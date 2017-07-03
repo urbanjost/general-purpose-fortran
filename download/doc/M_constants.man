@@ -1,0 +1,34 @@
+NAME
+    M_constants(3fm) - common constants
+SYNOPSIS
+    use M_constants, only : e,gamma
+DESCRIPTION
+  o "e"       the base of the natural logarithm system.  "e" was named in honor of Euler, but is known as Napier's constant.
+  o "gamma"   The Euler-Mascheroni constant is often denoted by a lower-case Gamma.  Gamma is defined as
+
+               Gamma = limit ( M -> Infinity ) ( Sum ( 1 <= N <= M ) 1 / N ) - Log ( M )
+  o "pi"      The ratio of the circumference of a circle to the diameter of the circle
+EXAMPLES
+  Sample usage
+
+   program demo_constants
+   use M_constants, only : e,euler,pi,golden_ratio,deg_per_rad,rad_per_deg
+   implicit none
+      write(*,101) "Napier's constant (e) is about ",e
+      write(*,101) "The Euler-Mascheroni constant (euler or gamma) is about ",euler
+      write(*,101) "pi (pi) is about ",pi
+      write(*,101) "The Golden Ratio (golden_ratio) is about ",golden_ratio
+      write(*,101) "Deg_Per_Rad is about ",Deg_Per_Rad
+      write(*,101) "Rad_Per_Deg is about ",Rad_Per_Deg
+   101 format(a,t52,g0)
+   end program demo_constants
+
+  Results:
+
+   Napier's constant (e) is about                     2.7182818284590451
+   The Euler-Mascheroni constant (gamma) is about     .57721566490153287
+   pi (pi) is about                                   3.1415926535897931
+   The Golden Ratio (golden_ratio) is about           1.6180339887498949
+   Deg_Per_Rad is about                               57.295779513082323
+   Rad_Per_Deg is about                               .17453292519943295E-001
+

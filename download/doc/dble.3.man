@@ -1,0 +1,43 @@
+NAME
+
+     dble(3f) - [INTRINSIC:NUMERIC] Double conversion function
+
+SYNTAX
+
+   result = DBLE(A)
+
+DESCRIPTION
+
+   DBLE(A) Converts A to double precision real type.
+
+ARGUMENTS
+
+   A  - The type shall be INTEGER, REAL, or COMPLEX.
+
+RETURN VALUE
+
+   The return value is of type DOUBLEPRECISION.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_dble
+        real    :: x = 2.18
+        integer :: i = 5
+        complex :: z = (2.3,1.14)
+        print *, dble(x), dble(i), dble(z)
+    end program test_dble
+
+STANDARD
+
+   [[FORTRAN 77]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+
+   [[float]], [[real]]
+

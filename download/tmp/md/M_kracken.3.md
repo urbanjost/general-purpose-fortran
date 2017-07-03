@@ -1,0 +1,259 @@
+[CLI Home Page]
+
+KRACKEN(3F): The Fortran Command Line Argument Cracker
+(Extended Version)
+
+This is an experimental version dependent upon Fortran 2008 features. see Fortran 2003 and FORTRAN 77 versions if you are looking
+for older stable versions that do not require other modules from the CLI (Command Line Interface) collection.
+
+  * Abstract
+  * Example of typical use
+  * Routine Descriptions
+  * Using the interactive menu mode of prompting
+  * Usage notes
+
+To get a demonstration program and the source for the M_kracken module download the source files for the module, other modules it
+is dependent on, and many example programs that call KRACKEN(3f).
+
+NAME
+
+M_kracken(3fm) - [ARGUMENTS:M_kracken]parse command line options of Fortran programs using Unix-like syntax
+
+ABSTRACT
+
+KRACKEN(3f) is a Fortran command line argument parser designed to provide for easy entry of negative numbers, strings, and
+exponential numbers without generally requiring quotes on the command line. It provides:
+
+  * a standard Unix-like style for parsing arguments and keywords
+  * a clear way to specify allowable keywords and default values
+  * simple access to the parsed data from procedures
+  * easy conversion from strings to numbers
+  * easy conversion from strings to arrays
+  * a simple menu-driven interactive mode for modifying parameters
+
+You can call your command like this:
+
+ mycode -r 333.333 -file /home/testin -l -i 300
+
+with very little code:
+
+Example Usage
+
+program myprogram
+
+   use M_kracken
+   character(255) filename
+   logical lval
+   !  define command arguments, default values and crack command line
+   call kracken('cmd','-i 10 -r 10e3 -d 4.1123344d0 -l .false. -file input')
+   !  get values
+   call retrev('cmd_f',filename,iflen,ier) ! get -f FILENAME
+   lval = lget('cmd_l')                    ! get -l present?
+   rval = rget('cmd_r')                    ! get -r RVAL
+   dval = dget('cmd_d')                    ! get -d DBLEVAL
+   ival = iget('cmd_i')                    ! get -i IVAL
+   !  all done parsing; do something with the values
+   print *, "filename=",filename(:iflen)
+   print *, " i=",ival, " r=",rval, " l=",lval, "d=",dval
+end program myprogram
+
+See the documentation for the procedures for detailed descriptions. Each procedure description includes a working example program.
+
+The Routines
+
+kracken define command options and defaults and parse command line
+retrev get value for a keyword as a string
+
+The returned strings obtained by calls to RETREV(3f) can be converted to numeric values using procedures from the M_strings(3fm)
+module such as STRING_TO_VALUE(3F), which converts strings to a numeric value, and SPLIT(3F), which can break a string into a list
+of words. But more commonly, the following convenience routines are used ...
+
+There are scalar convenience functions for getting simple values that are used in most cases as an alternative to RETREV(3f) that
+convert the values directly to common scalar types:
+
+      lval=lget(VERB_ARGNAME) !gets a "logical" value.
+      rval=rget(VERB_ARGNAME) !gets a "real" value.
+      dval=dget(VERB_ARGNAME) !gets a "doubleprecision" value.
+      ival=iget(VERB_ARGNAME) !gets a "integer" value
+      sval=sget(VERB_ARGNAME) !gets a "character" value
+
+There are also convenience routines for returning arrays of scalar values that typically use allocatable arrays. Just add 's' to
+the end of the scalar convenience functions.
+
+      lvals=lgets(VERB_ARGNAME) !gets a "logical" array.
+      rvals=rgets(VERB_ARGNAME) !gets a "real" array.
+      dvals=dgets(VERB_ARGNAME) !gets a "doubleprecision" array.
+      ivals=igets(VERB_ARGNAME) !gets a "integer" array
+      svals=sgets(VERB_ARGNAME) !gets a "character" array
+
+SPECIAL-PURPOSE PUBLIC ROUTINES:
+
+Setting command prompts
+
+   public :: setprompts             ! define prompts for commands in interactive mode
+
+Only needed for parsing input files, not cracking command line arguments
+
+   dissect  ! for user-defined commands: define defaults, then process user input
+   parse    ! parse user command and store tokens into Language Dictionary
+   store    ! replace dictionary name's value (if allow=add add name if necessary)
+   show     ! display dictionary contents for information
+
+length of verbs and entries in Language dictionary
+
+NOTE: many parameters may be reduced in size so as to just accommodate being used as a command line parser. In particular, some
+might want to change:
+
+   integer, parameter,public :: IPic=4000            ! number of entries in language dictionary
+   logical,public            :: stop_command=.false. ! indication to return stop_command as false in interactive mode
+   integer, parameter,public :: IPvalue=4096         ! length of keyword value
+   integer, parameter,public :: IPcmd=32768          ! length of command
+   integer, parameter,public :: IPverb=20            ! length of verb
+   character(len=1),save,public :: kracken_comment='#'
+   character(len=IPcmd),public  :: leftover=' '      ! remaining command(s) on line
+   integer,public,save          :: current_command_length=0 ! length of options for current command
+
+Interactive menu mode
+
+The menu mode feature is in a state of flux and may change significantly ...
+
+All commands automatically have the parameter "-?". If it is present, a menu appears after any specified options have been applied
+that allows for changing parameters interactively.
+
+The default prompts are the keywords themselves and their current values. To set your own prompts call SETPROMPTS(3f):
+
+    call setprompts(verb_name,options_and_prompts)
+
+where the special prompt string "#N#" means to not allow prompting for this parameter. For example:
+
+     ! set prompts for interactive mode ...
+     call setprompts('copy','                           &
+     & -oo "#N#"                                        &
+     & -i Enter input file name                         &
+     & -o Enter output file name                        &
+     & -version "#N#"                                   &
+     & -help "#N#"                                      &
+     & ')
+     call kracken('copy','-i -o -version .false. -help .false')
+
+Then the command
+
+       copy -?
+
+
+would only prompt for the -i and -o parameters.
+
+A description on how to use the menu mode can be generated by entering a question mark ("?") at the prompt once menu mode has been
+invoked.
+
+Usage Notes
+
+the reserved -oo keyword
+
+Everything before any switch is always referred to as 'VERB_oo' in RETREV(3f). This same value can also be set later in the command
+line by using the reserved keyword -oo. Often, you can ignore it exists, but the -oo option is always there. Unlike other
+parameters a default value is ignored unless no parameters are specified on the command line. That is, in general do not set a
+default value for the -oo parameter. It should almost always be initially a blank string.
+
+Note that you can just put the calls to RETREV() or the convenience routines where you need the information in your program instead
+of parsing everything in a single routine. But parsing them and storing them into a COMMON or MODULE is more efficient if the
+routine doing the parsing is called many times.
+
+  Sample showing -oo parameter and retrieving data in subroutines
+     program demo_placement
+     use M_calculator, only : kracken
+     ! define and crack command line arguments
+     call kracken('cmd',' default string -x 123 -y 456 ')
+     end program demo_placement
+
+     subroutine showstring()
+     use M_kracken, only : sget, IPvalue
+     character(len=IPvalue) :: string
+     ! get value of string before any switch
+     string=sget('cmd_oo')
+     write(*,*)'string is ',trim(string)
+     call showvalue()
+     end subroutine showstring
+
+     subroutine showvalue()
+     use M_kracken, only : rget
+     ! show values for -x and -y parameters
+     x=rget('cmd_x')
+     y=rget('cmd_y')
+     write(*,*)' X and Y are ',x,y
+     end subroutine showvalue
+
+     ./demo_placement
+     STRING is DEFAULT STRING
+      X and Y are    123.000000       456.000000
+      ./demo_placement -x 987.654
+
+     ./demo_placement -x 987.653992
+     STRING is
+      X and Y are    987.653992       456.000000
+
+     ./demo_placement -oo BBBB -oo CCCC
+     STRING is AAAA BBB
+      X and Y are    123.000000       456.000000
+
+     ./demo_placement AAAA -oo BBBB -oo CCCC
+     STRING is AAAA BBBB CCCC
+      X and Y are    123.000000       456.000000
+
+You may note that the parsing rules are not identical to Unix, although very similar.
+
+SYNTAX:
+verb[-oo] value for kw_oo  [-kw1 value_for_kw1] [-kw2 value_for_kw2] [-kw3 value_for_kw3] ...
+where
+  "kw" stands for a keyword name
+
+  * Quotes are rarely needed. A keyword is assumed whenever " -[A-Za-Z]" (space followed by dash followed by letter) is
+    encountered. So
+
+            cmd -title This is my title -value 10.3e2
+
+
+    would produce a value of "This is my title" for dictionary value "cmd_title". This does mean if your value contains " -letter"
+    you must quote your command such that the program sees the string surrounded with double-quotes. Depending on the shell you are
+    using this can be awkward. For example, in the bash shell you might use
+
+            cmd -title '"-A is a bad title to need"'
+            cmd -title /"-A is a bad title to need/"
+
+
+  * The keyword -oo is implied after the verb.
+  * There is no way to terminate a keyword value except by starting a new keyword. This means when you use shell globbing you often
+    want filenames to be the first parameter (and dictionary "cmd_oo" will hold the filenames):
+
+            cmd * -value 10.3e2
+
+
+    Many (but not all) Unix commands have such values allowed whereever another value is not allowed (Surprised? "ls -r * -l" works
+    as well as "ls -r -l *" .). This is why quoting and specification of which keywords require values and which do not is usually
+    required on Unix commands. Alternatively, just ignore the -oo field and always require keywords for all values.
+  * You cannot combine keywords (-ir is not equivalent to -i -r, which is sometimes allowed on Unix commands).
+  * Although this is rarely needed in practice, You may find the way to include a literal double-quote character (") as part of an
+    input value is the most unlike Unix -- Double the double-quote. Again, shells often expand double-quotes, so in the bash(1)
+    shell you might have to enter
+
+             cmd  -string \"\"
+
+
+    to give the "cmd_string" dictionary value the simple value '"'.
+  * --KEYWORD is equivalent to -KEYWORD; primarily so that the --version and --help options are easily supported.
+  * If a keyword is specified multiple times the values are concatenated into a single value with a space delimiter between the
+    values. That is,
+
+          cmd -D 10 -D 20 -D 30
+
+
+    would set the dictionary variable "cmd_D" to '10 20 30'.
+  * All commands automatically have the -? keyword, which evokes interactive menu mode.
+
+    Contributors:
+    John S. Urban -- Author (last change: May. 2016)
+    Felix Becker -- Enhancements to reduce limitations on parameter lengths (2013-05-28)
+    Walid Keyrouz -- Upgrades to bring code into conformance with recommended practices (2013-12-06)
+
+.fi
+

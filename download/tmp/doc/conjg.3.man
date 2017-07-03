@@ -1,0 +1,41 @@
+NAME
+     conjg(3f) - [INTRINSIC:NUMERIC] Complex conjugate function
+
+SYNTAX
+
+   z = conjg(z)
+
+DESCRIPTION
+
+   conjg(z) returns the conjugate of Z. If Z is (x, y)
+   then the result is (x, -y)
+
+ARGUMENTS
+
+   Z  - The type shall be COMPLEX.
+
+RETURN VALUE
+
+   The return value is of type COMPLEX.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_conjg
+        complex :: z = (2.0, 3.0)
+        complex(8) :: dz = (2.71_8, -3.14_8)
+        z= conjg(z)
+        print *, z
+        dz = dconjg(dz)
+        print *, dz
+    end program test_conjg
+
+STANDARD
+
+   [[FORTRAN 77]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+

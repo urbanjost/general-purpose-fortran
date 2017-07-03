@@ -1,0 +1,30 @@
+NAME
+   system_getppid(3f) - [M_system]get parent process ID (PPID) of current process from Fortran by calling getppid(3c)
+SYNOPSIS
+   integer(kind=c_int) function system_getppid()
+DESCRIPTION
+       The system_getppid() function returns the parent process ID of
+       the calling process.
+
+RETURN VALUE
+       The system_getppid() function should always be successful and no
+       return value is reserved to indicate an error.
+
+ERRORS
+       No errors are defined.
+
+SEE ALSO
+       exec, fork(), getpgid(), getpgrp(), getpid(), kill(),
+       setpgid(), setsid()
+
+EXAMPLE
+  Get parent process PID (PPID) from Fortran
+
+   program demo_system_getppid
+   use M_system, only: system_getppid
+   implicit none
+
+   write(*,*)'PPID=',system_getppid()
+
+   end program demo_system_getppid
+

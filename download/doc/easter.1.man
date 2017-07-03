@@ -1,0 +1,20 @@
+NAME
+   easter(1f) - [FUNIX]print day and month Easter falls on for given year
+
+SYNOPSIS
+   easter [year]|[--help|--version]
+
+DESCRIPTION
+   Prints day Easter falls on
+
+OPTIONS
+   year       year for which to calculate Easter day. Defaults to currrent year
+   --help     display this help and exit
+   --version  output version information and exit
+
+EXAMPLES
+  Sample commands
+
+   easter 2017
+   Easter day: the 16th day of April in the year of our Lord 2017
+

@@ -1,0 +1,64 @@
+NAME
+   change - [M_strings]change old string to new string with a directive like a line editor
+
+SYNOPSIS
+   subroutine change(target_string,cmd,ierr)
+
+    character(len=*),intent(inout) :: target_string
+    character(len=*),intent(in)    :: cmd
+    integer                        :: ierr
+
+DESCRIPTION
+
+   change an old substring into a new substring in a character variable
+   like a line editor. Primarily used to create interactive utilities
+   such as input history editors for interactive line-mode programs. The
+   output string is assumed long enough to accommodate the change.
+   a directive resembles a line editor directive of the form
+
+      C/old_string/new_string/
+
+   where / may be any character which is not included in old_string
+   or new_string.
+
+   a null old_string implies "beginning of string".
+
+OPTIONS
+   target_string  line to be changed
+   cmd            contains instructions to change the string
+   ierr           error code.
+
+      o =-1 bad directive
+      o =0 no changes made
+      o >0 count of changes made
+
+EXAMPLES
+
+   program demo_change
+
+    use M_strings, only : change
+    implicit none
+    character(len=132) :: line='This is a test string to change'
+    integer            :: ierr
+       write(*,*)trim(line)
+
+       ! change miniscule a to uppercase A
+       call change(line,'c/a/A/',ierr)
+       write(*,*)trim(line)
+
+       ! put string at beginning of line
+       call change(line,'c//prefix: /',ierr)
+       write(*,*)trim(line)
+
+       ! remove blanks
+       call change(line,'c/ //',ierr)
+       write(*,*)trim(line)
+
+   end program demo_change
+
+   Expected output
+
+    This is a test string to change
+    This is A test string to chAnge
+    prefix: This is A test string to chAnge
+    prefix:ThisisAteststringtochAnge

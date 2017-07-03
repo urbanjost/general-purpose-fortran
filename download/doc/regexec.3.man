@@ -1,0 +1,19 @@
+NAME
+   regexec(3f) - [M_regex] Execute a compiled regex against a string
+SYNOPSIS
+   function regexec(this,string,matches,flags,status) result(match)
+
+     logical :: match ! .TRUE. if the pattern matched
+     type(regex_type), intent(in) :: this ! regex object
+     character(len=*), intent(in) :: string ! target string
+     character(len=*), intent(in), &
+                      optional :: flags ! flag characters (for partial lines):
+                                        ! b = no beginning-of-line (REG_NOTBOL)
+                                        ! e = no end-of-line (REG_NOTEOL)
+     integer, intent(out), optional :: matches(:,:) ! match locations,
+                                                    ! dimension(2,nmatch)
+     integer, intent(out), optional :: status ! If absent, errors are fatal
+DESCRIPTION
+OPTIONS
+RETURNS
+EXAMPLE

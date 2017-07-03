@@ -1,0 +1,50 @@
+NAME
+   circle(3f) - [M_pixel] draw a circle using current line width and color
+
+SYNOPSIS
+ definition:
+
+   subroutine circle(x,y,radius)
+   real,intent(in) :: x
+   real,intent(in) :: y
+   real,intent(in) :: radius
+
+DESCRIPTION
+   Draw a circle using the current line width and color into the pixel array.
+   Units are in world coordinates.
+
+OPTIONS
+   X,Y        Coordinates for the center of the circle
+   RADIUS     Radius of the circle
+
+EXAMPLE
+  Sample program:
+
+   program demo_circle
+   use M_pixel
+   use M_writegif, only : writegif
+   !! set up drawing surface
+   call prefsize(400,400)
+   call vinit()
+   call ortho2(left=-100.0, right=100.0, bottom=-100.0, top=100.0)
+   call color(3)
+   call clear()
+   call color(4)
+   call linewidth(200)
+   !! draw some circles
+   call circle(0.0, 0.0, 90.0)
+   call color(1)
+   call circle(0.0, 0.0, 40.0)
+   call color(2)
+   call circle(-25.0, 25.0, 20.0)
+   call circle(-25.0,-25.0, 20.0)
+   call circle( 25.0, 25.0, 20.0)
+   call circle( 25.0,-25.0, 20.0)
+   !! render the pixel map
+   call writegif('circle.3.gif',P_pixel,P_colormap)
+   !! display the graphic assuming display(1) is available
+   call execute_command_line('display circle.3.ppm')
+   !! exit graphics mode
+   call vexit()
+   end program demo_circle
+

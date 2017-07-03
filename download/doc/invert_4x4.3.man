@@ -1,0 +1,22 @@
+NAME
+   invert_4x4(3f) - [M_math] directly invert 4x4 matrix
+
+SYNOPSIS
+  pure function invert_4x4(A) result(B)
+
+   ! integer,real,double,complex
+   integer,parameter         :: wp=kind(0|0.0|0.0d|(0.0,0.0))
+   NNNNNN(kind=wp), intent(in) :: A(2,2)   !! Matrix
+   NNNNNN(kind=wp)             :: B(2,2)   !! Inverse matrix
+    where
+   NNNNNN may be INTEGER,REAL,DOUBLEPRECISION,COMPLEX
+
+DESCRIPTION
+   Directly invert 4x4 matrix for speed (versus using, e.g. LAPACK)
+
+OPTIONS
+   A  original 4x4 matrix, may be INTEGER, REAL, DOUBLE, or COMPLEX
+   B  inverted 4x4 matrix, of same type as input matrix A
+
+EXAMPLE
+

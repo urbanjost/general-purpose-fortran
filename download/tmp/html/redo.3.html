@@ -1,0 +1,466 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>redo (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>redo(3f) </B>- [M_history]Fortran-based Input History Editor
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Usage</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#4>Listing Command History</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#5>Positioning To Previous Commands</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#6>Editing The Current Buffer Line</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#7>Help</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#8>System Commands</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#9>Dumping And Loading The Command History</A><BR>
+<A HREF=#10>Example Program</A><BR>
+<A HREF=#11>Sample Usage</A><BR>
+<A HREF=#12>Author</A><BR>
+</BLOCKQUOTE>
+<A name=13>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>redo</B>(<I>inputline</I>)
+<P>
+     character(len=*) :: inputline
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+the <B>redo</B>(3f) routine lets you recall, list, save, and modify previously
+entered program input. Built-in help is included.
+<P>
+The <B>redo</B>(3f) input history editor is a simple-to-use input history
+editor interface modeled on the CDC NOS command REDO. It uses a
+line editor model that means no special escape characters or control
+characters are required. Typically, only a few minutes are required
+to master usage.
+<P>
+When using <B>redo</B>(3f) input lines are usually first read into a character
+variable and then passed to the routine. The returned string can then
+be parsed or read from with an internal <B>READ</B>(3f). So, for example,
+if you have an existing <B>READ</B>(3f) such as
+<P>
+<PRE>
+      READ(*,101) A,I,K
+<P>
+</PRE>
+replace it with something similar to
+<P>
+<PRE>
+    USE M_HISTORY,ONLY : REDO
+    CHARACTER(LEN=255) :: LINE ! make variable big enough to read a line
+          :
+          :
+    READ(*,&#146;(A)&#146;) LINE   ! read line into character variable
+    CALL REDO(LINE)      ! pass line to REDO(3f). This is a no-op except
+                         ! for storing the line into the input history
+                         ! unless the input line is the "r" command
+    READ(LINE,101)A,I,K  ! read from variable like you did from file
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>USAGE</H3>
+
+</A>
+<BLOCKQUOTE>
+When prompted for an input line by your program you may at any
+timeenter "r" on a line by itself, or a line beginning with "r
+r_command" and you will enter the command history edit mode. Now you
+can recall and edit previous input or compose an input line using
+the editor commands.
+<P>
+By default, you will be editing the last line you entered, shifted
+one character to the right by an exclamation character.
+<P>
+The character you respond with in column one controls what happens next.
+<TABLE cellpadding=3><!-- tsb: The character you respond with in column one controls what happens next.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If you enter "?" while in command edit mode, help is displayed.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If the last input line is not the desired line to edit,
+select the line to edit by entering it&#146;s line number or by
+using the /,l,u, and d commands (see below for details) to find the desired input line.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Next enter an editing directive (c,m) to edit the selected line. The
+"change" command will change all occurrences of an old string to a
+new string &#46;&#46;&#46;
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+      c/old/new/
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+or the "modify" command can be used with the special characters # &amp; and ^ &#46;&#46;&#46;
+<TABLE width=100% cellpadding=3><!-- tsb: or the "modify" command can be used with the special characters # &amp; and ^ &#46;&#46;&#46;
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A # under a character will delete a character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An "&" (ampersand) will cause the character above it to be replaced with a space.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+To insert a string enter ^string#.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Otherwise, enter a character under one in the currently displayed command and it will replace it.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+hit RETURN to start another edit of the line
+</TD></TR>
+<TR></TR></TABLE><!-- .IP \(bu 3 -->
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Once the change is executed you will be prompted for another edit
+directive
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+You will stay in edit mode until you enter a return on a
+blank line to feed your line to your program; or enter "." or
+"q" (which means cancel changes and return blank line).
+</TD></TR>
+<TR></TR></TABLE>A detailed summary of the main edit-mode commands follows. In the
+descriptions, N stands for a number &#46;&#46;&#46;
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; LISTING COMMAND HISTORY</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+l|p N
+list from line N. <B>-N</B> shows N last lines
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+L|P N
+same as &#146;l&#146; except no line numbers (for pasting)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+/string
+search for simple string in all history lines
+Note that the buffer set to the last line displayed
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+    <H4>&nbsp; &nbsp; POSITIONING TO PREVIOUS COMMANDS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+u N
+up through buffer
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+d N
+down through buffer
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+N
+load line number
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+    <H4>&nbsp; &nbsp; EDITING THE CURRENT BUFFER LINE</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+c/oldstring/newstring/
+change all occurrences of old string
+to new string. Note that s
+(for substitute) is a synonym for c
+(for change).
+<P>
+For the "c" directive the second character
+becomes the delimiter. Traditionally one
+usually uses a delimiter of / unless the
+string you are editing contains /.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+mmod_string
+If the first character of your entry is m or blank,
+<TABLE width=100% cellpadding=3><!-- tsb: mmod_string
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+REPLACE a string by entering a replacement character under it
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LEAVE a character alone by leaving a space under it
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DELETE a character by putting a # character under it
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BLANK OUT a character by putting an & under it
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+INSERT A STRING by entering ^STRING#
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+The "modify" directive takes a little practice but this single
+directive accommodates positionally deleting, replacing, and
+inserting text. it is hardest using "modify" to put the strings
+"&" and "#" into your lines. to put a # or & character into a
+string use the &#146;c&#146; command instead or ^&# or ^##.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+;N N N N &#46;&#46;&#46;
+Append specified lines to current line
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=7>
+
+    <H4>&nbsp; &nbsp; HELP</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+h|?
+display help text
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=8>
+
+    <H4>&nbsp; &nbsp; SYSTEM COMMANDS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!cmd
+execute system command
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=9>
+
+    <H4>&nbsp; &nbsp; DUMPING AND LOADING THE COMMAND HISTORY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+w FILENAME
+write entire command history to specified file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+r FILENAME
+replace command history with file contents
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+a FILENAME
+append lines from file onto command history
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=10>
+
+     <H3>EXAMPLE PROGRAM</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program redoit
+   use M_history, only : redo
+   implicit none
+   character(len=1024) ::  line
+   integer :: ios
+   write(*,&#146;(a)&#146;) &
+   & &#146;REDO(3f) COMMAND INPUT EDITOR&#146;,
+   & &#146;enter "r" or "r r_command" on the input line to go&#146;,
+   & &#146;into history edit mode. Once in history edit mode you&#146;,
+   & &#146;may enter "?" to get some help. Enter "quit" to exit&#146;,
+   & &#146;the program.&#146;
+   do
+      write(*,&#146;(a)&#146;,advance=&#146;no&#146;)&#146;&gt;-&gt;&#146;    ! write prompt
+      read(*,&#146;(a)&#146;,iostat=ios) line       ! read new input line
+      ! if "r", edit and return a line from the history editor
+      call redo(line) ! store into history if not "r".
+      if(line.eq.&#146;quit&#146;)stop ! exit program if user enters "quit"
+      ! now call user code to process new line of data
+      ! As an example, call the system shell using a common f77 extension:
+      call execute_command_line(trim(line)) ! f08 equivalent
+   enddo
+   end program redoit
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>SAMPLE USAGE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The example program is basically a loop that reads a command from
+standard input and then executes it as a subshell unless the "r"
+command is entered.
+<P>
+Now, we will enter an <B>echo</B>(1) command followed by a few other lines
+of input. Then we recall the <B>echo</B>(1) command and use a few of the
+features of <B>redo</B>(3) to change and then re-execute the command.
+<P>
+<PRE>
+      &gt;echo This isss a Test
+      This isss a Test
+      &gt;date
+      Sun May 31 23:54:09 EDT 2009
+      &gt;pwd
+      /cygdrive/c/urbanjs/MYCYGWIN/DISKA/public_html/public/CLONE/REDO
+      &gt;r                            ! enter edit mode
+      00001 echo This isss a Test   ! last commands are displayed
+      00002 date
+      00003 pwd
+      !pwd
+      &gt;1                            ! go to first line in history
+      !echo This isss a Test
+                   ##   t           ! delete and replace characters
+      !echo This is a test          ! insert a string
+                      ^new #
+      !echo This is a new test
+      c/test/TEST/                  ! change a substring
+      !echo This is a new TEST
+                         &          | replace character with spaces
+      !echo This is a newTEST
+                                    ! a blank line ends editing
+      This is a newTEST
+      &gt;quit
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=12>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 1988,2009,2011 (last change: Nov 2015)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>redo (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d22fbce9-2ae5-4348-9b35-bdadc9cc7c1b using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/redo.3.gif"></center> 
+</body>
+</HTML>

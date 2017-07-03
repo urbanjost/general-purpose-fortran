@@ -1,0 +1,310 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>strgarr (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>strgarr(3f) </B>- [M_calculator_plus]read a string into an array using <B>jucalc</B>(3f) calculator
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Dependencies</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>See Also</A><BR>
+<A HREF=#6>References</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>strgarr</B>(line,ivals,vals,ifound,delims,ierr)
+<P>
+    character(len=*), intent=(in) :: line
+    integer, intent=(in)          :: ivals
+    real, intent=(out)            :: vals(ivals)
+    integer, intent=(out)         :: ifound
+    character(len=*), intent=(in) :: delims
+    integer, intent=(out)         :: ierr
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>strgarr</B>() returns an array of real values from a string containing numeric
+expressions. Use <B>strgar2</B>() if you are going to permit string expressions
+with " delimiters.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <B>strgarr</B>() returns an array of real values from a string containing numeric
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>strgarr</B>() parses the string at the specified delimiters and calls the
+calculator routine <B>JUCALCX</B>(3f) to evaluate the expressions.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+It counts the number of values found.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Once the maximum allowable number of values have been found <B>strgarr</B>()
+returns, ignoring the rest of the line.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If an error occurs the error flag returns the column number where the
+expression that failed begins.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+line
+LINE is a string of numeric expressions. Each expression can be up to
+(iclen_calc=255) characters long. The syntax of an expression is as
+described in the main document of the Calculator Library. Assuming the
+delimiters include a space character an example would be:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  &#146;A=10 100 300E2/42.6  sin(3.1416/5)&#146;
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+Only numeric expressions are expected; so no use of the delimiter
+characters is allowed except as a delimiter, even in quoted strings.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ivals
+IVALS is the maximum number of values to return.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>vals</B>(ivals)
+VALS is an array filled with the numeric values calculated from the
+expressions in LINE.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ifound
+IFOUND is the number of values successfully returned in VALS
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+delims
+DELIMS is a character to use as an expression delimiter. It is commonly
+set to a space and <B>semi-colon</B>(&#146; ;&#146;).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ierr
+IERR returns 0 if no error occurred. If an error did occur, it returns
+the column number the expression started at that could not be
+evaluated.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DEPENDENCIES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+jucalcx
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+User-supplied routines:
+All programs that call the calculator routine must supply their own
+JUOWN1 and C procedures. See the example program for samples.
+<TABLE width=100% cellpadding=3><!-- tsb: User-supplied routines:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+juown1
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+c
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program T_strgarr
+      use M_kracken, only: sget, kracken, lget
+      use M_calculator_plus, only : strgarr
+      real vals(41)
+      character(len=80) :: line=&#146; &#146;
+      character(len=10) :: delims=&#146; ;&#146;
+      !  define command arguments, default values and crack command line
+      call kracken(&#146;cmd&#146;,&#146;-d " ;" -test .false. -help .false. -begin -end&#146;)
+      !----------------------------------------------------------
+      write(*,*)&#146;SGET&#146;,trim(sget(&#146;cmd_test&#146;))
+      write(*,*)&#146;LGET&#146;,lget(&#146;cmd_test&#146;)
+      if(lget(&#146;cmd_test&#146;))then   ! cursory test
+         call strgarr("10;2/3;sin(4.314)",41,vals,ifound,&#146; ;&#146;,ierr)
+         write(*,*)&#146;values are&#146;,(vals(i),i=1,ifound)
+         sumtarget= 9.74497986
+         tol=       0.00000001
+         sumup=sum(vals(:ifound))
+         ipass=0
+         if(ifound.ne.3) ipass=ipass+1
+         if(ierr.ne.0)   ipass=ipass+2
+         if( sumup &gt;= (sumtarget-tol) .and. sumup &lt;= (sumtarget+tol) ) then
+         else
+            ipass=ipass+4
+         endif
+         if(ipass.eq.0)then
+            write(*,*)&#146;sum is &#146;,sumup
+            write(*,*)&#146;number of values is&#146;,ifound
+            write(*,*)&#146;error flag is&#146;,ierr
+            write(*,*)&#146;STRGARR*: PASSED&#146;
+            stop(0)
+         else
+            write(*,*)&#146;IFOUND:&#146;,ifound
+            write(*,*)&#146;IERR  :&#146;,ierr
+            write(*,*)&#146;SUM   :&#146;,sumup
+            write(*,*)&#146;STRGARR*: FAILED&#146;,ipass
+            stop(-1)
+         endif
+      endif
+      !----------------------------------------------------------
+      delims=sget(&#146;cmd_d&#146;)
+      write(*,*)&#146;DELIMS=[&#146;,trim(delims),&#146;]&#146;
+      !----------------------------------------------------------
+      line=sget(&#146;cmd_begin&#146;)
+      write(*,*)&#146;BEGIN:&#146;,trim(line)
+      if(line.ne.&#146; &#146;)then
+         call strgarr(line,41,vals,ifound,delims,ierr)
+      endif
+      !----------------------------------------------------------
+      line=sget(&#146;cmd_oo&#146;)
+      write(*,*)&#146;LINE:&#146;,trim(line)
+      if(line.ne.&#146; &#146;)then
+         call strgarr(line,41,vals,ifound,delims,ierr)
+         write(*,*)(VALS(I),I=1,IFOUND)
+      else
+         INFINITE: do
+            read(*,&#146;(a)&#146;,iostat=ios)line
+            if(ios.ne.0)then
+               exit INFINITE
+            endif
+            call strgarr(line,41,vals,ifound,delims,ierr)
+            write(*,*)IERR,IFOUND,&#146;:&#146;,(VALS(I),I=1,IFOUND)
+         enddo INFINITE
+      endif
+      !----------------------------------------------------------
+      line=sget(&#146;cmd_end&#146;)
+      write(*,*)&#146;END&#146;,trim(line)
+      if(line.ne.&#146; &#146;)then
+         call strgarr(line,41,vals,ifound,delims,ierr)
+         write(*,*)&#146;END:&#146;,(VALS(I),I=1,IFOUND)
+      endif
+      !----------------------------------------------------------
+      end
+<P>
+      ! NOTE: user must supply the JUOWN1 and C procedures.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+To parse a list of numbers instead of expressions see <B>STRGAR</B>().
+If there is only one expression see <B>RNUM0</B>(), <B>JUCALCX</B>(), <B>JUCALC</B>().
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+none.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>strgarr (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cf485f6a-f049-4b44-8c0a-99d270f6e623 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/strgarr.3.gif"></center> 
+</body>
+</HTML>

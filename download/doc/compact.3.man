@@ -1,0 +1,51 @@
+NAME
+   compact - [M_strings]converts contiguous whitespace to a single character (or nothing)
+
+SYNOPSIS
+   function compact(STR,CHAR) result (OUTSTR)
+
+    character(len=*),intent(in)          :: STR
+    character(len=*),intent(in),optional :: CHAR
+    character(len=len(str))              :: OUTSTR
+
+DESCRIPTION
+   COMPACT(3f) converts multiple spaces, tabs and control characters
+   (called "whitespace") to a single character or nothing. Leading
+   whitespace is removed.
+
+OPTIONS
+   STR     input string to reduce or remove whitespace from
+   CHAR    By default the character that replaces adjacent
+           whitespace is a space. If the optional CHAR parameter is supplied
+           it will be used to replace the whitespace. If a null character is
+           supplied for CHAR whitespace is removed.
+RETURNS
+   OUTSTR  string of same length as input string but with all contigious whitespace
+           reduced to a single space and leading whitespace removed
+
+EXAMPLES
+   program demo_compact
+
+    use M_strings, only : compact
+    implicit none
+    ! produces 'This is a test               '
+    write(*,*)compact('  This     is      a     test  ')
+    ! produces 'Thisisatest                  '
+    write(*,*)compact('  This     is      a     test  ',char='')
+    ! produces 'This:is:a:test               '
+    write(*,*)compact('  This     is      a     test  ',char=':')
+
+    ! note CHAR is used to replace the whitespace, but if CHAR is
+    ! in the original string it is just copied
+    write(*,*)compact('A  AA    A   AAAAA',char='A')
+    ! produces (original A characters are left as-is) 'AAAAAAAAAAAA'
+    ! not 'A'
+
+   end program demo_compact
+
+   Expected output
+
+    >This is a test
+    >Thisisatest
+    >This:is:a:test
+    >AAAAAAAAAAAA

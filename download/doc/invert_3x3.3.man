@@ -1,0 +1,24 @@
+NAME
+
+   invert_3x3(3f) - [M_math] directly invert 3x3 matrix
+
+SYNOPSIS
+
+  pure function invert_3x3(A) result(B)
+
+   ! integer,real,double,complex
+   integer,parameter         :: wp=kind(0|0.0|0.0d|(0.0,0.0))
+   NNNNNN(kind=wp), intent(in) :: A(2,2)   !! Matrix
+   NNNNNN(kind=wp)             :: B(2,2)   !! Inverse matrix
+    where
+   NNNNNN may be INTEGER,REAL,DOUBLEPRECISION,COMPLEX
+
+DESCRIPTION
+   Directly invert 3x3 matrix for speed (versus using, e.g. LAPACK)
+
+OPTIONS
+   A  original 3x3 matrix, may be INTEGER, REAL, DOUBLE, or COMPLEX
+   B  inverted 3x3 matrix, of same type as input matrix A
+
+EXAMPLE
+

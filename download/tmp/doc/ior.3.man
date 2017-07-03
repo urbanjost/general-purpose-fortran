@@ -1,0 +1,34 @@
+NAME
+     ior(3f) - [INTRINSIC:BIT MANIPULATION] Bitwise logical inclusive or
+
+SYNTAX
+
+   result = ior(i, j)
+
+DESCRIPTION
+
+   IOR returns the bitwise Boolean inclusive-OR of I and J.
+
+ARGUMENTS
+
+   I  - The type shall be INTEGER.
+   J  - The type shall be INTEGER, of the same kind as I.
+
+RETURN VALUE
+
+   The return type is INTEGER, of the same kind as the arguments. (If the
+   argument kinds differ, it is of the same kind as the larger argument.)
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+
+   [[ieor]], [[iand]], [[ibits]], [[ibset]],
+   [[ibclr]], [[not]]
+

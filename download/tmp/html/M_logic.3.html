@@ -1,0 +1,231 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_logic (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>cond(3f) </B>- [M_logic]process input files with embedded if/else/elseif/endif commands
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Options</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<P>
+<B>subroutine</B> <B>cond</B>(verb,line,ierr)
+<P>
+     character(len=*),intent(in) :: verb
+     character(len=*),intent(in) :: line
+     integer,intent(out)         :: ierr
+<P>
+</PRE>
+<B>Public</B> <I>module</I> <I>variables</I> <I>include</I>
+<P>
+<PRE>
+     WRITE -- flag whether next input line should be read
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+verb
+must be &#146;if&#146;,&#146;elseif&#146;,&#146;else&#146;,&#146;endif&#146;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+line
+calculator expression to reduce to an integer.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ierr
+indicate if an error occurred
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Many programs read input files where input lines are conditionally skipped over. It may make sense that the data file itself
+contains the conditionals (think of pre-processors like <B>cpp</B>(1), shell programs (ie. interpreted languages), and configuration
+files that are read from multiple programs and from different environments). Instead of having many code-specific ways of
+specifying which lines will be processed, this <I>module</I> allows you to embed if/else/elseif/endif directives in the input files.
+<P>
+If you pass the conditional lines to <B>cond</B>(3f) it sets the logical variable "WRITE" to indicate when non-conditional lines
+(blocks of lines between those logical conditions) should be skipped.
+<P>
+if ierr=0, no obvious error occurred. if ierr not equal=0, suggest stopping the calling program from processing input
+<P>
+The variable NEST_LEVEL should be zero at the end, or a nesting error occurred.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The example program uses <B>cond</B>(3f) and the calculator <I>module</I> to let you have input files that the program or the input file (via
+the #define command) can set values for. Note that expressions on the #if and #elseif input lines are truncated to whole
+numbers. You need to see the calculator documentation to see all the expressions available (date and time functions, most
+FORTRAN 77 intrinsic functions, &#46;&#46;&#46;)
+<P>
+Here is an example program that will read in a file and write just lines from the file to output that are in true blocks&#46;&#46;&#46;
+<P>
+<PRE>
+   program logic
+   use M_journal, only : journal  ! for logging messages
+   use M_strings, only : lower, delim,v2s ! convert character case; split string
+   use M_logic, only : cond
+   use M_logic, only : write ! flag whether current data lines should be written
+   use M_logic, only : nest_level   ! nesting level for #IF/#ELSEIF/#ELSE/#ENDIF
+   use M_calculator_plus, only : rnum0
+   character(len=1)    :: prefix              ! directive prefix character
+   character(len=1024) :: line                ! input line
+   integer,parameter   :: max_words=2  ! maximum number of words allowed on line
+   character(len=1024) :: array(max_words)    ! working copy of input line
+   ! location where words start and end
+   integer             :: ibegin(max_words), iterm(max_words)
+   !----------------------------------------------------------------------------
+   PREFIX=&#146;#&#146;              ! for the example, assume direct lines use a # prefix
+   !----------------------------------------------------------------------------
+   READLINE: do                                   ! read loop to read input file
+      read(*,&#146;(a)&#146;,iostat=ios) line
+      if(ios.ne.0)then
+         if (nest_level.ne.0) then ! check to make sure all if blocks are closed
+            call journal(&#146;sc&#146;,&
+            &&#146;*logic* error - #IF BLOCK NOT CLOSED WHEN READiNG FILE FINISHED.&#146;)
+         endif
+         stop
+      endif
+      ! although delim(3f) can do more
+      ! just parsing the first word out and finding where second word starts
+      ! make sure array is initialized for when
+      ! icount(number of words on line) is zero
+      array=&#146; &#146;
+      call delim(lower(line),array,max_words,icount,ibegin,iterm,ilen,&#146; &#146;)
+      select case(array(1))
+      ! find conditional lines
+      case(&#146;#if&#146;,&#146;#else&#146;,&#146;#elseif&#146;,&#146;#endif&#146;)
+         ! process conditional directive
+         call cond(trim(array(1)(2:)),line(iterm(1)+1:),ierr_logic)
+      case(&#146;#define&#146;)
+         ! evaluate expression
+         value=rnum0(line(iterm(1)+1:))
+      case default
+         ! find input lines you want to use, skip others
+         if (write) then
+            ! for example, if last conditional was true then write line
+            write(*,&#146;(a)&#146;) trim(line)
+            ! write data line
+         endif
+      end select
+   enddo READLINE
+   end program logic
+<P>
+</PRE>
+Here is an input file for the test program
+<P>
+<PRE>
+   &gt;#define A=10
+   &gt;#define B=1234.0
+   &gt;#define C=sin(30)
+   &gt;DEFINED SOME VALUES AND READY TO START
+   &gt;#if eq(A,20)
+   &gt;   SHOULD NOT BE OUTPUT
+   &gt;#elseif eq(A,10)
+   &gt;  CORRECT BRANCH WRITE THIS
+   &gt;   #if gt(B,A)
+   &gt;      CORRECT AGAIN
+   &gt;   #else
+   &gt;      SHOULD NOT BE IN OUTPUT EITHER
+   &gt;   #endif
+   &gt;#else
+   &gt;   SHOULD NOT BE OUTPUT ONCE AGAIN
+   &gt;#endif
+   &gt;GOT TO END
+<P>
+</PRE>
+The output should be
+<P>
+<PRE>
+   &gt;DEFINED SOME VALUES AND READY TO START
+   &gt;  CORRECT BRANCH WRITE THIS
+   &gt;      CORRECT AGAIN
+   &gt;GOT TO END
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_logic (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f363775d-0336-4d19-a2ea-ffd5514bde57 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_logic.3.gif"></center> 
+</body>
+</HTML>

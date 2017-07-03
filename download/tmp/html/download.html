@@ -1,0 +1,1096 @@
+<html>
+<head>
+<title></title>
+<style>
+body {xfont-style: italic}
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libjust4/just4.html">[CLI Home Page]</a>
+<div id="Container">
+<div id="Content">
+<h1>Download Page</h1>
+<h2>(for Fortran Command Line Interface Collection)</h2>
+
+<p>
+   There is one file to download for the libjust4 library -
+   <a href="../../just4.tgz" style="background-color: yellow"
+      title="
+      It is easiest to pull all the CLI (Command Line Interface) sources
+      code at one time in an archive file  because many of the modules use
+      other CLI modules; and many included programs use multiple modules
+      and routines.
+      "
+   > just4.tgz </a>.
+   This includes
+<ul>
+
+   <li><a href="../source.html" title="
+      The what(1) command was run on the expanded source directory to produce
+      a listing that shows what procedures are in which files: The what(1)
+      command used is a customized version (included in this collection)
+      that can generate simple HTML documents.
+      "
+      >the CLI (Command Line Interface) sources</a>
+   </li>
+
+   <li>  <a href="man3.html"> manpages for the <em>procedures</em> </a> as *roff and HTML </li>
+
+   <li>  selected <a href="programs.html"> example programs </a></li>
+
+   <li>  <a href="man1.html"> manpages for the <em>example programs</em> </a> as *roff and HTML </li>
+
+   <li>a <a href="../Makefile">make(1) file</a> to build the source </li>
+
+   <li> A start at manpages for the <a href="man3i.html"> <em>Fortran intrinsics</em></a> as *roff and HTML </li>
+
+   <li> additional HTML documentation </li>
+
+</ul>
+</p>
+
+</p>
+   Assuming a recent version of gfortran is on your system you can
+   download the file and place it in an empty directory and enter
+</p>
+
+<pre>
+   tar xvfz just4.tgz
+   make
+</pre>
+
+<p>
+   This will compile the CLI procedures and sample utility programs.
+</p>
+
+<p>
+   For other programming environments you will need to change the lines
+   in the Makefile that define the compiler command. Many Fortran 2003
+   features are required. Recently, I have only tested with GNU Fortran
+   (GCC) 5.4.0 .
+</p>
+
+<hr>
+<h3> MAN  pages:</h3>
+
+<p>
+   The man(1) pages are particularly useful when working with the
+   code files when used with editors such as vim(1) and emacs(1).
+   Several editors can now look up and display the man(1) pages for a
+   routine from inside the editors. Place your cursor over a function
+   name in the example programs and enter "K" in vim(1) to access the
+   man(1) page for a procedure, for example.  Typically, you set the
+   MANPATH environment variable to include the full pathname to the man/
+   directory first. Something like
+   <pre>
+      export MANPATH=/home/$USER/CLI/man:$MANPATH::
+   </pre>
+   (assuming you installed the source in /home/$USER/CLI)
+   will work, depending on what shell you are using.
+</p>
+
+<hr>
+<h3> HTML pages:</h3>
+
+<p>
+   HTML documents are the most complete reference, as they include
+   some higher-level overviews of the larger module files that are not
+   currently included in the man(1) pages. Otherwise, the HTML documents
+   are for the most part generated from the man(1) pages.
+</p>
+
+<p>
+   Special HTML files
+   use javascript to append groups of the HTML documents into a
+   single manual.
+</p>
+
+<table border="1">
+<tbody>
+<tr><!-- line 1 -->
+ <td class="odd" > <a href="./BOOK_INDEX.html"> BOOK_INDEX </a> </td>
+ <td class="odd" >   <a href="./BOOK_INTRINSIC.html"> BOOK_INTRINSIC </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_Compare_Float_Numbers.html"> BOOK_M_Compare_Float_Numbers </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_calculator.html"> BOOK_M_calculator </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_color.html"> BOOK_M_color </a> </td>
+</tr>
+<tr><!-- line 2 -->
+ <td class="even" >  <a href="./BOOK_M_debug.html"> BOOK_M_debug </a> </td>
+ <td class="even" >   <a href="./BOOK_M_factor.html"> BOOK_M_factor </a> </td>
+ <td class="even" >   <a href="./BOOK_M_io.html"> BOOK_M_io </a> </td>
+ <td class="even" >   <a href="./BOOK_M_journal.html"> BOOK_M_journal </a> </td>
+ <td class="even" >   <a href="./BOOK_M_kracken.html"> BOOK_M_kracken </a> </td>
+</tr>
+<tr><!-- line 3 -->
+ <td class="odd" >  <a href="./BOOK_M_logic.html"> BOOK_M_logic </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_math.html"> BOOK_M_math </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_messages.html"> BOOK_M_messages </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_pixel.html"> BOOK_M_pixel </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_process.html"> BOOK_M_process </a> </td>
+</tr>
+<tr><!-- line 4 -->
+ <td class="even" >  <a href="./BOOK_M_sort.html"> BOOK_M_sort </a> </td>
+ <td class="even" >   <a href="./BOOK_M_strings.html"> BOOK_M_strings </a> </td>
+ <td class="even" >   <a href="./BOOK_M_system.html"> BOOK_M_system </a> </td>
+ <td class="even" >   <a href="./BOOK_M_time.html"> BOOK_M_time </a> </td>
+ <td class="even" >   <a href="./BOOK_M_units.html"> BOOK_M_units </a> </td>
+</tr>
+</table>
+
+<h3> Alphabetical listing of HTML documents: </h3>
+<table border="1">
+<tbody>
+<tr><!-- line 1 -->
+ <td class="odd" > <a href="./BOOK_INDEX.html"> BOOK_INDEX </a> </td>
+ <td class="odd" >   <a href="./BOOK_INTRINSIC.html"> BOOK_INTRINSIC </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_Compare_Float_Numbers.html"> BOOK_M_Compare_Float_Numbers </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_calculator.html"> BOOK_M_calculator </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_color.html"> BOOK_M_color </a> </td>
+</tr>
+<tr><!-- line 2 -->
+ <td class="even" >  <a href="./BOOK_M_debug.html"> BOOK_M_debug </a> </td>
+ <td class="even" >   <a href="./BOOK_M_factor.html"> BOOK_M_factor </a> </td>
+ <td class="even" >   <a href="./BOOK_M_io.html"> BOOK_M_io </a> </td>
+ <td class="even" >   <a href="./BOOK_M_journal.html"> BOOK_M_journal </a> </td>
+ <td class="even" >   <a href="./BOOK_M_kracken.html"> BOOK_M_kracken </a> </td>
+</tr>
+<tr><!-- line 3 -->
+ <td class="odd" >  <a href="./BOOK_M_logic.html"> BOOK_M_logic </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_math.html"> BOOK_M_math </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_messages.html"> BOOK_M_messages </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_pixel.html"> BOOK_M_pixel </a> </td>
+ <td class="odd" >   <a href="./BOOK_M_process.html"> BOOK_M_process </a> </td>
+</tr>
+<tr><!-- line 4 -->
+ <td class="even" >  <a href="./BOOK_M_sort.html"> BOOK_M_sort </a> </td>
+ <td class="even" >   <a href="./BOOK_M_strings.html"> BOOK_M_strings </a> </td>
+ <td class="even" >   <a href="./BOOK_M_system.html"> BOOK_M_system </a> </td>
+ <td class="even" >   <a href="./BOOK_M_time.html"> BOOK_M_time </a> </td>
+ <td class="even" >   <a href="./BOOK_M_units.html"> BOOK_M_units </a> </td>
+</tr>
+<tr><!-- line 5 -->
+ <td class="odd" >  <a href="./INTRINSIC.3.html"> INTRINSIC.3 </a> </td>
+ <td class="odd" >   <a href="./M_Compare_Float_Numbers.3.html"> M_Compare_Float_Numbers.3 </a> </td>
+ <td class="odd" >   <a href="./M_calculator.3.html"> M_calculator.3 </a> </td>
+ <td class="odd" >   <a href="./M_calculator_plus.3.html"> M_calculator_plus.3 </a> </td>
+ <td class="odd" >   <a href="./M_calculator_programmer_notes.3.html"> M_calculator_programmer_notes.3 </a> </td>
+</tr>
+<tr><!-- line 6 -->
+ <td class="even" >  <a href="./M_color.3.html"> M_color.3 </a> </td>
+ <td class="even" >   <a href="./M_debug.3.html"> M_debug.3 </a> </td>
+ <td class="even" >   <a href="./M_factor.3.html"> M_factor.3 </a> </td>
+ <td class="even" >   <a href="./M_getopt.3.html"> M_getopt.3 </a> </td>
+ <td class="even" >   <a href="./M_getopt_long.3.html"> M_getopt_long.3 </a> </td>
+</tr>
+<tr><!-- line 7 -->
+ <td class="odd" >  <a href="./M_io.3.html"> M_io.3 </a> </td>
+ <td class="odd" >   <a href="./M_journal.3.html"> M_journal.3 </a> </td>
+ <td class="odd" >   <a href="./M_kracken.3.html"> M_kracken.3 </a> </td>
+ <td class="odd" >   <a href="./M_logic.3.html"> M_logic.3 </a> </td>
+ <td class="odd" >   <a href="./M_math.3.html"> M_math.3 </a> </td>
+</tr>
+<tr><!-- line 8 -->
+ <td class="even" >  <a href="./M_messages.3.html"> M_messages.3 </a> </td>
+ <td class="even" >   <a href="./M_pixel.3.html"> M_pixel.3 </a> </td>
+ <td class="even" >   <a href="./M_process.3.html"> M_process.3 </a> </td>
+ <td class="even" >   <a href="./M_readline.3.html"> M_readline.3 </a> </td>
+ <td class="even" >   <a href="./M_sort.3.html"> M_sort.3 </a> </td>
+</tr>
+<tr><!-- line 9 -->
+ <td class="odd" >  <a href="./M_strings.3.html"> M_strings.3 </a> </td>
+ <td class="odd" >   <a href="./M_system.3.html"> M_system.3 </a> </td>
+ <td class="odd" >   <a href="./M_time.3.html"> M_time.3 </a> </td>
+ <td class="odd" >   <a href="./M_units.3.html"> M_units.3 </a> </td>
+ <td class="odd" >   <a href="./_dirname.1.html"> _dirname.1 </a> </td>
+</tr>
+<tr><!-- line 10 -->
+ <td class="even" >  <a href="./_echo.1.html"> _echo.1 </a> </td>
+ <td class="even" >   <a href="./_false.1.html"> _false.1 </a> </td>
+ <td class="even" >   <a href="./_grep.1.html"> _grep.1 </a> </td>
+ <td class="even" >   <a href="./_hostname.1.html"> _hostname.1 </a> </td>
+ <td class="even" >   <a href="./_kill.1.html"> _kill.1 </a> </td>
+</tr>
+<tr><!-- line 11 -->
+ <td class="odd" >  <a href="./_ln.1.html"> _ln.1 </a> </td>
+ <td class="odd" >   <a href="./_logname.1.html"> _logname.1 </a> </td>
+ <td class="odd" >   <a href="./_ls.1.html"> _ls.1 </a> </td>
+ <td class="odd" >   <a href="./_mv.1.html"> _mv.1 </a> </td>
+ <td class="odd" >   <a href="./_pwd.1.html"> _pwd.1 </a> </td>
+</tr>
+<tr><!-- line 12 -->
+ <td class="even" >  <a href="./_rm.1.html"> _rm.1 </a> </td>
+ <td class="even" >   <a href="./_rmdir.1.html"> _rmdir.1 </a> </td>
+ <td class="even" >   <a href="./_true.1.html"> _true.1 </a> </td>
+ <td class="even" >   <a href="./_tty.1.html"> _tty.1 </a> </td>
+ <td class="even" >   <a href="./_uname.1.html"> _uname.1 </a> </td>
+</tr>
+<tr><!-- line 13 -->
+ <td class="odd" >  <a href="./_unlink.1.html"> _unlink.1 </a> </td>
+ <td class="odd" >   <a href="./_yes.1.html"> _yes.1 </a> </td>
+ <td class="odd" >   <a href="./abs.3.html"> abs.3 </a> </td>
+ <td class="odd" >   <a href="./accdig.3.html"> accdig.3 </a> </td>
+ <td class="odd" >   <a href="./achar.3.html"> achar.3 </a> </td>
+</tr>
+<tr><!-- line 14 -->
+ <td class="even" >  <a href="./acos.3.html"> acos.3 </a> </td>
+ <td class="even" >   <a href="./acosh.3.html"> acosh.3 </a> </td>
+ <td class="even" >   <a href="./adjustc.3.html"> adjustc.3 </a> </td>
+ <td class="even" >   <a href="./adjustl.3.html"> adjustl.3 </a> </td>
+ <td class="even" >   <a href="./adjustr.3.html"> adjustr.3 </a> </td>
+</tr>
+<tr><!-- line 15 -->
+ <td class="odd" >  <a href="./aimag.3.html"> aimag.3 </a> </td>
+ <td class="odd" >   <a href="./aint.3.html"> aint.3 </a> </td>
+ <td class="odd" >   <a href="./all.3.html"> all.3 </a> </td>
+ <td class="odd" >   <a href="./allocated.3.html"> allocated.3 </a> </td>
+ <td class="odd" >   <a href="./almost.3.html"> almost.3 </a> </td>
+</tr>
+<tr><!-- line 16 -->
+ <td class="even" >  <a href="./alphabet.1.html"> alphabet.1 </a> </td>
+ <td class="even" >   <a href="./anint.3.html"> anint.3 </a> </td>
+ <td class="even" >   <a href="./any.3.html"> any.3 </a> </td>
+ <td class="even" >   <a href="./anyinteger_to_128bit.3.html"> anyinteger_to_128bit.3 </a> </td>
+ <td class="even" >   <a href="./anyscalar_to_real.3.html"> anyscalar_to_real.3 </a> </td>
+</tr>
+<tr><!-- line 17 -->
+ <td class="odd" >  <a href="./arc.3.html"> arc.3 </a> </td>
+ <td class="odd" >   <a href="./asa2pdf.1.html"> asa2pdf.1 </a> </td>
+ <td class="odd" >   <a href="./asin.3.html"> asin.3 </a> </td>
+ <td class="odd" >   <a href="./asinh.3.html"> asinh.3 </a> </td>
+ <td class="odd" >   <a href="./associated.3.html"> associated.3 </a> </td>
+</tr>
+<tr><!-- line 18 -->
+ <td class="even" >  <a href="./atan.3.html"> atan.3 </a> </td>
+ <td class="even" >   <a href="./atan2.3.html"> atan2.3 </a> </td>
+ <td class="even" >   <a href="./atanh.3.html"> atanh.3 </a> </td>
+ <td class="even" >   <a href="./atomic_add.3.html"> atomic_add.3 </a> </td>
+ <td class="even" >   <a href="./atomic_and.3.html"> atomic_and.3 </a> </td>
+</tr>
+<tr><!-- line 19 -->
+ <td class="odd" >  <a href="./atomic_cas.3.html"> atomic_cas.3 </a> </td>
+ <td class="odd" >   <a href="./atomic_define.3.html"> atomic_define.3 </a> </td>
+ <td class="odd" >   <a href="./atomic_fetch_add.3.html"> atomic_fetch_add.3 </a> </td>
+ <td class="odd" >   <a href="./atomic_fetch_and.3.html"> atomic_fetch_and.3 </a> </td>
+ <td class="odd" >   <a href="./atomic_fetch_or.3.html"> atomic_fetch_or.3 </a> </td>
+</tr>
+<tr><!-- line 20 -->
+ <td class="even" >  <a href="./atomic_fetch_xor.3.html"> atomic_fetch_xor.3 </a> </td>
+ <td class="even" >   <a href="./atomic_or.3.html"> atomic_or.3 </a> </td>
+ <td class="even" >   <a href="./atomic_ref.3.html"> atomic_ref.3 </a> </td>
+ <td class="even" >   <a href="./atomic_xor.3.html"> atomic_xor.3 </a> </td>
+ <td class="even" >   <a href="./bds.3.html"> bds.3 </a> </td>
+</tr>
+<tr><!-- line 21 -->
+ <td class="odd" >  <a href="./bessel_j0.3.html"> bessel_j0.3 </a> </td>
+ <td class="odd" >   <a href="./bessel_j1.3.html"> bessel_j1.3 </a> </td>
+ <td class="odd" >   <a href="./bessel_jn.3.html"> bessel_jn.3 </a> </td>
+ <td class="odd" >   <a href="./bessel_y0.3.html"> bessel_y0.3 </a> </td>
+ <td class="odd" >   <a href="./bessel_y1.3.html"> bessel_y1.3 </a> </td>
+</tr>
+<tr><!-- line 22 -->
+ <td class="even" >  <a href="./bessel_yn.3.html"> bessel_yn.3 </a> </td>
+ <td class="even" >   <a href="./bge.3.html"> bge.3 </a> </td>
+ <td class="even" >   <a href="./bgt.3.html"> bgt.3 </a> </td>
+ <td class="even" >   <a href="./biggest_ortho2.3.html"> biggest_ortho2.3 </a> </td>
+ <td class="even" >   <a href="./bit_size.3.html"> bit_size.3 </a> </td>
+</tr>
+<tr><!-- line 23 -->
+ <td class="odd" >  <a href="./ble.3.html"> ble.3 </a> </td>
+ <td class="odd" >   <a href="./block.7.html"> block.7 </a> </td>
+ <td class="odd" >   <a href="./blocks.3.html"> blocks.3 </a> </td>
+ <td class="odd" >   <a href="./blt.3.html"> blt.3 </a> </td>
+ <td class="odd" >   <a href="./box_month.3.html"> box_month.3 </a> </td>
+</tr>
+<tr><!-- line 24 -->
+ <td class="even" >  <a href="./btest.3.html"> btest.3 </a> </td>
+ <td class="even" >   <a href="./c2f.3.html"> c2f.3 </a> </td>
+ <td class="even" >   <a href="./c2s.3.html"> c2s.3 </a> </td>
+ <td class="even" >   <a href="./c_associated.3.html"> c_associated.3 </a> </td>
+ <td class="even" >   <a href="./c_f_pointer.3.html"> c_f_pointer.3 </a> </td>
+</tr>
+<tr><!-- line 25 -->
+ <td class="odd" >  <a href="./c_f_procpointer.3.html"> c_f_procpointer.3 </a> </td>
+ <td class="odd" >   <a href="./c_funloc.3.html"> c_funloc.3 </a> </td>
+ <td class="odd" >   <a href="./c_loc.3.html"> c_loc.3 </a> </td>
+ <td class="odd" >   <a href="./c_sizeof.3.html"> c_sizeof.3 </a> </td>
+ <td class="odd" >   <a href="./cartesian_to_polar.3.html"> cartesian_to_polar.3 </a> </td>
+</tr>
+<tr><!-- line 26 -->
+ <td class="even" >  <a href="./cartesian_to_spherical.3.html"> cartesian_to_spherical.3 </a> </td>
+ <td class="even" >   <a href="./case.7.html"> case.7 </a> </td>
+ <td class="even" >   <a href="./ceiling.3.html"> ceiling.3 </a> </td>
+ <td class="even" >   <a href="./centertext.3.html"> centertext.3 </a> </td>
+ <td class="even" >   <a href="./cf.1.html"> cf.1 </a> </td>
+</tr>
+<tr><!-- line 27 -->
+ <td class="odd" >  <a href="./change.1.html"> change.1 </a> </td>
+ <td class="odd" >   <a href="./change.3.html"> change.3 </a> </td>
+ <td class="odd" >   <a href="./char.3.html"> char.3 </a> </td>
+ <td class="odd" >   <a href="./chomp.3.html"> chomp.3 </a> </td>
+ <td class="odd" >   <a href="./circle.3.html"> circle.3 </a> </td>
+</tr>
+<tr><!-- line 28 -->
+ <td class="even" >  <a href="./circleprecision.3.html"> circleprecision.3 </a> </td>
+ <td class="even" >   <a href="./citer.3.html"> citer.3 </a> </td>
+ <td class="even" >   <a href="./clear.3.html"> clear.3 </a> </td>
+ <td class="even" >   <a href="./closepoly.3.html"> closepoly.3 </a> </td>
+ <td class="even" >   <a href="./closest_color_name.3.html"> closest_color_name.3 </a> </td>
+</tr>
+<tr><!-- line 29 -->
+ <td class="odd" >  <a href="./cmplx.3.html"> cmplx.3 </a> </td>
+ <td class="odd" >   <a href="./co_broadcast.3.html"> co_broadcast.3 </a> </td>
+ <td class="odd" >   <a href="./co_max.3.html"> co_max.3 </a> </td>
+ <td class="odd" >   <a href="./co_min.3.html"> co_min.3 </a> </td>
+ <td class="odd" >   <a href="./co_reduce.3.html"> co_reduce.3 </a> </td>
+</tr>
+<tr><!-- line 30 -->
+ <td class="even" >  <a href="./co_sum.3.html"> co_sum.3 </a> </td>
+ <td class="even" >   <a href="./color.3.html"> color.3 </a> </td>
+ <td class="even" >   <a href="./color_name2rgb.3.html"> color_name2rgb.3 </a> </td>
+ <td class="even" >   <a href="./colors.1.html"> colors.1 </a> </td>
+ <td class="even" >   <a href="./command_argument_count.3.html"> command_argument_count.3 </a> </td>
+</tr>
+<tr><!-- line 31 -->
+ <td class="odd" >  <a href="./compact.3.html"> compact.3 </a> </td>
+ <td class="odd" >   <a href="./compiler_options.3.html"> compiler_options.3 </a> </td>
+ <td class="odd" >   <a href="./compiler_version.3.html"> compiler_version.3 </a> </td>
+ <td class="odd" >   <a href="./compute.1.html"> compute.1 </a> </td>
+ <td class="odd" >   <a href="./cond.3.html"> cond.3 </a> </td>
+</tr>
+<tr><!-- line 32 -->
+ <td class="even" >  <a href="./conjg.3.html"> conjg.3 </a> </td>
+ <td class="even" >   <a href="./continue.7.html"> continue.7 </a> </td>
+ <td class="even" >   <a href="./cos.3.html"> cos.3 </a> </td>
+ <td class="even" >   <a href="./cosd.3.html"> cosd.3 </a> </td>
+ <td class="even" >   <a href="./cosh.3.html"> cosh.3 </a> </td>
+</tr>
+<tr><!-- line 33 -->
+ <td class="odd" >  <a href="./count.3.html"> count.3 </a> </td>
+ <td class="odd" >   <a href="./cprint.1.html"> cprint.1 </a> </td>
+ <td class="odd" >   <a href="./cpu_time.3.html"> cpu_time.3 </a> </td>
+ <td class="odd" >   <a href="./crop.3.html"> crop.3 </a> </td>
+ <td class="odd" >   <a href="./cshift.3.html"> cshift.3 </a> </td>
+</tr>
+<tr><!-- line 34 -->
+ <td class="even" >  <a href="./cycle.7.html"> cycle.7 </a> </td>
+ <td class="even" >   <a href="./d2j.3.html"> d2j.3 </a> </td>
+ <td class="even" >   <a href="./d2o.3.html"> d2o.3 </a> </td>
+ <td class="even" >   <a href="./d2r.3.html"> d2r.3 </a> </td>
+ <td class="even" >   <a href="./d2u.3.html"> d2u.3 </a> </td>
+</tr>
+<tr><!-- line 35 -->
+ <td class="odd" >  <a href="./d2w.3.html"> d2w.3 </a> </td>
+ <td class="odd" >   <a href="./data.7.html"> data.7 </a> </td>
+ <td class="odd" >   <a href="./date_and_time.3.html"> date_and_time.3 </a> </td>
+ <td class="odd" >   <a href="./date_to_julian.3.html"> date_to_julian.3 </a> </td>
+ <td class="odd" >   <a href="./date_to_unix.3.html"> date_to_unix.3 </a> </td>
+</tr>
+<tr><!-- line 36 -->
+ <td class="even" >  <a href="./days2sec.1.html"> days2sec.1 </a> </td>
+ <td class="even" >   <a href="./days2sec.3.html"> days2sec.3 </a> </td>
+ <td class="even" >   <a href="./dble.3.html"> dble.3 </a> </td>
+ <td class="even" >   <a href="./delim.3.html"> delim.3 </a> </td>
+ <td class="even" >   <a href="./describe.3.html"> describe.3 </a> </td>
+</tr>
+<tr><!-- line 37 -->
+ <td class="odd" >  <a href="./dget.3.html"> dget.3 </a> </td>
+ <td class="odd" >   <a href="./dgets.3.html"> dgets.3 </a> </td>
+ <td class="odd" >   <a href="./digits.3.html"> digits.3 </a> </td>
+ <td class="odd" >   <a href="./dim.3.html"> dim.3 </a> </td>
+ <td class="odd" >   <a href="./dirname.3.html"> dirname.3 </a> </td>
+</tr>
+<tr><!-- line 38 -->
+ <td class="even" >  <a href="./dissect.3.html"> dissect.3 </a> </td>
+ <td class="even" >   <a href="./dl_slices.3.html"> dl_slices.3 </a> </td>
+ <td class="even" >   <a href="./dnum0.3.html"> dnum0.3 </a> </td>
+ <td class="even" >   <a href="./do.7.html"> do.7 </a> </td>
+ <td class="even" >   <a href="./dot_product.3.html"> dot_product.3 </a> </td>
+</tr>
+<tr><!-- line 39 -->
+ <td class="odd" >  <a href="./dow.3.html"> dow.3 </a> </td>
+ <td class="odd" >   <a href="./download.html"> download </a> </td>
+ <td class="odd" >   <a href="./dp_addig.3.html"> dp_addig.3 </a> </td>
+ <td class="odd" >   <a href="./dprod.3.html"> dprod.3 </a> </td>
+ <td class="odd" >   <a href="./draw2.3.html"> draw2.3 </a> </td>
+</tr>
+<tr><!-- line 40 -->
+ <td class="even" >  <a href="./drawchar.3.html"> drawchar.3 </a> </td>
+ <td class="even" >   <a href="./drawstr.3.html"> drawstr.3 </a> </td>
+ <td class="even" >   <a href="./dshiftl.3.html"> dshiftl.3 </a> </td>
+ <td class="even" >   <a href="./dshiftr.3.html"> dshiftr.3 </a> </td>
+ <td class="even" >   <a href="./dtu.1.html"> dtu.1 </a> </td>
+</tr>
+<tr><!-- line 41 -->
+ <td class="odd" >  <a href="./easter.1.html"> easter.1 </a> </td>
+ <td class="odd" >   <a href="./endselect.7.html"> endselect.7 </a> </td>
+ <td class="odd" >   <a href="./envelope.3.html"> envelope.3 </a> </td>
+ <td class="odd" >   <a href="./eoshift.3.html"> eoshift.3 </a> </td>
+ <td class="odd" >   <a href="./epsilon.3.html"> epsilon.3 </a> </td>
+</tr>
+<tr><!-- line 42 -->
+ <td class="even" >  <a href="./erf.3.html"> erf.3 </a> </td>
+ <td class="even" >   <a href="./erfc.3.html"> erfc.3 </a> </td>
+ <td class="even" >   <a href="./erfc_scaled.3.html"> erfc_scaled.3 </a> </td>
+ <td class="even" >   <a href="./event_query.3.html"> event_query.3 </a> </td>
+ <td class="even" >   <a href="./exchange.1.html"> exchange.1 </a> </td>
+</tr>
+<tr><!-- line 43 -->
+ <td class="odd" >  <a href="./execute_command_line.3.html"> execute_command_line.3 </a> </td>
+ <td class="odd" >   <a href="./exit.7.html"> exit.7 </a> </td>
+ <td class="odd" >   <a href="./exp.3.html"> exp.3 </a> </td>
+ <td class="odd" >   <a href="./expand.3.html"> expand.3 </a> </td>
+ <td class="odd" >   <a href="./exponent.3.html"> exponent.3 </a> </td>
+</tr>
+<tr><!-- line 44 -->
+ <td class="even" >  <a href="./extremum.3.html"> extremum.3 </a> </td>
+ <td class="even" >   <a href="./f2c.3.html"> f2c.3 </a> </td>
+ <td class="even" >   <a href="./factors.1.html"> factors.1 </a> </td>
+ <td class="even" >   <a href="./feet_to_meters.3.html"> feet_to_meters.3 </a> </td>
+ <td class="even" >   <a href="./fileglob.3.html"> fileglob.3 </a> </td>
+</tr>
+<tr><!-- line 45 -->
+ <td class="odd" >  <a href="./float.3.html"> float.3 </a> </td>
+ <td class="odd" >   <a href="./floor.3.html"> floor.3 </a> </td>
+ <td class="odd" >   <a href="./fmtdate.3.html"> fmtdate.3 </a> </td>
+ <td class="odd" >   <a href="./fmtdate_usage.3.html"> fmtdate_usage.3 </a> </td>
+ <td class="odd" >   <a href="./font.3.html"> font.3 </a> </td>
+</tr>
+<tr><!-- line 46 -->
+ <td class="even" >  <a href="./fortran.7.html"> fortran.7 </a> </td>
+ <td class="even" >   <a href="./fortran_continuation_line.7.html"> fortran_continuation_line.7 </a> </td>
+ <td class="even" >   <a href="./fraction.3.html"> fraction.3 </a> </td>
+ <td class="even" >   <a href="./fseq.1.html"> fseq.1 </a> </td>
+ <td class="even" >   <a href="./gamma.3.html"> gamma.3 </a> </td>
+</tr>
+<tr><!-- line 47 -->
+ <td class="odd" >  <a href="./gcd.1.html"> gcd.1 </a> </td>
+ <td class="odd" >   <a href="./get_command.3.html"> get_command.3 </a> </td>
+ <td class="odd" >   <a href="./get_command_argument.3.html"> get_command_argument.3 </a> </td>
+ <td class="odd" >   <a href="./get_environment_variable.3.html"> get_environment_variable.3 </a> </td>
+ <td class="odd" >   <a href="./getdisplaysize.3.html"> getdisplaysize.3 </a> </td>
+</tr>
+<tr><!-- line 48 -->
+ <td class="even" >  <a href="./getgp2.3.html"> getgp2.3 </a> </td>
+ <td class="even" >   <a href="./getkey.3.html"> getkey.3 </a> </td>
+ <td class="even" >   <a href="./getvalue.3.html"> getvalue.3 </a> </td>
+ <td class="even" >   <a href="./getviewport.3.html"> getviewport.3 </a> </td>
+ <td class="even" >   <a href="./greatest_common_divisor.3.html"> greatest_common_divisor.3 </a> </td>
+</tr>
+<tr><!-- line 49 -->
+ <td class="odd" >  <a href="./guessdate.3.html"> guessdate.3 </a> </td>
+ <td class="odd" >   <a href="./hershey.3.html"> hershey.3 </a> </td>
+ <td class="odd" >   <a href="./hue.3.html"> hue.3 </a> </td>
+ <td class="odd" >   <a href="./huegif.1.html"> huegif.1 </a> </td>
+ <td class="odd" >   <a href="./huge.3.html"> huge.3 </a> </td>
+</tr>
+<tr><!-- line 50 -->
+ <td class="even" >  <a href="./hypot.3.html"> hypot.3 </a> </td>
+ <td class="even" >   <a href="./i_is_prime.3.html"> i_is_prime.3 </a> </td>
+ <td class="even" >   <a href="./iachar.3.html"> iachar.3 </a> </td>
+ <td class="even" >   <a href="./iall.3.html"> iall.3 </a> </td>
+ <td class="even" >   <a href="./iand.3.html"> iand.3 </a> </td>
+</tr>
+<tr><!-- line 51 -->
+ <td class="odd" >  <a href="./iany.3.html"> iany.3 </a> </td>
+ <td class="odd" >   <a href="./ibclr.3.html"> ibclr.3 </a> </td>
+ <td class="odd" >   <a href="./ibits.3.html"> ibits.3 </a> </td>
+ <td class="odd" >   <a href="./ibset.3.html"> ibset.3 </a> </td>
+ <td class="odd" >   <a href="./ichar.3.html"> ichar.3 </a> </td>
+</tr>
+<tr><!-- line 52 -->
+ <td class="even" >  <a href="./ieor.3.html"> ieor.3 </a> </td>
+ <td class="even" >   <a href="./iget.3.html"> iget.3 </a> </td>
+ <td class="even" >   <a href="./igets.3.html"> igets.3 </a> </td>
+ <td class="even" >   <a href="./igetvalue.3.html"> igetvalue.3 </a> </td>
+ <td class="even" >   <a href="./image_index.3.html"> image_index.3 </a> </td>
+</tr>
+<tr><!-- line 53 -->
+ <td class="odd" >  <a href="./implied_do.7.html"> implied_do.7 </a> </td>
+ <td class="odd" >   <a href="./indent.3.html"> indent.3 </a> </td>
+ <td class="odd" >   <a href="./index.3.html"> index.3 </a> </td>
+ <td class="odd" >   <a href="./inpolygon.3.html"> inpolygon.3 </a> </td>
+ <td class="odd" >   <a href="./int.3.html"> int.3 </a> </td>
+</tr>
+<tr><!-- line 54 -->
+ <td class="even" >  <a href="./intrinsics.1.html"> intrinsics.1 </a> </td>
+ <td class="even" >   <a href="./intrinsics.7.html"> intrinsics.7 </a> </td>
+ <td class="even" >   <a href="./intro_blas1.3.html"> intro_blas1.3 </a> </td>
+ <td class="even" >   <a href="./inum0.3.html"> inum0.3 </a> </td>
+ <td class="even" >   <a href="./invert_2x2.3.html"> invert_2x2.3 </a> </td>
+</tr>
+<tr><!-- line 55 -->
+ <td class="odd" >  <a href="./invert_3x3.3.html"> invert_3x3.3 </a> </td>
+ <td class="odd" >   <a href="./invert_4x4.3.html"> invert_4x4.3 </a> </td>
+ <td class="odd" >   <a href="./ior.3.html"> ior.3 </a> </td>
+ <td class="odd" >   <a href="./iparity.3.html"> iparity.3 </a> </td>
+ <td class="odd" >   <a href="./is_contiguous.3.html"> is_contiguous.3 </a> </td>
+</tr>
+<tr><!-- line 56 -->
+ <td class="even" >  <a href="./is_iostat_end.3.html"> is_iostat_end.3 </a> </td>
+ <td class="even" >   <a href="./is_iostat_eor.3.html"> is_iostat_eor.3 </a> </td>
+ <td class="even" >   <a href="./isalnum.3.html"> isalnum.3 </a> </td>
+ <td class="even" >   <a href="./isalpha.3.html"> isalpha.3 </a> </td>
+ <td class="even" >   <a href="./isascii.3.html"> isascii.3 </a> </td>
+</tr>
+<tr><!-- line 57 -->
+ <td class="odd" >  <a href="./isblank.3.html"> isblank.3 </a> </td>
+ <td class="odd" >   <a href="./iscntrl.3.html"> iscntrl.3 </a> </td>
+ <td class="odd" >   <a href="./isdigit.3.html"> isdigit.3 </a> </td>
+ <td class="odd" >   <a href="./isdir.3.html"> isdir.3 </a> </td>
+ <td class="odd" >   <a href="./isgraph.3.html"> isgraph.3 </a> </td>
+</tr>
+<tr><!-- line 58 -->
+ <td class="even" >  <a href="./ishft.3.html"> ishft.3 </a> </td>
+ <td class="even" >   <a href="./ishftc.3.html"> ishftc.3 </a> </td>
+ <td class="even" >   <a href="./islower.3.html"> islower.3 </a> </td>
+ <td class="even" >   <a href="./isprint.3.html"> isprint.3 </a> </td>
+ <td class="even" >   <a href="./ispunct.3.html"> ispunct.3 </a> </td>
+</tr>
+<tr><!-- line 59 -->
+ <td class="odd" >  <a href="./isspace.3.html"> isspace.3 </a> </td>
+ <td class="odd" >   <a href="./isupper.3.html"> isupper.3 </a> </td>
+ <td class="odd" >   <a href="./isxdigit.3.html"> isxdigit.3 </a> </td>
+ <td class="odd" >   <a href="./j2d.3.html"> j2d.3 </a> </td>
+ <td class="odd" >   <a href="./journal.3.html"> journal.3 </a> </td>
+</tr>
+<tr><!-- line 60 -->
+ <td class="even" >  <a href="./jucalc.3.html"> jucalc.3 </a> </td>
+ <td class="even" >   <a href="./jucalcx.3.html"> jucalcx.3 </a> </td>
+ <td class="even" >   <a href="./julfit.3.html"> julfit.3 </a> </td>
+ <td class="even" >   <a href="./julfit1.3.html"> julfit1.3 </a> </td>
+ <td class="even" >   <a href="./julian_to_date.3.html"> julian_to_date.3 </a> </td>
+</tr>
+<tr><!-- line 61 -->
+ <td class="odd" >  <a href="./junbad.3.html"> junbad.3 </a> </td>
+ <td class="odd" >   <a href="./junbat.3.html"> junbat.3 </a> </td>
+ <td class="odd" >   <a href="./junbuster.3.html"> junbuster.3 </a> </td>
+ <td class="odd" >   <a href="./jundragon.3.html"> jundragon.3 </a> </td>
+ <td class="odd" >   <a href="./junroach.3.html"> junroach.3 </a> </td>
+</tr>
+<tr><!-- line 62 -->
+ <td class="even" >  <a href="./junsun.3.html"> junsun.3 </a> </td>
+ <td class="even" >   <a href="./juntrolls.3.html"> juntrolls.3 </a> </td>
+ <td class="even" >   <a href="./justfy.3.html"> justfy.3 </a> </td>
+ <td class="even" >   <a href="./kind.3.html"> kind.3 </a> </td>
+ <td class="even" >   <a href="./kracken.3.html"> kracken.3 </a> </td>
+</tr>
+<tr><!-- line 63 -->
+ <td class="odd" >  <a href="./lbound.3.html"> lbound.3 </a> </td>
+ <td class="odd" >   <a href="./lcm.1.html"> lcm.1 </a> </td>
+ <td class="odd" >   <a href="./lcobound.3.html"> lcobound.3 </a> </td>
+ <td class="odd" >   <a href="./leadz.3.html"> leadz.3 </a> </td>
+ <td class="odd" >   <a href="./least_common_multiple.3.html"> least_common_multiple.3 </a> </td>
+</tr>
+<tr><!-- line 64 -->
+ <td class="even" >  <a href="./len.3.html"> len.3 </a> </td>
+ <td class="even" >   <a href="./len_trim.3.html"> len_trim.3 </a> </td>
+ <td class="even" >   <a href="./len_white.3.html"> len_white.3 </a> </td>
+ <td class="even" >   <a href="./lenset.3.html"> lenset.3 </a> </td>
+ <td class="even" >   <a href="./lge.3.html"> lge.3 </a> </td>
+</tr>
+<tr><!-- line 65 -->
+ <td class="odd" >  <a href="./lget.3.html"> lget.3 </a> </td>
+ <td class="odd" >   <a href="./lgets.3.html"> lgets.3 </a> </td>
+ <td class="odd" >   <a href="./lgt.3.html"> lgt.3 </a> </td>
+ <td class="odd" >   <a href="./line.3.html"> line.3 </a> </td>
+ <td class="odd" >   <a href="./linearint.3.html"> linearint.3 </a> </td>
+</tr>
+<tr><!-- line 66 -->
+ <td class="even" >  <a href="./linewidth.3.html"> linewidth.3 </a> </td>
+ <td class="even" >   <a href="./lle.3.html"> lle.3 </a> </td>
+ <td class="even" >   <a href="./llt.3.html"> llt.3 </a> </td>
+ <td class="even" >   <a href="./locpt.3.html"> locpt.3 </a> </td>
+ <td class="even" >   <a href="./log.3.html"> log.3 </a> </td>
+</tr>
+<tr><!-- line 67 -->
+ <td class="odd" >  <a href="./log10.3.html"> log10.3 </a> </td>
+ <td class="odd" >   <a href="./log_gamma.3.html"> log_gamma.3 </a> </td>
+ <td class="odd" >   <a href="./logical.3.html"> logical.3 </a> </td>
+ <td class="odd" >   <a href="./lower.3.html"> lower.3 </a> </td>
+ <td class="odd" >   <a href="./lowess.3.html"> lowess.3 </a> </td>
+</tr>
+<tr><!-- line 68 -->
+ <td class="even" >  <a href="./makepoly.3.html"> makepoly.3 </a> </td>
+ <td class="even" >   <a href="./man1.html"> man1 </a> </td>
+ <td class="even" >   <a href="./man2.html"> man2 </a> </td>
+ <td class="even" >   <a href="./man3.html"> man3 </a> </td>
+ <td class="even" >   <a href="./man3i.html"> man3i </a> </td>
+</tr>
+<tr><!-- line 69 -->
+ <td class="odd" >  <a href="./man4.html"> man4 </a> </td>
+ <td class="odd" >   <a href="./man5.html"> man5 </a> </td>
+ <td class="odd" >   <a href="./man6.html"> man6 </a> </td>
+ <td class="odd" >   <a href="./man7.html"> man7 </a> </td>
+ <td class="odd" >   <a href="./man8.html"> man8 </a> </td>
+</tr>
+<tr><!-- line 70 -->
+ <td class="even" >  <a href="./manup.1.html"> manup.1 </a> </td>
+ <td class="even" >   <a href="./mapcolor.3.html"> mapcolor.3 </a> </td>
+ <td class="even" >   <a href="./maskit.3.html"> maskit.3 </a> </td>
+ <td class="even" >   <a href="./maskl.3.html"> maskl.3 </a> </td>
+ <td class="even" >   <a href="./maskr.3.html"> maskr.3 </a> </td>
+</tr>
+<tr><!-- line 71 -->
+ <td class="odd" >  <a href="./matchw.3.html"> matchw.3 </a> </td>
+ <td class="odd" >   <a href="./matmul.3.html"> matmul.3 </a> </td>
+ <td class="odd" >   <a href="./max.3.html"> max.3 </a> </td>
+ <td class="odd" >   <a href="./maxexponent.3.html"> maxexponent.3 </a> </td>
+ <td class="odd" >   <a href="./maxloc.3.html"> maxloc.3 </a> </td>
+</tr>
+<tr><!-- line 72 -->
+ <td class="even" >  <a href="./maxval.3.html"> maxval.3 </a> </td>
+ <td class="even" >   <a href="./merge.3.html"> merge.3 </a> </td>
+ <td class="even" >   <a href="./merge_bits.3.html"> merge_bits.3 </a> </td>
+ <td class="even" >   <a href="./merge_str.3.html"> merge_str.3 </a> </td>
+ <td class="even" >   <a href="./meters_to_feet.3.html"> meters_to_feet.3 </a> </td>
+</tr>
+<tr><!-- line 73 -->
+ <td class="odd" >  <a href="./min.3.html"> min.3 </a> </td>
+ <td class="odd" >   <a href="./minexponent.3.html"> minexponent.3 </a> </td>
+ <td class="odd" >   <a href="./minloc.3.html"> minloc.3 </a> </td>
+ <td class="odd" >   <a href="./minval.3.html"> minval.3 </a> </td>
+ <td class="odd" >   <a href="./mo2d.3.html"> mo2d.3 </a> </td>
+</tr>
+<tr><!-- line 74 -->
+ <td class="even" >  <a href="./mo2v.3.html"> mo2v.3 </a> </td>
+ <td class="even" >   <a href="./mod.3.html"> mod.3 </a> </td>
+ <td class="even" >   <a href="./modif.3.html"> modif.3 </a> </td>
+ <td class="even" >   <a href="./modulo.3.html"> modulo.3 </a> </td>
+ <td class="even" >   <a href="./month.1.html"> month.1 </a> </td>
+</tr>
+<tr><!-- line 75 -->
+ <td class="odd" >  <a href="./moon_fullness.3.html"> moon_fullness.3 </a> </td>
+ <td class="odd" >   <a href="./move2.3.html"> move2.3 </a> </td>
+ <td class="odd" >   <a href="./move_alloc.3.html"> move_alloc.3 </a> </td>
+ <td class="odd" >   <a href="./mvbits.3.html"> mvbits.3 </a> </td>
+ <td class="odd" >   <a href="./nearest.3.html"> nearest.3 </a> </td>
+</tr>
+<tr><!-- line 76 -->
+ <td class="even" >  <a href="./new_line.3.html"> new_line.3 </a> </td>
+ <td class="even" >   <a href="./nint.3.html"> nint.3 </a> </td>
+ <td class="even" >   <a href="./noesc.3.html"> noesc.3 </a> </td>
+ <td class="even" >   <a href="./norm2.3.html"> norm2.3 </a> </td>
+ <td class="even" >   <a href="./nospace.3.html"> nospace.3 </a> </td>
+</tr>
+<tr><!-- line 77 -->
+ <td class="odd" >  <a href="./not.3.html"> not.3 </a> </td>
+ <td class="odd" >   <a href="./notabs.1.html"> notabs.1 </a> </td>
+ <td class="odd" >   <a href="./notabs.3.html"> notabs.3 </a> </td>
+ <td class="odd" >   <a href="./note.1.html"> note.1 </a> </td>
+ <td class="odd" >   <a href="./notopen.3.html"> notopen.3 </a> </td>
+</tr>
+<tr><!-- line 78 -->
+ <td class="even" >  <a href="./now.1.html"> now.1 </a> </td>
+ <td class="even" >   <a href="./now.3.html"> now.3 </a> </td>
+ <td class="even" >   <a href="./null.3.html"> null.3 </a> </td>
+ <td class="even" >   <a href="./num_images.3.html"> num_images.3 </a> </td>
+ <td class="even" >   <a href="./numdiff.1.html"> numdiff.1 </a> </td>
+</tr>
+<tr><!-- line 79 -->
+ <td class="odd" >  <a href="./o2d.3.html"> o2d.3 </a> </td>
+ <td class="odd" >   <a href="./ordinal_to_date.3.html"> ordinal_to_date.3 </a> </td>
+ <td class="odd" >   <a href="./ortho2.3.html"> ortho2.3 </a> </td>
+ <td class="odd" >   <a href="./other2.3.html"> other2.3 </a> </td>
+ <td class="odd" >   <a href="./pack.3.html"> pack.3 </a> </td>
+</tr>
+<tr><!-- line 80 -->
+ <td class="even" >  <a href="./paranoid.1.html"> paranoid.1 </a> </td>
+ <td class="even" >   <a href="./parity.3.html"> parity.3 </a> </td>
+ <td class="even" >   <a href="./parse.3.html"> parse.3 </a> </td>
+ <td class="even" >   <a href="./paws.1.html"> paws.1 </a> </td>
+ <td class="even" >   <a href="./pdec.3.html"> pdec.3 </a> </td>
+</tr>
+<tr><!-- line 81 -->
+ <td class="odd" >  <a href="./pendulum.1.html"> pendulum.1 </a> </td>
+ <td class="odd" >   <a href="./penv.1.html"> penv.1 </a> </td>
+ <td class="odd" >   <a href="./percent_done.3.html"> percent_done.3 </a> </td>
+ <td class="odd" >   <a href="./phase_of_moon.3.html"> phase_of_moon.3 </a> </td>
+ <td class="odd" >   <a href="./pixel_slice.3.html"> pixel_slice.3 </a> </td>
+</tr>
+<tr><!-- line 82 -->
+ <td class="even" >  <a href="./point2.3.html"> point2.3 </a> </td>
+ <td class="even" >   <a href="./polar_to_cartesian.3.html"> polar_to_cartesian.3 </a> </td>
+ <td class="even" >   <a href="./poly2.3.html"> poly2.3 </a> </td>
+ <td class="even" >   <a href="./poly_intercept.3.html"> poly_intercept.3 </a> </td>
+ <td class="even" >   <a href="./polyarea.3.html"> polyarea.3 </a> </td>
+</tr>
+<tr><!-- line 83 -->
+ <td class="odd" >  <a href="./polyline.3.html"> polyline.3 </a> </td>
+ <td class="odd" >   <a href="./popcnt.3.html"> popcnt.3 </a> </td>
+ <td class="odd" >   <a href="./poppar.3.html"> poppar.3 </a> </td>
+ <td class="odd" >   <a href="./ppm.5.html"> ppm.5 </a> </td>
+ <td class="odd" >   <a href="./precision.3.html"> precision.3 </a> </td>
+</tr>
+<tr><!-- line 84 -->
+ <td class="even" >  <a href="./prefsize.3.html"> prefsize.3 </a> </td>
+ <td class="even" >   <a href="./present.3.html"> present.3 </a> </td>
+ <td class="even" >   <a href="./prime_factors.3.html"> prime_factors.3 </a> </td>
+ <td class="even" >   <a href="./print_ascii.3.html"> print_ascii.3 </a> </td>
+ <td class="even" >   <a href="./print_inquire.3.html"> print_inquire.3 </a> </td>
+</tr>
+<tr><!-- line 85 -->
+ <td class="odd" >  <a href="./print_ppm.3.html"> print_ppm.3 </a> </td>
+ <td class="odd" >   <a href="./process_close.3.html"> process_close.3 </a> </td>
+ <td class="odd" >   <a href="./process_open.3.html"> process_open.3 </a> </td>
+ <td class="odd" >   <a href="./process_open_read.3.html"> process_open_read.3 </a> </td>
+ <td class="odd" >   <a href="./process_open_write.3.html"> process_open_write.3 </a> </td>
+</tr>
+<tr><!-- line 86 -->
+ <td class="even" >  <a href="./process_readall.3.html"> process_readall.3 </a> </td>
+ <td class="even" >   <a href="./process_readline.3.html"> process_readline.3 </a> </td>
+ <td class="even" >   <a href="./process_writeline.3.html"> process_writeline.3 </a> </td>
+ <td class="even" >   <a href="./product.3.html"> product.3 </a> </td>
+ <td class="even" >   <a href="./r2d.3.html"> r2d.3 </a> </td>
+</tr>
+<tr><!-- line 87 -->
+ <td class="odd" >  <a href="./radix.3.html"> radix.3 </a> </td>
+ <td class="odd" >   <a href="./random_number.3.html"> random_number.3 </a> </td>
+ <td class="odd" >   <a href="./random_seed.3.html"> random_seed.3 </a> </td>
+ <td class="odd" >   <a href="./range.3.html"> range.3 </a> </td>
+ <td class="odd" >   <a href="./rank.3.html"> rank.3 </a> </td>
+</tr>
+<tr><!-- line 88 -->
+ <td class="even" >  <a href="./rdraw2.3.html"> rdraw2.3 </a> </td>
+ <td class="even" >   <a href="./readgif.3.html"> readgif.3 </a> </td>
+ <td class="even" >   <a href="./readline.3.html"> readline.3 </a> </td>
+ <td class="even" >   <a href="./real.3.html"> real.3 </a> </td>
+ <td class="even" >   <a href="./rect.3.html"> rect.3 </a> </td>
+</tr>
+<tr><!-- line 89 -->
+ <td class="odd" >  <a href="./redo.3.html"> redo.3 </a> </td>
+ <td class="odd" >   <a href="./regcomp.3.html"> regcomp.3 </a> </td>
+ <td class="odd" >   <a href="./regerror.3.html"> regerror.3 </a> </td>
+ <td class="odd" >   <a href="./regexec.3.html"> regexec.3 </a> </td>
+ <td class="odd" >   <a href="./regfree.3.html"> regfree.3 </a> </td>
+</tr>
+<tr><!-- line 90 -->
+ <td class="even" >  <a href="./regmatch.3.html"> regmatch.3 </a> </td>
+ <td class="even" >   <a href="./repeat.3.html"> repeat.3 </a> </td>
+ <td class="even" >   <a href="./reshape.3.html"> reshape.3 </a> </td>
+ <td class="even" >   <a href="./retrev.3.html"> retrev.3 </a> </td>
+ <td class="even" >   <a href="./rever.1.html"> rever.1 </a> </td>
+</tr>
+<tr><!-- line 91 -->
+ <td class="odd" >  <a href="./reverse.3.html"> reverse.3 </a> </td>
+ <td class="odd" >   <a href="./rgbmono.3.html"> rgbmono.3 </a> </td>
+ <td class="odd" >   <a href="./rget.3.html"> rget.3 </a> </td>
+ <td class="odd" >   <a href="./rgets.3.html"> rgets.3 </a> </td>
+ <td class="odd" >   <a href="./rgetvalue.3.html"> rgetvalue.3 </a> </td>
+</tr>
+<tr><!-- line 92 -->
+ <td class="even" >  <a href="./rmove2.3.html"> rmove2.3 </a> </td>
+ <td class="even" >   <a href="./rnum0.3.html"> rnum0.3 </a> </td>
+ <td class="even" >   <a href="./rrspacing.3.html"> rrspacing.3 </a> </td>
+ <td class="even" >   <a href="./s2c.3.html"> s2c.3 </a> </td>
+ <td class="even" >   <a href="./s2v.3.html"> s2v.3 </a> </td>
+</tr>
+<tr><!-- line 93 -->
+ <td class="odd" >  <a href="./s2vs.3.html"> s2vs.3 </a> </td>
+ <td class="odd" >   <a href="./same_type_as.3.html"> same_type_as.3 </a> </td>
+ <td class="odd" >   <a href="./scale.3.html"> scale.3 </a> </td>
+ <td class="odd" >   <a href="./scale1.3.html"> scale1.3 </a> </td>
+ <td class="odd" >   <a href="./scale3.3.html"> scale3.3 </a> </td>
+</tr>
+<tr><!-- line 94 -->
+ <td class="even" >  <a href="./scan.3.html"> scan.3 </a> </td>
+ <td class="even" >   <a href="./sec2days.1.html"> sec2days.1 </a> </td>
+ <td class="even" >   <a href="./sec2days.3.html"> sec2days.3 </a> </td>
+ <td class="even" >   <a href="./select.7.html"> select.7 </a> </td>
+ <td class="even" >   <a href="./selected_char_kind.3.html"> selected_char_kind.3 </a> </td>
+</tr>
+<tr><!-- line 95 -->
+ <td class="odd" >  <a href="./selected_int_kind.3.html"> selected_int_kind.3 </a> </td>
+ <td class="odd" >   <a href="./selected_real_kind.3.html"> selected_real_kind.3 </a> </td>
+ <td class="odd" >   <a href="./set_environment_variable.3.html"> set_environment_variable.3 </a> </td>
+ <td class="odd" >   <a href="./set_exponent.3.html"> set_exponent.3 </a> </td>
+ <td class="odd" >   <a href="./setprompts.3.html"> setprompts.3 </a> </td>
+</tr>
+<tr><!-- line 96 -->
+ <td class="even" >  <a href="./sget.3.html"> sget.3 </a> </td>
+ <td class="even" >   <a href="./sgets.3.html"> sgets.3 </a> </td>
+ <td class="even" >   <a href="./shape.3.html"> shape.3 </a> </td>
+ <td class="even" >   <a href="./shell.1.html"> shell.1 </a> </td>
+ <td class="even" >   <a href="./shifta.3.html"> shifta.3 </a> </td>
+</tr>
+<tr><!-- line 97 -->
+ <td class="odd" >  <a href="./shiftl.3.html"> shiftl.3 </a> </td>
+ <td class="odd" >   <a href="./shiftr.3.html"> shiftr.3 </a> </td>
+ <td class="odd" >   <a href="./show.3.html"> show.3 </a> </td>
+ <td class="odd" >   <a href="./sign.3.html"> sign.3 </a> </td>
+ <td class="odd" >   <a href="./signs.3.html"> signs.3 </a> </td>
+</tr>
+<tr><!-- line 98 -->
+ <td class="even" >  <a href="./sin.3.html"> sin.3 </a> </td>
+ <td class="even" >   <a href="./sind.3.html"> sind.3 </td>
+ <td> &nbsp; </td>
+ <td> &nbsp; </td>
+ <td> &nbsp; </td>
+</tr>
+<tr><!-- line 99 -->
+ <td class="odd" > </a> </td>
+ <td class="odd" >   <a href="./sinh.3.html"> sinh.3 </a> </td>
+ <td class="odd" >   <a href="./size.3.html"> size.3 </a> </td>
+ <td class="odd" >   <a href="./skekur1.3.html"> skekur1.3 </a> </td>
+ <td> &nbsp; </td>
+</tr>
+<tr><!-- line 100 -->
+ <td class="even" >  <a href="./skekurx.3.html"> skekurx.3 </a> </td>
+ <td class="even" >   <a href="./slurp.3.html"> slurp.3 </a> </td>
+ <td class="even" >   <a href="./sngl.3.html"> sngl.3 </a> </td>
+ <td class="even" >   <a href="./snum0.3.html"> snum0.3 </a> </td>
+ <td class="even" >   <a href="./sort_quick_rx.3.html"> sort_quick_rx.3 </a> </td>
+</tr>
+<tr><!-- line 101 -->
+ <td class="odd" >  <a href="./sort_shell.3.html"> sort_shell.3 </a> </td>
+ <td class="odd" >   <a href="./spacing.3.html"> spacing.3 </a> </td>
+ <td class="odd" >   <a href="./spherical_to_cartesian.3.html"> spherical_to_cartesian.3 </a> </td>
+ <td class="odd" >   <a href="./splift.3.html"> splift.3 </a> </td>
+ <td class="odd" >   <a href="./splint.3.html"> splint.3 </a> </td>
+</tr>
+<tr><!-- line 102 -->
+ <td class="even" >  <a href="./split.3.html"> split.3 </a> </td>
+ <td class="even" >   <a href="./splitname.1.html"> splitname.1 </a> </td>
+ <td class="even" >   <a href="./splitpath.3.html"> splitpath.3 </a> </td>
+ <td class="even" >   <a href="./spread.3.html"> spread.3 </a> </td>
+ <td class="even" >   <a href="./sqrt.3.html"> sqrt.3 </a> </td>
+</tr>
+<tr><!-- line 103 -->
+ <td class="odd" >  <a href="./state.3.html"> state.3 </a> </td>
+ <td class="odd" >   <a href="./stddev.3.html"> stddev.3 </a> </td>
+ <td class="odd" >   <a href="./stderr.3.html"> stderr.3 </a> </td>
+ <td class="odd" >   <a href="./storage_size.3.html"> storage_size.3 </a> </td>
+ <td class="odd" >   <a href="./store.3.html"> store.3 </a> </td>
+</tr>
+<tr><!-- line 104 -->
+ <td class="even" >  <a href="./strgar2.3.html"> strgar2.3 </a> </td>
+ <td class="even" >   <a href="./strgarr.3.html"> strgarr.3 </a> </td>
+ <td class="even" >   <a href="./string_to_value.3.html"> string_to_value.3 </a> </td>
+ <td class="even" >   <a href="./string_to_values.3.html"> string_to_values.3 </a> </td>
+ <td class="even" >   <a href="./strlength.3.html"> strlength.3 </a> </td>
+</tr>
+<tr><!-- line 105 -->
+ <td class="odd" >  <a href="./stuff.3.html"> stuff.3 </a> </td>
+ <td class="odd" >   <a href="./stuffa.3.html"> stuffa.3 </a> </td>
+ <td class="odd" >   <a href="./substitute.3.html"> substitute.3 </a> </td>
+ <td class="odd" >   <a href="./sum.3.html"> sum.3 </a> </td>
+ <td class="odd" >   <a href="./swap.3.html"> swap.3 </a> </td>
+</tr>
+<tr><!-- line 106 -->
+ <td class="even" >  <a href="./switch.3.html"> switch.3 </a> </td>
+ <td class="even" >   <a href="./system_chdir.3.html"> system_chdir.3 </a> </td>
+ <td class="even" >   <a href="./system_chmod.3.html"> system_chmod.3 </a> </td>
+ <td class="even" >   <a href="./system_clearenv.3.html"> system_clearenv.3 </a> </td>
+ <td class="even" >   <a href="./system_clock.3.html"> system_clock.3 </a> </td>
+</tr>
+<tr><!-- line 107 -->
+ <td class="odd" >  <a href="./system_closedir.3.html"> system_closedir.3 </a> </td>
+ <td class="odd" >   <a href="./system_errno.3.html"> system_errno.3 </a> </td>
+ <td class="odd" >   <a href="./system_getcwd.3.html"> system_getcwd.3 </a> </td>
+ <td class="odd" >   <a href="./system_getegid.3.html"> system_getegid.3 </a> </td>
+ <td class="odd" >   <a href="./system_geteuid.3.html"> system_geteuid.3 </a> </td>
+</tr>
+<tr><!-- line 108 -->
+ <td class="even" >  <a href="./system_getgid.3.html"> system_getgid.3 </a> </td>
+ <td class="even" >   <a href="./system_gethostname.3.html"> system_gethostname.3 </a> </td>
+ <td class="even" >   <a href="./system_getkey.3.html"> system_getkey.3 </a> </td>
+ <td class="even" >   <a href="./system_getlogin.3.html"> system_getlogin.3 </a> </td>
+ <td class="even" >   <a href="./system_getpid.3.html"> system_getpid.3 </a> </td>
+</tr>
+<tr><!-- line 109 -->
+ <td class="odd" >  <a href="./system_getppid.3.html"> system_getppid.3 </a> </td>
+ <td class="odd" >   <a href="./system_getsid.3.html"> system_getsid.3 </a> </td>
+ <td class="odd" >   <a href="./system_getuid.3.html"> system_getuid.3 </a> </td>
+ <td class="odd" >   <a href="./system_getumask.3.html"> system_getumask.3 </a> </td>
+ <td class="odd" >   <a href="./system_initenv.3.html"> system_initenv.3 </a> </td>
+</tr>
+<tr><!-- line 110 -->
+ <td class="even" >  <a href="./system_kill.3.html"> system_kill.3 </a> </td>
+ <td class="even" >   <a href="./system_link.3.html"> system_link.3 </a> </td>
+ <td class="even" >   <a href="./system_mkdir.3.html"> system_mkdir.3 </a> </td>
+ <td class="even" >   <a href="./system_mkfifo.3.html"> system_mkfifo.3 </a> </td>
+ <td class="even" >   <a href="./system_opendir.3.html"> system_opendir.3 </a> </td>
+</tr>
+<tr><!-- line 111 -->
+ <td class="odd" >  <a href="./system_perror.3.html"> system_perror.3 </a> </td>
+ <td class="odd" >   <a href="./system_putenv.3.html"> system_putenv.3 </a> </td>
+ <td class="odd" >   <a href="./system_rand.3.html"> system_rand.3 </a> </td>
+ <td class="odd" >   <a href="./system_readdir.3.html"> system_readdir.3 </a> </td>
+ <td class="odd" >   <a href="./system_readenv.3.html"> system_readenv.3 </a> </td>
+</tr>
+<tr><!-- line 112 -->
+ <td class="even" >  <a href="./system_readline.3.html"> system_readline.3 </a> </td>
+ <td class="even" >   <a href="./system_remove.3.html"> system_remove.3 </a> </td>
+ <td class="even" >   <a href="./system_rename.3.html"> system_rename.3 </a> </td>
+ <td class="even" >   <a href="./system_rewinddir.3.html"> system_rewinddir.3 </a> </td>
+ <td class="even" >   <a href="./system_rmdir.3.html"> system_rmdir.3 </a> </td>
+</tr>
+<tr><!-- line 113 -->
+ <td class="odd" >  <a href="./system_setumask.3.html"> system_setumask.3 </a> </td>
+ <td class="odd" >   <a href="./system_sleep.3.html"> system_sleep.3 </a> </td>
+ <td class="odd" >   <a href="./system_srand.3.html"> system_srand.3 </a> </td>
+ <td class="odd" >   <a href="./system_umask.3.html"> system_umask.3 </a> </td>
+ <td class="odd" >   <a href="./system_uname.3.html"> system_uname.3 </a> </td>
+</tr>
+<tr><!-- line 114 -->
+ <td class="even" >  <a href="./system_unlink.3.html"> system_unlink.3 </a> </td>
+ <td class="even" >   <a href="./system_unsetenv.3.html"> system_unsetenv.3 </a> </td>
+ <td class="even" >   <a href="./t2m.1.html"> t2m.1 </a> </td>
+ <td class="even" >   <a href="./tabgraph.3.html"> tabgraph.3 </a> </td>
+ <td class="even" >   <a href="./table2html.1.html"> table2html.1 </a> </td>
+</tr>
+<tr><!-- line 115 -->
+ <td class="odd" >  <a href="./tabulate.1.html"> tabulate.1 </a> </td>
+ <td class="odd" >   <a href="./tan.3.html"> tan.3 </a> </td>
+ <td class="odd" >   <a href="./tand.3.html"> tand.3 </a> </td>
+ <td class="odd" >   <a href="./tanh.3.html"> tanh.3 </a> </td>
+ <td class="odd" >   <a href="./textang.3.html"> textang.3 </a> </td>
+</tr>
+<tr><!-- line 116 -->
+ <td class="even" >  <a href="./textsize.3.html"> textsize.3 </a> </td>
+ <td class="even" >   <a href="./this_image.3.html"> this_image.3 </a> </td>
+ <td class="even" >   <a href="./tiny.3.html"> tiny.3 </a> </td>
+ <td class="even" >   <a href="./today.1.html"> today.1 </a> </td>
+ <td class="even" >   <a href="./trailz.3.html"> trailz.3 </a> </td>
+</tr>
+<tr><!-- line 117 -->
+ <td class="odd" >  <a href="./transfer.3.html"> transfer.3 </a> </td>
+ <td class="odd" >   <a href="./transliterate.3.html"> transliterate.3 </a> </td>
+ <td class="odd" >   <a href="./transpose.3.html"> transpose.3 </a> </td>
+ <td class="odd" >   <a href="./trim.3.html"> trim.3 </a> </td>
+ <td class="odd" >   <a href="./ttee.1.html"> ttee.1 </a> </td>
+</tr>
+<tr><!-- line 118 -->
+ <td class="even" >  <a href="./txt2man.1.html"> txt2man.1 </a> </td>
+ <td class="even" >   <a href="./u2d.3.html"> u2d.3 </a> </td>
+ <td class="even" >   <a href="./ubound.3.html"> ubound.3 </a> </td>
+ <td class="even" >   <a href="./ucobound.3.html"> ucobound.3 </a> </td>
+ <td class="even" >   <a href="./ufpp.1.html"> ufpp.1 </a> </td>
+</tr>
+<tr><!-- line 119 -->
+ <td class="odd" >  <a href="./ufpp_overview.1.html"> ufpp_overview.1 </a> </td>
+ <td class="odd" >   <a href="./uniq.3.html"> uniq.3 </a> </td>
+ <td class="odd" >   <a href="./unit_check.3.html"> unit_check.3 </a> </td>
+ <td class="odd" >   <a href="./unit_check_bad.3.html"> unit_check_bad.3 </a> </td>
+ <td class="odd" >   <a href="./unit_check_good.3.html"> unit_check_good.3 </a> </td>
+</tr>
+<tr><!-- line 120 -->
+ <td class="even" >  <a href="./unit_check_start.3.html"> unit_check_start.3 </a> </td>
+ <td class="even" >   <a href="./unix_to_date.3.html"> unix_to_date.3 </a> </td>
+ <td class="even" >   <a href="./unpack.3.html"> unpack.3 </a> </td>
+ <td class="even" >   <a href="./upper.3.html"> upper.3 </a> </td>
+ <td class="even" >   <a href="./v2mo.3.html"> v2mo.3 </a> </td>
+</tr>
+<tr><!-- line 121 -->
+ <td class="odd" >  <a href="./v2s.3.html"> v2s.3 </a> </td>
+ <td class="odd" >   <a href="./value_to_string.3.html"> value_to_string.3 </a> </td>
+ <td class="odd" >   <a href="./verify.3.html"> verify.3 </a> </td>
+ <td class="odd" >   <a href="./vexit.3.html"> vexit.3 </a> </td>
+ <td class="odd" >   <a href="./viewport.3.html"> viewport.3 </a> </td>
+</tr>
+<tr><!-- line 122 -->
+ <td class="even" >  <a href="./vinit.3.html"> vinit.3 </a> </td>
+ <td class="even" >   <a href="./w2d.3.html"> w2d.3 </a> </td>
+ <td class="even" >   <a href="./what.1.html"> what.1 </a> </td>
+ <td class="even" >   <a href="./what_overview.1.html"> what_overview.1 </a> </td>
+ <td class="even" >   <a href="./where.7.html"> where.7 </a> </td>
+</tr>
+<tr><!-- line 123 -->
+ <td class="odd" >  <a href="./write_animated_gif.3.html"> write_animated_gif.3 </a> </td>
+ <td class="odd" >   <a href="./writegif.3.html"> writegif.3 </a> </td>
+ <td class="odd" >   <a href="./xcentertext.3.html"> xcentertext.3 </a> </td>
+ <td class="odd" >   <a href="./ycentertext.3.html"> ycentertext.3 </a> </td>
+ <td class="odd" >  &nbsp; </td>
+</tr>
+</table>
+<h3>Footnotes:</h3>
+
+<p>
+   Most of the code is maintained using a custom programming
+   environment. The original source files are mostly ufpp(1) input files
+   and/or HTML documents.  To eliminate the need to install this custom
+   environment all the source files have been expanded to standard
+   Fortran and C source.
+</p>
+
+<p>
+   To simplify building the resulting collection of code a make(1)
+   file has been automatically generated using makeMake(1) to compile
+   the sources.
+</p>
+
+<p>
+   Using a variety of utilities (primarily ufpp(1) and txt2man(1) )
+   the help text is generally part of the source file and automatically
+   converted to comments, flat text, HTML and man(1) pages.
+</p>
+
+<p>
+   For those interested (particulary since ufpp(1) is one of the
+   utilities included in this collection) most of the source is kept
+   as ufpp(1) files.  ufpp(1) can write text blocks to various files.
+   This allows basic documentation to easily be maintained with the
+   source.  These blocks are then converted either into comments or help
+   functions in the code by ufpp(1), but also optionally written to a
+   common directory where they can be further processed, if required
+   (they might already be HTML, which generally does not need further
+   processing).  For simple routines the documentation is often written
+   to look like a flat text version of a man(1) page; which has proven
+   to be a good standard for documenting procedures, which many people
+   are familiar with, and integrates into Unix/Linux environments and
+   tools. The txt2man(1) utility is used to convert the flat files
+   to *roff files; other files are run thru markdown(1) or LaTex(1)
+   or other utilities as appropriate, based on the suffix of the files.
+<p>
+
+</p>
+   The utility groff(1) was originally used to convert the man(1)
+   pages to HTML and PDF but it has a bug as of this writing where it
+   removes significant spaces when generating HTML; so the man(1) pages
+   are now formatted using manserver.pl. Also see rman(1), html2man(1),
+   and roff2html(1).  It sounds complicated but is totally automated
+   just using a few bash(1) scripts to glue it together, and provides
+   for an easy way to maintain documentation and source in the same file.
+</p>
+
+<p>
+   <div class='property'> LINK: <a class='category_link' href='../../../just4.html'>JUST4 home</a></div>
+</p>
+
+<div class="byline">
+  Revised on Thu, Jul 21, 2016 11:27:17 PM
+  by
+  <a class="existingWikiWord" href="JSU.xhtml">JSU</a>
+</div>
+</div>
+</div>
+</body>
+</html>

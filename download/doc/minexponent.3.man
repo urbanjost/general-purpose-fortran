@@ -1,0 +1,35 @@
+NAME
+     minexponent(3f) - [INTRINSIC] Minimum exponent of a real kind
+
+SYNTAX
+
+   result = minexponent(x)
+
+DESCRIPTION
+
+   minexponent(x) returns the minimum exponent in the model of the
+   type of X.
+
+ARGUMENTS
+
+   X  - Shall be of type REAL.
+
+RETURN VALUE
+
+   The return value is of type INTEGER and of the default integer
+   kind.
+
+EXAMPLE
+
+  Sample program:
+
+See [[maxexponent]] for an example.
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Inquiry function]]
+

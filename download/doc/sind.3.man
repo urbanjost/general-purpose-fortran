@@ -1,0 +1,35 @@
+NAME
+   sind - [M_units]calculate sine of value in degrees
+SYNOPSIS
+   elemental real function sind(degrees)
+
+    class(*),intent(in) :: degrees
+DESCRIPTION
+   Calculate sine of input value in degrees
+
+OPTIONS
+   degrees    any standard scalar value supported by anyscalar_to_real(3f).
+EXAMPLE
+  Sample program
+
+   program sind_demo
+   use M_units, only :  sind
+   implicit none
+      write(*,*)'With REAL array input    ', sind([ 0.0, 15.0, 30.0, 45.0, 60.0, 75.0, 90.0, 180.0, 270.0 ])
+      write(*,*)'With INTEGER array input ', sind([0,15,30,45,60,75,90,180,270])
+      write(*,*)'With DOUBLEPRECISION     ', sind(0.0d0),sind(15.0d0),sind(90.0/3.0d0),sind(90.0/2.0d0),sind(60.0d0),sind(75.0d0),&
+      & sind(90.0d0),sind(180.0d0),sind(270.0d0)
+   end program sind_demo
+
+  Results
+
+   With REAL array input      0.00000000      0.258819044      0.500000000
+                              0.707106829     0.866025448      0.965925813
+                              1.00000000     -8.74227766E-08  -1.00000000
+   With INTEGER array input   0.00000000      0.258819044      0.500000000
+                              0.707106829     0.866025448      0.965925813
+                              1.00000000      -8.74227766E-08  -1.00000000
+   With DOUBLEPRECISION       0.00000000      0.258819044      0.500000000
+                              0.707106829     0.866025448      0.965925813
+                              1.00000000      -8.74227766E-08  -1.00000000
+

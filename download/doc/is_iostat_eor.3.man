@@ -1,0 +1,19 @@
+NAME
+   IS_IOSTAT_EOR(3f) - [INTRINSIC] True if and only if a value indicates an end-of-record condition.
+SYNOPSIS
+   logical IS_IOSTAT_EOR (I)
+
+    integer,intent(in) :: I
+DESCRIPTION
+   True if and only if a value indicates an end-of-record condition.
+
+ARGUMENT
+   I    shall be of type integer.
+
+RESULT
+   Default logical.  The result has the value true if and only if I is
+   a value for the scalar-int-variable in an IOSTAT= specifier
+   that would indicate an end-of-record condition.
+
+CLASS
+   Elemental function.

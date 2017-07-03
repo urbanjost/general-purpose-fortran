@@ -1,0 +1,365 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>hershey (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>hershey(3f) </B>- [M_pixel] draw text string as Hershey software vector fonts
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Options</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+definition:
+<P>
+   subroutine hershey(x,y,height,itext,theta,ntext)
+   character(len=*),intent(in)   :: itext
+   real,intent(in)               :: x,y
+   real,intent(in)               :: height
+   real,intent(in)               :: theta
+   integer,intent(in)            :: ntext
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+X,Y
+are the coordinates in inches from the current origin to the
+lower left corner of the 1st character to be plotted. If either
+is set to 999.0 then saved next character position is used.
+HEIGHT is the character height in inches
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ITEXT
+contains the text to be plotted
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+THETA
+is the positive CCW angle W.R.T. the X-axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+NTEXT
+is the number of characters in itext to plot
+<TABLE width=100% cellpadding=3><!-- tsb: NTEXT
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If NTEXT.lt.<B>-1</B> the pen is down to (X,Y) and a single special
+centered symbol is plotted.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If NTEXT.eq.<B>-1</B> the pen is up to (X,Y) and a single special
+centered symbol is plotted.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if NTEXT=0 a single Simplex Roman character from ITEXT,
+left-justified, is plotted.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if NTEXT.gt.0 NTEXT characters from ITEXT are decoded and
+NCHR characters are plotted where NCHR.le.NTEXT to remove
+backslashes, command codes, etc.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+FEATURES:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: FEATURES:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1)
+</TD><TD>
+Four HERSHEY letter fonts-<B>-SIMPLEX</B>,COMPLEX,ITALIC, and DUPLEX--
+are provided in upper and lower case ROMAN
+</TD></TR>
+<TR valign=top><TD width=4%>
+2)
+</TD><TD>
+Two hershey letter fonts-<B>-SIMPLEX</B> and COMPLEX-<B>-are</B> provided in
+upper and lower case GREEK
+</TD></TR>
+<TR valign=top><TD width=4%>
+3)
+</TD><TD>
+47 special mathematical symbols, e.g. integral sign, del&#46;&#46;&#46; are
+provided
+</TD></TR>
+<TR valign=top><TD width=4%>
+4)
+</TD><TD>
+SUPER- and SUB-scripting is possible within a character string
+without separate calls to HERSHEY
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Change of font is made by enclosing the name of the font in upper
+case in backslashes, e.g \SIMPLEX\. Three letters suffice to
+specify the font. SIMPLEX is the default font on the initial call
+to HERSHEY. A font remains in effect until explicitly changed.
+SUPER- or SUB-scripting is accomplished by enclosing the expression
+to be SUPER- or SUB-scripted in curly brackets and preceding it by
+SUP or SUB. the closing curly bracket terminates the
+SUPER- or SUB-scripting and returns to normal character plotting.
+Note that SUPER- and SUB-script letters are plotted with a
+different character size.
+<P>
+GREEK letters are drawn by enclosing the ENGLISH name of the
+letter in backslashes, e.g. \ALPHA\. The case of the first letter
+determines the case of the GREEK letter. The closing backslash must
+be included.
+<P>
+Any symbol may be called by enclosing the symbol number+1000 in
+backslashes. This is the only way to call some symbols, especially
+special mathematical symbols.
+</BLOCKQUOTE>
+<P>
+The symbol numbers are
+<P>
+<PRE>
+    1-26    upper case ROMAN SIMPLEX
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:     1-26    upper case ROMAN SIMPLEX
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+27-52
+lower case ROMAN SIMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+53-72
+SIMPLEX numbers and symbols
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+73-96
+upper case GREEK SIMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+97-120
+lower case GREEK SIMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+121-146
+upper case ROMAN COMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+147-172
+lower case ROMAN COMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+173-192
+COMPLEX numbers and symbols
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+193-216
+upper case GREEK COMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+217-240
+lower case GREEK COMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+241-266
+upper case ROMAN ITALIC
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+267-292
+lower case ROMAN ITALIC
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+293-312
+ITALIC numbers and symbols
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+313-338
+upper case ROMAN DUPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+339-364
+lower case ROMAN DUPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+365-384
+DUPLEX numbers and symbols
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+385-432
+special mathematical symbols
+</TD></TR>
+<TR></TR></TABLE>Additional features added Feb 1982:
+<P>
+The pen may be moved back to the start point for the previous character
+by \BS\. This is useful, for example, in writing integral signs with
+limits above and below them.
+<P>
+Symbol parameters taken from N.M.Wolcott, FORTRAN IV Enhanced Character Graphics, NBS
+<P>
+A.CHAVE IGPP/UCSD Aug 1981, Modified Feb 1982 by A. Chave, R.L. Parker, and L. Shure
+<P>
+programmed in FORTRAN-77
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Show all Hershey characters
+<P>
+<PRE>
+   program demo_hershey
+   use M_pixel
+   use M_writegif_animated, only : write_animated_gif
+   use M_strings, only : v2s
+   integer,parameter :: isize=600
+   integer,parameter :: topsym=432
+   integer  :: movie(1:topsym,0:isize-1,0:isize-1)
+   !! set up environment
+   call prefsize(isize,isize)
+   call vinit()
+   call ortho2(-150.0,150.0,-150.0,150.0)
+<P>
+   !! draw all characters using hershey numeric strings
+   do i=1,topsym
+      !! draw reference circle and crosshairs
+      call color(0)
+      call clear()
+<P>
+      call color(4)
+      call linewidth(100)
+      call circle(0.0,0.0,75.0)
+      call move2(-75.0,0.0)
+      call draw2(75.0,0.0)
+      call move2(0.0,-75.0)
+      call draw2(0.0,75.0)
+<P>
+      call centertext(.true.)
+      call color(7)
+      call linewidth(500)
+      call textang(3.0*i)
+      call textang(0.0)
+      call move2(0.0,0.0)
+      call textsize(150.0,150.0)
+      call drawstr(&#146;#146;//v2s(i+1000)//&#146;#146;)
+<P>
+      call centertext(.false.)
+      call color(1)
+      call move2(-120.0,120.0)
+      call textsize(10.0,10.0)
+      call linewidth(40)
+      call drawstr(v2s(i+1000)//&#146; &#146;)
+      movie(i,:,:)=P_pixel
+   enddo
+   call vexit()
+   !! write to file and display with display(1)
+   call write_animated_gif(&#146;hershey.3.gif&#146;,movie,P_colormap,delay=40)
+   !call execute_command_line(&#146;display hershey.3.gif&#146;)
+   end program demo_hershey
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>hershey (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b15f60ad-774a-4d0c-b29e-d1a395ea16dc using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/hershey.3.gif"></center> 
+</body>
+</HTML>

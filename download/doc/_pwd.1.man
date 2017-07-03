@@ -1,0 +1,13 @@
+NAME
+       _pwd(1f) - [FUNIX]list full pathname of current directory
+SYNOPSIS
+       _pwd [--version|--help]
+DESCRIPTION
+       list full pathname of current directory
+OPTIONS
+       --help      display command help and exit
+       --version   output version information and exit
+EXAMPLES
+ Sample command lines ...
+
+        _pwd

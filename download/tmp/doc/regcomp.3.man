@@ -1,0 +1,18 @@
+NAME
+   regcomp(3f) - [M_regex]Compile a regex into a regex object
+SYNOPSIS
+   subroutine regcomp(this,pattern,flags,status)
+
+     type(regex_type), intent(out) :: this           ! new regex object
+     character(len=*), intent(in) :: pattern         ! regex pattern string
+     character(len=*), intent(in), &
+                          optional :: flags ! flag characters:
+                                            ! x = extended regex (REG_EXTENDED)
+                                            ! m = multi-line     (REG_NEWLINE)
+                                            ! i = case-insensitive (REG_ICASE)
+                                            ! n = no MATCH required (REG_NOSUB)
+     integer, intent(out), optional :: status ! If absent, errors are fatal
+DESCRIPTION
+OPTIONS
+RETURNS
+EXAMPLE

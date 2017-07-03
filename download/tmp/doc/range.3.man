@@ -1,0 +1,40 @@
+NAME
+
+     range(3f) - [INTRINSIC] Decimal exponent range of a real kind
+
+SYNTAX
+
+   result = range(x)
+
+DESCRIPTION
+
+   range(x) returns the decimal exponent range in the model of the
+   type of X.
+
+ARGUMENTS
+
+   X  - Shall be of type REAL or COMPLEX.
+
+RETURN VALUE
+
+   The return value is of type INTEGER and of the default integer
+   kind.
+
+EXAMPLE
+
+  Sample program:
+
+See [[precision]] for an example.
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Inquiry function]]
+
+SEE ALSO
+
+   [[selected_real_kind]], [[precision]]
+

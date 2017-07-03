@@ -1,0 +1,45 @@
+NAME
+     pdec - [M_debug]write out string with ASCII decimal equivalent vertically under it
+
+SYNOPSIS
+   Usage:
+
+    subroutine pdec(string)
+    character(len=*),intent(in) :: string
+
+DESCRIPTION
+
+     Given a string to print, PDEC() writes out the ASCII Decimal equivalent of
+     the string directly underneath it. This can help you to locate
+     unprintable characters or non-standard white-space such as a
+     backspace character or tab character in input strings that your
+     program could not interpret. On output, non-printable characters
+     are replaced with a space, and trailing spaces are ignored.
+
+     You read the numbers vertically.
+
+     1. ignore trailing spaces
+     2. print the character if it has an ADE of 32 on up
+     3. print a space if it has an ADE of less than 32
+     4. underneath each character print the ADE value vertically
+     5. strings are assumed under 32767 characters in length.
+        Format integer constants > 32767 are not supported on HP-UX
+        when newer compilers are available use unlimited
+
+EXAMPLE
+
+   Sample program:
+
+      program demo
+      call pdec(' ABCDEFG abcdefg ')
+      end program demo
+
+   would produce (notice trailing space is trimmed):
+
+     > ABCDEFG abcdefg
+     >0000000000001111
+     >3666667739990000
+     >2567890127890123
+
+AUTHOR
+     John S. Urban

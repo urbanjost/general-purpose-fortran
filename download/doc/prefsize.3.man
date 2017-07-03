@@ -1,0 +1,50 @@
+NAME
+   prefsize(3f) - [M_pixel] specify size of pixel array
+SYNOPSIS
+ definition:
+
+   subroutine prefsize(width, height)
+   integer width, height
+
+DESCRIPTION
+   Specify the preferred width and height of the pixel array  opened by the *next* vinit(3f).
+   The pixel array is then available via the M_pixel(3fm) module as variable P_pixel. Note
+   that the width corresponds to the number of rows in the array, and height to the number
+   of columns.
+
+OPTIONS
+   WIDTH   width of pixel array  to create when vinit(3f) is called
+   HEIGHT  height of pixel array to create when vinit(3f) is called
+
+EXAMPLE
+  Sample program:
+
+     program demo_prefsize
+     use M_pixel, only: prefsize, vinit, ortho2, clear
+     use M_pixel, only: move2, draw2, vexit, color
+     use M_pixel, only : P_pixel,P_colormap
+     use M_writegif, only : writegif
+        ! make first file with one size
+        call prefsize(60*2,40*2)
+        call vinit()
+        call picture()
+        call writegif('prefsize.3.gif',P_pixel,P_colormap)
+        call vexit()
+
+        ! make second file with another size
+        call prefsize(60*3,40*3)
+        call vinit()
+        call picture()
+        call writegif('prefsize_B.3.gif',P_pixel,P_colormap)
+        call vexit()
+     contains
+     subroutine picture
+        call ortho2(-300.0,300.0,-200.0,200.0)
+        call clear(0)
+        call color(1)
+        call move2(-300.0,-200.0)
+        call draw2(300.0,200.0)
+        call move2(300.0,-200.0)
+        call draw2(-300.0,200.0)
+     end subroutine picture
+     end program demo_prefsize

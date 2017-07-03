@@ -1,0 +1,31 @@
+NAME
+     reverse - [M_strings]Return a string reversed
+
+SYNOPSIS
+
+   elemental pure function reverse(str) result (string)
+
+    character(*), intent(in) :: str
+    character(len(str))      :: string
+
+DESCRIPTION
+     reverse(string) returns a copy of the input string with
+     all characters reversed from right to left.
+
+EXAMPLE
+
+   Sample call
+
+      program demo_reverse
+      use M_strings, only: reverse
+      implicit none
+      character(len=:),allocatable  :: s
+         s='abcdefghijklmnopqrstuvwxyz'
+         write(*,*) 'original input string is ....',s
+         write(*,*) 'reversed output string is ...',reverse(s)
+      end program demo_reverse
+
+   Expected output
+
+     original input string is ....abcdefghijklmnopqrstuvwxyz
+     reversed output string is ...zyxwvutsrqponmlkjihgfedcba

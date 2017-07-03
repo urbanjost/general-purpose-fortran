@@ -1,0 +1,23 @@
+NAME
+   splitname(1f) - [FUNIX]strip pathname into components {dir,name,basename,extension}
+
+SYNOPSIS
+   splitname [NAME1 NAME2 ... |-help|-version]
+
+DESCRIPTION
+   Output each pathname broken into components dir, name, basename, extension
+
+OPTIONS
+   NAMES     pathnames to split
+   -help     display this help and exit
+   -version  output version information and exit
+
+EXAMPLES
+   Sample program executions:
+
+     splitname /usr/bin/          -> "/usr/bin" "" "" ""
+     splitname /usr/bin           -> "/usr" "bin" "" ""
+     splitname stdio.h            -> "" "studio.h" "studio" ".h"
+
+SEE ALSO
+   splitname(1), basename(1), readlink(1), realpath(1)

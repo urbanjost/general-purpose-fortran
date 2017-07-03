@@ -1,0 +1,42 @@
+NAME
+   percent_done(3f) - [M_messages] non-advancing status counter displays percentage done
+                      on terminal displays
+
+SYNOPSIS
+  subroutine percent_done(part,whole)
+
+   class(*),intent(in) :: part
+   class(*),intent(in) :: whole
+
+DESCRIPTION
+   For interactive terminal sessions display the message
+
+     " Percent Complete: NNN.NN%"
+
+OPTIONS
+   part   number of elements completed. Should take any
+          scalar numeric value.
+   whole  total number of elements to be completed. Should take any
+          scalar numeric value.
+
+EXAMPLE
+
+  Sample program:
+
+   program progress
+   use m_time, only : system_sleep
+   use m_messages, only : percent_done
+   implicit none
+   integer :: i, nr=10
+
+   do i=1,nr
+      call percent_done(i,nr)
+      call system_sleep(1)  !give a delay in seconds
+   enddo
+
+   end program progress
+
+  Results:
+
+   Percent Complete: 100.00%
+

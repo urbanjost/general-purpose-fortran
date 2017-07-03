@@ -1,0 +1,187 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_getopt_long (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_getopt_long(3fm) </B>- [ARGUMENTS:M_getopt_long]parse command line options like Sun getopt_long, including the Sun CLIP specification
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>Author</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+use M_getopt_long, only : getopt_new, getopt
+use M_getopt_long, only : getopt_type, getopt_option_type
+use M_getopt_long, only : getopt_argv
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+This is based on SunOS <B>getopt_long</B>(3), and includes the Sun CLIP
+specification, which requires matching short and long versions of all
+options.
+<P>
+Precise getopt functionality is not really desirable. The biggest drawback
+of getopt is the use of globals. (It was designed a long time ago.) This
+interface uses OOP with a derived-type data object,
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program selftest_program
+     use M_getopt_long
+     implicit none
+     character(len=1) :: c
+     integer :: i
+     integer :: digit_optind = 0
+     type(getopt_type), pointer :: opts
+<P>
+     integer :: this_option_optind
+     integer :: option_index
+     character(len=1), parameter :: NIL = char(0)
+<P>
+     type(getopt_option_type) :: long_options(6) = (/ &
+         getopt_option_type("add",     1, NULL(), NIL), &
+         getopt_option_type("append",  0, NULL(), NIL), &
+         getopt_option_type("delete",  1, NULL(), NIL), &
+         getopt_option_type("verbose", 0, NULL(), NIL), &
+         getopt_option_type("create",  1, NULL(), &#146;c&#146;), &
+         getopt_option_type("file",    1, NULL(), NIL) /)
+     character(len=*), parameter :: optstring = "abc:d:012"
+<P>
+     call getopt_new(opts,optstring,long_options)
+<P>
+     do
+       this_option_optind = merge(opts%index,1,opts%index&gt;0)
+       option_index = 0
+       c = getopt(opts,option_index)
+       write(*,*)&#146;retval=&#146;,c
+       select case(c)
+       case (GETOPT_STATUS_END)
+         exit
+       case (GETOPT_STATUS_NIL)
+         write(*,&#146;(2A)&#146;,advance=&#146;no&#146;) "option ", trim(long_options(option_index)%name)
+         if (associated(opts%optarg)) &
+           write(*,&#146;(2A)&#146;,advance=&#146;no&#146;) "with arg ", opts%optarg
+         write(*,*) !newline
+<P>
+       case (&#146;0&#146;,&#146;1&#146;,&#146;2&#146;)
+         if (digit_optind /= 0 .and. digit_optind /= this_option_optind) &
+           write(*,*) "digits occur in two different argv-elements."
+         digit_optind = this_option_optind
+         write(*,*)"option ",c
+<P>
+       case (&#146;a&#146;,&#146;b&#146;)
+         write(*,*)"option ",c
+<P>
+       case (&#146;c&#146;,&#146;d&#146;)
+         write(*,*)"option ",c," with value &#146;",opts%optarg,&#146;"&#146;
+<P>
+       case default
+         write(*,*) "?? getopt returned character code ",ichar(c)," ??"
+<P>
+       end select
+<P>
+     end do
+<P>
+     if (opts%index &lt;= opts%argc) then
+       write(*,&#146;(A)&#146;,advance=&#146;no&#146;) "non-option ARGV-elements: "
+       do i=opts%index,opts%argc
+         write(*,&#146;(A,1X)&#146;,advance=&#146;no&#146;) getopt_argv(opts,i)
+       end do
+       write(*,*) ! newline
+     end if
+<P>
+     stop
+   end program selftest_program
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[getopt_long_module]] by [[Joe Krahn]].
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+slightly modified from original - JSU
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_getopt_long (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d4ffe7b8-aa03-4a38-bddd-93f66c188de3 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_getopt_long.3.gif"></center> 
+</body>
+</HTML>

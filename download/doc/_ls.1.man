@@ -1,0 +1,18 @@
+NAME
+       _ls(1f) - [FUNIX]list files in a directory
+SYNOPSIS
+       _ls [directory|--version|--help] [-a]
+DESCRIPTION
+       Given a directory name list files in the directory
+OPTIONS
+       directory   name of directory to display contents of.
+                   Defaults to current directory.
+       -a          show hidden files (files beginning with ".").
+       --help      display command help and exit
+
+       --version   output version information and exit
+EXAMPLES
+ Sample command lines ...
+
+        _ls
+        _ls /tmp

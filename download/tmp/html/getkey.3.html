@@ -1,0 +1,271 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>getkey (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>getkey(3f) </B>- read single character from keyboard in hot (raw I/O) mode
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>How It Works</A><BR>
+<A HREF=#5>Alternatives</A><BR>
+<A HREF=#6>Origins</A><BR>
+<A HREF=#7>Tested</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>GETKEY</B>(3F) is a C/Fortran combination that (hopefully) lets Fortran read
+one character at a time in raw I/O mode on most platforms.
+<P>
+Unfortunately (as of this writing), there is no universal standard method
+using the programming languages Fortran or C for reading hot (raw I/O)
+keystrokes. In this document "Hot" or "Raw" mode, also sometimes called
+"immediate mode" means each keystroke is detected immediately, without
+requiring a carriage return.
+<P>
+The best way to know if this will work on your platform is to try it.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program test_getkey
+   use M_getkey, only : system_getkey
+   character :: A
+   integer   :: icount
+      icount=0
+      write(*,*)&#146;begin striking keys to demonstrate interactive raw I/O mode&#146;
+      write(*,*)&#146;q to quit; up to 40 tries allowed&#146;
+      do
+         A=system_getkey()
+         icount=icount+1
+         write(*,*)icount,&#146; f03:key=&#146;,A,&#146;-&gt;&#146;,ichar(A)
+         !flush(6)
+         if(A.eq.&#146;q&#146;)stop
+         if(icount.gt.40)stop
+      enddo
+   end program test_getkey
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>HOW IT WORKS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The <B>getkey</B>(3c) C routine uses commonly available routines to set to
+raw mode, read a keystroke, and reset to normal mode. Once this is
+working, it is typically easy to make a Fortran routine that calls
+the C routine. How to make Fortran/C interfaces still varies if you
+do not have a Fortran 2003 compiler.
+<P>
+getkey.c is the core C routine that you must get working.
+<P>
+The steps to test the <B>GETKEY</B>(3F) procedure are relatively simple.
+</BLOCKQUOTE>
+<P>
+Test C program
+<P>
+<PRE>
+   First you need to make sure the C routine will work by itself &#46;&#46;&#46;
+<P>
+      ########################################
+      cc -DTESTPRG -DLinux getkey.c -o testit
+         or
+      cc -DTESTPRG getkey.c -o testit
+         or
+      cc -DBSD -DTESTPRG  getkey.c -o testit
+         then
+      ./testit
+      ########################################
+<P>
+<P>
+</PRE>
+<BLOCKQUOTE>
+Test common Fortran/C interface style
+<P>
+<PRE>
+   Once the C program works; just make an object file and then load it with
+   one of the Fortran programs, depending on which compilers you have
+<P>
+</PRE>
+Test using Fortran 2003 ISO_C_BINDING
+<P>
+<PRE>
+   If you have a Fortran 2003 compiler, there is a standard-based method for
+   the Fortran-to-C interface that is preferable that uses the ISO_C_BINDINGS
+   modules. Note that most f90+ compilers now support this 2003 feature as
+   an extension &#46;&#46;&#46;
+<P>
+      ########################################
+      cc -DLinux getkey.c -o
+      g95 M_getkey.F90 getkey.o -o testit
+      ./testit
+      ########################################
+<P>
+</PRE>
+Running the Test Program
+<P>
+<PRE>
+   The sample program reads one character at a time until the letter "q"
+   is entered. If the C program works in stand-alone mode but none of the
+   Fortran examples work you will have to find out how your programming
+   environment allows Fortran to call C routines. For this intentionally
+   simple routine you usually just need to add an underscore to the
+   C name (ie "_getkey" or "getkey_" or make it uppercase "GETKEY")
+   to make getkeyC(3c) a Fortran-callable procedure.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>ALTERNATIVES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Look at the <B>curses</B>(3c) or <B>ncurses</B>(3c) libraries or similar libraries
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Look for extensions in your Fortran compiler documentation (Pass
+examples back -- I&#146;d be glad to see them).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+In Unix and GNU/Linux look at the system commands
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+       stty -cread
+          or
+       stty raw -echo min 0  time 5
+<P>
+<P>
+</PRE>
+<BLOCKQUOTE>
+Sometimes you can use a call to <B>SYSTEM</B>() to set and unset raw I/O
+mode and then use standard I/O routines; This is a simple method;
+but it is highly <B>OS</B>(Operating System) and compiler dependent and
+has very high overhead.
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Sometimes you can use a call to <B>SYSTEM</B>() to set and unset raw I/O
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Routines that allow input-line editing may provide source that has
+to read in raw mode.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<A name=6>
+
+     <H3>ORIGINS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+This routine has been on a lot of systems over the years; it dates back
+to a program that was used to read keypresses from a Tektronix 4010 and
+4014 raster storage graphics terminal (an <B>xterm</B>(1) still can emulate a
+Tektronix 4010!).
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>TESTED</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Recently tested with the Intel compilers on Linux, on a MSWindows
+machine in the CygWin application, on HP-UX and Solaris. Some version
+of it was used on UniCOS, Tru64, AIX, NextStep, &#46;&#46;&#46;
+<P>
+caveat: communication-related characters such as ctrl-S and ctrl-Q
+are often still intercepted by the system or by terminal emulators.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>getkey (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 16c878f0-622a-4400-94ab-d34b251319be using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/getkey.3.gif"></center> 
+</body>
+</HTML>

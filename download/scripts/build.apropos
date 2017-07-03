@@ -1,0 +1,12 @@
+#!/bin/bash
+#@(#) APROPOS(1sh): make index of man(1) pages for apropos(1)
+####################################################################################################################################
+banner.sh build.apropos
+export HERE=$(cd $(dirname $0);pwd)
+export PUTMAN=${PUTMAN:-$HERE/../tmp/man}
+echo PUTMAN $PUTMAN
+
+mandb -c $PUTMAN
+
+exit
+####################################################################################################################################

@@ -1,0 +1,242 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>swap (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>swap(3f) </B>- [M_swap]elemental subroutine swaps two standard type variables of like type
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>swap</B>(X,Y)
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Generic subroutine <B>SWAP</B>(GEN1,GEN2) swaps two variables of like type
+(real, integer, complex, character, double, logical).
+<P>
+On output, the values of X and Y have been interchanged.
+Swapping is commonly required in procedures that sort data.
+<P>
+<B>SWAP</B>(3f) is elemental, so it can operate on vectors and arrays as well
+as scalar values.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Example program:
+<P>
+<PRE>
+   program try_swap
+   use M_swap, only : swap
+   integer             :: iarray(2)=[10,20]
+   real                :: rarray(2)=[11.11,22.22]
+   doubleprecision     :: darray(2)=[1234.56789d0,9876.54321d0]
+   complex             :: carray(2)=[(1234,56789),(9876,54321)]
+   logical             :: larray(2)=[.true.,.false.]
+   character(len=16)   :: string(2)=["First string    ","The other string"]
+<P>
+   integer             :: one(13)=1
+   integer             :: two(13)=2
+<P>
+   integer             :: one2(3,3)=1
+   integer             :: two2(3,3)=2
+<P>
+      print *, "integers before swap ", iarray
+      call swap (iarray(1), iarray(2))
+      print *, "integers after swap  ", iarray
+<P>
+      print *, "reals before swap ", rarray
+      call swap (rarray(1), rarray(2))
+      print *, "reals after swap  ", rarray
+<P>
+      print *, "doubles before swap ", darray
+      call swap (darray(1), darray(2))
+      print *, "doubles after swap  ", darray
+<P>
+      print *, "complexes before swap ", carray
+      call swap (carray(1), carray(2))
+      print *, "complexes after swap  ", carray
+<P>
+      print *, "logicals before swap ", larray
+      call swap (larray(1), larray(2))
+      print *, "logicals after swap  ", larray
+<P>
+      print *, "strings before swap ", string
+      call swap (string(1), string(2))
+      print *, "strings after swap ", string
+<P>
+      write(*,*)&#146;swap two vectors&#146;
+      write(*,&#146;("one before: ",*(i0,:","))&#146;) one
+      write(*,&#146;("two before: ",*(i0,:","))&#146;) two
+      call swap(one,two)
+      write(*,&#146;("one after: ",*(i0,:","))&#146;) one
+      write(*,&#146;("two after: ",*(i0,:","))&#146;) two
+<P>
+      write(*,*)&#146;given these arrays initially each time &#146;
+      one2=1
+      two2=2
+      call printarrays()
+<P>
+      write(*,*)&#146;swap two rows&#146;
+      one2=1
+      two2=2
+      call swap(one2(2,:),two2(3,:))
+      call printarrays()
+<P>
+      write(*,*)&#146;swap two columns&#146;
+      one2=1
+      two2=2
+      call swap(one2(:,2),two2(:,2))
+      call printarrays()
+<P>
+      write(*,*)&#146;swap two arrays with same number of elements&#146;
+      one2=1
+      two2=2
+      call swap(one2,two2)
+      call printarrays()
+<P>
+      contains
+      subroutine printarrays()
+      integer :: i
+      do i=1,size(one2(1,:))
+         write(*,&#146;(*(i0,:","))&#146;) one2(i,:)
+      enddo
+      write(*,*)
+      do i=1,size(two2(1,:))
+         write(*,&#146;(*(i0,:","))&#146;) two2(i,:)
+      enddo
+      end subroutine printarrays
+<P>
+</PRE>
+<BLOCKQUOTE>
+end program try_swap
+</BLOCKQUOTE>
+<P>
+Expected Results:
+<P>
+<PRE>
+   &gt; integers before swap           10          20
+   &gt; integers after swap            20          10
+   &gt; reals before swap    11.1099997       22.2199993
+   &gt; reals after swap     22.2199993       11.1099997
+   &gt; doubles before swap    1234.5678900000000        9876.5432099999998
+   &gt; doubles after swap     9876.5432099999998        1234.5678900000000
+   &gt; complexes before swap  (  1234.00000    ,  56789.0000    ) (  9876.00000    ,  54321.0000    )
+   &gt; complexes after swap   (  9876.00000    ,  54321.0000    ) (  1234.00000    ,  56789.0000    )
+   &gt; logicals before swap  T F
+   &gt; logicals after swap   F T
+   &gt; strings before swap First string    The other string
+   &gt; strings after swap The other stringFirst string
+   &gt; swap two vectors
+   &gt;one before: 1,1,1,1,1,1,1,1,1,1,1,1,1
+   &gt;two before: 2,2,2,2,2,2,2,2,2,2,2,2,2
+   &gt;one after: 2,2,2,2,2,2,2,2,2,2,2,2,2
+   &gt;two after: 1,1,1,1,1,1,1,1,1,1,1,1,1
+   &gt; given these arrays initially each time
+   &gt;1,1,1
+   &gt;1,1,1
+   &gt;1,1,1
+   &gt;
+   &gt;2,2,2
+   &gt;2,2,2
+   &gt;2,2,2
+   &gt; swap two rows
+   &gt;1,1,1
+   &gt;2,2,2
+   &gt;1,1,1
+   &gt;
+   &gt;2,2,2
+   &gt;2,2,2
+   &gt;1,1,1
+   &gt; swap two columns
+   &gt;1,2,1
+   &gt;1,2,1
+   &gt;1,2,1
+   &gt;
+   &gt;2,1,2
+   &gt;2,1,2
+   &gt;2,1,2
+   &gt; swap two arrays with same number of elements
+   &gt;2,2,2
+   &gt;2,2,2
+   &gt;2,2,2
+   &gt;
+   &gt;1,1,1
+   &gt;1,1,1
+   &gt;1,1,1
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>swap (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f88ecf43-b5fe-427f-bd9c-ae4f7b290ef5 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/swap.3.gif"></center> 
+</body>
+</HTML>

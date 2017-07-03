@@ -1,0 +1,32 @@
+NAME
+     merge(3f) - [INTRINSIC:ARRAY CONSTRUCTION] Merge variables
+
+SYNTAX
+
+   result = merge(tsource, fsource, mask)
+
+DESCRIPTION
+
+   Select values from two arrays according to a logical mask. The result
+   is equal to TSOURCE if MASK is .true., or equal to
+   FSOURCE if it is .false..
+
+ARGUMENTS
+
+   TSOURCE  - May be of any type.
+   FSOURCE  - Shall be of the same type and type parameters
+              as TSOURCE.
+   MASK  - Shall be of type LOGICAL.
+
+RETURN VALUE
+
+   The result is of the same type and type parameters as TSOURCE.
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+

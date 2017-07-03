@@ -1,0 +1,48 @@
+NAME
+   transliterate - [M_strings]replace characters from old set with new set
+
+SYNOPSIS
+   pure function transliterate(instr,old_set,new_set) result(outstr)
+
+    character(len=*),intent(in)  :: instr
+    character(len=*),intent(in)  :: old_set
+    character(len=*),intent(in)  :: new_set
+    character(len=len(instr))    :: outstr
+
+DESCRIPTION
+   Translate, squeeze, and/or delete characters from the input string.
+
+    o Each character in the input string that matches a character in
+      the old set is replaced.
+    o If the new_set is the empty set the matched characters are deleted.
+    o If the new_set is shorter than the old set the last character in the
+      new set is used to replace the remaining characters in the new set.
+
+EXAMPLES
+   program demo_transliterate
+
+    use M_strings, only : transliterate
+    implicit none
+    character(len=80)   :: STRING
+
+    STRING='aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ'
+    write(*,'(a)') STRING
+
+    ! convert a string to uppercase:
+    write(*,*) TRANSLITERATE(STRING,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+
+    ! change all miniscule letters to a colon (":"):
+    write(*,*) TRANSLITERATE(STRING,'abcdefghijklmnopqrstuvwxyz',':')
+
+    ! delete all miniscule letters
+    write(*,*) TRANSLITERATE(STRING,'abcdefghijklmnopqrstuvwxyz','')
+
+   end program demo_transliterate
+
+   Expected output
+
+    > aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ
+    > AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ
+    > :A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z
+    > ABCDEFGHIJKLMNOPQRSTUVWXYZ
+

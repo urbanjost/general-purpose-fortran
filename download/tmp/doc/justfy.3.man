@@ -1,0 +1,23 @@
+NAME
+   justfy(3f) - [M_pixel] return lengths used to justify a string when calling hershey
+
+SYNOPSIS
+ definition:
+
+   subroutine justfy(s, height, text, ntext)
+   real,intent(out)               :: s(4)
+   real,intent(in)                :: height
+   character(len=*),intent(in)    :: text
+   integer,intent(in)             :: ntext
+
+DESCRIPTION
+   Given the text string TEXT with NTEXT characters, height HEIGHT, this routine
+   gives 4 distances in inches, all from the left end of the string -
+
+   o S(1)  to the left edge of the 1st nonblank character
+   o S(2)  to the center of the string, blanks removed from the ends
+   o S(3)  to the right edge of the last nonblank character
+   o S(4)  to the right edge of the last character of the string.
+
+EXAMPLE
+

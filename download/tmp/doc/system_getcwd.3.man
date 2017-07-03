@@ -1,0 +1,32 @@
+NAME
+      system_getcwd(3f) - [M_system]call getcwd(3c) to get the pathname of the current working directory
+SYNOPSIS
+      subroutine system_getcwd(output,ierr)
+
+       character(len=:),allocatable,intent(out) :: output
+       integer,intent(out)                      :: ierr
+DESCRIPTION
+       system_getcwd(3f) calls the C routine getcwd(3c) to obtain the absolute pathname of the current working directory.
+
+RETURN VALUE
+       FILENAME  The absolute pathname of the current working directory
+                 The pathname shall contain no components that are dot or dot-dot,
+                 or are symbolic links.
+       IERR      is not zero if an error occurs.
+
+EXAMPLE
+  Sample program:
+
+     program demo_system_getcwd
+     use M_system, only : system_getcwd
+     implicit none
+     character(len=:),allocatable :: dirname
+     integer                      :: ierr
+     call system_getcwd(dirname,ierr)
+     if(ierr.eq.0)then
+        write(*,*)'CURRENT DIRECTORY ',trim(dirname)
+     else
+        write(*,*)'ERROR OBTAINING CURRENT DIRECTORY NAME'
+     endif
+     end program demo_system_getcwd
+

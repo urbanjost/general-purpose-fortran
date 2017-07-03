@@ -1,0 +1,46 @@
+NAME
+         lget - [ARGUMENTS:M_kracken]given keyword fetch logical array from command argument
+SYNOPSIS
+   function lgets(keyword) result(lvals)
+
+    character(len=*),intent(in)  :: keyword
+    logical,allocatable          :: lvals(:)
+DESCRIPTION
+    The lgets(3f) function returns a dynamically allocated array of logical values
+    from a string that is the value for a command line option. It is part of
+    the M_kracken(3fp) module.
+
+    Values that cannot be read as a logical value are returned as a ".FALSE.".
+OPTIONS
+    keyword    the dictionary keyword (in form VERB_KEYWORD) to retrieve.
+               The VERB name comes from the first argument of the
+               KRACKEN(3f) call. The KEYWORD is a keyword from the second
+               argument to the KRACKEN(3f) call.
+
+RETURNS
+    lvals      logical array returned by function. The input value should be
+               from the case-insensitive list of the words "true, false,
+               t, f, yes, no, y, n, .false., .true., .f., .t".
+
+EXAMPLE
+  Sample program:
+
+   program demo_lgets
+   use M_kracken, only: kracken, lgets
+   implicit none
+   logical,allocatable  :: vals(:)
+     ! define command arguments and parse user command
+     call kracken('demo','-truths .F. .T. .F. .F. .T. .T.' )
+     ! get any values specified on command line for -truth
+     vals=lgets('demo_truths')
+     write(*,*)vals
+   end program demo_lgets
+
+  Example program runs:
+
+   $ demo_lgets
+    F T F F T T
+
+   $ demo_lgets -truths false F .f. no true .true. t T Yes No
+    F F F F T T T T T T F
+

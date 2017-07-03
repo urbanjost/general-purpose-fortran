@@ -1,0 +1,16 @@
+NAME
+   ortho2(3f) - [M_pixel] define the area of the virtual world coordinates to map to the viewport
+
+SYNOPSIS
+ definition:
+
+   subroutine ortho2(left, right, bottom, top)
+   real,intent(in) :: left, right, bottom, top
+
+DESCRIPTION
+   Defines the section of the virtual world coordinates to map to the
+   viewport. All the projection routines define a new transformation
+   matrix, and consequently the world units. Parallel projections are
+   defined by ortho2.
+
+EXAMPLE

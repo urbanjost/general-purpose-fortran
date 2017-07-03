@@ -1,0 +1,415 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>write_animated_gif (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>write_animated_gif(3f) </B>- [M_writegif_animated] Codes pixel-maps with palette into animated GIF format. Optional transparent color
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>write_animated_gif</B>(filename,pixel,colormap,transparent,delay)
+<P>
+   character(len=*),intent(in)         :: filename
+   integer,intent(in),dimension(:,:,:) :: pixel
+   integer,intent(in),dimension(:,0:)  :: colormap
+   integer,intent(in),optional         :: transparent
+   integer,intent(in),optional         :: delay
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Writes gif89 image, given pixel array and color map.
+This version can create an animated gif.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+FileName
+file to create or replace
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Pixel
+Pixel values 0 to ncol
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ColorMap
+Color map (RGB 0:255 for colours 0:ncol)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Transparent
+Transparent color; optional
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Delay
+Delay time [ 1/100 of seconds]; optional
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample call:
+<P>
+<PRE>
+   !***************************************************************************
+   !&gt; author: Jacob Williams
+   !
+   !  Use the gif module to create a sample animated gif.
+   !
+   !# See also
+   !  * [Make a circle illusion animation](<A HREF="http://codegolf.stackexchange.com/questions/34887/make-a-circle-illusion-animation">http://codegolf.stackexchange.com/questions/34887/make-a-circle-illusion-animation</A>)
+<P>
+   program circle_illusion
+   use, intrinsic :: iso_fortran_env, only: wp=&gt;real64
+   use M_writegif_animated, only : write_animated_gif
+   implicit none
+<P>
+   logical,parameter :: new = .true.
+<P>
+   integer,parameter  :: n        = 200  !! size of image (square)
+   real(wp),parameter :: rcircle  = n/2  !! radius of the big circle
+   integer,parameter  :: time_sep = 5    !! deg
+<P>
+   real(wp),parameter :: deg2rad = acos(-1.0_wp)/180.0_wp
+<P>
+   integer,dimension(:,:,:),allocatable :: pixel    !! pixel values
+<P>
+   real(wp),dimension(2) :: xy
+   real(wp)              :: r,t
+   integer               :: i,j,k,row,col,m,n_cases,ang_sep,iframe
+<P>
+   integer,dimension(3,0:5)  :: colormap
+   integer,parameter  :: white = 0
+   integer,parameter  :: gray  = 1
+   integer,parameter  :: red   = 2
+   integer,parameter  :: green = 3
+   integer,parameter  :: blue  = 4
+   integer,parameter  :: black = 5
+<P>
+   colormap(:,black) = [0,0,0]
+   colormap(:,white) = [255,255,255]
+   colormap(:,gray)  = [200,200,200]
+   colormap(:,red)   = [255,0,0]
+   colormap(:,green) = [0,255,0]
+   colormap(:,blue)  = [0,0,255]
+<P>
+   if (new) then
+       ang_sep = 5
+       n_cases = 3
+   else
+       ang_sep = 20
+       n_cases = 0
+   end if
+<P>
+   !how many frames:
+   iframe=0
+   do k=0,355,time_sep
+       iframe=iframe+1
+   end do
+   allocate(pixel(iframe,0:n,0:n))
+<P>
+   iframe=0
+   do k=0,355,time_sep
+<P>
+       !frame number:
+       iframe=iframe+1
+<P>
+       !clear entire image:
+       pixel(iframe,:,:) = white
+<P>
+       if (new) call draw_circle(n/2,n/2,red,n/2)
+<P>
+       !draw polar grid:
+       do j=0,180-ang_sep,ang_sep
+           do i=-n/2, n/2
+               call spherical_to_cartesian(dble(i),dble(j)*deg2rad,xy)
+               call convert(xy,row,col)
+               if (new) then
+                   pixel(iframe,row,col) = gray
+               else
+                   pixel(iframe,row,col) = black
+               end if
+           end do
+       end do
+<P>
+       !draw dots:
+       do m=0,n_cases
+           do j=0,360-ang_sep,ang_sep
+               r = sin(m*90.0_wp*deg2rad + (k + j)*deg2rad)*rcircle
+               t = dble(j)*deg2rad
+               call spherical_to_cartesian(r,t,xy)
+               call convert(xy,row,col)
+               if (new) then
+                   !call draw_circle(row,col,black,10)    !v2
+                   !call draw_circle(row,col,m,5)         !v2
+                   call draw_circle(row,col,mod(j,3)+3,5) !v3
+               else
+                   call draw_square(row,col,red)          !v1
+               end if
+           end do
+       end do
+<P>
+</PRE>
+<BLOCKQUOTE>
+end do
+<P>
+call <B>write_animated_gif</B>(&#146;circle_illusion.gif&#146;,pixel,colormap,delay=5)
+<P>
+<B>deallocate</B>(pixel)
+<P>
+contains
+!***************************************************************************
+!&gt; author: Jacob Williams
+!
+<TABLE cellpadding=3><!-- tsb: contains
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+Draw a square.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+       subroutine draw_square(r,c,icolor)
+<P>
+       implicit none
+       integer,intent(in) :: r      !! row of center
+       integer,intent(in) :: c      !! col of center
+       integer,intent(in) :: icolor !! color value
+<P>
+       integer,parameter :: d = 10 !square size
+<P>
+       pixel(iframe,max(0,r-d):min(n,r+d),max(0,c-d):min(n,c+d)) = icolor
+<P>
+       end subroutine draw_square
+</PRE>
+!***************************************************************************
+!&gt; author: Jacob Williams
+!
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+Draw a circle.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+       subroutine draw_circle(r,c,icolor,d)
+<P>
+       implicit none
+<P>
+       integer,intent(in) :: r      !! row of center
+       integer,intent(in) :: c      !! col of center
+       integer,intent(in) :: icolor !! color value
+       integer,intent(in) :: d      !! diameter
+<P>
+       integer :: i,j
+<P>
+       do i=max(0,r-d),min(n,r+d)
+           do j=max(0,c-d),min(n,c+d)
+               if (sqrt(dble(i-r)**2 + dble(j-c)**2)&lt;=d) &
+                   pixel(iframe,i,j) = icolor
+           end do
+       end do
+<P>
+       end subroutine draw_circle
+</PRE>
+!***************************************************************************
+!&gt; author: Jacob Williams
+!
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+Convert from x,y to row,col.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+       subroutine convert(xy,row,col)
+<P>
+       implicit none
+<P>
+       real(wp),dimension(2),intent(in) :: xy  !! coordinates
+       integer,intent(out) :: row
+       integer,intent(out) :: col
+<P>
+       row = int(-xy(2) + n/2.0_wp)
+       col = int( xy(1) + n/2.0_wp)
+<P>
+       end subroutine convert
+</PRE>
+!***************************************************************************
+!&gt; author: Jacob Williams
+!
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+Convert spherical to cartesian coordinates.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+       subroutine spherical_to_cartesian(r,theta,xy)
+<P>
+       implicit none
+<P>
+       real(wp),intent(in) :: r
+       real(wp),intent(in) :: theta
+       real(wp),dimension(2),intent(out) :: xy
+<P>
+       xy(1) = r * cos(theta)
+       xy(2) = r * sin(theta)
+<P>
+       end subroutine spherical_to_cartesian
+</PRE>
+!***************************************************************************
+<P>
+end program circle_illusion
+!***************************************************************************
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Copyright (c) 2014-2015, Jacob Williams
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Copyright (c) 2014-2015, Jacob Williams.
+All rights reserved.
+<P>
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+<TABLE cellpadding=3><!-- tsb: Redistribution and use in source and binary forms, with or without
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Neither the name of the {organization} nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+</TD></TR>
+<TR></TR></TABLE>This software is provided by the copyright holders and contributors "AS IS"
+and any express or implied warranties, including, but not limited to, the
+implied warranties of merchantability and fitness for a particular purpose are
+disclaimed. In no event shall the copyright holder or contributors be liable
+for any direct, indirect, incidental, special, exemplary, or consequential
+damages (including, but not limited to, procurement of substitute goods or
+services; loss of use, data, or profits; or business interruption) However
+caused and on any theory of liability, whether in contract, strict liability,
+or tort (Including negligence or otherwise) arising in any way out of the use
+of this software, even if advised of the possibility of such damage.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>write_animated_gif (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5c38e338-c89a-40c6-add8-8db785e6542c using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/write_animated_gif.3.gif"></center> 
+</body>
+</HTML>

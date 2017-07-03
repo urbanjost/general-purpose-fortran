@@ -1,0 +1,41 @@
+NAME
+
+     fraction(3f) - [INTRINSIC] Fractional part of the model representation
+
+DESCRIPTION
+
+   fraction(x) returns the fractional part of the model
+   representation of X.
+
+SYNTAX
+
+   y = fraction(x)
+
+ARGUMENTS
+
+   X  - The type of the argument shall be a REAL.
+
+RETURN VALUE
+
+   The return value is of the same type and kind as the argument.
+   The fractional part of the model representation of X is returned;
+   it is x * radix(x)**(-exponent(x)).
+
+EXAMPLE
+
+  Sample program:
+
+    program test_fraction
+      real :: x
+      x = 178.1387e-4
+      print *, fraction(x), x * radix(x)**(-exponent(x))
+    end program test_fraction
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+

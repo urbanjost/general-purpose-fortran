@@ -1,0 +1,205 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>shell (1)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>shell(1f) </B>- shell for demonstrating major modules in libjust4.a
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Usage</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>shell</B> expression|<B>-help</B>|<B>-version</B>|[<B>-replay</B>][<B>-read</B> <I>FILENAME</I>]
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Example command line interface with command line history, numeric
+expressions, if/else/elseif/endif logic, and Unix-like command
+parsing.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>--help</B>
+display this help and exit
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>--version</B>
+output version information and exit
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>USAGE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+At the command prompt the following example commands may be used:
+<P>
+<PRE>
+  #----------------------------------------------------------------------------#
+  | command                     |exercises       | description                 |
+  #----------------------------------------------------------------------------#
+  | r                           | M_HISTORY      | enter history editor;       |
+  |                             |                | ? will produce help         |
+  #----------------------------------------------------------------------------#
+  | today format [-help]        | M_TIME         | display current time using  |
+  |                             |                | fmtdate(3f)                 |
+  #----------------------------------------------------------------------------#
+  | if/else/elseif expression   | M_LOGIC        | conditionally process input |
+  |                             |                | lines                       |
+  | endif                       | M_LOGIC        | end IF block                |
+  #----------------------------------------------------------------------------#
+  | set dump                    | M_CALCULATOR   | dump currently defined      |
+  |                             |                | variable names              |
+  | set funcs                   | M_CALCULATOR   | describe functions available|
+  |                             |                | in expressions              |
+  | set nc()                    | JUOWN1/CALC_NC | display list of ncurses()   |
+  |                             |                | functions                   |
+  | set expression [-q]         | M_CALCULATOR   | anything else is assumed to |
+  |                             |                | be a numeric expression     |
+  | set                         | M_CALCULATOR   | If no expression switch to  |
+  |                             |                | calculator mode till "." is |
+  |                             |                | entered.                    |
+  #----------------------------------------------------------------------------#
+  | read file [-q]              | M_KRACKEN      | read from another input file|
+  | test1 -x -y --help --version| M_KRACKEN      | test of DISSECT(3f)         |
+  #----------------------------------------------------------------------------#
+  |                             | M_PIXEL        | pixel graphics              |
+  |prefsize:        specify size of pixel array
+  |vinit:           initialize pixel array drawing module
+  |
+  |rect:            draw line rectangle given two opposite corners
+  |line:            draw line between two points applying line width and color
+  |polyline:        draw lines between points
+  |rmove2:          relative move
+  |move2:           move current position
+  |rdraw2:          relative draw
+  |draw2:           draw a line from current position to specified point
+  |
+  |point2:          Draw a point at x, y
+  |
+  |arc:             draw a arc using current line width and color
+  |circle:          draw a circle using current line width and color
+  |circleprecision: set number of line segments making up a circle
+  |
+  |drawchar:        draw text at the current position
+  |drawstr:         draw text at the current position
+  |
+  |linewidth:       set line width for lines drawn in pixel image
+  |color:           set current color for lines drawn in pixel image
+  |textsize:        set text size in world units
+  |ycentertext:     set text centering mode on for drawstr(3f) and drawc(3f) in Y direction
+  |xcentertext:     set text centering mode for drawstr(3f) and drawc(3f) in X direction
+  |centertext:      set text centering mode for drawstr(3f) and drawc(3f)
+  |textang:         set angle in degrees to draw text at using drawstr(3f)
+  |
+  |mapcolor:        set a color index using RGB values
+  |
+  |strlength:       length of string using current font size
+  |getviewport:     return viewport in screen pixel coordinates
+  |getdisplaysize:  Returns the width and height of the device in pixels
+  |state:           print graphics state of M_pixel graphics module
+  |getgp2:          get current graphics position
+  |
+  |viewport:        Specify which part of the screen to draw in.
+  |ortho2:          define the area of the virtual world coordinates to map to the viewport
+  |ortho2_biggest:  given a window size, find and set to largest accommodating viewport
+  |
+  |print_ppm:       print pixel array as a P3 PPM file
+  |print_ascii:     print pixel array as an ASCII block of text
+  |
+  |clear:           set background color all to specified color index
+  |
+  |vexit:           exit pixel array drawing module
+  |                             |                |                             |
+  #----------------------------------------------------------------------------#
+  | help                        |                | display this information    |
+  |                             |                | this information            |
+  | quit|.                      |                | exit program                |
+  #----------------------------------------------------------------------------#
+  | anything_else               | execute as system command                    |
+  #----------------------------------------------------------------------------#
+<P>
+</PRE>
+It can be confusing if you make variables that are command names.
+An expression on the command line is evaluated and then the program exits.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>shell (1)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5bd29a80-e71f-4af8-b4fe-cbb7cc012348 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/shell.1.gif"></center> 
+</body>
+</HTML>

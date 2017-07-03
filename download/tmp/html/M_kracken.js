@@ -1,0 +1,20 @@
+function loadthem(){
+append("M_kracken.3.html");
+append("dget.3.html");
+append("dgets.3.html");
+append("dissect.3.html");
+append("iget.3.html");
+append("igets.3.html");
+append("kracken.3.html");
+append("lget.3.html");
+append("lgets.3.html");
+append("parse.3.html");
+append("retrev.3.html");
+append("rget.3.html");
+append("rgets.3.html");
+append("setprompts.3.html");
+append("sget.3.html");
+append("sgets.3.html");
+append("show.3.html");
+append("store.3.html");
+}

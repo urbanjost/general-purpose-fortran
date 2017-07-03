@@ -1,0 +1,55 @@
+NAME
+   days2sec - [M_time] convert string of form [[-]dd-]hh:mm:ss.nn to seconds
+
+SYNOPSIS
+   function days2sec(str) result(time)
+
+    character(len=*),intent(in)       :: str
+    real(kind=realtime)               :: time
+
+DESCRIPTION
+     Given a string representing a duration of the form
+     "[-][[[dd-]hh:]mm:]ss" return a value representing seconds
+
+     If "dd-" is present, units for the numbers are assumed to
+     proceed from day to hour to minute to second. But if no
+     day is present, the units are assumed to proceed from second
+     to minutes to hour from left to ring. That is ...
+
+        [-]dd-hh:mm:ss
+        [-]dd-hh:mm
+        [-]dd-hh
+
+        hh:mm:ss
+        mm:ss
+        ss
+
+         Where dd is days, hh hours, mm minutes and ss seconds.
+         A decimal fraction is supported on the seconds.
+
+OPTIONS
+      str   string of the general form dd-hh:mm:ss.nn
+RETURNS
+      time  the number of seconds represented by the input string
+
+EXAMPLE
+   Sample program:
+
+    program demo_days2sec
+    use M_time, only : days2sec
+    implicit none
+       write(*,*)days2sec('1-12:04:20')
+       write(*,*)'one second ',days2sec('1')
+       write(*,*)'one minute ',days2sec('1:00')
+       write(*,*)'one hour ',days2sec('1:00:00')
+       write(*,*)'one day ',days2sec('1-00:00:00')
+    end program demo_days2sec
+
+   Results:
+
+    129860.00000000000
+    one second    1.0000000000000000
+    one minute    60.000000000000000
+    one hour    3600.0000000000000
+    one day    86400.000000000000
+

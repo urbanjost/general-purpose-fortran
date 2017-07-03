@@ -1,0 +1,43 @@
+NAME
+         sgets - [ARGUMENTS:M_kracken]given keyword fetch string value parsed on whitespace into an array
+SYNOPSIS
+  function sgets(name,delim) result(strings)
+
+   character(len=*),intent(in) :: name
+   character(len=*),intent(in),optional :: delim
+   character(len=IPvalue),allocatable :: strings(:)
+
+DESCRIPTION
+    The sgets(3f) function returns a dynamically allocated array of character values
+    from a string that is the value for a command line option. It is part of
+    the M_kracken(3fp) module.
+OPTIONS
+    name     the dictionary keyword (in form VERB_KEYWORD) to retrieve.
+             The VERB name comes from the first argument of the
+             KRACKEN(3f) or DISSECT(3f) call. The KEYWORD is a keyword from the second
+             argument to the KRACKEN(3f) or DISSECT(3f) call.
+             This routine trusts that the desired name exists.
+             A blank is returned if the name is not in the dictionary.
+    delim    characters to split the string at into elements
+
+RETURNS
+    strings  returned string array
+
+EXAMPLE
+  Sample program:
+
+   program demo_sgets
+   use M_kracken, only : kracken, sgets, IPvalue
+   character(len=IPvalue),allocatable :: strings(:)
+      call kracken('cmd',' -string    This   is  a sentence ')
+      strings= sgets("cmd_string")            ! get -strings words
+      print *, "string=",('['//trim(strings(i))//']',i=1,size(strings))
+   end program demo_sgets
+
+  Example program execution:
+   $ xxx
+    string=[This][is][a][sentence]
+
+   $ xxx -string parse this into words
+    string=[parse][this][into][words]
+

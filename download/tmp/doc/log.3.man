@@ -1,0 +1,35 @@
+NAME
+     LOG(3f) - [INTRINSIC:MATHEMATICS] Logarithm function
+
+SYNTAX
+   result = LOG(X)
+
+DESCRIPTION
+   LOG(X) computes the natural logarithm of X, i.e. the logarithm to the base "e".
+
+ARGUMENTS
+   X  - The type shall be REAL or COMPLEX.
+
+RETURN VALUE
+   The return value is of type REAL or COMPLEX.
+   The kind type parameter is the same as X.
+   If X is COMPLEX, the imaginary part OMEGA is in the range
+
+   -PI < OMEGA <= PI.
+
+EXAMPLE
+  Sample program:
+
+   program test_log
+     real :: x = 2.7182818284590451_8
+     complex :: z = (1.0, 2.0)
+     x = log(x)    ! will yield (approximately) 1
+     z = log(z)
+   end program test_log
+
+STANDARD
+   [[FORTRAN 77]] and later
+
+CLASS
+   [[Elemental procedure|Elemental function]]
+

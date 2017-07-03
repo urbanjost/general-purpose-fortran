@@ -1,0 +1,149 @@
+[UP]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                Manual Reference Pages  - delim (3)
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                                 
+NAME
+
+    delim - [M_strings]parse a string and store tokens into an array
+
+CONTENTS
+
+    Synopsis
+    Description
+    Options
+    Examples
+
+SYNOPSIS
+
+    subroutine delim(line,array,n,icount,ibegin,iterm,ilen,dlim)
+
+
+        character(len=*),intent(in)  :: line
+        integer,integer(in)          :: n
+        integer,intent(out)          :: icount
+        character(len=*)             :: array(n)
+        integer,intent(out)          :: ibegin(n)
+        integer,intent(out)          :: iterm(n)
+        integer,intent(out)          :: ilen
+        character(len=*)             :: dlim
+
+DESCRIPTION
+
+    Given a LINE of structure " par1 par2 par3 ... parn " store each par(n) into a separate variable in ARRAY (UNLESS ARRAY(1).eq. 
+    #N# )
+
+    Also set ICOUNT to number of elements of array initialized, and return beginning and ending positions for each element in
+    IBEGIN(N) and ITERM(N).
+
+    Return position of last non-blank character (even if more than N elements were found) in ILEN
+
+    No quoting or escaping of delimiter is allowed, so the delimiter character can not be placed in a token.
+
+    No checking for more than N parameters; If any more they are ignored.
+
+OPTIONS
+
+          LINE input string to parse into tokens
+
+          ARRAY(N) array that receives tokens
+
+          N size of arrays ARRAY, IBEGIN, ITERM
+
+          ICOUNT number of tokens found IBEGIN(N) starting columns of tokens found
+
+          ITERM(N) ending columns of tokens found
+
+          ILEN position of last non-blank character in input string LINE
+
+          DLIM delimiter characters
+
+EXAMPLES
+
+    program demo_delim
+
+        use m_strings, only: delim
+        character(len=80) :: line
+        character(len=80) :: dlm
+        integer,parameter :: n=10
+        character(len=20) :: array(n)=   
+        integer           :: ibegin(n),iterm(n)
+        line=  first  second 10.3 words_of_stuff   
+        do i20=1,4
+           ! change delimiter list and what is calculated or parsed
+           if(i20.eq.1)dlm=   
+           if(i20.eq.2)dlm= o 
+           if(i20.eq.3)dlm=  aeiou     ! NOTE SPACE IS FIRST
+           if(i20.eq.3)ARRAY(1)= #N#   ! QUIT RETURNING STRING ARRAY
+           if(i20.eq.4)line= AAAaBBBBBBbIIIIIi  J K L 
+
+
+           ! write out a break line composed of =========== ..
+           write(*, (57("=")) )
+           ! show line being parsed
+           write(*, (a) ) PARSING=[ //trim(line)// ] on  //trim(dlm)
+           ! call parsing procedure
+           call delim(line,array,n,icount,ibegin,iterm,ilen,dlm)
+           write(*,*) number of tokens found= ,icount
+           write(*,*) last character in column  ,ilen
+           if(icount.gt.0)then
+              if(ilen.ne.iterm(icount))then
+                 write(*,*) ignored from column  ,iterm(icount)+1,  to  ,ilen
+              endif
+              do i10=1,icount
+                 ! check flag to see if ARRAY() was set
+                 if(array(1).ne. #N# )then
+                    ! from returned array
+                    write(*, (a,a,a) ,advance= no )&
+                    & [ ,array(i10)(:iterm(i10)-ibegin(i10)+1), ] 
+                 endif
+              enddo
+              ! using start and end positions in IBEGIN() and ITERM()
+              write(*,*)
+              do i10=1,icount
+                 ! from positions in original line
+                 write(*, (a,a,a) ,advance= no )&
+                 & [ ,line(ibegin(i10):iterm(i10)), ] 
+              enddo
+              write(*,*)
+           endif
+        enddo
+
+    end program demo_delim
+
+    Expected output
+
+       ========================================================
+       PARSING=[ first  second 10.3 words_of_stuff] on
+        number of tokens found=           4
+        last character in column           34
+       [first][second][10.3][words_of_stuff]
+       [first][second][10.3][words_of_stuff]
+       ========================================================
+       PARSING=[ first  second 10.3 words_of_stuff] on o
+        number of tokens found=           4
+        last character in column           34
+       [ first  sec][nd 10.3 w][rds_][f_stuff]
+       [ first  sec][nd 10.3 w][rds_][f_stuff]
+       ========================================================
+       PARSING=[ first  second 10.3 words_of_stuff] on  aeiou
+        number of tokens found=          10
+        last character in column           34
+
+
+       [f][rst][s][c][nd][10.3][w][rds_][f_st][ff]
+       =========================================================
+       PARSING=[AAAaBBBBBBbIIIIIi  J K L] on  aeiou
+        number of tokens found=           5
+        last character in column           24
+
+
+       [AAA][BBBBBBbIIIII][J][K][L]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                                                             delim (3)                                                July 02, 2017
+
+Generated by manServer 1.08 from 60918b53-0901-4d65-9aa2-f92a5dc62dfd using man macros.
+                                                              [delim]

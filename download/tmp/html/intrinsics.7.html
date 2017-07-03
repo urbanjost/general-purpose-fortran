@@ -1,0 +1,1111 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>intrinsics (7)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>intrinsics(7f) </B>- intrinsic <B>man</B>(1) pages
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Contents</A><BR>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Got tired of not having the Fortran intrinsics available as <B>man</B>(1) pages,
+especially when looking at code in the <B>vim</B>(1) editor and wanting to use the
+"K" command to evoke the <B>man</B>(1) page.
+<P>
+So, as a start I took the closest thing I knew, which was descriptions on the
+Fortran Wiki, and am slowly turning them into <B>man</B>(1) pages and sometimes
+altering them.
+<P>
+*Note*: In many cases the descriptions of these intrinsics were originally
+taken from the [[GFortran|GNU Fortran]] manual to make descriptions
+on the Fortran Wiki by Jason Blevins (which were then used to start this
+collection). Like the Fortran Wiki itself, the [[GFortran|GNU Fortran]]
+manual is licensed under the [[GNU Free Documentation License]].
+<P>
+These are at the state of "good enough considering the alternative is nothing",
+but are still actively being completed.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CONTENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Inquiry intrinsic functions
+<P>
+The result of an inquiry function depends on the properties of its
+principal argument, not on the value of the argument. The value of the
+argument does not have to be defined.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The result of an inquiry function depends on the properties of its
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[allocated]]<B>--Status</B> of an allocatable entity
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[associated]]<B>--Status</B> of a pointer or pointer/target pair
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bit_size]]<B>--Bit</B> size inquiry function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[command_argument_count]]<B>--Get</B> number of command line arguments
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[digits]]<B>--Significant</B> digits function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[epsilon]]<B>--Epsilon</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[extends_type_of]]<B>--Type</B> extension inquiry
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[huge]]<B>--Largest</B> number of a kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[is_contiguous]]<B>--True</B> if and only if an object is contigous
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[kind]]<B>--Kind</B> of an entity
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[lbound]]<B>--Lower</B> dimension bounds of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[len]]<B>--Length</B> of a character entity
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[maxexponent]]<B>--Maximum</B> exponent of a real kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[minexponent]]<B>--Minimum</B> exponent of a real kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[new_line]]<B>--New</B> line character
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[precision]]<B>--Decimal</B> precision of a real kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[present]]<B>--Determine</B> whether an optional dummy argument is specified
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[radix]]<B>--Base</B> of a model number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[range]]<B>--Decimal</B> exponent range of a real kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[same_type_as]]<B>--Query</B> dynamic types for equality
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[shape]]<B>--Determine</B> the shape of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[size]]<B>--Determine</B> the size of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[tiny]]<B>--Smallest</B> positive number of a real kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ubound]]<B>--Upper</B> dimension bounds of an array
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Math functions
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Math functions
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[abs]]<B>--Absolute</B> value
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[acos]]<B>--Arccosine</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[acosh]]<B>--Inverse</B> hyperbolic cosine function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[asin]]<B>--Arcsine</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[asinh]]<B>--Inverse</B> hyperbolic sine function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atan]]<B>--Arctangent</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atan2]]<B>--Arctangent</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atanh]]<B>--Inverse</B> hyperbolic tangent function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bessel_j0]]<B>--Bessel</B> function of the first kind of order 0
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bessel_j1]]<B>--Bessel</B> function of the first kind of order 1
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bessel_jn]]<B>--Bessel</B> function of the first kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bessel_y0]]<B>--Bessel</B> function of the second kind of order 0
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bessel_y1]]<B>--Bessel</B> function of the second kind of order 1
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bessel_yn]]<B>--Bessel</B> function of the second kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[cos]]<B>--Cosine</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[cosh]]<B>--Hyperbolic</B> cosine function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[erf]]<B>--Error</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[erfc]]<B>--Complementary</B> error function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[erfc_scaled]]<B>--Error</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[gamma]]<B>--Gamma</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[hypot]]<B>--Euclidean</B> distance function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[log]]<B>--Logarithm</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[log10]]<B>--Base</B> 10 logarithm function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[log_gamma]]<B>--Logarithm</B> of the Gamma function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[sin]]<B>--Sine</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[sinh]]<B>--Hyperbolic</B> sine function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[sqrt]]<B>--Square-root</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[tan]]<B>--Tangent</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[tanh]]<B>--Hyperbolic</B> tangent function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[aimag]]<B>--Imaginary</B> part of complex number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[aint]]<B>--Truncate</B> to a whole number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[anint]]<B>--Nearest</B> whole number
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[achar]]<B>--Character</B> in ASCII collating sequence
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[adjustl]]<B>--Left</B> adjust a string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[adjustr]]<B>--Right</B> adjust a string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[all]]<B>--All</B> values in MASK along DIM are true
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[any]]<B>--Any</B> value in MASK along DIM is true
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_add]]<B>--Atomic</B> ADD operation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_and]]<B>--Atomic</B> bitwise AND operation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_cas]]<B>--Atomic</B> compare and swap
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_define]]<B>--Setting</B> a variable atomically
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_fetch_add]]<B>--Atomic</B> ADD operation with prior fetch
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_fetch_and]]<B>--Atomic</B> bitwise AND operation with prior fetch
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_fetch_or]]<B>--Atomic</B> bitwise OR operation with prior fetch
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_fetch_xor]]<B>--Atomic</B> bitwise XOR operation with prior fetch
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_or]]<B>--Atomic</B> bitwise OR operation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_ref]]<B>--Obtaining</B> the value of a variable atomically
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[atomic_xor]]<B>--Atomic</B> bitwise OR operation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bge]]<B>--Bitwise</B> greater than or equal to
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[bgt]]<B>--Bitwise</B> greater than
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ble]]<B>--Bitwise</B> less than or equal to
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[blt]]<B>--Bitwise</B> less than
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[btest]]<B>--Bit</B> test function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[c_associated]]<B>--Status</B> of a C pointer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[c_funloc]]<B>--Obtain</B> the C address of a procedure
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[c_f_procpointer]]<B>--Convert</B> C into Fortran procedure pointer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[c_f_pointer]]<B>--Convert</B> C into Fortran pointer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[c_loc]]<B>--Obtain</B> the C address of an object
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[c_sizeof]]<B>--Size</B> in bytes of an expression
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ceiling]]<B>--Integer</B> ceiling function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[char]]<B>--Character</B> conversion function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[cmplx]]<B>--Complex</B> conversion function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[co_broadcast]]<B>--Copy</B> a value to all images the current set of images
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[co_max]]<B>--Maximal</B> value on the current set of images
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[co_min]]<B>--Minimal</B> value on the current set of images
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[co_reduce]]<B>--Reduction</B> of values on the current set of images
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[co_sum]]<B>--Sum</B> of values on the current set of images
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[compiler_options]]<B>--Options</B> passed to the compiler
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[compiler_version]]<B>--Compiler</B> version string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[conjg]]<B>--Complex</B> conjugate function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[count]]<B>--Count</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[cpu_time]]<B>--CPU</B> elapsed time in seconds
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[cshift]]<B>--Circular</B> shift elements of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[date_and_time]]<B>--Date</B> and time subroutine
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[dble]]<B>--Double</B> conversion function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[dim]]<B>--Positive</B> difference
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[dot_product]]<B>--Dot</B> product function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[dprod]]<B>--Double</B> product function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[dshiftl]]<B>--Combined</B> left shift
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[dshiftr]]<B>--Combined</B> right shift
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[eoshift]]<B>--End-off</B> shift elements of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[event_query]]<B>--Query</B> whether a coarray event has occurred
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[execute_command_line]]<B>--Execute</B> a shell command
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[exp]]<B>--Exponential</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[exponent]]<B>--Exponent</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[float]]<B>--Convert</B> integer to default real
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[floor]]<B>--Integer</B> floor function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[fraction]]<B>--Fractional</B> part of the model representation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[get_command]]<B>--Get</B> the entire command line
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[get_command_argument]]<B>--Get</B> command line arguments
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[get_environment_variable]]<B>--Get</B> an environmental variable
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[iachar]]<B>--Code</B> in ASCII collating sequence
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[iall]]<B>--Bitwise</B> and of array elements
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[iand]]<B>--Bitwise</B> logical and
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[iany]]<B>--Bitwise</B> or of array elements
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ibclr]]<B>--Clear</B> bit
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ibits]]<B>--Bit</B> extraction
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ibset]]<B>--Set</B> bit
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ichar]]<B>--Character-to-integer</B> conversion function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ieor]]<B>--Bitwise</B> logical exclusive or
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[image_index]]<B>--Cosubscript</B> to image index conversion
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[index]]<B>--Position</B> of a substring within a string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[int]]<B>--Convert</B> to integer type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ior]]<B>--Bitwise</B> logical inclusive or
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[iparity]]<B>--Bitwise</B> exclusive or of array elements
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[is_iostat_end]]<B>--Test</B> for end-of-file value
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[is_iostat_eor]]<B>--Test</B> for end-of-record value
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ishft]]<B>--Shift</B> bits
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ishftc]]<B>--Shift</B> bits circularly
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[lcobound]]<B>--Lower</B> codimension bounds of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[leadz]]<B>--Number</B> of leading zero bits of an integer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[len_trim]]<B>--Length</B> of a character entity without trailing blank characters
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[lge]]<B>--Lexical</B> greater than or equal
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[lgt]]<B>--Lexical</B> greater than
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[lle]]<B>--Lexical</B> less than or equal
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[llt]]<B>--Lexical</B> less than
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[logical]]<B>--Convert</B> to logical type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[maskl]]<B>--Left</B> justified mask
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[maskr]]<B>--Right</B> justified mask
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[matmul]]<B>--matrix</B> multiplication
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[max]]<B>--Maximum</B> value of an argument list
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[maxloc]]<B>--Location</B> of the maximum value within an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[maxval]]<B>--Maximum</B> value of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[merge]]<B>--Merge</B> variables
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[merge_bits]]<B>--Merge</B> of bits under mask
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[min]]<B>--Minimum</B> value of an argument list
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[minloc]]<B>--Location</B> of the minimum value within an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[minval]]<B>--Minimum</B> value of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[mod]]<B>--Remainder</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[modulo]]<B>--Modulo</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[move_alloc]]<B>--Move</B> allocation from one object to another
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[mvbits]]<B>--Move</B> bits from one integer to another
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[nearest]]<B>--Nearest</B> representable number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[nint]]<B>--Nearest</B> whole number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[not]]<B>--Logical</B> negation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[norm2]]<B>--Euclidean</B> vector norm
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[null]]<B>--Function</B> that returns an disassociated pointer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[num_images]]<B>--Number</B> of images
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[pack]]<B>--Pack</B> an array into an array of rank one
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[parity]]<B>--Reduction</B> with exclusive or
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[popcnt]]<B>--Number</B> of bits set
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[poppar]]<B>--Parity</B> of the number of bits set
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[product]]<B>--Product</B> of array elements
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[random_number]]<B>--Pseudo-random</B> number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[random_seed]]<B>--Initialize</B> a pseudo-random number sequence
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[rank]]<B>--Rank</B> of a data object
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[real]]<B>--Convert</B> to real type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[repeat]]<B>--Repeated</B> string concatenation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[reshape]]<B>--Function</B> to reshape an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[rrspacing]]<B>--Reciprocal</B> of the relative spacing
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[scale]]<B>--Scale</B> a real value
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[scan]]<B>--Scan</B> a string for the presence of a set of characters
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[selected_char_kind]]<B>--Choose</B> character kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[selected_int_kind]]<B>--Choose</B> integer kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[selected_real_kind]]<B>--Choose</B> real kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[set_exponent]]<B>--Set</B> the exponent of the model
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[shifta]]<B>--Right</B> shift with fill
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[shiftl]]<B>--Left</B> shift
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[shiftr]]<B>--Right</B> shift
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[sign]]<B>--Sign</B> copying function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[sngl]]<B>--Convert</B> double precision real to default real
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[spacing]]<B>--Smallest</B> distance between two numbers of a given type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[spread]]<B>--Add</B> a dimension to an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[storage_size]]<B>--Storage</B> size in bits
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[sum]]<B>--Sum</B> of array elements
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[system_clock]]<B>--Time</B> function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[this_image]]<B>--Cosubscript</B> index of this image
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[trailz]]<B>--Number</B> of trailing zero bits of an integer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[transfer]]<B>--Transfer</B> bit patterns
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[transpose]]<B>--Transpose</B> an array of rank two
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[trim]]<B>--Remove</B> trailing blank characters of a string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[ucobound]]<B>--Upper</B> codimension bounds of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[unpack]]<B>--Store</B> the elements of a vector in an array of higher rank
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[verify]]<B>--Scan</B> a string for the absence of a set of characters
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>intrinsics (7)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1fc1ffb8-1005-4ad6-bac8-8f3728c7a11c using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/intrinsics.7.gif"></center> 
+</body>
+</HTML>

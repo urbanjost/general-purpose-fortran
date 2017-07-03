@@ -1,0 +1,176 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>paws (1)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>paws </B>- [TIME] pause until specified time or for specified duration
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>paws</B> dd-hh:mm:ss[.xxx][<B>-msg</B> message][<B>-repeat</B> TIMES[<B>-fmt</B> ]]|&#46;&#46;&#46;
+[<B>-uet</B>|<B>-jed</B>|<B>-dat</B>|[<B>-date</B>|<B>-until</B>]]
+<B>paws</B> <B>--version</B>|<B>--help</B>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Given a duration in the form dd-hh:mm:ss.xxx where dd is days, hh hours,
+mm minutes and ss.xxx seconds convert it to seconds. Then, pause for that
+many seconds. Alternatively, pause until specified date has passed.
+If no duration is specified wait until a carriage return is entered.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+dd-hh:mm:ss
+Given a string representing a duration of time in the
+following forms:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  dd-hh:mm:ss[.xx]
+                     hh:mm:ss[.xx]
+                        mm:ss[.xx]
+                           ss[.xx]
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+convert it to seconds and pause for that amount of time.
+<B>-date</B>|<B>-until</B> wait until the specified date has passed (before starting
+optional pause). See <B>guessdate</B>(3f) for syntax allowed for
+the date.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-uet</B>
+wait until the specified Unix Epoch Time has passed
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-jed</B>
+wait until the specified Julian Ephemeris Date has passed
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-dat</B>
+wait until the specified date vector has passed
+(year month day timezone hour minutes seconds milliseconds)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-repeat</B> NNN
+The duration is repeated NNN times with the date displaced
+at the end of each pause.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>--msg</B>
+message to display before pausing
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>--help</B>
+display this help and exit
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>--version</B>
+output version information and exit
+</TD></TR>
+<TR></TR></TABLE>For more information on the format of the dates, see the <B>now</B>(1) command.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Typical usage:
+<P>
+<PRE>
+   paws 2:00:00              # pause for two hours
+   paws 3600                 # pause one hour
+   paws 0.10                 # pause one tenth of a second
+   paws 1 -repeat 60         # pause sixty seconds, display the date each second
+   paws -until 23:59:59      # pause until midnight
+   paws 15:00 -date 23:59:59 # pause till midnight then an additional 15 minutes
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>paws (1)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6227cba6-3132-4bd5-a9a7-ca2992d69276 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/paws.1.gif"></center> 
+</body>
+</HTML>

@@ -1,0 +1,214 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>makepoly (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>makepoly(3f) </B>- [M_pixel] opens polygon constructed by a series of move-draws and closed by closepoly |
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+definition:
+<P>
+   subroutine makepoly()
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>MAKEPOLY</B>(3f) opens up a polygon which will then be constructed by a series
+of move-draws and closed by a <B>CLOSEPOLY</B>(3f).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_makepoly
+   use :: M_pixel
+   use :: M_writegif, only : writegif
+   use :: M_writegif_animated, only : write_animated_gif
+   implicit none
+   integer,parameter :: wide=640, tall=640
+   integer :: rows, xoff, yoff, box_sz
+   integer :: i20, i30, ncols, nrows, ilines
+   real    :: bottom, left, sun_radius, planet_radius, planet_offset
+   character(len=40) :: filename
+   integer :: movie(300,0:wide-1,0:tall-1)
+      call prefsize(wide,tall)
+      call vinit()
+      call ortho2(0.0, real(wide), 0.0, real(tall) )
+      ! call linewidth(3) ! really slows down pbm driver because all lines are polygons
+      call color(7)
+      call clear()
+      call color(0)
+      rows=1
+      box_sz=MIN(wide,tall)/rows       ! size of biggest box to use and get specified number of rows
+      nrows = tall/box_sz              ! number of rows of objects to draw
+      ncols = wide/box_sz              ! number of columns of objects to draw
+      xoff = (wide - ncols * box_sz)/2 ! initial x offset to begin row at to center drawings
+      yoff = (tall - nrows * box_sz)/2 ! initial x offset to begin column at to center drawings
+      sun_radius = 148
+      planet_radius = 1
+      do ilines = 1, 300
+         do i20 = 1, ncols
+            left = (i20-1)*box_sz+xoff
+            do i30 = 1, nrows
+               bottom = (i30-1)*box_sz+yoff
+               call color(0)
+            call makepoly()
+               call rect(left,bottom,left+box_sz,bottom+box_sz)
+            call closepoly()
+               planet_offset= sun_radius
+                  call color(mod(ilines,15)+1)
+                  call hypoc(left + box_sz/2.0, bottom + box_sz/2.0, &
+               & sun_radius, planet_radius, planet_offset, &
+               & box_sz/2.0, ilines,  &
+               & 0.0, 0.0, 1)
+            enddo
+         enddo
+         movie(ilines,:,:)=P_pixel
+         write(filename,&#146;("hypoc.",i0,".gif")&#146;)ilines
+         !!call writegif(filename,P_pixel,P_colormap)
+      enddo
+      call write_animated_gif(&#146;makepoly.3.gif&#146;,movie,P_colormap,delay=70)
+      call vexit()
+   contains
+   !
+   !  Make shapes using hypocycloidal curves.
+   !
+   subroutine hypoc(xcenter,ycenter,sunr0,planet0,offset0,radius,ilines,ang,angs,ifill)
+   use M_pixel
+   implicit none
+   real,parameter     :: PI= 3.14159265358979323846264338327950288419716939937510
+   real,intent(in)    :: xcenter, ycenter      ! center of curve
+   real,intent(in)    :: sunr0,planet0,offset0 ! radii of sun, planet, and planet offset
+   real,intent(in)    :: radius                ! radius to fit the shape to (no fit if radius is 0)
+   integer,intent(in) :: ilines                ! number of points to sample along curve
+   real,intent(in)    :: ang                   ! angle to rotate the shape by, to orientate it.
+   real,intent(in)    :: angs                  ! angle to start sampling points at; ccw is +; 0 is East
+   integer,intent(in) :: ifill                 ! 1 make a filled polygon, 2 make a hatched polygon
+   integer            :: i10
+   real               :: ang1, con1, con2, factor
+   real               :: offset, planet, r, sunr, u
+   real               :: xpoin, xpoin1, ypoin, ypoin1
+      sunr=sunr0
+      offset=offset0
+      planet=planet0
+      if(ilines.eq.0.0) return
+      if(planet.eq.0.0) return
+      if(sunr.eq.0.0)   return
+      if(radius.ne.0.and.sunr-planet+offset.ne.0)then
+         factor=radius/(sunr-planet+offset)
+         sunr=factor*sunr
+         planet=factor*planet
+         offset=factor*offset
+      endif
+      u=0.0+ang
+      con1=PI*2.*(sunr/planet)/real(ilines)
+      con2=(1.0-planet/sunr)*u
+      xpoin1=(sunr-planet)*cos(planet*u/sunr)+offset*cos(con2)
+      ypoin1=(sunr-planet)*sin(planet*u/sunr)-offset*sin(con2)
+      ang1=atan2(ypoin1,xpoin1)+angs
+      r=sqrt(xpoin1**2+ypoin1**2)
+      xpoin1=r*cos(ang1)+xcenter
+      ypoin1=r*sin(ang1)+ycenter
+      select case(ifill)
+      case(:0)
+      case(1:)
+         call makepoly()
+      end select
+      call move2(xpoin1,ypoin1)
+      do i10=1,ilines
+         u=con1*i10+ang
+         con2=(1.0-planet/sunr)*u
+         if(con2.ge.2**24) con2=amod(con2,PI)
+         xpoin=(sunr-planet)*cos(planet*u/sunr)+offset*cos(con2)
+         ypoin=(sunr-planet)*sin(planet*u/sunr)-offset*sin(con2)
+         ang1=atan2(ypoin,xpoin)+angs
+         r=sqrt(xpoin**2+ypoin**2)
+         xpoin=r*cos(ang1)+xcenter
+         ypoin=r*sin(ang1)+ycenter
+         call draw2(xpoin,ypoin)
+      enddo
+      call draw2(xpoin1,ypoin1)
+      if(ifill.gt.0)then
+        call closepoly()
+      endif
+   end subroutine hypoc
+   end program demo_makepoly
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>makepoly (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 32d6ef83-82af-4b38-8a2e-1ea837c03261 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/makepoly.3.gif"></center> 
+</body>
+</HTML>

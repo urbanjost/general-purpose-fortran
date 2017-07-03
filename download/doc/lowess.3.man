@@ -1,0 +1,274 @@
+NAME
+    lowess(3f) - [M_math:fit]procedures for locally weighted regression
+
+SYNOPSIS
+   Calling Sequence:
+
+    subroutine lowess(x, y, n, f, nsteps, delta, ys, rw, res)
+    real,intent(in)    :: x(n)
+    real,intent(in)    :: y(n)
+    integer,intent(in) :: n
+    real,intent(in)    :: f
+    integer,intent(in) :: nsteps
+    real,intent(in)    :: delta
+
+    real,intent(out)   :: ys(n)
+    real,intent(out)   :: rw(n)
+    real,intent(out)   :: rw(res)
+
+PURPOSE
+
+
+   Lowess is a data analysis technique for producing a "smooth" set of
+   values from a time series which has been contaminated with noise,
+   or from a scatter plot with a "noisy" relationship between the two
+   variables. In a time series context, the technique is an improvement
+   over least squares smoothing when the data is not equally spaced
+   (as least squares smoothing assumes).
+
+DESCRIPTION
+
+   LOWESS stands for "locally weighted regression". LOWESS computes the
+   smooth of a scatterplot of Y against X using robust locally weighted
+   regression. Fitted values, YS, are computed at each of the values of
+   the horizontal axis in X.
+
+   For lowess smoothing, the analyst can vary the size of the smoothing
+   window.  This size is given as the fraction (0 to 1) of the data that
+   the window should cover. The default window size is .2 (which states
+   that the smoothing window has a total width of 20% of the horizontal
+   axis variable). The LOWESS fraction (F) controls the smoothness of the
+   curve. For example, if it is 1.0, then the LOWESS curve is a single
+   straight line. In general, the smaller the fraction, the more that
+   LOWESS curve follows individual data points. To obtain a smoother
+   LOWESS curve, increase the value of the LOWESS FRACTION.
+
+   This package consists of two FORTRAN procedures for smoothing
+   scatterplots by robust locally weighted regression, or lowess. The
+   principal routine is LOWESS which computes the smoothed values using
+   the method described in "The Elements of Graphing Data", by William S.
+   Cleveland (Wadsworth, 555 Morego Street, Monterey, California 93940).
+
+   LOWESS calls a support routine, LOWEST, the code for which is
+   included. LOWESS also calls a routine SORT, which the user must provide.
+
+   To reduce the computations, LOWESS requires that the arrays X and Y,
+   which are the horizontal and vertical coordinates, respectively, of the
+   scatterplot, be such that X is sorted from smallest to largest. The
+   user must therefore use another sort routine which will sort X and Y
+   according to X.
+
+   To summarize the scatterplot, YS, the fitted values, should be plotted
+   against X. No graphics routines are available in the package and must
+   be supplied by the user.
+
+   The FORTRAN code for the routines LOWESS and LOWEST has been generated
+   from higher level RATFOR programs (B. W. Kernighan, ``RATFOR: A
+   Preprocessor for a Rational Fortran,'' Software Practice and Experience,
+   Vol. 5 (1975).
+
+OPTIONS
+
+   ARGUMENT DESCRIPTION
+
+         X =       Input; abscissas of the points on the
+                   scatterplot; the values in X must be ordered
+                   from smallest to largest.
+         Y =       Input; ordinates of the points on the
+                   scatterplot.
+         N =       Input; dimension of X,Y,YS,RW, and RES.
+         F =       Input; specifies the amount of smoothing; F is
+                   the fraction of points used to compute each
+                   fitted value; as F increases the smoothed values
+                   become smoother; choosing F in the range .2 to
+                   .8 usually results in a good fit; if you have no
+                   idea which value to use, try F = .5.
+         NSTEPS =  Input; the number of iterations in the robust
+                   fit; if NSTEPS = 0, the nonrobust fit is
+                   returned; setting NSTEPS equal to 2 should serve
+                   most purposes.
+         DELTA =   input; nonnegative parameter which may be used
+                   to save computations; if N is less than 100, set
+                   DELTA equal to 0.0; if N is greater than 100 you
+                   should find out how DELTA works by reading the
+                   additional instructions section.
+         YS =      Output; fitted values; YS(I) is the fitted value
+                   at X(I); to summarize the scatterplot, YS(I)
+                   should be plotted against X(I).
+         RW =      Output; robustness weights; RW(I) is the weight
+                   given to the point (X(I),Y(I)); if NSTEPS = 0,
+                   RW is not used.
+         RES =     Output; residuals; RES(I) = Y(I)-YS(I).
+
+
+   ADDITIONAL INSTRUCTIONS
+
+       DELTA can be used to save computations.
+       Very roughly the algorithm is this:
+       on the initial fit and on each of the NSTEPS iterations locally weighted regression fitted values are computed
+       at points in X which are spaced, roughly, DELTA apart;
+       then the fitted values at the remaining points are computed using linear interpolation.
+       The first locally weighted regression (LWR) computation is carried out at X(1) and the last is carried out at X(N).
+       Suppose the LWR computation is carried out at X(I).
+       If X(I+1) is greater than or equal to X(I)+DELTA, the next LWR computation is carried out at X(I+1).
+       If X(I+1) is less than X(I)+DELTA, the next LWR computation is carried out at the largest X(J) which is greater than
+       or equal to X(I) but is not greater than X(I)+DELTA.
+       Then the fitted values for X(K) between X(I) and X(J), if there are any, are computed by linear interpolation
+       of the fitted values at X(I) and X(J).
+       If N is less than 100 then DELTA can be set to 0.0 since the computation time will not be too great.
+       For larger N it is typically not necessary to carry out the LWR computation for all points,
+       so that much computation time can be saved by taking DELTA to be greater than 0.0.
+       If DELTA = Range (X)/k then,
+       if the values in X were uniformly scattered over the range,
+       the full LWR computation would be carried out at approximately k points.
+       Taking k to be 50 often works well.
+
+   METHOD
+
+       The fitted values are computed by using the nearest neighbor
+       routine and robust locally weighted regression of degree 1
+       with the tricube weight function. A few additional features
+       have been added. Suppose r is FN truncated to an integer.
+       Let h be the distance to the r-th nearest neighbor
+       from X(I). All points within h of X(I) are used. Thus if
+       the r-th nearest neighbor is exactly the same distance as
+       other points, more than r points can possibly be used for
+       the smooth at X(I). There are two cases where robust
+       locally weighted regression of degree 0 is actually used at
+       X(I). One case occurs when h is 0.0. The second case
+       occurs when the weighted standard error of the X(I) with
+       respect to the weights w(j) is less than .001 times the
+       range of the X(I), where w(j) is the weight assigned to the
+       j-th point of X (the tricube weight times the robustness
+       weight) divided by the sum of all of the weights. Finally,
+       if the w(j) are all zero for the smooth at X(I), the fitted
+       value is taken to be Y(I).
+
+DEPENDENCIES
+
+     o LOWEST
+     o SORT
+
+   LOWEST
+
+   Calling sequence
+
+        CALL LOWEST(X,Y,N,XS,YS,NLEFT,NRIGHT,W,USERW,RW,OK)
+
+   PURPOSE
+
+       LOWEST is a support routine for LOWESS and ordinarily will
+       not be called by the user. The fitted value, YS, is
+       computed at the value, XS, of the horizontal axis.
+       Robustness weights, RW, can be employed in computing the
+       fit.
+
+   OPTIONS
+        Argument description
+
+         X =       Input; abscissas of the points on the
+                   scatterplot; the values in X must be ordered
+                   from smallest to largest.
+         Y =       Input; ordinates of the points on the
+                   scatterplot.
+         N =       Input; dimension of X,Y,W, and RW.
+         XS =      Input; value of the horizontal axis at which the
+                   smooth is computed.
+         YS =      Output; fitted value at XS.
+         NLEFT =   Input; index of the first point which should be
+                   considered in computing the fitted value.
+         NRIGHT =  Input; index of the last point which should be
+                   considered in computing the fitted value.
+         W =       Output; W(I) is the weight for Y(I) used in the
+                   expression for YS, which is the sum from
+                   I = NLEFT to NRIGHT of W(I)*Y(I); W(I) is
+                   defined only at locations NLEFT to NRIGHT.
+         USERW =   Input; logical variable; if USERW is .TRUE., a
+                   robust fit is carried out using the weights in
+                   RW; if USERW is .FALSE., the values in RW are
+                   not used.
+         RW =      Input; robustness weights.
+         OK =      Output; logical variable; if the weights for the
+                   smooth are all 0.0, the fitted value, YS, is not
+                   computed and OK is set equal to .FALSE.; if the
+                   fitted value is computed OK is set equal to
+
+   METHOD
+
+        The smooth at XS is computed using (robust) locally weighted
+        regression of degree 1. The tricube weight function is used
+        with h equal to the maximum of XS-X(NLEFT) and X(NRIGHT)-XS.
+        Two cases where the program reverts to locally weighted
+        regression of degree 0 are described in the documentation
+        for LOWESS.
+
+DEPENDENCIES
+      o lowest
+      o sort_shell ! user-supplied SORT
+
+EXAMPLES
+
+  Example program:
+
+      program T_lowess
+      !  test driver for lowess
+      !  for expected output, see introduction
+      real x(20), y(20), ys(20), rw(20), res(20)
+      data x /1,2,3,4,5,10*6,8,10,12,14,50/
+      data y /18,2,15,6,10,4,16,11,7,3,14,17,20,12,9,13,1,8,5,19/
+      call lowess(x,y,20,.25,0,0.,ys,rw,res)
+      write(*,*) ys
+      call lowess(x,y,20,.25,0,3.,ys,rw,res)
+      write(*,*) ys
+      call lowess(x,y,20,.25,2,0.,ys,rw,res)
+      write(*,*) ys
+      end
+
+      The following are data and output from LOWESS that can
+      be used to check your implementation of the routines. The
+      notation (10)v means 10 values of v.
+
+       X values:
+         1  2  3  4  5  (10)6  8  10  12  14  50
+
+       Y values:
+          18  2  15  6  10  4  16  11  7  3  14  17  20  12  9  13  1  8  5  19
+
+       YS values with F = .25, NSTEPS = 0, DELTA = 0.0
+        13.659  11.145  8.701  9.722  10.000  (10)11.300  13.000  6.440  5.596
+          5.456  18.998
+
+       YS values with F = .25, NSTEPS = 0 ,  DELTA = 3.0
+         13.659  12.347  11.034  9.722  10.511  (10)11.300  13.000  6.440  5.596
+           5.456  18.998
+
+       YS values with F = .25, NSTEPS = 2, DELTA = 0.0
+         14.811  12.115  8.984  9.676  10.000  (10)11.346  13.000  6.734  5.744
+         5.415  18.998
+
+REFERENCE
+    This routine is functionally based on the "netlib" routine lowess
+    from netlib/go/lowess.f .
+
+    "Graphical Methods for Data Analysis", Chambers, Cleveland, Kleiner, and
+    Tukey. Wadsworth, 1983.
+
+APPLICATIONS
+
+    Time Series Analysis
+
+
+SEE ALSO
+
+   A multivariate version is available by "send dloess from a"
+   from the NETLIB server.
+
+AUTHOR
+
+   Bill Cleveland
+
+    research!alice!wsc Mon Dec 30 16:55 EST 1985
+    W. S. Cleveland
+    ATT Bell Laboratories
+    Murray Hill NJ 07974
+

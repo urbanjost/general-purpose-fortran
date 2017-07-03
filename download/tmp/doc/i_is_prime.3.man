@@ -1,0 +1,48 @@
+NAME
+   i_is_prime(3f) - [M_factor]Determine if a number is prime using Sieve of Erasthosthenes
+SYNOPSIS
+   function i_is_prime ( n )
+
+    integer,intent(in) :: n
+
+DESCRIPTION
+   A simple, unoptimized sieve of Erasthosthenes is used to
+   check whether N can be divided by any integer between 2
+   and SQRT(N).
+
+VERSION
+   29 November 1998
+
+AUTHOR
+   John Burkardt
+
+PARAMETERS
+   n  Input, integer N, the integer to be tested.
+RETURNS
+   Output  logical I_IS_PRIME(3f) is TRUE if N is prime, and FALSE
+           otherwise.  Note that negative numbers and 0 are not
+           considered prime.
+EXAMPLE
+   sample program
+
+    program testit
+    use m_factor, only: i_is_prime
+    implicit none
+    integer  :: i
+    integer  :: icount=0
+    integer  :: isum=0
+    integer,parameter :: n= 10000
+
+    do i=2, n
+       if(i_is_prime(i))then
+          icount=icount+1
+          isum=isum+i
+          write(*,*)icount,i
+       endif
+    enddo
+
+    write(*,*)'number of primes between 2 and ',n,' is ',icount
+    write(*,*)'sum of primes between 2 and ',n,' is ',isum
+
+    end program testit
+!

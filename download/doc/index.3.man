@@ -1,0 +1,41 @@
+NAME
+     index(3f) - [INTRINSIC:CHARACTER] Position of a substring within a string
+
+SYNTAX
+
+    result = index(string, substring [, back [, kind]])
+
+DESCRIPTION
+
+   Returns the position of the start of the first occurrence of string
+   SUBSTRING as a substring in STRING, counting from one. If
+   SUBSTRING is not present in STRING, zero is returned. If the
+   BACK argument is present and true, the return value is the start of
+   the last occurrence rather than the first.
+
+ARGUMENTS
+
+* STRING  - Shall be a scalar CHARACTER, with intent(in)
+* SUBSTRING  - Shall be a scalar CHARACTER, with intent(in)
+* BACK  - (Optional) Shall be a scalar LOGICAL, with intent(in)
+* KIND  - (Optional) An INTEGER initialization expression indicating
+  the kind parameter of the result.
+
+RETURN VALUE
+
+   The return value is of type INTEGER and of kind KIND.
+   If KIND is absent, the return value is of default integer
+   kind.
+
+STANDARD
+
+   [[FORTRAN 77]] and later, with KIND argument [[Fortran 2003]] and later
+
+CLASS
+
+   [[Elemental function]]
+
+SEE ALSO
+
+   [[scan]], [[verify]]
+

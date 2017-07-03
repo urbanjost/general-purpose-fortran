@@ -1,0 +1,69 @@
+NAME
+   M_debug(3fm) - [M_debug] a collection of Fortran routines for supporting the development of
+                  unit tests, and providing error processing and debugging procedures.
+SYNOPSIS
+   The M_debug(3fm) Fortran module provides procedures and data useful in providing error processing and debugging capabilities.
+DESCRIPTION
+
+   fstop(3f)             calls 'STOP VALUE' passing in a value (1-32), with optional message
+   pdec(3f)              write ASCII Decimal Equivalent (ADE) numbers vertically beneath string
+   stderr(3f)            Write message on stderr
+
+   unit_check_start(3f)  call command "goodbad NAME start"
+   unit_check(3f)        if expression is .F. call command "goodbad NAME bad" and stop program
+   unit_check_good(3f)   call command "goodbad NAME good"
+   unit_check_bad(3f)    call command "goodbad NAME bad" and  stop program
+
+   The existence of a command called "goodbad" is assumed. This is generally a script that makes entries for each unit in an
+   SQLite data file which is then used to create CSV and HTML reports on the status of each unit. A sample goodbad(1) command
+   written in the bash(1) shell and using the sqlite3(1) command should be included in this distribution.
+
+EXAMPLE
+  Sample program:
+
+    program demo_unit_tests
+    use M_debug, only: unit_check_start, unit_check
+    use M_debug, only: unit_check_good, unit_check_bad
+    implicit none
+    integer :: i, j, k
+    integer,allocatable :: array(:)
+    i=1
+    j=2
+    k=3
+    array=[10,20,30,40,50,60,70]
+
+    !  register an entry for specified name in database with status of zero (0)
+    call unit_check_start('myroutine')
+
+    !  if mask test fails, change database status for specified entry to -1 and stop program, else continue
+    call unit_check('myroutine',i.gt.0)
+
+    ! use of all(3f), any(3f), merge(3f) can be useful
+    ! if you know what these would produce
+    ! write(*,*)['A','X','X','X','X','B'].eq.'B'      ! this would return an array, the last element having the value T, else F
+    ! write(*,*)all(['A','X','X','X','X','X'].eq.'X') ! this would return F
+    ! write(*,*)any(['A','X','X','X','X','X'].eq.'B') ! this would return F
+    ! write(*,*)any(['A','X','X','X','X','B'].eq.'B') ! this would return T
+    ! write(*,*).not.all(array.lt.100)
+    ! write(*,*)all(array.lt.100)
+    ! this will make sense ...
+
+    call unit_check('myroutine',all([i,j,k].gt.0),      'testing if everyone greater than zero')
+    call unit_check('myroutine',all(.not.[i,j,k].eq.4), 'testing if no one is equal to four')
+
+    ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
+    if(i+j+k.lt.1)then
+       call unit_check_bad('myroutine')
+    endif
+
+    ! it is assumed if you got here you should set status in the database to one, meaning tests were conducted and passed
+    write(*,*)'check on "myroutine" passed'
+    call unit_check_good('myroutine')
+
+    end program demo_unit_tests
+
+   TEST-DRIVEN DEVELOPMENT
+
+   set-up       perform initialization operations common to all tests within a module
+   tear-down    perform finalization operations common to all tests within a module
+

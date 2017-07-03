@@ -1,0 +1,243 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>notopen (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>notopen(3f) </B>- [M_io] Find a FUN/LUN (Fortran-unit-number) that is not in use
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Notes</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Authors</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>Usage</B>
+<P>
+      integer function notopen(start,end,err)
+      integer,optional,intent(in)  :: start
+      integer,optional,intent(in)  :: end
+      integer,optional,intent(out) :: err
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+A free FORTRAN unit number is needed to OPEN a file. <B>NOTOPEN</B>() returns
+a FORTRAN unit number from START to END not currently associated with
+an I/O unit. START and END are expected to be positive integers where
+END .ge. START.
+<P>
+If <B>NOTOPEN</B>() returns <B>-1</B>, then no free FORTRAN unit could be found in
+the specified range.
+<P>
+Otherwise, <B>NOTOPEN</B>() returns an integer representing a free FORTRAN
+logical unit number. Note that <B>NOTOPEN</B>() assumes the following unit
+numbers defined by the Fortran 2008 ISO_FORTRAN_ENV module
+<P>
+<PRE>
+      ERROR_UNIT,INPUT_UNIT,OUTPUT_UNIT
+<P>
+</PRE>
+are special, and will never return those values.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+start
+optional logical unit number to start scan at, defaults to 10.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+end
+optional logical unit number to stop scan at, defaults to 99.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+err
+optional error flag returned. ERR will be non-zero if no errors.
+If not present and an error occurs the program will stop instead
+of returning.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>NOTES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Why are the default START and END limits from 10 to 99? the Fortran 77
+standard did not specify a specific limit on the upper range limit, but
+the LUN range of 1 to 99 was almost always supported in conventional
+programming environments. Additionally, units in the range 0-10 have
+often been the units used for pre-assigned files. Occasionally 100,
+101 and 102 are reserved (for files such as standard input, standard
+output, standard error, &#46;&#46;&#46;). Therefore, the defaults for START and
+END were selected to be 10 and 99. And most programs do not need
+more than 90 files simultaneously open, so the defaults work well in
+practice with many versions/vintages of Fortran.
+<P>
+Note that an environment may impose a limit on the number of
+simultaneously open files (which some compilers work around).
+<P>
+Beginning with f2008, you can probably use <B>OPEN</B>(NEWUNIT=&#46;&#46;&#46;) instead.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+    program demo_notopen ! test the NOTOPEN(3f) function
+    use m_io, only: notopen
+    implicit none
+    integer :: ii, ierr, igot
+<P>
+    write(*,*)&#146;check for preassigned files from unit 0 to unit 1000&#146;
+    write(*,*)&#146;(5 and 6 always return -1)&#146;
+<P>
+    do ii=0,1000
+       if(notopen(ii,ii,ierr) .ne. ii)then
+          write(*,*)&#146;INUSE:&#146;,ii, notopen(ii,ii,ierr)
+       endif
+    enddo
+<P>
+    ! open all files from UNIT=10 to UNIT=30 so have used units
+    do ii=10,30,1
+      open(unit=ii,status="scratch")
+    enddo
+    ! close UNIT=25
+    close(25)
+<P>
+    ! find open file in range 10 to 30
+    write(*,*)&#146;Should get 25 for this ..&#146;,notopen(10,30,ierr)
+<P>
+    close(18)
+    do ii=10,32
+      igot=notopen(ii,ii,ierr)
+      write(*,*)&#146;For unit &#146;,ii,&#146; I got &#146;,igot,&#146; with ERR=&#146;,ierr
+    enddo
+<P>
+    end program demo_notopen
+<P>
+</PRE>
+Expected <B>output</B>(can vary with each programming environment):
+<P>
+<PRE>
+      check for preassigned files from unit 0 to unit 1000
+      (5 and 6 always return -1)
+      INUSE:    0    -1
+      INUSE:    5    -1
+      INUSE:    6    -1
+      Should get 25 for this .. 25
+      For  unit  10  I  got  -1  with  ERR=  -1
+      For  unit  11  I  got  -1  with  ERR=  -1
+      For  unit  12  I  got  -1  with  ERR=  -1
+      For  unit  13  I  got  -1  with  ERR=  -1
+      For  unit  14  I  got  -1  with  ERR=  -1
+      For  unit  15  I  got  -1  with  ERR=  -1
+      For  unit  16  I  got  -1  with  ERR=  -1
+      For  unit  17  I  got  -1  with  ERR=  -1
+      For  unit  18  I  got  18  with  ERR=   0
+      For  unit  19  I  got  -1  with  ERR=  -1
+      For  unit  20  I  got  -1  with  ERR=  -1
+      For  unit  21  I  got  -1  with  ERR=  -1
+      For  unit  22  I  got  -1  with  ERR=  -1
+      For  unit  23  I  got  -1  with  ERR=  -1
+      For  unit  24  I  got  -1  with  ERR=  -1
+      For  unit  25  I  got  25  with  ERR=   0
+      For  unit  26  I  got  -1  with  ERR=  -1
+      For  unit  27  I  got  -1  with  ERR=  -1
+      For  unit  28  I  got  -1  with  ERR=  -1
+      For  unit  29  I  got  -1  with  ERR=  -1
+      For  unit  30  I  got  -1  with  ERR=  -1
+      For  unit  31  I  got  31  with  ERR=   0
+      For  unit  32  I  got  32  with  ERR=   0
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHORS</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>notopen (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7cc2c0f5-a256-4e8b-9630-500f0b99fa0e using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/notopen.3.gif"></center> 
+</body>
+</HTML>

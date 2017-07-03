@@ -1,0 +1,50 @@
+NAME
+
+     EVENT_QUERY(3f) - [INTRINSIC] Query whether a coarray event has occurred
+
+SYNTAX
+
+   call EVENT_QUERY(EVENT, COUNT [, STAT])
+
+DESCRIPTION
+
+   EVENT_QUERY assigns the number of events to COUNT which have been
+   posted to the EVENT variable and not yet been removed by calling
+   EVENT_WAIT. When STAT is present and the invocation was
+   successful, it is assigned the value 0. If it is present and the
+   invocation has failed, it is assigned a positive value and COUNT is
+   assigned the value -1.
+
+ARGUMENTS
+
+  EVENT  - (intent(in)) Scalar of type event_type, defined in
+           iso_fortran_env; shall not be coindexed.
+  COUNT  - (intent(out))Scalar integer with at least the precision of
+           default integer.
+  STAT   - (OPTIONAL) Scalar default-kind integer variable.
+
+EXAMPLE
+
+  Sample program:
+
+   program atomic
+     use iso_fortran_env
+     implicit none
+     type(event_type) :: event_value_has_been_set[*]
+     integer :: cnt
+     if (this_image() == 1) then
+       call event_query(event_value_has_been_set, cnt)
+       if (cnt > 0) write(*,*) "Value has been set"
+     elseif (this_image() == 2) then
+       event post(event_value_has_been_set[1])
+     end if
+   end program atomic
+
+STANDARD
+
+   [[TS 18508]] or later
+
+CLASS
+
+   Subroutine
+

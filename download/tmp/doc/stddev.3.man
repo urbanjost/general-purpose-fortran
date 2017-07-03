@@ -1,0 +1,37 @@
+NAME
+   stddev(3f) - [M_math:statistics]given a real vector and the vector average calculate the standard deviation
+SYNTAX
+   function stddev(vector,n,avg)
+
+   integer,intent(in) :: n
+   real,intent(in)    :: vector(n)
+   real,intent(in)    :: avg
+   real               :: stddev
+DESCRIPTION
+   Clearly the average gives one number around which the n observations
+   tend to cluster. And the standard deviation gives a measure of how the
+   n observations vary or spread about this average. The square of the
+   standard deviation is called the variance. If we consider a unit mass
+   at each point x(i) , then the variance is equivalent to a moment of
+   inertia about an axis through x(avg). It is readily seen that for a
+   fixed value of x(avg), greater spreads from the average will produce
+   larger values of the standard deviation s. The average and the standard
+   deviation can be used jointly to summarize where the observations are
+   concentrated. Tchebysheff's theorem states :
+
+      A fraction of at least 1 - (1/k**2) of the observations  lie within k
+      standard  deviations  of the average.  The theorem  guarantees  lower
+      bounds on the percentage of observations within k standard deviations
+      of the average.
+OPTIONS
+   n            the size of the input vector
+   vector(n)    the input vector
+   avg          the average of the input vector
+
+RETURNS
+   stddev       the standard deviation of the vector
+EXAMPLE
+AUTHOR
+   1994 John S. Urban
+REFERENCE
+   From Mark's  Handbook,  page 17-19, 8th edition

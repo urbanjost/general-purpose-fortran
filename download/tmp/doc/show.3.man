@@ -1,0 +1,19 @@
+NAME
+         show(3f) - [ARGUMENTS:M_kracken]dump dictionary entries
+
+SYNOPSIS
+  subroutine show(VERB_NAME0,VERBS_ONLY,IWIDE0)
+
+   character(len=*),intent(in)   :: VERB_NAME0
+   logical,intent(in)            :: VERBS_ONLY
+   integer,intent(in)            :: iwide0
+DESCRIPTION
+   Write information about a command from the command dictionary or list all the
+   command verbs in the dictionary
+
+OPTIONS
+   VERB_NAME0   verb prefix to display. Default is all
+   VERBS_ONLY   flag to show verbs only
+   IWIDE0       if .ge. zero, how many columns wide to show just verbs
+
+EXAMPLE

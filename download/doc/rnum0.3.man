@@ -1,0 +1,41 @@
+NAME
+      rnum0(3f) - [M_calculator_plus]returns real number from string expression using JUCALC(3f)
+SYNOPSIS
+real function rnum0(inline)
+    character(len=*), intent=(in) :: inline
+    integer,intent(out),optional  :: ierr
+
+DESCRIPTION
+    RNUM0() is used to return a REAL value from a CHARACTER string representing
+    a numeric expression. It uses the M_calculator(3fp) module.
+
+    inline  INLINE is a CHARACTER variable up to (iclen_calc=512) characters long
+            that is similar to a FORTRAN 77 numeric expression.
+    ierr    error code. If zero, no error occurred
+
+DEPENDENCIES
+      o jucalcx
+      o User-supplied routines:
+        All programs that call the calculator routine must supply their own
+        JUOWN1 and C procedures. See the example program for samples.
+          o juown1
+          o c
+EXAMPLES
+  Sample program
+
+    program demo_rnum0
+    ! NOTE: user must supply the JUOWN1 and C procedures.
+    x=rnum0('20/3.4')
+    y=rnum0('CI = 10 * sin(3.1416/4)')
+    z=rnum0('CI')
+    write(*,*)x,y,z
+    end program demo_rnum0
+
+SEE ALSO
+
+      o The syntax of an expression is as described in the main documentation
+        of the Calculator Library.
+      o See JUCALCX(3f), JUCALC(3f), STRGAR2(3f), INUM0(3f), DNUM0(3f), SNUM0(3f).
+
+REFERENCES
+      o NONE.

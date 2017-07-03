@@ -1,0 +1,121 @@
+#!/bin/bash
+#@(#)man2html: call commands to convert man(1) page to HTML if man2html(1) is missing
+env >x
+################################################################################
+# try to find a command to change file to HTML
+if inpath manserver
+then
+   COMMAND='manserver'
+elif inpath groff
+then
+   COMMAND='groff -mandoc -T html'
+   COMMAND='groff -man -T html'
+   COMMAND='groff -m man -T html'
+elif inpath roff2html
+then
+   COMMAND='roff2html'
+else
+   COMMAND='troff -a -man'
+   COMMAND='nroff  -man'
+fi
+export FILENAME AUX_FILENAME IMG_FILENAME
+################################################################################
+CHANGEHTML(){
+IMG_FILENAME=${FILENAME:-"$AUX_FILENAME"}
+IMG_FILENAME=${IMG_FILENAME:-IMAGE}
+
+sed -e '1,/ *<[bB][oO][dD][yY].*>/{
+/^ *<[bB][oO][dD][yY]/!d
+i\
+<html> \
+<head> \
+<title> </title>\
+<style> \
+p {font-family: "Lucida Console", Monaco, monospace}\
+body {xfont-style: italic}\
+body {\
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }\
+a:visited { color:#666; }\
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }\
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}\
+h2 { font-size:143%;color:teal; }\
+h3 { font-size:134%;color:blue; }\
+h4 { font-size:120%;color:gray; }\
+p{ padding: 0;margin: 0]\
+p{ padding-right:1.4em; }\
+p{ whitespace: pre-wrap; }\
+h5,h6 { font-size:100% }\
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }\
+XXtable { border:double #000; border-collapse:collapse; }\
+XXtable { border-collapse:collapse; }\
+XXtd { border:thin solid #888; }\
+XXtd { border:none; }\
+li { margin-bottom:0.5em; }\
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }\
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }\
+a,li span { color:#000; }\
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }\
+#Container { margin:0 10px; text-align:center; background-color: #BBB}\
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}\
+span.webName { font-size:.5em; }\
+textarea#content { font-size: 1em; line-height: 1.125; }\
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }\
+.property { color:#666; font-size:80%; }\
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }\
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } \
+</style> \
+</head>
+}' -e '/^ *<[bB][oO][dD][yY].*/{
+a\
+<h5><a href="download.html">[UP]</a></h5> \
+<div id="Container">\
+<div id="Content">
+}' -e '/^<\/[bB][oO][dD][yY]/{
+i\
+</div>\
+</div>
+}' -e '/<\/BODY>/{
+i\
+<center><img src="z-q-j-z-q-j"></center> \
+</body>
+}' -e 's/<\/BODY>//'|sed -e "s/z-q-j-z-q-j/images\/$(basename ${IMG_FILENAME} .man).gif/"
+}
+################################################################################
+export FILENAME
+for FILENAME in ${*:-''}
+do
+   case "$FILENAME" in
+   ''|' ')
+      cat |$COMMAND
+   ;;
+   *.gz)
+      zcat $FILENAME|$COMMAND
+   ;;
+   *)
+      if [ -r "$FILENAME" ]
+      then
+         $COMMAND "$FILENAME"
+      else
+         # If filename is not found, see if can find manpage file that matches name
+	 set -x
+         FILENAME=$(whereis -m "${FILENAME:-' '}")
+         FILENAME=${FILENAME/* /}
+         FILENAME=${FILENAME/%:/}
+         # if still cannot find filename notify user and skip this filename
+         if [ ! -r "$FILENAME" ]
+         then
+      	   echo "file [$FILENAME] not found" 1>&2
+      	   continue # break
+         fi
+         # if manpage file ends in .gz need to decompress it
+         case "$FILENAME" in
+            *.gz)  zcat      "$FILENAME"|$COMMAND  ;;
+            *)     $COMMAND  "$FILENAME"           ;;
+         esac
+      fi
+   ;;
+   esac | CHANGEHTML
+done
+################################################################################
+exit
+################################################################################

@@ -1,0 +1,11 @@
+NAME
+       rever(1f) - [FUNIX]print file in reverse
+
+SYNOPSIS
+       rever INPUT_FILE [OUTPUT_FILE] [-help][-version]
+
+DESCRIPTION
+       Read entire file into memory as a stream and write it in reverse
+       byte order
+SEE ALSO
+       tac(1), rev(1)

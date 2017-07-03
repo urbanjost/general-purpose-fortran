@@ -1,0 +1,32 @@
+NAME
+       gcd(1f) - [NUMBERS]display greatest common divisor of a list of whole numbers
+
+SYNOPSIS
+       gcd [NUMBERS]...
+
+DESCRIPTION
+   Print the gcd (Greatest Common Divisor) of a list of integer whole
+   NUMBERS. If none are specified on the command line, read them from
+   standard input, one list per line.
+
+   Typically, the numbers must be positive integers where
+
+      2 <= NUMBER <= (2**31)-1 or 2147483647.
+
+   but if the result would be larger than (2**31)-1 an error is returned
+
+OPTIONS
+       NUMBERS    list of numbers whose greatest common divisor is to be
+                  determined
+       --help     display this help and exit
+       --version  output version information and exit
+       --verbose  produce verbose answer instead of simple integer result
+EXAMPLE
+ Sample Usage:
+
+  gcd 10 34 82
+  2
+
+  gcd 10 34 82 -verbose
+  2=gcd([10,34,82])
+

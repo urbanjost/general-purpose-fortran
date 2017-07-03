@@ -1,0 +1,37 @@
+
+NAME
+   unit_check_good - [M_debug]call command "goodbad NAME good"
+
+SYNOPSIS
+   subroutine unit_check_good(name,string)
+
+    character(len=*),intent(in) :: name
+    character(len=*),intent(in) :: string
+
+DESCRIPTION
+
+   unit_check_good(3f) calls the shell command
+
+        goodbad NAME good [string]
+
+EXAMPLES
+  Sample program:
+
+    program demo_unit_check_good
+    use M_debug, only: unit_check_start
+    use M_debug, only: unit_check
+    use M_debug, only: unit_check_good, unit_check_bad
+
+    implicit none
+    integer :: x
+    x=10
+    call unit_check_start('myroutine')
+
+    call unit_check('myroutine', x.gt.3 ,'test if big enough')
+    call unit_check('myroutine', x.lt.100 ,'test if small enough')
+
+    write(*,*)'checks on "myroutine" passed'
+    call unit_check_good('myroutine')
+
+    end program demo_unit_check_good
+

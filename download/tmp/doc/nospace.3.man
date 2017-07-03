@@ -1,0 +1,37 @@
+NAME
+   nospace - [M_strings]remove all whitespace from input string
+
+SYNOPSIS
+   function nospace(str) - remove all whitespace from input string
+
+    character(len=*),intent(in)          :: str
+    character(len=:),allocatable         :: nospace
+
+DESCRIPTION
+
+   nospace(3f) removes space, tab, carriage return, new line, vertical
+   tab, formfeed and null characters (called "whitespace"). The output
+   is returned trimmed.
+
+EXAMPLES
+  Sample call
+
+    program demo_nospace
+    use M_strings, only: nospace
+    implicit none
+    character(len=:),allocatable  :: s
+       s='  This     is      a     test  '
+       write(*,*) 'original input string is ....',s
+       write(*,*) 'processed output string is ...',nospace(s)
+       if(nospace(s).eq.'Thisisatest')then
+          write(*,*)'nospace test passed'
+       else
+          write(*,*)'nospace test error'
+       endif
+    end program demo_nospace
+
+  Expected output
+
+    original input string is ....  This     is      a     test
+    processed output string is ...Thisisatest
+    nospace test passed

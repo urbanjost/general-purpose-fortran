@@ -1,0 +1,14 @@
+NAME
+   regerror(3f) - [M_regex] Get the string message for a status error value
+SYNOPSIS
+   subroutine regerror(this,errcode,errmsg,errmsg_len)
+
+     type(regex_type), intent(in) :: this
+     integer, intent(in)          :: errcode
+     character, intent(out)       :: errmsg
+     integer, intent(out)         :: errmsg_len
+
+DESCRIPTION
+OPTIONS
+RETURNS
+EXAMPLE

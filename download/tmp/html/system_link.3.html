@@ -1,0 +1,224 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>system_link (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>system_link(3f) </B>- [M_system]link one file to another file relative to two directory file descriptors
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Return Value</A><BR>
+<A HREF=#4>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+integer function <B>link</B>(oldpath,newpath);
+<P>
+    character(len=*),intent(in) :: oldpath
+    character(len=*),intent(in) :: newpath
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>link</B>() function shall create a new link (directory entry) for the existing file, path1.
+<TABLE cellpadding=3><!-- tsb: The <B>link</B>() function shall create a new link (directory entry) for the existing file, path1.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+The
+path1  argument points to a pathname naming an existing file. The path2 argument points to a pathname naming the new
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+directory entry to be created. The <B>link</B>() function shall atomically create a new link for the existing file and the
+link
+count of the file shall be incremented by one.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+If
+path1  names a directory, <B>link</B>() shall fail unless the process has appropriate privileges and the implementation
+supports
+using <B>link</B>() on directories.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+If path1 names a symbolic link, it is implementation-defined whether <B>link</B>() follows the symbolic link, or creates
+a  new
+link to the symbolic link itself.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Upon
+successful  completion,  <B>link</B>()  shall mark for update the last file status change timestamp of the file. Also, the
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+last data modification and last file status change timestamps of the directory that
+contains  the  new  entry  shall  be
+marked for update.
+</TD></TR>
+<TR><TD colspan=2>
+If <B>link</B>() fails, no link shall be created and the link count of the file shall remain unchanged.
+</TD></TR>
+<TR><TD colspan=2>
+The implementation may require that the calling process has permission to access the existing file.
+</TD></TR>
+<TR><TD colspan=2>
+The <B>linkat</B>() function shall be equivalent to the <B>link</B>() function except that symbolic links shall be handled as specified
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+by the value of flag (see below) and except in the case where either path1 or path2 or both are relative paths.
+In  this
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+case
+a  relative  path path1 is interpreted relative to the directory associated with the file descriptor fd1 instead of
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+the current working directory and similarly for path2 and the file descriptor fd2.
+If the  file  descriptor  was  opened
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+without
+O_SEARCH, the function shall check whether directory searches are permitted using the current permissions of the
+directory underlying the file descriptor. If the file descriptor was opened with O_SEARCH, the function shall not perform
+the check.
+</TD></TR>
+<TR><TD colspan=2>
+Values for flag are constructed by a bitwise-inclusive OR of flags from the following list, defined in &lt;fcntl.h&gt;:
+</TD></TR>
+<TR><TD colspan=2>
+AT_SYMLINK_FOLLOW
+If path1 names a symbolic link, a new link for the target of the symbolic link is created.
+</TD></TR>
+<TR><TD colspan=2>
+If <B>linkat</B>() is passed the special value AT_FDCWD in the fd1 or fd2 parameter, the current working directory shall be used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+for the respective path argument. If both fd1 and fd2 have value AT_FDCWD, the behavior shall be identical to a
+call  to
+<B>link</B>(), except that symbolic links shall be handled as specified by the value of flag.
+</TD></TR>
+<TR><TD colspan=2>
+Some implementations do allow links between file systems.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+If path1 refers to a symbolic link, application developers should use <B>linkat</B>() with appropriate flags to
+select  whether
+or not the symbolic link should be resolved.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+If
+the  AT_SYMLINK_FOLLOW flag is clear in the flag argument and the path1 argument names a symbolic link, a new link is
+created for the symbolic link path1 and not its target.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Upon successful completion, these functions shall return 0. Otherwise, these functions shall return <B>-1</B> and set
+errno  to
+indicate the error.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Creating a Link to a File
+<P>
+<PRE>
+   program demo_system_link
+   use M_system, only : system_link
+   ierr = system_link(&#146;myfile1&#146;,&#146;myfile2&#146;)
+   if(ierr.ne.0)then
+      call system_perror(&#146;*demo_system_link*&#146;)
+   endif
+   end program demo_system_link
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>system_link (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ef2a7614-f6cb-40b2-b503-b1f8054889a3 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/system_link.3.gif"></center> 
+</body>
+</HTML>

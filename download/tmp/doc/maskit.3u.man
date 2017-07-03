@@ -1,0 +1,56 @@
+NAME
+     maskit(3f) - compress array using mask array
+
+SYNOPSIS
+   subroutine maskit(org,ii,select,jj,isaved)
+
+      real,intent(inout)  :: org(ii)
+      real,intent(in)     :: select(jj)
+      integer,intent(out) :: isaved
+
+DESCRIPTION
+
+     Given real arrays ORG(II) and SELECT(JJ)
+     use the values in SELECT to determine whether to retain
+     the values in ORG. If SELECT(n) is zero (0) then retain
+     the ORG value. Repack ORG to retain only the selected
+     values.
+
+         ORG      is the original array to repack
+         II       is size of array ORG
+         SELECT   is the mask array
+         JJ       is size of array SELECT
+         ISAVED   returns the count of saved values
+
+     Testing a real value against zero can cause problems because
+     of problems with numeric precision, so this can only be used
+     in specific situations where this is not an issue.
+
+EXAMPLE
+  Sample program:
+
+   program demo_maskit
+   real    :: original(10)=[0.0,1.0,2.2,3.3,4.4,5.5,6.6,7.7,8.8,9.9]
+   real    :: mask(10)=[0.0,1.0,0.0,3.3,0.0,5.5,0.0,7.7,0.0,9.9]
+   integer :: isaved
+   write(*,*)'ORIGINAL=',original
+   write(*,*)'MASK=',mask
+   call maskit(original,10,mask,10,isaved)
+   write(*,*)'ORIGINAL MASKED=',original(:isaved)
+   end program demo_maskit
+
+  Results:
+
+   ORIGINAL=        0.0, 1.0, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9
+   MASK=            0.0, 1.0, 0.0, 3.3, 0.0, 5.5, 0.0, 7.7, 0.0, 9.9
+   ORIGINAL MASKED= 0.0,      2.2,      4.4,      6.6,      8.8
+
+NOTES
+
+   References: none
+
+DEPENDENCIES
+   M_journal()
+
+QA
+

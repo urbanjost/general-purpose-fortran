@@ -1,0 +1,41 @@
+NAME
+     bessel_y1(3f) - [INTRINSIC:MATHEMATICS] Bessel function of the second kind of order 1
+
+SYNTAX
+
+   result = bessel_y1(x)
+
+DESCRIPTION
+
+   bessel_y1(x) computes the [[Bessel function]] of the second kind of
+   order 1 of X.
+
+ARGUMENTS
+
+  X  - The type shall be REAL.
+
+RETURN VALUE
+
+The return value is REAL. It has the same kind as X.
+
+EXAMPLE
+
+  Sample program:
+
+   program test_besy1
+     real(8) :: x = 1.0_8
+     x = bessel_y1(x)
+   end program test_besy1
+
+STANDARD
+
+   [[Fortran 2008]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+
+   [[bessel_j0]], [[bessel_j1]], [[bessel_jn]], [[bessel_y0]], [[bessel_yn]]
+

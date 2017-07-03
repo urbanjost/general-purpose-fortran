@@ -1,0 +1,282 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>d2w (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>d2w </B>- [M_time] calculate iso-8601 Week-numbering year date yyyy-Www-d given DAT date-time array
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Definition</A><BR>
+<A HREF=#7>Calculation</A><BR>
+<A HREF=#8>Method</A><BR>
+<A HREF=#9>Reference</A><BR>
+<A HREF=#10>Author</A><BR>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>d2w</B>(dat,iso_year,iso_week,iso_weekday,iso_name)
+<P>
+    integer,intent(in)              :: dat(8)     ! input date array
+    integer,intent(out)             :: iso_year, iso_week, iso_weekday
+    character(len=10),intent(out)   :: iso_name
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Given a "DAT" array defining a date and time, return the ISO-8601
+Week in two formats -- as three integer values defining the ISO year,
+week of year and weekday; and as a string of the form "yyyy-Www-d".
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+dat
+"DAT" array (an integer array of the same format as
+the array returned by the intrinsic <B>DATE_AND_TIME</B>(3f))
+describing the date, which is the basic time description
+used by the other <B>M_time</B>(3fm) module procedures.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+iso_year
+ISO-8601 year number for the given date
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+iso_week
+ISO-8601 week number for the given date
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+iso_weekday
+ISO-8601 weekday number for the given date
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+iso_name
+ISO-8601 Week string for the data in the form "yyyy-Www-d".
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+    program demo_d2w
+    use M_time, only : d2w
+    implicit none
+    integer           :: dat(8)     ! input date array
+    integer           :: iso_year, iso_week, iso_weekday
+    character(len=10) :: iso_name
+<P>
+       call date_and_time(values=dat)
+       call d2w(dat,iso_year,iso_week,iso_weekday,iso_name)
+       write(*,&#146;("ISO-8601 Week:   ",a)&#146;)iso_name
+       write(*,&#146;(a,i0)&#146;)&#146;ISO-8601 year    &#146;,iso_year
+       write(*,&#146;(a,i0)&#146;)&#146;ISO-8601 week    &#146;,iso_week
+       write(*,&#146;(a,i0)&#146;)&#146;ISO-8601 weekday &#146;,iso_weekday
+</PRE>
+end program demo_d2w
+<P>
+results:
+<P>
+<PRE>
+    ISO-8601 Week:   2016-W29-1
+    ISO-8601 year    2016
+    ISO-8601 week    29
+    ISO-8601 weekday 1
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>DEFINITION</H3>
+
+</A>
+<BLOCKQUOTE>
+The ISO-8601 date and time standard was issued by the International Organization for Standardization (ISO).
+It is used (mainly) in government and business for fiscal years, as well as in timekeeping.
+The system specifies a week year atop the Gregorian calendar by defining a notation for ordinal weeks of the year.
+<P>
+An ISO week-numbering year (also called ISO year informally) has 52 or 53 full weeks.
+That is 364 or 371 days instead of the usual 365 or 366 days.
+The extra week is referred to here as a leap week, although ISO-8601 does not use this term.
+Weeks start with Monday.
+The first week of a year is the week that contains the first Thursday of the year (and, hence, always contains 4 January).
+ISO week year numbering therefore slightly deviates from the Gregorian for some days close to January 1st.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>CALCULATION</H3>
+
+</A>
+<BLOCKQUOTE>
+The ISO-8601 week number of any date can be calculated, given its ordinal date (i.e. position within the year)
+and its day of the week.
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>METHOD</H3>
+
+</A>
+<BLOCKQUOTE>
+Using ISO weekday numbers (running from 1 for Monday to 7 for Sunday),
+subtract the weekday from the ordinal date, then add 10. Divide the result
+by 7. Ignore the remainder; the quotient equals the week number. If
+the week number thus obtained equals 0, it means that the given date
+belongs to the preceding (week-based) year. If a week number of 53 is
+obtained, one must check that the date is not actually in week 1 of the
+following year.
+<P>
+These two statements are assumed true when correcting the dates around January 1st:
+<TABLE cellpadding=3><!-- tsb: These two statements are assumed true when correcting the dates around January 1st:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The number of weeks in a given year is equal to the corresponding week number of 28 December.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+January 4th is always in the first week.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+ISO_NAME
+Week date representations are in the format YYYYWww-D.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: ISO_NAME
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[YYYY] indicates the ISO week-numbering year which is slightly different from the traditional Gregorian calendar year.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[Www] is the week number prefixed by the letter W, from W01 through W53.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[D] is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+For example, the Gregorian date 31 December 2006 corresponds to the Sunday of the 52nd week of 2006, and is written
+<P>
+<PRE>
+    2006-W52-7 (extended form)
+    or
+    2006W527 (compact form).
+<P>
+</PRE>
+<A name=9>
+
+     <H3>REFERENCE</H3>
+
+</A>
+<BLOCKQUOTE>
+From Wikipedia, the free encyclopedia 2015-12-19
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2015-12-19
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>d2w (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 793e92ae-6c72-4e8f-9aa9-57f16f1dbc49 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/d2w.3.gif"></center> 
+</body>
+</HTML>

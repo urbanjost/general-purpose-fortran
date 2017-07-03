@@ -1,0 +1,240 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_pixel (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_pixel(3f) </B>- [M_pixel] module for drawing into a pixel array with 2D vector operations
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>Module</B> <I>procedures</I>
+<P>
+   use M_writegif, only : writegif
+<P>
+   use :: M_pixel, only : drawchar,    rect,            rdraw2,      strlength
+   use :: M_pixel, only : color,       mapcolor,        clear,       draw2
+   use :: M_pixel, only : circle,      circleprecision, arc,         getviewport
+   use :: M_pixel, only : viewport,    ortho2,          rmove2
+   use :: M_pixel, only : line,        linewidth,       polyline,    move2
+   use :: M_pixel, only : move2,       draw2,           prefsize,    vinit
+   use :: M_pixel, only : textang,     textsize,        drawstr,     getgp2
+   use :: M_pixel, only : vflush,      biggest_ortho2,  point2,      getdisplaysize
+   use :: M_pixel, only : poly2,       centertext,      xcentertext, ycentertext
+   use :: M_pixel, only : makepoly,    closepoly,       font
+<P>
+   use :: M_pixel, only : state,       hershey,         justfy
+   use :: M_pixel, only : print_ascii, print_ppm
+<P>
+   ! Differences between M_pixel and M_vogle and VOGLE-related procedures:
+   !    hershey(3f) and justfy(3f) do not exist in VOGLE and might be replaced
+   !    and the same font names are not available
+   !    print_ascii(3f) and print_ppm(3f) do not exist in VOGLE
+   !    state(3f) does not exist in VOGLE
+   !    biggest_ortho2(3f) is like juaspct(3f)
+   !    viewport is in terms of pixels, not range -1.0 to 1.0
+<P>
+</PRE>
+<B>Module</B> <I>variables</I>
+<P>
+<PRE>
+   use M_pixel,    only :  P_pixel, P_ColorMap, P_debug
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>M_pixel</B>(3fm) is intended to produce simple pixel graphics composed of
+line drawings and polygon fills in two dimensions. It handles circles,
+curves, arcs, polygons, and software text. It is designed to provide a
+programming interface very similar to a subset of the VOGLE graphics
+library (M_pixel does not support objects, interactive graphics,
+or 3D vectors).
+<P>
+It is primarily intended to provide a simple Fortran-based set of
+routines that can generate simple graphics that can be written to a
+GIF file using the <B>writegif</B>(3f) routine.
+<P>
+This is a prototype under construction starting 2017-06, but is already
+useful. Improvements in line width, dashed lines, polygon fill and
+higher level graphing routines are being worked on. If anyone is
+interested in collaborating on the module, contact the author.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_M_pixel
+<P>
+   use M_pixel
+   use M_writegif, only :  writegif
+   use M_units,    only : cosd, sind
+   implicit none
+<P>
+      integer  :: i
+      integer  :: j
+      integer  :: icolor
+<P>
+      ! initialize image
+      call prefsize(400,400)  ! set size before starting
+      call vinit()            ! start graphics
+      call clear(0)           ! clear to color 0
+<P>
+      ! put some colored boxes into pixmap by address
+      ! so show how the pixel map can be editted easily with
+      ! other routines that can manipulate a pixel array.
+      ! The P_pixel array was created when vinit(3f) was called
+      icolor=1
+      do i=1,4
+         do j=1,4
+            P_pixel((i-1)*100+1+3:i*100-3,(j-1)*100+1+3:j*100-3)=icolor
+            icolor=icolor+1
+         enddo
+      enddo
+<P>
+      ! map area of virtual world to pixel array
+      ! notice Y-axis for viewport is zero at TOP
+         ! viewport(left, right, bottom, top)
+      call viewport(0.0,  400.0,  400.0, 0.0)
+      ! define the virtual world area we want to work in
+          !ortho2(left, right, bottom,   top)
+      call ortho2(0.0,  400.0,    0.0, 400.0)
+      ! the drawing routines use these world units
+<P>
+      ! draw polar grids
+      call linewidth(100)
+      call color(14)
+      call target(200.0,200.0,200.0)
+<P>
+      call linewidth(75)
+      call color(0)
+      call target(100.0,200.0,50.0)
+<P>
+      ! draw some lines
+      call color(1)
+      call linewidth(200)
+      call line(1.0,1.0,400.0,400.0)
+<P>
+      call color(4)
+      call line(350.0,200.0,350.0,300.0)
+<P>
+      ! print some text
+      call color(1)
+      !call hershey(x,y,height,itext,theta,ntext)
+      call linewidth(125)
+      call hershey(40.0, 40.0,35.0,&#146;Hello World&#146;,0.0,11)
+      call color(7)
+      call linewidth(25)
+      call hershey(40.0, 80.0,35.0,&#146;Hello World&#146;,0.0,11)
+      call linewidth(100)
+      call hershey(40.0,120.0,35.0,&#146;Hello World&#146;,30.0,11)
+<P>
+      call hershey( 40.0,350.0,35.0,&#146;\COMPLEX\Hello World&#146;,0.0,20)
+      call hershey( 40.0,310.0,35.0,&#146;\DUPLEX\Hello World&#146;,0.0,19)
+      call hershey( 350.0,400.0,35.0,&#146;\ITALIC\Hello World&#146;,90.0,19)
+      call linewidth(50)
+      call hershey(200.0,120.0,15.0,&#146;\SIMPLEX\Hello World&#146;,20.0,20)
+<P>
+      ! change background color directly
+      where (P_pixel.eq.0) P_pixel=9
+      ! write standard gif file
+      call writegif(&#146;M_pixel.3.gif&#146;,P_pixel,P_ColorMap)
+<P>
+</PRE>
+<BLOCKQUOTE>
+contains
+<P>
+<PRE>
+      subroutine target(xc,yc,rc)
+      use M_units,    only : cosd, sind
+      real     :: xc,yc,rc
+      integer  :: i
+      real     :: x,y
+         do i=0,360,10
+            x=rc*cosd(i)
+            y=rc*sind(i)
+            call line(xc,yc,xc+x,yc+y)
+         enddo
+         do i=1,int(rc),10
+            call circle(xc,yc,real(i))
+         enddo
+      end subroutine target
+</PRE>
+end program demo_M_pixel
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_pixel (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a249b527-5cbf-4070-9a75-7df8e940b97a using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_pixel.3.gif"></center> 
+</body>
+</HTML>

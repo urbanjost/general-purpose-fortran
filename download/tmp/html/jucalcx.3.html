@@ -1,0 +1,254 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>jucalcx (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>jucalcx(3f) </B>- [M_calculator_plus]return value from a string expression processing messages to simplify call to <B>JUCALC</B>(3f)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Dependencies</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>See Also</A><BR>
+<A HREF=#6>References</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>jucalcx</B>(inlin0,outval,outlin0,ierr,ilen)
+<P>
+    character(len=*), intent=(in)  :: inlin0
+    doubleprecision, intent=(out)  :: outval
+    character(len=*), intent=(out) :: outlin0
+    integer, intent=(out)          :: ierr
+    integer, intent=(out)          :: ilen
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>JUCALCX</B>() takes a string containing a FORTRAN-like expression and evaluates
+it and returns a numeric or string value as appropriate.
+The main purpose of <B>JUCALCX</B>() is to assume the burden of displaying the
+calculator messages for codes that make multiple calls to <B>JUCALC</B>(). JUCALC
+() does not display error messages directly.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <B>JUCALCX</B>() takes a string containing a FORTRAN-like expression and evaluates
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>JUCALCX</B>() calls the calculator routine jucalc.f to evaluate the
+expressions.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Messages beginning with a # are considered comments and are not passed
+on to the calculator.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+inlin0
+INLIN0 is a string containing a numeric expression. The expression can
+be up to (iclen_calc=512) characters long. The syntax of an expression
+is as described in the main document of the Calc library. For example:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+              &#146;A=sin(3.1416/5)&#146;
+              &#146;# this is a comment&#146;
+              &#146;$STR("The value is ",40/3)&#146;
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+outval
+OUTVAL is a numeric value calculated from the expression in INLIN0
+(when IERR returns 0).
+When a string value is returned (IERR=2) then OUTVAL is the length of
+the output string.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+outlin0
+OUTLIN0 contains a string representation of the number returned in
+OUTVAL up to 20 characters long when INLIN0 is a numeric expression. It
+contains a string up to (iclen_calc=512) characters long when INLIN0 is
+a string expression.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ierr
+IERR returns
+<TABLE width=100% cellpadding=3><!-- tsb: ierr
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>-1</B> if an error occurred
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+0 if a numeric value is returned (value is in OUTVAL, string
+representation of the value is in OUTLIN2).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+1 if no value was returned but a message was displayed (If a &#146;dump&#146;
+or &#146;funcs&#146; command was passed to the calculator).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+2 if the expression evaluated to a string value instead of a
+numeric value (value is in OUTLIN0).
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+ilen
+ILEN returns the length of the input string minus trailing blanks.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DEPENDENCIES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+jucalc
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+pdec
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+User-supplied routines:
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+        All programs that call the calculator routine must supply their own
+        JUOWN1 and C procedures. See the example program for samples.
+          o juown1
+          o c
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+    program TEST_JUCALCX
+    !     NOTE: user must supply the JUOWN1 and C procedures.
+    use m_calculator, only: iclen_calc
+    character(len=iclen_calc) ::  outlin0
+    doubleprecision :: outval
+    call jucalcx(&#146;A=3.4**5    &#146;,outval,outlin0,ierr,ilen)
+    write(*,*)&#146;value of expression is &#146;,outval
+    write(*,*)&#146;string representation of value is &#146;,outlin0
+    write(*,*)&#146;error flag value is &#146;,ierr
+    write(*,*)&#146;length of expression is &#146;,ilen
+    end program TEST_JUCALCX
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+See also: <B>STRGAR</B>(),RNUM0(),<B>JUCALC</B>(),INUM0(),SNUM0()
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+NONE.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>jucalcx (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 71800f28-99a0-4568-bad3-8581017522b7 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/jucalcx.3.gif"></center> 
+</body>
+</HTML>

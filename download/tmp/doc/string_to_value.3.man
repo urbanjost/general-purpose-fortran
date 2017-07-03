@@ -1,0 +1,37 @@
+NAME
+     string_to_value - [M_strings]subroutine returns real value from string
+
+SYNOPSIS
+   subroutine string_to_value(chars,valu,ierr)
+
+    character(len=*),intent(in) :: chars   ! input string
+    integer|real|doubleprecision,intent(out)         :: valu
+    integer,intent(out)         :: ierr
+
+DESCRIPTION
+      returns a real value from a numeric character string.
+
+      works with any g-format input, including integer, real, and
+      exponential.  If the input string begins with "B", "Z", or "O"
+      and otherwise represents a positive whole number it is assumed to
+      be a binary, hexadecimal, or octal value. If the string contains
+      commas they are removed.
+
+      if an error occurs in the READ, IOSTAT is returned in IERR and
+      value is set to zero.  if no error occurs, IERR=0.
+OPTIONS
+      CHARS  input string to read numeric value from
+RETURNS
+      VALU   numeric value returned. May be INTEGER, REAL, or DOUBLEPRECISION.
+      IERR   error flag (0 == no error)
+EXAMPLE
+
+   program demo_string_to_value
+
+    use m_strings, only: string_to_value
+    character(len=80) :: string
+       string=' -40.5e-2 '
+       call string_to_value(string,value,ierr)
+       write(*,*) 'value of string ['//trim(string)//'] is ',value
+
+   end program demo_string_to_value

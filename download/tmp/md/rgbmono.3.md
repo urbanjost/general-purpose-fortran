@@ -1,0 +1,20 @@
+[CLI Home Page]
+
+NAME
+    RGBMONO(3f) - [M_color]converts RGB colors to a reasonable grayscale intensity.
+SYNOPSIS
+
+       subroutine rgbmono(rr,rg,rb,ri,status)
+
+        real, intent(in)  :: RR ! red component of the input color in the range 0 to 100
+        real, intent(in)  :: RG ! green component of the input color in the range 0 to 100
+        real, intent(in)  :: RB ! blue component of the input color in the range 0 to 100
+        real, intent(out) :: RI ! grayscale intensity calculated in the range 0 to 100
+        integer           :: status
+
+
+DESCRIPTION
+    RGBMONO(3f) converts RGB colors to a reasonable grayscale intensity. This can be used to produce monochrome images from color
+    images. Intensity is calculated from the specified Red, Green, Blue intensities as 0.30*R + 0.59*G + 0.11*B, as in U.S. color
+    television systems, NTSC encoding. Note that most devices do not have an infinite range of monochrome intensities available.
+

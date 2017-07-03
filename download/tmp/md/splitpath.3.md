@@ -1,0 +1,151 @@
+[UP]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+                                              Manual Reference Pages  - splitpath (3)
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                                 
+NAME
+
+    splitpath(3f) - [M_io] split a Unix pathname into components
+
+CONTENTS
+
+    Synopsis
+    Description
+    Options
+    Results
+    Example
+
+SYNOPSIS
+
+    splitpath(path,dir,name,basename,ext)
+
+
+       integer,parameter :: maxlen=4096
+       character(len=maxlen),intent(in)  :: path
+       character(len=maxlen),intent(out) :: dir
+       character(len=maxlen),intent(out) :: name
+       character(len=maxlen),intent(out) :: basename
+       character(len=maxlen),intent(out) :: ext
+
+
+
+DESCRIPTION
+
+    splitpath(3f) splits given pathname assuming a forward slash seperates filename components and that the right-most period in
+    the last leaf of the pathname is considered the beginning of an extension. If an extension is found it is left present in NAME
+    but removed from BASENAME.
+
+    This routine does not check the system for the existence or type of the filename componenents; it merely parses a string.
+
+OPTIONS
+
+          path Path to be broken into components.
+
+          o  Forward slashes (/) are assumed to separate pathname components.
+
+          o  the name  . is assumed to mean "current directory"
+
+          o  the name  .. is assumed to mean "up one directory
+
+          o  a pathname ending in a slash is assumed to be a directory name
+
+          o  a slash starting the pathname is assumed to represent the root
+             directory.
+
+          o  trailing spaces are assumed insignificant.
+
+    Using these rules helps to reduce incorrect parsing, but the routine is only intended for simple parsing of names of the form "
+    [dir/]name[.extension].
+
+RESULTS
+
+           dir Path of directories, including the trailing slash.
+
+           name Name of file leaf or, if no file is specified in path, name of the lowest directory.
+
+           basename NAME with any extension removed
+
+           ext File name extension, if any, including the leading period (.).
+
+    The path parameter can be a complete or partial file specification. The special name "." is assumed to mean the current
+    directory, and the special name ".." is assumed to mean one directory above the current directory.
+
+EXAMPLE
+
+    program demo_splitpath
+
+       use m_io, only : splitpath
+       implicit none
+       integer,parameter :: maxlen=4096
+       character(len=maxlen),parameter   :: file(*)=[&
+          &  dirs/name.ext   , &
+          &  xx/IO/zz/NN.FF  , &
+          &  xx/IO/zz/NN     , &
+          &  /xx/IO/zz/NN    , &
+          &  /xx/IO/zz/      , &
+          &  /xx/IO/zz.A/    , &
+          &  /xx/IO/zz/.     , &
+          &                  , &
+          &  ./              , &
+          &  /               , &
+          &  /..             , &
+          &  ./..            , &
+          &  name.           , &
+          &  .name           , &
+          &  .name.          , &
+          &  .               , &
+          &  ..              , &
+          &  ...             ]
+
+
+       character(len=maxlen)  :: dir
+       character(len=maxlen)  :: name
+       character(len=maxlen)  :: basename
+       character(len=maxlen)  :: ext
+       integer                :: i
+       integer                :: longest
+       longest=maxval(len_trim(file)) ! find longest filename
+
+
+       do i=1,size(file)
+          call splitpath(file(i), dir, name, basename, ext)
+          write(*, (*("| ",a:)) )  &
+          & file(i)(:longest),     &
+          & dir(:longest),         &
+          & name(:longest),        &
+          & basename(:longest),    &
+          & ext(:longest)
+       enddo
+
+
+
+    Output
+
+       | dirs/name.ext | dirs          | name.ext      | name          | .ext
+       | xx/IO/zz/NN.FF| xx/IO/zz      | NN.FF         | NN            | .FF
+       | xx/IO/zz/NN   | xx/IO/zz      | NN            | NN            |
+       | /xx/IO/zz/NN  | /xx/IO/zz     | NN            | NN            |
+       | /xx/IO/zz/    | /xx/IO/zz     |               |               |
+       | /xx/IO/zz.A/  | /xx/IO/zz.A   |               |               |
+       | /xx/IO/zz/.   | /xx/IO/zz/.   |               |               |
+       |               | .             |               |               |
+       | ./            | .             |               |               |
+       | /             | /             |               |               |
+       | /..           | /             |               |               |
+       | ./..          | ./..          |               |               |
+       | name.         |               | name.         | name          | .
+       | .name         |               | .name         | .name         |
+       | .name.        |               | .name.        | .name         | .
+       | .             | .             |               |               |
+       | ..            |               |               |               |
+       | ...           |               | ...           | ..            | .
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                                                           splitpath (3)                                              July 02, 2017
+
+Generated by manServer 1.08 from 1dbf9a3d-b4c4-4eaa-bc17-1aff5d0512ea using man macros.
+                                                            [splitpath]

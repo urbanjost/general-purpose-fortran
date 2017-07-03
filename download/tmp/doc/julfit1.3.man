@@ -1,0 +1,73 @@
+NAME
+     julfit1(3f) - [M_math:fit]internal routine for linear least square fit(y=a*x+b), changes the y array
+SYNOPSIS
+
+   subroutine julfit1(x,y,ixn,a,b,r2)
+
+      real,intent(in)    :: x(*)
+      real               :: y(*)
+      integer,intent(in) :: ixn
+      real,intent(out)   :: a
+      real,intent(out)   :: b
+      real,intent(out)   :: r2
+DESCRIPTION
+
+   While the method of least squares often gives optimal estimates parameters for linear processes,
+   it is very sensitive to the presence of unusual data points in the data used to fit a model, as the square of the
+   distance from the resulting fit is used in the calculation.
+   That is, a few outliers can sometimes seriously skew the results of a least squares analysis;
+   this makes model validation, especially with respect to outliers, critical to obtaining sound answers.
+
+OPTIONS
+    X     input X values
+    Y     input Y values
+    IXN   size of X and Y vectors
+    A     multiplier
+    B     y-intercept
+    R2
+EXAMPLE
+  sample program
+
+   program demo_julfit1
+   implicit none
+   intrinsic random_number
+   integer :: points
+   real    :: slope, intercept
+   write(*,*)'For y=m*x+b enter M and B and number of points N:'
+   read(*,*)slope,intercept,points
+   call testit()
+   contains
+
+   subroutine testit()
+   real    :: x(points), y(points)
+   real    :: slope_out, intercept_out, r2
+   integer :: i, ii
+   real    :: rndnum
+      do i=1,points
+         x(i)=i*0.10
+         ! assigned pseudorandom numbers from the uniform distribution in the interval 0  x < 1.
+         call random_number(rndnum)
+         y(i)=slope*(x(i)+4.0*(rndnum-0.5))+intercept
+      enddo
+      !write(*,*)(ii,x(ii),y(ii),new_line('A'),ii=1,points)
+      call julfit1(x,y,points,slope_out,intercept_out,r2)
+      write(*,*)'SLOPE AND INTERCEPT IN  ',slope,intercept
+      write(*,*)'SLOPE AND INTERCEPT OUT ',slope_out,intercept_out,r2
+   end subroutine testit
+
+   end program demo_julfit1
+
+  Results
+
+    $ xxx
+    For y=m*x+b enter M and B and number of points N:
+    10 20 1000000
+    SLOPE AND INTERCEPT IN     10.0000000       20.0000000
+    SLOPE AND INTERCEPT OUT    10.0000000       19.9998207       1.00000000
+
+    $ xxx
+    For y=m*x+b enter M and B and number of points N:
+    10 20 100
+    SLOPE AND INTERCEPT IN     10.0000000       20.0000000
+    SLOPE AND INTERCEPT OUT    9.62195778       23.3507996      0.850686848
+

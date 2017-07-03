@@ -1,0 +1,150 @@
+[UP]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                Manual Reference Pages  - split (3)
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                                 
+NAME
+
+    split - [M_strings]parse string into an array using specified delimiters
+
+CONTENTS
+
+    Synopsis
+    Description
+    Options
+    Examples
+
+SYNOPSIS
+
+    subroutine split(input_line,array,delimiters,order,nulls)
+
+
+        character(len=*),intent(in)              :: input_line
+        character(len=:),allocatable,intent(out) :: array(:)
+        character(len=*),optional,intent(in)     :: delimiters
+        character(len=*),optional,intent(in)     :: order
+        character(len=*),optional,intent(in)     :: nulls
+
+
+
+DESCRIPTION
+
+    SPLIT(3f) parses a string using specified delimiter characters and store tokens into an array
+
+OPTIONS
+
+             INPUT_LINE Input string to tokenize
+
+             ARRAY Output array of tokens
+
+             DELIMITERS List of delimiter characters. The default delimiters are the "whitespace" characters (space, tab,new line,
+             vertical tab, formfeed, carriage return, and null). You may specify an alternate set of delimiter characters.
+
+             Multi-character delimiters are not supported (Each character in the DELIMITERS list is considered to be a delimiter).
+
+             Quoting of delimiter characters is not supported.
+
+             ORDER SEQUENTIAL|REVERSE|RIGHT Order of output array. By default ARRAY contains the tokens having parsed the
+             INPUT_LINE from left to right. If ORDER= RIGHT or ORDER= REVERSE the parsing goes from right to left.
+
+             NULLS IGNORE|RETURN|IGNOREEND Treatment of null fields. By default adjacent delimiters in the input string do not
+             create an empty string in the output array. if NULLS= return adjacent delimiters create an empty element in the output
+             ARRAY. If NULLS= ignoreend then only trailing delimiters at the right of the string are ignored.
+
+EXAMPLES
+
+    program demo_split
+
+        use m_strings, only: split
+        character(len=*),parameter     :: &
+        & line=   aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|333 a B cc     
+        character(len=256),allocatable :: array(:) ! output array of tokens
+           write(*,*) INPUT LINE:[ //LINE// ] 
+        write(*, (80("=")) )
+           write(*,*) typical call: 
+           CALL split(line,array)
+           write(*, (i0," ==> ",a) )(i,trim(array(i)),i=1,size(array))
+           write(*,*) SIZE: ,SIZE(array)
+        write(*, (80("-")) )
+         write(*,*) custom list of delimiters (colon and vertical line): 
+         CALL split(line,array,delimiters= :| ,order= sequential ,nulls= ignore )
+         write(*, (i0," ==> ",a) )(i,trim(array(i)),i=1,size(array))
+         write(*,*) SIZE: ,SIZE(array)
+        write(*, (80("-")) )
+         write(*,*)&
+         & custom list of delimiters, reverse array order and count null fields: 
+           CALL split(line,array,delimiters= :| ,order= reverse ,nulls= return )
+           write(*, (i0," ==> ",a) )(i,trim(array(i)),i=1,size(array))
+           write(*,*) SIZE: ,SIZE(array)
+        write(*, (80("-")) )
+           write(*,*) INPUT LINE:[ //LINE// ] 
+           write(*,*)&
+           & default delimiters and reverse array order and return null fields: 
+           CALL split(line,array,delimiters=  ,order= reverse ,nulls= return )
+           write(*, (i0," ==> ",a) )(i,trim(array(i)),i=1,size(array))
+           write(*,*) SIZE: ,SIZE(array)
+
+
+
+    end program demo_split
+
+Output
+
+   > INPUT LINE:[  aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|333 a B cc    ]
+   > ===========================================================================
+   >  typical call:
+   > 1 ==> aBcdef
+   > 2 ==> ghijklmnop
+   > 3 ==> qrstuvwxyz
+   > 4 ==> 1:|:2
+   > 5 ==> 333|333
+   > 6 ==> a
+   > 7 ==> B
+   > 8 ==> cc
+   >  SIZE:           8
+   > --------------------------------------------------------------------------
+   >  custom list of delimiters (colon and vertical line):
+   > 1 ==>   aBcdef   ghijklmnop qrstuvwxyz  1
+   > 2 ==> 2     333
+   > 3 ==> 333 a B cc
+   >  SIZE:           3
+   > --------------------------------------------------------------------------
+   >  custom list of delimiters, reverse array order and return null fields:
+   > 1 ==> 333 a B cc
+   > 2 ==> 2     333
+   > 3 ==>
+   > 4 ==>
+   > 5 ==>   aBcdef   ghijklmnop qrstuvwxyz  1
+   >  SIZE:           5
+   > --------------------------------------------------------------------------
+   >  INPUT LINE:[  aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|333 a B cc    ]
+   >  default delimiters and reverse array order and count null fields:
+   > 1 ==>
+   > 2 ==>
+   > 3 ==>
+   > 4 ==> cc
+   > 5 ==> B
+   > 6 ==> a
+   > 7 ==> 333|333
+   > 8 ==>
+   > 9 ==>
+   > 10 ==>
+   > 11 ==>
+   > 12 ==> 1:|:2
+   > 13 ==>
+   > 14 ==> qrstuvwxyz
+   > 15 ==> ghijklmnop
+   > 16 ==>
+   > 17 ==>
+   > 18 ==> aBcdef
+   > 19 ==>
+   > 20 ==>
+   >  SIZE:          20
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                                                             split (3)                                                July 02, 2017
+
+Generated by manServer 1.08 from 0c5b007b-116a-4998-8551-cf98d92ece84 using man macros.
+                                                              [split]

@@ -1,0 +1,44 @@
+NAME
+
+     ubound(3f) - [INTRINSIC:ARRAY INQUIRY] Upper dimension bounds of an array
+
+SYNTAX
+
+   result = ubound(array [, dim [, kind]])
+
+DESCRIPTION
+
+   Returns the upper bounds of an array, or a single upper bound
+   along the DIM dimension.
+
+ARGUMENTS
+
+   ARRAY  - Shall be an array, of any type.
+   DIM  - (Optional) Shall be a scalar INTEGER.
+   KIND- (Optional) An INTEGER initialization expression
+         indicating the kind parameter of the result.
+
+RETURN VALUE
+
+   The return value is of type INTEGER and of kind KIND. If
+   KIND is absent, the return value is of default integer kind.
+   If DIM is absent, the result is an array of the upper bounds of
+   ARRAY. If DIM is present, the result is a scalar
+   corresponding to the upper bound of the array along that dimension. If
+   ARRAY is an expression rather than a whole array or array
+   structure component, or if it has a zero extent along the relevant
+   dimension, the upper bound is taken to be the number of elements along
+   the relevant dimension.
+
+STANDARD
+
+   [[Fortran 95]] and later, with KIND argument [[Fortran 2003]] and later
+
+CLASS
+
+   [[Inquiry function]]
+
+SEE ALSO
+
+   [[lbound]], [[lcobound]], [[ucobound]]
+

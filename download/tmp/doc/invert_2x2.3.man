@@ -1,0 +1,25 @@
+NAME
+   invert_2x2(3f) - [M_math] directly invert 2x2 matrix
+
+SYNOPSIS
+  pure function invert_2x2(A) result(B)
+
+   ! integer,real,double,complex
+
+   integer,parameter         :: wp=kind(0|0.0|0.0d|(0.0,0.0))
+   NNNNNN(kind=wp), intent(in) :: A(2,2)   !! Matrix
+   NNNNNN(kind=wp)             :: B(2,2)   !! Inverse matrix
+    where
+   NNNNNN may be INTEGER,REAL,DOUBLEPRECISION,COMPLEX
+
+DESCRIPTION
+
+   Directly invert 2x2 matrix for speed (versus using, e.g. LAPACK)
+
+OPTIONS
+
+   A  original 2x2 matrix, may be INTEGER, REAL, DOUBLE, or COMPLEX
+   B  inverted 2x2 matrix, of same type as input matrix A
+
+EXAMPLE
+

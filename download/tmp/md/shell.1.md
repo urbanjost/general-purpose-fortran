@@ -1,0 +1,131 @@
+[UP]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                Manual Reference Pages  - shell (1)
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                                 
+NAME
+
+    shell(1f) - shell for demonstrating major modules in libjust4.a
+
+CONTENTS
+
+    Synopsis
+    Description
+    Options
+    Usage
+
+SYNOPSIS
+
+    shell expression|-help|-version|[-replay][-read FILENAME]
+
+DESCRIPTION
+
+    Example command line interface with command line history, numeric expressions, if/else/elseif/endif logic, and Unix-like
+    command parsing.
+
+OPTIONS
+
+        --help display this help and exit
+
+        --version output version information and exit
+
+USAGE
+
+    At the command prompt the following example commands may be used:
+
+      #----------------------------------------------------------------------------#
+      | command                     |exercises       | description                 |
+      #----------------------------------------------------------------------------#
+      | r                           | M_HISTORY      | enter history editor;       |
+      |                             |                | ? will produce help         |
+      #----------------------------------------------------------------------------#
+      | today format [-help]        | M_TIME         | display current time using  |
+      |                             |                | fmtdate(3f)                 |
+      #----------------------------------------------------------------------------#
+      | if/else/elseif expression   | M_LOGIC        | conditionally process input |
+      |                             |                | lines                       |
+      | endif                       | M_LOGIC        | end IF block                |
+      #----------------------------------------------------------------------------#
+      | set dump                    | M_CALCULATOR   | dump currently defined      |
+      |                             |                | variable names              |
+      | set funcs                   | M_CALCULATOR   | describe functions available|
+      |                             |                | in expressions              |
+      | set nc()                    | JUOWN1/CALC_NC | display list of ncurses()   |
+      |                             |                | functions                   |
+      | set expression [-q]         | M_CALCULATOR   | anything else is assumed to |
+      |                             |                | be a numeric expression     |
+      | set                         | M_CALCULATOR   | If no expression switch to  |
+      |                             |                | calculator mode till "." is |
+      |                             |                | entered.                    |
+      #----------------------------------------------------------------------------#
+      | read file [-q]              | M_KRACKEN      | read from another input file|
+      | test1 -x -y --help --version| M_KRACKEN      | test of DISSECT(3f)         |
+      #----------------------------------------------------------------------------#
+      |                             | M_PIXEL        | pixel graphics              |
+      |prefsize:        specify size of pixel array
+      |vinit:           initialize pixel array drawing module
+      |
+      |rect:            draw line rectangle given two opposite corners
+      |line:            draw line between two points applying line width and color
+      |polyline:        draw lines between points
+      |rmove2:          relative move
+      |move2:           move current position
+      |rdraw2:          relative draw
+      |draw2:           draw a line from current position to specified point
+      |
+      |point2:          Draw a point at x, y
+      |
+      |arc:             draw a arc using current line width and color
+      |circle:          draw a circle using current line width and color
+      |circleprecision: set number of line segments making up a circle
+      |
+      |drawchar:        draw text at the current position
+      |drawstr:         draw text at the current position
+      |
+      |linewidth:       set line width for lines drawn in pixel image
+      |color:           set current color for lines drawn in pixel image
+      |textsize:        set text size in world units
+      |ycentertext:     set text centering mode on for drawstr(3f) and drawc(3f) in Y direction
+      |xcentertext:     set text centering mode for drawstr(3f) and drawc(3f) in X direction
+      |centertext:      set text centering mode for drawstr(3f) and drawc(3f)
+      |textang:         set angle in degrees to draw text at using drawstr(3f)
+      |
+      |mapcolor:        set a color index using RGB values
+      |
+      |strlength:       length of string using current font size
+      |getviewport:     return viewport in screen pixel coordinates
+      |getdisplaysize:  Returns the width and height of the device in pixels
+      |state:           print graphics state of M_pixel graphics module
+      |getgp2:          get current graphics position
+      |
+      |viewport:        Specify which part of the screen to draw in.
+      |ortho2:          define the area of the virtual world coordinates to map to the viewport
+      |ortho2_biggest:  given a window size, find and set to largest accommodating viewport
+      |
+      |print_ppm:       print pixel array as a P3 PPM file
+      |print_ascii:     print pixel array as an ASCII block of text
+      |
+      |clear:           set background color all to specified color index
+      |
+      |vexit:           exit pixel array drawing module
+      |                             |                |                             |
+      #----------------------------------------------------------------------------#
+      | help                        |                | display this information    |
+      |                             |                | this information            |
+      | quit|.                      |                | exit program                |
+      #----------------------------------------------------------------------------#
+      | anything_else               | execute as system command                    |
+      #----------------------------------------------------------------------------#
+
+
+
+    It can be confusing if you make variables that are command names. An expression on the command line is evaluated and then the
+    program exits.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                                                             shell (1)                                                July 02, 2017
+
+Generated by manServer 1.08 from 5bd29a80-e71f-4af8-b4fe-cbb7cc012348 using man macros.
+                                                              [shell]

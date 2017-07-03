@@ -1,0 +1,30 @@
+NAME
+   feet_to_meters - [M_units]converts a measurement in feet to meters
+SYNOPSIS
+   elemental real function feet_to_meters(feet)
+
+    class(*),intent(in) :: feet
+DESCRIPTION
+   Converts feet to meters using the formula:
+
+    meters = 0.0254 * 12.0 * feet
+OPTIONS
+   feet   any standard scalar value supported by anyscalar_to_real(3f).
+          This at least includes REAL, INTEGER, and DOUBLEPRECISION.
+EXAMPLE
+  Sample program
+
+   program feet_to_meters_demo
+   use M_units, only : feet_to_meters
+   implicit none
+      write(*,*)'With REAL array input    ', feet_to_meters([ -1.0, 0.0, 1.0 ,1.0/12.0])
+      write(*,*)'With INTEGER array input ', feet_to_meters([ -1,   0,   1   ])
+      write(*,*)'With DOUBLEPRECISION     ', feet_to_meters(-1.0d0),feet_to_meters(0.0d0),feet_to_meters(1.0d0)
+   end program feet_to_meters_demo
+
+  Results
+
+    With REAL array input     -0.304800004   0.00000000  0.304800004  2.54000016E-02
+    With INTEGER array input  -0.304800004   0.00000000  0.304800004
+    With DOUBLEPRECISION      -0.304800004   0.00000000  0.304800004
+

@@ -1,0 +1,19 @@
+NAME
+   cprint(1f) - [FILE FILTER] filter prints specified columns
+SYNOPSIS
+   cprint [columns ][-delimiters delim] |-help|-version
+
+DESCRIPTION
+   cprint is a filter that prints the specified columns
+
+OPTIONS
+    columns      numbers indicating which columns to print
+    -delimiters  input column delimiter character(s) (default: whitespace)
+    -help        display command help and exit
+    -version     display command metadata and exit
+EXAMPLES
+  Sample usage:
+
+      >echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1
+      h e l l o w o r l d
+

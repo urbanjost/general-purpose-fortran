@@ -1,0 +1,38 @@
+NAME
+
+     huge(3f) - [INTRINSIC] Largest number of a kind
+
+SYNTAX
+
+   result = huge(x)
+
+DESCRIPTION
+
+   huge(x) returns the largest number that is not an infinity in
+   the model of the type of X.
+
+ARGUMENTS
+
+   X  - Shall be of type REAL or INTEGER.
+
+RETURN VALUE
+
+   The return value is of the same type and kind as X
+
+EXAMPLE
+
+  Sample program:
+
+    program test_huge_tiny
+      print *, huge(0), huge(0.0), huge(0.0d0)
+      print *, tiny(0.0), tiny(0.0d0)
+    end program test_huge_tiny
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Inquiry function]]
+

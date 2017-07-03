@@ -1,0 +1,16 @@
+NAME
+   clear(3f) - [M_pixel] clear background to current color or specified color index
+
+SYNOPSIS
+ definition:
+
+   subroutine clear(indx)
+   integer,intent(in),optional :: indx
+
+DESCRIPTION
+   Clears the screen to the current color or to color specified
+
+OPTIONS
+   INDX   color index to set pixel array to. Optional
+
+EXAMPLE

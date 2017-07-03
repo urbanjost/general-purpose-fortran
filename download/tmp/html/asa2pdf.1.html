@@ -1,0 +1,502 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>asa2pdf (1)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>asa2pdf(1f) </B>- [FILE FILTER]Convert text files with/without
+<B>ASA carriage control to an Adobe PDF file.
+</B><B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Usage</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Environment Variables</A><BR>
+<A HREF=#6>Examples</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>asa2pdf</B> <B>-o</B> <I>output_filename</I> <B>-i</B> <I>input_filename</I>
+<B>-g</B> <I>gray_scale_shade</I> <B>-b</B> <I>lines_alternately_shaded</I> <B>-d</B> <I>dashcode</I>
+<B>-s</B> <I>top_middle_page_label</I> <B>-t</B> <I>top_left_page_label</I>
+<B>-P</B> # <I>add</I> <I>page</I> <I>numbers</I>
+<B>-l</B> <I>lines_per_page</I> <B>-f</B> <I>font_name</I> <B>-S</B> <I>columns_to_shift_data</I>
+<B>-N</B> # <I>add</I> <I>line</I> <I>numbers</I>
+<B>-H</B> <I>page_height</I> <B>-W</B> <I>page_width</I> <B>-u</B> <I>points_per_unit</I>
+<B>-L</B> <I>left_margin</I> <B>-R</B> <I>right_margin</I> <B>-B</B> <I>bottom_margin</I> <B>-T</B> <I>top_margin</I>
+<B>-help</B> <B>-version</B> <B>-show</B>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Basically, <B>asa2pdf</B>(1) emulates a <I>line</I> printer that recognizes ASA
+carriage control. That is, it lets you convert ASCII text files using
+ASA carriage control into Adobe "clear text" PDF files instead of a
+printed <I>page</I>.
+<P>
+The PDF is clear-text ASCII so that it is easy to still use other
+Unix/Linux utilities such as <B>spell</B>(1), <B>diff</B>(1), <B>grep</B>(1), &#46;&#46;&#46;. on the
+output files.
+<P>
+To properly view the output requires a PDF processor (such
+as <B>xpdf</B>(1),acroread(1)/AcroRd32, <B>gv</B>(1) or <B>ghostview</B>(1), &#46;&#46;&#46;).
+Most modern systems can view, mail and print PDF files.
+<P>
+The default layout generates a landscape 132-column 60-<I>line</I> format with
+every other two lines shaded. A variety of switches are available to
+let you easily print files with no vertical carriage control, and in
+portrait mode too. There are options to use dashed lines instead of
+shading, to set different margins, and so on.
+<P>
+WHAT IS ASA CARRIAGE CONTROL?
+<P>
+The ASA carriage control standard was the first important formatting
+standard for printing and viewing text files. The standard was almost
+universally adapted by printer manufacturers of the time (and printers
+were a much more common output device than interactive displays).
+<P>
+Most commercial high-level programs at the time the standard was
+created were either FORTRAN or COBOL; so nearly all early FORTRAN
+output used ASA carriage control
+(ASA was the American Standards Association -- now ANSI).
+This FORTRAN/ASA association became so strong that the standard is
+sometimes referred to as the "Fortran carriage control standard" (FCC).
+Indeed, even though ASA is no longer commonly directly supported on
+desktop printers, it was part of the Fortran 90 standard (this was
+dropped in Fortran 2003 -- how a printer processes files is really
+not directly part of any programming language).
+<P>
+Times have changed, and the once nearly ubiquitous ASA standard
+is poorly supported on Unix and MSWindows machines in particular
+(Direct operating-system support of ASA files was once common, but
+is now rare).
+<P>
+But no alternative as simple has emerged for output files
+that truly replaces the ASA standard (although machine control
+characters (ctrl-H, ctrl-L, &#46;&#46;&#46;) have come close they have their
+own issues).
+<P>
+So many programs using ASA-based formatting have not been changed,
+and use commands like <B>asa</B>(1)/nasa(1), and <B>fpr</B>(1) to allow the files to
+be printed as desired but NOT to generally be viewed properly on-<I>line</I>,
+and printing itself is becoming less common.
+<P>
+So the problem isn&#146;t so much with ASA files, but that today&#146;s
+infrastructure does not support the format well. The <B>asa2pdf</B>(1)
+program bridges the gap by allowing you to still make and manipulate
+ASA files until you want to print or email them, at which time you
+can quickly convert them to an Adobe PDF file.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>USAGE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>asa2pdf</B>(1) reads input from standard input. By default the first
+character of each <I>line</I> is interpreted as a control character. Lines
+beginning with any character other than those listed in the ASA
+carriage-control characters table or in the list of extensions below
+are interpreted as if they began with a blank, and an appropriate
+diagnostic appears on standard error. The first character of each
+<I>line</I> is not printed.
+<P>
+ASA Carriage Control Characters
+<P>
+<PRE>
+        +------------+-----------------------------------------------+
+        | Character  |                                               |
+        +------------+-----------------------------------------------+
+        | +          | Do not advance; overstrike previous line.     |
+        | blank      | Advance one line.                             |
+        | null lines | Treated as if they started with a blank       |
+        | 0          | Advance two lines.                            |
+        | -          | Advance three lines (IBM extension).          |
+        | 1          | Advance to top of next page.                  |
+        | all others | Discarded (except for extensions listed below)|
+        +------------+-----------------------------------------------+
+</PRE>
+Extensions
+<P>
+<PRE>
+       H   Advance one-half line.
+       R   Do not advance; overstrike previous line. Use red text color
+       G   Do not advance; overstrike previous line. Use green text color
+       B   Do not advance; overstrike previous line. Use blue text color
+       r   Advance one line. Use red text color
+       g   Advance one line. Use green text color
+       b   Advance one line. Use blue text color
+       ^   Overprint but add 127 to the ADE value of the character
+           (ie., use ASCII extended character set)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-o</B> outputfile
+Name of Adobe PDF output file to create
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-i</B> inputfile
+Name of text file to read. Defaults to stdin.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PRINTABLE PAGE AREA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The <I>page</I> size may be specified using <B>-H</B> for height, <B>-W</B> for width, and <B>-u</B>
+to indicate the points per unit (72 makes H and W in inches,
+1 is used when units are in font points). For example:
+<P>
+<PRE>
+       -u 72 -H 8.5 -W 11   # page Height and Width in inches
+       -T 0.5 -B 0.5 -L 0.5 -R 0.5   # margins (Top, Bottom, Left, Right)
+<P>
+</PRE>
+common media sizes with <B>-u</B> 1:
+<P>
+<PRE>
+       +-------------------+------+------------+
+       | name              |  W   |        H   |
+       +-------------------+------+------------+
+       | Letterdj (11x8.5) | 792  |       612  | (LandScape)
+       | A4dj              | 842  |       595  |
+       | Letter (8.5x11)   | 612  |       792  | (Portrait)
+       | Legal             | 612  |       1008 |
+       | A5                | 420  |       595  |
+       | A4                | 595  |       842  |
+       | A3                | 842  |       1190 |
+       +-------------------+------+------------+
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SHADING</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-g</B> 0.800781
+gray-scale value for shaded bars ( 0 &lt; g 1 )
+0 is black, 1 is white.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-i</B> 2
+repeat shade pattern every N lines
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-d</B> &#146; &#146;
+<I>dashcode</I> pattern
+The pattern is a series of integers defining an
+on-off sequence in user units used to create a
+dash pattern. A single digit "N" implies a pattern
+of "N N". (seems buggy)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MARGIN LABELS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-s</B> &#146;&#146;
+top middle <I>page</I> label.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-t</B> &#146;&#146;
+top left <I>page</I> label.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-P</B>
+<I>add</I> <I>page</I> <I>numbers</I> to right corners
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TEXT OPTIONS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-l</B> 60
+lines per <I>page</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-f</B> Courier
+font names: Courier, Courier-Bold,Courier-Oblique
+Helvetica, Symbol, Times-Bold, Helvetica-Bold,
+ZapfDingbats, Times-Italic, Helvetica-Oblique,
+Times-BoldItalic, Helvetica-BoldOblique,
+Times-Roman, Courier-BoldOblique
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-S</B> 0
+right shift 1 for non-ASA files
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-N</B>
+<I>add</I> <I>line</I> <I>numbers</I>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INFORMATION</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-version</B>
+display version number
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-help</B>
+display this help
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>ENVIRONMENT VARIABLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+$IMPACT_TOP Will be printed in large red letters across the <I>page</I> top.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+$IMPACT_GRAY sets the default gray-scale value, same as the <B>-g</B> switch.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample input:
+<P>
+<PRE>
+  &gt; The numbers are plain underlined double-struck over-struck
+  &gt;+                      __________ double-struck ///////////
+  &gt;R                                               ///////////
+  &gt; abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=_+()*&^%$#@!\|[]{};&#146;:",.&lt;&gt;/?&#145;~
+  &gt;
+  &gt;r red
+  &gt;g     green
+  &gt;b           blue
+  &gt; PRIMARY:
+  &gt;R         red
+  &gt;G             green
+  &gt;B                   blue
+  &gt; 1/2 line advance
+  &gt;H                1
+  &gt;H                 2         a-1
+  &gt;H                  3       Z
+  &gt;H                   4       b
+  &gt; back to a normal line
+<P>
+</PRE>
+Sample commands:
+<P>
+<PRE>
+     # use non-ASA file to generate portrait mode with a dashed line under every line
+     asa2pdf -S 1 -W 8.5 -H 11 -i 1 -d &#146;2 4 1&#146; -T 1 -B .75 -o paper.pdf &lt; INFILE
+<P>
+     # banner on top
+     env IMPACT_GRAY=1 IMPACT_TOP=CONFIDENTIAL asa2pdf -o paper.pdf &lt; test.txt
+<P>
+     # 132-column landscape
+      asa2pdf -s LANDSCAPE -o paper.pdf &lt;asa2pdf.c
+<P>
+     # 132-column landscape with line numbers with dashed lines
+      asa2pdf -s &#146;LANDSCAPE LINE NUMBERS&#146; -d &#146;3 1 2&#146; \
+      -N -T .9 -o paper.pdf &lt;asa2pdf.c
+<P>
+     # portrait 80-column non-ASA file with dashed lines
+      asa2pdf -s PORTRAIT -S 1 -W 8.5 -H 11 -i 1 -d &#146;2 4 1&#146; \
+      -T 1 -B .75 -o paper.pdf &lt; asa2pdf.c
+<P>
+     # portrait 80-column with line numbers , non-ASA
+      asa2pdf -s &#146;PORTRAIT LINE NUMBERS&#146; -l 66 -S 1 -W 8.5 -H 11 \
+      -i 1 -T 1 -B .75 -N -o paper.pdf &lt; asa2pdf.c
+<P>
+     # titling
+      asa2pdf -d &#146;1 0 1&#146; -t "$USER" -i 1 -P -N -T 1 \
+      -s "asa2pdf.c" -o paper.pdf &lt;asa2pdf.c
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+ALTERNATIVES TO ASA2PDF
+<P>
+About the only standard ASA support on Unix variants is that some
+contain the <B>asa</B>(1)/<B>fpr</B>(1) and <B>nasa</B>(1) commands for converting ASA text
+files into and from text files with machine control (MC) characters
+such as form-feed, backspace, carriage-return, &#46;&#46;&#46;. Most personal
+printers will no longer properly print ASA files directly, but they
+will often correctly print files with simple MC characters
+(Note that the <B>asa</B>(1) command is referenced in the POSIX.2 standard).
+<P>
+Furthermore, if a printer does not directly support MC characters,
+text conversion utilities such as <B>enscript</B>(1) and <B>a2ps</B>(1) can
+often be used to print the files (usually by converting the files
+to PostScript or PCL). Such utilities support features such as
+titling, <I>page</I> numbering, and other useful options.
+<P>
+Programs like "Adobe Distiller" can convert text to a PDF; as well as
+editors such as OpenOffice. In fact, most modern document-formatting
+editors can read in an ASCII text file and save it as an Adobe
+PDF file.
+<P>
+HTML and PostScript/PDF and PCL files are the alternatives often
+incorporated to satisfy simple formatting criteria --
+yet HTML is not printer-oriented;
+and PDF files are complex to write from a simple program, and PCL is
+vendor-specific and has few on-<I>line</I> viewers available for it.
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+Assuming converting the Fortran program to just write a plain ASCII
+file instead of an ASA file is not acceptable, More extensive flat-text
+formatting is available using
+<TABLE cellpadding=3><!-- tsb: Assuming converting the Fortran program to just write a plain ASCII
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+HTML, *roff and LaTex-related file formats
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+libraries for writing more sophisticated PostScript, PDF, and HTML/CSS files
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+XML files formatted using Cascading Style Sheet (CSS) files
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+RTF (Rich Text Format) files
+</TD></TR>
+<TR></TR></TABLE>Other Unix commands that can be useful in working with plain text and
+MC character files are
+<P>
+<PRE>
+      pr(1)           can be used to add page numbers and titles.
+      expand(1)       can remove tab characters
+      fold(1),fmt(1)  can be used to wrap the text
+      cut(1)          can let you trim or select columns
+      cat -n          can be used to add number lines
+      paste(1)        can be used to put files side-by-side.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<B>asa</B>(1)/<B>nasa</B>(1), <B>fpr</B>(1), <B>enscript</B>(1), <B>a2ps</B>(1), and <B>ps2pdf</B>(1).
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>asa2pdf (1)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5a78ce55-3b0b-44de-83d7-f2392ceda3f9 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/asa2pdf.1.gif"></center> 
+</body>
+</HTML>

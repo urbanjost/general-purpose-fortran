@@ -1,0 +1,44 @@
+NAME
+     ADJUSTR(3f) - [INTRINSIC:CHARACTER] Right adjust a string
+
+SYNTAX
+
+   result = ADJUSTR(STRING)
+
+DESCRIPTION
+
+   ADJUSTR(STRING) will right adjust a string by removing trailing spaces.
+   Spaces are inserted at the start of the string as needed.
+
+ARGUMENTS
+
+   STRING  - the type shall be CHARACTER.
+
+RETURN VALUE
+
+   The return value is of type CHARACTER and of the same kind as
+   STRING where trailing spaces are removed and the same number of
+   spaces are inserted at the start of STRING.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_adjustr
+      character(len=20) :: str = 'gfortran'
+      str = adjustr(str)
+      print *, str
+    end program test_adjustr
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   Elemental function
+
+SEE ALSO
+
+   [[adjustl]], [[trim]]
+

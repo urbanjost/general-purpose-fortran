@@ -1,0 +1,10 @@
+NAME
+   almost(3f) - [M_math] return true or false if two numbers agree up to specified number of digits
+SYNOPSIS
+   function almost(x,y,digits)
+   real,intent(in) :: x,y
+   real,intent(in) :: rdigits
+DESCRIPTION
+   Returns true or false depending on whether the two numbers given agree to within the specified
+   number of digits as calculated by ACCDIG(3f).
+EXAMPLE

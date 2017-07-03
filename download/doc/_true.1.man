@@ -1,0 +1,18 @@
+NAME
+       _true(1f) - [FUNIX]do nothing, successfully
+
+SYNOPSIS
+       _true [ignored command line arguments]
+       _true OPTION
+
+DESCRIPTION
+       Exit with a status code indicating failure.
+
+       --verbose  display an ASCII graphic of a shining sun
+       --help     display this help and exit
+       --version  output version information and exit
+
+EXAMPLE
+       _true && echo SUCCESSFUL || echo DID NOT WORK
+SEE ALSO
+       _true(1f)

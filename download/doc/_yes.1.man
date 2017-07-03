@@ -1,0 +1,33 @@
+NAME
+
+    _yes(1f) - [FUNIX]output a string repeatedly until killed or limit is reached
+
+SYNOPSIS
+    _yes [STRING] -help -version [-repeat N]
+
+DESCRIPTION
+    _yes(1) prints the command line arguments, separated by spaces and followed
+    by a newline until the repeat count is reached or endlessly until it is
+    killed. If no arguments are given, it prints ''y'' followed by a newline
+    endlessly until killed. Upon a write error, _yes(1) exits with status "1".
+
+       -repeat N  specify number of times to display string
+       --help     display this help and exit
+       --version  output version information and exit
+
+    To output an argument that begins with -, precede it with --, e.g.,
+
+       _yes -- --help.
+
+EXAMPLES
+
+    Sample commands
+
+       # repeat a command 20 times, pausing and clearing:
+       _yes  date --repeat 20  |xargs -iXX  sh -c ''XX;sleep 2;clear''
+
+REPORTING BUGS
+       Report _yes bugs to <http://www.urbanjost.altervista.org/index.html>
+
+SEE ALSO
+   yes(1), repeat(1), xargs(1)

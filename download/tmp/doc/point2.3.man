@@ -1,0 +1,31 @@
+NAME
+   point2(3f) - [M_pixel] Draw a point at x, y
+
+SYNOPSIS
+ definition:
+
+   subroutine point2(x, y)
+   real,intent(in) :: x, y
+
+DESCRIPTION
+   Draw a point at x, y.  Points are drawn with the current color as
+   a circle with a diameter equal to the current linewidth.
+
+EXAMPLE
+  Sample program:
+
+   program demo_point2
+   use :: M_pixel
+   use :: M_writegif, only : writegif
+   implicit none
+   integer :: i
+   call vinit()
+   call color(5)
+   do i=1,20
+      call linewidth(50*i)
+      call point2(real(i*25),real(i*25))
+   enddo
+   call writegif('point2.3.gif',P_pixel,P_colormap)
+   call vexit()
+   end program demo_point2
+

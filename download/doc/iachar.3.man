@@ -1,0 +1,50 @@
+NAME
+
+     iachar(3f) - [INTRINSIC:CHARACTER] Code in ASCII collating sequence
+
+SYNTAX
+
+   result = iachar(c [, kind])
+
+DESCRIPTION
+
+   iachar(c) returns the code for the ASCII character
+   in the first character position of C.
+
+ARGUMENTS
+
+   C  - Shall be a scalar CHARACTER, with intent(in)
+   KIND  - (Optional) An INTEGER initialization
+expression indicating the kind parameter of the result.
+
+RETURN VALUE
+
+   The return value is of type INTEGER and of kind KIND. If
+   KIND is absent, the return value is of default integer kind.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_iachar
+      integer i
+      i = iachar(' ')
+    end program test_iachar
+
+NOTE
+
+   See [[ichar]] for a discussion of converting between numerical
+   values and formatted string representations.
+
+STANDARD
+
+   [[Fortran 95]] and later, with KIND argument [[Fortran 2003]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+
+   [[achar]], [[char]], [[ichar]]
+

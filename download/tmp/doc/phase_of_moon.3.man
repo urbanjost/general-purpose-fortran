@@ -1,0 +1,37 @@
+NAME
+    phase_of_moon(3fp) - [M_time] return name for phase of moon for given date
+SYNOPSIS
+  function phase_of_moon(datin)
+
+   integer,intent(in)            :: datin(8)
+   character(len=:),allocatable  :: phase_of_moon
+
+DESCRIPTION
+ Phases Of The Moon
+
+ This is a private procedure used to support the %p field descriptor for the
+ fmtdate(3f) routine.
+
+ The moon circles the earth every 29.530588853 days on average, so pick a
+ starting point and count. A new moon occurred at Julian date 2451550.1
+ (January 6, 2000, 18:14 UTC). Then it is easy to count the number of
+ days since the last new moon. This is an approximate calculation.
+
+ There are eight generally recognized phases of the moon in common use
+
+   o new or dark
+   o waxing crescent
+   o first quarter
+   o waxing gibbous
+   o full
+   o waning gibbous
+   o laster quarter
+   o waning crescent
+
+ To calculate the phase of the moon simply divide the days since the
+ last new moon by eight and select the appropriate phase.
+
+ Note that technically the four states (new, first quarter, full, third
+ quarter) are events not phases. That is to say, the moon is technically
+ only new for an instant.
+

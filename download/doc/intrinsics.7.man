@@ -1,0 +1,235 @@
+NAME
+   intrinsics(7f) - intrinsic man(1) pages
+
+DESCRIPTION
+
+   Got tired of not having the Fortran intrinsics available as man(1) pages,
+   especially when looking at code in the vim(1) editor and wanting to use the
+   "K" command to evoke the man(1) page.
+
+   So, as a start I took the closest thing I knew, which was descriptions on the
+   Fortran Wiki, and am slowly turning them into man(1) pages and sometimes
+   altering them.
+
+   *Note*: In many cases the descriptions of these intrinsics were originally
+   taken from the [[GFortran|GNU Fortran]] manual to make descriptions
+   on the Fortran Wiki by Jason Blevins (which were then used to start this
+   collection). Like the Fortran Wiki itself, the [[GFortran|GNU Fortran]]
+   manual is licensed under the [[GNU Free Documentation License]].
+
+   These are at the state of "good enough considering the alternative is nothing",
+   but are still actively being completed.
+
+CONTENTS
+
+Inquiry intrinsic functions
+
+The result of an inquiry function depends on the properties of its
+principal argument, not on the value of the argument. The value of the
+argument does not have to be defined.
+
+   * [[allocated]]--Status of an allocatable entity
+   * [[associated]]--Status of a pointer or pointer/target pair
+   * [[bit_size]]--Bit size inquiry function
+   * [[command_argument_count]]--Get number of command line arguments
+   * [[digits]]--Significant digits function
+   * [[epsilon]]--Epsilon function
+   * [[extends_type_of]]--Type extension inquiry
+   * [[huge]]--Largest number of a kind
+   * [[is_contiguous]]--True if and only if an object is contigous
+   * [[kind]]--Kind of an entity
+   * [[lbound]]--Lower dimension bounds of an array
+   * [[len]]--Length of a character entity
+   * [[maxexponent]]--Maximum exponent of a real kind
+   * [[minexponent]]--Minimum exponent of a real kind
+   * [[new_line]]--New line character
+   * [[precision]]--Decimal precision of a real kind
+   * [[present]]--Determine whether an optional dummy argument is specified
+   * [[radix]]--Base of a model number
+   * [[range]]--Decimal exponent range of a real kind
+   * [[same_type_as]]--Query dynamic types for equality
+   * [[shape]]--Determine the shape of an array
+   * [[size]]--Determine the size of an array
+   * [[tiny]]--Smallest positive number of a real kind
+   * [[ubound]]--Upper dimension bounds of an array
+
+Math functions
+
+   * [[abs]]--Absolute value
+   * [[acos]]--Arccosine function
+   * [[acosh]]--Inverse hyperbolic cosine function
+   * [[asin]]--Arcsine function
+   * [[asinh]]--Inverse hyperbolic sine function
+   * [[atan]]--Arctangent function
+   * [[atan2]]--Arctangent function
+   * [[atanh]]--Inverse hyperbolic tangent function
+   * [[bessel_j0]]--Bessel function of the first kind of order 0
+   * [[bessel_j1]]--Bessel function of the first kind of order 1
+   * [[bessel_jn]]--Bessel function of the first kind
+   * [[bessel_y0]]--Bessel function of the second kind of order 0
+   * [[bessel_y1]]--Bessel function of the second kind of order 1
+   * [[bessel_yn]]--Bessel function of the second kind
+   * [[cos]]--Cosine function
+   * [[cosh]]--Hyperbolic cosine function
+   * [[erf]]--Error function
+   * [[erfc]]--Complementary error function
+   * [[erfc_scaled]]--Error function
+   * [[gamma]]--Gamma function
+   * [[hypot]]--Euclidean distance function
+   * [[log]]--Logarithm function
+   * [[log10]]--Base 10 logarithm function
+   * [[log_gamma]]--Logarithm of the Gamma function
+   * [[sin]]--Sine function
+   * [[sinh]]--Hyperbolic sine function
+   * [[sqrt]]--Square-root function
+   * [[tan]]--Tangent function
+   * [[tanh]]--Hyperbolic tangent function
+
+   * [[aimag]]--Imaginary part of complex number
+   * [[aint]]--Truncate to a whole number
+   * [[anint]]--Nearest whole number
+
+
+   * [[achar]]--Character in ASCII collating sequence
+   * [[adjustl]]--Left adjust a string
+   * [[adjustr]]--Right adjust a string
+   * [[all]]--All values in MASK along DIM are true
+   * [[any]]--Any value in MASK along DIM is true
+   * [[atomic_add]]--Atomic ADD operation
+   * [[atomic_and]]--Atomic bitwise AND operation
+   * [[atomic_cas]]--Atomic compare and swap
+   * [[atomic_define]]--Setting a variable atomically
+   * [[atomic_fetch_add]]--Atomic ADD operation with prior fetch
+   * [[atomic_fetch_and]]--Atomic bitwise AND operation with prior fetch
+   * [[atomic_fetch_or]]--Atomic bitwise OR operation with prior fetch
+   * [[atomic_fetch_xor]]--Atomic bitwise XOR operation with prior fetch
+   * [[atomic_or]]--Atomic bitwise OR operation
+   * [[atomic_ref]]--Obtaining the value of a variable atomically
+   * [[atomic_xor]]--Atomic bitwise OR operation
+   * [[bge]]--Bitwise greater than or equal to
+   * [[bgt]]--Bitwise greater than
+   * [[ble]]--Bitwise less than or equal to
+   * [[blt]]--Bitwise less than
+   * [[btest]]--Bit test function
+   * [[c_associated]]--Status of a C pointer
+   * [[c_funloc]]--Obtain the C address of a procedure
+   * [[c_f_procpointer]]--Convert C into Fortran procedure pointer
+   * [[c_f_pointer]]--Convert C into Fortran pointer
+   * [[c_loc]]--Obtain the C address of an object
+   * [[c_sizeof]]--Size in bytes of an expression
+   * [[ceiling]]--Integer ceiling function
+   * [[char]]--Character conversion function
+   * [[cmplx]]--Complex conversion function
+   * [[co_broadcast]]--Copy a value to all images the current set of images
+   * [[co_max]]--Maximal value on the current set of images
+   * [[co_min]]--Minimal value on the current set of images
+   * [[co_reduce]]--Reduction of values on the current set of images
+   * [[co_sum]]--Sum of values on the current set of images
+   * [[compiler_options]]--Options passed to the compiler
+   * [[compiler_version]]--Compiler version string
+   * [[conjg]]--Complex conjugate function
+   * [[count]]--Count function
+   * [[cpu_time]]--CPU elapsed time in seconds
+   * [[cshift]]--Circular shift elements of an array
+   * [[date_and_time]]--Date and time subroutine
+   * [[dble]]--Double conversion function
+   * [[dim]]--Positive difference
+   * [[dot_product]]--Dot product function
+   * [[dprod]]--Double product function
+   * [[dshiftl]]--Combined left shift
+   * [[dshiftr]]--Combined right shift
+   * [[eoshift]]--End-off shift elements of an array
+   * [[event_query]]--Query whether a coarray event has occurred
+   * [[execute_command_line]]--Execute a shell command
+   * [[exp]]--Exponential function
+   * [[exponent]]--Exponent function
+   * [[float]]--Convert integer to default real
+   * [[floor]]--Integer floor function
+   * [[fraction]]--Fractional part of the model representation
+   * [[get_command]]--Get the entire command line
+   * [[get_command_argument]]--Get command line arguments
+   * [[get_environment_variable]]--Get an environmental variable
+   * [[iachar]]--Code in ASCII collating sequence
+   * [[iall]]--Bitwise and of array elements
+   * [[iand]]--Bitwise logical and
+   * [[iany]]--Bitwise or of array elements
+   * [[ibclr]]--Clear bit
+   * [[ibits]]--Bit extraction
+   * [[ibset]]--Set bit
+   * [[ichar]]--Character-to-integer conversion function
+   * [[ieor]]--Bitwise logical exclusive or
+   * [[image_index]]--Cosubscript to image index conversion
+   * [[index]]--Position of a substring within a string
+   * [[int]]--Convert to integer type
+   * [[ior]]--Bitwise logical inclusive or
+   * [[iparity]]--Bitwise exclusive or of array elements
+   * [[is_iostat_end]]--Test for end-of-file value
+   * [[is_iostat_eor]]--Test for end-of-record value
+   * [[ishft]]--Shift bits
+   * [[ishftc]]--Shift bits circularly
+   * [[lcobound]]--Lower codimension bounds of an array
+   * [[leadz]]--Number of leading zero bits of an integer
+   * [[len_trim]]--Length of a character entity without trailing blank characters
+   * [[lge]]--Lexical greater than or equal
+   * [[lgt]]--Lexical greater than
+   * [[lle]]--Lexical less than or equal
+   * [[llt]]--Lexical less than
+   * [[logical]]--Convert to logical type
+   * [[maskl]]--Left justified mask
+   * [[maskr]]--Right justified mask
+   * [[matmul]]--matrix multiplication
+   * [[max]]--Maximum value of an argument list
+   * [[maxloc]]--Location of the maximum value within an array
+   * [[maxval]]--Maximum value of an array
+   * [[merge]]--Merge variables
+   * [[merge_bits]]--Merge of bits under mask
+   * [[min]]--Minimum value of an argument list
+   * [[minloc]]--Location of the minimum value within an array
+   * [[minval]]--Minimum value of an array
+   * [[mod]]--Remainder function
+   * [[modulo]]--Modulo function
+   * [[move_alloc]]--Move allocation from one object to another
+   * [[mvbits]]--Move bits from one integer to another
+   * [[nearest]]--Nearest representable number
+   * [[nint]]--Nearest whole number
+   * [[not]]--Logical negation
+   * [[norm2]]--Euclidean vector norm
+   * [[null]]--Function that returns an disassociated pointer
+   * [[num_images]]--Number of images
+   * [[pack]]--Pack an array into an array of rank one
+   * [[parity]]--Reduction with exclusive or
+   * [[popcnt]]--Number of bits set
+   * [[poppar]]--Parity of the number of bits set
+   * [[product]]--Product of array elements
+   * [[random_number]]--Pseudo-random number
+   * [[random_seed]]--Initialize a pseudo-random number sequence
+   * [[rank]]--Rank of a data object
+   * [[real]]--Convert to real type
+   * [[repeat]]--Repeated string concatenation
+   * [[reshape]]--Function to reshape an array
+   * [[rrspacing]]--Reciprocal of the relative spacing
+   * [[scale]]--Scale a real value
+   * [[scan]]--Scan a string for the presence of a set of characters
+   * [[selected_char_kind]]--Choose character kind
+   * [[selected_int_kind]]--Choose integer kind
+   * [[selected_real_kind]]--Choose real kind
+   * [[set_exponent]]--Set the exponent of the model
+   * [[shifta]]--Right shift with fill
+   * [[shiftl]]--Left shift
+   * [[shiftr]]--Right shift
+   * [[sign]]--Sign copying function
+   * [[sngl]]--Convert double precision real to default real
+   * [[spacing]]--Smallest distance between two numbers of a given type
+   * [[spread]]--Add a dimension to an array
+   * [[storage_size]]--Storage size in bits
+   * [[sum]]--Sum of array elements
+   * [[system_clock]]--Time function
+   * [[this_image]]--Cosubscript index of this image
+   * [[trailz]]--Number of trailing zero bits of an integer
+   * [[transfer]]--Transfer bit patterns
+   * [[transpose]]--Transpose an array of rank two
+   * [[trim]]--Remove trailing blank characters of a string
+   * [[ucobound]]--Upper codimension bounds of an array
+   * [[unpack]]--Store the elements of a vector in an array of higher rank
+   * [[verify]]--Scan a string for the absence of a set of characters
+

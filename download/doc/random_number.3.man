@@ -1,0 +1,38 @@
+NAME
+
+     random_number(3f) - [INTRINSIC] Pseudo-random number
+
+SYNTAX
+
+   random_number(harvest)
+
+DESCRIPTION
+
+   Returns a single pseudorandom number or an array of pseudorandom numbers
+   from the uniform distribution over the range 0 <= x < 1.
+
+ARGUMENTS
+
+   HARVEST  - Shall be a scalar or an array of type REAL.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_random_number
+      real :: r(5,5)
+      call random_number(r)
+    end program
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   Subroutine
+
+SEE ALSO
+
+   [[random_seed]]
+

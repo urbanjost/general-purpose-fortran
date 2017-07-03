@@ -1,0 +1,29 @@
+NAME
+   crop - [M_strings]trim leading blanks and trailing blanks from a string
+
+SYNOPSIS
+   function crop(strin) result (strout)
+
+    character(len=*),intent(in)  :: strin
+    character(len=:),allocatable :: strout
+
+DESCRIPTION
+   trim leading blanks from a string and return position of last
+   non-blank character in the string.
+
+EXAMPLE
+
+   program demo_crop
+
+    use m_strings, only: crop
+    implicit none
+    character(len=20) ::  untrimmed = '   ABCDEFG abcdefg  '
+       write(*,*) 'untrimmed string=[',untrimmed,']'
+       write(*,*) 'cropped string=[',crop(untrimmed),']'
+
+   end program demo_crop
+
+   Expected output
+
+     untrimmed string=[   ABCDEFG abcdefg                      ]
+     cropped string=[ABCDEFG abcdefg]

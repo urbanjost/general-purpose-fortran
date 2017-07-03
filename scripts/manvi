@@ -1,0 +1,106 @@
+#!/bin/sh
+################################################################################
+#ident  "@(#) view man pages with editor. John S. Urban, 19910321"
+#
+# view a man(1) page in an editor 
+# more(1) and/or pg(1) are nice for beginners
+# but more often than not it is much nicer to
+# edit the man page if you are familiar with the
+# vi editor (you loose highlighting).
+# 
+# 11950302: editor can be specified via common variables
+#
+# NOTE: some man(1) utilities let you select more(1) as
+#       your pager, and some more(1) utilities let you
+#       evoke vi(1) easily from within more(1).
+################################################################################
+#set -x
+SCRATCH=/tmp/$(uuidgen).man
+trap "rm $SCRATCH; exit 2" 1 2 3 13 15
+export SCRATCH
+################################################################################
+export MANPATH
+MANPATH="$MANPATH:/tmp_mnt${HOME}/man:$HOME/man:/usr/local/man"
+################################################################################
+if ( test $# -eq 0 )
+then
+   # 
+   case "`uname -s`" in
+   *CYGWIN*)man -k \(|col -b > $SCRATCH;;
+   *)man -k ' ' > $SCRATCH;;
+   *)man -k '.' > $SCRATCH;;
+   *)man -k '\('|col -b > $SCRATCH;;
+   esac
+else
+   machine=`uname -s`
+   case "${machine}" in
+   #=========================================================================
+   ULTRIX)
+   /usr/ucb/man ${@}|col -b|expand > $SCRATCH
+   ;;
+   #=========================================================================
+   sn[0-9]*|UNICOS)
+   # module load PrgEnv mpt
+   man -loub $* > $SCRATCH
+   ;;
+   #=========================================================================
+   IRIX64)
+   MANPATH="$MANPATH:/usr/share/catman"                      # root directory of on-line reference manual entry tree
+   MANPATH="$MANPATH:/usr/share/catman/u_man/cat[1,6]/*"     # user manual pages
+   MANPATH="$MANPATH:/usr/share/catman/a_man/cat[1,4,7]/*"   # system administrator manual pages
+   MANPATH="$MANPATH:/usr/share/catman/p_man/cat[2-5]/*"     # programmer manual pages
+   MANPATH="$MANPATH:/usr/share/catman/g_man/cat3/*"         # Graphics Library manual pages
+   MANPATH="$MANPATH:/usr/share/catman/local/cat[1-8lnop]/*" # local pre-formatted manual entries
+   MANPATH="$MANPATH:/usr/catman/local/man[1-8lnop]/*"       # local unformatted nroff(1) source manual entries
+   MANPATH="$MANPATH:/usr/share/man/*"                       # additional unformatted manual pages
+   
+   man $*|col -b|expand > $SCRATCH
+   ;;
+   #=========================================================================
+   SunOS)
+   MANPATH="$MANPATH:/usr/share/man" # Solaris
+   MANPATH="/usr/openwin/man:/usr/man:/opt/SUNWspro/man:$MATHPATH"
+   man $*|col -b|expand > $SCRATCH
+   ;;
+   #=========================================================================
+   HP-UX)
+   man $*|col -b|expand > $SCRATCH
+   ;;
+   #=========================================================================
+   *)
+   if [ "$#" -gt 1 ]
+   then
+      man -k $*
+      man $* </dev/null|col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH
+   else
+      man -a $* |col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH
+   fi
+   ;;
+   #=========================================================================
+   esac
+fi
+################################################################################
+# select editor:
+# use $FCEDIT, then $EDITOR, then vi
+# $FCEDIT - edit mode for bash(1) and korn(1) shell
+# $EDITOR - common variable used for this purpose (tcsh,...)
+# $VISUAL - common variable used for this purpose (tcsh,...)
+EDIT=${FCEDIT:-${EDITOR:-${VISUAL:-vim -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>'}}}
+################################################################################
+# some word counts use different orders
+COUNT=`wc -l $SCRATCH|awk '{print $1}'`
+[ ! -z $SCRATCH -a "$COUNT" -gt 1 ] && ${EDIT} $SCRATCH
+rm -rf $SCRATCH
+################################################################################
+exit
+################################################################################
+################################################################################
+if ( test $# -eq 0 )
+then
+   echo " 
+////////////////////////////////////////////////////////////////////////////////
+   format of command is:
+   $0 topics
+////////////////////////////////////////////////////////////////////////////////
+   "
+#=========================================================================

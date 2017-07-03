@@ -1,0 +1,9 @@
+NAME
+     _mv(1f) - [FUNIX]rename file
+SYNOPSIS
+     _mv SOURCE DEST
+DESCRIPTION
+       Rename SOURCE to DEST
+
+EXAMPLE
+     _mv file.text file.txt

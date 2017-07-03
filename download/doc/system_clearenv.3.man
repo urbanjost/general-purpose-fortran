@@ -1,0 +1,38 @@
+NAME
+   system_clearenv(3f) - [M_system]clear environment by calling clearenv(3c)
+
+
+SYNOPSIS
+   subroutine system_clearenv(ierr)
+
+    integer,intent(out),optional :: ierr
+
+DESCRIPTION
+   The clearenv() procedure clears the environment of all name-value pairs.
+   Typically used in security-conscious applications or ones where configuration
+   control requires ensuring specific variables are set.
+
+RETURN VALUES
+   ierr  returns zero on success, and a nonzero value on failure. Optional.
+         If not present and an error occurs the program stops.
+
+EXAMPLE
+
+  Sample program:
+
+     program demo_system_clearenv
+     use M_system, only : system_clearenv
+     implicit none
+     ! environment before clearing
+     call execute_command_line('env|wc')
+     ! environment after clearing (not necessarily blank!!)
+     call system_clearenv()
+     call execute_command_line('env')
+     end program demo_system_clearenv
+
+  Typical output:
+
+     89     153    7427
+     PWD=/home/urbanjs/V600
+     SHLVL=1
+

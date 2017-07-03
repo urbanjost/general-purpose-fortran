@@ -1,0 +1,28 @@
+#!/bin/bash
+#@(#) call manServer.pl to convert man(1) pages to HTML
+DIR=$(dirname $0)
+################################################################################
+case "$*" in 
+-h|-help|--help)
+   nroff -man $DIR/manServer_dir/manServer.1|more
+   exit
+;;
+esac
+################################################################################
+if [ "$1" = '' ] 
+then
+   # allow command to read stdin
+   SCR=$(uuidgen)
+   cat >$SCR
+   $DIR/manServer_dir/manServer.pl $SCR
+   rm -f $SCR
+elif [ "$*" = 'xxxxx' ]
+then
+  :
+else
+   $DIR/manServer_dir/manServer.pl $*
+fi |grep -v '^<!--.* -->'
+# in PRE regions some browsers leave blank lines where comment lines are, so delete comment lines
+################################################################################
+exit
+################################################################################

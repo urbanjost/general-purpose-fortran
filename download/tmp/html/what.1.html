@@ -1,0 +1,270 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>what (1)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>what </B>- [DEVELOPER] extract SCCS-style metadata from a file
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Exit Status</A><BR>
+<A HREF=#6>Environment Variables</A><BR>
+<A HREF=#7>See Also</A><BR>
+<A HREF=#8>Bugs</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+what [ <B>filename</B>(<I>s</I>) [-<I>s</I>] [<B>-q</B>] [<B>-html</B>|<B>-table</B>] ] | [ [<B>-help</B>] [<B>-version</B>] ]
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>what</B>(1) utility searches each filename for occurrences of the
+SCCS identification string @(#) and prints what follows up to a
+",&gt;,\, or non-printable ASCII <B>character</B>(NULL,NEWLINE,TAB,&#46;&#46;&#46;..).
+<P>
+This allows files to quickly be scanned for metadata such as simple
+descriptions, versions and pedigree placed in the files.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+The following options are supported:
+<TABLE cellpadding=3><!-- tsb: The following options are supported:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+-<I>s</I>
+Stops after the first occurrence of the pattern in each file.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-html</B>
+Print output as a table in an HTML document.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-table</B>
+Print output as a HTML table.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-q</B>
+Quiet mode (do not report errors when opening filenames)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-help</B>
+Print description of this program.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-version</B>
+Print version information for this program
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Example 1: Extracting SCCS version information
+<P>
+Text files are generally easy to place a @(#) string into by using the
+appropriate format for a comment in the language being used.
+Exactly how to place a string into an object file or executable may
+vary depending on your compiler or optimization level. Generally the
+following strings will work:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Text files are generally easy to place a @(#) string into by using the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o C/C++
+#ident "@(#)identification info"
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o C:
+char sccsid[] = "@(#)identification info"
+/* must be global scope or optimization usually removes it */
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o C++:
+#pragma ident "@(#)identification info"
+/* many references say this should work, but unreliable */
+</TD></TR>
+<TR></TR></TABLE><TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Fortran: <B>character</B>(len=*),parameter::sccsid= &#146;@(#)identification info&#146;
+be careful it is not removed by high optimization levels
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+For example, if program.f90 were compiled to yield program.o and
+executable a.out, the command:
+what program.f90 program.o a.out
+should produce:
+<P>
+<PRE>
+        program.f90:
+              identification info
+        program.o:
+              identification info
+        a.out:
+              identification info
+<P>
+</PRE>
+A few tips for common interpreted file types:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: A few tips for common interpreted file types:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o shell script:
+#@(#)identification info
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o HTML:
+&lt;!--"@(#)identification info"--&gt;
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXIT STATUS</H3>
+
+</A>
+<BLOCKQUOTE>
+The following exit values are returned:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The following exit values are returned:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+0
+Any matches were found.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+1
+No matches found.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>ENVIRONMENT VARIABLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+The following commands can help identify file contents
+<B>file</B>(1), <B>strings</B>(1), <B>nm</B>(1), <B>ldd</B>(1), <B>cpp</B>(1), <B>fpp</B>(1),
+<B>ident</B>(1), <B>ar</B>(1), <B>objdump</B>(1), <B>ranlib</B>(1),
+[if SCCS installed ] <B>sccs</B>(1), <B>sccs-admin</B>(1), <B>sccs-get</B>(1), &#46;&#46;&#46;
+<P>
+Related topics: schema, IDL (Information Description Language), &#46;&#46;&#46;
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+There is a remote possibility that a spurious occurrence of the "@(#)"
+pattern could be found by <B>what</B>(1).
+<P>
+If standard input is processed it must be a text file with line width less
+than 4,096 characters or errors may occur.
+<P>
+The length of the file arguments may be limited depending on what
+command-line argument parser is used.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>what (1)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c106929d-8627-4f1f-99fd-df76b1ee9655 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/what.1.gif"></center> 
+</body>
+</HTML>

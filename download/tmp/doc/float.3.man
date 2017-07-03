@@ -1,0 +1,41 @@
+NAME
+
+     float(3f) - [INTRINSIC] Convert integer to default real
+
+SYNTAX
+
+   result = float(a)
+
+DESCRIPTION
+
+   float(a) converts the integer A to a default real value.
+
+ARGUMENTS
+
+   A  - The type shall be INTEGER.
+
+RETURN VALUE
+
+   The return value is of type default REAL.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_float
+        integer :: i = 1
+        if (float(i) /= 1.) call abort
+    end program test_float
+
+STANDARD
+
+   [[FORTRAN 77]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+
+   [[dble]], [[real]]
+

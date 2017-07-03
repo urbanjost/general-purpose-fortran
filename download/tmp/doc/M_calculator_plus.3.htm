@@ -1,0 +1,61 @@
+<dl>
+<dt><a href="NAME">NAME</a></dt>
+<dd>
+    M_calculator_plus(3fm) - [M_calculator_plus] convenience routines for calling the M_calculator(3fm) module
+</dd>
+<dt><a href="SYNOPSIS">SYNOPSIS</a></dt>
+<dd>
+   Public entities:
+<pre>
+    use M_calculator_plus, only : inum0, rnum0, dnum0, snum0, jucalcx, strgarr, strgar2
+</pre>
+
+</dd
+<dt><a href="DESCRIPTION">DESCRIPTION</a></dt>
+
+<p>
+    The M_calculator_plus(3f) module is a collection of convenience routines that
+    simplify calling the expression parser module M_calculator.
+</p>
+
+<pre>
+   <a href="inum0.3.html">inum0</a>     resolve a calculator string into a whole integer number
+   <a href="rnum0.3.html">rnum0</a>     resolve a calculator string into a real number
+   <a href="dnum0.3.html">dnum0</a>     resolve a calculator string into a doubleprecision number
+   <a href="snum0.3.html">snum0</a>     resolve a calculator expression into a string
+   <a href="jucalcx.3.html">jucalcx</a>   call jucalc() calculator and display messages
+   <a href="strgarr.3.html">strgarr</a>   read a string of numeric expressions into an array USING CALCULATOR
+   <a href="strgar2.3.html">strgar2</a>   read a string of numeric or string expressions into an array USING CALCULATOR
+</pre>
+
+<dd>
+
+</dd
+<dt><a href="EXAMPLE">EXAMPLE</a></dt>
+<dd>
+
+<p>
+ Sample program
+</p>
+
+<pre>
+
+    program demo_m_calculator_plus
+    use M_calculator_plus, only : rnum0
+    implicit none
+    real :: rval
+    character(len=80) :: string
+    string='A=sind(30)'
+    rval=rnum0(string,ierr)
+    if(ierr.eq.0)then
+       write(*,*) rval
+    else
+       write(*,*) 'error evaluating '//trim(string)
+    endif
+    rval=rnum0('A',ierr)
+    write(*,*) rval
+    end program demo_m_calculator_plus
+</pre>
+
+</dd
+</dl>

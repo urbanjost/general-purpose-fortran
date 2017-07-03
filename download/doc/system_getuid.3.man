@@ -1,0 +1,18 @@
+NAME
+   system_getuid(3f) - [M_system]get real UID of current process from Fortran by calling getuid(3c)
+SYNOPSIS
+   integer(kind=c_int) function system_getuid()
+
+DESCRIPTION
+       The system_getuid(3f) function shall return the real user ID
+       of the calling process.  The getuid() function shall always be
+       successful and no return value is reserved to indicate the error.
+EXAMPLE
+  Get group ID from Fortran:
+
+   program demo_system_getuid
+   use M_system, only: system_getuid
+   implicit none
+      write(*,*)'UID=',system_getuid()
+   end program demo_system_getuid
+

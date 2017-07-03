@@ -1,0 +1,71 @@
+NAME
+
+     date_and_time(3f) - [INTRINSIC:SYSTEM ENVIRONMENT] gets current time
+
+SYNTAX
+
+    call date_and_time([date, time, zone, values])
+
+DESCRIPTION
+
+   date_and_time(date, time, zone, values) gets the corresponding date and
+   time information from the real-time system clock. DATE is intent(out)
+   and has form ccyymmdd. TIME is intent(out) and has form hhmmss.sss.
+   ZONE is intent(out) and has form (+-)hhmm, representing the difference
+   with respect to Coordinated Universal Time (UTC). Unavailable time and
+   date parameters return blanks.
+
+   VALUES is intent(out) and provides the following:
+
+ * value(1): - The year
+ * value(2): - The month
+ * value(3): - The day of the month
+ * value(4): - Time difference with UTC in minutes
+ * value(5): - The hour of the day
+ * value(6): - The minutes of the hour
+ * value(7): - The seconds of the minute
+ * value(8): - The milliseconds of the second
+
+ARGUMENTS
+
+   DATE    - (Optional) The type shall be character(len=8) or larger,
+             and of default kind.
+   TIME    - (Optional) The type shall be character(len=10) or
+             larger, and of default kind.
+   ZONE    - (Optional) The type shall be character(len=5) or larger,
+             and of default kind.
+   VALUES  - (Optional) The type shall be integer(8).
+
+RETURN VALUE
+
+None
+
+EXAMPLE
+
+    program test_time_and_date
+
+        character(8)  :: date
+        character(10) :: time
+        character(5)  :: zone
+        integer,dimension(8) :: values
+        ! using keyword arguments
+        call date_and_time(date,time,zone,values)
+        call date_and_time(DATE=date,ZONE=zone)
+        call date_and_time(TIME=time)
+        call date_and_time(VALUES=values)
+        print '(a,2x,a,2x,a)', date, time, zone
+        print '(8i5)', values
+
+    end program test_time_and_date
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   Subroutine
+
+SEE ALSO
+
+   [[cpu_time]], [[system_clock]]

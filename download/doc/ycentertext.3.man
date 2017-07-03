@@ -1,0 +1,15 @@
+NAME
+   ycentertext(3f) - [M_pixel] set text centering mode on for drawstr(3f) and drawc(3f) in Y direction
+
+SYNOPSIS
+ definition:
+
+   subroutine ycentertext()
+
+DESCRIPTION
+   Centers text in the Y direction. The text string will be draw so that
+   it's center line is aligned with the current y position. Top
+   justification and Bottom justification are turned off.
+
+EXAMPLE
+

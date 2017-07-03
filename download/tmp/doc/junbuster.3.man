@@ -1,0 +1,44 @@
+NAME
+     junbuster(3f) - [M_messages]call journal(3f) to print eye-catching ASCII graphic (ghostbuster)
+
+SYNOPSIS
+
+      SUBROUTINE junbuster(where)
+
+       character(len=*),intent(in) :: where
+
+DESCRIPTION
+
+ Sample output:
+
+  >                        __---__
+  >                     _-       _--______
+  >                __--( /     \ )XXXXXXXXXXXXX_
+  >              --XXX(   O   O  )XXXXXXXXXXXXXXX-
+  >             /XXX(       U     )        XXXXXXX\
+  >           /XXXXX(              )--_  XXXXXXXXXXX\
+  >          /XXXXX/ (      O     )   XXXXXX   \XXXXX\
+  >          XXXXX/   /            XXXXXX   \__ \XXXXX----
+  >          XXXXXX__/          XXXXXX         \__----  -
+  >  ---___  XXX__/          XXXXXX      \__         ---
+  >    --  --__/   ___/\  XXXXXX            /  ___---=
+  >      -_    ___/    XXXXXX              '--- XXXXXX
+  >        --\/XXX\ XXXXXX                      /XXXXX
+  >          \XXXXXXXXX                        /XXXXX/
+  >           \XXXXXX                        _/XXXXX/
+  >             \XXXXX--__/              __-- XXXX/
+  >              --XXXXXXX---------------  XXXXX--
+  >                 \XXXXXXXXXXXXXXXXXXXXXXXX-
+  >                   --XXXXXXXXXXXXXXXXXX-
+
+
+ See the description of JOURNAL() for a meaning for the I/O flag.
+
+EXAMPLE
+ Sample program:
+
+   program seebuster
+   use M_messages, only : junbuster
+      call junbuster('s')
+   end program seebuster
+

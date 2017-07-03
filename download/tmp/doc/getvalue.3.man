@@ -1,0 +1,27 @@
+NAME
+   getvalue(3f) - [M_calculator]given numeric variable name return doubleprecision value directly from calculator dictionary for efficiency
+SYNOPSIS
+   doubleprecision function getvalue(varnam)
+
+    character(len=*),intent(in) :: varnam
+
+DEFINITION
+      Given numeric variable name return double precision value.
+      Note this is breaking the rule of only accessing the calculator thru jucalc(3f).
+      It should only be used from user JUOWN1(3f) routines to avoid recursion
+OPTIONS
+   varnam  name of calculator variable to look up that is assumed to be a valid defined
+   name of a numeric variable. If it does not exist zero is returned.
+EXAMPLE
+  Program:
+
+   program demo_getvalue
+   use M_calculator_plus, only : rnum0
+   use M_calculator, only: getvalue
+   value1=rnum0('A=100/2') ! store something into calculator
+   write(*,*)value1,getvalue('A')
+   end program demo_getvalue
+
+  Results:
+
+   50.0000000       50.000000000000000

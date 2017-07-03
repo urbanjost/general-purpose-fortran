@@ -1,0 +1,167 @@
+[UP]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+                                               Manual Reference Pages  - strgar2 (3)
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                                 
+NAME
+
+    strgar2(3f) - [M_calculator_plus]read a string into a real array USING CALCULATOR, allowing quoted strings in arguments,
+
+CONTENTS
+
+    Synopsis
+    Description
+    Dependencies
+    Examples
+    See Also
+    References
+
+SYNOPSIS
+
+    subroutine strgar2(line,ivals,vals,ifound,delims,ierr)
+
+
+        character(len=*), intent=(in) :: line
+        integer, intent=(in) :: ivals
+        real, intent=(out) :: vals(ivals)
+        integer, intent=(out) :: ifound
+        character(len=*), intent=(in) :: delims
+        integer, intent=(out) :: ierr
+
+
+
+DESCRIPTION
+
+    STRGAR2() returns an array of real values from a string containing numeric and string expressions.
+
+        o    STRGAR2() parses the string at the specified delimiters and calls the calculator routine jucalc.f to evaluate the
+             expressions.
+
+        o    It counts the number of values found.
+
+        o    Once the maximum allowable number of values have been found STRGAR2() returns, ignoring the rest of the line.
+
+        o    If an error occurs the error flag returns the column number where the expression that failed begins.
+
+        o    If the string is  * , the value -99999.0 is returned.
+
+             line LINE is a string of numeric expressions. Each expression can be up to (iclen_calc=512) characters long. The
+             syntax of an expression is as described in the main document of the Calculator Library. (Assuming the delimiters
+             include a space character) an example would be:
+
+                           A=10 100 300E2/42.6  sin(3.1416/5) 
+
+
+
+             ivals IVALS is the maximum number of values to return.
+
+             vals(ivals) VALS is an array filled with the numeric values calculated from the expressions in LINE.
+
+             ifound IFOUND is the number of values successfully returned in VALS
+
+             delims DELIMS is a character(s) to use as an expression delimiter. It is commonly set to a space (  ). If more than
+             one character is specified, the space must not be last.
+
+             ierr IERR returns 0 if no error occurred. If an error did occur, it returns the column number the expression started
+             at that could not be evaluated.
+
+DEPENDENCIES
+
+    o    jucalcx
+
+    o    User-supplied routines: All programs that call the calculator routine must supply their own JUOWN1 and C procedures. See
+         the example program for samples.
+
+         o    juown1
+
+         o    c
+
+EXAMPLES
+
+    Sample program:
+
+        program T_STRGAR2
+        use M_calculator_plus, only : strgar2
+        integer             :: ios
+        integer             :: i
+        integer             :: ifound
+        integer             :: ierr
+        real                :: vals(1000)
+        character(len=4096) :: line
+        ! NOTE: user must supply the JUOWN1 and C procedures.
+
+
+        write(*, (80("-")) )
+        call strgar2( 10;2/3;sin(4.314) ,4,vals,ifound,  ; ,ierr)
+        write(*,*) should find three values in 10;2/3;sin(4.314) 
+        write(*,*) ifound= ,ifound
+        write(*,*) values are ,(vals(i),i=1,ifound)
+
+
+        write(*, (80("-")) )
+        write(*,*) should find three values in 10;2/3;sin(4.314) 
+        write(*,*) ifound= ,ifound
+        call strgar2( 10;2/3;sin(4.314)  ,3,vals,ifound,  ; ,ierr)
+        write(*,*) ifound= ,ifound
+        write(*,*) values are ,(vals(i),i=1,ifound)
+
+
+        write(*, (80("-")) )
+        write(*,*) should stop at two values in 10;2/3;sin(4.314) 
+        call strgar2( 10;2/3;sin(4.314) ,2,vals,ifound,  ; ,ierr)
+        write(*,*) ifound= ,ifound
+        write(*,*) values are ,(vals(i),i=1,ifound)
+
+
+        write(*, (80("-")) )
+        write(*,*) should stop at one values in 10;2/3;sin(4.314) 
+        call strgar2( 10;2/3;sin(4.314) ,1,vals,ifound,  ; ,ierr)
+        write(*,*) ifound= ,ifound
+        write(*,*) values are ,(vals(i),i=1,ifound)
+
+
+        write(*, (80("-")) )
+        write(*,*) should find three values in 10;2/3;sin(4.314) ; ; ;   ;;  
+        call strgar2( 10;2/3;sin(4.314) ; ; ;   ;;  ,1000,vals,ifound,  ; ,ierr)
+        write(*,*) ifound= ,ifound
+        write(*,*) values are ,(vals(i),i=1,ifound)
+
+
+        write(*, (80("-")) )
+        write(*,*) should find an error in  values in 10;20/3O;sin(4.314) ; ; ;   ;;  
+        call strgar2( 10;20/3O;sin(4.314) ; ; ;   ;;  ,1000,vals,ifound,  ; ,ierr)
+        write(*,*) ifound= ,ifound,  error= ,ierr
+        write(*,*) values are ,(vals(i),i=1,ifound)
+
+
+        write(*, (80("-")) )
+        write(*,*) Enter strings delimited by spaces or semicolons 
+           do
+              read(*, (a) ,iostat=ios)line
+              if(ios.ne.0)then
+                 stop
+              endif
+              call strgar2(line,1000,vals,ifound,  ; ,ierr)
+              write(*,*) ifound= ,ifound
+              write(*,*) values are ,(vals(i),i=1,ifound)
+           enddo
+        end program T_STRGAR2
+
+
+
+SEE ALSO
+
+    To parse a list of numbers instead of expressions see STRGAR(). If there is only one expression see RNUM0(), JUCALCX(), JUCALC
+    ().
+
+REFERENCES
+
+    NONE.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                                                            strgar2 (3)                                               July 02, 2017
+
+Generated by manServer 1.08 from 0018817c-bbd9-4e0d-841a-abc7b149e1da using man macros.
+                                                             [strgar2]

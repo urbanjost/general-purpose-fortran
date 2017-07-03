@@ -1,0 +1,148 @@
+NAME
+   data(7f) - [FORTRAN]DATA statement
+
+SYNOPSIS
+   data-stmt is   DATA data-stmt-set [ [ , ] data-stmt-set ] ...
+DESCRIPTION
+
+   The DATA statement specifies explicit initialization.
+
+   If a nonpointer object has default initialization, it shall not appear in a data-stmt-object-list.
+
+   A variable that appears in a DATA statement and has not been typed previously may appear in a subsequent type
+   declaration only if that declaration confirms the implicit typing. An array name, array section, or array element
+   that appears in a DATA statement shall have had its array properties established by a previous specification
+   statement.
+
+   Except for variables in named common blocks, a named variable has the SAVE attribute if any part of it is
+   initialized in a DATA statement, and this may be confirmed by explicit specification.
+
+      R535    data-stmt-set                 is   data-stmt-object-list / data-stmt-value-list /
+
+      R536    data-stmt-object              is variable
+                                            or data-implied-do
+
+      R537    data-implied-do               is   ( data-i-do-object-list , data-i-do-variable =
+                                                    scalar-int-initialization-expr ,
+                                                    scalar-int-initialization-expr
+                                                    [ , scalar-int-initialization-expr ] )
+
+      R538    data-i-do-object              is array-element
+                                            or scalar-structure-component
+                                            or data-implied-do
+
+      R539    data-i-do-variable            is   do-variable
+
+      C563    A data-stmt-object or data-i-do-object shall not be a coindexed variable.
+
+      C564    (R536) In a variable that is a data-stmt-object, each subscript, section subscript, substring starting point,
+              and substring ending point shall be an initialization expression.
+
+      C565    (R536) A variable whose designator appears as a data-stmt-object or a data-i-do-object shall not be a
+              dummy argument, accessed by use or host association, in a named common block unless the DATA
+              statement is in a block data program unit, in blank common, a function name, a function result name,
+              an automatic object, or an allocatable variable.
+
+      C566    (R536) A data-i-do-object or a variable that appears as a data-stmt-object shall not be an object designator
+              in which a pointer appears other than as the entire rightmost part-ref .
+
+      C567    (R538) The array-element shall be a variable.
+
+      C568    (R538) The scalar-structure-component shall be a variable.
+
+      C569    (R538) The scalar-structure-component shall contain at least one part-ref that contains a subscript-list.
+
+      C570    (R538) In an array-element or scalar-structure-component that is a data-i-do-object, any subscript shall
+              be an initialization expression, and any primary within that subscript that is a data-i-do-variable shall
+              be a DO variable of this data-implied-do or of a containing data-implied-do.
+
+      R540     data-stmt-value               is   [ data-stmt-repeat * ] data-stmt-constant
+
+      R541     data-stmt-repeat              is scalar-int-constant
+                                             or scalar-int-constant-subobject
+
+      C571     (R541) The data-stmt-repeat shall be positive or zero. If the data-stmt-repeat is a named constant, it
+               shall have been declared previously in the scoping unit or made accessible by use or host association.
+
+      R542     data-stmt-constant            is   scalar-constant
+                                             or   scalar-constant-subobject
+                                             or   signed-int-literal-constant
+                                             or   signed-real-literal-constant
+                                             or   null-init
+                                             or   initial-data-target
+                                             or   structure-constructor
+
+      C572     (R542) If a DATA statement constant value is a named constant or a structure constructor, the named
+               constant or derived type shall have been declared previously in the scoping unit or accessed by use or
+               host association.
+
+      C573     (R542) If a data-stmt-constant is a structure-constructor , it shall be an initialization expression.
+
+      R543     int-constant-subobject        is   constant-subobject
+
+      C574     (R543) int-constant-subobject shall be of type integer.
+
+      R544     constant-subobject            is   designator
+
+      C575     (R544) constant-subobject shall be a subobject of a constant.
+
+      C576     (R544) Any subscript, substring starting point, or substring ending point shall be an initialization expression.
+
+   The data-stmt-object-list is expanded to form a sequence of pointers and scalar variables, referred to as "sequence
+   of variables" in subsequent text. A nonpointer array whose unqualified name appears as a data-stmt-object or
+   data-i-do-object is equivalent to a complete sequence of its array elements in array element order (6.5.3.2). An
+   array section is equivalent to the sequence of its array elements in array element order. A data-implied-do is
+   expanded to form a sequence of array elements and structure components, under the control of the data-i-do-
+   variable, as in the DO construct (8.1.7.6).
+
+   The data-stmt-value-list is expanded to form a sequence of data-stmt-constants. A data-stmt-repeat indicates the
+   number of times the following data-stmt-constant is to be included in the sequence; omission of a data-stmt-repeat
+   has the effect of a repeat factor of 1.
+
+   A zero-sized array or a data-implied-do with an iteration count of zero contributes no variables to the expanded
+   sequence of variables, but a zero-length scalar character variable does contribute a variable to the expanded
+   sequence. A data-stmt-constant with a repeat factor of zero contributes no data-stmt-constants to the expanded
+   sequence of scalar data-stmt-constants.
+
+   The expanded sequences of variables and data-stmt-constants are in one-to-one correspondence. Each data-stmt-
+   constant specifies the initial value, initial data target, or null-init for the corresponding variable. The lengths of
+   the two expanded sequences shall be the same.
+
+   A data-stmt-constant shall be null-init or initial-data-target if and only if the corresponding data-stmt-object has
+   the POINTER attribute. If data-stmt-constant is null-init, the initial association status of the corresponding data
+   statement object is disassociated. If data-stmt-constant is initial-data-target the corresponding data statement
+   object shall be data-pointer-initialization compatible with the initial data target; the data statement object is
+   initially associated with the target.
+
+   A data-stmt-constant other than boz-literal-constant, null-init, or initial-data-target shall be compatible with its
+   corresponding variable according to the rules of intrinsic assignment (7.2.1.2). The variable is initially defined
+   with the value specified by the data-stmt-constant; if necessary, the value is converted according to the rules of
+   intrinsic assignment (7.2.1.3) to a value that agrees in type, type parameters, and shape with the variable.
+
+   If a data-stmt-constant is a boz-literal-constant, the corresponding variable shall be of type integer. The boz-
+   literal-constant is treated as if it were converted by the intrinsic function INT (13.7.81) to type integer with the
+   kind type parameter of the variable.
+
+EXAMPLES
+   Examples of DATA statements are:
+
+          CHARACTER (LEN = 10) NAME
+          INTEGER, DIMENSION (0:9) :: MILES
+          REAL, DIMENSION (100, 100) :: SKEW
+          TYPE (NODE), POINTER :: HEAD_OF_LIST
+          TYPE (PERSON) MYNAME, YOURNAME
+          DATA NAME / 'JOHN DOE' /, MILES / 10 * 0 /
+          DATA ((SKEW (K, J), J = 1, K), K = 1, 100) / 5050 * 0.0 /
+          DATA ((SKEW (K, J), J = K + 1, 100), K = 1, 99) / 4950 * 1.0 /
+          DATA HEAD_OF_LIST / NULL() /
+          DATA MYNAME / PERSON (21, 'JOHN SMITH') /
+          DATA YOURNAME % AGE, YOURNAME % NAME / 35, 'FRED BROWN' /
+
+   The character variable NAME is initialized with the value JOHN DOE with padding on the right because
+   the length of the constant is less than the length of the variable. All ten elements of the integer array
+   MILES are initialized to zero. The two-dimensional array SKEW is initialized so that the lower triangle
+   of SKEW is zero and the strict upper triangle is one. The structures MYNAME and YOURNAME are
+   declared using the derived type PERSON from Note 4.17. The pointer HEAD OF LIST is declared using
+   the derived type NODE from Note 4.37; it is initially disassociated. MYNAME is initialized by a structure
+   constructor. YOURNAME is initialized by supplying a separate value for each component.
+

@@ -1,0 +1,34 @@
+NAME
+     ibclr(3f) - [INTRINSIC:BIT MANIPULATION] Clear bit
+
+SYNTAX
+
+   result = ibclr(i, pos)
+
+DESCRIPTION
+
+   IBCLR returns the value of I with the bit at position
+   POS set to zero.
+
+ARGUMENTS
+
+   I  - The type shall be INTEGER.
+   POS  - The type shall be INTEGER.
+
+RETURN VALUE
+
+   The return value is of type INTEGER and of the same kind as I.
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+
+   [[ibits]], [[ibset]], [[iand]], [[ior]], [[ieor]],
+   [[mvbits]]
+

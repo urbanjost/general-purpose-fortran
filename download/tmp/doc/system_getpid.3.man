@@ -1,0 +1,20 @@
+NAME
+   system_getpid(3f) - [M_system]get PID (process ID) of current process from Fortran by calling getpid(3c)
+SYNOPSIS
+   integer function system_getpid()
+DESCRIPTION
+       The system_getpid() function returns the process ID of the
+       calling process.
+RETURN VALUE
+       The value returned is the integer process ID.  The system_getpid()
+       function shall always be successful and no return value is reserved
+       to indicate an error.
+EXAMPLE
+  Get process PID from Fortran
+
+   program demo_system_getpid
+   use M_system, only: system_getpid
+   implicit none
+      write(*,*)'PID=',system_getpid()
+   end program demo_system_getpid
+

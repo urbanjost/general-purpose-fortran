@@ -1,0 +1,213 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>matchw (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>matchw </B>- [M_strings]compare given string for match to pattern which may contain wildcard characters
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+logical function <B>matchw</B>(<I>string</I>, pattern )
+<P>
+    character(len=*),intent(in) :: string
+    character(len=*),intent(in) :: pattern
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>matchw</B>(3f) compares given <I>string</I> for match to pattern which may
+contain wildcard characters.
+<P>
+In this version to get a match entire <I>string</I> must be described by pattern.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: In this version to get a match entire <I>string</I> must be described by pattern.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+"?" matching any one character
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+"*" matching zero or more characters.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+Both strings may have trailing spaces which are ignored.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Example program
+<P>
+<PRE>
+   program demo_matchw
+   use M_strings, only : matchw
+<P>
+   ! first match is not all of string so F
+   write(*,*)matchw(&#146;*c*ax &#146;,&#146;abcdefgaxaxaxax&#146;)
+   ! true
+   write(*,*)matchw(&#146;*c*ax*&#146;,&#146;abcdefgaxaxaxax&#146;)
+<P>
+   write(*,*)merge(&#146;MATCH&#146;,&#146;ERROR&#146;,matchw(&#146;abcdefgaxaxaxax&#146;,&#146;*c*ax*&#146;))
+   write(*,*)merge(&#146;MATCH&#146;,&#146;ERROR&#146;,matchw(&#146;abcdefgaxaxaxax&#146;,&#146;*c??f*&#146;))
+   write(*,*)merge(&#146;ERROR&#146;,&#146;NO   &#146;,matchw(&#146;abcdefgaxaxaxax&#146;,&#146;*a??f&#146;))
+   write(*,*)merge(&#146;ERROR&#146;,&#146;NO   &#146;,matchw(&#146;abcdefgaxaxaxax&#146;,&#146;*y&#146;))
+<P>
+   end program demo_matchw
+<P>
+</PRE>
+Expected output
+<P>
+<PRE>
+    &gt; F
+    &gt; T
+    &gt; MATCH
+    &gt; MATCH
+    &gt; NO
+    &gt; NO
+<P>
+</PRE>
+More extensive example
+<P>
+<PRE>
+   program test_matchw
+   use M_strings, only : matchw
+   !implicit none
+   integer np, ns
+   parameter (np =  19, ns =  6)
+   character pattern(np)*8, string(ns)*12
+   character pattern2(np)*8
+   integer s, p
+   data pattern /&#146;*&#146;,&#146;a*a&#146;,&#146;a*&#146;,&#146;ab*&#146;,&#146;*a&#146;,&#146;a*a&#146;,&#146;a?d?&#146;,&#146;a?d*&#146;,&#146;abra&#146;,&
+   & &#146;aa&#146;,&#146;a&#146;,&#146;ab&#146;,&#146;*&#146;,&#146;?&#146;,&#146;????&#146;,&#146;?*&#146;,&#146;*?&#146;,&#146;***?&#146;,&#146;****?&#146;/
+   data pattern2/&#146;*&#146;,&#146;a**a&#146;,&#146;a*d?&#146;,&#146;ab*&#146;,&#146;*a&#146;,&#146;a*a&#146;,&#146;a?d?&#146;,&#146;a?d*&#146;,&#146;alda&#146;,&
+   & &#146;aa&#146;,&#146;a&#146;,&#146;ab&#146;,&#146;*&#146;,&#146;?&#146;,&#146;???a&#146;,&#146;????&#146;,&#146;**&#146;,&#146;***a&#146;,&#146;?????&#146;/
+   data string / &#146;abracadabra&#146;, &#146;aldabra&#146;, &#146;alda&#146;, &#146;carta&#146;, &#146;abdc&#146;, &#146;abra&#146;/
+<P>
+      write(*,&#146;("TABLE 1",t18, *(a6))&#146;) pattern
+      do s = 1,ns
+         write(*, &#146;(a, 100L6)&#146;) &
+          & string(s),(matchw(string(s),pattern(p)), p=1,np)
+      enddo
+<P>
+      write(*,&#146;("TABLE 2",t18, *(a6))&#146;) pattern2
+      do s = 1,ns
+         write(*, &#146;(a, 100L6)&#146;) &
+          & string(s),(matchw(string(s),pattern2(p)), p=1,np)
+      enddo
+<P>
+      stop
+<P>
+      do s = 1,ns
+         do p=1,np
+         write(*, &#146;(a,a,L7)&#146;) &
+          & string(s),pattern2(p),matchw(string(s),pattern2(p))
+         enddo
+      enddo
+<P>
+</PRE>
+<BLOCKQUOTE>
+end program test_matchw
+</BLOCKQUOTE>
+<P>
+Expected output
+<P>
+<PRE>
+   TABLE 1     * a*a  a*   ab* *a a*a a?d? a?d* abra aa a ab * ? ???? ?*   *? ***? ****?
+   abracadabra T T    T    T   T  T   F    F    F    F  F F  T F F    T    F  F    F
+   aldabra     T T    T    F   T  T   F    T    F    F  F F  T F F    T    F  F    F
+   alda        T T    T    F   T  T   T    T    F    F  F F  T F T    T    F  F    F
+   carta       T F    F    F   T  F   F    F    F    F  F F  T F F    T    F  F    F
+   abdc        T F    T    T   F  F   T    T    F    F  F F  T F T    T    F  F    F
+   abra        T T    T    T   T  T   F    F    T    F  F F  T F T    T    F  F    F
+   TABLE 2     * a**a a*d? ab* *a a*a a?d? a?d* alda aa a ab * ? ???a ???? ** ***a ?????
+   abracadabra T F    F    T   T  T   F    F    F    F  F F  T F F    F    F  F    F
+   aldabra     T F    F    F   T  T   F    T    F    F  F F  T F F    F    F  F    F
+   alda        T F    T    F   T  T   T    T    T    F  F F  T F T    T    F  F    F
+   carta       T F    F    F   T  F   F    F    F    F  F F  T F F    F    F  F    T
+   abdc        T F    T    T   F  F   T    T    F    F  F F  T F F    T    F  F    F
+   abra        T F    F    T   T  T   F    F    F    F  F F  T F T    T    F  F    F
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>matchw (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4ea2ecc6-9a64-4647-8787-715a80f4fe87 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/matchw.3.gif"></center> 
+</body>
+</HTML>

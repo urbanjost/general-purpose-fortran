@@ -1,0 +1,293 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>sort_shell (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>sort_shell(3f) </B>- [M_sort]Generic subroutine sorts the array X using Shell&#146;s method
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Reference</A><BR>
+<A HREF=#6>Author</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+Usage:
+<P>
+    real, integer data:
+       sort_shell(X,ORDER=&#146;A|D&#146;)
+<P>
+    X          input/output numeric array
+    order      Ascending (a-z) or Descending (z-a) sort order
+<P>
+    complex, complex(kind=kind(0.0d0)) data:
+       sort_shell(X,order=&#146;A|D&#146;,type=&#146;R|I|S&#146;)
+<P>
+    X          input/output complex array
+    order      Ascending (a-z) or Descending (z-a) sort order
+    type       Sort by Real component, Imaginary component, or Sqrt(R**2+I**2)
+<P>
+    character data:
+       sort_shell(X,order=&#146;A|D&#146;,[startcol=NN,endcol=MM])
+<P>
+    X          input/output character array
+    order      Ascending (a-z) or Descending (z-a) sort order
+    startcol   character position in strings which starts search field
+    endcol     character position in strings which ends search field
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+subroutine <B>sort_shell</B>(3f) sorts an array over a specified field in numeric or alphanumeric order.
+<P>
+From Wikipedia, the free encyclopedia:
+<P>
+The step-by-step process of replacing pairs of items during the shell
+sorting algorithm. Shellsort, also known as Shell sort or Shell&#146;s
+method, is an in-place comparison sort. It can be seen as either a
+generalization of sorting by exchange (bubble sort) or sorting by
+insertion (insertion sort).[3] The method starts by sorting pairs of
+elements far apart from each other, then progressively reducing the gap
+between elements to be compared. Starting with far apart elements, it
+can move some out-of-place elements into position faster than a simple
+nearest neighbor exchange. Donald Shell published the first version
+of this sort in 1959.[4][5] The running time of Shellsort is heavily
+dependent on the gap sequence it uses. For many practical variants,
+determining their time complexity remains an open problem.
+<P>
+Shellsort is a generalization of insertion sort that allows the
+exchange of items that are far apart. The idea is to arrange the list
+of elements so that, starting anywhere, considering every hth element
+gives a sorted list. Such a list is said to be h-sorted. Equivalently,
+it can be thought of as h interleaved lists, each individually sorted.[6]
+Beginning with large values of h, this rearrangement allows elements
+to move long distances in the original list, reducing large amounts
+of disorder quickly, and leaving less work for smaller h-sort steps to
+do. If the file is then k-sorted for some smaller integer k, then the
+file remains h-sorted. Following this idea for a decreasing sequence of
+h values ending in 1 is guaranteed to leave a sorted list in the end.
+</BLOCKQUOTE>
+<P>
+F90 NOTES:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: F90 NOTES:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+procedure names are declared private in this module so they are not accessible except by their generic name
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+procedures must include a "use M_sort" to access the generic name SORT_SHELL
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+if these routines are recompiled, routines with the use statement should then be recompiled and reloaded.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+X
+is a vector or integer, real, complex, doubleprecision, character,
+or doubleprecision complex values to be sorted
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+order
+sort order
+<TABLE width=100% cellpadding=3><!-- tsb: order
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A for ascending
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+D for descending (default)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+type
+Sort by Real component, Imaginary component, or <B>Sqrt</B>(R**2+I**2)
+Only applies to complex types.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+startcol
+character position in strings which starts sort field.
+Only applies to character values. Defaults to 1. Optional.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+endcol
+character position in strings which ends sort field
+Only applies to character values. Defaults to end of string.
+Optional.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+      program demo_sort_shell
+      use M_sort, only : sort_shell
+      character(len=:),allocatable :: array(:)
+<P>
+      array= [ character(len=20) ::                               &
+      & &#146;red&#146;,    &#146;green&#146;, &#146;blue&#146;, &#146;yellow&#146;, &#146;orange&#146;,   &#146;black&#146;, &
+      & &#146;white&#146;,  &#146;brown&#146;, &#146;gray&#146;, &#146;cyan&#146;,   &#146;magenta&#146;,           &
+      & &#146;purple&#146;]
+<P>
+      write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
+      call sort_shell(array,order=&#146;a&#146;)
+      write(*,&#146;(a,*(a:,","))&#146;)&#146;A-Z    &#146;,(trim(array(i)),i=1,size(array))
+      do i=1,size(array)-1
+         if(array(i).gt.array(i+1))then
+            write(*,*)&#146;Error in sorting strings a-z&#146;
+         endif
+      enddo
+<P>
+      array= [ character(len=20) ::                               &
+      & &#146;RED&#146;,    &#146;GREEN&#146;, &#146;BLUE&#146;, &#146;YELLOW&#146;, &#146;ORANGE&#146;,   &#146;BLACK&#146;, &
+      & &#146;WHITE&#146;,  &#146;BROWN&#146;, &#146;GRAY&#146;, &#146;CYAN&#146;,   &#146;MAGENTA&#146;,           &
+      & &#146;PURPLE&#146;]
+<P>
+      write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
+      call sort_shell(array,order=&#146;d&#146;)
+      write(*,&#146;(a,*(a:,","))&#146;)&#146;Z-A    &#146;,(trim(array(i)),i=1,size(array))
+      do i=1,size(array)-1
+         if(array(i).lt.array(i+1))then
+            write(*,*)&#146;Error in sorting strings z-a&#146;
+         endif
+      enddo
+<P>
+      end program demo_sort_shell
+<P>
+</PRE>
+Expected output
+<P>
+<PRE>
+      BEFORE red,green,blue,yellow,orange,black,white,brown,gray,cyan,magenta,purple
+      A-Z    black,blue,brown,cyan,gray,green,magenta,orange,purple,red,white,yellow
+      BEFORE RED,GREEN,BLUE,YELLOW,ORANGE,BLACK,WHITE,BROWN,GRAY,CYAN,MAGENTA,PURPLE
+      Z-A    YELLOW,WHITE,RED,PURPLE,ORANGE,MAGENTA,GREEN,GRAY,CYAN,BROWN,BLUE,BLACK
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>REFERENCE</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+1.
+ALGORITHM 201, SHELLSORT, J. BOOTHROYD, CACM VOL. 6, NO. 8, P 445, (1963)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+2.
+D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 19970201
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>sort_shell (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from db2f607b-c6cb-4fe6-b2c6-1dd36fc463aa using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/sort_shell.3.gif"></center> 
+</body>
+</HTML>

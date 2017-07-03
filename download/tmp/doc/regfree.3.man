@@ -1,0 +1,21 @@
+NAME
+   regfree(3f) - [M_regex] Release
+SYNOPSIS
+   subroutine regfree(this)
+
+     type(regex_type), intent(inout) :: this
+
+DESCRIPTION
+
+     regfree(3f) frees any dynamically-allocated storage used by the internal form of an RE.
+
+     The regfree(3f) function frees any dynamically-allocated storage associated with the compiled RE pointed to by THIS.  The
+     remaining regex_type is no longer a valid compiled RE and the effect of supplying it to regexec() or regerror() is undefined.
+
+OPTIONS
+RETURNS
+EXAMPLE
+SEE ALSO
+     These routines implement IEEE Std 1003.2 ("POSIX.2") regular expressions ("RE"s); see re_format(7).
+
+     IEEE Std 1003.2 (``POSIX.2''), sections 2.8 (Regular Expression Notation) and B.5 (C Binding for Regular Expression Matching).

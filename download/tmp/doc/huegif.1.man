@@ -1,0 +1,16 @@
+NAME
+   huegif(1) - generate color wheels as GIF pixmap files
+
+SYNOPSIS
+   huegif
+
+DESCRIPTION
+
+    Generates color wheels using the HSL (Hue Lightness, Saturation)
+    model as GIF pixel files.
+
+OPTIONS
+    --help      display this help and exit
+
+    --version   output version information and exit
+

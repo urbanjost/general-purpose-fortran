@@ -1,0 +1,31 @@
+.\" Specification of Fortran
+.TH CONTINUE "7" "January 2017" "Fortran" "Language Specification"
+.SH NAME
+   CONTINUE(7f) - [FORTRAN:EXECUTION CONTROL] construct
+.SH SYNOPSIS
+   continue
+.SH DESCRIPTION
+.nf
+  Execution of a CONTINUE statement has no effect.  A CONTINUE statement
+  is most often used as a labeled line that is used in transfer control
+  statements to numerically labeled lines such as GOTO. It is often
+  very confusing to have executable statements on labeled lines; a
+  CONTINUE statement eliminates the ambiguities that arise in jumping
+  to an executable line. Preferably no target of a transfer should be an
+  executable statement, but should be a statement like ENDDO or CONTINUE.
+
+  CONTINUE was very frequently used as the end of a DO loop; ENDDO
+  is now the proper way to end a DO loop.
+.fi
+.SH EXAMPLE
+.nf
+   program demo_continue
+         I=10
+         J=5
+         if(I.lt.5)goto 100
+         J=3
+   100   continue
+         write(*,*)'J=',J
+
+   end program demo_continue
+.fi

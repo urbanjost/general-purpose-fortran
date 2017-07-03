@@ -1,0 +1,7 @@
+NAME
+   regmatch(3f) - [M_regex]
+SYNOPSIS
+DESCRIPTION
+OPTIONS
+RETURNS
+EXAMPLE

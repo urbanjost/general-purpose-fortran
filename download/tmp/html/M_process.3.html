@@ -1,0 +1,337 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_process (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_process </B>- [M_process]Fortran Module for calling process-related C functions from Fortran
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>use</B> M_process, <I>only</I> : process_open_read, process_open_write, <I>process_close</I>
+<B>use</B> M_process, <I>only</I> : process_readline, process_readall, <I>process_writeline</I>
+<B>use</B> M_process, <I>only</I> : streampointer, <I>process_debug</I>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Module <B>M_process</B>(3f) lets Fortran code read/write lines from/to processes.
+<P>
+These Fortran procedures <B>use</B> the ISO_C_BINDING interface to define
+Fortran-callable versions of the C procedures <B>popen</B>(3c)/pclose(3c)
+and <B>fgets</B>(3c)/fputs(3c). A set of record-oriented wrapper routines
+are then used to create a simple Fortran-callable interface.
+<P>
+Basically, you
+<TABLE cellpadding=3><!-- tsb: Basically, you
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Open a process for either reading from or writing to using formatted
+sequential text records (eg. "lines"); much like with a regular file.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+pass a CHARACTER variable to/from the process that represents
+a record.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Use internal READs and internal WRITEs or parsing routines to
+create or interpret the lines.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+when done close the process much like closing a file.
+</TD></TR>
+<TR></TR></TABLE>The procedures defined are:
+<P>
+<PRE>
+    ! open process to read from
+    subroutine process_open_read(cmd,fp,ierr)
+<P>
+    ! open process to write to
+    subroutine process_open_write(cmd,fp,ierr)
+<P>
+    ! read line from process
+    subroutine process_readline(string,fp,ierr)
+    ! read all of process output into a string string
+    function process_readall(cmd,ierr) result (string)
+<P>
+    ! write line to process
+    subroutine process_writeline(string,fp,ierr)
+<P>
+    ! close process
+    subroutine process_close(fp,ierr)
+<P>
+</PRE>
+where the variable types are
+<P>
+<PRE>
+      character(len=*)    :: cmd
+      type(streampointer) :: fp
+      character(len=*)    :: string
+      integer             :: ierr
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+cmd
+command passed to system to start process
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+fp
+C file pointer returned by process_open_*()
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+string
+data line to send or receive from process
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ierr
+error flag returned. Non-zero indicates an error
+</TD></TR>
+<TR></TR></TABLE>maximum character value length is currently 4096
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+An example that places all the output of a command into a single
+string variable (see <B>process_readall</B>(3) for an even simpler way to
+do this) &#46;&#46;&#46;
+<P>
+<PRE>
+      program read_ex
+      use M_process ,only: process_open_read, process_readline
+      use M_process ,only: streampointer, process_close
+      implicit none
+      ! C file pointer returned by process_open()
+      type(streampointer) :: fp
+      ! check status of calls to process module routines
+      integer :: ierr
+      ! hold results, assuming sufficient memory is available
+      character(len=:),allocatable :: string
+      ! long enough to hold any expected line
+      character(len=4096) :: line
+<P>
+         string=&#146;&#146;
+<P>
+         !###! open process to read from
+         call process_open_read(&#146;ls&#146;,fp,ierr)
+<P>
+         !###! read output of process till end
+         do
+            call process_readline(line,fp,ierr)
+            if(ierr.ne.0)exit
+            !###! append output lines together
+            string=string//trim(line)//&#146; &#146;
+            write(*,*)&#146;[&#146;//string//&#146;]&#146;
+         enddo
+<P>
+         write(*,*)trim(string)
+<P>
+         !###! Wrap up
+         call process_close(fp,ierr)
+<P>
+</PRE>
+<BLOCKQUOTE>
+end program read_ex
+</BLOCKQUOTE>
+<P>
+An example program that calls the M_process module to start a plotting
+program called <B>gnuplot</B>(1) and give it enough commands to generate
+a plot. It then lets you interactively interact with the program or
+continue on in the program.
+<P>
+<PRE>
+       program gnuExample
+       ! @(#)  Example of Fortran writing GNUPLOT command and data file.
+       use M_process ,only: process_open_write, process_writeline
+       use M_process ,only: streampointer, process_close
+       implicit none
+       !*! line of data to write (assumed long enough to hold any command line)
+       character(len=4096) :: line
+       !*! C file pointer returned by process_open()
+       type(streampointer) :: fp
+       !*! check status of calls to process module routines
+       integer :: ierr
+       !*! DO loop counter
+       integer :: i
+<P>
+       !*! data file to create and put X,Y values into
+       character(len=60)   :: fidmap=&#146;SAMPLE.MAP&#146;
+       !*! number of points to put into curve to be plotted
+       integer,parameter   :: n=50
+       !*! arrays to fill with curve data to be plotted
+       real                :: x(n),y(n)
+       integer             :: ios
+<P>
+       !*! open data file to hold X,Y values to be plotted
+       open(70,file=fidmap)
+       !*! Define sample X,Y array.
+       do i=1,n
+       !*! set X() values as whole numbers 1 to N
+          x(i)=i
+       !*!
+          y(i)=(x(i)+0.5)**2
+       enddo
+<P>
+       !*! Write the X,Y array as coordinates to be plotted.
+       write(70,&#146;(2f10.3)&#146;)(x(i),y(i),i=1,n)
+       !*! if not closed or flushed, subprocess may not be able to read
+       flush(70, iostat = ios)
+<P>
+       !*! Write the GnuPlot commands
+       !*! open process to write to (ie. start gnuplot(1) program)
+       call process_open_write(&#146;gnuplot&#146;,fp,ierr)
+       call process_writeline &
+       & (&#146;set title " Example of GNUPlot data and command file generation"&#146;,fp,ierr)
+       !*! write a command to the process
+       call process_writeline(&#146;set nokey&#146;,fp,ierr)
+<P>
+       !*! build a command with a formatted write
+       write(line,101) trim(fidmap)
+       101 format(&#146;plot "&#146;,A,&#146;" with lines&#146;)
+       !*! write a command to the process
+       call process_writeline(trim(line),fp,ierr)
+<P>
+<P>
+       !*! Additional gnuplot commands; in this case interactively entered
+       write(*,&#146;(a)&#146;)&#146;enter gnuplot commands or "." to exit&#146;
+       do
+          write(*,&#146;(a)&#146;,advance=&#146;no&#146;)&#146;gnu&gt;&gt;&#146;
+          read(*,&#146;(a)&#146;,iostat=ios)line
+          if(line.eq.&#146;.&#146;)exit
+          call process_writeline(trim(line),fp,ierr)
+       enddo
+<P>
+       !*! Wrap up
+       call process_close(fp,ierr)
+       write(*,*)&#146;CLOSED THE PROCESS. RETURNING TO PROGRAM&#146;
+       !*! delete the data file
+       close(70,status=&#146;delete&#146;,iostat=ios)
+       end program gnuExample
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+PIPES: <B>pipe</B>(3c), <B>popen</B>(3c), <B>pclose</B>(3c), <B>fflush</B>(3c)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NAMED PIPES: <B>mkfifo</B>(3c), <B>mknod</B>(3c)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SUBPROCESSES: <B>fork</B>(3c)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+OTHER: <B>fflush</B>(3c)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_process (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c579f644-bc11-4cc1-9e14-f43f8ae887eb using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_process.3.gif"></center> 
+</body>
+</HTML>

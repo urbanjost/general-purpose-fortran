@@ -1,0 +1,58 @@
+NAME
+   system_readdir(3f) - [M_system]read a directory using readdir(3c)
+SYNOPSIS
+subroutine system_readdir(dir,filename,ierr)
+
+ type(c_ptr),value                         :: dir
+ character(len=:),intent(out),allocatable  :: filename
+ integer,intent(out)                       :: ierr
+
+DESCRIPTION
+   system_readdir(3f) returns the name of the directory entry at the
+   current position in the directory stream specified by the argument
+   DIR, and positions the directory stream at the next entry. It returns
+   a null name upon reaching the end of the directory stream.
+
+   The readdir() function does not return directory entries containing
+   empty names. If entries for dot or dot-dot exist, one entry is returned
+   for dot and one entry is returned for dot-dot.
+
+   The entry is marked for update of the last data access timestamp each
+   time it is read.
+
+   If IERR is set to non-zero on return, an error occurred.
+
+   least {NAME_MAX}+1 elements.
+
+   reaching the end of the directory stream, the name is a blank name.
+
+
+EXAMPLE
+  Sample program:
+
+   program demo_system_readdir
+   use M_system, only : system_opendir,system_readdir
+   use M_system, only : system_rewinddir,system_closedir
+   use iso_c_binding
+   implicit none
+
+   type(c_ptr)                  :: dir
+   character(len=:),allocatable :: filename
+   integer                      :: i, ierr
+   !--- open directory stream to read from
+   call system_opendir('.',dir,ierr)
+   !--- read directory stream twice
+   do i=1,2
+      write(*,'(a,i0)')'PASS ',i
+      do
+         call system_readdir(dir,filename,ierr)
+         if(filename.eq.' ')exit
+         write(*,*)filename
+      enddo
+      call system_rewinddir(dir)
+   enddo
+   !--- close directory stream
+   call system_closedir(dir,ierr)
+
+   end program demo_system_readdir
+

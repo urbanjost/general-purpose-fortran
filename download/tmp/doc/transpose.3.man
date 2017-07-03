@@ -1,0 +1,30 @@
+NAME
+
+     transpose(3f) - [INTRINSIC:ARRAY MANIPULATION] Transpose an array of rank two
+
+SYNTAX
+
+   result = transpose(matrix)
+
+DESCRIPTION
+
+   Transpose an array of rank two. Element (i, j) of the result has the value
+   matrix(j, i), for all i, j.
+
+ARGUMENTS
+
+   MATRIX  - Shall be an array of any type and have a rank of two.
+
+RETURN VALUE
+
+   The result has the same type as MATRIX, and has shape
+   (/ m, n /) if MATRIX has shape (/ n, m /).
+
+STANDARD
+
+   Fortran 95 and later
+
+CLASS
+
+   Transformational function
+

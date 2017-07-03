@@ -1,0 +1,46 @@
+NAME
+     upper - [M_strings]changes a string to uppercase
+
+SYNOPSIS
+   elemental pure function upper(str,begin,end) result (string)
+
+    character(*), intent(in)    :: str
+    integer,optional,intent(in) :: begin,end
+    character(len(str))         :: string  ! output string
+
+DESCRIPTION
+     upper(string) returns a copy of the input string with all characters
+     converted in the optionally specified ran to uppercase, assuming
+     ASCII character sets are being used. If no range is specified the
+     entire string is converted to uppercase.
+
+OPTIONS
+   str    string to convert to uppercase
+   begin  optional starting position in "str" to begin converting to uppercase
+   end    optional ending position in "str" to stop converting to uppercase
+
+RESULTS
+   upper  copy of the input string with all characters converted to uppercase
+          over optionally specified range.
+
+EXAMPLE
+
+   Sample call
+
+    program demo_upper
+    use M_strings, only: upper
+    implicit none
+    character(len=:),allocatable  :: s
+       s=' ABCDEFG abcdefg '
+       write(*,*) 'mixed-case input string is ....',s
+       write(*,*) 'upper-case output string is ...',upper(s)
+       write(*,*) 'make first character uppercase  ... ',upper('this is a sentence.',1,1)
+       write(*,'(1x,a,*(a:,"+"))') 'UPPER(3f) is elemental ==>',upper(["abc","def","ghi"])
+    end program demo_upper
+
+   Expected output
+
+    mixed-case input string is .... ABCDEFG abcdefg
+    upper-case output string is ... ABCDEFG ABCDEFG
+    make first character uppercase  ... This is a sentence.
+    UPPER(3f) is elemental ==>ABC+DEF+GHI

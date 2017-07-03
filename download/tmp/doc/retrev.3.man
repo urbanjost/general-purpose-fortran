@@ -1,0 +1,47 @@
+NAME
+   RETREV(3f) - [ARGUMENTS:M_kracken]get keyword value as a string from a command's argument list processed by kracken(3f)
+
+SYNOPSIS
+  SUBROUTINE retrev(name, string, len, ier)
+
+   CHARACTER(len=*),intent(in)  :: name
+   CHARACTER(len=*),intent(out) :: string
+   INTEGER,intent(out)          :: len
+   INTEGER,intent(out)          :: ier
+
+DESCRIPTION
+   When a command has had it's command argument list parsed using the
+   kracken(3f) routine the value associated with any keyword can be retrieved
+   as a string.
+
+OPTIONS
+
+    NAME    parameter name of form VERB_KEYWORD
+    STRING  returned parameter value
+    LEN     length of returned STRING
+    IER     error flag. Any non-zero value means an error occurred
+
+EXAMPLE
+  Sample program:
+
+    program demo_retrev
+    use M_kracken, only : kracken, retrev
+    use M_kracken, only : IPvalue ! length of keyword value
+    implicit none
+    character(len=IPvalue) :: val
+    integer                :: len, ier
+
+    call kracken('demo', ' -value my default string')
+    call retrev('demo_value',val,len,ier)
+    write(*,'(a)')'VALUE IS '//trim(val)
+
+    end program demo_retrev
+
+  Example execution and output:
+
+    $ ./demo_retrev
+    VALUE IS my default string
+
+    $ ./demo_retrev -value use this value instead
+    VALUE IS use this value instead
+

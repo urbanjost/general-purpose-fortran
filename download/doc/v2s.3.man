@@ -1,0 +1,40 @@
+NAME
+     v2s - [M_strings]return numeric string from a numeric value
+SYNOPSIS
+      function v2s(value) result(outstr)
+
+       integer|real|doubleprecision,intent(in ) :: value
+       character(len=:),allocatable :: outstr
+DESCRIPTION
+
+   v2s(3f) returns a representation of a numeric value as a string when
+   given a numeric value of type REAL, DOUBLEPRECISION, or INTEGER. It
+   creates the strings using internal WRITE() statements.  trailing zeros
+   are removed from non-zero values, and the string is left-justified.
+
+      o  VALUE - input value to be converted to a string
+      o  OUTSTR - returned string representing input value,
+EXAMPLE
+
+  Sample call
+
+   program demo_v2s
+   use m_strings, only: v2s
+   write(*,*) 'The value of 3.0/4.0 is ['//v2s(3.0/4.0)//']'
+   write(*,*) 'The value of 1234    is ['//v2s(1234)//']'
+   write(*,*) 'The value of 0d0     is ['//v2s(0d0)//']'
+   end program demo_v2s
+
+  Expected output
+
+    The value of 3.0/4.0 is [0.75]
+    The value of 1234    is [1234]
+    The value of 0d0     is [0.0]
+
+FILES AND METADATA
+
+      o  References: none
+      o  Dependencies: value_to_string
+      o  Legal Restrictions: none
+      o  QA:ufpp(1) ggodbad(1) test in source file
+      o  Authors: John S. Urban

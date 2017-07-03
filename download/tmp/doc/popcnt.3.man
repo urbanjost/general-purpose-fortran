@@ -1,0 +1,41 @@
+NAME
+     popcnt(3f) - [INTRINSIC:BIT INQUIRY] Number of bits set
+
+SYNTAX
+
+   result = popcnt(i)
+
+DESCRIPTION
+
+   Returns the number of bits set in the binary representation of an integer.
+
+ARGUMENTS
+
+   I  - Shall be of type INTEGER.
+
+RETURN VALUE
+
+   The return value is of type 'integer' and of the default integer kind.
+
+EXAMPLE
+
+  Sample program:
+
+   program test_population
+     print *, popcnt(127),       poppar(127)
+     print *, popcnt(huge(0_4)), poppar(huge(0_4))
+     print *, popcnt(huge(0_8)), poppar(huge(0_8))
+   end program test_population
+
+STANDARD
+
+   [[Fortran 2008]] and later
+
+CLASS
+
+   [[Elemental function]]
+
+SEE ALSO
+
+   [[poppar]], [[leadz]], [[trailz]]
+

@@ -1,0 +1,61 @@
+NAME
+
+     system_clock(3f) - [INTRINSIC:SYSTEM ENVIRONMENT] Time function
+
+SYNTAX
+
+   call system_clock([count, count_rate, count_max])
+
+DESCRIPTION
+
+   system_clock lets you measure durations of time with the precision
+   of the smallest time increment generally available on a system by
+   returning processor-dependent values based on the current value of the
+   processor clock. The CLOCK value is incremented by one for each clock
+   count until the value count_max is reached and is then reset to zero
+   at the next count. CLOCK therefore is a modulo value that lies in the
+   range 0 to count_max. count_rate and count_max are assumed constant
+   (even though CPU rates can vary on a single platform).
+
+   count_rate is system dependent and can vary depending on the kind of
+   the arguments.
+
+   If there is no clock, or querying the clock fails, COUNT is set to
+   -huge(count), and count_rate and count_max are set to zero.
+
+   system_clock is typically used to measure short time intervals (system
+   clocks may be 24-hour clocks or measure processor clock ticks since
+   boot, for example). It is most often used for measuring or tracking
+   the time spent in code blocks in lieu of using profiling tools.
+
+ARGUMENTS
+
+  COUNT       - (Optional) shall be a scalar of type INTEGER with
+                intent(out).
+  count_rate  - (Optional) shall be a scalar of type INTEGER or REAL
+                with intent(out).
+  count_max   - (Optional) shall be a scalar of type INTEGER with
+                intent(out).
+
+EXAMPLE
+
+  Sample program:
+
+   program test_system_clock
+     integer :: count, count_rate, count_max
+     call system_clock(count, count_rate, count_max)
+     write(*,*) count, count_rate, count_max
+   end program
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   Subroutine
+
+SEE ALSO
+
+   [[date_and_time]], [[cpu_time]]
+

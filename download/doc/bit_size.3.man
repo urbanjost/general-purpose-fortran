@@ -1,0 +1,39 @@
+NAME
+     bit_size(3f) - [INTRINSIC:BIT INQUIRY] Bit size inquiry function
+
+SYNTAX
+
+   result = bit_size(i)
+
+DESCRIPTION
+
+   bit_size(i) returns the number of bits (integer precision plus sign bit)
+   represented by the type of I.
+
+ARGUMENTS
+
+   I  - The type shall be INTEGER.
+
+RETURN VALUE
+
+The return value is of type INTEGER
+
+EXAMPLE
+
+  Sample program:
+
+    program test_bit_size
+        integer :: i = 123
+        integer :: size
+        size = bit_size(i)
+        print *, size
+    end program test_bit_size
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Inquiry function]]
+

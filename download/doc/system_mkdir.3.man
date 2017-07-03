@@ -1,0 +1,47 @@
+NAME
+       system_mkdir(3f) - [M_system]call mkdir(3c) to create a new directory
+SYNOPSIS
+DESCRIPTION
+
+   Predefined variables are typically used to set permission modes.
+   You can bytewise-OR together these variables to to create the most common
+   permissions mode:
+
+    User:    R_USR  (read),  W_USR  (write),  X_USR(execute)
+    Group:   R_GRP  (read),  W_GRP  (write),  X_GRP(execute)
+    Others:  R_OTH  (read),  W_OTH  (write),  X_OTH(execute)
+
+   Additionally, some shortcuts are provided (basically a bitwise-OR combination of the above):
+
+     Read + Write + Execute: R_WXU (User), R_WXG (Group), R_WXO (Others)
+     DEFFILEMODE: Equivalent of 0666 =rw-rw-rw-
+     ACCESSPERMS: Equivalent of 0777 = rwxrwxrwx
+
+   Therefore, to give only the user rwx (read+write+execute) rights whereas
+   group members and others may not do anything, you can use any of the
+   following mkdir() calls equivalently:
+
+     ierr= mkdir("mydir", IANY(R_USR, W_USR, X_USR));
+     ierr= mkdir("mydir", R_WXU);
+
+   In order to give anyone any rights (mode 0777 = rwxrwxrwx), you can
+   use any of the following calls equivalently:
+
+     ierr= mkdir("mydir",IANY(R_USR,W_USR,X_USR,R_GRP,W_GRP,X_GRP,R_OTH,W_OTH,X_OTH));
+     ierr= mkdir("mydir",IANY(R_WXU,R_WXG,R_WXO));
+     ierr= mkdir("mydir",ACCESSPERMS);
+
+EXAMPLE
+  Sample program:
+
+   program demo_system_mkdir
+   use M_system, only : system_perror
+   use M_system, only : system_mkdir
+   use M_system, only : R_GRP,R_OTH,R_USR,R_WXG,R_WXO
+   use M_system, only : R_WXU,W_GRP,W_OTH,W_USR,X_GRP,X_OTH,X_USR
+   use M_system, only : DEFFILEMODE, ACCESSPERMS
+   implicit none
+   integer :: ierr
+   ierr=system_mkdir('_scratch',IANY(R_USR,W_USER,X_USER))
+   end program demo_system_mkdir
+

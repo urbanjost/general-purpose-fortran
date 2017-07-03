@@ -1,0 +1,43 @@
+NAME
+   sec2days - [M_time] convert seconds to string of form dd-hh:mm:ss
+
+SYNOPSIS
+   function sec2days(seconds,crop) result(dhms)
+
+    real(kind=realtime),intent(in) :: seconds
+    logical,intent(in),optional    :: crop
+    character(len=:),allocatable   :: dhms
+
+DESCRIPTION
+      Given an integer number of seconds convert it to a string
+      of the form
+
+         dd-hh:mm:ss
+
+      Where dd is days, hh hours, mm minutes and ss seconds.
+
+OPTIONS
+   seconds    number of seconds to convert to string of form dd-hh:mm:ss. May
+              be of type INTEGER, REAL, or REAL(KIND=REALTIME).
+   crop       if .true., remove leading zero day values or day and hour values.
+              Optional, defaults to .false. .
+RETURNS
+   dmhs       the returned string
+
+EXAMPLE
+   Sample Program:
+
+    program demo_sec2days
+    use M_time, only : sec2days
+    implicit none
+       write(*,*)sec2days(129860)
+       write(*,*)sec2days(80000.0d0)
+       write(*,*)sec2days(80000,crop=.true.)
+    end program demo_sec2days
+
+   results:
+
+    1-12:04:20
+    0-22:13:20
+    22:13:20
+

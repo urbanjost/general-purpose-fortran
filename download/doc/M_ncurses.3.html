@@ -1,0 +1,505 @@
+<html>
+<head>
+<title> ncurses(3c)_from_Fortran </title>
+<link rel="stylesheet" type="text/css" href="ncurses.css" title="Local" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style type="text/css">
+.BO { font-weight:     bold;         }
+.U  { text-decoration: underline;    }
+.S  { text-decoration: line-through; }
+.BL { text-decoration: blink;        }
+.I  { font-style:      italic;       }
+.N  { font-style:      normal;       }
+body{ color: #ffffff; background-color: #000000; }
+div{ color: #ffffff; background-color: #000000; }
+.PAIR0{ color: #ffffff; background-color: #000000; }
+.RPAIR0{ color: #000000; background-color: #ffffff; }
+.PAIR1{ color: #00ff00; background-color: #000000; }
+.RPAIR1{ color: #000000; background-color: #00ff00; }
+.PAIR2{ color: #00ff00; background-color: #000000; }
+.RPAIR2{ color: #000000; background-color: #00ff00; }
+.PAIR3{ color: #00ff00; background-color: #adadad; }
+.RPAIR3{ color: #adadad; background-color: #00ff00; }
+.PAIR4{ color: #00fff0; background-color: #2c2c2c; }
+.RPAIR4{ color: #2c2c2c; background-color: #00fff0; }
+.PAIR5{ color: #00fff0; background-color: #0b0b0b; }
+.RPAIR5{ color: #0b0b0b; background-color: #00fff0; }
+.PAIR7{ color: #000000; background-color: #000000; }
+.RPAIR7{ color: #000000; background-color: #000000; }
+.PAIR9{ color: #000000; background-color: #adadad; }
+.RPAIR9{ color: #adadad; background-color: #000000; }
+.PAIR11{ color: #000000; background-color: #000000; }
+.RPAIR11{ color: #000000; background-color: #000000; }
+.PAIR13{ color: #AD0000; background-color: #000000; }
+.RPAIR13{ color: #000000; background-color: #AD0000; }
+.PAIR14{ color: #AD0000; background-color: #000000; }
+.RPAIR14{ color: #000000; background-color: #AD0000; }
+.PAIR15{ color: #AD0000; background-color: #adadad; }
+.RPAIR15{ color: #adadad; background-color: #AD0000; }
+.PAIR16{ color: #AD0000; background-color: #AD0000; }
+.RPAIR16{ color: #AD0000; background-color: #AD0000; }
+.PAIR17{ color: #2c0000; background-color: #AD0000; }
+.RPAIR17{ color: #AD0000; background-color: #2c0000; }
+.PAIR19{ color: #00AD00; background-color: #000000; }
+.RPAIR19{ color: #000000; background-color: #00AD00; }
+.PAIR20{ color: #00AD00; background-color: #000000; }
+.RPAIR20{ color: #000000; background-color: #00AD00; }
+.PAIR21{ color: #00AD00; background-color: #adadad; }
+.RPAIR21{ color: #adadad; background-color: #00AD00; }
+.PAIR22{ color: #00AD00; background-color: #00AD00; }
+.RPAIR22{ color: #00AD00; background-color: #00AD00; }
+.PAIR23{ color: #002c00; background-color: #00AD00; }
+.RPAIR23{ color: #00AD00; background-color: #002c00; }
+.PAIR25{ color: #adad00; background-color: #000000; }
+.RPAIR25{ color: #000000; background-color: #adad00; }
+.PAIR26{ color: #adad00; background-color: #000000; }
+.RPAIR26{ color: #000000; background-color: #adad00; }
+.PAIR27{ color: #adad00; background-color: #adadad; }
+.RPAIR27{ color: #adadad; background-color: #adad00; }
+.PAIR28{ color: #adad00; background-color: #adad00; }
+.RPAIR28{ color: #adad00; background-color: #adad00; }
+.PAIR29{ color: #2c2c00; background-color: #adad00; }
+.RPAIR29{ color: #adad00; background-color: #2c2c00; }
+.PAIR31{ color: #0000AD; background-color: #000000; }
+.RPAIR31{ color: #000000; background-color: #0000AD; }
+.PAIR32{ color: #0000AD; background-color: #000000; }
+.RPAIR32{ color: #000000; background-color: #0000AD; }
+.PAIR33{ color: #0000AD; background-color: #adadad; }
+.RPAIR33{ color: #adadad; background-color: #0000AD; }
+.PAIR34{ color: #0000AD; background-color: #0000AD; }
+.RPAIR34{ color: #0000AD; background-color: #0000AD; }
+.PAIR35{ color: #00002c; background-color: #0000AD; }
+.RPAIR35{ color: #0000AD; background-color: #00002c; }
+.PAIR37{ color: #AD00AD; background-color: #000000; }
+.RPAIR37{ color: #000000; background-color: #AD00AD; }
+.PAIR38{ color: #AD00AD; background-color: #000000; }
+.RPAIR38{ color: #000000; background-color: #AD00AD; }
+.PAIR39{ color: #AD00AD; background-color: #adadad; }
+.RPAIR39{ color: #adadad; background-color: #AD00AD; }
+.PAIR40{ color: #AD00AD; background-color: #AD00AD; }
+.RPAIR40{ color: #AD00AD; background-color: #AD00AD; }
+.PAIR41{ color: #2c002c; background-color: #AD00AD; }
+.RPAIR41{ color: #AD00AD; background-color: #2c002c; }
+.PAIR43{ color: #00adad; background-color: #000000; }
+.RPAIR43{ color: #000000; background-color: #00adad; }
+.PAIR44{ color: #00adad; background-color: #000000; }
+.RPAIR44{ color: #000000; background-color: #00adad; }
+.PAIR45{ color: #00adad; background-color: #adadad; }
+.RPAIR45{ color: #adadad; background-color: #00adad; }
+.PAIR46{ color: #00adad; background-color: #00adad; }
+.RPAIR46{ color: #00adad; background-color: #00adad; }
+.PAIR47{ color: #002c2c; background-color: #00adad; }
+.RPAIR47{ color: #00adad; background-color: #002c2c; }
+.PAIR49{ color: #adadad; background-color: #000000; }
+.RPAIR49{ color: #000000; background-color: #adadad; }
+.PAIR50{ color: #adadad; background-color: #000000; }
+.RPAIR50{ color: #000000; background-color: #adadad; }
+.PAIR51{ color: #adadad; background-color: #adadad; }
+.RPAIR51{ color: #adadad; background-color: #adadad; }
+.PAIR52{ color: #adadad; background-color: #adadad; }
+.RPAIR52{ color: #adadad; background-color: #adadad; }
+.PAIR53{ color: #2c2c2c; background-color: #adadad; }
+.RPAIR53{ color: #adadad; background-color: #2c2c2c; }
+</style>
+</head>
+<body>
+<!-- ======================================================================= -->
+<hr> <!-- ================================================================== -->
+<h1> A public-domain Fortran(2003) interface to the ncurses(3c) library </h1>
+<!-- ======================================================================= -->
+<p>
+   The ncurses(3c) library lets you control your terminal screen on a
+   character-cell by character-cell basis. It is often described as a
+   "CRT screen handling and optimization package".
+   The ncurses(3c) library is C-based and does not supply a Fortran interface.
+   The following is a description of public-domain files that comprise
+   such a Fortran/C interface for ncurses(3c).
+</p>
+   This is a screen shot from a Fortran program running in an xterm(1) window
+   that uses ncurses(3c):
+</p>
+<img src="basics/example.gif" />
+
+<p>
+   Note that this interface does not yet support all the ncurses(3c) extensions to
+   the curses(3c) interface, such as
+</p>
+<ul>
+   <li>"Wide" (ie. UNICODE) character support.</li>
+   <li>the forms, menus, and panels widget extensions</li>
+</ul>
+<!-- ======================================================================= -->
+<!-- ======================================================================= -->
+<h2>System Requirements</h2>
+<ul>
+   <li>The ncurses(3c) library must be installed on your system </li>
+   <li>Your Fortran compiler must support the Fortran-2003 ISO_C_BINDING interface</li>
+</ul>
+<p>
+   The interface has recently (20150113) been tested using
+</p>
+<ul>
+   <li>GNU Fortran/C (ie. gfortran(1) and gcc(1)) version 4.8.3, and ncurses(3c) version 5.9</li>
+   <li>Intel Composer 14.0.3, and ncurses(3c) version 5.9</li>
+</ul>
+<!-- ======================================================================= -->
+<h2>Download Files:</h2>
+
+<p>
+   All the files, including the examples are contained in
+</p>
+
+<ul>
+   <li><a href="ncf.tgz"> ncf.tgz </a></li>
+</ul>
+
+<p>
+   Or you can browse the principal files
+</p>
+
+<ul>
+   <li><a href="ncurses.f90"> ncurses.f90     (the main Fortran module)</a></li>
+   <li><a href="macros.c"> macros.c           (required auxiliary C routines)</a></li>
+   <li><a href="UNLICENSE.txt"> UNLICENSE.txt (the License file)</a></li>
+</ul>
+
+<p>
+Other CLI-related materials can be found in the <a href="../../../libjust4/just4.html">libjust4 library</a>.
+</p>
+<p>
+  You can typically get a description of all the ncurses(3c) C routines on Linux and
+  Unix platforms by entering
+</p>
+<pre>
+  man ncurses
+</pre>
+<p>
+  or see the Wikipedia entry or main web page for ncurses(3c):
+</p>
+<pre>
+   <a href="http://invisible-island.net/ncurses/">http://invisible-island.net/ncurses/</a>
+</pre>
+<!-- ======================================================================= -->
+
+<h2>Examples</h2>
+
+<p>
+   The examples should help considerably to show the differences
+   in the Fortran interface for those familiar with the C interface. To get
+   started the most significant differences are:
+</p>
+
+<ul>
+   <li> Functions must always be assigned to a variable even if the return value is unused.
+        For example:
+   <pre>
+        move(Y,X);      /* C usage */
+        ierr=move(Y,X)  ! Fortran Usage
+   </pre>
+   </li>
+   <li>The printw(3c) family of routines has limited support. Only one REAL, one CHARACTER string or one or two INTEGER
+       values should be printed per call. Note that the C escape-syntax strings such as /n will not work, but that
+       characters such as C_NEW_LINE are defined in the ISO_C_BINDING interface that can be used to produce the same
+       results.
+   </li>
+   <li> Strings need terminated with the ISO_C_BINDING character C_NULL_CHAR</li>
+   <li> Variables passed to the routines should be C-interoperable
+        (ie. declared with a KIND that is listed in the ISO_C_BINDING definition)
+        to be portable. Note that some of the examples do not strictly follow that suggestion,
+        as INTEGER and INTEGER(C_INT) and REAL and REAL(C_FLOAT)
+        are often the same on common platforms.
+   </li>
+   <li> getwin(3f) and putwin(3f) take a filename instead of a C "FILE*" argument.
+</ul>
+
+<p>
+   To try the interface start with a simple program like the "Hello World!" example
+   below and try the following commands (or their equivalent for your programming
+   environment):
+</p>
+
+<pre>
+   # GNU compiler
+   gcc -c macros.c  # build auxiliary C routines
+   gfortran -J. -c ncurses.f90
+   gfortran -I. -J. hello_world.f90 ncurses.o macros.o -lncurses -o hello_world
+   ./hello_world
+</pre>
+<pre>
+   # Intel compiler
+   icc -c macros.c  # build auxiliary C routines
+   ifort -I. -c ncurses.f90
+   ifort -I. hello_world.f90 ncurses.o macros.o -lncurses -o hello_world
+   ./hello_world
+</pre>
+
+<h3>Fortran "Hello World" Example</h3>
+<xmp>
+!===============================================================================
+program hello_world ! @(#) HELLO WORLD program using ncurses(3c) from Fortran
+   use M_ncurses      ! load interface to ncurses(3c) C library
+   !mplicit none
+   integer :: ierr, ikey
+   stdscr=initscr()                           ! Start curses mode
+   ierr=addstr("Hello World!!!"//C_NULL_CHAR) ! Print Hello World
+   ierr=refresh()                             ! update the real screen
+   ikey=getch()                               ! Wait for a user keystroke
+   ierr=endwin()                              ! End curses mode
+end program hello_world
+</xmp>
+<h3>C "Hello World" Example</h3>
+<xmp>
+#include <ncurses.h>
+int main()
+{
+        initscr();                      /* Start curses mode              */
+        printw("Hello World !!!");      /* Print Hello World              */
+        refresh();                      /* Print it on to the real screen */
+        getch();                        /* Wait for user input */
+        endwin();                       /* End curses mode                */
+        return 0;
+}
+</xmp>
+
+<p>
+  The following example programs show basic usage:
+</p>
+
+<ul>
+   <li> <a href="basics/nc_hello_world.f90"> nc_hello_world.f90</a>:              HELLO WORLD program using ncurses(3c) from Fortran</li>
+   <li> <a href="basics/nc_key_code.f90"> nc_key_code.f90</a>:                 basic example shows how to identify what keys were pressed</li>
+   <li> <a href="basics/nc_acs_vars.f90"> nc_acs_vars.f90</a>:                 test Alternate Character Set (ACS) variable names (line box characters, ...)</li>
+   <li> <a href="basics/nc_getwin.f90"> nc_getwin.f90</a>:            read a window dump from putwin(3c) using getwin(3c)
+   <li> <a href="basics/nc_mouse.f90"> nc_mouse.f90</a>:            how to get position and click information from mouse presses
+   <li> <a href="basics/nc_putwin.f90"> nc_putwin.f90</a>:            use putwin(3f) to create a window dump to a file
+   <li> <a href="basics/nc_colo.f90"> nc_colo.f90</a>:                     Simple color text program with more than 8 colors</li>
+   <li> <a href="basics/nc_color_set.f90"> nc_color_set.f90</a>:                setting color pairs </li>
+   <li> <a href="basics/nc_colour.f90"> nc_colour.f90</a>:                   Print out some ncurses colors.</li>
+   <li> <a href="basics/nc_exp1.f90"> nc_exp1.f90</a>:                     draw a panel and fill it and show a subsection of it</li>
+   <li> <a href="basics/nc_hline.f90"> nc_hline.f90</a>:                    draw horizontal lines using mvhline(3f)</li>
+   <li> <a href="basics/nc_init_func_example.f90"> nc_init_func_example.f90</a>:        Capture all key strokes and identify what keys were pressed</li>
+   <li> <a href="basics/nc_marquee.f90"> nc_marquee.f90</a>:                  example showing character inserts</li>
+   <li> <a href="basics/nc_printw_example.f90"> nc_printw_example.f90</a>:           simple printw-family calls to place text on the screen</li>
+   <li> <a href="basics/nc_scanw_example.f90"> nc_scanw_example.f90</a>:            read a string from the screen</li>
+   <li> <a href="basics/nc_simple_attr.f90"> nc_simple_attr.f90</a>:              ncurses example program that pages a C code and highlights comments</li>
+   <li> <a href="basics/nc_simple_color.f90"> nc_simple_color.f90</a>:             Simple color text program</li>
+   <li> <a href="basics/nc_simple_key.f90"> nc_simple_key.f90</a>:               draw a simple menu</li>
+   <li> <a href="basics/nc_temp_leave.f90"> nc_temp_leave.f90</a>:               temporarily leave screen mode </li>
+   <li> <a href="basics/nc_termattrs.f90"> nc_termattrs.f90</a>:                test termattrs(3f) and query which attributes this terminal type takes</li>
+   <li> <a href="basics/nc_wenclose.f90"> nc_wenclose.f90</a>:                 basic mouse usage</li>
+   <li> <a href="basics/nc_win_border.f90"> nc_win_border.f90</a>:               draw box that can be moved around screen </li>
+   <li> <a href="basics/nc_with_chgat.f90"> nc_with_chgat.f90</a>:               change attributes of text on the screen </li>
+</ul>
+
+<h2> Print your ncurses(3c) pads and windows as HTML</h2>
+
+<p>
+A simple cut and paste of a plain terminal window can suffice for monochrome output
+not using box characters. but I find it far easier (especially if you want to print
+a "pad" window, which can be larger than your display screen) to use the following
+routines:
+</p>
+
+<ul>
+<li><a href="nc_printhtml.f90"> nc_printhtml.f90</a></li>
+<li><a href="nc_errmessage.f90"> nc_errmessage.f90</a></li>
+<li><a href="ncp.f90"> ncp.f90</a></li>
+</ul>
+
+<p>
+The ncp.f90 sample program reads a file generated by ncurses(3c) programs with the putwin(3c)
+procedure and converts them to HTML. Note this allows windows dumped from programs written in other
+languages to be dumped.
+</p>
+
+<p>
+As an example, nc_printhtml(3f) was used to generate the following output from selected  test programs:
+</p>
+<hr><!-- =================================================================== -->
+<div>
+<pre>
+<span class=" PAIR0 PAIR0">ACS_ULCORNER:Upper left corner    &#9484;    ACS_GEQUAL  :Greater/Equal sign   &ge;
+ACS_LLCORNER:Lower left corner      &#9492;  ACS_PI      :Pi                     &pi;
+ACS_LRCORNER:Lower right corner   &#9496;    ACS_NEQUAL  :Not equal            &ne;
+ACS_URCORNER:Upper right corner     &#9488;  ACS_STERLING:UK pound sign          &pound;
+ACS_LTEE    :Tee pointing right   &#9500;
+ACS_RTEE    :Tee pointing left      &#9508;
+ACS_BTEE    :Tee pointing up      &#9524;
+ACS_TTEE    :Tee pointing down      &#9516;
+ACS_HLINE   :Horizontal line      &#9472;
+ACS_VLINE   :Vertical line          &#9474;
+ACS_PLUS    :Crossover            &#9532;
+ACS_S1      :Scan Line 1            &#9146;
+ACS_S3      :Scan Line 3          &#9147;
+ACS_S7      :Scan Line 7            &#9148;
+ACS_S9      :Scan Line 9          &#9149;
+ACS_DIAMOND :Diamond                &diams;
+ACS_CKBOARD :Stipple              &#9618;
+ACS_DEGREE  :Degree Symbol          &deg;
+ACS_PLMINUS :Plus/Minus Symbol    &plusmn;
+ACS_BULLET  :Bullet                 &bull;
+ACS_LARROW  :Arrow Pointing Left  &larr;
+ACS_RARROW  :Arrow Pointing Right   &rarr;
+ACS_DARROW  :Arrow Pointing Down  &darr;
+ACS_UARROW  :Arrow Pointing Up      &uarr;
+ACS_BOARD   :Board of squares     &#9626;
+ACS_LANTERN :Lantern Symbol         &#9227;
+ACS_BLOCK   :Solid Square Block   &block;
+ACS_LEQUAL  :Less/Equal sign        &le;
+</span>
+</pre>
+<hr><!-- =================================================================== -->
+<pre>
+<span class=" BO PAIR0 PAIR0"> Color      FD  FB  FW  BG  BD    BFD BFB BFW BBG BBN</span><span class=" PAIR0 PAIR0">
+
+ default    </span><span class=" PAIR1 PAIR1">FD  </span><span class=" PAIR2 PAIR2">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR3 PAIR3">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR4 PAIR4">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR5 PAIR5">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR1 PAIR1">FD  </span><span class=" BO PAIR2 PAIR2">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR3 PAIR3">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR4 PAIR4">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR5 PAIR5">BD</span><span class=" PAIR0 PAIR0">
+ BLACK      </span><span class=" PAIR7 PAIR7">FD  </span><span class=" PAIR8 PAIR8">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR9 PAIR9">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR10 PAIR10">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR11 PAIR11">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR7 PAIR7">FD  </span><span class=" BO PAIR8 PAIR8">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR9 PAIR9">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR10 PAIR10">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR11 PAIR11">BD</span><span class=" PAIR0 PAIR0">
+ RED        </span><span class=" PAIR13 PAIR13">FD  </span><span class=" PAIR14 PAIR14">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR15 PAIR15">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR16 PAIR16">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR17 PAIR17">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR13 PAIR13">FD  </span><span class=" BO PAIR14 PAIR14">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR15 PAIR15">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR16 PAIR16">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR17 PAIR17">BD</span><span class=" PAIR0 PAIR0">
+ GREEN      </span><span class=" PAIR19 PAIR19">FD  </span><span class=" PAIR20 PAIR20">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR21 PAIR21">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR22 PAIR22">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR23 PAIR23">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR19 PAIR19">FD  </span><span class=" BO PAIR20 PAIR20">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR21 PAIR21">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR22 PAIR22">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR23 PAIR23">BD</span><span class=" PAIR0 PAIR0">
+ YELLOW     </span><span class=" PAIR25 PAIR25">FD  </span><span class=" PAIR26 PAIR26">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR27 PAIR27">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR28 PAIR28">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR29 PAIR29">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR25 PAIR25">FD  </span><span class=" BO PAIR26 PAIR26">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR27 PAIR27">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR28 PAIR28">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR29 PAIR29">BD</span><span class=" PAIR0 PAIR0">
+ BLUE       </span><span class=" PAIR31 PAIR31">FD  </span><span class=" PAIR32 PAIR32">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR33 PAIR33">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR34 PAIR34">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR35 PAIR35">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR31 PAIR31">FD  </span><span class=" BO PAIR32 PAIR32">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR33 PAIR33">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR34 PAIR34">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR35 PAIR35">BD</span><span class=" PAIR0 PAIR0">
+ MAGENTA    </span><span class=" PAIR37 PAIR37">FD  </span><span class=" PAIR38 PAIR38">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR39 PAIR39">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR40 PAIR40">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR41 PAIR41">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR37 PAIR37">FD  </span><span class=" BO PAIR38 PAIR38">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR39 PAIR39">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR40 PAIR40">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR41 PAIR41">BD</span><span class=" PAIR0 PAIR0">
+ CYAN       </span><span class=" PAIR43 PAIR43">FD  </span><span class=" PAIR44 PAIR44">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR45 PAIR45">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR46 PAIR46">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR47 PAIR47">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR43 PAIR43">FD  </span><span class=" BO PAIR44 PAIR44">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR45 PAIR45">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR46 PAIR46">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR47 PAIR47">BD</span><span class=" PAIR0 PAIR0">
+ WHITE      </span><span class=" PAIR49 PAIR49">FD  </span><span class=" PAIR50 PAIR50">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR51 PAIR51">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR52 PAIR52">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" PAIR53 PAIR53">BD</span><span class=" PAIR0 PAIR0">    </span><span class=" BO PAIR49 PAIR49">FD  </span><span class=" BO PAIR50 PAIR50">FB</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR51 PAIR51">FW</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR52 PAIR52">BG</span><span class=" PAIR0 PAIR0">  </span><span class=" BO PAIR53 PAIR53">BD</span><span class=" PAIR0 PAIR0">
+
+  FD  = Front color on default background
+  FB  = Front color on black background
+  FW  = Front color on white background
+  BG  = Front and background color
+  BD  = Background color with default front color
+  B?? = As above, with A_BOLD enabled
+
+Hit any key to exit.
+
+</span>
+</pre>
+<hr><!-- =================================================================== -->
+<pre>
+<span class=" PAIR0 PAIR0">                                       &#9472;&#9472;
+                                      &#9472;&#9472;&#9472;&#9472;
+                                     &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                                    &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                                   &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                                  &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                                 &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                                &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                               &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                              &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                             &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                            &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                           &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                          &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                         &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                        &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                       &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                      &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                     &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                    &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                   &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                  &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                 &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+               &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+              &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+             &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+            &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+</span>
+</pre>
+<hr><!-- =================================================================== -->
+<pre>
+<span class=" PAIR0 PAIR0">Type any character to see it in bold ('q' to quit)
+Note on some keyboards you hit [FN][Function Key] to press a 'function key'
+The pressed key value is 330, named function </span><span class=" BO PAIR0 PAIR0"> dc: delete character</span><span class=" PAIR0 PAIR0">
+The pressed key value is 262, named function </span><span class=" BO PAIR0 PAIR0"> home: home key</span><span class=" PAIR0 PAIR0">
+The pressed key value is 339, named function </span><span class=" BO PAIR0 PAIR0"> ppage: previous page</span><span class=" PAIR0 PAIR0">
+The pressed key value is 338, named function </span><span class=" BO PAIR0 PAIR0"> npage: next page</span><span class=" PAIR0 PAIR0">
+The pressed key value is 360, named function </span><span class=" BO PAIR0 PAIR0"> end: end key</span><span class=" PAIR0 PAIR0">
+The pressed key value is 360, named function </span><span class=" BO PAIR0 PAIR0"> end: end key</span><span class=" PAIR0 PAIR0">
+The pressed key value is 261, named function </span><span class=" BO PAIR0 PAIR0"> right: Right arrow key</span><span class=" PAIR0 PAIR0">
+The key value is 19, a normal 'non-printable' called </span><span class=" BO PAIR0 PAIR0"> DC3 which prints as^S</span><span class=" PAIR0 PAIR0">
+The pressed key value is 97, the regular character </span><span class=" BO PAIR0 PAIR0">a</span><span class=" PAIR0 PAIR0">
+The pressed key value is 98, the regular character </span><span class=" BO PAIR0 PAIR0">b</span><span class=" PAIR0 PAIR0">
+The pressed key value is 99, the regular character </span><span class=" BO PAIR0 PAIR0">c</span><span class=" PAIR0 PAIR0">
+The pressed key value is 100, the regular character </span><span class=" BO PAIR0 PAIR0">d</span><span class=" PAIR0 PAIR0">
+The pressed key value is 65, the regular character </span><span class=" BO PAIR0 PAIR0">A</span><span class=" PAIR0 PAIR0">
+The pressed key value is 66, the regular character </span><span class=" BO PAIR0 PAIR0">B</span><span class=" PAIR0 PAIR0">
+The pressed key value is 67, the regular character </span><span class=" BO PAIR0 PAIR0">C</span><span class=" PAIR0 PAIR0">
+The key value is 32, a normal 'non-printable' called </span><span class=" BO PAIR0 PAIR0"> SPACE which prints as </span><span class=" PAIR0 PAIR0">
+The key value is 27, a normal 'non-printable' called </span><span class=" BO PAIR0 PAIR0"> ESC which prints as^[</span><span class=" PAIR0 PAIR0">
+The pressed key value is 96, the regular character </span><span class=" BO PAIR0 PAIR0">`</span><span class=" PAIR0 PAIR0">
+The pressed key value is 113, the regular character </span><span class=" BO PAIR0 PAIR0">q</span><span class=" PAIR0 PAIR0">
+
+</span>
+</pre>
+<hr><!-- =================================================================== -->
+<pre>
+<span class=" PAIR8 PAIR8">This terminal is capable of the following attributes:
+ AltCharSet: Yes &#9618;bcde&deg;&plusmn;&#9626;&#9227;&#9496;&#9488;&#9484;&#9492;&#9532;&#9146;&#9147;&#9472;&#9148;&#9149;&#9500;&#9508;&#9524;&#9516;&#9474;&le;&ge;&block;123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      Blink: Yes </span><span class=" BL PAIR0 PAIR0">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class=" PAIR0 PAIR0">
+       Bold: Yes </span><span class=" BO PAIR0 PAIR0">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class=" PAIR0 PAIR0">
+        Dim: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+ Invis(ible):Yes </span><span class=" IN PAIR0 PAIR0">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class=" PAIR0 PAIR0">
+     Normal: Yes abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    Reverse: Yes </span><span class=" RPAIR20 PAIR20">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class=" PAIR0 PAIR0">
+   Standout: Yes </span><span class=" PAIR20 RPAIR20">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class=" PAIR0 PAIR0">
+  Underline: Yes </span><span class=" U PAIR0 PAIR0">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class=" PAIR0 PAIR0">
+    Protect: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+ Horizontal: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+       Left: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        Low: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      Right: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        Top: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+   Vertical: No  abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+   Italic:   No  </span><span class=" I PAIR0 PAIR0">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class=" PAIR0 PAIR0">
+Window size is 28 rows, 80 columns.
+This terminal has insert/delete character abilities
+This terminal has insert/delete line abilities
+This terminal can do colors.
+This terminal can change the standard colors.
+This terminal's baud rate is 38400.
+
+</span>
+</pre>
+<hr><!-- =================================================================== -->
+<pre>
+<span class=" PAIR0 PAIR0">Click the left mouse around the screen. Asterisks should appear where you click
+unless you click in the green bar, which should cause a beep instead.
+The ENTER key exits.
+                                   *   *
+                                                  *
+                           *                        *
+                                    *         *
+                                          *      *
+
+                     *        *        </span><span class="RPAIR3">   </span><span class=" PAIR0 ">
+                                *      </span><span class="RPAIR3">   </span><span class=" PAIR0 ">    *      *
+                                       </span><span class="RPAIR3">   </span><span class=" PAIR0 ">
+                     *     *           </span><span class="RPAIR3">   </span><span class=" PAIR0 ">       *
+                                       </span><span class="RPAIR3">   </span><span class=" PAIR0 ">
+                                           *
+                                       *        *   *
+
+                      *        *
+                                     *    *       *
+
+                                               *
+                               *         *
+
+
+
+
+</span>
+</pre>
+</div>
+<hr><!-- =================================================================== -->
+
+</body></html>
+
+<!--
+<p>
+   If you want to work on this, the
+   <a href="build.sh"> bash(1) shell script </a>
+   I used to prototype
+   the interface <em>might</em> provide some useful tips on how to get started.
+</p>
+-->

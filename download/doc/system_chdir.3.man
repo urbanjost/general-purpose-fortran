@@ -1,0 +1,61 @@
+NAME
+   system_chdir(3f) - [M_system]call chdir(3c) from Fortran to change working directory
+SYNOPSIS
+   subroutine system_chdir(path, err)
+
+    character(len=*)               :: path
+    integer, optional, intent(out) :: err
+
+DESCRIPTION
+
+   system_chdir(3f) changes the current working directory of the calling
+   process to the directory specified in path. The current working
+   directory is the starting point for interpreting relative pathnames
+   (those not starting with '/').
+
+RETURN VALUE
+
+   On success, zero is returned. On error, -1 is returned, and errno is
+   set appropriately.
+
+
+   Depending on the file system, other errors can be returned. The more
+   general errors for chdir() are listed below, by their C definitions:
+
+   Errors
+   EACCES        Search permission is denied for one of the components of path.
+                 (See also path_resolution(7).)
+   EFAULT        path points outside your accessible address space.
+   EIO           An I/O error occurred.
+   ELOOP         Too many symbolic links were encountered in resolving path.
+   ENAMETOOLONG  path is too long.
+   ENOENT        The file does not exist.
+   ENOMEM        Insufficient kernel memory was available.
+   ENOTDIR       A component of path is not a directory.
+
+SEE ALSO
+
+   chroot(2), getcwd(3), path_resolution(7)
+
+EXAMPLE
+   Change working directory from Fortran
+
+     program demo_system_chdir
+     use M_system, only : system_chdir
+     implicit none
+     integer :: ierr
+
+     call execute_command_line('pwd')
+     call system_chdir('/tmp',ierr)
+     call execute_command_line('pwd')
+     write(*,*)'*CHDIR TEST* IERR=',ierr
+
+     end program demo_system_chdir
+
+RESULTS:
+  Sample run output:
+
+     /home/urbanjs/V600
+     /tmp
+     *CHDIR TEST* IERR=           0
+

@@ -1,0 +1,15 @@
+NAME
+   fortran(7f) - [FORTRAN] Fortran Example
+EXAMPLE
+  Sample
+
+     program fortran_syntax
+     contains
+        subroutine sub1(a,b,c)
+        integer,intent(in)                     :: a
+        integer,intent(out)                    :: b
+        character(len=:),intent(out),optional  :: c
+        b=2*a
+        end subroutine sub1
+     end program fortran_syntax
+

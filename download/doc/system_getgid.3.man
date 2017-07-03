@@ -1,0 +1,27 @@
+NAME
+   system_getgid(3f) - [M_system]get the real group ID (GID) of current process from Fortran by calling getgid(3c)
+SYNOPSIS
+   integer(kind=c_int) function system_getgid()
+DESCRIPTION
+       The getgid() function returns the real group ID of the calling process.
+
+RETURN VALUE
+       The getgid() should always be successful and no return value is
+       reserved to indicate an error.
+
+ERRORS
+       No errors are defined.
+
+SEE ALSO
+       getegid(), system_geteuid(), getuid(), setegid(), seteuid(), setgid(),
+       setregid(), setreuid(), setuid()
+
+EXAMPLE
+  Get group ID from Fortran
+
+   program demo_system_getgid
+   use M_system, only: system_getgid
+   implicit none
+      write(*,*)'GID=',system_getgid()
+   end program demo_system_getgid
+

@@ -1,0 +1,194 @@
+NAME
+   where(7f) - [FORTRAN:ASSIGNMENT] masked array assignment
+SYNTAX
+
+  WHERE statement:
+
+   WHERE ( mask-expr ) where-assignment-stmt
+
+  WHERE construct without ELSEWHERE:
+
+     [where-construct-name:] WHERE ( mask-expr )
+     ELSEWHERE (mask-expr ) [where-construct-name]
+
+  WHERE construct with ELSEWHEREs:
+
+     [where-construct-name:] WHERE ( mask-expr )
+     [ELSEWHERE (mask-expr )
+        elemental-statements]
+     [ELSEWHERE (mask-expr )
+        elemental-statements]
+           :
+     [ELSEWHERE
+        elemental-statements
+     ]
+     END WHERE [where-construct-name]
+
+DESCRIPTION
+
+   A masked array assignment is either a WHERE statement or a WHERE
+   construct. It is used to mask the evaluation of expressions and
+   assignment of values in array assignment statements, according to the
+   value of a logical array expression.
+
+   where-assignment-stmt that is a defined assignment shall be elemental.
+
+   A statement that is part of a where-body-construct shall not be a
+   branch target statement.
+
+   If a where-construct contains a where-stmt, a masked-elsewhere-stmt, or
+   another where-construct then each mask-expr within the where-construct
+   shall have the same shape. In each where-assignment-stmt, the mask-expr
+   and the variable being defined shall be arrays of the same shape.
+
+   Examples of a masked array assignment are:
+
+            WHERE (TEMP > 100.0) TEMP = TEMP - REDUCE_TEMP
+
+            WHERE (PRESSURE <= 1.0)
+               PRESSURE = PRESSURE + INC_PRESSURE
+               TEMP = TEMP - 5.0
+            ELSEWHERE
+               RAINING = .TRUE.
+            ENDWHERE
+
+   Interpretation of masked array assignments
+
+   When a WHERE statement or a where-construct-stmt is executed, a control
+   mask is established. In addition,
+   when a WHERE construct statement is executed, a pending control
+   mask is established. If the statement does not appear as part of a
+   where-body-construct, the mask-expr of the statement is evaluated,
+   and the control mask is established to be the value of mask-expr . The
+   pending control mask is established to have the value .NOT. mask- expr
+   upon execution of a WHERE construct statement that does not appear as
+   part of a where-body-construct.  The mask-expr is evaluated only once.
+
+   Each statement in a WHERE construct is executed in sequence.
+
+   Upon execution of a masked-elsewhere-stmt, the following actions take place in sequence.
+
+   1. The control mask mc is established to have the value of the pending control mask.
+   2. The pending control mask is established to have the value mc .AND. (.NOT. mask-expr ).
+   3. The control mask mc is established to have the value mc .AND. mask-expr .
+
+   The mask-expr is evaluated at most once.
+
+   Upon execution of an ELSEWHERE statement, the control mask is
+   established to have the value of the pending
+   control mask. No new pending control mask value is established.
+
+   Upon execution of an ENDWHERE statement, the control mask and pending
+   control mask are established to have the values they had prior to the
+   execution of the corresponding WHERE construct statement. Following the
+   execution of a WHERE statement that appears as a where-body-construct,
+   the control mask is established to have the value it had prior to the
+   execution of the WHERE statement.
+
+   The establishment of control masks and the pending control mask
+   is illustrated with the following example:
+
+            WHERE(cond1)             ! Statement 1
+            . . .
+            ELSEWHERE(cond2)         ! Statement 2
+            . . .
+            ELSEWHERE                ! Statement 3
+            . . .
+            END WHERE
+
+   Following execution of statement 1, the control mask has the value
+   cond1 and the pending control mask has the value .NOT. cond1.
+   Following execution of statement 2, the control mask has the value
+   (.NOT. cond1) .AND. cond2 and the pending control mask has the
+   value (.NOT. cond1) .AND. (.NOT. cond2). Following execution
+   of statement 3, the control mask has the value (.NOT. cond1)
+   .AND. (.NOT. cond2). The false condition values are propagated
+   through the execution of the masked ELSEWHERE statement.
+
+   Upon execution of a WHERE construct statement that is part of a
+   where-body-construct, the pending control mask is established to
+   have the value mc .AND. (.NOT. mask-expr ). The control mask is then
+   established to have the value mc .AND. mask-expr. The mask-expr is
+   evaluated at most once.
+
+   Upon execution of a WHERE statement that is part of a
+   where-body-construct, the control mask is established to have the
+   value mc .AND. mask-expr. The pending control mask is not altered.
+
+   If a nonelemental function reference occurs in the expr or variable
+   of a where-assignment-stmt or in a mask-expr ,
+   the function is evaluated without any masked control; that is, all of
+   its argument expressions are fully evaluated and the function is fully
+   evaluated. If the result is an array and the reference is not within
+   the argument list of a nonelemental function, elements corresponding
+   to true values in the control mask are selected for use in evaluating
+   the expr, variable or mask-expr.
+
+   If an elemental operation or function reference occurs in the expr
+   or variable of a where-assignment-stmt or in a
+   mask-expr , and is not within the argument list of a nonelemental
+   function reference, the operation is performed or the function is
+   evaluated only for the elements corresponding to true values of the
+   control mask.
+
+   If an array constructor appears in a where-assignment-stmt or in a
+   mask-expr , the array constructor is evaluated
+   without any masked control and then the where-assignment-stmt is
+   executed or the mask-expr is evaluated.
+
+   When a where-assignment-stmt is executed, the values of expr that
+   correspond to true values of the control mask
+   are assigned to the corresponding elements of the variable.
+
+   The value of the control mask is established by the execution of a
+   WHERE statement, a WHERE construct
+   statement, an ELSEWHERE statement, a masked ELSEWHERE statement, or
+   an ENDWHERE statement.  Subsequent changes to the value of entities
+   in a mask-expr have no effect on the value of the control mask. The
+   execution of a function reference in the mask expression of a WHERE
+   statement is permitted to affect entities in the assignment statement.
+
+   Examples of function references in masked array assignments are:
+
+      WHERE (A > 0.0)
+         A = LOG (A)           ! LOG is invoked only for positive elements.
+         A = A / SUM (LOG (A)) ! LOG is invoked for all elements
+                               ! because SUM is transformational.
+      END WHERE
+
+EXAMPLE
+
+  Sample
+
+   program demo_where
+   !  Example of WHERE, ELSE WHERE, END WHERE
+   parameter (nd=10, ndh=nd/2, nduh=nd-ndh-1)
+   real, dimension(nd):: a=[ (2*j,j=1,nd) ]
+   real, dimension(nd):: b ! =[ ndh*1.0, 0.0, nduh*2.0 ]
+   real, dimension(nd):: c ! =[ nd*-77.77 ]
+   integer iflag(nd)
+   data b/ndh*1,0.0,nduh*2./,c/nd*-77.77/
+
+      where (b.ne.0) c=a/b
+
+      write (*,2000) c(1:nd)
+   2000 format ('a/b = ',/,(10f7.2))
+   !
+   !  The above protects against divide by zero, but doesn't actually assign
+   !  values to elements in c when the corresponding element in b is zero
+   !  The following covers that, and sets a flag when a divide by zero is
+   !  present
+   !
+      where (b(1:nd).ne.0.0)
+         c=a/b
+         iflag=0
+      else where
+         c=0.0
+         iflag=1
+      end where
+
+      write (*,2000) c(1:nd)
+      write (*,1000) iflag(1:nd)
+    1000 format ('iflag= ',/,(10i7))
+   end program demo_where
+

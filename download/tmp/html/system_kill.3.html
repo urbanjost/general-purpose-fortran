@@ -1,0 +1,232 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>system_kill (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>system_kill(3f) </B>- [M_system] send a signal to a process or a group
+<B>of processes
+</B><B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Return Value</A><BR>
+<A HREF=#4>Errors</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>integer</B>(kind=c_int) function <B>system_kill</B>(pid,sig)
+<P>
+      integer,intent(in) :: pid
+      integer,intent(in) :: sig
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The <B>kill</B>() function shall send a signal to a process or a group of
+processes specified by pid. The signal to be sent is specified by sig
+and is either one from the list given in &lt;signal.h&gt; or 0. If sig is 0
+(the null signal), error checking is performed but no signal is actually
+sent. The null signal can be used to check the validity of pid.
+<P>
+For a process to have permission to send a signal to a process designated
+by pid, unless the sending process has appropriate privileges, the real
+or effective user ID of the sending process shall match the real or
+saved set-user-ID of the receiving process.
+<P>
+If pid is greater than 0, sig shall be sent to the process whose process
+ID is equal to pid.
+<P>
+If pid is 0, sig shall be sent to all processes (excluding an unspecified
+set of system processes) whose process group ID is equal to the process
+group ID of the sender, and for which the process has permission to send
+a signal.
+<P>
+If pid is <B>-1</B>, sig shall be sent to all processes (excluding an unspecified
+set of system processes) for which the process has permission to send
+that signal.
+<P>
+If pid is negative, but not <B>-1</B>, sig shall be sent to all processes
+(excluding an unspecified set of system processes) whose process group
+ID is equal to the absolute value of pid, and for which the process has
+permission to send a signal.
+<P>
+If the value of pid causes sig to be generated for the sending process,
+and if sig is not blocked for the calling thread and if no other thread
+has sig unblocked or is waiting in a <B>sigwait</B>() function for sig, either
+sig or at least one pending unblocked signal shall be delivered to the
+sending thread before <B>kill</B>() returns.
+<P>
+The user ID tests described above shall not be applied when sending
+SIGCONT to a process that is a member of the same session as the sending
+process.
+<P>
+An implementation that provides extended security controls may impose
+further implementation-defined restrictions on the sending of signals,
+including the null signal. In particular, the system may deny the
+existence of some or all of the processes specified by pid.
+<P>
+The <B>kill</B>() function is successful if the process has permission to send
+sig to any of the processes specified by pid. If <B>kill</B>() fails, no signal
+shall be sent.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=3>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Upon successful completion, 0 shall be returned. Otherwise, <B>-1</B> shall be
+returned and errno set to indicate the error.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>ERRORS</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>kill</B>() function shall fail if:
+<TABLE cellpadding=3><!-- tsb: The <B>kill</B>() function shall fail if:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+EINVAL
+The value of the sig argument is an invalid or unsupported
+signal number.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+EPERM
+The process does not have permission to send the signal to
+any receiving process.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ESRCH
+No process or process group can be found corresponding to
+<TABLE width=100% cellpadding=3><!-- tsb: ESRCH
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+that specified by pid.
+The following sections are informative.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_system_kill
+   use M_system, only : system_kill
+   use M_system, only : system_perror
+   implicit none
+   integer           :: i,pid,ios,ierr,signal=9
+   character(len=80) :: argument
+<P>
+      do i=1,command_argument_count()
+         ! get arguments from command line
+         call get_command_argument(i, argument)
+         ! convert arguments to integers assuming they are PID numbers
+         read(argument,&#146;(i80)&#146;,iostat=ios) pid
+         if(ios.ne.0)then
+            write(*,*)&#146;bad PID=&#146;,trim(argument)
+         else
+            write(*,*)&#146;kill SIGNAL=&#146;,signal,&#146; PID=&#146;,pid
+         ! send signal SIGNAL to pid PID
+            ierr=system_kill(pid,signal)
+         ! write message if an error was detected
+            if(ierr.ne.0)then
+               call system_perror(&#146;*demo_system_kill*&#146;)
+            endif
+         endif
+      enddo
+</PRE>
+end program demo_system_kill
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>getpid</B>(), <B>raise</B>(), <B>setsid</B>(), <B>sigaction</B>(), <B>sigqueue</B>(),
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>system_kill (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d4861002-75cc-4d6f-8be7-88547e7c11a2 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/system_kill.3.gif"></center> 
+</body>
+</HTML>

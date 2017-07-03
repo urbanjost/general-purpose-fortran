@@ -1,0 +1,48 @@
+NAME
+    spherical_to_cartesian(3f) - [M_units] convert ISO polar coordinates to Cartesian coordinates
+SYNOPSIS
+   subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
+
+    real,intent(in) :: radius,inclination,azimuth
+    real,intent(out)  :: x,y,z
+
+DESCRIPTION
+
+    Convert ISO 8000-2:2009 polar coordinate <radius, inclination, azimuth> with
+    angles in radians to cartesian point <X,Y,Z> using the formulas
+
+      x=radius*sin(inclination)*cos(azimuth)
+      y=radius*sin(inclination)*sin(azimuth)
+      z=radius*cos(inclination)
+
+OPTIONS
+
+   RADIUS       The radial distance from the origin (O) to the point (P)
+   INCLINATION  The zenith angle in radians between the zenith reference direction
+                (z-axis) and the line OP
+   AZIMUTH      The azimuth angle in radians between the azimuth reference direction
+                (x-axis) and the orthogonal projection of the line OP of the
+                reference plane (x-y plane).
+
+RESULTS
+
+   X  The distance along the x-axis
+   Y  The distance along the y-axis
+   Z  The distance along the z-axis
+
+EXAMPLES
+  examples of usage
+
+   program demo_spherical_to_cartesian
+   use M_units, only : spherical_to_cartesian
+   implicit none
+   real    :: x,y,z
+   real    :: r,i,a
+   integer :: ios
+   INFINITE: do
+      read(*,*,iostat=ios) x, y, z
+      if(ios.ne.0)exit INFINITE
+      call spherical_to_cartesian(r,i,a,x,y,z)
+      write(*,*)'x=',x,' y=',y,' z=',z,'radius=',r,'inclination=',i,'azimuth=',a
+   enddo INFINITE
+   end program demo_spherical_to_cartesian

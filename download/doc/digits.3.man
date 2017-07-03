@@ -1,0 +1,43 @@
+NAME
+
+     digits(3f) - [INTRINSIC] Significant digits function
+
+SYNTAX
+
+   result = digits(x)
+
+DESCRIPTION
+
+   digits(x) returns the number of significant digits of the internal model
+   representation of X. For example, on a system using a 32-bit
+   floating point representation, a default real number would likely return 24.
+
+ARGUMENTS
+
+   X  - The type may be INTEGER or REAL.
+
+RETURN VALUE
+
+   The return value is of type INTEGER.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_digits
+        integer :: i = 12345
+        real :: x = 3.143
+        real(8) :: y = 2.33
+        print *, digits(i)
+        print *, digits(x)
+        print *, digits(y)
+    end program test_digits
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Inquiry function]]
+

@@ -1,0 +1,58 @@
+NAME
+   isalnum,isalpha,iscntrl,isdigit,isgraph,islower,
+   isprint,ispunct,isspace,isupper,isascii,isblank,isxdigit - [M_strings]test membership in subsets of ASCII character set
+
+SYNOPSIS
+   Where "FUNCNAME" is one of the function names in the group, the functions are defined by
+
+    elemental function FUNCNAME(onechar)
+    character,intent(in) :: onechar
+    logical              :: FUNC_NAME
+
+DESCRIPTION
+
+      These elemental functions test if a character belongs to various subsets of the ASCII character set.
+
+      o isalnum:   returns .true. if character is a letter (a-z,A-Z) or digit (0-9)
+      o isalpha:   returns .true. if character is a letter and .false. otherwise
+      o isascii:   returns .true. if character is in the range char(0) to char(127)
+      o isblank:   returns .true. if character is a blank (space or horizontal tab).
+      o iscntrl:   returns .true. if character is a delete character or ordinary control character (0x7F or 0x00-0x1F).
+      o isdigit:   returns .true. if character is a digit (0,1,...,9) and .false. otherwise
+      o isgraph:   returns .true. if character is a printable ASCII character excluding space
+      o islower:   returns .true. if character is a miniscule letter (a-z)
+      o isprint:   returns .true. if character is a printable ASCII character
+      o ispunct:   returns .true. if character is a printable punctuation character (isgraph(c) && !isalnum(c)).
+      o isspace:   returns .true. if character is a null, space, tab, carriage return, new line, vertical tab, or formfeed
+      o isupper:   returns .true. if character is an uppercase letter (A-Z)
+      o isxdigit:  returns .true. if character is a hexadecimal digit (0-9, a-f, or A-F).
+
+EXAMPLES
+
+  program demo_isdigit
+
+   use m_strings, only : isdigit, isspace, switch
+   implicit none
+   character(len=10),allocatable :: string(:)
+   integer                       :: i
+      string=[&
+      & '1 2 3 4 5 ' ,&
+      & 'letters   ' ,&
+      & '1234567890' ,&
+      & 'both 8787 ' ]
+      ! if string is nothing but digits and whitespace return .true.
+      do i=1,size(string)
+         write(*,'(a)',advance='no')'For string['//string(i)//']'
+         write(*,*) &
+         all(isdigit(switch(string(i))).or.isspace(switch(string(i))))
+      enddo
+
+  end program demo_isdigit
+
+  Expected output:
+
+   For string[1 2 3 4 5 ] T
+   For string[letters   ] F
+   For string[1234567890] T
+   For string[both 8787 ] F
+

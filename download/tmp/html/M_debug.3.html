@@ -1,0 +1,193 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_debug (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_debug(3fm) </B>- [M_debug] a collection of Fortran routines for supporting the development of
+<B>unit tests, and providing error processing and debugging procedures.
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+The <B>M_debug</B>(<I>3fm</I>) Fortran module provides procedures and data useful in providing error processing and debugging capabilities.
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>fstop</B>(3f)
+calls &#146;STOP VALUE&#146; passing in a value (1-32), with optional message
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>pdec</B>(3f)
+write ASCII Decimal Equivalent (ADE) numbers vertically beneath string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>stderr</B>(3f)
+Write message on stderr
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>unit_check_start</B>(3f)
+call command "goodbad NAME start"
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>unit_check</B>(3f)
+if expression is .F. call command "goodbad NAME bad" and stop program
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>unit_check_good</B>(3f)
+call command "goodbad NAME good"
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>unit_check_bad</B>(3f)
+call command "goodbad NAME bad" and  stop program
+</TD></TR>
+<TR></TR></TABLE>The existence of a command called "goodbad" is assumed. This is generally a script that makes entries for each unit in an
+SQLite data file which is then used to create CSV and HTML reports on the status of each unit. A sample <B>goodbad</B>(1) command
+written in the <B>bash</B>(1) shell and using the <B>sqlite3</B>(1) command should be included in this distribution.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+    program demo_unit_tests
+    use M_debug, only: unit_check_start, unit_check
+    use M_debug, only: unit_check_good, unit_check_bad
+    implicit none
+    integer :: i, j, k
+    integer,allocatable :: array(:)
+    i=1
+    j=2
+    k=3
+    array=[10,20,30,40,50,60,70]
+<P>
+    !  register an entry for specified name in database with status of zero (0)
+    call unit_check_start(&#146;myroutine&#146;)
+<P>
+    !  if mask test fails, change database status for specified entry to -1 and stop program, else continue
+    call unit_check(&#146;myroutine&#146;,i.gt.0)
+<P>
+    ! use of all(3f), any(3f), merge(3f) can be useful
+    ! if you know what these would produce
+    ! write(*,*)[&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;].eq.&#146;B&#146;      ! this would return an array, the last element having the value T, else F
+    ! write(*,*)all([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;].eq.&#146;X&#146;) ! this would return F
+    ! write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;].eq.&#146;B&#146;) ! this would return F
+    ! write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;].eq.&#146;B&#146;) ! this would return T
+    ! write(*,*).not.all(array.lt.100)
+    ! write(*,*)all(array.lt.100)
+    ! this will make sense &#46;&#46;&#46;
+<P>
+    call unit_check(&#146;myroutine&#146;,all([i,j,k].gt.0),      &#146;testing if everyone greater than zero&#146;)
+    call unit_check(&#146;myroutine&#146;,all(.not.[i,j,k].eq.4), &#146;testing if no one is equal to four&#146;)
+<P>
+    ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
+    if(i+j+k.lt.1)then
+       call unit_check_bad(&#146;myroutine&#146;)
+    endif
+<P>
+    ! it is assumed if you got here you should set status in the database to one, meaning tests were conducted and passed
+    write(*,*)&#146;check on "myroutine" passed&#146;
+    call unit_check_good(&#146;myroutine&#146;)
+<P>
+    end program demo_unit_tests
+<P>
+</PRE>
+<BLOCKQUOTE>
+TEST-DRIVEN DEVELOPMENT
+<TABLE cellpadding=3><!-- tsb: TEST-DRIVEN DEVELOPMENT
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+set-up
+perform initialization operations common to all tests within a module
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+tear-down
+perform finalization operations common to all tests within a module
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_debug (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d15948ad-ba91-4e47-a46a-85d497db95b4 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_debug.3.gif"></center> 
+</body>
+</HTML>

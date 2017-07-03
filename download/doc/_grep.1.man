@@ -1,0 +1,23 @@
+NAME
+    _grep(1f) - [FUNIX] search a file for a pattern
+
+SYNOPSIS
+    _grep pattern|[--help|--version]
+
+DESCRIPTION
+
+OPTIONS
+    pattern    regular expression
+    --help     display this help and exit
+    --version  output version information and exit
+
+EXAMPLES
+    Sample commands
+
+       _grep  '^T.*found it' <foundit
+
+REPORTING BUGS
+    Report _grep bugs to <http://www.urbanjost.altervista.org/index.html>
+
+SEE ALSO
+

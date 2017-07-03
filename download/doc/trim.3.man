@@ -1,0 +1,42 @@
+NAME
+
+     trim(3f) - [INTRINSIC:CHARACTER] Remove trailing blank characters of a string
+
+SYNTAX
+
+   result = trim(string)
+
+DESCRIPTION
+
+   Removes trailing blank characters of a string.
+
+ARGUMENTS
+
+   STRING  - Shall be a scalar of type CHARACTER.
+
+RETURN VALUE
+
+   A scalar of type CHARACTER which length is that of STRING
+   less the number of trailing blanks.
+
+EXAMPLE
+
+  Sample program:
+
+    program test_trim
+      character(len=10), parameter :: s = "gfortran  "
+      write(*,*) len(s), len(trim(s))  ! "10 8", with/without trailing blanks
+    end program
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   Transformational function
+
+SEE ALSO
+
+   [[adjustl]], [[adjustr]]
+

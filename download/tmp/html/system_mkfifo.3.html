@@ -1,0 +1,193 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>system_mkfifo (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>system_mkfifo(3f) </B>- [M_system]make a FIFO special file relative to directory file descriptor
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Return Value</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Example</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>mkfifo</B>() function creates a new FIFO special file named by the pathname pointed to by path.
+The file permission bits of the new FIFO are initialized from mode.
+The file permission bits of the mode argument are modified by the process&#146; file creation mask.
+<P>
+When bits in mode other than the file permission bits are set, the effect is implementation-defined.
+<P>
+If path names a symbolic link, <B>mkfifo</B>() shall fail and set errno to [EEXIST].
+<TABLE cellpadding=3><!-- tsb: If path names a symbolic link, <B>mkfifo</B>() shall fail and set errno to [EEXIST].
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+The
+FIFO&#146;s user ID will be set to the process&#146; effective user ID.
+The FIFO&#146;s group ID shall be set to the group ID of the parent directory or to the effective group ID of the process.
+Implementations shall provide a way to initialize the FIFO&#146;s group ID to the group ID of the parent directory.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Implementations may, but need not, provide an implementation-defined way to initialize
+the FIFO&#146;s group ID to the effective group ID of the calling process.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Upon
+successful  completion, <B>mkfifo</B>() shall mark for update the last data access, last data modification, and last file status change timestamps of the file.
+Also, the last data modification and last file status change timestamps of the directory that contains the new entry shall be marked for update.
+</TD></TR>
+<TR></TR></TABLE>Predefined variables are typically used to set permission modes.
+You can bytewise-OR together these variables to to create the most common permissions mode:
+<P>
+<PRE>
+    User:    R_USR  (read),  W_USR  (write),  X_USR(execute)
+    Group:   R_GRP  (read),  W_GRP  (write),  X_GRP(execute)
+    Others:  R_OTH  (read),  W_OTH  (write),  X_OTH(execute)
+<P>
+</PRE>
+Additionally, some shortcuts are provided (basically a bitwise-OR combination of the above):
+<P>
+<PRE>
+     Read + Write + Execute: R_WXU (User), R_WXG (Group), R_WXO (Others)
+     DEFFILEMODE: Equivalent of 0666 =rw-rw-rw-
+     ACCESSPERMS: Equivalent of 0777 = rwxrwxrwx
+<P>
+</PRE>
+Therefore, to give only the user rwx (read+write+execute) rights whereas
+group members and others may not do anything, you can use any of the
+following <B>mkfifo</B>() calls equivalently:
+<P>
+<PRE>
+     ierr= mkfifo("myfile", IANY(R_USR, W_USR, X_USR));
+     ierr= mkfifo("myfile", R_WXU);
+<P>
+</PRE>
+In order to give anyone any rights (mode 0777 = rwxrwxrwx), you can
+use any of the following calls equivalently:
+<P>
+<PRE>
+     ierr= mkfifo("myfile",IANY(R_USR,W_USR,X_USR,R_GRP,W_GRP,X_GRP,R_OTH,W_OTH,X_OTH));
+     ierr= mkfifo("myfile",IANY(R_WXU,R_WXG,R_WXO));
+     ierr= mkfifo("myfile",ACCESSPERMS);
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+Upon successful completion, these functions shall return 0.
+Otherwise, these functions return <B>-1</B> and set errno to indicate the error.
+If <B>-1</B> is returned, no FIFO is created.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+The following example shows how to create a FIFO file named
+/home/cnd/mod_done, with read/write permissions for owner, and
+with read permissions for group and others.
+<P>
+<PRE>
+   program demo_system_mkfifo
+   use M_system, only : system_mkfifo, system_perror
+   use M_system, only : R_GRP,R_OTH,R_USR,R_WXG,R_WXO
+   use M_system, only : R_WXU,W_GRP,W_OTH,W_USR,X_GRP,X_OTH,X_USR
+   use M_system, only : DEFFILEMODE, ACCESSPERMS
+   implicit none
+      integer :: status
+      status = system_mkfifo("/home/cnd/mod_done", IANY([W_USR, R_USR, R_GRP, R_OTH]))
+      if(status.ne.0)then
+         call system_perror(&#146;*mkfifo* error:&#146;)
+      endif
+   end program demo_system_mkfifo
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+integer :: ierr
+<B>ierr=system_mkfifo</B>(&#146;_scratch&#146;,IANY(R_USR,W_USER,X_USER))
+end program demo_system_mkfifo
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>system_mkfifo (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 369653e3-8dd5-40ea-b99e-67d26c2315e9 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/system_mkfifo.3.gif"></center> 
+</body>
+</HTML>

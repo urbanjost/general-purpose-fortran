@@ -1,0 +1,39 @@
+NAME
+   implied_do(7f) - [FORTRAN] documentation on usage of implied do in Fortran
+
+SYNOPSIS
+
+DESCRIPTION
+
+   Examples using implied DO loops in Fortran code.
+
+EXAMPLES
+
+ Sample Programs:
+
+   program initializing
+   implicit none
+      integer :: i
+      ! [A-Z] [a-z] alphabet
+      character(len=1),parameter :: a2z(26*2)=[(char(i),i=65,90),(char(i),i=97,122)]
+      write(*,*)'Alphabet=',a2z
+   end program initializing
+
+ Expected output:
+
+   Alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+
+ Examples of array constructors containing an implied DO are:
+
+   (/ (I, I = 1, 1075) /)
+
+ and
+
+   N=20
+   [ 3.6, (3.6 / I, I = 1, N) ]
+
+ For an io-implied-do, the loop initialization and execution are the same as for a DO construct.
+ An example of an output list with an implied DO is:
+
+   WRITE (LP, FMT = '(10F8.2)') (LOG (A (I)), I = 1, N + 9, K), G
+

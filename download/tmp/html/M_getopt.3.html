@@ -1,0 +1,291 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_getopt (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_getopt(3fm) </B>- [ARGUMENTS:M_getopt]parse command line arguments. similar to those in standard C library.
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Copyright</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>use</B> getopt_m, <I>only</I> : <I>getopt</I>
+<B>use</B> getopt_m, <I>only</I> : <I>option_s</I>
+<B>use</B> getopt_m, <I>only</I> : <I>optarg,optopt,optind</I>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+ch = <B>getopt</B>( optstring, [longopts] )
+<P>
+Returns next option character from command line arguments.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Returns next option character from command line arguments.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If an option is not recognized, it returns &#146;?&#146;.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If no options are left, it returns a null character, <B>char</B>(0).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+optstring
+contains characters that are recognized as options.
+If a character is followed by a colon, then it takes a required argument.
+For example, "x" recognizes "<B>-x</B>", while "x:" recognizes "<B>-x</B> arg" or "<B>-xarg</B>".
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+opterr
+Errors are printed by default. Set opterr=.false. to suppress them.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+optopt
+is set to the option character, even if it isn&#146;t recognized.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+optarg
+is set to the option&#146;s argument.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+optind
+has the index of the next argument to process. Initially optind=1.
+</TD></TR>
+<TR></TR></TABLE>Grouped options are allowed, so "<B>-abc</B>" is the same as "<B>-a</B> <B>-b</B> <B>-c</B>".
+<P>
+If longopts is present, it is an array of <B>type</B>(<I>option_s</I>), where each entry
+describes one long option.
+<P>
+<PRE>
+     type option_s
+         character(len=4096) :: name
+         logical             :: has_arg
+         character           :: val
+     end type
+<P>
+</PRE>
+The name field is the option name, without the leading -- double dash.
+Set the has_arg field to true if it requires an argument, false if not.
+The val field is returned. Typically this is set to the corresponding short
+option, so short and long options can be processed together. (But there
+is no requirement that every long option has a short option, or vice-versa.)
+<P>
+Differences from C version:
+<TABLE cellpadding=3><!-- tsb: Differences from C version:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+when options are finished, C version returns <B>-1</B> instead of <B>char</B>(0),
+and thus stupidly requires an int instead of a char.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+does not support optreset
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+does not support "--" as last argument
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if no argument, optarg is blank, not NULL
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+argc and argv are implicit
+</TD></TR>
+<TR></TR></TABLE>Differences for long options:
+<TABLE cellpadding=3><!-- tsb: Differences for long options:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+optional argument to <B>getopt</B>(), rather than separate function <B>getopt_long</B>()
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+has_arg is logical, and does not support optional_argument
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+does not support flag field (and thus always returns val)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+does not support longindex
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+does not support "<B>--opt</B>=value" syntax, <I>only</I> "<B>--opt</B> value"
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+knows the length of longopts, so does not need an empty last record
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_getopts
+   use getopt_m, only : getopt,option_s,optarg,optopt
+   implicit none
+<P>
+   character(len=*),parameter :: OPTIONS=&#146;ab:c&#146;
+   type(option_s):: opts(2)
+      opts(1) = option_s( "alpha", .false., &#146;a&#146; )
+      opts(2) = option_s( "beta",  .true.,  &#146;b&#146; )
+      do
+         PARSE: select case( getopt( OPTIONS, opts ))
+         case( char(0))
+            exit PARSE
+         case( &#146;a&#146; )
+            print *, &#146;option alpha/a&#146;, optarg
+         case( &#146;b&#146; )
+            print *, &#146;option beta/b=&#146;, optarg
+         case( &#146;?&#146; )
+            print *, &#146;unknown option &#146;, optopt,&#146; not in &#146;,OPTIONS
+            stop
+         case default
+            print *, &#146;unhandled option c &#146;, optopt, &#146; (an intentional bug)&#146;
+         end select PARSE
+      end do
+   end program demo_getopts
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>COPYRIGHT</H3>
+
+</A>
+<BLOCKQUOTE>
+Copyright 2008 by Mark Gates
+<P>
+This program is free software; you can redistribute or modify it under
+the terms of the GNU general public license (GPL), version 2 or later.
+<P>
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+merchantability or fitness for a particular purpose.
+<P>
+If you wish to incorporate this into non-GPL software, please contact
+me regarding licensing terms.
+<P>
+Slightly modified from original <B>-JSU</B>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_getopt (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7256bfe7-9e27-41b1-8513-522c0d176831 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_getopt.3.gif"></center> 
+</body>
+</HTML>

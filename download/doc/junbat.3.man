@@ -1,0 +1,34 @@
+NAME
+     junbat(3f) - [M_messages]print an eye-catching image of a bat.
+
+SYNOPSIS
+  SUBROUTINE junbat(where)
+
+   character(len=*),intent(in) :: where
+
+DESCRIPTION
+ Sample output:
+
+  >                     .-                    .-
+  >                _..-'(                       )`-.._
+  >             ./'. '||\\.       (\_/)       .//||` .`\.
+  >          ./'.|'.'||||\\|..    )o o(    ..|//||||`.`|.`\.
+  >       ./'..|'.|| |||||\`````` '`"'` ''''''/||||| ||.`|..`\.
+  >     ./'.||'.|||| ||||||||||||.     .|||||||||||| ||||.`||.`\.
+  >    /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`\
+  >   '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
+  >  '.||| ||||||||| |/'   ``\||``     ''||/''   `\| ||||||||| |||.`
+  >  |/' \./'     `\./         \!|\   /|!/         \./'     `\./ `\|
+  >  V    V         V          }' `\ /' `{          V         V    V
+  >  `    `         `               V               '         '    '
+
+ See the description of JOURNAL() for a meaning for the I/O flag.
+
+EXAMPLE
+ Sample program:
+
+   program seepic
+   use M_messages, only : junbat
+      call junbat('s')
+   end program seepic
+

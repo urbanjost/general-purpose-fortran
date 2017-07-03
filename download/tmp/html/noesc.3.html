@@ -1,0 +1,183 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>noesc (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>noesc </B>- [M_strings]convert non-printable characters to a space.
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+elemental function <B>noesc</B>(<I>INSTR</I>)
+<P>
+    character(len=*),intent(in) :: INSTR
+    character(len=len(instr))   :: noesc
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Convert non-printable characters to a space.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+program demo_noesc
+<P>
+<PRE>
+    use M_strings, only : noesc
+    character(len=128) :: ascii
+    character(len=128) :: cleared
+    ! fill variable with base ASCII character set
+    do i=1,128
+       ascii(i:i)=char(i-1)
+    enddo
+    cleared=noesc(ascii)
+    write(*,*)&#146;characters and their ADE (ASCII Decimal Equivalent)&#146;
+    call ade(ascii)
+    write(*,*)&#146;Cleared of non-printable characters&#146;
+    call ade(cleared)
+    write(*,*)&#146;Cleared string:&#146;
+    write(*,*)cleared
+    contains
+      subroutine ade(string)
+      implicit none
+      ! the string to print
+      character(len=*),intent(in) :: string
+      ! number of characters in string to print
+      integer :: ilen
+      ! counter used to step thru string
+      integer :: i
+         ! get trimmed length of input string
+         ilen=len_trim(string(:len(string)))
+<P>
+         ! replace lower unprintable characters with spaces
+         write(*,101)(merge(string(i:i),&#146; &#146;,&
+         & ichar(string(i:i)).ge.32         &
+         & .and.                            &
+         & ichar(string(i:i)).le.126)       &
+         & ,i=1,ilen)
+<P>
+         ! print ADE value of character underneath it
+         write(*,202)     (ichar(string(i:i))/100,    i=1,ilen)
+         write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,ilen)
+         write(*,202)(mod((ichar(string(i:i))),10),   i=1,ilen)
+      ! format for printing string characters
+      101   format(*(a1:))
+      ! format for printing ADE values
+      202   format(*(i1:))
+      end subroutine ade
+    end program demo_noesc
+<P>
+</PRE>
+Expected output
+<P>
+The string is printed with the ADE value vertically beneath.
+The original string has all the ADEs from 000 to 127. After
+<B>NOESC</B>(3f) is called on the string all the "non-printable"
+characters are replaced with a space (ADE of 032).
+</BLOCKQUOTE>
+<P>
+characters and their ADE (ASCII Decimal Equivalent)
+<P>
+<PRE>
+   &gt;                                 !"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_&#145;abcdefghijklmnopqrstuvwxyz{|}~
+   &gt;00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111
+   &gt;00000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222
+   &gt;01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567
+<P>
+</PRE>
+<BLOCKQUOTE>
+Cleared of non-printable characters
+<P>
+<PRE>
+   &gt;                                 !"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_&#145;abcdefghijklmnopqrstuvwxyz{|}~
+   &gt;0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111
+   &gt;3333333333333333333333333333333333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222
+   &gt;2222222222222222222222222222222223456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456
+<P>
+</PRE>
+Cleared string:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Cleared string:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+&gt;
+!"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_&#145;abcdefghijklmnopqrstuvwxyz{|}~
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>noesc (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f00b6a14-a4b5-4dcc-b02a-769cee154ef0 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/noesc.3.gif"></center> 
+</body>
+</HTML>

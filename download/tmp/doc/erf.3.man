@@ -1,0 +1,40 @@
+NAME
+     erf(3f) - [INTRINSIC:MATHEMATICS] Error function
+
+DESCRIPTION
+
+   erf(x) computes the error function of X, defined as
+   $$
+   \text{erf}(x) = \frac{2}{\sqrt{\pi}} \int_0**x e**{-t**2} dt.
+   $$
+
+SYNTAX
+
+   result = erf(x)
+
+ARGUMENTS
+
+   X  - The type shall be REAL.
+
+RETURN VALUE
+
+   The return value is of type REAL, of the same kind as
+   X and lies in the range -1 <= erf(x) <= 1 .
+
+EXAMPLE
+
+  Sample program:
+
+    program test_erf
+      real(8) :: x = 0.17_8
+      x = erf(x)
+    end program test_erf
+
+STANDARD
+
+   [[Fortran 2008]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+

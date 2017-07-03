@@ -1,0 +1,43 @@
+NAME
+   state(3f) - [M_pixel] print graphics state of M_pixel graphics module
+
+SYNOPSIS
+ definition:
+
+   recursive subroutine state(string)
+   character(len=*),intent(in),optional :: string
+
+DESCRIPTION
+   Print the state of the M_pixel graphics module. This is primarily used in
+   debugging during program development and is not currently in the VOGLE library.
+
+OPTIONS
+   STRING  can have the following values
+           o all
+           o default
+           o colormap
+
+EXAMPLE
+  Sample program:
+
+   program demo_state
+   use M_pixel
+   call prefsize(640,400)
+   call vinit()
+   call state()
+   call vexit()
+   end program demo_state
+  Results:
+
+   VINIT CALLED:        T
+   PREFSIZE: WIDTH=         640  HEIGHT=         400
+   CURRENT POSITION: X=   0.00000000      Y=   0.00000000
+   LINE WIDTH:                    1
+   FONT:               SIMPLEX
+   COLOR NUMBER:                  1
+   CIRCLE PRECISION:             60
+   TEXT:               HEIGHT=   10.0000000     WIDTH=   7.00000000     ANGLE=   0.00000000
+   TEXT JUSTIFICATION: X_CENTER= F Y_CENTER= F
+   VIEWPORT:           LEFT=   0.00000000     RIGHT=   639.000000     BOTTOM=   399.000000     TOP=   0.00000000
+   WINDOW:             LEFT=   0.00000000     RIGHT=   640.000000     BOTTOM=   0.00000000     TOP=   400.000000
+

@@ -1,0 +1,37 @@
+NAME
+     new_line(3f) - [INTRINSIC] New line character
+
+SYNTAX
+
+   result = new_line(c)
+
+DESCRIPTION
+
+   new_line(c) returns the new-line character.
+
+ARGUMENTS
+
+   C  - The argument shall be a scalar or array of the type CHARACTER.
+
+RETURN VALUE
+
+   Returns a CHARACTER scalar of length one with the new-line character of
+   the same kind as parameter C.
+
+EXAMPLE
+
+  Sample program:
+
+    program newline
+      implicit none
+      write(*,'(A)') 'This is record 1.'//NEW_LINE('A')//'This is record 2.'
+    end program newline
+
+STANDARD
+
+   [[Fortran 2003]] and later
+
+CLASS
+
+   [[Inquiry function]]
+

@@ -1,0 +1,66 @@
+<html>
+<head>
+<title></title>
+<style>
+body {xfont-style: italic}
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libjust4/just4.html">[CLI Home Page]</a>
+<div id="Container">
+<div id="Content">
+<dl>
+   <dt> NAME           </dt>
+   <dd> M_io(3f) - [M_io]Fortran I/O module</dd>
+   <dt> SYNOPSIS </dt><dd>
+      use M_io, only : slurp, notopen, print_inquire, uniq
+      use M_io, only : dirname
+   </dd>
+   <dt> DESCRIPTION    </dt><dd>
+      The M_io module is a collection of routines related to basic I/O
+      (input/output) operations.
+      <ul>
+         <li><a href="slurp.3.html">         SLURP </a> - read a file into a character array </li>
+         <li><a href="notopen.3.html">       NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
+         <li><a href="print_inquire.3.html"> PRINT_INQUIRE </a> - run INQUIRE(3f) on a file by name or number and print results</li>
+         <li><a href="uniq.3.html">          UNIQ </a> - add numeric suffix to filename if needed till filename does not exist</li>
+         <li><a href="dirname.3.html">       DIRNAME </a> - return the directory portion of a pathname </li>
+         <li><a href="splitpath.3.html">     SPLITPATH </a> - split Unix pathname into directory, name, basename and extension</li>
+         <li><a href="isdir.3.html">         ISDIR </a> - tell if a path is an existing directory on Unix-compatible systems</li>
+         <li><a href="readline.3.html">      READLINE </a> - read line as long as programming environment line length limit</li>
+      </ul>
+   </dd>
+</dl>
+</div>
+</div>
+</body>
+</html>

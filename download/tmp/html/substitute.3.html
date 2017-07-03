@@ -1,0 +1,178 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>substitute (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>substitute </B>- [M_strings]Globally substitute one substring for another in string
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>substitute</B>(targetline,old,new,ierr,start,end)
+<P>
+    character(len=*)              :: targetline
+    character(len=*),intent(in)   :: old
+    character(len=*),intent(in)   :: new
+    integer,intent(out),optional  :: ierr
+    integer,intent(in),optional   :: start
+    integer,intent(in),optional   :: end
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Globally substitute one substring for another in string.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+targetline
+input line to be changed
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+old
+old substring to replace
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+new
+new substring
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ierr
+error code. iF ier = <B>-1</B> bad directive, &gt;= 0 then
+count of changes made
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+start
+start sets the left  margin
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+end
+end sets the right  margin
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+   program test_substitute
+   use M_strings, only : substitute
+   implicit none
+   ! must be long enough to hold changed line
+   character(len=80) :: targetline
+<P>
+   targetline=&#146;this is the input string&#146;
+   write(*,*)&#146;ORIGINAL    : &#146;//trim(targetline)
+<P>
+   ! changes the input to &#146;THis is THe input string&#146;
+   call substitute(targetline,&#146;th&#146;,&#146;TH&#146;)
+   write(*,*)&#146;th =&gt; TH    : &#146;//trim(targetline)
+<P>
+   ! a null old substring means "at beginning of line"
+   ! changes the input to &#146;BEFORE:this is the input string&#146;
+   call substitute(targetline,&#146;&#146;,&#146;BEFORE:&#146;)
+   write(*,*)&#146;"" =&gt; BEFORE: &#146;//trim(targetline)
+<P>
+   ! a null new string deletes occurrences of the old substring
+   ! changes the input to &#146;ths s the nput strng&#146;
+   call substitute(targetline,&#146;i&#146;,&#146;&#146;)
+   write(*,*)&#146;i =&gt; ""     : &#146;//trim(targetline)
+<P>
+   end program test_substitute
+<P>
+</PRE>
+Expected output
+<P>
+<PRE>
+    ORIGINAL    : this is the input string
+    th =&gt; TH    : THis is THe input string
+    "" =&gt; BEFORE: BEFORE:THis is THe input string
+    i =&gt; ""     : BEFORE:THs s THe nput strng
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>substitute (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8e6f1660-d997-4c74-a16c-a1a1d0a14341 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/substitute.3.gif"></center> 
+</body>
+</HTML>

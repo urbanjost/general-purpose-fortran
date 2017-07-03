@@ -1,0 +1,59 @@
+NAME
+   substitute - [M_strings]Globally substitute one substring for another in string
+
+SYNOPSIS
+   subroutine substitute(targetline,old,new,ierr,start,end)
+
+    character(len=*)              :: targetline
+    character(len=*),intent(in)   :: old
+    character(len=*),intent(in)   :: new
+    integer,intent(out),optional  :: ierr
+    integer,intent(in),optional   :: start
+    integer,intent(in),optional   :: end
+
+DESCRIPTION
+   Globally substitute one substring for another in string.
+
+OPTIONS
+    targetline  input line to be changed
+    old         old substring to replace
+    new         new substring
+    ierr        error code. iF ier = -1 bad directive, &gt;= 0 then
+                count of changes made
+    start       start sets the left  margin
+    end         end sets the right  margin
+
+EXAMPLES
+  Sample Program:
+
+   program test_substitute
+   use M_strings, only : substitute
+   implicit none
+   ! must be long enough to hold changed line
+   character(len=80) :: targetline
+
+   targetline='this is the input string'
+   write(*,*)'ORIGINAL    : '//trim(targetline)
+
+   ! changes the input to 'THis is THe input string'
+   call substitute(targetline,'th','TH')
+   write(*,*)'th => TH    : '//trim(targetline)
+
+   ! a null old substring means "at beginning of line"
+   ! changes the input to 'BEFORE:this is the input string'
+   call substitute(targetline,'','BEFORE:')
+   write(*,*)'"" => BEFORE: '//trim(targetline)
+
+   ! a null new string deletes occurrences of the old substring
+   ! changes the input to 'ths s the nput strng'
+   call substitute(targetline,'i','')
+   write(*,*)'i => ""     : '//trim(targetline)
+
+   end program test_substitute
+
+  Expected output
+
+    ORIGINAL    : this is the input string
+    th => TH    : THis is THe input string
+    "" => BEFORE: BEFORE:THis is THe input string
+    i => ""     : BEFORE:THs s THe nput strng

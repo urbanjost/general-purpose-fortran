@@ -1,0 +1,233 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>jucalc (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>jucalc </B>- [M_calculator]parse calculator expression and return numeric or string value
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Dependencies</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>See Also</A><BR>
+<A HREF=#6>References</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>jucalc</B>(inline,outlin,mssg,slast,ierr)
+<P>
+   character(len=*),intent=(in)           :: inline
+   character(len=iclen_calc),intent=(out) :: outlin
+   character(len=iclen_calc),intent=(out) :: mssg
+   doubleprecision, intent=(out)          :: slast
+   integer, intent=(out)                  :: ierr
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>JUCALC</B>() evaluates FORTRAN-like expressions. It can be used to
+add
+calculator-like abilities to your program.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+    inline  INLINE is a string expression up to (iclen_calc=512) characters long.
+            The syntax of an expression is described in
+            the main document of  the  Calculator  Library.
+    outlin  Returned numeric value as a string when IERR=0.
+    mssg    MSSG is a string that can serve several purposes
+            o Returned string value when IERR=2
+            o Error message string when IERR=-1
+            o Message from &#146;funcs&#146; or &#146;dump&#146; command when IERR=1
+    slast   SLAST has different meanings depending on whether a string or number
+            is being returned
+            o REAL value set to last successfully calculated value when IERR=0
+            o Number of characters in returned string variable when IERR=2
+    ierr    status flag.
+            o  -1 ==&gt; An error occurred
+            o  0 ==&gt; A numeric value was returned
+            o  1 ==&gt; A message was returned
+            o  2 ==&gt; A string value was returned
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DEPENDENCIES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ceiling
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+floor
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+change
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+modif
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+rand
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+len_trim
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B></B> </TD><TD valign=bottom>
+o
+User-supplied routines: juown1, c
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Example calculator program
+<P>
+<PRE>
+      program compute
+      !@(#)compute(1f): line mode calculator program (that calls jucalc(3f))
+      !     requires:
+      !     c()
+      use m_calculator, only: jucalc,iclen_calc
+      ! iclen_calc : max length of expression or variable value as a string
+      implicit none
+      integer,parameter         :: dp=kind(0.0d0)
+      character(len=iclen_calc) :: line
+      character(len=iclen_calc) :: outlin
+      character(len=iclen_calc) :: event
+      real(kind=dp)             :: rvalue
+      integer                   :: ierr
+      ierr=0
+      call jucalc(&#146;ownmode(1)&#146;,outlin,event,rvalue,ierr)
+      ! activate user-defined function interface
+      INFINITE: do
+         read(*,&#146;(a)&#146;,end=999)line
+         if(line.eq.&#146;.&#146;)stop
+         call jucalc(line,outlin,event,rvalue,ierr)
+         select case (ierr)
+         ! several different meanings to the error flag returned by calculator
+         case(0)
+         ! a numeric value was returned without error
+           write(*,&#146;(a,a,a)&#146;)trim(outlin),&#146; = &#146;,trim(line)
+         case(2)
+         ! a string value was returned without error
+           write(*,&#146;(a)&#146;)trim(event(:int(rvalue)))
+         case(1)
+         ! a request for a message has been returned (from DUMP or FUNC)
+           write(*,&#146;(a,a)&#146;)&#146;message===&gt;&#146;,trim(event(:len_trim(event)))
+         case(-1)
+         ! an error has occurred
+           write(*,&#146;(a,a)&#146;)&#146;error===&gt;&#146;,trim(event(:len_trim(event)))
+         case default
+         ! this should not occur
+           WRITE(6,&#146;(A,i10)&#146;)&#146;*JUCALC* UNEXPECTED IERR VALUE &#146;,IERR
+         end select
+      enddo INFINITE
+      999 continue
+      end program compute
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+see <B>INUM0</B>(),RNUM0(),SNUM0(),STRGAR2(),JUCALCX().
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+NONE.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>jucalc (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b5b7d698-b369-4df0-a745-a237286b457d using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/jucalc.3.gif"></center> 
+</body>
+</HTML>

@@ -1,0 +1,47 @@
+NAME
+   arc(3f) - [M_pixel] draw an arc using current line width and color
+
+SYNOPSIS
+ definition:
+
+   subroutine arc(x, y, radius, startang, endang)
+   real,intent(in) :: x
+   real,intent(in) :: y
+   real,intent(in) :: radius
+   real,intent(in) :: startang
+   real,intent(in) :: endang
+
+DESCRIPTION
+
+   Draw an arc. x, y, and radius are values in world units.
+
+   Angles are in degrees, positive measured counterclockwise from the
+   +X axis. The current position after the arc is drawn is at the end
+   of the arc.
+
+OPTIONS
+   X,Y        Coordinates for the center of the circle
+   RADIUS     Radius of the circle
+   STARTANG   Start angle
+   ENDANG     End angle
+
+EXAMPLE
+  Sample program:
+
+   program demo_arc
+   use M_pixel
+   use M_writegif, only : writegif
+   integer  :: transparent=0
+   call prefsize(600,240)
+   call vinit()
+   call ortho2(0.0,60.0,0.0,24.0)
+   call linewidth(400)
+   call color(1)
+   call arc(16.0,12.0,12.0,90.0,270.0)
+   call color(2)
+   call arc(44.0,12.0,12.0,-90.0,90.0)
+   ! write gif with a transparent background
+   call writegif('arc.3.gif',P_pixel,P_ColorMap,transparent)
+   call vexit()
+   end program demo_arc
+

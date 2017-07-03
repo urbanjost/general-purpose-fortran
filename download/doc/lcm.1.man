@@ -1,0 +1,36 @@
+NAME
+       lcm(1f) - [NUMBERS]display least common multiple of a list of whole numbers
+
+SYNOPSIS
+       lcm [NUMBERS]...
+
+DESCRIPTION
+   Print the LCM (Least Common Multiple) of a list of integer whole
+   NUMBERS. If none are specified on the command line, read them from
+   standard input, one list per line.
+
+   Typically, the numbers must be positive integers where
+
+      2 <= NUMBER <= (2**31)-1 or 2147483647.
+
+   but if the result would be larger than (2**31)-1 an error is returned
+
+OPTIONS
+       NUMBERS    list of numbers whose least common multiple is to be
+                  determined
+       --help     display this help and exit
+       --version  output version information and exit
+       --verbose  produce verbose answer instead of simple integer result
+EXAMPLE
+ Sample Usage:
+
+  >lcm 10 34 82
+  >6970
+
+  >lcm 10 34 82 -verbose
+  >6970=lcm([10,34,82])
+
+  >lcm 202023 2147483647
+  >STOP 1
+  >*lcm* result larger than a standard integer = 433841088817881
+

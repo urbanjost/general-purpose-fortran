@@ -1,0 +1,38 @@
+NAME
+   subroutine other2(iin,iflag)
+SYNOPSIS
+   integer, intent=(inout) :: iin
+      This is the unit code the program should be reading from.
+
+   integer, intent=(out) :: iflag
+      if IFLAG=0 then ending reading of this file. Decrement unit count.
+      if IFLAG=1 then open a new file and update unit code.
+
+DESCRIPTION
+   OTHER2() is a copy of OTHER() that can have filenames that are
+   Calculator string expressions and that enables a program with a
+   "parcel" command that reads from a direct access file to be mixed
+   with the nested reads normally allowed with a call to OTHER().
+
+   Currently only one program uses this routine but it's function is
+   similar to OTHER() and it may be useful as an example for anyone
+   else trying to implement a parcel command.
+
+   o  OTHER2() can use string expressions for filenames because it
+      calls RETRV2() instead of RETREV() to get the filenames from
+      the dictionary.
+   o  if IIN is negative, this is a flag that the read was encountered
+      while reading from a "parcel" instead of a standard file.
+   o  switches IIN  to + so read occurs, but keep sign to reapply at end
+
+DEPENDENCIES
+      o retrv2
+      o jun
+SEE ALSO
+   see OTHER().
+REFERENCES
+   o NONE
+AUTHOR
+   John S. Urban
+   Created: 19971123
+   Updated: 20161215

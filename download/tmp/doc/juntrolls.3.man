@@ -1,0 +1,42 @@
+NAME
+     juntrolls(3f) - [M_messages]print an eye-catching bulletin
+
+SYNOPSIS/USAGE
+
+     SUBROUTINE juntrolls(where,a)
+
+      character(len=*)  :: where  ! the I/O flag to pass on to JOURNAL()
+      character(len=21) :: a(4)
+
+DESCRIPTION
+ Sample output:
+
+    >          \|||/
+    >          (o o)
+    > ;~~~~ooO~~(_)~~~~~~~~~;
+    > |                     |
+    > |                     |
+    > |                     |
+    > |_____________________|
+    > '~~~~~~~~~~~~~~~~Ooo~~'
+    >         |  |  |
+    >         ~~~ ~~~
+    >          || ||
+    >         ooO Ooo
+
+ See the description of JOURNAL() for a meaning for the I/O flag.
+
+EXAMPLE
+
+ Sample program:
+
+   program seepic
+   use M_messages, only : juntrolls
+      call juntrolls('s',[         &
+         'Please ...           ',  &
+         "   don't feed        ",  &
+         '   the               ',  &
+         '   TROLLS!           '   &
+         ])
+   end program seepic
+

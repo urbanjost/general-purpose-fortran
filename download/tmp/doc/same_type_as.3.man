@@ -1,0 +1,34 @@
+NAME
+
+     same_type_as(3f) - [INTRINSIC] Query dynamic types for equality
+
+SYNTAX
+
+   result = same_type_as(a, b)
+
+DESCRIPTION
+
+   Query dynamic types for equality.
+
+ARGUMENTS
+
+   A  - Shall be an object of extensible declared type or unlimited polymorphic.
+   B  - Shall be an object of extensible declared type or unlimited polymorphic.
+
+RETURN VALUE
+
+   The return value is a scalar of type default logical. It is true if and
+   only if the dynamic type of A is the same as the dynamic type of B.
+
+STANDARD
+
+   [[Fortran 2003]] and later
+
+CLASS
+
+   [[Inquiry function]]
+
+SEE ALSO
+
+   [[extends_type_of]]
+

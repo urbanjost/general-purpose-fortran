@@ -1,0 +1,42 @@
+NAME
+         parse(3f) - [ARGUMENTS:M_kracken]parse user command and store tokens into Language Dictionary
+
+SYNOPSIS
+subroutine parse(verb,string,allow,error_return)
+
+   character(len=*),intent(in)     ::  verb
+   character(len=*),intent(in)     ::  string
+   character(len=*),intent(in)     ::  allow
+   integer,optional,intent(out)    ::  error_return
+
+DESCRIPTION
+   given a string of form
+
+     value  -var value -var value
+
+   define variables of form
+
+     verb_var(i) = value
+
+   --var will become verb__var
+
+   o  values may be in double quotes if they contain alphameric characters
+   o  a # signifies the rest of the line is a comment
+   o  adjacent double quotes put one double quote into value
+   o  processing ends when an unquoted semi-colon or end of string is encountered
+   o  the variable name for the first value is verb_init (often verb_oo)
+   o  leading and trailing blanks are removed from values
+   o  call it once to give defaults
+   o  call it again and vars without values are set to null strings
+
+OPTIONS
+
+   VERB          command name to process
+   STRING        string is character input string with first verb removed (options + other commands)
+   ALLOW         keyword indicating whether commands may be added or only replaced
+   ERROR_RETURN  error code. If zero, no error occurred
+
+RETURNS
+
+EXAMPLE
+

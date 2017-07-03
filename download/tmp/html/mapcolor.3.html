@@ -1,0 +1,278 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>mapcolor (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>mapcolor(3f) </B>- [M_pixel] set a color index using RGB values
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+definition:
+<P>
+   subroutine mapcolor(indx, red, green, blue)
+   integer indx, red, green, blue
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Set the color map index indx to the color represented by (red, green, blue).
+rgb values are in the range of 0 to 255.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+INDX
+color index number, in range 0 to 255
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+RED
+red component of color being defined, in range 0 to 255
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+GREEN
+green component of color being defined, in range 0 to 255
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+BLUE
+blue component of color being defined, in range 0 to 255
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Color wheel example:
+<P>
+<PRE>
+   !     good program to exercise color tables, and look at differences
+   !     when actual output device has a color table that is dynamic,
+   !     or only has a small color table (a frame in this program takes
+   !     at least SLICES*RINGS colors to produce accurately).
+   !
+   program demo_mapcolor
+   use M_pixel
+   use m_color, only: hue
+   use M_writegif, only : writegif
+   use M_units,    only : cosd, sind
+   implicit none
+      character(len=4096)  :: filename
+      real                 :: lightstep
+      integer              :: ii,iframe
+      integer,parameter    :: SLICES=30
+      integer,parameter    :: RINGS=  8
+      real                 :: LIGHTNESS
+      integer,parameter    :: BOX=1200
+      call prefsize(BOX,BOX)
+      call vinit(&#146; &#146;)
+      call color(0)
+      call clear()
+      call color(7)
+      call biggest_ortho2(-110./2.,85./2.,-110./2.,110./2.)
+      LIGHTNESS=100.0
+      lightstep=-5
+      do ii=1,19
+         iframe=ii
+         call color(0)
+         call clear()
+         call color(7)
+         call wheel()
+         write(filename,&#146;("mapcolor.3_",i3.3,".gif")&#146;)int(LIGHTNESS)
+         call writegif(filename,P_pixel,P_colormap)
+         LIGHTNESS=LIGHTNESS+LIGHTSTEP
+      enddo
+      call vexit()
+   contains
+   !=======================================================================--------
+   subroutine wheel() ! draw an entire wheel
+      character(len=40) :: inline
+      real              :: hue_val
+      integer           :: ii
+      call textang(0.0)
+      call color(7)
+      call textsize(5.0,6.0)
+      call font(&#146;times.r&#146;)
+      call move2(0.0,103.0/2.0)
+      call centertext(.true.)
+      call linewidth(30)
+      call drawstr(&#146;COLOR WHEEL&#146;)
+      call linewidth(0)
+      call textsize( 2.5,2.5)
+      call font(&#146;futura.l&#146;)
+      call move2(0.0,90.0/2.0)
+      write(inline,&#146;("lightness=",f6.2)&#146;)LIGHTNESS
+      call linewidth(30)
+      call drawstr(inline)
+      call linewidth(0)
+      call textsize(1.5,1.5)
+      hue_val=0
+      do ii=SLICES, 1,-1
+         call slice(hue_val)
+      enddo
+      call centertext(.false.)
+   end subroutine wheel
+   !=======================================================================--------
+   subroutine slice(hue_val) ! draw a slice
+      integer           :: buffer
+      real              :: hue_val, ang_inc
+      character(len=40) :: inline
+      real              :: step
+      real              :: X1, X2, X3, X4
+      real              :: Y1, Y2, Y3, Y4
+      !
+      integer           :: maxcolors, current_color
+      integer           :: ir, ig, ib
+      real              :: r,g,b
+      real              :: saturation
+      !
+      integer           :: status
+      integer           :: icount
+      real              :: angle1, angle2
+      real              :: radius1, radius2, radius3, radius4
+      !
+      integer,save      :: color_count=0
+      !
+      buffer=8
+      ANG_INC=360.0/SLICES
+      angle1=hue_val-ANG_INC/2
+      angle2=angle1+ANG_INC
+      saturation=100
+      radius1=32
+      radius3=radius1+4
+      radius4=radius1+7
+      ! draw tic from wheel to start of angle label
+      call color(7)
+      call linewidth(40)
+      call move2( radius1*cosd(hue_val), radius1*sind(hue_val) )
+      call draw2( radius3*cosd(hue_val), radius3*sind(hue_val) )
+      ! draw degree label at tic
+      call textang(hue_val)
+      call move2( radius4*cosd(hue_val), radius4*sind(hue_val) )
+      write(inline,&#146;(i0)&#146;)nint(hue_val)
+      call linewidth(20)
+      call drawstr(inline)
+      call linewidth(0)
+      step=radius1/(RINGS)
+      radius2=radius1-step
+      ! draw a chunk in a slice
+      MAXCOLORS=(256)-buffer
+      do icount=RINGS+1,2,-1
+         CURRENT_COLOR=MOD(color_count,MAXCOLORS)+buffer  ! add buffer to leave base colors alone
+         color_count=color_count+1
+         ! fancy mapcolor
+         call hue("hls",hue_val,LIGHTNESS,saturation,"rgb",r,g,b,status)
+         ir=int(r*255.0/100.0+0.50)
+         ig=int(g*255.0/100.0+0.50)
+         ib=int(b*255.0/100.0+0.50)
+         call mapcolor(CURRENT_COLOR,ir,ig,ib)
+         call color(CURRENT_COLOR)
+         !
+         X1=cosd(angle1)*radius2
+         Y1=sind(angle1)*radius2
+         X2=cosd(angle1)*radius1
+         Y2=sind(angle1)*radius1
+         !
+         X3=cosd(angle2)*radius2
+         Y3=sind(angle2)*radius2
+         X4=cosd(angle2)*radius1
+         Y4=sind(angle2)*radius1
+         !
+         call makepoly()
+         call move2(X1,Y1)
+         call draw2(X2,Y2)
+         call draw2(X4,Y4)
+         call draw2(X3,Y3)
+         call closepoly()
+         !
+         saturation=saturation-100.0/RINGS
+         radius1=radius2
+         radius2=radius1-step
+      enddo
+      hue_val=hue_val+ANG_INC
+   end subroutine slice
+   end program demo_mapcolor
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>mapcolor (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a560d98f-6e6f-468d-ba93-fae7202d882a using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/mapcolor.3.gif"></center> 
+</body>
+</HTML>

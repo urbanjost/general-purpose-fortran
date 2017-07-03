@@ -1,0 +1,36 @@
+NAME
+   system_unsetenv(3f) - [M_system]change or add an environment variable by calling unsetenv(3c)
+SYNOPSIS
+  subroutine system_unsetenv(name,ierr)
+
+   character(len=*),intent(in)  :: name
+   integer,intent(out),optional :: ierr
+
+DESCRIPTION
+
+   The system_unsetenv(3f) function deletes the variable name from the
+   environment.
+
+OPTIONS
+   name   name of variable to delete.
+          If name does not exist in the environment, then the
+          function succeeds, and the environment is unchanged.
+
+   ierr   The system_unsetenv(3f) function returns zero on success, or -1 on error.
+          name is NULL, points to a string of length 0, or contains an '=' character.
+          Insufficient memory to add a new variable to the environment.
+
+EXAMPLE
+  Sample program:
+
+     program demo_system_unsetenv
+     use M_system, only : system_unsetenv, system_putenv
+     implicit none
+     call system_putenv('GRU=this is the value')
+     write(*,'(a)')'The variable GRU should be set'
+     call execute_command_line('env|grep GRU')
+     call unsetenv('GRU')
+     write(*,'(a)')'The variable GRU should not be set'
+     call execute_command_line('env|grep GRU')
+     end program demo_system_unsetenv
+

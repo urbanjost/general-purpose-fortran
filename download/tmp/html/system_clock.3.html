@@ -1,0 +1,181 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>system_clock (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>
+</B><B>system_clock(3f) </B>- [INTRINSIC:SYSTEM ENVIRONMENT] Time function
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Arguments</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Standard</A><BR>
+<A HREF=#6>Class</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+call <B>system_clock</B>([count, count_rate, count_max])
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+system_clock lets you measure durations of time with the precision
+of the smallest time increment generally available on a system by
+returning processor-dependent values based on the current value of the
+processor clock. The CLOCK value is incremented by one for each clock
+count until the value count_max is reached and is then reset to zero
+at the next count. CLOCK therefore is a modulo value that lies in the
+range 0 to count_max. count_rate and count_max are assumed constant
+(even though CPU rates can vary on a single platform).
+<P>
+count_rate is system dependent and can vary depending on the kind of
+the arguments.
+<P>
+If there is no clock, or querying the clock fails, COUNT is set to
+<B>-huge</B>(count), and count_rate and count_max are set to zero.
+<P>
+system_clock is typically used to measure short time intervals (system
+clocks may be 24-hour clocks or measure processor clock ticks since
+boot, for example). It is most often used for measuring or tracking
+the time spent in code blocks in lieu of using profiling tools.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+COUNT
+- (Optional) shall be a scalar of type INTEGER with
+<B>intent</B>(out).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+count_rate
+- (Optional) shall be a scalar of type INTEGER or REAL
+with <B>intent</B>(out).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+count_max
+- (Optional) shall be a scalar of type INTEGER with
+<B>intent</B>(out).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+   program test_system_clock
+     integer :: count, count_rate, count_max
+     call system_clock(count, count_rate, count_max)
+     write(*,*) count, count_rate, count_max
+   end program
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+[[Fortran 95]] and later
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Subroutine
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+[[date_and_time]], [[cpu_time]]
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>system_clock (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b953123f-307a-47e6-83eb-94bd5cc18a3d using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/system_clock.3.gif"></center> 
+</body>
+</HTML>

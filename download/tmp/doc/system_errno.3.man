@@ -1,0 +1,15 @@
+NAME
+   system_errno(3f) - [M_system] XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+SYNOPSIS
+   integer(kind=c_int) function system_errno()
+
+DESCRIPTION
+
+EXAMPLE
+  Sample program:
+
+   program demo_system_errno
+   use M_system, only: system_errno
+   implicit none
+   end program demo_system_errno
+

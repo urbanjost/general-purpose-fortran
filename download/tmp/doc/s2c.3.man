@@ -1,0 +1,39 @@
+NAME
+     s2c - [M_strings]convert character variable to array of characters with last element set to null
+
+SYNOPSIS
+   function s2c(string)
+
+    character(len=*),intent=(in)  :: string
+    character(len=1),allocatable  :: s2c(:)
+DESCRIPTION
+   Given a character variable convert it to an array of single-character
+   character variables with the last element set to a null character.
+   This is generally used to pass character variables to C procedures.
+
+EXAMPLES
+
+   Sample Program:
+
+    program demo_s2c
+    use M_strings, only : s2c
+    implicit none
+    character(len=*),parameter   :: string="single string"
+    character(len=3),allocatable :: array(:)
+       write(*,*)'INPUT STRING ',trim(string)
+       ! put one character into each 3-character element of array
+       array=s2c(string)
+       ! write array with ASCII Decimal Equivalent below it except show
+       ! unprintable characters like NULL as "XXX"
+       write(*,'(1x,*("[",a3,"]":))')&
+            & merge('XXX',array,ichar(array(:)(1:1)).lt.32)
+       write(*,'(1x,*("[",i3,"]":))')&
+            & ichar(array(:)(1:1))
+    end program demo_s2c
+
+  Expected output:
+
+   INPUT STRING single string
+   [s  ][i  ][n  ][g  ][l  ][e  ][   ][s  ][t  ][r  ][i  ][n  ][g  ][XXX]
+   [115][105][110][103][108][101][ 32][115][116][114][105][110][103][  0]
+

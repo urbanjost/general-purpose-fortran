@@ -1,0 +1,750 @@
+<html>
+<head>
+<title></title>
+<style>
+body {xfont-style: italic}
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libjust4/just4.html">[CLI Home Page]</a>
+<div id="Container">
+<div id="Content">
+<html><head><title></title></head><body><table border="1">
+<tr><td><a href="source.html">source.html</a></td>
+<td>
+</td>
+<tr><td><a href="M_Compare_Float_Numbers.f90">M_Compare_Float_Numbers.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_anyscalar.f90">M_anyscalar.f90</a></td>
+<td>
+	M_anyscalar::anyscalar_to_real(3f): convert integer or real parameter of any kind to real'<br/>
+	M_anyscalar::anyinteger_to_128: convert integer parameter of any kind to 128-bit integer'<br/>
+</td>
+<tr><td><a href="M_calculator.f90">M_calculator.f90</a></td>
+<td>
+	compute(1f): line mode calculator program (that calls jucalc(3f))<br/>
+	M_calculator::jucalc(3f): The procedure JUCALC acts like a calculator<br/>
+	M_calculator::help_funcs(3fp): prints help for calculator functions<br/>
+	M_calculator::jupars(3fp): crack out the parenthesis and solve<br/>
+	M_calculator::jufuns(3fp):reduce name(p1,p2,...) (p(i) are non-parenthesized expressions)<br/>
+	M_calculator::stufftok(3fp): add a new token variable and assign string to it<br/>
+	M_calculator::juargs(3fp):given 'par1,par2,...' store  non-parenthesized expression par(n) into a real or string array<br/>
+	M_calculator::jucals(3fp): resolve a series of terms into a single value and restring<br/>
+	M_calculator::jupows(3fp): expand power functions in a string, working from left to right<br/>
+	M_calculator::jufacs(3fp):reduce unparenthesized string with only * and / operators to val<br/>
+	M_calculator::juator(3f):returns a real value rval8 from a numeric character string chars.<br/>
+	M_calculator::jurtoa(3fp): returns a numeric character string from a real value.<br/>
+	M_calculator::jusqes(3fp):change +-[] to #=(),replace strings with placeholders,delete comments.<br/>
+	M_calculator::jubous(3fp):locate where entry is/should go in sorted dictionary<br/>
+	M_calculator::juaddr(3fp): add new variable to numeric value dictionary at specified location<br/>
+	M_calculator::juadds(3fp): insert new variable name into string dictionary at specified location<br/>
+	M_calculator::given_name_get_stringvalue(3fp): return associated value for variable name<br/>
+	M_calculator::getvalue(3f): given numeric variable name return value<br/>
+	M_calculator::integer_stuff(3fp): pass INTEGER value to STUFF(3f)<br/>
+	M_calculator::real_stuff(3fp): pass REAL value to STUFF(3f)<br/>
+	M_calculator::real_stuff(3fp): pass DOUBLEPRECISION value to STUFF(3f)<br/>
+	M_calculator::stuffa(3f): directly store a string into calculator variable name table<br/>
+</td>
+<tr><td><a href="M_calculator_plus.f90">M_calculator_plus.f90</a></td>
+<td>
+	M_calculator_plus::inum0(3f):resolve a calculator string into a whole integer number<br/>
+	M_calculator_plus::rnum0(3f):resolve a calculator string into a real number<br/>
+	M_calculator_plus::dnum0(3f):resolve a calculator string into a doubleprecision number<br/>
+	M_calculator_plus::snum0(3f):resolve a calculator expression into a string<br/>
+	M_calculator_plus::jucalcx(3f):call jucalc() calculator and display messages<br/>
+	M_calculator_plus::strgarr(3f):read numeric expressions into an real array<br/>
+	M_calculator_plus::strgar2(3f):read numeric and string calculator expressions into an array USING CALCULATOR<br/>
+</td>
+<tr><td><a href="M_color.f90">M_color.f90</a></td>
+<td>
+	M_color::hue(3f): convert color components from one color model to another<br/>
+	M_color::rgbhls(3fp): given red,green,blue values calculate hue,lightness,saturation<br/>
+	M_color::rgbhvs(3fp): given red,green,blue calculate hue,saturation,value components<br/>
+	M_color::cmyrgb(3fp): given cyan,magenta,yellow calculate red,green,blue components<br/>
+	M_color::rgbcmy(3fp): given red,green,blue calculate cyan,magenta,yellow components<br/>
+	M_color::rgbmono(3f): convert RGB colors to a reasonable grayscale<br/>
+	M_color::rgbval(3fp): ensure a value is in the appropriate range and quadrant<br/>
+	M_color::hlsrgb(3fp): convert HLS(hue,lightness,saturation) values to RGB components<br/>
+	M_color::hvsrgb(3fp): given hue,saturation,value calculate red,green,blue components<br/>
+	M_color::yiqrgb(3fp): convert luma,orange-blue chrominance,purple-green chrominance to RGB<br/>
+	M_color::rgbyiq(3fp): convert RGB to luma,orange-blue chrominance,purple-green chrominance<br/>
+	M_color::closest_color_name(3f): given RGB values, try to find closest named color<br/>
+	M_color::showcolors(1f): list colors known to colorname2rgb(3f) & corresponding RGB values<br/>
+	M_color::color_name2rgb(3f): given a color name, return rgb color values in range 0 to 100<br/>
+</td>
+<tr><td><a href="M_constants.f90">M_constants.f90</a></td>
+<td>
+	M_constants(3fm): A collection of commonly used constants (pi, e, gamma, ...)'<br/>
+</td>
+<tr><td><a href="M_debug.f90">M_debug.f90</a></td>
+<td>
+	M_debug::stderr(3f): writes a message to standard error using a standard f2003 method<br/>
+	M_debug::fstop(3f): calls 'STOP VALUE' passing in a value (1-32), with optional message<br/>
+	M_debug::unit_check(3f):if .not.expression call 'goodbad NAME bad' & stop program<br/>
+	M_debug::unit_check_start(3f): call 'goodstart NAME start'<br/>
+	M_debug::unit_check_bad(3f): call 'goodbad NAME bad'<br/>
+	M_debug::unit_check_good(3f): call 'goodbad NAME good'<br/>
+	M_debug::pdec(3f): write ASCII Decimal Equivalent (ADE) numbers vertically beneath string<br/>
+</td>
+<tr><td><a href="M_factor.f90">M_factor.f90</a></td>
+<td>
+	M_factor::least_common_multiple(3f): function finds LCM for (i,j)|m(:)|m(:,:)|m(:,:,:)'<br/>
+	M_factor::greatest_common_divisor(3f): function finds GCD for (i,j)|m(:)|m(:,:)|m(:,:,:)<br/>
+	M_factor::lcm(3fp): least common multiple of two integers<br/>
+	M_factor::lcm_vector(3fp): least common multiple of integer array m(:)<br/>
+	M_factor::lcm_matrix(3fp):least common multiple of integer matrix m(:,:)<br/>
+	M_factor::lcm_cuboid(3fp):least common multiple of integer cuboid m(:,:,:)<br/>
+	M_factor::gcd(3fp): compute greatest common divisor of two integers<br/>
+	M_factor::gcd_vector(3fp):greatest common divisor of integer vector m(:)<br/>
+	M_factor::gcd_matrix(3fp):greatest common divisor of integer matrix array m(:,:)<br/>
+	M_factor::gcd_cuboid(3fp):greatest common divisor of integer cuboid m(:,:,:)<br/>
+	M_factor::prime_factors(3f):decompose a number into its prime factors<br/>
+	M_factor::i_is_prime(3f): reports whether an integer is prime<br/>
+</td>
+<tr><td><a href="M_fixedform.f90">M_fixedform.f90</a></td>
+<td>
+	 take an appropriate action for each keypress<br/>
+	 convert user data to an ncurses(3c) window<br/>
+	 look <br/>
+	 if pad coordinates map to a screen area find screen coordinates<br/>
+	 access program data here so nc_printplain(3f) is generic<br/>
+	 if on a menu button clear any menu buttons connected to it and toggle it<br/>
+	 from current cursor position jump to next input field in pad<br/>
+	 from current cursor position jump to previous input field in pad jsu<br/>
+</td>
+<tr><td><a href="M_getkey.f90">M_getkey.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_getopt.f90">M_getopt.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_getopt_long.f90">M_getopt_long.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_history.f90">M_history.f90</a></td>
+<td>
+	M_history::redo(3f): open binary direct access file for keeping history<br/>
+	M_history::open_history(3fp): open history file for REDO(3f) procedure<br/>
+	M_history::redoline(3fp): redo a previous input line<br/>
+	M_history::help(3fp): prints help for REDO(3f)<br/>
+</td>
+<tr><td><a href="M_html.f90">M_html.f90</a></td>
+<td>
+	M_html::h_array(3f):write table from array<br/>
+	M_html::h_close(3f):close HTML file<br/>
+	M_html::h_open(3f):open HTML file<br/>
+</td>
+<tr><td><a href="M_io.f90">M_io.f90</a></td>
+<td>
+	M_io::uniq(3f):append a number to the end of filename to make a unique name if name exists<br/>
+	M_io::print_inquire(3f): Do INQUIRE on file by name/number and print results<br/>
+	M_io::slurp(3f):allocate text array and read file filename into it<br/>
+	M_io::notopen(3f): find free FORTRAN unit number to OPEN() a file<br/>
+	M_io::dirname(3f):strip last component from filename<br/>
+	M_io::splitpath(3f):split Unix pathname into components (dir,name,basename,extension)<br/>
+	M_io::isdir(3f): determine if DIRNAME is a directory name ON UNIX-COMPATIBLE file systems<br/>
+</td>
+<tr><td><a href="M_journal.f90">M_journal.f90</a></td>
+<td>
+	M_journal::journal(3fg): provides public message routine, no paging or graphic mode change<br/>
+	M_journal::write_msg(3fp): basic message routine used for journal files<br/>
+	M_journal::set_stdout(3fp): change I/O logical unit value for standard writes<br/>
+	M_journal::change_model(3fp): change integer journal(3f) modes<br/>
+	M_journal::wm(3fp): calls JOURNAL('sc',message)<br/>
+	M_journal::wm_r(3fp): append real to message and pass to write_msg()<br/>
+	M_journal::wm_l(3fp): append logical to message and pass to write_msg()<br/>
+	M_journal::wm_d(3fp): append doubleprecision to message and pass to write_msg()<br/>
+	M_journal::wm_i(3fp): append integer to string and pass to write_msg()<br/>
+</td>
+<tr><td><a href="M_kracken.f90">M_kracken.f90</a></td>
+<td>
+	M_kracken(3fm):parse command line options of Fortran programs using Unix-like syntax<br/>
+	M_kracken::retrev(3f): retrieve token value from Language Dictionary when given NAME<br/>
+	M_kracken::dget(3f): given keyword fetch dble value from Language Dictionary (zero on err)<br/>
+	M_kracken::rget(3f): given keyword fetch real value from language dictionary (zero on err)<br/>
+	M_kracken::iget(3f): given keyword fetch integer value from Language Dictionary (0 on err)<br/>
+	M_kracken::lget(3f): given keyword fetch logical value from lang. dictionary (.f. on err)<br/>
+	M_kracken::sget(3f): Fetch string value and length of specified NAME from lang. dictionary<br/>
+	M_kracken::dgets(3f): given keyword fetch dble value from Language Dictionary (0 on err)<br/>
+	M_kracken::igets(3f):given keyword fetch integer array from string in dictionary(0 on err)<br/>
+	M_kracken::rgets(3f): given keyword fetch real array from string in dictionary (0 on err)<br/>
+	M_kracken::lgets(3f):given keyword fetch logical array from string in dictionary(F on err)<br/>
+	M_kracken::sgets(3f): Fetch strings value for specified NAME from the lang. dictionary<br/>
+	M_kracken::kracken(3f): define and parse command line options<br/>
+	M_kracken::setprompts(3f): set explicit prompts for keywords in interactive mode<br/>
+	M_kracken::dissect(3f): convenient call to parse() -- define defaults, then process<br/>
+	M_kracken::parse(3f):parse user command and store tokens into Language Dictionary<br/>
+	M_kracken::store(3fp): replace dict. name's value (if allow='add' add name if necessary)<br/>
+	M_kracken::bounce(3fp): find index in Language Dictionary where VARNAM can be found<br/>
+	M_kracken::add_string(3fp): Add new string name to Language Library dictionary<br/>
+	M_kracken::subscript(3fp): return the subscript value of a string when given it's name<br/>
+	M_kracken::get_command_arguments(3fp): return all command arguments as an allocated string<br/>
+	M_kracken::menu(3fp):prompt for values using a menu interface<br/>
+	M_kracken::show(3f):dump dictionary entries<br/>
+</td>
+<tr><td><a href="M_logic.f90">M_logic.f90</a></td>
+<td>
+	M_logic(3fm): Allows if/else/elseif/endif logic to be applied to input files<br/>
+	M_logic::cond(3f): process if/else/elseif/endif directives passed from input files<br/>
+	M_logic::if(3fp): process IF command in input files<br/>
+	M_logic::evalit(3fp): evaluate expression from an IF/ELSEIF and set write flag<br/>
+	M_logic::else(3fp): process ELSE command in input files<br/>
+	M_logic::elseif(3fp): process ELSEIF command in input files<br/>
+	M_logic::endif(3fp): process ENDIF command in input files<br/>
+</td>
+<tr><td><a href="M_math.f90">M_math.f90</a></td>
+<td>
+	M_math::julfit(3f): linear least squares curve fits, destroys input arrays<br/>
+	M_math::julfit1(3f): linear least square fit of (y=a*x+b), changes the y array<br/>
+	M_math::lowess(3f): data smoothing using locally weighted regression'<br/>
+	M_math::splift(3f): fits a spline to the n data points given in x and y'<br/>
+	M_math::splint(3f): interpolates and twice differentiates a cubic spline'<br/>
+	M_math::linearint(3f):linear interpolation of curve X(i),Y(i) at given XI(j) values<br/>
+	M_math::citer(3f): determine various geometric properties of circle segment given radius and area of the segment.<br/>
+	M_math::envelope(3f):Find the vertices (in clockwise order) of a polygon enclosing the points (x(i), y(i), i=1, ..., n.<br/>
+	M_math::inpolygon(3f):Subroutine to determine whether or not an integer point is in a polygon of integer points<br/>
+	M_math::locpt(3f): find if a point is inside a polygonal path<br/>
+	M_math::poly_intercept(3f): Calculates the points at which a line <A,B<br/>
+	M_math::polyarea(3f): compute the area bounded by a closed polygonal curve <br/>
+	M_math::extremum(3f):Find the minimum and maximum value in a REAL array'<br/>
+	M_math::bds(3f): Basic Descriptive Statistics (based on a routine from the IBM collection)<br/>
+	M_math::skekur1(3f): variant on calculating skewness and kurtosis of an arrray<br/>
+	M_math::skekurx(3f): COMPUTE UNBIASED ESTIMATOR OF THE POPULATION SKEWNESS AND KURTOSIS<br/>
+	M_math::stddev(3f): find standard deviation of a real array<br/>
+	M_math::almost(3f): function to compare two real numbers only up to a specified number of digits by calling ACCDIG(3f)<br/>
+	M_math::accdig(3f): compare two real numbers only up to a specified number of digits<br/>
+	M_math::dp_accdig(3f): compare two double values only up to a specified number of digits<br/>
+	M_math::round(3f):round val to specified number of significant digits<br/>
+	M_math::scale1(3f):given xmin,xmax,n, find new range xminp xmaxp divisible into approximately n linear intervals of size dist<br/>
+	M_math::scale3(3f):find nice log range.<br/>
+	M_math::invert_2x2(3f): performs a direct calculation of the inverse of a 2x2 matrix<br/>
+	M_math::invert_3x3(3f): performs a direct calculation of the inverse of a 3x3 matrix<br/>
+	M_math::invert_4x4(3f): performs a direct calculation of the inverse of a 4x4 matrix<br/>
+</td>
+<tr><td><a href="M_messages.f90">M_messages.f90</a></td>
+<td>
+	M_messages::junbad(3f):print eye-catching ASCII graphic (skull)<br/>
+	M_messages::junbat(3f):print eye-catching ASCII graphic (bat)<br/>
+	M_messages::junbuster(3f):print eye-catching ASCII graphic (ghostbuster)<br/>
+	M_messages::jundragon(3f):print eye-catching ASCII graphic (dragon) with message<br/>
+	M_messages::junroach(3f):print eye-catching ASCII graphic (roach)<br/>
+	M_messages::junsun(3f):print eye-catching ASCII graphic (sunshine)<br/>
+	M_messages::juntrolls(3f):print eye-catching ASCII graphic (trolls) with message<br/>
+	M_messages::tabgraph(3f): write columns of numbers with a text scale to the right<br/>
+	M_messages::blocks(3f): write out 132-character string in large block letters<br/>
+	M_messages::signs(3f):write up to 132 large block letters<br/>
+	place a non-advancing status counter on terminal display (not redirected)<br/>
+</td>
+<tr><td><a href="M_ncurses.f90">M_ncurses.f90</a></td>
+<td>
+	 Fortran interface to the ncurses(3c) library -John S.Urban 20141205<br/>
+	 wrapper around ICHAR(3f) that returns integer type C_LONG<br/>
+</td>
+<tr><td><a href="M_pixel.f90">M_pixel.f90</a></td>
+<td>
+	M_pixel::rect(3f): draw line rectangle given two opposite corners<br/>
+	M_pixel::line(3f): draw line between two points applying line width and color<br/>
+	M_pixel::swapcoor(3fp): swap two coordinates (integers)<br/>
+	M_pixel::draw_line_single(3fp): draw line between two points in pixel array<br/>
+	M_pixel::hershey(3f): draw text string as Hershey software vector fonts<br/>
+	M_pixel::hstylus(3fp): move to new current position(CP) or draw from CP to new position and update CP<br/>
+	M_pixel::chrcod(3fp): return symbol numbers or formatting codes for a text string<br/>
+	M_pixel::strlength: length of string using current font size<br/>
+	M_pixel::justfy(3f): calculate values for justifying Hershey fonts called by hershey(3f)<br/>
+	M_pixel::polyline(3f): draw lines between points<br/>
+	M_pixel::clear(3f): set background color all to specified color index<br/>
+	M_pixel::if_init(3f): check if pixel graphics library has been initialized<br/>
+	M_pixel::arc(3f): draw a arc using current line width and color<br/>
+	M_pixel::circle(3f): draw a circle using current line width and color<br/>
+	M_pixel::linewidth(3f): set line width for lines drawn in pixel image<br/>
+	M_pixel::color(3f): set current color for lines drawn in pixel image<br/>
+	M_pixel::mapcolor(3f): set a color index using RGB values<br/>
+	M_pixel::circleprecision(3f): set number of line segments making up a circle<br/>
+	M_pixel::getviewport(3f): return viewport in screen pixel coordinates<br/>
+	M_pixel::viewport(3f): Specify which part of the screen to draw in.<br/>
+	M_pixel::mapping(3fp): calculate conversion factors between viewport and world window<br/>
+	M_pixel::world2viewport(3fp): convert world coordinates to viewports<br/>
+	M_pixel::viewport2world(3fp): convert viewport to world coordinates<br/>
+	M_pixel::ortho2(3f): define the area of the virtual world coordinates to map to the viewport<br/>
+	M_pixel::biggest_ortho2(3f): given a window size, find and set to largest accommodating viewport<br/>
+	M_pixel::rmove2(3f): relative move<br/>
+	M_pixel::move2(3f): move current position<br/>
+	M_pixel::rdraw2(3f): relative draw<br/>
+	M_pixel::draw2(3f): draw a line from current position to specified point<br/>
+	M_pixel::prefsize(3f): specify size of pixel array<br/>
+	M_pixel::vexit(3f): exit pixel array drawing module<br/>
+	M_pixel::vinit(3f): initialize pixel array drawing module<br/>
+	M_pixel::makepoly(3f): opens polygon constructed by a series of move-draws and closed by closepoly<br/>
+	M_pixel::makepoly(3f): terminate a polygon opened by makepoly(3f)<br/>
+	M_pixel::print_ppm(3f): print pixel array as a P3 PPM file<br/>
+	M_pixel::print_ascii(3f): print pixel array as an ASCII block of text<br/>
+	M_pixel::textsize(3f): set text size in world units<br/>
+	M_pixel::ycentertext(3f): set text centering mode on for drawstr(3f) and drawc(3f) in Y direction<br/>
+	M_pixel::xcentertext(3f): set text centering mode for drawstr(3f) and drawc(3f) in X direction<br/>
+	M_pixel::centertext(3f): set text centering mode for drawstr(3f) and drawc(3f)<br/>
+	M_pixel::textang(3f): set angle in degrees to draw text at using drawstr(3f)<br/>
+	M_pixel::font(3f): select font style by name<br/>
+	M_pixel::drawchar(3f): draw text at the current position<br/>
+	M_pixel::drawstr(3f): draw text at the current position<br/>
+	M_pixel::getgp2(3f): get current graphics position<br/>
+	M_pixel::getdisplaysize(3f): Returns the width and height of the device in pixels<br/>
+	M_pixel::point2(3f): Draw a point at x, y<br/>
+	M_pixel::state(3f): print graphics state of M_pixel graphics module<br/>
+	M_pixel::poly2(3f): construct a polygon from an array of points<br/>
+	M_pixel::vflush(3f): flush current page<br/>
+	M_pixel::PPM_DRAW_FILL_LINE(3fp): draws a line across a graphics array<br/>
+	M_pixel::PPM_DRAW_THICK_LINE(3fp): draw line from current pixel graphics position to (x, y) using polygons for line thickness<br/>
+	M_pixel::PPM_SOLID_FILL(3fp): fill polygon of n points that are in viewport coordinates<br/>
+	M_pixel::PPM_ENDCAP_CIRCEL(3fp): Draw a circle on thick line segment end point<br/>
+</td>
+<tr><td><a href="M_pixel_slices.f90">M_pixel_slices.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_process.f90">M_process.f90</a></td>
+<td>
+	  Example of Fortran writing GNUPLOT command and data file.<br/>
+	M_process(3fm): call C process open,close,read,write functions <br/>
+	M_process::process_open_read(3f):open process to read from<br/>
+	M_process::process_open_write(3f):open process to write to<br/>
+	M_process::process_open(3fp):open process<br/>
+	M_process::process_close(3f):close process<br/>
+	M_process::process_readline(3f):read line from process<br/>
+	M_process::process_readall(3f):read all lines from process<br/>
+	M_process::process_writeline(3f):write line to process<br/>
+</td>
+<tr><td><a href="M_readgif.f90">M_readgif.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_readline.f90">M_readline.f90</a></td>
+<td>
+	 Call readline(3c) from Fortran using ISO_C_BINDING<br/>
+</td>
+<tr><td><a href="M_regex.f90">M_regex.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_sort.f90">M_sort.f90</a></td>
+<td>
+	M_sort::sort_shell(3f): Generic subroutine sorts the array X using a shell sort<br/>
+	M_sort::sort_shell_strings(3fp):sort strings over specified field using shell sort<br/>
+	M_sort::sort_shell_strings_lh(3fp):sort strings(a-z) over specified field using shell sort<br/>
+	M_sort::sort_shell_strings_hl(3fp):sort strings(z-a) over specified field using shell sort<br/>
+	M_sort::sort_shell_integers(3fp):sort integer array using Shell sort and specified order<br/>
+	M_sort::sort_shell_integers_hl(3fp):sort integer array using Shell sort (high to low)<br/>
+	M_sort::sort_shell_integers_lh(3fp):sort integer array using Shell sort low to high<br/>
+	M_sort::sort_shell_reals(3fp):sort real array using Shell sort and specified order<br/>
+	M_sort::sort_shell_reals_hl(3fp):sort real array using Shell sort (high to low)<br/>
+	M_sort::sort_shell_reals_lh(3fp):sort real array using Shell sort (low to high)<br/>
+	M_sort::sort_shell_doubles(3fp):sort double array using Shell sort and specified order<br/>
+	M_sort::sort_shell_doubles_hl(3fp):sort double array using Shell sort (high to low)<br/>
+	M_sort::sort_shell_doubles_lh(3fp):sort double array using Shell sort (low to high)<br/>
+	M_sort::sort_shell_complex(3fp):sort complex array using Shell sort<br/>
+	M_sort::sort_shell_reals_hl(3fp):sort complex array using Shell sort (high to low)<br/>
+	M_sort::sort_shell_reals_lh(3fp):sort complex array using Shell sort (low to high)<br/>
+	M_sort::sort_shell_complex_double(3fp):sort double complex array using Shell sort<br/>
+	M_sort::sort_shell_reals_hl(3fp):sort double complex array using Shell sort (high to low)<br/>
+	M_sort::sort_shell_reals_lh(3fp):sort double complex array using Shell sort (low to high)<br/>
+</td>
+<tr><td><a href="M_strings.f90">M_strings.f90</a></td>
+<td>
+	M_strings(3f): Fortran module containing routines that deal with character strings<br/>
+	M_strings::switch(3f): toggle between string and array of characters; generic{a2s,s2a}<br/>
+	M_strings::string_to_value(3f): Generic subroutine converts numeric string to a number (a2d,a2r,a2i)<br/>
+	M_strings::v2s(3f): Generic function returns string given REAL|INTEGER|DOUBLEPRECISION value(d2s,r2s,i2s)<br/>
+	M_strings::matchw(3f): compare string to pattern which may contain wildcard characters<br/>
+	M_strings::split(3f): parse string on delimiter characters and store tokens into an array<br/>
+	M_strings::chomp(3f): Tokenize a string : JSU- 20151030<br/>
+	M_strings::delim(3f): parse a string and store tokens into an array<br/>
+	M_strings::substitute(3f): Globally substitute one substring for another in string<br/>
+	M_strings::change(3f): change a character string like a line editor<br/>
+	M_strings::strtok(3fp): Tokenize a string : JSU- 20151030<br/>
+	M_strings::modif(3f): Emulate the MODIFY command from the line editor XEDIT<br/>
+	M_strings::len_white(3f): return position of last non-blank/non-null character in string<br/>
+	M_strings::crop(3f): trim leading and trailings blanks from string<br/>
+	M_strings::transliterate(3f): replace characters from old set with new set<br/>
+	M_strings::reverse(3f): Return a string reversed<br/>
+	M_strings::upper(3f): Changes a string to uppercase<br/>
+	M_strings::lower(3f): Changes a string to lowercase over specified range<br/>
+	M_strings::a2s(3fp): function to copy char array to string<br/>
+	M_strings::s2a(3fp): function to copy string(1:Clen(string)) to char array<br/>
+	M_strings::s2c(3f): copy string(1:Clen(string)) to char array with null terminator<br/>
+	M_strings::c2s(3f): copy pointer to C char array till a null is encountered to a Fortran string up to 4096 characters<br/>
+	M_strings::indent(3f): find number of leading spaces in a string<br/>
+	M_strings::expand(3f): return string with escape sequences expanded<br/>
+	M_strings::notabs(3f): convert tabs to spaces while maintaining columns, remove CRLF chars<br/>
+	M_strings::adjustc(3f): center text<br/>
+	M_strings::nospace(3f): remove all whitespace from input string<br/>
+	M_strings::lenset(3f): return string trimmed or padded to specified length<br/>
+	M_strings::merge_str(3f): pads first and second arguments to MERGE(3f) to same length<br/>
+	M_strings::compact(3f): Converts white-space to single spaces<br/>
+	M_strings::noesc(3f): convert non-printable characters to a space<br/>
+	M_strings::a2r(3fp): subroutine returns real value from string<br/>
+	M_strings::a2i(3fp): subroutine returns integer value from string<br/>
+	M_strings::a2d(3fp): subroutine returns double value from string<br/>
+	M_strings::s2v(3f): returns doubleprecision number from string<br/>
+	M_strings::value_to_string(3fp): subroutine returns a string from a value<br/>
+	M_strings::v2s_bug(3f): function returns string given numeric value<br/>
+	M_strings::d2s(3fp): private function returns string given doubleprecision value<br/>
+	M_strings::r2s(3fp): private function returns string given real value<br/>
+	M_strings::i2s(3fp): private function returns string given integer value<br/>
+	M_strings::trimzeros(3fp): Delete trailing zeros from numeric decimal string<br/>
+	M_strings::describe(3f): return string describing long name of a single character<br/>
+	M_strings::string_to_values(3f): reads an array of numbers from a numeric string<br/>
+	M_strings::s2vs(3f): function returns array of values from a string<br/>
+	M_strings::isprint(3f): indicates if input character is a printable ASCII character<br/>
+	M_strings::isgraph(3f) :indicates if character is printable ASCII character excluding space<br/>
+	M_strings::isalpha(3f): Return .true. if character is a letter and .false. otherwise<br/>
+	M_strings::isxdigit(3f): returns .true. if c is a hexadecimal digit (0-9,a-f, or A-F)<br/>
+	M_strings::isdigit(3f): Returns .true. if ch is a digit (0-9) and .false. otherwise<br/>
+	M_strings::isblank(3f): returns .true. if character is a blank (space or horizontal tab)<br/>
+	M_strings::isascii(3f): returns .true. if character is in the range char(0) to char(127)<br/>
+	M_strings::isspace(3f): true if null,space,tab,return,new line,vertical tab, or formfeed<br/>
+	M_strings::iscntrl(3f): true if a delete or ordinary control character(0x7F or 0x00-0x1F)<br/>
+	M_strings::ispunct(3f): true if a printable punctuation character (isgraph(c)&&<br/>
+	M_strings::isupper(3f): returns true if character is an uppercase letter (A-Z)<br/>
+	M_strings::islower(3f): returns true if character is a miniscule letter (a-z)<br/>
+	M_strings::isalnum(3f): returns true if character is a letter (a-z,A-Z) or digit(0-9)<br/>
+	M_strings::construct_from_fill(3f): construct TYPE(STRING)<br/>
+	M_strings::oop_len(3f): length of string<br/>
+	M_strings::oop_len_trim(3f): trimmed length of string<br/>
+	M_strings::oop_switch(3f): convert string to array of single characters<br/>
+	M_strings::oop_index(3f): find starting position of a substring in a string<br/>
+	M_strings::oop_upper(3f): convert string to uppercase<br/>
+	M_strings::oop_lower(3f): convert string to miniscule<br/>
+	M_strings::oop_expand(3f): expand common escape sequences by calling expand(3f)<br/>
+	M_strings::oop_trim(3f): trim trailing spaces<br/>
+	M_strings::oop_crop(3f): crop leading and trailing spaces<br/>
+	M_strings::oop_reverse(3f): reverse string<br/>
+	M_strings::oop_adjustl(3f): adjust string to left<br/>
+	M_strings::oop_adjustr(3f): adjust string to right<br/>
+	M_strings::oop_adjustc(3f): adjust string to center<br/>
+	M_strings::oop_int(3f): string to integer<br/>
+	M_strings::oop_real(3f): string to real<br/>
+	M_strings::oop_dble(3f): string to double<br/>
+	M_strings::oop_compact(3f): adjust string to center<br/>
+	M_strings::oop_substitute(3f): change all occurrences of oldstring to newstring non-recursively<br/>
+	M_strings::oop_transliterate(3f): change all occurrences of oldstring to newstring non-recursively<br/>
+	M_strings::oop_lenset(3f): set string to specific length<br/>
+	M_strings::oop_matchw(3f): test if wildcard pattern matches string<br/>
+	M_strings::oop_notabs(3f): expand tab characters assuming tab stops every eight(8) characters<br/>
+	M_strings::oop_noesc(3f): replace non-printable characters with spaces<br/>
+	M_strings::oop_p(3f): return CHARACTER string from TYPE(STRING)<br/>
+	M_strings::init_dt(3f): initialize TYPE(STRING)<br/>
+	M_strings::string_plus_value(3f): add value to TYPE(STRING)<br/>
+	M_strings::string_minus_value(3f): subtract value from TYPE(STRING)<br/>
+	M_strings::string_append_value(3f): append value to TYPE(STRING)<br/>
+	M_strings::string_multiply_value(3f): multiply TYPE(STRING) value times<br/>
+	M_strings::eq(3f): compare derived type string objects (eq,lt,gt,le,ge,ne)<br/>
+</td>
+<tr><td><a href="M_swap.f90">M_swap.f90</a></td>
+<td>
+	M_swap::swap(3f): swap two variables of like type (real,integer,complex,character,double)'<br/>
+	M_swap::d_swap(3fp): swap two double variables<br/>
+	M_swap::d_swap(3fp): swap two real variables<br/>
+	M_swap::d_swap(3fp): swap two integer variables<br/>
+	M_swap::d_swap(3fp): swap two logical variables<br/>
+	M_swap::d_swap(3fp): swap two complex variables<br/>
+	M_swap::cd_swap(3fp): swap two double complex variables<br/>
+	M_swap::d_swap(3fp): swap two double variables<br/>
+</td>
+<tr><td><a href="M_system.f90">M_system.f90</a></td>
+<td>
+	M_system::system_srand(3f): call srand(3c)<br/>
+	M_system::system_kill(3f):call kill(3c) to send a signal to a process<br/>
+	M_system::system_errno(3f): return errno(3c)<br/>
+	M_system::system_geteuid(3f): call geteuid(3c)<br/>
+	M_system::system_getuid(3f): call getuid(3c)<br/>
+	M_system::system_getegid(3f): call getegid(3c)<br/>
+	M_system::system_getgid(3f): call getgid(3c)<br/>
+	M_system::system_getsid(3f): call getsid(3c) to get session leader for given pid<br/>
+	M_system::system_getpid(3f): call getpid(3c)<br/>
+	M_system::system_getppid(3f): call getppid(3c)<br/>
+	M_system::system_umask(3f): call umask(3c)<br/>
+	M_system::system_rand(3f): call rand(3c)<br/>
+	M_system::system_initenv(3f): initialize environment table for reading<br/>
+	M_system::system_link(3f): call link(3c) to create a file link<br/>
+	M_system::system_unlink(3f): call unlink(3c) to rm file link<br/>
+	M_system::system_perror(3f): call perror(3c) to display error message<br/>
+	M_system::system_chdir(3f): call chdir(3c)<br/>
+	M_system::system_remove(3f): call remove(3c) to remove file<br/>
+	M_system::system_rename(3f): call rename(3c) to change filename<br/>
+	M_system::system_getcwd(3f):call getcwd(3c) to get pathname of current working directory<br/>
+	M_system::system_rmdir(3f): call rmdir(3c) to remove empty directory<br/>
+	M_system::system_mkfifo(3f): call mkfifo(3c) to create a new FIFO special file<br/>
+	M_system::system_mkdir(3f): call mkdir(3c) to create empty directory<br/>
+	M_system::system_putenv(3f): call putenv(3c)<br/>
+	M_system::set_environment_variable(3f): call setenv(3c) to set environment variable<br/>
+	M_system::system_clearenv(3f): emulate clearenv(3c) to clear environment<br/>
+	M_system::system_unsetenv(3f): call unsetenv(3c) to remove variable from  environment<br/>
+	M_system::system_readenv(3f): read next entry from environment table<br/>
+	M_system::fileglob(3f): Returns list of files using a file globbing pattern<br/>
+	M_system::system_uname(3f): call my_uname(3c) which calls uname(3c)<br/>
+	M_system::system_gethostname(3f): get name of current host by calling gethostname(3c)<br/>
+	M_system::arr2str(3fp): function copies null-terminated char array to string<br/>
+	M_system::str2arr(3fp): function copies string to null terminated char array<br/>
+</td>
+<tr><td><a href="M_time.f90">M_time.f90</a></td>
+<td>
+	M_time::date_to_julian(3f): Converts proleptic Gregorian DAT date-time array to Julian Date<br/>
+	M_time::julian_to_date(3f): Converts Julian Date to DAT date-time array<br/>
+	M_time::date_to_unix(3f): Convert DAT date-time array to Unix Epoch Time<br/>
+	M_time::unix_to_date(3f): Converts Unix Time to DAT date-time array<br/>
+	M_time::d2o(3f): Converts DAT date-time array to Ordinal day<br/>
+	M_time::o2d(3f): Converts ordinal day to DAT date-time array<br/>
+	M_time::v2mo(3f): returns the month name of a Common month number<br/>
+	M_time::mo2d(3f): month name to DAT date-time array for 1st of that month in current year<br/>
+	M_time::mo2v(3f): given month name return month number (1-12) of that month<br/>
+	M_time::now(3f): return string representing current time given format<br/>
+	M_time::fmtdate(3f): given DAT date-time array return date as string using format<br/>
+	M_time::fmtdate_usage(3f): display macros recognized by fmtdate(3f)<br/>
+	M_time::guessdate(3f): Guess format of a date string to create a DAT date-time array<br/>
+	M_time::dow(3f): Given DAT date-time array return the day of the week<br/>
+	M_time::d2w(3f): DAT date-time array to iso-8601 Week-numbering year date yyyy-Www-d<br/>
+	M_time::w2d(3f): convert iso-8601 Week-numbering year date yyyy-Www-d to DAT date-time array<br/>
+	M_time::box_month(3f): generate month specified by DAT date-time array in character array<br/>
+	M_time::d2j(3f): Given DAT date-time array returns Julian Date<br/>
+	M_time::j2d(3f): Given Julian Date returns DAT date-time array<br/>
+	M_time::d2u(3f): Given DAT date-time array returns Unix Epoch time<br/>
+	M_time::u2d(3f): Given Unix Epoch Time returns DAT date-time array<br/>
+	M_time::sec2days(3f): converts seconds to string showing days of form D-HH:MM:SS<br/>
+	M_time::days2sec(3f): convert string [[-]dd-]hh:mm:ss.nn to seconds<br/>
+	M_time::call_sleep(3fp): call sleep(3c)<br/>
+	M_time::call_usleep(3fp): call usleep(3c)<br/>
+	M_time::now_ex(3f): use of now(3f) outside of a module<br/>
+	M_time::construct_from_dat(3f): construct TYPE(DATE_TIME) with DAT date-time array<br/>
+	M_time::construct_from_jed(3f): construct TYPE(DATE_TIME) with REAL Julian JED date-time value<br/>
+	M_time::construct_from_uet(3f): construct TYPE(DATE_TIME) with INTEGER Unix UET date-time value<br/>
+	M_time::dt2d(3f): convert derived type date_time to DAT date-time array<br/>
+	M_time::epoch(3f): convert derived type date_time to unix epoch seconds<br/>
+	M_time::format(3f): convert derived type date_time to formatted string<br/>
+	M_time::julian(3f): convert derived type date_time to julian date<br/>
+	M_time::ordinal(3f): convert derived type date_time to ordinal date<br/>
+	M_time::weekday(3f): convert derived type date_time to weekday (1=Monday,7=Sunday)<br/>
+	M_time::delta(3f): add times to a type(date_time)<br/>
+	M_time::init_dt(3f): initialize TYPE(DATE_TIME)<br/>
+	M_time::plus_seconds(3f): add derived type date_time object and seconds<br/>
+	M_time::minus_seconds(3f): subtract seconds from derived type date_time object<br/>
+	M_time::minus_date_time(3f): add derived type date_time object and seconds<br/>
+	M_time::eq(3f): compare derived type date_time objects (eq,lt,gt,le,ge,ne)<br/>
+</td>
+<tr><td><a href="M_treesort.f90">M_treesort.f90</a></td>
+<td>
+	 simple tree sort of integers as they are added to the sort<br/>
+</td>
+<tr><td><a href="M_units.f90">M_units.f90</a></td>
+<td>
+	M_units::c2f(3f): Convert celsius to fahrenheit<br/>
+	M_units::f2c(3f): Convert fahrenheit to celsius<br/>
+	M_units::r2d(3f): Convert radians to degrees<br/>
+	M_units::d2r(3f): Convert degrees to radians<br/>
+	M_units::sind(3f): sin(3f) with degrees as input instead of radians<br/>
+	M_units::cosd(3f): cos(3f) with degrees as input instead of radians<br/>
+	M_units::tand(3f): tan(3f) with degrees as input instead of radians<br/>
+	M_units::asind(3f): asin(3f) with degrees as output instead of radians<br/>
+	M_units::acosd(3f): calculate arc-cos of angle in degrees<br/>
+	M_units::atand(3f): result is arc-tangent of angle in degrees<br/>
+	M_units::atan2d(3f): calculate arc-tangent of angle in degrees<br/>
+	M_units::feet_to_meters(3f): converts a measurement in feet to meters<br/>
+	M_units::meters_to_feet(3f): converts a measurement in meters to feet<br/>
+	M_units::cartesian_to_spherical(3f): convert Cartesian coordinates to ISO polar coordinates<br/>
+	M_units::spherical_to_cartesian(3f): convert spherical coordinates to cartesian coordinates<br/>
+	M_units::cartesian_to_polar(3f): convert Cartesian coordinates to polar coordinates<br/>
+	M_units::polar_to_cartesian(3f): convert polar coordinates to cartesian coordinates<br/>
+</td>
+<tr><td><a href="M_writegif.f90">M_writegif.f90</a></td>
+<td>
+</td>
+<tr><td><a href="M_writegif_animated.f90">M_writegif_animated.f90</a></td>
+<td>
+</td>
+<tr><td><a href="Type_Kinds.f90">Type_Kinds.f90</a></td>
+<td>
+</td>
+<tr><td><a href="c.f90">c.f90</a></td>
+<td>
+</td>
+<tr><td><a href="calc_NC.f90">calc_NC.f90</a></td>
+<td>
+	 user-added calculator call function for ncurses routines<br/>
+</td>
+<tr><td><a href="dparanoia.f90">dparanoia.f90</a></td>
+<td>
+	dparanoia(3f): test doubleprecisions operations in programming environment<br/>
+</td>
+<tr><td><a href="init_random_seed.f90">init_random_seed.f90</a></td>
+<td>
+</td>
+<tr><td><a href="juown1.f90">juown1.f90</a></td>
+<td>
+	juown1(3f): extend functions available to the calculator routine <br/>
+</td>
+<tr><td><a href="kiss64.f90">kiss64.f90</a></td>
+<td>
+	 A 64-bit KISS random number generator by George Margaglia.<br/>
+	kiss64(3f):64-bit KISS random number generator by George Margaglia.<br/>
+</td>
+<tr><td><a href="nc_errmessage.f90">nc_errmessage.f90</a></td>
+<td>
+</td>
+<tr><td><a href="nc_notabs.f90">nc_notabs.f90</a></td>
+<td>
+	 convert tabs in input to spaces in output while maintaining columns, assuming a tab is set every 8 characters<br/>
+</td>
+<tr><td><a href="nc_printescape.f90">nc_printescape.f90</a></td>
+<td>
+	 plain text print reading window from ncurses<br/>
+</td>
+<tr><td><a href="nc_printhtml.f90">nc_printhtml.f90</a></td>
+<td>
+	 print ncurses(3c) window as HTML<br/>
+</td>
+<tr><td><a href="nc_printplain.f90">nc_printplain.f90</a></td>
+<td>
+	 plain text print reading window from ncurses<br/>
+</td>
+<tr><td><a href="nc_printunicode.f90">nc_printunicode.f90</a></td>
+<td>
+	 plain text print reading window from ncurses<br/>
+</td>
+<tr><td><a href="nc_uniqname.f90">nc_uniqname.f90</a></td>
+<td>
+	 append a number to the end of the filename that makes it relatively unique<br/>
+</td>
+<tr><td><a href="paranoia.f90">paranoia.f90</a></td>
+<td>
+	paranoia(3f): call doublprecision or real versions of paranoia<br/>
+</td>
+<tr><td><a href="pixel_slice.f90">pixel_slice.f90</a></td>
+<td>
+	M_pixel::pixel_slice(3f): simplified call of dl_slices to plot a 3d-surface<br/>
+</td>
+<tr><td><a href="ran_mod.f90">ran_mod.f90</a></td>
+<td>
+	 Test of random number consistency for ran_mod : 20111230 - John S. Urban<br/>
+	randmod(3f): random number generator<br/>
+	ran1.f    1.2 97/07/02                                            RAN1_2<br/>
+</td>
+<tr><td><a href="sparanoia.f90">sparanoia.f90</a></td>
+<td>
+	sparanoia(3f): test real value operations in programming environment<br/>
+</td>
+<tr><td><a href="strgar3.f90">strgar3.f90</a></td>
+<td>
+	strgar3(3f):read a string into an array USING CALCULATOR passing double-quoted strings<br/>
+	errc(3f): function for specifying error curve numbers<br/>
+</td>
+<tr><td><a href="C-M_getkey.c">C-M_getkey.c</a></td>
+<td>
+	 Driver for reading a character from keyboard in raw I/O mode */<br/>
+	 Driver for reading a character from keyboard in raw I/O mode */<br/>
+	 Driver for reading a character from keyboard in raw I/O mode */<br/>
+	 Driver for reading a character from keyboard in raw I/O mode */<br/>
+</td>
+<tr><td><a href="C-M_readline.c">C-M_readline.c</a></td>
+<td>
+	 Fortran-callable C routine that calls readline(3c)<br/>
+	FCreadline(3c): return line from readline(3c) to Fortran. John S. Urban, 20100323<br/>
+</td>
+<tr><td><a href="C-M_regex.c">C-M_regex.c</a></td>
+<td>
+</td>
+<tr><td><a href="C-M_system.c">C-M_system.c</a></td>
+<td>
+	system_unbuffer(3c): FORTRAN-callable call to turn off buffering of stdin<br/>
+</td>
+<tr><td><a href="C-M_units.c">C-M_units.c</a></td>
+<td>
+	d2r(3c): Convert degrees to radians<br/>
+	r2d(3c): Convert radians to degrees<br/>
+</td>
+<tr><td><a href="C-gauss.c">C-gauss.c</a></td>
+<td>
+</td>
+<tr><td><a href="C-getkey.c">C-getkey.c</a></td>
+<td>
+	 Driver for reading a character from keyboard in raw I/O mode<br/>
+</td>
+<tr><td><a href="C-hlsrgb.c">C-hlsrgb.c</a></td>
+<td>
+</td>
+<tr><td><a href="C-hvsrgb.c">C-hvsrgb.c</a></td>
+<td>
+</td>
+<tr><td><a href="C-jubiglet.c">C-jubiglet.c</a></td>
+<td>
+	jubiglet(3c): Make big block letters<br/>
+	 jubiglet_(char *s, int len) // Fortran 77 callable (sometimes) version of jubiglet */<br/>
+</td>
+<tr><td><a href="C-jucolor.c">C-jucolor.c</a></td>
+<td>
+	jucolor(3c):this procedure converts a color's components from one color model to another<br/>
+</td>
+<tr><td><a href="C-macros.c">C-macros.c</a></td>
+<td>
+</td>
+<tr><td><a href="C-read_line.c">C-read_line.c</a></td>
+<td>
+	read_line(3c):Paranoid function to read a line of text from a text file or terminal<br/>
+</td>
+<tr><td><a href="C-rgbhls.c">C-rgbhls.c</a></td>
+<td>
+</td>
+<tr><td><a href="C-rgbhvs.c">C-rgbhvs.c</a></td>
+<td>
+</td>
+<tr><td><a href="C-rgbmono.c">C-rgbmono.c</a></td>
+<td>
+	 For converting RGB colors to a reasonable grayscale<br/>
+</td>
+<tr><td><a href="C-rgbval.c">C-rgbval.c</a></td>
+<td>
+	 Ensure a color value is in the appropriate range and quadrant<br/>
+</td>
+<tr><td><a href="Makefile">Makefile</a></td>
+<td>
+</td>
+<tr><td><a href="Makefile_picky">Makefile_picky</a></td>
+<td>
+</td>
+<tr><td><a href="exrc">exrc</a></td>
+<td>
+	 advanced vi(1) configuration file <br/>
+</td>
+<tr><td><a href="vimrc">vimrc</a></td>
+<td>
+	 An example for a vimrc file.<br/>
+</td>
+</table></body></html>
+</div>
+</div>
+</body>
+</html>

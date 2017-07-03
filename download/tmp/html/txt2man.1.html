@@ -1,0 +1,361 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>txt2man (1)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>txt2man </B>- [DEVELOPER] convert flat ASCII text to man page format
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Environment</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Hints</A><BR>
+<A HREF=#7>See Also</A><BR>
+<A HREF=#8>Bugs</A><BR>
+<A HREF=#9>Author</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>txt2man</B> [<B>-hpTX</B>] [<B>-t</B> <I>mytitle</I>] [<B>-P</B> <I>pname</I>] [<B>-r</B> <I>rel</I>] [<B>-s</B> <I>sect</I>]
+[<B>-v</B> <I>vol</I>] [<B>-I</B> <I>txt</I>] [<B>-B</B> <I>txt</I>] [<I>ifile</I>]
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>txt2man</B> converts the input text into nroff/troff standard <B>man</B>(7)
+macros used to format Unix manual pages. Nice pages can be generated;
+particularly for commands (section 1 or 8) or for C functions (sections
+2, 3), with the ability to recognize and format command and function
+names, flags, types and arguments.
+<P>
+<B>txt2man</B> is also able to recognize and format sections, paragraphs,
+lists (standard, numbered, description, nested), cross references and
+literal display blocks.
+<P>
+If an input file <I>ifile</I> is omitted, standard input is used. The result
+is displayed on standard output.
+<P>
+Here is how text patterns are recognized and processed:
+<TABLE cellpadding=3><!-- tsb: Here is how text patterns are recognized and processed:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Sections
+These headers are defined by a line in upper case, starting
+in column 1. If there is one or more leading spaces, a
+sub-section will be generated instead.
+NOTE that a section resets the indent; so an uppercase
+line is ALWAYS the beginning of a section and will reset
+being in fixed space mode.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Paragraphs
+They must be separated by a blank line, and consistently left
+aligned (all lines must have the same left margin).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Tag list
+The item definition is separated from the item description
+by at least 2 blank spaces, even before a new line, if
+the definition is too long. Definition will be emphasized
+by default.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Bullet list
+Bullet list items are defined by the first word being "-"
+or "*" or "o" or "+".
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Enumerated list
+The first word must be a number followed by a dot.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Literal display blocks
+This paragraph type is used to display unmodified text,
+for example source code. It must be separated by a blank
+line, and be indented.
+It will be printed using a fixed font whenever possible
+(troff).
+<P>
+So that means you put a blank line above a code block and
+that there has to have been at least one previous line in
+the section to set the default indent and that the code
+must be indented relative to that line:
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SECTION BEGINNING</H4>
+</A>
+<BLOCKQUOTE>
+Line to set the default paragraph indent
+<P>
+<PRE>
+                    code starts indented with a blank line
+<P>
+</PRE>
+</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Cross references
+A cross reference (another man page) is defined by a word
+followed by a number in parenthesis.
+<P>
+Special sections:
+<TABLE width=100% cellpadding=3><!-- tsb: Special sections:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+NAME
+The function or command name and short description are set in
+this section.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+SYNOPSIS
+This section receives a special treatment to identify command
+name, flags and arguments, and propagate corresponding
+attributes later in the text. If a C-like function is recognized
+(word immediately followed by an open parenthesis), <B>txt2man</B> will
+print function name in bold font, types in normal font, and
+variables in italic font. The whole section will be printed using
+a fixed font family (courier) whenever possible (troff).
+</TD></TR>
+<TR></TR></TABLE>It is a good practice to embed documentation into source code, by using
+comments or constant text variables. <B>txt2man</B> allows to do that, keeping
+the document source readable, usable even without further formatting
+(i.e. for online help) and easy to write. The result is high quality
+and standard complying document.
+</TD></TR>
+<TR></TR></TABLE><A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-h</B>
+The option <B>-h</B> displays help.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-P</B> <I>pname</I>
+Set <I>pname</I> as project name in header. Default to uname <B>-s</B>.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-p</B>
+Probe title, section name and volume.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-t</B> <I>mytitle</I>
+Set <I>mytitle</I> as title of generated man page.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-r</B> <I>rel</I>
+Set <I>rel</I> as project name and release.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-s</B> <I>sect</I>
+Set <I>sect</I> as section in heading, usually a value from 1 to 8.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-v</B> <I>vol</I>
+Set <I>vol</I> as volume name, i.e. "Unix user &#146;s manual".
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-I</B> <I>txt</I>
+Italicize text in output. Can be specified more than once.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-B</B> <I>txt</I>
+Emphasize (bold) text in output. Can be specified more than once.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-T</B>
+Text result previewing using PAGER, usually <B>more</B>(1).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>-X</B>
+X11 result previewing using <B>gxditview</B>(1).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>ENVIRONMENT</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+PAGER
+name of paging command, usually <B>more</B>(1), or <B>less</B>(1). If not set
+falls back to <B>more</B>(1).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Try this command to format this text itself:
+<P>
+<PRE>
+      $ txt2man -h 2&gt;&1 | txt2man -T
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>HINTS</H3>
+
+</A>
+<BLOCKQUOTE>
+To obtain an overall good formating of output document, keep paragraphs
+indented correctly. If you have unwanted bold sections, search for
+multiple spaces between words, which are used to identify a tag list
+(term followed by a description). Choose also carefully the name of
+command line or function parameters, as they will be emphasized each
+time they are encountered in the document.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>man</B>(1), <B>mandoc</B>(7), <B>rman</B>(1), <B>groff</B>(1), <B>more</B>(1), <B>gxditview</B>(1), <B>troff</B>(1).
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Automatic probe (<B>-p</B> option) works only if input is a regular file (i.e.
+not stdin).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Something wrong when use ellipsis ("&#46;&#46;&#46;")
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SYNOPSIS
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+      command [value(s)]
+</PRE>
+causes problems with ().
+<TABLE cellpadding=3><!-- tsb:       command [value(s)]
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SYNOPSIS
+name ( a, b, c, d )
+causes problems with ().
+Remove spaces and it is OK.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=9>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Marc Vertes &lt;<A HREF="mailto:mvertes@free.fr">mvertes@free.fr</A>&gt;
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>txt2man (1)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2f3a4fdc-90ff-48e8-9a78-14a5616b7d81 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/txt2man.1.gif"></center> 
+</body>
+</HTML>

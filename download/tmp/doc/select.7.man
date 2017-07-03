@@ -1,0 +1,156 @@
+NAME
+   select(7f) - [FORTRAN:EXECUTION CONTROL] masked array assignment
+SYNOPSIS
+1 The CASE construct selects for execution at most one of its constituent blocks. The selection is based on the
+  value of an expression.
+
+  R810      case-construct               is   select-case-stmt
+                                                   [ case-stmt
+                                                        block ] ...
+                                                   end-select-stmt
+
+  R811      select-case-stmt             is   [ case-construct-name : ] SELECT CASE ( case-expr )
+
+  R812      case-stmt                    is   CASE case-selector [case-construct-name]
+
+  R813      end-select-stmt              is   END SELECT [ case-construct-name ]
+
+  C809      (R810) If the select-case-stmt of a case-construct specifies
+            a case-construct-name, the corresponding end-
+            select-stmt shall specify the same case-construct-name. If
+            the select-case-stmt of a case-construct does not specify a
+            case-construct-name, the corresponding end-select-stmt shall
+            not specify a case-construct- name. If a case-stmt specifies
+            a case-construct-name, the corresponding select-case-stmt
+            shall specify the same case-construct-name.
+
+  R814      case-expr                    is scalar-int-expr
+                                         or scalar-char-expr
+                                         or scalar-logical-expr
+
+  R815      case-selector                is ( case-value-range-list )
+                                         or DEFAULT
+
+  C810      (R810) No more than one of the selectors of one of the CASE statements shall be DEFAULT.
+
+  R816      case-value-range             is   case-value
+                                         or   case-value :
+                                         or   : case-value
+                                         or   case-value : case-value
+
+  R817      case-value                   is scalar-int-initialization-expr
+                                         or scalar-char-initialization-expr
+                                         or scalar-logical-initialization-expr
+
+  C811      (R810) For a given case-construct, each case-value shall be
+            of the same type as case-expr . For character
+            type, the kind type parameters shall be the same; character
+            length differences are allowed.
+
+  C812      (R810) A case-value-range using a colon shall not be used
+            if case-expr is of type logical.
+
+  C813      (R810) For a given case-construct, there shall be no possible
+            value of the case-expr that matches more
+            than one case-value-range.
+
+DESCRIPTION
+  8.1.5      CASE construct
+  8.1.5.1    Purpose and form of the CASE construct
+
+
+  8.1.5.2     Execution of a CASE construct
+
+   The execution of the SELECT CASE statement causes the case expression
+   to be evaluated. The resulting value is called the case index. For a
+   case value range list, a match occurs if the case index matches any
+   of the case value ranges in the list. For a case index with a value
+   of c, a match is determined as follows.
+
+        1. If the case value range contains a single value v without a colon, a match occurs for type logical if
+           the expression c .EQV. v is true, and a match occurs for type integer or character if the expression
+           c == v is true.
+        2. If the case value range is of the form low : high, a match occurs if the expression low <= c .AND.
+           c <= high is true.
+        3. If the case value range is of the form low :, a match occurs if the expression low <= c is true.
+        4. If the case value range is of the form : high, a match occurs if the expression c <= high is true.
+        5. If no other selector matches and a DEFAULT selector appears, it matches the case index.
+        6. If no other selector matches and the DEFAULT selector does not appear, there is no match.
+
+   The block following the CASE statement containing the matching
+   selector, if any, is executed. This completes execution of the
+   construct.
+
+   It is permissible to branch to an end-select-stmt only from within
+   its CASE construct.
+
+  8.1.5.3     Examples of CASE constructs
+
+       NOTE 8.5
+       An integer signum function:
+
+       INTEGER FUNCTION SIGNUM (N)
+       SELECT CASE (N)
+       CASE (:-1)
+          SIGNUM = -1
+       CASE (0)
+          SIGNUM = 0
+       CASE (1:)
+          SIGNUM = 1
+       END SELECT
+       END
+
+       NOTE 8.6
+       A code fragment to check for balanced parentheses:
+
+       CHARACTER (80) :: LINE
+          ...
+       LEVEL = 0
+       SCAN_LINE: DO I = 1, 80
+          CHECK_PARENS: SELECT CASE (LINE (I:I))
+          CASE ('(')
+             LEVEL = LEVEL + 1
+          CASE (')')
+             LEVEL = LEVEL - 1
+             IF (LEVEL < 0) THEN
+                PRINT *, 'UNEXPECTED RIGHT PARENTHESIS'
+                EXIT SCAN_LINE
+             END IF
+          CASE DEFAULT
+             ! Ignore all other characters
+           END SELECT CHECK_PARENS
+        END DO SCAN_LINE
+        IF (LEVEL > 0) THEN
+           PRINT *, 'MISSING RIGHT PARENTHESIS'
+        END IF
+
+        NOTE 8.7
+        The following three fragments are equivalent:
+
+        IF (SILLY == 1) THEN
+           CALL THIS
+        ELSE
+           CALL THAT
+        END IF
+        SELECT CASE (SILLY == 1)
+        CASE (.TRUE.)
+           CALL THIS
+        CASE (.FALSE.)
+           CALL THAT
+        END SELECT
+        SELECT CASE (SILLY)
+        CASE DEFAULT
+           CALL THAT
+        CASE (1)
+           CALL THIS
+        END SELECT
+
+        NOTE 8.8
+        A code fragment showing several selections of one block:
+
+        SELECT CASE (N)
+        CASE (1, 3:5, 8)        ! Selects 1, 3, 4, 5, 8
+           CALL SUB
+        CASE DEFAULT
+           CALL OTHER
+        END SELECT

@@ -1,0 +1,46 @@
+NAME
+      adjustc(3f) - [M_strings]center text
+
+SYNOPSIS
+  pure function adjustc(string[,length])
+
+   character(len=*),intent(in)  :: string
+   integer,intent(in),optional  :: length
+   character(len=:),allocatable :: adjustc
+
+DESCRIPTION
+    Centers input text in a string of the length specified. Returns a
+    string of length LENGTH if LENGTH is present. Otherwise returns a
+    string of the length of the input string.
+OPTIONS
+    string  input string to trim and center
+    length  line length to center text in, optional.
+RETURNS
+    adjustc  centered output string
+
+EXAMPLES
+
+  Sample Program:
+
+   program demo_adjustc
+   use M_strings, only : adjustc
+   !  using length of the input string
+      write(*,'(a)')       '================================'
+      write(*,'(a)')adjustc('centered string                 ')
+      write(*,'(a)')adjustc('                 centered string')
+      write(*,'(a)')adjustc('  centered string               ')
+   !  using explicit output string length
+      write(*,'(a)')repeat('=',50)
+      write(*,'(a)')adjustc('this is a centered string',50)
+      write(*,'(a)')repeat('=',50)
+   end program demo_adjustc
+
+  Expected output
+
+   ================================
+           centered string
+           centered string
+           centered string
+   ==================================================
+               this is a centered string
+   ==================================================

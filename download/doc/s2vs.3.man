@@ -1,0 +1,56 @@
+NAME
+     s2vs - [M_strings]given a string representing numbers return a numeric array
+
+SYNOPSIS
+      function s2vs(line[,delim])
+
+       character(len=*) :: line
+       doubleprecision,allocatable :: s2vs(:)
+
+DESCRIPTION
+
+   The function S2VS(3f) takes a string representing a series of numbers
+   and converts it to a numeric doubleprecision array. The string values
+   may be delimited by spaces, semi-colons, and commas by default.
+
+OPTIONS
+      LINE   Input string containing numbers
+      DELIM  optional list of delimiter characters. If a space is
+             included, it should appear as the left-most character
+             in the list. The default is " ;," (spaces, semi-colons,
+             and commas).
+RESULTS
+      S2VS   doubleprecision array
+
+EXAMPLE
+
+    Sample Program:
+
+     program demo_s2vs
+     use M_strings, only : s2vs
+     character(len=80)           :: s=' 10 20e3;3.45 -400.3e-2;1234; 5678 '
+     doubleprecision,allocatable :: values(:)
+     integer,allocatable         :: ivalues(:)
+
+     values=s2vs(s)
+     ivalues=int(s2vs(s))
+     call reportit()
+
+     contains
+       subroutine reportit()
+         write(*,*)'S2VS:'
+         write(*,*)'input string.............',trim(s)
+         write(*,*)'number of values found...',size(values)
+         write(*,*)'values...................',(values(ii),ii=1,size(values))
+         write(*,*)'ivalues..................',(ivalues(ii),ii=1,size(values))
+       end subroutine reportit
+     end program demo_s2vs
+
+   Expected output
+
+    S2VS:
+    input string............. 10 20e3;3.45 -400.3e-2;1234; 5678
+    number of values found... 6
+    values................... 10.000000000000000  20000.000000000000 3.4500000000000002
+    -4.0030000000000001       1234.0000000000000  5678.0000000000000
+    ivalues.................. 10  20000  3  -4 1234 5678

@@ -1,0 +1,43 @@
+NAME
+     lower - [M_strings]changes a string to lowercase over specified range
+
+SYNOPSIS
+
+   elemental pure function lower(str,begin,end) result (string)
+
+    character(*), intent(in) :: str
+    integer,optional         :: begin, end
+    character(len(str))      :: string  ! output string
+
+DESCRIPTION
+     lower(string) returns a copy of the input string with all characters
+     converted to miniscule over the specified range, assuming ASCII
+     character sets are being used. If no range is specified the entire
+     string is converted to miniscule.
+
+OPTIONS
+   str    string to convert to miniscule
+   begin  optional starting position in "str" to begin converting to miniscule
+   end    optional ending position in "str" to stop converting to miniscule
+
+RESULTS
+   lower  copy of the input string with all characters converted to miniscule
+          over optionally specified range.
+
+EXAMPLE
+
+   Sample call
+
+      program demo_lower
+      use M_strings, only: lower
+      implicit none
+      character(len=:),allocatable  :: s
+         s=' ABCDEFG abcdefg '
+         write(*,*) 'mixed-case input string is ....',s
+         write(*,*) 'lower-case output string is ...',lower(s)
+      end program demo_lower
+
+   Expected output
+
+      mixed-case input string is .... ABCDEFG abcdefg
+      lower-case output string is ... abcdefg abcdefg

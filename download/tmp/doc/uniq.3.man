@@ -1,0 +1,62 @@
+NAME
+     uniq(3f) - [M_io] append a number to the end of filename to make a unique name if name exists
+SYNOPSIS
+     Usage
+
+      character(len=255) function uniq(name,istart)
+      character(len=*),intent(in) :: name
+      integer,intent(in),optional :: istart
+
+DESCRIPTION
+   Given a filename test if it is in use or exists. If it is, or if it
+   ends in a period add a four-digit number to the end of the name and
+   test if the new name is in use. If necessary, increment the number
+   and try again up to the value 9999.
+
+   o relatively non-generic;
+   o does not try to detect io errors
+
+   could make this use $TMPDIR and $$ to suffix and prefix file with to come up with a unique filename
+OPTIONS
+      name    base input name used to create output filename
+      istart  number to start with as a suffix
+RETURNS
+      uniq  A unique filename that is the same as the NAME input parameter
+            except with a number appended at the end if needed.
+EXAMPLE
+   Sample program
+
+      program demo_uniq
+      use M_io, only : uniq
+      implicit none
+      character(len=255) :: myname
+      integer            :: i
+         myname=uniq('does_not_exist')
+         open(unit=10,file='does_exist')
+         write(*,*)'name stays the same ',trim(myname)
+         myname=uniq('does_exist')
+         write(*,*)'name has suffix added ',trim(myname)
+         do i=1,10
+            myname=uniq('does_exist')
+            write(*,*) 'FILENAME:',trim(myname)
+            open(unit=20+i,file=myname)
+         enddo
+      end program demo_uniq
+
+   Expected output
+
+    name stays the same does_not_exist
+    name has suffix added does_exist0000
+    FILENAME:does_exist0001
+    FILENAME:does_exist0002
+    FILENAME:does_exist0003
+    FILENAME:does_exist0004
+    FILENAME:does_exist0005
+    FILENAME:does_exist0006
+    FILENAME:does_exist0007
+    FILENAME:does_exist0008
+    FILENAME:does_exist0009
+    FILENAME:does_exist0010
+
+AUTHOR
+   John S. Urban, 1993

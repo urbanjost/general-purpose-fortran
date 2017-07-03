@@ -1,0 +1,16 @@
+NAME
+     line(3f) - [M_pixel] draw line between two points
+
+SYNOPSIS
+ definition:
+
+   subroutine line(x1,y1, x2,y2 )
+   real,intent(in)            :: x1,y1,x2,y2
+
+DESCRIPTION
+   Draw line between two points using current line width and color
+
+OPTIONS
+   X1,Y1  starting point for line segment
+   X2,Y2  end point for line segment
+

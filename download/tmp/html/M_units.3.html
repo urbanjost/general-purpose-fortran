@@ -1,0 +1,294 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_units (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_units(3fm) </B>- [M_units]convert between various physical units
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<P>
+<B>procedure</B> definitions:
+<P>
+      elemental real function c2f(celsius)
+      elemental real function f2c(fahrenheit)
+<P>
+      elemental real function r2d(radians)
+      elemental real function d2r(degrees)
+<P>
+      elemental real function feet_to_meters(feet)
+      elemental real function meters_to_feet(meters)
+<P>
+      elemental real function sind(angle_in_degrees)
+      elemental real function cosd(angle_in_degrees)
+      elemental real function tand(angle_in_degrees)
+      elemental real function asind(x)
+      elemental real function acosd(x)
+      elemental real function atand(x)
+      elemental real function atan2d(x,y)
+<P>
+      subroutine cartesian_to_spherical(x,y,z,radius,inclination,azimuth)
+      subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
+      subroutine cartesian_to_polar(x,y,radius,inclination)
+      subroutine polar_to_cartesian(radius,inclination,x,y)
+<P>
+</PRE>
+<B>Where</B> <I>the</I> <I>input</I> <I>values</I> <I>may</I> <I>be</I> <I>any</I> <I>standard</I> <I>scalar</I> <I>value</I> <I>supported</I> <I>by</I>
+<B>the</B> <B>anyscalar_to_real</B>(3f) <I>function</I> (<I>(real,integer,doubleprecision)</I>) <I>within</I>
+<I>the</I> <I>range</I> <I>allowed</I> <I>by</I> <I>the</I> <I>function</I>.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>M_units</B>(3fm) is a Fortran module that collects together basic
+procedures that are used to convert between various physical units
+and common named constants.
+<P>
+<PRE>
+      +---------------------------+
+      |Angle|Area        |Base    |
+      |-----+------------+--------|
+      |Data |Energy      |Length  |
+      |-----+------------+--------|
+      |Mass |Power       |Pressure|
+      |-----+------------+--------|
+      |Speed|Temperature |Time    |
+      +---------------------------+
+<P>
+</PRE>
+Angular Units
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Angular Units
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o d2r:
+Convert degrees to radians
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o r2d:
+Convert radians to degrees
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Temperature
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Temperature
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o c2f:
+Convert Celsius to Fahrenheit
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o f2c:
+Convert Fahrenheit to Celsius
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Distance
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Distance
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o feet_to_meters:
+Convert feet to meters
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o meters_to_feet:
+Convert meters to feet
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+REAL trig <I>function.</I> where <I>input</I> is in angular degrees instead of radians
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: REAL trig <I>function.</I> where <I>input</I> is in angular degrees instead of radians
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental real <I>function</I> <B>sind</B>(angle_in_degrees)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental real <I>function</I> <B>cosd</B>(angle_in_degrees)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental real <I>function</I> <B>tand</B>(angle_in_degrees)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental real <I>function</I> <B>asind</B>(x)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental real <I>function</I> <B>acosd</B>(x)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental real <I>function</I> <B>atand</B>(x)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental real <I>function</I> <B>atan2d</B>(x,y)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Coordinates
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Coordinates
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o cartesian_to_spherical:
+Convert cartesian coordinates to spherical
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o spherical:
+Convert spherical coordinates to cartesian
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o cartesian_to_polar:
+Convert cartesian coordinates to polar
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o polar:
+Convert polar coordinates to cartesian
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
+And <I>the</I> real constants PI, RADIAN, DEGREE, E.
+And <I>the</I> double_precision constants PI_D, RADIAN_D, DEGREE_D, E_D.
+<BLOCKQUOTE>
+<P>
+Note that your compiler is less likely to inline small procedures in a
+module than it would statement <I>function.</I> or CONTAINED <I>function.</I>.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Simple usage example:
+<P>
+<PRE>
+   program testit
+   use M_units, only : r2d, d2r
+   use M_units, only : f2c, c2f
+   use M_units, only : sind, cosd, tand
+   use M_units, only : asind, acosd, atand, atan2d
+   use M_units, only : pi=&gt;pi,radian,degree,e
+   implicit none
+   write(*,*)r2d([0.0,PI/4.0,PI/2.0,3.0*PI/2.0,PI])
+   write(*,*)d2r([0.0,45.0,90.0,135.0,180.0])
+   write(*,*)f2c([-40.0,32.0,212.0])
+   write(*,*)c2f([-40.0,0.0,100.0])
+   write(*,*)PI
+   write(*,*)E
+   end program testit
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   &gt; 0.00000000   45.0000000   90.0000000   270.000000   180.000000
+   &gt; 0.00000000  0.785398185   1.57079637   2.35619450   3.14159274
+   &gt;-40.0000000   0.00000000   100.000000
+   &gt;-40.0000000   32.0000000   212.000000
+   &gt; 3.14159274
+   &gt; 2.71828175
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_units (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ab52474f-8c19-49ca-b9fc-78cc8f4a2e43 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_units.3.gif"></center> 
+</body>
+</HTML>

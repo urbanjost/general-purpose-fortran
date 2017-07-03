@@ -1,0 +1,43 @@
+NAME
+     move_alloc(3f) - [INTRINSIC] Move allocation from one object to another
+
+SYNTAX
+
+   call move_alloc(src, dest)
+
+DESCRIPTION
+
+   move_alloc(src, dest) moves the allocation from SRC to DEST.
+   SRC will become deallocated in the process.
+
+ARGUMENTS
+
+   SRC  - ALLOCATABLE, intent(inout), may be of any type and kind.
+   DEST  - ALLOCATABLE, intent(out), shall be of the same type, kind and rank as SRC.
+
+EXAMPLE
+
+  Sample program:
+
+   program test_move_alloc
+       integer, allocatable :: a(:), b(:)
+
+       allocate(a(3))
+       a = [ 1, 2, 3 ]
+       call move_alloc(a, b)
+       print *, allocated(a), allocated(b)
+       print *, b
+   end program test_move_alloc
+
+STANDARD
+
+   [[Fortran 2003]] and later
+
+CLASS
+
+Pure subroutine
+
+SEE ALSO
+
+   [[allocated]]
+

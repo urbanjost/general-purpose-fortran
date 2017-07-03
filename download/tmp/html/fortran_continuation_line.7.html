@@ -1,0 +1,247 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>fortran_continuation_line (7)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fortran_continuation_line(7f) </B>- [FORTRAN] Fortran Continuation Lines
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Specifically</A><BR>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If a statement is too long to fit on a line, it can be continued with
+the following methods: If a line is ended with an ampersand, &, it will
+be continued on the next line. Continuation is normally to the first
+character of the next non-comment line.
+<P>
+<PRE>
+   A = 174.5 * Year   &
+       + Count / 100
+</PRE>
+The above is equivalent to the following
+<P>
+<PRE>
+   A = 174.5 * Year  + Count / 100
+<P>
+</PRE>
+Note that & is not part of the statement.
+<P>
+<PRE>
+   A = 174.5 * Year   &
+   !  this is a comment line
+       + Count / 100
+<P>
+</PRE>
+The above is equivalent to the following, since the comment is ignored
+by the compiler:
+<P>
+<PRE>
+   A = 174.5 * Year  + Count / 100
+<P>
+</PRE>
+If the first non-blank character of the continuation line is &,
+continuation is to the first character after the &:
+<P>
+<PRE>
+   A = 174.5 + ThisIsALong&
+        &VariableName * 123.45
+<P>
+</PRE>
+is equivalent to
+<P>
+<PRE>
+   A = 174.5 + ThisIsALongVariableName * 123.45
+<P>
+</PRE>
+In this case, there should be no spaces between the last character and
+the & on the first line. For example,
+<P>
+<PRE>
+   A = 174.5 + ThisIsALong   &
+        &VariableName * 123.45
+<P>
+</PRE>
+is equivalent to
+<P>
+<PRE>
+   A = 174.5 + ThisIsALong   VariableName * 123.45
+<P>
+</PRE>
+Note that there are spaces between ThisIsALong and VariableName. In this
+way, a token (name and number) can be split over two lines. However,
+this is not recommended
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>SPECIFICALLY</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+3.3.2.4
+Free form statement continuation
+</TD></TR>
+<TR></TR></TABLE><TABLE cellpadding=3>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+The character "&" is used to indicate that the current statement is
+continued on the next line that is not a
+comment line. Comment lines cannot be continued; an "&" in a comment
+has no effect. Comments may occur within a continued statement. When
+used for continuation, the "&" is not part of the statement. No line
+shall contain a single "&" as the only nonblank character or as the
+only nonblank character before an "!" that initiates a comment.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+If a noncharacter context is to be continued, an "&" shall be the last
+nonblank character on the line, or the last
+nonblank character before an "!". There shall be a later line that is
+not a comment; the statement is continued on the next such line. If
+the first nonblank character on that line is an "&", the statement
+continues at the next character position following that "&"; otherwise,
+it continues with the first character position of that line.
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+If a lexical token is split across the end of a line, the first nonblank
+character on the first following noncomment
+line shall be an "&" immediately followed by the successive characters
+of the split token.
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+If a character context is to be continued, an "&" shall be the last
+nonblank character on the line and shall not be
+followed by commentary. There shall be a later line that is not a
+comment; an "&" shall be the first nonblank character on the next such
+line and the statement continues with the next character following that
+"&".
+</TD></TR>
+<TR></TR></TABLE>So this is OK:
+<P>
+<PRE>
+   POINT=[&   ! define a Point &lt;X,Y,Z&gt;
+   & 10, &    ! the X component
+   & 20, &    ! the Y component
+   & 30  ]    ! the Z component
+<P>
+</PRE>
+because you can have comments after the ampersand when it is not a string.
+But this is not OK:
+<P>
+<PRE>
+   STRING=[&#146;&   ! create a sentence
+   & This&      ! first word
+   & is&        ! second word
+   & sentence&  ! third word
+   & a&#146;]        ! forth word (a comment here is OK)
+<P>
+</PRE>
+Because when continuing a string you cannot have a comment after the ampersand.
+This is OK:
+<P>
+<PRE>
+   STRING=[&#146;&
+   ! create a sentence
+   & This&
+   ! first word
+   & is&
+   ! second word
+   & sentence&
+   ! third word
+   & a&#146;]        ! forth word (a comment here is OK)
+<P>
+<P>
+</PRE>
+Long strings:
+<P>
+<PRE>
+   Subroutine LongString()
+<P>
+   Character (len=200) :: string1, String2
+   string1 = "A very long string that won&#146;t fit on a single &
+              &line can be made through proper continuation."
+<P>
+   string2 = "A very long string that won&#146;t fit on a single " // &
+             "line can be made through proper continuation."
+   if (string1 == string2) then
+     print *, "string1 and 2 are identical!"
+     print *, "string1 & 2=",string1
+   else
+     print *, "string1 and 2 don&#146;t match!"
+   endif
+<P>
+   End Subroutine LongString
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>fortran_continuation_line (7)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dc69f3a2-0d97-40d0-b10c-2ce277bcaf74 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/fortran_continuation_line.7.gif"></center> 
+</body>
+</HTML>

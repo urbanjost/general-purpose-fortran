@@ -1,0 +1,34 @@
+NAME
+   t2m - [DEVELOPER] basic markup of text to a man(1) page
+
+SYNOPSIS
+   t2m FILE -cmd -section 1 -product "" -help .F. -version .F.
+
+DESCRIPTION
+   Minimalist conversion of a text file to a man page. Lines that are all upper-case
+   starting in column 1 start a section. Otherwise the sections are printed essentially
+   as-is.
+
+OPTIONS
+     FILE
+        The input filename
+
+     -section N  N is the man(1) section number. Typically the following categories
+                 are used:
+
+                  User Commands       1  Executable programs or shell commands
+                  System Calls        2  System calls (functions provided by the kernel)
+                  Library Calls       3  Library calls (functions within program libraries)
+                  Special Files       4  Special files (usually found in /dev)
+                  File Formats        5  File formats and conventions (eg. /etc/passwd)
+                  Games               6  Games
+                  Miscellanous        7  Miscellaneous (including macro packages and conventions), e.g. man(7), groff(7)
+                  System Admin.       8  System administration commands (usually only for root)
+                  Kernel Extensions   9  Kernel routines [Non standard]
+
+                 See the man(1) page for man(1) for further details.
+
+     -cmd
+     -product
+     -help       display help and exit
+     -version    display version information and exit

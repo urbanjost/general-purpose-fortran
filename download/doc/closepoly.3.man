@@ -1,0 +1,11 @@
+NAME
+   closepoly(3f) - [M_pixel] Terminates a polygon opened by makepoly(3f)
+
+SYNOPSIS
+ definition:
+
+      subroutine closepoly()
+
+DESCRIPTION
+   Terminates a polygon opened by MAKEPOLY(3f).
+

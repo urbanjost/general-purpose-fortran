@@ -1,0 +1,51 @@
+NAME
+     ABS(3f) - [INTRINSIC:NUMERIC] Absolute value
+
+SYNTAX
+   result = ABS(A)
+
+DESCRIPTION
+   ABS(A) computes the absolute value of A.
+
+ARGUMENTS
+  A  - the type of the argument shall be an INTEGER, REAL, or
+       COMPLEX.
+
+RETURN VALUE
+   The return value is of the same type and kind as the argument except
+   the return value is REAL for a COMPLEX argument.
+
+   If A is of type INTEGER or REAL, the value of the result is |A|; if A is
+   COMPLEX with value (X, Y), the result is equal to a processor-dependent
+   approximation to SQRT(X**2 + Y**2) computed without undue overflow
+   or underflow.
+
+EXAMPLE
+  Sample program:
+
+     program test_abs
+     integer :: i = -1, iout
+     real :: x = -1.e0, xout, zout
+     complex :: z = (-3.e0,4.e0)
+        write(*,*)'INPUTS:',i,x,z
+        iout = abs(i)
+        xout = abs(x)
+        zout = abs(z)
+        write(*,*)'OUTPUTS:',iout,xout,zout
+        ! 3 - 4 -5 right triangle test :
+        write(*,*)'The abs() of (3.0,4.0) should be 5.0',abs((3.0,4.0))
+     end program test_abs
+  Results:
+
+    INPUTS:   -1  -1.00000000    (-3.00000000,4.00000000)
+    OUTPUTS:   1   1.00000000      5.00000000
+    The abs() of (3.0,4.0) should be 5.0   5.00000000
+
+STANDARD
+
+   [[FORTRAN 77]] and later
+
+CLASS
+
+   Elemental function
+

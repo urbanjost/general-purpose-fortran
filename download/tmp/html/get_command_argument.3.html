@@ -1,0 +1,235 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>get_command_argument (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>
+</B><B>get_command_argument(3f) </B>- [INTRINSIC:SYSTEM ENVIRONMENT] Get command line arguments
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Arguments</A><BR>
+<A HREF=#4>Return Value</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Standard</A><BR>
+<A HREF=#7>Class</A><BR>
+<A HREF=#8>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+call <B>get_command_argument</B>(number [, value, length, status])
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Retrieve the NUMBER-th argument that was passed on the command line
+when the containing program was invoked.
+<P>
+There is not anything specifically stated about what an argument is but
+in practice the arguments are split on whitespace unless the arguments
+are quoted and IFS values (Internal Field Seperators) used by common
+shells are ignored.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+NUMBER
+- Shall be a scalar of type <B>integer</B>(4), NUMBER &gt; 0.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+VALUE
+- Shall be a scalar of type CHARACTER and of default kind.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+LENGTH
+- (Optional) Shall be a scalar of type <B>integer</B>(4).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+STATUS
+- (Optional) Shall be a scalar of type <B>integer</B>(4).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+After get_command_argument returns, the VALUE argument holds the
+NUMBER-th command line argument. If VALUE can not hold the argument, it is
+truncated to fit the length of VALUE. If there are less than NUMBER
+arguments specified at the command line, VALUE will be filled with blanks.
+If NUMBER = 0, VALUE is set to the name of the program (on systems
+that support this feature).
+<P>
+The LENGTH argument contains the length of the
+NUMBER-th command line argument.
+<P>
+If the argument retrieval fails, STATUS
+is a positive number; if VALUE contains a truncated command line argument,
+STATUS is <B>-1</B>; and otherwise the STATUS is zero.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program test_get_command_argument
+   implicit none
+     integer :: count,i, longest, argument_length
+     integer,allocatable  :: istat(:), ilen(:)
+     character(len=:),allocatable :: arguments(:)
+<P>
+     ! get number of arguments
+     count = command_argument_count()
+<P>
+     ! find longest argument
+     longest=0
+     do i=0,count
+        call get_command_argument(number=i,length=argument_length)
+        longest=max(longest,argument_length)
+      enddo
+<P>
+     ! allocate string array big enough to hold command line
+    allocate(character(len=longest) :: arguments(0:count))
+    allocate(istat(0:count))
+    allocate(ilen(0:count))
+<P>
+     ! read the arguments into the array
+     do i=0,count
+       call get_command_argument(i, arguments(i),status=istat(i),length=ilen(i))
+     enddo
+<P>
+     ! show the results
+     write (*,&#146;(i3.3,1x,i0.5,1x,i0.5,1x,"[",a,"]")&#146;) (i,istat(i),ilen(i),arguments(i)(:ilen(i)),i=0,count)
+<P>
+</PRE>
+<BLOCKQUOTE>
+end program test_get_command_argument
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+Sample output:
+<P>
+<PRE>
+   ./test_get_command_argument a    simple      test    &#146;of getting   arguments  &#146; "  from the command"
+   000 00000 00003 [./test_get_command_argument]
+   001 00000 00001 [a]
+   002 00000 00006 [simple]
+   003 00000 00004 [test]
+   004 00000 00024 [of getting   arguments  ]
+   005 00000 00018 [  from the command]
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+[[Fortran 2003]] and later
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Subroutine
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+[[get_command]],
+[[command_argument_count]]
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>get_command_argument (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a164b21a-eaa6-4cc2-b9fc-da8878a40cfd using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/get_command_argument.3.gif"></center> 
+</body>
+</HTML>

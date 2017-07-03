@@ -1,0 +1,174 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>font (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>font(3f) </B>- [M_pixel] select font style by name
+<B>
+</BLOCKQUOTE>
+</B><B>SYNOPSIS:
+</B><B>definition:
+</B><B>
+<PRE>
+        subroutine font(fontname)
+        character(len=*),intent(in) :: fontname
+<P>
+</PRE>
+</B><A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Example</A><BR>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Set the current font. Allowed names are
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Set the current font. Allowed names are
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o futura.l
+SIMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o futura.m
+DUPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o times.r
+COMPLEX
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+o times.i
+ITALIC
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+   program demo_font
+   use :: M_pixel
+   use :: M_writegif, only : writegif
+   real    :: left
+   real    :: baseline=80.0
+   integer :: icolor=1
+      !! set up drawing surface
+      call prefsize(400, 400)
+      call vinit()
+      call viewport(0.0, 400.0, 400.0, 0.0)
+      call ortho2(-100.0, 100.0, -100.0, 100.0)
+      call color(7)
+      call clear()
+      call textsize(10.0, 10.0)
+      !! place a vertical line along the edge
+      call color(1)
+      call move2(-90.0, -90.0)
+      call draw2(-90.0, 90.0)
+      !! make a centered title at top a bit bolder and bigger
+      call xcentertext()
+      call textsize(13.0, 13.0)
+      call linewidth(90)
+      left=0
+      call nextline(&#146;Font Samples&#146;)
+      !! print the font samples
+      left=-90
+      call linewidth(0)
+      call textsize(10.0, 10.0)
+      call centertext(.false.)
+      icolor=icolor-1
+      call nextline(&#146;DEFAULT (ie. futura.l)&#146;)
+      icolor=icolor-1
+      call nextline(&#146;now call font(3f) &#46;&#46;&#46;&#146;)
+      call nextline(&#146;SIMPLEX, or futura.l&#146;)
+      call nextline(&#146;COMPLEX, or times.r&#146;)
+      call nextline(&#146;ITALIC, or times.i&#146;)
+      call nextline(&#146;DUPLEX, or futura.m&#146;)
+      call writegif(&#146;font.3.gif&#146;,P_pixel,P_colormap)
+      !call execute_command_line(&#146;display font.3.gif&#146;)
+      call vexit()
+   contains
+   subroutine nextline(string)
+   character(len=*) :: string
+   !! reduce some duplicate code; very specific to this example
+      integer :: iend
+      iend=index(string,&#146;,&#146;)  ! if comma, assume font name found
+      if(iend.ne.0)call font(string(:iend-1)) ! change font
+      icolor=icolor+1         ! set pen color
+      call color(icolor)
+      baseline=baseline-20    ! move down before drawing line
+      call move2(left, baseline)
+      call drawstr(string)    ! draw string
+   end subroutine nextline
+<P>
+   end program demo_font
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>font (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6d695e32-6009-43e5-83e4-200970dc1f8c using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/font.3.gif"></center> 
+</body>
+</HTML>

@@ -1,0 +1,66 @@
+<dl>
+<!-- ======================================================================= -->
+<dt> <a name="CLOSEST_COLOR_NAME">NAME</a> </dt><dd>
+    closest_color_name(3f) - [M_color]returns the closest name for the given RGB values.
+</dd>
+<!-- ======================================================================= -->
+<dt> SYNOPSIS  </dt><dd>
+   <pre>
+   subroutine closest_color_name(r,g,b,closestname)
+
+    real,intent(in)               :: r,g,b
+    character(len=20),intent(out) :: closestname
+   </pre>
+</dd>
+<!-- ======================================================================= -->
+<dt> DESCRIPTION  </dt><dd>
+
+    closest_color_name() returns the closest name for the given RGB values.
+    Most X11 Windows color names are supported.
+</dd>
+<!-- ======================================================================= -->
+<dt> OPTIONS  </dt><dd>
+
+    <ul>
+    <li>R  - red component, range of 0 to 100</li>
+    <li>G  - green component, range of 0 to 100</li>
+    <li>B  - blue component, range of 0 to 100</li>
+    <ul>
+</dd>
+<!-- ======================================================================= -->
+<dt> RETURNS  </dt><dd>
+
+    <ul>
+    <li>CLOSESTNAME  - name of color found closest to given RGB value</li>
+    <ul>
+</dd>
+<!-- ======================================================================= -->
+<dt> EXAMPLE  </dt><dd>
+
+    Sample program
+    <pre>
+       program demo_closest_color_name
+       use M_color, only : closest_color_name
+       character(len=100) :: string ! at least 20 characters
+       string=' '
+
+       call closest_color_name(100.0,  0.0,  0.0,string)
+       write(*,*)trim(string)
+
+       call closest_color_name(  0.0,100.0,  0.0,string)
+       write(*,*)trim(string)
+
+       call closest_color_name(  0.0,  0.0,100.0,string)
+       write(*,*)trim(string)
+
+       end program demo_closest_color_name
+
+<h3>Results:</h3>
+       red
+       green
+       blue
+    </pre>
+
+</dd>
+<!-- ======================================================================= -->
+</dl>

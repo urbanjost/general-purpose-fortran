@@ -1,0 +1,77 @@
+NAME
+   system_opendir(3f) - [M_system]open directory stream by calling opendir(3c)
+SYNOPSIS
+  subroutine system_opendir(dirname,dir,ierr)
+
+   character(len=*), intent(in) :: dirname
+   type(c_ptr)                  :: dir
+   integer,intent(out)          :: ierr
+
+DESCRIPTION
+       The system_opendir(3f) procedure opens a directory stream
+       corresponding to the directory named by the dirname argument.
+       The directory stream is positioned at the first entry.
+
+RETURN VALUE
+       Upon successful completion, a pointer to a C dir type is returned.
+       Otherwise, these functions shall return a null pointer and set
+       IERR to indicate the error.
+
+ERRORS
+
+       An error corresponds to a condition described in opendir(3c):
+
+       EACCES    Search permission is denied for the component of the
+                 path prefix of dirname or read permission is denied
+                 for dirname.
+
+       ELOOP     A loop exists in symbolic links encountered during
+                 resolution of the dirname argument.
+
+       ENAMETOOLONG  The length of a component of a pathname is longer than {NAME_MAX}.
+
+       ENOENT        A component of dirname does not name an existing directory or dirname is an empty string.
+
+       ENOTDIR       A component of dirname names an existing file that is neither a directory nor a symbolic link to a directory.
+
+       ELOOP         More than {SYMLOOP_MAX} symbolic links were encountered during resolution of the dirname argument.
+
+       EMFILE        All file descriptors available to the process are currently open.
+
+       ENAMETOOLONG  The length of a pathname exceeds {PATH_MAX},
+                     or pathname resolution of a symbolic link produced an intermediate
+                     result with a length that exceeds {PATH_MAX}.
+
+       ENFILE        Too many files are currently open in the system.
+
+APPLICATION USAGE
+       The opendir() function should be used in conjunction with readdir(), closedir(), and rewinddir() to examine the contents
+       of the directory (see the EXAMPLES section in readdir()). This method is recommended for portability.
+OPTIONS
+      dirname name of directory to open a directory stream for
+RETURNS
+      dir   pointer to directory stream. If an
+            error occurred, it will not be associated.
+      ierr  0 indicates no error occurred
+EXAMPLE
+  Sample program:
+
+   program demo_system_opendir
+   use M_system, only : system_opendir,system_readdir
+   use M_system, only : system_closedir
+   use iso_c_binding
+   implicit none
+   type(c_ptr)                  :: dir
+   character(len=:),allocatable :: filename
+   integer                      :: ierr
+   !--- open directory stream to read from
+   call system_opendir('.',dir,ierr)
+   !--- read directory stream
+   do
+      call system_readdir(dir,filename,ierr)
+      if(filename.eq.' ')exit
+      write(*,*)filename
+   enddo
+   !--- close directory stream
+   call system_closedir(dir,ierr)
+   end program demo_system_opendir

@@ -1,0 +1,29 @@
+NAME
+     LOG10(3f) - [INTRINSIC:MATHEMATICS] Base 10 logarithm function
+
+SYNTAX
+   result = LOG10(x)
+
+DESCRIPTION
+   LOG10(X) computes the base 10 logarithm of X.
+
+ARGUMENTS
+   X  - The type shall be REAL.
+
+RETURN VALUE
+   The return value is of type REAL or COMPLEX.
+   The kind type parameter is the same as X.
+
+EXAMPLE
+  Sample program:
+
+    program test_log10
+      real(8) :: x = 10.0_8
+      x = log10(x)
+    end program test_log10
+
+STANDARD
+   [[FORTRAN 77]] and later
+
+CLASS
+   [[Elemental procedure|Elemental function]]

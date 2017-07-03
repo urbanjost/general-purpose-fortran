@@ -1,0 +1,66 @@
+.\" Specification of Fortran
+.TH EXIT "7" "January 2017" "Fortran" "Language Specification"
+.SH NAME
+   EXIT(7f) - [FORTRAN:EXECUTION CONTROL] statement
+.SH SYNOPSIS
+   EXIT [construct-name]
+
+.SH DESCRIPTION
+.nf
+  The EXIT statement provides one way of terminating a loop, or completing
+  execution of another construct.
+
+  If a construct-name appears, the EXIT statement shall be within that
+  construct; otherwise, it shall be within the range of at least one
+  do-construct.
+
+  An EXIT statement belongs to a particular construct. If a construct
+  name appears, the EXIT statement belongs
+  to that construct; otherwise, it belongs to the innermost DO construct
+  in which it appears.
+
+  An exit-stmt shall not belong to a DO CONCURRENT construct,
+  nor shall it appear within the range
+  of a DO CONCURRENT construct if it belongs to a construct
+  that contains that DO CONCURRENT construct.
+
+  When an EXIT statement that belongs to a DO construct is executed,
+  it terminates the loop and
+  any active loops contained within the terminated loop. When an
+  EXIT statement that belongs to a non-DO construct is executed, it
+  terminates any active loops contained within that construct, and
+  completes execution of that construct.
+.fi
+
+.SH EXAMPLES
+
+.nf
+  Samples:
+
+   do i=1,10
+      if(i.eq.4)exit ! exit loop
+   enddo
+
+   do i=1,10
+      do j=100,200
+         if(j.eq.150)exit ! exit inner loop "j"
+      enddo
+   enddo
+
+   OUTER: do i=1,10
+      INNER: do j=100,200
+         if(j.eq.150)exit OUTER ! exit named loop
+      enddo INNER
+   enddo OUTER
+
+   MYBLOCK: block
+      big=.false.
+      do i=1,100
+        if(i=40)then
+          exit MYBLOCK
+        endif
+      enddo
+      big=.true.
+   endblock MYBLOCK
+.fi
+

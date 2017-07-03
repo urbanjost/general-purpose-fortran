@@ -1,0 +1,18 @@
+NAME
+       _false(1f) - [FUNIX]do nothing, unsuccessfully
+
+SYNOPSIS
+       _false [ignored command line arguments]
+       _false OPTION
+
+DESCRIPTION
+       Exit with a status code indicating failure.
+
+       --help     display this help and exit
+       --version  output version information and exit
+       --verbose  display ASCII graphic of cockroach
+
+EXAMPLE
+       _false && echo UNSUCCESSFUL && echo DID NOT WORK
+SEE ALSO
+       _true(1f)

@@ -1,0 +1,23 @@
+NAME
+   sec2days - [TIME] Convert seconds to string of form dd-hh:mm:ss
+
+SYNOPSIS
+   sec2days nnnn | --version| --help
+
+DESCRIPTION
+   Given an integer string representing seconds convert it to a string
+   of the form
+
+      dd-hh:mm:ss
+
+   Where dd is days, hh hours, mm minutes and ss seconds.
+
+OPTIONS
+   nnnn        number of seconds to convert to string of form dd-hh:mm:ss
+   --help      display this help and exit
+   --version   output version information and exit
+
+EXAMPLE
+   sec2days 129860
+
+   1-12:04:20

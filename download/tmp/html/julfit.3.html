@@ -1,0 +1,185 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>julfit (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>julfit(3f) </B>- [M_math:fit]linear least squares curve fits , destroys input arrays
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synposis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Returns</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNPOSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>julfit</B>(x,y,ixn,itype,a,b,r2)
+<P>
+<PRE>
+   integer,intent(in) :: ixn
+   real               :: x(ixn),y(ixn)
+   integer,intent(in) :: itype
+   real,intent(out)   :: a,b,r2
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+use method of least squares to find a fit to the data.
+the expression being fitted is of one of several forms that
+have in common the fact that the expression will plot as
+a straight line if the proper axis type is selected.
+<P>
+<PRE>
+     type  x-axis y-axis   significance of a and b
+<P>
+      1    linear linear   y=a*x+b         # linear function
+      2    linear log      y=a*b**x        # exponential function
+      3    log    linear   y=a*log10(x)+b  # logarithmic function
+      4    log    log      y=a*x**b        # power functions:
+                                                hyperbolic if b &lt;0;
+                                                parabolic if b &gt; 0.
+      5    linear log      y=a*e**(-b*x)   # a common variant of the
+                                             exponential form.
+<P>
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+x
+= array of x values, input
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+y
+= array of y values, input that are changed to hold the output
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+ixn
+= number of points in arrays x and y to use
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+itype
+= expression being solved
+(1) Y=a*X+b
+(2) Y=a*b**X
+(3) Y=a*log10(X)+b
+(4) Y=a*X**b
+(5) Y=a*e*(<B>-b</B>**X)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+NOTE: odd use of arrays specifically optimized for calling from USH
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+a
+= slope of linearized line
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+b
+= y intercept of linearized line
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+r2
+= correlation coefficient (1=perfect)
+In general, if the correlation coefficient is &lt;0.5 the correlation
+is regarded as insignificant. If it is &gt;0.8 the derived linear fit
+is considered highly significant.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>julfit (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 16ca3dcb-e75d-4d7e-afea-482aa05bef53 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/julfit.3.gif"></center> 
+</body>
+</HTML>

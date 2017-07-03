@@ -1,0 +1,14 @@
+NAME
+   system_umask(3fp) - [M_system] XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+SYNOPSIS
+   integer(kind=c_int) function system_umask(umask_value)
+
+DESCRIPTION
+
+EXAMPLE
+  Sample program:
+
+   program demo_system_umask
+   use M_system, only: system_umask
+   implicit none
+   end program demo_system_umask

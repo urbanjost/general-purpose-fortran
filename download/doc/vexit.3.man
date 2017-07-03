@@ -1,0 +1,37 @@
+NAME
+   vexit(3f) - [M_pixel] exit pixel graphics mode
+
+SYNOPSIS
+ definition:
+
+   subroutine vexit()
+
+DESCRIPTION
+   Used to terminate pixel graphics mode. Does any actions required to terminate
+   graphics mode including unallocating the module pixel array P_pixel. Required
+   before calling vinit(3f) more than once.
+
+   Resets the window/terminal (must be the last M_PIXEL routine called).
+
+OPTIONS
+
+EXAMPLE
+  Sample program:
+
+     program demo_vexit
+     use M_pixel, only: prefsize, vexit, ortho2, clear
+     use M_pixel, only: move2, draw2, color, vinit
+     use M_pixel, only : P_pixel,P_colormap
+     use M_writegif, only : writegif
+     call prefsize(60,40)
+     call vinit()
+     call ortho2(-300.0,300.0,-200.0,200.0)
+     call clear(0)
+     call color(1)
+     call move2(-300.0,-200.0)
+     call draw2(300.0,200.0)
+     call move2(300.0,-200.0)
+     call draw2(-300.0,200.0)
+     call writegif('vexit.3.gif',P_pixel,P_colormap)
+     call vexit()
+     end program demo_vexit

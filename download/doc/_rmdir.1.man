@@ -1,0 +1,15 @@
+
+NAME
+      _rmdir(1f) - [FUNIX]remove empty directories
+SYNOPSIS
+       _rmdir DIRECTORY... [OPTION]...
+DESCRIPTION
+       given the names of empty directories remove them.
+OPTIONS
+       DIRECTORY  Remove the DIRECTORY(ies) if they are empty.
+       --help     display this help and exit
+       --version  output version information and exit
+EXAMPLES
+ Sample command lines ...
+
+        _rmdir a/b/c /a/b /a

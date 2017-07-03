@@ -1,0 +1,34 @@
+NAME
+   lenset - [M_strings]return string trimmed or padded to specified length
+
+SYNOPSIS
+   function lenset(str,length) result(strout)
+
+    character(len=*)                     :: str
+    character(len=length)                :: strout
+    integer,intent(in)                   :: length
+
+DESCRIPTION
+   lenset(3f) truncates a string or pads it with spaces to the specified
+   length.
+
+EXAMPLE
+
+   Sample Program:
+
+    program demo_lenset
+     use M_strings, only : lenset
+     implicit none
+     character(len=10)            :: string='abcdefghij'
+     character(len=:),allocatable :: answer
+        answer=lenset(string,5)
+        write(*,'("[",a,"]")') answer
+        answer=lenset(string,20)
+        write(*,'("[",a,"]")') answer
+    end program demo_lenset
+
+   Expected output:
+
+    [abcde]
+    [abcdefghij          ]
+

@@ -1,0 +1,45 @@
+NAME
+   system_rand(3f) - [M_system]call pseudo-random number generator rand(3c)
+SYNOPSIS
+   integer(kind=c_int) :: function system_rand()
+DESCRIPTION
+   Use rand(3c) to generate pseudo-random numbers.
+
+EXAMPLE
+   Sample program:
+
+      program demo_system_srand
+      use M_system, only : system_srand, system_rand
+      implicit none
+      integer :: i
+
+      call system_srand(1001)
+      do i=1,10
+         write(*,*)system_rand()
+      enddo
+      write(*,*)
+
+      end program demo_system_srand
+  expected results:
+
+     1512084687
+     1329390995
+     1874040748
+       60731048
+      239808950
+     2017891911
+       22055588
+     1105177318
+      347750200
+     1729645355
+
+     1512084687
+     1329390995
+     1874040748
+       60731048
+      239808950
+     2017891911
+       22055588
+     1105177318
+      347750200
+     1729645355

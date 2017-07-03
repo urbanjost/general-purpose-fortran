@@ -1,0 +1,115 @@
+NAME
+   M_units(3fm) - [M_units]convert between various physical units
+
+SYNOPSIS
+
+   procedure definitions:
+
+      elemental real function c2f(celsius)
+      elemental real function f2c(fahrenheit)
+
+      elemental real function r2d(radians)
+      elemental real function d2r(degrees)
+
+      elemental real function feet_to_meters(feet)
+      elemental real function meters_to_feet(meters)
+
+      elemental real function sind(angle_in_degrees)
+      elemental real function cosd(angle_in_degrees)
+      elemental real function tand(angle_in_degrees)
+      elemental real function asind(x)
+      elemental real function acosd(x)
+      elemental real function atand(x)
+      elemental real function atan2d(x,y)
+
+      subroutine cartesian_to_spherical(x,y,z,radius,inclination,azimuth)
+      subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
+      subroutine cartesian_to_polar(x,y,radius,inclination)
+      subroutine polar_to_cartesian(radius,inclination,x,y)
+
+   Where the input values may be any standard scalar value supported by
+   the anyscalar_to_real(3f) function (real,integer,doubleprecision) within
+   the range allowed by the function.
+
+DESCRIPTION
+
+   M_units(3fm) is a Fortran module that collects together basic
+   procedures that are used to convert between various physical units
+   and common named constants.
+
+      +---------------------------+
+      |Angle|Area        |Base    |
+      |-----+------------+--------|
+      |Data |Energy      |Length  |
+      |-----+------------+--------|
+      |Mass |Power       |Pressure|
+      |-----+------------+--------|
+      |Speed|Temperature |Time    |
+      +---------------------------+
+
+   Angular Units
+
+    o d2r:  Convert degrees to radians
+    o r2d:  Convert radians to degrees
+
+   Temperature
+
+    o c2f:  Convert Celsius to Fahrenheit
+    o f2c:  Convert Fahrenheit to Celsius
+
+   Distance
+
+    o feet_to_meters:  Convert feet to meters
+    o meters_to_feet:  Convert meters to feet
+
+   REAL trig functions where input is in angular degrees instead of radians
+
+    o elemental real function sind(angle_in_degrees)
+    o elemental real function cosd(angle_in_degrees)
+    o elemental real function tand(angle_in_degrees)
+    o elemental real function asind(x)
+    o elemental real function acosd(x)
+    o elemental real function atand(x)
+    o elemental real function atan2d(x,y)
+
+   Coordinates
+
+    o cartesian_to_spherical:  Convert cartesian coordinates to spherical
+    o spherical:  Convert spherical coordinates to cartesian
+    o cartesian_to_polar:  Convert cartesian coordinates to polar
+    o polar:  Convert polar coordinates to cartesian
+
+  And the real constants PI, RADIAN, DEGREE, E.
+  And the double_precision constants PI_D, RADIAN_D, DEGREE_D, E_D.
+
+  Note that your compiler is less likely to inline small procedures in a
+  module than it would statement functions or CONTAINED functions.
+
+EXAMPLES
+
+  Simple usage example:
+
+   program testit
+   use M_units, only : r2d, d2r
+   use M_units, only : f2c, c2f
+   use M_units, only : sind, cosd, tand
+   use M_units, only : asind, acosd, atand, atan2d
+   use M_units, only : pi=>pi,radian,degree,e
+   implicit none
+   write(*,*)r2d([0.0,PI/4.0,PI/2.0,3.0*PI/2.0,PI])
+   write(*,*)d2r([0.0,45.0,90.0,135.0,180.0])
+   write(*,*)f2c([-40.0,32.0,212.0])
+   write(*,*)c2f([-40.0,0.0,100.0])
+   write(*,*)PI
+   write(*,*)E
+   end program testit
+
+  Results:
+
+   > 0.00000000   45.0000000   90.0000000   270.000000   180.000000
+   > 0.00000000  0.785398185   1.57079637   2.35619450   3.14159274
+   >-40.0000000   0.00000000   100.000000
+   >-40.0000000   32.0000000   212.000000
+   > 3.14159274
+   > 2.71828175
+

@@ -1,0 +1,22 @@
+function loadthem(){
+append("./BOOK_INDEX.html");
+append("./BOOK_INTRINSIC.html");
+append("./BOOK_M_Compare_Float_Numbers.html");
+append("./BOOK_M_calculator.html");
+append("./BOOK_M_color.html");
+append("./BOOK_M_debug.html");
+append("./BOOK_M_factor.html");
+append("./BOOK_M_io.html");
+append("./BOOK_M_journal.html");
+append("./BOOK_M_kracken.html");
+append("./BOOK_M_logic.html");
+append("./BOOK_M_math.html");
+append("./BOOK_M_messages.html");
+append("./BOOK_M_pixel.html");
+append("./BOOK_M_process.html");
+append("./BOOK_M_sort.html");
+append("./BOOK_M_strings.html");
+append("./BOOK_M_system.html");
+append("./BOOK_M_time.html");
+append("./BOOK_M_units.html");
+}

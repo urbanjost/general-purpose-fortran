@@ -1,0 +1,222 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>fmtdate_usage (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fmtdate_usage </B>- [M_time] display macros recognized by <B>fmtdate</B>(3f) and <B>now</B>(3f)
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine <B>fmtdate_usage</B>(<I>indent</I>)
+<P>
+    integer,intent(in),optional      :: indent
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The <B>fmtdate_usage</B>(3f) subroutine displays the formatting options
+available for use in procedures such as <B>fmtdate</B>(3f) and <B>now</B>(3f).
+It is typically used to produce up-to-date help text in commands
+that use the <B>M_time</B>(3fm) module, so that the formatting information
+only needs maintained in one place (this routine) and is easily
+displayed so users can quickly obtain a description of the formatting
+macros.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<I>indent</I>
+how many spaces to prefix the output with, so that
+calling programs can position the output. Default
+for this optional parameter is three (3).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+    program demo_fmtdate_usage
+    use M_time, only : fmtdate_usage
+    implicit none
+       call fmtdate_usage() ! see all formatting options
+    end program demo_fmtdate_usage
+<P>
+</PRE>
+results (actually call the routine to ensure this is up to date):
+<P>
+<PRE>
+    Description                                        Example
+<P>
+    Base time array:
+    (1) %Y -- year, yyyy                                2016
+    (2) %M -- month of year, 01 to 12                   07
+    (3) %D -- day of month, 01 to 31                    29
+        %d -- day of month, with suffix (1st, 2nd,&#46;&#46;&#46;)  29th
+    (4) %Z -- minutes from UTC                          -0240
+        %z -- -+hh:mm from UTC                          -04:00
+    (5) %h -- hours, 00 to 23                           10
+        %H -- hour (1 to 12, or twelve-hour clock)      10
+        %N -- midnight&lt; AM &lt;=noon; noon&lt;= PM &lt;midnight  AM
+    (6) %m -- minutes, 00 to 59                         54
+    (7) %s -- sec, 00 to 59                             08
+    (8) %x -- milliseconds 000 to 999                   521
+    Conversions:
+        %E -- Unix Epoch time                           1469804048.5220029
+        %e -- integer value of Unix Epoch time          1469804049
+        %J -- Julian  date                              2457599.121
+        %j -- integer value of Julian Date(Julian Day)  2457599
+        %O -- Ordinal day (day of year)                 211
+        %U -- day of week, 1..7 Sunday=1                6
+        %u -- day of week, 1..7 Monday=1                5
+        %i -- ISO week of year 1..53                    30
+        %I -- iso-8601 week-numbering date(yyyy-Www-d)  2016-W30-5
+     Names:
+        %l -- abbreviated month name                    Jul
+        %L -- full month name                           July
+        %w -- first three characters of weekday         Fri
+        %W -- weekday name                              Friday
+        %p -- phase of moon                             New
+        %P -- percent of way from new to full moon      -1%
+     Literals:
+        %% -- a literal %                               %
+        %t -- tab character
+        %b -- blank character
+        %n -- new line (system dependent)
+        %q -- single quote (apostrophe)
+        %Q -- double quote
+     Program timing:
+        %c -- CPU_TIME(3f) output                       .21875000000000000
+        %C -- number of times this routine is used      1
+        %S -- seconds since last use of this format     .0000000000000000
+        %k -- time in seconds from SYSTEM_CLOCK(3f)     723258.812
+<P>
+</PRE>
+If no percent (%) is found in the format one of several
+alternate substitutions occurs.
+<P>
+If the format is composed entirely of one of the following
+keywords the following substitutions occur:
+<P>
+<PRE>
+     "iso-8601",
+     "iso"        ==&gt; %Y-%M-%DT%h:%m:%s%Z
+     "iso-8601W",
+     "isoweek"    ==&gt; %I 2016-W30-5
+     "sql"        ==&gt; "%Y-%M-%D %h:%m:%s.%x"
+     "sqlday"     ==&gt; "%Y-%M-%D"
+     "sqltime"    ==&gt; "%h:%m:%s.%x"
+     "rfc-2822"   ==&gt; %w, %D %l %Y %h:%m:%s %Z
+     "rfc-3339"   ==&gt; %Y-%M-%DT%h:%m:%s%Z
+     "date"       ==&gt; %w %l %D %h:%m:%s UTC%z %Y
+     "short"      ==&gt; %w, %l %d, %Y %H:%m:%s %N UTC%z
+     "long"," "   ==&gt; %W, %L %d, %Y %H:%m:%s %N UTC%z
+<P>
+</PRE>
+otherwise the following words are replaced with the most
+common macros:
+<P>
+<PRE>
+      year     %Y  2016
+      month    %M  07
+      day      %D  29
+      hour     %h  10
+      minute   %m  54
+      second   %s  08
+      epoch    %e  1469804049
+      julian   %j  2457599
+      ordinal  %O  211
+      weekday  %u  5
+<P>
+</PRE>
+if none of these keywords are found then every letter that
+is a macro is assumed to have an implied percent in front
+of it. For example:
+<P>
+<PRE>
+      YMDhms ==&gt; %Y%M%D%h%m%s ==&gt; 20160729105408
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>fmtdate_usage (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 91287f73-a1db-4de3-9fc5-6ddb4965fccd using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/fmtdate_usage.3.gif"></center> 
+</body>
+</HTML>

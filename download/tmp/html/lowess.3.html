@@ -1,0 +1,508 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>lowess (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>lowess(3f) </B>- [M_math:fit]procedures for locally weighted regression
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Purpose</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Dependencies</A><BR>
+<A HREF=#6>Dependencies</A><BR>
+<A HREF=#7>Examples</A><BR>
+<A HREF=#8>Reference</A><BR>
+<A HREF=#9>Applications</A><BR>
+<A HREF=#10>See Also</A><BR>
+<A HREF=#11>Author</A><BR>
+</BLOCKQUOTE>
+<A name=12>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<B>Calling</B> Sequence:
+<P>
+    subroutine lowess(x, y, n, f, nsteps, delta, ys, rw, res)
+    real,intent(in)    :: x(n)
+    real,intent(in)    :: y(n)
+    integer,intent(in) :: n
+    real,intent(in)    :: f
+    integer,intent(in) :: nsteps
+    real,intent(in)    :: delta
+<P>
+    real,intent(out)   :: ys(n)
+    real,intent(out)   :: rw(n)
+    real,intent(out)   :: rw(res)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>PURPOSE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<P>
+Lowess is a data analysis technique for producing a "smooth" set of
+values from a time series which has been contaminated with noise,
+or from a scatter plot with a "noisy" relationship between the two
+variables. In a time series context, the technique is an improvement
+over least squares smoothing when the data is not equally spaced
+(as least squares smoothing assumes).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+LOWESS stands for "locally weighted regression". LOWESS computes the
+smooth of a scatterplot of Y against X using robust locally weighted
+regression. Fitted values, YS, are computed at each of the values of
+the horizontal axis in X.
+<P>
+For lowess smoothing, the analyst can vary the size of the smoothing
+<TABLE cellpadding=3><!-- tsb: For lowess smoothing, the analyst can vary the size of the smoothing
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+window.
+This size is given as the fraction (0 to 1) of the data that
+the window should cover. The default window size is .2 (which states
+that the smoothing window has a total width of 20% of the horizontal
+axis variable). The LOWESS fraction (F) controls the smoothness of the
+curve. For example, if it is 1.0, then the LOWESS curve is a single
+straight line. In general, the smaller the fraction, the more that
+LOWESS curve follows individual data points. To obtain a smoother
+LOWESS curve, increase the value of the LOWESS FRACTION.
+</TD></TR>
+<TR></TR></TABLE>This package consists of two FORTRAN procedures for smoothing
+scatterplots by robust locally weighted regression, or lowess. The
+principal routine is LOWESS which computes the smoothed values using
+the method described in "The Elements of Graphing Data", by William S.
+Cleveland (Wadsworth, 555 Morego Street, Monterey, California 93940).
+<P>
+LOWESS calls a support routine, LOWEST, the code for which is
+included. LOWESS also calls a routine SORT, which the user must provide.
+<P>
+To reduce the computations, LOWESS requires that the arrays X and Y,
+which are the horizontal and vertical coordinates, respectively, of the
+scatterplot, be such that X is sorted from smallest to largest. The
+user must therefore use another sort routine which will sort X and Y
+according to X.
+<P>
+To summarize the scatterplot, YS, the fitted values, should be plotted
+against X. No graphics routines are available in the package and must
+be supplied by the user.
+<P>
+The FORTRAN code for the routines LOWESS and LOWEST has been generated
+from higher level RATFOR programs (B. W. Kernighan, &#145;&#145;RATFOR: A
+Preprocessor for a Rational Fortran,&#146;&#146; Software Practice and Experience,
+Vol. 5 (1975).
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ARGUMENT DESCRIPTION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+X =
+Input; abscissas of the points on the
+scatterplot; the values in X must be ordered
+from smallest to largest.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Y =
+Input; ordinates of the points on the
+scatterplot.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+N =
+Input; dimension of X,Y,YS,RW, and RES.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+F =
+Input; specifies the amount of smoothing; F is
+the fraction of points used to compute each
+fitted value; as F increases the smoothed values
+become smoother; choosing F in the range .2 to
+idea which value to use, try F = .5.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+NSTEPS =
+Input; the number of iterations in the robust
+fit; if NSTEPS = 0, the nonrobust fit is
+returned; setting NSTEPS equal to 2 should serve
+most purposes.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+DELTA =
+input; nonnegative parameter which may be used
+to save computations; if N is less than 100, set
+DELTA equal to 0.0; if N is greater than 100 you
+should find out how DELTA works by reading the
+additional instructions section.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+YS =
+Output; fitted values; <B>YS</B>(I) is the fitted value
+at <B>X</B>(I); to summarize the scatterplot, <B>YS</B>(I)
+should be plotted against <B>X</B>(I).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+RW =
+Output; robustness weights; <B>RW</B>(I) is the weight
+given to the point (<B>X</B>(I),Y(I)); if NSTEPS = 0,
+RW is not used.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+RES =
+Output; residuals; <B>RES</B>(I) = <B>Y</B>(I)-<B>YS</B>(I).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ADDITIONAL INSTRUCTIONS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+DELTA can be used to save computations.
+Very roughly the algorithm is this:
+on the initial fit and on each of the NSTEPS iterations locally weighted regression fitted values are computed
+at points in X which are spaced, roughly, DELTA apart;
+then the fitted values at the remaining points are computed using linear interpolation.
+The first locally weighted regression (LWR) computation is carried out at <B>X</B>(1) and the last is carried out at <B>X</B>(N).
+Suppose the LWR computation is carried out at <B>X</B>(I).
+If <B>X</B>(I+1) is greater than or equal to <B>X</B>(I)+DELTA, the next LWR computation is carried out at <B>X</B>(I+1).
+If <B>X</B>(I+1) is less than <B>X</B>(I)+DELTA, the next LWR computation is carried out at the largest <B>X</B>(J) which is greater than
+or equal to <B>X</B>(I) but is not greater than <B>X</B>(I)+DELTA.
+Then the fitted values for <B>X</B>(K) between <B>X</B>(I) and <B>X</B>(J), if there are any, are computed by linear interpolation
+of the fitted values at <B>X</B>(I) and <B>X</B>(J).
+If N is less than 100 then DELTA can be set to 0.0 since the computation time will not be too great.
+For larger N it is typically not necessary to carry out the LWR computation for all points,
+so that much computation time can be saved by taking DELTA to be greater than 0.0.
+If DELTA = Range (X)/k then,
+if the values in X were uniformly scattered over the range,
+the full LWR computation would be carried out at approximately k points.
+Taking k to be 50 often works well.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; METHOD</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The fitted values are computed by using the nearest neighbor
+routine and robust locally weighted regression of degree 1
+with the tricube weight function. A few additional features
+have been added. Suppose r is FN truncated to an integer.
+Let h be the distance to the r-th nearest neighbor
+from <B>X</B>(I). All points within h of <B>X</B>(I) are used. Thus if
+the r-th nearest neighbor is exactly the same distance as
+other points, more than r points can possibly be used for
+the smooth at <B>X</B>(I). There are two cases where robust
+locally weighted regression of degree 0 is actually used at
+<B>X</B>(I). One case occurs when h is 0.0. The second case
+occurs when the weighted standard error of the <B>X</B>(I) with
+respect to the weights <B>w</B>(j) is less than .001 times the
+range of the <B>X</B>(I), where <B>w</B>(j) is the weight assigned to the
+j-th point of X (the tricube weight times the robustness
+weight) divided by the sum of all of the weights. Finally,
+if the <B>w</B>(j) are all zero for the smooth at <B>X</B>(I), the fitted
+value is taken to be <B>Y</B>(I).
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>DEPENDENCIES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LOWEST
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SORT
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LOWEST</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<B>Calling</B> sequence
+<P>
+<PRE>
+        CALL LOWEST(X,Y,N,XS,YS,NLEFT,NRIGHT,W,USERW,RW,OK)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+    <H4>&nbsp; &nbsp; PURPOSE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+LOWEST is a support routine for LOWESS and ordinarily will
+not be called by the user. The fitted value, YS, is
+computed at the value, XS, of the horizontal axis.
+Robustness weights, RW, can be employed in computing the
+fit.
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; OPTIONS</H4>
+</A>
+<BLOCKQUOTE>
+Argument description
+<P>
+<PRE>
+         X =       Input; abscissas of the points on the
+                   scatterplot; the values in X must be ordered
+                   from smallest to largest.
+         Y =       Input; ordinates of the points on the
+                   scatterplot.
+         N =       Input; dimension of X,Y,W, and RW.
+         XS =      Input; value of the horizontal axis at which the
+                   smooth is computed.
+         YS =      Output; fitted value at XS.
+         NLEFT =   Input; index of the first point which should be
+                   considered in computing the fitted value.
+         NRIGHT =  Input; index of the last point which should be
+                   considered in computing the fitted value.
+         W =       Output; W(I) is the weight for Y(I) used in the
+                   expression for YS, which is the sum from
+                   I = NLEFT to NRIGHT of W(I)*Y(I); W(I) is
+                   defined only at locations NLEFT to NRIGHT.
+         USERW =   Input; logical variable; if USERW is .TRUE., a
+                   robust fit is carried out using the weights in
+                   RW; if USERW is .FALSE., the values in RW are
+                   not used.
+         RW =      Input; robustness weights.
+         OK =      Output; logical variable; if the weights for the
+                   smooth are all 0.0, the fitted value, YS, is not
+                   computed and OK is set equal to .FALSE.; if the
+                   fitted value is computed OK is set equal to
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; METHOD</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The smooth at XS is computed using (robust) locally weighted
+regression of degree 1. The tricube weight function is used
+with h equal to the maximum of <B>XS-X</B>(NLEFT) and <B>X</B>(NRIGHT)<B>-XS</B>.
+Two cases where the program reverts to locally weighted
+regression of degree 0 are described in the documentation
+for LOWESS.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>DEPENDENCIES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+lowest
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+sort_shell ! user-supplied SORT
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=7>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Example program:
+<P>
+<PRE>
+      program T_lowess
+      !  test driver for lowess
+      !  for expected output, see introduction
+      real x(20), y(20), ys(20), rw(20), res(20)
+      data x /1,2,3,4,5,10*6,8,10,12,14,50/
+      data y /18,2,15,6,10,4,16,11,7,3,14,17,20,12,9,13,1,8,5,19/
+      call lowess(x,y,20,.25,0,0.,ys,rw,res)
+      write(*,*) ys
+      call lowess(x,y,20,.25,0,3.,ys,rw,res)
+      write(*,*) ys
+      call lowess(x,y,20,.25,2,0.,ys,rw,res)
+      write(*,*) ys
+      end
+<P>
+      The following are data and output from LOWESS that can
+      be used to check your implementation of the routines. The
+      notation (10)v means 10 values of v.
+<P>
+       X values:
+         1  2  3  4  5  (10)6  8  10  12  14  50
+<P>
+       Y values:
+          18  2  15  6  10  4  16  11  7  3  14  17  20  12  9  13  1  8  5  19
+<P>
+       YS values with F = .25, NSTEPS = 0, DELTA = 0.0
+        13.659  11.145  8.701  9.722  10.000  (10)11.300  13.000  6.440  5.596
+          5.456  18.998
+<P>
+       YS values with F = .25, NSTEPS = 0 ,  DELTA = 3.0
+         13.659  12.347  11.034  9.722  10.511  (10)11.300  13.000  6.440  5.596
+           5.456  18.998
+<P>
+       YS values with F = .25, NSTEPS = 2, DELTA = 0.0
+         14.811  12.115  8.984  9.676  10.000  (10)11.346  13.000  6.734  5.744
+         5.415  18.998
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>REFERENCE</H3>
+
+</A>
+<BLOCKQUOTE>
+This routine is functionally based on the "netlib" routine lowess
+from netlib/go/lowess.f .
+<P>
+"Graphical Methods for Data Analysis", Chambers, Cleveland, Kleiner, and
+Tukey. Wadsworth, 1983.
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>APPLICATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Time Series Analysis
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=10>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A multivariate version is available by "send dloess from a"
+from the NETLIB server.
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Bill Cleveland
+<P>
+<PRE>
+    research!alice!wsc Mon Dec 30 16:55 EST 1985
+    W. S. Cleveland
+    ATT Bell Laboratories
+    Murray Hill NJ 07974
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>lowess (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1b0618c7-2538-4147-b8a5-c0a8ab3e2589 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/lowess.3.gif"></center> 
+</body>
+</HTML>

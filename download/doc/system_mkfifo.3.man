@@ -1,0 +1,74 @@
+NAME
+       system_mkfifo(3f)  - [M_system]make a FIFO special file relative to directory file descriptor
+SYNOPSIS
+DESCRIPTION
+   The mkfifo() function creates a new FIFO special file named by the pathname pointed to by path.
+   The file permission bits of the new FIFO are initialized from mode.
+   The file permission bits of the mode argument are modified by the process' file creation mask.
+
+   When bits in mode other than the file permission bits are set, the effect is implementation-defined.
+
+   If path names a symbolic link, mkfifo() shall fail and set errno to [EEXIST].
+
+   The  FIFO's user ID will be set to the process' effective user ID.
+   The FIFO's group ID shall be set to the group ID of the parent directory or to the effective group ID of the process.
+   Implementations shall provide a way to initialize the FIFO's group ID to the group ID of the parent directory.
+   Implementations may, but need not, provide an implementation-defined way to initialize  the FIFO's group ID to the effective group ID of the calling process.
+
+   Upon  successful  completion, mkfifo() shall mark for update the last data access, last data modification, and last file status change timestamps of the file.
+   Also, the last data modification and last file status change timestamps of the directory that contains the new entry shall be marked for update.
+
+   Predefined variables are typically used to set permission modes.
+   You can bytewise-OR together these variables to to create the most common permissions mode:
+
+    User:    R_USR  (read),  W_USR  (write),  X_USR(execute)
+    Group:   R_GRP  (read),  W_GRP  (write),  X_GRP(execute)
+    Others:  R_OTH  (read),  W_OTH  (write),  X_OTH(execute)
+
+   Additionally, some shortcuts are provided (basically a bitwise-OR combination of the above):
+
+     Read + Write + Execute: R_WXU (User), R_WXG (Group), R_WXO (Others)
+     DEFFILEMODE: Equivalent of 0666 =rw-rw-rw-
+     ACCESSPERMS: Equivalent of 0777 = rwxrwxrwx
+
+   Therefore, to give only the user rwx (read+write+execute) rights whereas
+   group members and others may not do anything, you can use any of the
+   following mkfifo() calls equivalently:
+
+     ierr= mkfifo("myfile", IANY(R_USR, W_USR, X_USR));
+     ierr= mkfifo("myfile", R_WXU);
+
+   In order to give anyone any rights (mode 0777 = rwxrwxrwx), you can
+   use any of the following calls equivalently:
+
+     ierr= mkfifo("myfile",IANY(R_USR,W_USR,X_USR,R_GRP,W_GRP,X_GRP,R_OTH,W_OTH,X_OTH));
+     ierr= mkfifo("myfile",IANY(R_WXU,R_WXG,R_WXO));
+     ierr= mkfifo("myfile",ACCESSPERMS);
+RETURN VALUE
+   Upon successful completion, these functions shall return 0.
+   Otherwise, these functions return -1 and set errno to indicate the error.
+   If -1 is returned, no FIFO is created.
+
+EXAMPLES
+  The following example shows how to create a FIFO file named
+  /home/cnd/mod_done, with read/write permissions for owner, and
+  with read permissions for group and others.
+
+   program demo_system_mkfifo
+   use M_system, only : system_mkfifo, system_perror
+   use M_system, only : R_GRP,R_OTH,R_USR,R_WXG,R_WXO
+   use M_system, only : R_WXU,W_GRP,W_OTH,W_USR,X_GRP,X_OTH,X_USR
+   use M_system, only : DEFFILEMODE, ACCESSPERMS
+   implicit none
+      integer :: status
+      status = system_mkfifo("/home/cnd/mod_done", IANY([W_USR, R_USR, R_GRP, R_OTH]))
+      if(status.ne.0)then
+         call system_perror('*mkfifo* error:')
+      endif
+   end program demo_system_mkfifo
+
+EXAMPLE
+   integer :: ierr
+   ierr=system_mkfifo('_scratch',IANY(R_USR,W_USER,X_USER))
+   end program demo_system_mkfifo
+

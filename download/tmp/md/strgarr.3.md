@@ -1,0 +1,177 @@
+[UP]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+                                               Manual Reference Pages  - strgarr (3)
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                                 
+NAME
+
+    strgarr(3f) - [M_calculator_plus]read a string into an array using jucalc(3f) calculator
+
+CONTENTS
+
+    Synopsis
+    Description
+    Dependencies
+    Examples
+    See Also
+    References
+
+SYNOPSIS
+
+    subroutine strgarr(line,ivals,vals,ifound,delims,ierr)
+
+
+        character(len=*), intent=(in) :: line
+        integer, intent=(in)          :: ivals
+        real, intent=(out)            :: vals(ivals)
+        integer, intent=(out)         :: ifound
+        character(len=*), intent=(in) :: delims
+        integer, intent=(out)         :: ierr
+
+
+
+DESCRIPTION
+
+    strgarr() returns an array of real values from a string containing numeric expressions. Use strgar2() if you are going to
+    permit string expressions with " delimiters.
+
+        o    strgarr() parses the string at the specified delimiters and calls the calculator routine JUCALCX(3f) to evaluate the
+             expressions.
+
+        o    It counts the number of values found.
+
+        o    Once the maximum allowable number of values have been found strgarr() returns, ignoring the rest of the line.
+
+        o    If an error occurs the error flag returns the column number where the expression that failed begins.
+
+             line LINE is a string of numeric expressions. Each expression can be up to (iclen_calc=255) characters long. The
+             syntax of an expression is as described in the main document of the Calculator Library. Assuming the delimiters
+             include a space character an example would be:
+
+                       A=10 100 300E2/42.6  sin(3.1416/5) 
+
+
+
+             Only numeric expressions are expected; so no use of the delimiter characters is allowed except as a delimiter, even in
+             quoted strings.
+
+             ivals IVALS is the maximum number of values to return.
+
+             vals(ivals) VALS is an array filled with the numeric values calculated from the expressions in LINE.
+
+             ifound IFOUND is the number of values successfully returned in VALS
+
+             delims DELIMS is a character to use as an expression delimiter. It is commonly set to a space and semi-colon( ; ).
+
+             ierr IERR returns 0 if no error occurred. If an error did occur, it returns the column number the expression started
+             at that could not be evaluated.
+
+DEPENDENCIES
+
+    o    jucalcx
+
+    o    User-supplied routines: All programs that call the calculator routine must supply their own JUOWN1 and C procedures. See
+         the example program for samples.
+
+         o    juown1
+
+         o    c
+
+EXAMPLES
+
+    Sample program:
+
+          program T_strgarr
+          use M_kracken, only: sget, kracken, lget
+          use M_calculator_plus, only : strgarr
+          real vals(41)
+          character(len=80) :: line=   
+          character(len=10) :: delims=  ; 
+          !  define command arguments, default values and crack command line
+          call kracken( cmd , -d " ;" -test .false. -help .false. -begin -end )
+          !----------------------------------------------------------
+          write(*,*) SGET ,trim(sget( cmd_test ))
+          write(*,*) LGET ,lget( cmd_test )
+          if(lget( cmd_test ))then   ! cursory test
+             call strgarr("10;2/3;sin(4.314)",41,vals,ifound,  ; ,ierr)
+             write(*,*) values are ,(vals(i),i=1,ifound)
+             sumtarget= 9.74497986
+             tol=       0.00000001
+             sumup=sum(vals(:ifound))
+             ipass=0
+             if(ifound.ne.3) ipass=ipass+1
+             if(ierr.ne.0)   ipass=ipass+2
+             if( sumup >= (sumtarget-tol) .and. sumup <= (sumtarget+tol) ) then
+             else
+                ipass=ipass+4
+             endif
+             if(ipass.eq.0)then
+                write(*,*) sum is  ,sumup
+                write(*,*) number of values is ,ifound
+                write(*,*) error flag is ,ierr
+                write(*,*) STRGARR*: PASSED 
+                stop(0)
+             else
+                write(*,*) IFOUND: ,ifound
+                write(*,*) IERR  : ,ierr
+                write(*,*) SUM   : ,sumup
+                write(*,*) STRGARR*: FAILED ,ipass
+                stop(-1)
+             endif
+          endif
+          !----------------------------------------------------------
+          delims=sget( cmd_d )
+          write(*,*) DELIMS=[ ,trim(delims), ] 
+          !----------------------------------------------------------
+          line=sget( cmd_begin )
+          write(*,*) BEGIN: ,trim(line)
+          if(line.ne.   )then
+             call strgarr(line,41,vals,ifound,delims,ierr)
+          endif
+          !----------------------------------------------------------
+          line=sget( cmd_oo )
+          write(*,*) LINE: ,trim(line)
+          if(line.ne.   )then
+             call strgarr(line,41,vals,ifound,delims,ierr)
+             write(*,*)(VALS(I),I=1,IFOUND)
+          else
+             INFINITE: do
+                read(*, (a) ,iostat=ios)line
+                if(ios.ne.0)then
+                   exit INFINITE
+                endif
+                call strgarr(line,41,vals,ifound,delims,ierr)
+                write(*,*)IERR,IFOUND, : ,(VALS(I),I=1,IFOUND)
+             enddo INFINITE
+          endif
+          !----------------------------------------------------------
+          line=sget( cmd_end )
+          write(*,*) END ,trim(line)
+          if(line.ne.   )then
+             call strgarr(line,41,vals,ifound,delims,ierr)
+             write(*,*) END: ,(VALS(I),I=1,IFOUND)
+          endif
+          !----------------------------------------------------------
+          end
+
+
+          ! NOTE: user must supply the JUOWN1 and C procedures.
+
+
+
+SEE ALSO
+
+    To parse a list of numbers instead of expressions see STRGAR(). If there is only one expression see RNUM0(), JUCALCX(), JUCALC
+    ().
+
+REFERENCES
+
+    none.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                                                            strgarr (3)                                               July 02, 2017
+
+Generated by manServer 1.08 from cf485f6a-f049-4b44-8c0a-99d270f6e623 using man macros.
+                                                             [strgarr]

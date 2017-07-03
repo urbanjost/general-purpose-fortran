@@ -1,0 +1,32 @@
+NAME
+   days2sec - [TIME] Convert [[-]dd-][[hh:]mm:]ss to seconds
+
+SYNOPSIS
+   days2sec dd-hh:mm:ss | --version| --help
+
+DESCRIPTION
+   Given a duration in the form dd-hh:mm:ss where dd is days, hh hours,
+   mm minutes and ss seconds convert it to seconds. Many utilities (ps(1),
+   for example) show times in this format to make it more intelligible;
+   but it generally easier to perform math on values represented in
+   seconds.
+
+OPTIONS
+   dd-hh:mm:ss  Given a string representing a duration of time in the
+                following forms:
+
+                  dd-hh:mm:ss
+                     hh:mm:ss
+                        mm:ss
+                           ss
+                convert it to seconds. If a value is not specified on
+                the command line, values are read one per line from stdin.
+   --help       display this help and exit
+   --version    output version information and exit
+
+EXAMPLE
+    days2sec 1-12:04:20
+
+    129860
+SEE ALSO
+    sec2days(1)

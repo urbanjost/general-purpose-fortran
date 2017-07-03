@@ -1,0 +1,22 @@
+<dl>
+   <dt> NAME           </dt>
+   <dd> M_io(3f) - [M_io]Fortran I/O module</dd>
+   <dt> SYNOPSIS </dt><dd>
+      use M_io, only : slurp, notopen, print_inquire, uniq
+      use M_io, only : dirname
+   </dd>
+   <dt> DESCRIPTION    </dt><dd>
+      The M_io module is a collection of routines related to basic I/O
+      (input/output) operations.
+      <ul>
+         <li><a href="slurp.3.html">         SLURP </a> - read a file into a character array </li>
+         <li><a href="notopen.3.html">       NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
+         <li><a href="print_inquire.3.html"> PRINT_INQUIRE </a> - run INQUIRE(3f) on a file by name or number and print results</li>
+         <li><a href="uniq.3.html">          UNIQ </a> - add numeric suffix to filename if needed till filename does not exist</li>
+         <li><a href="dirname.3.html">       DIRNAME </a> - return the directory portion of a pathname </li>
+         <li><a href="splitpath.3.html">     SPLITPATH </a> - split Unix pathname into directory, name, basename and extension</li>
+         <li><a href="isdir.3.html">         ISDIR </a> - tell if a path is an existing directory on Unix-compatible systems</li>
+         <li><a href="readline.3.html">      READLINE </a> - read line as long as programming environment line length limit</li>
+      </ul>
+   </dd>
+</dl>

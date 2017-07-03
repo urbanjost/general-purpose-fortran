@@ -1,0 +1,25 @@
+NAME
+       compute(1f) - [NUMBERS]evaluate a calculator expression
+SYNOPSIS
+       compute [STRING] [-verbose]| [-help| -version]
+DESCRIPTION
+       Given any expression call the JUCALC(3f) calculator function
+       and evaluate it. If no expression is present, read expressions
+       from stdin until a line composed of a period(".") or end of data
+       is encountered.
+
+       Expressions are similar to Fortran77 syntax except powers are
+       processed from left to right.
+OPTIONS
+       STRING     calculator expression to evaluate
+       --help     display this help and exit
+       --version  output version information and exit
+EXAMPLES
+       Sample commands:
+
+        $ compute '(sin(30.33333)*2)**2+40.0/2.3-1.23e3'
+
+        $ compute funcs # list available functions
+
+SEE ALSO
+       M_calculator(3fm)

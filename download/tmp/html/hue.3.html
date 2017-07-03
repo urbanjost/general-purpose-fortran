@@ -1,0 +1,103 @@
+<html>
+<head>
+<title></title>
+<style>
+body {xfont-style: italic}
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libjust4/just4.html">[CLI Home Page]</a>
+<div id="Container">
+<div id="Content">
+<dl>
+<dt> <a name="HUE">NAME</a> </dt><dd>
+   HUE(3f) - [M_color]converts a color's components from one color model to another.
+</dd>
+
+<dt> SYNOPSIS </dt><dd>
+   <pre>
+   subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
+
+    character(len=*),intent(in) :: modei  ! name of color model of input values
+    character(len=*),intent(in) :: modeo  ! name of color model of output values
+    real,intent(in)             :: clr1i,clr2i,clr3i
+    real,intent(out)            :: clr1o,clr2o,clr3o
+    integer,intent(out)         :: status
+   </pre>
+</dd>
+<!-- ======================================================================= -->
+<dt> DESCRIPTION  </dt><dd>
+Basic color models ...
+<br/><br/>
+
+<blockquote>
+<table border="1" >
+   <caption> <b>
+     valid values for modei and modeo as well as the corresponding
+     meanings for clr1*, clr2*, and clr3*  are:
+   </b></caption>
+   <tr> <th> model </th> <th> clr1             </th> <th> clr2                    </th> <th> clr3                     </th> </tr>
+   <tr> <td> hls   </td> <td> hue              </td> <td> lightness               </td> <td> saturation               </td> </tr>
+   <tr> <td> hsl   </td> <td> hue              </td> <td> saturation              </td> <td> lightness                </td> </tr>
+   <tr> <td> hvs   </td> <td> hue              </td> <td> value                   </td> <td> saturation               </td> </tr>
+   <tr> <td> hsv   </td> <td> hue              </td> <td> saturation              </td> <td> value                    </td> </tr>
+   <tr> <td> rgb   </td> <td> red              </td> <td> green                   </td> <td> blue                     </td> </tr>
+   <tr> <td> cmy   </td> <td> cyan             </td> <td> magenta                 </td> <td> yellow                   </td> </tr>
+   <tr> <td> yiq   </td> <td> luma(gray scale) </td> <td> orange-blue chrominance </td> <td> purple-green chrominance </td> </tr>
+</table>
+</blockquote>
+
+<ul>
+   <li>  lightness, value, saturation, red, green, blue, cyan, magenta, and yellow range from 0 to 100,
+   <li>  hue ranges from 0 to 360 degrees,
+   <li>  y   ranges from   0 to 100,
+   <li>  i   ranges from -60 to 60,
+   <li>  q   ranges from -52 to 52
+</ul>
+
+<p>
+   The STATUS variable can signal the following conditions:
+</p>
+
+<pre>
+   -1   modei = modeo, so no substantial conversion was done,
+    1   one of the input color values was outside the allowable range,
+    2   modei was invalid
+    3   modeo was invalid
+</pre>
+</dd>
+<!-- ======================================================================= -->
+</dl>
+</div>
+</div>
+</body>
+</html>

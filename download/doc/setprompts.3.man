@@ -1,0 +1,20 @@
+NAME
+         setprompts(3f) - [ARGUMENTS:M_kracken]set explicit prompts for keywords in interactive mode
+SYNOPSIS
+  subroutine setprompts(verb,init)
+
+   character(len=*),intent(in):: verb
+   character(len=*),intent(in):: init
+
+DESCRIPTION
+
+   Optionally set prompts for interactive prompting mode.
+   The syntax of the call is the same as for KRACKEN(3f)/DISSECT(3f) except that prompt
+   strings are given instead of default values. It is called after a call to KRACKEN(3f)
+   or DISSECT(3f).
+
+OPTIONS
+   verb    name to define prompts for
+   string  to define prompts instead of values
+RETURNS
+EXAMPLE

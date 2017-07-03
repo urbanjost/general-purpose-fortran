@@ -1,0 +1,21 @@
+NAME
+         dissect(3f) - [ARGUMENTS:M_kracken]convenient call to parse() -- define defaults, then process
+
+SYNOPSIS
+  subroutine dissect(verb,init,pars,error_return)
+
+   character(len=*),intent(in)  :: verb
+   character(len=*),intent(in)  :: init
+   character(len=*),intent(in)  :: pars
+   integer,intent(out),optional :: error_return
+DESCRIPTION
+
+OPTIONS
+   VERB          the name of the command to be reset/defined
+   INIT          used to define command options; usually hard-set in the program.
+   PARS          defines the command options to be set, usually from user input
+
+RETURNS
+   ERROR_RETURN  error code. If zero no error occurred.
+
+EXAMPLE

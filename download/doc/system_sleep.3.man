@@ -1,0 +1,49 @@
+NAME
+   system_sleep - [M_time] call C sleep(3c) or usleep(3c) procedure
+SYNOPSIS
+   subroutine system_sleep(wait_seconds)
+
+      integer,intent(in)  :: wait_seconds
+         or
+      real,intent(in)  :: wait_seconds
+
+DESCRIPTION
+   The system_sleep(3f) routine uses the intrinsic ISO_C_BINDING
+   interface to call the C sleep(3c) procedure or usleep(3c)
+   routine.
+
+OPTIONS
+    wait_seconds  integer,real or doubleprecision number of seconds for process to sleep.
+
+EXAMPLE
+   Sample program:
+
+    program demo_system_sleep
+    use M_time, only : system_sleep, now
+    implicit none
+    integer :: i
+       !
+       write(*,*)"Time before integer call is: ",now()
+       call system_sleep(4)
+       write(*,*)"Time after  integer call is: ",now()
+       !
+       write(*,*)"Time before real call is: ",now()
+       call system_sleep(4.0)
+       write(*,*)"Time after  real call is: ",now()
+       !
+       write(*,*)"Time before loop is: ",now()
+       do i=1,1000
+          call system_sleep(4.0/1000.0)
+       enddo
+       write(*,*)"Time after loop  is: ",now()
+       !
+    end program demo_system_sleep
+
+   results
+
+    Time before integer call is: Sunday, July 17th, 2016 2:29:45 AM UTC-0240
+    Time after integer call is: Sunday, July 17th, 2016 2:29:49 AM UTC-0240
+    Time before real call is: Sunday, July 17th, 2016 2:29:49 AM UTC-0240
+    Time after  real call is: Sunday, July 17th, 2016 2:29:53 AM UTC-0240
+    Time before loop is: Sunday, July 17th, 2016 2:29:53 AM UTC-0240
+    Time after loop  is: Sunday, July 17th, 2016 2:30:09 AM UTC-0240

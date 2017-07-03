@@ -1,0 +1,60 @@
+NAME
+     inum0(3f) - [M_calculator_plus]return integer value from calculator expression
+SYNOPSIS
+  integer function inum0(inline,ierr)
+
+   character(len=*),intent(in)  :: inline
+   integer,optional,intent(out) :: ierr
+
+SYNOPSIS
+   INUM0() evaluates a CHARACTER argument as a FORTRAN-like
+   calculator expression and returns an integer.
+
+    o INUM0() uses the calculator routine jucalc(3f)
+    o Remember that the calculator treats all values as DOUBLEPRECISION.
+
+   Values returned are assumed to be very close to being whole integer
+   values.  A small value (0.01) is added to the result before it is
+   returned to reduce roundoff error problems. This could introduce
+   errors if INUM0 is misused and is not being used to calculate
+   essentially integer results.
+DESCRIPTION
+
+   inline  INLINE is a CHARACTER variable up to 255 characters long that is
+           similar to a FORTRAN 77 numeric expression. Keep it less than 80
+           characters when possible.
+   ierr    zero (0) if no error occurs
+
+DEPENDENCIES
+      o jucalcx
+      o User-supplied routines:
+
+        All programs that call the calculator routine must supply
+        their own JUOWN1 and C procedures. See the
+        ../html/Example.html">example program for samples.
+          o juown1
+          o c
+EXAMPLES
+   Sample program:
+
+      program demo_inum0
+      ! NOTE: user must supply the JUOWN1 and C procedures.
+      i=inum0('20/3.4')
+      j=inum0('CI = 13 * 3.1')
+      k=inum0('CI')
+      write(*,*)'Answers are ',I,J,K
+      end program demo_inum0
+
+SEE ALSO
+      The syntax of an expression is as described in
+      the main document of  the  Calculator  Library.
+  See
+      JUCALC(),
+      RNUM0(),
+      DNUM0(),
+      SNUM0(),
+      STRGARR(),
+      STRGAR2(),
+      JUCALCX()
+REFERENCES
+NONE.

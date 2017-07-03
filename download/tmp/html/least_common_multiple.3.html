@@ -1,0 +1,213 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>least_common_multiple (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>least_common_multiple(3f) </B>- [M_factor]Least common multiple of two integers
+<B>or vector </B><B>m</B>(:), matrix <B>m</B>(:,:) or cuboid <B>m</B>(:,:,:)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>Method</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+integer function <B>least_common_multiple</B>(i,j)
+<B>integer,intent</B>(<I>in</I>):: i,j
+or
+integer function <B>least_common_multiple</B>(<I>m</I>)
+<B>integer,intent</B>(<I>in</I>):: <I>m</I>(:)
+or
+<B>integer,intent</B>(<I>in</I>):: <I>m</I>(:,:)
+or
+<B>integer,intent</B>(<I>in</I>):: <I>m</I>(:,:,:)
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+From Wikipedia, the free encyclopedia:
+<P>
+In arithmetic and number theory, the least common multiple (also
+called the lowest common multiple or smallest common multiple) of
+two integers a and b, usually denoted by <B>LCM</B>(a, b), is the smallest
+positive integer that is divisible by both a and b. Since division
+of integers by zero is undefined, this definition has meaning only
+if a and b are both different from zero. However, some authors define
+<B>lcm</B>(a,0) as 0 for all a, which is the result of taking the LCM to be
+the least upper bound <I>in</I> the lattice of divisibility.
+<P>
+The LCM is familiar from grade-school arithmetic as the "lowest common
+denominator" (LCD) that must be determined before fractions can be
+added, subtracted or compared. The LCM of more than two integers
+is also well-defined: it is the smallest positive integer that is
+divisible by each of them.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+   program demo_lcm
+   use M_factor, only : lcm=&gt;least_common_multiple
+   implicit none
+      write(*,*)&#146;SCALAR:&#146;
+         call writeit(10,24,120)
+         call writeit(15,30,30)
+         call writeit(-15,-30,30)
+         call writeit(15,-30,30)
+         call writeit(-15,30,30)
+<P>
+      write(*,*)&#146;VECTOR:&#146;
+         call writeit_v([10,24],120)
+         call writeit_v([15,30],30)
+         call writeit_v([-15,-30],30)
+         call writeit_v([5,-15,-40],120)
+         call writeit_v([2,3,4,5],60)
+      write(*,*)&#146;Special cases:&#146;
+         call writeit_v([15,0],0)
+         call writeit_v([-15,0],0)
+         call writeit_v([0],0)
+         call writeit_v([-10],10)
+         call writeit_v([22],22)
+         call writeit_v([0,0],0)
+         call writeit_v([0,0,0,0,0],0)
+         call writeit_v([0,0,0,-1,0],0)
+         call writeit_v([0,0,0,33,0,3,11],0)
+      contains
+<P>
+      subroutine writeit(ii,jj,answer)
+      integer,intent(in) :: ii,jj
+      integer,intent(in) :: answer
+         write(*,&#146;("  For lcm(",I0,",",I0,") the value is ",I0," which is ",L1)&#146;)&
+            & ii,jj,lcm(ii,jj),lcm(ii,jj).eq.answer
+      end subroutine writeit
+<P>
+      subroutine writeit_v(array,answer)
+      integer,intent(in) :: array(:)
+      integer,intent(in) :: answer
+         write(*,&#146;("  For lcm([",*(i0:,1x))&#146;,advance=&#146;no&#146;)array
+         write(*,&#146;("]) the value is ",i0," which is ",L1)&#146;) &
+            & lcm(array),lcm(array).eq.answer
+      end subroutine writeit_v
+<P>
+   end program demo_lcm
+<P>
+</PRE>
+Expected results:
+<P>
+<PRE>
+    &gt; SCALAR:
+    &gt;  For lcm(10,24) the value is 120 which is T
+    &gt;  For lcm(15,30) the value is 30 which is T
+    &gt;  For lcm(-15,-30) the value is 30 which is T
+    &gt;  For lcm(15,-30) the value is 30 which is T
+    &gt;  For lcm(-15,30) the value is 30 which is T
+    &gt; VECTOR:
+    &gt;  For lcm([10 24]) the value is 120 which is T
+    &gt;  For lcm([15 30]) the value is 30 which is T
+    &gt;  For lcm([-15 -30]) the value is 30 which is T
+    &gt;  For lcm([5 -15 -40]) the value is 120 which is T
+    &gt;  For lcm([2 3 4 5]) the value is 60 which is T
+    &gt; Special cases:
+    &gt;  For lcm([15 0]) the value is 0 which is T
+    &gt;  For lcm([-15 0]) the value is 0 which is T
+    &gt;  For lcm([0]) the value is 0 which is T
+    &gt;  For lcm([-10]) the value is 10 which is T
+    &gt;  For lcm([22]) the value is 22 which is T
+    &gt;  For lcm([0 0]) the value is 0 which is T
+    &gt;  For lcm([0 0 0 0 0]) the value is 0 which is T
+    &gt;  For lcm([0 0 0 -1 0]) the value is 0 which is T
+    &gt;  For lcm([0 0 0 33 0 3 11]) the value is 0 which is T
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>METHOD</H3>
+
+</A>
+<BLOCKQUOTE>
+Reduction by the greatest common divisor
+<P>
+The following formula reduces the problem of computing the least
+common multiple to the problem of computing the greatest common divisor
+(GCD), also known as the greatest common factor:
+<P>
+<PRE>
+    lcm(a,b) = |a*b| / gcd(a,b)
+<P>
+</PRE>
+This formula is also valid when exactly one of a and b is 0, since
+<B>gcd</B>(a, 0) = |a|. (However, if both a and b are 0, this formula would
+cause division by zero; <B>lcm</B>(0, 0) = 0 is a special case.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>least_common_multiple (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a626c524-7715-4b65-800a-9f0f52112ad0 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/least_common_multiple.3.gif"></center> 
+</body>
+</HTML>

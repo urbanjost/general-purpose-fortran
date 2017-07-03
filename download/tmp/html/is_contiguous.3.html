@@ -1,0 +1,268 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>is_contiguous (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>is_contiguous(3f) </B>- [INTRINSIC:INQUIRY] test if object is contigous
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Arguments</A><BR>
+<A HREF=#4>Return Value</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Standard</A><BR>
+<A HREF=#7>Class</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+result = <B>is_contigious</B>(A)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+True if and only if an object is contiguous.
+<P>
+An object is contiguous if it is
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: An object is contiguous if it is
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(1)
+an object with the CONTIGUOUS attribute,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(2)
+a nonpointer whole array that is not assumed-shape,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(3)
+an assumed-shape array that is argument associated with an array that is contiguous,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(4)
+an array allocated by an ALLOCATE statement,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(5)
+a pointer associated with a contiguous target, or
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(6)
+a nonzero-sized array section provided that
+<TABLE width=100% cellpadding=3><!-- tsb: (6)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(a)
+its base object is contiguous,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(b)
+it does not have a vector subscript,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(c)
+the elements of the section, in array element order, are a subset of the base object elements
+that are consecutive in array element order,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(d)
+if the array is of type character and a substring-range appears, the substring-range specifies all
+of the characters of the parent-string,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(e)
+only its final part-ref has nonzero rank, and
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+(f)
+it is not the real or imaginary part of an array of type complex.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+An object is not contiguous if it is an array subobject, and
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: An object is not contiguous if it is an array subobject, and
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the object has two or more elements,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the elements of the object in array element order are not consecutive in the elements of the base object,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the object is not of type character with length zero, and
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the object is not of a derived type that has no ultimate components other than zero-sized arrays and
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+characters with length zero.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+It is processor-dependent whether any other object is contiguous.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+A
+may be of any type. It shall be an array. If it is a
+pointer it shall be associated.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Result
+of type Default logical scalar.
+The result has the value true if A is contiguous, and false otherwise.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+    program test_is_contiguous
+    REAL, DIMENSION (1000, 1000), TARGET :: A
+    REAL, DIMENSION (:, :), POINTER       :: IN, OUT
+    IN =&gt; A              ! Associate IN with target A
+    OUT =&gt; A(1:1000:2,:) ! Associate OUT with subset of target A
+<P>
+    write(*,*)&#146;IN is &#146;,IS_CONTIGUOUS(IN)
+    write(*,*)&#146;OUT is &#146;,IS_CONTIGUOUS(OUT)
+<P>
+    end program test_is_contiguous
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+[[Fortran 2008]] and later
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+[[Inquiry function]]
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>is_contiguous (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9827a50e-8848-4390-9256-755aaf9005ab using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/is_contiguous.3.gif"></center> 
+</body>
+</HTML>

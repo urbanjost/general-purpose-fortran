@@ -1,0 +1,12 @@
+NAME
+   getdisplaysize(3f) - [M_pixel] Returns the width and height of the device in pixels
+
+SYNOPSIS
+ definition:
+
+   subroutine getdisplaysize(w, h)
+   real,intent(in) :: w, h
+
+DESCRIPTION
+   Returns the width and height of the device in pixels in w and h respectively.
+

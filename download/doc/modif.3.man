@@ -1,0 +1,50 @@
+NAME
+   modif - [M_strings]emulate the MODIFY command from the line editor XEDIT
+
+SYNOPSIS
+
+   subroutine modif(cline,cmod)
+
+    character(len=*) :: cline ! input string to change
+    character(len=*) :: cmod  ! directive provides directions on changing string
+
+
+DESCRIPTION
+
+  MODIF(3f) Modifies the line currently pointed at using a directive
+  that acts much like a line editor directive.
+  Primarily used to create interactive utilities such as input history
+  editors for interactive line-mode programs.
+
+  the modify directives are as follows-
+
+   DIRECTIVE  EXPLANATION
+
+   ^STRING#   Causes the string of characters between the ^ and the
+              next # to be inserted before the characters pointed to
+              by the ^. an ^ or & within the string is treated as a
+              regular character. If the closing # is not specified,
+              MODIF(3f) inserts the remainder of the line as if a # was
+              specified after the last nonblank character.
+
+              There are two exceptions. the combination ^# causes a #
+              to be inserted before the character pointed to by the
+              ^, and an ^ as the last character of the directives
+              causes a blank to be inserted.
+
+   #          (When not the first # after an ^) causes the character
+              above it to be deleted.
+
+   &          Replaces the character above it with a space.
+
+   (SPACE)    A space below a character leaves it unchanged.
+
+   Any other character replaces the character above it.
+
+EXAMPLES
+
+  Example input/output:
+
+   THE INPUT LINE........ 10 THIS STRING  TO BE MORTIFD
+   THE DIRECTIVES LINE...        ^ IS THE#        D#  ^IE
+   ALTERED INPUT LINE.... 10 THIS IS THE STRING  TO BE MODIFIED

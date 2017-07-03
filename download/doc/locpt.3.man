@@ -1,0 +1,30 @@
+NAME
+  locpt - [M_math:geometry]find if a point is inside a polygonal path
+SYNOPIS
+  Usage:
+
+   subroutine locpt (x0,y0,x,y,n,l,m)
+   real, intent(in)     :: x0, y0, x(:), y(:)
+   integer, intent(in)  :: n
+   integer, intent(out) :: l, m
+
+DESCRIPTION
+  Given a polygonal line connecting the vertices (X(I),Y(I)) (I = 1,...,N)
+  taken in this order. it is assumed that the polygonal path is a loop,
+  where (X(N),Y(N)) = (X(1),Y(1)) or there is an arc from (X(N),Y(N)) to
+  (X(1),Y(1)). N.B. The polygon may cross itself any number of times.
+
+  (X0,Y0) is an arbitrary point and l and m are variables.
+  On output, L and M are assigned the following values ...
+
+     L = -1   If (X0,Y0) is outside the polygonal path
+     L =  0   If (X0,Y0) lies on the polygonal path
+     L =  1   If (X0,Y0) is inside the polygonal path
+
+  M = 0 if (X0,Y0) is on or outside the path. If (X0,Y0) is inside the
+  path then M is the winding number of the path around the point (X0,Y0).
+
+   o Fortran 66 version by A.H. Morris
+   o Converted to ELF90 compatibility by Alan Miller, 15 February 1997
+     saved from url=(0050)http://users.bigpond.net.au/amiller/NSWC/locpt.f90
+

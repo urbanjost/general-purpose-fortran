@@ -1,0 +1,48 @@
+NAME
+     c_associated(3f) - [INTRINSIC:ISO_C_BINDING] Status of a C pointer
+
+SYNTAX
+
+    result = c_associated(c_prt_1[, c_ptr_2])
+
+DESCRIPTION
+
+   c_associated(c_prt_1[, c_ptr_2]) determines the status of the C pointer
+   c_ptr_1 or if c_ptr_1 is associated with the target c_ptr_2.
+
+ARGUMENTS
+
+   c_ptr_1  - Scalar of the type c_ptr or c_funptr.
+   c_ptr_2  - (Optional) Scalar of the same type as c_ptr_1.
+
+RETURN VALUE
+
+   The return value is of type LOGICAL; it is .false. if either
+   c_ptr_1 is a C NULL pointer or if c_ptr1 and c_ptr_2
+   point to different addresses.
+
+EXAMPLE
+
+  Sample program:
+
+    subroutine association_test(a,b)
+      use iso_c_binding, only: c_associated, c_loc, c_ptr
+      implicit none
+      real, pointer :: a
+      type(c_ptr) :: b
+      if(c_associated(b, c_loc(a))) &
+         stop 'b and a do not point to same target'
+    end subroutine association_test
+
+STANDARD
+
+   [[Fortran 2003]] and later
+
+CLASS
+
+   [[Inquiry function]]
+
+SEE ALSO
+
+   [[c_loc]], [[c_funloc]], [[iso_c_binding]]
+

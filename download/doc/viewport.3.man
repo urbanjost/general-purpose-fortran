@@ -1,0 +1,24 @@
+NAME
+   viewport(3f) - [M_pixel] Specify which part of the screen to draw in.
+
+SYNOPSIS
+ definition:
+
+   subroutine viewport(left, right, bottom, top)
+   real,intent(in) :: left, right, bottom, top
+
+DESCRIPTION
+   Specify which part of the screen to draw in. Left, right, bottom,
+   and top are real values in screen coordinates (0:n,0:m).
+
+   If a pixel array has been declared to be real :: array(600,400)
+
+        o-----> X                         (right=600,top=0)
+        | #------------------------------------#
+        | |                                    |
+        | |                                    |
+        V |                                    |
+        Y |                                    |
+          #------------------------------------#
+     (left=0,bottom=400)
+

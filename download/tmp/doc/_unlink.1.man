@@ -1,0 +1,6 @@
+NAME
+     _unlink(1f) - [FUNIX]remove file
+SYNOPSIS
+     _unlink file(s)
+DESCRIPTION
+EXAMPLE

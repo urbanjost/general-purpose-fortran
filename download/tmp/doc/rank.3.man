@@ -1,0 +1,41 @@
+NAME
+
+     rank(3f) - [INTRINSIC] Rank of a data object
+
+SYNTAX
+
+   result = rank(a)
+
+DESCRIPTION
+
+   rank(a) returns the rank of a scalar or array data object.
+
+ARGUMENTS
+
+   A  - can be of any type
+
+RETURN VALUE
+
+   The return value is of type INTEGER and of the default integer
+   kind. For arrays, their rank is returned; for scalars zero is
+   returned.
+
+EXAMPLE
+
+  Sample program:
+
+   program test_rank
+     integer :: a
+     real, allocatable :: b(:,:)
+
+     print *, rank(a), rank(b) ! Prints:  0  2
+   end program test_rank
+
+STANDARD
+
+   [[TS 29113]]
+
+CLASS
+
+   Inquiry function
+

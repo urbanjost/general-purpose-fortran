@@ -1,0 +1,355 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>where (7)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>where(7f) </B>- [FORTRAN:ASSIGNMENT] masked array assignment
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+WHERE statement:
+<P>
+<PRE>
+   WHERE ( mask-expr ) where-assignment-stmt
+<P>
+</PRE>
+WHERE construct without ELSEWHERE:
+<P>
+<PRE>
+     [where-construct-name:] WHERE ( mask-expr )
+     ELSEWHERE (mask-expr ) [where-construct-name]
+<P>
+</PRE>
+WHERE construct with ELSEWHEREs:
+<P>
+<PRE>
+     [where-construct-name:] WHERE ( mask-expr )
+     [ELSEWHERE (mask-expr )
+        elemental-statements]
+     [ELSEWHERE (mask-expr )
+        elemental-statements]
+           :
+     [ELSEWHERE
+        elemental-statements
+     ]
+     END WHERE [where-construct-name]
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A masked array assignment is either a WHERE statement or a WHERE
+construct. It is used to mask the evaluation of expressions and
+assignment of values in array assignment statements, according to the
+value of a logical array expression.
+<P>
+where-assignment-stmt that is a defined assignment shall be elemental.
+<P>
+A statement that is part of a where-body-construct shall not be a
+branch target statement.
+<P>
+If a where-construct contains a where-stmt, a masked-elsewhere-stmt, or
+another where-construct then each mask-expr within the where-construct
+shall have the same shape. In each where-assignment-stmt, the mask-expr
+and the variable being defined shall be arrays of the same shape.
+<P>
+Examples of a masked array assignment are:
+<P>
+<PRE>
+            WHERE (TEMP &gt; 100.0) TEMP = TEMP - REDUCE_TEMP
+<P>
+            WHERE (PRESSURE &lt;= 1.0)
+               PRESSURE = PRESSURE + INC_PRESSURE
+               TEMP = TEMP - 5.0
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ELSEWHERE</H4>
+</A>
+<BLOCKQUOTE>
+RAINING = .TRUE.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ENDWHERE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Interpretation of masked array assignments
+<P>
+When a WHERE statement or a where-construct-stmt is executed, a control
+mask is established. In addition,
+when a WHERE construct statement is executed, a pending control
+mask is established. If the statement does not appear as part of a
+where-body-construct, the mask-expr of the statement is evaluated,
+and the control mask is established to be the value of mask-expr . The
+pending control mask is established to have the value .NOT. mask- expr
+upon execution of a WHERE construct statement that does not appear as
+<TABLE cellpadding=3><!-- tsb: When a WHERE statement or a where-construct-stmt is executed, a control
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+part of a where-body-construct.
+The mask-expr is evaluated only once.
+</TD></TR>
+<TR></TR></TABLE>Each statement in a WHERE construct is executed in sequence.
+<P>
+Upon execution of a masked-elsewhere-stmt, the following actions take place in sequence.
+<TABLE cellpadding=3><!-- tsb: Upon execution of a masked-elsewhere-stmt, the following actions take place in sequence.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+The control mask mc is established to have the value of the pending control mask.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+The pending control mask is established to have the value mc .AND. (.NOT. mask-expr ).
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+The control mask mc is established to have the value mc .AND. mask-expr .
+</TD></TR>
+<TR></TR></TABLE>The mask-expr is evaluated at most once.
+<P>
+Upon execution of an ELSEWHERE statement, the control mask is
+established to have the value of the pending
+control mask. No new pending control mask value is established.
+<P>
+Upon execution of an ENDWHERE statement, the control mask and pending
+control mask are established to have the values they had prior to the
+execution of the corresponding WHERE construct statement. Following the
+execution of a WHERE statement that appears as a where-body-construct,
+the control mask is established to have the value it had prior to the
+execution of the WHERE statement.
+<P>
+The establishment of control masks and the pending control mask
+is illustrated with the following example:
+<P>
+<PRE>
+            WHERE(cond1)             ! Statement 1
+            . . .
+            ELSEWHERE(cond2)         ! Statement 2
+            . . .
+            ELSEWHERE                ! Statement 3
+            . . .
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END WHERE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Following execution of statement 1, the control mask has the value
+cond1 and the pending control mask has the value .NOT. cond1.
+Following execution of statement 2, the control mask has the value
+(.NOT. cond1) .AND. cond2 and the pending control mask has the
+value (.NOT. cond1) .AND. (.NOT. cond2). Following execution
+of statement 3, the control mask has the value (.NOT. cond1)
+through the execution of the masked ELSEWHERE statement.
+<P>
+Upon execution of a WHERE construct statement that is part of a
+where-body-construct, the pending control mask is established to
+have the value mc .AND. (.NOT. mask-expr ). The control mask is then
+established to have the value mc .AND. mask-expr. The mask-expr is
+evaluated at most once.
+<P>
+Upon execution of a WHERE statement that is part of a
+where-body-construct, the control mask is established to have the
+value mc .AND. mask-expr. The pending control mask is not altered.
+<P>
+If a nonelemental function reference occurs in the expr or variable
+of a where-assignment-stmt or in a mask-expr ,
+the function is evaluated without any masked control; that is, all of
+its argument expressions are fully evaluated and the function is fully
+evaluated. If the result is an array and the reference is not within
+the argument list of a nonelemental function, elements corresponding
+to true values in the control mask are selected for use in evaluating
+the expr, variable or mask-expr.
+<P>
+If an elemental operation or function reference occurs in the expr
+or variable of a where-assignment-stmt or in a
+mask-expr , and is not within the argument list of a nonelemental
+function reference, the operation is performed or the function is
+evaluated only for the elements corresponding to true values of the
+control mask.
+<P>
+If an array constructor appears in a where-assignment-stmt or in a
+mask-expr , the array constructor is evaluated
+without any masked control and then the where-assignment-stmt is
+executed or the mask-expr is evaluated.
+<P>
+When a where-assignment-stmt is executed, the values of expr that
+correspond to true values of the control mask
+are assigned to the corresponding elements of the variable.
+<P>
+The value of the control mask is established by the execution of a
+WHERE statement, a WHERE construct
+statement, an ELSEWHERE statement, a masked ELSEWHERE statement, or
+<TABLE cellpadding=3><!-- tsb: The value of the control mask is established by the execution of a
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+an ENDWHERE statement.
+Subsequent changes to the value of entities
+in a mask-expr have no effect on the value of the control mask. The
+execution of a function reference in the mask expression of a WHERE
+statement is permitted to affect entities in the assignment statement.
+</TD></TR>
+<TR></TR></TABLE>Examples of function references in masked array assignments are:
+<P>
+<PRE>
+      WHERE (A &gt; 0.0)
+         A = LOG (A)           ! LOG is invoked only for positive elements.
+         A = A / SUM (LOG (A)) ! LOG is invoked for all elements
+                               ! because SUM is transformational.
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END WHERE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample
+<P>
+<PRE>
+   program demo_where
+   !  Example of WHERE, ELSE WHERE, END WHERE
+   parameter (nd=10, ndh=nd/2, nduh=nd-ndh-1)
+   real, dimension(nd):: a=[ (2*j,j=1,nd) ]
+   real, dimension(nd):: b ! =[ ndh*1.0, 0.0, nduh*2.0 ]
+   real, dimension(nd):: c ! =[ nd*-77.77 ]
+   integer iflag(nd)
+   data b/ndh*1,0.0,nduh*2./,c/nd*-77.77/
+<P>
+      where (b.ne.0) c=a/b
+<P>
+      write (*,2000) c(1:nd)
+</PRE>
+2000 format (&#146;a/b = &#146;,/,(10f7.2))
+!
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:       write (*,2000) c(1:nd)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+The above protects against divide by zero, but doesn&#146;t actually assign
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+values to elements in c when the corresponding element in b is zero
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+The following covers that, and sets a flag when a divide by zero is
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+!
+present
+!
+where (b(1:nd).ne.0.0)
+c=a/b
+iflag=0
+else where
+c=0.0
+iflag=1
+end where
+<P>
+write (*,2000) <B>c</B>(1:nd)
+write (*,1000) <B>iflag</B>(1:nd)
+1000 format (&#146;iflag= &#146;,/,(10i7))
+end program demo_where
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>where (7)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f0ba8eaf-4b99-479b-a7a2-914c05079f37 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/where.7.gif"></center> 
+</body>
+</HTML>

@@ -1,0 +1,20 @@
+NAME
+   IS_IOSTAT_END(3f) - [INTRINSIC] True if and only if a value indicates an end-of-file condition.
+SYNOPSIS
+    logical IS_IOSTAT_END (I)
+    integer,intent(in) :: I
+
+DESCRIPTION
+   True if and only if a value indicates an end-of-file condition
+
+ARGUMENT
+   I     integer status value obtained from READ(3f)
+
+RESULT
+   A default logical value is returned.
+   The result has the value true if and only if I is a value for the
+   scalar-int-variable in an IOSTAT= specifier that would
+   indicate an end-of-file condition.
+
+CLASS
+   Elemental function.

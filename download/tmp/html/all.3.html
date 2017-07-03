@@ -1,0 +1,251 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>all (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>ALL(3f) </B>- [INTRINSIC:TRANSFORMATIONAL FUNCTION] determines if all the values are true
+<B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Arguments</A><BR>
+<A HREF=#4>Return Value</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Standard</A><BR>
+<A HREF=#7>Class</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+result = <B>ALL</B>(MASK [, DIM])
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Logical conjunction of elements of MASK along dimension DIM.
+<P>
+"<B>ALL</B>(MASK [, DIM])" determines if all the values are true in MASK
+in the array along dimension DIM.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+MASK
+- shall be a logical array. That is,
+the type of the argument shall be LOGICAL and it shall
+not be scalar.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+DIM
+- (optional) DIM shall be a scalar integer with a value
+that lies between one and the rank of MASK.
+The corresponding actual argument shall not be an optional
+dummy argument.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+"<B>ALL</B>(MASK)" returns a scalar value of type LOGICAL where the kind
+type parameter is the same as the kind type parameter of MASK. If
+DIM is present, then <B>ALL</B>(MASK, DIM) returns an array with the rank
+of MASK minus 1. The shape is determined from the shape of MASK
+where the DIM dimension is elided.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: "<B>ALL</B>(MASK)" returns a scalar value of type LOGICAL where the kind
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+<B>ALL</B>(MASK) is true if all elements of MASK are true.
+It also is true if MASK has zero size; otherwise, it is false.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+If the rank of MASK is one, then <B>ALL</B>(MASK, DIM) is equivalent
+to <B>ALL</B>(MASK). If the rank is greater than one, then <B>ALL</B>(MASK,
+DIM) is determined by applying ALL to the array sections.
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+Result Characteristics. The result is of type logical with the same
+kind type parameter as MASK. It is scalar
+if DIM is absent or n = 1; otherwise, the result has rank n - 1 and
+shape [d1 , d2 , . . . , dDIM-1 , dDIM+1 , . . . , dn ] where [d1 ,
+d2 , . . . , dn ] is the shape of MASK.
+</TD></TR>
+<TR valign=top><TD width=4%>
+5.
+</TD><TD>
+Result Value.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+       Case (i):     The result of ALL (MASK) has the value true if all
+                     elements of MASK are true or if MASK has
+                     size zero, and the result has value false if any element
+                     of MASK is false.
+<P>
+       Case (ii):    If MASK has rank one, ALL(MASK,DIM) is equal to
+                     ALL(MASK). Otherwise, the value of element
+                     (s1 , s2 , . . . , sDIM-1 , sDIM+1 , . . . , sn ) of ALL
+                     (MASK, DIM) is equal to ALL (MASK (s1 , s2 , . . . ,
+                     sDIM-1 , :, sDIM+1 , . . . , sn )).
+<P>
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+    program test_all
+      logical l
+      l = all((/.true., .true., .true./))
+      print *, l
+      call section
+    contains
+       subroutine section
+          integer a(2,3), b(2,3)
+          a = 1
+          b = 1
+          b(2,2) = 2
+          print *, all(a .eq. b, 1)
+          print *, all(a .eq. b, 2)
+       end subroutine section
+    end program test_all
+<P>
+</PRE>
+Case (i):
+<P>
+<PRE>
+     The value of ALL ([.TRUE., .FALSE., .TRUE.]) is false.
+<P>
+</PRE>
+Case (ii):
+1|3|5
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Case (ii):
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+If B is the array
+-+-+-
+2|4|6
+<P>
+0|3|5
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+and C is the array
+-+-+-
+7|4|8
+</TD></TR>
+<TR></TR></TABLE>then ALL (B /= C, DIM = 1) is
+[true, false, false]
+and ALL (B /= C, DIM = 2) is
+[false, false].
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+[[Fortran 95]] and later
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+Transformational function.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>all (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4cdfaf8a-120e-4b9d-8c95-b577b7c2aeff using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/all.3.gif"></center> 
+</body>
+</HTML>

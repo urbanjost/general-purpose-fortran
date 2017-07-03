@@ -1,0 +1,399 @@
+[UP]
+
+-----------------------------------------------------------------------------------------------------------------------------------
+                                              Manual Reference Pages  - dl_slices (3)
+-----------------------------------------------------------------------------------------------------------------------------------
+                                                                 
+NAME
+
+    dl_slices(3f) - [M_pixel] basic 3-d surface plotting routine
+
+CONTENTS
+
+    Synopsis
+    Description
+    Options
+    Example
+
+SYNOPSIS
+
+    subroutine dl_slices(d,ndx,ndz,nx,nz,a,b,xh,yh,zh,iflag,iax,
+
+
+                        & xt,nxt,xs,xe,nmx,nnx,mlx,tsx,ndx,smx,
+                        & yt,nyt,      nmy,nny,mly,tsy,ndy,smy,
+                        & zt,nzt,zs,ze,nmz,nnz,mlz,tsz,ndz,smz,
+                        & lt;dm,dx,ic)
+
+
+
+DESCRIPTION
+
+    dl_slices is a simple 3-d surface plotting routine. A 3-d surface is plotted by plotting slices through the volume which are
+    parallel to the x-y plane. The x,y values of the surface at the intersection of the slice plane and the fixed z value are
+    plotted. Hidden lines are suppressed, giving the illusion of a 3 dimensional surface. The height of the plotted surface
+    relative to the y axis value is calibrated to the x and z axes. No perspective is used. Options exist to vary the plotting
+    angle and to plot axes.
+
+    The origin of the plot is in the lower-left corner. The x axis runs left to right along the plot bottom. The y axis is plotted
+    as a vertical displacement offset by the z axis value. The z axis appears to point into the screen. This, with the hidden line
+    removal, gives the illusion of depth.
+
+    dl_slices contains an internal working storage array dimensioned sufficiently large for most sufaces. However, for very complex
+    surfaces, the working storage buffer length may be exceeded. In this case an error message is written to the terminal and the
+    routine terminated.
+
+OPTIONS
+
+             d (R): array of y values dimensioned d(ndx,ndz)
+
+             ndx,ndz (i): x and z dimensions of d array
+
+             nx,nz (i): x and z sizes of surface to plot d array
+
+             a (R): angle of x axis from horizontal 0-85 degrees
+
+             b (R): angle of z axis from horizontal 0-90 degrees note: origin (1,1) is in lower-left corner x axis runs left to
+             right on screen y axis runs up to down on screen z axis appears to run into the screen but is angled to the right
+             xh,yh,zh (R): length of each axis
+
+             iflag (i): option flag (1 s digit) =2: use color array (need all parameters) =1: do not use color array (10 s digit)=
+             0: Plot sides =1: Do not plot sides
+
+             iax (i): axis format control < 0 : plot axes, use input scale factors dm and dx = 0 : no axes plotted, optional
+             parameters (xt...dx) not used, scaling computed from input array > 0 : plot axes, use scaling computed from input
+             array only axis parameters xt through smz accessed.
+
+                     (1 s digit) = 1 : Plot actual max/min or input values for Y axis = 2 : Plot smoothed values for Y axis (10 s
+                     digit) = 0 : Use default axis type = 1 : Use input DL_AXISB-type axis parameters (nmx, nnx, mlx, tsx, ndx,
+                     etc.)
+
+    (NOTE: the following optional parameters are used if iax < 0 or mod(iflag,10)=1)
+
+    X-AXIS
+
+                     xt (C): title of x axis (width)
+
+                     nxt (i): number of characters in xt = 0 : no axis plotted > 0 : normal xs,xe (R): starting and ending values
+                     displayed on x axis (see DL_AXISB for detailed description of axis parameters)
+
+                     nmx (i): number of minor ticks between major ticks on x axis
+
+                     nnx (i): highlight length of nnx-th minor tick on x axis
+
+                     mlx (i): number of major tick marks on x axis
+
+                     tsx (R): size of title and numbers on x axis < 0 auto exponent scaling (x10 to power) disabled > 0 auto
+                     exponent scaling (x10 to power) enabled
+
+                     ndx (i): number of digits to right of decimal point on x axis
+
+                     smx (R): major tick length on x axis Y-AXIS
+
+                     yt (C): title of y axis (depth)
+
+                     nyt (i): number of characters in yt = 0 : no y axis plotted > 0 : normal
+
+                     nmy (i): number of minor ticks between major ticks on y axis
+
+                     nny (i): highlight length of nny-th minor tick on y axis
+     
+                     mly (i): number of major tick marks on y axis
+
+                     tsy (R): size of title and numbers on y axis < 0 auto exponent scaling (x10 to power) disabled > 0 auto
+                     exponent scaling (x10 to power) enabled
+
+                     ndy (i): number of digits to right of decimal point on y axis
+
+                     smy (R): major tick length on y axis Z-AXIS
+
+                     zt (C): title of z axis (height)
+
+                     nzt (i): number of characters in zt = 0 : no z axis plotted > 0 : normal zs,ze (R): starting and ending value
+                     displayed on z axis
+
+                     nmz (i): number of minor ticks between major ticks on z axis
+
+                     nnz (i): highlight length of nnz-th minor tick on z axis
+
+                     mlz (i): number of major tick marks on z axis
+
+                     tsz (R): size of title and numbers on z axis < 0 auto exponent scaling (x10 to power) disabled > 0 auto
+                     exponent scaling (x10 to power) enabled
+
+                     ndz (i): number of digits to right of decimal point on z axis
+
+                     smz (R): major tick length on z axis
+
+    (NOTE: the following optional parameters are accessed only if iax < 0 or mod(iflag,10)=1) dm,dx (R): minimum and maximum values
+    of d array (NOTE: color array accessed only if mod(iflag,10)=1)
+
+                     ic (i): color list ic(1) : color for axis lines ic(2) : color for axis numbers ic(3) : color for axis titles
+                     ic(4) : color for axis exponents ic(5) : color index for lower plot surface (return) ic(6) : color index for
+                     upper plot surface (return)
+
+EXAMPLE
+
+    Sample program:
+
+       PROGRAM demo_dl_slices
+
+
+       !     WRITTEN BY: DGL, LAST REVISED ON  5-JAN-1994 10:31:18.86
+       !                 JSU,                 19-JUL-2005
+
+
+        use M_pixel
+        use M_writegif_animated, only : write_animated_gif
+        use :: m_pixel_slices, only : dl_slices, dl_init, dl_symbol
+        implicit none
+          integer,PARAMETER  :: IX=35
+          integer,PARAMETER  :: IZ=45
+          real               :: SURFDAT(ix,iz)              ! array of y values
+          integer            :: MOVIE(85+90+90,0:500,0:500) ! array of y values
+          real,save          :: TPI=3.141592654
+          integer            :: ICOL(255)
+          character(len=80)  :: XT,YT,ZT                    ! axis titles
+          real :: a,b,dm,dx
+          real :: smx,smy,smz
+          real :: tsx,tsy,tsz
+          real :: xe,xh,xs
+          real :: ye,yh,ys
+          real :: ze,zh,zs
+
+
+          integer :: i
+          integer :: i10,i20,i40
+          integer :: iax
+          integer :: iflag
+          integer :: iframe
+          integer :: ii
+          integer :: j
+          integer :: mlx,mly,mlz
+          integer :: ndx,ndy,ndz
+          integer :: nmx,nmy,nmz
+          integer :: nnx,nny,nnz
+          integer :: nx,nxt
+          integer :: nyt
+          integer :: nz,nzt
+
+
+
+        ! (NOTE: color array accessed only if mod(iflag,10)=1)
+
+                ! icol (i): color list
+
+                ! icol(1) : color for axis lines
+
+                ! icol(2) : color for axis numbers
+
+                ! icol(3) : color for axis titles
+
+                ! icol(4) : color for axis exponents
+
+                ! icol(5) : color index for lower plot surface (return)
+
+                ! icol(6) : color index for upper plot surface (return)
+
+                ! initialize the color array DO I=1,255 ICOL(I)=MOD(I,7) enddo
+
+                ! fill some arrays with data we can plot DO J=1,IX DO I=1,IZ SURFDAT(J,I)=COS(TPI*REAL(J-1)/12.0)*COS(TPI*REAL(I-1)
+                /12.0) enddo enddo
+
+                call prefsize(501,501) call vinit()
+
+                        CALL DL_INIT(12.5,12.5,1.5,1.5,1.0) ! set up plotting surface scale CALL LINEWIDTH(3) CALL COLOR(4)
+
+                ! now plot 3-d surface using slices with axis NX=IX NZ=IZ
+
+        ! length of axis in window units XH=6.0 ! xh,yh,zh (R): length of each axis YH=3.8 ZH=5.0
+
+        IFLAG=012 IFLAG=000 IFLAG=002
+
+                ! iflag (i): option flag
+
+                ! (1 s digit) =2: use color array (need all parameters)
+
+                ! =1: do not use color array
+
+                ! (10 s digit)=0: Plot sides
+
+                ! =1: Do not plot sides
+
+        IAX= 01 IAX=-11 ! SIGN:
+
+                ! iax (i): axis format control
+
+                ! < 0 : plot axes, use input scale factors dm and dx
+
+                ! = 0 : no axes plotted, optional parameters (xt...dx)
+
+                ! not used, scaling computed from input array
+
+                ! > 0 : plot axes, use scaling computed from input array
+
+                ! only axis parameters xt through smz accessed. ! DIGITS:
+
+                ! (1 s digit) = 1 : Plot actual max/min or input values for Y axis
+
+                ! = 2 : Plot smoothed values for Y axis
+
+                ! (10 s digit) = 0 : Use default axis type
+
+                ! = 1 : Use input DL_AXISB-type axis parameters
+
+                ! (nmx, nnx, mlx, tsx, ndx, etc.)
+
+        ! (NOTE: the following optional parameters are used if iax < 0 or mod(iflag,10)=1)
+
+                ! (see DL_AXISB for detailed description of axis parameters)
+
+        ! XAXIS:
+
+                        XS=-10.0 ! xs,xe (R): starting and ending values displayed on x axis XE=10.0 !-----------------------
+
+                        NMX=4 ! nmx (i): number of minor ticks between major ticks on x axis
+
+                        NNX=0 ! nnx (i): highlight length of nnx-th minor tick on x axis
+
+                        MLX=4 ! mlx (i): number of major tick marks on x axis
+
+                        TSX=-0.15 ! tsx (R): size of title and numbers on x axis
+
+                ! < 0 auto exponent scaling (x10 to power) disabled
+
+                ! > 0 auto exponent scaling (x10 to power) enabled
+
+                        NDX=1 ! (i): number of digits to right of decimal point on x axis
+
+                        SMX=0.1 ! (R): major tick length on x axis !-----------------------
+
+                        XT= dl_slices X TITLE ! xt (C): title of x axis (width)
+
+                        NXT=len_trim(xt) ! nxt (i): number of characters in xt ;nxt = 0 : no axis plotted ; nxt > 0 : normal
+
+        ! YAXIS:
+
+                        YS=-10.0 ! ys,ye (R): starting and ending values displayed on y axis YE=10.0 !-----------------------
+
+                        NMY=1 ! (i): number of minor ticks between major ticks on y axis
+
+                        NNY=0 ! (i): highlight length of nny-th minor tick on y axis
+
+                        MLY=3 ! (i): number of major tick marks on y axis
+
+                        TSY=-0.15 ! (R): size of title and numbers on y axis
+
+                               ! < 0 auto exponent scaling (x10 to power) disabled
+
+                               ! > 0 auto exponent scaling (x10 to power) enabled
+
+                        NDY=1 ! ndy (i): number of digits to right of decimal point on y axis
+
+                        SMY=0.10 ! smy (R): major tick length on y axis !-----------------------
+
+                        YT= dl_slices Y TITLE ! yt (C): title of y axis (width)
+
+                        NYT=len_trim(yt) ! nyt (i): number of characters in xt ;nyt = 0 : no axis plotted ; nyt > 0 : normal
+
+        ! ZAXIS: ZS=1.0
+
+                        ZE=1.0 ! zs,ze (R): starting and ending value displayed on z axis !-----------------------
+
+                        NMZ=3 ! nmz (i): number of minor ticks between major ticks on z axis
+
+                        NNZ=2 ! nnz (i): highlight length of nnz-th minor tick on z axis
+
+                        MLZ=2 ! mlz (i): number of major tick marks on z axis
+
+                        TSZ=-0.15 ! tsz (R): size of title and numbers on z axis
+
+                               ! < 0 auto exponent scaling (x10 to power) disabled
+
+                               ! > 0 auto exponent scaling (x10 to power) enabled
+
+                        NDZ=1 ! ndz (i): number of digits to right of decimal point on z axis
+
+                        SMZ=0.1 ! smz (R): major tick length on z axis !-----------------------
+
+                        ZT= SLICE ! zt (C): title of z axis (width)
+
+                        NZT=len_trim(zt) ! nzt (i): number of characters in xt ;nzt = 0 : no axis plotted ; nzt > 0 : normal
+
+                ! (NOTE: the following optional parameters are accessed only if
+
+                ! iax < 0 or mod(iflag,10)=1)
+
+                        DM=-1.0 ! dm,dx (R): minimum and maximum values of SURFDAT array DX=1.0 ! view angles
+
+                ! A (R): angle of x axis from horizontal 0-80 degrees
+
+                ! B (R): angle of z axis from horizontal 5-80 degrees
+
+                ! note: origin (1,1) is in lower-left corner
+
+                ! x axis runs left to right on screen
+
+                ! y axis runs up to down on screen
+
+                ! z axis appears to run into the screen but is angled to the right iframe=1 B=15.0
+
+                        DO I10=1,85 ! Animate cycling thru angle A A=I10 CALL COLOR(7) CALL CLEAR() CALL COLOR(0)
+
+                               CALL dl_slices(SURFDAT,IX,IZ,NX,NZ,A,B,XH,YH,ZH,IFLAG,IAX,
+
+                & XT,NXT,
+
+                        & XS,XE,NMX,NNX,MLX,TSX,NDX,SMX,
+
+                        & YT,NYT,
+
+                        & NMY,NNY,MLY,TSY,NDY,SMY,
+
+                        & ZT,NZT, & ZS,ZE,NMZ,NNZ,MLZ,TSZ,NDZ,SMZ,DM,DX,ICOL)
+
+                ! add a label after master routine call CALL COLOR(1) CALL LINEWIDTH(1) CALL DL_SYMBOL(0.0,0.0,0.25, VAX3DX ,0.0,6,
+                -1) movie(iframe,:,:)=P_pixel(:,:) iframe=iframe+1 enddo
+
+                A=25
+
+                        DO I20=1,90 ! Animate cycling thru angle B B=I20 CALL COLOR(7) CALL CLEAR() CALL COLOR(0)
+
+                               CALL dl_slices(SURFDAT,IX,IZ,NX,NZ,A,B,XH,YH,ZH,IFLAG,IAX,
+
+                & XT,NXT,
+
+                        & XS,XE,NMX,NNX,MLX,TSX,NDX,SMX,
+
+                        & YT,NYT,
+
+                        & NMY,NNY,MLY,TSY,NDY,SMY,
+
+                        & ZT,NZT, & ZS,ZE,NMZ,NNZ,MLZ,TSZ,NDZ,SMZ,DM,DX,ICOL) movie(iframe,:,:)=P_pixel(:,:) iframe=iframe+1 enddo
+
+        IAX=01 IFLAG=012 II=1
+
+                DO I40=1,90*II ! Animate cycling thru angles A and B A=REAL(I40)/II/2.0 ! should get warning when this exceeds 85 B
+                =REAL(I40)/II/2.0 CALL COLOR(7) CALL CLEAR() CALL COLOR(0)
+
+                        CALL dl_slices(SURFDAT,IX,IZ,NX,NZ,A,B,XH,YH,ZH,IFLAG,IAX,
+
+                & XT,NXT,
+
+                        & XS,XE,NMX,NNX,MLX,TSX,NDX,SMX,
+
+                        & YT,NYT,
+
+                        & NMY,NNY,MLY,TSY,NDY,SMY,
+
+                        & ZT,NZT, & ZS,ZE,NMZ,NNZ,MLZ,TSZ,NDZ,SMZ,DM,DX,ICOL) movie(iframe,:,:)=P_pixel(:,:) iframe=iframe+1 enddo
+
+                CALL VEXIT() ! close up plot package call write_animated_gif( dl_slices.3.gif ,movie,P_colormap,delay=5) !call
+                execute_system_command( display dl_slices.3.gif ) END PROGRAM demo_dl_slices
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                                                           dl_slices (3)                                              July 02, 2017
+
+Generated by manServer 1.08 from 4449ebfd-1c1d-4ca9-bc82-4b7b07643c3d using man macros.
+                                                            [dl_slices]

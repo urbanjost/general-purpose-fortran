@@ -1,0 +1,24 @@
+.SH "NAME"
+   M_messages(3fp) - [M_messages]module collecting various general routines for displaying messages
+.SH "DESCRIPTION"
+.nf
+   ! LINEART
+   public junbad        ! <a href="junbad.3.html">print eye-catching ASCII graphic (skull)</a>
+   public junbat        ! <a href="junbat.3.html">print eye-catching ASCII graphic (bat)</a>
+   public junbuster     ! <a href="junbuster.3.html">print eye-catching ASCII graphic (ghostbuster)</a>
+   public jundragon     ! <a href="jundragon.3.html">print eye-catching ASCII graphic (dragon) with message</a>
+   public junroach      ! <a href="junroach.3.html">print eye-catching ASCII graphic (roach)</a>
+   public junsun        ! <a href="junsun.3.html">print eye-catching ASCII graphic (sunshine)</a>
+   public juntrolls     ! <a href="juntrolls.3.html">print eye-catching ASCII graphic (trolls) with message</a>
+
+   ! ILLUMINATE
+   public tabgraph      ! <a href="tabgraph.3.html">write columns of numbers with a text scale to the right</a>
+
+   ! BLOCK LETTERS
+   public blocks        ! <a href="blocks.3.html">write out 132-character string in large block letters</a>
+   public signs         ! <a href="signs.3.html">write up to 132 large block letters</a>
+
+   ! PROGRESS AND STATUS
+   public percent_done  ! <a href=percent_done.3.html"> place a non-advancing status counter on terminal display </a>
+
+.fi

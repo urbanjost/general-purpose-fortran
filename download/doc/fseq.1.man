@@ -1,0 +1,35 @@
+NAME
+   fseq - print a sequence of numbers, optionally appending file lines.
+SYNOPSIS
+   fseq [OPTION]...
+DESCRIPTION
+  A test program for testing M_kracken(3fm) module. Also useful for experimenting
+  with Fortran FORMAT statements and observing  round-off issues.
+
+  Sort of parts of "cat -n"  and "seq" and "head" mixed together.
+  But awk(1) or sed(1) or shells would do it better.
+  Logic has gotten very messy, and has not been made fault tolerant.
+
+   Print numbers from START to END, in steps of DELTA.
+       -s START     # start value (defaults to 1)
+       -d DELTA     # increment value (defaults to 1)
+       -e END       # end value (required)
+       -f FORMAT    # use Fortran floating-point FORMAT
+       -i FORMAT    # use Fortran integer FORMAT (defaults to "i0,/")
+       -h           # display this help and exit
+       -v           # output version information and exit
+       -oo          # filename (ignored if active FORMAT is *)
+                    # lines are read from this file and appended to output
+                    # lines.
+   FIRST, DELTA, and END are interpreted as floating point values when the
+   format from -f is used, they are interpreted as integers when -i is used.
+   -f FORMAT must be suitable for printing one argument of type "REAL",
+   -i FORMAT must be suitable for printing one argument of type "INTEGER".
+   If -f is present, -i is ignored.
+EXAMPLES
+   fseq -e 20
+   fseq -s 10 -e 100 -d 10 -f "g5.1'':''"
+   # show first 20 lines of file "filename"
+   fseq filename -e 20 -i "i10,'':'',1x"
+   # show
+   fseq filename -e 1000000000 -i "i0,t5,'':'',1x"

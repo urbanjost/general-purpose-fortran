@@ -1,0 +1,40 @@
+NAME
+         dget - [ARGUMENTS:M_kracken]given keyword fetch doubleprecision value from command argument
+SYNOPSIS
+   function dget(keyword) result(value)
+
+    character(len=*),intent(in)  :: keyword
+    doubleprecision              :: value
+DESCRIPTION
+    The dget(3f) function returns a scalar doubleprecision value from a command line
+    argument using the M_kracken(3fm) module.
+OPTIONS
+    KEYWORD    the dictionary keyword (in form VERB_KEYWORD) to retrieve.
+               The VERB name comes from the first argument of the KRACKEN(3f)
+               call. The KEYWORD is a keyword from the KRACKEN(3f) call that
+               should be interpreted as a doubleprecision value.
+RETURNS
+    VALUE      doubleprecision value returned by function
+EXAMPLE
+  Sample program
+
+   program demo_dget
+   use M_kracken, only: kracken, dget
+   implicit none
+   doubleprecision :: val
+     ! define command arguments and parse user command
+     call kracken('demo','-val 3.1416' )
+     val=dget('demo_val') ! get any values specified on -val option
+     write(*,*)val         ! print the value
+   end program demo_dget
+
+  Example program runs:
+
+   $ demo_dget
+      3.14159989
+
+   $ demo_dget -val 10
+      10.0000000
+
+   $ demo_dget -val 3.000
+      3.00000000

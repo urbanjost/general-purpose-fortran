@@ -1,0 +1,19 @@
+NAME
+   xcentertext(3f) - [M_pixel] set text centering mode on for drawstr(3f) and drawc(3f) in X direction
+
+SYNOPSIS
+ definition:
+
+   subroutine xcentertext()
+
+DESCRIPTION
+   Set text centering mode on in X direction.  Y justification is
+   turned off.
+
+   Centers text in the X direction. The text string will begin at a
+   point to the notional left of the current position and finish at a
+   point to the right of the current position. Left justification and
+   Right justification are turned off.
+
+EXAMPLE
+

@@ -1,0 +1,49 @@
+NAME
+   dirname(3f) - [M_io] strip last component from filename
+
+SYNOPSIS
+   function dirname(FILENAME) result (DIRECTORY)
+
+     character(len=*),intent(in)  :: FILENAME
+     character(len=:),allocatable :: DIRECTORY
+
+DESCRIPTION
+   Output FILENAME with its last non-slash component and trailing slashes removed.
+   if FILENAME contains no /'s, output '.' (meaning the current directory).
+
+   Assumes leaf seperator is a slash ('/') and that filename does not contain
+   trailing spaces.
+
+OPTIONS
+     FILENAME   pathname to remove the last leaf from
+
+RETURNS
+     DIRECTORY  directory name for pathname
+
+EXAMPLES
+  Sample program:
+
+   program demo_dirname
+   use M_io, only : dirname
+   implicit none
+   character(len=:),allocatable :: filename
+   integer                      :: filename_length
+   integer                      :: i
+   ! get pathname from command line arguments
+   do i = 1 , command_argument_count()
+      call get_command_argument (i , length=filename_length)
+      allocate(character(len=filename_length) :: filename)
+      call get_command_argument (i , value=filename)
+      write(*,'(a)')dirname(filename)
+      deallocate(filename)
+   enddo
+   end program demo_dirname
+
+  Sample program executions:
+
+     demo_dirname /usr/bin/          -> "/usr"
+     demo_dirname dir1/str dir2/str  -> "dir1" followed by "dir2"
+     demo_dirname stdio.h            -> "."
+
+SEE ALSO
+   dirname(3c), basename(3c), readlink(3c), realpath(3c)

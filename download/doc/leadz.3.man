@@ -1,0 +1,32 @@
+NAME
+     leadz(3f) - [INTRINSIC:BIT INQUIRY] Number of leading zero bits of an integer
+
+SYNTAX
+   result = leadz(i)
+
+DESCRIPTION
+   LEADZ returns the number of leading zero bits of an integer.
+
+ARGUMENTS
+   I  - Shall be of type INTEGER.
+
+RETURN VALUE
+   The type of the return value is the default INTEGER.
+   If all the bits of I are zero, the result value is bit_size(i).
+
+EXAMPLE
+  Sample program:
+
+    program test_leadz
+      write (*,*) leadz(1)  ! prints 8 if bitsize(i) has the value 32
+    end program
+
+STANDARD
+   [[Fortran 2008]] and later
+
+CLASS
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+   [[bit_size]], [[popcnt]], [[poppar]], [[trailz]]
+

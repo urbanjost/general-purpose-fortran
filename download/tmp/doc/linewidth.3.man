@@ -1,0 +1,38 @@
+NAME
+   linewidth(3f) - [M_pixel] set linewidth
+
+SYNOPSIS
+ definition:
+
+   subroutine linewidth(iwidth)
+   integer iwidth
+
+DESCRIPTION
+   Set the current line width in units of 1/10,000 of the X size of the display surface
+EXAMPLE
+  Sample program:
+
+   program demo_linewidth
+   use M_pixel
+   use M_writegif, only : writegif
+   use M_units, only : cosd, sind
+   integer,parameter      :: SLICES=32
+   integer,parameter      :: RINGS=8
+   integer ii
+      call prefsize(600,600)
+      call vinit(' ')
+      call color(0)
+      call clear()
+      call color(7)
+      call ortho2(-110.0, 110.0, -110.0, 100.0)
+      do ii=0,360,30
+         call linewidth(ii)
+         call move2(0.0,0.0)
+         call draw2(100*cosd(real(ii)),100*sind(real(ii)))
+         call draw2(110*cosd(real(ii+15.0)),110*sind(real(ii+15.0)))
+      enddo
+      call writegif('linewidth.3.gif',P_pixel,P_colormap)
+      call execute_command_line('display linewidth.3.gif')
+      call vexit()
+   end program demo_linewidth
+

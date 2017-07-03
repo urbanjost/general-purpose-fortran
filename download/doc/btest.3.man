@@ -1,0 +1,48 @@
+NAME
+     btest(3f) - [INTRINSIC:BIT MANIPULATION] Bit test function
+
+SYNTAX
+
+   result = btest(i, pos)
+
+DESCRIPTION
+
+   btest(i,pos) returns logical .true. if the bit at POS
+   in I is set.
+
+ARGUMENTS
+
+   I  - The type shall be INTEGER.
+   POS  - The type shall be INTEGER. A value of zero refers to the least significant bit.
+
+RETURN VALUE
+
+   The return value is of type LOGICAL
+
+EXAMPLE
+
+  Sample program:
+
+    program test_btest
+        integer :: i = 32768 + 1024 + 64
+        integer :: pos
+        logical :: bool
+        do pos=0,16
+            bool = btest(i, pos)
+            print *, pos, bool
+        end do
+    end program test_btest
+
+STANDARD
+
+   [[Fortran 95]] and later
+
+CLASS
+
+   [[Elemental procedure|Elemental function]]
+
+SEE ALSO
+
+   [[ibclr]], [[ibits]], [[ibset]], [[iand]], [[ior]], [[ieor]],
+   [[mvbits]]
+

@@ -1,0 +1,18 @@
+NAME
+    scale1(3f) - [M_math] find new range xminp xmaxp divisible into approximately n linear intervals of size dist
+
+SYNOPSIS
+  subroutine scale1(xmin, xmax, n, xminp, xmaxp, dist)
+
+   real,intent(in)      :: xmin, xmax
+   integer,intent(in)   :: n
+   real,intent(out)     :: xminp, xmaxp, dist
+
+DESCRIPTION
+
+   Find new range divisible into approximately n linear intervals using
+   "CACM Algorithm 463 scale1".  Typically used to find nice ranges for
+   axis scales.
+
+EXAMPLE
+

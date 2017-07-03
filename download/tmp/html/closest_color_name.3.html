@@ -1,0 +1,110 @@
+<html>
+<head>
+<title></title>
+<style>
+body {xfont-style: italic}
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libjust4/just4.html">[CLI Home Page]</a>
+<div id="Container">
+<div id="Content">
+<dl>
+<!-- ======================================================================= -->
+<dt> <a name="CLOSEST_COLOR_NAME">NAME</a> </dt><dd>
+    closest_color_name(3f) - [M_color]returns the closest name for the given RGB values.
+</dd>
+<!-- ======================================================================= -->
+<dt> SYNOPSIS  </dt><dd>
+   <pre>
+   subroutine closest_color_name(r,g,b,closestname)
+
+    real,intent(in)               :: r,g,b
+    character(len=20),intent(out) :: closestname
+   </pre>
+</dd>
+<!-- ======================================================================= -->
+<dt> DESCRIPTION  </dt><dd>
+
+    closest_color_name() returns the closest name for the given RGB values.
+    Most X11 Windows color names are supported.
+</dd>
+<!-- ======================================================================= -->
+<dt> OPTIONS  </dt><dd>
+
+    <ul>
+    <li>R  - red component, range of 0 to 100</li>
+    <li>G  - green component, range of 0 to 100</li>
+    <li>B  - blue component, range of 0 to 100</li>
+    <ul>
+</dd>
+<!-- ======================================================================= -->
+<dt> RETURNS  </dt><dd>
+
+    <ul>
+    <li>CLOSESTNAME  - name of color found closest to given RGB value</li>
+    <ul>
+</dd>
+<!-- ======================================================================= -->
+<dt> EXAMPLE  </dt><dd>
+
+    Sample program
+    <pre>
+       program demo_closest_color_name
+       use M_color, only : closest_color_name
+       character(len=100) :: string ! at least 20 characters
+       string=' '
+
+       call closest_color_name(100.0,  0.0,  0.0,string)
+       write(*,*)trim(string)
+
+       call closest_color_name(  0.0,100.0,  0.0,string)
+       write(*,*)trim(string)
+
+       call closest_color_name(  0.0,  0.0,100.0,string)
+       write(*,*)trim(string)
+
+       end program demo_closest_color_name
+
+<h3>Results:</h3>
+       red
+       green
+       blue
+    </pre>
+
+</dd>
+<!-- ======================================================================= -->
+</dl>
+</div>
+</div>
+</body>
+</html>

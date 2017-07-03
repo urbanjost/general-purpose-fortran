@@ -1,0 +1,174 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+p {font-family: "Lucida Console", Monaco, monospace}
+body {xfont-style: italic}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+p{ padding: 0;margin: 0]
+p{ padding-right:1.4em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; font-style:italic; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:99%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="download.html">[UP]</a></h5> 
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_factor (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_factor </B>- [M_factor]module for least common multiple, greatest common divisor, and prime factors
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Primes</A><BR>
+<A HREF=#4>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>least_common_multiple</B>
+<I>least</I> <I>common</I> <I>multiple</I> <I>of</I> <I>two</I> <I>integers</I> (<I>(i,j)</I>) <I>or</I>
+<B>integer</B> <I>array</I> <B>m</B>(:|:,:|:,:,:)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>greatest_common_divisor</B>
+<I>greatest</I> <I>common</I> <I>divisor</I> <I>of</I> <I>two</I> <I>integers</I> (<I>(i,j)</I>) <I>or</I>
+<B>integer</B> <I>array</I> <B>m</B>(:|:,:|:,:,:)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>prime_factors</B>
+<I>prime</I> <I>factors</I> <I>of</I> <I>a</I> <I>number</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+<B>i_is_prime</B>
+<I>determine</I> <I>if</I> <I>an</I> <I>integer</I> <I>is</I> <I>a</I> <I>prime</I>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+This module <I>is</I> <I>a</I> collection <I>of</I> procedures that perform <I>common</I> functions
+found in arithmetic and <I>number</I> theory such as Least Common Multiples,
+Greatest Common Divisors, and Prime Factors <I>of</I> INTEGER variables.
+The INTEGER values are typically limited to values up to the magnitude
+(2**31)<B>-1</B>= 2147483647.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>PRIMES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Date
+10/06/97 at 12:47:29
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+From
+Doctor Rob
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B> </TD><TD valign=bottom>
+Subject
+Re: The <I>number</I> 1 and zero
+</TD></TR>
+<TR><TD colspan=2>
+One <I>is</I> neither <I>a</I> <I>prime</I> nor <I>a</I> composite <I>number</I>. A <I>prime</I> <I>number</I> <I>is</I> one
+with exactly <I>two</I> positive divisors, itself and one. One has only one
+positive <I>divisor</I>. It cannot be written as <I>a</I> product <I>of</I> <I>two</I> <I>factors</I>,
+neither <I>of</I> which <I>is</I> itself, so one <I>is</I> also not composite. It falls
+in <I>a</I> class <I>of</I> numbers called units. These are the numbers whose
+reciprocals are also whole numbers.
+</TD></TR>
+<TR><TD colspan=2>
+Zero <I>is</I> not <I>a</I> <I>prime</I> <I>or</I> <I>a</I> composite <I>number</I> either. Zero has <I>an</I> infinite
+<I>number</I> <I>of</I> divisors (any nonzero whole <I>number</I> divides zero). It cannot
+be written as <I>a</I> product <I>of</I> <I>two</I> <I>factors</I>, neither <I>of</I> which <I>is</I> itself, so
+zero <I>is</I> also not composite. It falls in <I>a</I> class <I>of</I> numbers called
+zero-divisors. These are numbers such that, when multiplied by some
+nonzero <I>number</I>, the product <I>is</I> zero.
+</TD></TR>
+<TR><TD colspan=2>
+The most important fact <I>of</I> multiplication <I>of</I> <I>integers</I> <I>is</I> called the
+Fundamental Theorem <I>of</I> Arithmetic. It says that every whole <I>number</I>
+greater than one can be written *uniquely* (except for their order) as
+the product <I>of</I> <I>prime</I> numbers. This <I>is</I> so important that we tailor our
+idea <I>of</I> what <I>a</I> <I>prime</I> <I>number</I> <I>is</I> to make it true. If 1 were <I>a</I> <I>prime</I>
+<I>number</I>, this would be false, since, for example,
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<P>
+7 = 1*7 = 1*1*7 = 1*1*1*7 = &#46;&#46;&#46;,
+</TD></TR>
+<TR></TR></TABLE>and the uniqueness would fail.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+The individual <B>man</B>(1) pages for each procedure contain examples and
+<I>a</I> full description <I>of</I> the procedure parameters.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_factor (3)</TD> <TD align=right width=33%><I>July 02, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0a9188f9-2444-4b82-a7f6-5ab9929e4582 using man macros.</FONT>
+</div>
+</div>
+<center><img src="images/M_factor.3.gif"></center> 
+</body>
+</HTML>

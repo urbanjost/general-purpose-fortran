@@ -1,0 +1,19 @@
+NAME
+   polyline(3f) - [M_pixel] connect points with lines
+
+SYNOPSIS
+ definition:
+
+   subroutine polyline(x,y)
+   real,intent(in) :: x(:)
+   real,intent(in) :: y(:)
+
+DESCRIPTION
+   Draw a line through a series of points described by the
+   arrays X and Y.
+
+OPTIONS
+   X    array of x-coordinates
+   Y    array of y-coordinates
+
+EXAMPLE

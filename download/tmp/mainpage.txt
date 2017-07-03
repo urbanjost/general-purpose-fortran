@@ -1,0 +1,10 @@
+mainpage.txt
+/**
+     @mainpage CLI Fortran Library
+
+     @section Introduction
+      This is a collection of Fortran modules and procedures used to 
+      maintain and produce code with command line interfaces.
+
+     @image html tmp/doc/images/swirl.gif
+*/
