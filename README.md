@@ -5,16 +5,16 @@ modules and libraries.
 
 This initial release is a collection of Fortran modules (and in some cases
 their associated C support routines) providing 
-  o basic string operations
-  o simple expression parsing
-  o command line parsing 
-  o command line history editing
-  o a date and time module
-  o an interface to the ncurses(3c) library
-  o the beginnings of a pixel graphics module similiar to the VOGLE graphics library interface
-  o libraries for message handling, unit testing, and debugging
-  o a module for reading and writing lines to a process (a popen(3c) interface
-  o a growing number of Fortran interfaces to common C routines, including many POSIX routines
+  * basic string operations
+  * simple expression parsing
+  * command line parsing 
+  * command line history editing
+  * a date and time module
+  * an interface to the ncurses(3c) library
+  * the beginnings of a pixel graphics module similiar to the VOGLE graphics library interface
+  * libraries for message handling, unit testing, and debugging
+  * a module for reading and writing lines to a process (a popen(3c) interface
+  * a growing number of Fortran interfaces to common C routines, including many POSIX routines
 
 The majority of thse routines come with a man(1) page in *roff and HTML format.
 An index into the documentation is contained in the 
