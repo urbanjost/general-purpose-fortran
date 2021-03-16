@@ -1,0 +1,194 @@
+#!/bin/bash --norc
+################################################################################
+#@(#) manvi(1sh) - view man pages with editor
+#ident  "@(#) John S. Urban, 19910321"
+HELP(){
+(${TXT2MAN:-txt2man -T}|| cat ) 2>/dev/null <<\EOF
+NAME
+      manvi(1) - view a man(1) page in an editor 
+SYNOPSIS
+      manvi [topics]
+DESCRIPTION
+
+ Runs man(1) on the specified topics to a flat text file and then edits
+ the file.
+
+ The editor is choosen by looking at $FCEDIT, $EDITOR, $VISUAL and then
+ if none of those are set runs vim(1).
+
+ Pagers used by man(1) by default such as more(1), less(1) and/or pg(1)
+ are nice for beginners but more often than not it is much nicer to edit
+ the manpage with your favorite editor. (you loose highlighting with
+ vi(1), vim(1) can still present basic highlighting).
+
+ If no topics are given you are placed into the output from 'man -k .'. In
+ the vim(1) editor if you enter "K" on a topic name it will run man(1)
+ on that topic.
+
+ NOTE: some man(1) utilities let you select more(1) as
+       your pager, and some more(1) utilities let you
+       evoke vi(1) easily from within more(1).
+EOF
+}
+################################################################################
+# 1995-03-02: editor can be specified via common variables
+################################################################################
+#set -x
+SCRATCH=/tmp/$(uuidgen)
+trap "rm -f $SCRATCH.man $SCRATCH.vimrc" 0 1 2 3 13 15
+export SCRATCH
+################################################################################
+export MANPATH
+MANPATH="$MANPATH:/tmp_mnt${HOME}/man:$HOME/man:/usr/local/man::"
+[ "$MANPATH_OVERRIDE" != '' ] && MANPATH="$MANPATH_OVERRIDE"
+################################################################################
+MAKE_VIMRC(){
+#
+# create scratch vimrc file
+#
+cat > $SCRATCH.vimrc <<\EOF
+" @(#) A vimrc file for editing manpages.
+"
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+set history=50		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+set incsearch		" do incremental searching
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  augroup END
+
+   " when the K command is used use manvi(1) instead of man(1)
+   autocmd FileType fortran set keywordprg=$THOME/scripts_vi/manvi
+   autocmd FileType man     set keywordprg=$THOME/scripts_vi/manvi
+   " add filetypes by file suffix
+   autocmd  BufRead,BufNewFile *.ff		set filetype=fortran
+   autocmd  BufRead,BufNewFile *.FF		set filetype=fortran
+
+else
+
+  set autoindent		" always set autoindenting on
+
+endif " has("autocmd")
+
+if has("mouse")
+   set mouse=a
+else
+   echo "no mouse support"
+endif
+EOF
+}
+################################################################################
+if ( test $# -eq 0 )
+then
+   # 
+   case "`uname -s`" in
+   *CYGWIN*)man -k '.' > $SCRATCH.man;;
+   *CYGWIN*)man -k '\('|col -b > $SCRATCH.man;;
+   *)man -k ' ' > $SCRATCH.man;;
+   *)man -k '.' > $SCRATCH.man;;
+   *)man -k '\('|col -b > $SCRATCH.man;;
+   esac
+elif [ "$*" = '--help' ]
+then
+   HELP
+   exit
+else
+   machine=`uname -s`
+   case "${machine}" in
+   #=========================================================================
+   ULTRIX)
+   /usr/ucb/man ${@}|col -b|expand > $SCRATCH.man
+   ;;
+   #=========================================================================
+   sn[0-9]*|UNICOS)
+   # module load PrgEnv mpt
+   man -loub $* > $SCRATCH.man
+   ;;
+   #=========================================================================
+   IRIX64)
+   MANPATH="$MANPATH:/usr/share/catman"                      # root directory of on-line reference manual entry tree
+   MANPATH="$MANPATH:/usr/share/catman/u_man/cat[1,6]/*"     # user manual pages
+   MANPATH="$MANPATH:/usr/share/catman/a_man/cat[1,4,7]/*"   # system administrator manual pages
+   MANPATH="$MANPATH:/usr/share/catman/p_man/cat[2-5]/*"     # programmer manual pages
+   MANPATH="$MANPATH:/usr/share/catman/g_man/cat3/*"         # Graphics Library manual pages
+   MANPATH="$MANPATH:/usr/share/catman/local/cat[1-8lnop]/*" # local pre-formatted manual entries
+   MANPATH="$MANPATH:/usr/catman/local/man[1-8lnop]/*"       # local unformatted nroff(1) source manual entries
+   MANPATH="$MANPATH:/usr/share/man/*"                       # additional unformatted manual pages
+   
+   man $*|col -b|expand > $SCRATCH.man
+   ;;
+   #=========================================================================
+   SunOS)
+   MANPATH="$MANPATH:/usr/share/man" # Solaris
+   MANPATH="/usr/openwin/man:/usr/man:/opt/SUNWspro/man:$MATHPATH"
+   man $*|col -b|expand > $SCRATCH.man
+   ;;
+   #=========================================================================
+   HP-UX)
+   man $*|col -b|expand > $SCRATCH.man
+   ;;
+   #=========================================================================
+   *)
+   if [ "$#" -gt 1 ]
+   then
+      man -k $*
+      man $* </dev/null|col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH.man
+   else
+      # generate flat text copy of manpages in scratch file
+      man -a $* |col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH.man
+   fi
+   ;;
+   #=========================================================================
+   esac
+fi
+################################################################################
+# select editor:
+# use $FCEDIT, then $EDITOR, then vi
+# $FCEDIT - edit mode for bash(1) and korn(1) shell
+# $EDITOR - common variable used for this purpose (tcsh,...)
+# $VISUAL - common variable used for this purpose (tcsh,...)
+# edit man pages with nice vim(1) options
+VIM=$(cat <<\EOF
+vim -c "so $SCRATCH.vimrc"
+EOF
+#vim -c "so $SCRATCH.vimrc" -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>'
+)
+EDIT=${FCEDIT:-${EDITOR:-${VISUAL:-$VIM}}}
+case "$EDIT" in
+*vim*) EDIT="$VIM" ;;
+esac
+################################################################################
+# some word counts use different orders
+COUNT=`wc -l $SCRATCH.man|awk '{print $1}'`
+MAKE_VIMRC # generate custom vimrc file
+[ ! -z $SCRATCH.man -a "$COUNT" -gt 1 ] && eval ${EDIT} $SCRATCH.man
+
+rm -rf $SCRATCH.man $SCRATCH.vimrc
+################################################################################
+exit
+################################################################################

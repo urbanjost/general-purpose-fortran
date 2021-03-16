@@ -1,0 +1,238 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>get_subcommand (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>get_subcommand</B>(3f) - [ARGUMENTS:M_CLI2] special-case routine for
+handling subcommands on a command line
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Returns</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>get_subcommand</B>()
+<P>
+<PRE>
+    character(len=:),allocatable :: get_subcommand
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+In the special case when creating a program with subcommands it
+is assumed the first word on the command line is the subcommand. A
+routine is required to handle response file processing, therefore
+this routine (optionally processing response files) returns that
+first word as the subcommand name.
+<P>
+It should not be used by programs not building a more elaborate
+command with subcommands.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>NAME</B> </TD><TD valign=bottom>
+name of subcommand
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_get_subcommand
+   !*! SUBCOMMANDS
+   !*! For a command with subcommands like git(1)
+   !*! you can make separate namelists for each subcommand.
+   !*! You can call this program which has two subcommands (run, test),
+   !*! like this:
+   !*!    demo_get_subcommand --help
+   !*!    demo_get_subcommand run -x -y -z -title -l -L
+   !*!    demo_get_subcommand test -title -l -L -testname
+   !*!    demo_get_subcommand run --help
+      implicit none
+   !*! DEFINE VALUES TO USE AS ARGUMENTS WITH INITIAL VALUES
+      real               :: x=-999.0,y=-999.0,z=-999.0
+      character(len=80)  :: title="not set"
+      logical            :: l=.false.
+      logical            :: l_=.false.
+      character(len=80)  :: testname="not set"
+      character(len=20)  :: name
+      call parse(name) !*! DEFINE AND PARSE COMMAND LINE
+      !*! ALL DONE CRACKING THE COMMAND LINE.
+      !*! USE THE VALUES IN YOUR PROGRAM.
+      write(*,*)&#146;command was &#146;,name
+      write(*,*)&#146;x,y,z &#46;&#46;&#46;. &#146;,x,y,z
+      write(*,*)&#146;title &#46;&#46;&#46;. &#146;,title
+      write(*,*)&#146;l,l_ &#46;&#46;&#46;.. &#146;,l,l_
+      write(*,*)&#146;testname . &#146;,testname
+   contains
+   subroutine parse(name)
+   !*! PUT EVERYTHING TO DO WITH COMMAND PARSING HERE FOR CLARITY
+   use M_CLI2, only : set_args, get_args, get_args_fixed_length
+   use M_CLI2, only : get_subcommand
+   use M_CLI2, only : CLI_RESPONSE_FILE
+   character(len=*)              :: name    ! the subcommand name
+   character(len=:),allocatable  :: help_text(:), version_text(:)
+      CLI_RESPONSE_FILE=.true.
+   ! define version text
+      version_text=[character(len=80) :: &
+         &#146;@(#)PROGRAM:     demo_get_subcommand            &gt;&#146;, &
+         &#146;@(#)DESCRIPTION: My demo program  &gt;&#146;, &
+         &#146;@(#)VERSION:     1.0 20200715     &gt;&#146;, &
+         &#146;@(#)AUTHOR:      me, myself, and I&gt;&#146;, &
+         &#146;@(#)LICENSE:     Public Domain    &gt;&#146;, &
+         &#146;&#146; ]
+       ! general help for "demo_get_subcommand --help"
+       help_text=[character(len=80) :: &
+        &#146; allowed subcommands are          &#146;, &
+        &#146;   * run  -l -L -title -x -y -z   &#146;, &
+        &#146;   * test -l -L -title            &#146;, &
+        &#146;&#146; ]
+      ! find the subcommand name by looking for first word on command
+      ! not starting with dash
+      name = get_subcommand()
+      select case(name)
+      case(&#146;run&#146;)
+       help_text=[character(len=80) :: &
+        &#146;                                  &#146;, &
+        &#146; Help for subcommand "run"        &#146;, &
+        &#146;                                  &#146;, &
+        &#146;&#146; ]
+       call set_args( &
+       & &#146;-x 1 -y 2 -z 3 --title "my title" -l F -L F&#146;,&
+       & help_text,version_text)
+       call get_args(&#146;x&#146;,x)
+       call get_args(&#146;y&#146;,y)
+       call get_args(&#146;z&#146;,z)
+       call get_args_fixed_length(&#146;title&#146;,title)
+       call get_args(&#146;l&#146;,l)
+       call get_args(&#146;L&#146;,l_)
+      case(&#146;test&#146;)
+       help_text=[character(len=80) :: &
+        &#146;                                  &#146;, &
+        &#146; Help for subcommand "test"       &#146;, &
+        &#146;                                  &#146;, &
+        &#146;&#146; ]
+       call set_args(&
+       & &#146;--title "my title" -l F -L F --testname "Test"&#146;,&
+       & help_text,version_text)
+       call get_args_fixed_length(&#146;title&#146;,title)
+       call get_args(&#146;l&#146;,l)
+       call get_args(&#146;L&#146;,l_)
+       call get_args_fixed_length(&#146;testname&#146;,testname)
+      case default
+       ! process help and version
+       call set_args(&#146; &#146;,help_text,version_text)
+       write(*,&#146;(*(a))&#146;)&#146;unknown or missing subcommand [&#146;,trim(name),&#146;]&#146;
+       write(*,&#146;(a)&#146;)[character(len=80) ::  &
+       &#146; allowed subcommands are          &#146;, &
+       &#146;   * run  -l -L -title -x -y -z   &#146;, &
+       &#146;   * test -l -L -title            &#146;, &
+       &#146;&#146; ]
+       stop
+      end select
+   end subroutine parse
+   end program demo_get_subcommand
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2019
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>get_subcommand (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bd4a3e1b-b52a-4461-ace5-7fbd7694d704 using man macros.</FONT>
+<br><br><center><img src="images/get_subcommand.3m_cli2.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

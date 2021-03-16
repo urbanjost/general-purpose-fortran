@@ -1,0 +1,1426 @@
+<HTML>
+<HEAD>
+   <TITLE>Steam Table Library - Overview</TITLE>
+   <META NAME="Description" CONTENT="@(#)Steam Table Library - Overview">
+   <META NAME="Author" CONTENT="John S. Urban">
+</HEAD>
+<BODY  BGCOLOR="#FFFF88">
+<h2>NAME</h2>
+<font color="red">
+<h4 align="left">
+   M_steam67(3fm) - [M_steam67] 1967 ASME Steam Table Library
+</h4>
+</font>
+
+<H1>
+<IMG ALIGN=middle ALT="Steam Library" SRC="images/steam.gif">
+ASME Steam Table Library
+</H1>
+
+<h2>USER GUIDE</h2>
+<p>
+   The Westinghouse ASME Steam Table library has been in existence
+   for many years. This library of well-tested functions is
+   available for those who need to perform calculations involving
+   the various properties of steam. Users are responsible (as always)
+   for verifying the accuracy of their results.
+</p>
+<HR><!-- ================================================================== -->
+<h2>Menu-Driven Steam Table Program</h2>
+
+   there is a simple menu-driven program to help you calculate some
+   steam table properties. The source for this utility makes a good
+
+<A HREF="../src/m_steam67.F90"> sample FORTRAN program </A>
+
+   for new steam table library users
+
+<em>(take into account it dates back to circa 1980 )</em>.
+
+<hr><!-- =================================================================== -->
+<dl>
+<dt> <h2>ASME Steam Table User Guide</h2> <dd>
+
+<pre><strong>
+ Section Title
+ </strong>
+
+ 1.0     <A HREF="#introduction">Introduction</A>
+
+ 2.0     <A HREF="#validation">Validation</A> of the ASME Steam Property
+         Procedures
+
+ 3.0     <A HREF="#basis_limitations">Basis</A> for the Westinghouse 7600 Steam
+         Property Procedures and Certain Limitations
+
+ 4.0     <A HREF="use.html">Use</A> of the ASME Steam Property Procedures
+
+     4.1 <A HREF="#4p1">Nomenclature</A>
+     4.2 <A HREF="#4p2">The Three Calculational Regions</A>
+     4.3 <A HREF="#4p3">Regions of Applicability</A>
+     4.4 <A HREF="#4p4">Description</A> of Steam Property Functions
+</pre>
+<pre>
+         <A HREF="condl67.3m_steam.html" >CONDL</A>  <A HREF="condv67.3m_steam.html" >CONDV</A>  <A HREF="cpl67.3m_steam.html"
+         >CPL</A>     <A HREF="cpv67.3m_steam.html"   >CPV</A>
+         <A HREF="crflo67.3m_steam.html" >CRFLO</A>  <A HREF="crvel67.3m_steam.html" >CRVEL</A>  <A HREF="hcl67.3m_steam.html"
+         >HCL</A>     <A HREF="hsl67.3m_steam.html"   >HSL</A>
+         <A HREF="hss67.3m_steam.html"   >HSS</A>    <A HREF="hssicl67.3m_steam.html">HSSICL</A> <A
+         HREF="hssiss67.3m_steam.html">HSSISS</A>  <A HREF="hsv67.3m_steam.html"   >HSV</A>
+         <A HREF="prliq67.3m_steam.html" >PRLIQ</A>  <A HREF="prstm67.3m_steam.html" >PRSTM</A>  <A HREF="psl67.3m_steam.html"
+         >PSL</A>     <A HREF="psv67.3m_steam.html"   >PSV</A>
+         <A HREF="ssl67.3m_steam.html"   >SSL</A>    <A HREF="sssicl67.3m_steam.html">SSSICL</A> <A
+         HREF="sssiss67.3m_steam.html">SSSISS</A>  <A HREF="tsl67.3m_steam.html"   >TSL</A>
+         <A HREF="tslh67.3m_steam.html"  >TSLH</A>   <A HREF="vcl67.3m_steam.html"   >VCL</A>    <A HREF="visl67.3m_steam.html"
+         >VISL</A>    <A HREF="visv67.3m_steam.html"  >VISV</A>
+         <A HREF="vsl67.3m_steam.html"   >VSL</A>
+</pre>
+
+<pre>
+     4.5 <A HREF="#4p5">Input Argument Limits for Specific Enthalpy, H</A>
+
+     4.6 <A HREF="#4p6">Input Argument Limits for Specific Entropy, S</A>
+
+     4.7 <A HREF="#table1">Procedures Grouped by Output Property </A>- Table 1
+
+     4.8 <A HREF="#table2">Procedures Grouped by Region </A>- Table 2
+
+     4.9 <A HREF="#table3">Alphabetic Listing of Steam Property Procedures </A>- Table 3
+
+ 5.0     <A HREF="#references">References</A>
+
+ 6.0     <A HREF="#steamv67">STEAMV67</A> routine should be called to document the
+         pedigree of the library being used.
+
+ 7.0     <A HREF="revision.html">Document Revision Record</A>
+</pre>
+<!-- ======================================================================= -->
+<strong> <dt> SYNOPSIS </strong> <dd>
+
+<p>
+ This document describes the Westinghouse ASME Steam Table FORTRAN
+ library procedures. The library is a set of well-tested functions that
+ dates back many years. It is available for those who need to work with
+ calculations involving the various properties of steam.
+</p>
+
+<p>
+<strong>
+ Note that this library is all double precision.
+</strong>
+</p>
+
+<p>
+<em>
+ Users are responsible (as always) for verifying the accuracy of their
+ results.
+</em>
+</p>
+
+<p>
+<strong> <dt>MANUAL USAGE</strong> <dd>
+ This is actually a rather lengthy manual. New users of the WCCS Steam
+ Table routines might find it easier to print a copy of this manual for
+ study rather than just trying to scan it on-line.
+</p>
+
+<p>
+ The fastest way to look up a specific procedure's information is to go
+ to one of the hyper-text tables in sections 4.7, 4.8, and 4.9, and click
+ on a routine name.
+</p>
+
+</dl>
+<p>
+<hr><!-- =================================================================== -->
+<h1>
+ 1.0    Introduction
+</h1>
+
+<p>
+   The  following  quotations,  taken directly from the "1967 ASME Steam Tables"
+   published by the American Society of Mechanical Engineers, are thought to  be
+   of significant value both as background, and for proper use of the ASME Steam
+   Table  subroutines.   The  entire  introduction  is taken from the "1967 ASME
+   Steam Tables" reference, except for the headings for Sections 1.1, 1.2.   and
+   1.3.
+</p>
+
+<h3>
+ 1.1    From the Foreword:
+</h3>
+
+<p>
+   The  publication of these new ASME Steam Tables represents the culmination of
+   an  ASME  project  which  had  its  origin  in  1954  when,  at  the   Fourth
+   International Conference on Properties of Steam held in Philadelphia, Pa., it
+   was  decided  that  the  time  had  come  to  update  our  knowledge  of  the
+   thermodynamic properties of steam.  Fortunately, the Society was able to take
+   advantage of the experience of a number of its members who were involved in a
+   similar venture more than thirty years earlier.
+</p>
+
+<p>
+   Just   as   occurred   previously,   the   project   required  fund  raising,
+   identification  and  technical  supervision  of  new  experimental  research,
+   extensive  international  cooperation,  and  the  adoption of internationally
+   accepted skeleton tables.  This time, however, the demand for standardization
+   of design and performance calculations could not  be  satisfied  by  skeleton
+   tables  alone.   International  agreement  had  to  be  reached  on  a set of
+   equations which would reproduce these skeleton  tables,  provide  a  suitable
+   interpolation  scheme,  and  yet  give  reasonable  computer  efficiency when
+   incorporated in the already complex computer programs used day after day  for
+   design and performance calculations.
+</p>
+
+<h3>
+ 1.2    From the Introduction:
+</h3>
+
+<p>
+   The  First  International Conference on Properties of Steam, London, England,
+   1929, concerned itself with a detailed examination of the tables of  specific
+   volume  and  enthalpy  submitted  by  the  various national delegations.  The
+   skeleton tables compiled at that conference served as the basis for the  1930
+   ASME  Steam  Tables,  prepared  by  Professor J.  H.  Keenan and published by
+   ASME.  This conference recognized that considerable  additional  measurements
+   would  be  required  before  a  truly  satisfactory  representation  of these
+   properties could be agreed upon.
+</p>
+
+<p>
+   Progress was reviewed at the Second International Conference, held in Berlin,
+   Germany,  in  1930, at which time, significant modifications were made in the
+   skeleton tables.  The time, however, was not ripe for full  agreement.   Such
+   agreement  was  reached in 1934 at the Third International Conference held in
+   Washington, D.C., Cambridge, Mass., and New York, N.Y., with the adoption  of
+   skeleton  tables giving the specific volume and enthalpy along the saturation
+   line and at round values of  temperature  and  pressure  for  the  compressed
+   liquid  and  superheated  vapor.   In  addition, each entry in the tables had
+   associated with it a tolerance so that the two  values  would  "constitute  a
+   criterion,  internationally  agreed  upon, by which, the reliability of steam
+   tables may be judged".  The skeleton tables and the experimental measurements
+   which led up to them served as the basis for a number  of  publications,  the
+   most  prominent  of  which  was  the  Keenan and Keyes Steam Tables which had
+   served as the vade mecum of engineers these past 30 years.
+</p>
+
+<p>
+   The  need  was  recognized  for continued research on properties of steam and
+   water by the Third International Conference, to an extent that  solicitations
+   and  even  recorded  assurances  from  various  delegations  and institutions
+   assured that the work on steam would be continued and extended.
+</p>
+
+<p>
+   The  plan to hold a Fourth International Conference in Prague, Czechoslovakia
+   gave way in time to more pressing problems brought on  by  the  Second  World
+   War.   Almost  twenty  years  elapsed  before the thermodynamic properties of
+   steam again became an active concern of the  Society  and  the  international
+   scientific   and   engineering  community.   When  the  Fourth  International
+   Conference was held  in  Philadelphia,  PA  in  1954,  it  was  evident  that
+   technological  advances made in intervening years would require thermodynamic
+   information outside of the temperature and pressure  range  of  the  existing
+   steam tables.  The Society established a research committee on the Properties
+   of  Steam,  and  charged  it  with the task of arranging for new research and
+   reestablishing the program of international coordination, which had proved so
+   fruitful two decades earlier.  The Society also accepted  the  invitation  to
+   serve  as  the  permanent  Secretariat  for  the International Conferences on
+   Properties of Steam.
+</p>
+
+<p>
+   By  this  time,  interest  had  developed  in  Japan  and  the  U.S.S.R.   in
+   thermodynamic  tables  for  steam  having  the  status  of  an  international
+   standard.  Moreover, a considerable body of new experimental measurements had
+   been  reported by a number of institutions in the Soviet Union.  Thus, at the
+   time of the Fifth International Conference, London, 1956, it was evident that
+   the work of examining the published data and  supervising  the  then  current
+   research  could  be  handled  best  by  national  commissions  from  the four
+   countries in which the major experimental research was being carried on.   It
+   was  further  agreed,  that  the  national  Commissions  (Federal Republic of
+   Germany, United Kingdom.  Union of Soviet Socialist Republics, and the United
+   States) would constitute  the  International  Coordinating  Committee  -  the
+   working group of the Fifth International Conference.
+</p>
+
+<p>
+   The  labors  of  the  International Coordinating Committee were rewarded at a
+   plenary session of the Sixth International Conference on  the  Properties  of
+   Steam,  New  York,  N.   Y.,  1963.   when  the  tables  were adopted as "The
+   International Skeleton  Tables  of  1963".   The  temperature  range  of  the
+   skeleton  tables is from 0 to 800 C and the pressure extends to 1000 bars - a
+   considerable extension over the range of the 1934 Skeleton Tables.  Where new
+   experimental data reflected refined  experimental  techniques,  they  are  in
+   turn,  reflected  in  the narrower "tolerance" limits of the new tables.  The
+   skeleton tables adopted by 16  member  nations  of  the  Sixth  International
+   Conference, are  the  bases  for the  equations from  which these  ASME Steam
+   Tables have been computed.
+</p>
+
+<p>
+    Long  before  the  work  of  the  International  Coordinating  Committee  was
+    completed, it was clear to most  members  of  the  working  groups  that  the
+    skeleton tables alone did not insure the degree of reproducibility originally
+    envisioned  for  design  and performance calculations owing to the relatively
+    coarse grid of the skeleton tables and  to  the  requirements  of  performing
+    numerical  differentiation  and  integration.   It became important to ensure
+    that each country handled the numbers  in  the  same  way  when  it  came  to
+    compiling  detailed  tables such as the following, or, when incorporating the
+    skeleton  tables  into  a  computer  program  for  design   and   performance
+    calculations.   The  Sixth  International  Conference  was  cognizant of this
+    problem and established an International Formulation Committee (IFC) to:
+</p>
+
+<p>
+    "Develop  at the earliest practical date a formulation for use with computers
+    of the properties of steam as  they  are  represented  by  the  International
+    Skeleton  Tables of 1963.  This formulation shall provide values that are, at
+    all points, within the tolerances stated in the International Skeleton Tables
+    of 1963, and shall be thermodynamically consistent."
+</p>
+
+<p>
+    After  two  years  of sustained effort, during which delegates from Japan and
+    Czechoslovakia joined those  of  the  Federal  Republic  of  Germany,  United
+    Kingdom,  United  States  of  America,  and  the  Union  of  Soviet Socialist
+    Republics, a conference was held in Prague, at which  agreement  was  reached
+    concerning the form and characteristics of the equations which would meet the
+    requirements  laid  down by the Sixth International Conference.  A year later
+    (March 1966), the IFC met in Glasgow,  Scotland.   After  much  deliberation,
+    unanimous  agreement  was  reached  among  the  six national delegations on a
+    formulation,  which,   after   some   post-conference   modifications.    was
+    recommended to the members of the Sixth International Conference.
+</p>
+
+<p>
+    While  it  was the general feeling of the IFC that the formulation did indeed
+    satisfy the requirement for international standardization of steam tables for
+    industrial use, it left much to be desired as a definitive equation of  state
+    for  steam; thus, The "1967 IFC Formulation for Industrial Use: A Formulation
+    of the Thermodynamic Properties of Ordinary Water Substance." Several of  the
+    countries  participating in the Sixth International Conference are using this
+    formulation to prepare more  detailed  tables  for  steam  and  water.   This
+    formulation  is  the  basis for the thermodynamic tables and figures in these
+    new ASME Steam Tables.
+</p>
+
+<p>
+    The  Sixth  International  Conference  expanded  the scope of its activity by
+    establishing a panel of experts to  develop  skeleton  tables  for  transport
+    properties  (viscosity  and  thermal  conductivity of steam and water).  That
+    panel completed its work at a meeting in Paris, France, in June 1964 and  the
+    transport  properties  given  here  are  based on the skeleton tables and the
+    empirical equations which they developed.
+</p>
+
+<hr> <!-- ================================================================== -->
+<h3>
+ 1.3    From the 1967 Formulation for Industrial Use:
+</h3>
+
+</p>
+    With  the  increasing  use  of digital computers, particularly in complicated
+    calculations relating to plant design and cycle optimization, it  has  become
+    necessary  to  have  a  formulation  of the thermodynamic properties of water
+    substance convenient for industrial use.
+</p>
+
+</p>
+    The  various thermodynamic properties are not independent of each other.  For
+    example, when the pressure p and temperature T are chosen as the  independent
+    variables   of   the  formulation,  then  expressions  (here  called  derived
+    functions)  for  the  specific  volume,  entropy,  enthalpy  and  all   other
+    thermodynamic  properties  may be derived directly by partial differentiation
+    of the so-called canonical (or characteristic) function g = g (p, T) where  g
+    is the specific free enthalpy (Gibbs function).  Similarly, when the specific
+    volume  v  and  temperature  T  are chosen as the independent variables, then
+    expressions for the  pressure,  specific  entropy,  enthalpy  and  all  other
+    thermodynamic  properties  may be derived directly by partial differentiation
+    of the canonical function f = f(v, T) where f is  the  specific  free  energy
+    (Helmholtz  function).   The  formulation  is  presented  in  terms  of these
+    canonical functions, thereby maintaining thermodynamic consistency.
+</p>
+
+<p>
+    The canonical functions provide the definitive expression of the formulation.
+    The  derived  functions  are  for  practical  use  and  are  secondary to the
+    canonical functions.
+</p>
+
+<p>
+    The  formulation  presented  herein describes the thermodynamic properties of
+    ordinary water substance throughout the whole  of  the  region  that  extends
+    pressure  from  the ideal-gas limit (at zero pressure) to a pressure of 10**8
+    N/m**2 (1000 bar), and that extends in temperature from 273.16 K (0.01 C)  to
+    1073.15 K(800 C).
+</p>
+
+<h3>
+        DISCONTINUITIES AT BOUNDARIES BETWEEN SUBREGIONS <br>
+        (See Figure 2 on next page)
+</h3>
+
+    It  should  be noted that there are discontinuities in property values at the
+    boundary between subregions 2 and 3 and at the boundary between subregions  1
+    and 4.  Nevertheless, for the specific volume, specific enthalpy and specific
+    free enthalpy, the discontinuities are less than the maximum values which the
+    First  Meeting  of  the  International  Formulation  Committee (Prague, 1965)
+    recommended should not be exceeded.  However, when  values  of  the  specific
+    entropy  are  listed  at  5-degree  intervals,  there  are four points on the
+    boundary between subregions 2 and 3 at which the discontinuity has a value of
+    0.3 J/kg K, and one point having a value of 0.4 J/kg K.   compared  with  the
+    recommended maximum acceptable value of 0.2 J/kg K.
+<p>
+
+<h3>
+        PRECAUTIONS TO BE OBSERVED IN NUMERICAL COMPUTATION
+</h3>
+
+    The  precautions  and  techniques of numerical analysis will be well known to
+    users of this formulation.  Two points, however, warrant comment.
+<p>
+
+<ol>
+       <li>  It will be clearly evident that, in order to attain an
+             adequately precise result from numerical inversion in
+             subregions 3 and 4, it is necessary to control the pressure
+             error or the volume error, or both, within appropriate bounds.
+             When pressure alone is controlled, very severe conditions must
+             be imposed (possibly as fine as 1 part in 10**6 or, near the
+             critical point, much finer).
+
+       <li>  Note should be taken of the fact that errors may arise if
+             finite-different techniques be used with too small an interval.
+
+</ol>
+
+<hr> <!-- ================================================================== -->
+<center>
+<IMG ALT="Steam Library" SRC="images/fig1_2.gif">
+<br>
+                   This figure is taken from "1967 ASME Steam Tables"
+
+</center>
+<hr><!-- =================================================================== -->
+<h3>
+ 2.0    Validation of the ASME Steam Property Sub-Programs
+</h3>
+
+    Concurrent  with  the installation of the ASME Steam Property Sub-Programs as
+    the standard PSCC 7600 steam property routines, a study of  the  validity  of
+    these programs was begun.  The study had three primary purposes:
+<p>
+
+<ol>
+       <li>  To compare sub-program results with the skeleton tables which
+             appear in "1967 ASME Steam Tables", and to determine the quality of
+             the results over their full range of applicability.
+
+       <li>  To provide the necessary computer programs for the continued
+             Quality Assurance of the ASME sub-programs.  The results of these
+             programs will continue to be analyzed following ASME sub-program
+             corrections, and other critical System changes.
+
+       <li>  To provide the necessary information for new user documentation.
+</ol>
+
+
+<p>
+        Two computer programs which have evolved from this study are:
+<p>
+
+<ol>
+      <li>   A program which calculates steam properties at ASME skeleton table
+             values of temperature and pressure, compares the sub-program
+             results with the published skeleton table values, and tests to see
+             that the difference between the sub-program result and the
+             skeleton table value is within tolerance.  The program also
+             produces plots of sub-program and skeleton table results.  In what
+             follows this program will be referred to as the Skeleton Table
+             Program.
+
+      <li>   A program which produces three dimensional plots of the steam
+             properties as functions of temperature and pressure.  This program
+             will be called the 3-D Plot Program.
+</ol>
+
+
+<hr> <!-- ================================================================== -->
+<h3>
+ 2.1    The Skeleton Table Program
+</h3>
+
+ This program performs the following three calculations:
+<p>
+
+<ol>
+      <li>   Calculation of steam properties at skeleton values of pressure and
+             temperature, and comparison of sub-program results with the
+             published ASME values.  When more than one sub-program may be used
+             to calculate the property, all sub-programs are tested.  In all
+             cases, the original inputs for the calculation are pressure and
+             temperature, so that when the function requires other inputs, an
+             intermediate step is performed.  Thus, to calculate the enthalpy
+             using the function sub-program HSSISS[*], the following steps are
+             used:
+<code>
+<blockquote>
+             C=HSS(P,T,S,V) to calculate S using P and T<br>
+             H=HSSISS(P,S,T1,V1,X) to calculate the enthalpy, H, using P and S.<br>
+</blockquote>
+</code>
+
+<p>
+ *See Section 4 for a description of usage of the steam property sub-programs.
+ Specifically see sections 4.4.9 and 4.4.11 for descriptions of HSS and HSSISS,
+ respectively.
+<p>
+
+       <li>   Using each of the skeleton table pressures, each property is
+             calculated at small increments of temperature - normally increments
+             of 2 C.  Plots are produced using the character period (".") at 2 C
+             increments, and using the character ("T") to represent ASME skeleton
+             table values.
+
+<p>
+             Note that in Figure 1, an example of such a plot, the T's of the
+             skeleton table values rest on the line generated by the periods,
+             and hence agreement is perfect.
+
+<p>
+             Similar plots are produced by fixing temperature at each of the
+             skeleton values, and varying pressure in small increments, over
+             the entire pressure range.
+
+<p>
+             For purposes of Quality Assurance, checksums are calculated by
+             summing plotted results for each fixed pressure and temperature.
+             A total checksum for all properties is also calculated.
+<p>
+
+       <li>   Using the curves which are generated in 2), sub-program results
+             are searched for local maximums and minimums.  (A local maximum is
+             a point where the function value is greater than the two values
+             immediately to the left and to the right, but which is not a
+             genuine maximum of the property.  These maximum and minimums are
+             actually small discontinuities.  All of the sub-programs produce
+             such local variations when the pressure and temperature increments
+             are 0.1.  However, most variations disappear when increments of
+             1.0 are used.)
+<p>
+
+             Microfiche print and plot output of this program is available from
+             Customer Services.
+<p>
+
+</ol>
+<hr> <!-- ================================================================== -->
+
+<h3>
+ 2.2    The 3-D Plot Program
+</h3>
+
+        This program performs the following functions:
+<p>
+
+<ol>
+      <li>   Calculates sub-program results over a rectangular region, using
+             input limits and increments of pressure and temperature.  In all
+             cases, the original input arguments for the calculation are
+             pressure and temperature.
+
+      <li>   Plots the results of 1) three-dimensionally, using pressure and
+             temperature as independent variables, and sub-program results as
+             the dependent variable.  Figure 2 is the surface for Specific
+             Isobaric Heat Capacity.
+
+      <li>   If the sub-program outputs temperature, the original input
+             temperature is compared with the output temperature.  Maximum
+             differences of approximately .1% have been found for values of
+             temperature near 32 F, although normal differences are .001% and
+             less.
+
+             Microfiche print and plot outputs of this program are available.
+             The program, itself, is also available to users who wish to study
+             results in their regions of applicability.
+</ol>
+
+<hr> <!-- ================================================================== -->
+
+<center>
+<h3>
+<IMG ALT="Steam Library" SRC="images/fig1_3.gif">
+</h3>
+</center>
+<hr> <!-- ================================================================== -->
+
+<h3>
+ 2.3    The following routines are validated by one or both of the above programs.
+</h3>
+
+<dl>
+
+<pre>
+ 2.3.1  For Specific Volume
+
+        VSL,HSV,VCL,HSS,HSSISS,SSSISS,CPV
+
+ 2.3.2  For Specific Enthalpy
+
+        HSL,HCL,HSSICL,HSS,HSV,HSSISS
+
+ 2.3.3  For Specific Entropy
+
+        SSL,HCL,SSSICL,HSS,HSV,SSSISS
+
+ 2.3.4  For Thermal Conductivity
+
+        CONDL,CONDV
+
+ 2.3.5  For Viscosity
+
+        VISL,VISV
+
+ 2.3.6  For Specific Isobaric Heat Capacity
+
+        CPL,CPV
+
+ 2.3.7  For Temperature
+
+        TSL,TSLH,HSV,HSSICL,HSSISS,SSSICL,SSSISS
+
+ 2.3.8  For Pressure
+
+        PSL,PSV
+
+ 2.3.9  For Prandtl Number
+
+        PRLIQ and PRSTM
+
+ 2.3.10 CRVEL which calculates critical velocity.
+
+ 2.3.11 CRFLO which calculates Critical Mass Flow Rate.
+
+ 2.4    The following outputs have not been validated:
+
+ 2.4.1  Isentropic Exponent from CRVEL.
+
+ 2.4.2  Quality, as output by HSSISS and SSSISS.
+</pre>
+</dl>
+
+<hr> <!-- ================================================================== -->
+<br>
+<center>
+<IMG ALT="Steam Library" SRC="images/fig2_2.gif"><br>
+                        SPECIFIC ISOBARIC HEAT CAPACITY
+</center>
+<br>
+<hr> <!-- ================================================================== -->
+<font color="red"> <h4 align="right"> Basis and Limitations </h4> </font>
+<hr><!-- =================================================================== -->
+<H1>
+ 3.0<br>
+        Basis for the Westinghouse PSCC 7600 Steam Property Sub-programs, and
+        certain limitations.
+</H1>
+<hr> <!-- ================================================================== -->
+<dl>
+
+<strong> <dt>
+ 3.1
+</strong> <dd>
+        The properties of specific volume, enthalpy, and entropy are
+        calculated as described in "1967 ASME Steam Tables" published by the
+        American Society of Mechanical Engineers.
+<p>
+
+<strong> <dt>
+ 3.2
+</strong> <dd>
+        Viscosity is calculated as described in Reference 3.
+<p>
+
+<strong> <dt>
+ 3.3
+</strong> <dd>
+   The thermal conductivity subroutine represents the latest work of the
+   Westinghouse Steam Division.  It is a modification of the approximation
+   which is described in Reference 2.  The routine returns values which
+   are well within tolerance at all skeleton table values.  However, for
+   pressures greater than 400 bars. thermal conductivity has the following
+   general shape when it is plotted for fixed pressure and varying
+   temperatures.
+<p>
+<center>
+<IMG ALT="Steam Library" SRC="images/fig3_1.gif">
+<br>
+
+   The oscillations in the circled region occur at approximately 360 C =
+   680 F
+</center>
+<p>
+
+<hr> <!-- ================================================================== -->
+
+<strong> <dt>
+ 3.4
+</strong> <dd>
+        Heat capacity is, in most cases, calculated by a numerical
+        approximation of the derivative of enthalpy with respect to
+        temperature.  However, in three small rectangular regions where this
+        approximation undergoes non-trivial oscillations, linear interpolation
+        of nearby values of heat capacity is used.  In addition, there are a
+        few other regions where the numerical derivative displays gaps of as
+        much as 8% from neighboring values, although the overall effect of the
+        approximation is quite satisfactory.
+<p>
+        The calculation of heat capacity by numerical differentiation
+        demonstrates two possible characteristics which must be considered for
+        all of the ASME steam properties:
+<p>
+
+<ol>
+<li>    There may be regions where the numerical derivative of the properties
+        are discontinuous, or where the numerical derivative undergoes
+        non-trivial oscillations.  Therefore, users are advised to investigate
+        the behavior of the properties in their regions of application, before
+        making use of a numerical derivative.  Programs are available to aid in
+        these investigations (See Section 2.2).
+<p>
+<li>    The steam property sub-program results are generally very smooth, as
+        evident from maximum discontinuities of only 8% in the heat capacity,
+        over (almost) the entire range of temperature and pressure.  The
+        irregularities of enthalpy, which cause the anomalies in heat capacity
+        are so slight that they cannot be detected by close scrutiny of plots
+        of enthalpy for constant pressure, and temperatures which vary in 1 C
+        increments from 0 to 700 C (32 to 1292 F).
+<p>
+</ol>
+
+ One further word on heat capacity is required.  Heat capacity should be
+ considered to be undefined at the critical point, since it is unbounded within
+ any neighborhood of the critical point.  The subroutines CPL and CPV, however,
+ produce results which are continuous and comparatively large at and near the
+ critical point.
+<p>
+
+<strong> <dt>
+ 3.5
+</strong> <dd>
+        There are four combinations of subroutines which may be used to
+        calculate the specific volume over its full range of values.  These
+        combinations are the use of VCL in the liquid region, and the use of
+        CPV, HSS, HSSISS, or SSSISS in the steam and gas regions.  There are
+        also four combinations which may be used to calculate enthalpy and
+        entropy.  Generally, the property values which are calculated from
+        these different combinations have been found to agree to six decimal
+        places.  The significance of this agreement is best illustrated by an
+        example.
+<p>
+
+        The specific volume V1 which is calculated by
+<p>
+<pre>
+
+             C = HSS(P,T.S,V1)           to calculate V1
+
+</pre>
+        and the specific volume V2 which is calculated by
+<p>
+<pre>
+             Q = HSS(P,T,S,V1)           to calculate S
+                                         for P and T.
+
+             C = HSSISS(P,S,T1,V2,M)     using above
+                                         output S to
+                                         calculate V2.
+</pre>
+
+        agree to six decimal places.  This example demonstrates a rather
+        remarkable consistency of the results produced by HSS and HSSISS, a
+        consistency which has been found to be generally true of the ASME
+        sub-programs.
+<p>
+<hr> <!-- ================================================================== -->
+
+<strong> <dt>
+ 3.6
+</strong> <dd>
+        Areas of slight fluctuation of results have been discovered in all of
+        the properties.  These fluctuations are characterized by the occurrence
+        of local maximums and minimums within very small intervals of
+        temperature or pressure.  Again, these fluctuations cannot be detected
+        by viewing a plot which covers the entire range of temperature or
+        pressure.  As an example, the specific entropy at 550 C = 1022 F, has a
+        local minimum of 5.06412 at 779.3 bars pressure, and a local maximum of
+        5.06424 bars at 779.4 bars pressure.  However small these variations
+        might appear, they could cause difficulties if the derivative is being
+        approximated in this region as (S1-S0)/(P1-P0)[ editor's note: read this
+        as "change-in-S/change-in-P"], and (P1-P0) is very small.  Generally
+        these difficulties may be avoided by selecting a sufficiently large
+        (P1-P0) or (T1-T0).  For example a (T1-T0)= 2 degrees F was selected to
+        calculate values of specific heat as the derivative of enthalpy with
+        respect to temperature.
+<p>
+
+<strong> <dt>
+ 3.7
+</strong> <dd>
+        It is possible that a user may encounter problems with calculating
+        property values near the critical point.  However, no difficulties have
+        been encountered when using critical point values of 3208.234 psia
+        pressure and 705.47 degrees F temperature, and calculating the
+        properties as described in Section 4.
+<p>
+
+<strong> <dt>
+ 3.8
+</strong> <dd>
+        The function PSV returns zero values for negative values of entropy.
+        This results in answers which are slightly out of tolerance when
+        both the temperature and pressure are near zero.
+<p>
+
+<strong> <dt>
+ 3.9
+</strong> <dd>
+        The functions which calculate enthalpy have been found to fail for zero
+        values of pressure.  A pressure of .001 has been found to be acceptable.
+<p>
+
+<strong> <dt>
+ 3.10
+</strong> <dd>
+        The results have been found to be within skeleton tables tolerances in
+        almost every case.  The maximum value of |D/S|, where D is the
+        variation from tolerance and S is the skeleton table value, is less
+        than .15%.  An exception to this is the property of entropy near
+        pressures of zero, where the entropy has nearly zero (and sometimes
+        negative) values.  In this case |D/S| can be as high as 50%.
+<p>
+
+<strong> <dt>
+ 3.11
+</strong> <dd>
+        Critical flow values calculated by the subprogram CRFLO have been
+        compared with plotted curve values of Figure 14, Reference 1.  The
+        total region of comparison is defined by the following figure.
+<p>
+<center>
+<IMG ALT="Steam Library" SRC="images/fig3_2.gif">
+</center>
+<br>
+        The corners of this region are (P=.2, H=600), (P=1000, H=600), (P=1000,
+        H=700), (P=2000 H,700), (P=2000 H=1700), and (P=.2, H=1700).  Agreement
+        with the Reference 1 values is well within graph reading error limits,
+        and the CRFLO-generated curves are remarkably smooth.
+<p>
+
+<hr> <!-- ================================================================== -->
+
+<strong> <dt>
+ 3.12
+</strong> <dd>
+        Critical velocity values calculated by the sub-program CRVEL have been
+        compared with the curves plotted in Figure 12 and 13 of Reference 1
+        (except for the curve, Pressure=15000 psia).  The total region of
+        comparison is defined by the following figure.
+<p>
+<br>
+<center>
+<IMG ALT="Steam Library" SRC="images/fig3_3.gif">
+</center>
+<br>
+        The corners of this region are (P=.25, H=800), (P=600, H=800), (P=2000,
+        H=935) (P=2000, H=1100), (P=12000, H=1100), (P=12000, H=1700), and
+        (P=.25, H=1700).  Agreement with the Reference 1 values is well within
+        graph reading limits, and the CRVEL generated curves are remarkably
+        smooth.  However, along the lines Ll and L2, discontinuities of less
+        than 1% do occur in CRVEL calculated results.  Ll passes through the
+        points (P=2000, H=1245), (P=5000, H=1125), (P=8000, H=1137), (P=10000,
+        H=1157), and (P=12000, H=1183). L2 passes through the points (P=8000,
+        H=1270), (P=10000, H=1288), and (P=12000, H=1390).
+<p>
+</dl>
+<hr><!-- =================================================================== -->
+<font color="red"> <h4 align="right"> Usage </h4> </font>
+<!-- ======================================================================= -->
+<h1>
+ 4.0    Use of the ASME Steam Property Sub-Programs
+</h1>
+
+<h3>
+<a name="4p1">
+ 4.1    Nomenclature
+</a>
+</h3>
+<blockquote>
+<dl>
+<dt> <strong>
+        P[min], P[max]
+        </strong>
+                      <dd> The minimum and maximum pressures for which a
+                            property may be calculated.  For pressures outside
+                            this range, the value of the property is undefined
+                            by the ASME tables.
+
+<dt> <strong>
+        T[min], T[max]
+        </strong>
+                       <dd> The minimum and maximum temperatures for which a
+                            property may be calculated.  For temperatures
+                            outside this range, the value of the property is
+                            undefined by the ASME tables.
+<dt> <strong>
+        P[sat]</strong><dd> Saturation pressure for a given temperature
+
+<dt> <strong>
+        T[sat]</strong><dd> Saturation temperature for a given pressure
+
+<dt> <strong>
+        P[crit], T[crit]
+        </strong>
+                        <dd>Critical point pressure and temperature (3208.234 psia,
+                            705.47 F).
+
+<dt> <strong>
+        CP   </strong> <dd> Specific Isobaric Heat Capacity, BTU/lb-F
+
+<dt> <strong>
+        FC   </strong> <dd> Critical Flow, lb/hr-in**2
+
+<dt> <strong>
+        H    </strong> <dd> Specific Enthalpy, BTU/lb
+
+<dt> <strong>
+        K    </strong> <dd> Thermal Conductivity, BTU/hr-ft-F
+
+<dt> <strong>
+        P    </strong> <dd> Pressure, psia
+
+<dt> <strong>
+        PR   </strong> <dd> Prandtl Number
+
+<dt> <strong>
+        S    </strong> <dd> Specific Entropy, BTU/lb-F
+
+<dt> <strong>
+        T    </strong> <dd> Temperature, F
+
+<dt> <strong>
+        V    </strong> <dd> Specific Volume, ft**3/lb
+
+<dt> <strong>
+        VC   </strong> <dd> Critical Velocity, ft/sec
+
+<dt> <strong>
+        VISC </strong> <dd> Viscosity, lb/ft-sec
+
+<dt> <strong>
+        X    </strong> <dd> Quality, %/100
+
+</dl>
+</blockquote>
+<hr> <!-- ================================================================== -->
+<h3>
+<a name="4p2">
+ 4.2    The Three Calculational Regions.
+</a>
+</h3>
+<br>
+<center>
+<IMG ALT="Steam Library" SRC="images/fig4_1.gif">
+</center>
+<br>
+
+        The three regions are defined as follows
+<p>
+
+<dl>
+<dt>
+ Region 3:        THE SATURATION LINE.
+<dd>
+
+                  The Saturation Line extends from (.0886 psia, 32 F) to the
+                  critical point.  In a portion of what follows, the curve is
+                  considered to have two sides:  The liquid side, and the
+                  gas or vapor side.
+
+
+<dt>
+ Region 1:        THE LIQUID SIDE
+<dd>
+<pre>
+            T[min] .le. T .le. T[crit]
+                      and
+      and   P[sat](T) .le. P .le. P[max]
+
+            Note that Region 1 includes the liquid side of Region 3.
+</pre>
+
+
+<dt>
+ Region 2:        THE STEAM OR GAS SIDE
+<dd>
+
+<pre>
+            P[min] .le. P .le. P[max]
+                      and
+             T[sat](P) .le. T .le. T[max]   when  P .le. P[crit]
+            T[crit](P) .le. T .le. T[max]   when  P   >  P[crit]
+</pre>
+
+                Note that Region 2 includes the steam/gas side of Region 3.
+</dl>
+
+        Unless otherwise noted, the values of P[min] and T[min] are .01 psia
+        and 32 F, respectively.  Acceptable values of P[crit] and T[crit] are
+        3208.234 psia and 705.47 F.  P[max] and T[max] vary with the property.
+<p>
+<hr> <!-- ================================================================== -->
+<h3>
+<a name="4p3">
+ 4.3    Regions of Applicability
+</a>
+</h3>
+
+        In the descriptions which follow, the regions of applicability together
+        with minimum and maximum temperatures and pressures are given for each
+        of the property sub-programs.  It is important to realize what these
+        regions are, and what they are not.  They are:
+<p>
+
+<ol>
+<li>
+             The regions of applicability defined by "1967 ASME Steam Tables"
+             published by the American Society of Mechanical Engineers.
+
+<li>
+             The regions over which most of the sub-programs have been tested
+             and quality assured by the programs described in Section 2.
+
+<li>
+             Regions beyond which the 1967 ASME tables do not define the
+             behavior of the results.
+</ol>
+
+        They are not necessarily:
+<p>
+
+<ol>
+<li>
+             Regions outside of which error messages are or are not printed.
+
+<li>
+             Regions beyond which results are correct or incorrect.
+</ol>
+
+        In summary, the results satisfy ASME requirements (within previously
+        described limitations) inside the regions of applicability, but their
+        behavior is undefined outside these regions.
+<p>
+<hr><!-- ================================================================== -->
+<h3>
+<a name="4p4">
+ 4.4    Description of the Steam Property Functions (listed alphabetically).
+</a>
+</h3>
+
+        All of the input and output arguments, as well as the function values
+        of the steam property functions, are Fortran REAL values.  Input of
+        infinite or indefinite arguments will cause the routines to abort with
+        an arithmetic error.  All arguments, input and output, are Level 1,
+        i.e., they must be assigned to small core storage.  Although some of
+        the functions provide messages for out of range arguments, most of the
+        responsibility of staying within limits lies with the user.  Since, in
+        most cases, the limits are very generous, frequent use outside limits
+        is not anticipated.
+<p>
+
+        It is generally true that functions with two input arguments and which
+        end in L, must be used to compute property values in Region 1.
+        Similarly, functions with two input arguments and which end in S or V,
+        must be used in Region 2.
+<p>
+
+        In the descriptions which follow, Definition and Purpose define input
+        and output arguments of the function.  When more than one variable
+        appears on the left of the = sign, the first variable is the function
+        value, and the remaining variables are output arguments.  The values in
+        parentheses to the right of the = sign are the input arguments.
+<p>
+
+<!-- ====================================================================== -->
+<hr><!-- ================================================================== -->
+<h2>
+<a name="4p5">
+ 4.5    Input Argument Limits for Specific Enthalpy, H.
+</a>
+</h2>
+
+<dl>
+<strong> <dt>
+ 4.5.1  Region 1 (Liquid)
+</strong> <dd>
+        For any temperature T in Region 1, let P[sat] = PSL(T).  The H must lie
+        between the specific enthalpy values, HCL(P[sat],T) and HCL(P[max],T).  The
+        approximate magnitudes of these limits may be obtained by dividing
+        result of Table 1.3 (Appendix 4, Reference 1) by 2.326.
+<p>
+
+<strong> <dt>
+ 4.5.2  Region 2 (Steam or Gas)
+</strong> <dd>
+
+<blockquote>
+<strong> <dt>
+ 4.5.2.1
+</strong> <dd>
+             For a temperature T in Region 2 such that T .le. T[crit], let P[sat] =
+             PSL(T).  Then HSS(P[sat],T) .le. H .le. HSS(P = .01,T).  The
+             approximate magnitude of these limits may be obtained by dividing
+             results of Table 1.3 (Appendix 4, Reference 1) by 2.326.
+<p>
+
+<strong> <dt>
+ 4.5.2.2
+</strong> <dd>
+             For a temperature T in Region 2 such that T > T[crit], HSS(P[max],T).le.
+             H .le. HSS(P=.01,T).  The approximate magnitude of these limits may
+             be obtained by dividing results of Table 1.3 (Appendix 4, Reference
+             1) by 2.326.
+<p>
+</blockquote>
+
+</dl>
+<hr> <!-- ================================================================== -->
+<h2>
+<a name="4p6">
+ 4.6    Input Argument Limits for Specific Entropy, S.
+</a>
+</h2>
+
+<dl>
+<strong> <dt>
+ 4.6.1  Region 1 (Liquid)
+</strong> <dd>
+
+        For a temperature T in Region 1, let P[sat] = PSL(T).  Let  S1 = value
+        of specific entropy given by calling HCL(P[max],T), and S2 = value of
+        specific entropy given by calling HCL(P[sat],T).  Then the specific
+        entropy S must approximately satisfy S1 &lt S &lt S2.  Approximate values of
+        S1 and S2 may be obtained by dividing results of Table 8 (Appendix 3,
+        Reference 1) by 4.1868.
+<p>
+
+<strong> <dt>
+ 4.6.2       Region 2 (Steam or Gas)
+</strong> <dd>
+
+<blockquote>
+<strong> <dt>
+ 4.6.2.1
+</strong> <dd>
+             For a temperature T in Region 2 such that T .le. T[crit], let
+             P[sat]=PSL(T), and S1 be the value of specific entropy given by
+             calling HSS(P[sat],T). Let S2 be the value of specific entropy
+             given by calling HSS(P = .01,T).  The approximate limits on the
+             specific entropy S are S1 .le. S .le. S2.  Values for S1 and S2 may
+             be obtained by dividing results of Table 8 (Appendix 3, Reference 1)
+             by 4.1868.
+<p>
+
+<strong> <dt>
+ 4.6.2.2
+</strong> <dd>
+             For a temperature T in Region 2 such that T &gt T[crit], let S1 and S2
+             be values of specific entropy obtained by calling HSS(P[max],T) and
+             HSS(P= .01,T).  Then  S1 .le. S .le. S2.  Approximate values of S1
+             and S2 may be obtained by dividing results of Table 8 (Appendix 3,
+             Reference 1) by 4.1868.
+<p>
+</blockquote>
+
+</dl>
+
+<hr><!-- ================================================================== -->
+<h2>
+<a name=table1>
+ 4.7  <br>
+ Table 1 [see note 1]
+</a>
+</h2>
+
+<center>
+<table border>
+<caption>
+                     Sub-Programs Grouped by Output Property
+</caption>
+
+<tr><th> Output Property
+                    <th>Region
+                                            <th>Function
+                                                                      <th>Input  Arguments
+<tr><th rowspan=6>Specific Enthalpy
+                    <td> Saturated Liquid   <td align=left>  H=<a href="hsl67.3m_steam.html"   >HSL</a>(T)            <td>  T
+<tr>                <td> Saturated Vapor    <td align=left>  H=<a href="hsv67.3m_steam.html"   >HSV</a>(P,T,S,V)      <td>  P
+<tr>                <td> Liquid             <td align=left>  H=<a href="hcl67.3m_steam.html"   >HCL</a>(P,T,S)        <td>  P,T
+<tr>                <td> Liquid             <td align=left>  H=<a href="hssicl67.3m_steam.html">HSSICL</a>(P,S,T)     <td>  P,S
+<tr>                <td> Steam/Gas          <td align=left>  H=<a href="hss67.3m_steam.html"   >HSS</a>(P,T,S,V)      <td>  P,T
+<tr>                <td> Steam/Gas          <td align=left>  H=<a href="hssiss67.3m_steam.html">HSSISS</a>(P,S,T,V,X) <td>  P,S
+
+<tr><th rowspan=6> Specific Entropy
+                    <td> Saturated Liquid   <td align=left>  S=<a href="ssl67.3m_steam.html"   >SSL</a>(T)            <td>  T
+<tr>                <td> Saturated Vapor    <td align=left>  H=<a href="hsv67.3m_steam.html"   >HSV</a>(P,T,S,V)      <td>  P
+<tr>                <td> Liquid             <td align=left>  H=<a href="hcl67.3m_steam.html"   >HCL</a>(P,T,S)        <td>  P,T
+<tr>                <td> Liquid             <td align=left>  S=<a href="sssicl67.3m_steam.html">SSSICL</a>(P,H,T)     <td>  P,H
+<tr>                <td> Steam/Gas          <td align=left>  H=<a href="hss67.3m_steam.html"   >HSS</a>(P,T,S,V)      <td>  P,T
+<tr>                <td> Steam/Gas          <td align=left>  S=<a href="sssiss67.3m_steam.html">SSSISS</a>(P,H,T,V,X) <td>  P,H
+
+<tr><th rowspan=2> Prandtl Number
+                    <td> Liquid             <td align=left>  PR=<a href="prliq67.3m_steam.html" >PRLIQ</a>(P,T)       <td>  P,T
+<tr>                <td> Steam/Gas          <td align=left>  PR=<a href="prstm67.3m_steam.html" >PRSTM</a>(P,T)       <td>  P,T
+
+<tr><th rowspan=2 align=center> Pressure <br>
+                    <td> Saturation Line    <td align=left>  P=<a href="psl67.3m_steam.html"   >PSL</a>(T)            <td>  T
+<tr>                <td> Saturated Vapor    <td align=left>  P=<a href="psv67.3m_steam.html"   >PSV</a>(S)            <td>  S
+
+<tr><th rowspan=2> Specific Heat
+                    <td> Liquid             <td align=left>  CP=<a href="cpl67.3m_steam.html"   >CPL</a>(P,T)         <td>  P,T
+<tr>                <td> Steam/Gas          <td align=left>  CP=<a href="cpv67.3m_steam.html"   >CPV</a>(P,T,V)       <td>  P,T
+
+<tr><th rowspan=7> Specific Volume
+                    <td> Saturated Liquid   <td align=left>  V=<a href="vls67.3m_steam.html"   >VSL</a>(T)            <td>  T
+<tr>                <td> Saturated Vapor    <td align=left>  H=<a href="hsv67.3m_steam.html"   >HSV</a>(P,T,S,V)      <td>  P
+<tr>                <td> Liquid             <td align=left>  V=<a href="vcl67.3m_steam.html"   >VCL</a>(P,T)          <td>  P,T
+<tr>                <td> Steam/Gas          <td align=left>  CP=<a href="cpv67.3m_steam.html"   >CPV</a>(P,T,V)       <td>  P,T
+<tr>                <td> Steam/Gas          <td align=left>  H=<a href="hss67.3m_steam.html"   >HSS</a>(P,T,S,V)      <td>  P,T
+<tr>                <td> Steam/Gas          <td align=left>  H=<a href="hssiss67.3m_steam.html">HSSISS</a>(P,S,T,V,X) <td>  P,S
+<tr>                <td> Steam/Gas          <td align=left>  S=<a href="sssiss67.3m_steam.html">SSSISS</a>(P,H,T,V,X) <td>  P,H
+
+<tr><th rowspan=2> Steam Quality
+                    <td> Steam/Gas          <td align=left>  H=<a href="hssiss67.3m_steam.html">HSSISS</a>(P,S,T,V,X) <td>  P,S
+<tr>                <td> Steam/Gas          <td align=left>  S=<a href="sssiss67.3m_steam.html">SSSISS</a>(P,H,T,V,X) <td>  P,H
+
+<tr><th rowspan=5> Temperature
+                    <td> Saturated Liquid   <td align=left>  T=<a href="tslh67.3m_steam.html"  >TSLH</a>(H)           <td>  H
+<tr>                <td> Saturation Line    <td align=left>  T=<a href="tsl67.3m_steam.html"   >TSL</a>(P)            <td>  P
+<tr>                <td> Saturated Vapor    <td align=left>  H=<a href="hsv67.3m_steam.html"   >HSV</a>(P,T,S,V)      <td>  P
+<tr>                <td> Liquid             <td align=left>  H=<a href="hssicl67.3m_steam.html">HSSICL</a>(P,S,T)     <td>  P,S
+<tr>                <td> Liquid             <td align=left>  S=<a href="sssicl67.3m_steam.html">SSSICL</a>(P,H,T)     <td>  P,H
+
+<tr><th rowspan=2> Thermal Conductivity
+                    <td> Liquid             <td align=left> K=<a href="condl67.3m_steam.html" >CONDL</a>(P,T) [see note 2]<td> P,T
+<tr>                <td>Steam/Gas           <td align=left> K=<a href="condv67.3m_steam.html" >CONDV</a>(P,T) [see note 2]<td> P,T
+
+<tr><th rowspan=2> Viscosity
+                    <td> Liquid             <td align=left> VISC=<a href="visl67.3m_steam.html"  >VISL</a>(P,T)       <td> P,T
+<tr>                <td> Steam/Gas          <td align=left> VISC=<a href="visv67.3m_steam.html"  >VISV</a>(P,T)       <td> P,T
+</table>
+</center>
+
+
+<ol>
+  <li>   This table displays what sub-programs may be used to calculate each of
+         the Steam Properties.
+
+  <li>   These statements should not be used in Fortran, since K is an integer
+         variable.
+</ol>
+
+<hr> <!-- ================================================================== -->
+<h2>
+<a name=table2>
+4.8 <br>
+Table 2 <em>[see note 1]</em>
+</a>
+</h2>
+<center>
+<table border>
+<caption>
+
+                        Sub-Programs Grouped by Region
+</caption>
+
+<tr>
+<th>Region
+              <th> Function
+                                           <th> Input Arguments
+                                                                        <th> Calculated Properties
+<tr><th rowspan=8> Liquid (Region 1)
+              <td>K=<a href="condl67.3m_steam.html" >CONDL</a>(P,T)<em> [see note 2]</em>    <td align=left>P,T    <td>Thermal Conductivity
+<tr>          <td>CP=<a href="cpl67.3m_steam.html"   >CPL</a>(P,T)                           <td align=left>P,T    <td>Specific Isobaric, Heat Capacity
+<tr>          <td>H=<a href="hcl67.3m_steam.html"   >HCL</a>(P.T,S)                          <td align=left>P,T    <td>Enthalpy, Entropy <em>[see note 3] </em>
+<tr>          <td>H=<a href="hssicl67.3m_steam.html">HSSICL</a>(P,S,T)                       <td align=left>P,S    <td>Enthalpy, Temperature
+<tr>          <td>PR=<a href="prliq67.3m_steam.html" >PRLIQ</a>(P,T)                         <td align=left>P,T    <td>Prandtl Number
+<tr>          <td>S=<a href="sssicl67.3m_steam.html">SSSICL</a>(P,H,T)                       <td align=left>P,H    <td>Entropy, Temperature
+<tr>          <td>V=<a href="vcl67.3m_steam.html"   >VCL</a>(P,T)                            <td align=left>P,T    <td>Specific Volume
+<tr>          <td>VISC=<a href="visl67.3m_steam.html"  >VISL</a>(P,T )                       <td align=left>P,T    <td>Viscosity
+<tr><th rowspan=7> Steam/Gas (Region 2)
+              <td>K=<a href="condv67.3m_steam.html" >CONDV</a>(P,T)[see note 2]              <td align=left>P,T    <td>Thermal Conductivity
+<tr>          <td>CP=<a href="cpv67.3m_steam.html"   >CPV</a>(P,T,V)                         <td align=left>P,T    <td>Specific Isobaric, Heat Capacity, Specific Volume
+<tr>          <td>H=<a href="hss67.3m_steam.html"   >HSS</a>(P,T,S,V)                        <td align=left>P,T    <td>Enthalpy, Entropy, Specific Volume
+<tr>          <td>H=<a href="hssiss67.3m_steam.html">HSSISS</a>(P,S,T,V,X)                   <td align=left>P,S    <td>Enthalpy, Temperature, Specific Volume, Quality
+<tr>          <td>PR=<a href="prstm67.3m_steam.html" >PRSTM</a>(P,T)                         <td align=left>P,T    <td>Prandtl Number
+<tr>          <td>S=<a href="sssiss67.3m_steam.html">SSSISS</a>(P,H,T,V,X)                   <td align=left>P,H    <td>Entropy, Temperature, Specific Volume, Quality
+<tr>          <td>VISC=<a href="visv67.3m_steam.html"  >VISV</a>(P,T)                        <td align=left>P,T    <td>Viscosity
+<tr><th rowspan=8> Saturation Line (Region 3)
+              <td>H=<a href="hsl67.3m_steam.html"   >HSL</a>(T)                              <td align=left>T      <td>Enthalpy
+<tr>          <td>H=<a href="hsv67.3m_steam.html"   >HSV</a>(P,T,S,V)                        <td align=left>P      <td>Enthalpy, Temperature, Entropy, Specific, Volume
+<tr>          <td>P=<a href="psl67.3m_steam.html"   >PSL</a>(T)                              <td align=left>T      <td>Pressure
+<tr>          <td>P=<a href="psv67.3m_steam.html"   >PSV</a>(S)                              <td align=left>S      <td>Pressure
+<tr>          <td>S=<a href="ssl67.3m_steam.html"   >SSL</a>(T)                              <td align=left>T      <td>Entropy
+<tr>          <td>T=<a href="tslh67.3m_steam.html"  >TSLH</a>(H)                             <td align=left>H      <td>Temperature
+<tr>          <td>T=<a href="tsl67.3m_steam.html"   >TSL</a>(P)                              <td align=left>P      <td>Temperature
+<tr>          <td>V=<a href="vsl67.3m_steam.html"   >VSL</a>(T)                              <td align=left>T      <td>Specific Volume
+</table>
+</center>
+<ol>
+      <li>  This table displays the regions in which each of the Steam Property
+           Sub-Programs is valid.
+
+      <li>  These statements should not be used in Fortran, since K is an integer
+           variable.
+
+      <li>  In this table, enthalpy and entropy are specific enthalpy and
+            entropy.
+</ol>
+
+
+<hr> <!-- ================================================================== -->
+<h2>
+<a name=table3>
+4.9 <br>
+Table 3
+</a>
+</h2>
+
+<center>
+<table border>
+<caption>
+                  Alphabetic Listing of Steam Property Sub-Programs
+</caption>
+
+<tr><th> Sub-Program Name <th> Region of Application <th> Input/Output Specifications <th> Reference Section
+
+
+<tr><th> <a href="condl67.3m_steam.html" >CONDL</a>  <td align=left>   Region 1 (Liquid)                  <td align=left>K=f(P,T)          <td align=left>  4.4.1
+<tr><th> <a href="condv67.3m_steam.html" >CONDV</a>  <td align=left>   Region 2 (Steam/Gas)               <td align=left>K=f(P,T)          <td align=left>  4.4.2
+<tr><th> <a href="cpl67.3m_steam.html"   >CPL</a>    <td align=left>   Region 1                           <td align=left>CP=f(P,T)         <td align=left>  4.4.3
+<tr><th> <a href="cpv67.3m_steam.html"   >CPV</a>    <td align=left>   Region 2                           <td align=left>CP,V=f(P,T)       <td align=left>  4.4.4
+<tr><th> <a href="crflo67.3m_steam.html" >CRFLO</a>  <td align=left>   Wet or Superheated Steam           <td align=left>FC,DEGS=f(P,H)    <td align=left>  4.4.5
+<tr><th> <a href="crvel67.3m_steam.html" >CRVEL</a>  <td align=left>   Wet or Superheated Steam           <td align=left>VC,GAMMA=f(P,H)   <td align=left>  4.4.6
+<tr><th> <a href="hcl67.3m_steam.html"   >HCL</a>    <td align=left>   Region 1                           <td align=left>H,S=f(P,T)        <td align=left>  4.4.7
+<tr><th> <a href="hsl67.3m_steam.html"   >HSL</a>    <td align=left>   Liquid side of Region 3 Saturation <td align=left>H=f(T)            <td align=left>  4.4.8
+<tr><th> <a href="hss67.3m_steam.html"   >HSS</a>    <td align=left>   Region 2                           <td align=left>H,S,V=f(P,T)      <td align=left>  4.4.9
+<tr><th> <a href="hssicl67.3m_steam.html">HSSICL</a> <td align=left>   Region 1                           <td align=left>H,T =f(P,S)       <td align=left>  4.4.10
+<tr><th> <a href="hssiss67.3m_steam.html">HSSISS</a> <td align=left>   Region 2                           <td align=left>H,T,V,X=f(P,S)    <td align=left>  4.4.11
+<tr><th> <a href="hsv67.3m_steam.html"   >HSV</a>    <td align=left>   Vapor side of Region 3             <td align=left>H,T,S,V=f(P)      <td align=left>  4.4.12
+<tr><th> <a href="prliq67.3m_steam.html" >PRLIQ</a>  <td align=left>   Region 1                           <td align=left>PR=f(P,T)         <td align=left>  4.4.13
+<tr><th> <a href="prstm67.3m_steam.html" >PRSTM</a>  <td align=left>   Region 2                           <td align=left>PR=f(P,T)         <td align=left>  4.4.14
+<tr><th> <a href="psl67.3m_steam.html"   >PSL</a>    <td align=left>   Region 3 (Saturation)              <td align=left>P=f(T)            <td align=left>  4.4.15
+<tr><th> <a href="psv67.3m_steam.html"   >PSV</a>    <td align=left>   Region 3, vapor side               <td align=left>P=f(S)            <td align=left>  4.4.16
+<tr><th> <a href="ssl67.3m_steam.html"   >SSL</a>    <td align=left>   Liquid side of Region 3            <td align=left>S=f(T)            <td align=left>  4.4.17
+<tr><th> <a href="sssicl67.3m_steam.html">SSSICL</a> <td align=left>   Region 1                           <td align=left>S,T=f(P,H)        <td align=left>  4.4.18
+<tr><th> <a href="sssiss67.3m_steam.html">SSSISS</a> <td align=left>   Region 2                           <td align=left>S,T,V,X=f(P,H)    <td align=left>  4.4.19
+<tr><th> <a href="tsl67.3m_steam.html"   >TSL</a>    <td align=left>   Region 3                           <td align=left>T=f(P)            <td align=left>  4.4.20
+<tr><th> <a href="tslh67.3m_steam.html"  >TSLH</a>   <td align=left>   Region 3, liquid side              <td align=left>T=f(H)            <td align=left>  4.4.21
+<tr><th> <a href="vcl67.3m_steam.html"   >VCL</a>    <td align=left>   Region 1                           <td align=left>V=f(P,T)          <td align=left>  4.4.22
+<tr><th> <a href="visl67.3m_steam.html"  >VISL</a>   <td align=left>   Region 1                           <td align=left>VISC=f(P,T)       <td align=left>  4.4.23
+<tr><th> <a href="visv67.3m_steam.html"  >VISV</a>   <td align=left>   Region 2                           <td align=left>VISC=f(P,T)       <td align=left>  4.4.24
+<tr><th> <a href="vsl67.3m_steam.html"   >VSL</a>    <td align=left>   Liquid side of Region 3            <td align=left>V=f(T)            <td align=left>  4.4.25
+</table>
+</center>
+
+<hr><!-- =================================================================== -->
+<font color="red"> <h4 align="right"> References </h4> </font>
+<hr> <!-- ================================================================== -->
+<h1>
+             5.0 References [1]
+</h1>
+
+<ol>
+<li>
+           "1967 ASME Steam Tables, Thermodynamic and Transport Properties
+             of Steam"
+             <p>
+
+             Published by the American Society of Mechanical Engineers
+             <p>
+<li>
+           "Formulation of Thermal Conductivity for Water Substance as a
+             action of Temperature and Density"
+             <p>
+
+             Authorized by Ichimatsu Tanishita, Koichi Watanabi, and Kosei
+             Oguchi of Keio University, in Tokyo Japan
+             <p>
+<li>
+           "Formulation of Viscosity for Water Substance as a Function of
+             Temperature and Density"
+             <p>
+
+             Authorized by Ichimatsu Tanishita, Koichi Watanabi, and Kosei
+             Oguchi of Keio University, in Tokyo Japan
+             <p>
+<li>
+           "Fortran Subroutines for Calculating the 1967 ASME Steam Tables"
+             W Steam Division Report EM-1035, June 1969, William Steltz and
+             George Silvestri
+             <p>
+</ol>
+
+
+  [1]   Note:  Reference 1 is widely available.  References 2, 3, and
+        4 may be obtained from Customer Services.
+        <p>
+<hr><!-- =================================================================== -->
+<font color="red"> <h4 align="right"> <a name="steamv67"> STEAMV67 routine</a> </h4> </font>
+<!-- ======================================================================= -->
+<h1>
+   6.0   Use The STEAMV routine to verify the pedigree of the steam library
+</h1>
+<p>
+   A routine  called  STEAMV  identifies  the origin of the steam library
+   being used.  The first parameter identifies which FORTRAN unit number
+   to write the  output on  (values  less than 0 cause the  output to be
+   suppressed).
+</p>
+
+<hr><!-- =================================================================== -->
+<font color="red"> <h4 align="right"> Revision Record </h4> </font>
+<hr> <!-- ================================================================== -->
+<h1>
+7.0   Document Revision Record
+</h1>
+<pre>
+                                RECORD OF REVISIONS
+
+ NO.        DATE
+
+ 1          08/21/87 - First release of document on-line for COS in DOCLIB.
+ 2          07/01/91 - First release of document on UNICOS as a PRE-RELEASE.
+ 3          08/20/93 - added STEAMV67 routine to allow workstation users to
+                       more easily identify which library they are using.
+ 4          09/06/93 - Corrected f77 command example and minor carriage
+                       control changes.
+ 5          09/06/93 - Document put onto WWW, main document is still a text file.
+ 6          12/19/95 - Actual conversion to HTML and added scanned graphics.
+
+</pre>
+<hr><!-- =================================================================== -->
+<P><FONT SIZE=-1>
+<UL>
+<LI> <I> Created: 19971231 </I>
+<script language="JavaScript">
+<!---//hide script from old browsers; automatically update modification date
+document.write( "<LI><I>Date last updated: "+
+document.lastModified +"</I>");
+//end hiding contents --->
+</script>
+</UL>
+</FONT>
+<hr><!-- =================================================================== -->
+</BODY></HTML>

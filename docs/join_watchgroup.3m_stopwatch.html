@@ -1,0 +1,224 @@
+<HTML><HEAD>
+<TITLE>join_watchgroup.3m_stopwatch.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>JOIN_WATCHGROUP (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+join_watchgroup(3f) - [M_stopwatch] adds a M_StopWatch watch to a watch
+group (LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Diagnostics</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Bugs</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine
+<B>join_watchgroup</B><I>(watch, handle, err)</I> <P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+type (watchtype), intent(IN) ::  watch
+</TD></TR>
+<TR valign=top><TD width=6%>
+OR
+</TD><TD>
+type (watchtype), intent(IN) ::  watch(:)
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+type (watchgroup), intent(INOUT) ::  handle
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+integer, optional, intent(OUT) ::  err
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Adds the specified watch(es) to the specified watch
+group.  The watch(es) and group must have been
+previously created with
+<B>create_watch</B> and
+<B>create_watchgroup.</B> <P>
+One or more watches must be specified.  The argument
+<I>watch</I> can be a single variable of type
+<I>watchtype</I> (see
+<B>M_stopwatch</B>(3))
+to add one watch, an array of type
+<I>watchtype</I> to add several watches.
+<P>
+The watch group is specified by
+<I>handle,</I> a variable of type
+<I>watchgroup.</I> <P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DIAGNOSTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+If present, the optional intent OUT integer argument
+<I>err</I> returns a status code.  The code is the sum of the
+values listed below.
+<P>
+An error message will be printed to a specified I/O
+unit (unit 6 by default) if
+<I>print_errors</I> is TRUE (default is TRUE). The error message contains
+more detail about the cause of the error than can be
+obtained from just the status code, so you should set
+<I>print_errors</I> to TRUE if you have trouble determining the cause of
+the error.
+<P>
+If
+<I>abort_errors</I> is TRUE (default is FALSE), the program will terminate
+on an error condition.  Otherwise, the program will
+continue execution but the watch(es) will not be added
+to the group.
+<P>
+See
+<B>option_stopwatch</B>(3)
+for further information on
+<I>print_errors, abort_errors</I> and I/O units.
+<P>
+The relevant status codes and messages are:
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+0
+</TD><TD>
+No errors; execution successful.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+1
+</TD><TD>
+Watch needs to be created.  This error occurs if you
+attempt to add a watch that has been destroyed to a
+group.  The watch must first be created again.  See
+also the comment about watches that have never been
+created in the BUGS section.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+512
+</TD><TD>
+Failed to allocate required memory.  Memory is
+allocated in the group when a watch is added.  Also,
+when
+<B>join_watchgroup</B> is called with an array or group of watches, temporary
+memory is allocated.  This error occurs if the Fortran
+<B>allocate</B> statement returns a nonzero status indicating that
+memory could not be allocated.  Avoid memory leaks by
+always destroying watches and groups before recreating
+them, and destroying local variable watches and groups
+before returning from a subroutine.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+1024
+</TD><TD>
+Error occurred while deallocating memory.  This error
+occurs if the Fortran
+<B>deallocate</B> statement returns a nonzero status while deallocating
+temporary memory used for an array or group of watches.
+The watches are added to the group, but be aware that
+other problems could develop as a result of the
+deallocate error.
+<P>
+</TD></TR>
+<TR></TR></TABLE><P>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+type (watchtype) w1, w2(3)
+type (watchgroup) g1
+integer errcode
+<P>
+call join_watchgroup(w1, g1)
+call join_watchgroup(w2, g1, errcode)
+<P>
+The first call adds the watch
+<I>w1</I> to watch group
+<I>g1.</I> The second call adds three watch to
+<I>g1</I> and returns a status code.
+<P>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+It cannot be determined whether or not a watch variable
+or watch group has been created (passed as an argument
+to
+<B>create_watch</B> or
+<B>create_watchgroup</B>). If a watch or watch group that has never been created
+is passed into
+<B>join_watchgroup,</B> it might generate a Fortran error due to passing a
+pointer with undefined association status to the
+Fortran intrinsic function
+<B>associated.</B> However, some compilers will allow this as an extension
+to the Fortran 90 standard and recognize that the
+pointer is not associated, in which case the &#145;&#145;Watch
+needs to be created&#146;&#146; error message is generated.
+<P>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+William F. Mitchell, <A HREF="mailto:william.mitchell@nist.gov">william.mitchell@nist.gov</A>
+National Institute of Standards and Technology
+<P>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+M_stopwatch(3), create_watchgroup(3), create_watch(3),
+destroy_watchgroup(3), destroy_watch(3),
+end_pause_watch(3), inquiry_stopwatch(3),
+leave_watchgroup(3), option_stopwatch(3),
+pause_watch(3), print_watch(3), read_watch(3),
+reset_watch(3), start_watch(3), stop_watch(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>M_StopWatch 1.1</I></TD> <TD width=33% align=center>JOIN_WATCHGROUP (3)</TD> <TD align=right width=33%><I>September 22, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from join_watchgroup.3m_stopwatch.txt using man macros.</FONT>
+</BODY></HTML>

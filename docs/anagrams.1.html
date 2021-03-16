@@ -1,0 +1,188 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>anagrams (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>anagrams</B>(1f) - print anagrams of strings
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>References</A><BR>
+<A HREF=#4>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+anagrams <B>string</B>(<I>s</I>)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Generation in lexicographic order
+<P>
+There are many ways to systematically generate all permutations of
+a given sequence. One classic, simple, and flexible algorithm is
+based upon finding the next permutation in lexicographic ordering, if it
+exists. It can handle repeated values, for which case it generates each
+distinct multiset permutation once. Even for ordinary permutations it is
+significantly more efficient than generating values for the Lehmer code
+in lexicographic order (possibly using the factorial number system) and
+converting those to permutations. It begins by sorting the sequence in
+(weakly) increasing order (which gives its lexicographically minimal
+permutation), and then repeats advancing to the next permutation as
+long as one is found. The method goes back to Narayana Pandita in 14th
+century India, and has been rediscovered frequently.
+<P>
+The following algorithm generates the next permutation lexicographically
+after a given permutation. It changes the given permutation in-place.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The following algorithm generates the next permutation lexicographically
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Find the largest index k such that a[k] &lt; a[k + 1]. If no such index
+exists, the permutation is the last permutation.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Find the largest index l greater than k such that a[k] &lt; a[l].
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Swap the value of a[k] with that of a[l].
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Reverse the sequence from a[k + 1] up to and including the final
+element a[n].
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+For example, given the sequence [10, 20, 30, 40] (which is in increasing
+order), and given that the index is one-based, the steps are as follows:
+<TABLE cellpadding=3><!-- tsb: For example, given the sequence [10, 20, 30, 40] (which is in increasing
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1)
+</TD><TD>
+Index k = 3, because 30 is placed at an index that satisfies condition
+of being the largest index that is still less than a[k + 1] which is 40.
+if no such index exists no more permutations exist
+</TD></TR>
+<TR valign=top><TD width=4%>
+2)
+</TD><TD>
+Index l = 4, because 40 is the only value in the sequence that is greater
+than 30 in order to satisfy the condition a[k] &lt; a[l].
+</TD></TR>
+<TR valign=top><TD width=4%>
+3)
+</TD><TD>
+The values of a[3] and a[4] are swapped to form the new sequence
+[10,20,40,30].
+</TD></TR>
+<TR valign=top><TD width=4%>
+4)
+</TD><TD>
+The sequence after k-index a[3] to the final element is reversed. Because
+only one value lies after this index (the 30), the sequence remains
+unchanged in this instance. Thus the lexicographic successor of the
+initial state is permuted: [10,20,40,30].
+</TD></TR>
+<TR valign=top><TD width=4%>
+5)
+</TD><TD>
+Following this algorithm, the next lexicographic permutation will be
+[10,30,20,40], and the 24th permutation will be [40,30,20,10] at which point a[k]
+&lt; a[k + 1] does not exist, indicating that this is the last permutation.
+</TD></TR>
+<TR></TR></TABLE>This method uses about 3 comparisons and 1.5 swaps per permutation,
+amortized over the whole sequence, not counting the initial sort.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+Wikipedia
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+anagrams hello world
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>anagrams (1)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f67798e6-10c7-40a2-89b2-2138088b053d using man macros.</FONT>
+<br><br><center><img src="images/anagrams.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,369 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>glob (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>glob</B>(3f) - [M_strings:COMPARE] compare given string for match to
+a pattern which may contain globbing wildcard characters
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>Reference</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+logical function <B>glob</B>(<I>string</I>, pattern )
+<P>
+<PRE>
+    character(len=*),intent(in) :: string
+    character(len=*),intent(in) :: pattern
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>glob</B>(3f) compares given STRING for match to PATTERN which may
+contain basic wildcard "globbing" characters.
+<P>
+In this version to get a match the entire <I>string</I> must be described
+by PATTERN. Trailing whitespace is significant, so trim the input
+<I>string</I> to have trailing whitespace ignored.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>string</I> </TD><TD valign=bottom>
+the input <I>string</I> to test to see if it contains the pattern.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>pattern</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the following simple globbing options are available
+<TABLE width=100% cellpadding=3><!-- tsb: the following simple globbing options are available
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+"?" matching any one character
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+"*" matching zero or more characters.
+Do NOT use adjacent asterisks.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Both strings may have trailing spaces which
+are ignored.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+There is no escape character, so matching strings with
+literal question mark and asterisk is problematic.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Example program
+<P>
+<PRE>
+   program demo_glob
+   implicit none
+   ! This main() routine passes a bunch of test strings
+   ! into the above code.  In performance comparison mode,
+   ! it does that over and over. Otherwise, it does it just
+   ! once. Either way, it outputs a passed/failed result.
+   !
+   integer :: nReps
+   logical :: allpassed
+   integer :: i
+    allpassed = .true.
+<P>
+    nReps = 10000
+    ! Can choose as many repetitions as you&#146;re expecting
+    ! in the real world.
+    nReps = 1
+<P>
+    do i=1,nReps
+     ! Cases with repeating character sequences.
+     allpassed=allpassed .and. test("a*abab", "a*b", .true.)
+     !!cycle
+     allpassed=allpassed .and. test("ab", "*?", .true.)
+     allpassed=allpassed .and. test("abc", "*?", .true.)
+     allpassed=allpassed .and. test("abcccd", "*ccd", .true.)
+     allpassed=allpassed .and. test("bLah", "bLaH", .false.)
+     allpassed=allpassed .and. test("mississippi", "*sip*", .true.)
+     allpassed=allpassed .and. &
+      & test("xxxx*zzzzzzzzy*f", "xxx*zzy*f", .true.)
+     allpassed=allpassed .and. &
+      & test("xxxx*zzzzzzzzy*f", "xxxx*zzy*fffff", .false.)
+     allpassed=allpassed .and. &
+      & test("mississipissippi", "*issip*ss*", .true.)
+     allpassed=allpassed .and. &
+      & test("xxxxzzzzzzzzyf", "xxxx*zzy*fffff", .false.)
+     allpassed=allpassed .and. &
+      & test("xxxxzzzzzzzzyf", "xxxx*zzy*f", .true.)
+     allpassed=allpassed .and. test("xyxyxyzyxyz", "xy*z*xyz", .true.)
+     allpassed=allpassed .and. test("xyxyxyxyz", "xy*xyz", .true.)
+     allpassed=allpassed .and. test("mississippi", "mi*sip*", .true.)
+     allpassed=allpassed .and. test("ababac", "*abac*", .true.)
+     allpassed=allpassed .and. test("aaazz", "a*zz*", .true.)
+     allpassed=allpassed .and. test("a12b12", "*12*23", .false.)
+     allpassed=allpassed .and. test("a12b12", "a12b", .false.)
+     allpassed=allpassed .and. test("a12b12", "*12*12*", .true.)
+<P>
+     ! Additional cases where the &#146;*&#146; char appears in the tame string.
+     allpassed=allpassed .and. test("*", "*", .true.)
+     allpassed=allpassed .and. test("a*r", "a*", .true.)
+     allpassed=allpassed .and. test("a*ar", "a*aar", .false.)
+<P>
+     ! More double wildcard scenarios.
+     allpassed=allpassed .and. test("XYXYXYZYXYz", "XY*Z*XYz", .true.)
+     allpassed=allpassed .and. test("missisSIPpi", "*SIP*", .true.)
+     allpassed=allpassed .and. test("mississipPI", "*issip*PI", .true.)
+     allpassed=allpassed .and. test("xyxyxyxyz", "xy*xyz", .true.)
+     allpassed=allpassed .and. test("miSsissippi", "mi*sip*", .true.)
+     allpassed=allpassed .and. test("miSsissippi", "mi*Sip*", .false.)
+     allpassed=allpassed .and. test("abAbac", "*Abac*", .true.)
+     allpassed=allpassed .and. test("aAazz", "a*zz*", .true.)
+     allpassed=allpassed .and. test("A12b12", "*12*23", .false.)
+     allpassed=allpassed .and. test("a12B12", "*12*12*", .true.)
+     allpassed=allpassed .and. test("oWn", "*oWn*", .true.)
+<P>
+     ! Completely tame (no wildcards) cases.
+     allpassed=allpassed .and. test("bLah", "bLah", .true.)
+<P>
+     ! Simple mixed wildcard tests suggested by IBMer Marlin Deckert.
+     allpassed=allpassed .and. test("a", "*?", .true.)
+<P>
+     ! More mixed wildcard tests including coverage for false positives.
+     allpassed=allpassed .and. test("a", "??", .false.)
+     allpassed=allpassed .and. test("ab", "?*?", .true.)
+     allpassed=allpassed .and. test("ab", "*?*?*", .true.)
+     allpassed=allpassed .and. test("abc", "?**?*?", .true.)
+     allpassed=allpassed .and. test("abc", "?**?*&?", .false.)
+     allpassed=allpassed .and. test("abcd", "?b*??", .true.)
+     allpassed=allpassed .and. test("abcd", "?a*??", .false.)
+     allpassed=allpassed .and. test("abcd", "?**?c?", .true.)
+     allpassed=allpassed .and. test("abcd", "?**?d?", .false.)
+     allpassed=allpassed .and. test("abcde", "?*b*?*d*?", .true.)
+<P>
+     ! Single-character-match cases.
+     allpassed=allpassed .and. test("bLah", "bL?h", .true.)
+     allpassed=allpassed .and. test("bLaaa", "bLa?", .false.)
+     allpassed=allpassed .and. test("bLah", "bLa?", .true.)
+     allpassed=allpassed .and. test("bLaH", "?Lah", .false.)
+     allpassed=allpassed .and. test("bLaH", "?LaH", .true.)
+<P>
+     ! Many-wildcard scenarios.
+     allpassed=allpassed .and. test(&
+     &"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&
+     &aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",&
+     &"a*a*a*a*a*a*aa*aaa*a*a*b",&
+     &.true.)
+     allpassed=allpassed .and. test(&
+     &"abababababababababababababababababababaacacacacacacac&
+     &adaeafagahaiajakalaaaaaaaaaaaaaaaaaffafagaagggagaaaaaaaab",&
+     &"*a*b*ba*ca*a*aa*aaa*fa*ga*b*",&
+     &.true.)
+     allpassed=allpassed .and. test(&
+     &"abababababababababababababababababababaacacacacacaca&
+     &cadaeafagahaiajakalaaaaaaaaaaaaaaaaaffafagaagggagaaaaaaaab",&
+     &"*a*b*ba*ca*a*x*aaa*fa*ga*b*",&
+     &.false.)
+     allpassed=allpassed .and. test(&
+     &"abababababababababababababababababababaacacacacacacacad&
+     &aeafagahaiajakalaaaaaaaaaaaaaaaaaffafagaagggagaaaaaaaab",&
+     &"*a*b*ba*ca*aaaa*fa*ga*gggg*b*",&
+     &.false.)
+     allpassed=allpassed .and. test(&
+     &"abababababababababababababababababababaacacacacacacacad&
+     &aeafagahaiajakalaaaaaaaaaaaaaaaaaffafagaagggagaaaaaaaab",&
+     &"*a*b*ba*ca*aaaa*fa*ga*ggg*b*",&
+     &.true.)
+     allpassed=allpassed .and. test("aaabbaabbaab", "*aabbaa*a*", .true.)
+     allpassed=allpassed .and. &
+     test("a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*",&
+     &"a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*", .true.)
+     allpassed=allpassed .and. test("aaaaaaaaaaaaaaaaa",&
+     &"*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*", .true.)
+     allpassed=allpassed .and. test("aaaaaaaaaaaaaaaa",&
+     &"*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*", .false.)
+     allpassed=allpassed .and. test(&
+     &"abc*abcd*abcde*abcdef*abcdefg*abcdefgh*abcdefghi*abcdefghij&
+     &*abcdefghijk*abcdefghijkl*abcdefghijklm*abcdefghijklmn",&
+     & "abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*abc&
+     &*abc*abc*abc*",&
+     &.false.)
+     allpassed=allpassed .and. test(&
+     &"abc*abcd*abcde*abcdef*abcdefg*abcdefgh*abcdefghi*abcdefghij&
+     &*abcdefghijk*abcdefghijkl*abcdefghijklm*abcdefghijklmn",&
+     &"abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*",&
+     &.true.)
+     allpassed=allpassed .and. test("abc*abcd*abcd*abc*abcd",&
+     &"abc*abc*abc*abc*abc", .false.)
+     allpassed=allpassed .and. test( "abc*abcd*abcd*abc*abcd*abcd&
+     &*abc*abcd*abc*abc*abcd", &
+     &"abc*abc*abc*abc*abc*abc*abc*abc*abc*abc*abcd",&
+     &.true.)
+     allpassed=allpassed .and. test("abc",&
+     &"********a********b********c********", .true.)
+     allpassed=allpassed .and.&
+     &test("********a********b********c********", "abc", .false.)
+     allpassed=allpassed .and. &
+     &test("abc", "********a********b********b********", .false.)
+     allpassed=allpassed .and. test("*abc*", "***a*b*c***", .true.)
+<P>
+     ! A case-insensitive algorithm test.
+     ! allpassed=allpassed .and. test("mississippi", "*issip*PI", .true.)
+    enddo
+<P>
+    if (allpassed)then
+       write(*,&#146;(a)&#146;)"Passed",nReps
+    else
+       write(*,&#146;(a)&#146;)"Failed"
+    endif
+   contains
+   ! This is a test program for wildcard matching routines.
+   ! It can be used either to test a single routine for correctness,
+   ! or to compare the timings of two (or more) different wildcard
+   ! matching routines.
+   !
+   function test(tame, wild, bExpectedResult) result(bpassed)
+   use M_strings, only : glob
+      character(len=*) :: tame
+      character(len=*) :: wild
+      logical          :: bExpectedResult
+      logical          :: bResult
+      logical          :: bPassed
+      bResult = .true.    ! We&#146;ll do "&=" cumulative checking.
+      bPassed = .false.   ! Assume the worst.
+      write(*,*)repeat(&#146;=&#146;,79)
+      bResult = glob(tame, wild) ! Call a wildcard matching routine.
+<P>
+      ! To assist correctness checking, output the two strings in any
+      ! failing scenarios.
+      if (bExpectedResult .eqv. bResult) then
+         bPassed = .true.
+         if(nReps == 1) write(*,*)"Passed match on ",tame," vs. ", wild
+      else
+         if(nReps == 1) write(*,*)"Failed match on ",tame," vs. ", wild
+      endif
+<P>
+   end function test
+   end program demo_glob
+<P>
+</PRE>
+Expected output
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>REFERENCE</H3>
+
+</A>
+<BLOCKQUOTE>
+The article "Matching Wildcards: An Empirical Way to Tame an Algorithm"
+in Dr Dobb&#146;s Journal, By Kirk J. Krauss, October 07, 2014
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>glob (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4827d195-0c2e-47a8-b3ca-6936878a3120 using man macros.</FONT>
+<br><br><center><img src="images/glob.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

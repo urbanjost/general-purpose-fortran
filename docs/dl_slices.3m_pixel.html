@@ -1,0 +1,921 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>dl_slices (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>dl_slices</B>(3f) - [M_pixel_slices] basic 3-d surface plotting routine
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>dl_slices</B>(d,ndx,ndz,nx,nz,a,b,xh,yh,zh,iflag,iax,
+<P>
+<PRE>
+                    & xt,nxt,xs,xe,nmx,nnx,mlx,tsx,ndx,smx,
+                    & yt,nyt,      nmy,nny,mly,tsy,ndy,smy,
+                    & zt,nzt,zs,ze,nmz,nnz,mlz,tsz,ndz,smz,
+                    & dm,dx,ic,maxsize)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+dl_slices is a simple 3-d surface plotting routine. A 3-d surface is
+plotted by plotting slices through the volume which are parallel to
+the x-y plane. The x,y values of the surface at the intersection of
+the slice plane and the fixed z value are plotted. Hidden lines
+are suppressed, giving the illusion of a 3 dimensional surface.
+The height of the plotted surface relative to the y axis value is
+calibrated to the x and z axes. No perspective is used.
+Options exist to vary the plotting angle and to plot axes.
+<P>
+The origin of the plot is in the lower-left corner. The x axis
+runs left to right along the plot bottom. The y axis is
+plotted as a vertical displacement offset by the z axis value. The z
+axis appears to point into the screen. This, with the hidden line
+removal, gives the illusion of depth.
+<P>
+dl_slices contains an internal working storage array
+dimensioned sufficiently large for most surfaces. However,
+for very complex surfaces, the working storage buffer length may
+be exceeded. In this case an error message is written to
+the terminal and the routine terminated.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>d</B> </TD><TD valign=bottom>
+(R): array of y values dimensioned <B>d</B>(ndx,ndz)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ndx,ndz</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(i): x and z dimensions of d array
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nx,nz</B> </TD><TD valign=bottom>
+(i): x and z sizes of surface to plot d array
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>a</B> </TD><TD valign=bottom>
+(R): angle of x axis from horizontal 0-85 degrees
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>b</B> </TD><TD valign=bottom>
+(R): angle of z axis from horizontal 0-90 degrees
+note: origin (1,1) is in lower-left corner
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                     x  axis runs left to right on screen
+                     y  axis runs up to down on screen
+                     z  axis appears to run into the screen but
+                        is angled to the right
+</PRE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>xh,yh,zh</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(R): length of each axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>iflag</B> </TD><TD valign=bottom>
+(i): option flag
+(1&#146;s digit) =2: use color array (need all parameters)
+=1: do not use color array
+(10&#146;s digit)=0: Plot sides
+=1: Do not plot sides
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>iax</B> </TD><TD valign=bottom>
+(i): axis format control
+&lt; 0 : plot axes, use input scale factors dm and dx
+= 0 : no axes plotted, optional parameters (xt&#46;&#46;&#46;dx)
+not used, scaling computed from input array
+&gt; 0 : plot axes, use scaling computed from input array
+only axis parameters xt through smz accessed.
+<TABLE width=100% cellpadding=3><!-- tsb: (i): axis format control
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>(1&#146;s digit)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+= 1 : Plot actual max/min or input values for Y axis
+= 2 : Plot smoothed values for Y axis
+(10&#146;s digit) = 0 : Use default axis type
+= 1 : Use input DL_AXISB-type axis parameters
+(nmx, nnx, mlx, tsx, ndx, etc.)
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+(NOTE: the following optional parameters are used if iax &lt; 0
+or <B>mod</B>(iflag,10)=1)
+</TD></TR>
+<TR><TD colspan=2>
+X-AXIS
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>xt</B> </TD><TD valign=bottom>
+(C): title of x axis (width)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nxt</B> </TD><TD valign=bottom>
+(i): number of characters in xt
+= 0 : no axis plotted
+&gt; 0 : normal
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>xs,xe</B> </TD><TD valign=bottom>
+(R): starting and ending values displayed on x axis
+</TD></TR>
+<TR><TD colspan=2>
+(see DL_AXISB for detailed description of axis parameters)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nmx</B> </TD><TD valign=bottom>
+(i): number of minor ticks between major ticks on x axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nnx</B> </TD><TD valign=bottom>
+(i): highlight length of nnx-th minor tick on x axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>mlx</B> </TD><TD valign=bottom>
+(i): number of major tick marks on x axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>tsx</B> </TD><TD valign=bottom>
+(R): size of title and numbers on x axis
+&lt; 0 auto exponent scaling (x10 to power) disabled
+&gt; 0 auto exponent scaling (x10 to power) enabled
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ndx</B> </TD><TD valign=bottom>
+(i): number of digits to right of decimal point on x axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>smx</B> </TD><TD valign=bottom>
+(R): major tick length on x axis
+Y-AXIS
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>yt</B> </TD><TD valign=bottom>
+(C): title of y axis (depth)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nyt</B> </TD><TD valign=bottom>
+(i): number of characters in yt
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  = 0 : no y axis plotted
+                  &gt; 0 : normal
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nmy</B> </TD><TD valign=bottom>
+(i): number of minor ticks between major ticks on y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nny</B> </TD><TD valign=bottom>
+(i): highlight length of nny-th minor tick on y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>mly</B> </TD><TD valign=bottom>
+(i): number of major tick marks on y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>tsy</B> </TD><TD valign=bottom>
+(R): size of title and numbers on y axis
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                   &lt; 0 auto exponent scaling (x10 to power) disabled
+                   &gt; 0 auto exponent scaling (x10 to power) enabled
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ndy</B> </TD><TD valign=bottom>
+(i): number of digits to right of decimal point on y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>smy</B> </TD><TD valign=bottom>
+(R): major tick length on y axis
+Z-AXIS
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>zt</B> </TD><TD valign=bottom>
+(C): title of z axis (height)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nzt</B> </TD><TD valign=bottom>
+(i): number of characters in zt
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  = 0 : no z axis plotted
+                  &gt; 0 : normal
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>zs,ze</B> </TD><TD valign=bottom>
+(R): starting and ending value displayed on z axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nmz</B> </TD><TD valign=bottom>
+(i): number of minor ticks between major ticks on z axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nnz</B> </TD><TD valign=bottom>
+(i): highlight length of nnz-th minor tick on z axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>mlz</B> </TD><TD valign=bottom>
+(i): number of major tick marks on z axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>tsz</B> </TD><TD valign=bottom>
+(R): size of title and numbers on z axis
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  &lt; 0 auto exponent scaling (x10 to power) disabled
+                  &gt; 0 auto exponent scaling (x10 to power) enabled
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ndz</B> </TD><TD valign=bottom>
+(i): number of digits to right of decimal point on z axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>smz</B> </TD><TD valign=bottom>
+(R): major tick length on z axis
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+(NOTE: the following optional parameters are accessed only if
+iax &lt; 0 or <B>mod</B>(iflag,10)=1)
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>dm,dx</B> </TD><TD valign=bottom>
+(R): minimum and maximum values of d array
+</TD></TR>
+<TR><TD colspan=2>
+(NOTE: color array accessed only if <B>mod</B>(iflag,10)=1)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ic</B> </TD><TD valign=bottom>
+(i): color list
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                   ic(1):  color for axis lines
+                   ic(2):  color for axis numbers
+                   ic(3):  color for axis titles
+                   ic(4):  color for axis exponents
+                   ic(5):  color index for lower plot surface (return)
+                   ic(6):  color index for upper plot surface (return)
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>maxsize</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+optional maximum number of points.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   PROGRAM demo_dl_slices
+<P>
+   !     WRITTEN BY: DGL, LAST REVISED ON  5-JAN-1994 10:31:18.86
+   !                 JSU,                 19-JUL-2005
+<P>
+    use M_pixel
+    use M_writegif_animated, only : write_animated_gif
+    use :: M_pixel_slices, only : dl_slices, dl_init, dl_symbol
+    implicit none
+      integer,PARAMETER  :: IX=35
+      integer,PARAMETER  :: IZ=45
+      real               :: SURFDAT(ix,iz)              ! array of y values
+      integer            :: MOVIE(85+90+90,0:500,0:500) ! array of y values
+      real,save          :: TPI=3.141592654
+      integer            :: ICOL(255)
+      character(len=80)  :: XT,YT,ZT                    ! axis titles
+      real :: a,b,dm,dx
+      real :: smx,smy,smz
+      real :: tsx,tsy,tsz
+      real :: xe,xh,xs
+      real :: ye,yh,ys
+      real :: ze,zh,zs
+<P>
+      integer :: i
+      integer :: i10,i20,i40
+      integer :: iax
+      integer :: iflag
+      integer :: iframe
+      integer :: ii
+      integer :: j
+      integer :: mlx,mly,mlz
+      integer :: ndx,ndy,ndz
+      integer :: nmx,nmy,nmz
+      integer :: nnx,nny,nnz
+      integer :: nx,nxt
+      integer :: nyt
+      integer :: nz,nzt
+<P>
+</PRE>
+<BLOCKQUOTE>
+! (NOTE: color array accessed only if <B>mod</B>(iflag,10)=1)
+<TABLE cellpadding=3><!-- tsb: ! (NOTE: color array accessed only if <B>mod</B>(iflag,10)=1)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>! icol</B> </TD><TD valign=bottom>
+(i): color list
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+<B>icol</B>(1) : color for axis lines
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+<B>icol</B>(2) : color for axis numbers
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+<B>icol</B>(3) : color for axis titles
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+<B>icol</B>(4) : color for axis exponents
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+<B>icol</B>(5) : color index for lower plot surface (return)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+<B>icol</B>(6) : color index for upper plot surface (return)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+initialize the color array
+DO I=1,255
+<B>ICOL</B>(I)=MOD(I,7)
+enddo
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+fill some arrays with data we can plot
+DO J=1,IX
+DO I=1,IZ
+<B>SURFDAT</B>(J,I)=COS(TPI*REAL(J-1)/12.0)*COS(TPI*REAL(I-1)/12.0)
+enddo
+enddo
+<P>
+call <B>prefsize</B>(501,501)
+call <B>vinit</B>()
+<TABLE width=100% cellpadding=3><!-- tsb: call <B>prefsize</B>(501,501)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>CALL </B><B>DL_INIT</B>(12.5,12.5,1.5,1.5,1.0) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! set up plotting surface scale
+CALL <B>LINEWIDTH</B>(3)
+CALL <B>COLOR</B>(4)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+now plot 3-d surface using slices with axis
+NX=IX
+NZ=IZ
+</TD></TR>
+<TR><TD colspan=2>
+! length of axis in window units
+XH=6.0 ! xh,yh,zh (R): length of each axis
+YH=3.8
+ZH=5.0
+</TD></TR>
+<TR><TD colspan=2>
+IFLAG=012
+IFLAG=000
+IFLAG=002
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>! iflag</B> </TD><TD valign=bottom>
+(i): option flag
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+(1&#146;s digit) =2: use color array (need all parameters)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+=1: do not use color array
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+(10&#146;s digit)=0: Plot sides
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+=1: Do not plot sides
+</TD></TR>
+<TR><TD colspan=2>
+IAX= 01
+IAX=<B>-11</B>
+! SIGN:
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>! iax</B> </TD><TD valign=bottom>
+(i): axis format control
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&lt; 0 : plot axes, use input scale factors dm and dx
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+= 0 : no axes plotted, optional parameters (xt&#46;&#46;&#46;dx)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+not used, scaling computed from input array
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&gt; 0 : plot axes, use scaling computed from input array
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+only axis parameters xt through smz accessed.
+! DIGITS:
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+(1&#146;s digit)  = 1 : Plot actual max/min or input values for Y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+= 2 : Plot smoothed values for Y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+(10&#146;s digit) = 0 : Use default axis type
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+= 1 : Use input DL_AXISB-type axis parameters
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+(nmx, nnx, mlx, tsx, ndx, etc.)
+</TD></TR>
+<TR><TD colspan=2>
+! (NOTE: the following optional parameters are used if iax &lt; 0 or <B>mod</B>(iflag,10)=1)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+(see DL_AXISB for detailed description of axis parameters)
+</TD></TR>
+<TR><TD colspan=2>
+! XAXIS:
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>XS=</B><B>-10.0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! xs,xe (R): starting and ending values displayed on x axis
+XE=10.0
+!-----------------------
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NMX=4</B> </TD><TD valign=bottom>
+! nmx   (i): number of minor ticks between major ticks on x axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NNX=0</B> </TD><TD valign=bottom>
+! nnx   (i): highlight length of nnx-th minor tick on x axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>MLX=4</B> </TD><TD valign=bottom>
+! mlx   (i): number of major tick marks on x axis
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>TSX=</B><B>-0.15</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! tsx   (R): size of title and numbers on x axis
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&lt; 0 auto exponent scaling (x10 to power) disabled
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&gt; 0 auto exponent scaling (x10 to power) enabled
+<TABLE width=100% cellpadding=3><!-- tsb: &gt; 0 auto exponent scaling (x10 to power) enabled
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NDX=1</B> </TD><TD valign=bottom>
+! (i): number of digits to right of decimal point on x axis
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>SMX=0.1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! (R): major tick length on x axis
+!-----------------------
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>XT=&#146;dl_slices X TITLE&#146; ! xt</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(C): title of x axis (width)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>NXT=len_trim</B>(xt) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! nxt   (i): number of characters in xt ;nxt = 0 : no axis plotted ; nxt &gt; 0 : normal
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+! YAXIS:
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>YS=</B><B>-10.0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! ys,ye (R): starting and ending values displayed on y axis
+YE=10.0
+!-----------------------
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NMY=1</B> </TD><TD valign=bottom>
+! (i): number of minor ticks between major ticks on y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NNY=0</B> </TD><TD valign=bottom>
+! (i): highlight length of nny-th minor tick on y axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>MLY=3</B> </TD><TD valign=bottom>
+! (i): number of major tick marks on y axis
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>TSY=</B><B>-0.15</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! (R): size of title and numbers on y axis
+<TABLE width=100% cellpadding=3><!-- tsb: ! (R): size of title and numbers on y axis
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&lt; 0 auto exponent scaling (x10 to power) disabled
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&gt; 0 auto exponent scaling (x10 to power) enabled
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NDY=1</B> </TD><TD valign=bottom>
+! ndy   (i): number of digits to right of decimal point on y axis
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>SMY=0.10</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! smy   (R): major tick length on y axis
+!-----------------------
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>YT=&#146;dl_slices Y TITLE&#146; ! yt</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(C): title of y axis (width)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>NYT=len_trim</B>(yt) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! nyt   (i): number of characters in xt ;nyt = 0 : no axis plotted ; nyt &gt; 0 : normal
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+! ZAXIS:
+ZS=1.0
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>ZE=1.0</B> </TD><TD valign=bottom>
+! zs,ze (R): starting and ending value displayed on z axis
+!-----------------------
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NMZ=3</B> </TD><TD valign=bottom>
+! nmz   (i): number of minor ticks between major ticks on z axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NNZ=2</B> </TD><TD valign=bottom>
+! nnz   (i): highlight length of nnz-th minor tick on z axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>MLZ=2</B> </TD><TD valign=bottom>
+! mlz   (i): number of major tick marks on z axis
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>TSZ=</B><B>-0.15</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! tsz   (R): size of title and numbers on z axis
+<TABLE width=100% cellpadding=3><!-- tsb: ! tsz   (R): size of title and numbers on z axis
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&lt; 0 auto exponent scaling (x10 to power) disabled
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+&gt; 0 auto exponent scaling (x10 to power) enabled
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NDZ=1</B> </TD><TD valign=bottom>
+! ndz   (i): number of digits to right of decimal point on z axis
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>SMZ=0.1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! smz   (R): major tick length on z axis
+!-----------------------
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ZT=&#146;SLICE&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! zt    (C): title of z axis (width)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>NZT=len_trim</B>(zt) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! nzt   (i): number of characters in xt ;nzt = 0 : no axis plotted ; nzt &gt; 0 : normal
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+(NOTE: the following optional parameters are accessed only if
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+iax &lt; 0 or <B>mod</B>(iflag,10)=1)
+<TABLE width=100% cellpadding=3><!-- tsb: iax &lt; 0 or <B>mod</B>(iflag,10)=1)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>DM=</B><B>-1.0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! dm,dx (R): minimum and maximum values of SURFDAT array
+DX=1.0
+! view angles
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>! A</B> </TD><TD valign=bottom>
+(R): angle of x axis from horizontal 0-80 degrees
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>! B</B> </TD><TD valign=bottom>
+(R): angle of z axis from horizontal 5-80 degrees
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+note: origin (1,1) is in lower-left corner
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+x axis runs left to right on screen
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+y axis runs up to down on screen
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+z axis appears to run into the screen but is angled to the right
+iframe=1
+B=15.0
+<TABLE width=100% cellpadding=3><!-- tsb: z axis appears to run into the screen but is angled to the right
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>DO I10=1,85</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! Animate cycling thru angle A
+A=I10
+CALL <B>COLOR</B>(7)
+CALL <B>CLEAR</B>()
+CALL <B>COLOR</B>(0)
+<TABLE width=100% cellpadding=3><!-- tsb: ! Animate cycling thru angle A
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>CALL </B><B>dl_slices</B>(SURFDAT,IX,IZ,NX,NZ,A,B,XH,YH,ZH,IFLAG,IAX, </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>& XT,NXT,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>& XS,XE,NMX,NNX,MLX,TSX,NDX,SMX,</B> <!-- Consumed .TP -->
+<BR>
+<B>& YT,NYT,</B> <!-- Consumed .TP -->
+<BR>
+<B>& NMY,NNY,MLY,TSY,NDY,SMY,</B> <!-- Consumed .TP -->
+<BR>
+<B>& ZT,NZT,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+& ZS,ZE,NMZ,NNZ,MLZ,TSZ,NDZ,SMZ,DM,DX,ICOL)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+add a label after master routine call
+CALL <B>COLOR</B>(1)
+CALL <B>LINEWIDTH</B>(1)
+CALL <B>DL_SYMBOL</B>(0.0,0.0,0.25,&#146;VAX3DX&#146;,0.0,6,<B>-1</B>)
+<B>movie</B>(iframe,:,:)=P_pixel(:,:)
+iframe=iframe+1
+enddo
+<P>
+A=25
+<TABLE width=100% cellpadding=3><!-- tsb: A=25
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>DO I20=1,90</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! Animate cycling thru angle B
+B=I20
+CALL <B>COLOR</B>(7)
+CALL <B>CLEAR</B>()
+CALL <B>COLOR</B>(0)
+<TABLE width=100% cellpadding=3><!-- tsb: ! Animate cycling thru angle B
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>CALL </B><B>dl_slices</B>(SURFDAT,IX,IZ,NX,NZ,A,B,XH,YH,ZH,IFLAG,IAX, </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>& XT,NXT,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>& XS,XE,NMX,NNX,MLX,TSX,NDX,SMX,</B> <!-- Consumed .TP -->
+<BR>
+<B>& YT,NYT,</B> <!-- Consumed .TP -->
+<BR>
+<B>& NMY,NNY,MLY,TSY,NDY,SMY,</B> <!-- Consumed .TP -->
+<BR>
+<B>& ZT,NZT,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+& ZS,ZE,NMZ,NNZ,MLZ,TSZ,NDZ,SMZ,DM,DX,ICOL)
+<B>movie</B>(iframe,:,:)=P_pixel(:,:)
+iframe=iframe+1
+enddo
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+IAX=01
+IFLAG=012
+II=1
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>DO I40=1,90*II</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! Animate cycling thru angles A and B
+<B>A=REAL</B>(I40)/II/2.0 ! should get warning when this exceeds 85
+<B>B=REAL</B>(I40)/II/2.0
+CALL <B>COLOR</B>(7)
+CALL <B>CLEAR</B>()
+CALL <B>COLOR</B>(0)
+<TABLE width=100% cellpadding=3><!-- tsb: ! Animate cycling thru angles A and B
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>CALL </B><B>dl_slices</B>(SURFDAT,IX,IZ,NX,NZ,A,B,XH,YH,ZH,IFLAG,IAX, </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>& XT,NXT,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>& XS,XE,NMX,NNX,MLX,TSX,NDX,SMX,</B> <!-- Consumed .TP -->
+<BR>
+<B>& YT,NYT,</B> <!-- Consumed .TP -->
+<BR>
+<B>& NMY,NNY,MLY,TSY,NDY,SMY,</B> <!-- Consumed .TP -->
+<BR>
+<B>& ZT,NZT,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+& ZS,ZE,NMZ,NNZ,MLZ,TSZ,NDZ,SMZ,DM,DX,ICOL)
+<B>movie</B>(iframe,:,:)=P_pixel(:,:)
+iframe=iframe+1
+enddo
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>CALL </B><B>VEXIT</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! close up plot package
+call <B>write_animated_gif</B>(&#146;dl_slices.3m_pixel.gif&#146;,movie,P_colormap,delay=5)
+!call <B>execute_system_command</B>(&#146;display dl_slices.3m_pixel.gif&#146;)
+END PROGRAM demo_dl_slices
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>dl_slices (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 55bfb1b2-87df-4859-a1b9-31d4292d2e1c using man macros.</FONT>
+<br><br><center><img src="images/dl_slices.3m_pixel.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,235 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>initialize_arrays (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>initialize_arrays</B>(7f) - [FORTRAN:FAQ] Initializing small 2D numeric arrays with array constructors
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Intuitively, one might assume that if one wants to initialize a
+small array by rows that something like the following will work:
+<P>
+<PRE>
+   ! DOES NOT WORK
+   integer :: xx(3,5)= [ 1, 2, 3, 4, 5], &
+                       [10,20,30,40,50], &
+                       [11,22,33,44,55]
+<P>
+</PRE>
+or perhaps
+<P>
+<PRE>
+   ! DOES NOT WORK
+   integer :: xx(3,5)= [ [ 1, 2, 3, 4, 5], &
+                         [10,20,30,40,50], &
+                         [11,22,33,44,55]  ]
+<P>
+</PRE>
+Someday something simpler might work, but currently the following syntax
+is required to specify the values in an intuitive row-column sequence
+using an array constructor:
+<P>
+<PRE>
+   integer,save :: xx(3,5)= reshape([&
+<P>
+       1, 2, 3, 4, 5, &
+</PRE>
+10,20,30,40,50, &
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:        1, 2, 3, 4, 5, &
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>11,22,33,44,55</B> <!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>],shape(xx),order=[2,1])
+</BLOCKQUOTE>
+<P>
+This is because an array constructor can be used to create and assign
+values only to rank-one arrays. To define arrays of more than one
+dimension with an array constructor, you must use the <B>RESHAPE</B>(3f) intrinsic
+function.
+<P>
+Note that the ORDER= option on <B>RESHAPE</B>(3f) is used to allow the values
+to be specified in row-column order instead of the default behavior,
+which fills columns first.
+<P>
+Also note that if the expressions are of type character, Fortran 95/90
+requires each expression to have the same character length (there is a
+common compiler extension that extends all strings to the length of the
+longest value specified, but depending on it reduces portability).
+<P>
+## Printing small arrays in row-column format
+<P>
+When working with small arrays the issue that there is no default Fortran
+routine for printing an array in row-column order becomes apparent. So
+lets create a simple solution for integer arrays (PRINT_MATRIX_INT(3f)):
+<P>
+<PRE>
+   program demo_initialize_arrays ! initializing small arrays
+   implicit none
+   integer,save :: xx(3,5)= reshape([&
+     &  1, 2, 3, 4, 5,    &
+     & 10,20,30,40,50,    &
+     & 11,22,33,44,-1055  &
+    ],shape(xx),order=[2,1])
+   call print_matrix_int(&#146;xx array:&#146;,xx)
+   contains
+   subroutine print_matrix_int(title,arr)
+   implicit none
+   character(len=*),parameter::ident= "@(#)print_matrix_int(3f) - print small 2d integer arrays in row-column format"
+   character(len=*),intent(in)  :: title
+   integer,intent(in)           :: arr(:,:)
+   integer                      :: i
+   character(len=:),allocatable :: biggest
+      write(*,*)trim(title)                                                 ! print title
+      biggest=&#146;           &#146;                                                 ! make buffer to write integer into
+      write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+1         ! find how many characters to use for integers
+      biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;                       ! use this format to write a row
+      do i=1,size(arr,dim=1)                                                ! print one row of array at a time
+         write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+         write(*,&#146;(" ]")&#146;)
+      enddo
+   end subroutine print_matrix_int
+   end program demo_initialize_arrays
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   xx array:
+   &gt; [  1,  2,  3,  4,  5 ]
+   &gt; [ 10, 20, 30, 40, 50 ]
+   &gt; [ 11, 22, 33, 44, 55 ]
+<P>
+</PRE>
+We could do a more robust version that handles REAL and COMPLEX values
+as well as NaN values, but it has already been done. If you need to
+print a variety of small matrices see:
+<P>
+<PRE>
+  dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
+  Kristjan Jonasson, Department of Computer Science,
+  School of Science and Engineering, University of Iceland,
+  Hjardarhaga 4, 107 Reykjavik, Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
+<P>
+</PRE>
+#Initializing a 2D array using DATA statements
+<P>
+Note that DATA statements are very flexible, and allow for perhaps the
+most intelligible way of specifying small arrays row by row. For example:
+<P>
+<PRE>
+   ! fill rows using DATA statements
+   integer,save,dimension(3,5) :: gg
+   data gg(1,:)/  1,  2,  3,  4,  5 /
+   data gg(2,:)/ 10, 20, 30, 40, 50 /
+   data gg(3,:)/ 11, 22, 33, 44, 55 /
+<P>
+</PRE>
+There are other ways to use a DATA statement to fill in row-column order,
+including use of the <B>SIZE</B>(3f) function and an implied-DO:
+<P>
+<PRE>
+   ! use implied-DO so data can be declared in row-column order
+   integer, dimension(3,5) :: ff
+   DATA (( ff(J,I), I=1,size(ff,dim=2)), J=1,size(ff,dim=1)) / &
+      01,02,03,04,05, &
+      10,20,30,40,50, &
+      11,22,33,44,55  /
+<P>
+</PRE>
+##Initializing a 2D array from a vector using EQUIVALENCE
+<P>
+Sometimes instead of using <B>RESHAPE</B>(3f) you will see someone initialize a
+vector and then equivalence it to a multi-dimensional array; especially
+if the code has a reason to access the data as both a vector and a matrix:
+<P>
+<PRE>
+   ! multi-dimensional row1, row2, &#46;&#46;&#46;. by equivalence
+   integer,parameter :: d1=3,d2=5
+   integer           :: ee(d1,d2)
+   ! note that the DATA statements could be used to initialize the array instead
+   integer           :: e(d1*d2) =[1,10,11, 2,20,22, 3,30,33, 4,40,44, 5,50,55]
+   equivalence       (e(1),ee(1,1))
+<P>
+</PRE>
+##Notes
+<P>
+Remember that for simple initializations vector statements can be used
+<P>
+<PRE>
+   real :: arr(10,20)=0.0
+   ! array constructors can be used to define constants, not just vectors
+   integer,parameter :: ii(10,10)=[(i,i=1,size(ii))] ! odd numbers using implied-DO
+<P>
+</PRE>
+and that if things are too complicated you can just set the values in the executable
+body of the code.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>initialize_arrays (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ce8c8961-d10c-47e8-a046-e40d91e98896 using man macros.</FONT>
+<br><br><center><img src="images/initialize_arrays.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

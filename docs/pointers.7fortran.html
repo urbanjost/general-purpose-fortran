@@ -1,0 +1,186 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>pointers (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>pointers</B>(7f) - [FORTRAN] Pointers and targets methods
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+In Fortran, the concept of pointers differs from that in C-like
+languages. A Fortran 90 pointer does not merely store the memory address
+of a target variable; it also contains additional descriptive information
+such as the target&#146;s rank, the upper and lower bounds of each dimension,
+and even strides through memory. This allows a Fortran 90 pointer to
+point at submatrices.
+<P>
+Fortran 90 pointers are "associated" with well-defined "target"
+variables, via either the pointer assignment operator (=&gt;) or an
+ALLOCATE statement. When appearing in expressions, pointers are always
+dereferenced; no "pointer arithmetic" is possible.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The following example illustrates the concept:
+<P>
+<PRE>
+   module SomeModule
+      implicit none
+    contains
+       elemental function A(x) result(res)
+           integer :: res
+           integer, intent(IN) :: x
+           res = x + 1
+       end function
+   end module SomeModule
+<P>
+   program demo_pointers
+      use SomeModule, DoSomething =&gt; A
+      implicit none
+<P>
+      !Declare variables
+      integer, parameter :: m = 3, n = 3
+      integer, pointer :: p(:)=&gt;null(), q(:,:)=&gt;null()
+      integer, allocatable, target :: A(:,:)
+      integer :: istat = 0, i, j
+      character(80) :: fmt
+<P>
+   !  Write format string for matrices
+   !  (/ A / A, " = [", 3( "[",3(i2, 1x), "]" / 5x), "]" )
+      write (fmt, &#146;("(/ A / A, "" = ["", ", i0, "( ""["",", i0, "(i2, 1x), ""]"" / 5x), ""]"" )")&#146;) m, n
+<P>
+      allocate(A(m, n), q(m, n), stat = istat)
+      if (istat /= 0) stop &#146;Error during allocation of A and q&#146;
+<P>
+   !  Matrix A is:
+   !  A = [[ 1  4  7 ]
+   !       [ 2  5  8 ]
+   !       [ 3  6  9 ]
+   !       ]
+      A = reshape([(i, i = 1, size(A))], shape(A))
+      q = A
+<P>
+      write(*, fmt) "Matrix A is:", "A", ((A(i, j), j = 1, size(A, 2)), i = 1, size(A, 1))
+<P>
+   !  p will be associated with the first column of A
+      p =&gt; A(:, 1)
+<P>
+   !  This operation on p has a direct effect on matrix A
+      p = p ** 2
+<P>
+   !  This will end the association between p and the first column of A
+      nullify(p)
+<P>
+   !  Matrix A becomes:
+   !  A = [[ 1  4  7 ]
+   !       [ 4  5  8 ]
+   !       [ 9  6  9 ]
+   !       ]
+      write(*, fmt) "Matrix A becomes:", "A", ((A(i, j), j = 1, size(A, 2)), i = 1, size(A, 1))
+<P>
+   !  Perform some array operation
+      q = q + A
+<P>
+   !  Matrix q becomes:
+   !  q = [[ 2  8 14 ]
+   !       [ 6 10 16 ]
+   !       [12 12 18 ]
+   !       ]
+      write(*, fmt) "Matrix q becomes:", "q", ((q(i, j), j = 1, size(A, 2)), i = 1, size(A, 1))
+<P>
+   !  Use p as an ordinary array
+      allocate (p(1:m*n), stat = istat)
+      if (istat /= 0) stop &#146;Error during allocation of p&#146;
+<P>
+   !  Perform some array operation
+      p = reshape(DoSomething(A + A ** 2), shape(p))
+<P>
+   !  Array operation:
+   !      p(1) = 3
+   !      p(2) = 21
+   !      p(3) = 91
+   !      p(4) = 21
+   !      p(5) = 31
+   !      p(6) = 43
+   !      p(7) = 57
+   !      p(8) = 73
+   !      p(9) = 91
+      write(*, &#146;("Array operation:" / (4x,"p(",i0,") = ",i0))&#146;) (i, p(i), i = 1, size(p))
+<P>
+      deallocate(A, p, q, stat = istat)
+      if (istat /= 0) stop &#146;Error during deallocation&#146;
+<P>
+   end program demo_pointers
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>pointers (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ed069d99-44f0-4708-8403-66b182530833 using man macros.</FONT>
+<br><br><center><img src="images/pointers.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

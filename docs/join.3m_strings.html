@@ -1,0 +1,219 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>join (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>join</B>(3f) - [M_strings:EDITING] append CHARACTER variable array into
+a single CHARACTER variable with specified separator
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Result</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+pure function <B>join</B>(str,sep,trm,left,right,start,end) result (<I>string</I>)
+<P>
+<PRE>
+    character(len=*),intent(in)          :: str(:)
+    character(len=*),intent(in),optional :: sep
+    logical,intent(in),optional          :: trm
+    character(len=*),intent(in),optional :: right
+    character(len=*),intent(in),optional :: left
+    character(len=*),intent(in),optional :: start
+    character(len=*),intent(in),optional :: end
+    character(len=:),allocatable         :: string
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>JOIN</B>(3f) appends the elements of a CHARACTER array into a single
+CHARACTER variable, with elements 1 to N joined from left to right.
+By default each element is trimmed of trailing spaces and the
+default separator is a null <I>string</I>.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>STR</B>(:) </TD><TD valign=bottom>
+array of CHARACTER variables to be joined
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>SEP</B> </TD><TD valign=bottom>
+separator <I>string</I> to place between each variable. defaults
+to a null <I>string</I>.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>LEFT</B> </TD><TD valign=bottom>
+<I>string</I> to place at left of each element
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>RIGHT</B> </TD><TD valign=bottom>
+<I>string</I> to place at right of each element
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>START</B> </TD><TD valign=bottom>
+prefix <I>string</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>END</B> </TD><TD valign=bottom>
+suffix <I>string</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>TRM</B> </TD><TD valign=bottom>
+option to trim each element of STR of trailing
+spaces. Defaults to .TRUE.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>STRING</B> </TD><TD valign=bottom>
+CHARACTER variable composed of all of the elements of <B>STR</B>()
+appended together with the optional separator SEP placed
+between the elements.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+  program demo_join
+  use M_strings, only: join
+  implicit none
+  character(len=:),allocatable  :: s(:)
+  character(len=:),allocatable  :: out
+  integer                       :: i
+    s=[character(len=10) :: &#146;United&#146;,&#146; we&#146;,&#146; stand,&#146;, &
+    & &#146; divided&#146;,&#146; we fall.&#146;]
+    out=join(s)
+    write(*,&#146;(a)&#146;) out
+    write(*,&#146;(a)&#146;) join(s,trm=.false.)
+    write(*,&#146;(a)&#146;) (join(s,trm=.false.,sep=&#146;|&#146;),i=1,3)
+    write(*,&#146;(a)&#146;) join(s,sep=&#146;&lt;&gt;&#146;)
+    write(*,&#146;(a)&#146;) join(s,sep=&#146;;&#146;,left=&#146;[&#146;,right=&#146;]&#146;)
+    write(*,&#146;(a)&#146;) join(s,left=&#146;[&#146;,right=&#146;]&#146;)
+    write(*,&#146;(a)&#146;) join(s,left=&#146;&gt;&gt;&#146;)
+  end program demo_join
+<P>
+</PRE>
+Expected output:
+<P>
+<PRE>
+  United we stand, divided we fall.
+  United     we        stand,    divided   we fall.
+  United    | we       | stand,   | divided  | we fall.
+  United    | we       | stand,   | divided  | we fall.
+  United    | we       | stand,   | divided  | we fall.
+  United&lt;&gt; we&lt;&gt; stand,&lt;&gt; divided&lt;&gt; we fall.
+  [United];[ we];[ stand,];[ divided];[ we fall.]
+  [United][ we][ stand,][ divided][ we fall.]
+  &gt;&gt;United&gt;&gt; we&gt;&gt; stand,&gt;&gt; divided&gt;&gt; we fall.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>join (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ad847c20-f9fb-4350-b22a-d795aae4e3cd using man macros.</FONT>
+<br><br><center><img src="images/join.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,288 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>scale (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>scale</B>(3f) - [M_calcomp:basic] calculate scaling factors for producing XY plots with <B>LINE</B>(3f) and <B>AXIS</B>(3f) routines
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>License</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>scale</B>(array,axlen,npts,+<B>-inc</B>)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Calculate scaling factors and a starting value for an array of X or Y values
+for use in producing XY plots with the LINE and AXIS routines, for example.
+<P>
+Typically, the user&#146;s program will accumulate plotting data in two arrays:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Typically, the user&#146;s program will accumulate plotting data in two arrays:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An array of independent variables, <B>X</B>(i)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An array of dependent variables, <B>Y</B>(i)=f(<B>X</B>(i))
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Typically these values should not be drawn directly in units of inches, but
+should be rescaled (A temperature of 3000 should not require the generation
+of a 3000 inch plot!).
+<P>
+For some problems the range of data is predictable. The programmer can
+predetermine suitable conversion factors for use in drawing the axis scale
+values and plot the data points on the graph directly in units of inches
+using the PLOT routine. Usually, however, these factors are not known in
+advance.
+<P>
+Therefore, the SCALE subroutine can examine the data values in an array and
+determine a starting value (minimum or maximum) and a scaling factor
+(positive or negative) such that:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Therefore, the SCALE subroutine can examine the data values in an array and
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+The scale numbers drawn by the AXIS subroutine at each
+division will properly represent the range of real data
+values in the array.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+The data points, when plotted by the LINE subroutine,
+will fit in a given plotting area (Generally the bounds of the
+plot axis drawn with AXIS).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+These values are computed and stored by SCALE at the END OF THE INPUT VALUE
+ARRAY.
+<P>
+The computed scaling factor (DELTAV) represents the number of data units per
+inch of axis, adjusting DELTAV so that it is always an interval of 1, 2, 4,
+5, or 8 x 10**n (where n is an exponent consistent with the original
+unadjusted scaling factor). Thus, an array may have a range of values from
+301 to 912, to be plotted over an axis of 10 inches. The unadjusted scaling
+factor is (912-301)/10=61.1 units/inch. The adjusted DELTAV would be 8 x
+10**1 = 80. This will allow the production of &#146;nice&#146; axes, that start and
+end on rounded units and are divided into increments people can easily
+interpolate between.
+<P>
+The starting value (FIRSTV) is intended to be used as the first numeric label
+on the axis, is computed as a multiple of DELTAV that is equal to or outside
+the limits of the data in the array. For the example given above, if a
+minimum is wanted for FIRSTV, 240 would be chosen as the best value. If a
+maximum is desired instead, 960 would be selected (The nearest multiple of
+80=DELTAV that is below or above the minimum and maximum data values 301 and
+912).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>ARRAY</B> </TD><TD valign=bottom>
+is the first element of the array of data points to be
+examined.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>AXLEN</B> </TD><TD valign=bottom>
+is the length of the axis, in inches, to which the data
+is to be scaled. Its value must be greater than 1.0 inch,
+and less than 100 inches.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NPTS</B> </TD><TD valign=bottom>
+is the number of data values to be scanned in the array.
+The FORTRAN DIMENSION statement must specify at least two
+elements more than the number of values being scaled, to
+allow room for SCALE to store the computed starting value
+and scaling factor at the end of the array.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>+</B><B>-INC</B> </TD><TD valign=bottom>
+is an integer whose magnitude is used by SCALE as the
+increment with which to select the data values to be
+scaled in the array. Normally INC=1; if it is 2, every
+other value is examined.
+<P>
+If INC is positive, the selected starting value (FIRSTV)
+approximates a minimum, and the scale factor (DELTAV) is
+positive.
+<P>
+If INC is negative, the selected starting value (FIRSTV)
+approximates a maximum, and the scaling factor (DELTAV)
+is negative.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; WARNING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+If INC= +<B>-1</B>, the array must be dimensioned at least two
+elements larger than the actual number of data values it
+contains. If the magnitude of INC &gt; 1, the computed
+values are stored at (INC) elements and (2*INC) elements
+beyond the last data point. The subscripted element for
+FIRSTV is <B>ARRAY</B>(NPTS*INC+1); for DELTAV it is ARRAY
+(NPTS*INC+INC+1). Therefore, ARRAY must always be
+dimensioned at least NPTS*INC+INC+1 .
+<P>
+Generally, SCALE is called to examine each array to be
+plotted. If the user knows the range of his data values,
+he does not have to call SCALE for that array so long as
+he supplies an appropriate FIRSTV and DELTAV when AXIS
+and LINE are called.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_scale
+   use M_calcomp
+<P>
+   character * 28 ichr1
+   character * 26 ichr2
+   character * 10 lbcd1,lbcd2
+   dimension xarray(62),yarray(62)
+   ICHR1=&#146;PLOTTED ON A CALCOMP PLOTTER&#146;
+   ICHR2=&#146;USING  Y = X -0.7*X +0.1*X&#146;
+   LBCD1=&#146;X-ABSCISSA&#146;
+   LBCD2=&#146;Y-ORDINATE&#146;
+   call plots(0.0,10.0,0.0,10.0)
+   ! PLOT THREE GRAPHS ILLUSTRATING SCALE, AXIS, AND LINE
+   deltax=0.04
+   i=1
+   ! AXIS DRAWS LABELS AS MUCH AS 0.4 INCHES TO THE NEGATIVE OF AXIS CENTER;
+   ! EITHER USE AN ORIGIN OFFSET OF AT LEAST THIS VALUE OR DO NOT USE AN
+   ! ORIGIN VALUE OF LESS THAN 0.4 OR CLIPPING WILL OCCUR
+   call plot(0.4,0.4,-3)
+   deltax=2.0*deltax
+   xarray(1)=deltax
+   do j=1,60
+      yarray(j)=xarray(j)**2-0.7*xarray(j)**3+0.1*xarray(j)**4
+      xarray(j+1)=xarray(j)+deltax
+   enddo
+   call scale(xarray(1), 6.5,60,1)
+   call scale(yarray(1),10.0,60,1)
+   call axis(0.0,0.0,lbcd1,-10, 6.5, 0.0,xarray(61),xarray(62))
+   call axis(0.0,0.0,lbcd2, 10,10.0,90.0,yarray(61),yarray(62))
+   call newpen(i)
+   call line(xarray(1),yarray(1),60,1,2*(i-2),i)
+   call newpen(1)
+   call symbol(1.3,10.,.14,ichr1,inteq,0.0,28)
+   call symbol(1.3,9.7,.14,ichr2,inteq,0.0,26)
+   call number(2.98,9.8,.1,2.0,0.,-1)
+   call number(3.96,9.8,.1,3.0,0.,-1)
+   call number(4.94,9.8,.1,4.0,0.,-1)
+<P>
+   !call plot(10.0,0.0,-3)
+   call plot(0.0,0.0,999)
+   end program demo_scale
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>scale (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8ab8d708-158d-49c0-9c25-f14698149d0f using man macros.</FONT>
+<br><br><center><img src="images/scale.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

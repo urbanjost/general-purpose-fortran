@@ -1,0 +1,185 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_big_integer (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_big_integer</B>(3fm) - [M_big_integer] define new data type BIG_INTEGER and operators
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Author</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>use</B> <I>M_big_integer</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The module named BIG_INTEGERS defines a new data type BIG_INTEGER.
+This data type represents nonnegative integers up to 10**n - 1, where n
+is the parameter (named constant) NR_OF_DECIMAL_DIGITS. This value may
+be changed, but the module must then be recompiled (it is not dynamic).
+<P>
+The following operations are implemented. "b" represents a big integer,
+"c" a character string, and "i" an ordinary integer.
+<P>
+<PRE>
+     big (i)
+     big (c)
+     int (b)
+     int (c)
+     char (b)
+     char (i)
+<P>
+     b = i
+     b = c
+     i = b
+     i = c
+     c = b
+     c = i
+<P>
+     b ? i, i ? b, and b ? b, where ? is
+       +, -, *, /,
+       &lt;, &lt;=, &gt;, &gt;=, ==, or /=
+<P>
+     b ** i
+<P>
+     modulo (b, i)  [result is integer]
+     modulo (i, b)  [result is big_integer]
+     modulo (b, b)  [result is big_integer]
+<P>
+     huge (b)
+     sqrt (b)
+<P>
+     call print_big (b)
+     call random_number (b, low, high)
+<P>
+</PRE>
+</BLOCKQUOTE>
+Many operations of the form b ? i, where i &lt; base, are implemented to
+be efficient as special cases.
+<A name=3>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Copyright (c) 1993-2002 Unicomp, Inc.
+<P>
+Developed at Unicomp, Inc.
+<P>
+Permission to <B>use</B>, copy, modify, and distribute this
+software is freely granted, provided that this notice
+is preserved.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+   program demo_M_big_integer
+   use M_big_integer
+   type(big_integer) :: a, b
+   a = "1234567890"
+   b = a ** 34
+   call print_big(b)
+   end program demo_M_big_integer
+<P>
+</PRE>
+Expected output:
+<P>
+<PRE>
+   18044389448552283571495419217299928002884571753268277623634094010253\
+   66981452225691084844631888351415012575687866144963748904906312371105\
+   80592001682129147574651845715171456148359301092015447205623057495772\
+   65956402721330118223207623859033190068180607802717874097649095503332\
+   13108684548203091283587744857909677706830329440243525585391247886790\
+   67434454263656340662912379366253271751953736731074819372491000795297\
+   39485301010583702548434613939308992953505848626082883004863432319153\
+   74851257117575530170864942620865071745761606428864154243365627850016\
+   44174485982226421972489721110767356064962137106505728778418700556641\
+   02307658653980050645991117790555490389944390204219987434165392204913\
+   97208851608204247050595317024494964141522065839042524403351250735123\
+   55264351679192059781951740756716496372272101373104569806788535169770\
+   01992757833390412200073266324230837178629444544469456556334359024793\
+   85520866582032929720704074267136863063443220583328656131024989866204\
+   73134625473086906778038872631750464721441869000000000000000000000000\
+   00000000000000000000000000000000000000000000000000000000000000000000\
+   0000000000000000000000000000000
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_big_integer (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e6667033-9126-4f72-8bee-13330db20253 using man macros.</FONT>
+<br><br><center><img src="images/M_big_integer.3m_big_integer.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

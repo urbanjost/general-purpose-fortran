@@ -1,0 +1,287 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>lookat (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>lookat</B>(3f) - [M_draw:VIEWPORT] Specify the viewer&#146;s position
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>lookat</B>(<I>vx</I>, <I>vy</I>, <I>vz</I>, <I>px</I>, <I>py</I>, <I>pz</I>, <I>twist</I>)
+real <I>vx</I>, <I>vy</I>, <I>vz</I>, <I>px</I>, <I>py</I>, <I>pz</I>, <I>twist</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Specify the viewer&#146;s position by giving a viewpoint and a reference
+point in world coordinates. A <I>twist</I> about the line of sight may also
+be given.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_lookat
+   ! Demonstrate a rotating translating tetrahedron, and doublebuffering
+   use M_draw
+   use M_time, only : system_sleep
+   !
+   integer TETRAHEDRON
+   parameter (TETRAHEDRON = 1)
+   !
+   real R, tx, tz, rotval, drotval, zeye
+   integer i
+   logical back, backdir, fill
+   character(len=50) :: device
+   integer :: ios
+   !
+   call prefsize(300, 300)
+   !
+   print*,&#146;Enter output device:&#146;
+   read(*,&#146;(a)&#146;,iostat=ios)device
+   if(ios.ne.0)device=&#146; &#146;
+   !
+   back = .true.
+   backdir = .true.
+   fill = .true.
+   !
+   call vinit(device)
+   !
+   ! Make the tetrahedral object
+   !
+   call maketheobject()
+   !
+   rotval = 0.0
+   drotval = 5.0
+   zeye = 5.0
+   !
+   R = 1.6
+   !
+   tx = 0.0
+   tz = R
+   !
+   !all polyfill(fill)
+   call backface(back)
+   call backfacedir(backdir)
+   call clipping(.false.)
+   !
+   ! set up a perspective projection with a field of view of
+   ! 40.0 degrees, aspect ratio of 1.0, near clipping plane 0.1,
+   ! and the far clipping plane at 1000.0.
+   !
+   call perspective(40.0, 1.0, 0.001, 15.0)
+   call lookat(0.0, 0.0, zeye, 0.0, 0.0, 0.0, 0.0)
+   !
+   ! Setup drawing into the backbuffer&#46;&#46;&#46;.
+   !
+   if (backbuffer().lt.0) then
+      call vexit()
+      write(*,*)&#146;Device can&#146;&#146;t support doublebuffering&#146;
+      stop
+   endif
+   !
+   ! we loop back here ad-naseum until someone hits a non-interpreted key
+   !
+   INFINITE: do
+   !
+      rotval = 0.0
+   !
+      do i = 0, int(359.0 / drotval)
+   !
+         call color(D_BLACK)
+         call clear()
+   !
+   !  Rotate the whole scene&#46;&#46;&#46;(this accumulates - hence
+   !  drotval)
+   !
+         call rotate(drotval * 0.1, &#146;x&#146;)
+         call rotate(drotval * 0.1, &#146;z&#146;)
+   !
+         call color(D_RED)
+         call pushmatrix()
+         call polyfill(.false.)
+         call rotate(90.0, &#146;x&#146;)
+         call circle(0.0, 0.0, R)
+         call polyfill(fill)
+         call popmatrix()
+   !
+         call color(D_BLUE)
+         call move(0.0, 0.0, 0.0)
+         call draw(tx, 0.0, tz)
+   !
+   ! Remember! The order of the transformations is
+   ! the reverse of what is specified here in between
+   ! the pushmatrix and the popmatrix. These ones don&#146;t
+   ! accumulate because of the push and pop.
+   !
+         call pushmatrix()
+            call translate(tx, 0.0, tz)
+            call rotate(rotval, &#146;x&#146;)
+            call rotate(rotval, &#146;y&#146;)
+            call rotate(rotval, &#146;z&#146;)
+            call scale(0.4, 0.4, 0.4)
+            call callobj(TETRAHEDRON)
+         call popmatrix()
+   !
+         tz = R * cos(rotval * 3.1415926535 / 180)
+         tx = R * sin(rotval * 3.1415926535 / 180)
+   !
+         call swapbuffers()
+   !
+         select case(char(checkkey()))
+         case(&#146;f&#146;)
+                   fill = .not. fill
+                   call polyfill(fill)
+         case(&#146;b&#146;)
+                   back = .not. back
+                   call backface(back)
+         case(&#146;d&#146;)
+                   backdir = .not. backdir
+                   call backfacedir(backdir)
+         case(char(0))
+         case default
+                   call vexit()
+                   stop
+          end select
+   !
+         rotval = rotval + drotval
+   !
+         call system_sleep(0.05)
+   !
+   enddo
+   !
+   enddo INFINITE
+   !
+   contains
+   !
+   ! maketheobject
+   !
+   !       generate a tetrahedron object as a series of move draws
+   !
+   subroutine maketheobject()
+<P>
+   integer TETRAHEDRON, NSIDES, NFACES, NPNTS
+   parameter (TETRAHEDRON = 1, NSIDES = 3, NFACES = 4, NPNTS = 4)
+   integer colface(NFACES)
+   real pnts(3, NPNTS)
+   integer faces(NSIDES, NFACES)
+   integer i, j
+   real x, y, z
+<P>
+   data pnts/               &
+        &  -0.5, 0.866, -0.667,     &
+        &  -0.5, -0.866, -0.667,    &
+        &   1.0, 0.0, -0.667,       &
+        &   0.0, 0.0, 1.334/
+<P>
+   data colface/D_GREEN, D_YELLOW, D_CYAN, D_MAGENTA/
+<P>
+   data faces/   &
+        &  3, 2, 1,      &
+        &  1, 2, 4,      &
+        &  2, 3, 4,      &
+        &  3, 1, 4/
+<P>
+   call makeobj(TETRAHEDRON)
+<P>
+   do i = 1, NFACES
+      call makepoly()
+      call color(colface(i))
+      x = pnts(1, faces(1, i))
+      y = pnts(2, faces(1, i))
+      z = pnts(3, faces(1, i))
+      call move(x, y, z)
+      do j = 2, NSIDES
+         x = pnts(1, faces(j,i))
+         y = pnts(2, faces(j,i))
+         z = pnts(3, faces(j,i))
+         call draw(x, y, z)
+      enddo
+      call closepoly()
+    enddo
+<P>
+    call closeobj()
+<P>
+    end subroutine maketheobject
+<P>
+   end program demo_lookat
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>lookat (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f7a6baa3-4535-44cc-8935-67b56616290e using man macros.</FONT>
+<br><br><center><img src="images/lookat.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

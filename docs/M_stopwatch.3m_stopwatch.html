@@ -1,0 +1,918 @@
+<HTML><HEAD>
+<TITLE>M_stopwatch.3m_stopwatch.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_STOPWATCH (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+M_stopwatch(3f)(3f) - [M_stopwatch] package for measuring cpu and wall clock
+execution time (LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Diagnostics</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Alternatives</A><BR>
+<A HREF=#6>Bugs</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+M_StopWatch is a Fortran 90 module for measuring
+execution time of program segments.  M_StopWatch is
+designed to be a portable, easy-to-use means of
+measuring execution time.  It supports the wall clock,
+CPU clock, and a breakdown of the CPU clock into user and
+system times. It returns all times in seconds.  It
+provides a simple means of determining which clocks are
+available, and the precision of those clocks.
+<P>
+M_StopWatch is used by instrumenting your code with
+subroutine calls that mimic the operation of a stop
+watch.  The primary routines are
+<B>start_watch, stop_watch, reset_watch, read_watch,</B> and
+<B>print_watch.</B> M_StopWatch supports multiple watches, and provides the
+concept of watch groups to allow functions to operate
+on multiple watches simultaneously.
+<P>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The entities in M_StopWatch that have public
+accessibility are two derived types and fifteen
+subroutines (one of which is a function subroutine).
+Any program unit that references any of these entities
+must use the
+<I>M_stopwatch</I> module, i.e., must contain the statement
+<P>
+use M_stopwatch
+<P>
+The derived types are:
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<I>watchtype</I> -- used for declaring a variable to be a watch
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<I>watchgroup</I> -- used for declaring a variable to be a handle for a
+group of watches
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+These two types have public accessibility, but the
+internals of the type are private.  Any operations
+performed on a variable of one of these types must be
+performed by one of the M_StopWatch subroutines.
+<P>
+This man page describes, in general terms, the
+operations that can be performed by the M_StopWatch
+subroutines.  The formal interfaces and detailed
+descriptions of the routines can be found in the
+individual man pages.
+<P>
+A watch is a variable declared to be of type
+<I>watchtype.</I> It can be passed to subroutines as an actual argument
+or through modules like any Fortran variable, but can
+only be operated on by the M_StopWatch subroutines.
+Watches must be created by subroutine
+<B>create_watch</B> before they are used.  Attempting to use a watch that
+has not been created will generate a Fortran 90 error,
+from attempting to pass a pointer with undefined
+association status to the Fortran intrinsic function
+<B>associated.</B> Watches must be destroyed when no longer useful.  For
+example, consider a local variable of type
+<I>watchtype</I> in a subroutine.  Since the contents of a local
+variable are lost when the subroutine returns, the
+watch should be destroyed before returning to the
+calling program.  Failure to destroy watches can lead
+to a memory leak.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>create_watch</B> -- creates a watch
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>destroy_watch</B> -- destroys a watch
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+Watches can optionally be given a name (up to 132
+characters) through an optional argument,
+<I>name,</I> in
+<B>create_watch.</B> This name is used in error messages and
+<B>print_watch</B> to identify the watch in the printed output.
+<P>
+Different applications demand different definitions of
+&#145;&#145;time&#146;&#146;.  M_StopWatch supports four clocks in each
+watch, with each clock measuring a different concept of
+time.  All of them measure time in seconds.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+user -- the amount of CPU time used by the user&#146;s
+program
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+sys -- the amount of CPU time used by the system in
+support of the user&#146;s program
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+cpu -- the total CPU time, i.e., user+sys
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+wall -- the wall clock time, i.e., elapsed real time
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+It is not required that all clocks be used.  A watch
+can be created with any combination of the four clocks.
+You can also specify a set of
+<I>default clocks</I> to be used whenever the clocks are not explicitly
+determined.
+<P>
+Since Fortran 90 does not contain an intrinsic function
+for CPU time, the implementation of the cpu, sys and
+user clocks is system dependent.  Some implementations
+may support only cpu and wall, not user and sys.  Some
+implementations may support only wall.  Since the
+Fortran 90 standard requires the existence of a
+<B>system_clock</B> subroutine, but does not require that it provide clock
+information, it is possible that some implementations
+might not support wall.  Clock availability can be
+determined by
+<B>inquiry_stopwatch.</B> Unavailable clocks will automatically be removed from
+the set of default clocks, but if a clock that is not
+available is explicitly requested, a warning message
+will be generated.
+<P>
+M_StopWatch supports multiple watches simultaneously.
+Often it is useful to perform the same operation on
+several watches.  This is essential for correct
+operation of
+<B>pause_watch</B> and
+<B>end_pause_watch,</B> and can also be convenient for procedures like
+<B>read_watch, print_watch,</B> and
+<B>reset_watch.</B> To facilitate this, M_StopWatch supports the concept of
+<I>watch groups.</I> When calling a M_StopWatch subroutine, a watch group can
+be specified instead of a watch.  The group is
+referenced by a variable of type
+<I>watchgroup.</I> Watch groups must be created before they are used.
+Attempting to use a watch group that has not been
+created will generate a Fortran 90 error, from
+attempting to pass a pointer with undefined association
+status to the Fortran intrinsic function
+<B>associated.</B> Watch groups must be destroyed when no longer useful.
+The watches themselves are not destroyed, only the
+grouping of them.  Failure to destroy watch groups can
+lead to a memory leak.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>create_watchgroup</B> -- creates a new watch group
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>destroy_watchgroup</B> -- destroys a watch group (but not the watches in the
+group)
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+Most M_StopWatch subroutines take
+<I>watch</I> as the first dummy argument, and accept several forms
+of
+<I>watch.</I> The forms are:
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+type (watchtype) watch -- a single watch
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+type (watchtype) watch(:)  -- an array of watches
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+type (watchgroup) watch -- a watch group handle
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+In most M_StopWatch routines, an array of watches can be
+specified by an array constructor in the calling
+statement, for example:
+<P>
+type (watchtype) watch ::  w1, w2, w3
+<P>
+call print_watch( (/w1,w2,w3/) )
+<P>
+However, this can not be used in routines where
+<I>watch</I> has intent OUT or intent INOUT, because the array
+constructor is actually an expression, not a list of
+the variables.  Currently this includes the routines
+<B>create_watch</B> and
+<B>destroy_watch.</B> <P>
+Most M_StopWatch subroutines take
+<I>clock</I> as the (optional) second dummy argument to determine
+which of the four clocks will be affected by the
+action.
+<I>clock</I> can be one of the character strings &#146;user&#146;, &#146;sys&#146;,
+&#39;cpu&#146;, or &#146;wall&#146;, or can be an array of such character
+strings to specify more than one clock.  Since
+<I>clock</I> is always intent IN, an array of clock types can be
+built with an array constructor.  However, note that
+Fortran 90 requires all character strings in such a
+construction to have the same length.  Thus &#146;sys&#146; and
+&#39;cpu&#146; should be padded with a blank, as in:
+<P>
+call start_watch(watch, (/&#146;user&#146;,&#146;sys &#146;,&#146;cpu &#146;/) )
+<P>
+If the optional argument
+<I>clock</I> is omitted, the current set of default clocks is used.
+The set of default clocks is set with
+<B>option_stopwatch</B> and initially consists of all available clocks.
+<P>
+A M_StopWatch watch is operated on by subroutine calls
+that correspond to the actions performed with a common
+stop watch.  The basic operation of a watch involves
+starting it, stopping it, and resetting it to 0.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>start_watch</B> -- starts an idle watch, like the Start/Stop button on
+a stop watch
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>stop_watch</B> -- stops a running watch, like the Start/Stop button on
+a stop watch
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>reset_watch</B> -- sets the clocks on a watch to 0.0, like the Reset
+button on a stop watch
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+Of course, running a stop watch is of little use unless
+you can see what it says.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>read_watch</B> -- returns the current clock value of a watch, like
+looking at the display of a stop watch
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>print_watch</B> -- prints the current clock value of a watch to an
+output device.  To push the analogy to the limit,
+imagine a stop watch with a printer attached to it.
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+The routine
+<B>read_watch</B> is a function subroutine.  The result is either a
+scalar, array of rank one, or array of rank two
+depending on whether
+<I>watch</I> and
+<I>clock</I> are scalars or arrays.
+<P>
+When measuring CPU time, it is often desirable to not
+include the time used by certain parts of the code,
+such as printing or graphics.  In a subroutine, you
+might not know which of the clocks are currently
+running, so you can not simply stop them before the I/O
+and start them up again after the I/O. For this,
+M_StopWatch provides the pause function.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>pause_watch</B> -- temporarily suspend the running watches
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>end_pause_watch</B> -- resume suspended watches
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+Besides
+<B>create_watchgroup</B> and
+<B>destroy_watchgroup,</B> there are two operations that can be performed on
+<I>watchgroup</I> variables:
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>join_watchgroup</B> -- adds a watch to a watch group
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>leave_watchgroup</B> -- removes a watch from a watch group
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+Subroutines are provided to set several options within
+M_StopWatch, to determine the current value of these
+options, and to determine system dependent values of
+the implementation.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>option_stopwatch</B> -- sets options within M_StopWatch.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+<B>inquiry_stopwatch</B> -- returns values of options and system dependent
+values
+<P>
+</TD></TR>
+<TR></TR></TABLE><P>
+See
+<B>option_stopwatch</B>(3)
+and
+<B>inquiry_stopwatch</B>(3)
+for a description of the options and system dependent
+values that can be set and read.
+<P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DIAGNOSTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+All M_StopWatch subroutines take an optional intent OUT
+integer argument
+<I>err</I> which, if present, returns a status code.  The code is
+the sum of the values listed below.
+<P>
+Errors can also be determined through printed error
+messages.  An error message will be printed to a
+specified I/O unit (unit 6 by default) if
+<I>print_errors</I> is TRUE (default is TRUE). The error message contains
+more detail about the cause of the error than can be
+obtained from just the status code, so you should set
+<I>print_errors</I> to TRUE if you have trouble determining the cause of
+the error.
+<P>
+All errors are non-fatal.  If
+<I>abort_errors</I> is TRUE (default is FALSE), the program will terminate
+on an error condition.  Otherwise, the program will
+continue execution but the requested operation will not
+be performed.
+<P>
+See
+<B>option_stopwatch</B>(3)
+for further information on
+<I>print_errors, abort_errors</I> and I/O units.
+<P>
+The relevant status codes and messages are:
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+0
+</TD><TD>
+No errors; execution successful.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+1
+</TD><TD>
+Watch needs to be created.  This error occurs if you
+attempt to use a watch that has been destroyed.  The
+watch must first be created again.  See also the
+comment about watches that have never been created in
+the BUGS section.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+2
+</TD><TD>
+Watch is in the wrong state for this operation.  This
+occurs when you attempt to start a watch that is
+currently running, stop a watch that is not running,
+etc.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+4
+</TD><TD>
+Watch is in an unknown state.  This occurs if M_StopWatch
+does not recognize the state (running, stopped, etc.)
+that the watch is in.  This error should not occur, and
+indicates an internal bug in M_StopWatch.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+8
+</TD><TD>
+Invalid clock type.  This occurs if
+<I>clock</I> is present and one of the specified clocks is not
+supported by the implementation.  See
+<B>inquiry_stopwatch</B>(3)
+to determine what clocks are available.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+16
+</TD><TD>
+Too many clocks specified.  This occurs when the
+argument
+<I>clock</I> is an array longer than four.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+32
+</TD><TD>
+Number of names is not equal to number of watches.
+This occurs in
+<B>create_watch</B> if the array of watch names is not of the same length
+as the array of watches.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+64
+</TD><TD>
+Character string too long.  This occurs when a watch
+name with more than 132 characters is passed into
+<B>create_watch.</B> <P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+128
+</TD><TD>
+Watch not found in given group.  This occurs when you
+attempt to remove a watch from a group that it does not
+belong to.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+256
+</TD><TD>
+I/O unit is not open for writing.  This can occur from
+<B>print_watch</B> or when printing an error message.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+512
+</TD><TD>
+Failed to allocate required memory.  When a M_StopWatch
+routine is called with an array or group of watches,
+temporary memory is allocated.  This error occurs if
+the Fortran
+<B>allocate</B> statement returns a nonzero status indicating that
+memory could not be allocated.  Avoid memory leaks by
+always destroying watches and groups before recreating
+them, and destroying local variable watches and groups
+before returning from a subroutine.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+1024
+</TD><TD>
+Error occurred while deallocating memory.  This error
+occurs if the Fortran
+<B>deallocate</B> statement returns a nonzero status while deallocating
+temporary memory used for an array or group of watches.
+The operation is performed, but be aware that other
+problems could develop as a result of the deallocate
+error.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+2048
+</TD><TD>
+Illegal output form.  This error occurs in
+<B>option_stopwatch</B> or
+<B>print_watch</B> if the given print format is not one of the valid
+strings (see
+<B>print_watch</B>(3)
+).
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+In addition to the run time diagnostics generated by
+M_StopWatch, the following problems may arise:
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+In Fortran 90, the character strings in an array
+constructor must all have the same length.  Pad three
+letter clock names with a blank on the right to make a
+four character string, for example, &#146;cpu &#146;, and pad
+watch names so they all have the same length (within an
+array constructor).
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+In
+<B>create_watch</B> and
+<B>destroy_watch,</B><I> watch</I> has intent OUT or INOUT, so you cannot use an array
+constructor as an actual argument to construct an array
+of watches.  Some compilers will recognize this as a
+compile time error, but will generate an obscure error
+message, such as &#145;&#145;no specific match for generic
+name&#146;&#146;.
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+<P>
+! program demo_M_stopwatch and modules
+! The following times are measured:
+!
+!  o each phase each time through the loop
+!  o total time for each phase
+!  o the total time
+!
+!  There will be printed output that should not be included in the
+!  measured time.
+!
+module globals
+use M_stopwatch
+implicit none
+private
+public :: watchgroup
+public :: setup_watches
+<P>
+! the group with all the watches; global var
+type (watchgroup), public :: ALL_GROUPS
+<P>
+type (watchtype), public, dimension(5) :: w
+! The watches are: w(1) time for phase 1 this time through the loop
+!                  w(2) time for phase 2 this time through the loop
+!                  w(3) total time for phase 1
+!                  w(4) total time for phase 2
+!                  w(5) total time
+! The watch groups are: GROUPS_FOR_ONE phase 1 times w(1) and w(3)
+!                       GROUPS_FOR_TWO phase 2 times w(2) and w(4)
+!                       ALL_GROUPS all of them (declared in module globals)
+type (watchgroup), public :: GROUPS_FOR_ONE, GROUPS_FOR_TWO
+contains
+subroutine setup_watches
+<P>
+   ! Measure only cpu and wall time
+   call option_stopwatch(default_clock=(/"cpu ","wall"/))
+   call create_watch(w,name=(/ "phase 1      ", &      ! create the watches
+                               "phase 2      ", &
+                               "total phase 1", &
+                               "total phase 2", &
+                               "Total        " /) )
+   call create_watchgroup(w(1),GROUPS_FOR_ONE)         ! create the groups
+   call join_watchgroup(w(3),GROUPS_FOR_ONE)
+   call create_watchgroup(w(2:4:2),GROUPS_FOR_TWO)     ! a shorter way
+   call create_watchgroup(w,ALL_GROUPS)
+   call start_watch(w(5))                              ! start the total time
+<P>
+end subroutine setup_watches
+<P>
+end module globals
+<P>
+module workers
+implicit none
+! The routines being measured
+public :: subone
+contains
+<P>
+subroutine subone(n,c) ! just to give us something to time.
+use M_stopwatch
+use globals
+integer, intent(in) :: n
+real, intent(out)   :: c
+integer :: i
+real :: a=2.0,b
+b=real(n)
+do i=1,n
+   c=a*b
+end do
+<P>
+call pause_watch(ALL_GROUPS)
+write(unit=*,fmt=*) "Performed ",n," multiplications"
+call end_pause_watch(ALL_GROUPS)
+<P>
+end subroutine subone
+<P>
+end module workers
+<P>
+program demo_M_stopwatch
+use M_stopwatch
+use globals
+use workers
+implicit none
+<P>
+integer :: i, nmult                ! loop counter, number of multiplies to do
+logical :: cpu_is_there            ! flag for cpu clock
+real    :: zz
+<P>
+call setup_watches()
+<P>
+nmult = 200000
+do i=1,3
+   write(*,&#146;(a)&#146;)repeat(&#146;=&#146;,70)
+   write(*,*)&#146;LOOP&#146;,i,&#146;:&#146;
+   ! reset the watches that measure the time for this loop
+   call reset_watch(w(1:2))
+   ! start the phase 1 watches, do phase 1, and stop the phase 1 watches
+   call start_watch(GROUPS_FOR_ONE)
+   nmult = 5*nmult
+   call subone(nmult,zz)
+   call stop_watch(GROUPS_FOR_ONE)
+<P>
+   call start_watch(GROUPS_FOR_TWO)       ! same for phase 2
+   nmult = 2*nmult
+   call subone(nmult,zz)
+   call stop_watch(GROUPS_FOR_TWO)
+<P>
+! pause the cpu clock of the total time watch while printing the current times,
+! if the cpu clock is available on this implementation, but leave the wall
+! clock running.  The call to inquiry_stopwatch should be outside the loop, but
+! this should make a clearer illustration.
+<P>
+   call inquiry_stopwatch(cpu_avail=cpu_is_there)
+   if (cpu_is_there) then
+      call pause_watch(w(5),"cpu")
+   end if
+<P>
+   write(*,&#146;(a)&#146;)repeat(&#146;-&#146;,70)
+   call print_watch(w(1:2),title="Times for this loop")
+   write(*,&#146;(a)&#146;)repeat(&#146;-&#146;,70)
+   call print_watch(w(3:4),title="Total times so far")
+<P>
+   if (cpu_is_there) then
+      call end_pause_watch(w(5),"cpu")
+   end if
+<P>
+end do
+<P>
+write(*,&#146;(a)&#146;)repeat(&#146;=&#146;,70)
+! print the total times
+call print_watch([w(3),w(4),w(5)],title="Final total times")
+<P>
+write(unit=*,fmt=*)&
+&"Note: the difference between the sum of the first two wall clocks"
+write(unit=*,fmt=*)&
+&"      and the Total wall clock is due to not pausing the wall clock"
+write(unit=*,fmt=*)&
+&"      on the Total watch while printing."
+<P>
+call destroy_watch(w)                ! destroy the watches
+end program demo_M_stopwatch
+</PRE>
+<P>
+Expected output:
+<P>
+<PRE>
+======================================================================
+ LOOP           1 :
+ Performed      1000000  multiplications
+ Performed      2000000  multiplications
+----------------------------------------------------------------------
+Times for this loop
+  phase 1:
+        cpu=    0.00 wall=    0.00
+  phase 2:
+        cpu=    0.01 wall=    0.02
+----------------------------------------------------------------------
+Total times so far
+  total phase 1:
+        cpu=    0.00 wall=    0.00
+  total phase 2:
+        cpu=    0.01 wall=    0.02
+======================================================================
+ LOOP           2 :
+ Performed     10000000  multiplications
+ Performed     20000000  multiplications
+----------------------------------------------------------------------
+Times for this loop
+  phase 1:
+        cpu=    0.05 wall=    0.05
+  phase 2:
+        cpu=    0.11 wall=    0.11
+----------------------------------------------------------------------
+Total times so far
+  total phase 1:
+        cpu=    0.05 wall=    0.05
+  total phase 2:
+        cpu=    0.12 wall=    0.12
+======================================================================
+ LOOP           3 :
+ Performed    100000000  multiplications
+ Performed    200000000  multiplications
+----------------------------------------------------------------------
+Times for this loop
+  phase 1:
+        cpu=    0.49 wall=    0.48
+  phase 2:
+        cpu=    0.97 wall=    0.99
+----------------------------------------------------------------------
+Total times so far
+  total phase 1:
+        cpu=    0.53 wall=    0.53
+  total phase 2:
+        cpu=    1.09 wall=    1.11
+======================================================================
+Final total times
+  total phase 1:
+        cpu=    0.53 wall=    0.53
+  total phase 2:
+        cpu=    1.09 wall=    1.11
+  Total:
+        cpu=    1.62 wall=    1.64
+ Note: the difference between the sum of the first two wall clocks
+       and the Total wall clock is due to not pausing the wall clock
+       on the Total watch while printing.
+</PRE>
+<P>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>ALTERNATIVES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If you simply need to time a certain portion of the code and do not wish to use the
+module the SYSTEM_CLOCK(3f) intrinsic may be sufficient:
+<P>
+<PRE>
+   :
+   :
+call system_clock(count_rate=clock_rate) !Find the time rate
+call system_clock(count=clock_start)     !Start Timer
+<P>
+call do_something_subroutine             !This is what gets timed
+<P>
+call system_clock(count=clock_stop)      ! Stop Timer
+e_time = real(clock_stop-clock_start)/real(clock_rate)
+   :
+   :
+</PRE>
+<P>
+For full timing analysis during the development cycle
+programming environments generally provide a profiler tool.
+<P>
+If you use the GNU compiler, check out gprof.
+In short, you&#146;ll add the -pg flag to your compiler, like so:
+<PRE>
+gfortran -g -pg -0 myprogram myprogram.F
+</PRE>
+Then, run the program and a file called "gmon.out" will be
+generated. Then, for example,  call
+<PRE>
+gprof --line myprogram gmon.out
+</PRE>
+This will give a line-by-line CPU time profile.
+<P>
+<P>
+MPI_WTIME: This is a high resolution wall-clock that will work anywhere
+MPI is available. The downside is that if your program doesn&#146;t already
+use MPI, you&#146;ll have to wrap MPI around it (which isn&#146;t hard). Here is
+a simple example:
+<PRE>
+  include &#146;mpif.h&#146;
+  DOUBLE PRECISION :: start, end
+  start = MPI_Wtime()
+<P>
+  ! code to be timed
+<P>
+  end   = MPI_Wtime()
+  write(*,*) &#146;That took &#146;,end-start,&#146; seconds&#146;
+</PRE>
+<P>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+It cannot be determined whether or not a watch variable
+or watch group has been created (passed as an argument
+to
+<B>create_watch</B> or
+<B>create_watchgroup</B>). If a watch or watch group that has never been created
+is passed into a M_StopWatch subroutine, it might
+generate a Fortran error due to passing a pointer with
+undefined association status to the Fortran intrinsic
+function
+<B>associated.</B> However, some compilers will allow this as an extension
+to the Fortran 90 standard and recognize that the
+pointer is not associated, in which case the &#145;&#145;Watch
+needs to be created&#146;&#146; error message is generated.
+<P>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+V1.0: William F. Mitchell, <A HREF="mailto:william.mitchell@nist.gov">william.mitchell@nist.gov</A> -- January 3, 1997
+National Institute of Standards and Technology
+V1.1: John S. Urban, <A HREF="mailto:urbanjost@comcast.net">urbanjost@comcast.net</A>  -- September 22, 2017
+<P>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+create_watchgroup(3), create_watch(3),
+destroy_watchgroup(3), destroy_watch(3),
+end_pause_watch(3), inquiry_stopwatch(3),
+join_watchgroup(3), leave_watchgroup(3),
+option_stopwatch(3), pause_watch(3), print_watch(3),
+read_watch(3), reset_watch(3), start_watch(3),
+stop_watch(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>M_StopWatch 1.1</I></TD> <TD width=33% align=center>M_STOPWATCH (3)</TD> <TD align=right width=33%><I>September 22, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from M_stopwatch.3m_stopwatch.txt using man macros.</FONT>
+</BODY></HTML>

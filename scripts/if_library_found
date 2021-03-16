@@ -1,0 +1,15 @@
+#!/bin/bash
+###############################################################################
+#@(#) if_library_found.sh(1) : echo library name as -l$NAME if found in current library path (LICENSE:PD)
+
+# V20191124 John S. Urban
+###############################################################################
+# did not pursue using ldconfig -p because command was not on CygWin
+for NAME in $* 
+do
+   #(trap 'rm -f _a.exe' EXIT;ld -l$NAME -o _a.exe 2>/dev/null && printf " -l$NAME"|| echo "Warning : library $NAME not found" 1>&2)
+   (trap 'rm -f _a.exe' EXIT;ld -l$NAME -o _a.exe 2>/dev/null && printf " -l$NAME"|| printf "")
+done
+###############################################################################
+exit
+###############################################################################

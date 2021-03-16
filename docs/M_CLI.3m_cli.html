@@ -1,0 +1,269 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_CLI (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_CLI</B>(3fm) - [ARGUMENTS::M_CLI] command line argument parsing using
+a prototype command and NAMELIST
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>Author</A><BR>
+<A HREF=#5>License</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>use</B> M_CLI, <I>only</I> : commandline, <I>check_commandline</I>
+<B>use</B> M_CLI, <I>only</I> : unnamed, <I>debug</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Allow for command line parsing much like standard Unix command line
+parsing using a simple prototype that looks just like a call to the
+program and NAMELIST.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+This is an extensive example that even adds a procedure that lets you
+interactively edit the NAMELIST values. See the demo programs for more
+basic usage.
+<P>
+Sample program
+<P>
+<PRE>
+   program demo_M_CLI
+   !-! FULL EXAMPLE ADDING HELP AND VERSION TEXT AND INTERACTIVE EXAMPLE
+   use M_CLI,  only : commandline, check_commandline, unnamed
+   implicit none
+   integer                      :: i
+   character(len=:),allocatable :: status
+   character(len=255)           :: message ! use for I/O error messages
+   character(len=:),allocatable :: readme  ! stores updated namelist
+   character(len=:),allocatable :: help_text(:), version_text(:)
+   integer                      :: ios
+<P>
+   real               :: x, y, z  ; namelist /args/ x, y, z
+   real               :: point(3) ; namelist /args/ point
+   character(len=80)  :: title    ; namelist /args/ title
+   logical            :: l, l_    ; namelist /args/ l, l_
+   character(len=*),parameter :: cmd=&
+      &#146; -x 1 -y 2 -z 3 --point -1,-2,-3 --title "my title" -l F -L F &#146;
+<P>
+      !-! PARSING SECTION : SHOULD NOT HAVE TO CHANGE
+      call set() !-! set text values for help
+      readme=commandline(cmd)
+      read(readme,nml=args,iostat=ios,iomsg=message)
+      call check_commandline(ios,message,help_text,version_text)
+      do
+         call readargs(status) ! interactively change NAMELIST group
+         if(status.eq.&#146;stop&#146;)exit
+         call dosomething() ! use the NAMELIST values
+      enddo
+      !-! END PARSING SECTION
+<P>
+      !-! ALL DONE CRACKING THE COMMAND LINE.
+      !-! USE THE VALUES IN YOUR PROGRAM!
+<P>
+      !-! THE OPTIONAL UNNAMED VALUES ON THE COMMAND LINE ARE
+      !-! ACCUMULATED IN THE CHARACTER ARRAY "UNNAMED"
+      if(size(unnamed).gt.0)then
+         write(*,&#146;(a)&#146;)&#146;files:&#146;
+         write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,unnamed(i),&#146;]&#146;,i=1,size(unnamed))
+      endif
+<P>
+   contains
+   subroutine set()
+      help_text=[character(len=80) :: &
+         &#146;NAME                                                    &#146;, &
+         &#146;   myprocedure(1) - make all things possible            &#146;, &
+         &#146;SYNOPSIS                                                &#146;, &
+         &#146;   function myprocedure(stuff)                          &#146;, &
+         &#146;   class(*) :: stuff                                    &#146;, &
+         &#146;DESCRIPTION                                             &#146;, &
+         &#146;   myprocedure(1) makes all things possible given STUFF &#146;, &
+         &#146;OPTIONS                                                 &#146;, &
+         &#146;   STUFF  things to do things to                        &#146;, &
+         &#146;RETURNS                                                 &#146;, &
+         &#146;   MYPROCEDURE  the answers you want                    &#146;, &
+         &#146;EXAMPLE                                                 &#146;, &
+         &#146;&#146; ]
+<P>
+      version_text=[character(len=80) :: &
+         &#146;@(#)PROGRAM:     demo5            &gt;&#146;, &
+         &#146;@(#)DESCRIPTION: My demo program  &gt;&#146;, &
+         &#146;@(#)VERSION:     1.0 20200115     &gt;&#146;, &
+         &#146;@(#)AUTHOR:      me, myself, and I&gt;&#146;, &
+         &#146;@(#)LICENSE:     Public Domain    &gt;&#146;, &
+         &#146;&#146; ]
+   end subroutine set
+   subroutine readargs(status)
+   character(len=:),intent(out),allocatable :: status
+   character(len=256) :: line
+   character(len=256) :: answer
+   integer            :: lun
+   integer            :: ios
+      status=&#146;&#146;
+      write(*,&#146;(a)&#146;)&#146;args&gt;&gt; "." to run, "stop" to end,&
+      & "show" to show keywords, "read","write","sh"&#146;
+      do
+         write(*,&#146;(a)&#146;,advance=&#146;no&#146;)&#146;args&gt;&gt;&#146;
+         read(*,&#146;(a)&#146;)line
+         if(line(1:1).eq.&#146;!&#146;)cycle
+         select case(line)
+          case(&#146;.&#146;)
+            exit
+          case(&#146;show&#146;)
+            write(*,*)&#146;SO FAR&#146;
+            write(*,nml=args)
+            !-! something where you could restrict nml output to just
+            !-! listed names would be nice
+            !-!write(*,nml=args)[&#146;A&#146;,&#146;H&#146;]
+            !-!write(*,nml=*NML)args[&#146;A&#146;,&#146;H&#146;]
+          case(&#146;help&#146;)
+          write(*,&#146;(a)&#146;)[character(len=80) :: &
+          &#146; You are in interactive mode where you can display and change&
+          & your values using&#146;, &
+          &#146; NAMELIST syntax:&#146;, &
+          &#146;  KEYWORD=VALUE(S) - change a variable value&#146;, &
+          &#146;  show             - show current values&#146;, &
+          &#146;  stop             - stop program&#146;, &
+          &#146;  .                - return to program and run&#146;, &
+          &#146;  write FILENAME   - write NAMELIST group to specified file&#146;,&
+          &#146;  read  FILENAME   - read NAMELIST input file&#146;, &
+          &#146;  sh               - start shell process&#146;, &
+          &#146;&#146;, &
+         &#146;&#146; ]
+          case(&#146;stop&#146;)
+            status=&#146;stop&#146;
+            exit
+          case(&#146;sh&#146;)
+            call execute_command_line(&#146;bash&#146;)
+          case(&#146;read&#146;)
+            write(*,&#146;(a)&#146;,advance=&#146;no&#146;)&#146;filename:&#146;
+            read(*,&#146;(a)&#146;,iostat=ios)answer
+            if(ios.ne.0)exit
+            open(file=answer,iostat=ios,newunit=lun)
+            if(ios.ne.0)exit
+            read(lun,args,iostat=ios)
+            close(unit=lun,iostat=ios)
+          case(&#146;write&#146;)
+            write(*,&#146;(a)&#146;,advance=&#146;no&#146;)&#146;filename:&#146;
+            read(*,&#146;(a)&#146;,iostat=ios)answer
+            if(ios.ne.0)exit
+            open(file=answer,iostat=ios,newunit=lun)
+            if(ios.ne.0)exit
+            write(lun,args,iostat=ios)
+            close(unit=lun,iostat=ios)
+          case default
+            UPDATE: block
+               character(len=:),allocatable :: intmp
+               character(len=256)  :: message
+               integer :: ios
+               intmp=&#146;&ARGS &#146;//trim(line)//&#146;/&#146;
+               read(intmp,nml=args,iostat=ios,iomsg=message)
+               if(ios.ne.0)then
+                  write(*,*)&#146;ERROR:&#146;,trim(message)
+               endif
+            endblock UPDATE
+         end select
+      enddo
+   end subroutine readargs
+   subroutine dosomething()
+      ! placeholder
+      write(*,*)&#146;USE ALL THOSE VALUES&#146;
+   end subroutine dosomething
+<P>
+   end program demo_M_CLI
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2019
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_CLI (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e4d7f5ef-ff8f-4200-a998-1bbdccb5f402 using man macros.</FONT>
+<br><br><center><img src="images/M_CLI.3m_cli.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

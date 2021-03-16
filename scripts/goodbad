@@ -1,0 +1,604 @@
+#!/bin/bash
+################################################################################
+#@(#)track which library routines have been built successfully in SQLite database
+################################################################################
+#echo "GOODBAD: $*"
+cd $HOME/LIBRARY || exit
+export TMPFILE=/tmp/$(uuidgen).txt
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+PARSE(){
+#ident  "@(#)parse: crack Unix-like commands (V1.2 19960401 John S. Urban)"
+# Revision 1.0 Copyright (c) 1991, by John S. Urban
+# Revision 1,1 07/19/1991
+usage="$0 basename [ -keyword1 [value1] -keyword2 [value2] [ -keyword3 [value3] ... ]"
+# Like getarg(1) and getargs(1) if those are on your machine
+#
+#  A CALL LIKE THIS PRODUCES THE FOLLOWING OUTPUT:
+#  parse VERBNAME This is what -a one ONE -b two -c three
+#    VERBNAME='This is what'
+#    VERBNAME='one ONE'
+#    VERBNAME='two'
+#
+# You can enter:
+#
+#  eval `parse VERBNAME This is what -a one ONE -b two -c three`
+#  eval `parse VERBNAME $*`
+#  And then just use the expected variable names.
+#  Note that if you use the -prompt switch it should be first and  your
+#  command should do everything in one eval:
+#  eval `parse VERBNAME This is what -a one ONE -b two -c three -00 $*`
+#  Note:
+#        no test for unknown keywords, could make one by always assuming
+#        a default value is not blank, or can use a case statement with all
+#        $BASENAME_* variables looked at
+#
+#        eval can have its risks if used with a SETUID command. So, do not use
+#        this script with one.
+#
+#  Also useful with env(1) and when calling scripts with keywords first.
+#   !/bin/ksh
+#    export `parse TESTIT THIS -a ONE TWO -b "THREE FOUR FIVE" -cxxx OOPS`
+#    env|grep TESTIT
+#    export `parse TESTIT $*`
+#    env|grep TESTIT
+#    exit
+#
+# Produces:
+#    TESTIT_00='THIS'
+#    TESTIT_a='ONE
+#    TESTIT_b='THREE
+#    TESTIT_cxxx='OOPS'
+#    TESTIT_00=''        # Notice how this is blanked out
+#    TESTIT_a='ONE
+#    TESTIT_b='THREE
+#    TESTIT_cxxx='OOPS'
+#-------------------------------------------------------------------------------
+export PARSE_PROMPT=${PARSE_PROMPT:-NO}
+####################################################################################################################################
+OUTVALUE(){
+NAME="$1"
+VALUE="$2"
+if [ "$PARSE_PROMPT" != 'NO' ]
+then
+   echo "${NAME}=${VALUE}" 1>&2
+   printf 'enter new value or <cr>' 1>&2
+   read NEWVALUE <$TTY
+   if [ "$NEWVALUE" != '' ]
+   then
+      VALUE="$NEWVALUE"
+   fi
+fi
+cat <<EOF
+$NAME='${VALUE}'
+EOF
+}
+####################################################################################################################################
+#-------------------------------------------------------------------------------
+if tty -s
+then
+   TTY=`tty`
+fi
+#-------------------------------------------------------------------------------
+if (test $# -eq 0)
+then
+    echo " $usage "
+    exit 1
+fi
+#-------------------------------------------------------------------------------
+BASENAME="$1"
+shift
+#-------------------------------------------------------------------------------
+PATH=/bin:/usr/bin
+export BASENAME KEYWORD VALUE SEP
+#-------------------------------------------------------------------------------
+#
+# Get the parameters
+#
+#-------------------------------------------------------------------------------
+if [ "$*" = '' ]
+then
+        OUTVALUE "${BASENAME}_00"  ''
+        exit
+fi
+#-------------------------------------------------------------------------------
+while test -n "$1"
+do
+  KEYWORD="$1"
+  case "$KEYWORD" in
+#-------------------------------------------------------------------------------
+#
+--)
+   shift
+   OUTVALUE "${BASENAME}_00"  "${*}"
+   exit
+;;
+#-------------------------------------------------------------------------------
+#
+-prompt)
+   shift
+   PROMPT=YES
+;;
+#-------------------------------------------------------------------------------
+-*[\&\;\#~?\`\(\)\\\*\'\"\:)
+# serves em right
+shift
+;;
+#-------------------------------------------------------------------------------
+#      CRACK THE KEYWORDS
+-[a-zA-Z0]*|--[a-zA-Z0]*)
+       if test -n "$2"
+       then
+          VALUE=""
+       else
+          VALUE="DEFAULT"
+       fi
+
+       SEP=''
+       while test -n "$2"
+       do
+              case "$2" in
+              -*)
+                 # $2 was a keyword, not part of name so quit and do not shift
+                 if  test  -z  "$VALUE"
+                 then
+                   VALUE="DEFAULT"
+                 fi
+                 break
+              ;;
+              "")
+                 echo "cannot get here"
+                 break # -f was at the end of the command
+              ;;
+              *)
+                 VALUE="${VALUE}${SEP}${2}" # add the string to the name string
+                 shift
+              ;;
+              esac
+             # echo  "next word = $2, so far = $VALUE"
+             SEP=' '
+       done
+       #  USED TO WRITE MESSAGE TO TERMINAL STATUS LINE (NICE FOR REMINDERS)
+       OUTVALUE "${BASENAME}_${KEYWORD}"  "${VALUE}"| sed -e 's/_--*/_/'
+       shift # make sure shifted for
+;;
+#-------------------------------------------------------------------------------
+*)
+       SEP=' '
+       VALUE=$KEYWORD
+       while test -n "$2"
+       do
+              case "$2" in
+              -*)
+                 # $2 was a keyword, not part of name so quit and do not shift
+                 if  test  -z  "$VALUE"
+                 then
+                   VALUE="DEFAULT"
+                 fi
+                 break
+              ;;
+              "")
+                 echo "cannot get here"
+                 break # -f was at the end of the command
+              ;;
+              *)
+                 VALUE="${VALUE}${SEP}${2}" # add the string to the name string
+                 shift
+              ;;
+              esac
+             # echo  "next word = $2, so far = $VALUE"
+       done
+       # USED TO WRITE MESSAGE TO TERMINAL STATUS LINE (NICE FOR REMINDERS)
+       OUTVALUE "${BASENAME}_00"  "${VALUE}"
+       shift # make sure shifted for
+;;
+#-------------------------------------------------------------------------------
+esac
+#-------------------------------------------------------------------------------
+done
+#-------------------------------------------------------------------------------
+exit
+}
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+DEBUG(){
+cat <<EOF
+<<<<<<<<<<<<<<<<
+ENTRYNAME ...... ${ENTRYNAME}
+DESCRIPTION .... $GOODBAD_description
+DOCUMENTATION .. $GOODBAD_documentation
+FILENAME ....... $GOODBAD_filename
+LIBRARY ........ $GOODBAD_library
+UFPP ........... $GOODBAD_ufpp
+CCALL .......... $GOODBAD_ccall
+ARCHIVE ........ $GOODBAD_archive
+SECTION ........ $GOODBAD_section
+MAN ............ $GOODBAD_man
+>>>>>>>>>>>>>>>>
+
+EOF
+}
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+SHOW(){
+echo "SHOW $*"
+#set -x
+for NAMES_TO_SHOW in $*
+do
+   sqlite3 goodbad.db <<EOF
+-- one item per line
+.mode line
+SELECT * FROM tests WHERE entryname='$NAMES_TO_SHOW';
+EOF
+done
+}
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+# function to display help text
+HELP(){
+cat <<EOF
+================================================================================
+NAME
+      goodbad(1) - maintains a simple sqlite3 database file that is used to record
+                   the results of simple tests run on the routines
+
+SYNOPSIS
+      goodbad  [entryname [status] ]
+               [-edit]
+               [-html]
+               [-delete]
+               [-show LIST]
+               [-help]
+               [-version]
+
+DESCRIPTION
+       entryname [numeric_status]
+
+       Note that a entryname with a leading _ will be ignored
+
+          numeric_status
+       start        means a unit test was begun
+         bad[N]     means a test has failed
+        good[N]     means  a test has passed
+
+       -edit        if specified edit file as simple text file
+       -line        dump in line mode
+       -delete      if specified remove entryname
+       -show        list of entries to show in format NAME.SECTION
+
+       Descriptions:
+
+       -section        section number. Defaults to 3
+       -description
+       -documentation
+       -man            update all descriptions from man(1) pages
+
+       Processing:
+
+       -filename
+       -library
+       -ufpp
+       -ccall
+       -archive
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+EXAMPLE:
+ typical test program:
+    program test_stuff
+    call execute_command_line('goodbad noesc 0')
+    if(TESTISBAD)then
+       call execute_command_line('goodbad noesc bad')
+       stop 1
+    endif
+    if(ANOTHERTESTISBAD)then
+       call execute_command_line('goodbad noesc bad2')
+       stop 2
+    endif
+    ! program was not stopped so a good output
+    call execute_command_line('goodbad noesc 1')
+    end program test_stuff
+================================================================================
+EOF
+}
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+# display version information
+VERSION(){
+cat <<EOF
+COMMAND:    goodbad
+VERSION:    3.0
+DATE:       2016-04-23
+AUTHOR:     John S. Urban
+FILE:       $0
+EOF
+}
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+# display version information
+VERSION(){
+cat <<EOF
+COMMAND:    goodbad
+VERSION:    4.0
+DATE:       2016-10-08
+AUTHOR:     John S. Urban
+FILE:       $0
+EOF
+}
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+CREATE(){
+echo 'creating goodbad'
+sqlite3 goodbad.db <<\EOF
+-- *****************************************************************************
+CREATE TABLE IF NOT EXISTS tests(
+   entryname      TEXT  NOT  NULL  PRIMARY  KEY  ,
+   description    TEXT  ,
+   documentation  TEXT  ,
+   filename       TEXT  ,
+   library        TEXT  ,
+   ufpp           TEXT  ,
+   ccall          TEXT  ,
+   archive        TEXT  ,
+   date           DATE  NOT  NULL  ,
+   status         INT   NOT  NULL  );
+-- *****************************************************************************
+.quit
+EOF
+}
+####################################################################################################################################
+#()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()#
+####################################################################################################################################
+
+####################################################################################################################################
+####################################################################################################################################
+# parse command arguments
+export ALL="$*"
+export GOODBAD_00
+export GOODBAD_version
+export GOODBAD_help
+export GOODBAD_edit
+export GOODBAD_html
+export GOODBAD_delete
+export GOODBAD_section
+export GOODBAD_description
+export GOODBAD_documentation
+export GOODBAD_man
+export GOODBAD_filename
+export GOODBAD_library
+export GOODBAD_ufpp
+export GOODBAD_ccall
+export GOODBAD_archive
+export GOODBAD_show
+export GOODBAD_line
+export DATE=$(date +%Y/%m/%d\ %H:%M:%S)
+ANSWER=$(PARSE GOODBAD \
+	-delete NO \
+	-html NO \
+	-edit NO \
+	-help NO \
+	-version NO \
+        -debug NO \
+        -man NO \
+        -browse NO \
+        -show NO \
+        -line NO \
+        -description \
+        -documentation \
+        -filename \
+        -library \
+        -ufpp \
+        -ccall \
+        -archive  \
+        -section 3 \
+        -00 $*)
+eval ${ANSWER}
+
+export DESCRIPTION="$GOODBAD_description"
+export DOCUMENTATION="$GOODBAD_documentation"
+export MAN_DESCRIPTION="$GOODBAD_man"
+export FILENAME="$GOODBAD_filename"
+export LIBRARY="$GOODBAD_library"
+export UFPP="$GOODBAD_ufpp"
+export CCALL="$GOODBAD_ccall"
+export ARCHIVE="$GOODBAD_archive"
+export SECTION="$GOODBAD_section"
+
+set -- ${GOODBAD_00:-DEFAULT}
+ENTRYNAME=${1}
+#####################################
+# remove double leading underscore entries
+case "$ENTRYNAME" in
+   __*)
+      echo "$ENTRYNAME ignored by $0" 1>&2
+      ENTRYNAME=${ENTRYNAME/_/}
+      exit
+  ;;
+esac
+#####################################
+STATUS=${2:-' '}
+case "$STATUS" in
+bad)STATUS='-1';;
+good)STATUS='1';;
+start)STATUS='0';;
+esac
+STATUS=${STATUS/good/}
+STATUS=${STATUS/bad/-}
+#  0: started
+#  1: passed
+# -1: failed
+
+export ENTRYNAME=${ENTRYNAME}.$SECTION
+################################################################################
+# if debug flag is set display variables set and exit
+if [ "$GOODBAD_debug" != 'NO' ]
+then
+   echo PARAMETERS ARE $ANSWER
+   env |grep '^GOODBAD_'
+   echo "ENTRYNAME=$ENTRYNAME"
+   echo "STATUS=$STATUS"
+   exit
+fi
+####################################################################################################################################
+# display help text if -help parameter is present
+case "$GOODBAD_help" in
+NO);;
+*) HELP; exit;;
+esac
+################################################################################
+# display version text if -version parameter is present
+case "$GOODBAD_version" in
+NO);;
+*) VERSION; exit;;
+esac
+####################################################################################################################################
+# If database does not exist initialize it
+if [ ! -f goodbad.db -o ! -s goodbad.db ]
+then
+	CREATE
+fi
+################################################################################
+# if no parameters specified display database
+if [ "$ALL" = '' ]
+then
+   (
+   sed -e 's/^ *#//' <<EOF
+   #<html><head><title>goodbad</title></head><body>
+   #<table border="1">
+EOF
+   sqlite3 -html -header goodbad.db  'SELECT * FROM tests ORDER BY entryname;'
+   sed -e 's/^ *#//' <<EOF
+   #</table>
+   #</body></html>
+EOF
+)| html2term|more
+#cygstart /tmp/status_$(logname).html
+   exit
+fi
+####################################################################################################################################
+if [ "$GOODBAD_html" != 'NO' ]
+then
+   (
+   sed -e 's/^ *#//' <<EOF
+   #<html><head><title>goodbad</title></head><body>
+   #<table border="1">
+EOF
+   sqlite3 -html -header goodbad.db  'SELECT * FROM tests ORDER BY entryname;'
+   sed -e 's/^ *#//' <<EOF
+   #</table>
+   #</body></html>
+EOF
+)
+#cygstart /tmp/status_$(logname).html
+   exit
+fi
+####################################################################################################################################
+# if -edit switch specified edit file as simple text file
+if [ "$GOODBAD_edit" != 'NO' ]
+then
+   #sqlite3 -header goodbad.db |column --output-separator '|' --separator separators '|' --table > $TMPFILE <<\EOF
+   sqlite3 -header goodbad.db  'SELECT * FROM tests ORDER BY entryname;' > $TMPFILE 
+   vi $TMPFILE && (
+   mv goodbad.db goodbad.db.OLD
+   CREATE
+   sqlite3 goodbad.db ".import $TMPFILE tests"
+   rm -f $TMPFILE )
+   exit
+fi
+####################################################################################################################################
+# if -line switch specified print file as simple text file
+if [ "$GOODBAD_line" != 'NO' ]
+then
+   sqlite3 goodbad.db  <<EOF
+.mode line
+SELECT * FROM tests ORDER BY entryname;
+EOF
+   exit
+fi
+####################################################################################################################################
+# Database schema
+# entryname â|date  â|descriptionâ|documentationâ|filenameâ|libraryâ|ufppâ|ccallâ|archiveâ|status
+################################################################################
+# if -delete switch specified
+if [ "$GOODBAD_delete" != 'NO' ]
+then
+   echo "DELETE FROM tests WHERE entryname='$ENTRYNAME';"
+   sqlite3 goodbad.db "DELETE FROM tests WHERE entryname='$ENTRYNAME' ;"
+   exit
+fi
+################################################################################
+# if -show switch specified
+if [ "$GOODBAD_show" != 'NO' ]
+then
+   SHOW $GOODBAD_show
+   exit
+fi
+################################################################################
+STATUS=${STATUS/ /}
+#------------------------------------------------------------------------------#
+case "${STATUS}${ALL}" in
+DEFAULT*|-[a-zA-Z]*)
+echo 'No status'
+exit
+;;
+*-*)
+   printf "$0: $ENTRYNAME $STATUS $ALL\n"
+   #set -x
+
+   if [ "$STATUS" != '' ]
+   then
+      sqlite3 goodbad.db "INSERT INTO tests ( entryname, date, status ) VALUES ( '$ENTRYNAME'  , '$DATE', $STATUS) ;" >/dev/null 2>&1
+      sqlite3 goodbad.db "UPDATE tests SET entryname='$ENTRYNAME', date='$DATE', status=$STATUS  WHERE entryname='$ENTRYNAME';"
+   else
+      sqlite3 goodbad.db "INSERT INTO tests ( entryname, date ) VALUES ( '$ENTRYNAME'  , '$DATE' ) ;" >/dev/null 2>&1
+      sqlite3 goodbad.db "UPDATE tests SET entryname='$ENTRYNAME', date='$DATE' WHERE entryname='$ENTRYNAME';"
+   fi
+
+   if [ "$DESCRIPTION" != DEFAULT -a "$DESCRIPTION" != '' ] 
+   then
+      sqlite3 goodbad.db "UPDATE tests SET description='$DESCRIPTION' WHERE entryname='$ENTRYNAME';"
+   fi
+   [ "$DOCUMENTATION" != DEFAULT ] && sqlite3 goodbad.db "UPDATE tests SET documentation='$DOCUMENTATION' WHERE entryname='$ENTRYNAME';"
+   [ "$FILENAME" != DEFAULT ]      && sqlite3 goodbad.db "UPDATE tests SET filename='$FILENAME' WHERE entryname='$ENTRYNAME';"
+   [ "$LIBRARY" != DEFAULT ]       && sqlite3 goodbad.db "UPDATE tests SET library='$LIBRARY' WHERE entryname='$ENTRYNAME';"
+   [ "$UFPP" != DEFAULT ]          && sqlite3 goodbad.db "UPDATE tests SET ufpp='$UFPP' WHERE entryname='$ENTRYNAME';"
+   [ "$CCALL" != DEFAULT ]         && sqlite3 goodbad.db "UPDATE tests SET ccall='$CCALL' WHERE entryname='$ENTRYNAME';"
+   [ "$ARCHIVE" != DEFAULT ]       && sqlite3 goodbad.db "UPDATE tests SET archive='$ARCHIVE' WHERE entryname='$ENTRYNAME';"
+
+
+   #echo "data for $ENTRYNAME is"
+   #sqlite3 -header -column goodbad.db  'select * from tests where entryname="'$ENTRYNAME'";'
+   if [ "${STATUS:-0}" -ge 0 ]
+   then
+	   exit 0
+   else
+	   exit 1
+   fi
+;;
+#------------------------------------------------------------------------------#
+*\ good|*\ bad|*\ start|*\ good[0-9]*|*\ bad[0-9])
+;;
+*)
+   echo "[$STATUS $ALL]data for $ENTRYNAME is"
+   SHOW ${ENTRYNAME}
+;;
+#------------------------------------------------------------------------------#
+esac
+################################################################################
+exit
+################################################################################

@@ -1,0 +1,155 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>fortran_recursion (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fortran_recursion</B>(7f) - [FORTRAN] Examples of recursion
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program that does a simple flood fill using recursion
+<P>
+<PRE>
+   program testit
+      integer  :: array(20,50)
+   ! Fill array with rectangles of values
+      array(:,:)=61 ! fill array
+      do  i=  5   ,  15;  do  j=  4   ,  45;  array(i  ,  j)=  43;  enddo;  enddo
+      do  i=  10  ,  12;  do  j=  3   ,  35;  array(i  ,  j)=  45;  enddo;  enddo
+      do  i=  13  ,  18;  do  j=  2   ,  45;  array(i  ,  j)=  45;  enddo;  enddo
+      do  i=  2   ,  10;  do  j=  26  ,  49;  array(i  ,  j)=  45;  enddo;  enddo
+      do  i=  3   ,  8;   do  j=  30  ,  44;  array(i  ,  j)=  42;  enddo;  enddo
+      do  i=  2   ,  2;   do  j=  2   ,  14;  array(i  ,  j)=  45;  enddo;  enddo
+   !  print the array assuming the values can be printed as characters
+      WRITE (*, FMT = &#146;(50a1)&#146;) ((char(array(i,j)),j=1,50,1),i=1,20,1)
+   !  pick a point and flood fill value 45 with value 35
+      call flood_fill(array,10,17,45,35)
+      write(*,&#146;(a)&#146;)
+      WRITE (*, FMT = &#146;(50a1)&#146;) ((char(array(i,j)),j=1,50,1),i=1,20,1)
+   contains
+      recursive subroutine flood_fill(array,y,x,old_attribute,new_attribute)
+   ! Stack-based recursive flood-fill (Four-way)
+   !
+   ! Flood fill, also called seed fill, is an algorithm that determines the
+   ! area connected to a given node in a multi-dimensional array. It is used
+   ! in pixel-based graphics to "bucket" fill connected, similarly-colored
+   ! areas with a different color,
+   !
+   ! The flood fill algorithm takes three parameters: a start node, a target
+   ! color, and a replacement color. The algorithm looks for all nodes in the
+   ! array which are connected to the start node by a path of the target color,
+   ! and changes them to the replacement color.
+   !
+   ! Depending on whether we consider nodes touching at the corners connected
+   ! or not, we have two variations, Eight-way and Four-way, respectively.
+   !
+   ! One implicitly stack-based (recursive) flood-fill implementation (for
+   ! a two-dimensional array) goes as follows:
+   !
+   ! Flood-fill (node, target-color, replacement-color):
+   !  1. If target-color is equal to replacement-color, return.
+   !  2. If the color of node is not equal to target-color, return.
+   !  3. Set the color of node to replacement-color.
+   !  4. Perform Flood-fill (one step to the west of node, target-color, replacement-color).
+   !     Perform Flood-fill (one step to the east of node, target-color, replacement-color).
+   !     Perform Flood-fill (one step to the north of node, target-color, replacement-color).
+   !     Perform Flood-fill (one step to the south of node, target-color, replacement-color).
+   !  5. Return.
+   !
+   ! Though easy to understand, the implementation of the algorithm above
+   ! is impractical in languages and environments where stack space is
+   ! severely constrained. Many other algorithms are available if this is an issue.
+         integer  ::  array(:,:)
+         integer  :: y, x, old_attribute, new_attribute
+         integer  :: test_attribute
+         test_attribute=array(y,x)
+         if(test_attribute.eq.new_attribute) return
+         if(test_attribute.ne.old_attribute) return
+         array(y,x)=new_attribute
+         if(x.gt.1)                call flood_fill(array,y,x-1,old_attribute,new_attribute)
+         if(x.lt.size(array,dim=2))call flood_fill(array,y,x+1,old_attribute,new_attribute)
+         if(y.gt.1)                call flood_fill(array,y-1,x,old_attribute,new_attribute)
+         if(y.lt.size(array,dim=1))call flood_fill(array,y+1,x,old_attribute,new_attribute)
+      end subroutine flood_fill
+   end program testit
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>fortran_recursion (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bfdb3d82-5dc3-4fd2-993e-a84b2ad69281 using man macros.</FONT>
+<br><br><center><img src="images/fortran_recursion.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

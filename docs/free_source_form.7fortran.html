@@ -1,0 +1,321 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>free_source_form (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>free_source_form</B>(7f) - [FORTRAN] syntax of free source form statements, comments, and continuation lines
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+[label] <I>statement</I> [! <I>comment</I>]
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+There are two source forms: free and fixed. Fixed-format is generally
+considered deprecated but is commonly encountered in older codes,
+as all FORTRAN pre-Fortran90 was fixed-form. All new code should be
+generated as free-format without some overwhelming reason, such as
+the need to use fixed-form INCLUDE files, or where it is required to
+be compatible with very old compilers.
+<P>
+Free form and fixed form may not be mixed in the same program unit.
+The means for specifying the source form of a program unit are
+processor dependent. Most commonly, if the file ends if .F or .f it
+is assumed to be fixed-form; a suffix of .f90 or .F90 indicates the
+file is free-format.
+<P>
+In free source form there are no restrictions on where a <I>statement</I> (or
+portion of a <I>statement</I>) may appear within a line. A line may contain
+zero characters. If a line consists entirely of characters of default
+kind, it may contain at most 132 characters. If a line contains any
+character that is not of default kind, the maximum number of characters
+allowed on the line is processor dependent.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BLANK CHARACTERS IN FREE FORM</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+In free source form blank characters shall not appear within
+lexical tokens other than in a character context or in a format
+specification. Blanks may be inserted freely between tokens to improve
+readability; for example, blanks may occur between the tokens that form
+a complex literal constant. A sequence of blank characters outside of
+a character context is equivalent to a single blank character.
+<P>
+A blank shall be used to separate names, constants, or labels from
+adjacent keywords, names, constants, or labels. For example, the
+blanks after REAL, READ, 30, and DO are required in the following:
+<P>
+<PRE>
+    &gt;   REAL X
+    &gt;   READ 10
+    &gt;   30 DO K=1,3
+<P>
+</PRE>
+One or more blanks shall be used to separate adjacent keywords except
+in the following cases, where blanks are optional:
+<P>
+Adjacent keywords where separating blanks are optional
+<P>
+<PRE>
+    &gt;   ALL STOP           &gt;   END IF
+    &gt;   BLOCK DATA         &gt;   END MODULE
+    &gt;   DOUBLE PRECISION   &gt;   END INTERFACE
+    &gt;   ELSEIF             &gt;   END PROCEDURE
+    &gt;   ELSE WHERE         &gt;   END PROGRAM
+    &gt;   END ASSOCIATE      &gt;   END SELECT
+    &gt;   END BLOCK          &gt;   END SUBMODULE
+    &gt;   END BLOCK DATA     &gt;   END SUBROUTINE
+    &gt;   END CRITICAL       &gt;   END TYPE
+    &gt;   END DO             &gt;   END WHERE
+    &gt;   END ENUM           &gt;   GO TO
+    &gt;   END FILE           &gt;   IN OUT
+    &gt;   END FORALL         &gt;   SELECT CASE
+    &gt;   END FUNCTION       &gt;   SELECT TYPE
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FREE FORM COMMENTARY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The character "!" initiates a <I>comment</I> except where it appears within
+a character context. The <I>comment</I>
+extends to the end of the line. If the first nonblank character on
+a line is an "!", the line is a <I>comment</I> line. Lines containing only
+blanks or containing no characters are also <I>comment</I> lines. Comments may
+appear anywhere in a program unit and may precede the first <I>statement</I>
+of a program unit or may follow the last <I>statement</I> of a program
+unit. Comments have no effect on the interpretation of the program unit.
+<P>
+<PRE>
+       NOTE 3.6
+       This part of ISO/IEC 1539 does not restrict the number of
+       consecutive comment lines.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FREE FORM STATEMENT CONTINUATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The character "&" is used to indicate that the current <I>statement</I> is
+continued on the next line that is not a
+<I>comment</I> line. Comment lines cannot be continued; an "&" in a <I>comment</I>
+has no effect. Comments may occur within a continued <I>statement</I>. When
+used for continuation, the "&" is not part of the <I>statement</I>. No line
+shall contain a single "&" as the only nonblank character or as the
+only nonblank character before an "!" that initiates a <I>comment</I>.
+<P>
+If a noncharacter context is to be continued, an "&" shall be the last
+nonblank character on the line, or the last
+nonblank character before an "!". There shall be a later line that is
+not a <I>comment</I>; the <I>statement</I> is continued on the next such line. If
+the first nonblank character on that line is an "&", the <I>statement</I>
+continues at the next character position following that "&"; otherwise,
+it continues with the first character position of that line.
+<P>
+If a lexical token is split across the end of a line, the first nonblank
+character on the first following noncomment
+line shall be an "&" immediately followed by the successive characters
+of the split token.
+<P>
+If a character context is to be continued, an "&" shall be the last
+nonblank character on the line and shall not be
+followed by commentary. There shall be a later line that is not a
+<I>comment</I>; an "&" shall be the first nonblank character on the next such
+line and the <I>statement</I> continues with the next character following that
+"&".
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FREE FORM STATEMENT TERMINATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+If a <I>statement</I> is not continued, a <I>comment</I> or the end of the line
+terminates the <I>statement</I>.
+<P>
+A <I>statement</I> may alternatively be terminated by a ";" character that
+appears other than in a character context
+or in a <I>comment</I>. The ";" is not part of the <I>statement</I>. After a ";"
+terminator, another <I>statement</I> may appear on the same line, or begin
+on that line and be continued. A sequence consisting only of zero
+or more blanks and one or more ";" terminators, in any order, is
+equivalent to a single ";" terminator.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FREE FORM STATEMENTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A label may precede any <I>statement</I> not forming part of another <I>statement</I>
+(Note that no Fortran <I>statement</I> begins with a digit).
+<P>
+It is strongly suggested that numeric labels only be used on CONTINUE
+statements and for labeling FORMAT statements.
+<P>
+A <I>statement</I> shall not have more than 255 continuation lines.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_free_source_form
+   use,intrinsic :: iso_fortran_env, only : ERROR_UNIT, &
+                                            INPUT_UNIT, &
+                                            OUTPUT_UNIT ! access computing environment
+   use iso_fortran_env, only : int8, int32, int64
+   implicit none
+   integer,parameter  :: dp=kind(0.0d0)
+   real(kind=dp),save :: x(10)=0.0_dp
+   character(len=255) :: filename
+   logical            :: lval
+   integer            :: ier
+   integer            :: i_myloop
+   integer            :: i, j, k
+   character(len=*),parameter    :: VERSION=&#146;1.0&#146;
+   character(len=:), allocatable :: mystring
+      call usage()
+      filename=&#146;my file&#146;
+      print *, "filename=", trim(filename)
+   !-----------------------------------------------------------------------
+      MYLOOP: do I_MYLOOP=1,10  ! DO loop
+         cycle MYLOOP           ! start next pass of loop
+         exit  MYLOOP           ! go to next statement after corresponding ENDDO
+      enddo MYLOOP
+   !-----------------------------------------------------------------------
+      block
+         character(len=1) :: c
+         mystring=trim(filename)
+         do i=1,len(mystring)
+            c=mystring(i:i)
+            select case (c)
+             CASE (&#146;a&#146; : &#146;j&#146;);            WRITE(*,*)c, &#146; :One of the first ten letters&#146;
+             CASE (&#146;l&#146; : &#146;p&#146;, &#146;u&#146; : &#146;y&#146;); WRITE(*,*)c, &#146; :One of l, m, n, o, p, u, v, w, x, y&#146;
+             CASE (&#146;z&#146;, &#146;q&#146; : &#146;t&#146;);       WRITE(*,*)c, &#146; :One of z, q, r, s, t&#146;
+             CASE default
+               WRITE(ERROR_UNIT,*)c, &#146; :Other characters, which may not be letters&#146;
+            end select
+         enddo
+         write(*,*)signum([10,20,0,-100])
+         ! mine(3f) is a function that does I/O. Do not use in an I/O statement
+         x=mine(100.40)
+      endblock
+   !-----------------------------------------------------------------------
+   contains
+   ! An integer signum function:
+   elemental integer function signum (n)
+   integer,intent(in) :: n
+     select case (n)
+      case (:-1); signum =    1
+      case (0);   signum = 0
+      case (1:);  signum = 1
+     end select
+   end function signum
+   !-------------------------------------------------------------------------------
+   function mine(xx) result(yy) ! note when RESULT used, function name has no type
+   implicit none
+   real :: xx
+   real :: yy
+     write(*,*)&#146;VALUE=&#146;,xx
+     yy=xx
+   end function mine
+   !-------------------------------------------------------------------------------
+   subroutine usage()
+   character(len=80),allocatable :: help_text(:)
+   integer                       :: i
+     help_text=[ &
+     &&#146;12345678901234567890123456789012345678901234567890123456789012345678901234567890&#146;,&
+     &&#146;This is example help text for the example program                               &#146;,&
+     &&#146;                                                                                &#146;,&
+     &&#146;                                                                                &#146;,&
+     &&#146;                                                                                &#146;]
+     WRITE(*,&#146;(a)&#146;)(help_text(i),i=1,size(help_text))
+   end subroutine usage
+   !-------------------------------------------------------------------------------
+   end program demo_free_source_form
+   !-------------------------------------------------------------------------------
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>free_source_form (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 97e60f6c-06e9-4066-9494-8ce8f09dd5fa using man macros.</FONT>
+<br><br><center><img src="images/free_source_form.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

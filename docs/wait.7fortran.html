@@ -1,0 +1,146 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>wait (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>wait</B>(7f) - [FORTRAN:IO] statement performs a wait operation for specified pending asynchronous data transfer operations
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>WAIT</B>( [UNIT=] file-unit-number,
+<P>
+<PRE>
+     [END=label,] [EOR=label,] [ERR=label,]
+     [ID=scalar-int-expr,] [IOMSG=iomsg-variable,] [IOSTAT=scalar-int-variable]
+     )
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>WAIT</B>(7f) statement performs a wait operation for specified pending
+asynchronous data transfer operations.
+<P>
+The CLOSE, INQUIRE, and file positioning statements may also perform
+wait operations.
+<P>
+Execution of a WAIT statement specifying a unit that does not
+exist, has no file connected to it, or is not open for asynchronous
+input/output is permitted, provided that the WAIT statement has no ID=
+specifier; such a WAIT statement does not cause an error or end-of-file
+condition to occur.
+<P>
+An EOR= specifier has no effect if the pending data transfer operation
+is not a nonadvancing read.
+<P>
+An END= specifier has no effect if the pending data transfer operation
+is not a READ.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+No specifier shall appear more than once in a given wait-spec-list.
+<P>
+<PRE>
+    [UNIT=]file-unit-number     A file-unit-number shall be specified
+                                in a wait-spec-list; if the optional
+                                characters UNIT= are omitted, the
+                                file-unit-number shall be the first item
+                                in the wait-spec-list.
+    END=label, EOR=label, ERR=label   The label in the ERR=, EOR=,
+                                      or END= specifier is a statement
+                                      label of a branch target statement
+                                      that appears in the same scoping
+                                      unit as the WAIT statement.
+    ID=scalar-int-expr   The value of the expression specified in
+                         the ID= specifier shall be the identifier
+                         of a pending data transfer operation for the
+                         specified unit. If the ID= specifier appears, a
+                         wait operation for the specified data transfer
+                         operation is performed. If the ID= specifier is
+                         omitted, wait operations for all pending data
+                         transfers for the specified unit are performed.
+    IOMSG=iomsg-variable  if IOSTAT is not zero, a corresponding message
+                          describing the error
+    IOSTAT=scalar-int-variable  status value indicating if an error occurred.
+                                zero (0) indicates no error occurred.
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>wait (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 739f6b99-ef4c-4df1-a446-c4c454f8ce7c using man macros.</FONT>
+<br><br><center><img src="images/wait.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

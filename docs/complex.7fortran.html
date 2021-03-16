@@ -1,0 +1,243 @@
+<HTML><HEAD>
+<TITLE>complex.7fortran.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>()</NOBR><HR></H1>
+</CENTER>
+<PRE>
+NAME
+   complex(7f) - [FORTRAN] complex variables
+SYNOPSIS
+   complex(kind=NN) :: name
+   complex(kind=NN) :: name=(r,i)
+DESCRIPTION
+   In mathematics, a complex number has a real and an imaginary
+   component. In Fortran, complex numbers are stored as a pair of REAL
+   numbers (the first representing the real part, the following the
+   imaginary part). Using the correct KIND allows for DOUBLEPRECISION
+   COMPLEX values.
+
+   Any expression involving COMPLEX numbers and other numbers is promoted
+   to COMPLEX.
+
+   All of the arithmetic operators can take a COMPLEX number on either
+   side (left hand side or right hand side) of an expression such
+   as LHS=RHS.
+
+   DECLARATION
+   The standard way to declare a complex variable is simply to use the COMPLEX
+   statement:
+
+      COMPLEX myVariable, anotherVariable, anArray(2,3)
+
+   Examples of complex declarations are
+
+      COMPLEX (KIND = KIND(0.0D0)) :: C
+      COMPLEX :: CUBE_ROOT = (-0.5, 0.866)
+
+   CONSTANTS AND EXPRESSIONS
+   Complex constants are specified as "(",a real value, a comma, another real
+   value and ")". Some examples are 1 as (1.0,0.0), i as (0.0,1.0), 2-3i as
+   (2.0,-3.0), and 1000000000i as (0.0,1.0E+09). The same constants can
+   be coded as double-precision complex constants by the simple expedient
+   of using a D in the exponent. Thus, the same constants can be coded
+   in double-precision using (1.0D+00,0.0D+00), (0.0D+00,1.0D+00),
+   (2.0D+00,-3.0D+00), and (0.0D+00,1.0D+09), respectively. Note: This
+   notation cannot be used with variables. For example, (a, b) is invalid.
+
+   Examples of complex constants are
+
+      (1.0, -1.0)
+      (3, 3.1E6)
+      (4.0_4, 3.6E7_8)
+      ( 0.0, PI)  ! where PI is a previously declared named
+                  ! scalar numeric CONSTANT, not a variable.
+
+
+   CMPLX AND DOUBLE PRECISION
+
+   To convert real variables to complex, use the CMPLX function.
+
+   The Fortran 90 language defines CMPLX() as always returning a result
+   that is type COMPLEX(KIND=KIND(0.0)).
+
+   This means `CMPLX(D1,D2)', where `D1' and `D2' are DOUBLEPRECISION,
+   is treated as:
+
+      CMPLX(SNGL(D1), SNGL(D2))
+
+   If you want double-precision complex numbers, you're pretty much
+   stuck with specifying a precision.
+
+   It was necessary for Fortran 90 to specify this behavior for
+   DOUBLEPRECISION arguments, since that is the behavior mandated by
+   FORTRAN 77.
+
+   So Fortran 90 extends the CMPLX() intrinsic by adding an extra argument
+   used to specify the desired kind of complex result.
+
+      integer,parameter :: dp=kind(0.0d0)
+      complex(kind=dp) :: z8
+      !
+      ! NO: result is just real because KIND parameter is not specified
+      !
+      z8 = cmplx(1.2345678901234567d0, 1.2345678901234567d0)       ! note this was stored with default real precision
+      print *, 'NO, Z8=',z8,real(z8),aimag(z8)                     ! notice components are just truncated to real
+      z8 = cmplx(1.2345678901234567e0_dp, 1.2345678901234567e0_dp) ! note works with e0, not d0
+      print *, 'NO, Z8=',z8,real(z8),aimag(z8)                     ! note components are just real
+      !
+      ! YES
+      !
+      z8 = cmplx(1.2345678901234567d0, 1.2345678901234567d0,kind=dp) ! kind= makes it work
+      print *, 'YES, Z8=',z8,real(z8),aimag(z8)
+
+   F2018 COMPONENT SYNTAX
+   The real and imaginary parts of a complex entity can be accessed
+   independently with a component-like syntax in f2018:
+
+   A complex-part-designator is
+
+      designator % RE
+      or
+      designator % IM.
+
+   The designator shall be of complex type.
+
+   So designator%RE designates the real part of a complex value,
+   designator%IM designates the imaginary part of complex value. The
+   type of a complex-part-designator is real, and its kind and shape
+   are those of the designator.
+
+   The following are examples of complex part designators:
+
+       impedance%re           !-- Same value as REAL(impedance)
+       fft%im                 !-- Same value as AIMAG(fft)
+       x%im = 0.0             !-- Sets the imaginary part of X to zero
+
+      program components
+      integer,parameter :: dp=kind(0.0d0)
+      complex(kind=dp) ::  z8
+       z8 = cmplx(1.2345678901234567d0, 1.2345678901234567d0,kind=dp)
+       print *, 'Z8=',z8,z8%re,z8%im
+       print *, real(aimag(z8),kind=dp)
+       print *, real(z8)
+      end program components
+
+   C
+   Your C-compiler can work with complex numbers if it supports the C99
+   standard. Link with -lm. The imaginary unit is represented by I.
+
+        /* check that exp(i * pi) == -1 */
+        #include <math.h>       /* for atan */
+        #include <stdio.h>
+        #include <complex.h>
+
+        int
+        main(void)
+        {
+           double pi = 4 * atan(1.0);
+           double complex z = cexp(I * pi);
+           printf("%f + %f * i\n", creal(z), cimag(z));
+        }
+EXAMPLE
+  Sample program:
+
+   program demo_aimag
+   integer,parameter :: dp=kind(0.0d0)
+   complex          :: z4
+   complex(kind=dp) :: z8
+   real(kind=dp)    :: d8
+      z4 = cmplx(1.2345678901234567d0, 1.2345678901234567d0) ! no kind so values on LHS are converted to default real
+      z8 = cmplx(1.2345678901234567d0, 1.2345678901234567d0,kind=dp) ! kind= makes it work
+   end program demo_aimag
+SEE ALSO
+   o aimag(3f) -  Imaginary part of complex number
+   o cmplx(3f) -  Complex conversion function
+   o conjg(3f) -  Complex conjugate function
+   o real(3f)  -  Convert to real type
+WORKING ON
+  Sample using aimag
+
+   program demo_aimag
+   integer,parameter :: dp=kind(0.0d0)
+   complex          :: z4
+   complex(kind=dp) :: z8
+   real(kind=dp)    :: d8
+   d8 = 1.2345678901234567     ! NO: might be truncated to default real
+   print *, 'NO, D8=',d8
+   d8 = 1.2345678901234567_dp  ! should work; note that only one value was specified
+   print *, 'D8=',d8
+   d8 = 1.2345678901234567d0   ! should work
+   print *, 'D8=',d8
+   ! intuitive and works without calling cmplx(3f) but does not work for variables
+   z8 = (1.2345678901234567d0 , 1.2345678901234567d0 )
+   print *, 'Z8=',z8
+   !=========================================================================================
+   contains
+      function DCOMPLEX(real, imag)
+      end function DCOMPLEX
+
+   end program demo_aimag
+>!
+>!  EXTENSION: COMPLEX function
+>!      A simple way to build a
+>!      complex value out of two numbers, with the precise type of the
+>!      value determined by the types of the two numbers (via the usual
+>!      type-promotion mechanism):
+>!
+>!
+>!      When real and imag are the same REAL types, COMPLEX() performs
+>!      no conversion other than to put them together to form a complex
+>! result of the same (complex version of real) type.
+>
+>
+>
+>       The text CMPLX (X [, Y, KIND]) indicates that Y and KIND are
+>       both optional arguments. Valid reference forms include CMPLX(x),
+>       CMPLX(x, y), CMPLX(x, KIND=kind ), CMPLX(x, y, kind ), and
+>       CMPLX(KIND=kind, X=x, Y=y).
+>
+>      The result values of the intrinsic functions CMPLX and DBLE
+>       are defined by references to the intrinsic function REAL with
+>       the same arguments. Therefore, the padding and truncation of
+>       boz-literal-constant arguments to those intrinsic functions is
+>       the same as for the intrinsic function REAL.
+>
+>   COMPLEX EXPONENTIATION
+>
+> 1 In the case of a complex value raised to a complex power, the value of the operation x1 ** x2 is the principal
+>   value of xx2 .
+>             1
+>
+>    8.2.4      Arithmetic IF statement
+>    R853      arithmetic-if-stmt                 is   IF ( scalar-numeric-expr ) label , label , label
+>
+>    C846      (R853) The scalar-numeric-expr shall not be of type complex.
+>
+> IO
+>   To each data edit descriptor interpreted in a format specification, there corresponds one effective item specified by
+>   the input/output list (9.6.3), except that an input/output list item of type complex requires the interpretation of
+>   two F, E, EN, ES, D, or G edit descriptors.
+>
+>   COMPLEX EDITING
+>
+> 1 A complex datum consists of a pair of separate real data. The editing of a scalar datum of complex type is
+>   specified by two edit descriptors each of which specifies the editing of real data. The first of the edit descriptors
+>   specifies the real part; the second specifies the imaginary part. The two edit descriptors may be different. Control
+>   and character string edit descriptors may be processed between the edit descriptor for the real part and the edit
+>   descriptor for the imaginary part.
+>
+>   LIST-DIRECTED INPUT
+> 5 When the next effective item is of type complex, the input form consists of a left parenthesis followed by an
+>   ordered pair of numeric input fields separated by a comma (if the decimal edit mode is POINT) or semicolon
+>   (if the decimal edit mode is COMMA), and followed by a right parenthesis. The first numeric input field is the
+>   real part of the complex constant and the second is the imaginary part. Each of the numeric input fields may be
+>   preceded or followed by any number of blanks and ends of records. The end of a record may occur after the real
+>   part or before the imaginary part.
+>      print *, 'Z4=',z4,real(z4),aimag(z4)
+>      print *, 'Z4=',z4,z4%re,z4%im
+>   NAMELIST
+</PRE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Manual Page</I></TD> <TD width=33% align=center>()</TD> <TD align=right width=33%><I>Manual Page</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from complex.7fortran.txt (preformatted text).</FONT>
+</BODY></HTML>

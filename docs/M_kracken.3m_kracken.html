@@ -1,0 +1,549 @@
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="Fortran, Fortran code, Fortran source code repository, Fortran library, Fortran archive,         " />
+<meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
+<meta name="keywords" content="Fortran Repository" />
+<meta name="keywords" content="Fortran Collection" />
+<style>
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
+<div id="Container">
+<div id="Content">
+<h1>KRACKEN(3F): The Fortran Command Line Argument Cracker<br><em>(Extended Version)</em></h1>
+
+<p class="synopsis">
+    This version is dependent upon Fortran 2008 features and other GPF (General Purpose Fortran) modules.
+    See the simpler
+    <a href="../../../arguments/src2015/krackenhelp.html"> Fortran 2003 and FORTRAN 77 versions</a>
+    if you are looking for older stable versions that do not require
+    other CLI (Command Line Interface) modules from the GPF collection.
+</p>
+
+<ul>
+   <li><a href="#ABSTRACT">Abstract</a></li>
+   <li><a href="#EX1">Example of typical use </a></li>
+   <li><a href="#DESCRIPTION">Routine Descriptions</a></li>
+   <li><a href="#MENU">Using the interactive menu mode of prompting</a></li>
+   <li><a href="#USAGE"> Usage notes </a></li>
+   <li><a href="#ARGS"> Alternate parsing of the command line arguments</a></li>
+</ul>
+
+<p>
+   To get a demonstration program and the source for the M_kracken module
+   download the
+   <a href="download.html"> source files </a>
+   for the module, other modules it is dependent on, and many example
+   programs that call KRACKEN(3f).
+</p>
+
+<h2><a name="NAME">NAME</a></h2>
+<p>
+   M_kracken(3fm) - [ARGUMENTS:M_kracken] parse command line options of Fortran programs using Unix-like syntax
+   (LICENSE:PD)
+</p>
+
+<h2><a name="ABSTRACT">ABSTRACT</a></h2>
+
+<p>
+   KRACKEN(3f) is a Fortran command line argument parser designed to
+   provide for easy entry of lists of negative numbers, strings, and
+   exponential numbers without generally requiring quotes on the command
+   line. It provides:
+</p>
+
+<ul>
+   <li> a standard Unix-like style for parsing arguments and keywords </li>
+   <li> a clear way to specify allowable keywords and default values </li>
+   <li> simple access to the parsed data from procedures </li>
+   <li> easy conversion from strings to numbers </li>
+   <li> easy conversion from strings to arrays </li>
+   <li> a simple menu-driven interactive mode for modifying parameters </li>
+</ul>
+
+<p>
+   You can call your command like this:
+</p>
+
+<pre>
+ mycode -r 333.333 -file /home/testin -l -i 300
+</pre>
+
+<p>
+   with <em>very</em> little code:
+</p>
+
+<h2><a name="EX1">Example Usage</a></h2>
+
+<pre>
+<B><FONT COLOR="#A020F0">program</FONT></B> myprogram
+
+   use M_kracken
+   <B><FONT COLOR="#228B22">character</FONT></B>(255) filename
+   <B><FONT COLOR="#228B22">logical</FONT></B> lval
+   !  define command arguments, default values and crack command line
+   <B><FONT COLOR="#A020F0">call</FONT></B> kracken(<B><FONT COLOR="#BC8F8F">'cmd'</FONT></B>,<B><FONT COLOR="#BC8F8F">'-i 10 -r 10e3 -d 4.1123344d0 -l .false. -file input'</FONT></B>)
+   !  get values
+   <B><FONT COLOR="#A020F0">call</FONT></B> retrev(<B><FONT COLOR="#BC8F8F">'cmd_f'</FONT></B>,filename,iflen,ier) ! get -f FILENAME
+   lval = lget(<B><FONT COLOR="#BC8F8F">'cmd_l'</FONT></B>)                    ! get -l present?
+   rval = rget(<B><FONT COLOR="#BC8F8F">'cmd_r'</FONT></B>)                    ! get -r RVAL
+   dval = dget(<B><FONT COLOR="#BC8F8F">'cmd_d'</FONT></B>)                    ! get -d DBLEVAL
+   ival = iget(<B><FONT COLOR="#BC8F8F">'cmd_i'</FONT></B>)                    ! get -i IVAL
+   !  all done parsing; <B><FONT COLOR="#A020F0">do</FONT></B> something with the values
+   <B><FONT COLOR="#A020F0">print</FONT></B> *, &quot;filename=&quot;,filename(:iflen)
+   <B><FONT COLOR="#A020F0">print</FONT></B> *, &quot; i=&quot;,ival, &quot; r=&quot;,rval, &quot; l=&quot;,lval, &quot;d=&quot;,dval
+<B><FONT COLOR="#A020F0">end</FONT></B> <B><FONT COLOR="#A020F0">program</FONT></B> myprogram
+</pre>
+
+<p>
+   See the documentation for the procedures for detailed descriptions.
+   Each procedure description includes a working example program.
+</p>
+
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<h2><a name="DESCRIPTION">The Routines</a></h2>
+
+</ul>
+   <li><a href="kracken.3.html">kracken</a> define command options and defaults and parse command line</li>
+   <li><a href="retrev.3.html">retrev</a> get value for a keyword as a string </li>
+</ul>
+
+<p>
+   The returned strings obtained by calls to RETREV(3f) can be converted
+   to numeric values using procedures from the M_strings(3fm) module such
+   as STRING_TO_VALUE(3F), which converts strings to a numeric value,
+   and SPLIT(3F), which can break a string into a list of words. But
+   more commonly, the following convenience routines are used ...
+</p>
+
+<p>
+   There are scalar convenience functions for getting simple values that are
+   used in most cases as an alternative to RETREV(3f) that convert the values
+   directly to common scalar types:
+</p>
+
+<pre>
+      lval=<a href="lget.3.html">lget</a>(VERB_ARGNAME)</a> !gets a "logical" value.
+      rval=<a href="rget.3.html">rget</a>(VERB_ARGNAME)</a> !gets a "real" value.
+      dval=<a href="dget.3.html">dget</a>(VERB_ARGNAME)</a> !gets a "doubleprecision" value.
+      ival=<a href="iget.3.html">iget</a>(VERB_ARGNAME)</a> !gets a "integer" value
+      sval=<a href="sget.3.html">sget</a>(VERB_ARGNAME)</a> !gets a "character" value
+</pre>
+
+<p>
+   There are also convenience routines for returning arrays of scalar values
+   that typically use allocatable arrays. Just add 's' to the end of
+   the scalar convenience functions.
+</p>
+
+<pre>
+      lvals=<a href="lgets.3.html">lgets(VERB_ARGNAME)</a> !gets a "logical" array.
+      rvals=<a href="rgets.3.html">rgets(VERB_ARGNAME)</a> !gets a "real" array.
+      dvals=<a href="dgets.3.html">dgets(VERB_ARGNAME)</a> !gets a "doubleprecision" array.
+      ivals=<a href="igets.3.html">igets(VERB_ARGNAME)</a> !gets a "integer" array
+      svals=<a href="sgets.3.html">sgets(VERB_ARGNAME)</a> !gets a "character" array
+</pre>
+
+<h3>SPECIAL-PURPOSE PUBLIC ROUTINES:</h3>
+
+<h4> Setting command prompts</h4>
+
+<pre>
+   public :: setprompts             ! define prompts for commands in interactive mode
+</pre>
+
+<h4> Only needed for parsing input files, not cracking command line arguments</h4>
+
+<pre>
+   <a href="dissect.3.html">dissect</a>  ! for user-defined commands: define defaults, then process user input
+   <a href="parse.3.html">parse</a>    ! parse user command and store tokens into Language Dictionary
+   <a href="store.3.html">store</a>    ! replace dictionary name's value (if allow=add add name if necessary)
+   <a href="show.3.html">show</a>     ! display dictionary contents for information
+</pre>
+
+<h4> length of verbs and entries in Language dictionary</h4>
+
+<p>
+ NOTE:   many parameters may be  reduced in size so as to just accommodate being used as a command line parser.
+         In particular, some might want to change:
+</p>
+
+<pre>
+   logical,public            :: stop_command=.false. ! indication to return stop_command as false in interactive mode
+   integer, parameter,public :: IPvalue=4096*16      ! length of keyword value
+   integer, parameter,public :: IPverb=20            ! length of verb
+   character(len=1),save,public         :: kracken_comment='#'
+   character(len=:),allocatable,public  :: leftover                 ! remaining command(s) on line
+   integer,public,save                  :: current_command_length=0 ! length of options for current command
+</pre>
+
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<h2><a name="MENU">Interactive menu mode</a></h2>
+
+<p>
+   The menu mode feature is in a state of flux and may change significantly ...
+</p>
+
+<p>
+   All commands automatically have the parameter "-?". If it is present, a menu
+   appears after any specified options have been applied that allows for changing
+   parameters interactively.
+</p>
+
+<p>
+   The default prompts are the keywords themselves and their current
+   values. To set your own prompts call SETPROMPTS(3f):
+</p>
+
+<pre>
+   call setprompts(verb_name,options_and_prompts)
+</pre>
+
+<p>
+   where the special prompt string "#N#" means to not allow prompting
+   for this parameter. For example:
+</p>
+
+<pre>
+     ! set prompts for interactive mode ...
+     call setprompts('copy','                           &
+     & -oo "#N#"                                        &
+     & -i Enter input file name                         &
+     & -o Enter output file name                        &
+     & -version "#N#"                                   &
+     & -help "#N#"                                      &
+     & ')
+     call kracken('copy','-i -o -version .false. -help .false')
+</pre>
+<p>
+   Then the command
+   <pre>
+      copy -?
+   </pre>
+   would only prompt for the -i and -o parameters.
+</p>
+
+<p>
+   A description on how to use the menu mode can be generated by
+   entering a question mark ("?") at the prompt once menu mode
+   has been invoked.
+</p>
+
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<h2><a name="USAGE">Usage Notes</a></h2>
+
+<h3> the reserved -oo keyword</h3>
+
+<p>
+   Everything before any switch is always referred to as 'VERB_oo'
+   in RETREV(3f). This same value can also be set later in the
+   command line by using the reserved keyword -oo (or the alias --).
+   Often, you can ignore it exists, but the -oo option is always there.
+   Unlike other parameters a default value is ignored unless no parameters
+   are specified on the command line. That is, in general do not set
+   a default value for the -oo parameter. It should almost always be
+   initially a blank string.
+</p>
+
+<p>
+   Note that you can just put the calls to RETREV() or the convenience
+   routines where you need the information in your program instead of
+   parsing everything in a single routine. But parsing them and storing
+   them into a COMMON or MODULE is more efficient if the routine doing
+   the parsing is called many times.
+</p>
+<pre>
+  Sample showing -oo parameter and retrieving data in subroutines
+
+     program demo_M_kracken
+     use M_kracken, only : kracken
+     ! define and crack command line arguments
+     call kracken('cmd',' DEFAULT STRING -x 123 -y 456 ')
+     call showstring()
+     call showvalue()
+     contains
+
+     subroutine showstring()
+     use M_kracken, only : sget
+     character(len=:),allocatable :: string
+     ! get value of string before any switch
+     string=trim(sget('cmd_oo'))
+     write(*,*)'string is ',string
+     end subroutine showstring
+
+     subroutine showvalue()
+     use M_kracken, only : rget
+     ! show values for -x and -y parameters
+     x=rget('cmd_x')
+     y=rget('cmd_y')
+     write(*,*)' X and Y are ',x,y
+     end subroutine showvalue
+
+     end program demo_M_kracken
+
+      xxx
+       string is DEFAULT STRING
+        X and Y are    123.000000       456.000000
+
+      xxx -x 987.653992
+       string is
+        X and Y are    987.653992       456.000000
+
+      xxx -oo BBBB -oo CCCC
+       string is BBBB CCCC
+        X and Y are    123.000000       456.000000
+
+      xxx AAAA BBBB -oo CCCC
+       string is AAAA BBBB CCCC
+        X and Y are    123.000000       456.000000
+</pre>
+
+<p>
+   You may note that the parsing rules are not identical to Unix, although very similar.
+<p>
+
+<pre>
+SYNTAX:
+verb[-oo|--] value for kw_oo  [-kw1 value_for_kw1] [-kw2 value_for_kw2] [-kw3 value_for_kw3] ...
+where
+  "kw" stands for a keyword name
+</pre>
+
+<ul>
+   <li> Quotes are rarely needed. A keyword is assumed whenever " -[A-Za-Z]"
+        (space followed by dash followed by letter) is encountered. So
+        <pre>
+        cmd -title This is my title -value 10.3e2
+        </pre>
+        would produce a value of "This is my title" for dictionary value "cmd_title".
+        This does mean if your value contains " -letter" you must quote your command such
+        that the program sees the string surrounded with double-quotes. Depending on the
+        shell you are using this can be awkward. For example, in the bash shell you might
+        use
+        <pre>
+        cmd -title '"-A is a bad title to need"'
+        cmd -title /"-A is a bad title to need/"
+        </pre>
+   </li>
+   <li>
+      The keyword -oo is implied after the verb.
+   </li>
+   <li>
+      There is no way to terminate a keyword value except by starting
+      a new keyword. This means when you use shell globbing you often
+      want filenames to be the <em>first</em> parameter (and dictionary
+      "cmd_oo" will hold the filenames):
+      <pre>
+        cmd * -value 10.3e2
+      </pre>
+      Many (but not all) Unix commands have such values allowed
+      wherever another value is not allowed (Surprised? "ls -r *
+      -l" works as well as "ls -r -l *" .). This is why quoting and
+      specification of which keywords require values  and which
+      do not is usually required on Unix commands. Alternatively, just
+      ignore the -oo field and always require keywords for all values.
+   </li>
+
+   <li>
+      You cannot combine keywords (-ir is not equivalent to -i -r,
+      which is sometimes allowed on Unix commands).
+   </li>
+
+   <li>
+      Although this is rarely needed in practice, You may find the
+      way to include a literal double-quote character (") as part
+      of an input value is the most unlike Unix -- Double the
+      double-quote. Again, shells
+      often expand double-quotes, so in the bash(1) shell you
+      might have to enter
+      <pre>
+         cmd  -string \"\"
+      </pre>
+      to give the "cmd_string" dictionary value the simple value '"'.
+   </li>
+
+   <li>
+      --KEYWORD is equivalent to -KEYWORD; primarily so that the --version and --help options
+      are easily supported.
+   </li>
+
+   <li>
+      If a keyword is specified multiple times the values are
+      concatenated into a single value with a space delimiter between
+      the values. That is,
+      <pre>
+      cmd -D 10 -D 20 -D 30
+      </pre>
+      would set the dictionary variable "cmd_D" to '10 20 30'.
+   </li>
+   <li>
+      All commands automatically have the -? keyword, which evokes interactive menu mode.
+   </li>
+
+</ul>
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<h2><a name="ARGS">Alternate command line input syntax</a></h2>
+
+<p>
+     If you actually prefer quoting your arguments and having your unnamed
+     variables at the end of your command and support for the "--" option
+     supported by some GNU and Unix commands you can set the command
+     line parsing option "style='args'". This will <em>not</em> change
+     how you specify the parameters to the kracken(3f) command except
+     possibly for Boolean switches, but allows for entering commands in
+     a manner more like the C routine getopts(3c). If you turn the mode
+     on the "-oo" parameter is ignored unless you specifically assign
+     it a value by name; the values need quoted if they contain spaces
+     and the option "--" specifies that the rest of the command line is
+     composed of unnamed strings.
+
+     The unnamed values will go into the CHARACTER array "unnamed".
+     The way the command line input is parsed is the same as in the
+     M_args(3f) module.
+
+     That
+     means instead of entering:
+</p>
+<xmp>
+     program show_standard
+     use M_kracken, only : kracken, sgets, rget, sget, lget
+     implicit none
+     character(len=:),allocatable :: files(:)
+     character(len=:),allocatable :: title
+     real :: x,y
+     integer :: i
+     ! define and crack command line arguments
+     call kracken('cmd',' --title this is my title -x 123 -y 456 --help .false.')
+
+     title=sget('cmd_title')
+     x=rget('cmd_x')
+     y=rget('cmd_y')
+     write(*,*)'help=',lget('cmd_help')
+     write(*,*)' title is ',title
+     write(*,*)' x and y are ',x,y
+     ! get value of string before any switch
+     files=sgets('cmd_oo')
+     if(size(files).gt.0)then
+        do i=1,size(files)
+           write(*,*)i,files(i)
+        enddo
+     endif
+     end program show_standard
+</xmp>
+<p>
+    Add "style='args'" to the kracken call and "unnamed" from the
+    M_kracken(3fm) module, and the unnamed values will be in the
+    string array "unnamed" instead of obtained from something like
+    "sgets('cmd_oo').
+
+</p>
+
+<p>
+    With "style='args' other differences are in how you specify your
+    command prototype. You MUST use the string ".false." for any boolean
+    switch variable default value; and basically the values ".true." and
+    ".false." are reserved, regardless of case. This is normally how you
+    specify booleans anyway; but in the default style you can set your
+    default to ".true." or use other values for ".false." like "F" or
+    ".F.".
+</p>
+
+<p>
+    The way the arguments will then be read upon input are the same as
+    described in the M_args(3fm) module.
+</p>
+
+<xmp>
+     program show_alternate
+     use M_kracken, only : kracken, sget, rget, lget
+     USE M_KRACKEN, ONLY : UNNAMED
+     implicit none
+     character(len=:),allocatable :: title
+     real :: x,y
+     integer :: i
+     ! define and crack command line arguments
+     !
+     !
+     call kracken('cmd',' --title this is my title &
+      & -x 123 -y 456 --help .false.',style='args')
+     title=sget('cmd_title')
+     x=rget('cmd_x')
+     y=rget('cmd_y')
+     write(*,*)'help=',lget('cmd_help')
+     write(*,*)' title is ',title
+     write(*,*)' x and y are ',x,y
+
+     IF(SIZE(UNNAMED).GT.0)THEN
+        DO I=1,SIZE(UNNAMED)
+           WRITE(*,*)I,UNNAMED(I)
+        ENDDO
+     ENDIF
+     end program show_alternate
+</xmp>
+
+<pre>
+ Sample usage:
+
+    # first program uses default M_kracken parsing
+
+       cmd *.f90 -x 100 --title A new title -y 200
+
+    # or
+
+       cmd -x 100 --title A new title -y 200 -oo *.f90
+
+    # second program uses alternate command-line parsing.
+    # the unnamed values go into the string array
+    # UNNAMED but can appear anywhere on the command.
+    # multi-word values require being quoted.
+
+    cmd -x 100 -y 200 --title 'A new title' *.f90
+</pre>
+
+<blockquote>
+Contributors:<br/>
+   <author>
+   <ul>
+      <li> John S. Urban -- Author (last change: Oct. 2019) </li>
+      <li> Felix Becker  -- Enhancements to reduce limitations on parameter lengths (2013-05-28) </li>
+      <li> Walid Keyrouz -- Upgrades to bring code into conformance with recommended practices (2013-12-06) </li>
+   </ul>
+   </author>
+</blockquote>
+<div style="visibility:hidden;"> <xmp>.fi</xmp </div>
+</div>
+</div>
+</div>
+</body>
+</html>

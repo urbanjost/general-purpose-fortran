@@ -1,0 +1,274 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>pure (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>pure</B>(7f) - [FORTRAN:SPECIFICATION ATTRIBUTE] Pure procedures
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+pure <B>subroutine</B>()
+pure <B>function</B>()
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A pure procedure is
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: A pure procedure is
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a pure intrinsic procedure (13.1), defined by a pure subprogram,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a dummy procedure that has been specified to be PURE, or
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a statement function that references only pure functions.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+A pure subprogram is a subprogram that has the prefix-spec PURE, or
+has the prefix-spec ELEMENTAL and does not have the prefix-spec
+IMPURE. The following additional constraints apply to pure subprograms.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: A pure subprogram is a subprogram that has the prefix-spec PURE, or
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The specification-part of a pure function subprogram shall specify
+that all its nonpointer dummy data objects have <B>INTENT</B>(IN).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The specification-part of a pure subroutine subprogram shall
+specify the intents of all its nonpointer dummy data objects.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A local variable of a pure subprogram, or of a BLOCK construct
+within a pure subprogram, shall not have the SAVE attribute.
+<P>
+Variable initialization in a type-declaration-stmt or a data-stmt
+implies the SAVE attribute; therefore, such initialization is
+also disallowed.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The specification-part of a pure subprogram shall specify that
+all its dummy procedures are pure.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If a procedure that is neither an intrinsic procedure nor a
+statement function is used in a context that requires
+it to be pure, then its interface shall be explicit in the scope of
+that use. The interface shall specify that the procedure is pure.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+All internal subprograms in a pure subprogram shall be pure.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+In a pure subprogram any designator with a base object that is
+in common or accessed by host or use
+association, is a dummy argument of a pure function, is a dummy
+argument with <B>INTENT</B>(IN) of a pure subroutine, is a coindexed
+object, or an object that is storage associated with any such
+variable, shall not be used
+<TABLE width=100% cellpadding=3><!-- tsb: In a pure subprogram any designator with a base object that is
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+in a variable definition context (16.6.7),
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+as the data-target in a pointer-assignment-stmt,
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+as the expr corresponding to a component with the POINTER
+attribute in a structure-constructor ,
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+as the expr of an intrinsic assignment statement in which
+the variable is of a derived type if the derived type has a
+pointer component at any level of component selection, or
+</TD></TR>
+<TR valign=top><TD width=4%>
+5.
+</TD><TD>
+as an actual argument corresponding to a dummy argument with
+<B>INTENT</B>(OUT) or <B>INTENT</B>(INOUT) or with the POINTER attribute.
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>NOTE 12.50
+Item 3 requires that processors be able to determine if entities
+with the PRIVATE attribute or with private components have a
+pointer component.
+<TABLE cellpadding=3><!-- tsb: NOTE 12.50
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Any procedure referenced in a pure subprogram, including one
+referenced via a defined operation, defined assignment, defined
+input/output, or finalization, shall be pure.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A pure subprogram shall not contain a print-stmt, open-stmt,
+close-stmt, backspace-stmt, endfile-stmt, rewind-stmt, flush-stmt,
+wait-stmt, or inquire-stmt.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A pure subprogram shall not contain a read-stmt or write-stmt
+whose io-unit is a file-unit-number or *.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A pure subprogram shall not contain a stop-stmt or allstop-stmt.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A pure subprogram shall not contain an image control statement
+(8.5.1).
+<P>
+NOTE 12.51
+<P>
+The above constraints are designed to guarantee that a pure procedure
+is free from side effects (modifications of data visible outside
+the procedure), which means that it is safe to reference it in
+constructs such as a FORALL assignment-stmt or a DO CONCURRENT
+construct, where there is no explicit order of evaluation.
+<P>
+The constraints on pure subprograms may appear complicated, but it
+is not necessary for a programmer to be intimately familiar with
+them. From the programmer&#146;s point of view, these constraints can
+be summarized as follows: a pure subprogram shall not contain any
+operation that could conceivably result in an assignment or pointer
+assignment to a common variable, a variable accessed by use or host
+association, or an INTENT (IN) dummy argument; nor shall a pure
+subprogram contain any operation that could conceivably perform any
+external file input/output or STOP operation. Note the use of the
+word conceivably; it is not sufficient for a pure subprogram merely
+to be side-effect free in practice. For example, a function that
+contains an assignment to a global variable but in a block that
+is not executed in any invocation of the function is nevertheless
+not a pure function. The exclusion of functions of this nature is
+required if strict compile-time checking is to be used.
+<P>
+It is expected that most library procedures will conform to the
+constraints required of pure procedures, and so can be declared pure
+and referenced in FORALL statements and constructs, DO CONCURRENT
+constructs, and within user-defined pure procedures.
+<P>
+NOTE 12.52
+<P>
+Pure subroutines are included to allow subroutine calls from pure
+procedures in a safe way, and to allow forall-assignment-stmts to
+be defined assignments. The constraints for pure subroutines are
+based on the same principles as for pure functions, except that
+side effects to INTENT (OUT), INTENT (INOUT), and pointer dummy
+arguments are permitted.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>pure (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from efedb618-11e4-426f-a66a-5cb31ad28d07 using man macros.</FONT>
+<br><br><center><img src="images/pure.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

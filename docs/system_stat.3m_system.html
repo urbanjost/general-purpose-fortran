@@ -1,0 +1,256 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>system_stat (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+SYSTEM_STAT - [M_system:QUERY_FILE] Get file status information
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+CALL <B>SYSTEM_STAT</B>(NAME, VALUES [, STATUS],[DEBUG])
+<P>
+<PRE>
+   character(len=*),intent(in)          :: NAME
+   integer(kind=int64),intent(out)      :: values(13)
+   integer,optional,intent(out)         :: status
+   integer,intent(in)                   :: debug
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+This function returns information about a file. No permissions are
+required on the file itself, but execute (search) permission is required
+on all of the directories in path that lead to the file. The elements
+that are obtained and stored in the array VALUES:
+<P>
+<PRE>
+      VALUES(1) Device ID
+      VALUES(2) Inode number
+      VALUES(3) File mode
+      VALUES(4) Number of links
+      VALUES(5) Owner&#146;s uid
+      VALUES(6) Owner&#146;s gid
+      VALUES(7) ID of device containing directory entry for file (0 if not available)
+      VALUES(8) File size (bytes)
+      VALUES(9) Last access time as a Unix Epoch time rounded to seconds
+      VALUES(10) Last modification time as a Unix Epoch time rounded to seconds
+      VALUES(11) Last file status change time as a Unix Epoch time rounded to seconds
+      VALUES(12) Preferred I/O block size (-1 if not available)
+      VALUES(13) Number of blocks allocated (-1 if not available)
+<P>
+</PRE>
+Not all these elements are relevant on all systems. If an element is
+not relevant, it is returned as 0.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>NAME</B> </TD><TD valign=bottom>
+The type shall be CHARACTER, of the default kind and a valid
+path within the file system.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>VALUES</B> </TD><TD valign=bottom>
+The type shall be <B>INTEGER</B>(8), <B>DIMENSION</B>(13).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>STATUS</B> </TD><TD valign=bottom>
+(Optional) status flag of type <B>INTEGER</B>(4). Returns 0 on success
+and a system specific error code otherwise.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>DEBUG</B> </TD><TD valign=bottom>
+(Optional) print values being returned from C routine being
+called if value of 0 is used
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+program demo_system_stat
+<P>
+<PRE>
+   use M_system, only : system_stat, system_getpwuid, system_getgrgid
+   use M_time, only :   fmtdate, u2d
+   use, intrinsic :: iso_fortran_env, only : int32, int64
+   implicit none
+<P>
+   integer(kind=int64)  :: buff(13)
+   integer(kind=int32)  :: status
+   character(len=*),parameter :: fmt_date=&#146;year-month-day hour:minute:second&#146;
+<P>
+   integer(kind=int64) :: &
+    Device_ID, Inode_number,     File_mode, Number_of_links, Owner_uid,        &
+    Owner_gid, Directory_device, File_size, Last_access,     Last_modification,&
+    Last_status_change,  Preferred_block_size,  Number_of_blocks_allocated
+   equivalence                                    &
+      ( buff(1)  , Device_ID                  ) , &
+      ( buff(2)  , Inode_number               ) , &
+      ( buff(3)  , File_mode                  ) , &
+      ( buff(4)  , Number_of_links            ) , &
+      ( buff(5)  , Owner_uid                  ) , &
+      ( buff(6)  , Owner_gid                  ) , &
+      ( buff(7)  , Directory_device           ) , &
+      ( buff(8)  , File_size                  ) , &
+      ( buff(9)  , Last_access                ) , &
+      ( buff(10) , Last_modification          ) , &
+      ( buff(11) , Last_status_change         ) , &
+      ( buff(12) , Preferred_block_size       ) , &
+      ( buff(13) , Number_of_blocks_allocated )
+<P>
+   CALL SYSTEM_STAT("/etc/hosts", buff, status)
+<P>
+   if (status == 0) then
+      write (*, FMT="(&#146;Device ID(hex/decimal):&#146;,      &
+      & T30, Z0,&#146;h/&#146;,I0,&#146;d&#146;)") buff(1),buff(1)
+      write (*, FMT="(&#146;Inode number:&#146;,                &
+      & T30, I0)") buff(2)
+      write (*, FMT="(&#146;File mode (octal):&#146;,           &
+      & T30, O19)") buff(3)
+      write (*, FMT="(&#146;Number of links:&#146;,             &
+      & T30, I0)") buff(4)
+      write (*, FMT="(&#146;Owner&#146;&#146;s uid/username:&#146;,       &
+      & T30, I0,1x, A)") buff(5), system_getpwuid(buff(5))
+      write (*, FMT="(&#146;Owner&#146;&#146;s gid/group:&#146;,          &
+      & T30, I0,1x, A)") buff(6), system_getgrgid(buff(6))
+      write (*, FMT="(&#146;Device where located:&#146;,        &
+      & T30, I0)") buff(7)
+      write (*, FMT="(&#146;File size(bytes):&#146;,            &
+      & T30, I0)") buff(8)
+      write (*, FMT="(&#146;Last access time:&#146;,            &
+      & T30, I0,1x, A)") buff(9), fmtdate(u2d(int(buff(9))),fmt_date)
+      write (*, FMT="(&#146;Last modification time:&#146;,      &
+      & T30, I0,1x, A)") buff(10),fmtdate(u2d(int(buff(10))),fmt_date)
+      write (*, FMT="(&#146;Last status change time:&#146;,     &
+      & T30, I0,1x, A)") buff(11),fmtdate(u2d(int(buff(11))),fmt_date)
+      write (*, FMT="(&#146;Preferred block size(bytes):&#146;, &
+      & T30, I0)") buff(12)
+      write (*, FMT="(&#146;No. of blocks allocated:&#146;,     &
+      & T30, I0)") buff(13)
+   endif
+<P>
+   end program demo_system_stat
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   Device ID(hex/decimal):      3E6BE045h/1047257157d
+   Inode number:                1407374886070599
+   File mode (octal):                        100750
+   Number of links:             1
+   Owner&#146;s uid/username:        18 SYSTEM
+   Owner&#146;s gid/group:           18 SYSTEM
+   Device where located:        0
+   File size(bytes):            824
+   Last access time:            1557983191 2019-05-16 01:06:31
+   Last modification time:      1557983191 2019-05-16 01:06:31
+   Last status change time:     1557983532 2019-05-16 01:12:12
+   Preferred block size(bytes): 65536
+   No. of blocks allocated:     4
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>system_stat (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d4f558b4-179a-4881-bccb-442759028023 using man macros.</FONT>
+<br><br><center><img src="images/system_stat.3m_system.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

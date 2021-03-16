@@ -1,0 +1,281 @@
+<HTML><HEAD>
+<TITLE>option_stopwatch.3m_stopwatch.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>OPTION_STOPWATCH (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+option_stopwatch(3f) - [M_stopwatch] sets M_StopWatch options (LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Diagnostics</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Bugs</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine
+<B>option_stopwatch</B><I>(default_clock, io_unit_print, io_unit_error, print_errors, abort_errors, print_form, err)</I> <P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+character(len=*), optional, intent(IN) ::
+default_clock(:)
+</TD></TR>
+<TR valign=top><TD width=6%>
+OR
+</TD><TD>
+character(len=*), optional, intent(IN) ::  default_clock
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+integer, optional, intent(IN) ::  io_unit_print,
+io_unit_err
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+logical, optional, intent(IN) ::  print_errors,
+abort_errors
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+character(len=*), optional, intent(IN) ::  print_form
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+integer, optional, intent(OUT) ::  err
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Sets options that control the behavior of M_StopWatch.
+All arguments are optional and have intent IN (except
+the status code
+<I>err</I> which has intent OUT). These options are global in
+nature, and remain in effect until another call to
+<B>option_stopwatch</B> changes them.
+The argument
+<I>default_clock</I> determines what clocks will be used for all subsequent
+operations in which the
+<I>clock</I> argument is omitted.  This allows you to specify what
+clocks you are interested in once and for all, and not
+have to specify those clocks with every subroutine
+call.  The initial default value is (/&#146;cpu &#146;, &#146;user&#146;,
+&#39;sys &#146;, &#146;wall&#146;/), i.e., all clocks.  However, if any
+clocks are not available in the implementation, they
+will be automatically removed from the list of default
+clocks.
+<P>
+Printed output can be redirected to any valid I/O unit
+number.
+<I>io_unit_print</I> determines the unit for output from subroutine
+<B>print_watch.</B><I> io_unit_error</I> determines the unit for any error messages printed by
+M_StopWatch.  When an I/O unit is reset by one of these
+variables, the unit must already be open for writing.
+The initial default is 6 for both I/O units, which is
+standard output on many systems.
+<P>
+What to do when an error occurs is controlled by the
+two logical variables
+<I>print_errors</I> and
+<I>abort_errors.</I> If
+<I>print_errors</I> is TRUE, then an error message will be printed to
+<I>io_unit_error</I> whenever an error condition occurs.  In all cases where
+an error can be detected, the program can continue to
+execute, although the behavior of M_StopWatch might not
+be as expected.  If
+<I>abort_errors</I> is TRUE, then the program will terminate when an error
+condition occurs.  The initial defaults are TRUE for
+<I>print_errors</I> and FALSE for
+<I>abort_errors.</I> <P>
+The argument
+<I>print_form</I> determines the form for printing time when
+<I>form</I> is omitted in
+<I>print_errors</I> <!-- .  The valid values are:    .IP 'sec', -->
+<BR>.The valid values are: .IP &#146;sec&#146;,
+seconds
+<TABLE cellpadding=3><!-- tsb: The argument
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6%>
+&#146;hh:mm:ss&#146;,
+</TD><TD>
+colon separated hours, minutes and seconds
+</TD></TR>
+<TR valign=top><TD width=6%>
+&#146;[[hh:]mm:]ss&#146;,
+</TD><TD>
+same as &#146;hh:mm:ss&#146; except hours and minutes are printed
+only if nonzero
+The default value is &#146;sec&#146;.
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DIAGNOSTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+If present, the optional intent OUT integer argument
+<I>err</I> returns a status code.  The code is the sum of the
+values listed below.
+<P>
+The relevant status codes and messages are:
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+0
+</TD><TD>
+No errors; execution successful.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+8
+</TD><TD>
+Invalid clock type.  This occurs if
+<I>default_clock</I> is present and one of the specified clocks is not
+supported by the implementation.  See
+<B>inquiry_stopwatch</B>(3)
+to determine what clocks are available.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+16
+</TD><TD>
+Too many clocks specified.  This occurs when the
+argument
+<I>default_clock</I> is an array longer than four.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+256
+</TD><TD>
+I/O unit is not open for writing.  The I/O unit
+requested for
+<I>io_unit_print</I> or
+<I>io_unit_error</I> is not open for writing.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+512
+</TD><TD>
+Failed to allocate required memory.  This error occurs
+if the Fortran
+<B>allocate</B> statement returns a nonzero status indicating that
+memory could not be allocated.  Avoid memory leaks by
+always destroying watches and groups before recreating
+them, and destroying local variable watches and groups
+before returning from a subroutine.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+1024
+</TD><TD>
+Error occurred while deallocating memory.  This error
+occurs if the Fortran
+<B>deallocate</B> statement returns a nonzero status while deallocating
+memory.  Be aware that other problems could develop as
+a result of the deallocate error.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+2048
+</TD><TD>
+Illegal output form.  This error occurs if
+<I>print_form</I> is not one of the strings listed above.
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+In addition to the run time diagnostics generated by
+M_StopWatch, the following problems may arise:
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+In Fortran 90, the character strings in an array
+constructor must all have the same length.  Pad three
+letter clock names with a blank on the right to make a
+four character string, for example, &#146;cpu &#146;.
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+call option_stopwatch(default_clock=&#146;cpu&#146;,
+abort_error=.true.)
+call option_stopwatch(io_unit_print=11, io_unit_error=12)
+<P>
+The first call sets the default clock to be the cpu
+clock and says to terminate the program if an error
+occurs.  The second call reassigns the I/O units.
+<P>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+None known.
+<P>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+William F. Mitchell, <A HREF="mailto:william.mitchell@nist.gov">william.mitchell@nist.gov</A>
+National Institute of Standards and Technology
+<P>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+M_stopwatch(3), create_watchgroup(3), create_watch(3),
+destroy_watchgroup(3), destroy_watch(3),
+end_pause_watch(3), inquiry_stopwatch(3),
+join_watchgroup(3), leave_watchgroup(3), pause_watch(3),
+print_watch(3), read_watch(3), reset_watch(3),
+start_watch(3), stop_watch(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>M_StopWatch 1.1</I></TD> <TD width=33% align=center>OPTION_STOPWATCH (3)</TD> <TD align=right width=33%><I>September 22, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from option_stopwatch.3m_stopwatch.txt using man macros.</FONT>
+</BODY></HTML>

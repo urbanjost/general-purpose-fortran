@@ -1,0 +1,383 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>luhn_checksum (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>luhn_checksum</B>(3f) - [M_hashkeys] Luhn checksum algorithm applied to a string of numeric values
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Strengths And Weaknesses</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Result</A><BR>
+<A HREF=#5>References</A><BR>
+<A HREF=#6>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The Luhn algorithm or Luhn formula, also known as the "modulus 10" or
+"mod 10" algorithm, named after IBM scientist Hans Peter Luhn, is a simple
+checksum formula used to validate a variety of identification numbers
+such as credit card numbers, IMEI numbers, National Provider Identifier
+numbers in the United States, Canadian Social Insurance Numbers, Israel
+ID Numbers, Greek Social Security Numbers, and survey codes appearing on
+McDonald&#146;s, Taco Bell, and Tractor Supply Co. receipts. It was created by
+IBM scientist Hans Peter Luhn and described in U.S. Patent No. 2,950,048,
+filed on January 6, 1954, and granted on August 23, 1960.
+<P>
+The algorithm is in the public domain and is in wide use today. It
+is specified in ISO/IEC 7812-1.[1] It is not intended to be a
+cryptographically secure hash function; it was designed to protect against
+accidental errors, not malicious attacks. Most credit cards and many
+government identification numbers use the algorithm as a simple method of
+distinguishing valid numbers from mistyped or otherwise incorrect numbers.
+<P>
+The formula verifies a number against its included check digit, which
+is usually appended to a partial account number to generate the full
+account number. This number must pass the following test:
+<TABLE cellpadding=3><!-- tsb: The formula verifies a number against its included check digit, which
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+From the rightmost digit, which is the check digit, and moving left,
+double the value of every second digit. The check digit is not doubled;
+the first digit doubled is immediately to the left of the check digit. If
+the result of this doubling operation is greater than 9 (e.g., 8 × 2 =
+16), then add the digits of the result (e.g., 16: 1 + 6 = 7, 18: 1 + 8 =
+<TABLE width=100% cellpadding=3><!-- tsb: From the rightmost digit, which is the check digit, and moving left,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+9)
+</TD><TD>
+or, alternatively, the same final result can be found by subtracting
+9 from that result (e.g., 16: 16 − 9 = 7, 18: 18 − 9 = 9).
+</TD></TR>
+<TR></TR></TABLE><!-- .IP 2. 4 -->
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+Take the sum of all the digits.
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+If the total modulo 10 is equal to 0 (if the total ends in zero) then
+the number is valid according to the Luhn formula; else it is not valid.
+</TD></TR>
+<TR></TR></TABLE>Assume an example of an account number "7992739871" that will have a
+check digit added, making it of the form 7992739871x:
+<P>
+Account number
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Account number
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>7</B> </TD><TD valign=bottom>
+9  9  2  7  3  9  8  7  1  x
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Double every other
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Double every other
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>7</B> </TD><TD valign=bottom>
+18  9  4  7  6  9  16  7  2  x
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Sum digits
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Sum digits
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>7</B> </TD><TD valign=bottom>
+9  9  4  7  6  9  7  7  2  x
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The sum of all the digits in the third row is 67+x.
+<P>
+The check digit (x) is obtained by computing the sum of the non-check
+digits then computing 9 times that value modulo 10 (in equation form,
+((67 × 9) mod 10)). In algorithm form:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The check digit (x) is obtained by computing the sum of the non-check
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+Compute the sum of the non-check digits (67).
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+Multiply by 9 (603).
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+The units digit (3) is the check digit. Thus, x=3.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+(Alternative method) The check digit (x) is obtained by computing the sum
+of the other digits (third row) then subtracting the units digit from 10
+(67 =&gt; Units digit 7; 10 − 7 = check digit 3). In algorithm form:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: (Alternative method) The check digit (x) is obtained by computing the sum
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+Compute the sum of the non-check digits (67).
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+Take the units digit (7).
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+Subtract the units digit from 10.
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+The result (3) is the check digit. In case the sum of digits ends in
+0 then 0 is the check digit.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+This makes the full account number read 79927398713.
+<P>
+Each of the numbers 79927398710, 79927398711, 79927398712, 79927398713,
+79927398714, 79927398715, 79927398716, 79927398717, 79927398718,
+79927398719 can be validated as follows.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Each of the numbers 79927398710, 79927398711, 79927398712, 79927398713,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+Double every second digit, from the rightmost: (1×2) = 2, (8×2) = 16,
+(3×2) = 6, (2×2) = 4, (9×2) = 18
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+Sum all the individual digits (digits in parentheses are the products
+from Step 1): x (the check digit) + (2) + 7 + (1+6) + 9 + (6) + 7 +
+(4) + 9 + (1+8) + 7 = x + 67.
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+If the sum is a multiple of 10, the account number is possibly
+valid. Note that 3 is the only valid digit that produces a sum (70)
+that is a multiple of 10.
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+Thus these account numbers are all invalid except possibly 79927398713
+which has the correct check digit.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Alternately, you can use the same checksum creation algorithm, ignoring
+the checksum already in place as if it had not yet been calculated. Then
+calculate the checksum and compare this calculated checksum to the
+original checksum included with the credit card number. If the included
+checksum matches the calculated checksum, then the number is valid.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>STRENGTHS AND WEAKNESSES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The Luhn algorithm will detect any single-digit error, as well as almost
+all transpositions of adjacent digits. It will not, however, detect
+transposition of the two-digit sequence 09 to 90 (or vice versa). It will
+detect 7 of the 10 possible twin errors (it will not detect 22 ↔ 55,
+33 ↔ 66 or 44 ↔ 77).
+<P>
+Other, more complex check-digit algorithms (such as the Verhoeff algorithm
+and the Damm algorithm) can detect more transcription errors. The Luhn
+mod N algorithm is an extension that supports non-numerical strings.
+<P>
+Because the algorithm operates on the digits in a right-to-left manner
+and zero digits affect the result only if they cause shift in position,
+zero-padding the beginning of a string of numbers does not affect the
+calculation. Therefore, systems that pad to a specific number of digits
+(by converting 1234 to 0001234 for instance) can perform Luhn validation
+before or after the padding and achieve the same result.
+<P>
+Prepending a 0 to odd-length numbers makes it possible to process
+the number from left to right rather than right to left, doubling the
+odd-place digits.
+<P>
+The algorithm appeared in a US Patent[2] for a hand-held, mechanical
+device for computing the checksum. It was therefore required to be
+rather simple. The device took the mod 10 sum by mechanical means. The
+substitution digits, that is, the results of the double and reduce
+procedure, were not produced mechanically. Rather, the digits were marked
+in their permuted order on the body of the machine.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>S</B> </TD><TD valign=bottom>
+the string of digits to be checked. Spaces and dashes
+are ignored.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>LUHN_CHECKSUM</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the Luhn checksum of the string; which is the digits in the
+input string with the checksum digit appended.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+From Wikipedia, the free encyclopedia
+<P>
+<PRE>
+       (https://en.wikipedia.org/wiki/Luhn_algorithm)
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_luhn_checksum
+   use M_hashkeys, only : luhn_checksum
+   implicit none
+   character(len=:),allocatable :: ccards(:), string
+   integer :: i, j
+   write(*,*)&#146;GOOD VALUES&#146;
+   ccards=[ character(len=20) :: &#146;79927398713&#146;, &#146;49927398716&#146;, &#146;1234567812345670&#146; ]
+   call checkem()
+   write(*,*)&#146;BAD VALUES&#146;
+   ccards=[ character(len=20) :: &
+      &#146;79927398710&#146;,&#146;79927398711&#146;,&#146;79927398712&#146;,&#146;79927398714&#146;, &
+      &#146;79927398715&#146;,&#146;79927398716&#146;,&#146;79927398717&#146;,&#146;79927398718&#146;,&#146;79927398719&#146;, &
+      &#146;49927398717&#146;, &#146;1234567812345678&#146; ]
+   call checkem()
+   contains
+   subroutine checkem
+      ! validate these numbers
+      do i=1,size(ccards)
+         j=len(trim(ccards(i)))
+         string=luhn_checksum(ccards(i)(:j-1))
+         write(*,&#146;(a,1x,a,1x,l1)&#146;)ccards(i),string,ccards(i).eq.string
+      enddo
+<P>
+      string=&#146;123456 781-234-567&#146;
+      write(*,*)&#146;from &#146;,string,&#146; got &#146;,luhn_checksum(string),&#146; which should be 1234567812345670&#146;
+   end subroutine checkem
+   end program demo_luhn_checksum
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>luhn_checksum (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d4a8ee1f-f79a-4eb8-b365-2fde4a9239b4 using man macros.</FONT>
+<br><br><center><img src="images/luhn_checksum.3m_hashkeys.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

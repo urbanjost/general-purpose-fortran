@@ -1,0 +1,502 @@
+" @(#) advanced vi(1) configuration file 
+set shell=/bin/bash
+ "==============================================================================
+ " where to put scratch files (lots of room so do not run out of scratch space)
+" set directory=/tmp
+ "==============================================================================
+ " vi rewards study. Although it may not seem very intuitive at first, it is
+ " a flexible editor that can be used from virtually any keyboard. The regular
+ " expressions it uses are also useful when using other utilities such as 
+ " sed and awk. It is a particularly nice editor for touch-typists, as 
+ " fingers rarely if ever have to leave the "home" position. 
+ "==============================================================================
+" This  .exrc prologue file for the vi editor makes many edit functions easier
+" by using often-overlooked features of vi such as the  :map  command  and
+" filtering  thru  shell commands (and comments in .exrc files). 
+"
+ " John S. Urban, Westinghouse Electric Corporation; last updated 02/10/91
+ " tested on UNICOS,Sun SPARC,CDC910,RISC 6000,APOLLO DN1000,DECstation 5000
+ " RISC 6000, DECstation 5000 didn't allow :set showmode.
+ "
+ " put this .exrc file in your $HOME directory. To make a line in this file
+ " show up when ',h' is entered for help, start the line with "|.
+ " To make a comment NOT show up with ',H' start it with ' "'.
+ "
+ " NOTE:
+ " The #x, #p, #f, #A, and #t commands (prompting commands, paragraph fill
+ " commands,a  position-oriented  alter  command  and  a command to remove
+ " tabs) use custom procedures and programs which may  not  be  available.
+ " Contact the author for more information.
+ "
+" NOTE: :map displays current user-defined map strings 
+"       To see insert-mode map! strings, use :map!
+"
+" NOTE: .exrc contains tab characters. Use :set list to see it while editing
+ "==============================================================================
+set autoindent ignorecase | map g 1G
+"set notimeout 
+ " notimeout required using xterm from workstation to cray or rapid    
+ " cursor movement with cursor keys does not work properly, as some
+ " escape characters don't make it in time.
+ " note that it does not seem to happen with dxterm using 7-bit controls
+"==============================================================================
+" Hard to find:
+"/string/z  FIND AND PLACE AT SCREEN TOP (NICE FOR NEXT PAGE, CODE SECTION TOP.
+" multiple sets can be on a line and can separate ex commands with a |.
+" This is very powerful when mixed with the g and v commands.
+" Very elaborate edits are possible (that you can source from a file):
+" 'a;'bg/string/s/^/BEFORE/|?find above?|s/old/new/
+"==============================================================================
+ " The following map sequences are defining function keys you hopefully do
+ " NOT have defined in your terminfo file. Unfortunately, the #[.] method
+ " of executing a function key string only works WHEN THE KEY DOES NOT
+ " EXIST. if you do a ":map #1 1g" for example, #1 will not usually execute the
+ " string but pressing function key 1 (often PF1 on a vt100) will. Why
+ " the #[.] doesn't ALWAYS work is beyond me.
+ "==============================================================================
+ " Commonly unused keys in vi command mode:
+ "         control characters ....... ^A ^I ^K ^O ^V ^W ^X 
+ "         alphameric characters ....  g  K  q  v  V
+ "         punctuation characters ...  *  _  \  =
+ " Be cautious of control characters which sometimes interfere with %stty
+ " options and/or terminal functions.
+"===============================================================================
+ " Personally, I almost never have use for the "fFtT;," commands.
+" On my keyboard, a colon (used often) is harder to hit than a semicolon
+" but I need to use the colon command a lot so lets make a semi-colon
+" equivalent to a colon:
+map ; :
+"===============================================================================
+" To execute the "undefined" function keys, you should enter #[.]
+" where [.] is the letter used after the # character in the function-key
+" mapping command. If "#" is your backspace or rubout character or
+" is awkward to type on your keyboard, map another key to be equivalent
+" to the "#" characters. 
+map , #
+" Now to execute "function key a" you can enter ",a" (or still use "#a").
+"===============================================================================
+" CAUTION: This .exrc file uses and changes marks and buffers 
+"          "abcdefghij" quite freely and assumes the user in general does not.
+" The defined functions "communicate" using marks. The main marked region
+" being manipulated is the area from mark a to mark b. Mnemonically the
+" marks are
+"   mark a(above), b(below), c(current), d(current page home)
+"   e(current page middle) f(current page bottom)
+"===============================================================================
+"|most commonly used: a(bove) b(elow) c(opy) d(elete) m(ove) o(utput)
+"|                    M(arked) 
+"|almost all commands act only on the marked region from mark a to mark b
+"-------------------------------------------------------------------------------
+"|a Set ABOVE marks A and B so range for move, copy and delete is current line
+"|A ALTER marked region using first line of region as alter directive;
+"  directives are as follows : (caution: tabs and trailing blanks removed)
+" 
+"    DIRECTIVE                       EXPLANATION
+"    ---------                       ------------
+"    ^STRING#   CAUSES THE STRING OF CHARACTERS BETWEEN THE ^ AND THE
+"               NEXT  # TO BE INSERTED BEFORE THE CHARACTERS POINTED TO
+"               BY THE ^.  AN ^ OR & WITHIN THE STRING IS TREATED AS A 
+"               REGULAR  CHARACTER.  IF THE CLOSING # IS NOT SPECIFIED,
+"               XEDIT INSERTS THE REMAINDER OF THE LINE AS IF A #  WAS 
+"               SPECIFIED AFTER THE LAST NONBLANK CHARACTER. 
+"               THERE ARE TWO EXCEPTIONS. THE COMBINATION ^# CAUSES A #
+"               TO BE INSERTED BEFORE THE CHARACTER POINTED TO  BY  THE
+"               ^,  AND AN ^ AS THE LAST CHARACTER OF THE DIRECTIVES
+"               CAUSES A BLANK TO BE INSERTED.
+"    #          (WHEN NOT THE FIRST # AFTER AN ^) CAUSES THE  CHARACTER
+"               ABOVE IT TO BE DELETED.
+"    &          REPLACES THE CHARACTER ABOVE IT WITH A SPACE.
+"    (SPACE)    A SPACE BELOW A CHARACTER LEAVES IT UNCHANGED.
+"    ANY OTHER CHARACTER REPLACES THE CHARACTER ABOVE IT.
+"|b Set BELOW mark B
+"|B  delete multiple BLANK lines below to next non-blank line
+"    o If current line is non-blank, gap between this paragraph and
+"      next is closed (all blank lines are removed).
+"    o If current line is blank all blank lines BELOW the current
+"      line are deleted until a non-blank line is encountered.
+"          o Because a non-blank line must be encountered another
+"            command must be used to delete trailing blank lines at end of
+"            file (e.g. dG or :.,$d)
+"          o If wrapscan is set and use on last blank line in file
+"            lines from first blank region in file will be removed
+"          o If on LAST blank line before a non-blank region NEXT blank
+"            region will be removed.
+"|c COPY mark ab to current position. USES CURRENT REGION, NOT BUFFERED.
+"   (left at end of inserted text, use #V to view line on before operation)
+" C SEE CURRENT lines where marks ab are (versus #s which shows entire region).
+"|d DELETE mark ab (returned to original viewing position)
+"|  If c or d is in ab will get error bell. DELETED TEXT APPENDS TO BUFFER d.
+"|D DELETE mark ab (returned to original viewing position)
+"|  If c or d is in ab will get error bell. DELETED TEXT REPLACES BUFFER d.
+"|e EXECUTE command using marked region as input and replace region with output
+"   filter text thru commands like tr,pr,cb,asa,nasa,fold and such.
+"|f Paragraph FILL marked region using fmt(1) script/program
+"|  vi-script left_margin right_margin indent_margin
+"|F change marked region to entire FILE
+"|h HELP (display lines in .exrc starting with "|)
+"|H HELP (display ALL comment lines in .exrc)
+"|i indent mark by 3 characters.
+"|I use cb command to indent a C source code and remove tabs
+"|l convert MARK ab to LOWERCASE.
+"|m MOVE mark ab to current position
+"|  (left at end of inserted text, use #V to view line on before operation)
+"|M abbreviation for starting an ex command with the range set to 'a'b.
+"|n like n (locate next) except puts located line at top of screen
+"|N like N (locate previous) except puts located line at top of screen
+"|o OUTPUT the buffer stored with functions d,D,y and Y 
+" O OOPS! put last 9 unnamed deletes or yanks at current position
+"   WARNING: USING THIS COMMAND SEEMS TO HOSE UP ALL BUFFERS a-z
+" p PARAGRAPH fill current paragraph using fmt(1) program
+" P change marked region to current paragraph
+" r REMEMBER the current file position for return with capital R (bookmark)
+" R RETURN to the spot remembered with lowercase R (go to bookmark)
+"   The REMEMBER/RETURN will not work if the remembered "screen" home and/or
+"   current line have been deleted.
+" s SHOW marked region 
+" S change marked region to current screen.
+"|t TRIM TRAILING white space (spaces and tabs) from marked region.
+"|T Use expand program to expand TABS out  
+"|u convert MARK ab to UPPERCASE.
+" v Return to VIEW of original current line before #C or #M or most # commands.
+"|w write marked region to a file you specify
+" x EXTRA functions requiring parameter prompting in vi.extra script
+" X DELETE (X-OUT) marked words (cannot put in mapped macros!!!! use p to move)
+"|y YANK mark ab (returned to original viewing position)
+"|  YANK TEXT APPENDS TO BUFFER d.
+"|Y YANK mark ab (returned to original viewing position)
+"   YANKED TEXT REPLACES BUFFER d.
+"|
+ "==============================================================================
+"|  plain keys:
+"|g   go to top of file
+"|v   read in current X11 window buffer using pb0 script, xprop(1) and c-code 
+map v :r!pb0
+ "==============================================================================
+" yank W to change case of
+" set mark n to where you are
+" output the yanked text
+" turn it all to ~ characters
+" put it into named buffer n
+" delete the line
+" go to mark n
+" execute buffer n ( The line of ~s)
+map V yWmnoP:s/./\~/g0"nDdd`n@n
+ "==============================================================================
+ "From: William J Seng <oswms> Date: Mon, 11 Nov 1991 17:39:10 -0500
+"|^X  put brackets around the current word
+map  i(Ea)
+"===================================================
+map  :r!grep 
+"===================================================
+" vim uses ctrl-R for redo of a change so QUIT USING
+" map  :r!
+ "==============================================================================
+" USED BY vim(1) TO MOVE BETWEEN WINDOWS IN SPLIT SCREEN MODE; QUIT USING
+" |locate all word in marked region: ^w string ^w
+" map   #K:'a;'bg/\<
+" map!  \>/#
+ "==============================================================================
+"| forced write of file; then go to next file
+map  :w!|n
+ "==============================================================================
+ " Macro space is limited. Don't repeat sequences in different macros.
+ " In many of the macros it is convenient to mark the current, home, and
+ " middle positions so you can return to that view, so define K to mark
+ " those locations
+"map K mcHmdMme
+ " K is now used in vim(1)
+map #K mcHmdMme
+ "==============================================================================
+map #a mamb
+map #A #K'a!'bexpand|vi-alt
+map #b mb
+map #B :/^[ 	]*$/;/[^ 	]/-1d
+map #C #K:'a=|'b=|'ap|'bp'e`C
+map #c #K:'a;'bco'c
+map #d #K'a"Dd'b'e`c
+map #D #K'a"dd'b'e`c
+map #e #K'a!'b
+
+map #f #K'a!'bFmt -ad b -ll 78 
+"map #F #K1GmaGmb'e`c
+map #F #K:1ma a|$ma b'e`c
+
+
+map #h :!grep '^"|' $HOME/.exrc|more
+map #H :!grep '^"' $HOME/.exrc|more
+map #i #K:'a,'bs/.*/   &/
+map #I 1G!Gcb|expand -3
+
+
+
+
+map #l #K:'a,'bs/.*/\L&/
+
+map #m #K:'a;'bm'c
+map #M #K:'a;'b
+map #n nz
+map #N Nz
+map #o "dp
+" This map command causes letter buffers and number buffers to be erased
+" unless all these buffers exist!! BUG
+" map #O "1p"2p"3p"4p"5p"6p"7p"8p"9p
+map #O "1p........
+map #p {!}Fmt -ad b -ll 78
+map #P #K{ma}mb'e`c
+
+
+map #r miMmj`i
+map #R 'jz.`i
+map #s #K:'a;'bnu|'c;'d
+" map #s #K:'a=|'b=|'a;'bp|'c;'d
+map #S #KHmaLmb`c
+map #t #K:'a,'bs/[ 	][ 	]*$//g
+map #T #K'a!'bexpand  
+map #u #K:'a,'bs/.*/\U&/
+
+map #v 'dz`c
+map #w :'a;'bw! 
+ "==============================================================================
+"|locate all word in marked region: #w string ^w
+map  #W #K:'a;'bg/\<
+map!  \>/#
+ "==============================================================================
+map #x #KLmf:!vi.extra:so zqj_vi
+map #X mc`ad`b`c
+map #y #K'a"Dy'b'e`c
+map #Y #K'a"dy'b'e`c
+"==============================================================================
+" Somewhat dangerous: escape sequences to set a vt100 to 132 and 80 column mode
+" If your terminfo/termcap definition and communication path support the 
+" WindowChange signal, and if your terminal obeys 132 column switching (An
+" xterm can, but you have to turn that option on), this can be very handy.
+map #1 :!echo '[?3l'
+map #2 :!echo '[?3h'
+"==============================================================================
+" tried to map a key so all lowercase letters entered in insert mode would
+" be  translated  to uppercase.  Another key would unmap them all.  Didn't
+" work because vi considers you in insert mode on the ex : command line!
+"==============================================================================
+" some vt100 emulators do not allow cursor keys to send application mode
+" strings, so make vt100 normal mode arrow keys do cursor positioning too.
+map [A k
+map [B j
+map [C l
+map [D h
+" if in input mode, cursor keys take you out of input mode (vt100 strings)
+" notes: if in :set showmode mode prompt is not removed from the screen
+"        and don't necessarily go to proper column position. BUGS ?!
+map! [A k
+map! [B j
+map! [C l
+map! [D h
+map! OA k
+map! OB j
+map! OC l
+map! OD h
+"==============================================================================
+map   |map!  
+map , #
+map  :n|args
+map  :n
+map  :rew|args
+"==============================================================================
+" make tab key get to "second set" of functions (primarily filters and toggles)
+map 	 #Z
+" Tab commands:
+"==============================================================================
+" walker@hpl-opus.hpl.hp.com (Rick Walker)
+ "TAB n  toggles between numbered editing and non-numbered
+map @NU@ :set nu:map #Zn @NONU@:
+map @NONU@ :set nonu:map #Zn @NU@:
+map #Zn @NU@
+"==============================================================================
+" walker@hpl-opus.hpl.hp.com (Rick Walker)
+ "TAB a  toggles between autoindent and noautoindent
+ "       turn off autoindent before using a "PASTE" in X11 windows
+map @AI@ :set ai:map #Za @NOAI@::"---- autoindent ON ----"
+map @NOAI@ :set noai:map #Za @AI@::"---- autoindent OFF ----"
+map #Za @NOAI@
+"==============================================================================
+ "TAB i  toggles between ignorecase and noignorecase
+map @IC@ :set ic:map #Zi @NOIC@::"--- case insensitive ---"
+map @NOIC@ :set noic:map #Zi @IC@::"--- case sensitive ---"
+map #Zi @NOIC@
+"==============================================================================
+ "TAB t  lists toggles (capital letter is toggle name)
+map #Zt  :"MNEMONICS: Autoindent; case Insensitive; Numbered editing"
+"==============================================================================
+" GRIPES
+" o editor macros should be able to take parameters, 
+"   can simulate this by making scripts that create :source files.
+" o #n should execute function key definition n, even if function key n defined
+" o should be able to query and use current word
+" o use vi commands in file to be :sourced
+" o a built-in help facility such as the vax vms edt and eve editor has would
+" o be nice for beginners.
+" o The tilde command should work over a range.
+" COMPARED TO FSE:
+" o No help or teach command (:!man vi doesn't quite do it)
+" o No paragraph fill or centering capability (like .f and .c)
+" o would be nice if could leave a message like FSE set announce
+"   like if could set ex prompt to any value (:set prompt='string of stuff')
+" o a lot of things would be easier if had prompting and positional parameters
+"   for macros
+" o no equivalents to FSE split screen editing, set view offset, and alter
+"   commands, or to a visible (highlighted in inverse) marked range.
+" o can't switch between terminal sizes (132 column, 44 lines) like FSE can
+"   (Footnote: on DEC workstation, vi adjusts dynamically to xterm window sizes)
+" o things like "locate all word upper" much harder with vi than FSE.
+" o No easy locate [word] [ignorecase] like FSE lawu command.
+" o No single procedure file (each :source needs a unique file) like FSEPROC.
+" o termcap and vi information on using function keys seems very vague.
+"   may only have ten functions if use termcap instead of terminfo.
+"==============================================================================
+"
+" :1,$g/^$/d                          delete all blank lines
+" :1,$g/  */s// /g                    replace multiple spaces with one space
+" :[range]g/[string]/d"a              delete (or yank) lines containing
+"                                     string into buffer a
+" :[range]g!/[string]/d"a             delete lines NOT containing string into
+"                                     buffer a
+" :-m. or .m+                         switch current line with previous|next
+" INTERFACING WITH SAVED FILES (FILES -NOT- IN EDITOR BUFFER(S))
+" :w filename                         SAVE ENTIRE buffer to a new file
+" :'a;'bw filename                    SAVING PART of buffer to a new file
+" :'a;'bw! filename                   OVERWRITING a file with part of buffer
+" :'a;'bw >>filename                  appending part of buffer to a file
+" :r filename                         reading in a filename at CP
+" SHELL INTERFACING
+" :!cmd                      execute single shell command
+" :sh                        execute multiple shell commands
+" :r!cmd                     output of command written into edit file at CP
+" :'a;'b!cmd                 filter lines thru command(use text as input to
+"                            command, replace text with output of command)
+"                            cb,pr -o1,cut,paste,expand and many other
+"                            filters can add almost any command to vi
+" :w!cmd                     write lines to standard input of command
+"                            :w! lpr -Pps (or lp -dps)
+"==============================================================================
+" Handy commands for NOS/COS users migrating to UNICOS:
+" change UPDATE "*CALL NAME" to "      include 'name.h' 
+" 1,$s/^\*CALL[, ]\(.*\)/      include '\L\1.h'/
+"==============================================================================
+ " NOTE: marked words don't seem to work correctly, especially when do
+ "       multiple puts using them.
+ " NOTE: what will drive you crazy trying to build multi-command lines
+ "       mixing ex and vi commands is prompt after :ex command that
+ "       says enter carriage return to continue will continue on
+ "       ANY next character.
+ "       may be why Hmd .... 'dz
+ "       does not pause, either
+ " NOTE: only one pause per :so read, may be able to put vi command
+ "       into :so file to do vi commands
+ "
+ " For paragraph fill. Nice if had "leave column 1-x cxx for FORTRAN,
+ " * for C comments, " for .exrc comments, whatever (A prefix/suffix string
+ " for each line while doing paragraph fill).
+ "
+" depending on whether using Sys5 or Berkeley, several of these filters do
+" different things, but check out editing functions you can add via
+"asa,nasa,awk,cat,cb,sort,cut,paste,expand,unexpand,fold,pr,nl,tr
+"
+" NOTE: when setting marks with ex(1) the current file view is not changed.
+"       When using vi you must make the desired location the current position.
+"       The result is you can reduce screen repainting when setting marks not
+"       on the screen if you use ex(1) instead of vi(1) commands.
+"
+ " a trick to only get one carriage return prompt from a series of ex commands
+ " is not to delimit them with carriage return or esc, but with a |. Note
+ " to get | into a map sequence it must be entered in .exrc as ^V^V|
+"==============================================================================
+" These tips were in a file I was told was from Berkeley:
+  "Vi macro management:
+  "- if possible don't repeat character sequences in different macros, put them
+  "  in their own macros;
+  "- try to be concise, e.g. instead of "map @i :set noautoindent^V^M" use
+  "  "map @i :se noai^V^M";
+  "- don't try to solve difficult problems in vi, create appropriate shell
+  "  scripts instead, to be invoked through maps;
+  "- create specialized macro files, to be sourced only when appropriate,
+  "  you don't need all your maps all the time, e.g. "map ^C :!cc % " isn't
+  "  that useful when editing a letter to your friend; you might even create
+  "  shell scripts to do the sourcing for you -
+  "
+  "        % cat ~/bin/cvi
+  "        #!/bin/sh
+  "        /usr/ucb/vi +"so $HOME/.cmaps" ${1+"$@"}
+  "        %
+  "
+  "However, this script reveals an interesting bug: the source command will only
+  "take place when the first EXISTENT file is read into the buffer!
+  "A better idea than hacking the shell script is to define a standard macro
+  "(in EXINIT) to source ~/.cmaps:
+  "
+  "        map\C :unm\C^V|so~/.cmaps^M
+  "
+  "No unnecessary spaces! :-)
+  "When ~/.cmaps has been sourced, the `\C' macro can be deleted, hence the `unm'.
+  map Q :%s/........../mv/:!chmod a+w %:w!:!cd %;sh 00*;mv 00* ~/tmp
+"==============================================================================
+ab hhST <STRONG></STRONG>hhhhhhhhi
+ab hhAD <ADDRESS></ADDRESS>
+ab hhH1 <H1></H1>
+ab hhH2 <H2></H2>
+ab hhH3 <H3></H3>
+ab hhH4 <H4></H4>
+ab hhH5 <H5></H5>
+ab hhH6 <H6></H6>
+ab hhDL <DL><DD>ItemName<DT>DescriptiveText<DD>ItemName<DT>DescriptiveText</DL>
+ab ..a @
+ab ..A &
+ab ..b (
+ab ..B )
+ab ..d $
+ab ..e !
+ab ..f `
+ab ..G >
+ab ..l |
+ab ..L <
+ab ..n 0123456789
+ab ..p #
+ab ..P %
+ab ..q '
+ab ..Q "
+ab ..s /
+ab ..S \
+ab ..t ~
+ab ..u _
+ab ..U ^
+ab ..v (){}[]<>
+ab ..z *+-=
+ab ..w ?
+"-------------
+ab __var NAME="${1:-'DEFAULT'}"
+"-------------
+ab __one 1 
+ab __two 2
+ab __three 3
+ab __four 4
+ab __five 5
+ab __six 6
+ab __seven 7
+ab __eight 8
+ab __nine 9
+ab __zero 0
+"-------------
+ab __x    0
+ab __i    1
+ab __ii   2
+ab __iii  3
+ab __iv   4
+ab __v    5
+ab __vi   6
+ab __vii  7
+ab __viii 8
+ab __ix   9
+"==============================================================================
+ab __a   <a href=""> string </a>
+ab __table <table border="1" > <tr> <td> R 1 C 1 </td> <td> R 1 C 2 </td> <td> R 1 C 3 </td> </tr> <tr>  <td> R 2 C 1 </td> <td> R 2 C 2 </td> <td> R 2 C 3 </td> </tr> </table>
+ab __dl <dl> <dt> NAME           </dt><dd> PROCEDURE - WHAT PROCEDURE DOES HERE IN ONE LINE </dd> <dt> SYNOPSIS/USAGE </dt><dd>                                                  </dd> <dt> DESCRIPTION    </dt><dd> PROCEDURE(string) returns the ...                </dd> <dt> EXAMPLE        </dt><dd>                                                  </dd> <dt> NOTES          </dt><dd>                                                  </dd> <dt> FILES          </dt><dd> libJSU.a                                         </dd> </dl>
+ab __ul   <ul> <li> unordered list</li> <li> unordered list</li> </ul>
+"==============================================================================

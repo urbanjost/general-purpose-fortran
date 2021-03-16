@@ -1,0 +1,1246 @@
+<HTML><HEAD>
+<TITLE>faq.7.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>()</NOBR><HR></H1>
+</CENTER>
+<PRE>
+NAME
+  faq(7f) - [FORTRAN] Fortran FAQ
+DESCRIPTION 
+.nf
+Gotchas: significant digits and simple assigns
+
+How come when I assign a simple value (or even an expression) to a value I
+sometimes get less digits of precision than I expect?
+
+In the following example program the DOUBLEPRECISION value VALUE2 only contains
+the same number of correct digits from the constant that was assigned to it as
+the REAL value VALUE1. VALUE3 contains significantly more...
+
+
+  module M_prec
+    integer,parameter :: sp = selected_real_kind(6)
+    integer,parameter :: dp = selected_real_kind(15)
+  end module M_prec
+
+program main
+  use M_prec
+  real            :: value1=123.45678901234567890123
+  doubleprecision :: value2=123.45678901234567890123
+  doubleprecision :: value3=123.45678901234567890123d0
+  real(kind=dp)   :: value4=123.45678901234567890123_dp
+  write(*,*)value1
+  write(*,*)value2
+  write(*,*)value3
+  write(*,*)value4
+  end
+
+Typical results
+
+  123.456787
+  123.45678710937500
+            ^^^^^^^^ <== Not the values you might expect
+  123.45678901234568
+  123.45678901234568
+
+A general principle of Fortran is that the type of the RHS (Right Hand Side) of
+an assignment does not depend on the LHS (Left Hand Side). Once you understand
+this rule, a lot of things fall into place.
+
+You must make sure the constant on the RHS is of a KIND that can hold the
+number of digits desired, regardless of what type the LHS is.
+"123.45678901234567890123" is a REAL expression and is evaluated first. Then it
+is assigned to the value on the LHS, which in this case promotes the REAL value
+to DOUBLEPRECISION. Adding the "d0" suffix or specifying and using a KIND
+sufficiently big enough to give you the accuracy you desire is required.
+
+The best explanation I have seen for this is by Dick Hendrickson on the
+newsgroup "comp.lang.fortran" :
+
+    I think the REAL reason (ho, ho, ho) is that your example is too simple. In
+    Fortran almost everything can be an expression, rather than a single term.
+    (heck, even 29.5... is an [degenerate] expression in the syntax rules) And
+    there is no good way to push the type of the left hand side into the right
+    hand side expressions that won't surprise someone. In something like
+
+       double_prec_var = N/4 + MIN(M/3, 10) + 7 * user_func (6, 3.14)
+
+    everything goes wrong if you pull the constants up to double precision
+    before evaluating the RHS. Especially if userfunc is generic or if it
+    returns a type that causes the asterisk in "7 * userfunc (6, 3.14)" to be a
+    user defined function (probably also generic).
+
+    Rather than have two sets of rules (either for "expressions" that are
+    constants or for expressions that appear in declaration statements) Fortran
+    chose one rule for all expressions and it confuses people on the simple
+    case. It's a pity and, IMO, compilers should be more aggressive about
+    mismatched precision with simple constant expressions.
+
+Note that compilers are free to produce a warning when all the digits of a
+constant are not stored. As an example, if you use the -Wconversion-extra
+switch on gfortran:
+
+   + gfortran -Wconversion-extra xxx.f90
+   xxx.f90:8:52:
+
+      real            :: value1=123.45678901234567890123
+                                                       1
+   Warning: Non-significant digits in 'REAL(4)' number at (1), maybe incorrect KIND [-Wconversion-extra]
+   xxx.f90:9:28:
+   
+      doubleprecision :: value2=123.45678901234567890123
+                               1
+   Warning: Conversion from 'REAL(4)' to 'REAL(8)' at (1) [-Wconversion-extra]
+
+   xxx.f90:9:52:
+
+      doubleprecision :: value2=123.45678901234567890123
+                                                       1
+   Warning: Non-significant digits in 'REAL(4)' number at (1), maybe incorrect KIND [-Wconversion-extra]
+   xxx.f90:10:54:
+
+      doubleprecision :: value3=123.45678901234567890123d0
+                                                         1
+   Warning: Non-significant digits in 'REAL(8)' number at (1), maybe incorrect KIND [-Wconversion-extra]
+   xxx.f90:11:55:
+
+      real(kind=dp)   :: value4=123.45678901234567890123_dp
+                                                          1
+   Warning: Non-significant digits in 'REAL(8)' number at (1), maybe incorrect KIND [-Wconversion-extra]
+
+category: code
+
+Revised on Sun Dec 17 13:18:11 EST 2017 by JSU
+
+Trouble initialing character arrays
+
+or why
+
+character(len=*),parameter :: array(*)=['one','two','three']
+
+is an error
+
+In Fortran all the elements of a character array must have the same length
+(well, unless the ISO_VARYING_STRING extension is supported). Primarily because
+of that, intuitive declarations like
+
+character(len=*),parameter :: array(*)=['one','two','three']
+
+will fail because the string declarations are of different lengths. Even if you
+specify the LEN value the strings have to be the same length
+
+character(len=5),parameter :: array(*)=['one','two','three']
+
+Here are things that will work ...
+
+program odd ! implied shape array
+implicit none
+
+!!
+!! First, examples of character parameter array declarations
+!!
+
+CASE1 : BLOCK
+! for this syntax string length must be constant, but size of array and
+! LEN= an asterisk. This avoids any silent truncation or counting but
+! requires all the strings to be the same length ...
+   character(len=*),parameter :: array(*)=[ &
+   'one   ', &
+   'two   ', &
+   'three ', &
+   'last  ']
+   write(*,'(*("[",a,"]":))')array
+ENDBLOCK CASE1
+
+CASE2 : BLOCK
+! the strings can be specified more naturally without trailing spaces if
+! the length is explicitly declared but if the specified length is too
+! short the strings will be truncated. Note that as mentioned above, specifying
+! the LEN= value only on the left side of the assign will NOT work
+   character(len=*),parameter :: array(*)=[character(len=5) :: 'one','two','three','last']
+!                                          ^^^^^^^^^^^^^^^^^^^^
+   write(*,'(*("[",a,"]":))')array
+ENDBLOCK CASE2
+
+CASE3 : BLOCK
+! of course explicitly specifying the number of elements is fine, but tedious. If you get
+! the count on the number of elements wrong the compiler will generate an error; but note that
+! if you declare the values with a DATA statement instead nothing will check that you
+! specified all the elements
+   character(len=*),parameter :: array(4)=[character(len=5) :: 'one','two','three','last']
+!                                     ^^^
+   write(*,'(*("[",a,"]":))')array
+ENDBLOCK CASE3
+
+!!
+!! Next, examples for  an allocatable array
+!!
+
+ALLOC1: BLOCK
+! an allocatable array can change size but cannot be initialized in
+! the declaration
+
+! If no explicit length is given the strings all have to be the same
+! length, which is tedious
+   character(len=:),allocatable :: arrayallo(:)
+   arrayallo=['one   ','two   ','three ','last  ']
+   write(*,'(*("[",a,"]":))')arrayallo
+ENDBLOCK ALLOC1
+
+ALLOC2: BLOCK
+! this is how you specify a length so the strings can be specified
+! more naturally (although the will all be stored with the same length)
+   character(len=:),allocatable :: arrayallo(:)
+   arrayallo=[character(len=5) :: 'one', 'two', 'three', 'last']
+   write(*,'(*("[",a,"]":))')arrayallo
+ENDBLOCK ALLOC2
+
+ALLOC3: BLOCK
+! if everthing else is the same as in case ALLOC2 but len is set to 2
+! what happens (answer: truncation )?
+   character(len=:),allocatable :: arrayallo(:)
+   arrayallo=[character(len=2) :: 'one', 'two', 'three', 'last']
+   write(*,'(*("[",a,"]":))')arrayallo
+ENDBLOCK ALLOC3
+
+ALLOC4: BLOCK
+character(10) :: inp( 5 )
+integer :: i
+character(:), allocatable :: out(:)        ! this is NG
+inp = [ 'aAa', 'bBb', 'cCc', 'dDd', 'eEe' ]
+
+!! COPY INP TO OUT WITH SAME LENGTH
+out = [character(len=len(inp(i))) :: inp]               ; call printout()
+!! GET UP TO FIRST TWO CHARACTERS OF INP
+out = [character(len=2) :: inp]                         ; call printout()
+!! GET SECOND CHARACTER OF INP
+out = [character(len=1) :: inp(:)(2:2)]                 ; call printout()
+!! AN IMPLIED DO ALLOWS FOR FUNCTIONS AND CONCATENATION AND EXPRESSIONS
+out = [character(len=2) :: (inp(i),i=1,size(inp))]      ; call printout()
+out = [character(len=3) :: ("#"//inp(i),i=1,size(inp))] ; call printout()
+
+!!out = [character(len=2+1) :: inp//"Z"]                  ; call printout()
+ENDBLOCK ALLOC4
+
+contains
+subroutine printout()
+   write(*,'(*("[",a,"]":,","))')out
+end subroutine printout
+end program odd
+
+-------------------------------------------------------------------------------
+
+An example using a function
+
+  module test
+  implicit none
+  contains
+
+  elemental function gettwo( s ) result( res )
+  character(*), intent(in) :: s
+  character(len(s)) :: res
+     res = s( 1 : 2 )
+  endfunction
+
+  endmodule
+
+  program main
+  use test
+  implicit none
+  character(10) :: inp( 5 )
+  character(:), allocatable :: out(:)        ! this is NG
+     inp = [ 'aaa', 'bbb', 'ccc', 'ddd', 'eee' ]
+
+     !out = gettwo( inp )  !! NOT ALLOWED
+     out = [character(len=2) :: gettwo(inp) ]
+     print *, out       ! aabbccddee
+  endprogram
+
+-------------------------------------------------------------------------------
+
+category: code
+
+Revised on Sat Apr 28 16:24:56 EDT 2018 by JSU
+[UP]
+
+block comments in Fortran
+
+Fortran does not support block comments.
+
+Editor support of block text
+
+Some editors can support editing block comment sections in Fortran, such as
+emacs Fortran comments (1) and vim(1).
+
+Using pre-processors
+
+In general, a pre-processor can be used to provide support for documentation
+being combined with source code. For example, the commonly available fpp(1) or
+cpp(1) commands can be used If the file source.F90 contains
+
+ #ifdef DOCUMENT
+
+This is a block of text that
+can be used as documentation
+
+ #else
+
+ program demo
+write(*,*)'Hello world'
+ end program demo
+
+ #endif
+
+Then the cpp(1) command can be used to extract the comments
+
+ # extract text block info file source.txt
+ cpp -DDOCUMENT -P -C -traditional source.F90 >source.txt
+ # compile code skipping text block.
+ f90 source.F90
+
+Unfortunately, the text block can be placed in a separate file, but will then
+not appear in the source file. The much more powerful m4(1) pre-processor can
+be used to maintain code and documentation in the same file more flexibly, but
+has a steeper learning curve than fpp(1) or cpp(1).
+
+ufpp is a Fortran pre-processor included in the GPF (General Purpose Fortran)
+repository that supports several types of block text options to support
+generating man(1) pages as well as documented code. For example, the following
+input file
+
+ $!==============================================================================
+ $DOCUMENT COMMENT -file example.3.man
+ NAME
+    example(3f) - [FORTRAN] subroutine example using ufpp(1)
+ SYNOPSIS
+    subroutine example()
+ DESCRIPTION
+    This is an example program built using several of the modes
+    of the ufpp(1) $DOCUMENT directive. This section will become
+    comments in the code, and optionally also be written to the file
+    "$UFPP_DOCUMENT_DIR/doc/example.3.man" if the environment variable
+    $UFPP_DOCUMENT_DIR is set.
+
+    In this case, the data could easily be processed with txt2man(1)
+    and made into an automatic man(1) page.
+
+    Other formats often used here are "markdown" documents, Tex, HTML,
+    and *roff files.
+
+ EXAMPLE
+ $DOCUMENT END
+ $!==============================================================================
+ program testit
+ implicit none
+ integer :: i,io=6
+ $!==============================================================================
+ $DOCUMENT WRITE !  These will become write statements to unit IO
+ hello world!
+   hello world,again!
+     hello world, once more!
+ $DOCUMENT END
+ end program testit
+ $!==============================================================================
+
+would generate the following code, and optionally generate a separate file with
+the help text in it.
+
+! NAME
+!    example(3f) - [FORTRAN] subroutine example using ufpp(1)
+! SYNOPSIS
+!    subroutine example()
+! DESCRIPTION
+!    This is an example program built using several of the modes
+!    of the ufpp(1) $DOCUMENT directive. This section will become
+!    comments in the code, and optionally also be written to the file
+!    "$UFPP_DOCUMENT_DIR/example.3.man" if the environment variable
+!    $UFPP_DOCUMENT_DIR is set.
+!
+!    In this case, the data could easily be processed with txt2man(1)
+!    and made into an automatic man(1) page.
+!
+!    Other formats often used here are "markdown" documents, Tex, HTML,
+!    and *roff files.
+!
+! EXAMPLE
+!============================================================================
+program testit
+implicit none
+integer :: i,io=6
+write(io,'(a)')'hello world!'
+write(io,'(a)')'  hello world,again!'
+write(io,'(a)')'    hello world, once more!'
+end program testit
+
+category: code
+
+Revised on Sun, Dec 3, 2017 2:14:36 PM by JSU
+[UP]
+
+How do I compare arrays?
+
+You cannot use a simple compare of two arrays in an IF(3f), because a
+comparison of two arrays returns a logical array, not a single scalar logical.
+So this IF(3f) statement will return a compiler error:
+
+integer :: A(3)=[1,2,3], B(3)=[1,2,3]
+write(*,*)A.eq.B  ! This returns an array
+if(A.eq.B)then    ! SO THIS WILL NOT WORK
+   write(*,*) "A and B are equal"
+endif
+end
+
+ANY(3f) and ALL(3f) are probably what you are looking for
+
+There is not an specific intrinsic function to compare arrays in Fortran. but
+you can use the very flexible and generic ALL(3f) and ANY(3f) functions:
+
+integer :: A(3)=[1,2,3], B(3)=[1,2,3]
+write(*,*)A==B    ! Note this returns an array, not a scalar
+if(all(A.eq.B)) then
+   write(*,*) "A and B are equal"
+else
+   write(*,*) "A and B are NOT equal"
+endif
+
+write(*,*) all(A.eq.B)
+write(*,*) all(A.eq.B+2)
+
+end
+
+Results:
+
+T T T
+A and B are equal
+T
+F
+
+which works for all arrays as long as they have the same type and length.
+
+DO-ing it yourself
+
+Of course, you can loop through the elements with a DO(3f):
+
+integer :: A(3)=[1,2,3], B(3)=[1,2,3]
+logical :: answer
+COMPARE: block
+   integer :: i
+   answer=.false.
+   if(size(a).ne.size(b)) exit COMPARE
+   do i=1,size(a)
+      if(A(i).ne.B(i)) exit COMPARE
+   enddo
+   answer=.true.
+endblock COMPARE
+write(*,*)'equality of A and B is ',answer
+end
+
+Results:
+
+equality of A and B is  T
+
+Writing a function and returning .TRUE. or. .FALSE. is straight-forward, but
+for each type of array there has to be another function or you have to use
+CLASS(*).
+
+As an example, an alternative lacking the generic character of ALL(3f) or ANY
+(3f) is:
+
+integer :: A(3)=[1,2,3], B(3)=[1,2,3]
+
+if(equal(A,B))then
+    write(*,*) "A and B are equal"
+ else
+    write(*,*) "A and B are NOT equal"
+endif
+
+contains
+pure logical function equal( array1, array2 )
+integer,dimension(:),intent(in) :: array1, array2
+integer                         :: i
+
+equal=size(array1)==size(array2)
+
+if(equal) then
+   do i=1,size(array1)
+      equal=array1(i) == array2(i)
+      if(.not.equal)exit
+   enddo
+endif
+
+end function equal
+
+end
+
+Results:
+
+A and B are equal
+
+Be careful when comparing floating-point values
+
+If the arrays are INTEGER or CHARACTER, then the comparison can be exact.
+However, if the arrays contain floating-points values such as REAL,
+DOUBLEPRECISION or COMPLEX variables, you should consider using a suitably
+small tolerance when comparing values. For example:
+
+!real :: A(3)=[1.0,2.0,3.0], B(3)=[1.0,2.0,2.9999999999999]  ! this might test as equal
+real :: A(3)=[1.0,2.0,3.0], B(3)=[1.0,2.0,2.999999]         ! this should be close enough
+real :: tolerance=0.00001  ! just a sample tolerance
+
+if(all(A==B))then  ! testing for exact matches can be problematic
+   write(*,*) "A and B are equal"
+elseif (all( abs(A - B) < tolerance) )then
+   write(*,*) "A and B are close enough to equal"
+else
+   write(*,*) "A and B are NOT equal"
+endif
+end
+
+Most modern compilers do a good job at allowing programmers to compare floating
+point values, but there are several good sources on why you want to compare
+using a tolerance and how to determine what that tolerance should be.
+
+ANY(3f) and ALL(3f) may not be the most efficient method
+
+The ANY(3f) and ALL(3f) functions may generate a logical array the size of the
+input arrays or always test all elements; depending on how they are
+implemented. This could cause comparisons of large arrays to require a
+significant amount of memory or do unneeded tests. The functions may or may not
+take advantage of parallel or vector processing when available. So if you are
+doing many array comparisons of very large arrays you might want to create your
+own functions, but I suspect most ANY(3f) and ALL(3f) functions will perform as
+well or better than your own routines.
+
+If anyone has examples using Coarrays, OpenMP, or MPI that would be useful.
+Timing information on various methods for large arrays would also be very
+interesting. If I get the time I will try to add that.
+
+category: code
+
+Revised on Sat Dec 2 21:51:17 EST 2017 by JSU
+[UP]
+
+Gotchas: Inheritance control for CONTAIN-ed procedures
+
+New Fortran programmers using a contained procedure often do not know that a
+CONTAIN-ed procedure has access to all the variables in the parent procedure
+unless the variables are explicitly declared in the parent procedure. Even
+experienced programmers can accidentally corrupt parent procedure values.
+
+Although there has been discussion about allowing IMPORT to be extended to
+close this oversight in F2020 (seems like a very good idea to me), currently it
+is easy to accidentally corrupt a host-associated variable, because there is no
+simple way to turn off inheritance in a CONTAIN-ed procedure.
+
+A CONTAIN-ed procedure may be desirable because it provides automatic
+interfaces and creates a private routine much like a MODULE provides, but much
+more simply. And since a CONTAIN-ed procedure is only usable by the parent
+procedure the compiler it free to aggressively make optimizations such as
+in-lining the CONTAIN-ed routine.
+
+But a CONTAIN-ed procedure inherits everything the parent sees, with some
+restrictions. When desired this can be very useful; but it is also prone to
+errors.
+
+So when you do not want to inherit values or change values from the parent you
+must be very careful to declare all the variables. Using a naming convention
+such as starting local variables with the name of the routine can be helpful.
+
+Sample program to test your understanding of inheritance with ...
+
+  program testit
+  implicit none
+  real :: A
+     A=10
+     call printit1(); write(*,*)A
+     call printit2(); write(*,*)A
+     call printit2(); write(*,*)A
+     A=30.0
+     call printit3(); write(*,*)A
+  contains
+
+  subroutine printit1()
+  ! this routine uses the same A variable as in the parent
+     write(*,*)A
+     A=A+1.0  ! the parent variable is changed
+  end subroutine printit1
+
+  subroutine printit2()
+  ! this routine uses the local variable A because it was declared
+  ! in the subroutine
+  real :: A=20  ! this A is now a unique variable
+     write(*,*)A
+     A=A+2.0
+  end subroutine printit2
+
+  subroutine printit3()
+  implicit none  ! this does NOT turn off inheritance
+     write(*,*)A
+     A=A+3.0
+  end subroutine printit3
+
+  end program testit
+
+Expected Output
+
+10.0000000
+11.0000000
+20.0000000
+11.0000000
+22.0000000
+11.0000000
+30.0000000
+33.0000000
+
+category: code
+
+Revised on Sat Nov 25 18:24:28 EST 2017 by JSU
+
+To have an array of strings of different length, define a type and declare an
+array of that type.
+
+To have an array of strings of arbitrary length at run-time, you may use
+deferred-legnth allocatable CHARACTER variables.
+
+program demo_deferred_length
+
+!  An array of "deferred-length" allocatable CHARACTER variables (a
+!  Fortran 2003 feature) allows the character length to change at run-time,
+!  including automatically through assignment.
+call deferred_length()
+
+!  Note that each element of the array has the same length - it is not an
+!  array of individually variable length strings. If that's what you want,
+!  you have to do it as an array of derived type where the type contains
+!  a CHARACTER(:), allocatable component.
+call defined_type()
+
+contains
+
+subroutine deferred_length()
+   implicit none
+character(len=:), dimension(:),  allocatable :: array
+integer :: i
+integer,parameter :: max_len=14
+
+   !if(.not.allocated(array)) allocate(character(len=max_len) :: array(3))
+
+   ! force all the elements to the same length in a standard-conforming manner
+   ! note that this will silently truncate strings longer than the specified length
+   array = [character(len=max_len):: 'jones', 'something here','brown']
+   !================
+   write(*,'(*("[",a,"]":))')array
+   write(*,'(*("[",a,"]":))')(trim(array(i)),i=1,size(array))
+end subroutine deferred_length
+
+subroutine defined_type()
+! to define a type
+! and declare an array of that type, e.g.
+!
+type string
+   character(len=:), allocatable :: str
+end type string
+integer :: i
+type(string) :: array(3)
+
+   array(1)%str = 'jones'
+   array(2)%str = 'smith'
+   array(3)%str = 'brown'
+   write(*,'(a)') (array(i)%str,i=1,3)
+! or
+   array = [string('jones'), string('smith'), string('brown')]
+   write(*,'(a)') (array(i)%str,i=1,3)
+end subroutine defined_type
+
+end program demo_deferred_length
+
+category: code
+
+Revised on Sun Nov 25 22:56:38 EST 2018 by JSU
+[UP]
+
+Frequently Asked Questions About Fortran
+
+This is a GPF-centric (General Purpose Fortran) FAQ for Fortran.
+
+Contents
+
+  * Gotchas:
+      + Gotchas: Inheritance control for CONTAIN-ed procedures in Fortran
+      + Gotchas: significant digits and simple assigns
+  * Arrays:
+      + How do I initialize an array in row-column order in Fortran?
+      + Trouble initializing character arrays in Fortran; or why
+
+        character(len=*),parameter :: array(*)=['one','two','three']
+
+        is an error
+      + "array=[]" will not work in Fortran
+      + How do I compare arrays in Fortran?
+  * How does Fortran handle a scratch file?
+  * How do I put block comments in Fortran source?
+  * How do I get a file size in Fortran?
+  * Writing to stderr
+  * Automatically indenting a Fortran file
+  * How to issue a command to the operating system
+  * Build Tools
+  * Calling gnuplot(1) from Fortran
+  * Variable length CHARACTER arrays
+  * Non-advancing I/O
+  * Notes on list-directed output
+  * Notes on compound Boolean expressions
+  * Notes on including metadata in programs, objects, and source
+  * Procedure pointer
+  * Special values
+
+-------------------------------------------------------------------------------
+
+External Links
+
+Fortran standard
+
+The "web home" of ISO/IEC JTC1/SC22/WG5 (the international Fortran standards
+committee, or WG5 for short) is https://wg5-fortran.org/
+
+The WG5 web site is where you'll find news about what's happening with the
+Fortran standard, and links to all WG5 documents. Information on current and
+past standards is also available there.
+
+Fortran FAQs
+
+  * The Fortran Wiki FAQ
+  * The Fortran FAQ
+  * Fortran FAQ Wikibook
+  * Fortran90.org FAQ
+  * pages.mtu.edu FAQ
+
+-------------------------------------------------------------------------------
+
+Fortran Compilers
+
+  * https://gcc.gnu.org/wiki/GFortran
+
+-------------------------------------------------------------------------------
+
+Repositories, Discussion Groups, Reference Sites, ...
+
+  * netlib mathematical algorithm repository
+  * The Fortran Wiki
+  * Rosetta Code (multi-lingual code samples)
+  * comp.lang.fortran newsgroup
+
+-------------------------------------------------------------------------------
+
+Fortran scientific model searches
+
+XGC , SPECFEM , ACME , DIRAC , FLASH , GTC , LS-DALTON , NUCCOR , NWCHEM ,
+RAPTOR , GAMESS(US) , GAMESS(UK) , Gaussian , VB2000 , XMVB , ACES , CFOUR ,
+MOLPRO , MOLCAS ,
+
+Economic Modeling
+
+GEMPACK ,
+
+Weather Modeling
+
+WRF(Weather Research and Forecast),
+
+Geography
+
+geographiclib, fortranGIS,
+
+Best Practices
+
+  * https://github.com/Fortran-FOSS-Programmers/BestPractices
+  * http://www.fortran.com/FortranStyle.pdf
+  * http://www.fortran90.org/src/best-practices.html
+  * http://research.metoffice.gov.uk/research/nwp/numerical/fortran90/
+    f90standards.html
+  * https://github.com/szaghi/zen-of-fortran
+
+Fortran document generators
+
+fordocu , robodoc , ($)understand , doxygen ,
+
+Repositories
+
+  * Trending Fortran on GitHub
+
+Fortran and HPC searches
+
+Fortran , Coarray , MPI , OpenMP , OpenACC , HDF5 , HPC , MPI-AMRVAC ,
+-------------------------------------------------------------------------------
+
+category: code
+
+Revised on Sat, Nov 18, 2017 6:28:56 PM by JSU
+[UP]
+
+How do you get the size of a file?
+
+Fortran does not have an intrinsic that returns the size of a file, but with a
+modern compiler the answer to this question has gotten much simpler than it
+used to be. For most external files you can query the size with an INQUIRE(3f):
+
+use :: iso_fortran_env, only : FILE_STORAGE_SIZE
+implicit none
+character(len=:),allocatable :: filename
+integer                      :: file_size
+
+filename='test.txt'
+
+INQUIRE(FILE=filename, SIZE=file_size)  ! return -1 if cannot determine file size
+
+write(*,*)'size of file '//filename//' is ',file_size * FILE_STORAGE_SIZE /8,' bytes'
+end
+
+There are some dusty corners where this might not return what you expect on
+some systems, especially if the file is currently open as a direct access or
+stream file or is a soft link; but essentially every method has problems with
+special file types. I have not had the INQUIRE(SIZE=...) statement fail on
+regular external files.
+
+Other methods
+
+If the INQUIRE(3f) statement does not yet work with SIZE= in your programming
+environment, there are several alternative methods for obtaining system file
+information (some work for far more than just file size), each with advantages
+and disadvantages:
+
+ * using non-standard extensions
+ * opening a file at EOF and reading position
+ * call C routines via ISO_C_BINDING module
+ * calling system command and reading command output
+ * reading the entire file and counting line lengths and lines
+
+Using non-standard extensions
+
+If you are not concerned about portability many compilers support at least a
+subset of the POSIX system interface routines. Look for routines like STAT(3f)
+or PXFSTAT(3f).
+
+Opening a file at end-of-file and reading position
+
+Depending on what vintage of fortran you have available, if you OPEN(3f) the
+file with POSITION='APPEND' and then use INQUIRE(3f) to query the position of a
+file you get the size of the file assuming it is a basic external file. You
+cannot use this to query the size of some types of files such as files being
+piped to your process or other files where positioning the files to their end
+position really does not apply.
+
+So far (f2008) it is not standard to open a file that is already open, so the
+example FILESIZE(3f) procedure in the following example has to be used on files
+that are not open. The routine could be extended to use INQUIRE(3f) to detect
+this (by checking if the file is already open).
+
+program file_size
+implicit none
+character(len=:),allocatable :: filename
+integer                      :: filename_length, ios, nchars, count, ierr
+
+do count = 1,command_argument_count()
+
+   ! get filename from command line
+   call get_command_argument(number=count,length=filename_length,status=ios)     ! get command line length
+   if(ios.ne.0)then
+      stop '*file_size* ERROR: filenames must be specified on command line'
+   endif
+   allocate(character(len=filename_length) :: filename)   ! allocate string big enough to hold command line
+   call get_command_argument(number=count,value=filename) ! get command line as a string
+   filename=trim(adjustl(filename))                       ! trim leading spaces just in case
+   if(filename.eq.'')then
+      write(*,'(a)')'*file_size* ERROR: blank filename '
+      cycle
+   endif
+
+   ! call routine that should get size of file in bytes
+   call filesize(filename,nchars,ierr)
+   if(ierr.ne.0)then
+      write(*,'("*file_size* ERROR: ierr=",i0," for file ",a)')ierr,filename
+   elseif(nchars.le.0)then
+      write(*,'(a)')'empty file '//trim(filename)
+   else
+      write(*,'(a," is ",i0," bytes")')trim(filename),nchars
+   endif
+
+   deallocate(filename)
+enddo
+end program file_size
+
+subroutine filesize(filename,nchars,ierr)
+implicit none
+character(len=*),intent(in) :: filename
+integer,intent(out)         :: nchars
+integer,intent(out)         :: ierr
+character(len=256)          :: message
+integer                     :: lun, ios
+
+   nchars=0
+   ierr=0
+
+   ! open named file in stream mode positioned to append
+   open (newunit=lun,     &
+   & file=trim(filename), &
+   & access='stream',     &
+   & status='old',        &
+   & position='append',   &
+   & iomsg=message,       &
+   iostat=ios)
+
+   if(ios.eq.0)then                  ! if file was successfully opened
+      ! get file size in bytes and position file to beginning of file
+      inquire(unit=lun,pos=nchars)   ! get number of bytes in file plus one
+      nchars=nchars-1                ! opened for append, so subtract one to get current length
+   else
+      write(*,'("*error*:",a)')message
+   endif
+
+   ierr=ios
+end subroutine filesize
+
+Example output
+
+file_size *
+
+empty file asdf
+block_comments.md is 31712 bytes
+character_array_initialization.html is 7239 bytes
+comments.html is 5713 bytes
+compare_arrays.html is 6337 bytes
+contained.html is 4272 bytes
+faq.html is 2782 bytes
+file_size.ff is 3464 bytes
+file_size.ff~ is 3483 bytes
+nan.md is 34 bytes
+row-column.html is 7982 bytes
+scratch.html is 28136 bytes
+zero_elements.html is 7485 bytes
+
+call C routines via ISO_C_BINDING module
+
+With modern Fortran it is relatively standard and portable to call C routines.
+There is an extensive interface in module M_sytem(3f) in the GPF(General
+Purpose Fortran) collection that includes the procedure SYSTEM_STAT(3f) which,
+among other things, calls stat(3c) and returns system file information
+including file size.
+
+Calling system command and reading command output
+
+Although what system commands are available varies between programming
+environments, you can generally call a system command that prints the file size
+(such as stat(1), ls(1), dir(1), find(1), wc(1), ...) and read the command
+input.
+
+The stat(1) command on Unix and GNU/Linux systems can be used to return many
+external file attributes. This is just a simple example. Note that a more
+robust method for getting a scratch file than just using the name "_scratch"
+would be needed in any production version.
+
+  program read_command
+  implicit none
+  character(len=:),allocatable :: filename,cmd
+  character(len=256) :: message=''
+  integer            :: lun, ios=0, nchars=0, icmd, iexit
+     ! assume a file called "test.txt" exists
+     filename='test.txt'
+     ! system command to execute
+     cmd="stat --dereference --format='%s' "//filename//'>_scratch'
+     ! if you do not have execute_command_line(3f) look for a system(3f) procedure
+     call execute_command_line(command=cmd,exitstat=iexit,cmdstat=icmd,cmdmsg=message)
+     if(iexit.ne.0.or.icmd.ne.0)then
+        write(*,*)'*read_command* error '//trim(message)
+     else
+        open(newunit=lun,file='_scratch',iostat=ios)  ! you would want to trap errors here
+        if(ios.eq.0)then
+           read(lun,*)nchars                  ! you would want to trap errors here
+        endif
+        !!close(unit=lun,status='delete',iostat=ios)
+     endif
+     write(*,'(a,i0,a)')' file '//filename//' is ',nchars,' bytes'
+  end program read_command
+
+Example output
+
+ file test.txt is 938 bytes
+
+Reading the entire file and counting line lengths and lines
+
+One reason you might do this even with a modern Fortran version is to get the
+number of lines in a sequential file. For example:
+
+program count_lines
+implicit none
+integer :: line_count, ios
+   line_count=0
+   open(unit=10,file='test.txt')
+   do
+      read(10,*,iostat=ios) ! note there is no list of variables
+      if(ios.ne.0)exit
+      line_count=line_count+1
+   enddo
+   write(*,*)'file has ',count,' lines'
+end program count_lines
+
+In modern Fortran in addition to INQUIRE(3f) with SIZE= you can open a file as
+a stream and read one character at a time and (assuming you know what the line
+terminator is for the file) count lines and words and characters; but in older
+FORTRAN there were no standard ADVANCE='NO' options on READ(3f), no stream I/O,
+and no _INQUIRE(3f) parameters to easily give you file size.
+
+The trick in older Fortran versions was generally to open the file as a
+direct-access file with RECL=1 on the OPEN(3f). One problem was that the units
+for RECL were not always one byte; they were often 4 bytes or more, but there
+was usually a compiler option to make the unit 1 byte. Then you just read the
+file from beginning to end. I would replace any such code with the INQUIRE(3f)
+statement using SIZE=.
+
+       CHARACTER C , FILENAME*256
+       ISIZE=1
+       FILENAME='test.txt'
+       OPEN(10,FILE=FILENAME,IOSTAT=IOS,
+      $ACCESS='DIRECT',FORM='UNFORMATTED',STATUS='OLD',RECL=1)
+       IF(IOS.NE.0)THEN
+          WRITE(*,*)'I/O ERROR: ',IOS, ' for ',FILENAME
+          STOP
+       ENDIF
+ 1     CONTINUE
+       READ(10,IOSTAT=IOS,REC=ISIZE,ERR=999)C
+       IF (IOS.NE.0) THEN
+          WRITE(*,*)'ERROR ',IOS
+          STOP      ! Some sort of error.
+       ELSE
+          ISIZE=ISIZE+1
+       END IF
+       GOTO 1
+ 999   CONTINUE
+       ISIZE=ISIZE-1
+       WRITE(*,*)'File ',FILENAME(:JULEN(FILENAME)),' is ',ISIZE,' bytes'
+       END
+       INTEGER FUNCTION JULEN(STRING)
+ C     @(#) return position of last non-blank character in "string".
+ C     if the string is blank, a length of 0 is returned.
+ C
+       CHARACTER STRING*(*)
+       CHARACTER NULL*1
+       INTRINSIC LEN
+       NULL=CHAR(0)
+       ILEN=LEN(STRING)
+       IF(ILEN.GE.1)THEN ! CHECK FOR NULL STRINGS
+          DO 10 I10=ILEN,1,-1
+          IF(STRING(I10:I10).NE.' '.AND.STRING(I10:I10).NE.NULL)THEN
+             JULEN=I10
+             RETURN
+          ENDIF
+ 10       CONTINUE
+       ENDIF
+       JULEN=0
+       RETURN
+       END
+
+category: code
+
+Revised on Sun, Dec 3, 2017 10:59:03 PM by JSU
+[UP]
+
+Stream I/O on stdin and stdout
+
+Fortran 2003 introduces stream I/O for Fortran; but does not supply a way to
+make stdin and stdout stream files. One method is to call C routines to do the
+I/O.
+
+It is strongly suggested you not mix I/O between Fortran and C on the same
+units.
+
+Calling C from Fortran is less problematic with the Fortran 2003
+ISO_C_BINDING, so this example shows that method.
+
+Example
+
+This shell script makes the C routines getkeyC and putkeyC, a Fortran binding
+to the C routines, and an example program; and then builds and executes the
+program.
+
+ #!/bin/sh
+ ####To get stream I/O out of stdin and stdout, make a getc and putc callable from Fortran
+ cat > getkey.c <<\EOF
+ #include <stdlib.h>
+ char getkeyC(void) {
+ /* @(#) Driver for reading a character from stdin */
+         char c;
+         read(0, &c, 1);
+         return(c);
+ }
+ int putkeyC(char c) {
+ /* @(#) Driver for writing a character to stdout */
+         write(1, &c, 1);
+         return(c);
+ }
+ /******************************************************************************/
+ EOF
+ ################################################################################
+ cat > f2003.f90 <<\EOF
+ !=======================================================================--------
+ !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
+ !=======================================================================--------
+ ! make Fortran/C interface for C routine getkey(3C)
+ module M_getkey
+    use iso_c_binding
+    implicit none
+    public
+       interface
+          function getkeyI() bind(c, name='getkeyC')
+             use iso_c_binding
+             implicit none
+             integer(kind=c_char) :: getkeyI
+          end function getkeyI
+
+          function pkey(char) bind(c, name='putkeyC')
+             use iso_c_binding
+             implicit none
+             integer(kind=c_int) :: pkey
+             character(kind=c_char) :: char
+          end function pkey
+       end interface
+       contains
+         character*1 function gkey()
+        gkey=char(getkeyI())
+    end function gkey
+ end module M_getkey
+ !=======================================================================--------
+ !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
+ !=======================================================================--------
+ !-------------------------------------------------------------------------------
+ program test_getkey
+    use M_getkey
+    character :: A
+    integer :: icount
+    icount=0
+    write(*,*)'begin striking keys to demonstrate interactive raw I/O mode'
+    write(*,*)'q to quit; up to 40 characters'
+    istat=pkey('|')
+    do
+       A=gkey()
+       icount=icount+1
+       istat=pkey(A)
+       istat=pkey('|')
+       if(A.eq.'q')stop
+       if(icount.gt.40)stop
+    enddo
+ end program test_getkey
+ EOF
+ ################################################################################
+ (
+ exec 2>&1
+ set -x
+ rm -f getkey.o getkey getkey.exe
+ gcc -c getkey.c
+ gfortran f2003.f90 getkey.o -o getkey
+ # demonstrate non-interactive behavior
+ echo 'abcdefghijklmnopqrstuvwxyz'|./getkey
+ ls -ltrasd getkey
+ rm -f getkey.o m_getkey.mod # clean up
+ rm -f getkey.c f2003.f90
+ rm -f getkey.exe getkey
+ )|tee getkey.log
+ exit
+
+Alternatives
+
+In some cases using non-advancing I/O on stdin and stdout will work.
+
+In SOME programming environments you can trick stdin and stdout to be direct
+access files of RECL=1, and read and write on RECL length at a time. Make sure
+your record length for RECL=1 is 1 byte, not some other unit like 4 bytes.
+There is often a compiler switch to make the unit bytes even if that is not the
+default.
+
+category: code
+
+Revised on Thu, Dec 14, 2017 5:36:17 PM by JSU
++-----------------------------------------------------------------------------+
+|                     |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|                     |http://www.cisl.ucar.edu/tcg/    |                     |
+|A Fortran 90 Tutorial|consweb/Fortran90/F90Tutorial/   |A Fortran 90 Tutorial|
+|                     |tutorial.html                    |                     |
+|---------------------+---------------------------------+---------------------|
+|Art of Assembly      |http://webster.cs.ucr.edu/AoA/DOS|                     |
+|Language, PDF Files  |/pdf/0_AoAPDF.html               |                     |
+|---------------------+---------------------------------+---------------------|
+|British Computer     |http://www.fortran.bcs.org/      |                     |
+|Society (BCS) Fortran|index.php                        |                     |
+|Specialist Group     |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|CERN Program Library |http://wwwasd.web.cern.ch/wwwasd/|                     |
+|                     |cernlib/                         |                     |
+|---------------------+---------------------------------+---------------------|
+|                     |http://www.crsr.net/             |                     |
+|CHAPTER FIVE         |Programming_Languages/           |                     |
+|                     |SoftwareTools/ch5.html           |                     |
+|---------------------+---------------------------------+---------------------|
+|Clive Page's Fortran |http://www.star.le.ac.uk/~cgp/   |                     |
+|Resources            |fortran.html                     |                     |
+|---------------------+---------------------------------+---------------------|
+|Combining Fortran and|http://wiki.tcl.tk/4004          |                     |
+|Tcl in one program   |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|Cygwin Information   |http://www.cygwin.com/           |                     |
+|and Installation     |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|DATAPLOT - Google    |                                 |                     |
+|Search               |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|Download.com         |http://www.download.com/         |                     |
+|---------------------+---------------------------------+---------------------|
+|F2PY: Fortran to     |http://cens.ioc.ee/projects/     |                     |
+|Python interface     |f2py2e/                          |                     |
+|generator            |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|FLIBS - A collection |http://flibs.sourceforge.net/    |                     |
+|of Fortran modules   |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|FORTRAN90 Source     |http://people.sc.fsu.edu/        |                     |
+|Codes                |~burkardt/f_src/f_src.html       |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran 90 Topic     |http://www.liv.ac.uk/HPC/        |Fortran 90 Topic     |
+|Overview             |HTMLF90Course/                   |Overview             |
+|                     |HTMLF90CourseSlides.html         |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran 90 Tutorials |http://wwwasdoc.web.cern.ch/     |                     |
+|                     |wwwasdoc/f90.html                |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran 90 for the   |http://www.nsc.liu.se/~boein/    |                     |
+|Fortran 77 Programmer|f77to90/f77to90.html#index       |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran 90, 95,      |https://www.jiscmail.ac.uk/      |                     |
+|2003,77 Information  |cgi-bin/filearea.cgi?LMGT1=      |                     |
+|Resources            |COMP-FORTRAN-90&a=get&f=/        |                     |
+|                     |index.html                       |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran 95 function  |http://fparser.sourceforge.net/  |                     |
+|parser               |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran              |http://www.personal.psu.edu/     |                     |
+|                     |faculty/h/d/hdk/fortran.html     |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran              |http://www.personal.psu.edu/hdk/ |                     |
+|                     |fortran.html                     |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran Bits'n'pieces|http://stu.ods.org/fortran/      |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran Software for |http://myweb.lmu.edu/dmsmith/    |                     |
+|Multiple Precision   |FMLIB.html                       |                     |
+|Arithmetic           |                                 |                     |
+|---------------------+---------------------------------+---------------------|
+|Fortran Store        |http://www.swcp.com/fortran-bin/ |Fortran software and |
+|                     |fortran_store/commerce.cgi       |books                |
+|---------------------+---------------------------------+---------------------|
+|GAMS : Guide to      |                                 |A cross-index and    |
+|Available            |http://gams.nist.gov/            |virtual repository of|
+|Mathematical Software|                                 |mathematical and     |
++-----------------------------------------------------------------------------+
+</PRE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Manual Page</I></TD> <TD width=33% align=center>()</TD> <TD align=right width=33%><I>Manual Page</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from faq.7.txt (preformatted text).</FONT>
+</BODY></HTML>

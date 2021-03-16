@@ -1,0 +1,189 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>if (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>if</B>(7f) - [FORTRAN:EXECUTION CONTROL] selects a block based on a sequence of logical expressions.
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+[if_construct_name:] <I>IF</I> (<I>(scalar-logical-expr)</I>) <I>THEN</I>
+<B>block</B>
+<B>ELSEIF</B> (<I>(scalar-logical-expr)</I>) <I>THEN</I> [if_construct_name]
+<B>block</B>
+<B>ELSE</B> [if_construct_name]
+<B>block</B>
+<B>ENDIF</B> [if_construct_name]
+<P>
+<PRE>
+        or
+<P>
+</PRE>
+<B>IF</B> (<I>(scalar-logical-expression)</I>) <I>action-statement</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The <B>IF</B> construct selects for execution at most one of its constituent
+blocks. The selection is based on a sequence of logical expressions.
+<P>
+If an if-construct-name is specified, both the <B>IF</B> and <B>ENDIF</B> must use
+that same name. If an <B>ELSE</B> or <B>ELSEIF</B> uses an if-construct-name it must
+be the same as the one specified on the corresponding <B>IF</B>/<B>ENDIF</B>.
+<P>
+Execution of an <B>IF</B> construct
+<P>
+At most one of the blocks in the <B>IF</B> construct is executed. If there
+is an <B>ELSE</B> statement in the construct, exactly one of the blocks
+in the construct is executed. The scalar logical expressions are
+evaluated in the order of their appearance in the construct until
+a true value is found or an <B>ELSE</B> statement or <B>ENDIF</B> statement is
+encountered. If a true value or an <B>ELSE</B> statement is found, the <B>block</B>
+immediately following is executed and this completes the execution
+of the construct. The scalar logical expressions in any remaining
+<B>ELSEIF</B> statements of the <B>IF</B> construct are not evaluated. If none
+of the evaluated expressions is true and there is no <B>ELSE</B> statement,
+the execution of the construct is completed without the execution of
+any <B>block</B> within the construct.
+<P>
+It is permissible to branch to an <B>ENDIF</B> statement only from within
+its <B>IF</B> construct. Execution of an <B>ENDIF</B> statement has no effect.
+<P>
+Execution of an <B>IF</B> statement
+<P>
+The <B>IF</B> statement controls the execution of a single action statement
+based on a single logical expression.
+<P>
+The action-stmt in the if-stmt shall not be an end-function-stmt,
+end-mp-subprogram-stmt, end-program-stmt, end-subroutine-stmt,
+or if-stmt.
+<P>
+Execution of an <B>IF</B> statement causes evaluation of the scalar logical
+expression. If the value of the expression is true, the action statement
+is executed. If the value is false, the action statement is not executed
+and execution continues.
+<P>
+The execution of a function reference in the scalar logical expression
+may affect entities in the action statement.
+<P>
+An example of an <B>IF</B> statement is:
+<P>
+<PRE>
+       IF (A &gt; 0.0) A = LOG (A)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample <B>IF</B> constructs:
+<P>
+<PRE>
+     if (cvar == &#146;RESET&#146;) then
+        i = 0; j = 0; k = 0
+<P>
+</PRE>
+</BLOCKQUOTE>
+endif
+<P>
+<PRE>
+     OUTER: if (case.eq.0)then
+        PROOF_DONE: if (PROP) then
+           write (3, &#146;(&#146;&#146;QED&#146;&#146;)&#146;)
+           exit OUTER
+        else
+           PROP = nextprop
+        endif PROOF_DONE
+        write(*,*)&#146;END OF PROOF_DONE&#146;
+     else OUTER
+             write(*,*)&#146;else outer&#146;
+     endif OUTER
+<P>
+     if (a &gt; 0) then
+        b = c/a
+        if (b &gt; 0) then
+           d = 1.0
+        end if
+     elseif (c &gt; 0) then
+        b = a/c
+        d = -1.0
+     else
+        b = abs (max (a, c))
+        d = 0
+     endif
+<P>
+</PRE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>if (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cfa160a0-29ab-422c-85da-43d16cf92e5b using man macros.</FONT>
+<br><br><center><img src="images/if.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

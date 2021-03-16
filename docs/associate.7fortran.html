@@ -1,0 +1,298 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>associate (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>ASSOCIATE</B>(7f) - [FORTRAN:EXECUTION CONTROL] associate construct
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+[ associate-construct-name : ] ASSOCIATE ( associate-name =&gt; expr|variable, &#46;&#46;&#46;)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Basically, ASSOCIATE allows you to
+<TABLE cellpadding=3><!-- tsb: Basically, ASSOCIATE allows you to
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+create an alias for a variable
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+evaluate an expression at the top of the block and use a variable name
+as a substitute for the constant, much like a parameter declaration.
+</TD></TR>
+<TR></TR></TABLE>It is _NOT_ equivalent to a function macro.
+<P>
+The ASSOCIATE construct associates named entities with expressions or
+variables during the execution of its block. These "named construct
+entities" (16.4) are "associating entities" (16.5.1.6). The names are
+"associate names".
+<TABLE cellpadding=3><!-- tsb: The ASSOCIATE construct associates named entities with expressions or
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If selector is not a variable or is a variable that
+has a vector subscript, associate-name shall not appear in
+a variable definition <B>context</B>(16.6.7).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An associate-name shall not be the same as another
+associate-name in the same associate-stmt.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+variable shall not be a coindexed object.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+expr shall not be a variable.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+end-associate-stmt is END ASSOCIATE [ associate-construct-name ]
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+(R806) If the associate-stmt of an associate-construct
+specifies an associate-construct-name, the
+corresponding end-associate-stmt shall specify the
+same associate-construct-name. If the associate-stmt
+of an associate-construct does not specify an
+associate-construct-name, the corresponding end-associate-stmt
+shall not specify an associate-construct-name.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; EXECUTION OF THE ASSOCIATE CONSTRUCT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Execution of an ASSOCIATE construct causes evaluation of every
+expression within every selector that is a variable designator and
+evaluation of every other selector , followed by execution of its
+block. During execution of that block each associate name identifies an
+entity which is associated (16.5.1.6) with the corresponding selector.
+The associating entity assumes the declared type and type parameters
+of the selector. If and only if the selector is polymorphic, the
+associating entity is polymorphic.
+<P>
+It is permissible to branch to an end-associate-stmt only from within
+its ASSOCIATE construct.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ATTRIBUTES OF ASSOCIATE NAMES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Within an ASSOCIATE or SELECT TYPE construct, each associating entity
+has the same rank and corank as its associated selector. The lower
+bound of each dimension is the result of the intrinsic function LBOUND
+(13.7.90) applied to the corresponding dimension of selector . The upper
+bound of each dimension is one less than the sum of the lower bound
+and the extent. The cobounds of each codimension of the associating
+entity are the same as those of the selector. The associating entity
+has the ASYNCHRONOUS or VOLATILE attribute if and only if the selector
+is a variable and has the attribute. The associating entity has the
+TARGET attribute if and only if the selector is a variable and has
+either the TARGET or POINTER attribute. If the associating entity is
+polymorphic, it assumes the dynamic type and type parameter values of
+the selector. If the selector has the OPTIONAL attribute, it shall
+be present. The associating entity is contiguous if and only if the
+selector is contiguous.
+<P>
+If the selector is not permitted to appear in a variable definition
+context (16.6.7), the associate name shall not appear in a variable
+definition context.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The following example illustrates an association with an expression.
+<P>
+<PRE>
+       associate ( z =&gt; exp(-(x**2+y**2)) * cos(theta) )
+         print *, a+z, a-z
+       end associate
+<P>
+</PRE>
+The following example illustrates an association with a
+derived-type variable.
+<P>
+<PRE>
+       associate ( xc =&gt; ax%b(i,j)%c )
+         xc%dv = xc%dv + product(xc%ev(1:n))
+       end associate
+<P>
+</PRE>
+The following example illustrates association with an array section.
+<P>
+<PRE>
+       associate ( array =&gt; ax%b(i,:)%c )
+         array(n)%ev = array(n-1)%ev
+       end associate
+<P>
+</PRE>
+The following example illustrates multiple associations.
+<P>
+<PRE>
+       associate ( w =&gt; result(i,j)%w, zx =&gt; ax%b(i,j)%d, zy =&gt; ay%b(i,j)%d )
+         w = zx*x + zy*y
+       end associate
+<P>
+</PRE>
+<BLOCKQUOTE>
+The following example uses the ASSOCIATE construct as a shorthand for a
+complex expression and renames an existing variable, MYREAL. After the
+end of the ASSOCIATE construct, any change within the construct to the
+value of the associating entity that associates with MYREAL is reflected.
+<P>
+<PRE>
+      program demo_associate
+      real :: myreal, x, y, theta, a
+      x = 0.42
+      y = 0.35
+      myreal = 9.1
+      theta = 1.5
+      a = 0.4
+      associate ( z =&gt; exp(-(x**2+y**2)) * cos(theta), v =&gt; myreal)
+         print *, a+z, a-z, v
+         v = v * 4.6
+      end associate
+      print *, myreal
+      end program demo_associate
+<P>
+</PRE>
+</BLOCKQUOTE>
+See if you know what the following produces &#46;&#46;&#46;
+<P>
+<PRE>
+      program dustycorner
+      implicit none
+      real :: a = 42
+      associate (a =&gt; a, b =&gt; 2 * a)
+         print *, a, b
+         a = 0
+         print *, a, b
+      end associate
+      print *, a
+<P>
+      a=42
+      associate (aa =&gt; a, b =&gt; 2 * a)
+         print *, a, aa, b
+         aa = 0
+         print *, a, aa, b
+         a=-1
+         print *, a, aa, b
+      end associate
+      print *, a
+      end program dustycorner
+<P>
+</PRE>
+Did you expect the following?
+<P>
+<PRE>
+      42.0000000       84.0000000
+      0.00000000       84.0000000
+      0.00000000
+      42.0000000       42.0000000       84.0000000
+      0.00000000       0.00000000       84.0000000
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:       42.0000000       84.0000000
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-1.00000000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>-1.00000000</B>       84.0000000
+<B>-1.00000000</B>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>associate (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cde1a011-dfce-4903-90dd-f4b2b6abc63d using man macros.</FONT>
+<br><br><center><img src="images/associate.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

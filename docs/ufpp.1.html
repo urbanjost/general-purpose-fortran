@@ -1,0 +1,1083 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>ufpp (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>ufpp</B>(1) - [DEVELOPER] pre-process FORTRAN source files
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Options</A><BR>
+<A HREF=#3>Definition</A><BR>
+<A HREF=#4>Limitations</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>ufpp</B> </TD><TD valign=bottom>
+[[-D] <I>define_list</I>]
+[-I <I>include_directories</I>]
+[-i <B>input_file</B>(s)]
+[-o <I>output_file</I>]
+[-html]
+[-system]
+[-q]
+[-verbose]
+[-header <I>text_for_first_line</I>]
+[-ident]
+[-prefix <I>character_ADE</I>]
+[-keeptabs]
+[-header <I>text_for_first_line</I>]
+[-noenv]
+[-width <I>n</I>]
+[-debug]
+[-d ignore|remove|blank]
+[-cstyle default|doxygen]
+[-allow_links]
+[-version]
+[-help [-html]]
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><I>define_list</I>, <B>-D</B> <I>define_list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+An optional space-delimited list of expressions
+used to define variables before file processing
+commences.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-i</B> <I>input_file(s)</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The default input file is stdin. Filenames are
+space-delimited. In a list, @ represents stdin.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-o</B> <I>output_file</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The default output file is stdout.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-I</B> <I>include_directories</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The directories to search for files specified on
+$INCLUDE directives.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-prefix</B> ADE|letter </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The default directive prefix character is "$".
+Alternatives may be specified by providing an
+ASCII Decimal Equivalent (Common values are 37=%
+42=* 35=# 36=$ 64=@). If the value is not numeric
+t is assumed to be a literal character.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>-html</B> </TD><TD valign=bottom>
+Assumes the input file is HTML that follows the following
+rules:
+<TABLE width=100% cellpadding=3><!-- tsb: Assumes the input file is HTML that follows the following
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+Input lines are not output until a simple
+&lt;XMP&gt; directive is found.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+Output stops when a simple &lt;/XMP&gt;
+directive is encountered.
+This allows code to be maintained as part of an HTML
+document.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-help</B> [-html] </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+Display documentation and exit. If "<B>-html</B>" is present,
+write documentation as basic HTML, instead of as a text
+file.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-verbose</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+All commands on a $SYSTEM directive are echoed
+to stderr with a + prefix. Text following the
+string "@(#)" is printed to stderr similar to
+the Unix command <B>what</B>(1) but is otherwise
+treated as other text input.
+</TD></TR>
+<TR valign=top><TD width=4% nowrap>
+<B></B><B>-noenv</B> </TD><TD valign=bottom>
+The $IFDEF and $IFNDEF directives test for an
+internal <B>ufpp</B>(1) variable and then an
+environment variable by default. This option
+turns off testing for environment variables.
+</TD></TR>
+<TR valign=top><TD width=4% nowrap>
+<B></B><B>-ident</B> </TD><TD valign=bottom>
+The output of the $IDENT directive is in the form of a
+comment by default. If this flag is set the output is
+of the form
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                 character(len=*),parameter :: ident_NNN="@(#) string"
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=4%>&nbsp;</TD><TD>
+so executables and object code contain the metadata
+for use with the <B>what</B>(1) command. This generates an
+unused variable with some compilers might optimized
+away depending on what options are used.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-system</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+Allow system commands on $SYSTEM directives to
+be executed.
+</TD></TR>
+<TR valign=top><TD width=4% nowrap>
+<B></B><B>-q</B> </TD><TD valign=bottom>
+Quiet mode. Output is initially off and only turned
+on if in a conditional block.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-keeptabs</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+By default tab characters are expanded assuming
+a stop has been set every eight columns; and
+trailing carriage-return characters are removed.
+Use this flag to prevent this processing from
+occurring.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-header</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+<I>text_for_first_line</I>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-allow_links</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+If $UFPP_DOCUMENT_DIR is set the $FILTER <B>-file</B> option
+will write input to a file under the specified directory
+in a subdirectory called doc/ that by default is not
+permitted to have a link. To allow it to have a link
+add this switch.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-cstyle</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+try to style comments generated in $FILTER blocks
+for other utilities such as doxygen. Default is to
+prefix lines with &#146;! &#146;. Allowed keywords are
+currently "default", "doxygen".
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-d</B> ignore|remove|blank </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+Enable special treatment for lines beginning
+with "d" or "D" The letter will be left as-is
+(the default); removed; or replaced with a blank
+character. This non-standard syntax has been
+used to support the optional compilation of
+"debug" code by many Fortran compilers when
+compiling fixed-format Fortran source.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-debug</B> [.false.] </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+Dee&#146;d lines as controlled by the <B>-d</B> option are traditionally
+used with fixed-format sources. This is an alternative to
+use for free-format sources.
+<P>
+NOTE: It has no effect unless the environment variable
+DEBUGVERSION is set to T|F, which activates the mode and
+sets the default for the <B>-d</B> switch.
+<P>
+assuming DEBUGVERSION is set use the following syntax
+<P>
+<PRE>
+                      DEBUGVERSION: block
+                         ! the block of debug statements
+                         write(*,*) &#146;debug @@@&#146;,@@@
+                      endblock DEBUGVERSION
+<P>
+</PRE>
+These blocks are now removed when the debug mode
+is .false.. If the debug mode is on they are written
+with the following rules where nnn is an incrementing
+count of the number of "DEBUGVERSION:" strings:
+<TABLE width=100% cellpadding=3><!-- tsb: These blocks are now removed when the debug mode
+ -->
+<TR></TR><TR></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The string "DEBUGVERSION" is replaced with D_nnn
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+"@@@" is replaced with nnn
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+do NOT use the string "DEBUGVERSION" except to start
+or end the block of debug statements
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+<P>
+NB.: IMPORTANT!! This means when this mode is
+activated by the DEBUGVERSION environment variable
+being set the string DEBUGVERSION is a magic string
+and should not be used in input files unless the
+input file starts with "$DEBUG never".
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-version</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+Display version and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-width</B> <I>n</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+Maximum line length of the output file. Default
+is 1024. Typically used to trim fixed-format
+FORTRAN code that contains comments or "ident"
+labels past column 72 when compiling
+fixed-format Fortran code.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DEFINITION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+By default the stand-alone pre-processor <B>ufpp</B>(1) will interpret lines with
+"$" in column one, and will output no such lines. Other input is
+conditionally written to the output file based on the directives encountered
+in the input.
+<P>
+The syntax for the control lines is as follows:
+<P>
+<PRE>
+     $DEFINE   variable_name[=expression]                 [! comment ]
+     $ERROR    message_to_stderr                          [! comment ]
+     $IF       {constant LOGICAL expression}              [! comment ]
+      or
+     $IFDEF    {variable_name}                            [! comment ]
+      or
+     $IFNDEF   {variable_name}                            [! comment ]
+               { sequence of source statements}
+     [$ELSEIF  {constant LOGICAL expression}              [! comment ]
+               { sequence of source statements}]
+     [$ELSE                                               [! comment ]
+               { sequence of source statements}]
+     $ENDIF                                               [! comment ]
+     $IDENT    metadata                                   [! comment ]
+     $@(#)     metadata                                   [! comment ]
+     $INCLUDE  filename                                   [! comment ]
+     $OUTPUT   filename  [-append]                        [! comment ]
+     $FILTER   [comment|write|help|version] |
+               [shell [-cmd NAME]] |
+               [variable [-varname NAME]]
+               [-file NAME [-append]]                     [! comment ]
+     $DOCUMENT and $FILTER are synonyms for $BLOCK
+     $PRINTENV predefined_name|environment_variable_name  [! comment ]
+     $SHOW                                                [! comment ]
+     $STOP {stop_value}                                   [! comment ]
+     $SYSTEM system_command                               [! comment ]
+     $DEBUG ON|OFF|NEVER                                  [! comment ]
+     $UNDEFINE variable_name                              [! comment ]
+     $WARNING  message_to_stderr                          [! comment ]
+     $MESSAGE  message_to_stderr                          [! comment ]
+     $ASSERT   insert call to ASSERT(3f) to print         [! comment ]
+               filename,linenumber,message to stderr and
+               end program. Filename and linenumber are
+               taken from file being processed by ufpp(1)
+<P>
+</PRE>
+Compiler directives are specified by a "$" in column one, followed by a
+keyword.
+<P>
+An exclamation character on a valid directive begins an in-line comment
+that is terminated by an end-of-line.
+<P>
+Any LOGICAL expression composed of integer constants, parameters
+and operators, is valid. Operators are
+<P>
+<PRE>
+     .NOT.  .AND.  .OR.  .EQV.  .NEQV.  .EQ.  .NE.  .GE.
+     .GT.   .LE.   .LT.  +      -       *     /     (
+     )      **
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DIRECTIVES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+$ASSERT expression [,values]
+<P>
+If debug mode is activated then then input line
+<P>
+<PRE>
+      $ASSERT i .gt. 10, &#146;I=&#146;, i, &#146;bigger than&#146;, 10
+<P>
+</PRE>
+becomes
+<P>
+<PRE>
+      call assert(filename, linenumber, i.gt.10, &#146;I=&#146;, &#146;bigger than&#146;, 10)
+<P>
+</PRE>
+and if "I" were 2000, would produce the output
+<P>
+<PRE>
+      ERROR:filename: xx.ff :line number: 32070 : I= 2000.00000 bigger than 10
+      STOP 1
+<P>
+</PRE>
+The manpage for <B>ASSERT</B>(3f) describes the meaning of the parameters in
+greater detail, but the filename will be the name of the file that
+was processed by <B>ufpp</B>(1), the line number will be the linenumber
+of the file processed by <B>ufpp</B>, and everything else on the $ASSERT
+directive is passed directly to <B>ASSERT</B>(3f). Note that the first
+parameter passed on $ASSERT must be a logical expression.
+<P>
+The <B>ASSERT</B>(3f) procedure must be in the load path and the "call assert"
+must be written to the <B>ufpp</B>(1) output file in a scope where
+<P>
+<PRE>
+      use, M_verify, only : assert
+<P>
+</PRE>
+has made the <B>assert</B>(3f) procedure available.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NOTE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The $ASSERT directive will not be written to the output file unless
+the environment variable DEBUGVERSION=T and the <B>-debug</B> switch is
+present on the <B>ufpp</B>.
+<P>
+<PRE>
+      program demo_assert_directive
+      use M_verify, only : assert
+         a=2000
+      $ASSERT  a .le. 10, a,&#146;bigger than&#146;,10
+      end program demo_assert_directive
+<P>
+      #!/bin/bash
+      export DEBUGVERSION=T
+      ufpp -debug -i xx.ff -o xx.f90
+      cat xx.f90
+      f90 xx.f90 -o xx
+      ./xx
+<P>
+</PRE>
+The $ASSERT directive becomes:
+<P>
+<PRE>
+      call assert( "xx.ff", 4 , a .le. 10, a,&#146;bigger than&#146;,10 )
+<P>
+</PRE>
+Sample output:
+<P>
+<PRE>
+      ERROR:filename: xx.ff :line number: 4 : 2000.00000 bigger than 10
+      STOP 1
+<P>
+</PRE>
+$DEFINE variable_name [=expression]
+<P>
+A $DEFINE may appear anywhere in a source file. If the value is ".TRUE."
+or ".FALSE." then the parameter is of type LOGICAL, otherwise the
+parameter is of type INTEGER and the value must be an INTEGER. If no
+value is supplied, the parameter is of type INTEGER and is given the
+value 1.
+<P>
+Constant parameters are defined from the point they are encountered in a
+$DEFINE directive until program termination unless explicitly
+undefined with a $UNDEFINE directive.
+<P>
+Example:
+<P>
+<PRE>
+    $define A=1
+    $define B=1
+    $define C=2
+    $if ( A + B ) / C .eq. 1
+       (a+b)/c is one
+    $endif
+<P>
+</PRE>
+$ERROR message
+<P>
+Write message to stderr and display program condition and exit program.
+<P>
+$IF/$ELSEIF/$ELSE/$ENDIF directives
+<P>
+Each of the control lines delineates a block of FORTRAN source. If the
+expression following the $IF is ".TRUE.", then the lines of FORTRAN
+source following are output. If it is ".FALSE.", and an $ELSEIF
+follows, the expression is evaluated and treated the same as the $IF. If
+the $IF and all $ELSEIF expressions are ".FALSE.", then the lines of
+source following the $ELSE are output. A matching $ENDIF ends the
+conditional block.
+<P>
+$IFDEF/$IFNDEF directives
+<P>
+$IFDEF and $IFNDEF are special forms of the $IF directive that simply test
+if a variable name is defined or not. Essentially, these are equivalent:
+<P>
+<PRE>
+     $IFDEF varname  ==&gt; $IF DEFINED(varname)
+     $IFNDEF varname ==&gt; $IF .NOT. DEFINED(varname)
+<P>
+</PRE>
+except that environment variables are tested as well if the <B>-noenv</B> option
+is not specified.
+<P>
+$IDENT metadata [-language fortran|c|shell]
+<P>
+Writes a line using SCCS-metadata format of the following forms:
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LANGUAGE</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>fortran</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+If the commandline option <B>-ident</B> is set
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  character(len=*),parameter::ident_NNN="@(#)metadata"
+</PRE>
+else
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  ! ident_NNN="@(#)metadata"
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>c</B> </TD><TD valign=bottom>
+#ident "@(#)metadata"
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>shell</B> </TD><TD valign=bottom>
+#@(#) metadata
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+This string is generally included for use with the <B>what</B>(1) command.
+<BLOCKQUOTE>
+<P>
+The default language is fortran. Depending on your compiler, the
+optimization level used when compiling, these strings may or may not
+remain in the object files and executables created.
+<P>
+Do not use the characters double-quote, greater-than, backslash ("&gt;\)
+in the metadata; do not use strings starting with " -" either.
+<P>
+$INCLUDE filename
+<P>
+Nested read of specified input file. Fifty (50) nesting levels are allowed.
+<P>
+$OUTPUT filename [-append]
+<P>
+Specify the output file to write to. Overrides the initial output file
+specified with command line options. If no output filename is given
+revert back to initial output file. @ is a synonym for stdout.
+<P>
+<PRE>
+      -append [.true.|.false]
+<P>
+</PRE>
+Named files open at the beginning by default. Use the <B>-append</B> switch to
+append to the end of an existing file instead of overwriting it.
+<P>
+$PRINTENV name
+<P>
+If the name of an uppercase environment variable is given the value
+of the variable will be placed in the output file. If the value is a
+null string or if the variable is undefined output will be stopped.
+This allows the system shell to generate code lines. This is usually
+used to pass in information about the compiler environment. For
+example:
+<P>
+<PRE>
+     # If the following command were executed in the bash(1) shell&#46;&#46;&#46;
+<P>
+      export STAMP="      write(*,*)&#146;&#146;COMPILED ON:&#145;uname -s&#145;;AT &#145;date&#145;&#146;&#146;"
+<P>
+</PRE>
+the environment variable STAMP would be set to something like
+<P>
+<PRE>
+     write(*,*)&#146;&#146;COMPILED ON:Eureka;AT Wed, Jun 12, 2013  8:12:06 PM&#146;&#146;
+<P>
+</PRE>
+A version number would be another possibility
+<P>
+<PRE>
+     export VERSION="      program_version=2.2"
+<P>
+</PRE>
+Special predefined variable names are:
+<P>
+<PRE>
+     Variable Name      Output
+     UFPP_DATE  &#46;&#46;&#46;...  UFPP_DATE="12:58 14Jun2013"
+     Where code is assumed to have defined UFPP_DATE as CHARACTER(LEN=15)
+     UFPP_FILE  &#46;&#46;&#46;...  UFPP_FILE="current filename"
+     Where code is assumed to have defined UFPP_FILE as CHARACTER(LEN=1024)
+     UFPP_LINE  &#46;&#46;&#46;...  UFPP_LINE=    nnnnnn
+     Where code is assumed to have defined UFPP_LINE as INTEGER
+<P>
+</PRE>
+This example shows one way how an environment variable can be turned
+into a write statement
+<P>
+<PRE>
+     $filter write
+     $ifdef HOME
+     $printenv HOME
+     $else
+        HOME not defined
+     $endif
+     $filter end
+<P>
+</PRE>
+Sample output
+<P>
+<PRE>
+     write(io,&#146;(a)&#146;)&#146;/home/urbanjs/V600&#146;
+<P>
+</PRE>
+$FILTER [comment|write|help|version|shell[ <B>-cmd</B> COMMAND]] [-file NAME][! comment]
+$FILTER VARIABLE <B>-varname</B> NAME
+<P>
+<PRE>
+      COMMENT:   write text prefixed by an exclamation and a space
+      WRITE:     write text as Fortran WRITE(3f) statements
+      HELP:      write text as a subroutine called HELP_USAGE
+      VERSION:   write text as a subroutine called HELP_VERSION
+                 prefixing lines with @(#) for use with the what(1) command.
+      NULL:      Do not write to output file
+      SHELL:     run text in block as a shell and replace with the stdout
+                 generated by the shell. The shell may be specified by the -cmd
+                 option. The default shell is bash(1).
+      VARIABLE:  write as a text variable. The name may be defined using the
+                 -varname switch. Default name is "textblock".
+      END:       End block of documentation
+<P>
+</PRE>
+Causes documentation to be altered in output so it is easily maintained as
+plain text. This is useful for keeping help text or man pages as part of a
+source file.
+<P>
+It is assumed the output will not generate lines over 132 columns. FORTRAN is
+currently the only language supported. A blank value resumes normal
+output processing. The Fortran generated is free-format Fortran 2003.
+<P>
+So the text can easily be processed by other utilities such as <B>markdown</B>(1)
+or <B>txt2man</B>(1) to produce <B>man</B>(1) pages and HTML documents the file can be
+written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the <B>-file</B> parameter. If the
+environment variable $UFPP_DOCUMENT_DIR is not set the option is ignored.
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+$SHOW
+<P>
+Shows current state of <B>ufpp</B>(1); including variable names and values; and
+the name of the current input files. All output is preceded by an
+exclamation character.
+<P>
+Example:
+<P>
+<PRE>
+    ufpp A=10 B C D -o paper
+    $define z=22
+    $show
+    $stop
+<P>
+    !======================================================================
+    ! *ufpp* CURRENT STATE
+    ! *ufpp*    TOTAL LINES READ &#46;&#46;&#46;.........          2
+    ! *ufpp*    CONDITIONAL_NESTING_LEVEL&#46;&#46;&#46;.   0
+    ! *ufpp*    DATE&#46;&#46;&#46;...................... 11:18 21Jun2013
+    ! *ufpp*    ARGUMENTS &#46;&#46;&#46;................ A=10 B C D -o paper
+    ! *ufpp* VARIABLES:
+    ! *ufpp*    ! A                               !          10
+    ! *ufpp*    ! B                               !           1
+    ! *ufpp*    ! C                               !           1
+    ! *ufpp*    ! D                               !           1
+    ! *ufpp*    ! Z                               !          22
+    ! *ufpp* OPEN FILES:
+    ! *ufpp*    ! ---- ! UNIT ! LINE NUMBER ! FILENAME
+    ! *ufpp*    !    1 !    5 !           2 !
+    !======================================================================
+<P>
+</PRE>
+$STOP stop_value
+<P>
+Stops input file processing. An optional integer value of 0 to 20
+will be returned as a status value to the system where supported. A
+value of two ("2") is returned if no value is specified. Any value
+from one ("1") to twenty ("20") also causes an implicit execution of
+the "$SHOW" directive before the program is stopped.
+<P>
+$SYSTEM system_command
+<P>
+If system command processing is enabled using the <B>-system</B> switch system
+commands can be executed to create files to be read or to execute test
+programs, for example. $SYSTEM directives are ignored by default; as you
+clearly need to ensure the input file is trusted before allowing commands
+to be executed.
+<P>
+Examples:
+<P>
+<PRE>
+    $! build variable definitions using GNU/Linux commands
+    $SYSTEM echo system=&#145;hostname&#145; &gt; compiled.h
+    $SYSTEM echo compile_time="&#145;date&#145;" &gt;&gt; compiled.h
+    $INCLUDE compiled.h
+<P>
+    $! obtain up-to-date copy of source file from HTTP server:
+    $SYSTEM wget <A HREF="http://repository.net/src/func.F90">http://repository.net/src/func.F90</A> -O -|
+    cpp -P -C -traditional &gt;_tmp.f90
+    $INCLUDE _tmp.f90
+    $SYSTEM  rm _tmp.f90
+<P>
+</PRE>
+$UNDEFINE variable_name
+<P>
+A symbol defined with $DEFINE can be removed with the $UNDEFINE
+directive.
+<P>
+<B>DEFINED</B>(variable_name)
+<P>
+A special function called <B>DEFINED</B>() may appear only in a $IF or $ELSEIF.
+If "variable_name" has been defined at that point in the source code,
+then the function value is ".TRUE.", otherwise it is ".FALSE.". A name is
+defined only if it has appeared in the source previously in a $DEFINE
+directive or been declared on the command line.
+The names used in compiler directives are district from names in the
+FORTRAN source, which means that "a" in a $DEFINE and "a" in a FORTRAN
+source statement are totally unrelated.
+The <B>DEFINED</B>() parameter is NOT valid in a $DEFINE directive.
+<P>
+Example:
+<P>
+<PRE>
+    &gt;        Program test
+    &gt; $IF .NOT. DEFINED (inc)
+    &gt;        INCLUDE &#146;&#146;comm.inc&#146;&#146;
+    &gt; $ELSE
+    &gt;        INCLUDE &#146;&#146;comm2.inc&#146;&#146;
+    &gt; $ENDIF
+    &gt;        END
+<P>
+</PRE>
+The file, "comm.inc" will be INCLUDEd in the source if the parameter,
+"inc", has not been previously defined, while INCLUDE "comm2.inc" will
+be included in the source if "inc" has been previously defined. This is
+useful for setting up a default inclusion.
+<P>
+$WARNING message
+<P>
+Write message to stderr of form "WARNING message"
+<P>
+$MESSAGE message
+<P>
+Write message to stderr of form "message"
+<P>
+$DEBUG option
+<TABLE cellpadding=3><!-- tsb: $DEBUG option
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NEVER</B> </TD><TD valign=bottom>
+allows for designating a file does not contain
+any "DEBUGVERSION" strings that should be processed
+as conditionally inserted lines.
+</TD></TR>
+<TR></TR></TABLE>Even if the environment variable DEBUGVERSION is no set to T|F:
+<P>
+<PRE>
+      ON    Change the default set by the environment variable
+            DEBUGVERSION or set by the -debug switch
+            and turn debug processing on.
+<P>
+      OFF   Change the default set by the environment variable
+            DEBUGVERSION or set by the -debug switch
+            and turn debug processing off.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>LIMITATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+$IF constructs can be nested up to 20 levels deep. Note that using
+more than two levels typically makes input files less readable.
+<P>
+$FILTER END is required after a $FILTER or <B>-file</B> FILENAME is not written
+and output of a shell is not read.
+<P>
+Nesting of $FILTER sections not allowed.
+<P>
+Messages for $MESSAGE, $WARNING, $ERROR cannot contain an exclamation
+</BLOCKQUOTE>
+<P>
+Input files
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Input files
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+lines are limited to 1024 columns. Text past column 1024 is ignored.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+files currently opened cannot be opened again.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a maximum of 50 files can be nested by $INCLUDE
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+filenames cannot contain spaces on the command line.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Variable names
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Variable names
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+cannot be redefined unless first undefined.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+are limited to 31 characters.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+must start with a letter (A-Z).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+are composed of the letters A-Z, digits 0-9 and _ and $.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+2048 variable names may be defined at a time.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Major <B>cpp</B>(1) features not present in <B>ufpp</B>(1):
+<P>
+<PRE>
+   There are no predefined preprocessor symbols. Use a directive input file
+   instead. The predefined variables such as UFPP_DATE can be used as a
+   substitute in some cases.
+<P>
+   This program does not provide string (macro) substitution in output
+   lines. See cpp(1) and m4(1) and related utilities if macro expansion is
+   required.
+<P>
+   While cpp(1) is the de-facto standard for preprocessing Fortran code,
+   Part 3 of the Fortran 95 standard (ISO/IEC 1539-3:1998) defines
+   Conditional Compilation, but it is (currently) not widely
+   supported (See coco(1)).
+<P>
+</PRE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Define variables on command line:
+<P>
+Typically, variables are defined on the command line when <B>ufpp</B>(1) is invoked
+or are grouped together into small files that are included with a $INCLUDE
+or as input files.
+<P>
+<PRE>
+     ufpp HP size=64 -i hp_directives.dirs @ test.F90 -o test_out.f90
+<P>
+</PRE>
+defines variables HP and SIZE as if the expressions had been on a $DEFINE
+and reads file "hp_directives.dirs" and then stdin and then test.F90.
+Output is directed to test_out.f90
+</BLOCKQUOTE>
+<P>
+Basic conditionals:
+<P>
+<PRE>
+   &gt;$! set value of variable "a" if it is not specified on the ufpp(1) command.
+   &gt;$IF .NOT.DEFINED(A)
+   &gt;$DEFINE a=1  ! define only the first version of SUB1(3f)
+   &gt;$ENDIF
+   &gt;program conditional_compile
+   &gt;   use M_kracken, only : kracken, lget
+   &gt;   ! use M_kracken module to crack command line arguments
+   &gt;   call kracken("cmd","-help .false. -version .false.")
+   &gt;   ! call routine generated by $FILTER HELP
+   &gt;   call help_usage(lget("cmd_help"))
+   &gt;   ! call routine generated by $FILTER VERSION
+   &gt;   call help_version(lget("cmd_version"))
+   &gt;   call sub1()
+   &gt;end program conditional_compile
+   &gt;! select a version of SUB1 depending on the value of ufpp(1) variable "a"
+   &gt;$IF a .EQ. 1
+   &gt;subroutine sub1
+   &gt;   print*, "This is the first SUB1"
+   &gt;end subroutine sub1
+   &gt;$ELSEIF a .eq. 2
+   &gt;subroutine sub1
+   &gt;   print*, "This is the second SUB1"
+   &gt;end subroutine sub1
+   &gt;$ELSE
+   &gt;subroutine sub1
+   &gt;   print*, "This is the third SUB1"
+   &gt;end subroutine sub1
+   &gt;$ENDIF
+   &gt;$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt;$! generate help_usage() procedure (and file to run thru txt2man(1) or other
+   &gt;$! filters to make man(1) page if $UFPP_DOCUMENT_DIR is set).
+   &gt;$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt;$FILTER HELP -file conditional_compile.man
+   &gt;NAME
+   &gt;    conditional_compile - basic example for ufpp(1) pre-processor.
+   &gt;SYNOPSIS
+   &gt;    conditional_example [--help] [--version]
+   &gt;DESCRIPTION
+   &gt;    This is a basic example program showing how documentation can be used
+   &gt;    to generate program help text
+   &gt;OPTIONS
+   &gt;       --help
+   &gt;              display this help and exit
+   &gt;       --version
+   &gt;              output version information and exit
+   &gt;$FILTER END
+   &gt;$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt;$! generate help_version() procedure
+   &gt;$FILTER VERSION
+   &gt;DESCRIPTION: example program showing conditional compilation with ufpp(1)
+   &gt;PROGRAM:     conditional_compile
+   &gt;VERSION:     1.0, 20160703
+   &gt;AUTHOR:      John S. Urban
+   &gt;$FILTER END
+   &gt;$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<P>
+</PRE>
+<BLOCKQUOTE>
+An example using the magic string "DEBUGVERSION" assuming the environment
+variable DEBUGVERSION has been set to T or F. Given the source file:
+<P>
+<PRE>
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+   module M_d
+      implicit none
+   contains
+      subroutine proc(r)
+         integer,intent(inout) :: r(:)
+         debugversion: block
+            integer :: i
+            write(*,&#146;(*(g0))&#146;)"*proc* message",@@@
+            write(*,&#146;("*proc* ",*(i0,"[",g0,"]"))&#146;)(i,r(i),i=1,size(r))
+         endblock debugversion
+         r=r**2
+         debugversion: block
+            integer :: i
+            write(*,&#146;("*proc* LOCATION @@@:",*(i0,"[",g0,"]"))&#146;)(i,r(i),i=1,size(r))
+         endblock debugversion
+      end subroutine proc
+   end module M_d
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+   program run
+      use M_d
+      integer :: arr(5)=[(i*10,i=1,size(arr))]
+      DEBUGVERSION: block
+         write(*,&#146;(a)&#146;)&#146;THIS IS A DEBUG VERSION&#146;
+      endblock DEBUGVERSION
+      call proc(arr)
+   end program run
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+<P>
+</PRE>
+<BLOCKQUOTE>
+Expected output if debug mode is on
+<P>
+<PRE>
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+   module M_d
+      implicit none
+   contains
+      subroutine proc(r)
+         integer,intent(inout) :: r(:)
+         DEBUG_1: block
+            integer :: i
+            write(*,&#146;(*(g0))&#146;)"*proc* message",1
+            write(*,&#146;("*proc* ",*(i0,"[",g0,"]"))&#146;)(i,r(i),i=1,size(r))
+         endblock DEBUG_1
+         r=r**2
+         DEBUG_2: block
+            integer :: i
+            write(*,&#146;("*proc* LOCATION 2:",*(i0,"[",g0,"]"))&#146;)(i,r(i),i=1,size(r))
+         endblock DEBUG_2
+      end subroutine proc
+   end module M_d
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+   program run
+      use M_d
+      integer :: arr(5)=[(i*10,i=1,size(arr))]
+      DEBUG_3: block
+         write(*,&#146;(a)&#146;)&#146;THIS IS A DEBUG VERSION&#146;
+      endblock DEBUG_3
+      call proc(arr)
+   end program run
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+<P>
+</PRE>
+Expected output if debug mode is off:
+<P>
+<PRE>
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+   module M_d
+      implicit none
+   contains
+      subroutine proc(r)
+         integer,intent(inout) :: r(:)
+         r=r**2
+      end subroutine proc
+   end module M_d
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+   program run
+      use M_d
+      integer :: arr(5)=[(i*10,i=1,size(arr))]
+      call proc(arr)
+   end program run
+   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+<P>
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>ufpp (1)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from efa338eb-badf-4897-a7ac-d4bc4b80dc3a using man macros.</FONT>
+<br><br><center><img src="images/ufpp.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

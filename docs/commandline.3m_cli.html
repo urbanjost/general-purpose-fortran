@@ -1,0 +1,353 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>commandline (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>commandline</B>(3f) - [ARGUMENTS:M_CLI] command line argument parsing
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>function</B> <B>commandline</B>(definition,name,noquote) <B>result</B>(string)
+<P>
+<PRE>
+    character(len=*),intent(in),optional  :: definition
+    character(len=*),optional :: name
+    logical,optional :: noquote
+    character(len=:),allocatable :: string
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+To use the routine first define a NAMELIST group called ARGS.
+<P>
+This routine leverages NAMELIST groups to do the conversion from
+strings to numeric values required by other command line parsers.
+<P>
+The example program shows how simple it is to use. Add a variable
+to the NAMELIST and the prototype and it automatically is available
+as a value in the program.
+<P>
+There is no need to convert from strings to numeric values in the
+source code. Even arrays and user-defined types can be used, complex
+values can be input &#46;&#46;&#46; just define the variable in the prototype
+and add it to the NAMELIST definition.
+<P>
+Note that since all the arguments are defined in a NAMELIST group that
+<TABLE cellpadding=3><!-- tsb: Note that since all the arguments are defined in a NAMELIST group that
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>config files can easily be used for the same options.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Just create
+a NAMELIST input file and read it.
+</TD></TR>
+<TR></TR></TABLE>NAMELIST syntax can vary between different programming environments.
+Currently, this routine has only been tested using gfortran 7.0.4;
+and requires at least Fortran 2003.
+<P>
+For example:
+<P>
+<PRE>
+       program demo_commandline
+          use M_CLI,  only : unnamed, commandline, check_commandline
+          implicit none
+          integer                      :: i
+          character(len=255)           :: message ! for I/O error
+          character(len=:),allocatable :: readme  ! updated namelist
+          integer                      :: ios
+<P>
+       ! declare a namelist
+          real               :: x, y, z, point(3), p(3)
+          character(len=80)  :: title
+          logical            :: l, l_
+          equivalence       (point,p)
+          namelist /args/ x,y,z,point,p,title,l,l_
+<P>
+       ! Define the prototype
+       !  o All parameters must be listed with a default value.
+       !  o logicals should be specified with a value of F or T.
+       !  o string values  must be double-quoted.
+       !  o lists must be comma-delimited. No spaces allowed in lists.
+       !  o all long names must be lowercase. An uppercase short name
+       !    -A maps to variable A_
+       !  o if variables are equivalenced only one should be used on
+       !    the command line
+          character(len=*),parameter  :: cmd=&#146;&
+          & -x 1 -y 2 -z 3     &
+          & --point -1,-2,-3   &
+          & --title "my title" &
+          & -l F -L F&#146;
+          ! reading in a NAMELIST definition defining the entire NAMELIST
+          ! now get the values from the command prototype and
+          ! command line as NAMELIST input
+          readme=commandline(cmd)
+          read(readme,nml=args,iostat=ios,iomsg=message)
+          call check_commandline(ios,message)
+          ! all done cracking the command line
+<P>
+          ! use the values in your program.
+          write(*,nml=args)
+          ! the optional unnamed values on the command line are
+          ! accumulated in the character array "UNNAMED"
+          if(size(unnamed).gt.0)then
+             write(*,&#146;(a)&#146;)&#146;files:&#146;
+             write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,unnamed(i),&#146;]&#146;,i=1,size(unnamed))
+          endif
+       end program demo_commandline
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B><A HREF=#2>DESCRIPTION</A></B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+composed of all command arguments concatenated
+into a Unix-like command prototype string.
+<TABLE width=100% cellpadding=3><!-- tsb: composed of all command arguments concatenated
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+all keywords get a value.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+logicals must be set to F or T.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+strings MUST be delimited with double-quotes and
+must be at least one space. Internal
+double-quotes are represented with two double-quotes
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+lists of values should be comma-delimited.
+No spaces are allowed in lists of numbers.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+long names (<B>--keyword</B>) should be all lowercase
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+short names (<B>-letter</B>) that are uppercase map to a
+NAMELIST variable called "letter_", but lowercase
+short names map to NAMELIST name "letter".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the values follow the rules for NAMELIST values, so
+"<B>-p</B> 2*0" for example would define two values.
+</TD></TR>
+<TR></TR></TABLE>DESCRIPTION is pre-defined to act as if started with the reserved
+options &#146;<B>--usage</B> F <B>--help</B> F <B>--version</B> F&#146;. The <B>--usage</B>
+option is processed when the <B>check_commandline</B>(3f)
+routine is called. The same is true for <B>--help</B> and <B>--version</B>
+if the optional help_text and version_text options are
+provided.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>NOQUOTE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+If .TRUE., then a comma is implicitly assumed a value separator
+in unquoted strings on the command line, so that an array of strings
+not containing commas in the values can
+be specified as A,B,C instead of &#146;"A","B","C"&#146;. Note that this means if
+a non-array string value is specified that contains a comma, the scalar
+value would now need quoted, as in &#146;"yesterday, today or tomorrow"&#146;.
+So if you are not using string arrays this should be left off.
+</TD></TR>
+<TR></TR></TABLE><A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>STRING</B> </TD><TD valign=bottom>
+The output is a NAMELIST string than can be read to update
+the NAMELIST "ARGS" with the keywords that were supplied on
+the command line.
+</TD></TR>
+<TR><TD colspan=2>
+When using one of the Unix-like command line forms note that
+(subject to change) the following variations from other common
+command-line parsers:
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+long names do not take the <B>--KEY</B>=VALUE form, just
+<B>--KEY</B> VALUE; and long names should be all lowercase and
+always more than one character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+duplicate keywords are replaced by the rightmost entry
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+numeric keywords are not allowed; but this allows
+negative numbers to be used as values.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+mapping of short names to long names is via an EQUIVALENCE.
+specifying both names of an equivalenced keyword will have
+undefined results (currently, their alphabetical order
+will define what the Fortran variable values become).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+short keywords cannot be combined. <B>-a</B> <B>-b</B> <B>-c</B> is required,
+not <B>-abc</B> even for Boolean keys.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+shuffling is not supported. Values must follow their
+keywords.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if a parameter value of just "-" is supplied it is
+converted to the string "stdin".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if the keyword "--" is encountered the rest of the
+command arguments go into the character array "UNUSED".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+values not matching a keyword go into the character
+array "UNUSED".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+short-name parameters of the form <B>-LETTER</B> VALUE
+map to a NAMELIST name of LETTER_ if uppercase
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2019
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>commandline (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 873275bd-3b19-4c93-91a4-55a98e2fe2e6 using man macros.</FONT>
+<br><br><center><img src="images/commandline.3m_cli.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

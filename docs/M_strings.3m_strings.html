@@ -1,0 +1,636 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_strings (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_strings</B>(3f) - [M_strings:INTRO] Fortran string module
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Synopsis</A><BR>
+<A HREF=#3>See Also</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>M_strings</B>(3fm) module is a collection of Fortran procedures
+that supplement the built-in intrinsic string routines. Routines
+for parsing, tokenizing, changing case, substituting new strings for
+substrings, locating strings with simple wildcard expressions, removing
+tabs and line terminators and other string manipulations are included.
+<P>
+<B>M_strings_oop</B>(3fm) is a companion module that provides an OOP interface
+to the M_strings module.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>public</B> entities:
+<P>
+<PRE>
+     use M_strings, only : split,sep,delim,chomp
+     use M_strings, only : substitute,change,modif,transliterate,reverse
+     use M_strings, only : replace,join
+     use M_strings, only : upper,lower,upper_quoted
+     use M_strings, only : rotate13
+     use M_strings, only : adjustc,compact,nospace,indent
+     use M_strings, only : crop,unquote,quote
+     use M_strings, only : len_white,atleast,stretch,lenset,merge_str
+     use M_strings, only : switch,s2c,c2s
+     use M_strings, only : noesc,notabs,dilate,expand,visible
+     !!use M_strings, only : uc
+     use M_strings, only : string_to_value,string_to_values,s2v,s2vs
+     use M_strings, only : value_to_string,v2s,msg
+     use M_strings, only : listout,getvals
+     use M_strings, only : glob, ends_with
+     use M_strings, only : fmt
+     use M_strings, only : base, decodebase, codebase
+     use M_strings, only : isalnum, isalpha, iscntrl, isdigit
+     use M_strings, only : isgraph, islower, isprint, ispunct
+     use M_strings, only : isspace, isupper, isascii, isblank, isxdigit
+     use M_strings, only : fortran_name
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TOKENS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>split</B> </TD><TD valign=bottom>
+subroutine parses string using specified delimiter characters
+and stores tokens into an array
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>sep</B> </TD><TD valign=bottom>
+function interface to <B>split</B>(3f)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>delim</B> </TD><TD valign=bottom>
+subroutine parses string using specified delimiter characters
+and store tokens into an array
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>chomp</B> </TD><TD valign=bottom>
+function consumes input line as it returns next token in a
+string using specified delimiters
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>fmt</B> </TD><TD valign=bottom>
+convert a string into a paragraph
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; EDITING</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>substitute</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+subroutine non-recursively globally replaces old
+substring with new substring
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>replace</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+function non-recursively globally replaces old
+substring with new substring using allocatable string
+(version of <B>substitute</B>(3f) without limitation on
+length of output string)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>change</B> </TD><TD valign=bottom>
+subroutine non-recursively globally replaces old
+substring
+with new substring with a directive like line editor
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>modif</B> </TD><TD valign=bottom>
+subroutine modifies a string with a directive like the
+XEDIT line editor MODIFY command
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>transliterate</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+replace characters found in set one with characters
+from set two
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>reverse</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+reverse character order in a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>join</B> </TD><TD valign=bottom>
+join an array of CHARACTER variables with specified
+separator
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>rotate13</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+apply trivial encryption algorithm ROT13 to a string
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CASE</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>upper</B> </TD><TD valign=bottom>
+function converts string to uppercase
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lower</B> </TD><TD valign=bottom>
+function converts string to miniscule
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>upper_quoted</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+function converts string to uppercase skipping strings
+quoted per Fortran rules
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; WHITE SPACE</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>adjustc</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+elemental function centers text within the length of the
+input string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>compact</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+left justify string and replace duplicate whitespace with
+single characters or nothing
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>nospace</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+function replaces whitespace with nothing
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>indent</B> </TD><TD valign=bottom>
+find number of leading spaces
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>crop</B> </TD><TD valign=bottom>
+function trims leading and trailing spaces
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; QUOTES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>unquote</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+remove quotes from string as if read with list-directed input
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>quote</B> </TD><TD valign=bottom>
+add quotes to string as if written with list-directed input
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; STRING LENGTH</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>len_white</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+find location of last non-whitespace character
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lenset</B> </TD><TD valign=bottom>
+return a string of specified length
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>atleast</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+return a string of at least specified length
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>stretch</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+return a string of at least specified length with suffix
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>merge_str</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+make strings of equal length and then call <B>MERGE</B>(3f)
+intrinsic
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CHARACTER ARRAY VERSUS STRING</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>switch</B> </TD><TD valign=bottom>
+switch between a string and an array of single characters
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>s2c</B> </TD><TD valign=bottom>
+convert string to array of single characters and add null
+terminator for passing to C
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>c2s</B> </TD><TD valign=bottom>
+convert null-terminated array of single characters to
+string for converting strings returned from C
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NONALPHA</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>noesc</B> </TD><TD valign=bottom>
+convert non-printable ASCII8 characters to a space
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>notabs</B> </TD><TD valign=bottom>
+convert tabs to spaces while maintaining columns,
+assuming tabs are set every 8 characters
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>dilate</B> </TD><TD valign=bottom>
+function to convert tabs to spaces assuming tabs are set
+every 8 characters
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>expand</B> </TD><TD valign=bottom>
+expand escape sequences in a string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>visible</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+expand escape sequences in a string to control and
+meta-control representations
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NUMERIC STRINGS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>string_to_value</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+generic subroutine returns numeric value (REAL,
+DOUBLEPRECISION, INTEGER) from string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>string_to_values</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+subroutine reads an array of numbers from a string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>getvals</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+subroutine reads a relatively arbitrary number
+of values from a string using list-directed read
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>s2v</B> </TD><TD valign=bottom>
+function returns DOUBLEPRECISION numeric value
+from string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>s2vs</B> </TD><TD valign=bottom>
+function returns a DOUBLEPRECISION array of numbers
+from a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>msg</B> </TD><TD valign=bottom>
+append the values of up to nine values into a string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>value_to_string</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+generic subroutine returns string given numeric value
+(REAL, DOUBLEPRECISION, INTEGER, LOGICAL )
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>v2s</B> </TD><TD valign=bottom>
+generic function returns string from numeric value
+(REAL, DOUBLEPRECISION, INTEGER )
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>listout</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+expand a list of numbers where negative numbers
+denote range ends (1 <B>-10</B> means 1 thru 10)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>isnumber</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+determine if string represents a number
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CHARACTER TESTS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>glob</B> </TD><TD valign=bottom>
+compares given string for match to pattern which may
+contain wildcard characters
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ends_with</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+test whether strings ends with one of the specified suffixs
+</TD></TR>
+<TR></TR></TABLE><TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isalnum returns .true. if character is a letter or digit
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isalpha returns .true. if character is a letter and
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+iscntrl returns .true. if character is a delete character or
+ordinary control character
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isdigit returns .true. if character is a digit (0,1,&#46;&#46;&#46;,9)
+and .false. otherwise
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isgraph returns .true. if character is a printable character
+except a space is considered non-printable
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+islower returns .true. if character is a miniscule letter (a-z)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isprint returns .true. if character is an ASCII printable
+character
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ispunct returns .true. if character is a printable punctuation
+character
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isspace returns .true. if character is a null, space, tab,
+carriage return, new line, vertical tab, or formfeed
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isupper returns .true. if character is an uppercase letter (A-Z)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isascii returns .true. if the character is in the range <B>char</B>(0)
+to <B>char</B>(127)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isblank returns .true. if character is a blank character
+(space or horizontal tab.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+isxdigit returns .true. if character is a hexadecimal digit
+(0-9, a-f, or A-F).
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>fortran_name</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+returns .true. if input string is a valid Fortran name
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BASE CONVERSION</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>base</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+convert whole number string in base [2-36] to string
+in alternate base [2-36]
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>codebase</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+convert whole number string in base [2-36] to base
+10 number
+decodebase convert whole number in base 10 to string in base [2-36]
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MISCELLANEOUS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>describe</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+returns a string describing the name of a single character
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INTRINSICS</H4>
+</A>
+<BLOCKQUOTE>
+The <B>M_strings</B>(3fm) module supplements and works in combination with
+the Fortran built-in intrinsics. Stand-alone Fortran lets you access
+the characters in a string using ranges much like they are character
+arrays, assignment, comparisons with standard operators, supports
+dynamically allocatable strings and supports concatenation using the //
+operator, as well as a number of intrinsic string routines:
+<P>
+<PRE>
+       adjustl             Left adjust a string
+       adjustr             Right adjust a string
+       index               Position of a substring within a string
+       repeat              Repeated string concatenation
+       scan                Scan a string for the presence of a set
+                           of characters
+       trim                Remove trailing blank characters of a string
+       verify              Scan a string for the absence of a set of
+                           characters
+       len                 It returns the length of a character string
+       achar               converts an integer into a character
+       iachar              converts a character into an integer
+       len_trim            finds length of string with trailing spaces
+                           ignored
+       new_line            Newline character
+       selected_char_kind  Choose character kind
+       lge                 Lexical greater than or equal
+       lgt                 Lexical greater than
+       lle                 Lexical less than or equal
+       llt                 Lexical less than
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; OOPS INTERFACE</H4>
+</A>
+<BLOCKQUOTE>
+The <B>M_strings_oop</B>(3fm) module (included with the <B>M_strings</B>(3fm)
+module) provides an OOP (Object-Oriented Programming) interface to
+the <B>M_strings</B>(3fm) module.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+There are additional routines in other GPF modules for working with
+expressions (M_calculator), time strings (M_time), random strings
+(M_random, M_uuid), lists (M_list), and interfacing with the C regular
+expression library (M_regex).
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Each of the procedural functions includes an example program in the
+corresponding <B>man</B>(1) page for the function. The object-oriented
+interface does not have individual <B>man</B>(1) pages, but is instead
+demonstrated using the following example program:
+</BLOCKQUOTE>
+<P>
+<P>
+<PRE>
+    program demo_M_strings
+    use M_strings, only : split, delim, chomp, sep
+    use M_strings, only : substitute, change, modif
+    use M_strings, only : transliterate, reverse
+    use M_strings, only : replace, join
+    use M_strings, only : upper, lower, upper_quoted
+    use M_strings, only : rotate13
+    use M_strings, only : adjustc, compact, nospace, indent, crop
+    use M_strings, only : unquote, quote
+    use M_strings, only : len_white, atleast, stretch, lenset, merge_str
+    use M_strings, only : switch, s2c, c2s
+    use M_strings, only : noesc, notabs, dilate, expand, visible
+    !!use M_strings, only : uc
+    use M_strings, only : string_to_value, string_to_values, s2v, s2vs
+    use M_strings, only : value_to_string, v2s, msg
+    use M_strings, only : listout, getvals
+    use M_strings, only : glob, ends_with
+    use M_strings, only : fmt
+    use M_strings, only : base, decodebase, codebase
+    use M_strings, only : isalnum, isalpha, iscntrl, isdigit, isgraph
+    use M_strings, only : islower, isprint, ispunct, isspace, isupper
+    use M_strings, only : isascii, isblank, isxdigit
+    use M_strings, only : fortran_name
+    end program demo_M_strings
+<P>
+</PRE>
+<BLOCKQUOTE>
+Expected output
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_strings (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 362341db-5102-4cbc-b828-5f847797bb27 using man macros.</FONT>
+<br><br><center><img src="images/M_strings.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

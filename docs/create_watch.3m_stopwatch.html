@@ -1,0 +1,347 @@
+<HTML><HEAD>
+<TITLE>create_watch.3m_stopwatch.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>CREATE_WATCH (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+create_watch(3f) - [M_stopwatch] creates and initializes a M_StopWatch watch (LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Diagnostics</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Bugs</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine
+<B>create_watch</B><I>(watch, clock, name, err)</I> <P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+type (watchtype), intent(OUT) ::  watch
+</TD></TR>
+<TR valign=top><TD width=6%>
+OR
+</TD><TD>
+type (watchtype), intent(OUT) ::  watch(:)
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+character(len=*), optional, intent(IN) ::  clock
+</TD></TR>
+<TR valign=top><TD width=6%>
+OR
+</TD><TD>
+character(len=*), intent(IN) ::  clock(:)
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+character(len=*), optional, intent(IN) ::  name
+</TD></TR>
+<TR valign=top><TD width=6%>
+OR
+</TD><TD>
+character(len=*), optional, intent(IN) ::  name(:)
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+integer, optional, intent(OUT) ::  err
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Creates and initializes the specified clocks of the
+specified watches.  In the initial state, all clocks
+are not running and have the value 0.  All watches must
+be created before they are used or added to a watch
+group.  In Fortran 90 it is impossible to test whether
+or not a watch has been created, and using a watch that
+has not been created may cause the program to crash.
+It is not an error to create a watch that has already
+been created, however the prior information and memory
+locations will be lost.  Watches should be destroyed
+(see
+<B>destroy_watch</B>(3))
+before they are recreated.  Also, local variable
+watches should be destroyed before returning from a
+subroutine, to avoid memory leaks.
+<P>
+One or more watches must be specified.  The argument
+<I>watch</I> can be a single variable of type
+<I>watchtype</I> (see
+<B>M_stopwatch</B>(3))
+to create one watch, or an array of type
+<I>watchtype</I> to create several watches.
+<P>
+The optional argument
+<I>clock</I> specifies which clocks to create on the specified
+watch(es).  If omitted, the current default clocks (see
+<B>option_stopwatch</B>(3))
+are created.  If present,
+<I>clock</I> must be a character string containing &#146;cpu&#146;, &#146;user&#146;,
+&#39;sys&#146;, or &#146;wall&#146;, or an array of such character
+strings.
+<P>
+The optional argument
+<I>name</I> allows you to attach a name to the watch.  The name is
+used when printing error messages, or when printing
+clock values using
+<B>print_watch.</B> If omitted, the name of the watch is &#146;unnamed watch&#146;.
+If present, it must be of the same rank and dimension
+as
+<I>watch.</I> Watch names are limited to 132 characters.
+<P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DIAGNOSTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+If present, the optional intent OUT integer argument
+<I>err</I> returns a status code.  The code is the sum of the
+values listed below.
+<P>
+An error message will be printed to a specified I/O
+unit (unit 6 by default) if
+<I>print_errors</I> is TRUE (default is TRUE). The error message contains
+more detail about the cause of the error than can be
+obtained from just the status code, so you should set
+<I>print_errors</I> to TRUE if you have trouble determining the cause of
+the error.
+<P>
+If
+<I>abort_errors</I> is TRUE (default is FALSE), the program will terminate
+on an error condition.  Otherwise, the program will
+continue execution but the watch(es) will not be
+created.
+<P>
+See
+<B>option_stopwatch</B>(3)
+for further information on
+<I>print_errors, abort_errors</I> and I/O units.
+<P>
+The relevant status codes and messages are:
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+0
+</TD><TD>
+No errors; execution successful.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+8
+</TD><TD>
+Invalid clock type.  This occurs if
+<I>clock</I> is present and one of the specified clocks is not
+supported by the implementation.  See
+<B>inquiry_stopwatch</B>(3)
+to determine what clocks are available.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+32
+</TD><TD>
+Number of names is not equal to number of watches.
+This occurs if the array of watch names,
+<I>name,</I> is not of the same length as the array of watches,
+<I>watch.</I> <P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+64
+</TD><TD>
+Character string too long.  This occurs when a watch
+name has more than 132 characters.  The watch is
+created, but the name is truncated to the first 132
+characters.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+512
+</TD><TD>
+Failed to allocate required memory.  Creating a watch
+involves allocating memory for it.  Also, when
+<B>create_watch</B> is called with an array or group of watches, temporary
+memory is allocated.  This error occurs if the Fortran
+<B>allocate</B> statement returns a nonzero status indicating that
+memory could not be allocated.  Avoid memory leaks by
+always destroying watches and groups before recreating
+them, and destroying local variable watches and groups
+before returning from a subroutine.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+1024
+</TD><TD>
+Error occurred while deallocating memory.  This error
+occurs if the Fortran
+<B>deallocate</B> statement returns a nonzero status while deallocating
+temporary memory used for an array or group of watches.
+The watches are created, but be aware that other
+problems could develop as a result of the deallocate
+error.
+<P>
+</TD></TR>
+<TR><TD colspan=2>
+<P>
+In addition to the run time diagnostics generated by
+M_StopWatch, the following problems may arise:
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+Since
+<I>watch</I> has intent OUT, you cannot use an array constructor as
+an actual argument to construct an array of watches.
+Some compilers will recognize this as a compile time
+error, but will generate an obscure error message, such
+as &#145;&#145;no specific match for generic name&#146;&#146;.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+In Fortran 90, the character strings in an array
+constructor must all have the same length.  Pad three
+letter clock names with a blank on the right to make a
+four character string, for example, &#146;cpu &#146;, and pad
+watch names so they all have the same length (within an
+array constructor).
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+type (watchtype) w1, w2(3), w3
+integer errcode
+<P>
+call create_watch(w1)
+call create_watch(w2, name=(/&#146;part 1&#146;, &#146;part 2&#146;, &#146;total
+&#39;/), err=errcode)
+call create_watch(w3, (/&#146;cpu &#146;, &#146;wall&#146;/), err=errcode)
+<P>
+The first call creates the default clocks on a single
+watch with name &#146;unnamed watch&#146;.  The second call
+creates the default clocks on three watches given as an
+array and with names &#146;part 1&#146;, &#146;part 2&#146;, and &#146;total&#146;,
+and returns a status code.  The third call creates one
+watch with the cpu and wall clocks, the name &#146;unnamed
+watch&#146;, and returns a status code.
+<P>
+<PRE>
+<P>
+   program demo_creat_watch
+   ! example program starts a watch W1, stops it, and prints the results
+   use,intrinsic :: iso_fortran_env, only : &
+      ERROR_UNIT, INPUT_UNIT, OUTPUT_UNIT ! access computing environment
+   use M_stopwatch, only : watchtype
+   use M_stopwatch, only : option_stopwatch, create_watch, start_watch
+   use M_stopwatch, only : stop_watch, print_watch, destroy_watch
+   implicit none
+   type (watchtype) w1
+   character(len=:),allocatable :: cmd
+   integer errcode
+<P>
+      cmd=&#146;hostname;sleep 3;date;pwd&#146;
+<P>
+      call option_stopwatch(                                            &
+         default_clock=[character(len=4) :: &#146;cpu&#146;,&#146;wall&#146;,&#146;user&#146;,&#146;sys&#146;], &
+         io_unit_print=ERROR_UNIT,                                      &
+         io_unit_error=ERROR_UNIT)
+<P>
+      call create_watch(watch=w1, name=&#146;times&#146;)
+      call start_watch(watch=w1)
+<P>
+      call execute_command_line(cmd) ! do something that takes some time
+<P>
+      call stop_watch(watch=w1)
+      call print_watch(watch=w1, title=&#146;COMMAND:&#146;//cmd, err=errcode)
+      call destroy_watch(w1)
+<P>
+   end program demo_creat_watch
+</PRE>
+<P>
+Expected typical output:
+<P>
+<PRE>
+   buzz
+   Sun Nov  4 20:56:29 EST 2018
+   /home/urbanjs/V600
+   COMMAND:hostname;sleep 3;date;pwd
+     times:
+           cpu=    0.03 user=    0.00  sys=    0.03 wall=    3.38
+</PRE>
+<P>
+<P>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+None known.
+<P>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+William F. Mitchell, <A HREF="mailto:william.mitchell@nist.gov">william.mitchell@nist.gov</A>
+National Institute of Standards and Technology
+<P>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+M_stopwatch(3), create_watchgroup(3),
+destroy_watchgroup(3), destroy_watch(3),
+end_pause_watch(3), inquiry_stopwatch(3),
+join_watchgroup(3), leave_watchgroup(3),
+option_stopwatch(3), pause_watch(3), print_watch(3),
+read_watch(3), reset_watch(3), start_watch(3),
+stop_watch(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>M_StopWatch 1.1</I></TD> <TD width=33% align=center>CREATE_WATCH (3)</TD> <TD align=right width=33%><I>September 22, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from create_watch.3m_stopwatch.txt using man macros.</FONT>
+</BODY></HTML>

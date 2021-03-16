@@ -1,0 +1,14 @@
+name = "GPF"
+version = "2021.14.14"
+license = "Primarily MIT and PD"
+author = "John S. Urban and GPF maintainers"
+maintainer = "urbanjost@comcast.net"
+copyright = "Copyright 2021, John S. Urban"
+description = "GPF (General Purpose Fortran)"
+categories = ["fortran", "POSIX"]
+keywords = ["fortran", "POSIX", "graphics", "strings", "unit tests"]
+homepage = "https://github.com/urbanjost/GPF"
+[build]
+link = ["curl", "ncurses", "sqlite3", "readline", "X11"]
+[install]
+library = true

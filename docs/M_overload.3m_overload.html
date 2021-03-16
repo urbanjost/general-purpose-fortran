@@ -1,0 +1,460 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_overload (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_overload</B>(3fm) - [M_overload] overloads of standard operators and intrinsic procedures
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Overloads</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>overloads</B> <I>on</I> <I>LOGICAL</I> <I>values</I>
+<P>
+<PRE>
+   ! use == like .eqv.; ie. logical==logical
+   use M_overload, only : operator(==)
+   ! use /= like .neqv.; ie. logical/=logical
+   use M_overload, only : operator(/=)
+<P>
+</PRE>
+<B>overloads</B> <I>on</I> <I>INTRINSICS</I> <I>to</I> <I>take</I> strings, logicals, <I>and</I> <I>metamorphic</I> <I>numeric</I> <I>intrinsic</I> <I>values</I>
+<P>
+<PRE>
+  use M_overload, only : int, real, dble
+  ! int(&#146;string&#146;)   int(logical)   int(class(*))
+  ! real(&#146;string&#146;)  real(logical)  real(class(*))
+  ! dble(&#146;string&#146;)  dble(logical)  dble(class(*))
+<P>
+</PRE>
+<B>overloads</B> <I>on</I> <I>operators</I>
+<P>
+<PRE>
+  use M_overload, only : operator(==)
+  ! INTRINSIC // INTRINSIC // INTRINSIC &#46;&#46;&#46;
+<P>
+  ! When sign(3f) is given a single value, call sign(1,value); ie.  sign(value)
+  use M_overload, only : sign
+<P>
+<P>
+<P>
+</PRE>
+<B>Allow</B> <I>strings</I> <I>of</I> <I>different</I> <I>length</I> <I>in</I> <I>MERGE</I>
+<P>
+<PRE>
+  use M_overload, only : merge
+  ! str=merge(&#146;one&#146;,&#146;three&#146;,i.eq.10)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Operator <I>and</I> function <B>overloads</B> have a wide range <I>of</I> applications
+from allowing existing Fortran routines <I>to</I> be used with almost no
+source-code changes <I>to</I> produce versions using arbitrary precision
+or cumulative error bounds <I>on</I> floating-point calculations <I>to</I> adding
+intuitive syntax for standard Fortran operations.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OVERLOADS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>//</B> </TD><TD valign=bottom>
+<B>overloads</B> // <I>to</I> concatenate any two <I>intrinsic</I> types into a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>==,/=</B> </TD><TD valign=bottom>
+<B>Allow</B> the syntax "L1 == L2"  <I>and</I> "L1 /= L2" where L1 <I>and</I> L2 are
+type <I>LOGICAL</I> as an alternative <I>to</I> the standard expressions
+"L1 .EQV. L2" <I>and</I> "L1 .NEQV. L2".
+<P>
+It should be pointed out that
+<P>
+<PRE>
+              L1 == L2   !! should be L1 .eqv. L2
+<P>
+</PRE>
+<I>and</I>
+<P>
+<PRE>
+              L1 /= L2   !! should be L1 .neqv. L2
+<P>
+</PRE>
+should NOT work by default; but often do (probably because
+the compiler silently converts <I>LOGICAL</I> <I>to</I> INTEGER when a
+<I>LOGICAL</I> appears where a <I>numeric</I> value is required). If your
+compiler supports this non-standard (but intuitive-looking)
+syntax you can use this module <I>to</I> allow the syntax <I>in</I> a
+portable manner with a standard method.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>int</B>(), <B>real</B>(), <B>dble</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+allow <I>strings</I> <I>to</I> be converted <I>to</I> <I>numeric</I> <I>values</I>
+using the standard <I>intrinsic</I> names
+<TABLE width=100% cellpadding=3><!-- tsb: allow <I>strings</I> <I>to</I> be converted <I>to</I> <I>numeric</I> <I>values</I>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>sign</B>(value) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+call <B>sign</B>(1,value)
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>str=merge</B>(&#146;little&#146;,&#146;big&#146;,a.eq.10) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+allows for <I>strings</I> <I>of</I> <I>different</I> lengths
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample usage:
+<P>
+<PRE>
+  program demo_M_overload
+<P>
+   use, intrinsic :: iso_fortran_env, only : &
+           & integer_kinds, int8, int16, int32, int64
+   use, intrinsic :: iso_fortran_env, only : &
+           & real32, real64, real128
+   use M_compare_float_numbers, only : operator(.EqualTo.)
+<P>
+   ! allow strings to be converted to integers
+   use M_overload, only : int
+   ! allow strings to be converted to floating point
+   use M_overload, only : real,dble
+   ! use == like .eqv.
+   use M_overload, only : operator(==)
+   ! use /= like .neqv.
+   use M_overload, only : operator(/=)
+   use M_overload, only : operator(//)
+   ! take a single argument
+   use M_overload, only : sign
+   ! allow strings of different length on merge
+   use M_overload, only : merge
+   implicit none
+   character(len=:),allocatable :: cmd
+   character(len=*), parameter :: gen=&#146;(*("[",g0,"]":,","))&#146;
+<P>
+     write(*,gen)merge(&#146;a&#146;,&#146;bbbbb&#146;,1.eq.1)
+     write(*,gen)merge(&#146;a&#146;,&#146;bbbbb&#146;,1.eq.2)
+     write(*,gen)merge([&#146;a&#146;,&#146;b&#146;],[&#146;bbbbb&#146;,&#146;ccccc&#146;],1.eq.2)
+<P>
+     if(int(&#146;1234&#146;)               .eq.1234) &
+      & write(*,*)&#146;int("STRING") works &#146;
+     if(real(&#146;1234.56789&#146;)        .EqualTo.1234.56789) &
+      & write(*,*)&#146;real("STRING") works &#146;
+     if(dble(&#146;1234.5678901234567&#146;).EqualTo.1234.5678901234567d0) &
+      & write(*,*)&#146;dble("STRING") works &#146;
+<P>
+      if (.true. == .true. ) &
+      & write(*,*)&#146;== works like .eqv. for LOGICAL values&#146;
+     if (.true. /= .false. ) &
+      & write(*,*)&#146;/= works like .neqv. for LOGICAL values&#146;
+<P>
+      write(*,*)&#146; The value is &#146;//10//&#146; which is less than //20.2
+<P>
+<P>
+     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
+            & sign(10_int8).eq.1 &
+      & .and. sign(-10_int8).eq.-1 )
+     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
+            & sign(10_int16).eq.1 &
+      & .and. sign(-10_int16).eq.-1 )
+     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
+            & sign(10_int32).eq.1 &
+      & .and. sign(-10_int32).eq.-1 )
+     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
+            & sign(10_int64).eq.1 &
+      & .and. sign(-10_int64).eq.-1 )
+     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
+            & sign(10.0_real32).eq.1.0 &
+      & .and. sign(-10.0_real32).eq.-1.0 )
+     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
+            & sign(10.0_real64).eq.1.0 &
+      & .and. sign(-10.0_real64).eq.-1.0 )
+     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
+      & sign(10.0_real128).eq.1.0&
+      & .and. sign(-10.0_real128).eq.-1.0 )
+</PRE>
+contains
+<BLOCKQUOTE>
+<P>
+end program demo_M_overload
+</BLOCKQUOTE>
+<P>
+Results:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Results:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+[a    ]
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+[bbbbb]
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+[bbbbb],[ccccc]
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>int</B>("STRING") works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>real</B>("STRING") works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>dble</B>("STRING") works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+== works like .eqv. for <I>LOGICAL</I> <I>values</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+/= works like .neqv. for <I>LOGICAL</I> <I>values</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+444         555
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+444.444000       555.554993
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+444.44400000000002        555.55500000000006
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+555.44399999999996        666.66600000000005        777.77700000000004
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>int</B>("STRING") works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>real</B>("STRING") works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>dble</B>("STRING") works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+== works like .eqv. for <I>LOGICAL</I> <I>values</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+/= works like .neqv. for <I>LOGICAL</I> <I>values</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+444         555
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+444.444000       555.554993
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+444.44400000000002        555.55500000000006
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+555.44399999999996        666.66600000000005        777.77700000000004
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+sign works
+&gt; 57 xx <B>-x</B> <B>-y</B> hello there xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+&gt; 0 0 [xx]
+&gt; 1 0 [-x]
+&gt; 2 0 [-y]
+&gt; 3 0 [hello there]
+&gt; 4 0 [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&gt; 0 0 [xx</B> <!-- Consumed .TP -->
+<BR>
+<B>&gt; 1 0 [-x</B> <!-- Consumed .TP -->
+<BR>
+<B>&gt; 2 0 [-y</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&gt; 3 <B>-1</B> [hello ther]
+&gt; 4 <B>-1</B> [xxxxxxxxxx]
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&gt; 0 0 [xx</B> <!-- Consumed .TP -->
+<BR>
+<B>&gt; 1 0 [-x</B> <!-- Consumed .TP -->
+<BR>
+<B>&gt; 2 0 [-y</B> <!-- Consumed .TP -->
+<BR>
+<B>&gt; 3 0 [hello there</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&gt; 4 <B>-1</B> [xxxxxxxxxxxxxxxxxxxx]
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_overload (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4f676aaf-9ac1-44f4-b4d7-5e5587d8950b using man macros.</FONT>
+<br><br><center><img src="images/M_overload.3m_overload.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

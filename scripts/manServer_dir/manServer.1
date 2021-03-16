@@ -1,0 +1,385 @@
+.\" <TITLE>manServer - Man Page to HTML Converter</TITLE>
+.\"
+.\" Checklist when releasing new version:
+.\" - update version number in .TH and download section
+.\" - add history comment
+.\" - run manServer on manServer.1
+.\" - amend <TITLE> and insert 'nroff output' link
+.\" - copy to download area
+.\"
+.TH MANSERVER l "13 August 2001" "v1.08"
+.SH NAME
+manServer \- convert manual pages to HTML for viewing with a web browser
+.SH SYNOPSIS
+.B manServer
+[
+.B \-s
+[
+.I port
+]
+]
+[
+.I filename
+]
+.SH DESCRIPTION
+.LP
+.B manServer
+is a troff (or nroff) to HTML interpreter written in Perl.
+It is designed specifically to convert manual pages written using the
+.BR man (7)
+troff macros into HTML for display and navigation with a web browser.
+To this end it includes direct support for man macros (also limited support for
+tbl, eqn and the doc macros) as well as the most common troff directives.
+.LP
+It differs from programs like \fBman2html\fP which merely take rather ugly
+.\" <A href="manServer.txt">nroff output</A>
+nroff output and put a thin HTML wrapper around it.
+.LP
+The following macros and directives are supported by \fBmanServer\fP, with varying degrees
+of correspondence to their troff counterparts. Where there are significant
+differences these are usually due
+to the fact that troff tends to be layout-oriented while HTML is more content-oriented
+and does not provide the same kind of detailed layout control.
+.\" ------------------------
+.SS Structure and layout macros
+.LP
+Standard man paragraph macros are quite well implemented,
+using tables to control indenting. These include:
+.RS
+.TS
+lB l.
+\&.TP .HP .IP	Hanging paragraph types
+\&.LP .PP .P	Flush left paragraphs
+\&.RS .RE	Indented blocks
+\&.SH .SS	Section and subsection headings
+\&.br .sp	Line break and spacing
+.TE
+.RE
+.LP
+Tab and tab stops (.ta, .DT) work, but only when using a constant width font. In practice this means
+within a no-fill block (.nf) that doesn't include any font style or size changes.
+.LP
+Temporary indents (.ti) and spacing control (.sp, paragraph spacing with .PD) don't
+work terribly well because HTML does not provide appropriate control.
+.\" ------------------------
+.SS Text style support
+.LP
+Standard troff directives (including in-line directives) are reasonably well
+implemented, including:
+.RS
+.TS
+lB l.
+\efB \ef2 \efC \efP \f1etc.\fP	Font control
+\&.B .I .R	Single word in alternate fonts
+\&.RI .BI .BR \f1etc.\fP	Alternating roman/italic/bold text styles
+\es\(+-\fIn\fB \es0	Point size control
+\&.ft .ps .SM	Font & size control
+\&.nf .fi	No-fill block (eg. code examples)
+\eu \ed	Super/sub-scripting
+.TE
+.RE
+.LP
+Only one level of super or subscript within a line
+is supported when using \eu or \en or eqn sup and sub tags.
+.LP
+Special characters in troff are geared towards typesetting mathematical equations,
+whereas the iso8859 character set supported by most browsers primarily includes foreign accented
+characters. Special characters are implemented wherever possible, but a large number of
+troff characters (such as Greek letters, square root signs and so on) have no equivalent in HTML.
+Conversely, HTML supports many more accented characters than troff, and these can be included
+by inserting HTML character entities such as &amp;THORN; (&THORN;) directly in the troff source.
+.LP
+Overstriking (\ez, \eo) and local motion (\eh, \ev) directives have no equivalent in HTML
+and are filtered out. A handful of overstrike combinations (combining a colon or apostrophe
+with a vowel to produce an accented character) are recognised and converted however.
+.\" ------------------------
+.SS Hyperlinks
+.LP
+A key benefit of using HTML is being able to turn the manual pages into
+hypertext for convenience of browsing:
+.IP - 3
+Items that look like a man page reference, especially following a .BR tag,
+are turned into links. (This only applies if manServer is running as a server, not
+from the command line).
+.IP -
+URLs (http, ftp and mailto) are converted to links.
+.IP -
+Included text (using a .so directive) is implemented as a link to a separate page.
+.IP -
+A table of contents with links to each section (.SH or .SS) is generated at the
+start of the page.
+.IP -
+Text in bold which starts with a capital letter and matches the name of a section
+is turned into a link to that section. 
+.IP -
+An index of man page sections and the contents of each section are produced to
+allow browsing throughout the man pages.
+.IP -
+As well as browsing through the index the name of a man page can be entered
+in a search dialog. Whenever a search is ambiguous a choice of matching pages is given.
+.\" ------------------------
+.SS Troff emulation
+The following are well implemented:
+.IP - 3
+Strings can be defined and interpolated (.ds).
+.IP - 3
+Simple macros can be defined (.de) and used, also renamed (.rn, .rm).
+.IP - 3
+Ignore blocks (.ig) and comments (.\e") are propagated through as HTML comments.
+.LP
+The following features are not implemented as fully as they might be.
+.IP - 3
+Conditional expressions (.if, .ie, .el) are barely implemented.
+.IP - 3
+Number registers and interpolation are partly implemented, but don't support
+auto-increment or formatting styles.
+.LP
+A number of features are not yet implemented though arguably they could or should be.
+.IP - 3
+Text diversions and input traps.
+.LP
+There's no way of measuring the width of text when a proportional font is used
+for rendering, so a very approximate guess is calculated when using the \ew directive
+(normal characters count as 1, whereas spaces and punctuation count as half a character).
+.\" ------------------------
+.SS Tbl support
+.LP
+Tables using the
+.BR tbl (1)
+preprocessor (between .TS and .TE macros) are rendered
+quite well, the main deficiency being that HTML tables do not give you control
+over whether individual cells have a border around them or not.
+.LP
+A number of heuristics are applied to try to determine when a row is actually
+a continuation of the previous row so the data can be merged.
+.\" ------------------------
+.SS Eqn support
+.LP
+A half-hearted attempt at interpreting
+.BR eqn (1)
+tags (between .EQ and .EN and inline delimeters)
+is made and copes reasonably well with simple expressions including things like super
+and subscripts. It makes no
+attempt to implement features that would result in more than one line of output however.
+.\" ------------------------
+.SS Doc macros
+.LP
+Manual pages written using the Berkely \fBdoc\fP macros are recognised and
+implemented to about the same extent as the corresponding \fBman\fP macros. (If anything,
+doc macros are easier to implement because they are slightly more content-oriented,
+if a little odd).
+.LP
+Supported doc macros include:
+.RS
+.TS
+lB l.
+\&.Dt .Sh .Ss	Title and section headings
+\&.Nd .Os .Dd	Document name etc.
+\&.Bd .Ed	Fill block
+\&.Bl .El .It	Lists
+\&.Xr .Sx	Cross references
+T{
+\&.Op .Fl .Pa .Ns .No .Ad .Em .Fa
+.br
+\&.Ft .Ic .Cm .Va .Sy .Nm .Li .Dv
+.br
+\&.Ev .Tn .Dl .Bq .Qq .Qo .Qc \f2etc.\fR
+T}	T{
+Assorted content-based style tags (option, flag, etc.)
+T}
+.TE
+.RE
+.SH OPERATION
+Synopsis:
+.B manServer
+[
+.B \-s
+[
+.I port
+]
+]
+[
+[\fB-d\fIdebuglevel\fR]
+.I filename
+]
+.LP
+.B manServer
+works in one of three modes, depending on how it is invoked:
+.TP
+\(bu
+If given a
+.I filename
+the file is processed and the HTML generated is written to standard out.
+.TP
+\(bu
+If invoked with the \fB-s\fP option
+.B manServer
+runs as a standalone HTTP server, directly responding to requests from a web browser,
+either on port 8888 or the port specified.
+.B manServer
+enters a loop and continues processing requests until it crashes, is killed, or the universe ends.
+.IP
+Note that for speed and simplicity, a new process is \fInot\fP forked to process each request,
+so if the server dies while processing a request you will have to restart it.
+.TP
+\(bu
+If invoked with no arguments and the
+.B GATEWAY_INTERFACE
+environment variable is set it is assumed to be running as a CGI script invoked
+by a standalone web server such as CERN HTTPD and a single request is serviced.
+.IP
+(If no arguments are specified and
+.B GATEWAY_INTERFACE
+is not set then
+.B manServer
+enters its HTTP server mode.)
+.LP
+.B manServer
+processes requests for individual man pages, usually specified as just the base
+name (eg. 'ls') or as a name plus section number (eg. 'ls.1') in which case they
+are searched for in the normal \s-1MANPATH\s0 hierarchy. They may also be fully qualified
+(eg. '/usr/man/man1/ls.1') and this form is necessary if the page appears in
+more than one manual hierarchy.
+.LP
+gzip'd manual pages (ending in a .gz suffix) are automatically expanded with zcat,
+similarly .bz2 compressed pages.
+.SH ENVIRONMENT
+.TP
+.SB MANPATH
+Determines which manual pages are available and where to find them. If not specified
+.B /usr/man/man*
+is used.
+.TP
+.SB GATEWAY_INTERFACE
+Determines whether
+.B manServer
+runs as a CGI script.
+.TP
+.SB SCRIPT_NAME
+CGI parameter.
+.TP
+.SB PATH_INFO
+CGI parameter.
+.TP
+.SB QUERY_STRING
+CGI parameter.
+.SH FILES
+.TP
+.B /etc/manpath.config
+.TP
+.B /etc/man.config
+Definition of MANPATH under Linux.
+.TP
+.B /usr/lib/tmac/tmac.an
+.TP
+.B /usr/lib/tmac/an
+.TP
+.B /usr/lib/tmac/tz.map
+.TP
+.B /usr/lib/groff/tmac/tmac.an
+Man macro definitions, used to get definitions of section and
+referred document abbreviations on various platforms.
+.TP
+.B /tmp/manServer.log
+Log file that may or may not contain some debug information.
+.SH "SEE ALSO"
+.BR man (1),
+.BR man (7),
+.BR nroff (1),
+.BR eqn (1),
+.BR tbl (1)
+.LP
+The program is available at http://www.squarebox.co.uk/download/manserver-1.08.tar.gz
+.SH AUTHOR
+Rolf Howarth (rolf@squarebox.co.uk)
+.SH HISTORY
+.PD 0
+.HP
+\fI13 August 2009\fP (1.08)
+.br
+Use gzcat for gzipped pages. Make clear that manServer is released under a BSD-style license.
+.HP
+\fI16 July 2001\fP (1.07)
+.br
+Added support for bz2 compressed pages. Fixed .so inclusion from other directories. Changes
+for compatibility with RedHat. Added support for removing and renaming macros. Allow
+use of \e& to suppress URL expansion. Fixed bug when $ used as a table delimiter.
+Fixed various mdoc bugs for compatiblity with Mac OS X.
+With thanks to the following for suggesting patches: Marache Mathieu, Hans Kristian Fjeld,
+Carl Mascott, Simon Lai, Martin Kraemer, Dan Terpstra, Kathryn Andersen, Eric S. Raymond,
+and Jayan Arayanan.
+.HP
+\fI30 November 1999\fP (1.06)
+.br
+Fixed a font style bug. Minor tidying of contents. Support preformatted text as well
+as nroff pages. Convert special Perl references like 'perlfunc' to links.
+.HP
+\fI4 August 1999\fP (1.05)
+.br
+Fixed URL now that my website is at www.squarebox.co.uk instead of www.parallax.co.uk.
+Fixed a taint problem and a minor Netscape table oddity (specifying cols=2).
+\fI12 Jan 1999\fP (1.04)
+.br
+Use readdir instead of shell expansion to fix tainting problem under perl 5.005.
+Fix to table of contents generation (prevent redefinition of SH tags). 
+Fix to URL detection so punctuation characters aren't treated as part of link.
+.HP
+\fI10 Nov 1997\fP (1.03)
+.br
+Use Socket.pm to get socket definitions. Fixed a tainting problem under perl 5.004.
+Fixed problem with spurious line breaks when using doc macros.
+.HP
+\fI30 Sept 1997\fP (1.02)
+.br
+Amended some of the character entities. Fixed a couple of standalone server regression bugs.
+Script now runs with -T taint checking.
+.HP
+\fI22 Sept 1997\fP (1.01)
+.br
+Introduction of version numbers. Table spanning fixes. No longer introduces
+broken links when invoked on a file from the command line.
+.HP
+\fI11 Sept 1997\fP (1.00)
+.br
+First release.
+.HP
+.I May - Aug 1997
+.br
+Initial development
+.PD
+.SH BUGS
+.LP
+Use of newer HTML features (especially style sheets) would improve the look
+of the pages produced.
+.LP
+.B manServer
+gets confused by some tags, particular within poorly structured manual pages.
+Some people write some \fIvery\fP peculiar manual pages and working out what
+semantic layout they actually meant from the inconsistent layout tags they
+used becomes more and more of a lost cause...
+.LP
+Searching man pages (either a free text search or in the manner of
+.BR apropos (1))
+is not yet implemented.
+.LP
+The order of parsing and processing troff input (especially things like
+special character codes) differs from troff and there may still be one or two
+bugs in certain situations, eg. where text is parsed twice, contains
+backslashes and/or angle brackets, or where it interacts with eqn or tbl
+emulation.
+.LP
+Tags like .B without an argument should apply to the next input line.
+.LP
+\efP should restore previous font, not always revert to roman.
+.LP
+Styles that span more than one tbl table cell need to be set and reset for
+each HTML table cell.
+.LP
+Various additional directives, including setting indent (.in),
+multi-line conditionals, renaming registers and macros, and diverts could
+and should all be implemented.
+.LP
+Different Unix platforms may define their own man macro package with variations
+from those implemented here.
+.B manServer
+has been tested with pages under SunOS, Solaris and Debian Linux.

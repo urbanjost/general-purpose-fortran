@@ -1,0 +1,215 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_xterm (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_xterm</B>(3fm) - [M_xterm] send escape sequences to an <B>xterm</B>(1) window that control VT102 emulator attributes
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>See Also</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>use</B> M_xterm, <I>only</I> : <I>xterm_font</I>
+<B>use</B> M_xterm, <I>only</I> : xterm_colors, <I>xterm_pencolor</I>
+<B>use</B> M_xterm, <I>only</I> : xterm_geometry, xterm_width, <I>xterm_position</I>
+<B>use</B> M_xterm, <I>only</I> : xterm_clear, xterm_keywords, <I>xterm_labels</I>
+<P>
+<B>use</B> M_xterm, <I>only</I> : xterm_get_geometry, xterm_get_font, <I>xterm_get_position</I>
+<B>use</B> M_xterm, <I>only</I> : xterm_get_iconstate, xterm_get_colors, <I>xterm_get_pencolor</I>
+<B>use</B> M_xterm, <I>only</I> : xterm_xrdb, <I>xterm_occupancy</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>xterm</B>(1) terminal emulator emulates an extended VT102 terminal on
+X11 Windows platforms. This means a number of strings beginning with
+an escape character can be used to clear the screen, toggle between
+80 and 132 column mode, position the cursor, and perform other command
+sequences that allow screen-based utilities to operate.
+<P>
+Since basic terminal control libraries such as <B>ncurses</B>(3c) already
+exist for basic terminal screen formatting, The <B>M_xterm</B>(3fm) module
+specifically supports the <B>xterm</B>(1) extensions that control the X11
+window attributes such as window size, font, and colors:
+<P>
+<PRE>
+     xterm_colors(type,color)     set xterm colors
+     xterm_font(fontname)         set xterm fonts
+     xterm_geometry(rows,cols)    set terminal size
+     xterm_position(right,downs)  set terminal position
+     xterm_width(iwidth)          set width to 80 or 132 characters
+     xterm_clear()                clear screen
+     xterm_keywords(keyword)      X11 Window Manager hints (lower,raise,
+                                  maximize,restore,&#46;&#46;&#46;) and modes
+     xterm_labels(keyword)        X11 Window Manager label hints
+<P>
+</PRE>
+An additional set of routines sends escape sequences to stdout that
+query the current state of the <B>xterm</B>(1). Then, with the terminal set
+to raw mode, they read back the response. In this implementation that
+means the command may not work in a basic pipe or have I/O redirected
+on some systems.
+<P>
+<PRE>
+      xterm_get_iconstate         Query whether window is iconified
+      xterm_get_geometry          Get size as number of rows and columns
+                                  or characters.
+      xterm_get_position          Get position of upper left corner of
+                                  window relative to upper left corner
+                                  of display in pixels
+      xterm_get_font              Get name of current font
+      xterm_get_colors            Get colors of various terminal window
+                                  attributes.
+      xterm_get_pencolor          Get description of a terminal color number
+      xterm_xrdb                  Write out current terminal settings as X11
+                                  Windows resources
+      xterm_occupancy             Move window to specified virtual display
+                                  where supported.
+<P>
+</PRE>
+For all these routines to work with some xterm versions, you may have to
+set the following X11 resources in your ~.Xresources file **before**
+starting the <B>xterm</B>(1) window. You may also <B>use</B> the <B>xrdb</B>(1) command.
+For example
+<P>
+<PRE>
+      xrdb --merge &lt;&lt;\end_of_file
+      XTerm*VT100.allowWindowOps: true
+      XTerm*VT100.allowTitleOps: true
+      XTerm*VT100.allowFontOps: true
+      end_of_file
+<P>
+</PRE>
+</BLOCKQUOTE>
+For a running <B>xterm</B>(1), you may <B>use</B> the "VT Fonts" menu to enable "Window Ops","Title Ops","Font Ops",
+and "Color Ops" if they are no enabled. If the "VT Fonts" menu is not visible in the upper left corner
+of the <B>xterm</B>(1) display, ctrl-Mouse3 in the main terminal display will make the menu visible.
+<BLOCKQUOTE>
+<P>
+An example program that can easily be called from scripts and shell aliases called <B>setxt</B>(1) is included
+in the GPF (General Purpose Fortran) distribution that this module is a part of.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample usage:
+<P>
+<PRE>
+    program demo_M_xterm
+    use M_xterm, only : xterm_colors, xterm_font
+    use M_xterm, only : xterm_geometry, xterm_width, xterm_position
+    use M_xterm, only : xterm_clear, xterm_keywords, xterm_labels
+    call xterm_colors(&#146;background&#146;,&#146;black&#146;)
+    call xterm_colors(&#146;foreground&#146;,&#146;white&#146;)
+    call xterm_colors(&#146;cursor&#146;,&#146;red&#146;)
+    call xterm_colors(&#146;mouse_foreground&#146;,&#146;red&#146;)
+    call xterm_colors(&#146;mouse_background&#146;,&#146;white&#146;)
+    call xterm_font(&#146;5&#146;)
+    call xterm_geometry(cols=132,rows=36)
+    call xterm_position(right=100,down=200)
+    call xterm_keywords(&#146;raise&#146;)
+    end program demo_M_xterm
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>xlsfonts</B>(1x),
+<B>clear</B>(1), <B>ncurses</B>(3c), stty (1), tabs (1),
+<B>terminfo</B>(5), tput (1), tset (1), tty (1)
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_xterm (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e197a81c-9093-4725-9bc7-fe6eca70cb2d using man macros.</FONT>
+<br><br><center><img src="images/M_xterm.3m_xterm.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,259 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>regerror (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>regerror</B>(3f) - [M_regex] maps a non-zero errcode from either <B>regcomp</B>(3f) or <B>regexec</B>(3f) to a human-readable, printable message.
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>regerror</B>(this,errcode) <B>result</B>(<I>errmsg</I>)
+<P>
+<PRE>
+     type(regex_type), intent(in) :: this
+     integer, intent(in)          :: errcode
+     character(len=:),allocatable :: errmsg
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>REGCOMP</B>() function compiles an RE written as a string into
+an internal form, <B>REGEXEC</B>() matches that internal form against
+a string and reports results, <B>REGERROR</B>() transforms error codes
+from either into human-readable messages, and <B>REGFREE</B>() frees any
+dynamically-allocated storage used by the internal form of an RE.
+<P>
+These routines implement IEEE Std 1003.2 (POSIX.2) regular
+expressions (RE s); see <B>re_format</B>(7).
+<P>
+Specifically, The <B>REGERROR</B>(3f) function maps a non-zero errcode from
+either <B>REGCOMP</B>(3f) or <B>REGEXEC</B>(3f) to a human-readable, printable
+message. If THIS is non-NULL, the error code should have arisen
+from use of the regex_t pointed to by THIS, and if the error code
+came from <B>REGCOMP</B>(), it should have been the result from the most
+recent <B>REGCOMP</B>() using that regex_t.
+<P>
+Non-zero error codes from <B>regcomp</B>() and <B>regexec</B>() include the
+following:
+<TABLE cellpadding=3><!-- tsb: Non-zero error codes from <B>regcomp</B>() and <B>regexec</B>() include the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_NOMATCH</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The <B>regexec</B>() function failed to match
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_BADPAT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+invalid regular expression
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_ECOLLATE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+invalid collating element
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_ECTYPE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+invalid character class
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_EESCAPE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+\    applied to unescapable character
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_ESUBREG</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+invalid backreference number
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_EBRACK</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+brackets    [ ]    not balanced
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_EPAREN</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+parentheses    ( )    not balanced
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_EBRACE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+braces    { }    not balanced
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_BADBR</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+invalid repetition <B>count</B>(s) in    { }
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_ERANGE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+invalid character range in    [ ]
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_ESPACE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+ran out of memory
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_BADRPT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+?   ,    *   , or    +    operand invalid
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_EMPTY</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+empty (sub)expression
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_ASSERT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+cannot happen - you found a bug
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_INVARG</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+invalid argument, e.g. negative-length string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>REG_ILLSEQ</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+illegal byte sequence (bad multibyte character)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>THIS</B> </TD><TD valign=bottom>
+a compiled regular expression from <B>REGCOMP</B>(3f)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ERRCODE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the last error code generated by <B>REGCOMP</B>(3f) or <B>REGEXEC</B>(3f)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ERRMSG</B> </TD><TD valign=bottom>
+the error message
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ERRMSG_LEN</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+size required of ERRMSG to display the entire message
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_regerror
+   use M_regex, only: regex_type, regcomp, regexec, regmatch, regfree, regerror
+   type(regex_type)             :: regex
+   integer,parameter            :: maxmatch=10
+   integer                      :: matches(2,maxmatch)
+<P>
+   character(len=:),allocatable :: input_line
+   character(len=:),allocatable :: expression
+   logical                      :: match
+<P>
+      expression= "([0-9\.\-\*\/]+)+"
+      expression= "([0-9\.\-\*\/+)+"  ! intentionally bad RE (Regular Expression)
+      input_line= "30*0 250*1 5 6 7"
+      call regcomp(regex,expression,&#146;x&#146;,status=istat)
+      if (istat/=0) then
+        write(*,&#146;("Regex runtime error in regcomp(3f):",a,", expression=",a)&#146;) regerror(regex,istat),expression
+        stop 1
+      endif
+      match=regexec(regex,input_line,matches,status=istat)
+      if (istat/=0) then
+        write(*,&#146;("Regex runtime error in regexec:(3f)",a)&#146;) regerror(regex,istat)
+        stop 2
+      endif
+      if(match)then
+         do i=1,maxmatch
+            if(matches(1,i).le.0)exit
+            write(*,*) &#146;match="&#146;,regmatch(i,input_line,matches),&#146;"&#146;
+         enddo
+      endif
+      call regfree(regex)
+<P>
+</PRE>
+<BLOCKQUOTE>
+end program demo_regerror
+</BLOCKQUOTE>
+<P>
+Expected output:
+<P>
+<PRE>
+   Regex runtime error in regcomp(3f):brackets ([ ]) not balanced , expression=([0-9\.\-\*\/+)+
+   stop 1
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>regerror (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 44992274-834c-458d-896e-4de2ee8f7746 using man macros.</FONT>
+<br><br><center><img src="images/regerror.3m_regex.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

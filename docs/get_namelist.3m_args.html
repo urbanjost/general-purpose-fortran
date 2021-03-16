@@ -1,0 +1,616 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>get_namelist (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>get_namelist</B>(3f) - [ARGUMENTS:M_args] NAMELIST-based command line argument parsing
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>get_namelist</B>(definition,all) <B>result</B>(<I>string</I>)
+<P>
+<PRE>
+   character(len=*),intent(in),optional  :: definition
+   logical,intent(in),optional  :: all
+   character(len=:),allocatable :: string
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+This routine leverages NAMELIST groups to do the conversion from strings
+to numeric values required by other command line parsers.
+<P>
+Several of the following example programs simply need an initialized
+variable added to the NAMELIST and it automatically is available as
+a command line argument. Hard to imagine it getting much simpler.
+<P>
+To use the routine define a NAMELIST group called ARGS.
+<P>
+The routine provides three modes
+<TABLE cellpadding=3><!-- tsb: The routine provides three modes
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>keyword=value</B>(s) pairs on the command line.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+     Typical program usage:
+<P>
+      cmd x=1 point=-1,-2,-3 help=T
+<P>
+</PRE>
+<BLOCKQUOTE>
+This requires nothing but a call to the <B>get_namelist</B>(3f) procedure
+with no arguments and is very suitable if you just need to pass in
+a few numeric values. the syntax used on the command line is the
+syntax required for a NAMELIST input <I>string</I> which is very good for
+numeric values but does not follow the common syntax rules found
+in routines like <B>getopts</B>(3c) or IEEE Std 1003.1-2001, for example.
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: This requires nothing but a call to the <B>get_namelist</B>(3f) procedure
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Unix-like command usage when provided a NAMELIST group <I>string</I>.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+     Typical program usage:
+<P>
+      cmd -x 1 --point -1,-2,-3 --title &#146;my string&#146; --help file1 file2
+<P>
+</PRE>
+<BLOCKQUOTE>
+You can use an internal write to generate the input <I>string</I> (which
+means to add a new parameter you need to do nothing but initialize
+the variable and add the name to the ARGS NAMELIST group and it
+automatically becomes a new command line argument).
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: You can use an internal write to generate the input <I>string</I> (which
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Unix-like command usage when provided a Unix-like prototype.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+     Typical program usage:
+<P>
+      cmd -x 1 --point -1,-2,-3 --title &#146;my string&#146; --help file1 file2
+<P>
+</PRE>
+<BLOCKQUOTE>
+If you are not familiar with NAMELIST input and output you can
+declare all the members of the namelist and their default values
+much like you were calling the program with a command prototype
+<I>string</I>.
+</BLOCKQUOTE>
+<P>
+For all three modes there is no need to convert from strings to numeric
+values in the source code. Even arrays and user-defined types can be
+used, complex values can be input &#46;&#46;&#46; just define the variable and
+add it to the NAMELIST definition.
+<P>
+Note that since all the arguments are defined in a NAMELIST group
+that config files can easily be used for the same options.
+Just create a NAMELIST input file and read it.
+<P>
+NAMELIST syntax can vary between different programming environments.
+Currently, this routine has only been tested using gfortran 7.0.4;
+and requires at least Fortran 2003.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NO DEFINITION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+If the routine is called with no definition <I>string</I> arguments are passed
+in on the command line using NAMELIST syntax (ie. KEYWORD=VALUE). This
+is particularly suited for passing a few numeric values.
+<P>
+For example:
+<P>
+<PRE>
+    program nooptions
+    use M_args, only : get_namelist
+    implicit none
+    character(len=255)           :: message ! use for I/O error messages
+    character(len=:),allocatable :: readme  ! stores command line
+    integer                      :: ios     ! I/O error number
+<P>
+    ! declare and initialize a namelist that defines all
+    ! the command keywords
+    integer    :: i=1, j=2, k=3
+    real       :: s=111.1, t=222.2, r=333.3
+    real       :: point(3)=[10.0,20.0,30.0]
+    logical    :: help=.false.,version=.false.
+<P>
+    ! just add a variable here and it is a new parameter
+    namelist /args/ i,j,k,s,t,r,point,help,version
+<P>
+       ! return command line arguments as NAMELIST input
+       readme=get_namelist()
+       ! internal read of namelist
+       read(readme,nml=args,iostat=ios,iomsg=message)
+       if(ios.ne.0)then
+          write(*,&#146;("ERROR:",i0,1x,a)&#146;)ios, trim(message)
+          write(*,*)&#146;OPTIONS:&#146;
+          write(*,nml=args)
+          stop 1
+       endif
+       ! all done cracking the command line
+<P>
+       ! use the values in your program.
+       write(*,nml=args)
+</PRE>
+end program nooptions
+<P>
+You can call the example program with syntax like:
+<P>
+<PRE>
+      cmd  r=200e3 i=200
+      cmd  K=33333,J=22222,I=11111
+      cmd  point = 1, 2, 3 s= -3.0e4 t = 405.5
+<P>
+</PRE>
+If you do pass in strings nested quotes or escaped double-quote
+characters are typically required. How to do that can vary with what
+shell and OS you are running in. Typically the following will work &#46;&#46;&#46;
+<P>
+<PRE>
+      # just quote the entire argument list with single quotes &#46;&#46;&#46;
+      cmd &#146;c="my character string" S=10,T=20.30,R=3e-2&#146;
+<P>
+      # or nest the quotes &#46;&#46;&#46;
+      cmd c=&#146;"string"&#146; S=20.30
+<P>
+      # or escape the quotes &#46;&#46;&#46;
+      cmd c=\"string\"
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PASS IN A NAMELIST STRING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+If you want to pass in options using syntax similar to that provided
+by the C <B>getopts</B>(3c) procedure pass in a NAMELIST <I>string</I>. Typically,
+you would generate the input <I>string</I> by writing the NAMELIST group to
+an internal file.
+<P>
+The following program can be called using commands like
+<P>
+<PRE>
+     cmd -A &#146;string Value&#146; -l -V --help -p 3.4,5.6 -- *
+<P>
+</PRE>
+Typical program skeleton:
+<P>
+<PRE>
+    program demo_get_namelist
+    use M_args,  only : unnamed
+    implicit none
+    integer :: i
+<P>
+    ! declare and initialize a namelist
+    ! letter_ denotes an uppercase short command keyword
+    ! all values should be allocated before calling get_args(3f)
+    real              :: x=111.1, y=222.2, z=333.3
+    real              :: point(3)=[10.0,20.0,30.0]
+    character(len=80) :: title=" "
+    logical           :: help=.false., version=.false.
+    logical           :: l=.false., l_=.false., v=.false., h=.false.
+    ! you can equivalence short and long options
+    equivalence       (help,h),(version,v)
+    ! just add a variable here and it is a new parameter !!
+    namelist /args/ x,y,z,point,title,help,h,version,v,l,l_
+    !
+       call get_args()  ! crack command line options
+       ! do stuff with your variables
+       write(*,*)&#146;VALUES ARE NOW&#146;
+       write(*,nml=args)
+       if(size(unnamed).gt.0)then
+          write(*,&#146;(a)&#146;)&#146;UNNAMED:&#146;
+          write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,unnamed(i),&#146;]&#146;,i=1,size(unnamed))
+       endif
+    contains
+    subroutine get_args()
+    ! The NAMELIST cannot be passed as an option to a routine so this
+    ! routine must be in a contained routine or directly in the body of
+    ! the routine that declares the NAMELIST. get_args(3f) should not
+    ! need changed except for possibly the length of HOLD_NAMELIST
+    use M_args,    only : get_namelist, print_dictionary, oneline
+    !
+    integer :: ios, i
+    character(len=255) :: message ! use for I/O error messages
+    character(len=:),allocatable :: readme  ! stores updated namelist
+    ! make big enough for all of namelist
+    character(len=10000) :: hold_namelist(60)
+    ! the routine needs a copy of the options to determine what values
+    ! are character and logical versus numeric
+       write(hold_namelist,nml=args,iostat=ios,iomsg=message)
+       if(ios.eq.0)then
+          ! pass in the namelist and get an updated copy that includes
+          ! values specified on the command line
+          readme=get_namelist(oneline(hold_namelist))
+          ! read the updated namelist to update the values
+          ! in the namelist group
+          read(readme,nml=args,iostat=ios,iomsg=message)
+       endif
+       if(ios.ne.0)then
+          write(*,&#146;("ERROR:",i0,1x,a)&#146;)ios, trim(message)
+          call print_dictionary()
+          stop 1
+       endif
+       ! all done cracking the command line
+    end subroutine get_args
+    end program demo_get_namelist
+<P>
+</PRE>
+Instead of writing the NAMELIST group into a <I>string</I> you can compose
+the <I>string</I> yourself. only defined names will be able to be specified
+on the command line. For example:
+<P>
+<PRE>
+    call get_namelist(&#146;&ARGS A_="A value",B_=" ",C_=11 22 33, help=F/&#146;)
+<P>
+</PRE>
+</BLOCKQUOTE>
+Sample with manual definition of NAMELIST <I>string</I>
+<P>
+<PRE>
+    program show_get_namelist_manual
+    use M_args,  only : unnamed, get_namelist, print_dictionary
+    implicit none
+    integer            :: i, ios
+    character(len=255) :: message
+    ! define namelist
+    real               :: x, y, z
+    logical            :: help, h, version, v
+    namelist /args/ x,y,z,help,h,version,v
+    ! equivalence short and long version and help options
+    equivalence           (help,h),(version,v)
+    ! define NAMELIST string that defines all NAMELIST
+    ! group variables
+    character(len=:),allocatable :: cmd
+       cmd=&#146;&ARGS X=1 Y=2 Z=3 HELP=F H=F VERSION=F V=F/&#146;
+       ! initialize all values in NAMELIST by reading string
+       read(cmd,nml=args,iostat=ios,iomsg=message)
+       if(ios.eq.0)then
+          ! reduce NAMELIST string to just values on command line
+          cmd=get_namelist(cmd)
+          ! update NAMELIST group with values from command line
+          read(cmd,nml=args,iostat=ios,iomsg=message)
+       endif
+       if(ios.ne.0)then
+          call print_dictionary(&#146;ERROR: &#146;//message)
+          stop 1
+       endif
+       ! all done. use values in program
+       write(*,nml=args)
+       if(size(unnamed).gt.0)then
+          write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,unnamed(i),&#146;]&#146;,i=1,size(unnamed))
+       endif
+    end program show_get_namelist_manual
+<P>
+</PRE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; UNIX PROTOTYPE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Instead of passing in a NAMELIST <I>string</I> a Unix-like command prototype
+<I>string</I> can be used. Something like:
+<P>
+<PRE>
+      call get_namelist(&#146;-A " " -l -x -30.34e2 --help -version &#146;)
+<P>
+</PRE>
+typical usage:
+<P>
+<PRE>
+      program show_get_namelist_unix_prototype
+         use M_args,  only : unnamed, get_namelist, print_dictionary
+         implicit none
+         integer                      :: i
+         character(len=255) :: message ! use for I/O error messages
+         character(len=:),allocatable :: readme ! stores updated namelist
+         integer                      :: ios
+<P>
+      ! declare a namelist
+         real               :: x, y, z, point(3)
+         character(len=80)  :: title
+         logical            :: help, version, l, l_, v, h
+         equivalence       (help,h),(version,v)
+         namelist /args/ x,y,z,point,title,help,h,version,v,l,l_
+<P>
+      ! Define the prototype
+      !  o All parameters must be listed with a default value
+      !  o string values  must be double-quoted
+      !  o numeric lists must be comma-delimited. No spaces are allowed
+         character(len=*),parameter  :: cmd=&#146;&
+         & -x 1 -y 2 -z 3     &
+         & --point -1,-2,-3   &
+         & --title "my title" &
+         & -h --help          &
+         & -v --version       &
+         & -l -L&#146;
+         ! reading in a NAMELIST definition defining the entire NAMELIST
+         readme=get_namelist(cmd,all=.true.)
+         read(readme,nml=args,iostat=ios,iomsg=message)
+         if(ios.ne.0)then
+            write(*,&#146;("ERROR:",i0,1x,a)&#146;)ios, trim(message)
+            call print_dictionary(&#146;OPTIONS:&#146;)
+            stop 1
+         endif
+         ! all done cracking the command line
+<P>
+         ! use the values in your program.
+         write(*,nml=args)
+         ! the optional unnamed values on the command line are
+         ! accumulated in the character array "UNNAMED"
+         if(size(unnamed).gt.0)then
+            write(*,&#146;(a)&#146;)&#146;files:&#146;
+            write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,unnamed(i),&#146;]&#146;,i=1,size(unnamed))
+         endif
+      end program show_get_namelist_unix_prototype
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B><A HREF=#2>DESCRIPTION</A></B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+null or composed of all command arguments concatenated
+into a <I>string</I> prepared for reading as a NAMELIST group
+or a Unix-line command prototype <I>string</I>.
+<P>
+When creating a Unix-like prototype
+<TABLE width=100% cellpadding=3><!-- tsb: When creating a Unix-like prototype
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+all values except logicals get a value.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+long names (<B>--keyword</B>) should be all lowercase
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+short names (<B>-letter</B>) that are uppercase map to a
+NAMELIST variable called "letter_", but lowercase
+short names map to NAMELIST name "letter".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+strings MUST be delimited with double-quotes and
+must be at least one space and internal
+double-quotes are represented with two double-quotes
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+lists of numbers should be comma-delimited.
+No spaces are allowed in lists of numbers.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the values follow the rules for NAMELIST values, so
+"<B>-p</B> 2*0" for example would define two values.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>ALL</B> </TD><TD valign=bottom>
+By default the output NAMELIST <I>string</I> only contains
+keywords and values for names that were specified on
+the command line. If ALL is .TRUE. a full NAMELIST
+<I>string</I> is returned containing all the variables from
+the input <I>string</I>.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>STRING</B> </TD><TD valign=bottom>
+The output is a NAMELIST <I>string</I> than can be read to update
+the NAMELIST "ARGS" with the keywords that were supplied on
+the command line.
+</TD></TR>
+<TR><TD colspan=2>
+When using one of the Unix-like command line forms note that
+(subject to change) the following variations from other common
+command-line parsers:
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+duplicate keywords are replaced by the rightmost entry
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+numeric keywords are not allowed; but this allows
+negative numbers to be used as values.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+specifying both names of an equivalenced keyword will have
+undefined results (currently, their alphabetical order
+will define what the Fortran variable values become).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+there is currently no mapping of short names to long
+names except via an EQUIVALENCE.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+short keywords cannot be combined. <B>-a</B> <B>-b</B> <B>-c</B> is required,
+not <B>-abc</B> even for Boolean keys.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+shuffling is not supported. Values must follow their
+keywords.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if a parameter value of just "-" is supplied it is
+converted to the <I>string</I> "stdin".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if the keyword "--" is encountered the rest of the
+command arguments go into the character array "UNUSED".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+values not matching a keyword go into the character
+array "UNUSED".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+long names do not take the <B>--KEY</B>=VALUE form, just
+<B>--KEY</B> VALUE; and long names should be all lowercase and
+always more than one character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+short-name parameters of the form <B>-LETTER</B> VALUE
+map to a NAMELIST name of LETTER_ if uppercase
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2019
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>get_namelist (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3c5d452e-d9ee-442b-b86a-a8849b916947 using man macros.</FONT>
+<br><br><center><img src="images/get_namelist.3m_args.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

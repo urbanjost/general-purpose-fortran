@@ -1,0 +1,186 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>random_number (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>random_number</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS:RANDOM]
+Pseudo-random number
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>random_number</B>(harvest)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Returns a single pseudorandom number or an array of pseudorandom numbers
+from the uniform distribution over the range 0 &lt;= x &lt; 1.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>HARVEST</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Shall be a scalar or an array of type REAL.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_random_number
+   implicit none
+   integer, allocatable :: seed(:)
+   integer              :: n
+   integer              :: first,last
+   integer              :: i
+   integer              :: rand_int
+   integer,allocatable  :: count(:)
+   real                 :: rand_val
+   call random_seed(size = n)
+   allocate(seed(n))
+   call random_seed(get=seed)
+   first=1
+   last=10
+   allocate(count(last-first+1))
+   ! To have a discrete uniform distribution on the integers {first, first+1,
+   ! &#46;&#46;&#46;, last-1, last} carve the continuous distribution up into last+1-first
+   ! equal sized chunks, mapping each chunk to an integer.
+   !
+   ! One way is:
+   !   call random_number(rand_val)
+   ! choose one from last-first+1 integers
+   !   rand_int = first + FLOOR((last+1-first)*rand_val)
+      count=0
+   ! generate a lot of random integers from 1 to 10 and count them.
+   ! with a large number of values you should get about the same number
+   ! of each value
+      do i=1,100000000
+         call random_number(rand_val)
+         rand_int=first+floor((last+1-first)*rand_val)
+         if(rand_int.ge.first.and.rand_int.le.last)then
+            count(rand_int)=count(rand_int)+1
+         else
+            write(*,*)rand_int,&#146; is out of range&#146;
+         endif
+      enddo
+      write(*,&#146;(i0,1x,i0)&#146;)(i,count(i),i=1,size(count))
+   end program demo_random_number
+<P>
+</PRE>
+Sample output:
+<P>
+<PRE>
+   &gt;1 10003588
+   &gt;2 10000104
+   &gt;3 10000169
+   &gt;4 9997996
+   &gt;5 9995349
+   &gt;6 10001304
+   &gt;7 10001909
+   &gt;8 9999133
+   &gt;9 10000252
+   &gt;10 10000196
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+[[Fortran 95]] and later
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+Subroutine
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>random_seed</B>(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>random_number (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9c89498c-a8ca-478f-befc-0f24e07bccb8 using man macros.</FONT>
+<br><br><center><img src="images/random_number.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

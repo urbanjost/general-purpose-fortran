@@ -1,0 +1,245 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>s2v (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>s2v</B>(3f) - [M_strings:NUMERIC] function returns doubleprecision
+numeric value from a string
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>s2v</B>(string[,ierr][,onerr])
+<P>
+<PRE>
+    character(len=*)             :: string
+    doubleprecision              :: s2v
+    integer,intent(out),optional :: ierr
+    class(*),intent(in),optional :: onerr
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+This function converts a string to a DOUBLEPRECISION numeric value.
+<P>
+The intrinsics <B>INT</B>(3f), <B>REAL</B>(3f), and <B>DBLE</B>(3f) are also extended
+to take CHARACTER variables. The KIND= keyword is not supported
+on the extensions.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>string</B> </TD><TD valign=bottom>
+holds string assumed to represent a numeric value
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ierr</B> </TD><TD valign=bottom>
+If an error occurs the program is stopped if the optional
+parameter IERR is not present. If IERR returns a non-zero
+value an error occurred.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>onerr</B> </TD><TD valign=bottom>
+The value to return on error. A value of NaN is
+returned on error by default.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>s2v</B> </TD><TD valign=bottom>
+numeric value read from string
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+   program demo_s2v
+<P>
+    use M_strings, only: s2v, int, real, dble
+    implicit none
+    character(len=8)              :: s=&#146; 10.345 &#146;
+    integer                       :: i
+    character(len=14),allocatable :: strings(:)
+    doubleprecision               :: dv
+    integer                       :: errnum
+<P>
+    ! different strings representing INTEGER, REAL, and DOUBLEPRECISION
+    strings=[&
+    &&#146; 10.345       &#146;,&
+    &&#146;+10           &#146;,&
+    &&#146;    -3        &#146;,&
+    &&#146;    -4.94e-2  &#146;,&
+    &&#146;0.1           &#146;,&
+    &&#146;12345.678910d0&#146;,&
+    &&#146;              &#146;,& ! Note: will return zero without an error message
+    &&#146;1 2 1 2 1 . 0 &#146;,& ! Note: spaces will be ignored
+    &&#146;WHAT?         &#146;]  ! Note: error messages will appear, zero returned
+<P>
+    ! a numeric value is returned,
+    ! so it can be used in numeric expression
+    write(*,*) &#146;1/2 value of string is &#146;,s2v(s)/2.0d0
+    write(*,*)
+    write(*,*)&#146; STRING            VALUE                    ERROR_NUMBER&#146;
+    do i=1,size(strings)
+       ! Note: not a good idea to use s2v(3f) in a WRITE(3f) statement,
+       ! as it does I/O when errors occur, so called on a separate line
+       dv=s2v(strings(i),errnum)
+       write(*,*) strings(i)//&#146;=&#146;,dv,errnum
+    enddo
+    write(*,*)"Extended intrinsics"
+    write(*,*)&#146;given inputs:&#146;,s,strings(:8)
+    write(*,*)&#146;INT(3f):&#146;,int(s),int(strings(:8))
+    write(*,*)&#146;REAL(3f):&#146;,real(s),real(strings(:8))
+    write(*,*)&#146;DBLE(3f):&#146;,dble(s),dble(strings(:8))
+    write(*,*)"That&#146;s all folks!"
+<P>
+    end program demo_s2v
+<P>
+</PRE>
+<BLOCKQUOTE>
+Expected output
+<P>
+<PRE>
+    &gt;1/2 value of string is    5.1725000000000003
+    &gt;
+    &gt; STRING            VALUE                    ERROR_NUMBER
+    &gt; 10.345       =   10.345000000000001                0
+    &gt;+10           =   10.000000000000000                0
+    &gt;    -3        =  -3.0000000000000000                0
+    &gt;    -4.94e-2  =  -4.9399999999999999E-002           0
+    &gt;0.1           =  0.10000000000000001                0
+    &gt;12345.678910d0=   12345.678910000001                0
+    &gt;              =   0.0000000000000000                0
+    &gt;1 2 1 2 1 . 0 =   12121.000000000000                0
+    &gt;*a2d* - cannot produce number from string [WHAT?]
+    &gt;*a2d* - [Bad value during floating point read]
+    &gt;WHAT?         =   0.0000000000000000             5010
+    &gt;Extended intrinsics
+    &gt;given inputs: 10.345 10.345 +10 -3 -4.94e-2 0.1
+    12345.678910d0 1 2 1 2 1 . 0
+    &gt;INT(3f): 10 10 10 -3 0 0 12345 0 12121
+    &gt;REAL(3f): 10.3450003 10.3450003 10.0000000 -3.00000000
+    -4.94000018E-02
+    &gt;          0.100000001 12345.6787 0.00000000 12121.0000
+    &gt;DBLE(3f): 10.345000000000001 10.345000000000001
+    10.000000000000000
+    &gt;          -3.0000000000000000 -4.9399999999999999E-002
+    0.10000000000000001
+    &gt;          12345.678910000001 0.0000000000000000
+    12121.000000000000
+    &gt;That&#146;s all folks!
+<P>
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>s2v (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fa29f278-0e02-4213-a1c0-5d10a943b731 using man macros.</FONT>
+<br><br><center><img src="images/s2v.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

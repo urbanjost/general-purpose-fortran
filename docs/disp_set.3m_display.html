@@ -1,0 +1,227 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>disp_set (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>disp_set</B>(3f) - [M_display] set default options for <B>disp</B>(3f)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>The Derived Type Disp_settings</A><BR>
+<A HREF=#3>Calling Syntax For Disp_set</A><BR>
+<A HREF=#4>Author</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The subroutine DISP_SET may be used to change default values of all the arguments of DISP except
+TITLE, X, FMT and LBOUND. In addition the default separator between items that are displayed
+side-by-side (using ADVANCE=&#146;no&#146;) may be changed with the MATSEP argument.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=2>
+
+     <H3>THE DERIVED TYPE DISP_SETTINGS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+M_display contains the following definition of the data type DISP_SETTINGS.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TYPE DISP_SETTINGS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(3) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: advance   = &#146;YES&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(9) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: matsep    = &#146;   &#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(3) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: orient    = &#146;COL&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(9) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: sep       = &#146;  &#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(19) :: style </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+= &#146;LEFT&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(4) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: trim      = &#146;AUTO&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(9) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: zeroas    = &#146;&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: digmax    = 6
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: matseplen = 3
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: seplen    = 2
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: unit      = <B>-3</B>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: zaslen    = 0
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END TYPE DISP_SETTINGS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Structures of type DISP_SETTINGS may be used to save and later restore format control settings of
+DISP. As shown, new variables of this type will automatically have default values for all
+components.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=3>
+
+     <H3>CALLING SYNTAX FOR DISP_SET</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+There are two ways to call DISP_SET:
+<P>
+<PRE>
+      CALL DISP_SET(SETTINGS)
+      CALL DISP_SET(ADVANCE, DIGMAX, MATSEP, ORIENT, SEP, STYLE, UNIT, ZEROAS)
+<P>
+</PRE>
+Both calls change the default format control used in subsequent calls to DISP. In the first call,
+SETTINGS is of type DISP_SETTINGS and the default values for all arguments is changed. In the
+second call all the arguments are optional. If an argument is absent the corresponding default
+setting is not changed. An example call is
+<P>
+<PRE>
+      CALL DISP_SET(STYLE = &#146;PAD&#146;, SEP = &#146; &#146;).
+<P>
+</PRE>
+The effect is that titles will be written padded above matrices, and matrix column will be
+separated by one blank. The type and purpose of all the arguments except MATSEP has been
+described in section 3.2.
+<TABLE cellpadding=3><!-- tsb: The effect is that titles will be written padded above matrices, and matrix column will be
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>MATSEP = ms</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specifies a character string of length &lt;= 9 that is written out between items
+(matrices) when they are displayed side-by-side. An example is:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  CALL DISP(X, ADVANCE=&#146;NO&#146;)
+                  CALL DISP(Y, ADVANCE=&#146;NO&#146;)
+                  CALL DISP_SET(MATSEP=&#146; | &#146;)
+                  CALL DISP(Z, ADVANCE=&#146;YES&#146;)
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+The output from these calls might be:
+<P>
+<PRE>
+                  12.2 |  1.3 | 1
+                   9.6 | 13.0 | 3
+                  -2.0 |  4.0 | 4
+<P>
+</PRE>
+Note that MATSEP affects the separation of all items that have been placed in the
+output queue of the unit being displayed on.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Based on <B>dispmodule</B>(3f), "A Fortran 95 module for pretty-printing matrices".
+Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
+Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>disp_set (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b1a6c4af-9b05-4a31-b552-5b3e0dd0392d using man macros.</FONT>
+<br><br><center><img src="images/disp_set.3m_display.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

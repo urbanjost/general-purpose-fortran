@@ -1,0 +1,169 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>textjustify (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>textjustify</B>(3f) - [M_draw:TEXT] general text justification (C only)
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>textjustify</B>(<I>val</I>)
+<B>character</B>(kind=c_short) :: ival
+<B>character</B>(kind=c_char) :: <I>val</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+General (direct) control of text justification. The value of <I>val</I> is made
+up of the logical OR of the following predefined constants in draw.h
+(FOR C and Fortran only). D_LEFT, D_RIGHT, D_XCENTERED, D_TOP, D_BOTTOM,
+D_YCENTERED. Centering takes priority, as does RIGHT and TOP justification
+(if you were silly enough to set it to D_LEFT|D_RIGHT for EXAMPLE that
+is). A value of 0 (zero) (in all languages) resets the textjustification
+to the default.
+<P>
+<PRE>
+       ! from Fortran, use IANY() to OR the array of options, and CHAR()
+       ! to convert the integer result to a C_CHAR type. KIND C_CHAR is
+       ! defined by loading a the intrinsic module for C bindings ("USE ISO_C_BINDING").
+       ival=iany([D_XCENTERED,D_YCENTERED])
+       val=char(ival)
+       call textjustify(val)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_textjustify
+   use M_draw
+   use M_draw,    only  : D_BLACK,   D_WHITE
+   use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
+   use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+   use iso_c_binding
+   implicit none
+   real :: x1=-20.0, x2=20.0, y1=-20.0, y2=20.0
+      call prefsize(int(x2-x1)*30,int(y2-y1)*30)
+      !!call voutput(&#146;|ppmtogif &gt;images/textjustify.3M_draw.gif&#146;)
+      !!call vinit(&#146;p6&#146;)
+      call vinit(&#146; &#146;)
+      call page(x1,x2,y1,y2)
+      call clear()
+      call textsize(0.9, 1.4)
+      call font("times.rb")
+      call linewidth(20)
+      call seejustify( "right|top",           iany([d_right,d_top]),           -10.0, -10.0 )
+      call seejustify( "right|ycentered",     iany([d_right,d_ycentered]),     -10.0,   0.0 )
+      call seejustify( "right|bottom",        iany([d_right,d_bottom]),        -10.0, +10.0 )
+      call seejustify( "xcentered|top",       iany([d_xcentered,d_top]),         0.0, -10.0 )
+      call seejustify( "xcentered|ycentered", iany([d_xcentered,d_ycentered]),   0.0,   0.0 )
+      call seejustify( "xcentered|bottom",    iany([d_xcentered,d_bottom]),      0.0, +10.0 )
+      call seejustify( "left|top",            iany([d_left,d_top]),            +10.0, -10.0 )
+      call seejustify( "left|ycentered",      iany([d_left,d_ycentered]),      +10.0,   0.0 )
+      call seejustify( "left|bottom",         iany([d_left,d_bottom]),         +10.0, +10.0 )
+      call vexit()
+   contains
+      subroutine seejustify(string,justify,x,y)
+         implicit none
+         real                    :: x, y
+         real                    :: height, width
+         integer(kind=c_short)   :: justify
+         character(len=*)        :: string
+         character(kind=c_char)  :: byte
+         call color(D_RED)
+         call move2(x-1.0,y); call draw2(x+1.0,y); call move2(x,y-1.0); call draw2(x,y+1.0)
+         call circle(x,y,5.0)
+         call color(D_BLUE)
+         call move2(x,y)
+         byte=char(justify)
+         call textjustify(byte)
+         call drawstr(string)
+         call color(D_WHITE)
+         call rmove2(-strlength(string),0.0)
+         call rdraw2(+strlength(string),0.0)
+         call getfontsize(width, height)
+         call rmove2(0.0,height)
+         call rmove2(-strlength(string),0.0)
+         call rdraw2(+strlength(string),0.0)
+      end subroutine seejustify
+   end program demo_textjustify
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>textjustify (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4e4c6047-7399-42b4-868d-c6df6b0efe13 using man macros.</FONT>
+<br><br><center><img src="images/textjustify.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,336 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>fileopen (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fileopen</B>(3f) - [M_io] A simple open of a sequential file
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Option</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>fileopen</B>(filename,mode,ios) <B>result</B>(<I>lun</I>)
+<P>
+<PRE>
+   character(len=*),intent(in)           :: filename
+   character(len=*),intent(in),optional  :: mode
+   integer,intent(out),optional          :: ios
+   integer                               :: lun
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fileopen</B>(3f) is a convenience routine that allows you to open a file
+for sequential reading and writing as a text file in a form commonly
+found in C and interpreted languages such as shells. See the <B>OPEN</B>(3f)
+statement for more demanding I/O specifications (asynchronous, direct,
+unformatted, &#46;&#46;&#46; ). The documentation for the flexible and powerful
+<B>OPEN</B>(3f) statement can be a bit overwhelming; this routine cuts it
+down to the just the simple basic functions typically available in
+a scripting language such as bash, tcsh, sh, &#46;&#46;&#46;
+<P>
+Specify the file&#146;s name as the string FILENAME with a shell-like prefix
+specifying the access mode, or alternatively specify a plain FILENAME
+and the kind of access you need to the file with the string MODE.
+<P>
+Three fundamental kinds of access are available: read, write,
+and append.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>FILENAME</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The filename to open. If the beginning of the filename is
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+            &lt;   open for read. File must exist
+            &gt;   open for write. Will overwrite current file
+            &gt;&gt;  open for append. Will append to current file
+<P>
+            If no prefix exists to specify a file access mode, it
+            will depend on the values of the MODE argument (meaning
+            the default will be "readwrite").
+<P>
+            A blank filename causes a unit number for a scratch file
+            to be returned.
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>MODE</B> </TD><TD valign=bottom>
+[rwa][tb][+]
+An alternate way to specify the file access mode is to specify
+a MODE value. It should begin with one of the three characters
+"r", "w", or "a". It defaults to &#146;rw&#146;. It is case-insensitive.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<A name=>
+
+    <H4>&nbsp; &nbsp; READING PREFIX</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>r,&lt;</B> </TD><TD valign=bottom>
+Open the file for reading; the operation will fail if the
+file does not exist, or if the host system does not permit
+you to read it.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; WRITING PREFIXES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>w,&gt;</B> </TD><TD valign=bottom>
+Open a file for writing from the beginning of the file.
+If the file whose name you specified already existed,
+the call fails.
+</TD></TR>
+<TR></TR></TABLE><TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Open the file for writing from the beginning of the file:
+effectively, this always creates a new file. If the file
+whose name you specified already existed, its old contents
+are discarded.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>a,&lt;&lt;</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+Initially open the file for appending data (ie. writing
+at the end of file).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SUFFIX</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3% nowrap>
+<B>b</B> </TD><TD valign=bottom>
+Append a "b" to any of the three modes above to specify that
+you are opening the file as a "binary file" (the default is
+to open the file as a sequential formatted text file. This
+switch changes to to an unformatted stream).
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+                  open( &#46;&#46;&#46; access=&#146;stream&#146;;form=&#146;unformatted&#146;)
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>t</B> </TD><TD valign=bottom>
+Append a "t" to any of the three modes (rwa) to specify a
+formatted stream
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  open( &#46;&#46;&#46; access=&#146;stream&#146;;form=&#146;formatted&#146;)
+<P>
+</PRE>
+</TD></TR>
+<TR></TR></TABLE><TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Finally, you might need to both read and write from the same
+file. You can specify "rw" or you can append a &#145;+&#146; to any of
+the three primary modes ("rwa") to permit "readwrite" access
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>v</B> </TD><TD valign=bottom>
+Additionally, "v" selects verbose mode, which prints the
+<B>OPEN</B>(3f) options explicitly selected
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NOTES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+If you want to append both &#145;b&#146; and &#145;+&#146;, you can do it in
+either order: for example, "rb+" means the same thing as
+"r+b" when used as a mode string.)
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: If you want to append both &#145;b&#146; and &#145;+&#146;, you can do it in
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IOS</B> </TD><TD valign=bottom>
+The error code returned by the <B>OPEN</B>(3f) statement ultimately
+executed by this function. If not present the program stops on
+an error.
+</TD></TR>
+<TR></TR></TABLE><A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>FILEOPEN</B>(3f) returns a Fortran unit number which you can use for other file
+operations, unless the file you requested could not be opened;
+in that situation, the result is <B>-1</B> (a reserved value that cannot be returned
+as a NEWUNIT value on an <B>OPEN</B>(3f)) and IOS will be non-zero.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Common usage
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; READ</H4>
+</A>
+<BLOCKQUOTE>
+R=<B>fileopen</B>(&#146;&lt;in.txt&#146;)
+or
+R=<B>fileopen</B>(&#146;in.txt&#146;,&#146;r&#146;)
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; WRITE</H4>
+</A>
+<BLOCKQUOTE>
+W=<B>fileopen</B>(&#146;&gt;out.txt&#146;)
+or
+W=<B>fileopen</B>(&#146;out.txt&#146;,&#146;W&#146;)
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; READWRITE</H4>
+</A>
+<BLOCKQUOTE>
+RW=<B>fileopen</B>(&#146;inout.txt&#146;)
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; APPEND</H4>
+</A>
+<BLOCKQUOTE>
+A=<B>fileopen</B>(&#146;&gt;&gt;inout.txt&#146;)
+or
+A=<B>fileopen</B>(&#146;inout.txt&#146;,&#146;a&#146;)
+</BLOCKQUOTE>
+<P>
+Sample program
+<P>
+<PRE>
+      program demo_fileopen
+      use M_io, only : fileopen, fileclose, print_inquire
+      implicit none
+      integer :: lun
+      lun=fileopen(&#146;fred.txt&#146;)
+      call print_inquire(lun)
+      end program demo_fileopen
+<P>
+</PRE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>fileopen (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bb8bec26-3e6f-4d2b-9996-95e0af38fdd9 using man macros.</FONT>
+<br><br><center><img src="images/fileopen.3m_io.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

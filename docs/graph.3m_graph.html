@@ -1,0 +1,581 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>graph (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>graph</B>(3) - [M_graph] Draw an XY graph
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>graph</B>(x,y,ndp,ndl,f,c,nc)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+This is an XY graph routine that is intended to be very self-contained and
+easily ported to various graphics libraries. This version is callable from
+the <B>M_draw</B>(3f) module.
+<P>
+It is being ported from the LONGLIB public domain library and will be
+changing. It is recommended that you rename the <B>M_graph</B>(3f) module source
+to freeze a copy at this point, as new versions will not necessarily be
+upward compatible. The underlying calls to <B>M_graph</B>(3f) should not require
+any changes.
+<P>
+<B>graph</B>(3f) is a general routine for plotting lines or scatterplots. Optionally,
+error bars and symbols can be added. <B>graph</B>(3f) differs in philosophy from other
+libDL MASTER routines in that plotting options are passed via an option array.
+The routine is designed to produce a reasonable plot with the option array set
+to all zeros. The output format is changed by initializing selected array
+elements to the values described below. This permits simple but flexible
+specification of the plot format.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>x</B> </TD><TD valign=bottom>
+(R): x input array dimensioned <B>x</B>(ndp,ndl).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>y</B> </TD><TD valign=bottom>
+(R): y input array dimensioned <B>y</B>(ndp,ndl).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ndp</B> </TD><TD valign=bottom>
+(i): number of data points per line
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ndl</B> </TD><TD valign=bottom>
+(i): number of data lines
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>f</B> </TD><TD valign=bottom>
+(R): option array dimensioned at least <B>f</B>(53)
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+              (described below)
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>c</B> </TD><TD valign=bottom>
+(C): array of strings dimensioned <B>C</B>(3+ndl)
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+               c(1) : x axis title
+               c(2) : y axis title
+               c(3) : top title
+               c(4) : line 1 legend (optionally used)
+               c(5) : line 2 legend (optionally used)
+               &#46;&#46;&#46;        ...
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nc</B> </TD><TD valign=bottom>
+(i): array of string lengths dimensioned <B>nc</B>(3+ndl)
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+               nc(1) : number of characters to use in C(1)
+               nc(2) : number of characters to use in C(2)
+                &#46;&#46;&#46;       ...
+<P>
+</PRE>
+The array elements of the option array f are interpreted according to the
+following table. Some parameters have default values (shown in square
+brackets). These are used when the input value is zero. A simple plot may be
+produced by setting all the elements of f to zero. Note that user specified
+input scaling factors should be powers of ten when the log axis specification
+is selected. An optional legend may be plotted. The legend consists of a column
+of lines and the labels from <B>n</B>(4:)
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+     array  range of
+     index  values   action for each value
+</PRE>
+------- -------- ------------------------
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>1</B> </TD><TD valign=bottom>
+0&lt;=.&lt;=ndp number of points/line to plot [ndp]: 0=ndp used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>2</B> </TD><TD valign=bottom>
+0&lt;=.&lt;=ndl number of lines to plot [nl]: 0=ndl used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>3</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1   x scale: 0=auto,smoothed; 1=auto,nosmooth; <B>-1</B>=user
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>4</B> </TD><TD valign=bottom>
+xmin    user supplied scale value (used if <B>f</B>(3)&lt;0)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5</B> </TD><TD valign=bottom>
+xmax    user supplied scale value (used if <B>f</B>(3)&lt;0)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>6</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1   y scale: 0=auto,smoothed; 1=auto,nosmooth; <B>-1</B>=user
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>7</B> </TD><TD valign=bottom>
+ymin    user supplied scale value (used if <B>f</B>(6)&lt;0)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>8</B> </TD><TD valign=bottom>
+ymax    user supplied scale value (used if <B>f</B>(6)&lt;0)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>9</B> </TD><TD valign=bottom>
+0/1     x value usage: 0=first line of x data array
+used for all y lines; 1=lines of x,y paired
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>10</B> </TD><TD valign=bottom>
+0/1     connect plotted points: 0=yes; 1=no
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>11</B> </TD><TD valign=bottom>
+&gt;=0     symbol plotted every ()th point: 0=no symbols
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>12</B> </TD><TD valign=bottom>
+&gt;=0     line symbol size [0.1]: 0=use default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>13</B> </TD><TD valign=bottom>
+&gt;=0     symbol number for first data line, each line
+then uses next symbol in sequence
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>14</B> </TD><TD valign=bottom>
+8&lt;.&lt;8   error bar option (see below): 0=no error bars
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>16</B> </TD><TD valign=bottom>
+&gt;=0     error bar size [0.1]: 0=default used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>17</B> </TD><TD valign=bottom>
+0/1     vertical line from points to reference value:
+0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>18</B> </TD><TD valign=bottom>
+rval    reference value
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>19</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1   x axis type: 0=linear; 1=log axis, <B>-1</B>=no axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>20</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1   y axis type: 0=linear; 1=log axis, <B>-1</B>=no axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>21</B> </TD><TD valign=bottom>
+&gt;=0     x axis length [7.0]: 0=default used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>22</B> </TD><TD valign=bottom>
+&gt;=0     y axis length [5.0]: 0=default used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>23</B> </TD><TD valign=bottom>
+&gt;=0     x axis tick pattern (see axisc_) [7.00]: 0=default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>24</B> </TD><TD valign=bottom>
+&gt;=0     y axis tick pattern (see axisc_) [5.00]: 0=default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>25</B> </TD><TD valign=bottom>
+0/1     x axis title side of axis: 0=below; 1=above
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>26</B> </TD><TD valign=bottom>
+0/1     y axis title side of axis: 0=left; 1=right
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>27</B> </TD><TD valign=bottom>
+0/1     x axis auto exponent enable: 0=enable; 1=disable
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>28</B> </TD><TD valign=bottom>
+0/1     y axis auto exponent enable: 0=enable; 1=disable
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>29</B> </TD><TD valign=bottom>
+0/1     x axis tick side: 0=below; 1=above
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>30</B> </TD><TD valign=bottom>
+0/1     y axis tick side: 0=left; 1=right
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>31</B> </TD><TD valign=bottom>
+0/1     x axis number orientation: 0=horizontal; 1=vertical
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>32</B> </TD><TD valign=bottom>
+0/1     y axis number orientation: 0=vertical; 1=horizontal
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>33</B> </TD><TD valign=bottom>
+0/1     x axis numbers/title: 0=shown; 1=not shown
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>34</B> </TD><TD valign=bottom>
+0/1     y axis numbers/title: 0=shown; 1=not shown
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>35</B> </TD><TD valign=bottom>
+0/1     use <B>x=log10</B>(abs(x values)+1.e-34): 0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>36</B> </TD><TD valign=bottom>
+0/1     use <B>y=log10</B>(abs(y values)+1.e-34): 0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>37</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1    add mirror x axis: 0=no; 1=w/labels; <B>-1</B>:w/o labels
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>38</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1    add mirror y axis: 0=no; 1=w/labels; <B>-1</B>:w/o labels
+(mirrored axes placed on opposite from normal axis)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>39</B> </TD><TD valign=bottom>
+&gt;=0     x axis label size [0.15]: 0=use default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>40</B> </TD><TD valign=bottom>
+&gt;=0     y axis label size [0.15]: 0=use default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>41</B> </TD><TD valign=bottom>
+&gt;=0     top title character size [0.18]: 0=use default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>42</B> </TD><TD valign=bottom>
+0/1/2/3   grid: 0=no grid; 1=solid; 2=dotted; 3=ticked
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>43</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1    legend: 0=no legend; 1=right side; <B>-1</B>=user locate
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>44</B> </TD><TD valign=bottom>
+xval    user specified lower-left corner of legend
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>45</B> </TD><TD valign=bottom>
+yval    user specified lower-left corner of legend
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>46</B> </TD><TD valign=bottom>
+0/1     show plot symbol on legend: 0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>47</B> </TD><TD valign=bottom>
+0/1     show line segment on legend: 0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>48</B> </TD><TD valign=bottom>
+&gt;=0     legend character height [0.12]: 0=use default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>49</B> </TD><TD valign=bottom>
+&gt;=0     legend line segment length [0.5]: 0=use default
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>50</B> </TD><TD valign=bottom>
+<B>-1</B>/0/1    top title justify: 0=center; <B>-1</B>:left; 1:right
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>51</B> </TD><TD valign=bottom>
+0/1      plot horizontal reference line: 0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>52</B> </TD><TD valign=bottom>
+0/1      use linetype array values: 0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>53</B> </TD><TD valign=bottom>
+0/1      use color array values: 0=no; 1=yes
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>54</B> </TD><TD valign=bottom>
+&gt;=0      color index #1: 0=color value 1 used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>55</B> </TD><TD valign=bottom>
+&gt;=0      linetype index #1
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>56</B> </TD><TD valign=bottom>
+&gt;=0      color index #2: 0=color value 1 used
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>57</B> </TD><TD valign=bottom>
+&gt;=0      linetype index #2
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&#46;&#46;&#46;</B> </TD><TD valign=bottom>
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>The optional error bar specification, when non-zero, changes interpretation of
+lines. The first line (and every third line) is considered a "center" line. The
+second line specifies the relative error (to be added to the first line) used
+for plotting the tops of the error bars. The third line is used similarly to
+locate the bottoms of the error bars. When the error bar specification is
+negative the center line points are marked with a special "x" (in addition to
+any other option). The absolution value of the specification determines the type
+of error bar according to the following table.
+<P>
+<PRE>
+    value   type of error bar
+    ------  ---------------------------------------------------
+     1     line connecting relative errors
+     2     1 + horizontal bars at relative errs
+     3     1 + vertical bars at relative errs
+     4     double line connecting rel. errs+horizontal bars
+     5     double line connecting rel. errs+vertical bars
+     6     vertical rectangle w/top and bottom rel. errs
+     7     rectangle with corners at relative errors
+<P>
+</PRE>
+The color and line type index (when enabled) are used according to the
+following table.
+<P>
+<PRE>
+    index #        color usage     linetype usage
+    ---------      -------------   ----------------
+      1              x axis         x axis
+      2           x axis numbers    y axis
+      3           x axis title      title
+      4           x axis exponent   legend titles
+      5              y axis         reference line
+      6           y axis numbers    error bars
+      7           y axis title      line #1 linetype
+      8           y axis exponent   line #2 linetype
+      9              title            etc.
+     10             legend titles     &#46;&#46;&#46;
+     11            reference line     &#46;&#46;&#46;
+     12               grid            &#46;&#46;&#46;
+     13             line #1 color     &#46;&#46;&#46;
+     14             line #2 color     &#46;&#46;&#46;
+     &#46;&#46;&#46;            ... etc. ...      ...
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program that creates some simple curves and then
+prompts for index values and values in the options array
+to allow for testing various options.
+<P>
+<PRE>
+   program demo_graph
+   use m_graph, only : graph, graph_init
+   use M_draw
+<P>
+   integer,parameter            :: numlines=3
+   integer,parameter            :: numpts=25
+   integer,parameter            :: nf=255
+   real                         :: x(numpts),y(numpts,numlines)
+   character(len=80)            :: c(numlines+3)
+   integer                      :: nc(numlines+3)
+   real                         :: f(nf)
+   character(len=20)            :: device
+   integer                      :: ixsize
+   integer                      :: iysize
+   character(len=:),allocatable :: filename
+   integer                      :: w
+      device=&#146;x11&#146;
+      ixsize=1200*.75*0.5
+      iysize=900*.75*0.5
+      w=40
+      if(device.eq.&#146;x11&#146;)then
+         call prefposition(0,0)
+         call prefsize(ixsize,iysize)
+      else
+         call prefsize(ixsize,iysize)
+         !!call voutput(str(filename,&#146;_&#146;,int(a),&#146;x&#146;,int(b),&#146;.&#146;,device,nospace=.true.))
+      endif
+      call vinit(device)
+      call vsetflush(.false.)
+      call vflush()
+      call linewidth(w)
+<P>
+   !     fill some arrays with data we can plot
+      DO i20=1,25
+         X(i20)=i20
+         Y(i20,1)=i20**2+5.0
+         Y(i20,2)=i20*20.0
+         Y(i20,3)=(-3.0)*(i20/4.0)**3
+      enddo
+<P>
+      f=0.0 !     zero out option array
+   !     set up color and linetype in option array
+      do i70=55,nf,2
+         f(i70)=mod(i70,7)
+         f(i70-1)=mod(i70,7)
+      enddo
+      f(52)=1
+      f(53)=1
+<P>
+      ndp=numpts! number of data points per line
+      ndl=3     ! number of data lines
+      !c        ! array of strings dimensioned c(3+numpts)
+      c(1)=&#146;X-AXIS&#146;  !  c(1) : x axis title
+      c(2)=&#146;Y-AXIS&#146;  !  c(2) : y axis title
+      c(3)=&#146;TITLE&#146;  !  c(3) : top title
+      c(4)=&#146;LABEL 1&#146;  !  c(n) : line N-3 legend (optionally used)
+      c(5)=&#146;LABEL 2&#146;  !  c(n) : line N-3 legend (optionally used)
+      c(6)=&#146;LABEL 3&#146;  !  c(n) : line N-3 legend (optionally used)
+      !nc       ! array of string lengths in c() dimensioned nc(3+numpts)
+      do i60=1,6
+         nc(i60)=len_trim(c(i60))
+      enddo
+      !f(39)= 0.25
+      !f(40)= 0.25
+      !f(42)= 3.00
+      !f(43)=-1.00
+   !  initialize graphics
+      call graph_init(12.0,9.0, 1.00,1.00, 1.0)
+      INFINITE: do
+         CALL graph(X,Y,NDP,NDL,F,C,NC)
+         call vflush()
+   888   continue
+         write(*,*)&#146;Enter index and value for graph(3f) option array:&#146;
+         read(*,*,end=999,err=888)index,value
+         if(index.lt.1)then
+            exit INFINITE
+         elseif(index.gt.nf)then
+            goto 888
+         else
+            f(index)=value
+            write(*,*)&#146;index &#146;,index,&#146; now &#146;,value
+         endif
+         call vflush()              ! flush graphics buffers
+         call color(7)
+         call clear()
+         call color(0)
+         call vflush()              ! flush graphics buffers
+      enddo INFINITE
+   999 continue
+      call vflush()              ! flush graphics buffers
+      call vexit()               ! close up plot package
+      stop
+   end program demo_graph
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Based on [LONGLIB93.SOURCES.FORTRAN.MASTER]graph.FOR
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Based on [LONGLIB93.SOURCES.FORTRAN.MASTER]graph.FOR
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+WRITTEN:  Version 1.0 SEPT. 1987 - DGL
+Version 2.0 20-JAN-1994 17:13:12.80
+Version 3.0 Wed Jun 12 10:34:11 MDT 1996
+</TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>graph (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fcadfc7c-03ba-4780-90af-7287316cdf8d using man macros.</FONT>
+<br><br><center><img src="images/graph.3m_graph.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

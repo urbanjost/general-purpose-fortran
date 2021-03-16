@@ -1,0 +1,333 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>now (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>now</B>(1f) - [TIME] print the date and time
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Limits</A><BR>
+<A HREF=#6>See Also</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>License</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>now</B> [Format [ <B>-date</B> date_str|<B>-ued</B> Unix_time|<B>-jed</B> Julian_Date|<B>-dat</B> <I>date_vector</I>]
+[ <B>-delta</B> dd-hh:mm:ss]]|<B>--help</B> |<B>--version</B>|<B>-test</B>]
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Report the current time or a Fortran date vector in a variety of formats.
+Julian dates, Unix Epoch time, weekdays, monthnames, ordinal days,
+AM/PM and iso-8601 week-numbering are supported by building a format
+string containing the desired macros.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>Format</I> </TD><TD valign=bottom>
+This string, containing macro names or keywords, creates the format used
+to print the specified date.
+<P>
+The FORMAT string is expanded using the following macros:
+<P>
+<PRE>
+      Description                                        Example
+<P>
+      Base time array:
+       (1) %Y -- year, yyyy                                2019
+       (2) %M -- month of year, 01 to 12                   11
+       (3) %D -- day of month, 01 to 31                    28
+           %d -- day of month, with suffix (1st, 2nd,&#46;&#46;&#46;)  28th
+       (4) %Z -- minutes from UTC                          -0300
+           %z -- -+hh:mm from UTC                          -05:00
+           %T -- -+hhmm  from UTC                          -0500
+       (5) %h -- hours, 00 to 23                           20
+           %H -- hour (1 to 12, or twelve-hour clock)      8
+           %N -- midnight&lt; AM &lt;=noon; noon&lt;= PM &lt;midnight  PM
+       (6) %m -- minutes, 00 to 59                         43
+       (7) %s -- sec, 00 to 59                             17
+       (8) %x -- milliseconds 000 to 999                   710
+      Conversions:
+           %E -- Unix Epoch time                           1574991797.7100163
+           %e -- integer value of Unix Epoch time          1574991798
+           %J -- Julian  date                              2458816.5717336112
+           %j -- integer value of Julian Date(Julian Day)  2458816
+           %O -- Ordinal day (day of year)                 332
+           %o -- Whole days since Unix Epoch date          18229
+           %U -- day of week, 1..7 Sunday=1                5
+           %u -- day of week, 1..7 Monday=1                4
+           %i -- ISO week of year 1..53                    48
+           %I -- iso-8601 week-numbering date(yyyy-Www-d)  2019-W48-4
+       Names:
+           %l -- abbreviated month name                    Nov
+           %L -- full month name                           November
+           %w -- first three characters of weekday         Thu
+           %W -- weekday name                              Thursday
+           %p -- phase of moon                             New
+           %P -- percent of way from new to full moon      12%
+       Literals:
+           %% -- a literal %                               %
+           %t -- tab character                                 
+           %b -- blank character
+           %B -- exclamation(bang) character               !
+           %n -- new line (system dependent)              
+<P>
+           %q -- single quote (apostrophe)                 &#146;
+           %Q -- double quote                              "
+       Program timing:
+           %c -- CPU_TIME(3f) output                       0.31000000000000000E-001
+           %C -- number of times this routine is used      1
+           %S -- seconds since last use of this format     0.0000000000000000
+           %k -- time in seconds from SYSTEM_CLOCK(3f)     222508.281
+           %K -- time in clicks from SYSTEM_CLOCK(3f)      222508293
+<P>
+      If no percent (%) is found in the format one of several
+      alternate substitutions occurs.
+<P>
+      If the format is composed entirely of one of the following
+      keywords the following substitutions occur:
+        "iso-8601",
+        "iso"        ==&gt; %Y-%M-%DT%h:%m:%s%z             2019-11-28T20:43:17-05:00
+        "iso-8601W",
+        "isoweek"    ==&gt; %I                              2019-W48-4
+        "sql"        ==&gt; "%Y-%M-%D %h:%m:%s.%x"          "2019-11-28 20:43:17.793"
+        "sqlday"     ==&gt; "%Y-%M-%D"                      "2019-11-28"
+        "sqltime"    ==&gt; "%h:%m:%s.%x"                   "20:43:17.794"
+        "rfc-2822"   ==&gt; %w, %D %l %Y %h:%m:%s %T
+                         Thu, 28 Nov 2019 20:43:17 -0500
+        "rfc-3339"   ==&gt; %Y-%M-%DT%h:%m:%s%z             2019-11-28T20:43:17-05:00
+        "date"       ==&gt; %w %l %D %h:%m:%s UTC%z %Y
+                         Thu Nov 28 20:43:17 UTC-05:00 2019
+        "short"      ==&gt; %w, %l %d, %Y %H:%m:%s %N UTC%z
+                         Thu, Nov 28th, 2019 8:43:17 PM UTC-05:00
+        "long"," "   ==&gt; %W, %L %d, %Y %H:%m:%s %N UTC%z
+                         Thursday, November 28th, 2019 8:43:17 PM UTC-05:00
+        "suffix"     ==&gt; %Y%D%M%h%m%s                    20192811204317
+        "formal"     ==&gt; The %d of %L %Y                 The 28th of November 2019
+        "lord"       ==&gt; the %d day of %L in the year of our Lord %Y
+                         the 28th day of November in the year of our Lord 2019
+        "easter"     ==&gt; FOR THE YEAR OF THE CURRENT DATE:
+                           Easter day: the %d day of %L in the year of our Lord %Y
+        "all"        ==&gt; A SAMPLE OF DATE FORMATS
+      otherwise the following words are replaced with the most
+      common macros:
+         year          %Y  2019
+         month         %M  11
+         day           %D  28
+         timezone      %z  -05:00
+         hour          %h  20
+         minute        %m  43
+         second        %s  17
+         millisecond   %x  801
+         epoch         %e  1574991798
+         julian        %j  2458816
+         ordinal       %O  332
+         weekday       %u  4
+      if none of these keywords are found then every letter that
+      is a macro is assumed to have an implied percent in front
+      of it. For example:
+         YMDhms ==&gt; %Y%M%D%h%m%s ==&gt; 20191128204317
+<P>
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-dat</B> <I>date_vector</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A date vector is eight integers representing a date in the same manner as
+the Fortran <B>DATE_AND_TIME</B>(3f) function:
+yyyy mm dd zone hh mm ss mss
+only numeric time zones are supported.
+<P>
+When present, the specified date is used instead of the current time.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-uet</B> Unix_Epoch_Time </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+When present a value is used as the Unix Epoch Time. This date is
+is then adjusted using any <B>-delta</B> value and then printed using
+the specified format.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-jed</B> Julian_Date </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+When present a value is used as the Julian Ephemeris Date.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-delta</B> dd-hh:mm:ss </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Add the specified duration to the date.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-date</B> date_str </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The <B>guessdate</B>(3f) routine is used to try to convert a date description
+to a date vector. For the guess to work, dates must either be in the
+form YYYY-MM-DD or the order of numeric values must be ""dd yy yyy".
+Only four-digit years are supported. Month names are preferred over
+numeric values. See the <B>guessdate</B>(3f) documentation for further details.
+</TD></TR>
+<TR></TR></TABLE><B>-test</B> :
+To list allowed macros use the <B>-test</B> switch.
+<P>
+When present, the specified date is used instead of the current time.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample commands:
+<P>
+<PRE>
+  now
+    Friday, June 17th, 2016 03:22:53 PM UTC-4:00
+<P>
+  now -delta  1-0:0:0  # Tomorrow
+    Sunday, June 19th, 2016 11:32:26 AM UTC-4:00
+<P>
+  now -delta -1-0:0:0  # Yesterday
+    Friday, June 17th, 2016 11:32:43 AM UTC-4:00
+<P>
+  now long -delta  7-0:0:0  # Next week
+    Saturday, June 25th, 2016 11:32:57 AM UTC-04:00
+<P>
+  now The date is %Y/%M/%D %h:%m:%s  # user-specified formats using macros
+    The date is 2009/08/10 00:33:48
+<P>
+  now Y/M/D h:m:s # user-specified format with no % character
+    2009/08/10 00:33:48
+<P>
+  now year-month-day # user-specified format with no % with long keywords
+  2016-07-29
+<P>
+  now -dat 2016 07 23 -240 1 01 00 00  # alternate date
+  Saturday, July 23rd, 2016 1:01:00 AM UTC-4:00
+<P>
+  now -uet  1469250060                 # alternate Unix Epoch date
+  now -date January 4th, 1999 10:20:30 # try to determine date from description.
+<P>
+  now YEAR=%Y MONTH=%M DAY=%D          # YEAR=2009 MONTH=08 DAY=10
+<P>
+  now HOUR=%h MINUTES=%m SECONDS=%s MILLISECONDS=%x
+      HOUR=01 MINUTES=18 SECONDS=44 MILLISECONDS=946
+<P>
+  # double-quotes are tricky (double them) to put in literally in this program:
+  now &#146;""year-month-day"",""hour-minute-second""&#146; #  "2017-04-23","14-41-09"
+<P>
+  # quotes are easier to control using the single-letter macros(use %q and %Q):
+  now QY-M-DQ,Qh:m:sQ
+     "2017-04-23","14-41-09"
+<P>
+  now -test       # Show formatting options, handy way to look up macro names
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LIMITS</H3>
+
+</A>
+<BLOCKQUOTE>
+See the M_time module description. Basically, A Gregorian Calendar is
+assumed, and Leap Seconds are not specifically accounted for.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>month</B>(1), <B>sec2days</B>(1), <B>days2sec</B>(1), <B>easter</B>(1), <B>paws</B>(1), <B>today</B>(1), <B>ttee</B>(1)
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>now (1)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7beac66c-977c-467f-9e7f-79263be17652 using man macros.</FONT>
+<br><br><center><img src="images/now.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,264 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>smoot (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>smoot</B>(3f) - [M_calcomp:scientific] draw a polyline using modified spline-fitting technique
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Description</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#5>Comments</A><BR>
+<A HREF=#6>Example</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>smoot</B>(xpage,ypage,ipen)
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+SMOOT is a FORTRAN subroutine which draws a smooth curve through
+a set of data points. It accomplishes this by using a modified
+spline-fitting technique. The subroutine receives a single coordinate
+pair on each call and accumulates the points until it has received a
+sufficient number to compute a pair of cubic parametric equations
+for a smooth curve. This accumulation method requires the user to
+specify an initial and a terminal call to the subroutine.
+<P>
+The SMOOT subroutine operates in either of two modes: Smooth Mode
+and Plot Mode.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>XPAGE,YPAGE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are the coordinates, in inches, of a single point through
+which the pen moves.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IPEN</B> </TD><TD valign=bottom>
+determines the mode and action of the SMOOT subroutine.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The first call to SMOOT must use an IPEN value of 0 or <B>-1</B> to put SMOOT in the
+Smooth Mode.
+<P>
+<PRE>
+    if IPEN = 0, XPAGE,YPAGE define the initial point (P(1))
+    on the curve. The smoothing function ends at the last
+    point (P(n)). An open curve is produced.
+<P>
+    if IPEN = -1, XPAGE,YPAGE are used to define the initial
+    point (P(1)) on the curve. The smoothing function
+    continues from the last point (P(n)) back to the initial
+    point (P(1)). A closed curve is produced.
+<P>
+</PRE>
+SMOOTH MODE:
+<P>
+<PRE>
+  When SMOOT is in the Smooth Mode, IPEN performs the following functions:
+<P>
+   IPEN = -2       XPAGE,YPAGE are used to define points P(2), P(3),&#46;&#46;&#46;,
+                   P(N-1), and a smoothed curve is drawn through the points
+                   on the curve.
+<P>
+   IPEN = -3       XPAGE,YPAGE are used to define points P(2), P(3),
+                   &#46;&#46;&#46;,P(N-1), and the pen, in the up position, is moved
+                   through these points. The smoothing function is
+                   maintained.
+<P>
+   IPEN = 2 or 3   The call is treated as a normal CALL PLOT
+                   (XPAGE,YPAGE,IPEN), and the point is not considered a
+                   point on the curve. The point of departure from the
+                   curve is the next-to-last point received by SMOOT, not
+                   the last point.
+<P>
+                   When the next call to SMOOT with IPEN = -2 or -3 is
+                   received, the pen is repositioned to the point where
+                   it left the smooth curve.  The smooth curve is then
+                   continued as though the calls with IPEN = 2 or 3 had
+                   not occurred.
+<P>
+   IPEN &lt;=(-24)   is used for the terminal call while SMOOT is in the
+                  Smooth Mode. XPAGE,YPAGE represent P(N). The curve is
+                  finished, and the subroutine returns to the Plot Mode.
+<P>
+</PRE>
+PLOT MODE:
+<P>
+SMOOT is in the Plot Mode after receiving a terminal call.
+<P>
+<PRE>
+     IF IPEN = +-2 or +-3, the call is treated as a normal CALL
+     PLOT (XPAGE,YPAGE,IPEN).
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+    <H4>&nbsp; &nbsp; COMMENTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+When SMOOT is called while it is in the Smooth Mode, the pen is not
+moved until three points on an open curve or four points on a closed
+curve have been received. For subsequent calls to SMOOT, the actual
+pen position is the next-to-last point received.
+<P>
+Calls to other plotting subroutines may be intermixed with calls to
+SMOOT. Point-of-departure restrictions are the same as noted in the
+Smooth Mode description above.
+<P>
+The first call to SMOOT must be with IPEN = 0 or <B>-1</B> .
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_smoot
+   use M_calcomp
+   implicit none
+   ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
+   real :: xar(10)=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
+   real :: yar(10)=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
+   character(len=50) :: ibcd
+   integer           :: inteq
+      call plots(0.0,10.0,0.0,10.0)
+   !     DRAW FRAME
+      call plot(7.0,0.0,2)
+      call plot(7.0,9.0,2)
+      call plot(0.0,9.0,2)
+      call plot(0.0,0.0,2)
+   !     DRAW AXIS
+      ibcd=&#146;SERVICE TIME&#146;
+      call axis(0.75,0.75,ibcd,-12,5.0,0.0,5.0,1.0)
+      ibcd=&#146;FREQUENCY&#146;
+      call axis(0.75,0.75,ibcd, 9,7.0,90.0,0.0,100.0)
+   !     DRAW COMMENTS
+      ibcd=&#146;USING FLINE AND SMOOT SUBROUTINES&#146;
+      call symbol(0.7,8.25,0.14,ibcd,inteq,0.0,34)
+      call plot(5.0,7.8,3)
+      call plot(5.1,7.8,2)
+      ibcd=&#146;SMOOT&#146;
+      call symbol(5.2,7.80,0.09,ibcd,inteq,0.0, 6)
+      inteq = 1
+      call symbol(5.0,7.60,0.10,ibcd,inteq,0.0,-1)
+      inteq=999
+      ibcd=&#146;FLINE&#146;
+      call symbol(5.2,7.60,0.09,ibcd,inteq,0.0, 5)
+   ! SMOOTHING
+      call smoot(0.75,3.75,0)
+      call smoot(1.75,2.5,-2)
+      call smoot(2.25,5.75,-2)
+      call smoot(2.75,7.0,-2)
+      call smoot(3.25,7.25,-2)
+      call smoot(4.25,6.75,-2)
+      call smoot(4.75,3.75,-2)
+      call smoot(5.75,4.75,-24)
+   ! FLINE IS USED
+      call plot(0.75,3.25,3)
+      call fline(xar, yar, -8,1,1,1)
+      call nframe()
+   end program demo_smoot
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>smoot (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b27b253b-1464-4380-b4b6-5f0ae77efe9d using man macros.</FONT>
+<br><br><center><img src="images/smoot.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

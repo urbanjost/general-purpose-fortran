@@ -1,0 +1,295 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_lua (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_lua</B>(3fm) - [M_lua] Fortran interface to the LUA language
+(LICENSE:MIT)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<P>
+This is a fork of a simple set of Lua bindings for use in Fortran,
+tested to be compatible with Lua 5.2.3+, based on FORTLUA 5.2.
+<P>
+Most of the original basis work is fully attributed to @adolgert and
+@adambrozier and creators of Aotus (see attribution clause below).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MOTIVATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+This project shows how to call a Lua file from Fortran. You can
+also call a Lua file from C, but doing it from an even older language
+seems more dramatic. This also demonstrates how to call C libraries
+directly from Fortran using the iso_c_binding.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COMPILATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+This project assumes that the Lua library is available on your system.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DISCUSSION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Why call Lua from Fortran? I can think of two good uses for this.
+<P>
+You could use a Lua file as a configuration file. You can query
+environment variables and do pre-calculations in the configuration
+file, yielding a result for Fortran to use. You can even pass in
+functions for Fortran to execute.
+<P>
+You could also write a commonly-modified subroutine in Lua so that
+there is no need to recompile the code when you make changes.
+<P>
+Why Lua? The language is relatively simple and has basic math
+included. It&#146;s made to embed in programs. That said, it is not a
+common language. You could do the same exercise with Gnu Guile.
+<P>
+How? Lua is a very small language that is built to be embedded.
+It passes all of its state back to the calling program through a
+stack (the stack data structure, but stored on the heap) so that it
+is simple to retrieve.
+<P>
+We use Fortran&#146;s iso_c_binding to call the Lua C library directly
+from Fortran. That binding is a relatively new development in Fortran,
+but it works fine.
+<P>
+<PRE>
+      Drew Dolgert
+      <A HREF="mailto:adolgert@cornell.edu">adolgert@cornell.edu</A>
+      Adam Brazier
+      <A HREF="mailto:brazier@cornell.edu">brazier@cornell.edu</A>
+      Kevin Manalo
+      <A HREF="mailto:kmanalo@gmail.com">kmanalo@gmail.com</A>
+<P>
+</PRE>
+This modification to FortLua was derived from routines provided by AOTUS, hence
+their attribution is listed below:
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; AOTUS LICENSE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Aotus is licensed under the terms of the MIT license reproduced below.
+This means that Aotus is free software and can be used for both academic and
+commercial purposes at absolutely no cost. You are free to do with the code
+whatever you want.
+The only requirement is that some credit to the authors is given by putting this
+copyright notice somewhere in your project.
+The MIT license is chosen for full compatibility with Lua.
+<P>
+For the license of the underlying Lua library have a look at
+<P>
+<PRE>
+      <A HREF="http://www.lua.org/license.html">http://www.lua.org/license.html</A>.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   ! This program uses a script to configure itself.
+<P>
+   PROGRAM calculate
+   USE M_lua
+<P>
+   INTEGER :: argument_count
+   REAL*8 :: pressure
+   REAL*8 :: time
+   INTEGER :: step, stepcount
+   INTEGER :: status
+   REAL :: temperature_start
+   REAL, DIMENSION(1) :: pressure_args
+   INTEGER :: read_status
+   INTEGER :: cstatus
+   integer :: newval
+<P>
+   character(50) :: string
+   character(:), allocatable :: astring
+<P>
+   status = config_open(&#146;vals.lua&#146;)
+<P>
+   call config_string(&#146;string&#146;,read_status, string)
+   astring = trim(string)
+<P>
+   write(*,*) &#146;string = &#146;, astring
+<P>
+   temperature_start = config_real(&#146;temperature&#146;,read_status)
+   IF ( read_status .eq. 0 ) THEN
+     WRITE (*,*) &#146;temperature = &#146;, temperature_start
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ELSE</H4>
+</A>
+<BLOCKQUOTE>
+WRITE (*,*) &#146;error reading temperature&#146;
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ENDIF</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+newval = <B>config_integer</B>(&#146;newval&#146;,read_status)
+IF ( read_status .eq. 0 ) THEN
+WRITE (*,*) &#146;newval = &#146;, newval
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ELSE</H4>
+</A>
+<BLOCKQUOTE>
+WRITE (*,*) &#146;error reading newval&#146;
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ENDIF</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+stepcount=10
+<P>
+DO step = 1,stepcount
+time = step/1.0
+<B>pressure_args</B>(1) = time
+<B>pressure=config_function</B>(&#146;pressure&#146;,pressure_args,1,cstatus)
+WRITE (*,*) &#146;pressure = &#146;, pressure
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END DO</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<P>
+CALL <B>config_close</B>()
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; STOP</H4>
+</A>
+<BLOCKQUOTE>
+END PROGRAM calculate
+</BLOCKQUOTE>
+<P>
+Input file
+<P>
+<PRE>
+   -- vals.lua
+   -- This is a configuration file for the Fortran program.
+   -- Lua is not too complicated. Check out
+   -- <A HREF="http://lua-users.org/wiki/TutorialDirectory">http://lua-users.org/wiki/TutorialDirectory</A>
+<P>
+   -- Parameters
+   if os.getenv("BATCH") then
+      temperature=3.2
+   else
+      temperature=5.0
+   end
+<P>
+   mintemp=3
+   maxtemp=6
+   duration=10 -- time to get to 95%
+   string=10 -- string will be interpreted because that is what this program is looking for
+   newval=10.5
+<P>
+   function pressure(time)
+     return mintemp+(maxtemp-mintemp)*math.tanh(1.83*time/duration)
+   end
+<P>
+<P>
+</PRE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_lua (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e843717f-3db1-4ea8-af62-450dc753bd01 using man macros.</FONT>
+<br><br><center><img src="images/M_lua.3m_lua.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

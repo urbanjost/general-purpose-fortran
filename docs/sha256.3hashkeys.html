@@ -1,0 +1,255 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>sha256 (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>sha256</B>(3f) - [M_hashkeys] generate a SHA-256 hashing
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Compile Notes</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Example</A><BR>
+<A HREF=#8>Unit Test</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>sha256</B>(<I>str</I>)
+<P>
+<PRE>
+   character(len=64)            :: sha256
+   character(len=*), intent(in) :: str
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A Fortran module for SHA-256 hashing.
+<P>
+Note that this code will not produce the same results on big-endian
+machines and the module was only tested on a little-endian Ubuntu LTS
+12.04 system using gfortran 4.6.3.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>str</I> </TD><TD valign=bottom>
+The message to digest.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>sha256</B> </TD><TD valign=bottom>
+The SHA-256 digest as a string of length 64.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>COMPILE NOTES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The &#146;<B>-fno-range-check</B>&#146; flag is required on <B>gfortran</B>(1) since the
+Fortran standard otherwise doesn&#146;t currently allow us to work with
+all bits in the integers (as if they were unsigned).
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+This routine is heavily based on the SHA-256 routines by
+Mikael Leetmaa &lt;<A HREF="mailto:leetmaa@kth.se">leetmaa@kth.se</A>&gt;, 2014-01-05. changes have
+been made to incorporate it into the GPF (General Purpose Fortran)
+framework.
+<P>
+If you found this useful, please let Mikael Leetmaa know.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_sha256
+   use M_hashkeys, only : sha256, dirty_sha256
+   implicit none
+   character(len=:),allocatable :: str
+   character(len=64)            :: ref
+<P>
+   ! Test the sha256 function with a set of reference strings.
+<P>
+   str=""
+   ref="E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 1&#146;)
+<P>
+   str="abc"
+   ref="BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 2&#146;)
+<P>
+   str="abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
+   ref="248D6A61D20638B8E5C026930C3E6039A33CE45964FF2167F6ECEDD419DB06C1"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 3&#146;)
+<P>
+   str="abcdefghbcdefghicdefghijdefghijkefghijklfghi&
+        &jklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu"
+   ref="CF5B16A778AF8380036CE59E7B0492370B249B11E8F07A51AFAC45037AFEE9D1"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 4&#146;)
+<P>
+   str=repeat("a",1000000)
+   ref="CDC76E5C9914FB9281A1C7E284D73E67F1809A48A497200E046D39CCC7112CD0"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 5&#146;)
+<P>
+   str="message digest"
+   ref="F7846F55CF23E14EEBEAB5B4E1550CAD5B509E3348FBC4EFA3A1413D393CB650"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 6&#146;)
+<P>
+   str="secure hash algorithm"
+   ref="F30CEB2BB2829E79E4CA9753D35A8ECC00262D164CC077080295381CBD643F0D"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 7&#146;)
+<P>
+   str="SHA256 is considered to be safe"
+   ref="6819D915C73F4D1E77E4E1B52D1FA0F9CF9BEAEAD3939F15874BD988E2A23630"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 8&#146;)
+<P>
+   str="For this sample, this 63-byte string will be used as input data"
+   ref="F08A78CBBAEE082B052AE0708F32FA1E50C5C421AA772BA5DBB406A2EA6BE342"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 9&#146;)
+<P>
+   str="This is exactly 64 bytes long, not counting the terminating byte"
+   ref="AB64EFF7E88E2E46165E29F2BCE41826BD4C7B3552F6B382A9E7D3AF47C245F8"
+   call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 10&#146;)
+<P>
+   ! Check the quick and dirty implementation as well.
+   ref="69E3FACD5F08321F78117BD53476E5321845433356F106E7013E68EC367F3017"
+   call unit_check(&#146;sha256&#146;,dirty_sha256(str)==ref,&#146;test dirtysha256 1&#146;)
+<P>
+   !!str=repeat("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmno",16777216)
+   !!ref="50E72A0E26442FE2552DC3938AC58658228C0CBFB1D2CA872AE435266FCD055E"
+   !!call unit_check(&#146;sha256&#146;,sha256(str)==ref,&#146;test sha256 11 -- long test&#146;)
+<P>
+   contains
+   subroutine unit_check(name,test,message)
+   character(len=*),intent(in) :: name
+   logical,intent(in)          :: test
+   character(len=*),intent(in) :: message
+      write(*,&#146;(a)&#146;) repeat("=",64)
+      write(*,&#146;(a)&#146;) sha256(str)
+      write(*,&#146;(a)&#146;) ref
+      if(test)then
+         write(*,*)trim(name)," PASSED: ",trim(message)
+      else
+         write(*,*)trim(name)," FAILED: ",trim(message)
+      endif
+   end subroutine unit_check
+   !
+   end program demo_sha256
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>UNIT TEST</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+When porting to a new programming environment use the
+built-in unit test &#46;&#46;&#46;
+<P>
+<PRE>
+   program test_sha256
+   use M_hashkeys, only : test_suite_sha256
+      call test_suite_sha256()
+   end program test_sha256
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>sha256 (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 17240336-08d1-41a3-b5a7-831851bd2d68 using man macros.</FONT>
+<br><br><center><img src="images/sha256.3hashkeys.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

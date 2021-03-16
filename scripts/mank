@@ -1,0 +1,61 @@
+#!/bin/bash
+#@(#)list the manual page names and descriptions found in this distribution
+export MANPATH=$(dirname $0)/../man:$HOME/LIBRARY/libGPF/download/GPF/man
+export MANPATH="$MANPATH:$HOME/alt/LIBRARY/libGPF/download/GPF/man"
+export LESS_TERMCAP_mb=$(printf '\e[01;31m') # enter blinking mode - red
+export LESS_TERMCAP_md=$(printf '\e[01;35m') # enter double-bright mode - bold, magenta
+export LESS_TERMCAP_me=$(printf '\e[0m')     # turn off all appearance modes (mb, md, so, us)
+export LESS_TERMCAP_se=$(printf '\e[0m')     # leave standout mode
+export LESS_TERMCAP_so=$(printf '\e[01;33m') # enter standout mode - yellow
+export LESS_TERMCAP_ue=$(printf '\e[0m')     # leave underline mode
+export LESS_TERMCAP_us=$(printf '\e[04;36m') # enter underline mode - cyan
+
+if [ "$*" = '' ]
+then
+   if [ -t 1 ]  # if stdout is a terminal and no parameters create man page index and edit it
+   then
+      TFILE=/tmp/$(uuidgen)
+      cat > $TFILE <<EOF
+================================================================================
+   NOTES:
+     vim(1) editor users can place the cursor on a topic name and press "K" to display
+     the corresponding man(1) page
+================================================================================
+EOF
+      export MANWIDTH=512
+      export MANWIDTH=${MANWIDTH:-512}
+      man -k .|
+         expand |
+         env LC_ALL=C sort --ignore-leading-blanks --dictionary-order --ignore-case --ignore-nonprinting -k 2,2 -k 4,4 -k 5,5|
+         uniq|
+         cat -n >> $TFILE
+      EDIT=${FCEDIT:-${EDITOR:-${VISUAL:-vim}}}
+      $EDIT $TFILE
+      rm $TFILE
+   else
+      export MANWIDTH=512
+      export MANWIDTH=${MANWIDTH:-512}
+      man -k . |
+         expand |
+         env LC_ALL=C sort --ignore-leading-blanks --dictionary-order --ignore-case --ignore-nonprinting -k 2,2 -k 4,4 |
+         uniq |
+         cat -n |
+         more
+   fi
+else
+   if [ "$*" = ALL ]
+   then
+      export MANWIDTH=${MANWIDTH:-512}
+      set . $( man -k .|cprint 1|xargs)
+   fi
+   if [ -t 1 ]
+   then
+      export MANWIDTH=${MANWIDTH:-80}
+      export MANPATH_OVERRIDE="$MANPATH"
+      manvi $@
+   else
+      man $@
+   fi
+fi
+#SEE ALSO: apropos
+exit

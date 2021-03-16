@@ -1,0 +1,122 @@
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="Fortran, Fortran code, Fortran source code repository, Fortran library, Fortran archive,         " />
+<meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
+<meta name="keywords" content="Fortran Repository" />
+<meta name="keywords" content="Fortran Collection" />
+<style>
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
+<div id="Container">
+<div id="Content">
+<dl>
+   <dt> NAME </dt>
+   <dd> M_io(3f) - [M_io] Fortran I/O module
+        (LICENSE:PD)
+   </dd>
+   <dt> SYNOPSIS </dt><dd>
+      <pre>
+      use M_io, only : slurp, swallow, notopen, print_inquire, read_table
+      use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, basename
+      use M_io, only : separator, getname, which, lookfor
+      use M_io, only : read_line, getline
+      use M_io, only : fileopen, fileclose, filedelete, filewrite
+      use M_io, only : number_of_lines
+      </pre>
+   </dd>
+   <dt> DESCRIPTION </dt><dd>
+      The M_io module is a collection of routines related to basic I/O
+      (input/output) operations.
+      <ul>
+         <li> READING DATA
+         <ul>
+            <li><a href="read_line.3m_io.html">     READ_LINE </a> - read line as long as programming environment line length limit cleaning up input line</li>
+            <li><a href="getline.3m_io.html">       GETLINE </a> - read line as long as programming environment line length limit</li>
+            <li><a href="rd.3m_io.html">            RD </a> - ask for string from standard input with user-definable prompt </li>
+            <li><a href="read_table.3m_io.html">    READ_TABLE </a> - read a file into a numeric array </li>
+            <li><a href="slurp.3m_io.html">         SLURP </a> - read a file into a single-character array </li>
+            <li><a href="swallow.3m_io.html">       SWALLOW </a> - read a file into a character array of text lines</li>
+            <li><a href="number_of_lines.3m_io.html"> NUMBER_OF_LINES </a> - number of lines in open sequential file</li>
+         </ul>
+         </li>
+
+         <li> SEQUENTIAL FILES
+         <ul>
+            <li><a href="fileopen.3m_io.html">       FILEOPEN </a> - open a file</li>
+            <li><a href="fileclose.3m_io.html">      FILECLOSE </a> - close a file</li>
+            <li><a href="filedelete.3m_io.html">     FILEDELETE </a> - remove a file</li>
+            <li><a href="filewrite.3m_io.html">     FILEWRITE </a> - write CHARACTER array to a file</li>
+         </ul>
+         </li>
+
+
+         <li> SCRATCH FILES
+         <ul>
+            <li><a href="get_tmp.3m_io.html">       GET_TMP </a> - get name for system scratch directory from environment variables</li>
+            <li><a href="scratch.3m_io.html">       SCRATCH </a> - get name of scratch file</li>
+            <li><a href="uniq.3m_io.html">          UNIQ </a> - add numeric suffix to filename if needed till filename does not exist</li>
+         </ul>
+         </li>
+
+         <li> SPLITTING AND JOINING PATHNAMES
+         <ul>
+            <li><a href="dirname.3m_io.html">       DIRNAME </a> - return the directory portion of a pathname </li>
+            <li><a href="basename.3m_io.html">      BASENAME </a> - return the leaf portion of a pathname </li>
+            <li><a href="splitpath.3m_io.html">     SPLITPATH </a> - split Unix pathname into directory, name, basename and extension</li>
+            <li><a href="joinpath.3m_io.html">     JOINPATH </a> - join pathnames </li>
+         </ul>
+         </li>
+         <li> SYSTEM NAMES AND ATTRIBUTES
+            <li><a href="separator.3m_io.html"> SEPARATOR </a> - try to determine pathname directory separator</li>
+            <li><a href="getname.3m_io.html"> GETNAME </a> - a pathname to the current executable</li>
+            <li><a href="which.3m_io.html"> WHICH </a> - return a pathname for a command name found with the environment variable
+            <li><a href="lookfor.3m_io.html"> LOOKFOR </a> - return a pathname for a file basename found with the directories in the
+            specified environment variable</li>
+
+         <li> MISCELLANEOUS
+         <ul>
+            <li><a href="notopen.3m_io.html">       NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
+            <li><a href="print_inquire.3m_io.html"> PRINT_INQUIRE </a> - run INQUIRE(3f) on a file by name or number and print results</li>
+         </ul>
+         </li>
+
+   </dd>
+   <dt> AUTHOR  </dt><dd> John S. Urban </dd>
+   <dt> LICENSE </dt><dd> Public Domain </dd>
+</dl>
+</div>
+</div>
+</body>
+</html>

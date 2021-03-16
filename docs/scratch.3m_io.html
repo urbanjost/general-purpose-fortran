@@ -1,0 +1,204 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>scratch (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>scratch</B>(3f) - [M_io] Return the name of a scratch file
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>scratch</B>(<I>prefix</I>) <B>result</B>(<I>tname</I>)
+<P>
+<PRE>
+     character(len=:),allocatable         :: tname
+     character(len=*),intent(in),optional :: prefix
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Fortran supports non-retainable scratch files via
+<B>OPEN</B>(STATUS=&#146;SCRATCH&#146;,&#46;&#46;&#46;) . There are circumstances where a file with
+a unique name is required instead. Specifying the pathname of a file
+can be required for performance reasons, file space limitations, or
+to support the ability for other processes or subprocesses to access
+the file.
+<P>
+<B>SCRATCH</B>(3f) Return the name of a scratch file in the scratch directory
+set by the most common environment variables used to designate a
+scratch directory unless the <I>prefix</I> contains the character "/" or "\".
+<P>
+$TMPDIR is the canonical environment variable in Unix and POSIX[1]
+used to specify a temporary directory for scratch space. If $TMPDIR
+is not set, $TEMP, $TEMPDIR, and $TMP are examined in that order. If
+nothing is set "/tmp/" is used.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>prefix</I> </TD><TD valign=bottom>
+an optional <I>prefix</I> for the leaf of the filename. A suffix created
+by <B>genuuid</B>(3) is used to make the name unique. The <I>prefix</I> is used
+as-is if it contains the character "/" or "\". Otherwise, the
+<I>prefix</I> is prefixed by the first value that is not blank from the
+set {$TMPDIR, $TEMP, $TEMPDIR, $TMP, /tmp}.
+<P>
+The default <I>prefix</I> is the basename of the program that
+called the procedure (the name trimmed of directories and
+anything from the right-most period in the name to the end
+of the name).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample:
+<P>
+<PRE>
+    program demo_scratch
+    use M_io, only : scratch
+    implicit none
+    write(*,*)&#146;find good scratch file name candidates; one should test if writable&#146;
+    call printit(&#146;JUNK:&#146;)
+    call printit(&#146;./&#146;)
+    call printit(&#146;/var/tmp/&#146;)
+    call printit(&#146;&#146;)
+    call printit()
+    contains
+    subroutine printit(NAME)
+    character(len=*),intent(in),optional :: NAME
+    if(present(NAME))then
+       write(*,&#146;(a,t20,a)&#146;)NAME,scratch(NAME)
+    else
+       write(*,&#146;(a,t20,a)&#146;)&#146;*NOT PRESENT*&#146;,scratch()
+    endif
+    end subroutine printit
+    end program demo_scratch
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    find good scratch file name candidates; one should test if writable
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:     find good scratch file name candidates; one should test if writable
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>JUNK:</B> </TD><TD valign=bottom>
+/tmp/JUNK:405d766e-1320-4405-50e1-5d88fffbee9a.scr
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>./</B> </TD><TD valign=bottom>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>/var/tmp/</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+/var/tmp/xx-3f5c55fa-17ca-4020-4a05-a9d9cfad8dbe.scr
+/tmp/f10e0491-a2ff-4455-5ff6-55d7dfe7fa8c.scr
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>*NOT PRESENT*</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+/tmp/xx-f4fed5f7-3694-4609-5af4-8902ffa75839.scr
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>scratch (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dea3172b-ab32-4d50-b82a-8172bf01c903 using man macros.</FONT>
+<br><br><center><img src="images/scratch.3m_io.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

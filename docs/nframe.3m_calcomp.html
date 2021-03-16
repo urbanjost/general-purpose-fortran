@@ -1,0 +1,209 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>nframe (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>nframe</B>(3f) - [M_calcomp:basic] start new frame
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>License</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>nframe</B>()
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Terminates the current frame and resets the current pen position and
+origin to zero (The lower left-hand corner of the new frame).
+<P>
+NFRAME is a locally-developed routine.
+<P>
+Subroutine NFRAME allows users to define the logical beginning
+and ending of a plot. This capability is necessary if plots are to
+be drawn on a graphics device with a limited display area (e.g.,
+a graphics terminal or microfiche/ film). A call to NFRAME enters
+a plot terminator in the user&#146;s metalanguage file. All plotting
+data generated between calls to NFRAME is treated as a single plot
+by the graphics post processing procedures. The absence of calls to
+NFRAME results in all plotting data being processed as a single
+plot by the post processor (e.g., all plotting data will be drawn
+in a single frame on microfiche).
+<P>
+The call to NFRAME should be placed before the call to subroutine
+PLOT that is used to move the pen to the origin of the next plot.
+Be aware that the area encompassed by moving the pen to
+establish the origin of a plot is considered part of the plot and will
+produce a visible bottom and left margin on plot frames if no negative
+values are subsequently used.
+<P>
+As mentioned previously, a plot frame is limited to a maximum size in
+either the X or Y direction of 100 "CALCOMP inches." Each plot frame is
+initialized by a call to subroutine PLOT with the third argument
+(IPEN) equal to <B>-2</B> or <B>-3</B>. For example:
+<P>
+<PRE>
+       CALL PLOT(0.5,1.0,-3)
+<P>
+</PRE>
+says to move 0.5 inches in the X-direction and 1.0 inch in the
+Y-direction before establishing a new origin. When establishing a
+new origin, all offsets are included inside the frame boundary and
+are therefore part of the plot frame size. If any X or Y coordinate
+value (plus the appropriate offset) exceeds the 100 inch limit,
+results are unpredictable. In programs where X and Y coordinate values
+exceed the scaling limit, a call to the CALCOMP routine FACTOR
+may be used to scale down the plot size appropriately. No additional
+offset is added by the call to NFRAME. Knowledge of the plot frame
+size in the X and Y directions will be needed to scale pen plots to
+actual inches with the device dependent post processing procedures.
+The following example is provided to assist in understanding how the
+frame size is determined.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+       program demo_nframe
+       use M_calcomp
+       implicit none
+       !
+       ! Perform initialization
+       call plots(0.0,10.0,0.0,10.0)
+       !
+       ! Establish origin for first plot (Negative Y values up to -0.5 are
+       ! now permitted also)
+       call plot( 0.0, 0.5, -3)
+       !
+       ! Draw a box inside of which all lines will appear
+       ! but notice plot frame size now includes the offset plus this box size
+       ! Plot frame size = maximum coordinate value used + offset
+       ! Plot frame size in the X-direction is 8 inches
+       ! Plot frame size in the Y-direction is 9.5 inches (0.5 offset in PLOT
+       ! call above
+       call plot( 8.0, 0.0, 2)
+       call plot( 8.0, 9.0, 2)
+       call plot( 0.0, 9.0, 2)
+       call plot( 0.0, 0.0, 2)
+       !
+       ! Calls to generate first plot go here
+       ! .
+       ! .
+       ! .
+       ! Terminate first plot
+       call nframe()
+       !
+       ! Establish origin for second plot
+       call plot(1.0, 2.0, -3)
+       ! Plot frame size in the X-direction is 6 inches
+       ! Plot frame size in the Y-direction is 6 inches
+       call plot(5.0, 0.0, 2)
+       call plot(5.0, 4.0, 2)
+       call plot(0.0, 4.0, 2)
+       call plot(0.0, 0.0, 2)
+       !
+       ! Calls to generate second plot go here
+       ! .
+       ! .
+       ! .
+       ! Close the plot file
+       call plot(0.0, 0.0, 999)
+       end program demo_nframe
+<P>
+</PRE>
+An inch drawn in frame 1 will not appear equal in length to an inch
+drawn in frame 2 because their unit-less frame sizes are not equal (
+8.5 x 9 versus 6 x 6 ) !
+<P>
+The size of each frame is determined by the maximum value reached
+in each frame relative to the ORIGINAL frame origin. Each frame, when
+plotted, is stretched without distortion to the maximum size
+it can obtain in the plotting area specified on post-processor calls
+(Usually the SIZE, and XI and YI parameters as described in the DOCLIB
+document GRPHDOC).
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>nframe (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 89b4c096-79f2-4785-86a8-7bb7a7189efb using man macros.</FONT>
+<br><br><center><img src="images/nframe.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

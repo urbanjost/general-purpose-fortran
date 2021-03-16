@@ -1,0 +1,280 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>common (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>common</B>(7f) - [FORTRAN:INTRINSICS] specifies blocks of variables that can be accessed by any scoping unit in the program
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>common</B> /<B>common</B>-block-name/ variables, /<B>common</B>-block-name/ variables, &#46;&#46;&#46;
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The COMMON statement specifies blocks of physical storage, called <B>common</B> blocks, that can be accessed by
+any of the scoping units in a program. Thus, the COMMON statement provides a global data facility based on
+storage association (16.5.3).
+<P>
+A <B>common</B> block that does not have a name is called blank <B>common</B>.
+<TABLE cellpadding=3><!-- tsb: A <B>common</B> block that does not have a name is called blank <B>common</B>.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>R568</B> </TD><TD valign=bottom>
+<B>common</B>-stmt                  is   COMMON
+[ / [ <B>common</B>-block-name ] / ] <B>common</B>-block-object-list
+[ [ , ] / [ <B>common</B>-block-name ] /
+<B>common</B>-block-object-list ] &#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>R569</B> </TD><TD valign=bottom>
+<B>common</B>-block-object          is variable-name [ ( array-spec ) ]
+or proc-pointer-name
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C595</B> </TD><TD valign=bottom>
+(R569) An array-spec in a <B>common</B>-block-object shall be an explicit-shape-spec-list.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C596</B> </TD><TD valign=bottom>
+(R569) Only one appearance of a given variable-name or proc-pointer-name is permitted in all
+<B>common</B>-block-object-lists within a scoping unit.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C597</B> </TD><TD valign=bottom>
+(R569) A <B>common</B>-block-object shall not be a dummy argument, an allocatable variable, a derived-type
+object with an ultimate component that is allocatable, an automatic object, a function name, an entry
+name, a variable with the BIND attribute, a coarray, or a result name.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C598</B> </TD><TD valign=bottom>
+(R569) If a <B>common</B>-block-object is of a derived type, the type shall have the BIND attribute or the
+SEQUENCE attribute and it shall have no default initialization.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C599</B> </TD><TD valign=bottom>
+(R569) A variable-name or proc-pointer-name shall not be a name made accessible by use association.
+</TD></TR>
+<TR><TD colspan=2>
+In each COMMON statement, the data objects whose names appear in a <B>common</B> block object list following a
+<B>common</B> block name are declared to be in that <B>common</B> block. If the first <B>common</B> block name is omitted, all
+data objects whose names appear in the first <B>common</B> block object list are specified to be in blank <B>common</B>.
+Alternatively, the appearance of two slashes with no <B>common</B> block name between them declares the data objects
+whose names appear in the <B>common</B> block object list that follows to be in blank <B>common</B>.
+</TD></TR>
+<TR><TD colspan=2>
+Any <B>common</B> block name or an omitted <B>common</B> block name for blank <B>common</B> may occur more than once in one
+or more COMMON statements in a scoping unit. The <B>common</B> block list following each successive appearance
+of the same <B>common</B> block name in a scoping unit is treated as a continuation of the list for that <B>common</B> block
+name. Similarly, each blank <B>common</B> block object list in a scoping unit is treated as a continuation of blank
+<B>common</B>.
+</TD></TR>
+<TR><TD colspan=2>
+The form variable-name (array-spec) specifies the DIMENSION attribute for that variable.
+</TD></TR>
+<TR><TD colspan=2>
+If derived-type objects of numeric sequence type (4.5.2) or character sequence type (4.5.2) appear in <B>common</B>, it
+is as if the individual components were enumerated directly in the <B>common</B> list.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+       NOTE 5.44
+       Examples of COMMON statements are:
+<P>
+       COMMON /BLOCKA/ A, B, D (10, 30)
+       COMMON I, J, K
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.2.2</B> </TD><TD valign=bottom>
+Common block storage sequence
+</TD></TR>
+<TR><TD colspan=2>
+For each <B>common</B> block in a scoping unit, a <B>common</B> block storage sequence is formed as follows:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+         (1)     A storage sequence is formed consisting of the sequence of storage units in the storage sequences
+                 (16.5.3.2) of all data objects in the common block object lists for the common block. The order of
+                 the storage sequences is the same as the order of the appearance of the common block object lists in
+                 the scoping unit.
+         (2)     The storage sequence formed in (1) is extended to include all storage units of any storage sequence
+                 associated with it by equivalence association. The sequence shall be extended only by adding storage
+                 units beyond the last storage unit. Data objects associated with an entity in a common block are
+                 considered to be in that common block.
+<P>
+</PRE>
+Only COMMON statements and EQUIVALENCE statements appearing in the scoping unit contribute to <B>common</B>
+block storage sequences formed in that scoping unit.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.2.3</B> </TD><TD valign=bottom>
+Size of a <B>common</B> block
+</TD></TR>
+<TR><TD colspan=2>
+The size of a <B>common</B> block is the size of its <B>common</B> block storage sequence, including any extensions of the
+sequence resulting from equivalence association.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.2.4</B> </TD><TD valign=bottom>
+Common association
+</TD></TR>
+<TR><TD colspan=2>
+Within a program, the <B>common</B> block storage sequences of all nonzero-sized <B>common</B> blocks with the same name
+have the same first storage unit, and the <B>common</B> block storage sequences of all zero-sized <B>common</B> blocks with the
+same name are storage associated with one another. Within a program, the <B>common</B> block storage sequences of
+all nonzero-sized blank <B>common</B> blocks have the same first storage unit and the storage sequences of all zero-sized
+blank <B>common</B> blocks are associated with one another and with the first storage unit of any nonzero-sized blank
+<B>common</B> blocks. This results in the association of objects in different scoping units. Use or host association may
+cause these associated objects to be accessible in the same scoping unit.
+</TD></TR>
+<TR><TD colspan=2>
+A nonpointer object that is default integer, default real, double precision real, default complex, default logical,
+or of numeric sequence type shall be associated only with nonpointer objects of these types and kinds.
+</TD></TR>
+<TR><TD colspan=2>
+A nonpointer object that is default character or of character sequence type shall be associated only with nonpointer
+objects of these types and kinds.
+</TD></TR>
+<TR><TD colspan=2>
+A nonpointer object of a derived type that is not a numeric sequence or character sequence type shall be associated
+only with nonpointer objects of the same type with the same type parameter values.
+</TD></TR>
+<TR><TD colspan=2>
+A nonpointer object of intrinsic type but which is not default integer, default real, double precision real, default
+complex, default logical, or default character shall be associated only with nonpointer objects of the same type
+and type parameters.
+</TD></TR>
+<TR><TD colspan=2>
+A data pointer shall be storage associated only with data pointers of the same type and rank. Data pointers that
+are storage associated shall have deferred the same type parameters; corresponding nondeferred type parameters
+shall have the same value. A procedure pointer shall be storage associated only with another procedure pointer;
+either both interfaces shall be explicit or both interfaces shall be implicit. If the interfaces are explicit, the
+characteristics shall be the same. If the interfaces are implicit, either both shall be subroutines or both shall be
+functions with the same type and type parameters.
+</TD></TR>
+<TR><TD colspan=2>
+An object with the TARGET attribute shall be storage associated only with another object that has the TARGET
+attribute and the same type and type parameters.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+        NOTE 5.45
+        A common block is permitted to contain sequences of different storage units, provided each scoping unit
+        that accesses the common block specifies an identical sequence of storage units for the common block. For
+        example, this allows a single common block to contain both numeric and character storage units.
+<P>
+        Association in different scoping units between objects of default type, objects of double precision real type,
+        and sequence structures is permitted according to the rules for equivalence objects (5.7.1).
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.2.5</B> </TD><TD valign=bottom>
+Differences between named <B>common</B> and blank <B>common</B>
+</TD></TR>
+<TR><TD colspan=2>
+A blank <B>common</B> block has the same properties as a named <B>common</B> block, except for the following.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+        undefined unless the common block has the SAVE attribute, but never causes data objects in blank common
+        to become undefined (16.6.6).
+        they appear, but blank common blocks may be of different sizes.
+        declaration statement in a block data program unit (11.3), but objects in blank common shall not be initially
+        defined.
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.3</B> </TD><TD valign=bottom>
+Restrictions on <B>common</B> and equivalence
+</TD></TR>
+<TR></TR></TABLE>An EQUIVALENCE statement shall not cause the storage sequences of two different <B>common</B> blocks to be
+associated.
+<P>
+Equivalence association shall not cause a derived-type object with default initialization to be associated with an
+object in a <B>common</B> block.
+<P>
+Equivalence association shall not cause a <B>common</B> block storage sequence to be extended by adding storage units
+preceding the first storage unit of the first object specified in a COMMON statement for the <B>common</B> block.
+<P>
+<PRE>
+        NOTE 5.46
+        For example, the following is not permitted:
+<P>
+        COMMON /X/ A
+        REAL B (2)
+        EQUIVALENCE (A, B(2))          ! Not standard-conforming
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>common (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3860ec3c-9b8f-4578-a90a-6af4d66e8026 using man macros.</FONT>
+<br><br><center><img src="images/common.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
+Binary file (standard input) matches

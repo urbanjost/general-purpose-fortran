@@ -1,0 +1,1251 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_draw (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_draw</B>(3fm) - [M_draw::INTRO] The M_draw graphics library
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Library Function Descriptions</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>Bugs</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+M_draw is a portable public-domain device-independent graphics library
+intended for being called from Fortran that is based on VOGLE (from
+the University of Melbourne) that is loosely based on the Silicon
+Graphics Iris GL library. It was also partly inspired by the DIGS
+library developed at the U.S. Naval Academy under the guidance of
+Prof David Rogers.
+<P>
+Many output devices are available:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Many output devices are available:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FrameMaker MIF 3.0 (Maker Interchange File) driver.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Adobe PDF driver.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+HTML5 Canvas driver.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SVG driver.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A PCL5/HPGL2 driver that supports <B>prefsize</B>() calls.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Monochrome PBM (Poskanzer bitmap P1 and P4 formats) and X11
+bitmap driver.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Color PBM (Poskanzer pixmap P3 and P6 formats). If you have the
+pbmplus package you can use it to make M_draw appear to write
+any format pbmplus writes (assuming your system supports the
+<B>popen</B>(3c) function).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A clear-text CGM (Computer Graphics Metafile) driver.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A different (color) PostScript driver.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A driver for Microsoft VML (Vector Markup Language)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+M_draw is intended to produce simple graphics composed of line drawings and
+polygon fills in two and three dimensions. It handles circles, curves,
+arcs, patches, polygons, and software text in a device independent
+fashion. Simple hidden line removal is also available via polygon
+backfacing. Access to hardware text and double buffering of drawings
+depends on the driver.
+<P>
+M_draw is callable from C and Fortran, and Pascal;
+but M_draw is only supported in Fortran (the C components are being converted
+to Fortran).
+<P>
+The original VOGLE source&#146;s ownership statement
+<P>
+<PRE>
+      This software is public domain and may be used for any purpose commercial
+      or otherwise. It is offered without any guarantee as to its suitability
+      for any purpose or as to the sanity of its writers. The authors do ask
+      that the source is passed on to anyone that requests a copy, and that
+      people who get copies don&#146;t go round claiming they wrote it. Use at your
+      own risk.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>LIBRARY FUNCTION DESCRIPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DEVICE ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>vinit</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Initialise device
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>vexit</B>() </TD><TD valign=bottom>
+Reset window/terminal (must be last routine called)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>voutput</B>(path) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Redirect output from *next* vinit to file
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>vnewdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Reinitialize to use new device without changing
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>vgetdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Get name of current device
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>pushdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+push current device onto a stack
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>popdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+pop device from stack created by pushdev.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getdepth</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Return number of bit planes (color planes)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ROUTINES FOR SETTING UP WINDOWS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>prefposition</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify preferred position of window
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>prefsize</B>(width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify preferred width and height of window
+</TD></TR>
+<TR></TR></TABLE>Some devices are basically window oriented - like sunview and X11. You
+can give M_draw some information on the window that it will use with these
+routines. These can make your code very device independent. Both routines
+take arguments which are in device space. (0, 0) is the top left hand
+corner in device space. To have any effect these routines must be called
+before vinit. For the X11 device, an entry may be made in your .Xdefaults
+file or loaded in with the <B>xrdb</B>(1) command:
+<P>
+<PRE>
+      xrdb &lt;&lt;\end_of_file
+      ! X11 Windows fonts to use for "small" and "large" fonts
+      M_draw*smallfont: fixed
+      M_draw*largefont: 9x15
+      ! title on decoration bar for the window
+      M_draw*title: My M_draw program
+      ! window geometry and position,
+      ! overridden by prefsize(3c) and prefposition(3c)
+      M_draw.Geometry: =500x500-10+20
+      end_of_file
+<P>
+</PRE>
+(where you specify your geometry as you please).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CLIPPING ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>clipping</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Turn clipping on or off
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COLOR ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>clear</B>() </TD><TD valign=bottom>
+Clears screen to current color
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>color</B>(col) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set current color
+<B>mapcolor</B>(indx, red, green, blue) Set color map index
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INTERACTIVE ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>getkey</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Return ASCII ordinal of next key typed
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>checkkey</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns zero if no key is pressed or ASCII ordinal
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getstring</B>(bcol, string) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Read in a string, echoing it in current font
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>locator</B>(xaddr, yaddr) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Find out where cursor is
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>slocator</B>(xaddr, yaddr) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Find out where cursor is in screen coordinates
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FLUSHING</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>vsetflush</B>(yesno) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set global flushing status
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>vflush</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Call device flush or syncronisation routine
+</TD></TR>
+<TR><TD colspan=2>
+On some devices (particularly X11) considerable speedups in display
+can be achieved by not flushing each graphics primitive call to the
+actual display until necessary. M_draw automatically delays flushing in
+the following cases:
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Within a <B>callobj</B>() call.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Within curves and patches.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Within Hershey software text.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+When double buffering (the flush is only done within swapbuffers).
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>There are two user routines that can be used to control flushing.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; VIEWPORT ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>viewport</B>(left, right, bottom, top) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify which part of screen to draw in
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>pushviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Save current viewport
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>popviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Retrieve last viewport
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getviewport</B>(left, right, bottom,top) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns limits of current viewport in screen coordinates
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>expandviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+use the entire device viewport
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>unexpandviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+undo <B>expandviewport</B>(3f)
+</TD></TR>
+<TR></TR></TABLE>Viewpoint routines alter the current transformation matrix.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; GETTING THE ASPECT DETAILS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>getaspect</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns the ratio height over width of the display device.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getfactors</B>(wfact, hfact) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns width over <B>min</B>(width of device, height of device) and height over <B>min</B>(width of
+device, height of device).
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getdisplaysize</B>(w, h) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns width and height of device in device units
+</TD></TR>
+<TR></TR></TABLE>Often the screen is not perfectly square and it would be nice to use
+the extra space without having to turn clipping off. The following
+routines are provided to get the values needed to adjust the calls
+to viewport, etc as needed.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ATTRIBUTE STACK ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>pushattributes</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Save the current attributes on the attribute stack.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>popattributes</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Restore attributes to what they were at last <B>pushattributes</B>().
+</TD></TR>
+<TR></TR></TABLE>The attribute stack contains details such as current color, filling,
+hatching, centered, fixedwidth, text height, text width, and the
+current font. If you need to prevent object calls from changing these,
+use pushattributes before the call and popattributes after.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PROJECTION ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>ortho</B>(left, right, bottom, top,near,far) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Define x,y,z clipping planes.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ortho2</B>(left, right, bottom, top) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Define x and y clipping planes.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>perspective</B>(fov, aspect, near, far) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify perspective viewing pyramid
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>window</B>(left, right, bot, top, near,far) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify a perspective viewing pyramid
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PROJECTION AND VIEWPORT ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>subroutine page (left, right, bottom, top)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+create a window of the specified size and then
+set the viewport to the largest viewport with
+that aspect so that output acts much like a
+page of paper of the specified size without
+distortion.
+</TD></TR>
+<TR></TR></TABLE>All the projection routines define a new transformation matrix, and
+consequently the world units. Parallel projections are defined by
+ortho or ortho2. Perspective projections can be defined by perspective
+and window.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MATRIX STACK ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>pushmatrix</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Save the current transformation matrix on the matrix stack.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>popmatrix</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Reinstall the last matrix pushed
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; VIEWPOINT ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>polarview</B>(dist, azim, inc, twist) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify the viewer&#146;s position in polar coordinates
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>up</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify the world up.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>lookat</B>(vx, vy, vz, px, py, pz,twist) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Specify the viewer&#146;s position
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MOVE ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>move</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Move current graphics position to (x, y, z)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rmove</B>(deltax, deltay, deltaz) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Relative move
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>move2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Move graphics position to point (x, y)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rmove2</B>(deltax, deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Relative move in world units.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>smove2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Move current graphics position in screen coordinates (<B>-1.0</B> to 1.0).
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rsmove2</B>(deltax, deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Relative move in screen units (<B>-1.0</B> to 1.0).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LINESTYLE ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>linewidth</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+set line width in rasters
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>dashcode</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+set dash pattern length
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>linestyle</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+set the line dash pattern
+</TD></TR>
+<TR></TR></TABLE>Linestyles are specified by giving a nominal length of a single
+dash and a character string consisting of 1&#146;s and 0&#146;s (zeros) that
+specify when to draw a dash and when not to draw a dash. Linestyles
+will follow curves and "go around" corners. If a linestyle is set or
+reset, the accumulated information as to where on a curve (or line)
+a dash is to be draw is also reset.
+<P>
+For EXAMPLE, with a nominal view of <B>-1</B> to 1, setting the dash length
+to 0.5, and the linestyle to &#146;11010&#146; would draw a <B>line</B>(or curve) with
+a 1.0 unit solid part, followed by a 0.5 unit blank part followed by
+a 0.5 unit solid part followed by a 0.5 unit blank part. The linestyle
+would then repeat itself.
+<P>
+The dash sizes are affected by the current viewport/transformation
+scaling factors, meaning that in perspective, the dashes look smaller
+the farther away they are.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DRAW ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>draw</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw from current graphics position to (x, y, z)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rdraw</B>(deltax, deltay, deltaz) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Relative draw
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>draw2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw from current graphics position to point (x, y)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rdraw2</B>(deltax,deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Relative draw
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>sdraw2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw in screen coordinates (<B>-1.0</B> to 1.0).
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rsdraw2</B>(deltax, deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Relative draw in screen units (<B>-1.0</B> to 1.0).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ARCS AND CIRCLES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>circleprecision</B>(nsegs) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set number of line segments in a circle. Default is 32.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>arc</B>(x, y, radius, startang, endang) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw an arc in world units.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>sector</B>(x, y, radius, startang,endang) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw a sector. Note: sectors are polygons.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>circle</B>(x, y, radius) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw a circle. Note: circles are polygons.
+</TD></TR>
+<TR></TR></TABLE>When creating arcs and sectors note that angles are
+measured in degrees; where <B>zero</B>(0) is the positive X axis in a
+right-handed Cartesian coordinate system and positive angles sweep
+counterclockwise. If filling sectors or circles (As described in the
+section on polygons) hatch pitch is measured in world coordinates
+and is initially set to 0.1. The initial hatch angle is <B>zero</B>(0).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CURVE ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>curvebasis</B>(basis) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Define a basis matrix for a curve.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>curveprecision</B>(nsegs) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Define number of line segments used to draw a curve.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rcurve</B>(geom) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw a rational curve.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>curve</B>(geom) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw a curve.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>curven</B>(n, geom) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw n - 3 overlapping curve segments. Note: n must be at least 4.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; RECTANGLES AND GENERAL POLYGON ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>rect</B>(x1, y1, x2, y2) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw a rectangle.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>polyfill</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set the polygon fill flag
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>polyhatch</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set the polygon hatch flag
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>hatchang</B>(angle) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set the angle of the hatch lines.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>hatchpitch</B>(pitch) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set the distance between hatch lines.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>poly2</B>(n, points) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Construct an (x, y) polygon from an array of points
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>poly</B>(n, points) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Construct a polygon from an array of points
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>makepoly</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+opens polygon constructed by a series of move-draws and closed by closepoly
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>closepoly</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Terminates a polygon opened by makepoly.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>backface</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Turns on culling of backfacing polygons.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>backfacedir</B>(clockwise) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Sets backfacing direction to clockwise or anti-clockwise
+</TD></TR>
+<TR><TD colspan=2>
+A polygon is composed of a number of coplanar line segments connected
+end to end to form a closed shape.
+</TD></TR>
+<TR><TD colspan=2>
+In M_draw curves are estimated by a series of line segments, and thus
+may be included easily into polygons.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Regular</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A polygon with all sides and interior angles the same. Regular
+polygons are always convex. See Regular Polygons
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Irregular</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Each side may a different length, each angle may be a different
+measure. The opposite of a regular polygon. See Irregular Polygons
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>Convex</B> </TD><TD valign=bottom>
+All interior angles less than 180 ,and all vertices &#146;point
+outwards&#146; away from the interior. The opposite of concave. Regular
+polygons are always convex. See Convex Polygons
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Concave</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+One or more interior angles greater than 180 . Some vertices
+push &#146;inwards&#146; towards the interior of the polygon. The opposite
+of convex.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Self-intersecting or Crossed</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A polygon where one or more sides crosses back over another side,
+creating multiple smaller polygons. Most of the properties and
+theorems concerning polygons do not apply to this shape. It is
+best considered as several separate polygons. A polygon that in
+not self-intersecting in this way is called a simple polygon.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TEXT ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>font</B>(fontname) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+set the current font
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>numchars</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+return number of characters in the current SOFTWARE font.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>textsize</B>(width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+set maximum size of a character in the current SOFTWARE font.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>textang</B>(ang) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+set the SOFTWARE text angle.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>fixedwidth</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+turns fixedwidth mode on or off for SOFTWARE fonts.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getcharsize</B>(c, width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+get the width and height of a character.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getfontdec</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+return size of maximum font descender
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getfontsize</B>(width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+get maximum width and height of a character in a font.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>drawchar</B>(c) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+draw the character c and update current position.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>drawstr</B>(str) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+draw the text in string at the current position.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>strlength</B>(str) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+return the length of the string s
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>boxtext</B>(x, y, l, h, s) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+stretch and draw the SOFTWARE string s so that it fits in the imaginary box
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>boxfit</B>(x, y, l, h, s) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+resize the SOFTWARE text size so it fits in a box
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>textjustify</B>(val) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+general text justification
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>leftjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+left justify text
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rightjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+right justify text
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>topjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+top justify text
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>bottomjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+bottom justify text
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>centertext</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+turns centertext mode on or off for SOFTWARE fonts.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>xcentertext</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+center text in the X direction
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ycentertext</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+center text in the Y direction
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>textslant</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+defines the obliqueness of the fonts.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>textweight</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+defines the weight of the fonts.
+</TD></TR>
+<TR></TR></TABLE>M_draw supports hardware and software fonts. The software fonts are based
+on the character set digitized by Dr Allen V. Hershey while working at
+the U. S. National Bureau of Standards. Exactly what hardware fonts are
+supported depends on the device, but it is guaranteed that the names
+"large" and "small" will result in something readable. For X11 displays
+the default large and small fonts used by the program can be overridden
+by placing the following defaults in the ~/.Xdefaults file:
+<P>
+<PRE>
+     draw.smallfont: X11-font-name
+     draw.largefont: X11-font-name
+<P>
+</PRE>
+It is noted here that hardware text is always assumed to be drawn
+parallel to the (x, y) plane, using whatever the current z coordinate
+is. The following software fonts are supported:
+<P>
+<PRE>
+      astrology       cursive         cyrillic        futura.l
+      futura.m        gothic.eng      gothic.ger      gothic.ita
+      greek           markers         math.low        math.upp
+      meteorology     music           script          symbolic
+      times.g         times.i         times.ib        times.r
+      times.rb        japanese
+<P>
+</PRE>
+A markers font "markers" is also provided for doing markers - you need
+to have centertext mode on for this to give sensible results when placing
+the markers.
+<P>
+If the environment variable "M_DRAW_FONTPATH" is set M_draw looks for the software
+fonts in the directory given by this value.
+<P>
+the default font is futura.l
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TRANSFORMATION ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>translate</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set up a translation.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>scale</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set up scaling factors in x, y, and z axis.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rotate</B>(angle, axis) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set up a rotation in axis axis where axis is one of &#146;x&#146;,&#146;y&#146;, or &#146;z&#146;.
+</TD></TR>
+<TR></TR></TABLE>All transformations are cumulative, so if you rotate something and
+then do a translate you are translating relative to the rotated
+axes. If you need to preserve the current transformation matrix use
+<B>pushmatrix</B>(), do the drawing, and then call <B>popmatrix</B>() to get back
+where you were before.
+<P>
+When doing transformations, ensure your objects remain in the viewing
+volume or they will be clipped. See routines such as <B>ortho</B>(3) for
+more information.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PATCH ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>patchbasis</B>(tbasis, ubasis) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Define the t and u basis matrices of a patch.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>patchprecision</B>(tseg, useg) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set minimum number of line segments making up curves in a patch.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>patchcurves</B>(nt, nu) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set the number of curves making up a patch.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>rpatch</B>(gx, gy, gz, gw) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draws a rational patch in the current basis, according to the geometry matrices gx, gy, gz, and gw.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>patch</B>(gx, gy, gz) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draws a patch in the current basis, according to the geometry matrices gx, gy, and gz.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; POINT ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>point</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw a point at x, y, z
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>point2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw a point at x, y.
+</TD></TR>
+<TR></TR></TABLE>points are drawn with the current color and linewidth. Points are
+currently device-specific and may appear as circles, squares, or
+not at all; as they are generated by a zero-length vector using the
+hardware line style.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; OBJECT ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>makeobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Commence the object number n.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>closeobj</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Close the current object.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>genobj</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns a unique object identifier.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getopenobj</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Return the number of the current object.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>callobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw object number n.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>isobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns non-zero if there is an object of number n.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>delobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Delete the object number n.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>loadobj</B>(n, filename) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Load the object in the file filename as object number n.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>saveobj</B>(n, filename) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Save object number n into file filename. Does NOT save objects called inside object n.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>invokeobj</B>(xt,yt,zt,xs,ys,zs,xr,yr,zr,iobject) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+push environment and do a transformation and then pop environment
+</TD></TR>
+<TR></TR></TABLE>Objects are graphical entities created by the drawing routines called
+between makeobj and closeobj. Objects may be called from within other
+objects. When an object is created most of the calculations required
+by the drawing routines called within it are done up to where the
+calculations involve the current transformation matrix. So if you need to
+draw the same thing several times on the screen but in different places
+it is faster to use objects than to call the appropriate drawing routines
+each time. Objects also have the advantage of being savable to a file,
+from where they can be reloaded for later reuse. Routines which draw
+or move in screen coordinates, or change device, cannot be included
+in objects.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DOUBLE BUFFERING</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>backbuffer</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw in the backbuffer. Returns <B>-1</B> if the device is not up to it.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>frontbuffer</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Draw in the front buffer. This will always work.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>swapbuffers</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Swap the front and back buffers.
+</TD></TR>
+<TR></TR></TABLE>Where possible M_draw allows for front and back buffers to enable
+things like animation and smooth updating of the screen. The routine
+backbuffer is used to initialise double buffering.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; POSITION ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>getgp</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Gets the current graphics position
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getgpt</B>(x, y, z, w) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Gets the current transformed graphics position in world coords.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>getgp2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Gets the current graphics position
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>sgetgp2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Gets the current screen graphics position in screen coords (<B>-1</B> to 1)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; GENERAL STACK ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>subroutine </B><B>pop</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+pop
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>subroutine </B><B>push</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+push
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_M_draw
+   use M_draw
+   use M_draw,    only  : D_BLACK,   D_WHITE
+   use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
+   use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+   use M_units,    only : cosd, sind
+   implicit none
+   integer  :: ipaws
+   real     :: x1, y1
+   integer  :: icolor
+   integer  :: i,j
+<P>
+      ! initialize image
+      call prefsize(400,400)  ! set size before starting
+      call vinit(&#146; &#146;)         ! start graphics using device $M_DRAW_DEVICE
+      call textsize(10.0,10.0)
+      call mapcolor( 0,   255,255,255 )  !white
+      call mapcolor( 1,   255,  0,  0 )  !red
+      call mapcolor( 2,     0,255,  0 )  !green
+      call mapcolor( 3,   255,255,  0 )  !yellow
+      call mapcolor( 4,     0,  0,255 )  !blue
+      call mapcolor( 5,   255,  0,255 )  !magenta
+      call mapcolor( 6,     0,255,255 )  !cyan
+      call mapcolor( 7,     0,  0,  0 )  !black
+      call mapcolor( 8,     0,155,  0 )
+      call mapcolor( 9,   155,155,155 )
+      call mapcolor(10,   155,255,255 )
+      call mapcolor(11,   155,155,  0 )
+      call mapcolor(12,     0,  0,155 )
+      call mapcolor(13,   155,  0,155 )
+      call mapcolor(14,     0,155,155 )
+      call mapcolor(15,   100,100,100 )
+      call mapcolor(16,   155,100,100 )
+      call color(D_BLACK)
+      call clear()            ! clear to color 0
+      call color(D_WHITE)
+<P>
+      ! map area of virtual world to specified device area
+      ! notice Y-axis for viewport is zero at TOP
+      ! define the virtual world area we want to work in
+      call page(0.0,  400.0,    0.0, 400.0)
+      ! the drawing routines use these world units
+<P>
+      ! put some colored boxes into pixmap by address
+      ! so show how the pixel map can be edited easily with
+      ! other routines that can manipulate a pixel array.
+      ! The P_pixel array was created when vinit(3f) was called
+      call polyfill(.true.)
+      icolor=1
+      do i=0,3
+         do j=0,3
+            x1=j*100.0
+            y1=i*100.0
+            icolor=icolor+1
+            call color(icolor)
+            call rect(x1,y1,x1+100.0,y1+100.0)
+         enddo
+      enddo
+      call polyfill(.false.)
+<P>
+      ! draw polar grids
+      call linewidth(100)
+<P>
+      call linewidth(100)
+      call color(14)
+      call target(200.0,200.0,200.0)
+<P>
+      call linewidth(75)
+      call color(0)
+      call target(100.0,200.0,50.0)
+<P>
+      ! draw some lines
+      call color(D_RED)
+      call linewidth(200)
+      call line(1.0,1.0,400.0,400.0)
+<P>
+      call color(D_BLUE)
+      call linewidth(250)
+      call line(350.0,200.0,350.0,300.0)
+<P>
+      ! print some text
+      call color(1)
+      call linewidth(125)
+      call font(&#146;futura.l&#146;)
+      call hershey(40.0, 40.0,35.0,&#146;Hello World&#146;,0.0)
+      call color(7)
+      call linewidth(25)
+      call hershey(40.0, 80.0,35.0,&#146;Hello World&#146;,0.0)
+      call linewidth(100)
+      call hershey(40.0,120.0,35.0,&#146;Hello World&#146;,30.0)
+<P>
+      call hershey(  40.0,350.0,35.0,&#146;Hello World&#146;,0.0)
+      call font(&#146;futura.m&#146;)
+      call hershey(  40.0,310.0,35.0,&#146;Hello World&#146;,0.0)
+      call font(&#146;times.r&#146;)
+      call hershey( 350.0,400.0,35.0,&#146;Hello World&#146;,90.0)
+      call linewidth(50)
+      call font(&#146;times.i&#146;)
+      call hershey(200.0,120.0,15.0,&#146;Hello World&#146;,20.0)
+<P>
+      ipaws=getkey()
+      call vexit()
+<P>
+      contains
+<P>
+      subroutine target(xc,yc,rc)
+      use M_units,    only : cosd, sind
+      real     :: xc,yc,rc
+      integer  :: i
+      real     :: x,y
+         do i=0,360,10
+            x=rc*cosd(i)
+            y=rc*sind(i)
+            call line(xc,yc,xc+x,yc+y)
+         enddo
+         do i=1,int(rc),10
+            call circle(xc,yc,real(i))
+         enddo
+      end subroutine target
+<P>
+      subroutine line(x1,y1,x2,y2)
+      real,intent(in) :: x1,y1,x2,y2
+      call move2(x1,y1)
+      call draw2(x2,y2)
+      end subroutine line
+<P>
+      subroutine hershey(x,y,height,itext,theta)
+      real,intent(in)               :: x,y
+      real,intent(in)               :: height
+      character(len=*),intent(in)   :: itext
+      real,intent(in)               :: theta
+      call move2(x,y)
+      call textang(theta)
+      call textsize(height,height)
+      call drawstr(itext)
+      end subroutine hershey
+</PRE>
+end program demo_M_draw
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Polygon hatching will give unexpected results unless the polygon is
+initially defined in the X-Y plane.
+<P>
+Double buffering isn&#146;t supported on all devices.
+<P>
+We don&#146;t recommend the use of the smove/sdraw routines.
+<P>
+The yobbarays may be turned on or they may be turned off.
+<P>
+When creating an object, current position and text size are not
+actually changed so almost any query routine to get position or font
+size or whatever will not work properly.
+<P>
+If call <B>vexit</B>(3f) and then call <B>vinit</B>(3f) everything should probably
+be reset to initial values at program startup, such as linewidth,
+current font, and color. It is currently left up to the output device
+initialization routine. It should not be. To minimize the issue,
+call all the push* routines after a <B>vinit</B>(3f) and call all the pop*
+routines before <B>vexit</B>(3f).
+<P>
+Exactly what attributes should and should not be reset with a
+<B>vnewdev</B>(3f) is questionable.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_draw (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7114b142-849e-4c92-8b7e-a698e131a19d using man macros.</FONT>
+<br><br><center><img src="images/M_draw.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

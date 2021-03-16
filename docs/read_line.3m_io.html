@@ -1,0 +1,221 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>read_line (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>read_line</B>(3f) - [M_io] read a line from specified LUN into allocatable string up to line length limit cleaning up input line
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+function <B>read_line</B>(line,lun,ios) <B>result</B>(ier)
+<P>
+<PRE>
+   character(len=:),allocatable,intent(out) :: line
+   integer,intent(in),optional              :: lun
+   integer,optional                         :: ios
+   integer                                  :: ier
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Read a line of any length up to the programming environment maximum
+line length. Requires Fortran 2003+.
+<P>
+It is primarily expected to be used when reading input which will
+then be parsed.
+<P>
+The input file must have a PAD attribute of YES for the function to
+work properly, which is typically true but can be set on an open file.
+<TABLE cellpadding=3><!-- tsb: The input file must have a PAD attribute of YES for the function to
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Append lines that end in a backslash with next line
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Expand tabs
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Replace unprintable characters with spaces
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Remove trailing carriage return characters and white space
+</TD></TR>
+<TR></TR></TABLE>The simple use of a loop that repeatedly re-allocates a character
+variable in addition to reading the input file one buffer at a time
+could (depending on the programming environment used) be inefficient,
+as it could reallocate and allocate memory used for the output string
+with each buffer read.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>LINE</B> </TD><TD valign=bottom>
+the line read from the file.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>LUN</B> </TD><TD valign=bottom>
+The LUN (logical unit) to read from. Defaults to stdin.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IOS</B> </TD><TD valign=bottom>
+status returned by <B>READ</B>(IOSTAT=IOS). If not zero, an error
+occurred or an end-of-file or end-of-record was encountered.
+This is the same value as returned by the function. See the
+example program for a usage case.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>IER</B> </TD><TD valign=bottom>
+status returned by <B>READ</B>(IOSTAT=IER). If not zero, an error
+occurred or an end-of-file or end-of-record was encountered.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+Checking the error message and counting lines:
+<P>
+<PRE>
+    program demo_read_line
+    use,intrinsic :: iso_fortran_env, only : stdin  =&gt; input_unit
+    use,intrinsic :: iso_fortran_env, only : stderr =&gt; error_unit
+    use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
+    use M_io, only : read_line
+    implicit none
+    character (len =: ), allocatable :: line
+    integer                          :: stat
+    integer                          :: icount=0
+       open(unit=stdin,pad=&#146;yes&#146;)
+       INFINITE: do while (read_line(line,ios=stat) == 0)
+          icount=icount
+          write (*, &#146;(*(g0))&#146;) icount,&#146; [&#146;,line,&#146;]&#146;
+       enddo INFINITE
+       if ( .not.is_iostat_end(stat) ) then
+          write (stderr, &#146;(*(g0))&#146;) &
+          & &#146;error: line &#146;,icount,&#146;==&gt;&#146;,trim (line)
+       endif
+    end program demo_read_line
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>read_line (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ebbd761b-56be-4f83-bf99-580921391ecb using man macros.</FONT>
+<br><br><center><img src="images/read_line.3m_io.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

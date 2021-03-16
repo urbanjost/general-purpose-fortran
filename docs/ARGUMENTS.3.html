@@ -1,0 +1,239 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>ARGUMENTS (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>ARGUMENTS</B>(3f) - [ARGUMENTS::INTRO] collection of command line argument parsers
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>M_kracken</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+&lt;h3&gt;SPECIAL-PURPOSE <I>PUBLIC</I> ROUTINES:&lt;/h3&gt;
+<P>
+<PRE>
+   use M_kracken
+   use M_kracken,  only : kracken
+   use M_kracken,  only : rget,dget,iget,lget,sget,retrev
+   use M_krackens, only : rgets,dgets,igets,lgets,sgets
+   use M_kracken,  only : print_kracken_dictionary
+   use M_kracken,  only : cmd_args_to_dictionary, unnamed
+   use M_getopt
+   use M_getopt_long
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The following command line argument parser modules are available:
+<TABLE cellpadding=3><!-- tsb: The following command line argument parser modules are available:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_kracken parse command line options of Fortran programs using Unix-like syntax
+(LICENSE:PD)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_getopt parse command line arguments. Similar to those in standard C library.
+(LICENSE:GPL)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_getopt_long parse command line options like Sun getopt_long, including the Sun CLIP specification
+(LICENSE:PD)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_args parse commands using NAMELIST format or Unix-like syntax and produce a NAMELIST string
+to allow argument parsing without having to convert strings to various variable types
+(LICENSE:PD)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>M_KRACKEN</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B><A HREF=#3>M_kracken</A></B>(3f) is a module to parse command line options of Fortran programs using Unix-like syntax.
+The main differences in syntax are that negative values and multi-word values rarely need quotes
+around them, and that the "unnamed" parameter is first on the command line. It contains:
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BASE ROUTINES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>kracken</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- crack command line options on Fortran programs, using "<B>-KEYWORD</B> VALUE" syntax
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>retrev</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- get keyword value as a string from a command&#146;s argument list
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CONVENIENCE ROUTINES FOR FETCHING VALUES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>dget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch doubleprecision value from command argument
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>iget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch integer value from command argument
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>lget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch logical value from command arguments
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>rget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch real value from command argument
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>sget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch string value and length from command arguments
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>dgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch doubleprecision array from command arguments
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>igets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch integer array from command arguments
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>lgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch logical array from command argument
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>rgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch real array from command arguments
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>sgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- given keyword fetch string value parsed on whitespace into an array
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; AUXILIARY COMMAND FOR SETTING PROMPTS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>setprompts</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- set explicit prompts for keywords in interactive mode
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; AUXILIARY COMMANDS FOR USE IN BUILDING CLI</H4>
+</A>
+<BLOCKQUOTE>
+(CLI) Command Line Interface routines can be used to read shell-like input and
+configuration files
+<TABLE cellpadding=3><!-- tsb: (CLI) Command Line Interface routines can be used to read shell-like input and
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>dissect</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- convenient call to <B>parse</B>() - define defaults, then process
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>parse</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- parse user command and store tokens into Language Dictionary
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>show</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- dump dictionary entries
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>store</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+- replace dictionary name&#146;s value (if allow=add add name if necessary)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>ARGUMENTS (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8a9b50ca-aae9-4ba8-b702-6bcabe178ecc using man macros.</FONT>
+<br><br><center><img src="images/ARGUMENTS.3.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

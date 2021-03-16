@@ -1,0 +1,298 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>bes (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>bes</B>(3f) - [M_bessel] calculate Bessel functions <B>J</B>(X), <B>Y</B>(X), <B>I</B>(X), <B>K</B>(X) for doubleprecision arguments and integer orders
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Authors</A><BR>
+<A HREF=#5>Example</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>bes</B>(x,no,kode,rslt1,rslt2,t1,t2,ierr)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+This routine calculates the Bessel functions <B>J</B>(X),<B>Y</B>(X), <B>I</B>(X), or <B>K</B>(X)
+for doubleprecision arguments and integer orders. Backwards recurrence
+techniques are used for the <B>J</B>(X) and <B>I</B>(X) functions except for very
+small arguments, where double precision series evaluation is used.
+Forward recurrence is used for the <B>Y</B>(X) and <B>K</B>(X) functions with double
+precision Chebyshev approximations used for function initialization.
+Accuracy is between thirteen and fourteen significant figures.
+For specific functions <B>J0</B>(), <B>J1</B>(), <B>Y0</B>(), <B>Y1</B>(), See <B>BESJ0</B>(), <B>BESJ1</B>(),
+<B>BESY0</B>(), and <B>BESY1</B>().
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Description of parameters
+<P>
+<PRE>
+   X     = input,doubleprecision argument of the Bessel function.
+           The argument may be positive,zero, or negative
+           (neg. arg. for Y(X) or K(X) produces error
+           message since results may be complex.)
+           Restriction on range is
+<P>
+              FOR J(X), -1100.0 .LE. X .LE. 1100.0
+              FOR Y(X), 0.0 .LE. X .LE. 1100.0
+              FOR I(X), -600.0 .LE. X .LE. 600.0
+              FOR K(X), 0.0 .LE. X .LE. 600.0
+<P>
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>NO</B> </TD><TD valign=bottom>
+= Input,integer order of function desired for a
+single value to be returned, or the maximum order
+desired (+ or -) if an array of values is to be
+returned.
+Let XX = <B>abs</B>(X). Then bounds on orders are
+<TABLE width=100% cellpadding=3><!-- tsb: = Input,integer order of function desired for a
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+For 0.0 .LE. XX .LE. 0.025,
+The absolute value of maximum order, ANO,
+and argument supplied (ABS(X)) must
+satisfy the relation
+<P>
+<B>log</B>(GAMMA(ANO))<B>-ANO</B>*<B>log</B>(XX/2.0)
+<TABLE width=100% cellpadding=3><!-- tsb: <B>log</B>(GAMMA(ANO))<B>-ANO</B>*<B>log</B>(XX/2.0)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>log</B>(XX)/2.0 .LE. 679.0
+</TD></TR>
+<TR></TR></TABLE>For a given argument and an order greater
+than that allowed by the above relation
+<P>
+<B>JN</B>(X) = 0.0, N.NE.0, AND =1.0 FOR N=0
+<B>YN</B>(X) = <B>-INF</B>
+<B>IN</B>(X) = 0.0, N.NE.0, AND =1.0 FOR N=0
+<B>KN</B>(X) = INF
+</TD></TR>
+<TR valign=top><TD width=3%>
+2.
+</TD><TD>
+FOR 0.025 .LT. XX .LE. 0.20,
+<B>ABS</B>(NO) .LE. <B>INT</B>(140.0*XX + 83.0)
+</TD></TR>
+<TR valign=top><TD width=3%>
+3.
+</TD><TD>
+FOR 0.20 .LT. XX .LE. 1.0,
+<B>ABS</B>(NO) .LE. <B>INT</B>(42.0*XX + 102.0)
+</TD></TR>
+<TR valign=top><TD width=3%>
+4.
+</TD><TD>
+FOR 1.0 .LT. XX .LE. 20.0,
+<B>ABS</B>(NO) .LE. <B>INT</B>(0.02*XX**3 - 0.86*XX**2 +
+17.15*XX + 124.0)
+</TD></TR>
+<TR valign=top><TD width=3%>
+5.
+</TD><TD>
+FOR 20.0 .LT. XX .LE. 100.0,
+<B>ABS</B>(NO) .LE. <B>INT</B>(2.75*XX + 228.0)
+</TD></TR>
+<TR valign=top><TD width=3%>
+6.
+</TD><TD>
+FOR 100.0 .LT. XX .LE. 400.0,
+<B>ABS</B>(NO) .LE. <B>INT</B>(1.67*XX + 336.0)
+</TD></TR>
+<TR valign=top><TD width=3%>
+7.
+</TD><TD>
+FOR 400.0 .LT. XX .LE. 1100.0,
+<B>ABS</B>(NO) .LE. <B>INT</B>(1.33*XX + 470.0)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>KODE</B> </TD><TD valign=bottom>
+= Input,integer indicator for the particular
+function to be computed.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+             KODE = 10 -- FUNCTION J(X) ONLY
+                  = 11 --          Y(X) ONLY
+                  = 12 --          J(X) AND Y(X)
+<P>
+                  = 20 --          I(X) ONLY
+                  = 21 --          K(X) ONLY
+                  = 22 --          I(X) AND K(X)
+<P>
+</PRE>
+RSLT1 = output,contains the doubleprecision function value for <B>J</B>(X)
+or <B>I</B>(X) corresponding to the order and argument
+supplied, depending on the KODE value. This
+parameter would contain the result if only one
+function value is to be returned.
+</TD></TR>
+<TR><TD colspan=2>
+RSLT2 = output,contains the doubleprecision function value for <B>Y</B>(X)
+or <B>K</B>(X) in a manner similar to RSLT1.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>T1</B> </TD><TD valign=bottom>
+= output,a work area which will contain the array oF
+doubleprecision function values for <B>J</B>(X) or <B>I</B>(X) of orders
+zero through NO, depending on KODE.
+T1 must be dimensioned in the calling program and
+must contain at least M cells of storage, where
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+               M = MAX(ABS(NO),INT(2*ABS(X))) + 51
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=3%>&nbsp;</TD><TD>
+In using the array, <B>T1</B>(1) = function of order 0,
+--- <B>T1</B>(NO+1) = function of order NO.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>T2</B> </TD><TD valign=bottom>
+= Output,similar to T1 for the functions <B>Y</B>(X) or
+<B>K</B>(X). an exception is that if only <B>J</B>(X) or <B>I</B>(X)
+are called, then T2 needs no dimension in the
+calling program, but the parameter must still
+appear in the calling sequence. Otherwise, T2
+must be dimensioned at least M.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>IERR</B> </TD><TD valign=bottom>
+= Output,error flag for the conditions
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+            -- Normal code
+               =0, Normal - No errors
+            -- Abnormal codes
+               =1, Argument out of range
+               =2, Order too large for argument supplied
+               =3, Argument too large for I(X) and K(X)
+               =4, Negative arguments for Y(X) or K(X)
+               =5, Incorrect parameter KODE
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=3%>&nbsp;</TD><TD>
+BS is documented for the original version in SC-M-69-336
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHORS</H3>
+
+</A>
+<BLOCKQUOTE>
+Based on routines originally from
+<P>
+<PRE>
+      Sandia Mathematical Program Library
+      Applied Mathematics Division 2642
+      Sandia Laboratories
+      P. O. Box 5800
+      Albuquerque, New Mexico  87115
+      Control Data 6600 Version 5.1, 10 December 1973
+<P>
+      Written by Ronald D. Halbgewachs, July, 1968.
+      Modified by RDH for increased accuracy, May 8,1973.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>bes (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 711c157b-9c27-4702-8926-70188be0696f using man macros.</FONT>
+<br><br><center><img src="images/bes.3m_bessel.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

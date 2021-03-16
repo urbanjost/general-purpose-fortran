@@ -1,0 +1,243 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>fline (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fline</B>(3f) - [M_calcomp:scientific] plot a polyline with optional fit
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#4>Comments</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>fline</B>(xarray,yarray,npts,inc,+<B>-lintyp</B>,inteq)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>XARRAY</B> </TD><TD valign=bottom>
+is the name of the array containing the values to be
+plotted as the abscissa and the appropriate scaling
+parameters.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>YARRAY</B> </TD><TD valign=bottom>
+is the name of the array containing the values to be
+plotted as the ordinates and the appropriate scaling
+parameters.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NPTS</B> </TD><TD valign=bottom>
+is the number of data points to be plotted:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+             if NPTS &gt;0 a straight line is drawn between the points.
+<P>
+             if NPTS &lt;0 a smooth curve, drawn using a modified
+             spline-fitting technique, is drawn between the points.
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>INC</B> </TD><TD valign=bottom>
+is the increment between elements in the array to be
+plotted. INC &gt;1 if the values to be plotted are in a
+mixed array. (Usually INC = 1.)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>LINTYP</B> </TD><TD valign=bottom>
+is used to control the type of graph produced:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+             if LINTYP = 0 a line is plotted between successive data
+             points. (No symbols are plotted.)
+<P>
+             if LINTYP = 1 a line plot is produced, with a symbol at
+             each data point.
+<P>
+             if LINTYP = n a line plot is produced, with a symbol at
+             every nth data point.
+<P>
+             if LINTYP = -n, connecting lines are not plotted between
+             data points; a symbol appears at every nth data point.
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>INTEQ</B> </TD><TD valign=bottom>
+is the integer equivalent used to specify the symbol to
+be plotted at a data point. (Refer to the description of
+SYMBOL for possible values of INTEQ.)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; COMMENTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The arrays must be dimensioned with at least NPTS + 2 elements. The
+adjusted minimum value (FIRSTV) and the adjusted delta value (DELTAV),
+normally provided by the SCALE subroutine, must be stored following
+the data array.
+<P>
+For the X array, the adjusted minimum is stored in XARRAY (NPTS*INC +
+1), and the adjusted delta is in XARRAY (NPTS*INC + INC + 1). Similarly,
+for the Y array, the minimum is in YARRAY (NPTS*INC + 1), and the delta
+is in YARRAY (NPTS*INC + INC + 1). Therefore, XARRAY and YARRAY must
+be dimensioned to be at least NPTS*INC+INC+1 .
+<P>
+If scaling is not required, the user must place the appropriate
+minimum and delta values in the specified elements in the arrays. For
+a one-to-one correspondence between array data and plotted data, these
+values should be 0.0 (minimum) and 1.0 (delta).
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_fline
+   use M_calcomp
+   implicit none
+   ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
+   real :: xar(10)=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
+   real :: yar(10)=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
+   character(len=50) :: ibcd
+   integer           :: inteq
+      call plots(0.0,10.0,0.0,10.0)
+   !     DRAW FRAME
+      call plot(7.0,0.0,2)
+      call plot(7.0,9.0,2)
+      call plot(0.0,9.0,2)
+      call plot(0.0,0.0,2)
+   !     DRAW AXIS
+      ibcd=&#146;SERVICE TIME&#146;
+      call axis(0.75,0.75,ibcd,-12,5.0,0.0,5.0,1.0)
+      ibcd=&#146;FREQUENCY&#146;
+      call axis(0.75,0.75,ibcd, 9,7.0,90.0,0.0,100.0)
+   !     DRAW COMMENTS
+      ibcd=&#146;USING FLINE AND SMOOT SUBROUTINES&#146;
+      call symbol(0.7,8.25,0.14,ibcd,inteq,0.0,34)
+      call plot(5.0,7.8,3)
+      call plot(5.1,7.8,2)
+      ibcd=&#146;SMOOT&#146;
+      call symbol(5.2,7.80,0.09,ibcd,inteq,0.0, 6)
+      inteq = 1
+      call symbol(5.0,7.60,0.10,ibcd,inteq,0.0,-1)
+      inteq=999
+      ibcd=&#146;FLINE&#146;
+      call symbol(5.2,7.60,0.09,ibcd,inteq,0.0, 5)
+   ! SMOOTHING
+      call smoot(0.75,3.75,0)
+      call smoot(1.75,2.5,-2)
+      call smoot(2.25,5.75,-2)
+      call smoot(2.75,7.0,-2)
+      call smoot(3.25,7.25,-2)
+      call smoot(4.25,6.75,-2)
+      call smoot(4.75,3.75,-2)
+      call smoot(5.75,4.75,-24)
+   ! FLINE IS USED
+      call plot(0.75,3.25,3)
+      call fline(xar, yar, -8,1,1,1)
+      call nframe()
+   end program demo_fline
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>fline (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 103952e2-caa6-4df9-9e6e-a2449679313b using man macros.</FONT>
+<br><br><center><img src="images/fline.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

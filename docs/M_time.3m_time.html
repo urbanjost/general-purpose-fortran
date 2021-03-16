@@ -1,0 +1,515 @@
+<html>
+<head>
+   <title> M_time </title>
+   <link rel="stylesheet" type="text/css" href="StyleSheets/man.css" title="Local" />
+   <meta name="description" content="Fortran module containing library of date and time procedures">
+   <meta name="keywords" content="time period">
+   <meta name="keywords" content="date_and_time,date,time,gregorian,julian,epoch time,day of week, ordinal day">
+   <meta name="keywords" content="week of year">
+   <meta name="keywords" content="Fortran,module,library,repository,collection">
+   <script src="../../../javascript/toggleHidden.js" type="text/javascript"></script>
+</head>
+<body>
+<!-- =========================================================================================================================== -->
+<div class="manpage">
+
+<dl>
+<dt> NAME </dt>
+<dd>
+     M_time(3fm) - [M_time] Fortran module for manipulating and presenting time and date values
+</dd>
+
+<dt> DESCRIPTION </dt>
+<dd>
+<p>
+    The M_time(3f) Fortran module and associated utility programs
+    provide date and time-related procedures. Both a procedural and OOP
+    (Object Oriented Programming) interface are provided. Each routine
+    is accompanied by a man(1) page which includes a sample program for
+    that procedure. This manual, the source and example utility programs
+    are included in the download.
+</p>
+<h3>Utility programs that use the M_time(3f) module:</h3>
+
+<ul>
+   <li> <a href="now.1.html">      now(1)      </a> prints a date in many formats                         </li>
+   <li> <a href="ttee.1.html">     ttee(1)     </a> a filter which timestamps stdout from another command </li>
+   <li> <a href="month.1.html">    month(1)    </a> which lets you print simple calendars                 </li>
+   <li> <a href="days2sec.1.html"> days2sec(1) </a> converts dd-hh:mm:ss to seconds                       </li>
+   <li> <a href="sec2days.1.html"> sec2days(1) </a> converts seconds to dd-hh:mm:ss                       </li>
+   <li> <a href="paws.1.html">     paws(1)     </a> pause until specified time or for specified interval  </li>
+</ul>
+
+<p>
+   The M_time(3f) module
+</p>
+
+<ul>
+   <li> provides for formatting dates. </li>
+   <li> facilitates simple computations using time and date values in the recent era. </li>
+   <li> allow for macro-level timing of code. </li>
+</ul>
+
+<p>
+    The M_TIME(3f) module complements the DATE_AND_TIME(3f) procedure, which is
+    the standard intrinsic subroutine that returns the current date and time in
+    the   Gregorian   calendar. That is, the primary way this module represents
+    dates is as an integer array with the same meaning for elements as defined
+    by the DATE_AND_TIME(3f) routine. In addition it can calculate or read many
+    other date representations such as ...
+</p>
+
+<ul>
+   <li> Julian Dates               </li>
+   <li> Unix Epoch Dates           </li>
+   <li> High-level date formatting </li>
+   <li> Ordinal days of the year   </li>
+   <li> days of the week           </li>
+   <li> ISO-8601 week numbers      </li>
+   <li> month and weekday names    </li>
+</ul>
+
+<p>
+    Julian and Unix Epoch Dates are particularly useful for manipulating dates
+    in simple numeric expressions.
+</p>
+
+<p>
+    The  extensive  formatting  options  include  showing  SYSTEM_CLOCK(3f) and
+    CPU_USAGE(3f) information along with Gregorian date  information,  allowing
+    for the easy incorporation of timing information into program messages. In
+    addition to conventional Civilian Calendar dates,  the  module
+    supports the ISO-8601 standard methods of displaying dates.
+</p>
+
+
+<p>
+    A Fortran-callable sleep(3c)/usleep(3c) procedure is also provided.
+</p>
+
+</dd>
+<dt> SYNOPSIS </dt>
+<dd>
+<table BORDER="1">
+
+<tr><th colspan="3">UNIX EPOCH                </th></tr>
+<tr><td><a href="date_to_unix.3.html"> date_to_unix(dat,UNIXTIME,IERR)    </a></td><td>%epoch()  </td><td> Convert date array to Unix Time</td></tr>
+<tr><td><a href="unix_to_date.3.html"> unix_to_date(unixtime,DAT,IERR)    </a></td><td>&nbsp;   </td><td> Convert Unix Time to date array</td></tr>
+<tr><td><a href="d2u.3.html"> d2u(dat) result (UNIXTIME)  </a></td><td>&nbsp;     </td><td> Convert date array to Unix Time</td></tr>
+<tr><td><a href="u2d.3.html"> u2d(unixtime) result (DAT)  </a></td><td>&nbsp;     </td><td> Convert Unix Time to date array</td></tr>
+
+<tr><th colspan="3">JULIAN                    </th></tr>
+<tr><td><a href="julian_to_date.3.html"> julian_to_date(julian,DAT,IERR)      </a></td><td>&nbsp;   </td><td> Convert Julian Date to date array</td></tr>
+<tr><td><a href="date_to_julian.3.html"> date_to_julian(dat,JULIAN,IERR)      </a></td><td>%julian() </td><td> Converts date array to Julian Date </td></tr>
+<tr><td><a href="d2j.3.html"> d2j(dat) result (JULIAN)    </a></td><td>&nbsp;    </td><td> Convert date array to Julian Date</td></tr>
+<tr><td><a href="j2d.3.html"> j2d(julian) result (DAT)    </a></td><td>&nbsp;    </td><td> Convert Julian Date to date array</td></tr>
+
+<tr><th colspan="3">DAY OF WEEK               </th></tr>
+<tr><td><a href="dow.3.html"> dow(dat,[WEEKDAY],[DAY],IERR)  </a></td><td>%weekday() </td><td> Convert date array to day of the week as number(Mon=1) and name</td></tr>
+
+<tr><th colspan="3">WEEK OF YEAR              </th></tr>
+<tr><td><a href="d2w.3.html"> d2w(dat,ISO_YEAR,ISO_WEEK,ISO_WEEKDAY,ISO_NAME) </a></td><td>&nbsp;  </td><td> calculate iso-8601 Week-numbering year date yyyy-Www-d</td></tr>
+<tr><td><a href="w2d.3.html"> w2d(iso_year,iso_week,iso_weekday,DAT) </a></td><td>&nbsp;  </td><td> calculate date given iso-8601 Week date yyyy-Www-d</td></tr>
+
+<tr><th colspan="3">ORDINAL DAY               </th></tr>
+<tr><td><a href="d2o.3.html"> d2o(dat) result(ORDINAL)                  </a></td><td>%ordinal() </td><td> given date array return ordinal day of year, Jan 1st=1</td></tr>
+<tr><td><a href="o2d.3.html"> o2d(ordinal,[year]) result(DAT)                </a></td><td> </td><td> given ordinal day of year return date array, Jan 1st=1</td></tr>
+<tr><td><a href="ordinal_to_date.3.html"> ordinal_to_date(ordinal,year,DAT)  </a></td><td> </td><td> given ordinal day of year return date array, Jan 1st=1</td></tr>
+<tr><td><a href="ordinal_seconds.3.html"> ordinal_seconds()  </a></td><td> </td><td> return seconds since beginning of year</td></tr>
+
+<tr><th colspan="3">PRINTING DATES            </th></tr>
+<tr><td><a href="fmtdate.3.html"> fmtdate(dat,format)  result (TIMESTR) </a></d><td>%format([STRING]) </td><td> Convert date array to string using format</td></tr>
+<tr><td><a href="fmtdate_usage.3.html"> fmtdate_usage(indent)           </a></td><td>&nbsp;            </td><td> display macros recognized by fmtdate(3f)</td></tr>
+<tr><td><a href="now.3.html"> now(format)        result (NOW)           </a></td><td>&nbsp;            </td><td> return string representing current time given format</td></tr>
+<tr><td><a href="box_month.3.html"> box_month(dat,CALEN)                </a></td><td>&nbsp;            </td><td> print specified month into character array</td></tr>
+
+<tr><th colspan="3">MONTH NAME                    </th></tr>
+<tr><td><a href="mo2v.3.html"> mo2v(month_name)   result (MONTH_NUMBER) </a></td><td>&nbsp;      </td><td> given month name return month number</td></tr>
+<tr><td><a href="v2mo.3.html"> v2mo(month_number) result (MONTH_NAME)   </a></td><td>&nbsp;      </td><td> given month number return month name</td></tr>
+<tr><td><a href="mo2d.3.html"> mo2d(month_name)   result (DAT)          </a></td><td>&nbsp;      </td><td> return date array for
+first day of given month name in specified year</td></tr>
+
+<tr><th colspan="3">ASTROLOGICAL                        </th></tr>
+<tr><td><a href="easter.3.html"> easter(year,dat) </a></td><td>&nbsp; </td><td> calculate month and day Easter falls on for given year </td></tr>
+<!--
+<tr><td><a href="ephemeris.3.html"> ephemeris(dat,planet,DEC_D,DEC,M,DEC_C,ASCENT_H,ASCENT_M) </a></td><td>&nbsp; </td><td> ephemeris position of planets for adjusting an equatorial telescope </td></tr>
+-->
+
+<tr><td><a href="moon_fullness.3.html"> moon_fullness(DAT) result(FULLNESS)</a></td><td>&nbsp; </td><td> percentage of moon phase from new to full </td></tr>
+<tr><td><a href="phase_of_moon.3.html"> phase_of_moon(DAT) result(PHASE)</a></td><td>&nbsp; </td><td> return name for phase of moon for given date </td></tr>
+
+<tr><th colspan="3">DURATION                  </th></tr>
+<tr><td><a href="sec2days.3.html">  sec2days(seconds)  result(dhms)     </a></td><td>&nbsp;       </td><td> converts seconds to string D-HH:MM:SS</td></tr>
+<tr><td><a href="days2sec.3.html"> days2sec(string)   result(seconds)   </a></td><td>&nbsp;       </td><td> converts string D-HH:MM:SS to seconds</td></tr>
+
+<tr><th colspan="3">READING DATES             </th></tr>
+<tr><td><a href="guessdate.3.html">    guessdate(anot,dat)                </a></td><td>&nbsp;       </td><td> Converts a date string to a date array, in various formats</td></tr>
+
+<tr><th colspan="3">C INTERFACE               </th></tr>
+<tr><td><a href="system_sleep.3.html">   system_sleep(wait_seconds)     </a></td><td>&nbsp;       </td><td> Call sleep(3c) or usleep(3c)</td></tr>
+</table>
+</dd>
+
+<dt> FORMATTING OPTIONS IN <code>FMTDATE</code></dt>
+<dd>
+
+<p>
+    You can easily use Julian Ephemeris Dates and Unix Epoch Times to add
+    and subtract  times  from  dates  or  to  calculate  the interval
+    between  dates. But JEDs and UETs and even the Gregorian Calendar
+    arrays in the DAT arrays are not the way we typically describe a
+    date   on the Civilian Calendar. So the fmtdate(3f) routine lets us
+    print a DAT array in a variety of familiar styles.
+</p>
+
+<p>
+    The  fmtdate(3f)  and now(3f) procedures let you display a Gregorian date using
+    either keywords for standard formats or using macros  in  a  user-specified
+    formatting string. A formatting string may contain the following macros:
+</p>
+<pre>
+
+Description                                        Example
+
+ Base time array:
+  (1) %Y -- year, yyyy                                2016
+  (2) %M -- month of year, 01 to 12                   07
+  (3) %D -- day of month, 01 to 31                    27
+      %d -- day of month, with suffix (1st, 2nd,...)  27th
+  (4) %Z -- minutes from UTC                          -0240
+      %z -- -+hh:mm from UTC                          -04:00
+      %T -- -+hhmm  from UTC                          -0400
+  (5) %h -- hours, 00 to 23                           21
+      %H -- hour (1 to 12, or twelve-hour clock)      09
+      %N -- midnight&lt; AM &lt;=noon; noon&lt;= PM &lt;midnight  PM
+  (6) %m -- minutes, 00 to 59                         24
+  (7) %s -- sec, 00 to 59                             22
+  (8) %x -- milliseconds 000 to 999                   512
+ Conversions:
+      %E -- Unix Epoch time                           1469669062.5129952
+      %e -- integer value of Unix Epoch time          1469669063
+      %J -- Julian  date                              2457597.559
+      %j -- integer value of Julian Date(Julian Day)  2457597
+      %O -- Ordinal day (day of year)                 209
+      %o -- whole days since Unix Epoch date          17009
+      %U -- day of week, 1..7 Sunday=1                4
+      %u -- day of week, 1..7 Monday=1                3
+      %i -- ISO week of year 1..53                    30
+      %I -- iso-8601 week-numbering date(yyyy-Www-d)  2016-W30-3
+  Names:
+      %l -- abbreviated month name                    Jul
+      %L -- full month name                           July
+      %w -- first three characters of weekday         Wed
+      %W -- weekday name                              Wednesday
+      %p -- phase of moon                             New
+      %P -- percent of way from new to full moon      -1%
+  Literals:
+      %% -- a literal %                               %
+      %t -- tab character
+      %b -- blank character
+      %B -- exclamation(bang) character
+      %n -- new line (system dependent)
+      %q -- single quote (apostrophe)
+      %Q -- double quote
+  Program timing:
+      %c -- CPU_TIME(3f) output                       .78125000000000000E-001
+      %C -- number of times this routine is used      1
+      %S -- seconds since last use of this format     .0000000000000000
+      %k -- time in seconds from SYSTEM_CLOCK(3f)     588272.750
+      %K -- time in clicks from SYSTEM_CLOCK(3f)      588272750
+
+If no percent (%) is found in the format one of several
+alternate substitutions occurs.
+
+If the format is composed entirely of one of the following
+keywords the following substitution occurs:
+
+  "iso-8601",
+  "iso"        ==&gt; %Y-%M-%DT%h:%m:%s%z  ! Example: 2017-08-26T18:56:33,510912700-04:00
+
+  "iso-8601W",
+  "isoweek"    ==&gt; %I
+  "sql"        ==&gt; "%Y-%M-%D %h:%m:%s.%x"
+  "sqlday"     ==&gt; "%Y-%M-%D"
+  "sqltime"    ==&gt; "%h:%m:%s.%x"
+  "rfc-2822"   ==&gt; %w, %D %l %Y %h:%m:%s %T  !  Example: Mon, 14 Aug 2006 02:34:56 -0600
+
+  "rfc-3339"   ==&gt; %Y-%M-%DT%h:%m:%s%z  !  Example: 2006-08-14 02:34:56-06:00
+  "date"       ==&gt; %w %l %D %h:%m:%s UTC%z %Y
+  "short"      ==&gt; %w, %l %d, %Y %H:%m:%s %N UTC%z
+  "long"," "   ==&gt; %W, %L %d, %Y %H:%m:%s %N UTC%z
+  "suffix"     ==&gt; %Y%D%M%h%m%s
+  "formal"     ==&gt; The %d of %L %Y
+  "lord"       ==&gt; the %d day of %L in the year of our Lord %Y
+  "easter"     ==&gt; FOR THE YEAR OF THE CURRENT DATE:
+                      Easter day: the %d day of %L in the year of our Lord %Y
+  "all"        ==&gt; A SAMPLE OF DATE FORMATS
+
+otherwise the following words are replaced with the most
+common macros:
+
+  STRING   MACRO  EXAMPLE
+  year     %Y     2016
+  month    %M     07
+  MONTH    %L     July
+  Month    %l     Jul
+  day      %D     27
+  DAY      %d     7th
+  hour     %h     21
+  HOUR     %H     10
+  GOOD     %N     AM
+  minute   %m     24
+  second   %s     22
+  weekday  %u     3
+  Weekday  %w     Thu
+  WEEKDAY  %W     Thursday
+  timezone %T     -0400
+  Timezone %Z     -240
+  TIMEZONE %z     -04:00
+
+  epoch    %e     1469669063
+  julian   %j     2457597
+  ordinal  %O     209
+
+f none of these keywords are found then every letter that
+s a macro is assumed to have an implied percent in front
+f it. For example:
+
+  YMDhms ==&gt; %Y%M%D%h%m%s ==&gt; 20160727212422
+</pre>
+
+</dd>
+
+<dt> OOPS INTERFACE </dt>
+<dd>
+
+<p>
+    If you prefer an Object-oriented interface the M_time_oop module (included
+    with the M_time module source) provides an OOP interface to the M_time
+    module.
+</p>
+</dd>
+<dt> EXAMPLES </dt>
+<dd>
+
+<p>
+    The following example program demonstrates the extensive options available
+    for formatting a date as well as how to use the module to  calculate dates
+    such as "Yesterday" and "Tomorrow", as well as how to use the Object
+    Oriented interface to the conventional procedures found in the M_time(3fm)
+    module.
+</p>
+
+<pre class="fortran">>
+program demo_M_time
+use M_time, only:  j2d, d2j, u2d, d2u, fmtdate, realtime
+integer                      :: dat(8)
+real(kind=realtime)          :: julian, unixtime
+character(len=*),parameter   :: iso_fmt='%Y-%M-%DT%h:%m:%s.%x%z'
+character(len=:),allocatable :: friendly
+
+   friendly='%W, %L %d, %Y %H:%m:%s %N' ! a nice friendly format
+
+   call date_and_time(values=dat)  ! current time is placed in array
+
+   write(*,*)'Today'
+   write(*,*)'ISO       ',fmtdate(dat,iso_fmt)
+   write(*,*)'Friendly  ',fmtdate(dat,friendly)
+   write(*,*)'ISO week  ',fmtdate(dat,'%I')
+
+   julian=d2j(dat)
+   unixtime=d2u(dat)
+
+   write(*,*)'Yesterday' ! subtract a day from scalar time and print
+   write(*,*)'          ',fmtdate(u2d(unixtime-86400),iso_fmt)
+   write(*,*)'          ',fmtdate(j2d(julian-1.0),friendly)
+   write(*,*)'          ',fmtdate(j2d(julian-1.0),'%I')
+
+   write(*,*)'Tomorrow'  ! add a day to scalar time and print
+   write(*,*)'          ',fmtdate(u2d(unixtime+86400),iso_fmt)
+   write(*,*)'          ',fmtdate(j2d(julian+1.0),friendly)
+   write(*,*)'          ',fmtdate(j2d(julian+1.0),'%I')
+
+   write(*,*)'Next Week'  ! add a week to scalar time and print
+   write(*,*)'          ',fmtdate(u2d(unixtime+7*86400),iso_fmt)
+   write(*,*)'          ',fmtdate(j2d(julian+7.0),friendly)
+   write(*,*)'          ',fmtdate(j2d(julian+7.0),'%I')
+
+end program demo_M_time
+</pre>
+
+<h3> Sample output of example program ...</h3>
+
+<pre>
+
+ Today
+ ISO       2015-12-22T08:07:34.025-0300
+ Friendly  Tuesday, December 22nd, 2015 08:07:34 AM
+ ISO week  2015-W52-2
+ Yesterday
+           2015-12-21T08:07:34.025-0300
+           Monday, December 21st, 2015 08:07:34 AM
+           2015-W52-1
+ Tomorrow
+           2015-12-23T08:07:34.025-0300
+           Wednesday, December 23rd, 2015 08:07:34 AM
+           2015-W52-3
+ Next Week
+           2015-12-29T08:07:34.025-0300
+           Tuesday, December 29th, 2015 08:07:34 AM
+           2015-W53-2
+</pre>
+
+</dd>
+
+<dt>DEFINITIONS</dt>
+<dd>
+
+<p>
+    A "date_and_time" array <b>"DAT"</b> has the same format as the array of
+    values generated by the Fortran intrinsic DATE_AND_TIME(3f). That is, it is
+    an 8-element integer array containing year, month, day, Time zone
+    difference from UTC in minutes, hour, minutes, seconds, and milliseconds of
+    the second. This array represents a date on the Proleptic Gregorian
+    Calendar.
+</p>
+
+    The <b>Proleptic Gregorian Calendar</b> assumes the Gregorian Calendar
+    existed back to the beginning of the Julian Day calendar (4713 BC). This
+    means historic dates will often be confused, as the Julian Calendar was
+    used in the USA until 1752-09-03, for example. The Gregorian Calendar was
+    formally decreed on 1582-10-15 but was not adapted in many countries. The
+    Julian Calendar was first used around 45 BC.
+
+    Note that the Proleptic Gregorian Calendar includes a year zero (0). It is
+    frequently used in computer software to simplify the handling of older
+    dates. For example, it is the calendar used by MySQL, SQLite, PHP, CIM,
+    Delphi, Python and COBOL. The Proleptic Gregorian Calendar is explicitly
+    required for all dates before 1582 by ISO 8601:2004 (clause 4.3.2.1 The
+    Gregorian calendar) if the partners to information exchange agree.
+
+<p>
+    <b>Unix  Epoch  Time (UET)</b>  is  defined as the number of  seconds since
+    00:00:00  on January 1st. 1970, UTC.
+</p>
+
+<p>
+    A  <b>JED</b>  is defined as a <b>Julian Ephemeris Date</b>. JED days start
+    at noon (not at midnight). 4713-01-01 BC at noon is defined as JED 0.0.
+</p>
+
+<p>
+    If  you  are  not familiar with them, in this context Julian Dates and Unix
+    Epoch Times are scalar numbers that allow for easy computations using dates
+    (to   go   back   one   day   just   subtract  one  from a Julian Date, for
+    example). Since these values are generally  not  considered   intelligible,
+    routines  are  included to convert between these scalar values and the date
+    array so human-readable results can be obtained.
+</p>
+
+<p>
+    <b>Coordinated  Universal  Time</b>  (French:  Temps  universel coordonn'e),
+    abbreviated as <b>UTC</b>, is the primary time standard by which the  world
+    regulates  clocks  and time. It is within about 1 second of mean solar time
+    at 0o longitude;[1] it does not observe daylight saving time. It is one  of
+    several  closely  related successors to Greenwich Mean Time (GMT). For most
+    purposes, UTC is considered interchangeable with GMT, but GMT is no  longer
+    precisely defined by the scientific community.
+</p>
+</dd>
+
+<dt> LIMITATIONS </dt>
+<dd>
+
+<p>
+    Like  most collections of date and time procedures M_time is
+    <em>not</em> a high-precision library  that  accounts  internally
+    for leap  seconds  and relativistic  effects.
+</p>
+
+<p>
+    M_time(3f) is intended for use in the recent era and is not
+    appropriate  for  use  with historical dates that used some other
+    calendar scheme such as the Julian Calendar. That is, you have to
+    remember to account for conversions to other calendar systems when
+    using historical dates.
+</p>
+
+<p>
+    When Daylight Savings is  in  effect calculations  will  generally be
+    correct,  as  the date model includes a timezone value; but you are
+    responsible for ensuring dates you  create  use the  correct timezone
+    value  or otherwise account for Daylight Savings Time as needed.
+</p>
+
+<p>
+    Currently, dates are manipulated using the current system timezone,
+    which can typically be set using the environment variable TZ. So if
+    you desire to  set the default timezone you generally set the
+    environment variable <em>before</em> executing your program. This
+    is compatible with current observed behavior for the intrinsic
+    procedure DATE_AND_TIME(3f) with compilers I have tested with, but
+    does not seem to be a specified behavior as far as the standard is
+    concerned. That is, DATE_AND_TIME(3f) returns a vector that contains
+    a current time zone, but does not specify how a current time zone
+    can be explicitly set. Since this library is intentionally designed
+    to complement DATE_AND_TIME(3f) it adopts the same behavior. A routine
+    to let you set a default time zone could be added in the future.
+</p>
+
+<p>
+    Note the environment variable can be set using
+    put_environment_variable(3f) from the libGPF library:
+</p>
+
+<pre>
+
+     use M_system, only : put_environment_variable
+     call put_environment_variable('TZ','America/New_York',ierr)
+</pre>
+
+<p>
+    There is no warranty on this code, and it is certain to change.
+</p>
+
+</dd>
+
+<dt> SEE ALSO </dt>
+<dd>
+
+<p>
+    The ISO-8601 standard is often used for business-related transactions.
+</p>
+
+<p>
+    There  are  (of course) the C/C++ intrinsics which provide much of the same
+    functionality that should be bindable  to  Fortran  via the   ISO_C_BINDING
+    module.
+</p>
+
+<p>
+    If you are looking for a high-precision Fortran library that is well tested
+    for manipulating dates  I  would  suggest  looking  at the  NASA   SPICElib
+    library. If   you  care    about    Leap   Seconds,  Orbital   Mechanics,
+    GPS/Satellite communications, and Astronomy it is worth a look.
+</p>
+
+<p>
+    The Fortran Wiki <a href="http://fortranwiki.org"> fortranwiki.org </a>
+    contains information on other libraries and modules that provide date-time
+    procedures.
+</p>
+
+</dd>
+
+</dl>
+
+</div>
+<!-- =========================================================================================================================== -->
+<footer>
+<script language="JavaScript" type="text/javascript" src="../../../javascript/doc.js"> </script>
+<script language="JavaScript" > footer("2015-09-13"); </script>
+</footer>
+<!-- =========================================================================================================================== -->
+</body>
+</html>

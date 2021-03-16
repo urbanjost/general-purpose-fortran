@@ -1,0 +1,211 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>check_commandline (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>check_commandline</B>(3f) - [ARGUMENTS:M_CLI] check status from READ of NAMELIST group and process pre-defined options
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>subroutine</B> <B>check_commandline</B>(ios,message)
+<P>
+<PRE>
+     integer,intent(in)                   :: ios
+     character(len=*),intent(in)          :: message
+     character(len=*),intent(in),optional :: help_text
+     character(len=*),intent(in),optional :: version_text
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Essentially a convenience routine for checking the status of a <B>READ</B>(7f)
+of the NAMELIST after calling <B>commandline</B>(3f). Basically, it lets
+you replace
+<P>
+<PRE>
+    if(ios.ne.0)then
+       write(*,&#146;("ERROR:",i0,1x,a)&#146;)ios, trim(message)
+       call print_dictionary(&#146;OPTIONS:&#146;)
+       stop 1
+    endif
+<P>
+</PRE>
+with
+<P>
+<PRE>
+   call check_commandline(ios,message)
+<P>
+</PRE>
+or if the <B>--usage</B> switch is present does
+<P>
+<PRE>
+    if(usage)
+       call print_dictionary(&#146;OPTIONS:&#146;)
+    endif
+<P>
+</PRE>
+If the optional text values are supplied they will be displayed by <B>--help</B>
+and <B>--version</B> command-line options, respectively.
+</BLOCKQUOTE>
+<A name=3>
+
+    <H4>&nbsp; &nbsp; OPTIONS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>IOS</B> </TD><TD valign=bottom>
+status from <B>READ</B>(7f) of NAMELIST after calling
+<B>commandline</B>(3f)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>MESSAGE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+message from <B>READ</B>(7f) of NAMELIST after calling
+<B>commandline</B>(3f)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>HELP_TEXT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if present, will be displayed if program is called with
+<B>--help</B> switch, and then the program will terminate.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>VERSION_TEXT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if present, will be displayed if program is called with
+<B>--version</B> switch, and then the program will terminate.
+<P>
+If the first four characters of each line are "@(#)" this prefix will
+not be displayed. This if for support of the SCCS <B>what</B>(1) command. If
+you do not have the <B>what</B>(1) command on GNU/Linux and Unix platforms
+you can probably see how it can be used to place metadata in a binary
+by entering:
+<P>
+<PRE>
+        strings demo2|grep &#146;@(#)&#146;|tr &#146;&gt;&#146; &#146;\n&#146;|sed -e &#146;s/  */ /g&#146;
+<P>
+</PRE>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Typical usage:
+<P>
+<PRE>
+    program demo_check_commandline
+    use M_CLI,  only : unnamed, commandline, check_commandline
+    implicit none
+    integer                      :: i
+    character(len=255)           :: message ! use for I/O error messages
+    character(len=:),allocatable :: readme  ! stores updated namelist
+    character(len=:),allocatable :: version_text(:), help_text(:)
+    integer                      :: ios
+<P>
+    real               :: x, y, z
+    logical            :: help, h
+    equivalence       (help,h)
+    namelist /args/ x,y,z,help,h
+    character(len=*),parameter :: cmd=&#146;-x 1 -y 2 -z 3 --help F -h F&#146;
+<P>
+    ! initialize namelist from string and then update from command line
+    readme=commandline(cmd)
+    !write(*,*)&#146;README=&#146;,readme
+    read(readme,nml=args,iostat=ios,iomsg=message)
+    version_text=[character(len=80) :: "version 1.0","author: me"]
+    help_text=[character(len=80) ::      &
+     & "wish I put instructions","here", &
+     & "I suppose?"]
+    call check_commandline(ios,message,help_text,version_text)
+<P>
+    ! all done cracking the command line
+    ! use the values in your program.
+    write(*,nml=args)
+    ! the optional unnamed values on the command line are
+    ! accumulated in the character array "UNNAMED"
+    if(size(unnamed).gt.0)then
+       write(*,&#146;(a)&#146;)&#146;files:&#146;
+       write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,unnamed(i),&#146;]&#146;,i=1,size(unnamed))
+    endif
+    end program demo_check_commandline
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>check_commandline (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f18dfed5-c91e-4e44-94a5-84fa2a684fe1 using man macros.</FONT>
+<br><br><center><img src="images/check_commandline.3m_cli.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

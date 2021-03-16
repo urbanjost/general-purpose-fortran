@@ -1,0 +1,156 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>scratch (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>scratch</B>(7f) - [FORTRAN:OPEN] where scratch files are typically written by <B>OPEN</B>(3f)
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>open</B>( &#46;&#46;&#46;. status=&#146;scratch&#146;)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Where files opened with status=&#146;scratch&#146; are written is implementation-dependent.
+Often the file is unlinked so that it goes away unconditionally when the program
+starts, so in many *nix environments you cannot see the scratch file that is often
+used. So the compiler documentation should be referred to, but typically
+a scratch file is opened with a unique filename in one of the following directories:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Where files opened with status=&#146;scratch&#146; are written is implementation-dependent.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+in the directory pointed to by the environment variable $TMPDIR, if defined.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+next directories pointed to by $TMP and $TEMP are used if the variables are
+defined.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if none of the variables are defined, then the /tmp directory is typically used
+on *nix systems, and the current directory is often used on other systems.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+This can be important if you are generating large scratch files, as you may want
+to specify they are created in a secure directory or on a high-speed server such
+as a Lustre file server or memory-resident file system. Consider
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: This can be important if you are generating large scratch files, as you may want
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Scratch files are often opened using the current permission mask
+(umask) combined with possible operating-system or kernel defaults
+and file-system-dependent attributes, so make sure scratch files are
+properly secure
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+files are written in an area that you can write to and have sufficient
+space in
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+that the scratch space provides optimal performance
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+make sure the system cleans up properly
+when programs are aborted.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The behavior is very system-dependent.
+</BLOCKQUOTE>
+<P>
+EXAMPLE:
+System-dependent example:
+<P>
+<PRE>
+    open(newunit=lun,status=&#146;scratch&#146;)
+    inquire(unit=lun,file=filename)
+    write(*,*)&#146;filename=&#146;,filename)
+    end
+<P>
+</PRE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>scratch (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from be722d1b-fe1b-4b66-8a15-bd69b880197e using man macros.</FONT>
+<br><br><center><img src="images/scratch.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

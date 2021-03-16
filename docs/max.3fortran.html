@@ -1,0 +1,223 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>max (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>max</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC] Maximum value of an argument list
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+result = <B>max</B>(a1, a2 [, a3 [, &#46;&#46;&#46;]])
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Returns the argument with the largest (most positive) value.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>A1</B> </TD><TD valign=bottom>
+The type shall be INTEGER or REAL.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>A2,A3,&#46;&#46;&#46;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+An expression of the same type and kind as A1.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<A name=4>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+The return value corresponds to the maximum value among the arguments,
+and has the same type and kind as the first argument.
+<P>
+The function is both elemental and allows for an arbitrary number of
+arguments. This means if some elements are scalar and some are arrays
+that all the arrays must be of the same size, and the returned value
+will be an array that is the result as if multiple calls were made
+with all scalar values with a single element of each array used in
+each call. If called with all arrays the returned array is the same
+as if multiple calls were made with <B>max</B>(arr1(1),arr2(1), &#46;&#46;&#46;) to
+<B>max</B>(arr1(N),arr2(N)).
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+    program demo_max
+    implicit none
+    real :: arr1(4)= [10.0,11.0,30.0,-100.0]
+    real :: arr2(5)= [20.0,21.0,32.0,-200.0,2200.0]
+<P>
+       !! this is simple enough because it is not being called elementally
+       !! because all arguments are scalar
+       !!
+<P>
+       write(*,*)&#146;scalars:&#146;,max(10.0,11.0,30.0,-100.0)
+<P>
+       !!
+       !! this is all max(3f) could do before it became an elemental
+       !! function and is the most intuitive
+       !! except that it can take an arbitrary number of options,
+       !! which is not common in Fortran without
+       !! declaring a lot of optional parameters.
+       !!
+       !! That is it unless you want to use the elemental features of max(3f)!
+<P>
+       !! Error: Intrinsic ‘max’ at (1) must have at least two arguments
+       !!write(*,*)max(arr1)
+       !! This does not work because it is like trying to return
+       !! [(max(arr1(i)),i=1,size(arr1))]
+       !! so it is trying to take the max of a single value.
+       !! To find the largest element of an array
+       !! call maxloc(3f) or maxval(3f).
+<P>
+       !! Error: Different shape for arguments &#146;a1&#146; and &#146;a2&#146; for intrinsic
+       !! &#146;max&#146; at (1) on dimension 1 (4 and 5)
+       !!write(*,*)max(arr1,arr2)
+       !! but this will return an array of
+       !! [(max(arr1(N),arr2(N),N=1,size(arr1))]
+<P>
+       write(*,*)max(arr1,arr2(1:4))
+<P>
+       !! so this works only if all the arrays are the same size and
+       !! you want an array of the largest Nth elements
+       !! from the input arrays.
+       !! maybe you wanted to do maxval([arr1,arr2]) or
+       !! equivalently max(maxval(arr1),maxval(arr2))
+       !! to find the single largest element in both arrays?
+<P>
+       !! compares all scalars to each member of array and
+       !! returns array of size arr2
+<P>
+       write(*,*)&#146;scalars and array:&#146;,max(10.0,11.0,30.0,-100.0,arr2)
+<P>
+       !! Error: Different shape for arguments &#146;a5&#146; and &#146;a6&#146;
+       !! for intrinsic &#146;max&#146; at (1) on dimension 1 (5 and 4)
+       !! write(*,*)&#146;scalars and array:&#146;,max(10.0,11.0,30.0,-100.0,arr2,arr1)
+       !! as the same reason above when arrays are used
+       !! (without scalar values) all the arrays must be the same size
+<P>
+       write(*,*)&#146;scalars and array:&#146;,max(40.0,11.0,30.0,-100.0,arr2(:4),arr1)
+<P>
+</PRE>
+<BLOCKQUOTE>
+end program demo_max
+</BLOCKQUOTE>
+<P>
+Results:
+<P>
+<PRE>
+    scalars:   30.000000
+      20.0000000  21.000000  32.000000 -100.00000
+    scalars and array:   30.000000  30.000000  32.000000  30.000000  2200.0000
+    scalars and array:   40.000000  40.000000  40.000000  40.000000
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+[[FORTRAN 77]] and later
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+[[Elemental procedure|Elemental function]]
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>maxloc</B>(3), <B>maxval</B>(3), <B>min</B>(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>max (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 921a6a16-c737-4cf6-904e-c3109fae2622 using man macros.</FONT>
+<br><br><center><img src="images/max.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

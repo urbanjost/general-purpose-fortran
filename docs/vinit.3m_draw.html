@@ -1,0 +1,522 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>vinit (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>vinit</B>(3f) - [M_draw:DEVICE] Initialise device
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Notes</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>vinit</B>(<I>device</I>)
+<B>character</B>(len=*),intent(<I>in</I>) :: <I>device</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Initialise the <I>device</I>.
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+Note 1 : Currently available devices are:
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INTERACTIVE DEVICES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>PC</B> </TD><TD valign=bottom>
+- native MSW PC driver; only tested from CygWin
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>X11</B> </TD><TD valign=bottom>
+- X11 windows (Black background)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>x11</B> </TD><TD valign=bottom>
+- X11 windows (White background)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>tek</B> </TD><TD valign=bottom>
+- tektronix 4010 and compatibles
+xtek - X11 xterm Tektronix 4010 emulator
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PRINTERS AND PLOTTERS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+PostScript:
+[p]psm or [p]postscript - monochrome PostScript
+[p]psg - grayscale PostScript
+[p]psc - color PostScript
+HPGL:
+hpgl - HP Graphics language and compatibles
+[p]hpgl2 - HPGL level 2 (obeys prefsize calls)
+PCL:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: PostScript:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>[p]pclland</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+- monochrome PCL5 (obeys prefsize calls)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>[p]pclport</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+- monochrome PCL5 (obeys prefsize calls)
+pcl5land (color PCL5 landscape)
+pcl5port (color PCL5 portrait)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
+PIXMAPS (COLOR) AND BITMAPS (MONOCHROME)
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: PIXMAPS (COLOR) AND BITMAPS (MONOCHROME)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>char</B> </TD><TD valign=bottom>
+An ASCII file that can be displayed to most
+<B>xterm</B>(1) terminal emulators that support
+color
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>p1/pbm</B> </TD><TD valign=bottom>
+Poskanzer (pbmplus/netplus) portable
+ASCII bitmap file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>p3/ppm</B> </TD><TD valign=bottom>
+Poskanzer portable ASCII pixmap file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>p4</B> </TD><TD valign=bottom>
+Poskanzer portable binary bitmap file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>p6</B> </TD><TD valign=bottom>
+Poskanzer portable binary pixmap file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>xbm</B> </TD><TD valign=bottom>
+X11 bitmap file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>bm</B> </TD><TD valign=bottom>
+bitmap format for <B>atobm</B>(1)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PRODUCT INPUT FILES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>mif</B> </TD><TD valign=bottom>
+FrameMaker Interchange Format 3.0 (MIF) files
+(16 colors)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>mif4</B> </TD><TD valign=bottom>
+FrameMaker Interchange Format 4.0 (MIF) files
+(user-definable colors, but breaks a MIF rule)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>xfig</B> </TD><TD valign=bottom>
+X11 <B>xfig</B>(1) figure utility
+</TD></TR>
+<TR><TD colspan=2>
+METAFILES WITH POST_PROCESSORS/CONVERTERS
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>cgmt</B> </TD><TD valign=bottom>
+a clear-text CGM (Computer Graphics Metafile)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>gnu</B> </TD><TD valign=bottom>
+GNU <B>plot</B>(1) metafile
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>pdf</B> </TD><TD valign=bottom>
+Adobe Public Document Format
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>unixplot</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Unix <B>plot</B>(1) metafile
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BROWSER FILES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>canvas</B> </TD><TD valign=bottom>
+HTML5 CANVAS graphics element file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>svg</B> </TD><TD valign=bottom>
+Scalable Vector Graphics
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>usemap</B> </TD><TD valign=bottom>
+HTML image map
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>vml</B> </TD><TD valign=bottom>
+Microsoft Vector Markup Language
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FILES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>vog</B> </TD><TD valign=bottom>
+M_draw low level call record (debug)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; OTHER</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>fti</B> </TD><TD valign=bottom>
+SGI vector-based icons
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>null</B> </TD><TD valign=bottom>
+no output
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+:- Drivers I&#146;ve dropped but code is there for
+---------------------------------------------
+<P>
+<PRE>
+       grwin - (minGW GRwin PC interface)
+       decX11 - the decstation window manager
+       dxy - roland DXY plotter language
+       sun - Sun workstations running sunview
+       next - NeXTStep and other NeXT platforms
+       apollo - Apollo workstations
+<P>
+</PRE>
+<BLOCKQUOTE>
+:- Drivers I&#146;ve dropped but are <I>in</I> the original distribution
+------------------------------------------------------------
+<P>
+<PRE>
+       hercules - IBM PC hercules graphics card
+       cga - IBM PC cga graphics card
+       ega - IBM PC ega graphics card
+       vga - IBM PC vga graphics card
+       sigma - IBM PC sigma graphics card.
+       mswin - IBM PC Microsoft Windows.
+<P>
+</PRE>
+</BLOCKQUOTE>
+Note 2 : If <I>device</I> is a NULL or a null string the value
+of the environment variable "M_DRAW_DEVICE" is taken as the
+<I>device</I> type to be opened. The format of the variable is
+<P>
+<PRE>
+            M_DRAW_DEVICE [ xsize [ ysize [ xoffset [ yoffset ] ] ]
+<P>
+</PRE>
+<BLOCKQUOTE>
+That is, if present xsize and ysize will be used
+<I>in</I> a call to <B>prefsize</B>(3c), and xoffset and yoffset will
+be used <I>in</I> a call to <B>preposition</B>(3c).
+</BLOCKQUOTE>
+<P>
+Note 3 : after <B>vinit</B>() it is wise to explicitly clear the screen.
+e.g.:
+<P>
+<PRE>
+         call color(D_BLACK)
+         call clear()
+<P>
+</PRE>
+<A name=3>
+
+     <H3>NOTES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+gnu
+<P>
+<PRE>
+   The GNU plotutils package includes a program called plot(1) that
+   can read in the gnu metafile and render images on an X11 display, PNG
+   (Portable Network Graphics) format, portable anymap format (PBM/PGM/PPM),
+   a pseudo-GIF format that does not use LZW encoding, the new XML-based
+   Scalable Vector Graphics format, the format used by Adobe Illustrator,
+   Postscript or Encapsulated Postscript (EPS) that can be edited with
+   idraw(1), CGM format (by default, confirming to the WebCGM profile),
+   the format used by the xfig(1) drawing editor, the Hewlett-Packard PCL 5
+   printer language, the Hewlett-Packard Graphics Language, ReGIS graphics
+   format (which can be displayed by the dxterm(1) terminal emulator or
+   by a VT330 or VT340 terminal), Tektronix format (which can be displayed
+   by the xterm(1) terminal emulator), and device-independent GNU metafile
+   format itself.
+<P>
+</PRE>
+pdf
+<P>
+<PRE>
+   Popular PDF readers are the Adobe PDF viewer, which is often callable from
+   Web browsers; the GhostScript-based gv(1) utility; or the xpdf program.
+<P>
+       The xpdf(1) software , related utilities ( pdftops(1), pdftotext(1),
+       pdfinfo(1), pdffonts(1), pdftoppm(1), pdfimages(1), xpdfrc (5))
+       and documentation are copyright 1996-2004 Glyph & Cog, LLC. at
+       <A HREF="http://www.foolabs.com/xpdf">http://www.foolabs.com/xpdf</A>/
+<P>
+</PRE>
+<BLOCKQUOTE>
+The GhostScript-based tools can convert PDF files to PostScript as
+well as view the files.
+</BLOCKQUOTE>
+<P>
+cgmt
+<P>
+<PRE>
+   The ralcgm(1) and gplot(1) packages are two very complete CGM viewers.
+<P>
+   ppm,pbm (and p1,p3,p4,p6)
+<P>
+     * p1/pbm - Poskanzer (pbmplus/netplus) portable ASCII bitmap file
+     * p3/ppm - Poskanzer portable ASCII pixmap file
+     * p4 - Poskanzer portable binary bitmap file
+     * p6 - Poskanzer portable binary pixmap file
+<P>
+   The NetPBM package is available for almost every platform and lets
+   you convert the Poskanzer portable pixmap (PPM) files to just about
+   any pixmap or bitmap format, including PNG, JPEG, GIF/PseudoGIF, BPM,
+   &#46;&#46;&#46;.. Other popular pixmap products such as ImageMagick, gv, ... can
+   read PPM files, convert them, and often edit them.
+<P>
+</PRE>
+HTML:
+<P>
+<PRE>
+   The vml, canvas, svg, and usemap drivers are primarily used to generate
+   graphics for inclusion in HTML documents. Browsers such as Opera, Safari,
+   Foxfire, and Chrome can easily incorporate graphics generated using the
+   SVG (Scalable Vector Graphics) format or the HTML5 CANVAS element.
+<P>
+</PRE>
+usemap
+<P>
+<PRE>
+   This driver writes out the edges of any polygon in a format that can be
+   used with an HTML image map; if the same sizes are used a plot generated
+   with the ppm driver; you will have clickable regions in your pixmap when
+   converted to a GIF image.
+<P>
+   If the polygons overlap you need to reverse the order of the polygon
+   definitions in the output file. The numeric field in the&lt;AREA&gt; titles
+   should help.
+<P>
+</PRE>
+vml
+<P>
+<PRE>
+   The VML format can be read in by any MicroSoft Office 2000+ product and
+   MicroSoft&#146;s web browser Internet Explorer. If the plots contain more than
+   about 9766 vectors MicroSoft Word starts choking (still true in 2005),
+   but otherwise this is a very nice way to generate input for MicroSoft
+   products.
+<P>
+   I generally use this on a machine running MicroSoft Windows by installing
+   CygWin with the X11 options (and ralcgm, the GhostScript software,
+   the GNU plotutils packages and netpbm).
+<P>
+</PRE>
+xfig
+<P>
+<PRE>
+   The xfig(1) command can be used to edit graphics generated with the
+   M_draw graphics library; and to convert the xfig(1)-format file to
+   many other output formats. If you are generating pixmaps with the PPM
+   driver and want to use them as image maps in your HTML documents the
+   usemap driver can be used.
+<P>
+   If you have xfig(1) installed, you will find that calling fig2dev(1)
+   allows you to generate many output formats from a single file,
+   including LaTex and encapsulated PostScript.
+<P>
+   xfig(1) is an X11 Windows application that can be used to interactively
+   edit figures. The HELP utility of xfig(1) provides a description of the
+   xfig(1) file format (as well as a user guide and many other documents).
+<P>
+   Unfortunately, the manual indicates the user defined colors must
+   be defined before any other Fig objects. By default, 16 colors are
+   defined. If undefined colors are used they are assigned a dash pattern
+   or a fill pattern to help distinguish them. Use of hardware dash and
+   M_draw software dash could get confusing.
+<P>
+   Also, in the current driver version all lines are drawn as a series
+   of move-draw vectors, which can make the files relatively very large.
+<P>
+   multiple pages appear to only work with the PostScript and PDF drivers
+   of xfig(1); and even then pages must be all positive numbers from left
+   to right and top to bottom, printing all pages in a rectangular area.
+<P>
+   Alternatively, could use depth to keep up to 999 pages separate
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_vinit
+      use M_draw
+      use ISO_C_BINDING
+      integer :: ios
+      character(len=50) :: device
+<P>
+      ! read in device name and start graphics mode
+      print*,&#146;Enter output device:&#146;
+      read(*,&#146;(a)&#146;,iostat=ios)device
+      if(ios.ne.0)device=&#146; &#146;
+      call vinit(device)
+      ! by default the drawing surface is
+      ! a square ranging from -1 to 1 in both
+      ! the X and Y axis
+<P>
+      ! set font to large hardware font
+      call font(&#146;large&#146;)
+<P>
+      ! set current color to black
+      call color(D_BLACK)
+<P>
+      ! clear to current color
+      call clear()
+<P>
+      ! we want to draw in green
+      call color(D_GREEN)
+<P>
+      ! draw a horizontal line at y = 0
+      call move2(-1.0, 0.0)
+      call draw2(1.0, 0.0)
+<P>
+      ! pause for some input
+      idum=getkey()
+<P>
+      ! draw a line along x = 0
+      call move2(0.0, 0.0)
+      call draw2(0.0, 1.0)
+<P>
+      ! move to the middle of the screen
+      call move2(0.0, 0.0)
+<P>
+      ! draw &#146;Hello&#146; starting at the origin
+      call drawstr(&#146;Hello&#146;)
+<P>
+      ! pause again
+      idum=getkey()
+<P>
+      !  wrap up and exit graphics mode
+      call vexit()
+<P>
+      end program demo_vinit
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>vinit (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ad464f72-b034-49f7-afb9-2bc2cfc44a86 using man macros.</FONT>
+<br><br><center><img src="images/vinit.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

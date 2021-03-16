@@ -1,0 +1,475 @@
+<HTML><HEAD>
+<TITLE>do.7fortran.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>DO (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+   DO(7f) - [FORTRAN:EXECUTION CONTROL] construct (LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+!-----------------------------------------------------------------------
+   MYLOOP: do I_MYLOOP=1,10  ! DO loop
+      cycle MYLOOP           ! start next pass of loop
+      exit  MYLOOP           ! go to next statement after corresponding ENDDO
+   enddo MYLOOP
+!-----------------------------------------------------------------------
+   READ (IUN, &#146;(1X, G14.7)&#146;, IOSTAT = IOS) X
+   DO WHILE (IOS == 0)
+      IF (X &gt;= 0.) THEN
+         CALL SUBA (X)
+         CALL SUBB (X)
+              ...
+         CALL SUBZ (X)
+      ENDIF
+      READ (IUN, &#146;(1X, G14.7)&#146;, IOSTAT = IOS) X
+   END DO
+!-----------------------------------------------------------------------
+</PRE>
+<P>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+  8.1.7     DO construct
+  8.1.7.1    Purpose and form of the DO construct
+<P>
+1 The DO construct specifies the repeated execution of a sequence of
+  executable constructs. Such a repeated sequence is called a loop.
+<P>
+2 The number of iterations of a loop may be determined at the beginning
+  of execution of the DO construct, or
+  may be left indefinite ("DO forever" or DO WHILE). Except in the case
+  of a DO CONCURRENT construct, the loop can be terminated immediately
+  (8.1.7.6.4). The current iteration of the loop may be curtailed by
+  executing a CYCLE statement (8.1.7.6.3).
+<P>
+3 There are three phases in the execution of a DO construct: initiation
+  of the loop, execution of the loop range,
+  and termination of the loop.
+<P>
+4 The DO CONCURRENT construct is a DO construct whose DO statement
+  contains the CONCURRENT keyword.
+<P>
+5 The DO construct may be written in either a block form or a nonblock form.
+<P>
+  R821      do-construct                     is block-do-construct
+                                             or nonblock-do-construct
+<P>
+  8.1.7.2    Form of the block DO construct
+<P>
+  R822      block-do-construct               is   do-stmt
+                                                      do-block
+                                                      end-do
+<P>
+  R823      do-stmt                          is label-do-stmt
+                                             or nonlabel-do-stmt
+<P>
+  R824      label-do-stmt                    is   [ do-construct-name : ] DO label [ loop-control ]
+<P>
+  R825      nonlabel-do-stmt                 is   [ do-construct-name : ] DO [ loop-control ]
+<P>
+  R826      loop-control                     is [ , ] do-variable = scalar-int-expr , scalar-int-expr
+                                                   [ , scalar-int-expr ]
+                                             or [ , ] WHILE ( scalar-logical-expr )
+                                             or [ , ] CONCURRENT forall-header
+<P>
+  R827      do-variable                      is   scalar-int-variable-name
+<P>
+  C816      (R827) The do-variable shall be a variable of type integer.
+<P>
+  R828      do-block                         is   block
+<P>
+  R829      end-do                           is end-do-stmt
+                                             or continue-stmt
+<P>
+  R830      end-do-stmt                      is   END DO [ do-construct-name ]
+<P>
+  C817      (R822) If the do-stmt of a block-do-construct specifies a
+            do-construct-name, the corresponding end-do
+            shall be an end-do-stmt specifying the same
+            do-construct-name. If the do-stmt of a block-do-construct
+            does not specify a do-construct-name, the corresponding
+            end-do shall not specify a do-construct-name.
+<P>
+  C818      (R822) If the do-stmt is a nonlabel-do-stmt, the corresponding
+            end-do shall be an end-do-stmt.
+<P>
+  C819      (R822) If the do-stmt is a label-do-stmt, the corresponding
+             end-do shall be identified with the same label .
+<P>
+  8.1.7.3    Form of the nonblock DO construct
+  R831      nonblock-do-construct            is   action-term-do-construct
+                                             or   outer-shared-do-construct
+<P>
+  R832      action-term-do-construct         is   label-do-stmt
+                                                        do-body
+                                                        do-term-action-stmt
+<P>
+  R833      do-body                          is   [ execution-part-construct ] ...
+<P>
+  R834      do-term-action-stmt              is   action-stmt
+<P>
+  C820      (R834) A do-term-action-stmt shall not be an allstop-stmt,
+             arithmetic-if-stmt,
+             continue-stmt, cycle-stmt, end-function-stmt,
+             end-mp-subprogram-stmt, end-program-stmt,
+             end-subroutine-stmt, exit-stmt, goto-stmt, return-stmt,
+             or stop-stmt.
+<P>
+    C821      (R831) The do-term-action-stmt shall be identified with
+              a label and the corresponding
+              label-do-stmt shall refer to the same label.
+<P>
+    R835      outer-shared-do-construct          is   label-do-stmt
+                                                            do-body
+                                                            shared-term-do-construct
+<P>
+    R836      shared-term-do-construct           is   outer-shared-do-construct
+                                                 or   inner-shared-do-construct
+<P>
+    R837      inner-shared-do-construct          is   label-do-stmt
+                                                            do-body
+                                                            do-term-shared-stmt
+<P>
+    R838      do-term-shared-stmt                is   action-stmt
+<P>
+    C822      (R838) A do-term-shared-stmt shall not be an allstop-stmt,
+              arithmetic-if-stmt,
+              cycle-stmt, end-function-stmt, end-program-stmt,
+              end-mp-subprogram-stmt, end-subroutine-stmt, exit-stmt,
+              goto-stmt, return-stmt, or stop-stmt.
+<P>
+    C823      (R836) The do-term-shared-stmt shall be identified with
+              a label and all of the label-do-stmts
+              of the inner-shared-do-construct and
+              outer-shared-do-construct shall refer to the same label.
+<P>
+1 The do-term-action-stmt, do-term-shared-stmt, or
+  shared-term-do-construct following the do-body of a nonblock DO
+  construct is called the DO termination of that construct.
+<P>
+2 Within a scoping unit, all DO constructs whose DO statements refer to
+  the same label are nonblock DO constructs, and share the
+  statement identified by that label.
+<P>
+    8.1.7.4      Range of the DO construct
+<P>
+1 The range of a block DO construct is the do-block , which shall satisfy
+  the rules for blocks (8.1.2). In particular,
+  transfer of control to the interior of such a block from outside the
+  block is prohibited. It is permitted to branch to the end-do of a
+  block DO construct only from within the range of that DO construct.
+<P>
+2 The range of a nonblock DO construct consists of the do-body and the
+  following DO termination. The end of such a range is not
+  bounded by a particular statement as for the other executable
+  constructs (e.g., END IF); nevertheless, the range satisfies the rules
+  for blocks (8.1.2). Transfer of control into the do-body or to the
+  DO termination from outside the range is prohibited; in particular,
+  it is permitted to branch to a do-term-shared-stmt only from within
+  the range of the corresponding inner-shared-do-construct.
+<P>
+    8.1.7.5      Active and inactive DO constructs
+<P>
+1 A DO construct is either active or inactive. Initially inactive,
+  a DO construct becomes active only when its
+  DO statement is executed.
+<P>
+2 Once active, the DO construct becomes inactive only when it terminates
+  (8.1.7.6.4).
+<P>
+    8.1.7.6      Execution of a DO construct
+<P>
+    8.1.7.6.1     Loop initiation
+<P>
+1 When the DO statement is executed, the DO construct becomes active. If loop-control is
+<P>
+2       [ , ] do-variable = scalar-int-expr 1 , scalar-int-expr 2 [ , scalar-int-expr 3 ]
+<P>
+3 the following steps are performed in sequence.
+          1.    The initial parameter m1 , the terminal parameter m2 ,
+                and the incrementation parameter m3 are
+                of type integer with the same kind type parameter
+                as the do-variable. Their values are established by
+                evaluating scalar-int-expr 1 , scalar-int-expr 2 , and
+                scalar-int-expr 3 , respectively, including, if necessary,
+                conversion to the kind type parameter of the
+                do-variable according to the rules for numeric conversion
+                (Table 7.11). If scalar-int-expr 3 does not appear,
+                m3 has the value 1. The value of m3
+                shall not be zero.
+          2.    The DO variable becomes defined with the value of the initial parameter m1 .
+          3.    The iteration count is established and is the value of
+                the expression (m2 - m1 + m3 )/m3 , unless that value is negative,
+                in which case the iteration count is 0.
+<P>
+        NOTE 8.11
+        The iteration count is zero whenever:
+<P>
+              m1 &gt; m2 and m3 &gt; 0, or
+              m1 &lt; m2 and m3 &lt; 0.
+<P>
+4 If loop-control is omitted, no iteration count is calculated. The
+  effect is as if a large positive iteration count,
+  impossible to decrement to zero, were established. If loop-control is
+  [ , ] WHILE (scalar-logical-expr ), the effect is as if loop-control
+  were omitted and the following statement inserted as the first statement
+  of the do-block :
+<P>
+5 IF (.NOT. (scalar-logical-expr )) EXIT
+<P>
+6 For a DO CONCURRENT construct, the values of the index variables for
+  the iterations of the construct are
+  determined by the rules for the index variables of the FORALL construct
+  (7.2.4.2.2 and 7.2.4.2.3).
+<P>
+7 An index-name in a DO CONCURRENT construct has a scope of the construct
+  (16.4). It is a scalar variable
+  that has the type and type parameters that it would have if it were
+  the name of a variable in the scoping unit that includes the construct,
+  and this type shall be integer type; it has no other attributes.
+<P>
+8 At the completion of the execution of the DO statement, the execution
+  cycle begins.
+<P>
+  8.1.7.6.2     The execution cycle
+<P>
+1 The execution cycle of a DO construct that is not a DO CONCURRENT
+  construct consists of the following steps performed in sequence
+  repeatedly until termination.
+<P>
+          1.    The iteration count, if any, is tested. If it is zero,
+                the loop terminates and the DO construct becomes
+                inactive. If loop-control is [ , ] WHILE
+                (scalar-logical-expr ), the scalar-logical-expr is
+                evaluated; if the value of this expression is false, the
+                loop terminates and the DO construct becomes inactive. If,
+                as a result, all of the DO constructs sharing the
+                do-term-shared-stmt are inactive, the execution of all
+                of these constructs is complete. However, if some of the
+                DO constructs sharing the do-term-shared-stmt are active,
+                execution continues with step (3) of the execution cycle
+                of the active DO construct whose DO statement was most
+                recently executed.
+          2.    The range of the loop is executed.
+          3.    The iteration count, if any, is decremented by one. The
+                DO variable, if any, is incremented by the
+                value of the incrementation parameter m3 .
+<P>
+  Except for the incrementation of the DO variable that occurs in step
+  (3), the DO variable shall neither be redefined
+  nor become undefined while the DO construct is active.
+<P>
+  The range of a DO CONCURRENT construct is executed for all of the
+  active combinations of the index-name
+  values. Each execution of the range is an iteration. The executions
+  may occur in any order.
+<P>
+  8.1.7.6.3     CYCLE statement
+<P>
+  Execution of the range of the loop may be curtailed by executing a
+  CYCLE statement from within the range of the loop.
+<P>
+  R839     cycle-stmt                         is   CYCLE [ do-construct-name ]
+<P>
+  C824     (R839) If a do-construct-name appears, the CYCLE statement
+           shall be within the range of that do-construct;
+           otherwise, it shall be within the range of at
+           least one do-construct.
+<P>
+  C825     (R839) A cycle-stmt shall not appear within the range of a
+           DO CONCURRENT construct if it belongs to an outer construct.
+<P>
+2 A CYCLE statement belongs to a particular DO construct. If the CYCLE
+  statement contains a DO construct name, it belongs to that DO construct;
+  otherwise, it belongs to the innermost DO construct in which it appears.
+<P>
+3 Execution of a CYCLE statement that belongs to a DO construct that is
+  not a DO CONCURRENT construct
+  causes immediate progression to step (3) of the current execution
+  cycle of the DO construct to which it belongs. If this construct is a
+  nonblock DO construct, the do-term-action-stmt or do-term-shared-stmt
+  is not executed.
+<P>
+4 Execution of a CYCLE statement that belongs to a DO CONCURRENT construct
+  completes execution of that iteration of the construct.
+<P>
+5 In a block DO construct, a transfer of control to the end-do has the
+  same effect as execution of a CYCLE statement
+  belonging to that construct. In a nonblock DO construct, transfer
+  of control to the do-term-action-stmt or do-term-shared-stmt causes
+  that statement to be executed. Unless a further transfer of control
+  results, step (3) of the current execution cycle of the DO construct
+  is then executed.
+<P>
+  8.1.7.6.4    Loop termination
+<P>
+1 For a DO construct that is not a DO CONCURRENT construct, the loop
+  terminates, and the DO construct becomes inactive, when any of the
+  following occurs.
+<P>
+        The iteration count is determined to be zero or the
+      scalar-logical-expr is false, when tested during step (1)
+        of the above execution cycle.
+<P>
+        An EXIT statement that belongs to the DO construct is executed.
+<P>
+        An EXIT or CYCLE statement that belongs to an outer construct
+      and is within the range of the DO
+        construct is executed.
+<P>
+        Control is transferred from a statement within the range of a
+        DO construct to a statement that is neither
+        the end-do nor within the range of the same DO construct.
+<P>
+        A RETURN statement within the range of the DO construct is executed.
+<P>
+2 For a DO CONCURRENT construct, the loop terminates, and the DO construct
+  becomes inactive when all of the iterations have completed execution.
+<P>
+3 When a DO construct becomes inactive, the DO variable, if any, of the
+  DO construct retains its last defined value.
+<P>
+  8.1.7.7     Restrictions on DO CONCURRENT constructs
+<P>
+  C826      A RETURN statement shall not appear within a DO CONCURRENT construct.
+<P>
+  C827      A branch (8.2) within a DO CONCURRENT construct shall not have a branch target that is outside
+            the construct.
+<P>
+  C828      A reference to a nonpure procedure shall not appear within a DO CONCURRENT construct.
+<P>
+  C829      A reference to the procedure IEEE GET FLAG, IEEE SET HALTING MODE, or IEEE GET HALT
+            ING MODE from the intrinsic module IEEE EXCEPTIONS, shall not appear within a DO CONCURRENT construct.
+<P>
+1 The following additional restrictions apply to DO CONCURRENT constructs.
+<P>
+      A variable that is referenced in an iteration shall either be
+      previously defined during that iteration, or shall not be defined
+      or become undefined during any other iteration of the current
+      execution of the construct. A variable that is defined or becomes
+      undefined by more than one iteration of the current execution of
+      the construct becomes undefined when the current execution of
+      the construct terminates. A pointer that is referenced in an
+      iteration either shall be previously pointer associated during
+      that iteration, or shall not have its pointer association changed
+      during any iteration. A pointer that has its pointer association
+      changed in more than one iteration has an association status of
+      undefined when the construct terminates.
+<P>
+     An allocatable object that is allocated in more than one iteration
+     shall be subsequently deallocated during the same iteration in which
+     it was allocated. An object that is allocated or deallocated in
+     only one iteration shall not be deallocated, allocated, referenced,
+     defined, or become undefined in a different iteration.
+     An input/output statement shall not write data to a file record or
+     position in one iteration and read from the same record or position
+     in a different iteration of the same execution of the construct.
+     Records written by output statements in the loop range to a
+     sequential access file appear in the file in an indeterminate order.
+<P>
+      NOTE 8.12
+      The restrictions on referencing variables defined in an iteration
+      of a DO CONCURRENT construct apply to any procedure invoked within
+      the loop.
+<P>
+      NOTE 8.13
+      The restrictions on the statements in the loop range of a DO
+      CONCURRENT construct are designed to ensure there are no data
+      dependencies between iterations of the loop. This permits code
+      optimizations that might otherwise be difficult or impossible
+      because they would depend on properties of the program not visible
+      to the compiler.
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+8.1.7.8    Examples of DO constructs
+<P>
+      NOTE 8.14
+      The following program fragment computes a tensor product of two arrays:
+<P>
+      DO I = 1, M
+         DO J = 1, N
+            C (I, J) = DOT_PRODUCT (A (I, J, :), B(:, I, J))
+         END DO
+      END DO
+<P>
+      NOTE 8.15
+      The following program fragment contains a DO construct that uses the
+      WHILE form of loop-control . The loop will continue to execute until
+      an end-of-file or input/output error is encountered, at which point
+      the DO statement terminates the loop. When a negative value of X
+      is read, the program skips immediately to the next READ statement,
+      bypassing most of the range of the loop.
+<P>
+      READ (IUN, &#146;(1X, G14.7)&#146;, IOSTAT = IOS) X
+      DO WHILE (IOS == 0)
+         IF (X &gt;= 0.) THEN
+            CALL SUBA (X)
+            CALL SUBB (X)
+                 ...
+            CALL SUBZ (X)
+         ENDIF
+         READ (IUN, &#146;(1X, G14.7)&#146;, IOSTAT = IOS) X
+      END DO
+<P>
+      NOTE 8.16
+      The following example behaves exactly the same as the one in Note
+      8.15. However, the READ statement has been moved to the interior
+      of the range, so that only one READ statement is needed. Also, a
+      CYCLE statement has been used to avoid an extra level of IF nesting.
+<P>
+      DO      ! A "DO WHILE + 1/2" loop
+          READ (IUN, &#146;(1X, G14.7)&#146;, IOSTAT = IOS) X
+          IF (IOS /= 0) EXIT
+          IF (X &lt; 0.) CYCLE
+          CALL SUBA (X)
+          CALL SUBB (X)
+             . . .
+          CALL SUBZ (X)
+       END DO
+<P>
+       NOTE 8.17
+       The following example represents a case in which the user knows
+       that there are no repeated values in the index array IND. The DO
+       CONCURRENT construct makes it easier for the processor to generate
+       vector gather/scatter code, unroll the loop, or parallelize the
+       code for this loop, potentially improving performance.
+<P>
+       INTEGER :: A(N),IND(N)
+<P>
+       DO CONCURRENT (I=1:M)
+          A(IND(I)) = I
+       END DO
+<P>
+       NOTE 8.18
+       Additional examples of DO constructs are in C.5.3.
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Fortran</I></TD> <TD width=33% align=center>DO (7)</TD> <TD align=right width=33%><I>January 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from do.7fortran.txt using man macros.</FONT>
+</BODY></HTML>

@@ -1,0 +1,391 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>iso_fortran_env (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>iso_fortran_env</B>(7f) - [FORTRAN] standard intrinsic module provides public entities related to the Fortran environment
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : integer_kinds, int8, int16, int32, <I>int64</I>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : real_kinds, real32, real64, <I>real128</I>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : <I>logical_kinds</I>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : character_kinds, <I>character_storage_size</I>
+<P>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : compiler_options, <I>compiler_version</I>
+<P>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : error_unit, input_unit, <I>output_unit</I>
+<P>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : file_storage_size, <I>numeric_storage_size</I>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : iostat_end, iostat_eor, <I>iostat_inquire_internal_unit</I>
+use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : <I>stat_stopped_image</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The <I>intrinsic</I> module ISO_FORTRAN_ENV provides at least the following
+public entities relating to the Fortran environment.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; GENERAL</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+This part of ISO/IEC 1539 defines five standard <I>intrinsic</I> modules: a
+Fortran environment module, a set of three modules to support exception
+handling and IEEE arithmetic, and a module to support interoperability
+with the C programming language.
+<P>
+The IEEE_EXCEPTIONS, IEEE_ARITHMETIC, and IEEE_FEATURES <I>intrinsic</I>
+modules are described in Clause 14. The <I>intrinsic</I> module ISO_C_BINDING
+is described in Clause 15.
+<P>
+The types and procedures defined in standard <I>intrinsic</I> modules are
+not themselves <I>intrinsic</I>.
+<P>
+A processor may extend the standard <I>intrinsic</I> modules to provide public
+entities in them in addition to those specified in ISO/IEC 1539.
+<P>
+To avoid potential name conflicts with program entities, it is
+recommended that a program use the ONLY option in any USE statement
+that references a standard <I>intrinsic</I> module.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CHARACTER_KINDS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The values of the elements of the default integer named constant array
+CHARACTER_KINDS are the kind values supported by the processor for
+variables of type character. The order of the values is processor
+dependent. The size of the array is the number of character kinds
+supported.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CHARACTER_STORAGE_SIZE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant CHARACTER_STORAGE_SIZE
+is the size expressed in bits of the character storage unit (16.5.3.2).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COMPILER_OPTIONS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+Processor-dependent string describing the
+options that controlled the program translation
+phase.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>Class</B> </TD><TD valign=bottom>
+Inquiry function.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Argument</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+None.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Result Characteristics</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Default character scalar with
+processor-dependent length.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Result Value</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A processor-dependent value which describes
+the options that controlled the translation
+phase of program execution.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+    <H4>&nbsp; &nbsp; EXAMPLE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<B>COMPILER_OPTIONS</B>() might have the value &#146;/OPTIMIZE /FLOAT=IEEE&#146;.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COMPILER_VERSION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+Processor-dependent string identifying the
+program translation phase.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>Class</B> </TD><TD valign=bottom>
+Inquiry function.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Argument</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+None.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Result Characteristics</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Default character scalar with
+processor-dependent length.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Result Value</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A processor-dependent value that identifies
+the name and version of the program translation
+phase of the processor.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>COMPILER_VERSION</B>() might have the value &#146;Fast KL-10 Compiler Version 7&#146;.
+<P>
+For both COMPILER_OPTIONS and COMPILER VERSION the processor should
+include relevant information that could be useful in solving problems
+found long after the translation phase. For example, compiler release
+and patch level, default compiler arguments, environment variable
+values, and run time library requirements might be included. A processor
+might include this information in an object file automatically,
+without the user needing to save the result of this function in
+a variable.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ERROR_UNIT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant ERROR_UNIT identifies
+the processor-dependent preconnected external unit used for the purpose
+of error reporting. This unit may be the same as OUTPUT_UNIT. The
+value shall not be <B>-1</B>.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FILE_STORAGE_SIZE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant FILE_STORAGE_SIZE is
+the size expressed in bits of the file storage unit.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INPUT_UNIT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant INPUT_UNIT identifies
+the same processor-dependent external unit preconnected for sequential
+formatted input as the one identified by an asterisk in a READ
+statement; this unit is the one used for a READ statement that does
+not contain an input/output control list (9.6.4.2). The value shall
+not be <B>-1</B>.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INTEGER_KINDS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The values of the elements of the default integer named constant
+array INTEGER_KINDS are the kind values supported by the processor
+for variables of type integer. The order of the values is processor
+dependent. The size of the array is the number of integer kinds
+supported.
+<P>
+INT8, INT16, INT32, and INT64
+<P>
+The values of these default integer scalar named constants shall be
+those of the kind type parameters that specify an INTEGER type whose
+storage size expressed in bits is 8, 16, 32, and 64 respectively. If,
+for any of these constants, the processor supports more than one
+kind of that size, it is processor-dependent which kind value is
+provided. If the processor supports no kind of a particular size,
+that constant shall be equal to <B>-2</B> if the processor supports kinds of
+a larger size and <B>-1</B> otherwise.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; IOSTAT_END</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant IOSTAT_END is
+assigned to the variable specified in an IOSTAT= specifier (9.11.5)
+if an end-of-file condition occurs during execution of an input/output
+statement and no error condition occurs. This value shall be negative.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; IOSTAT_EOR</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant IOSTAT_EOR is assigned
+to the variable specified in an IOSTAT= specifier (9.11.5) if an
+end-of-record condition occurs during execution of an input/output
+statement and no end-of-file or error condition occurs. This value
+shall be negative and different from the value of IOSTAT_END.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; IOSTAT_INQUIRE_INTERNAL_UNIT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant
+IOSTAT_INQUIRE_INTERNAL_UNIT is assigned to the variable specified in an
+IOSTAT= specifier in an INQUIRE statement (9.10) if a file-unit-number
+identifies an internal unit in that statement.
+<P>
+This can <I>only</I> occur when a user defined derived type input/output
+procedure is called by the processor as the result of executing a
+parent data transfer statement for an internal unit.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LOGICAL_KINDS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The values of the elements of the default integer named constant
+array LOGICAL KINDS are the kind values supported by the processor
+for variables of type logical. The order of the values is processor
+dependent. The size of the array is the number of logical kinds
+supported.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NUMERIC_STORAGE_SIZE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant NUMERIC_STORAGE_SIZE
+is the size expressed in bits of the numeric storage unit (16.5.3.2).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; OUTPUT_UNIT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant OUTPUT_UNIT identifies
+the same processor-dependent external unit preconnected for sequential
+formatted output as the one identified by an asterisk in a WRITE
+statement. The value shall not be <B>-1</B>.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; REAL_KINDS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The values of the elements of the default integer named constant
+array REAL KINDS are the kind values supported by the processor
+for variables of type real. The order of the values is processor
+dependent. The size of the array is the number of real kinds supported.
+<P>
+REAL32, REAL64, and REAL128
+<P>
+The values of these default integer scalar named constants shall be
+those of the kind type parameters that specify a REAL type whose storage
+size expressed in bits is 32, 64, and 128 respectively. If, for any of
+these constants, the processor supports more than one kind of that size,
+it is processor-dependent which kind value is provided. If the processor
+supports no kind of a particular size, that constant shall be equal
+to <B>-2</B> if the processor supports kinds of a larger size and <B>-1</B> otherwise.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; STAT STOPPED IMAGE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the default integer scalar constant STAT STOPPED IMAGE is
+assigned to the variable specified in a STAT= specifier (6.6.4, 8.5.5)
+if execution of the statement with that specifier or argument requires
+synchronization with an image that has initiated termination of
+execution. This value shall be positive and different from the value
+of IOSTAT INQUIRE INTERNAL UNIT.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>iso_fortran_env (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e066415d-2de2-4e51-accf-e2b71d0e9fcf using man macros.</FONT>
+<br><br><center><img src="images/iso_fortran_env.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

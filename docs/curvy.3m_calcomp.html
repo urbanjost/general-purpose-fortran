@@ -1,0 +1,195 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>curvy (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>curvy</B>(3f) - [M_calcomp:scientific] plots a function of Y over a given range
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>License</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>curvy</B>(yo,yf,coeff1,exp1,coeff2,exp2,coeff3,exp3,coeff4,exp4)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+CURVY is a FORTRAN subroutine which plots a function of Y over a given range.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>YO,YF</B> </TD><TD valign=bottom>
+are the starting and ending values of Y. (These are
+assumed to be inches.)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>COEFF1,COEFF2,COEFF3,COEFF4</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are the coefficients of the polynomial that
+defines the function to be plotted.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>EXP1,EXP2,EXP3,EXP4</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are the exponents of the polynomial that defines
+the function to be plotted.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COMMENTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The polynomial that defines the function to be plotted is:
+<P>
+<PRE>
+       X=COEFF1*Y**EXP1+COEFF2*Y**EXP2+COEFF3*Y**EXP3+COEFF4*Y**EXP4
+<P>
+</PRE>
+for values of Y from YO to YF, where deltaY=0.01. Since values
+of Y are assumed to be inches, any scaling required must be performed
+before calling this subroutine.
+<P>
+If Y is zero or negative, errors may be generated.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_curvx
+   use M_calcomp
+   implicit none
+   ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
+   character(len=50) :: ibcd
+   integer           :: inteq
+   ! INITIALIZE GRAPHICS
+      call plots(0.0,10.0,0.0,10.0)
+   ! DRAW FRAME
+      call plot(7.0,0.0,2)
+      call plot(7.0,9.0,2)
+      call plot(0.0,9.0,2)
+      call plot(0.0,0.0,2)
+   ! COMMENTS ARE INSERTED
+      ibcd=&#146;SAMPLE OF SCIENTIFIC SUBROUTINES PACKAGE&#146;
+      call symbol(0.7,8.5,0.14,ibcd,inteq,0.0,40)
+      ibcd=&#146;USING CURVY SUBROUTINE&#146;
+      call symbol(0.7,4.25,0.14,ibcd,inteq,0.0,23)
+      ibcd=&#146;USING CURVX SUBROUTINE&#146;
+      call symbol(0.7,8.25,0.14,ibcd,inteq,0.0,23)
+   ! TWO PAIRS OF AXES ARE DRAWN
+      ibcd=&#146;&#146;
+      call axis(1.0,4.75,ibcd,-1,5.0,0.0,0.0,1.0)
+      call axis(1.0,4.75,ibcd, 1,3.0,90.0,0.0,1.0)
+      call axis(1.0,0.75,ibcd,-1,5.0,0.0,0.0,1.0)
+      call axis(1.0,0.75,ibcd, 1,3.0,90.0,0.0,1.0)
+   ! CURVX IS DRAWN
+      call plot(1.0,4.75,-3)
+      call curvx(0.1,5.0,2.40,0.0,0.75,2.0,-0.525,3.0,0.075,4.0)
+      call plot(-1.0,-4.75,-3)
+   ! CURVY IS DRAWN
+      call plot(1.0,0.75,-3)
+      call curvy(0.1,3.0,9.0,1.26,-6.0,2.52,1.0,3.78,0.0,0.0)
+      call plot(-1.0,-0.75,-3)
+   ! EQUATIONS ARE DRAWN
+      ibcd=&#146;Y=0.075X**4-0.525X**3+0.75X**2+2.40&#146;
+      call symbol(3.0,7.75,0.09,ibcd,inteq,0.0,35)
+      ibcd=&#146;X=Y**3.78-6Y**2.52+9Y**1.26&#146;
+      call symbol(3.0,3.90,0.09,ibcd,inteq,0.0,27)
+      call nframe()
+   !  CLOSE GRAPHICS
+      call plot(11.0,0.0,999)
+   end program demo_curvx
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>curvy (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 195768f8-b59a-4ade-875b-8ae6313383ba using man macros.</FONT>
+<br><br><center><img src="images/curvy.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

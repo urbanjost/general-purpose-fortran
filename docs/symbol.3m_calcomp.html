@@ -1,0 +1,339 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>symbol (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>symbol</B>(3f) - [M_calcomp:basic] draw text string or marker
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options For Strings</A><BR>
+<A HREF=#4>Options For Symbols</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>The</B> "standard" <I>call</I> <I>which</I> <I>produces</I> <I>a</I> <I>line</I> <I>of</I> <I>text</I> is:
+<P>
+<PRE>
+       subroutine symbol(xpage,ypage,height,ibcd,inteq,angle,+nchar)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>The</B> SYMBOL subroutine <I>produces</I> plot annotation at any angle
+and in practically any size. There are two SYMBOL <I>call</I> formats:
+<P>
+<PRE>
+     1) the "standard" call, which can be used to draw text such
+        as titles, captions, and legends.
+<P>
+     2) the "special" call, which is used to draw special
+        centered symbols such as a box, octagon, triangle, etc., for
+        denoting data points.
+<P>
+</PRE>
+Both forms <I>of</I> the SYMBOL calling sequence have seven arguments.
+Which form is being used is determined by the value <I>of</I> the NCHAR
+parameter.
+<P>
+<B>The</B> standard characters that are drawn by SYMBOL include the
+letters A-Z, digits 0-9, and certain special characters. See Table 2
+for <I>a</I> description <I>of</I> CALCOMP&#146;s symbol table.
+<P>
+<B>The</B> parameter NCHAR is used to specify whether <I>a</I> <I>text</I> string
+or <I>a</I> single symbol is being plotted. If NCHAR is &gt;= 0, the <I>text</I>
+string in IBCD is used. If NCHAR= <B>-1</B> or <B>-2</B>, <I>a</I> single symbol is
+produced using the value <I>of</I> INTEQ (Which MUST then be between 0 and
+90, inclusive).
+<P>
+It is recommended that 999 be used for INTEQ when NCHAR is greater
+than or equal to zero, and either <I>a</I> dummy character variable (e.g.
+<B>CHARACTER</B>(len=1) :: DUMMY) or <I>a</I> literal character string (e.g. &#146; &#146;) be used
+for IBCD when NCHAR is less than zero (not just <I>a</I> plain word as <I>a</I>
+dummy variable)!
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS FOR STRINGS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>XPAGE, YPAGE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are the coordinates, in inches, <I>of</I> the lower left-hand
+corner (before character rotation) <I>of</I> the first character
+to be produced. <B>The</B> pen is up while moving to this point.
+<P>
+Annotation may be continued from the position following
+that at <I>which</I> the last annotation ended. Continuation
+occurs when XPAGE and/or YPAGE equals 999.0, and may be
+applied to X or Y independently. (Calling WHERE to
+obtain the current pen position and using RXPAGE, RYPAGE
+in another <I>call</I> to SYMBOL would not give the same results
+as using 999.)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>HEIGHT</B> </TD><TD valign=bottom>
+is the height, in inches, <I>of</I> the <B>character</B>(s) to be
+plotted. For best results, it should be <I>a</I> multiple <I>of</I>
+seven times the standard CALCOMP increment size <I>of</I> 0.01
+(e.g., 0.07, 0.14, 0.21), but other values are
+acceptable. <B>The</B> width <I>of</I> <I>a</I> character, including spacing,
+is normally the same as the height (e.g., <I>a</I> string <I>of</I> 10
+characters 0.14 inch high is 1.4 inches wide).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IBCD</B> </TD><TD valign=bottom>
+is the <I>text</I> to be used as annotation. <B>The</B> <B>character</B>(s)
+must be in <I>a</I> character array or single variable. (<B>The</B>
+data should be stored as TYPE CHARACTER.)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>INTEQ</B> </TD><TD valign=bottom>
+Ignored (Assuming NCHAR is positive!)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ANGLE</B> </TD><TD valign=bottom>
+is the angle, in degrees from the X axis, at <I>which</I> the
+annotation is to be plotted. If ANGLE=0.0, the
+<B>character</B>(s) will be plotted right side up and parallel
+to the X axis. <B>The</B> absolute magnitude <I>of</I> ANGLE can not
+exceed 1800 degrees.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>+NCHAR</B> </TD><TD valign=bottom>
+is the number <I>of</I> characters to be plotted from IBCD.
+If NCHAR=0, one alphanumeric character is produced, using
+<I>a</I> single character <I>which</I> is the first element <I>of</I> IBCD.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+For example, the following <I>call</I> to SYMBOL will result in the characters TITLE
+10 being output beginning at the X and Y coordinates <I>of</I> 1.0 .
+<P>
+<PRE>
+    character grlbl*8
+    grlbl=&#146;title 10&#146;
+    call symbol(1.0,1.0,0.14,grlbl,999,0.0,8)
+<P>
+</PRE>
+<A name=4>
+
+     <H3>OPTIONS FOR SYMBOLS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A second form is the "special" <I>call</I>, <I>which</I> <I>produces</I> only <I>a</I> single symbol
+based on the value <I>of</I> INTEQ - not on the ASCII representation <I>of</I> <I>a</I> character.
+<P>
+<B>The</B> "special" <I>call</I> is:
+<P>
+<PRE>
+       call symbol(xpage,ypage,height,ibcd,inteq,angle,-nchar)
+<P>
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>XPAGE, YPAGE,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are the same as described for the "standard" <I>call</I>. If
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>and ANGLE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the symbol to be produced is one <I>of</I> the centered symbols
+(e.g., if INTEQ is less than 14), XPAGE, YPAGE represent
+the geometric center <I>of</I> the character produced.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>HEIGHT</B> </TD><TD valign=bottom>
+is the height (and width), in inches, <I>of</I> the centered
+symbol to be drawn. Preferably, it should be <I>a</I> multiple
+<I>of</I> four times the CALCOMP 0.01 increment size.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IBCD</B> </TD><TD valign=bottom>
+Ignored (assuming NCHAR is negative!)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>INTEQ</B> </TD><TD valign=bottom>
+is the integer equivalent <I>of</I> the desired symbol. Valid
+integers and their symbols are listed in the Symbol Table
+(Table 2). If INTEQ is 0 through 14, <I>a</I> centered symbol
+is produced. INTEQ <B>-MUST</B>- be greater than or equal to zero
+and less than or equal to 90 .
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NCHAR</B> </TD><TD valign=bottom>
+is negative and determines whether the pen is up or down
+during the move to XPAGE, YPAGE.
+<P>
+When NCHAR is:
+<P>
+<B>-1</B>, the pen is up during the move, after <I>which</I> <I>a</I> single
+symbol is produced.
+<P>
+<B>-2</B>, or less, the pen is down during the move, after <I>which</I>
+<I>a</I> single symbol is produced.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+For example, the following <I>call</I> to SYMBOL will result in special symbol
+number 5 being output with its center at X and Y coordinates <I>of</I> 1.0 .
+<P>
+<PRE>
+       CALL SYMBOL(1.0,1.0,0.16,&#146; &#146;,5,0.0,-1)
+<P>
+</PRE>
+Table 2 shows the current symbols available and the integer equivalents for
+each symbol <I>which</I> are used in the "special" <I>call</I>. When <I>a</I> "standard" <I>call</I> to
+SYMBOL is made, the host computer&#146;s internal characters are translated to the
+appropriate characters from this table.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_symbol
+   use M_calcomp
+<P>
+   ! produce a symbol table which shows the characters
+   ! available in the symbol(3f) routine.
+   !
+   character(len= 38),parameter :: ichr1=&#146;CHARACTERS AVAILABLE IN SYMBOL ROUTINE&#146;
+   character(len= 38),parameter :: ichr2=&#146;  FOR CALCOMP ON THE CRAY COMPUTER    &#146;
+   character(len= 60),parameter :: ichr3=&#146;INTEGER FOR USE IN SYMBOL CALL SHOWN TO LEFT OF EACH SYMBOL&#146;
+   character(len= 1 )           :: ibcd
+   integer                      :: ia,ib
+   integer                      :: m
+   real                         :: z, xs, ys, x, y
+      call plots(0.0,10.0,0.0,10.0)
+      call plot(0.8,0.8,1001)
+      call plot(0.0,11.0,2)
+      call plot(8.5,11.0,2)
+      call plot(8.5,0.0,2)
+      call plot(0.0,0.0,2)
+      call symbol(0.4,10.50,.2,ichr1,inteq,0.0,38)
+      call symbol(0.4,10.25,.2,ichr2,inteq,0.0,38)
+      call plot(8.1,10.0,3)
+      call plot(0.4,10.0,2)
+      call plot(0.4, 0.5,2)
+      call plot(8.1, 0.5,2)
+      z=0.0
+      m=0
+      xs=0.85
+      ys=0.25
+      x=0.4
+      y=9.5
+      do ia=1,6
+         do ib=1,15
+            call number(x+0.10,y+0.18,0.14,z,0.0,-1)
+            call symbol(x+xs,y+ys, 0.4, ibcd,m,0.0,-1)
+            Z=Z+1.0
+            M=M+1
+            Y=Y-0.6
+         enddo
+         if(ia.eq.6) call number(x+0.10,y+0.18,0.14,z,0.0,-1)
+         if(ia.eq.6) call symbol(x+xs,y+ys,0.4,ibcd,m,0.0,-1)
+         x=x+1.283
+         call plot(x,0.5,3)
+         call plot(x,10.0,2)
+         y=9.5
+         xs=0.65
+         ys=0.05
+      enddo
+      call symbol(0.6,0.25,0.12,ichr3,inteq,0.0,60)
+      call nframe()
+      call plot(0.0,0.0,999)
+   end program demo_symbol
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>symbol (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 693b54ff-1410-4e07-bdc5-a59a34f0f530 using man macros.</FONT>
+<br><br><center><img src="images/symbol.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

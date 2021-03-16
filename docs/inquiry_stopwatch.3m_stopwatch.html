@@ -1,0 +1,240 @@
+<HTML><HEAD>
+<TITLE>inquiry_stopwatch.3m_stopwatch.txt</TITLE>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>INQUIRY_STOPWATCH (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+inquiry_stopwatch(3f) - [M_stopwatch] returns M_StopWatch options and system
+dependent values (LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Diagnostics</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Bugs</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine
+<B>inquiry_stopwatch</B><I>(default_clock, io_unit_print, io_unit_error, print_errors, abort_errors, print_form, cpu_avail, user_avail, sys_avail, wall_avail, cpu_prec, wall_prec, version, err)</I> <P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+character(len=*), optional, intent(OUT) ::
+default_clock(4)
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+integer, optional, intent(OUT) ::  io_unit_print,
+io_unit_err
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+logical, optional, intent(OUT) ::  print_errors,
+abort_errors
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+character(len=*), optional, intent(OUT) ::  print_form
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+logical, optional, intent(OUT) ::  cpu_avail,
+user_avail, sys_avail, wall_avail
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+real, optional, intent(OUT) ::  cpu_prec, wall_prec
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+character(len=16), optional, intent(OUT) ::  version
+</TD></TR>
+<TR valign=top><TD width=6%>
+
+</TD><TD>
+integer, optional, intent(OUT) ::  err
+<P>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Returns the value of M_StopWatch options and other system
+and implementation dependent values.  All arguments are
+optional and have intent OUT.
+The following arguments can be set by
+<B>option_stopwatch</B>. See
+<B>option_stopwatch</B>(3)
+for further details on their meaning.
+<I>default_clock</I> is the set of clocks that are used when the
+<I>clock</I> argument is omitted in a call to a M_StopWatch routine.
+<I>io_unit_print</I> returns the unit for output from subroutine
+<B>print_watch.</B><I> io_unit_error</I> returns the unit for any error messages printed by
+M_StopWatch.  If
+<I>print_errors</I> is TRUE, then an error message will be printed to
+<I>io_unit_error</I> whenever an error condition occurs.  If
+<I>abort_errors</I> is TRUE, then the program will terminate when an error
+condition occurs.
+<I>print_form</I> is the format used by
+<B>print_watch</B>(3)
+when the
+<I>form</I> argument is omitted.
+<P>
+The remaining arguments return system information that
+can not be changed.
+<P>
+Since an interface to the CPU clock is not part of the
+Fortran 90 standard, the availability of clocks and
+clock precisions are implementation dependent.  Not all
+clocks are available in all implementations.  The
+logical arguments
+<I>cpu_avail, user_avail, sys_avail</I> and
+<I>wall_avail</I> return TRUE if the respective clock is available in
+this implementation.
+<P>
+The precision (the shortest time interval that can be
+measured) of the clocks also varies between
+implementations.  The real variables
+<I>cpu_prec</I> and
+<I>wall_prec</I> return the precision of the CPU and wall clocks, in
+seconds.  It is assumed that the user and sys clocks
+have the same precision as the CPU clock.  If the CPU
+clock is not available, then
+<I>cpu_prec</I> will return 0., and similar for the wall clock.
+<P>
+The character string
+<I>version</I> returns the version number of M_StopWatch.
+<P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DIAGNOSTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+If present, the optional intent OUT integer argument
+<I>err</I> returns a status code.  The code is the sum of the
+values listed below.
+<P>
+An error message will be printed to a specified I/O
+unit (unit 6 by default) if
+<I>print_errors</I> is TRUE (default is TRUE). The error message contains
+more detail about the cause of the error than can be
+obtained from just the status code, so you should set
+<I>print_errors</I> to TRUE if you have trouble determining the cause of
+the error.
+<P>
+If
+<I>abort_errors</I> is TRUE (default is FALSE), the program will terminate
+on an error condition.  Otherwise, the program will
+continue execution but the requested value(s) might not
+be returned.
+<P>
+See
+<B>option_stopwatch</B>(3)
+for further information on
+<I>print_errors, abort_errors</I> and I/O units.
+<P>
+The relevant status codes and messages are:
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6%>
+0
+</TD><TD>
+No errors; execution successful.
+<P>
+</TD></TR>
+<TR valign=top><TD width=6%>
+512
+</TD><TD>
+Failed to allocate required memory.  This error occurs
+if the Fortran
+<B>allocate</B> statement returns a nonzero status indicating that
+memory could not be allocated.  Avoid memory leaks by
+always destroying watches and groups before recreating
+them, and destroying local variable watches and groups
+before returning from a subroutine.
+<P>
+</TD></TR>
+<TR></TR></TABLE><P>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+logical user_is_there
+real cpu_prec
+<P>
+call inquiry_stopwatch(user_avail=user_is_there)
+call inquiry_stopwatch(cpu_prec=cpu_prec)
+<P>
+The first call determines if the user clock is
+available in this implementation.  The second call
+determines the shortest time that can be measured by
+the CPU clock.
+<P>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>BUGS</H3>
+
+</A>
+<BLOCKQUOTE>
+None known.
+<P>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+William F. Mitchell, <A HREF="mailto:william.mitchell@nist.gov">william.mitchell@nist.gov</A>
+National Institute of Standards and Technology
+<P>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+M_stopwatch(3), create_watchgroup(3), create_watch(3),
+destroy_watchgroup(3), destroy_watch(3),
+end_pause_watch(3), join_watchgroup(3),
+leave_watchgroup(3), option_stopwatch(3),
+pause_watch(3), print_watch(3), read_watch(3),
+reset_watch(3), start_watch(3), stop_watch(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>M_StopWatch 1.1</I></TD> <TD width=33% align=center>INQUIRY_STOPWATCH (3)</TD> <TD align=right width=33%><I>September 22, 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from inquiry_stopwatch.3m_stopwatch.txt using man macros.</FONT>
+</BODY></HTML>

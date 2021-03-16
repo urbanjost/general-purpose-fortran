@@ -1,0 +1,716 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>set_args (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>set_args</B>(3f) - [ARGUMENTS:M_CLI2] command line argument parsing
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Defining The Prototype</A><BR>
+<A HREF=#5>Usage</A><BR>
+<A HREF=#6>Example</A><BR>
+<A HREF=#7>Response Files</A><BR>
+<A HREF=#8>Specification For Response Files</A><BR>
+<A HREF=#9>Author</A><BR>
+<A HREF=#10>License</A><BR>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>set_args</B>(definition,help_text,version_text,ierr,errmsg)
+<P>
+<PRE>
+     character(len=*),intent(in),optional              :: definition
+     character(len=:),intent(in),allocatable,optional  :: help_text
+     character(len=:),intent(in),allocatable,optional  :: version_text
+     integer,intent(out),optional                      :: ierr
+     character(len=:),intent(out),allocatable,optional :: errmsg
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>SET_ARGS</B>(3f) requires a unix-like command prototype for defining
+arguments and default command-line options. Argument values are then
+read using <B>GET_ARGS</B>(3f).
+<P>
+The <B>--help</B> and <B>--version</B> options require the optional
+help_text and version_text values to be provided.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B><A HREF=#2>DESCRIPTION</A></B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+composed of all command arguments concatenated
+into a Unix-like command prototype string. For
+example:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                     call set_args(&#146;-L F -ints 10,20,30 -title "my title" -R 10.3&#146;)
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+DESCRIPTION is pre-defined to act as if started with
+the reserved options &#146;<B>--verbose</B> F <B>--usage</B> F <B>--help</B>
+F <B>--version</B> F&#146;. The <B>--usage</B> option is processed when
+the <B>set_args</B>(3f) routine is called. The same is true
+for <B>--help</B> and <B>--version</B> if the optional help_text
+and version_text options are provided.
+<P>
+see "DEFINING THE PROTOTYPE" in the next section for
+further details.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>HELP_TEXT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if present, will be displayed if program is called with
+<B>--help</B> switch, and then the program will terminate. If
+not supplied, the command line initialization string
+will be shown when <B>--help</B> is used on the commandline.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>VERSION_TEXT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if present, will be displayed if program is called with
+<B>--version</B> switch, and then the program will terminate.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IERR</B> </TD><TD valign=bottom>
+if present a non-zero option is returned when an
+error occurs instead of program execution being
+terminated
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ERRMSG</B> </TD><TD valign=bottom>
+a description of the error if ierr is present
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>DEFINING THE PROTOTYPE</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+all keywords on the prototype MUST get a value.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+logicals MUST be set to F or T.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+strings MUST be delimited with double-quotes and
+must be at least one space. Internal double-quotes
+are represented with two double-quotes.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+numeric keywords are not allowed; but this allows
+negative numbers to be used as values.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+lists of values should be comma-delimited unless a
+user-specified delimiter is used. The prototype
+must use the same array delimiters as the call to
+the family of get_args*(3f) called.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+long names (<B>--keyword</B>) should be all lowercase
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The simplest way to have short names is to suffix the long
+name with :LETTER If this syntax is used then logical shorts
+may be combined on the command line and -- and - prefixes are
+strictly enforced.
+<P>
+mapping of short names to long names not using the
+<B>--LONGNAME</B>:SHORTNAME syntax is demonstrated in the manpage
+for <B>SPECIFIED</B>(3f).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A very special behavior occurs if the keyword name ends in ::.
+The next parameter is taken as a value even if it starts with -.
+This is not generally recommended but is noted here for
+completeness.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+to define a zero-length allocatable array make the
+value a delimiter (usually a comma).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+all unused values go into the character array UNNAMED
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If the prototype ends with "--" a special mode is turned
+on where anything after "--" on input goes into the variable
+REMAINING and the array ARGS instead of becoming elements in
+the UNNAMED array. This is not needed for normal processing.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>USAGE</H3>
+
+</A>
+<BLOCKQUOTE>
+When invoking the program line note that (subject to change) the
+following variations from other common command-line parsers:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: When invoking the program line note that (subject to change) the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Long names should be all lowercase and always more than one
+character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+values for duplicate keywords are appended together with a space
+separator when a command line is executed.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+numeric keywords are not allowed; but this allows
+negative numbers to be used as values.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Although not generally recommended you can equivalence
+keywords (usually for multi-lingual support). Be aware that
+specifying both names of an equivalenced keyword on a command
+line will have undefined results (currently, their ASCII
+alphabetical order will define what the Fortran variable
+values become).
+<P>
+The second of the names should only be called with a
+GET_ARGS*(3f) routine if the <B>SPECIFIED</B>(3f) function is .TRUE.
+for that name.
+<P>
+Note that allocatable arrays cannot be EQUIVALENCEd in Fortran.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+short keywords cannot be combined unless they were defined
+using the <B>--LONGNAME</B>:SHORTNAME syntax. Even then <B>-a</B> <B>-b</B> <B>-c</B>
+is required not <B>-abc</B> unless all the keywords are logicals
+(Boolean keys).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+shuffling is not supported. Values should follow their
+keywords.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if a parameter value of just "-" is supplied it is
+converted to the string "stdin".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+values not matching a keyword go into the character
+array "UNUSED".
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if the keyword "--" is encountered the rest of the
+command arguments go into the character array "UNUSED".
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+    program demo_set_args
+    use M_CLI2,  only : filenames=&gt;unnamed, set_args, get_args, unnamed
+    use M_CLI2,  only : get_args_fixed_size
+    implicit none
+    integer                      :: i
+    !
+    ! DEFINE ARGS
+    real                         :: x, y, z
+    real                         :: p(3)
+    character(len=:),allocatable :: title
+    logical                      :: l, lbig
+    integer,allocatable          :: ints(:)
+    !
+    !  DEFINE COMMAND (TO SET INITIAL VALUES AND ALLOWED KEYWORDS)
+    !  AND READ COMMAND LINE
+    call set_args(&#146; &
+       ! reals
+       & -x 1 -y 2.3 -z 3.4e2 &
+       ! integer array
+       & -p -1,-2,-3 &
+       ! always double-quote strings
+       & --title "my title" &
+       ! set all logical values to F or T.
+       & -l F -L F &
+       ! set allocatable size to zero if you like by using a delimiter
+       & -ints , &
+       ! string should be a single character at a minimum
+       & --label " " &
+       & &#146;)
+    ! ASSIGN VALUES TO ELEMENTS
+    !     SCALARS
+    call get_args(&#146;x&#146;,x)
+    call get_args(&#146;y&#146;,y)
+    call get_args(&#146;z&#146;,z)
+    call get_args(&#146;l&#146;,l)
+    call get_args(&#146;L&#146;,lbig)
+    call get_args(&#146;ints&#146;,ints)      ! ALLOCATABLE ARRAY
+    call get_args(&#146;title&#146;,title)    ! ALLOCATABLE STRING
+    call get_args_fixed_size(&#146;p&#146;,p) ! NON-ALLOCATABLE ARRAY
+    ! USE VALUES
+    write(*,*)&#146;x=&#146;,x
+    write(*,*)&#146;y=&#146;,y
+    write(*,*)&#146;z=&#146;,z
+    write(*,*)&#146;p=&#146;,p
+    write(*,*)&#146;title=&#146;,title
+    write(*,*)&#146;ints=&#146;,ints
+    write(*,*)&#146;l=&#146;,l
+    write(*,*)&#146;L=&#146;,lbig
+    ! UNNAMED VALUES
+    if(size(filenames).gt.0)then
+       write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,filenames(i),&#146;]&#146;,i=1,size(filenames))
+    endif
+    end program demo_set_args
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>RESPONSE FILES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If you have no interest in using external files as abbreviations
+you can ignore this section. Otherwise, before calling <B>set_args</B>(3f)
+add:
+<P>
+<PRE>
+    use M_CLI2, only : CLI_response_file
+    CLI_response_file=.true.
+<P>
+</PRE>
+M_CLI2 Response files are small files containing CLI (Command Line
+Interface) arguments that are used when command lines are so long that
+they would exceed line length limits or so complex that it is useful to
+have a platform-independent method of creating an abbreviation.
+<P>
+Examples of commands that support similar response files are the Clang
+and Intel compilers, although there is no standard format for the files.
+<TABLE cellpadding=3><!-- tsb: Examples of commands that support similar response files are the Clang
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>The file names must end with .rsp .</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+They are read if you add options
+of the syntax "@NAME" as the FIRST parameters on your program command
+line calls.
+</TD></TR>
+<TR></TR></TABLE>Shell aliases and scripts are often used for similar purposes (and
+allow for much more complex conditional execution, of course), but
+they generally cannot be used to overcome line length limits and are
+typically platform-specific.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LOCATING RESPONSE FILES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The first resource file found that results in lines being processed
+will be used and processing stops after that first match is found. If
+no match is found an error occurs and the program is stopped.
+<P>
+A search for the response file always starts with the current directory.
+The search then proceeds to look in any additional directories specified
+with the colon-delimited environment variable CLI_RESPONSE_PATH.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; RESPONSE FILE SECTIONS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A simple response file just has options for calling the program in it.
+But they can also contain section headers to denote sections that are
+only executed when a specific OS is being used. In addition a special
+response file named PROGRAM.rsp can contain multiple abbreviations.
+<P>
+<PRE>
+  SEARCH FOR @OSTYPE IN REGULAR FILES (NAME.rsp)
+<P>
+</PRE>
+Assuming the name @NAME was specified on the command line a file named
+NAME.rsp will be searched for in all those search locations for a string
+that starts with the string @OSTYPE if the environment variables $OS and
+$OSTYPE are not blank.
+<P>
+If $OSTYPE is unset, the value of the variable OS will be used.
+<P>
+<PRE>
+  SEARCH FOR UNLABELED DIRECTIVES IN REGULAR FILES (NAME.rsp)
+<P>
+</PRE>
+Then, the same files will be searched for lines before any line
+starting with "@". That is, if there is no special section for the current
+OS it just looks at the top of the file for unlabeled options.
+<P>
+<PRE>
+  SEARCH FOR @OSTYPE@NAME IN THE COMPLEX FILE (EXECUTABLE.rsp)
+<P>
+</PRE>
+Then, if nothing was found a file name EXECUTABLE.rsp will be searched
+for in the same locations where EXECUTABLE is the basename of the program
+being executed. This file is always a "complex" response file that uses
+the format described below to allow for multiple entries.
+<P>
+Any complex EXECUTABLE.rsp file found in the current or searched directories
+will be searched for the string @OSTYPE@NAME first.
+<P>
+<PRE>
+  SEARCH FOR @NAME IN THE COMPLEX FILE (EXECUTABLE.rsp)
+<P>
+</PRE>
+The last search is to search all the EXECUTABLE.rsp files for the string
+@NAME.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; THE SEARCH IS OVER</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Sounds complicated but actually works quite intuitively. Make a file in
+the current directory and put options in it and it will be used. If that
+file ends up needing different cases for different platforms add a line
+like "@Linux" to the file and some more lines and that will only be
+executed if the environment variable OSTYPE or OS is "Linux". If no match
+is found for named sections the lines at the top before any "@" lines
+will be used as a default if not match is found.
+<P>
+If you end up using a lot of files like this you can combine them all
+together and put them info a file called "program_name.rsp" and just
+put lines like @NAME or @OSTYPE@NAME at that top of each section.
+<P>
+Note that more than one response name may appear on a command line.
+<P>
+They are case-sensitive names.
+<P>
+As mentioned, they must be the first options on the command line.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=8>
+
+     <H3>SPECIFICATION FOR RESPONSE FILES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SIMPLE RESPONSE FILES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The first word of a line is special and has the following meanings:
+<P>
+<PRE>
+   options|-  Command options following the rules of the SET_ARGS(3f)
+              prototype. So
+               o It is preferred to specify a value for all options.
+               o double-quote strings.
+               o give a blank string value as " ".
+               o use F|T for lists of logicals,
+               o lists of numbers should be comma-delimited.
+   comment|#  Line is a comment line
+   system|!   System command.
+              System commands are executed as a simple call to
+              system (so a cd(1) or setting a shell variable
+              would not effect subsequent lines, for example)
+   print|&gt;    Message to screen
+   stop       display message and stop program.
+<P>
+</PRE>
+So if a program that echoed its parameters has a call of the form
+<P>
+<PRE>
+    set_args(&#146;-x 10.0 -y 20.0 --title "my title")
+<P>
+</PRE>
+And a file in the current directory called "a.rsp" contained
+<P>
+<PRE>
+    # defaults for project A
+    options -x 1000 -y 9999
+    options --title "my new default title"
+<P>
+</PRE>
+The program could be called with
+<P>
+<PRE>
+   # normal
+   $myprog
+    X=10.0 Y=20.0 TITLE="my title"
+<P>
+   # change defaults as specified in "a.rsp"
+   $myprog @a
+    X=1000.0 Y=9999.0 TITLE="my new default title"
+<P>
+   # change defaults but use any option as normal to override defaults
+   $myprog @a -y 1234
+    X=1000.0 Y=1234.0 TITLE="my new default title"
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COMPOUND RESPONSE FILES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A compound response file has the same basename as the executable with a
+".rsp" suffix added. So if your program is named "myprg" the filename
+must be "myprg.rsp".
+<P>
+<PRE>
+   Note that here &#145;basename&#145; means the basename of the
+   name of the program as returned by the Fortran intrinsic
+   GET_COMMAND_ARGUMENT(0,&#46;&#46;&#46;) trimmed of anything after a period ("."),
+   so it is a good idea not to use hidden files.
+<P>
+</PRE>
+Unlike simple response files compound response files can contain multiple
+setting names.
+<P>
+If the environment variable $OSTYPE (first) or $OS is set the search
+will first be for a line of the form (no leading spaces should be used):
+<P>
+<PRE>
+   @OSTYPE@alias_name
+<P>
+</PRE>
+If no match or if the environment variables $OSTYPE and $OS were not
+set or a match is not found then a line of the form
+<P>
+<PRE>
+   @alias_name
+<P>
+</PRE>
+is searched for. Subsequent lines will be ignored that start with "@"
+<TABLE cellpadding=3><!-- tsb: is searched for. Subsequent lines will be ignored that start with "@"
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>until a line not starting with @ is encountered.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Lines will then be
+processed until another line starting with "@" is found or end-of-file
+is encountered.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COMPOUND RESPONSE FILE EXAMPLE</H4>
+</A>
+<BLOCKQUOTE>
+An example compound file
+<P>
+<PRE>
+   #################
+   @if
+   &gt; RUNNING TESTS USING RELEASE VERSION AND ifort
+   - test --release --compiler ifort
+   #################
+   @gf
+   &gt; RUNNING TESTS USING RELEASE VERSION AND gfortran
+   - test --release --compiler gfortran
+   #################
+   @nv
+   &gt; RUNNING TESTS USING RELEASE VERSION AND nvfortran
+   - test --release --compiler nvfortran
+   #################
+   @nag
+   &gt; RUNNING TESTS USING RELEASE VERSION AND nagfor
+   - test --release --compiler nagfor
+   #
+   #################
+   # OS-specific example:
+   @Linux@install
+   #
+   # install executables in directory (assuming install(1) exists)
+   #
+   !mkdir -p ~/.local/bin
+   - run --release T --compiler gfortran --runner "install -vbp -m 0711 -t ~/.local/bin"
+   @install
+   @STOP INSTALL NOT SUPPORTED ON THIS PLATFORM OR $OSTYPE NOT SET
+   #
+   #################
+   @fpm@testall
+   #
+   !fpm test --compiler nvfortran
+   !fpm test --compiler ifort
+   !fpm test --compiler gfortran
+   !fpm test --compiler nagfor
+   STOP tests complete. Any additional parameters were ignored
+   #################
+<P>
+</PRE>
+Would be used like
+<P>
+<PRE>
+   fpm @install
+   fpm @nag --
+   fpm @testall
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NOTES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The intel Fortran compiler now calls the response files "indirect
+files" and does not add the implied suffix ".rsp" to the files
+anymore. It also allows the @NAME syntax anywhere on the command
+<TABLE cellpadding=3><!-- tsb: The intel Fortran compiler now calls the response files "indirect
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>line, not just at the beginning. --</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+20201212
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=9>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2019
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>set_args (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6e7fa7c6-6b8f-449f-b52b-3028b92467a5 using man macros.</FONT>
+<br><br><center><img src="images/set_args.3m_cli2.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

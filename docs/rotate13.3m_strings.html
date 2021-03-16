@@ -1,0 +1,216 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>rotate13 (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>rotate13</B>(3f) - [M_strings] apply trivial ROT13 encryption to a string
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>References</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>rotate13</B>(<I>input</I>) <B>result</B>(<I>output</I>)
+<P>
+<PRE>
+    character(len=*),intent(in) :: input
+    character(len=len(input))   :: output
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+ROT13 ("rotate by 13 places", sometimes hyphenated ROT-13) is a simple
+letter substitution cipher that replaces a letter with the 13th letter
+after it in the alphabet; wrapping around if necessary.
+<P>
+The transformation can be done using a lookup table, such as the
+following:
+<P>
+<PRE>
+      Input  ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+      Output NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm
+<P>
+</PRE>
+ROT13 is used in online forums as a means of hiding spoilers,
+punchlines, puzzle solutions, and offensive materials from the casual
+glance. ROT13 has inspired a variety of letter and word games on-line,
+and is frequently mentioned in newsgroup conversations.
+<P>
+The algorithm provides virtually no cryptographic security, and is
+often cited as a canonical example of weak encryption.
+<P>
+ROT13 is a special case of the Caesar cipher which was developed in
+ancient Rome.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ALGORITHM</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Applying ROT13 to a piece of text merely requires examining its
+alphabetic characters and replacing each one by the letter 13 places
+further along in the alphabet, wrapping back to the beginning if
+necessary. A becomes N, B becomes O, and so on up to M, which becomes
+Z, then the sequence continues at the beginning of the alphabet: N
+becomes A, O becomes B, and so on to Z, which becomes M. Only those
+letters which occur in the English alphabet are affected; numbers,
+symbols, whitespace, and all other characters are left unchanged.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SAME ALGORITHM FOR ENCODING AND DECODING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Because there are 26 letters in the English alphabet and 26 = 2 x 13,
+the ROT13 function is its own inverse: so the same action can be used
+for encoding and decoding. In other words, two successive applications
+of ROT13 restore the original text (in mathematics, this is sometimes
+called an involution; in cryptography, a reciprocal cipher).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TRIVIAL SECURITY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The use of a constant shift means that the encryption effectively
+has no key, and decryption requires no more knowledge than the fact
+that ROT13 is in use. Even without this knowledge, the algorithm is
+easily broken through frequency analysis.
+<P>
+In encrypted normal English-language text of any significant size,
+ROT13 is recognizable from some letter/word patterns. The words "n",
+"V" (capitalized only), and "gur" (ROT13 for "a", "I", and "the"),
+and words ending in "yl" ("ly") are examples.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+Wikipedia, the free encyclopedia
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_rotate13
+   use M_strings, only : rotate13
+   implicit none
+   character(len=256) :: line
+   integer            :: ios
+   do
+      read(*,&#146;(a)&#146;,iostat=ios)line
+      if(ios.ne.0)exit
+      write(*,&#146;(a)&#146;)rotate13(line)
+   enddo
+   end program demo_rotate13
+<P>
+</PRE>
+</BLOCKQUOTE>
+Sample usage:
+<P>
+<PRE>
+   demo_rotate13
+   United we stand, divided we fall.
+   Havgrq jr fgnaq, qvivqrq jr snyy.
+<P>
+</PRE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>rotate13 (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f2b49b56-d44e-4b37-a570-4baee04c50c5 using man macros.</FONT>
+<br><br><center><img src="images/rotate13.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

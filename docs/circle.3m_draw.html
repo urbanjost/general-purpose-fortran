@@ -1,0 +1,188 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>circle (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>circle</B>(3f) - [M_draw:ARCS] Draw a circle.
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>circle</B>(<I>x</I>, <I>y</I>, <I>radius</I>)
+<B>real,intent</B>(<I>in</I>) :: <I>x</I>
+<B>real,intent</B>(<I>in</I>) :: <I>y</I>
+<B>real,intent</B>(<I>in</I>) :: <I>radius</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Draw a circle. <I>x</I>, <I>y</I>, and <I>radius</I> are values <I>in</I> world units.
+<P>
+Draw a circle using current line width and color
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NOTE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+circles are regarded as polygons, so if polyfill or polyhatch has been
+called with .true., the circle will be filled or hatched accordingly.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X,Y</B> </TD><TD valign=bottom>
+Coordinates for the center of the circle
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>RADIUS</B> </TD><TD valign=bottom>
+Radius of the circle
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_circle
+      use M_draw
+      use M_draw,    only  : D_BLACK,   D_WHITE
+      use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
+      use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+      implicit none
+      real :: b=0.5
+      real :: R=5
+      integer :: ipaws
+   ! set up drawing surface
+      call prefsize(1000,200)
+      call vinit(&#146; &#146;) ! start graphics using device $M_DRAW_DEVICE
+      call page(-25.0-b,25.0+b,-R-b,R+b)
+      call linewidth(200)
+      call color(D_CYAN)
+      call clear()
+   ! draw circles with hatching and fill
+      call color(D_WHITE)
+      call circle(-20.0,0.0, R)
+      call color(D_RED)
+      call circle(-10.0,0.0, R)
+      call polyfill(.true.)
+      call color(D_GREEN)
+      call circle(0.0,0.0,R)
+      call linewidth(20)
+      call polyhatch(.true.)
+      call hatchpitch(1.0/2.0)
+      call color(D_MAGENTA)
+      call circle(10.0,0.0,R)
+   ! layer calls to get a filled crosshatched circle
+   ! first a solid colored circle
+      call color(D_YELLOW)
+      call polyfill(.true.)
+      call circle(20.0,0.0,R)
+<P>
+   ! draw hatch lines at 45 degrees
+      call color(D_GREEN)
+      call linewidth(80)
+      call polyhatch(.true.)
+      call hatchpitch(2.0/3.0)
+      call hatchang(45.0)
+      call circle(20.0,0.0,R)
+   ! draw hatch lines at -45 degrees
+      call hatchang(-45.0)
+      call circle(20.0,0.0,R)
+<P>
+   ! outline circle with a thick border
+      call color(D_WHITE)
+      call linewidth(160)
+      call polyhatch(.false.)
+      call circle(20.0,0.0,R)
+<P>
+      ipaws=getkey()
+   ! exit graphics mode
+      call vexit()
+   end program demo_circle
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>circle (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 95cc8208-9cb7-4c4b-b48b-908de82eeb3f using man macros.</FONT>
+<br><br><center><img src="images/circle.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

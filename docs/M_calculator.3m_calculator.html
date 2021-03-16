@@ -1,0 +1,901 @@
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="Fortran, Fortran code, Fortran source code repository, Fortran library, Fortran archive,         " />
+<meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
+<meta name="keywords" content="Fortran Repository" />
+<meta name="keywords" content="Fortran Collection" />
+<style>
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
+<div id="Container">
+<div id="Content">
+<dl>
+<dt><b>NAME</b></dt><dd>
+    M_calculator(3fm) - [M_calculator::INTRO] module of routines for parsing expressions and returning values
+    (LICENSE:PD)
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b>SYNOPSIS</b></dt><dd>
+<pre>
+
+    use M_calculator, only : calculator, getvalue, igetvalue, rgetvalue, stuff, stuffa
+    use M_calculator, only : iclen_calc, ixy_calc, icname_calc, x, y, values_len, values
+    ! convenience routines
+    use M_calculator, only : inum0, rnum0, dnum0, snum0, expression, strgarr, strgar2
+</pre>
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b> DESCRIPTION </b></dt><dd>
+<p>
+    The <font size=+2 color="red">M_calculator module and related
+    functions</font> evaluate CHARACTER strings containing FORTRAN-like
+    expressions and returns numeric and string values.
+</p>
+
+<p>
+    Using this interface it is easy to make free-format and
+    order-independent input interfaces where values can be expressions
+    and variable names instead of simple formatted numbers.
+</p>
+
+<p>
+    The primary routine CALCULATOR(3f) acts like a powerful desk-top
+    calculator. It supports named variables and has several arrays (of
+    55555 elements each). Many standard FORTRAN functions are available,
+    plus access to user-written functions is permitted via
+    user-supplied routines via set_mysub(3f) and set_myfunc(3f).
+</p>
+
+<p>
+    The programmer (generally) uses just the CALCULATOR(3f) routine or several
+    convenience routines (INUM0,RNUM0,SNUM0,STRGAR2,EXPRESSION) that
+    simplify making the most common type of calls to CALCULATOR(3f).
+</p>
+
+<!-- =========================================================================================================================== -->
+<dt><b> PROCEDURES </b></dt><dd>
+   <ul>
+   <li> <a href="calculator.3m_calculator.html">calculator</a>        The procedure CALCULATOR(3f) acts like a calculator
+   <li> <a href="getvalue.3m_calculator.html">getvalue</a>    given numeric variable name return double precision value directly
+   <li> <a href="igetvalue.3m_calculator.html">igetvalue</a>  given numeric variable name return integer value directly
+   <li> <a href="rgetvalue.3m_calculator.html">rgetvalue</a>  given numeric variable name return real value directly
+   <li> <a href="stuff.3m_calculator.html">stuff</a>          pass INTEGER|REAL|DOUBLEPRECISION value directly to calculator dictionary
+   <li> <a href="stuffa.3m_calculator.html">stuffa</a>        directly store a string into calculator variable name table
+   <li>
+   <ul> Convenience routines
+   <li> <a href="inum0">inum0</a>                 resolve a calculator string into a whole integer number
+   <li> <a href="rnum0">rnum0</a>                 resolve a calculator string into a real number (return 0 on errors)
+   <li> <a href="dnum0">dnum0</a>                 resolve a calculator string into a doubleprecision number (return 0 on error s)
+   <li> <a href="snum0">snum0</a>                 resolve a calculator expression into a string(return blank on errors)
+   <li> <a href="expression">expression</a>       call calculator() calculator and display messages
+   <li> <a href="strgarr">strgarr</a>             read a string into an array USING CALCULATOR
+   <li> <a href="strgar2">strgr2</a>              read a string into an array USING CALCULATOR
+   </ul>
+   </li>
+   </ul>
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b> CONSTANTS </b></dt><dd>
+<pre>
+
+   The variables used to hold the X,Y,$X
+   $Y, ... arrays and the dictionaries of variable names and
+   string names and their associated values:
+
+<blockquote>
+<ul>
+   <li> integer,parameter,public  :: iclen_calc=512     ! max length of expression or variable value as a string
+   <li> integer,parameter,public  :: ixy_calc=55555     ! number of variables in X() and Y() array
+   <li> integer,parameter,public  :: icname_calc=20     ! max length of a variable name
+   <li> real(kind=dp),save,public :: x(ixy_calc)=0.0_dp ! x array for procedure funcs_
+   <li> real(kind=dp),save,public :: y(ixy_calc)=0.0_dp ! y array for procedure funcs_
+   <li> integer,save,public,allocatable           :: values_len(:)  ! lengths of the string variable values
+   <li> character(len=:),save,public,allocatable  :: values(:)      ! string variable values
+</ul>
+</blockquote>
+</pre>
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b>LINKS</b></dt><dd>
+
+<ul>
+   <li><a href="#USAGE">              User Guide for programs that call the calculator</a></li>
+   <li><a href="M_calculator_example.3m_calculator.html">    Example Program </a></li>
+   <li><a href="M_calculator_programmer_notes.3m_calculator.html"> Programmer Notes </a></li>
+</ul>
+
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b> SEE ALSO</b></dt> <dd>
+<ul>
+   <li> calculator(3f) </li>
+   <li> expression(3f) </li>
+   <li> inum0(3f),rnum0(3f),dnum0(3f),snum0(3f) </li>
+   <li> stuff(3f),stuffa(3f), getvalue, igetvalue, rgetvalue </li>
+   <li> strgarr, strgar2 </li>
+</ul>
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b> <a name="USAGE">USAGE</a></b></dt> <dd>
+   <center>
+   <h2>Calculator Expressions </h2>
+   </center>
+   <!-- ======================================================================= -->
+   <dl>
+   <!-- ======================================================================= -->
+   <dt><b> SYNOPSIS </b></dt><dd>
+       The calculator interface allows input values to be numeric or string
+       expressions using Fortran-like syntax instead of just simple variables.
+   <br/> <br/>
+       Named variables may be created. Several arrays of 55555 elements each
+       exist. The majority of FORTRAN intrinsic functions are available,
+       Custom routines may be made available for each application using
+       the interface.
+   </dd>
+   <!-- ======================================================================= -->
+   <dt><b> DESCRIPTION </b></dt> <dd>
+
+       A summary of the syntax rules for the expressions follows:
+   <ul>
+     <li> The hierarchy of
+          operations is the same as that of FORTRAN except that adjacent
+          exponents are done from left to right, not right to
+          left [i.e. in FORTRAN 3**2**4=3**(2**4), e.g.
+          3**2**4=(3**2)**4]; and +- strings are resolved to a single sign
+          (that is, 3+ -4 is acceptable instead of 3+(-4)).
+     </li>
+     <li> Almost all the INTRINSIC mathematical functions defined in FORTRAN are available,
+          as well as access to common extensions and user-written routines.
+     </li>
+     <li> Embedded blanks are ignored during the processing of a calculation,
+          but most applications using the calculator interface parse
+          on spaces. Therefore, it is generally good practice to assume
+          unquoted white-space ends an expression.
+     </li>
+     <li> All numeric values are treated as FORTRAN type REAL variables.
+     </li>
+     <li> Input lines should not normally be over 255 characters long,
+     </li>
+     <li> There are three ways to store results to be used in future calculations:
+       <ol>
+          <li> Variable names      </li>
+          <li> The current-value   </li>
+          <li> The x and y arrays  </li>
+       </ol>
+        Each of the types will be discussed separately.
+     </li>
+   </ul>
+   </dd>
+   <!-- ======================================================================= -->
+   <dt><b> VARIABLE NAMES</b></dt><dd>
+
+    Names must be 1 to 20 characters long, and are case-sensitive. The
+    numbr of names permitted is only limited by the available
+    memory. Numeric variable names should be composed of the letters
+    a-z and underscores and numbers. String variables are similar but
+    start with a dollar sign($). Names must not end in a "digit-E"
+    combination. For example:
+   <pre>
+
+      A=sin(3.1416/2)
+      big=200.333E200
+      $name="Thomas Jefferson"
+   </pre>
+    Variables may be defined by equating them to an expression. To define
+    or redefine a variable called FRED, simply enter:
+    <pre>
+
+        > FRED=300*4/500
+    </pre>
+    The last value assigned to a variable will be used to evaluate the
+    expression on the left of the equals sign when this expression
+    redefines the variable. For example:
+    <pre>
+
+        > A=2
+          2
+        > A
+          2
+        > A=A+A
+          4
+        > A=A+A
+          8
+    </pre>
+    To allow FORTRAN-type E-format numeric entry and yet not cause the
+    calculator routine to do an excessive amount of checking, a variable
+    name ending in the letter E must not have a digit (012345789) in front
+    of that ending E. Attempting to define such a variable name will
+    produce an error. This limitation prevents the calculator from
+    becoming confused by whether 12E+3 is a variable called 12E plus 3
+    or the exponential number 12E3=12000.
+   </dd>
+   <!-- ======================================================================= -->
+   <dt><b> CURRENT VALUE</b></dt><dd>
+
+    The variable name '?' is automatically set by the program to contain
+    the last calculated value. This current-value register may be used
+    like any variable or number. It is 0 at program initialization.
+    Example:
+    <pre>
+
+          > (300+500)
+            800
+          > (1/4)*?
+            200
+          > ?+?
+            400
+    </pre>
+   </dd>
+   <!-- ======================================================================= -->
+   <dt><b> THE X AND Y ARRAYS</b></dt> <dd>
+
+    Two arrays called X and Y are available that can contain up to 55555
+    values each. The arrays are originally initialized to all zeros.
+    To set values in the arrays, use the xstore (or ystore) command. The
+    format of the commands is
+   <tt><blockquote>
+       xstore(start,ex1,ex2,ex3)<br>
+       ystore(start,ex1,ex2,ex3)<br>
+   </tt></blockquote>
+       where start=array address to start storing at
+       and ex(i) are expressions.
+   <br/>
+       The current value is assigned the last value stored.
+   <br/>
+   In addition there are similar string arrays and functions that can
+   hold up to 50 255-character strings:
+   <ul>
+   <li><b>$nstore(), $xstore(), $ystore()</b>
+   <li><b>$n() ,$x() ,$y()    </b>
+   </ul>
+    For example, to store into the locations 10,11,and 12 the values
+    1/10,2/10, and 3/10, the following could be entered:
+    <pre>
+
+        xstore( 10 , 1/10 , 2/20 , 3/10 )
+                ^
+                !
+                *-------Start storing evaluated expressions sequentially,
+                        beginning at x(10).
+    </pre>
+   </dd>
+   <!-- ======================================================================= -->
+   <dt><b> REFERENCING AN ARRAY VALUE </b></dt> <dd>
+
+    The values stored into the arrays may be referenced by subscript. For
+    example:
+   <pre>
+
+      > xstore(1,10,20,30)
+        30
+      > fred=x(1)+x(2)+x(3)
+        60
+   </pre>
+
+   <b>
+    NOTES:
+   </b><br>
+   <ol>
+      <li> x and y array values cannot be used on the left of equal signs.
+      <pre>
+
+         x(10)=5   # <em> IS ILLEGAL </em>
+      </pre>
+      <li> The current value is set to the value of the last expression
+         by the xstore and ystore commands
+   </ol>
+   </dd>
+   <!-- ======================================================================= -->
+   <dt><b> INTRINSICS </b></dt> <dd>
+
+   <h3>supported Fortran intrinsics </h3>
+
+   The majority of intrinsic Fortran numeric functions are available.
+   At a minimum the following are recognized
+   (Deviations of the calculator routines from the standard intrinsics are noted):
+
+   <dl>
+   <dt> <strong> Arc or anti-trigonometric functions</strong> </dt>
+       <dd>
+       <br/><br/>
+         <ul>
+           <li>
+            <b>ACOS(arg)</b> is a generic function that returns the arccosine
+           of its argument in radians. The result of ACOS(real-arg)
+           is real.</li>
+
+           <li>
+            <b>ASIN(arg)</b> is a generic function that returns the arcsine
+           of its argument in radians. The result of ASIN(real-arg)
+           is real.</li>
+
+           <li>
+            <b>ATAN(arg)</b> is a generic function that returns the arctangent
+           of its argument in radians. The result of ATAN(real-arg)
+           is real.</li>
+
+           <li>
+            <b>ATAN2(arg1, arg2)</b> is a generic function that returns
+           the arctangent of its argument in radians. The result of
+           ATAN2(real-arg1, real-arg2) is real. The arguments must not both
+           be 0.</li>
+
+           <li>
+            <b>ACOSH(arg)</b> is a generic function that returns the
+           hyperbolic arccosine of its argument in radians. The result of
+           ACOSH(real-arg) is real.</li>
+
+           <li>
+            <b>ASINH(arg)</b> is a generic function that returns the hyperbolic
+           arcsine of its argument in radians. The result of ASIN(real-arg)
+           is real.</li>
+
+           <li>
+            <b>ATANH(arg)</b> is a generic function that returns the
+           hyperbolic arctangent of its argument in radians. The result of
+           ATANH(real-arg) is real.</li>
+
+           <li> <b>ACOSD(arg)</b> calculate arccosine of value in degrees </li>
+           <li> <b>ASIND(arg)</b> calculate arcsine of value in degrees </li>
+           <li> <b>ATAND(arg)</b> calculate arctangent of value in degrees </li>
+
+         </ul>
+       </dd>
+
+   <dt> <strong> Trigonometric functions</strong> </dt>
+       <dd>
+       <br/><br/>
+         <ul>
+
+           <li> <b>COS(arg)</b> is a generic function that returns the cosine of
+           its argument in radians. The result of COS(real-arg) is real.</li>
+
+           <li> <b>SIN(arg)</b> is a generic function that returns the sine of
+           its argument in radians. The result of SIN(real-arg) is real.</li>
+
+           <li> <b>TAN(arg)</b> is a generic function that returns the tangent of
+           its argument in radians.</li>
+
+           <li> <b>COSD(arg)</b> calculate cosine of value in degrees </li>
+           <li> <b>SIND(arg)</b> calculate sine of value in degrees </li>
+           <li> <b>TAND(arg)</b> calculate tangent of value in degrees </li>
+
+         </ul>
+       </dd>
+
+   <dt> <strong> Hyperbolic trigonometric functions</strong> </dt>
+
+       <dd>
+       <br/><br/>
+         <ul>
+
+           <li> <b>COSH(arg)</b> is a generic function that returns the hyperbolic
+           cosine of its argument. The result of COSH(real-arg) is real.</li>
+
+           <li> <b>SINH(arg)</b> is a generic function that returns the hyperbolic
+           sine of its argument in radians. The result of SINH(real-arg)
+           is real.</li>
+
+           <li> <b>TANH(arg)</b> is a generic function that returns the hyperbolic
+           tangent of its argument in radians.</li>
+         </ul>
+       </dd>
+
+   <dt> <strong> Powers and logarithms</strong> </dt>
+
+       <dd>
+       <br/><br/>
+         <ul>
+
+           <li> <b>EXP(arg)</b> is a generic function that returns the exponential
+           of its argument. The result of EXP(real-arg) is real.</li>
+
+
+           <li> <b>LOG(arg)</b> is a generic function that returns the natural
+           logarithm (base e) of its argument. The result of LOG(real-arg)
+           is real.</li>
+
+
+           <li> <b>HYPOT(arg1,arg2)</b> returns the Euclidean distance calculated
+           at HYPOT(X,Y)==SQRT(X**2+Y**2)</li>
+
+
+           <li> <b>LOG10(arg)</b> is a generic function that returns the common
+           logarithm (base 10) of its argument. The result of LOG10(real-arg)
+           is real.</li>
+
+
+           <li> <b>SQRT(arg)</b> is a generic function that returns the principal
+           square root of its argument. The result of SQRT(real-arg)
+           is real.</li>
+
+         </ul>
+       </dd>
+
+   <dt> <strong> Maximum/Minimum</strong> </dt>
+
+       <dd>
+       <br/><br/>
+         <ul>
+
+           <li> <b>MAX(arg1, arg2 [,..., arg50])</b> is a generic function that
+           returns the largest value in its argument list. The result
+           of MAX(real-arg1, real-arg2 [,..., real-arg50]) is real. -
+           (NON-STANDARD LIMIT: 50 instead of 500 parameters allowed)</li>
+
+           <li> <b>MIN(arg1, arg2 [,..., arg50])</b> is a generic function that
+           returns the smallest value in its argument list. The result of
+           MIN(real-arg1, real-arg2 [,..., real-arg50]) is real. NON-STANDARD
+           LIMIT: 50 instead of 500 parameters allowed)</li>
+
+         </ul>
+       </dd>
+
+   <dt> <strong> Directly effecting sign of value</strong> </dt>
+       <dd>
+       <br/><br/>
+         <ul>
+           <li>
+           <b>ABS(arg)</b> is a generic function that returns the absolute
+           value of its argument. The result of ABS(real-arg) is real.</li>
+           <li>
+           <b>SIGN(arg1, arg2)</b> is a generic function that returns a value
+           after a sign transfer. The result of SIGN(real-arg1, real-arg2)
+           is real. The result is |arg1| if arg2 &gt;= 0. The result is
+           -|arg1| if arg2 &lt; 0.</li>
+         </ul>
+       </dd>
+
+   <dt> <strong> Converting to a whole number</strong> </dt>
+
+       <dd>
+       <br/><br/>
+         <ul>
+           <li> <b>INT(arg)</b> is a generic function that converts its argument to
+           integer type. The result of INT(real-arg) is zero if |real-arg|
+           &lt; 1. The result is the largest integer with the same sign
+           as real-arg that does not exceed the magnitude of real-arg if
+           |real-arg| &gt;= 1.</li>
+
+           <li> <b>AINT(arg)</b> is a generic function that returns a whole number
+           after truncation of its argument. The result of AINT(real-arg)
+           is real. The result is 0 if |arg| &lt; 1. The result is the
+           largest integer with the same sign as arg that does not exceed
+           the magnitude of arg if |arg| &gt;= 1.</li>
+
+           <li> <b>ANINT(arg)</b> is a generic function that returns the nearest
+           whole number of its argument. The result of ANINT(real-arg)
+           is real.</li>
+
+
+           <li>
+            NINT(arg) is a generic function that returns the integer that is nearest
+            to its argument. The result of NINT(real-arg) is integer. If arg &gt;=
+            0, the result is (INT(arg+.5)). If arg &lt; 0, the result is
+            (INT(arg-.5)).
+           </li>
+         </ul>
+       </dd>
+   <dt> <strong> Bessel functions</strong> </dt>
+
+       <dd>
+       <br/><br/>
+         <ul>
+           <li> BESSEL_J0(X)        - Bessel function of the first kind and order zero.</li>
+           <li> BESSEL_J1(X)        - Bessel function of the first kind and order one.</li>
+           <li> BESSEL_Y0(X)        - Bessel function of the second kind and order zero.</li>
+           <li> BESSEL_Y1(X)        - Bessel function of the second kind and order one.</li>
+           <li> BESSEL_JN(N,X)      - Bessel function of the first kind and order N.</li>
+           <li> BESSEL_YN(N,X)      - Bessel function of the second kind and order N.</li>
+           <li> BESSEL_JN(N1,N2,X)  - Bessel function of the first kind and order N.</li>
+           <li> BESSEL_YN(N1,N2,X)  - Bessel function of the second kind and order N.</li>
+         </ul>
+       </dd>
+   <dt> <strong> system functions</strong> </dt>
+
+       <dd>
+       <br/><br/>
+         <ul>
+           <li> $GETENV(NAME),$GE(NAME)             - get environment variable value        </li>
+           <li> $SETENV(NAME,VALUE),$SE(NAME_VALUE) - set environment variable value        </li>
+           <li> IFDEF(NAME)                         - detect if environment variable is set </li>
+           <li> $SH(COMMAND)                        - return output of system command       </li>
+         </ul>
+       </dd>
+   <dt> <strong> Miscellaneous Fortran Intrinsics</strong> </dt>
+       <dd>
+       <br/><br/>
+       <ul>
+         <li> <b>FRACTION</b>       - Fractional part of the model representation</li>
+         <li> <b>EXPONENT</b>       - Exponent function</li>
+         <li> <b>GAMMA</b>          - Gamma function</li>
+         <li> <b>LOG_GAMMA</b>      - Logarithm of the Gamma function</li>
+         <li> <b>MODULO</b>         - Modulo function</li>
+         <li> <b>SCALE</b>          - Scale a real value</li>
+         <li> <b>BTEST</b>          - Bit test function</li>
+         <li> <b>TINY</b>           - Smallest positive number of a real kind</li>
+         <li> <b>EPSILON</b>        - Epsilon function</li>
+         <li> <b>HUGE</b>           - Largest number of a kind</li>
+         <li> <b>ERFC_SCALED(X)</b> - Exponentially-scaled complementary error function.</li>
+         </ul>
+       </dd>
+   </dl>
+   <hr />
+
+   <h2> ADDITIONAL PROCEDURES</h2>
+
+   <p>
+      In addition to standard Fortran intrinsics, many other functions are supported ...
+   </p>
+
+   <!-- ======================================================================= -->
+   <h3>conversion functions </h3>
+   <ul>
+   <li><b>r2d(arg)    </b> - converts from radians to degrees
+   <li><b>d2r(arg)    </b> - converts from degrees to radians
+   <li><b>f2c()       </b> - convert Fahrenheit to Celsius
+   <li><b>c2f()       </b> - convert Celsius to Fahrenheit
+   </ul>
+   <!-- ======================================================================= -->
+   <h3>logical functions </h3>
+   <ul>
+   <li><b>ge(val1,val2)       </b> - return TRUE if VAL1 is greater than or equal to VAL2, else return FALSE
+   <li><b>gt(val1,val2)       </b> - return TRUE if VAL1 is greater than to VAL2, else return FALSE
+   <li><b>eq(val1,val2)       </b> - return TRUE if VAL1 is equal to VAL2, else return FALSE
+   <li><b>le(val1,val2)       </b> - return TRUE if VAL1 is less than or equal to VAL2, else return FALSE
+   <li><b>lt(val1,val2)       </b> - return TRUE if VAL1 is less than VAL2, else return FALSE
+   <li><b>ne(val1,val2)       </b> - return TRUE if VAL1 is not equal to VAL2, else return FALSE
+   <li><b>if(expression,val1,val2)    </b> - If expression is TRUE, return VAL1 else return VAL2
+   </ul>
+   For example:
+   <pre>
+
+     a=if(ge(b,c),a,d)
+   </pre>
+   means return a if b is greater than or equal to c else return d.
+   <!-- ======================================================================= -->
+   <h3>lexical logical functions </h3>
+   <ul>
+   <li><b>lge($str1,$str2)    </b> - return TRUE if $STR1 is lexically greater than or equal to $STR2, else return FALSE
+   <li><b>lgt($str1,$str2)    </b> - return TRUE if $STR1 is lexically greater than to $STR2, else return FALSE
+   <li><b>leq($str1,$strN)    </b> - return TRUE if $STR1 is lexically equal to any of the other strings, else return FALSE
+   <li><b>lle($str1,$str2)    </b> - return TRUE if $STR1 is lexically less than or equal to $STR2, else return FALSE
+   <li><b>llt($str1,$str2)    </b> - return TRUE if $STR1 is lexically less than $STR2, else return FALSE
+   <li><b>lne($str1,$strN)    </b> - return TRUE if $STR1 is not equal to all following strings.
+   <li><b>$if(expression,$str1,$str2) </b> - If expression is TRUE, return $STR1 else return $STR2
+   </ul>
+   <!-- ======================================================================= -->
+   <h3>miscellaneous functions </h3>
+   <ul>
+   <li><b>ownmode()            </b> - ownmode(3f) enables calls to user-supplied functions via set_mysub(3f) and set_myfunc(3f).
+   <li><b>c(val1)              </b> - user-supplied function
+   <li><b>ceiling(val1)        </b> - ceiling(3f)or ceil(3f) returns the least integral value greater than or equal to VAL1.
+   <li><b>floor(val1)          </b> - floor(3f) returns the greatest integral value less than or equal to VAL1.
+   <li><b>in(val1,val2,val3)   </b> - returns TRUE if VAL1 is between VAL2 and VAL3 else returns FALSE
+   <li><b>round(val1,val2)     </b> - round VAL1 to VAL2 significant digits. <em> Warning: this function is not ready yet.</em>
+   <li><b>same(x1,x2,idigits)  </b> - test if X1 and X2 are the same out to IDIGITS digits. 0=TRUE.
+   <li><b>ifdef(variable_name) </b> - given name of a variable as a string return 0 if it exists, else -1 if it does not
+   </ul>
+   <!-- ======================================================================= -->
+   <h3>String-related</h3>
+   <ul>
+   <li><b>$change($str1,"c/old/new") </b> - substring substitution
+   <li><b>$char(v1,v2,....)          </b> - return characters indicated by numeric ADE (ASCII decimal equivalent) values passed.
+   <li><b>delimx(istore,$str1,$delimiters)  </b> - parse string into tokens in array $x()
+   <li><b>$f(fortran_format,value)   </b> - create string from value using specified Fortran FORMAT statement
+   <li><b>ichar($char)               </b> - return the ADE (ASCII Decimal Equivalent) value of a letter
+   <li><b>index($str1,$str2)         </b> - return column number where $str2 begins in $str1 or zero(0).
+   <li><b>$l($str1)                  </b> - convert string to lowercase
+   <li><b>len($str1)                 </b> - return the length of the string
+   <li><b>$matchw($string,$pattern)  </b> - simple wild-card match of a string
+   <li><b>$modif($str1,$directive)   </b> - modify a string
+   <li><b>$(ex,ex,ex,...) or $str(ex,ex,ex,...)  </b> - generate a string from a series of
+                                       strings and numbers. The expressions may be numeric or string.
+   <li><b>str(ex,ex,ex,...)  </b>     - same as $str() but convert resulting string to a number IF the string is a simple numeric value
+   <li><b>$substr(string,i,j)        </b> - return a string that is columns i thru j of the input string (first
+                                            character is called column 1).
+   <li><b>$u($str1)                  </b> - convert string to uppercase
+   </ul>
+   <!-- ======================================================================= -->
+   <h3>calendar(Time-related)</h3>
+   <ul>
+   <li><b>ye(),year()   </b> - return current year
+   <li><b>mo(),month()   </b> - return current month
+   <li><b>da(),day()   </b> - return current day of month
+   <li><b>ho(),hour()   </b> - return current hour (0 -23)
+   <li><b>mi(),minute()   </b> - return current minute
+   <li><b>se(),second()   </b> - return current second
+   <li><b>dw()   </b> - days since Sunday (0 - 6) for current date
+   <li><b>ju()   </b> - days since January 1st (0 - 365) for current date
+
+   <li><b>$dw([0-7])                   </b> - day of week as a string
+   <li><b>$mo([1-12])                  </b> - month as a string
+   <li><b>$now(format)                 </b> - extensive formatting of current time
+   <li><b>$fmtdate(dat(8),format)      </b> - extensive formatting of date and time.
+                                              $fmtdate("help") shows the available macros.
+   <li><b>unix_to_date()               </b> - store Unix Epoch Time to date and time values in x(1) to x(8)
+   <li><b>date_to_unix(y,m,d,z,h,m,s,x)</b> - convert date and time values to Unix Epoch Time
+   </ul>
+
+   <p>
+     The $now() and $fmtdate() functions can output a date in a multitude of
+     formats and can be used to perform simple date manipulations.
+   </p>
+   <!-- ======================================================================= -->
+   <h3>Random numbers</h3>
+
+   <ul>
+   <li><b>rand([itype])   </b> - return random number from 0.0 to 1.0</li>
+   <li><b>srand(number[,itype])   </b> - set seed for rand(). Seeds should be whole numbers</li>
+   </ul>
+
+   <p>
+      If ITYPE is present different algorithms are used. The system routines vary from
+      platform to platform. The preferred algorithm is the "Numerical Recipes" algorithm.
+      The ITYPE must agree between the SRAND() call and the RAND() call. A call to SRAND()
+      should precede use of RAND().
+   </p>
+
+       <h3>ITYPE meanings</h3>
+   <ol>
+   <li> The system C routine rand()</li>
+   <li> The Fortran intrinsic RANDOM_NUMBER()</li>
+   </ol>
+   <!-- ======================================================================= -->
+   <dt><b> MISCELLANEOUS COMMANDS</b></dt><dd>
+
+      <dl>
+      <dt><b> Displaying variable values: dump </b></dt> <dd>
+      <br/><br/>
+
+       The current value and all defined variable names are displayed via
+       the dump command.
+
+      <dt><b> Listing Available Functions: funcs </b></dt> <dd>
+      <br/><br/>
+
+       A display of all available functions can be obtained when
+       executing CALCULATOR(3f) by entering the command 'funcs'. No descriptions
+       are provided.
+      </dl>
+   </dd>
+   <!-- ======================================================================= -->
+   </dl>
+</dd>
+<!-- =========================================================================================================================== -->
+</dl>
+<dl>
+<!-- =========================================================================================================================== -->
+<dt>
+<h2>ADDING FUNCTIONS</h2>
+<p>
+   Any program that calls CALCULATOR(3f) directly or indirectly (via EXPRESSION(3f),
+   STRGAR2(), INUM0(), RNUM0(), SNUM0()) can extend the functions
+   available by supplying two routines:
+</p>
+
+<ol>
+  <li> <b>SUBSTITUTE_SUBROUTINE</b>(3f) - This user-supplied routine is a hook
+           for programmers to add their own functions to CALCULATOR(3f) without
+           having to change CALCULATOR(3f) directly. It is passed the name of
+           unknown functions and their parameter lists if the expression
+           'ownmode(1)' is passed to the calculator. If you do not
+           need to add custom functions to the calculator this is
+           not required. A user-defined function call be created and
+           called with
+
+              call set_mysub(SUBROUTINE_NAME)
+
+           The routine must be defined with an explicit interface
+           available in the calling unit.
+
+  <li> <b>SUBSTITUTE_C</b>(3f) - This user-supplied function is here to optimize
+           performance of a particular program and everyone else should
+           typically ignore it. In a special case a non-standard
+           function needed added that was called so heavily that it
+           was important that it be called more efficiently than a
+           user defined function placed in SUBSTITUTE_SUBROUTINE(3f)
+           is. It allows for the function "c" to be defined and given
+           an array and an array size as arguments. By default the "c"
+           function just returns zero. A replacement can be defined by
+           creating a function with similar arguments and calling
+
+              call set_myfunc(FUNCTION_NAME).
+
+           The routine must be defined with an explicit interface
+           available in the calling unit.
+</ol>
+
+<p>
+   The following program shows a simple but complete line-mode calculator
+   program.
+</p>
+<pre>
+
+   ./compute        # run example program
+   a=10
+   a/2
+   3**4
+   sin(3.1416/4)
+   PI=2*asin(1)
+   diameter=20.3+8/4
+   circumference=PI*diameter
+   funcs
+   dump
+   # use end-of-file (typically control-D) to exit program
+   ctrl-D
+</pre>
+<pre>
+<!--FORTRAN90--><xmp>
+
+      program demo_M_calculator
+         !     line mode calculator that calls calculator
+         !
+         use M_calculator, only: calculator,iclen_calc
+         use M_calculator, only : rnum0
+         use M_calculator, only : set_mysub, set_myfunc
+         implicit none
+         integer, parameter        :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
+         character(len=iclen_calc) :: event, line
+         character(len=iclen_calc) :: outlin
+         integer                   :: ios
+         integer                   :: ierr
+         real(kind=k_dbl)          :: rvalue
+         character(len=80)         :: string
+         INFINITE: do
+            read(*,'(a)',iostat=ios)line
+            if(ios.ne.0)exit INFINITE
+            call calculator(line,outlin,event,rvalue,ierr)
+            ! line   -- input expression
+            ! outlin -- result as a string
+            ! event  --
+            ! rvalue -- result as a numeric value
+            ! ierr   -- return status
+            !
+            ! several different meaning to the status flag ...
+            select case(ierr)
+            case(0)  ! a numeric value was returned without error
+              write(6,'(a,a,a)')trim(outlin),' = ',trim(line)
+            case(2)  ! a string value was returned without error
+              write(6,'(a)')trim(event)
+            case(1)  ! a request for a message has been returned
+                     ! (from DUMP or FUNC)
+              write(6,'(a,a)')'message===>',trim(event)
+            case(-1) ! an error has occurred
+              write(6,'(a,a)')'error===>',trim(event)
+            case default ! this should not occur
+              write(6,'(a)')'warning===> unexpected ierr value from calculator'
+            end select
+         enddo INFINITE
+
+         string='A=sind(30)'
+         rvalue=rnum0(string,ierr)
+         if(ierr.eq.0)then
+            write(*,*) rvalue
+         else
+            write(*,*) 'error evaluating '//trim(string)
+         endif
+         rvalue=rnum0('A',ierr)
+         write(*,*) rvalue
+
+         ! OPTIONAL: contains example routines for adding user-defined
+         !           functions.
+         !
+         call set_mysub(my_functions)
+         call set_myfunc(c)
+         contains
+         subroutine my_functions(func,iflen,args,iargstp,n,fval,ctmp,ier)
+         ! extend functions available to the calculator routine
+         !
+         !  if the function ownmode(1) is called this subroutine
+         !  will be accessed to do user-written functions.
+         !
+         !  func(iend-1)=procedure name. func should not be changed.
+         !  iflen=length of procedure name.
+         !  args=array of 100 elements containing procedure arguments.
+         !  iargstp=type of argument(1=numeric value,2=position of string value)
+         !  n=integer number of parameters
+         !  x=array of 55555 x values
+         !  y=array of 55555 y values
+         !  fval=value to replace function call
+         !  ctmp=string to return when returning a string value
+         !  ier=returned error flag value.
+         !      set to -1 if an error occurs.
+         !      set to  0 if a number is returned
+         !      set to  2 if a string is returned
+         !
+         use M_calculator, only: x,y,values,values_len,iclen_calc
+         integer, parameter           :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
+         ! values: the values of string variables
+         ! values_len: the lengths of the string variable values
+         character(len=*),intent(in)  :: func
+         integer,intent(in)           :: iflen
+         real(kind=k_dbl),intent(in)  :: args(100)
+         integer,intent(in)           :: iargstp(100)
+         integer,intent(in)           :: n
+         real(kind=k_dbl)             :: fval
+         character(len=*)             :: ctmp
+         integer                      :: ier
+
+         integer                      :: iwhich
+         integer                      :: i10
+         integer                      :: ilen
+         character(len=iclen_calc)    :: temp1
+            fval=0.0d0
+         !-----------------------------------------------------------------------
+            write(*,*)'*my_functions* unknown function ', func(1:iflen)
+            write(*,*)'function name length is..',iflen
+            write(*,*)'number of arguments .....',n
+            do i10=1,n
+               if(iargstp(i10).eq.0)then
+                  write(*,*)i10,' VALUE=',args(i10)
+               elseif(iargstp(i10).eq.2)then
+                  iwhich=int(args(i10))
+                  ilen=values_len(iwhich)
+                  write(*,*)i10,' STRING='//values(iwhich)(:ilen)
+               else
+                  write(*,*)'unknown parameter type is ',iargstp(i10)
+               endif
+            enddo
+         end subroutine my_functions
+         !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+         real function c(fval,n)
+         implicit none
+         !  a built-in calculator function called c must be satisfied.
+         !  write whatever you want here as a function
+         integer, parameter          :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
+         integer,intent(in)          :: n
+         real(kind=k_dbl),intent(in) :: fval(n)
+            c=0.0_k_dbl
+         end function c
+         !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+         end program demo_M_calculator
+</xmp>
+</pre>
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b>AUTHOR</b></dt><dd>
+  John S. Urban
+</dd>
+<!-- =========================================================================================================================== -->
+<dt><b>LICENSE</b></dt><dd>
+   Public Domain
+</dd>
+<!-- =========================================================================================================================== -->
+</div>
+</div>
+</div>
+</body>
+</html>

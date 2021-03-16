@@ -1,0 +1,266 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>regsub (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>regsub</B>(3f) - [M_regex] perform regex substitutions
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>regsub</B>(<I>matchline</I>, <I>matches</I>, <I>source</I>, <I>dest</I>)
+<P>
+<PRE>
+   character(len=*),intent(in)              :: matchline
+   integer,intent(in)                       :: matches(:,:)
+   character(len=*),intent(in)              :: source
+   character(len=:),allocatable,intent(out) :: dest
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>regsub</B>() function copies <I>source</I> to <I>dest</I>, making substitutions
+according to the most recent <B>regexec</B>() performed using <B>MATCHES</B>(:,:).
+<P>
+Each instance of "&" in <I>source</I> is replaced by the substring indicated by
+the start and end array <B>MATCHES</B>(:,:).
+<P>
+Each instance of "\n", where n is a digit,
+is replaced by the substring indicated by <B>MATCHES</B>(1,n) and <B>MATCHES</B>(2,n).
+<P>
+To get a literal "&" or "\n" into <I>dest</I>, prefix it with "\"; to get
+a literal "\" preceding "&" or "\n", prefix it with another "\".
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>MATCHLINE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+line <B>REGEXEC</B>(3f) was run against
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>MATCHES</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+output array from <B>REGEXEC</B>(3f) call
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>SOURCE</B> </TD><TD valign=bottom>
+output template string containing "&" and/or "\n" indicating where to
+make substitutions
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>DEST</B> </TD><TD valign=bottom>
+output string
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program that reads an array of lines representing a Unix /etc/passwd file
+and uses an RE (Regular Expression) to read fields from the line and then uses
+<B>REGSUB</B>(3f) to print strings using the matched strings
+<P>
+<PRE>
+   program demo_regsub
+   use M_regex, only: regex_type, regcomp, regexec, regerror, regmatch, regfree, regsub
+   use M_strings, only : replace
+   implicit none
+   type(regex_type)             :: regex
+   integer,parameter            :: maxmatch=10
+   integer                      :: matches(2,maxmatch)
+   character(len=:),allocatable :: input_line(:)
+   character(len=:),allocatable :: output_line
+   character(len=:),allocatable :: expression
+   logical                      :: match
+   integer                      :: stat
+   integer                      :: i
+   logical                      :: BRE
+      ! The /etc/passwd file is a colon-separated file that contains the following information:
+      !
+      !     User name.
+      !     Encrypted password.
+      !     User ID number (UID)
+      !     User&#146;s group ID number (GID)
+      !     Full name of the user (GECOS)
+      !     User home directory.
+      !     Login shell.
+      !
+      BRE=.true.
+      if(BRE)then  ! BRE (Basic Regular Expression)
+         expression= &#146;\([^:]*\):*\([^:]*\):*\([^:]*\):*\([^:]*\):*\([^:]*\):*\([^:]*\):*\([^:]*\):*.*&#146;
+         call regcomp(regex,expression,status=stat)
+      else         ! ERE (Extended Regular Expression)
+         expression= &#146;([^:]*):*([^:]*):*([^:]*):*([^:]*):*([^:]*):*([^:]*):*([^:]*):*.*&#146;
+         call regcomp(regex,expression,&#146;x&#146;,status=stat)
+      endif
+<P>
+      if(stat.ne.0)then                                        ! if RE did not compile report error
+         write(*,*)&#146;*regcomp* ERROR:&#146;,regerror(regex,stat)
+         stop 1
+      endif
+<P>
+      ! simulate /etc/password file in array, with common aberrant input lines included
+      input_line= [character(len=128) ::                                     &
+      "doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh: and more",    &
+      "doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh: and more:",   &
+      "doeqj: :1001: :John Q. Doe:/home/doeqj:/bin/tcsh:",                   &
+      "doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh:",             &
+      "doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh",              &
+      "doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj",                        &
+      "doeqj:xxxxx:",                                                        &
+      "doeqj:xxxxx",                                                         &
+      "doeqj:",                                                              &
+      "doeqj",                                                               &
+      ":::::::::::::::",                                                     &
+      ":::",                                                                 &
+      "" ]
+<P>
+      do i=1,size(input_line)
+         input_line=replace(input_line(i),&#146;::&#146;,&#146;: :&#146;)          ! the RE shown needs the field to have at least one character
+         match=regexec(regex,input_line(i),matches)            ! generate the matches array using the compiled RE
+<P>
+         write(*,&#146;(a)&#146;)repeat(&#146;-&#146;,80)                          ! put out a number line
+         write(*,&#146;(a)&#146;) input_line(i)
+                                                               ! replace \n lines
+         call regsub(input_line(i),matches,&#146;username="\1" &
+         &password="\2" UID="\3" GID="\4" name="\5" &
+         &home="\6" shell="\7" &#146;,output_line)
+         write(*,&#146;(a)&#146;) output_line
+<P>
+         if(i.eq.1)then                                        ! show other examples of formatting for first entry
+            call regsub(input_line(i),matches,&
+            & &#146;The username for \5 is "\1"&#146;,output_line)
+            write(*,&#146;(a)&#146;) output_line
+<P>
+            call regsub(input_line(i),matches,&
+            & &#146;username "\1" has UID=\3, GID=\4 &
+            & and default shell "\7"&#146;,output_line)
+            write(*,&#146;(a)&#146;) output_line
+         endif
+      enddo
+<P>
+      call regfree(regex)
+<P>
+   end program demo_regsub
+   --------------------------------------------------------------------------------
+   doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh: and more
+   username="doeqj" password="xxxxx" UID="1001" GID="200" name="John Q. Doe" home="/home/doeqj" shell="/bin/tcsh"
+   The username for John Q. Doe is "doeqj"
+   username "doeqj" has UID=1001, GID=200 and default shell "/bin/tcsh"
+   --------------------------------------------------------------------------------
+   doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh: and more:
+   username="doeqj" password="xxxxx" UID="1001" GID="200" name="John Q. Doe" home="/home/doeqj" shell="/bin/tcsh"
+   --------------------------------------------------------------------------------
+   doeqj: :1001: :John Q. Doe:/home/doeqj:/bin/tcsh:
+   username="doeqj" password=" " UID="1001" GID=" " name="John Q. Doe" home="/home/doeqj" shell="/bin/tcsh"
+   --------------------------------------------------------------------------------
+   doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh:
+   username="doeqj" password="xxxxx" UID="1001" GID="200" name="John Q. Doe" home="/home/doeqj" shell="/bin/tcsh"
+   --------------------------------------------------------------------------------
+   doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj:/bin/tcsh
+   username="doeqj" password="xxxxx" UID="1001" GID="200" name="John Q. Doe" home="/home/doeqj" shell="/bin/tcsh"
+   --------------------------------------------------------------------------------
+   doeqj:xxxxx:1001:200:John Q. Doe:/home/doeqj
+   username="doeqj" password="xxxxx" UID="1001" GID="200" name="John Q. Doe" home="/home/doeqj" shell=""
+   --------------------------------------------------------------------------------
+   doeqj:xxxxx:
+   username="doeqj" password="xxxxx" UID="" GID="" name="" home="" shell=""
+   --------------------------------------------------------------------------------
+   doeqj:xxxxx
+   username="doeqj" password="xxxxx" UID="" GID="" name="" home="" shell=""
+   --------------------------------------------------------------------------------
+   doeqj:
+   username="doeqj" password="" UID="" GID="" name="" home="" shell=""
+   --------------------------------------------------------------------------------
+   doeqj
+   username="doeqj" password="" UID="" GID="" name="" home="" shell=""
+   --------------------------------------------------------------------------------
+   : :: :: :: :: :: :: ::
+   username="" password=" " UID=" " GID=" " name=" " home=" " shell=" "
+   --------------------------------------------------------------------------------
+   : ::
+   username="" password=" " UID="" GID="" name="" home="" shell=""
+   --------------------------------------------------------------------------------
+<P>
+   username="" password="" UID="" GID="" name="" home="" shell=""
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>regsub (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7e940b9e-c8c2-4840-a5e5-a2000cd355aa using man macros.</FONT>
+<br><br><center><img src="images/regsub.3m_regex.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

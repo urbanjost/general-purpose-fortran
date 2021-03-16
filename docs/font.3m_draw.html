@@ -1,0 +1,194 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>font (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>font</B>(3f) - [M_draw:TEXT] Set the current font by name
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>font</B>(<I>fontname</I>)
+<B>character</B>(len=*),intent(<I>in</I>) :: <I>fontname</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Set the current font.
+<P>
+M_draw supports hardware and software fonts. The software fonts are based
+on the character set digitized by Dr Allen V. Hershey while working at
+the U. S. National Bureau of Standards. Exactly what hardware fonts are
+supported depends on the device, but it is guaranteed that the names
+"large" and "small" will result <I>in</I> something readable. For X11 displays
+the default large and small fonts used by the program can be overridden
+by placing the following defaults <I>in</I> the ~/.Xdefaults file:
+<P>
+<PRE>
+     draw.smallfont: X11-font-name
+     draw.largefont: X11-font-name
+<P>
+</PRE>
+It is noted here that hardware text is always assumed to be drawn
+parallel to the (x, y) plane, using whatever the current z coordinate
+is. The following software fonts are supported:
+<P>
+<PRE>
+      astrology       cursive         cyrillic        futura.l
+      futura.m        gothic.eng      gothic.ger      gothic.ita
+      greek           markers         math.low        math.upp
+      meteorology     music           script          symbolic
+      times.g         times.i         times.ib        times.r
+      times.rb        japanese
+<P>
+</PRE>
+A markers font "markers" is also provided for doing markers - you need
+to have centertext mode on for this to give sensible results when placing
+the markers.
+<P>
+If the environment variable "M_DRAW_FONTPATH" is set M_draw looks for the software
+fonts <I>in</I> the directory given by this value.
+<P>
+WHEN ASKED FOR NON-EXISTENT FONT NAMES, <B>FONT</B>(3f) STOPS THE PROGRAM.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+   program demo_font
+   use :: M_draw
+   use M_draw,    only  : D_BLACK,   D_WHITE
+   use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
+   use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+   real    :: left
+   real    :: baseline=80.0
+   integer :: icolor=1
+   integer :: ipaws
+      !! set up drawing surface
+      call prefsize(400, 400)
+      call vinit(&#146; &#146;) ! start graphics using device $M_DRAW_DEVICE
+      call page(-100.0, 100.0, -100.0, 100.0)
+      call color(D_WHITE)
+      call clear()
+      call textsize(10.0, 10.0)
+      !! place a vertical line along the edge
+      call color(D_RED)
+      call move2(-90.0, -90.0)
+      call draw2(-90.0, 90.0)
+      !! make a centered title at top a bit bolder and bigger
+      call xcentertext()
+      call textsize(13.0, 13.0)
+      call linewidth(90)
+      left=0
+      call nextline(&#146;Font Samples&#146;)
+      !! print the font samples
+      left=-90
+      call linewidth(40)
+      call textsize(10.0, 10.0)
+      call centertext(.false.)
+      icolor=icolor-1
+      call nextline(&#146;DEFAULT (ie. futura.l)&#146;)
+      icolor=icolor-1
+      call nextline(&#146;now call font(3f) &#46;&#46;&#46;&#146;)
+      call nextline(&#146;A nice SIMPLEX font, futura.l&#146;)
+      call nextline(&#146;A COMPLEX font, times.r&#146;)
+      call nextline(&#146;ITALIC letters,  times.i&#146;)
+      call nextline(&#146;DUPLEX is in between, futura.m&#146;)
+      ipaws=getkey()
+      call vexit()
+   contains
+   subroutine nextline(string)
+   character(len=*) :: string
+   !! reduce some duplicate code; very specific to this EXAMPLE
+      integer :: iend
+      iend=index(string,&#146;,&#146;)  ! if comma, assume font name found
+      write(*,*)&#146;FONT=&#146;,string(iend+1:),iend
+      if(iend.ne.0)call font(trim(adjustl(string(iend+1:)))) ! change font
+      icolor=icolor+1         ! set pen color
+      call color(icolor)
+      baseline=baseline-20    ! move down before drawing line
+      call move2(left, baseline)
+      call drawstr(string)    ! draw string
+   end subroutine nextline
+<P>
+   end program demo_font
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>font (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 66571a56-0975-44bb-a5b8-635dcecfa1ab using man macros.</FONT>
+<br><br><center><img src="images/font.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

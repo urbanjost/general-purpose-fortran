@@ -1,0 +1,259 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>perspective (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>perspective</B>(3f) - [M_draw:PROJECTION] Specify perspective viewing pyramid
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>perspective</B>(<I>fov</I>, <I>aspect</I>, <I>near</I>, <I>far</I>)
+real <I>fov</I>, <I>aspect</I>, <I>near</I>, <I>far</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Specify a perspective viewing pyramid in world coordinates by giving
+a field of view, <I>aspect</I> ratio and the distance from the eye of the
+<I>near</I> and <I>far</I> clipping plane.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_perspective
+   !
+   !     Shows various combinations of viewing and projection transformations
+   use M_draw
+   !
+   character(len=50) :: device
+   integer :: ios
+   !
+      print*,&#146;Enter output device:&#146;
+      read(*,&#146;(a)&#146;,iostat=ios)device
+      if(ios.ne.0)device=&#146; &#146;
+   !
+      call vinit(device)
+   !
+      call color(D_BLACK)
+      call clear()
+   !
+   ! we want to draw just within the boundaries of the screen
+   !
+      call viewport(-0.9, 0.9, -0.9, 0.9)
+   !
+   ! set the world size
+   !
+      call ortho2(-5.0, 5.0, -5.0, 5.0)
+   !
+   ! draw a boundary frame
+   !
+      call color(D_RED)
+      call rect(-5.0, -5.0, 5.0, 5.0)
+   !
+   ! set up a perspective projection with a field of view of
+   ! 40.0 degrees, aspect ratio of 1.0, near clipping plane 0.1,
+   ! and the far clipping plane at 1000.0.
+   !
+      call perspective(40.0, 1.0, 0.1, 1000.0)
+   !
+   ! we want the drawing to be done with our eye point at (5.0, 8.0, 5.0)
+   ! looking towards (0.0, 0.0, 0.0). The last parameter gives a twist
+   ! in degrees around the line of sight, in this case zero.
+   !
+      call lookat(5.0, 8.0, 5.0, 0.0, 0.0, 0.0, 0.0)
+   !
+      call drawtetra()
+   !
+   ! set the text size
+   !
+      call textsize(0.6, 0.9)
+   !
+      call move2(-4.5, -4.5)
+      call drawstr(&#146;perspective/lookat&#146;)
+   !
+      idum=getkey()
+   !
+   ! window can also be used to give a perspective projection. Its
+   ! arguments are 6 clipping planes, left, right, bottom, top, near,
+   ! and far.
+   !
+      call window(-5.0, 5.0, -5.0, 5.0, -5.0, 5.0)
+   !
+   ! as window replaces the current transformation matrix we must
+   ! specify our viewpoint again.
+   !
+      call lookat(5.0, 8.0, 5.0, 0.0, 0.0, 0.0, 0.0)
+   !
+      call color(D_BLACK)
+      call clear()
+   !
+      call color(D_GREEN)
+      call rect(-5.0, -5.0, 5.0, 5.0)
+   !
+      call drawtetra()
+   !
+      call textsize(0.6, 0.9)
+      call move2(-4.5,-4.5)
+      call drawstr(&#146;window/lookat&#146;)
+   !
+      idum=getkey()
+   !
+   ! set up our original perspective projection again.
+   !
+      call perspective(40.0, 1.0, 0.1, 1000.0)
+   !
+   ! polarview also specifies our viewpoint, but, unlike lookat, in polar
+   ! coordinates. Its arguments are the distance from the world origin, an
+   ! azimuthal angle in the x-y plane measured from the y axis, an
+   ! incidence angle in the y-z plane measured from the z axis, and a
+   ! twist around the line of sight.
+   !
+      call polarview(15.0, 30.0, 30.0, 30.0)
+   !
+      call color(D_BLACK)
+      call clear()
+   !
+      call color(D_MAGENTA)
+      call rect(-5.0, -5.0, 5.0, 5.0)
+   !
+      call drawtetra()
+   !
+      call move2(-4.5,-4.5)
+      call textsize(0.6, 0.9)
+      call drawstr(&#146;perspective/polarview&#146;)
+   !
+      idum=getkey()
+   !
+   ! once more with window for comparison
+   !
+      call window(-4.0, 4.0, -4.0, 4.0, -4.0, 4.0)
+      call polarview(6.0, 20.0, -30.0, 70.0)
+   !
+      call color(D_BLACK)
+      call clear()
+   !
+      call color(D_YELLOW)
+      call rect(-5.0, -5.0, 5.0, 5.0)
+   !
+      call drawtetra()
+   !
+      call move2(-4.5,-4.5)
+      call textsize(0.6, 0.9)
+      call drawstr(&#146;window/polarview&#146;)
+   !
+      idum=getkey()
+   !
+      call vexit()
+   !
+   contains
+   !
+   subroutine drawtetra()
+   !
+   ! generate a tetrahedron as a series of move draws
+   !
+      call move(-0.5,  0.866, -0.5)
+      call draw(-0.5, -0.866, -0.5)
+      call draw( 1.0,  0.0,   -0.5)
+      call draw(-0.5,  0.866, -0.5)
+      call draw( 0.0,  0.0,    1.5)
+      call draw(-0.5, -0.866, -0.5)
+      call move( 1.0,  0.0,   -0.5)
+      call draw( 0.0,  0.0,    1.5)
+   !
+   !    Label the vertices.
+   !
+      call color(D_WHITE)
+      call textsize(0.3, 0.5)
+      call move(-0.5,  0.866, -0.5)
+      call drawchar(&#146;a&#146;)
+      call move(-0.5, -0.866, -0.5)
+      call drawchar(&#146;b&#146;)
+      call move( 1.0,  0.0,   -0.5)
+      call drawchar(&#146;c&#146;)
+      call move( 0.0,  0.0,    1.5)
+      call drawchar(&#146;d&#146;)
+   !
+   end subroutine drawtetra
+   !
+   end program demo_perspective
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>perspective (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d6d88ae7-98d6-4808-ae77-d5a7e4479cb3 using man macros.</FONT>
+<br><br><center><img src="images/perspective.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

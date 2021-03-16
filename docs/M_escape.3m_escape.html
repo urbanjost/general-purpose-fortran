@@ -1,0 +1,319 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_escape (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_escape</B>(3f) - [M_escape] substitute escape sequences for XML-like
+syntax in strings
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Major Features</A><BR>
+<A HREF=#4>Limitations</A><BR>
+<A HREF=#5>Future</A><BR>
+<A HREF=#6>Example</A><BR>
+<A HREF=#7>Alternate Direct Use</A><BR>
+<A HREF=#8>Alternate Functional Interface</A><BR>
+<A HREF=#9>Alternate Object Oriented</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>use</B> M_escape, <I>only</I> : esc, esc_mode, <I>update</I>
+<B>use</B> M_escape, <I>only</I> : <I>attr</I>
+<B>use</B> M_escape, <I>only</I> : color, <I>color_mode</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+M_escape is a Fortran module for using XML-like syntax to add
+attributes to terminal output such as color.
+<P>
+ANSI escape sequences are not universally supported by all terminal
+emulators; and normally should be suppressed when not going to a tty
+device. This routine provides the basic structure to support such
+behaviors, or to perhaps in the future generate a CSS style sheet
+and HTML instead of text to the terminal, &#46;&#46;&#46;
+<P>
+Alternatively, direct <B>use</B> of the escape sequences is supported,
+as well as a functional interface, and an object-oriented approach.
+<P>
+The original concept was to allow formatting by using an existing
+XML library to allow the user to write HTML and to format it on a
+terminal like w3m, lynx, and link do. And in some ways this is an
+opposite approach in that it is directly formatting the text by using
+a similar syntax to directly generate text attributes; but it is a
+much simpler approach programmatically.
+<P>
+Typically, you should <B>use</B> <B>M_system::system_istty</B>(3f) or the common
+Fortran extension <B>ISATTY</B>() to set the default
+to "plain" instead of "color" when the output file is not a terminal.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>MAJOR FEATURES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Add ANSI terminal escape sequences with an XML-like syntax with
+<B>ESC</B>(3f).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+suppress the escape sequence output with <B>ESC_MODE</B>(3f).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+add, delete, and replace what strings are produced using <B>UPDATE</B>(3f).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>LIMITATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+colors are not nestable, keywords are case-sensitive,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+not all terminals obey the sequences. On Windows, it is best if
+you <B>use</B> Windows 10+ and/or the Linux mode; although it has worked
+with all CygWin and MinGW and Putty windows and <B>mintty</B>(1).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>FUTURE</H3>
+
+</A>
+<BLOCKQUOTE>
+Full support for alternate output formats like HTML and popular markdown
+syntax. For example
+<P>
+<PRE>
+      ANSI  HTML        Markdown
+            &lt;h1&gt;&lt;/h1&gt;   #
+            &lt;h2&gt;&lt;/h2&gt;   ##
+            &lt;b&gt;&lt;/b&gt;     ** and **
+            &lt;i&gt;&lt;/i&gt;     __ and __
+<P>
+</PRE>
+</BLOCKQUOTE>
+Apparently have to make a stack of colors to allow nesting colors
+<BLOCKQUOTE>
+<P>
+How common are extensions like xterm-256 has to set RGB values for
+colors and so on?
+<P>
+Should a call to <B>system_istty</B>(3f) be built in to turn off escape sequences
+when a terminal is not present?
+<P>
+For color or pre-defined words a case statement could be used to call
+specific functions to support platforms like old Microsoft consoles that
+require a function call to assign text attributes instead of in-band ANSI
+escape control sequences. See the "Rosetta Code" web site for examples
+of generating color in Microsoft consoles.
+<P>
+Attributes are currently ended at the end of each call to <B>esc</B>(3f). Perhaps
+allow multi-line formatting?
+<P>
+Ultimately, an object-oriented package with capabilities like ncurses to
+define a "pad" and move and resize and format it would be ideal and very
+useful. Also see <B>fixedform</B>(3f) in the GPF (General Fortran Package).
+<P>
+It is a shame <B>xterm</B>(1) does not support pixel-oriented abilities to define
+a "graphics" area or support <B>canvas</B>(3c)<B>-like</B> in-band graphics, somewhat
+like Tektronix terminals, although it does have a Tektronix 4010 mode.
+<P>
+Perhaps overload + to replace //
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_M_escape
+   use M_escape, only : esc, esc_mode
+   implicit none
+   character(len=1024) :: line
+   real :: value
+      write(*,&#146;(a)&#146;)&
+      &esc(&#146;&lt;r&gt;&lt;W&gt;ERROR:&lt;/W&gt;This should appear as red text&lt;/y&gt;&#146;)
+      write(*,&#146;(a)&#146;)&
+      &esc(&#146;&lt;y&gt;&lt;B&gt;WARNING:&lt;/B&gt;&lt;/y&gt; This should appear as default text&#146;)
+<P>
+      value=3.4567
+      if( (value&gt;0.0) .and. (value&lt;100.0))then
+         write(line,fmt=&
+         &&#146;("&lt;w&gt;&lt;G&gt;GREAT&lt;/G&gt;&lt;/w&gt;:&
+         &The new value &lt;Y&gt;&lt;b&gt;",f8.4,"&lt;/b&gt;&lt;/Y&gt; is in range")&#146;)value
+      else
+         write(line,fmt=&
+         &&#146;("&lt;R&gt;&lt;e&gt;ERROR&lt;/e&gt;&lt;/R&gt;:&
+         &The new value &lt;Y&gt;&lt;b&gt;",g0,"&lt;/b&gt;&lt;/Y&gt; is out of range")&#146;)value
+      endif
+<P>
+      write(*,&#146;(a)&#146;)esc(trim(line))
+      ! write as plain text
+      call esc_mode(manner=&#146;plain&#146;)
+      write(*,&#146;(a)&#146;)esc(trim(line))
+<P>
+   end program demo_M_escape
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>ALTERNATE DIRECT USE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Alternatively, you may <B>use</B> the escape sequences directly
+<P>
+<PRE>
+   program direct
+      use M_escape, only : &
+     ! FOREGROUND COLORS
+        & fg_red, fg_cyan, fg_magenta, fg_blue, &
+        & fg_green, fg_yellow, fg_white, fg_ebony, &
+        & fg_default, &
+     ! BACKGROUND COLORS
+        & bg_red, bg_cyan, bg_magenta, bg_blue, &
+        & bg_green, bg_yellow, bg_white, bg_ebony, &
+        & bg_default, &
+     ! ATTRIBUTES
+        & bold, italic, inverse, underline,  &
+        & unbold, unitalic, uninverse, ununderline,  &
+        & reset, &
+     ! DISPLAY
+        & clear
+      implicit none
+        write(*,&#146;(*(g0))&#146;)fg_red,bg_green,bold,&#146;Hello!&#146;,reset
+   end program direct
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>ALTERNATE FUNCTIONAL INTERFACE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If you prefer a functional interface, <B>use</B> the <I>attr</I>(3f) function with
+the same keywords as with the <B>esc</B>(3f) function. Note that <B>esc_mode</B>(3f)
+will work with this function.
+<P>
+<PRE>
+   program functional
+   use M_escape, only : attr, esc_mode
+   implicit none
+        call printme(&#146;color&#146;)
+        call printme(&#146;plain&#146;)
+        call printme(&#146;raw&#146;)
+   contains
+   subroutine printme(mymode)
+   character(len=*),intent(in) :: mymode
+      call esc_mode(mymode)
+      write(*,&#146;(a)&#146;)mymode
+      write(*,&#146;(*(g0))&#146;,advance=&#146;no&#146;) &
+       & attr(&#146;red:BLUE:bold&#146;,&#146;Hello!&#146;), &
+       & &#146;and everything is back to defaults or &#146;, &
+       & attr(&#146;RED:blue:bold&#146;),&#146;Hello Again!&#146;, &
+       & attr(&#146;/BLUE&#146;),&#146; Well, the text color is still on.&#146;,attr(&#146;reset&#146;)
+      write(*,&#146;(*(g0))&#146;,advance=&#146;yes&#146;)&#146; Back to normal writes.&#146;
+   end subroutine printme
+   end program functional
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>ALTERNATE OBJECT ORIENTED</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_escape (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f2408511-48d9-49ed-a348-ffaffb0e7fc1 using man macros.</FONT>
+<br><br><center><img src="images/M_escape.3m_escape.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

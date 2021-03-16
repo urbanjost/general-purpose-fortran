@@ -1,0 +1,203 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>pack (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>pack</B>(3f) - [FORTRAN:INTRINSIC:ARRAY CONSTRUCTION] Pack an array into
+an array of rank one
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+result = <B>pack</B>(array, mask[,vector])
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Stores the elements of ARRAY in an array of rank one.
+<P>
+The beginning of the resulting array is made up of elements whose MASK
+equals TRUE. Afterwards, positions are filled with elements taken from
+VECTOR.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>ARRAY</B> </TD><TD valign=bottom>
+Shall be an array of any type.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>MASK</B> </TD><TD valign=bottom>
+Shall be an array of type LOGICAL and of the same size
+as ARRAY. Alternatively, it may be a LOGICAL scalar.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>VECTOR</B> </TD><TD valign=bottom>
+(Optional) shall be an array of the same type as ARRAY
+and of rank one. If present, the number of elements in VECTOR
+shall be equal to or greater than the number of true elements in
+MASK. If MASK is scalar, the number of elements in VECTOR
+shall be equal to or greater than the number of elements in
+ARRAY.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURN VALUE</H3>
+
+</A>
+<BLOCKQUOTE>
+The result is an array of rank one and the same type as that of ARRAY.
+If VECTOR is present, the result size is that of VECTOR, the
+number of TRUE values in MASK otherwise.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+    program demo_pack
+    implicit none
+    call test1()
+    call test2()
+    call test3()
+    contains
+    !
+    subroutine test1()
+    ! gathering nonzero elements from an array:
+    integer :: m(6)
+      m = [ 1, 0, 0, 0, 5, 0 ]
+      write(*, fmt="(*(i0, &#146; &#146;))") pack(m, m /= 0)  ! "1 5"
+    end subroutine test1
+    !
+    subroutine test2()
+    ! Gathering nonzero elements from an array and appending elements
+    ! from VECTOR:
+    integer :: m(4)
+      m = [ 1, 0, 0, 2 ]
+      write(*, fmt="(*(i0, &#146; &#146;))") pack(m, m /= 0, [ 0, 0, 3, 4 ])  ! "1 2 3 4"
+    end subroutine test2
+    !
+    subroutine test3()
+    ! select strings whose second character is "a"
+    character(len=10) :: m(4)
+    m = [ character(len=10) :: &#146;ape&#146;, &#146;bat&#146;, &#146;cat&#146;, &#146;dog&#146;]
+      write(*, fmt="(*(g0, &#146; &#146;))") pack(m, m(:)(2:2) == &#146;a&#146; )  ! "bat" "cat"
+    end subroutine test3
+    !
+    end program demo_pack
+<P>
+</PRE>
+Results:
+<BLOCKQUOTE>
+<P>
+1 5
+1 2 3 4
+<TABLE cellpadding=3><!-- tsb: 1 5
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>bat</B> </TD><TD valign=bottom>
+cat
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+[[Fortran 95]] and later
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+Transformational function
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>unpack</B>(3)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>pack (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 71b2e7f4-ec33-4b8d-8b22-15ea35ff0b04 using man macros.</FONT>
+<br><br><center><img src="images/pack.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

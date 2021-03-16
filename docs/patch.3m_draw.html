@@ -1,0 +1,343 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>patch (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>patch</B>(3f) - [M_draw:PATCH] Draws a patch in the current basis, according to the geometry matrices gx, gy, and gz.
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>patch</B>(<I>gx</I>, <I>gy</I>, <I>gz</I>)
+<B>real,intent</B>(<I>in</I>) :: <I>gx</I>(4,4), <B>gy</B>(4,4), <I>gz</I>(4,4)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Draws a patch <I>in</I> the current basis, according to the geometry matrices
+<I>gx</I>, <I>gy</I>, and <I>gz</I>.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_patch
+   !     Draws patches of various bases
+   !
+      use M_draw
+      implicit none
+   !
+      character(len=20) :: dev
+      integer           :: ios
+      integer           :: i
+      integer           :: idum
+   !
+   !  patch basis types
+   !
+      real bezier(4,4), cardinal(4, 4), bspline(4, 4)
+      real power(4, 4)
+      real x1(4, 4), y1(4, 4), z1(4, 4)
+      real x2(4, 4), y2(4, 4), z2(4, 4)
+     !
+      character(len=50) :: labels(4)
+     !
+      real    basis(64)
+      equivalence (basis(1), bezier(1, 1))
+      equivalence (basis(17), cardinal(1, 1))
+      equivalence (basis(33), bspline(1, 1))
+      equivalence (basis(49), power(1, 1))
+     !
+      data bezier/                                            &
+      &          -1.0,   3.0,    -3.0,   1.0,                 &
+      &          3.0,    -6.0,   3.0,    0.0,                 &
+      &          -3.0,   3.0,    0.0,    0.0,                 &
+      &          1.0,    0.0,    0.0,    0.0/
+     !
+      data cardinal/                                          &
+      &          -0.5,   1.5,    -1.5,   0.5,                 &
+      &          1.0,    -2.5,   2.0,    -0.5,                &
+      &          -0.5,   0.0,    0.5,    0.0,                 &
+      &          0.0,    1.0,    0.0,    0.0/
+     !
+      data bspline/                                           &
+      &          -0.166666,     0.5,     -0.5,     0.166666,  &
+      &           0.5,         -1.0,      0.5,     0.0,       &
+      &          -0.5,          0.0,      0.5,     0.0,       &
+      &           0.166666,     0.666666, 0.166666, 0.0 /
+     !
+      data power/                                             &
+      &          1.0, 0.0, 0.0, 0.0,                          &
+      &          0.0, 1.0, 0.0, 0.0,                          &
+      &          0.0, 0.0, 1.0, 0.0,                          &
+      &          0.0, 0.0, 0.0, 1.0/
+     !
+      data    x1 /                                            &
+      &          0.0,   0.2588,   0.5,   0.7071,              &
+      &          0.0,   0.51764,  1.0,   1.4142,              &
+      &          0.0,   0.51764,  1.0,   1.4142,              &
+      &          0.0,   0.2588,   0.5,   0.7071/
+     !
+      data    y1 /                                            &
+      &          1.0,   0.966,   0.866,  0.7071,              &
+      &          2.0,   1.9318,  1.732,  1.4142,              &
+      &          2.0,   1.9318,  1.732,  1.4142,              &
+      &          1.0,   0.966,   0.866,  0.7071/
+     !
+      data    z1 /                                            &
+      &          1.0,   1.0,     1.0,    1.0,                 &
+      &          1.0,   1.0,     1.0,    1.0,                 &
+      &          0.0,   0.0,     0.0,    0.0,                 &
+      &          0.0,   0.0,     0.0,    0.0/
+     !
+      data    x2 /                                            &
+      &          0.7071, 0.8660, 0.9660, 1.0,                 &
+      &          1.4142, 1.7320, 1.932,  2.0,                 &
+      &          1.4142, 1.7320, 1.932,  2.0,                 &
+      &          0.7071, 0.8660, 0.9660, 1.0/
+     !
+      data    y2 /                                            &
+      &          0.7071, 0.5,    0.2588, 0.0,                 &
+      &          1.4142, 1.0,    0.5176, 0.0,                 &
+      &          1.4142, 1.0,    0.5176, 0.0,                 &
+      &          0.7071, 0.5,    0.2588, 0.0/
+     !
+      data    z2 /                                            &
+      &          1.0,   1.0,     1.0,    1.0,                 &
+      &          1.0,   1.0,     1.0,    1.0,                 &
+      &          0.0,   0.0,     0.0,    0.0,                 &
+      &          0.0,   0.0,     0.0,    0.0/
+     !
+      data labels /                                           &
+      &          &#146;Bezier Patch(es)&#146;,                          &
+      &          &#146;Cardinal Patch(es)&#146;,                        &
+      &          &#146;B-Spline Patch(es)&#146;,                        &
+      &          &#146;&#146;&#146;Power&#146;&#146; Patch(es)&#146; /
+   !
+   !  demonstrate patches
+   !
+      write (*,*)&#146;Enter device:&#146;
+      read(*,&#146;(a)&#146;,iostat=ios) dev
+      if(ios.ne.0)dev=&#146; &#146;
+   !
+      call prefsize(1000,1000)
+      call vinit(dev)
+   !
+      call vsetflush(.true.)
+   !
+      call color(D_BLACK)
+      call clear()
+   !
+   ! Set up two viewports (They actually overlap)
+   !
+      call viewport(-1.0, 0.3, -1.0, 0.3)
+      call ortho(-2.0, 5.0, -2.0, 5.0, -2.0, 5.0)
+      call lookat(0.0, 0.0, 0.0, -3.0, 2.0, -4.0, 0.0)
+   !
+   !       Save it
+   !
+      call pushviewport()
+      call pushmatrix()
+   !
+      call viewport(-0.3, 1.0, -0.3, 1.0)
+      call ortho(-2.0, 5.0, -2.0, 5.0, -2.0, 5.0)
+      call lookat(0.0, 0.0, 0.0, 3.0, 2.0, -4.0, 0.0)
+   !
+      call textsize(0.4, 0.4)
+   !
+   !  patchcurves provides a number of curves in the t and u
+   !  directions. patchprecision gives the minimum number of line
+   !  segments making up the curves in the t and u directions. The
+   !  actual number of linesegments in t or u is equal to the closest
+   !  integer multiple of the number of curves, &gt; nsegs, in t or u,
+   !  greater than or equal to the number set by patchprecision in u or
+   !  t. eg. curves in t will be made up of 21 line segments so that we
+   !  can match up the 7 curves in u; curves in u will have 24 as 4 by 5
+   !  gives 20.
+   !
+      call patchcurves(4, 7)
+      call patchprecision(20, 20)
+   !
+      do 10 i = 0, 3
+   !
+         call axes()
+   !
+   !     patchbasis sets the basis matrices for the t and u
+   !     functions
+   !
+   !
+         call patchbasis(basis(i*16 + 1), basis(i*16 + 1))
+   !
+   !               Draw with viewport 2
+   !
+         call move(0.0, 4.0, 0.0)
+         call drawstr(labels(i+1))
+   !
+   !     Now draw the patches according to the geometry matrices in
+   !     x1, y1, and z1, x2, y2, z2.
+   !
+         call drawhull(x1, y1, z1)
+         call patch(x1, y1, z1)
+   !
+         call drawhull(x2, y2, z2)
+         call patch(x2, y2, z2)
+   !
+   !               Now with viewport 1
+   !
+         call popviewport()
+         call popmatrix()
+   !
+         call axes()
+   !
+         call move(0.0, 4.0, 0.0)
+         call drawstr(labels(i + 1))
+   !
+   !     now draw the patches according to the geometry matrices in
+   !     x1, y1, and z1, x2, y2, z2.
+   !
+         call drawhull(x1, y1, z1)
+         call patch(x1, y1, z1)
+   !
+         call drawhull(x2, y2, z2)
+         call patch(x2, y2, z2)
+   !
+         idum=getkey()
+   !
+   !     Save viewport 1 again and reset to viewport 2
+   !
+         call pushviewport()
+         call pushmatrix()
+   !
+         call viewport(-0.3, 1.0, -0.3, 1.0)
+         call ortho(-1.5, 5.0, -1.5, 5.0, -1.5, 5.0)
+         call lookat(0.0, 0.0, 0.0, 3.0, 2.0, -4.0, 0.0)
+   !
+         call color(D_BLACK)
+         call clear()
+   10 continue
+   !
+      call vexit()
+   !
+   contains
+   !
+      subroutine drawhull(x, y, z)
+      implicit none
+   !
+      real    x(4,4), y(4,4), z(4,4)
+      integer :: i
+      integer :: j
+   !
+         call color(D_MAGENTA)
+         do i = 1,4
+            call move(x(i,1), y(i,1), z(i,1))
+            do j = 1,4
+               call draw(x(i,j), y(i,j), z(i,j))
+            enddo
+         enddo
+   !
+         do i = 1,4
+            call move(x(1,i), y(1,i), z(1,i))
+            do j = 1,4
+               call draw(x(j,i), y(j,i), z(j,i))
+            enddo
+         enddo
+   !
+         call color(D_GREEN)
+      end subroutine drawhull
+   !
+      subroutine axes()
+   !
+   !       draw the axes
+   !
+         call color(D_BLUE)
+         call move(0.0, 0.0, 0.0)
+         call draw(4.0, 0.0, 0.0)
+<P>
+         call move(0.0, 0.0, 0.0)
+         call draw(0.0, 4.0, 0.0)
+<P>
+         call move(0.0, 0.0, 0.0)
+         call draw(0.0, 0.0, 4.0)
+   !
+      end subroutine axes
+   !
+   end program demo_patch
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>patch (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from da8b969f-4569-4ee0-8c59-1e38612581fd using man macros.</FONT>
+<br><br><center><img src="images/patch.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

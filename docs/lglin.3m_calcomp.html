@@ -1,0 +1,291 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>lglin (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>lglin</B>(3f) - [M_calcomp:scientific] draw polyline in log-log or semi-log mode
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>License</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>lglin</B>(xarray,yarray,npts,inc,+<B>-lintyp</B>,inteq,logtyp)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>LGLIN</B>(3f) is a FORTRAN subroutine used to plot data either in log-log or semi-log
+mode. <B>LGLIN</B>(3f) is similar in operation to <B>LINE</B>(3f).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>XARRAY,YARRAY</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are the arrays containing the variables to be plotted as
+abscissa and ordinate, respectively; either logarithmic
+or linear, depending on the value of LOGTYP. They also
+contain the scaling parameters.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NPTS</B> </TD><TD valign=bottom>
+is the number of points to be plotted.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>INC</B> </TD><TD valign=bottom>
+is the increment between elements in the array to be
+plotted. INC&gt;1 if the values to be plotted are in a
+mixed array. (Usually INC = 1).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>LINTYP</B> </TD><TD valign=bottom>
+is used to control the type of graph produced:
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  If LINTYP = 0 a line is plotted between successive data
+                  points. No symbols are plotted.
+<P>
+                  If LINTYP = 1 a line plot is produced, with a symbol at
+                  each data point.
+<P>
+                  If LINTYP = n a line plot is produced, with a symbol at
+                  every nth data point.
+<P>
+                  If LINTYP = -n, connecting lines are not plotted between
+                  data points; a symbol appears at every nth data point.
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>INTEQ</B> </TD><TD valign=bottom>
+is the integer equivalent used to specify the symbol to
+be plotted at a data point. (Refer to the description of
+SYMBOL for possible values of INTEQ.)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>LOGTYP</B> </TD><TD valign=bottom>
+is a code specifying the type of plot.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+                  If LOGTYP is:
+<P>
+                  -1, a semi-log plot, logarithmic in X and linear in Y is
+                  produced;
+<P>
+                  0, a log-log plot is produced;
+<P>
+                  +1, a semi-log plot, linear in X and logarithmic in Y is
+                  produced.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; COMMENTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The arrays XARRAY and YARRAY must be dimensioned with at least NPTS + 2
+elements. The adjusted minimum values and the delta values (normally
+provided by the SCALG subroutine for logarithmic data and by the SCALE
+subroutine for linear data) must be stored in the data arrays.
+<P>
+For the X array, the adjusted minimum is stored in XARRAY (NPTS*INC + 1), and
+the adjusted delta is in XARRAY (NPTS*INC + INC + 1). Similarly, for the Y
+array, the minimum is in YARRAY (NPTS*INC + 1), and the delta is in YARRAY
+(NPTS*INC + INC + 1). Therefore, XARRAY and YARRAY must be dimensioned to be
+at least NPTS*INC+INC+1 words long.
+<P>
+If scaling is not required, the user must place the appropriate minimum and
+delta values in the specified locations in the arrays. For linear arrays,
+these values should be 0.0 (minimum) and 1.0 (delta), to ensure a one-to-one
+correspondence between array data and plotted data.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_lglin
+   use M_calcomp
+   implicit none
+   ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
+   character(len=50) :: ibcd
+   integer           :: i, k
+   integer           :: inteq
+   real              :: a
+   real              :: angl
+   real              :: angle(19)
+   real              :: bang
+   real              :: beta
+   real              :: r(19)
+   real              :: theta
+   real              :: x
+   real              :: xx
+   real              :: xa,ya, xb,yb, xc,yc, xd,yd
+   real              :: xar(8)= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
+   real              :: yar(8)= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
+      call plots(0.0,10.0,0.0,10.0)
+   ! DRAW FRAME
+      call plot(7.0,0.0,2)
+      call plot(7.0,9.0,2)
+      call plot(0.0,9.0,2)
+      call plot(0.0,0.0,2)
+   ! DRAW COMMENTS
+      ibcd=&#146;USING SCALG, LGAXS, AND LGLIN SUBROUTINES&#146;
+      call symbol(0.7,8.25,0.14,ibcd,inteq,0.0,42)
+      ibcd=&#146;USING POLAR SUBROUTINE&#146;
+      call symbol(0.7,3.80,0.14,ibcd,inteq,0.0,22)
+   ! AXIS IS DRAWN
+      ibcd=&#146;ALTITUDE&#146;
+      call axis(1.0,4.75,ibcd,-8,5.0,0.0,0.0,25.0)
+      call scalg(yar,3.0,6,1)
+      ibcd=&#146;TEMPERATURE&#146;
+      call lgaxs(1.0,4.75,ibcd,11,3.0,90.0,yar(7),yar(8))
+      call scale(xar,5.0,6,1)
+      call plot(1.0,4.75,-3)
+      call lglin(xar,yar,6,1,0,1,1)
+      call plot(-1.0,-4.75,-3)
+   ! POLAR SUBROUTINE IS USED
+      x=0.0
+      do k=1,19
+         theta=x*0.0174533
+         r(k)=2.0*(1.0-cos(theta))
+         angle(k)=theta
+         x=x+10.0
+      enddo
+      call plot(5.0,0.75,-3)
+      call polar(r,angle,19,1,0,1,0.0,1.0)
+      angl =30.0
+      a=1.0
+      do  i=1,5
+         theta=angl *0.0174533
+         xa=cos(theta)
+         ya=sin(theta)
+         call plot(xa,ya,3)
+         xb=1.1*xa
+         yb=1.1*ya
+         call plot(xb,yb,2)
+         xc=xb+0.05*xa
+         yc=yb+0.05*ya
+         if((i-3).gt.0)then
+            a=1.5
+         endif
+         beta=1.570797-theta
+         xd=xc-0.105*a*cos(beta)
+         yd=yc+0.105*a*sin(beta)
+         bang=270.0+angl
+         call number(xd,yd,0.105,angl, bang,-1)
+         angl =angl +30.0
+      enddo
+      xx=0.0
+      do i=1,19
+         angle(i) = xx*0.0174533
+         r(i) = 1.0
+         xx=xx+10.0
+      enddo
+      call polar(r,angle,19,1,0,1,0.0,1.0)
+      call plot(-5.0,-0.75,-3)
+   ! AXIS IS DRAWN
+      ibcd=&#146;&#146;
+      call axis(1.0,0.75,ibcd,-1,4.0,0.0,4.0,-1.0)
+      call axis(5.0,0.75,ibcd,-1,1.0,0.0,0.0,1.0)
+      ibcd=&#146;RADIUS=2*(1-COS(ANGLE))&#146;
+      call symbol(3.75,3.5,0.09,ibcd,inteq,0.0,23)
+      call plot(11.0,0.0,999)
+   end program demo_lglin
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>lglin (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 24369286-479a-4ff0-ad61-cbb671f52393 using man macros.</FONT>
+<br><br><center><img src="images/lglin.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

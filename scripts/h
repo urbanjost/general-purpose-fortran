@@ -1,0 +1,13 @@
+#!/bin/bash
+#@(#) h(1): run command with --help switch and run thru txt2man(1)
+# many of my commands display their help text with the --help switch
+# and are formatted for txt2man(1)
+for NAME in $*
+do
+   clear
+   exec 2>&1
+   $NAME --help|txt2man -T|less -r
+   printf 'continue ...'
+   read PAWS
+done
+exit

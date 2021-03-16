@@ -1,0 +1,292 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>lgaxs (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>lgaxs</B>(3f) - [M_calcomp:scientific] draw logarithmic axis
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#4>Comments</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>lgaxs</B>(xpage,ypage,ibcd,+<B>-nchar</B>,axlen,angle,firstv,deltav)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>LGAXS</B>(3f) is a FORTRAN subroutine which draws a logarithmic axis
+with annotation in powers of ten. <B>LGAXS</B>(3f) is similar in operation
+to <B>AXIS</B>(3f).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>XPAGE,YPAGE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are the coordinates, in inches, of the axis starting
+point.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IBCD</B> </TD><TD valign=bottom>
+is the character data to be used as the axis title (may
+be one or more characters). It is centered and
+positioned parallel to the axis.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NCHAR</B> </TD><TD valign=bottom>
+is the number of characters in the axis title.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                 if NCHAR is:
+<P>
+                   o negative, annotation is placed on the clockwise
+                     side of the axis (normally used for the X axis);
+<P>
+                   o positive, annotation is placed on the
+                     counterclockwise side of the axis (normally used
+                     for the Y axis).
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>AXLEN</B> </TD><TD valign=bottom>
+is the length of the axis, in inches.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ANGLE</B> </TD><TD valign=bottom>
+is the angle, in degrees, at which the axis is to be
+drawn. (The axis is rotated about XPAGE,YPAGE). The X
+axis is at 0 degrees; the Y axis is at 90 degrees.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>FIRSTV</B> </TD><TD valign=bottom>
+is the value of annotation at the beginning of the axis.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>DELTAV</B> </TD><TD valign=bottom>
+is the number of log cycles per inch (the reciprocal of
+the length of one cycle, in inches).
+<P>
+Equivalently this is the reciprocal of
+the length of one cycle.
+<P>
+if <B>SCALOG</B>() is used to scale a logarithmic array, VARRAY,
+then <B>FIRSTV=VARRAY</B>(NV*K+1), and <B>DELTAV=VARRAY</B>(NV*K+K+1)
+where NV is number of values used and K is repeat cycle
+of location of values in array, as described in <B>SCALOG</B>().
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; COMMENTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A tick mark is placed on the axis for each power of ten and for each
+of the nine integer values between.
+<P>
+Annotation is placed at the tick marks as follows:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Annotation is placed at the tick marks as follows:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If a cycle is not less than two inches long, the integer tick marks
+are annotated.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The power-of-ten tick marks are annotated in the form 10**N.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_lgaxs
+   use M_calcomp
+   implicit none
+   ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
+   character(len=50) :: ibcd
+   integer           :: i, k
+   integer           :: inteq
+   real              :: a
+   real              :: angl
+   real              :: angle(19)
+   real              :: bang
+   real              :: beta
+   real              :: r(19)
+   real              :: theta
+   real              :: x
+   real              :: xx
+   real              :: xa,ya, xb,yb, xc,yc, xd,yd
+   real              :: xar(8)= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
+   real              :: yar(8)= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
+      call plots(0.0,10.0,0.0,10.0)
+   ! DRAW FRAME
+      call plot(7.0,0.0,2)
+      call plot(7.0,9.0,2)
+      call plot(0.0,9.0,2)
+      call plot(0.0,0.0,2)
+   ! DRAW COMMENTS
+      ibcd=&#146;USING SCALG, LGAXS, AND LGLIN SUBROUTINES&#146;
+      call symbol(0.7,8.25,0.14,ibcd,inteq,0.0,42)
+      ibcd=&#146;USING POLAR SUBROUTINE&#146;
+      call symbol(0.7,3.80,0.14,ibcd,inteq,0.0,22)
+   ! AXIS IS DRAWN
+      ibcd=&#146;ALTITUDE&#146;
+      call axis(1.0,4.75,ibcd,-8,5.0,0.0,0.0,25.0)
+      call scalg(yar,3.0,6,1)
+      ibcd=&#146;TEMPERATURE&#146;
+      call lgaxs(1.0,4.75,ibcd,11,3.0,90.0,yar(7),yar(8))
+      call scale(xar,5.0,6,1)
+      call plot(1.0,4.75,-3)
+      call lglin(xar,yar,6,1,0,1,1)
+      call plot(-1.0,-4.75,-3)
+   ! POLAR SUBROUTINE IS USED
+      x=0.0
+      do k=1,19
+         theta=x*0.0174533
+         r(k)=2.0*(1.0-cos(theta))
+         angle(k)=theta
+         x=x+10.0
+      enddo
+      call plot(5.0,0.75,-3)
+      call polar(r,angle,19,1,0,1,0.0,1.0)
+      angl =30.0
+      a=1.0
+      do  i=1,5
+         theta=angl *0.0174533
+         xa=cos(theta)
+         ya=sin(theta)
+         call plot(xa,ya,3)
+         xb=1.1*xa
+         yb=1.1*ya
+         call plot(xb,yb,2)
+         xc=xb+0.05*xa
+         yc=yb+0.05*ya
+         if((i-3).gt.0)then
+            a=1.5
+         endif
+         beta=1.570797-theta
+         xd=xc-0.105*a*cos(beta)
+         yd=yc+0.105*a*sin(beta)
+         bang=270.0+angl
+         call number(xd,yd,0.105,angl, bang,-1)
+         angl =angl +30.0
+      enddo
+      xx=0.0
+      do i=1,19
+         angle(i) = xx*0.0174533
+         r(i) = 1.0
+         xx=xx+10.0
+      enddo
+      call polar(r,angle,19,1,0,1,0.0,1.0)
+      call plot(-5.0,-0.75,-3)
+   ! AXIS IS DRAWN
+      ibcd=&#146;&#146;
+      call axis(1.0,0.75,ibcd,-1,4.0,0.0,4.0,-1.0)
+      call axis(5.0,0.75,ibcd,-1,1.0,0.0,0.0,1.0)
+      ibcd=&#146;RADIUS=2*(1-COS(ANGLE))&#146;
+      call symbol(3.75,3.5,0.09,ibcd,inteq,0.0,23)
+      call plot(11.0,0.0,999)
+   end program demo_lgaxs
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>lgaxs (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bd946ef8-1ddf-4011-b117-19eec0d61757 using man macros.</FONT>
+<br><br><center><img src="images/lgaxs.3m_calcomp.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

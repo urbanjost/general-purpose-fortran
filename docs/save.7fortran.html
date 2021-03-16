@@ -1,0 +1,200 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>save (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>SAVE</B>(7f) - [FORTRAN:STATEMENT:ATTRIBUTE] specifies that a local variable retains its status and value after a RETURN
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>SAVE</B> [ [ :: ] <I>saved-entity-list</I> ]
+<P>
+<PRE>
+      saved-entity                 is object-name
+                                   or proc-pointer-name
+                                   or / common-block-name /
+<P>
+      proc-pointer-name            is   name
+<P>
+</PRE>
+<B>or</B> <I>as</I> <I>an</I> <I>attribute</I> <I>of</I> <I>a</I> <I>data</I> <I>entity</I> declaration. <I>For</I> example,
+<P>
+<PRE>
+      INTEGER,SAVE :: II
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+1 The <B>SAVE</B> <I>attribute</I> specifies that <I>a</I> local variable <I>of</I> <I>a</I> program unit <B>or</B> subprogram retains its association status,
+allocation status, definition status, and value after execution <I>of</I> <I>a</I> RETURN <B>or</B> END statement unless it is <I>a</I>
+pointer and its target becomes undefined. If it is <I>a</I> local variable <I>of</I> <I>a</I> subprogram it is shared by all
+instances <I>of</I> the subprogram.
+<BLOCKQUOTE>
+<P>
+An <I>entity</I> with the <B>SAVE</B> <I>attribute</I> shall be <I>a</I> common block, variable, <B>or</B> procedure pointer.
+<P>
+The <B>SAVE</B> <I>attribute</I> shall not be specified for <I>a</I> dummy argument, <I>a</I> function result, <I>an</I> automatic <I>data</I>
+object, <B>or</B> <I>an</I> object that is in <I>a</I> common block.
+<P>
+If <I>a</I> <B>SAVE</B> statement with <I>an</I> omitted saved <I>entity</I> list appears in <I>a</I> scoping unit, no other
+appearance <I>of</I> the <B>SAVE</B> attr-spec <B>or</B> <B>SAVE</B> statement is permitted in that scoping unit.
+<P>
+A local variable <I>of</I> <I>a</I> pure subprogram, <B>or</B> <I>of</I> <I>a</I> BLOCK construct within
+<I>a</I> pure subprogram, shall not have the <B>SAVE</B> <I>attribute</I>. Variable
+initialization in <I>a</I> type-declaration-stmt <B>or</B> <I>a</I> <I>data</I>-stmt implies the
+<B>SAVE</B> <I>attribute</I>; therefore, such initialization is also disallowed in
+<I>a</I> pure subprogram.
+</BLOCKQUOTE>
+<P>
+2 The <B>SAVE</B> <I>attribute</I> specifies that <I>a</I> local variable <I>of</I> <I>a</I> BLOCK construct retains its association status, allocation
+status, definition status, and value after termination <I>of</I> the construct unless it is <I>a</I> pointer and its target becomes
+undefined (16.5.2.5(6)). If the BLOCK construct is within <I>a</I> subprogram the variable is shared by all instances
+(12.6.2.4) <I>of</I> the subprogram.
+<P>
+3 Giving <I>a</I> common block the <B>SAVE</B> <I>attribute</I> confers the <I>attribute</I> on all entities in the common block.
+<P>
+4 A variable, common block, <B>or</B> procedure pointer declared in the scoping unit <I>of</I> <I>a</I> main program, module, <B>or</B>
+submodule implicitly has the <B>SAVE</B> <I>attribute</I>, which may be confirmed by explicit specification. If <I>a</I> common
+block has the <B>SAVE</B> <I>attribute</I> in any other kind <I>of</I> scoping unit, it shall have the <B>SAVE</B> <I>attribute</I> in every scoping
+unit that is not <I>a</I> main program, module, <B>or</B> submodule.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SAVE ATTRIBUTE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+1 A blank common block has the same properties <I>as</I> <I>a</I> named common block, except for the following.
+<P>
+<PRE>
+      Execution of a RETURN or END statement might cause data objects
+      in a named common block to become
+      undefined unless the common block has the SAVE attribute, but
+      never causes data objects in blank common to become undefined.
+<P>
+</PRE>
+<BLOCKQUOTE>
+2 When the execution <I>of</I> <I>a</I> procedure is terminated by execution <I>of</I> <I>a</I> RETURN <B>or</B> END statement, <I>an</I> unsaved
+allocatable local variable <I>of</I> the procedure retains its allocation and definition status if it is <I>a</I> function result
+variable <B>or</B> <I>a</I> subobject thereof; otherwise, it is deallocated.
+<P>
+3 When <I>a</I> BLOCK construct terminates, <I>an</I> unsaved allocatable local variable <I>of</I> the construct is deallocated.
+</BLOCKQUOTE>
+<P>
+1 A <B>SAVE</B> statement with <I>a</I> saved <I>entity</I> list specifies the <B>SAVE</B> <I>attribute</I> (5.3.16) for <I>a</I> list <I>of</I> entities. A <B>SAVE</B>
+statement without <I>a</I> saved <I>entity</I> list is treated <I>as</I> though it contained the names <I>of</I> all allowed items in the same
+scoping unit.
+<P>
+3 Explicit initialization <I>of</I> <I>a</I> variable that is not in <I>a</I> common block implies the <B>SAVE</B> <I>attribute</I>, which may be
+confirmed by explicit specification.
+3 The BIND <I>attribute</I> for <I>a</I> variable <B>or</B> common block implies the <B>SAVE</B> <I>attribute</I>, which may be confirmed by
+explicit specification.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+To assign the <B>SAVE</B> <I>attribute</I> to all local variables in <I>a</I> subprogram
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SAVE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+An example <I>of</I> <I>a</I> typical <B>SAVE</B> statement is:
+<P>
+<PRE>
+    SAVE A, B, C, / BLOCKA /, D
+<P>
+</PRE>
+Example with <I>an</I> allocatable variable
+<P>
+<PRE>
+    subroutine process
+      real, allocatable :: temp(:)
+      real, allocatable, save :: x(:)
+      &#46;&#46;&#46;
+    end subroutine process
+<P>
+</PRE>
+on return from subroutine PROCESS, the allocation status <I>of</I> X is
+preserved because X has the <B>SAVE</B> <I>attribute</I>. TEMP does not have the
+<B>SAVE</B> <I>attribute</I>, so it will be deallocated if it was allocated. On
+the next invocation <I>of</I> PROCESS, TEMP will have <I>an</I> allocation status
+<I>of</I> unallocated.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>save (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d6715eb3-6949-493c-8b79-e6f5ef4f54c0 using man macros.</FONT>
+<br><br><center><img src="images/save.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,483 @@
+#!/bin/bash --norc
+#
+#(@)# txt2man - convert text file following markup rules to a man(1) page
+#
+test "$HOME" = ~ || exec ksh $0 "$@"    # try ksh if sh too old (not yet POSIX)
+
+# Copyright (C) 2001, 2002, 2003 Marc Vertes
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+# txt2man-1.5
+
+# slightly modified primarily to work a little better with Fortran files - JSU
+################################################################################
+usage()
+{
+cat << EOT
+NAME
+  txt2man - [DEVELOPER] convert flat ASCII text to manpage format
+SYNOPSIS
+  txt2man [-hpTxX] [-t mytitle] [-P pname] [-r rel] [-s sect]
+          [-v vol] [-I txt] [-B txt] [ifile]
+DESCRIPTION
+  txt2man converts the input text into nroff/troff standard man(7)
+  macros used to format Unix manual pages. Nice pages can be generated;
+  particularly for commands (section 1 or 8) or for C functions (sections
+  2, 3), with the ability to recognize and format command and function
+  names, flags, types and arguments.
+
+  txt2man is also able to recognize and format sections, paragraphs,
+  lists (standard, numbered, description, nested), cross references and
+  literal display blocks.
+
+  If an input file ifile is omitted, standard input is used. The result
+  is displayed on standard output.
+
+  Here is how text patterns are recognized and processed:
+  Sections    These headers are defined by a line in upper case, starting
+              in column 1. If there is one or more leading spaces, a
+	      sub-section will be generated instead.
+	      NOTE that a section resets the indent; so an uppercase
+	      line is ALWAYS the beginning of a section and will reset
+	      being in fixed space mode.
+  Paragraphs  They must be separated by a blank line, and consistently left 
+              aligned (all lines must have the same left margin).
+  Tag list    The item definition is separated from the item description
+              by at least 2 blank spaces, even before a new line, if
+              the definition is too long. Definition will be emphasized
+              by default.
+  Bullet list  
+              Bullet list items are defined by the first word being "-"
+	      or "*" or "o" or "+".
+  Enumerated list  
+	      The first word must be a number followed by a dot.
+  Literal display blocks  
+	      This paragraph type is used to display unmodified text,
+	      for example source code. It must be separated by a blank
+	      line, and be indented. 
+	      It will be printed using a fixed font whenever possible 
+	      (troff).
+
+	      So that means you put a blank line above a code block and
+	      that there has to have been at least one previous line in
+	      the section to set the default indent and that the code 
+	      must be indented relative to that line:
+
+	      SECTION BEGINNING
+	         Line to set the default paragraph indent
+		   
+		    code starts indented with a blank line
+
+  Cross references  
+	      A cross reference (another manpage) is defined by a word
+	      followed by a number in parenthesis.
+
+  Special sections:
+  NAME      The function or command name and short description are set in
+            this section.
+  SYNOPSIS  This section receives a special treatment to identify command
+            name, flags and arguments, and propagate corresponding
+            attributes later in the text. If a C-like function is recognized
+	    (word immediately followed by an open parenthesis), txt2man will
+	    print function name in bold font, types in normal font, and
+	    variables in italic font. The whole section will be printed using
+	    a fixed font family (courier) whenever possible (troff).
+
+  It is a good practice to embed documentation into source code, by using
+  comments or constant text variables. txt2man allows one to do that, keeping
+  the document source readable, usable even without further formatting
+  (i.e. for online help) and easy to write. The result is high quality
+  and standard-complying documentation.
+OPTIONS
+  -h          The option -h displays help.
+  -P pname    Set pname as project name in header. Default to uname -s.
+  -p          Probe title, section name and volume.
+  -t mytitle  Set mytitle as title of generated manpage.
+  -r rel      Set rel as project name and release.
+  -s sect     Set sect as section in heading, usually a value from 1 to 8.
+  -v vol      Set vol as volume name, i.e. "Unix user 's manual".
+  -I txt      Italicize text in output. Can be specified more than once.
+  -B txt      Emphasize (bold) text in output. Can be specified more than once.
+  -T          Text result previewing using PAGER, usually more(1).
+  -X          X11 result previewing using gxditview(1).
+  -x          Basic example input file
+ENVIRONMENT
+  PAGER    name of paging command, usually more(1), or less(1). If not set
+           falls back to more(1).
+EXAMPLE
+  Try this command to format this text itself:
+
+      $ txt2man -h 2>&1 | txt2man -T
+HINTS
+  To obtain an overall good formatting of the output document, keep paragraphs
+  indented correctly. If you have unwanted bold sections, search for
+  multiple spaces between words, which are used to identify a tag list
+  (term followed by a description). Also choose carefully the name of
+  command line or function parameters, as they will be emphasized each
+  time they are encountered in the document.
+SEE ALSO
+  man(1), mandoc(7), rman(1), groff(1), more(1), gxditview(1), troff(1).
+BUGS
+  - Automatic probe (-p option) works only if input is a regular file (i.e.
+  not stdin).
+
+  - Something wrong when use ellipsis ("...")
+  - SYNOPSIS
+
+      command [value(s)]
+    causes problems with (). 
+  - SYNOPSIS
+      name ( a, b, c, d )
+    causes problems with (). 
+    Remove spaces and it is OK.
+
+AUTHOR
+  Marc Vertes <mvertes@free.fr>
+EOT
+}
+################################################################################
+example(){
+cat <<\EOF
+NAME
+     sample(3f) - [category] this is a sample routine
+SYNOPSIS
+    subroutine sample(in1,in2,out1)
+
+     real,intent(in)     :: in1
+     real,intent(in)     :: in2
+     real,intent(out)    :: out1
+     integer,intent(out) :: ierr
+
+DESCRIPTION
+   Description of the procedure goes here.
+     o point one
+     o point two
+     o point three
+OPTIONS
+   IN1   description of IN1
+   IN2   description of IN2
+   IERR  description of IERR
+RETURNS
+   OUT1  description of OUT1
+EXAMPLE
+  Sample program:
+
+   program demo_sample
+   write(*,*)'exercise sample'
+   end program demo_sample
+EOF
+}
+################################################################################
+sys=$(uname -s)
+rel=
+volume=
+section=
+title=untitled
+doprobe=
+itxt=
+btxt=
+post=cat
+while getopts :hpTxXr:s:t:v:P:I:B: opt
+do
+	case $opt in
+	r) rel=$OPTARG;;
+	t) title=$OPTARG;;
+	s) section=$OPTARG;;
+	v) volume=$OPTARG;;
+	P) sys=$OPTARG;;
+	p) doprobe=1;;
+	I) itxt="$OPTARG§$itxt";;
+	B) btxt=$OPTARG;;
+	T) post="groff -m man  -Tlatin1 | ${PAGER:-more -f}";;
+	X) post="groff -m man  -X";;
+	T) post="groff -mandoc -Tlatin1 | ${PAGER:-more -f}";;
+	X) post="groff -mandoc -X";;
+	x) example; exit;;
+	*) usage; exit;;
+	esac
+done
+shift $(($OPTIND - 1))
+
+if test "$doprobe"
+then
+	title=${1##*/}; title=${title%.txt}
+	if egrep -q '#include |subroutine |function ' $1
+	then
+		section=${section:-3}
+		volume=${volume:-"$sys Programmer's Manual"}
+	else
+		section=${section:-1}
+		volume=${volume:-"$sys Reference Manual"}
+	fi
+	# get release from path
+	rel=$(pwd | sed 's:/.*[^0-9]/::g; s:/.*::g')
+fi
+################################################################################
+
+head=".\\\" Text automatically generated by txt2man
+.TH \"$title\" \"$section\" \"$(date +'%B %d, %Y')\" \"$rel\" \"$volume\" \" \"
+.\\\" -----------------------------------------------------------------
+.\\\" * set default formatting
+.\\\" disable hyphenation
+.nh
+.\\\" disable justification (adjust text to left margin only)
+.ad l
+.\\\" -----------------------------------------------------------------"
+# string "( " is causing trouble. Not sure why, remove space for now
+#sed -e 's@( @(@g'|
+#sed -e 's@ )@)@g'|
+#sed -e 's/\([\]\)/\\\1/g'|
+#sed -e 's/\([(\){+-/*%<=>,&`"}]\)/\\\&\1/g'| 
+#sed -e 's@(@\\(@g'|
+#sed -e 's@\[@\\[@g'|
+#sed -e 's@-@\\-@g'|
+#sed -e 's@\]@\\]@g'|
+# All tabs converted to spaces
+expand $* | 		
+# double backslashes as they are special to man(1)
+sed -e 's@\\@\\\\@g'|
+# gawk is needed because of use of non-standard regexp
+gawk --re-interval -v head="$head" -v itxt="$itxt" -v btxt="$btxt" '
+####################################################################################################################################
+BEGIN {
+        # print header
+	print head
+	avar[1] = btxt; avar[2] = itxt
+	# split list of words to make bold or italic and build dictionary
+	# of the words and the string to replace them with
+	for (k in avar) {
+		mark = (k == 1) ? "\\fB" : "\\fI"
+		split(avar[k], tt, "§")
+		for (i in tt)
+			if (tt[i] != "")
+				subwords["\\<" tt[i] "\\>"] = mark tt[i] "\\fP"
+		for (i in tt)
+			delete tt[i]
+	}
+	for (k in avar)
+		delete avar[k]
+}
+####################################################################################################################################
+{
+	# to avoid some side effects in regexp
+	# replace ellipses (...) with escaped string (\.\.\.)
+	sub(/\.\.\./, "\\.\\.\\.")
+	# remove spaces in empty lines
+	sub(/^ +$/,"")
+}
+####################################################################################################################################
+# line composed entirely of uppercase letters and spaces
+# if line is nothing but a title with uppercase letters (note that numbers and punctuation not allowed in a header)
+/^[[:upper:]_[:space:]]+$/ {
+	# Section header
+	if ((in_bd + 0) == 1) {
+		in_bd = 0
+		print ".fam T\n.fi"
+	}
+	if (section == "SYNOPSIS") {
+		print ".fam T\n.fi"
+		type["SYNOPSIS"] = ""
+	}
+	if ($0 ~/^[^[:space:]]/)
+		print ".SH " $0
+	else
+		print ".SS" $0
+	sub(/^ +/, "")
+	section = $0
+	if (section == "NAME")
+		#print "\\fB"
+		#print ""
+	if (section == "SYNOPSIS")
+		print ".nf\n.fam C"
+	line_start_index = 0		# line start index
+	previous_line_start_index = 0		# previous line start index
+	previous_non_zero_line_start_index = 0	# previous non zero line start index
+	indent_level = 0		# indent level
+	indent_offset_table[0] = 0	# indent offset table
+	prevblankline = 0
+	next
+}
+####################################################################################################################################
+{
+	# Compute line start index, handle start of example display block
+	previous_line_start_index = line_start_index
+	if (line_start_index != 0)
+		previous_non_zero_line_start_index = line_start_index
+	match($0, /[^ ]/)
+	line_start_index = RSTART
+	if (previous_line_start_index == 0 && previous_non_zero_line_start_index > 0  \
+	   && line_start_index > previous_non_zero_line_start_index  \
+	   && $1 !~ /^[0-9\-\*o]\.*$/) {
+		# example display block
+		if (prevblankline == 1) {
+			print ".PP"
+			prevblankline = 0
+		}
+		print ".nf\n.fam C"
+		in_bd = 1
+		eoff = line_start_index
+	}
+	if (line_start_index > 0 && indent_offset_table[0] == 0)
+		indent_offset_table[0] = line_start_index
+}
+####################################################################################################################################
+(in_bd + 0) == 1 {
+	# In example display block
+	if (line_start_index != 0 && line_start_index < eoff) {
+		# End of literal display block
+		in_bd = 0
+		print ".fam T\n.fi"
+	} else { print; next }
+}
+####################################################################################################################################
+section == "NAME" {
+	$1 = "" $1
+	#sub(/ \- /, " \\fP- ")
+}
+####################################################################################################################################
+section == "SYNOPSIS" {
+	# Identify arguments of fcts and cmds
+	if (type["SYNOPSIS"] == "") {
+		if (index($0, "(") == 0 && index($0, ")") == 0 &&
+		    index($0, "subroutine") == 0 &&
+		    index($0, "function") == 0 &&
+		    index($0, "#include") == 0)
+			type["SYNOPSIS"] = "cmd"
+		else
+			type["SYNOPSIS"] = "fct"
+	}
+	if (type["SYNOPSIS"] == "cmd") {
+		# Line is a command line
+		if ($1 !~ /^\[/) {
+			b = $1
+			sub(/^\*/, "", b)
+			subwords["\\<" b "\\>"] = "\\fB" b "\\fP"
+		}
+		for (i = 2; i <= NF; i++) {
+			a = $i
+			gsub(/[\[\]\|]/, "", a)
+			if (a ~ /^[^\-]/)
+				subwords["\\<" a "\\>"] = "\\fI" a "\\fP"
+		}
+	} else {
+		# Line is a C function definition
+		if ($1 == "typedef")
+			subwords["\\<" $2 "\\>"] = "\\fI" $2 "\\fP"
+		else if ($1 == "#define")
+			subwords["\\<" $2 "\\>"] = "\\fI" $2 "\\fP"
+		for (i = 1; i <= NF; i++) {
+			if ($i ~ /[,)]/) {
+				a = $i
+				sub(/.*\(/, "", a)
+				gsub(/\W/, "", a)
+				if (a !~ /^void$/)
+					subwords["\\<" a "\\>"] = "\\fI" a "\\fP"
+			}
+		}
+	}
+}
+####################################################################################################################################
+{
+	########################################################################
+	# protect dots inside words
+	while ($0  ~ /\w\.\w/)
+		sub(/\./, "_dOt_")
+	gsub(/\[/, "_sOq_")
+	# identify func calls and cross refs
+	for (i = 1; i <= NF; i++) {
+		b = $i
+		sub(/^\*/, "", b)
+		if ((a = index(b, ")(")) > 3) {
+			w = substr(b, 3, a - 3)
+			subwords["\\<" w "\\>"] = "\\fI" w "\\fP"
+		}
+		if ((a = index(b, "(")) > 1) {
+			w = substr(b, 1, a - 1)
+			subwords["\\<" w "\\("] = "\\fB" w "\\fP("
+		}
+	}
+	# word attributes
+	for (i in subwords)
+		gsub(i, subwords[i])
+	# shell options
+	gsub(/\B\-+\w+(\-\w+)*/, "\\fB&\\fP")
+	# unprotect dots inside words
+	gsub(/_dOt_/, ".")
+	gsub(/_sOq_/, "[")
+	########################################################################
+
+	if ($1 == "-"||$1 == "o"||$1 == "*" || $1 == "+") {
+		# bullet list item
+		adjust_indent()
+		print ".IP \\(bu 3"
+		prevblankline = 0
+		$1 = ""
+	} else if ($1 ~ /^[0-9]+[\).]$/) {
+		# enum list item
+		adjust_indent()
+		print ".IP " $1 " 4"
+		prevblankline = 0
+		$1 = ""
+	} else if (match($0, /[^ ]  +/) > 0) {
+		# tag list item
+		adjust_indent()
+		tag = substr($0, 1, RSTART)
+		sub(/^ */, "", tag)
+		if (RSTART+RLENGTH < length())
+			$0 = substr($0, RSTART + RLENGTH)
+		else
+			$0 = ""
+		print ".TP\n.B " tag
+		prevblankline = 0
+		if (NF == 0)
+			next
+	} else if (previous_line_start_index == 0) {
+		# new paragraph
+		adjust_indent()
+	} else if (NF == 0) {
+		# blank line
+		prevblankline = 1
+		next
+	} else
+		prevblankline = 0
+	# flush vertical space
+	if (prevblankline == 1) {
+		print ".PP"
+		prevblankline = 0
+	}
+	if (section != "SYNOPSIS" || $0 ~ /^ {1,4}/)
+		sub(/ */,"")
+	print
+}
+####################################################################################################################################
+function adjust_indent()
+{
+	if (line_start_index > indent_offset_table[indent_level]) {
+		indent_offset_table[++indent_level] = line_start_index
+		print ".RS"
+	} else if (line_start_index < indent_offset_table[indent_level]) {
+		while (line_start_index < indent_offset_table[indent_level]) {
+			indent_level--
+			print ".RE"
+		}
+	}
+}
+####################################################################################################################################
+' | eval $post
+####################################################################################################################################
+exit
+####################################################################################################################################

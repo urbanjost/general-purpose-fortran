@@ -1,0 +1,203 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>rgbmono (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>RGBMONO</B>(3f) - [M_color] converts RGB colors to a reasonable grayscale
+intensity
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>rgbmono&lt;/a&gt;</B>(rr,rg,rb,ri,status)
+<P>
+<PRE>
+    real, intent(in)  :: RR
+    real, intent(in)  :: RG
+    real, intent(in)  :: RB
+    real, intent(out) :: RI
+    integer           :: status
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>RGBMONO</B>(3f) converts RGB colors to a reasonable grayscale intensity.
+This can be used to produce monochrome images from color images.
+Intensity is calculated from the specified Red, Green, Blue intensities
+as 0.30*R + 0.59*G + 0.11*B, as in U.S. color television systems,
+NTSC encoding. Note that most devices do not have an infinite range
+of monochrome intensities available.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>RR</B> </TD><TD valign=bottom>
+red component of the input color in the range 0 to 100
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>RG</B> </TD><TD valign=bottom>
+green component of the input color in the range 0 to 100
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>RB</B> </TD><TD valign=bottom>
+blue component of the input color in the range 0 to 100
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>RI</B> </TD><TD valign=bottom>
+grayscale intensity calculated in the range 0 to 100
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>status</B> </TD><TD valign=bottom>
+zero (0) if no error occurred, otherwise result is out
+of bounds
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample:
+<P>
+<PRE>
+   program demo_rgbmono
+   use M_color, only : rgbmono
+   implicit none
+   real    :: gray
+   integer :: ierr
+   call rgbmono(100.0,  0.0,  0.0,gray,ierr); write(*,*)&#146;red     &#146;,gray
+   call rgbmono(  0.0,100.0,  0.0,gray,ierr); write(*,*)&#146;green   &#146;,gray
+   call rgbmono(  0.0,  0.0,100.0,gray,ierr); write(*,*)&#146;blue    &#146;,gray
+   call rgbmono(100.0,100.0,  0.0,gray,ierr); write(*,*)&#146;Yellow  &#146;,gray
+   call rgbmono(  0.0,100.0,100.0,gray,ierr); write(*,*)&#146;Cyan    &#146;,gray
+   call rgbmono(100.0,  0.0,100.0,gray,ierr); write(*,*)&#146;Magenta &#146;,gray
+   call rgbmono(100.0,100.0,100.0,gray,ierr); write(*,*)&#146;White   &#146;,gray
+   call rgbmono( 00.0,  0.0,  0.0,gray,ierr); write(*,*)&#146;Black   &#146;,gray
+   call rgbmono( 50.0,  0.0,  0.0,gray,ierr); write(*,*)&#146;Maroon  &#146;,gray
+   call rgbmono(100.0, 50.0, 50.0,gray,ierr); write(*,*)&#146;Pink    &#146;,gray
+   end program demo_rgbmono
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    red        30.0000019
+    green      58.9999962
+    blue       11.0000000
+    Yellow     89.0000000
+    Cyan       70.0000000
+    Magenta    41.0000000
+    White      100.000000
+    Black      0.00000000
+    Maroon     15.0000010
+    Pink       65.0000000
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>rgbmono (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 25794eb3-1d76-4334-84bf-647d4abc9355 using man macros.</FONT>
+<br><br><center><img src="images/rgbmono.3m_color.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

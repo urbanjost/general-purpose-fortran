@@ -1,0 +1,357 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>hue (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>HUE</B>(3f) - [M_pixel:COLOR] converts a color&#146;s components from one color model to another
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>Author</A><BR>
+<A HREF=#5>License</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>hue</B>(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
+<P>
+<PRE>
+    character(len=*),intent(in) :: modei
+    character(len=*),intent(in) :: modeo
+    real,intent(in)             :: clr1i,clr2i,clr3i
+    real,intent(out)            :: clr1o,clr2o,clr3o
+    integer,intent(out)         :: status
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Basic color models:
+<P>
+<PRE>
+    +----------------------------------------------------------+
+    | valid values for modei and modeo as well as the          |
+    | corresponding meanings for clr1*, clr2*, and clr3* are:  |
+    +----------------------------------------------------------+
+    |model| clr1         |         clr2      |         clr3    |
+    |-----+--------------+-------------------+-----------------|
+    |hls  |hue           |lightness          |saturation       |
+    |-----+--------------+-------------------+-----------------|
+    |hsl  |hue           |saturation         |lightness        |
+    |-----+--------------+-------------------+-----------------|
+    |hvs  |hue           |value              |saturation       |
+    |-----+--------------+-------------------+-----------------|
+    |hsv  |hue           |saturation         |value            |
+    |-----+--------------+-------------------+-----------------|
+    |rgb  |red           |green              |blue             |
+    |-----+--------------+-------------------+-----------------|
+    |cmy  |cyan          |magenta            |yellow           |
+    |-----+--------------+-------------------+-----------------|
+    |yiq  |gray scale)   |orange-blue        |purple-green     |
+    |     |              |chrominance        |chrominance      |
+    +----------------------------------------------------------+
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+lightness, value, saturation, red, green, blue, cyan, magenta, and
+yellow range from 0 to 100,
+<TABLE width=100% cellpadding=3><!-- tsb: lightness, value, saturation, red, green, blue, cyan, magenta, and
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+hue ranges from 0 to 360 degrees,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+y ranges from 0 to 100,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+i ranges from <B>-60</B> to 60,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+q ranges from <B>-52</B> to 52
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>The STATUS variable can signal the following conditions:
+<P>
+<PRE>
+     -1   modei = modeo, so no substantial conversion was done,
+      1   one of the input color values was outside the allowable range,
+      2   modei was invalid
+      3   modeo was invalid
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+    program demo_hue
+    use M_pixel, only : hue
+    implicit none
+       !                      NAME       RGB(0-255)            HLS(0-100)
+       call check_name(&#146;hls&#146;,&#146;red&#146;,      [ 100, 0,   0   ],[ 0,   50,  100 ])
+       call check_name(&#146;hls&#146;,&#146;orange&#146;,   [ 100, 65,  0   ],[ 39,  50,  100 ])
+       call check_name(&#146;hls&#146;,&#146;yellow&#146;,   [ 100, 100, 0   ],[ 60,  50,  100 ])
+       call check_name(&#146;hls&#146;,&#146;green&#146;,    [ 0,   100, 0   ],[ 120, 50,  100 ])
+       call check_name(&#146;hls&#146;,&#146;cyan&#146;,     [ 0,   100, 100 ],[ 180, 50,  100 ])
+       call check_name(&#146;hls&#146;,&#146;blue&#146;,     [ 0,   0,   100 ],[ 240, 50,  100 ])
+       call check_name(&#146;hls&#146;,&#146;magenta&#146;,  [ 100, 0,   100 ],[ 300, 50,  100 ])
+       call check_name(&#146;hls&#146;,&#146;black&#146;,    [ 0,   0,   0   ],[ 0,   0,   0   ])
+       call check_name(&#146;hls&#146;,&#146;white&#146;,    [ 100, 100, 100 ],[ 0,   100, 0   ])
+       call check_name(&#146;hsv&#146;,&#146;black&#146;,    [ 0,   0,   0   ],[ 0,   0,   0   ])
+       !                      NAME        RGB(0-255)            HSV(0-100)
+       call check_name(&#146;hsv&#146;,&#146;gray50&#146;,   [ 50,  50,  50  ],[ 0,   0,   50  ])
+       call check_name(&#146;hsv&#146;,&#146;silver&#146;,   [ 75,  75,  75  ],[ 0,   0,   75  ])
+       call check_name(&#146;hsv&#146;,&#146;white&#146;,    [ 100, 100, 100 ],[ 0,   0,   100 ])
+       call check_name(&#146;hsv&#146;,&#146;red4&#146;,     [ 55,  0,   0   ],[ 0,   100, 55  ])
+       call check_name(&#146;hsv&#146;,&#146;red&#146;,      [ 100, 0,   0   ],[ 0,   100, 100 ])
+       call check_name(&#146;hsv&#146;,&#146;olive&#146;,    [ 50,  50,  0   ],[ 60,  100, 50  ])
+       call check_name(&#146;hsv&#146;,&#146;yellow&#146;,   [ 100, 100, 0   ],[ 60,  100, 100 ])
+       call check_name(&#146;hsv&#146;,&#146;green&#146;,    [ 0,   100, 0   ],[ 120, 100, 100 ])
+       call check_name(&#146;hsv&#146;,&#146;lime&#146;,     [ 0,   100, 0   ],[ 120, 100, 100 ])
+       call check_name(&#146;hsv&#146;,&#146;teal&#146;,     [ 0,   50,  50  ],[ 180, 100, 50  ])
+       call check_name(&#146;hsv&#146;,&#146;cyan&#146;,     [ 0,   100, 100 ],[ 180, 100, 100 ])
+       call check_name(&#146;hsv&#146;,&#146;navy&#146;,     [ 0,   0,   50  ],[ 240, 100, 50  ])
+       call check_name(&#146;hsv&#146;,&#146;blue&#146;,     [ 0,   0,   100 ],[ 240, 100, 100 ])
+       call check_name(&#146;hsv&#146;,&#146;purple&#146;,   [ 63,  13,  94  ],[ 277, 87,  94  ])
+       call check_name(&#146;hsv&#146;,&#146;magenta4&#146;, [ 55,  0,   55  ],[ 300, 100, 55  ])
+       call check_name(&#146;hsv&#146;,&#146;magenta&#146;,  [ 100, 0,   100 ],[ 300, 100, 100 ])
+       call check_name(&#146;hsv&#146;,&#146;maroon&#146;,   [ 69,  19,  38  ],[ 338, 73,  69  ])
+    contains
+    subroutine check_name(modelout,name,rgb,other)
+    ! given a color convert to MODELOUT and compare to expected values
+    character(len=*),intent(in)   :: name
+    integer,intent(in)            :: rgb(3), other(3)
+    character(len=*),intent(in)   :: modelout
+       real                       :: val1,val2,val3
+       integer                    :: status
+       ! convert RGB values to MODELOUT values
+       call hue(&#146;rgb&#146;,REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)), &
+       & modelout,val1,val2,val3,status)
+          write(*,*)&#146;COLOR &#146;//trim(name)
+          write(*,*)&#146;EXPECTED &#146;//modelout//&#146; ====&gt;&#146;,other
+          write(*,*)&#146;RETURNED &#146;//modelout//&#146; ====&gt;&#146;, &
+          & int([val1+0.5,val2+0.5,val3+0.5])
+          write(*,*)&#146;STATUS ==========&gt;&#146;,status
+    end subroutine check_name
+    end program demo_hue
+<P>
+</PRE>
+<BLOCKQUOTE>
+Results:
+<P>
+<PRE>
+    COLOR red
+    EXPECTED hls ====&gt;           0          50         100
+    RETURNED hls ====&gt;           0          50         100
+    STATUS ==========&gt;           0
+    COLOR orange
+    EXPECTED hls ====&gt;          39          50         100
+    RETURNED hls ====&gt;          39          50         100
+    STATUS ==========&gt;           0
+    COLOR yellow
+    EXPECTED hls ====&gt;          60          50         100
+    RETURNED hls ====&gt;          60          50         100
+    STATUS ==========&gt;           0
+    COLOR green
+    EXPECTED hls ====&gt;         120          50         100
+    RETURNED hls ====&gt;         120          50         100
+    STATUS ==========&gt;           0
+    COLOR cyan
+    EXPECTED hls ====&gt;         180          50         100
+    RETURNED hls ====&gt;         180          50         100
+    STATUS ==========&gt;           0
+    COLOR blue
+    EXPECTED hls ====&gt;         240          50         100
+    RETURNED hls ====&gt;         240          50         100
+    STATUS ==========&gt;           0
+    COLOR magenta
+    EXPECTED hls ====&gt;         300          50         100
+    RETURNED hls ====&gt;         300          50         100
+    STATUS ==========&gt;           0
+    COLOR black
+    EXPECTED hls ====&gt;           0           0           0
+    RETURNED hls ====&gt;           0           0           0
+    STATUS ==========&gt;           0
+    COLOR white
+    EXPECTED hls ====&gt;           0         100           0
+    RETURNED hls ====&gt;           0         100           0
+    STATUS ==========&gt;           0
+    COLOR black
+    EXPECTED hsv ====&gt;           0           0           0
+    RETURNED hsv ====&gt;           0           0           0
+    STATUS ==========&gt;           0
+    COLOR gray50
+    EXPECTED hsv ====&gt;           0           0          50
+    RETURNED hsv ====&gt;           0           0          50
+    STATUS ==========&gt;           0
+    COLOR silver
+    EXPECTED hsv ====&gt;           0           0          75
+    RETURNED hsv ====&gt;           0           0          75
+    STATUS ==========&gt;           0
+    COLOR white
+    EXPECTED hsv ====&gt;           0           0         100
+    RETURNED hsv ====&gt;           0           0         100
+    STATUS ==========&gt;           0
+    COLOR red4
+    EXPECTED hsv ====&gt;           0         100          55
+    RETURNED hsv ====&gt;           0         100          55
+    STATUS ==========&gt;           0
+    COLOR red
+    EXPECTED hsv ====&gt;           0         100         100
+    RETURNED hsv ====&gt;           0         100         100
+    STATUS ==========&gt;           0
+    COLOR olive
+    EXPECTED hsv ====&gt;          60         100          50
+    RETURNED hsv ====&gt;          60         100          50
+    STATUS ==========&gt;           0
+    COLOR yellow
+    EXPECTED hsv ====&gt;          60         100         100
+    RETURNED hsv ====&gt;          60         100         100
+    STATUS ==========&gt;           0
+    COLOR green
+    EXPECTED hsv ====&gt;         120         100         100
+    RETURNED hsv ====&gt;         120         100         100
+    STATUS ==========&gt;           0
+    COLOR lime
+    EXPECTED hsv ====&gt;         120         100         100
+    RETURNED hsv ====&gt;         120         100         100
+    STATUS ==========&gt;           0
+    COLOR teal
+    EXPECTED hsv ====&gt;         180         100          50
+    RETURNED hsv ====&gt;         180         100          50
+    STATUS ==========&gt;           0
+    COLOR cyan
+    EXPECTED hsv ====&gt;         180         100         100
+    RETURNED hsv ====&gt;         180         100         100
+    STATUS ==========&gt;           0
+    COLOR navy
+    EXPECTED hsv ====&gt;         240         100          50
+    RETURNED hsv ====&gt;         240         100          50
+    STATUS ==========&gt;           0
+    COLOR blue
+    EXPECTED hsv ====&gt;         240         100         100
+    RETURNED hsv ====&gt;         240         100         100
+    STATUS ==========&gt;           0
+    COLOR purple
+    EXPECTED hsv ====&gt;         277          87          94
+    RETURNED hsv ====&gt;         277          86          94
+    STATUS ==========&gt;           0
+    COLOR magenta4
+    EXPECTED hsv ====&gt;         300         100          55
+    RETURNED hsv ====&gt;         300         100          55
+    STATUS ==========&gt;           0
+    COLOR magenta
+    EXPECTED hsv ====&gt;         300         100         100
+    RETURNED hsv ====&gt;         300         100         100
+    STATUS ==========&gt;           0
+    COLOR maroon
+    EXPECTED hsv ====&gt;         338          73          69
+    RETURNED hsv ====&gt;         337          72          69
+    STATUS ==========&gt;           0
+<P>
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>hue (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5b7b6b04-0768-439f-b3f3-01256afc837c using man macros.</FONT>
+<br><br><center><img src="images/hue.3m_pixel.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

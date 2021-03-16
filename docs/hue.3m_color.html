@@ -1,0 +1,209 @@
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="Fortran, Fortran code, Fortran source code repository, Fortran library, Fortran archive,         " />
+<meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
+<meta name="keywords" content="Fortran Repository" />
+<meta name="keywords" content="Fortran Collection" />
+<style>
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
+<div id="Container">
+<div id="Content">
+<dl>
+<dt> <a name="HUE">NAME</a> </dt><dd>
+   HUE(3f) - [M_color] converts a color's components from one color model
+   to another.
+   (LICENSE:PD)
+</dd>
+
+<dt> SYNOPSIS </dt><dd>
+<pre>
+subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
+
+ character(len=*),intent(in) :: modei  ! color model of input values
+ character(len=*),intent(in) :: modeo  ! color model of output values
+ real,intent(in)             :: clr1i,clr2i,clr3i
+ real,intent(out)            :: clr1o,clr2o,clr3o
+ integer,intent(out)         :: status
+</pre>
+</dd>
+<!-- ======================================================================= -->
+<dt> DESCRIPTION  </dt><dd>
+</dd>
+<dt> Basic color models ..</dt><dd>
+<p>
+Valid values for modei and modeo as well as the corresponding
+meanings for clr1*, clr2*, and clr3* are:
+
+<table border="1">
+<tr><th>model</th><th> clr1 </th><th> clr2      </th><th> clr3      </th></tr>
+<tr><td>hls  </td><td> hue  </td><td> lightness </td><td> saturation</td></tr>
+<tr><td>hsl  </td><td> hue  </td><td> saturation</td><td> lightness </td></tr>
+<tr><td>hvs  </td><td> hue  </td><td> value     </td><td> saturation</td></tr>
+<tr><td>hsv  </td><td> hue  </td><td> saturation</td><td> value     </td></tr>
+<tr><td>rgb  </td><td> red  </td><td> green     </td><td> blue      </td></tr>
+<tr><td>cmy  </td><td> cyan </td><td> magenta   </td><td> yellow    </td></tr>
+<tr><td>yiq  </td><td> luma</br> grayscale </td><td> orange-blue</br>chrominance </td><td> purple-green</br>chrominance </td></tr>
+</table>
+</p>
+
+<ul>
+   <li>  lightness, value, saturation, red, green, blue, cyan, magenta, and yellow range from 0 to 100,
+   <li>  hue ranges from 0 to 360 degrees,
+   <li>  y   ranges from   0 to 100,
+   <li>  i   ranges from -60 to 60,
+   <li>  q   ranges from -52 to 52
+</ul>
+
+<p>
+   The STATUS variable can signal the following conditions:
+</p>
+
+<pre>
+
+   -1   modei = modeo, so no substantial conversion was done,
+    1   one of the input color values was outside the allowable range,
+    2   modei was invalid
+    3   modeo was invalid
+</pre>
+<h2>EXAMPLE</h2>
+<pre>
+
+  Sample program
+
+   program demo_hue
+   use M_color, only : hue
+   implicit none
+      !               NAME        RGB(0-255)            HLS(0-100)
+      call chk('hls','red',     [100, 0,   0  ], [0,   50,  100])
+      call chk('hls','orange',  [100, 65,  0  ], [39,  50,  100])
+      call chk('hls','yellow',  [100, 100, 0  ], [60,  50,  100])
+      call chk('hls','green',   [0,   100, 0  ], [120, 50,  100])
+      call chk('hls','cyan',    [0,   100, 100], [180, 50,  100])
+      call chk('hls','blue',    [0,   0,   100], [240, 50,  100])
+      call chk('hls','magenta', [100, 0,   100], [300, 50,  100])
+      call chk('hls','black',   [0,   0,   0  ], [0,   0,   0  ])
+      call chk('hls','white',   [100, 100, 100], [0,   100, 0  ])
+      !               NAME        RGB(0-255)           HSV(0-100)
+      call chk('hsv','red',     [100, 0,   0  ], [0,   100, 100])
+      call chk('hsv','yellow',  [100, 100, 0  ], [60,  100, 100])
+      call chk('hsv','green',   [0,   100, 0  ], [120, 100, 100])
+      call chk('hsv','cyan',    [0,   100, 100], [180, 100, 100])
+      call chk('hsv','blue',    [0,   0,   100], [240, 100, 100])
+      call chk('hsv','magenta', [100, 0,   100], [300, 100, 100])
+      call chk('hsv','black',   [0,   0,   0  ], [0,   0,   0  ])
+      call chk('hsv','white',   [100, 100, 100], [0,   0,   100])
+
+      call chk('hsv','gray50',  [50,  50,  50 ], [0,   0,   50 ])
+      call chk('hsv','silver',  [75,  75,  75 ], [0,   0,   75 ])
+      call chk('hsv','red4',    [55,  0,   0  ], [0,   100, 55 ])
+      call chk('hsv','olive',   [50,  50,  0  ], [60,  100, 50 ])
+      call chk('hsv','lime',    [0,   100, 0  ], [120, 100, 100])
+      call chk('hsv','teal',    [0,   50,  50 ], [180, 100, 50 ])
+      call chk('hsv','navy',    [0,   0,   50 ], [240, 100, 50 ])
+      call chk('hsv','purple',  [63,  13,  94 ], [277, 87,  94 ])
+      call chk('hsv','magenta4',[55,  0,   55 ], [300, 100, 55 ])
+      call chk('hsv','maroon',  [69,  19,  38 ], [338, 73,  69 ])
+   contains
+   subroutine chk(modelout,name,rgb,other)
+   ! given a color convert to MODELOUT and compare to expected values
+   character(len=*),intent(in)   :: name
+   integer,intent(in)            :: rgb(3), other(3)
+   character(len=*),intent(in)   :: modelout
+      real                       :: val1,val2,val3
+      integer                    :: status
+      ! convert RGB values to MODELOUT values
+      call hue('rgb',REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)),&
+      & modelout,val1,val2,val3,status)
+         ! left-justify name to 10 characters or more
+         write(*,'(a,1x)',advance='no') &
+         & [ character(len=max(10,len_trim(name))) ::' '//trim(name)]
+         write(*,'(a,1x,3(i3,1x))',advance='no') &
+         & modelout//' EXPECTED',other
+         write(*,'(a,1x,3(i3,1x))',advance='no') &
+         & 'GOT',int([val1+0.5,val2+0.5,val3+0.5])
+         write(*,'(a,i0)')'STATUS ',status
+   end subroutine chk
+   end program demo_hue
+
+  Results:
+
+    red       hls EXPECTED   0  50 100 GOT   0  50 100 STATUS 0
+    orange    hls EXPECTED  39  50 100 GOT  39  50 100 STATUS 0
+    yellow    hls EXPECTED  60  50 100 GOT  60  50 100 STATUS 0
+    green     hls EXPECTED 120  50 100 GOT 120  50 100 STATUS 0
+    cyan      hls EXPECTED 180  50 100 GOT 180  50 100 STATUS 0
+    blue      hls EXPECTED 240  50 100 GOT 240  50 100 STATUS 0
+    magenta   hls EXPECTED 300  50 100 GOT 300  50 100 STATUS 0
+    black     hls EXPECTED   0   0   0 GOT   0   0   0 STATUS 0
+    white     hls EXPECTED   0 100   0 GOT   0 100   0 STATUS 0
+    black     hsv EXPECTED   0   0   0 GOT   0   0   0 STATUS 0
+    gray50    hsv EXPECTED   0   0  50 GOT   0   0  50 STATUS 0
+    silver    hsv EXPECTED   0   0  75 GOT   0   0  75 STATUS 0
+    white     hsv EXPECTED   0   0 100 GOT   0   0 100 STATUS 0
+    red4      hsv EXPECTED   0 100  55 GOT   0 100  55 STATUS 0
+    red       hsv EXPECTED   0 100 100 GOT   0 100 100 STATUS 0
+    olive     hsv EXPECTED  60 100  50 GOT  60 100  50 STATUS 0
+    yellow    hsv EXPECTED  60 100 100 GOT  60 100 100 STATUS 0
+    green     hsv EXPECTED 120 100 100 GOT 120 100 100 STATUS 0
+    lime      hsv EXPECTED 120 100 100 GOT 120 100 100 STATUS 0
+    teal      hsv EXPECTED 180 100  50 GOT 180 100  50 STATUS 0
+    cyan      hsv EXPECTED 180 100 100 GOT 180 100 100 STATUS 0
+    navy      hsv EXPECTED 240 100  50 GOT 240 100  50 STATUS 0
+    blue      hsv EXPECTED 240 100 100 GOT 240 100 100 STATUS 0
+    purple    hsv EXPECTED 277  87  94 GOT 277  86  94 STATUS 0
+    magenta4  hsv EXPECTED 300 100  55 GOT 300 100  55 STATUS 0
+    magenta   hsv EXPECTED 300 100 100 GOT 300 100 100 STATUS 0
+    maroon    hsv EXPECTED 338  73  69 GOT 337  72  69 STATUS 0
+</pre>
+</dd>
+<!-- ======================================================================= -->
+<dt> AUTHOR </dt><dd>
+
+   John S. Urban
+
+</dd>
+<!-- ======================================================================= -->
+<dt> LICENSE </dt><dd>
+
+   Public Domain
+
+</dd>
+<!-- ======================================================================= -->
+</dl>
+</div>
+</div>
+</body>
+</html>

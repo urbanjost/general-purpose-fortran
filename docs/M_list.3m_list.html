@@ -1,0 +1,284 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_list (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_list</B>(3f) - [M_list] maintain simple lists
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>Author</A><BR>
+<A HREF=#5>License</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>use</B> M_list, <I>only</I> : insert, replace, <I>remove</I>
+<B>use</B> M_list, <I>only</I> : <I>dictionary</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The <B>M_list</B>(3fm) module allows for maintaining an array as a sorted
+list. An example is given that creates a keyword-value <I>dictionary</I>
+using the lists.
+<P>
+The lists are maintained as simple allocatable arrays. Each time an
+entry is added or deleted the array is re-allocated. Because of the
+expense of reallocating the data these routines are best suited for
+maintaining small lists that do not change size frequently.
+<P>
+The advantage is that the <I>dictionary</I> components are simple arrays of
+intrinsic types which can be easily accessed with standard routines.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BASIC LIST</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>subroutine </B><B>locate</B>(list,value,place,ier,errmsg) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+finds the index where a
+value is found or should
+be in a sorted array and
+flag if the value exists
+already
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>subroutine </B><B>insert</B>(list,value,place) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+insert entry into an allocatable
+array at specified position
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>subroutine </B><B>replace</B>(list,value,place) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+replace entry in an allocatable
+array at specified position
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>subroutine </B><B>remove</B>(list,place) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<I>remove</I> entry from an allocatable
+array at specified position
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BASIC DICTIONARY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Due to bugs in gfortran up to at least 7.4.0, this next section
+does not work.
+<P>
+type <I>dictionary</I>
+<P>
+<PRE>
+      character(len=:),allocatable :: key(:)
+      character(len=:),allocatable :: value(:)
+      integer,allocatable          :: count(:)
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>%get</B> </TD><TD valign=bottom>
+get value from <B>type</B>(<I>dictionary</I>) given an existing key
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>%set</B> </TD><TD valign=bottom>
+set or replace value for <B>type</B>(<I>dictionary</I>) given a key
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>%del</B> </TD><TD valign=bottom>
+delete an existing key from <B>type</B>(<I>dictionary</I>)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>%clr</B> </TD><TD valign=bottom>
+empty a <B>type</B>(<I>dictionary</I>)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_M_list
+   use M_list, only : insert, locate, replace, remove
+   ! create a dictionary with character keywords, values, and value lengths
+   ! using the routines for maintaining a list
+<P>
+    use M_list, only : locate, insert, replace
+    implicit none
+    character(len=:),allocatable   :: keywords(:)
+    character(len=:),allocatable   :: values(:)
+    integer,allocatable            :: counts(:)
+    integer                        :: i
+    ! insert and replace entries
+    call update(&#146;b&#146;,&#146;value of b&#146;)
+    call update(&#146;a&#146;,&#146;value of a&#146;)
+    call update(&#146;c&#146;,&#146;value of c&#146;)
+    call update(&#146;c&#146;,&#146;value of c again&#146;)
+    call update(&#146;d&#146;,&#146;value of d&#146;)
+    call update(&#146;a&#146;,&#146;value of a again&#146;)
+    ! show array
+    write(*,&#146;(*(a,"==&gt;","[",a,"]",/))&#146;)(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+    ! remove some entries
+    call update(&#146;a&#146;)
+    call update(&#146;c&#146;)
+    write(*,&#146;(*(a,"==&gt;","[",a,"]",/))&#146;)(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+    ! get some values
+    write(*,*)&#146;get b=&gt;&#146;,get(&#146;b&#146;)
+    write(*,*)&#146;get d=&gt;&#146;,get(&#146;d&#146;)
+    write(*,*)&#146;get notthere=&gt;&#146;,get(&#146;notthere&#146;)
+<P>
+    contains
+    subroutine update(key,valin)
+    character(len=*),intent(in)           :: key
+    character(len=*),intent(in),optional  :: valin
+    integer                               :: place
+    integer                               :: ilen
+    character(len=:),allocatable          :: val
+    if(present(valin))then
+       val=valin
+       ilen=len_trim(val)
+       ! find where string is or should be
+       call locate(keywords,key,place)
+       ! if string was not found insert it
+       if(place.lt.1)then
+          call insert(keywords,key,iabs(place))
+          call insert(values,val,iabs(place))
+          call insert(counts,ilen,iabs(place))
+       else
+          call replace(values,val,place)
+          call replace(counts,ilen,place)
+       endif
+    else
+       call locate(keywords,key,place)
+       if(place.gt.0)then
+          call remove(keywords,place)
+          call remove(values,place)
+          call remove(counts,place)
+       endif
+    endif
+    end subroutine update
+    function get(key) result(valout)
+    character(len=*),intent(in)   :: key
+    character(len=:),allocatable  :: valout
+    integer                       :: place
+       ! find where string is or should be
+       call locate(keywords,key,place)
+       if(place.lt.1)then
+          valout=&#146;&#146;
+       else
+          valout=values(place)(:counts(place))
+       endif
+    end function get
+</PRE>
+end program demo_M_list
+<P>
+Results:
+<P>
+<PRE>
+   d==&gt;[value of d]
+   c==&gt;[value of c again]
+   b==&gt;[value of b]
+   a==&gt;[value of a again]
+<P>
+   d==&gt;[value of d]
+   b==&gt;[value of b]
+<P>
+    get b=&gt;value of b
+    get d=&gt;value of d
+    get notthere=&gt;
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_list (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8f3a15a5-cd34-438a-886f-dca2f8f64da5 using man macros.</FONT>
+<br><br><center><img src="images/M_list.3m_list.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

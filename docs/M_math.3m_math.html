@@ -1,0 +1,122 @@
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="Fortran, Fortran code, Fortran source code repository, Fortran library, Fortran archive,         " />
+<meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
+<meta name="keywords" content="Fortran Repository" />
+<meta name="keywords" content="Fortran Collection" />
+<style>
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
+<div id="Container">
+<div id="Content">
+<h2>NAME</h2>
+
+<p>
+   <em>M_math(3fm)</em> - [M_math::INTRO] module collecting various general math-related procedures
+</p>
+
+<h2>DESCRIPTION</h2>
+<br/> <br/>
+
+<h3>GEOMETRY</h3>
+
+<ul>
+<li><a href="citer.3m_math.html">          citer(3f)          </a> determine various geometric properties of circle segment given radius and area of the segment. </li>
+<li><a href="envelope.3m_math.html">       envelope(3f)       </a> Find the vertices (in clockwise order) of a polygon enclosing the points (x(i), y(i), i=1, ..., n. </li>
+<li><a href="inpolygon.3m_math.html">      inpolygon(3f)      </a> Subroutine to determine whether or not a point is in a polygon </li>
+<li><a href="locpt.3m_math.html">          locpt(3f)          </a> find if a point is inside a polygonal path </li>
+<li><a href="poly_intercept.3m_math.html"> poly_intercept(3f) </a> find points where a line intersects a polygon  </li>
+<li><a href="polyarea.3m_math.html">       polyarea(3f)       </a> find area of a polygon  </li>
+<li><a href="closest.3m_math.html">        closest(3f)        </a> find point in <X,Y> arrays closest to target point</li>
+<li><a href="hypot.3m_math.html">          hypot(3f)          </a> Euclidean distance</li>
+</ul>
+
+<h3>FIT</h3>
+<ul>
+   <li><a href="julfit.3m_math.html">         julfit(1f)        </a> linear least square fit  </li>
+   <li><a href="julfit1.3m_math.html">        julfit1(3f)       </a> linear least square fit(y=a*x+b)  </li>
+   <li><a href="lowess.3m_math.html">         lowess(3f)        </a> data smoothing using locally weighted regression  </li>
+   <li><a href="splift.3m_math.html">         splift(3f)        </a> fits a spline to the n data points given in x and y  </li>
+   <li><a href="splint.3m_math.html">         splint(3f)        </a> interpolates and twice differentiates a cubic spline  </li>
+   <li><a href="linearint.3m_math.html">      linearint(3f)     </a> linear interpolation  </li>
+</ul>
+
+<h3>STATISTICS</h3>
+<ul>
+   <li><a href="bds.3m_math.html">            bds(3f)          </a> basic descriptive statistics </li>
+   <li><a href="ncr.3m_math.html">            ncr(3f)          </a> number of unique combinations of size R from set of N candidates</li>
+   <li><a href="extremum.3m_math.html">       extremum(3f)     </a> find the minimum and maximum value in a real array </li>
+   <li><a href="stddev.3m_math.html">         stddev(3f)       </a> standard deviation </li>
+   <li><a href="skekurx.3m_math.html">        skekurx(3f)      </a> skew and kurtosis variant  </li>
+   <li><a href="skekur1.3m_math.html">        skekur1(3f)      </a> skew and kurtosis variant  </li>
+</ul>
+
+<h3>SCALES AND RANGES</h3>
+<ul>
+<li><a href="scale1.3m_math.html">         scale1(3f)       </a> given xmin,xmax,n, find new range xminp xmaxp divisible into approximately n linear intervals of size dist </li>
+<li><a href="scale3.3m_math.html">         scale3(3f)       </a> find nice log range, typically for an axis </li>
+</ul>
+
+<h3>MATRICES</h3>
+<ul>
+<li><a href="invert_2x2.3m_math.html">     invert_2x2(3f)      </a> directly invert 2x2 matrix </li>
+<li><a href="invert_3x3.3m_math.html">     invert_3x3(3f)      </a> directly invert 3x3 matrix </li>
+<li><a href="invert_4x4.3m_math.html">     invert_4x4(3f)      </a> directly invert 4x4 matrix </li>
+<li><a href="magic_square.3m_math.html">   magic_square(3f)    </a> fill a magic square</li>
+</ul>
+
+<h3>POLYNOMIALS</h3>
+<ul>
+<li><a href="quadratic.3m_math.html">      quadratic(3f)    </a> return roots of quadratic equation</li>
+</ul>
+
+<h3>CURVE FITS TO FUNCTIONS</h3>
+<ul>
+<li><a href="gcsgau1.3m_math.html"> gcsgau1:</a> solve a system of simultaneous linear equations
+<li><a href="glstsq.3m_math.html"> glstsq:</a> least squares fit to a polynomial expression
+</ul>
+
+<h3>THE CALCULUS</h3>
+<ul>
+<li><a href="qhfg.3m_math.html"> qhfg:</a> compute vector of integral values for given general table
+<li><a href="qhsg.3m_math.html"> qhsg:</a> compute vector of integral values for given general table
+<li><a href="qtfg.3m_math.html"> qtfg:</a> compute vector of integral values for given general table
+<li><a href="trapezoidal_integral.3m_math.html"> trapezoidal_integral:</a> compute vector of integral values for given general table
+</ul>
+
+</div>
+</div>
+</body>
+</html>

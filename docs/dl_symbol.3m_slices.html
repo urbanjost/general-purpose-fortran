@@ -1,0 +1,160 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>dl_symbol (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>dl_symbol</B>(3f) - [M_slices] routine to plot characters and symbols
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>DL_SYMBOL</B>(X,Y,S,T,A,NN,IS)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Routine to plot characters and symbols
+<TABLE cellpadding=3><!-- tsb: Routine to plot characters and symbols
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>X,Y</B> </TD><TD valign=bottom>
+string position. If x&gt;998 or y&gt;998 then plotting
+of the string is continued from the last <B>DL_SYMBOL</B>(3f) call
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>S</B> </TD><TD valign=bottom>
+height of the string to be printed
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>T</B> </TD><TD valign=bottom>
+character variable containing the ascii text to be plotted
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>A</B> </TD><TD valign=bottom>
+angle at which the string is to be plotted
+counter-clockwise from x axis
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+number of characters to use from T
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+           note: plotting will terminate if an ASCII zero is
+           encountered at any other position than the first character.
+<P>
+           If N&lt;0, a plot(x,y,2) will be executed prior to plotting
+           the first character and ABS(N) characters will be plotted.
+<P>
+           For N&lt;2, the plot pen is left at the 1st character origin
+           point; otherwise it is at the end of the last plotted
+           vector in the last plotted character.
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IS</B> </TD><TD valign=bottom>
+centering option flag.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+           = -3  end coordinates of string (if it were to be
+                 plotted will be returned in x,y where the input
+                 (x,y) are the lower left corner of string. This
+                 permits computation of the plotted length.
+                 However, no plotting is done and the last position
+                 variables are not changed.
+           = -2  end coordinates of string are returned in x,y.
+                 Initial (x,y) to be lower left corner of plotted
+                 string. String is plotted.
+           = -1  (x,y) to be lower left corner of plotted string
+                 (x and y not altered) String is plotted.
+           = 0   (x,y) to be center of plotted string
+                 (x and y not altered) String is plotted.
+           = 1   (x,y) to be lower right corner of plotted string
+                 (x and y not altered) String is plotted.
+<P>
+</PRE>
+</BLOCKQUOTE>
+DL_SYMBOL plots an ASCII string in a CHARACTER array. Each character
+(or string of characters) can be imagined as a square box with the
+origin at the lower left corner. The routine determines the initial
+position of the lower left of the first character than plots each
+character relative to this position. As each character is plotted the
+"current position" is moved to the right (along the string baseline)
+a fixed amount S. When the string centering option is selected,
+the length of the plotted string is determined and, based on the
+character height, the lower left corner is computed from the input
+(x,y) position. The special plot symbols (ASCII 0-31) are always
+centered about the current position.
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>dl_symbol (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b2773ed1-c843-48ee-aa4b-bf06378218ce using man macros.</FONT>
+<br><br><center><img src="images/dl_symbol.3m_slices.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

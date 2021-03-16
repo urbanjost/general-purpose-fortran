@@ -1,0 +1,334 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>parse (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>parse</B>(3f) - [ARGUMENTS:M_kracken] parse user command and store tokens into Language Dictionary
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>See Also</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>License</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+recursive subroutine <B>parse</B>(verb,string,allow,error_return)
+<P>
+<PRE>
+   character(len=*),intent(in)     ::  verb
+   character(len=*),intent(in)     ::  string
+   character(len=*),intent(in)     ::  allow
+   integer,optional,intent(out)    ::  error_return
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+given a string of form
+<P>
+<PRE>
+     value  -var value -var value
+<P>
+</PRE>
+define variables of form
+<P>
+<PRE>
+     verb_var(i) = value
+<P>
+</PRE>
+<B>--var</B> will become verb__var
+<TABLE cellpadding=3><!-- tsb: <B>--var</B> will become verb__var
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+values may be in double quotes if they contain alphameric characters
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a # signifies the rest of the line is a comment
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+adjacent double quotes put one double quote into value
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+processing ends when an unquoted semi-colon or end of string is encountered
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the variable name for the first value is verb_init (often verb_oo)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+leading and trailing blanks are removed from values
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+call it once to give defaults
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+call it again and vars without values are set to null strings
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>VERB</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+command name to process
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>STRING</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+string is character input string with first verb removed (options + other commands)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ALLOW</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+flag to allow or disallow new VERB_KEYWORD name being added. Should be
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NEW VARIABLES ARE ALLOWED</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NO NEW VARIABLES ARE ALLOWED</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+That is, ff &#146;add&#146; or &#146;append&#146; and the value is not blank
+it will be APPENDED to the current value. If &#146;define&#146; or
+to it.
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>ERROR_RETURN</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+error code. If zero, no error occurred
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+sample program:
+<P>
+<PRE>
+   program demo_parse
+   use M_kracken, only : parse, sget, iget, rget
+   use M_strings, only : chomp
+   implicit none
+   character(len=:),allocatable  :: verb
+   character(len=*),parameter    :: delimiters=&#146; ;,&#146;
+   integer     :: i
+   integer     :: ierr
+   character(len=132) :: line
+   character(len=132), parameter :: commands(5)= [character(len=132) :: &
+     &#146;start -i 10 -message this is a message&#146;, &
+     &#146;end -i 20 -j 30 -k 55.55 &#146;, &
+     &#146;list&#146;, &
+     &#146;help -oo&#146;, &
+     &#146;end -i 44.44 &#146;]
+     do i=1,size(commands)
+        line=commands(i) ! need mutable line
+        if(chomp(line,verb,delimiters).ge. 0)then
+           call parse(verb,line,&#146;add&#146;,ierr)
+           write(*,*)&#146;do whatever a &#146;//verb//&#146; command does&#146;
+           select case(verb)
+           case(&#146;start&#146;)
+              write(*,*)trim(sget(&#146;start_i&#146;))
+              write(*,*)trim(sget(&#146;start_message&#146;))
+           case(&#146;end&#146;)
+              write(*,*)iget(&#146;end_i&#146;)
+              write(*,*)iget(&#146;end_j&#146;)
+              write(*,*)rget(&#146;end_k&#146;)
+           case(&#146;list&#146;)
+              write(*,*)&#146;list things&#146;
+           case(&#146;help&#146;)
+              write(*,*)&#146;show help text&#146;
+           endselect
+        endif
+     enddo
+     ! look at some of the values as strings or numbers
+     write(*,*)trim(sget(&#146;start_i&#146;))
+     write(*,*)trim(sget(&#146;start_message&#146;))
+     write(*,*)iget(&#146;end_i&#146;)
+     write(*,*)iget(&#146;end_j&#146;)
+     write(*,*)rget(&#146;end_k&#146;)
+   end program demo_parse
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    do whatever a start command does
+    10
+    this is a message
+    do whatever a end command does
+             20
+             30
+      55.5499992
+    do whatever a list command does
+    list things
+    do whatever a help command does
+    show help text
+    do whatever a end command does
+             44
+             30
+      55.5499992
+    10
+    this is a message
+             44
+             30
+      55.5499992
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>M_kracken</B>(3f), </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>kracken</B>(3f)
+</TD></TR>
+<TR></TR></TABLE><B>dget</B>(3f), <B>dgets</B>(3f), <B>iget</B>(3f), <B>igets</B>(3f), <B>lget</B>(3f), <B>lgets</B>(3f),
+<B>rget</B>(3f), <B>rgets</B>(3f), <B>sget</B>(3f), <B>sgets</B>(3f), <B>retrev</B>(3f)
+<P>
+<B>parse</B>(3f), <B>dissect</B>(3f), <B>store</B>(3f), <B>setprompts</B>(3f), <B>show</B>(3f)
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>parse (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fd781cd8-6e47-4436-82ae-1f3bcd3968ef using man macros.</FONT>
+<br><br><center><img src="images/parse.3m_kracken.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

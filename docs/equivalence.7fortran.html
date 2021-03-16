@@ -1,0 +1,272 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>equivalence (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>equivalence</B>(7f) - [FORTRAN:INTRINSICS] used to specify the sharing of storage units by two or more objects in a storage unit
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>equivalence</B>(object1,object2)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+An EQUIVALENCE statement is used to specify the sharing of storage units by two or more objects in a
+scoping unit. This causes storage association (16.5.3) of the objects that share the storage units.
+<P>
+If the equivalenced objects have differing type or type parameters, the EQUIVALENCE statement does not cause
+type conversion or imply mathematical equivalence. If a scalar and an array are equivalenced, the scalar does
+not have array properties and the array does not have the properties of a scalar.
+<P>
+<PRE>
+     R565      equivalence-stmt             is   EQUIVALENCE equivalence-set-list
+<P>
+     R566      equivalence-set              is   ( equivalence-object , equivalence-object-list )
+<P>
+     R567      equivalence-object           is variable-name
+                                            or array-element
+                                            or substring
+<P>
+     C583      (R567) An equivalence-object shall not be a designator with a base object that is a dummy argument,
+               a pointer, an allocatable variable, a derived-type object that has an allocatable ultimate component,
+               an object of a nonsequence derived type, an object of a derived type that has a pointer at any level of
+               component selection, an automatic object, a function name, an entry name, a result name, a variable with
+               the BIND attribute, a variable in a common block that has the BIND attribute, or a named constant.
+<P>
+     C584     (R567) An equivalence-object shall not be a designator that has more than one part-ref .
+<P>
+     C585     (R567) An equivalence-object shall not be a coarray or a subobject thereof.
+<P>
+     C586     (R567) An equivalence-object shall not have the TARGET attribute.
+<P>
+     C587     (R567) Each subscript or substring range expression in an equivalence-object shall be an integer
+              initialization expression (7.1.12).
+<P>
+     C588     (R566) If an equivalence-object is default integer, default real, double precision real, default complex,
+              default logical, or of numeric sequence type, all of the objects in the equivalence set shall be of these
+              types.
+<P>
+     C589     (R566) If an equivalence-object is default character or of character sequence type, all of the objects in
+              the equivalence set shall be of these types and kinds.
+<P>
+     C590     (R566) If an equivalence-object is of a sequence type that is not a numeric sequence or character sequence
+              type, all of the objects in the equivalence set shall be of the same type with the same type parameter
+              values.
+<P>
+     C591     (R566) If an equivalence-object is of an intrinsic type but is not default integer, default real, double
+              precision real, default complex, default logical, or default character, all of the objects in the equivalence
+              set shall be of the same type with the same kind type parameter value.
+<P>
+     C592     (R567) If an equivalence-object has the PROTECTED attribute, all of the objects in the equivalence set
+              shall have the PROTECTED attribute.
+<P>
+     C593     (R567) The name of an equivalence-object shall not be a name made accessible by use association.
+<P>
+     C594     (R567) A substring shall not have length zero.
+<P>
+</PRE>
+<BLOCKQUOTE>
+NOTE 5.40
+<P>
+The EQUIVALENCE statement allows the equivalencing of sequence structures and the equivalencing of
+objects of intrinsic type with nondefault type parameters, but there are strict rules regarding the appearance
+of these objects in an EQUIVALENCE statement.
+<P>
+A structure that appears in an EQUIVALENCE statement shall be a sequence structure. If a sequence
+structure is not of numeric sequence type or of character sequence type, it shall be equivalenced only to
+objects of the same type with the same type parameter values.
+<P>
+A structure of a numeric sequence type shall be equivalenced only to another structure of a numeric sequence
+type, an object that is default integer, default real, double precision real, default complex, or default logical
+type such that components of the structure ultimately become associated only with objects of these types
+and kinds.
+<P>
+A structure of a character sequence type shall be equivalenced only to an object of default character type
+or another structure of a character sequence type.
+<P>
+An object of intrinsic type with nondefault kind type parameters shall not be equivalenced to objects of
+different type or kind type parameters.
+<P>
+Further rules on the interaction of EQUIVALENCE statements and default initialization are given in
+16.5.3.4.
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Further rules on the interaction of EQUIVALENCE statements and default initialization are given in
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.1.2</B> </TD><TD valign=bottom>
+Equivalence association
+</TD></TR>
+<TR><TD colspan=2>
+An EQUIVALENCE statement specifies that the storage sequences (16.5.3.2) of the data objects specified in an
+equivalence-set are storage associated. All of the nonzero-sized sequences in the equivalence-set, if any, have the
+same first storage unit, and all of the zero-sized sequences in the equivalence-set, if any, are storage associated with
+one another and with the first storage unit of any nonzero-sized sequences. This causes the storage association
+of the data objects in the equivalence-set and may cause storage association of other data objects.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.1.3</B> </TD><TD valign=bottom>
+Equivalence of default character objects
+</TD></TR>
+<TR><TD colspan=2>
+A default character data object shall not be equivalenced to an object that is not default character and not of a
+character sequence type. The lengths of equivalenced default character objects need not be the same.
+</TD></TR>
+<TR><TD colspan=2>
+An EQUIVALENCE statement specifies that the storage sequences of all the default character data objects
+specified in an equivalence-set are storage associated. All of the nonzero-sized sequences in the equivalence-set, if
+any, have the same first character storage unit, and all of the zero-sized sequences in the equivalence-set, if any,
+are storage associated with one another and with the first character storage unit of any nonzero-sized sequences.
+This causes the storage association of the data objects in the equivalence-set and may cause storage association
+of other data objects.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+       NOTE 5.41
+       For example, using the declarations:
+<P>
+       CHARACTER (LEN = 4) :: A, B
+       CHARACTER (LEN = 3) :: C (2)
+       EQUIVALENCE (A, C (1)), (B, C (2))
+<P>
+       the association of A, B, and C can be illustrated graphically as:
+<P>
+          1        2        3        4         5        6        7
+        |---      --- A    ---      ---|
+                                   |---      --- B    ---      ---|
+        |---      C(1)     ---|    |---      C(2)     ---|
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.1.4</B> </TD><TD valign=bottom>
+Array names and array element designators
+</TD></TR>
+<TR><TD colspan=2>
+For a nonzero-sized array, the use of the array name unqualified by a subscript list as an equivalence-object has
+the same effect as using an array element designator that identifies the first element of the array.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.1.5</B> </TD><TD valign=bottom>
+Restrictions on EQUIVALENCE statements
+</TD></TR>
+<TR><TD colspan=2>
+An EQUIVALENCE statement shall not specify that the same storage unit is to occur more than once in a
+storage sequence.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+       NOTE 5.42
+       For example:
+<P>
+       REAL, DIMENSION (2) :: A
+       REAL :: B
+       EQUIVALENCE (A(1), B), (A(2), B) ! Not standard-conforming
+<P>
+       is prohibited, because it would specify the same storage unit for A (1) and A (2).
+<P>
+</PRE>
+An EQUIVALENCE statement shall not specify that consecutive storage units are to be nonconsecutive.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+        NOTE 5.43
+        For example, the following is prohibited:
+<P>
+        REAL A (2)
+        DOUBLE PRECISION D (2)
+        EQUIVALENCE (A(1), D(1)), (A(2), D(2)) ! Not standard-conforming
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>5.7.3</B> </TD><TD valign=bottom>
+Restrictions on common and equivalence
+</TD></TR>
+<TR></TR></TABLE>An EQUIVALENCE statement shall not cause the storage sequences of two different common blocks to be
+associated.
+<P>
+Equivalence association shall not cause a derived-type object with default initialization to be associated with an
+object in a common block.
+<P>
+Equivalence association shall not cause a common block storage sequence to be extended by adding storage units
+preceding the first storage unit of the first object specified in a COMMON statement for the common block.
+<P>
+<PRE>
+        NOTE 5.46
+        For example, the following is not permitted:
+<P>
+        COMMON /X/ A
+        REAL B (2)
+        EQUIVALENCE (A, B(2))          ! Not standard-conforming
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>equivalence (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5c4b9e79-29fe-46c3-be92-231e0a90aa27 using man macros.</FONT>
+<br><br><center><img src="images/equivalence.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

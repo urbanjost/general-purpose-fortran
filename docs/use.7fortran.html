@@ -1,0 +1,219 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>use (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>use</B>(7f) - [FORTRAN] gives a program unit accessibility to public entities in a module.
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>USE</B> [, <I>mode-nature</I> ::] <I>namespace</I> [, <I>rename-list</I>]
+<B>USE</B> [, <I>mode-nature</I> ::] <I>namespace</I> [,ONLY: <I>only-list</I>]
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The <B>USE</B> statement makes the specified <I>namespace</I> accessible to the
+current scoping unit. It also provides a means of renaming or limiting
+the accessibility of entities in the <I>namespace</I>.
+<P>
+WHERE:
+<TABLE cellpadding=3><!-- tsb: WHERE:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><I>mode-nature</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Is INTRINSIC or NON_INTRINSIC. If INTRINSIC is used, <I>namespace</I>
+must be the name of an intrinsic module. If NON_INTRINSIC is used,
+<I>namespace</I> must be the name of an nonintrinsic module. If mod-nature is
+not specified, <I>namespace</I> must be the name of an intrinsic or nonintrinsic
+module. If both are provided, the nonintrinsic module is used. It is an
+error to specify a user module and an intrinsic module of the same name
+in the same program unit.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><I>namespace</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is a publicly accessible <I>namespace</I>; ie. it is the name of a module.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><I>rename-list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is a comma-separated list of local-name =&gt; use-name
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><I>only-list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is a comma-separated list of access-id or [local-name =&gt; use-name]
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+                 local-name      is the local name for the entity specified by use-name
+                                 Is the name of the entity in the program unit using the module or is
+                                 "OPERATOR (op-name)", where op-name is the name of a defined operator
+                                 in the program unit using the module.
+                 use-name        is the name of a public entity in the specified namespace
+                 access-id       is use-name or generic-spec
+                 generic-spec    is generic-name
+                                 or OPERATOR (defined-operator)
+                                 or ASSIGNMENT (=)
+<P>
+                               generic-name is the name of a generic procedure
+<P>
+                               defined-operator is one of the intrinsic operators
+<P>
+                               or .op-name.
+<P>
+                               .op-name. is a user-defined name for the operation
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; REMARKS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<I>rename-list</I> and ONLY: <I>only-list</I> may only appear if the <I>namespace</I> being
+used was implemented with Fortran for .NET
+<P>
+A <B>USE</B> statement without ONLY provides access to all PUBLIC entities in
+the specified <I>namespace</I>.
+<P>
+A <B>USE</B> statement with ONLY provides access only to those entities that
+appear in the <I>only-list</I>.
+<P>
+If more than one <B>USE</B> statement appears in a scoping unit, the rename-lists
+and only-lists are treated as one concatenated <I>rename-list</I>.
+<P>
+If two or more generic interfaces that are accessible in the same
+scoping unit have the same name, same operator, or are assignments,
+they are interpreted as a single generic interface.
+<P>
+Two or more accessible entities, other than generic interfaces, can
+have the same name only if no entity is referenced by this name in the
+scoping unit.
+<P>
+If local-name is absent, the use-name is available by use association.
+<P>
+An entity can be accessed by more than one local-name.
+<P>
+A local-name must not be declared with different attributes in the
+scoping unit that contains the <B>USE</B> statement, except that it can appear
+in a PUBLIC or PRIVATE statement in the scoping unit of a module.
+<P>
+Forward references to modules are not allowed. That is, if a module is
+used in the same source file in which it resides, the module program
+unit must appear before its use.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Samples:
+<P>
+<PRE>
+   module example ! example is the namespace name
+      type type1 ! type1 is the class prototype name
+      contains
+         procedure, nopass :: static_method1
+      end type type1
+      type type2 ! type1 is the class prototype name
+      contains
+         procedure, nopass :: static_method2
+      end type type2
+   contains
+      subroutine static_method1(arg)
+         integer :: arg
+         ! code to implement method goes here
+      end subroutine static_method1
+      subroutine static_method2(arg)
+         integer :: arg
+         ! code to implement method goes here
+      end subroutine static_method2
+   end module example
+<P>
+   use example ! all public objects in namespace example available
+<P>
+   use example, only: type1 ! class prototype type1 available,
+                            ! class prototype type2 not available
+<P>
+   ! within this scoping unit, type1 is referred to as "mytype"
+   use example, mytype =&gt; type1
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 64e1cfb3-2ce7-4222-9037-b51e06faaa21 using man macros.</FONT>
+<br><br><center><img src="images/use.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,233 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>get_command_argument (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>get_command_argument</B>(3f) - [FORTRAN:INTRINSIC:SYSTEM ENVIRONMENT] Get
+command line arguments
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+call <B>get_command_argument</B>(number [, value, length, status])
+<P>
+<PRE>
+     integer,intent(in)                    :: number
+     character(len=*),intent(out),optional :: value
+     integer,intent(out),optional          :: length
+     integer,intent(out),optional          :: status
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Retrieve the NUMBER-th argument that was passed on the command line
+when the containing program was invoked.
+<P>
+There is not anything specifically stated about what an argument is but
+in practice the arguments are split on whitespace unless the arguments
+are quoted and IFS values (Internal Field Separators) used by common
+shells are ignored.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>NUMBER</B> </TD><TD valign=bottom>
+Shall be a scalar of type <B>integer</B>(4), NUMBER &gt;= 0.
+If NUMBER = 0, VALUE is set to the name of the program
+(on systems that support this feature).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>VALUE</B> </TD><TD valign=bottom>
+Shall be a scalar of type CHARACTER and of default kind.
+After get_command_argument returns, the VALUE argument
+holds the NUMBER-th command line argument. If VALUE can
+not hold the argument, it is truncated to fit the length
+of VALUE. If there are less than NUMBER arguments specified
+at the command line, VALUE will be filled with blanks.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>LENGTH</B> </TD><TD valign=bottom>
+(Optional) Shall be a scalar of type <B>integer</B>(4).
+The LENGTH argument contains the length of the
+NUMBER-th command line argument.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>STATUS</B> </TD><TD valign=bottom>
+(Optional) Shall be a scalar of type <B>integer</B>(4).
+If the argument retrieval fails, STATUS is a positive number;
+if VALUE contains a truncated command line argument, STATUS
+is <B>-1</B>; and otherwise the STATUS is zero.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_get_command_argument
+   implicit none
+   character(len=255)           :: progname
+   integer                      :: stat
+   integer                      :: count,i, longest, argument_length
+   integer,allocatable          :: istat(:), ilen(:)
+   character(len=:),allocatable :: arguments(:)
+     ! get number of arguments
+     count = command_argument_count()
+     write(*,*)&#146;The number of arguments is &#146;,count
+     ! simple usage
+     call get_command_argument (0, progname, status=stat)
+     if (stat == 0) then
+        print *, "The program&#146;s name is " // trim (progname)
+     endif
+     ! showing how to make an array to hold any argument list
+     ! find longest argument
+     longest=0
+     do i=0,count
+        call get_command_argument(number=i,length=argument_length)
+        longest=max(longest,argument_length)
+     enddo
+     ! allocate string array big enough to hold command line argument strings
+     ! and related information
+     allocate(character(len=longest) :: arguments(0:count))
+     allocate(istat(0:count))
+     allocate(ilen(0:count))
+     ! read the arguments into the array
+     do i=0,count
+       call get_command_argument(i, arguments(i),status=istat(i),length=ilen(i))
+     enddo
+     ! show the results
+     write (*,&#146;(i3.3,1x,i0.5,1x,i0.5,1x,"[",a,"]")&#146;) &
+     & (i,istat(i),ilen(i),arguments(i)(:ilen(i)),i=0,count)
+   end program demo_get_command_argument
+<P>
+</PRE>
+</BLOCKQUOTE>
+Sample output:
+<P>
+<PRE>
+   ./test_get_command_argument a    test  &#146;of getting   arguments  &#146; "  leading"
+<P>
+   &gt; The number of arguments is            5
+   &gt; The program&#146;s name is xxx
+   &gt;000 00000 00003 [./test_get_command_argument]
+   &gt;001 00000 00001 [a]
+   &gt;003 00000 00004 [test]
+   &gt;004 00000 00024 [of getting   arguments  ]
+   &gt;005 00000 00018 [  leading]
+<P>
+</PRE>
+<A name=6>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+[[Fortran 2003]] and later
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>CLASS</H3>
+
+</A>
+<BLOCKQUOTE>
+Subroutine
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>get_command</B>(3), <B>command_argument_count</B>(3)
+</BLOCKQUOTE>
+<A name=9>
+
+    <H4>&nbsp; &nbsp; JSU</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>get_command_argument (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f20d70bb-f012-4869-80a5-4ed244416083 using man macros.</FONT>
+<br><br><center><img src="images/get_command_argument.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

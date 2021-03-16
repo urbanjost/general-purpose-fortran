@@ -1,0 +1,223 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>sort_quick_rx (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>sort_quick_rx</B>(3f) - [M_sort] indexed hybrid quicksort of an array
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Background</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>sort_quick_rx</B>(data,index)
+<P>
+<PRE>
+      ! one of
+         real,intent(in)            :: data(:)
+         doubleprecision,intent(in) :: data(:)
+         integer,intent(in)         :: data(:)
+         character,intent(in)       :: data(:)
+         complex,intent(in)         :: data(:)
+<P>
+      integer,intent(out)           :: indx(size(data))
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+A rank hybrid quicksort. The data is not moved. An integer array is
+generated instead with values that are indices to the sorted order of
+the data. This requires a second array the size of the input array,
+which for large arrays could require a significant amount of order. One
+major advantage of this method is that any element of a user-defined
+that is a scalar intrinsic can be used to provide the sort data and
+subsequently the indices can be used to access the entire user-defined
+type in sorted order. This makes this seemingly simple sort procedure
+usuable with the vast majority of user-defined types.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>BACKGROUND</H3>
+
+</A>
+<BLOCKQUOTE>
+From Leonard J. Moss of SLAC:
+<P>
+Here&#146;s a hybrid QuickSort I wrote a number of years ago. It&#146;s
+based on suggestions in Knuth, Volume 3, and performs much better
+than a pure QuickSort on short or partially ordered input arrays.
+<P>
+This routine performs an in-memory sort of the first N elements of
+array DATA, returning into array INDEX the indices of elements of
+DATA arranged in ascending order. Thus,
+<P>
+<PRE>
+      DATA(INDX(1)) will be the smallest number in array DATA;
+      DATA(INDX(N)) will be the largest number in DATA.
+<P>
+</PRE>
+The original data is not physically rearranged. The original order
+of equal input values is not necessarily preserved.
+<P>
+<B>sort_quick_rx</B>(3f) uses a hybrid QuickSort algorithm, based on several
+suggestions in Knuth, Volume 3, Section 5.2.2. In particular, the
+"pivot key" [my term] for dividing each subsequence is chosen to be
+the median of the first, last, and middle values of the subsequence;
+and the QuickSort is cut off when a subsequence has 9 or fewer
+elements, and a straight insertion sort of the entire array is done
+at the end. The result is comparable to a pure insertion sort for
+very short arrays, and very fast for very large arrays (of order 12
+micro-sec/element on the 3081K for arrays of 10K elements). It is
+also not subject to the poor performance of the pure QuickSort on
+partially ordered data.
+<P>
+Complex values are sorted by the magnitude of <B>sqrt</B>(r**2+i**2).
+<TABLE cellpadding=3><!-- tsb: Complex values are sorted by the magnitude of <B>sqrt</B>(r**2+i**2).
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Created: <B>sortrx</B>(3f): 15 Jul 1986, Len Moss
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+saved from <B>url=</B>(0044)<A HREF="http://www.fortran.com/fortran/quick_sort2.f">http://www.fortran.com/fortran/quick_sort2.f</A>
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+changed to update syntax from F77 style; John S. Urban 20161021
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+generalized from only real values to include other intrinsic types;
+John S. Urban 20210110
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample usage:
+<P>
+<PRE>
+   program demo_sort_quick_rx
+   use M_sort, only : sort_quick_rx
+   implicit none
+   integer,parameter            :: isz=10000
+   real                         :: rr(isz)
+   integer                      :: ii(isz)
+   integer                      :: i
+   write(*,*)&#146;initializing array with &#146;,isz,&#146; random numbers&#146;
+   CALL RANDOM_NUMBER(RR)
+   rr=rr*450000.0
+   write(*,*)&#146;sort real array with sort_quick_rx(3f)&#146;
+   call sort_quick_rx(rr,ii)
+   write(*,*)&#146;checking index of sort_quick_rx(3f)&#146;
+   do i=1,isz-1
+      if(rr(ii(i)).gt.rr(ii(i+1)))then
+         write(*,*)&#146;Error in sorting reals small to large &#146;,i,rr(ii(i)),rr(ii(i+1))
+      endif
+   enddo
+   write(*,*)&#146;test of sort_quick_rx(3f) complete&#146;
+   ! use the index array to actually move the input array into a sorted order
+   rr=rr(ii)
+   do i=1,isz-1
+      if(rr(i).gt.rr(i+1))then
+         write(*,*)&#146;Error in sorting reals small to large &#146;,i,rr(i),rr(i+1)
+      endif
+   enddo
+   write(*,*)&#146;test of sort_quick_rx(3f) complete&#146;
+   end program demo_sort_quick_rx
+<P>
+</PRE>
+<BLOCKQUOTE>
+Results:
+<P>
+<PRE>
+    initializing array with        10000  random numbers
+    sort real array with sort_quick_rx(3f)
+    checking index of sort_quick_rx(3f)
+    test of sort_quick_rx(3f) complete
+    test of sort_quick_rx(3f) complete
+<P>
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>sort_quick_rx (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8ba687e4-80fe-4f5a-b2dd-ecfd7c4a5625 using man macros.</FONT>
+<br><br><center><img src="images/sort_quick_rx.3m_sort.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

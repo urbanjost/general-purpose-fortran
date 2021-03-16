@@ -1,0 +1,297 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>deallocate (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>DEALLOCATE</B>(7f) - [FORTRAN:STATEMENT] causes allocated variables and targets to be deallocated
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>DEALLOCATE</B>(allocate-object-list [,STAT=stat-variable][,ERRMSG=errmsg-variable] )
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The DEALLOCATE statement causes allocatable variables to be deallocated;
+it causes pointer targets to be deallocated and the pointers to be
+disassociated.
+<P>
+An allocate-object shall not depend on the value, bounds, allocation
+status, or association status of another allocate-object in the same
+DEALLOCATE statement; it also shall not depend on the value of the
+stat-variable or errmsg-variable in the same DEALLOCATE statement.
+<P>
+The status of objects that were not successfully allocated or
+deallocated can be individually checked with the intrinsic functions
+ALLOCATED or ASSOCIATED.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>allocated-object-list</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Each allocate-object is a nonprocedure
+pointer or an allocatable variable.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>STAT=stat-variable</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+If the STAT= specifier appears, successful
+execution of the ALLOCATE or DEALLOCATE
+statement causes the stat-variable
+to become defined with a value of zero.
+<P>
+If an error condition occurs during
+execution of a DEALLOCATE statement that
+does not contain the STAT= specifier, error
+termination is initiated.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ERRMSG=errmsg-variable</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+If an error condition occurs during execution
+of an ALLOCATE or DEALLOCATE statement, the
+processor assigns an explanatory message to
+errmsg-variable. If no such condition occurs,
+the processor does not change the value of
+the errmsg-variable.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+No dealloc-opt shall appear more than once in a given DEALLOCATE statement
+<BLOCKQUOTE>
+<P>
+The errmsg-variable and stat-variable cannot be allocated or
+deallocated elsewhere in the statement or otherwise depend of any
+allocatable object in the statement.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+An example of a DEALLOCATE statement is:
+<P>
+<PRE>
+         DEALLOCATE (X, B)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>DEALLOCATION OF ALLOCATABLE VARIABLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Deallocating an unallocated allocatable variable causes an error
+condition in the DEALLOCATE statement. Deallocating an allocatable
+variable with the TARGET attribute causes the pointer association
+status of any pointer associated with it to become undefined.
+<P>
+When the execution of a procedure is terminated by execution of a
+RETURN or END statement, an unsaved allocatable local variable of
+the procedure retains its allocation and definition status if it
+is a function result variable or a subobject thereof; otherwise,
+it is deallocated.
+<P>
+When a BLOCK construct terminates, an unsaved allocatable local
+variable of the construct is deallocated.
+<P>
+If an executable construct references a function whose result is either
+allocatable or a structure with a subobject that is allocatable,
+and the function reference is executed, an allocatable result and
+any subobject that is an allocated allocatable entity in the result
+returned by the function is deallocated after execution of the
+innermost executable construct containing the reference.
+<P>
+If a function whose result is either allocatable or a structure with
+an allocatable subobject is referenced in the specification part
+of a scoping unit or BLOCK construct, and the function reference
+is executed, an allocatable result and any subobject that is an
+allocated allocatable entity in the result returned by the function
+is deallocated before execution of the executable constructs of the
+scoping unit or block.
+<P>
+When a procedure is invoked, any allocated allocatable object that
+is an actual argument corresponding to an INTENT (OUT) allocatable
+dummy argument is deallocated; any allocated allocatable object that
+is a subobject of an actual argument corresponding to an INTENT (OUT)
+dummy argument is deallocated.
+<P>
+When an intrinsic assignment statement (7.2.1.3) is executed,
+any noncoarray allocated allocatable subobject of the variable is
+deallocated before the assignment takes place.
+<P>
+When a variable of derived type is deallocated, any allocated
+allocatable subobject is deallocated.
+<P>
+If an allocatable component is a subobject of a finalizable object,
+that object is finalized before the component is automatically
+deallocated.
+<P>
+The effect of automatic deallocation is the same as that of a
+DEALLOCATE statement without a dealloc-opt-list.
+<P>
+There is implicit synchronization of all images in association with
+each DEALLOCATE statement that deallocates one or more coarrays. On
+each image, execution of the segment (8.5.1) following the statement
+is delayed until all other images have executed the same statement
+the same number of times. If the coarray is a dummy argument, its
+ultimate argument (12.5.2.3) shall be the same coarray on every image.
+<P>
+There is also an implicit synchronization of all images in association
+with the deallocation of a coarray or coarray subcomponent caused by
+the execution of a RETURN or END statement or the termination of a
+BLOCK construct.
+<P>
+<PRE>
+    In the following example:
+<P>
+       &gt; SUBROUTINE PROCESS
+       &gt;   REAL, ALLOCATABLE :: TEMP(:)
+       &gt;
+       &gt;   REAL, ALLOCATABLE, SAVE :: X(:)
+       &gt;   &#46;&#46;&#46;
+       &gt; END SUBROUTINE PROCESS
+<P>
+</PRE>
+<BLOCKQUOTE>
+on return from subroutine PROCESS, the allocation status of X is
+preserved because X has the SAVE attribute. TEMP does not have the
+SAVE attribute, so it will be deallocated if it was allocated. On
+the next invocation of PROCESS, TEMP will have an allocation status
+of unallocated.
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>DEALLOCATION OF POINTER TARGETS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If a pointer appears in a DEALLOCATE statement, its association status
+shall be defined. Deallocating a pointer
+that is disassociated or whose target was not created by an ALLOCATE
+statement causes an error condition in the DEALLOCATE statement. If a
+pointer is associated with an allocatable entity, the pointer shall
+not be deallocated.
+<P>
+If a pointer appears in a DEALLOCATE statement, it shall be associated
+with the whole of an object that was
+created by allocation. Deallocating a pointer target causes the
+pointer association status of any other pointer that is associated
+with the target or a portion of the target to become undefined.
+<P>
+If an ALLOCATE or DEALLOCATE statement with a coarray
+allocate-object is executed when one or more images has initiated
+termination of execution, the stat-variable becomes defined with the
+processor-dependent positive integer value of the constant STAT STOPPED
+IMAGE from the intrinsic module ISO_FORTRAN_ENV (13.8.2). If any other
+error condition occurs during execution of the ALLOCATE or DEALLOCATE
+statement, the stat-variable becomes defined with a processor-dependent
+positive integer value different from STAT STOPPED IMAGE. In either
+case, each allocate-object has a processor-dependent status:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: If an ALLOCATE or DEALLOCATE statement with a coarray
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+each allocate-object that was successfully allocated shall have
+an allocation status of allocated or a pointer association
+status of associated;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+each allocate-object that was successfully deallocated shall
+have an allocation status of unallocated or a pointer association
+status of disassociated;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+each allocate-object that was not successfully allocated or
+deallocated shall retain its previous allocation status or
+pointer association status.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
+<P>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>deallocate (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ce0e3a4d-0f4e-4de5-85f3-e91306771d67 using man macros.</FONT>
+<br><br><center><img src="images/deallocate.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

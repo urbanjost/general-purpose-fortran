@@ -1,0 +1,136 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>hatchang (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>hatchang</B>(3f) - [M_draw:POLYGONS] Set the angle of the hatch lines.
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>hatchang</B>(<I>angle</I>)
+<B>real,intent</B>(<I>in</I>) :: <I>angle</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Set the <I>angle</I> of the hatch lines. The <I>angle</I> is <I>in</I> degrees. Zero degrees
+is on the negative X axis. Positive values are counterclockwise. The
+value is 0 at program initialization. The last value set is retained
+even if hatching is not active or is turned on and off.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_hatchang
+   use M_drawplus, only : draw_interpret
+   character(len=:),allocatable :: draw_cmds(:)
+<P>
+   DRAW_CMDS=[ CHARACTER(LEN=128) :: &
+   &#146;prefsize 1000 200; vinit                                     &#146;,&
+   &#146;set b=.4; page -25-b 25+b -5-b 5+b; color 0;clear            &#146;,&
+   &#146;textsize .6 .7;font futura.l;centertext .true.               &#146;,&
+   &#146;leftjustify; linewidth 50; polyhatch .true.; hatchpitch 1/2  &#146;,&
+   &#146;# draw circles with hatching                                 &#146;,&
+   &#146;linewidth 90;hatchang  90.1; color  7;  circle X=-20  Y=0  5 &#146;,&
+   &#146;move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr  90 degrees &#146;,&
+   &#146;linewidth 90;hatchang  45  ; color  2;  circle X=-10  Y=0  5 &#146;,&
+   &#146;move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr  45 degrees &#146;,&
+   &#146;linewidth 90;hatchang   0  ; color  6;  circle X=-0   Y=0  5 &#146;,&
+   &#146;move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr   0 degrees &#146;,&
+   &#146;linewidth 90;hatchang -45  ; color  5;  circle X=10   Y=0  5 &#146;,&
+   &#146;move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr -45 degrees &#146;,&
+   &#146;linewidth 90;hatchang -90  ; color  4;  circle X=20   Y=0  5 &#146;,&
+   &#146;move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr -90 degrees &#146;,&
+   &#146;linewidth 130                                                &#146;,&
+   &#146;move2 0 0;draw2 -5 0                                         &#146;,&
+   &#146;move2 -5 0;draw2 -4.4  0.3                                   &#146;,&
+   &#146;move2 -5 0;draw2 -4.4 -0.3                                   &#146;,&
+   &#146;rightjustify                                                 &#146;,&
+   &#146;linewidth 60                                                 &#146;,&
+   &#146;move2 -5 0;drawstr 0 degrees                                 &#146;,&
+   &#146;getkey                                                       &#146;,&
+   &#146;vexit                                                        &#146;,&
+   &#146;&#146;]
+<P>
+   call draw_interpret(DRAW_CMDS,delimiters=&#146;;&#146;)
+   end program demo_hatchang
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>hatchang (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7a732382-4cb2-4b21-8169-c3f89e86cd41 using man macros.</FONT>
+<br><br><center><img src="images/hatchang.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

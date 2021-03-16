@@ -1,0 +1,284 @@
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="Fortran, Fortran code, Fortran source code repository, Fortran library, Fortran archive,         " />
+<meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
+<meta name="keywords" content="Fortran Repository" />
+<meta name="keywords" content="Fortran Collection" />
+<style>
+body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+
+a,li span { color:#000; }
+a:visited { color:#666; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:200%; line-height: 1.1em;color:#F33}
+h2 { font-size:173%; }
+h3 { font-size:144%; }
+h4 { font-size:120%; }
+h5,h6 { font-size:100% }
+table { border:double #000; border-collapse:collapse; }
+td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
+td { padding-left: 1em; padding-right: 1em;}
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:90%; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
+xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
+
+#Container { margin:0 10px; text-align:center; }
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:80%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
+</style>
+</head>
+<body>
+<a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
+<div id="Container">
+<div id="Content">
+<dl>
+<dt><b> NAME </b></dt><dd>
+   M_calculator_programmer_notes(5f) - [M_calculator] Programmer notes for module M_calculator
+   (LICENSE:PD)
+</dd>
+<dt><b> SYNOPSIS </b></dt><dd>
+
+<h2>Internal routines:</h2>
+
+<ul>
+   <li><em>parens_   </em> crack out the parenthesis and pass each subexpression to JFUNS or args_
+   <li><em>funcs_   </em> processes function call strings of form "fun(a1,a2,a3,...pi)"
+   <li><em>stufftok_ </em> stores a string being returned by a function into the string dictionary
+   <li><em>args_   </em> separates a list of expressions that do not contain parenthesis and passes them to expressions_
+   <li><em>expressions_   </em> resolve a single expression into a value and restring it
+   <li><em>pows_   </em> process power expressions "a**b" in expressions from expressions_
+   <li><em>factors_   </em> process multiplies and divides in expressions from expressions_
+   <li><em>squeeze_ </em> removes spaces and tokenizes strings before the calculator starts to crack the input expression.
+   <li><em>a_to_a_  </em> given a string variable name return its value
+   <li><em>JUFIND   </em> given a function name find the line funcs_() should go to
+</ul>
+
+<h2>public convenience routines in M_calculator(3f) module</h2>
+
+<ul>
+<li><em>EXPRESSION </em>
+    returns the results of evaluating an expression but in addition
+    it displays error messages and other information. It calls
+    CALCULATOR(3f) to evaluate the expression.
+<li><em>STRGAR2 </em>
+    returns an array of numeric values from a list of expressions
+    by separating the expressions and calling expression.
+<li><em>INUM0   </em>
+    returns an integer value from an expression by calling expression.
+<li><em>RNUM0   </em>
+    is a function that
+    returns a REAL value from an expression by calling expression.
+<li><em>SNUM0   </em>
+    is a function that
+    returns a CHARACTER value from an expression by calling expression.
+</ul>
+</dd>
+
+<!-- =========================================================================================================================== -->
+
+<h2> <a name="NOTES"> Programmer Notes </a> </h2>
+
+<ul>
+<li> Changing the
+     <a href="#number_of_variables"> number of variable names.</a>
+<li> Adding a
+     <a href="#new_function">new function</a>
+     directly to the calculator code.
+<li> Adding a
+     <a href="#substitute_subroutine(3f)"> procedure</a>
+     to customize an application by allowing for user-defined functions
+<li> Points to ponder
+   <ul>
+   <li> added substitute_subroutine(3f) and substitute_c(3f) to make it easier
+        for people to use the calculator library. Programmers could
+        override with their own version at load time.
+   <li> Using C or Fortran 90 it would be easier to make a version that
+        uses recursion and allocatable arrays to handle array syntax and
+        to run more efficiently by avoiding almost all string manipulations
+   <li> User-defined arrays, handling of complex numbers, and user-defined
+        functions would all be useful additional features.
+   <li>
+        The parser is not intended to be used to generate a large number
+        as in the order of hundreds of thousands of calculations. It
+        was written to be portable, not optimal. The library has been
+        used on many operating systems, including NOS, NOS/VE, VMS, COS,
+        Aegis, UNICOS, SunOS, HP-UX, IRIX64, AIX, Solaris, ...
+   </ul>
+<li> Known bugs and limitations
+   <ul>
+   <li> There is no type-checking to make sure that
+        numeric values are not used where strings are required
+        and vice-versa. That is,
+        <pre>
+
+        sin("hello there")
+        </pre>
+        can cause problems.
+   </ul>
+</ul>
+
+<!-- =========================================================================================================================== -->
+
+<h2> <a name="number_of_variables"> Changing number of variable names </a> </h2>
+
+<p>
+   The number of values in the X() and Y() arrays is controlled by
+</p>
+
+<pre>
+
+      parameter(ixy_calc=55555)
+</pre>
+
+<p>
+    and the number of strings in the $X() and $Y() arrays is controlled by
+</p>
+
+<pre>
+
+      parameter(ixyc_calc=50)
+</pre>
+
+<p>
+   <font color="red"> <em> <strong> Warning: </strong>
+   If these parameter values are changed in size, any user-written
+   substitute_subroutine(3f) routines must change to reflect the
+   changes. Make a new library version and document the new size if your
+   copy is being used by others or people reloading from your library
+   could encounter problems.
+   </em>
+</p>
+</font>
+<!-- =========================================================================================================================== -->
+<h2> <a name="new_function"> Adding a new function directly to the calculator </a> </h2>
+
+<p>
+   To add a new function directly to the calculator go into funcs_()
+   and add a new case to the SELECT. See the many existing case statements
+   for examples on how to pass and return arguments.
+</p>
+
+<pre>
+
+    !=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    case("NEW")
+          ! NEW(value) function
+          ! numeric parameters are in args(n)
+          ! set fval and goto 5000 to set the returning numeric value
+          fval=new(args(1))
+          goto 5000    ! go to 5000 to return a numeric value
+    !=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    case("$NEW")
+          ! $NEW(string) function
+
+          ! GETTING A STRING ARGUMENT
+          ii=args(1)   ! assume argument 1 is a string, then this is
+                       ! pointer to where the string is
+          ctmp=values(ii) ! get the string argument
+          iend=values_len(ii) ! get the length of string
+
+          ! RETURNING A STRING
+          ctmp=newchar(ctmp(:iend)) ! set returned value
+          iend=len_trim(ctmp) ! set significant length of returned value
+          ! do something based on string
+          goto 5002   ! set ctmp and goto 5002 to return a string value
+    !=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+</pre>
+
+<p>
+   Exactly how to extract and return character strings may seem a little
+   confusing. Remember there are over 70 examples in <a >funcs_()</a>.
+</p>
+
+<hr><!-- =================================================================== -->
+
+<h2> <a name="substitute_subroutine(3f)"> Adding a new function for a particular application </a> </h2>
+
+<p>
+   A special routine can be added to allow add your own
+   functions for a particular program that you don't want in the main
+   CALCULATOR(3f) utility code. It will be called when any function
+   name is not recognized and the expression 'ownmode(1)' has previously
+   been entered into the calculator. The
+   <a href="Example.html">example program</a> shows a fully functional
+   substitute_subroutine(3f) routine that should make it clear how to add your own
+   functions. Here is a session using the example program:
+</p>
+
+<p>
+   At first any unknown function name causes an error in funcs_().
+</p>
+
+
+<pre>
+
+    aa(10)
+    error===>*funcs_* function not found: aa
+</pre>
+
+<p>
+   But if the special function OWNMODE() is called with its first
+   parameter set to 1 then unknown function calls are now passed to
+   the substitute_subroutine() routine if it has been defined.
+</p>
+
+<pre>
+
+    ownmode(1)
+    1.                   = ownmode(1)
+
+    aa(10)
+     *juown1* unknown function aa
+     function name length is..  2
+     number of arguments .....  1
+       1 VALUE=   10.0000000000000
+    0.                   = aa(10)
+</pre>
+
+<p>
+   By default substitute_subroutine(3f) echoes the name of the unknown function, how many characters long
+   the function name is, how many parameters were on the function call, and
+   an array of argument values. Note that a second array and a common block
+   can be used to pass string variables too.
+<p>
+
+<pre>
+
+    $XX="This is a string"
+    This is a string
+
+    aa(10,"hello there",40/3,$XX)
+     *juown1* unknown function aa
+     function name length is..  2
+     number of arguments .....  4
+       1 VALUE=   10.0000000000000
+       2 STRING=hello there
+       3 VALUE=    13.333333333333
+       4 STRING=This is a string
+    0.                   = aa(10,"hello there",40/3,$XX)
+</pre>
+
+<p>
+   Hopefully, the example code makes this clear.
+</p>
+
+<p>
+   So to add your own custom functions just construct branches in substitute_subroutine(3f)
+   based on your new function names!
+</p>
+
+<!-- =================================================================== -->
+</div>
+</div>
+</body>
+</html>

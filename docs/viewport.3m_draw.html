@@ -1,0 +1,220 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>viewport (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>viewport</B>(3f) - [M_draw:VIEWPORT] Specify which part of screen to draw in
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>viewport</B>(<I>left</I>, <I>right</I>, <I>bottom</I>, <I>top</I>)
+<B>real,intent</B>(<I>in</I>) :: <I>left</I>, <I>right</I>, <I>bottom</I>, <I>top</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Specify which part of the screen to draw <I>in</I>. Left, <I>right</I>, <I>bottom</I>,
+and <I>top</I> are real values <I>in</I> screen coordinates (0:n,0:m).
+<P>
+If a device has been declared to be 600 x 400
+<P>
+<PRE>
+        o-----&gt; X                         (right=600,top=0)
+        | #------------------------------------#
+        | |                                    |
+        | |                                    |
+        V |                                    |
+        Y |                                    |
+          #------------------------------------#
+</PRE>
+(<I>left</I>=0,<I>bottom</I>=400)
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_viewport
+   !
+   ! using non-square viewports, the associated distortion -- and how to fix it
+   !
+   use M_draw
+<P>
+   character(len=50)  :: device
+   character(len=120) :: buf
+   real    xfact, yfact
+   integer :: ios
+<P>
+   print*,&#146;Enter output device:&#146;
+   read(*,&#146;(a)&#146;,iostat=ios)device
+   if(ios.ne.0)device=&#146; &#146;
+<P>
+   call vinit(device)
+<P>
+   call color(D_BLACK)
+   call clear()
+   !
+   ! Make the viewport the same size as the screen/window.
+   !
+   call getfactors(xfact, yfact)
+   call viewport(-1.0, xfact, -1.0, yfact)
+   !
+   ! Draw a square. (Looks like a rectangle, if the viewport
+   ! wasn&#146;t "accidentally" square)
+   !
+   call color(D_RED)
+   call rect(-0.5, -0.5, 0.5, 0.5)
+   !
+   ! Tell them what it is.
+   !
+   call move2(-1.0, 0.9)
+   write(buf,&#146;(&#146;&#146;Distorted square (viewport(-1, &#146;&#146;, F7.3, &#146;&#146;, -1, &#146;&#146;, F7.3, &#146;&#146;))&#146;&#146;)&#146;) xfact, yfact
+   call drawstr(buf)
+<P>
+   idum=getkey()
+   !
+   ! Fix up the distortion (The actual formula to fix
+   ! the distortion is (viewport.xmax * (1 + xfact) / 2.0),
+   ! and similar for the y axis.
+   !
+   call ortho2(-1.0, xfact, -1.0, yfact)
+   !
+   ! Draw another square (Really is square this time)
+   !
+   call color(D_YELLOW)
+   call rect(-0.5, -0.5, 0.5, 0.5)
+   !
+   ! Tell them what it is.
+   !
+   call move2(-1.0, -0.9)
+   write(buf,&#146;(&#146;&#146;Fixed up square with ortho2(-1, &#146;&#146;, F7.3, &#146;&#146;, -1, &#146;&#146;, F7.3, &#146;&#146;)&#146;&#146;)&#146;) xfact, yfact
+   call drawstr(buf)
+<P>
+   idum=getkey()
+   !
+   ! Do it with world coords going from 0 - 5, 0 - 5.
+   ! Reset square viewport.
+   !
+   call color(D_BLACK)
+   call clear()
+<P>
+   call viewport(-1.0, 1.0, -1.0, 1.0)
+   call ortho2(0.0, 5.0, 0.0, 5.0)
+   call textsize(0.1, 0.1)
+   !
+   ! Square from 1 to 3. (Really is square)
+   !
+   call color(D_GREEN)
+   call rect(1.0, 1.0, 3.0, 3.0)
+<P>
+   call move2(0.0, 4.5)
+   call drawstr(&#146;Square from 0 - 3, 0 - 3&#146;)
+<P>
+   idum=getkey()
+   !
+   ! Distort it with a non-square viewport.
+   !
+   call viewport(-1.0, xfact, -1.0, yfact)
+<P>
+   call color(D_BLUE)
+   call rect(1.0, 1.0, 3.0, 3.0)
+<P>
+   call move2(0.0, 0.5)
+   call drawstr(&#146;Distorted square from 0 - 3, 0 - 3&#146;)
+<P>
+   idum=getkey()
+   !
+   ! Fix the distortion.
+   !
+   call ortho2(0.0, 5.0 * (1.0 + xfact) / 2.0, 0.0, 5.0 * (1.0 + yfact) / 2.0)
+<P>
+   call color(D_MAGENTA)
+   call rect(1.0, 1.0, 3.0, 3.0)
+<P>
+   call move2(0.0, 2.5)
+   call drawstr(&#146;Fixed up  square from 0 - 3, 0 - 3&#146;)
+<P>
+   idum=getkey()
+<P>
+   call vexit()
+<P>
+   end program demo_viewport
+<P>
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>viewport (3)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d790da25-8fb1-4e13-8fba-f8f1f6af3b3d using man macros.</FONT>
+<br><br><center><img src="images/viewport.3m_draw.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

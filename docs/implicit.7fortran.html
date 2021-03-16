@@ -1,0 +1,269 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>implicit (7)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>IMPLICIT</B>(7f) - [FORTRAN:STATEMENT] specify default type (if any) associated to a starting letter
+(LICENSE:PD)
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+IMPLICIT [NONE]|[declaration-type-spec (letter-spec-list)]
+determine default mapping between between the first letter of a data entity and a type.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Every data entity has a type. If a type is not explicitly assigned to
+a variable or function it will (by default) be assigned one according
+to the following rule -- the type is INTEGER if the name starts with
+the letters from I to N (the first two letters of the word "integer");
+otherwise it defaults to REAL.
+<P>
+The IMPLICIT statement allows the default rule to be changed or set
+to null. To turn off implicit typing enter one and only one IMPLICIT
+statement in the scoping unit
+<P>
+<PRE>
+      implicit none ! Disable all implicit typing
+<P>
+</PRE>
+Each data entity will now require explicitly having a type declared
+(INTEGER, REAL, DOUBLE, COMPLEX, &#46;&#46;&#46;).
+<P>
+This must appear after any USE statements and before any type
+declarations, including PARAMETER statements (which must know the
+rules to determine what type names are that have not been explicitly
+declared).
+<P>
+In most new code implicit typing is turned off either with an "IMPLICIT
+NONE" or sometimes by a compiler switch. On the other hand, the majority
+of pre-fortran90 code depends on implicit defaults.
+<P>
+Each prefix letter may have the type assigned to it declared only
+once in a unit.
+<P>
+The default rule, expressed as an IMPLICIT statement is
+<P>
+<PRE>
+      implicit real(a-h,o-z),integer(i-k)
+<P>
+</PRE>
+To make the default for all names be a DOUBLEPRECISION type one could enter
+<P>
+<PRE>
+      implicit doubleprecision (a-h,o-z)
+<P>
+</PRE>
+In another unit one might specify (multiple statements and compound
+statements are allowed, as illustrated):
+<P>
+<PRE>
+      implicit complex (c), doubleprecision (d)
+      implicit integer (i)
+      implicit logical (l)
+      implicit real (r)
+      implicit character(len=8) (a,b,e-h,j,k,m-q,s-z)
+<P>
+</PRE>
+There is no way to make some letters default to no type and others
+have a default. Either nothing has a default type or everything does:
+<P>
+<PRE>
+      implicit (a-h)  ! NOT ALLOWED. A TYPE MUST BE SPECIFIED
+<P>
+</PRE>
+</BLOCKQUOTE>
+The default for an internal or module procedure is the mapping in the
+host scoping unit.
+<BLOCKQUOTE>
+<P>
+Any data entity that is not explicitly declared by a type declaration
+statement, is not an intrinsic function, and is not accessed by use or
+host association is declared implicitly to be of the type (and type
+parameters) mapped from the first letter of its name, provided the
+mapping is not null.
+<P>
+The mapping may be to a derived type that is inaccessible in the local
+scope if the derived type is accessible in the host scoping unit. The
+data entity is treated as if it were declared in an explicit type
+declaration in the outermost scoping unit in which it appears. An
+explicit type specification in a FUNCTION statement overrides
+an IMPLICIT statement for the name of the result variable of that
+function subprogram.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>NONE</B> </TD><TD valign=bottom>
+If IMPLICIT NONE is specified in a scoping unit, it shall precede any PARAMETER statements
+that appear in the scoping unit and there shall be no other IMPLICIT statements in the scoping unit.
+or
+declaration-type-spec
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>letter-spec</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is (letter-or-range[,letter-or-range] [,letter-or-range] )
+If the minus and second letter appear, the second
+letter shall follow the first letter alphabetically.
+A letter-spec consisting of two letter s separated by
+a minus is equivalent to writing a list containing
+all of the letters in alphabetical order in the
+alphabetic sequence from the first letter through
+the second letter. For example, A-C is equivalent
+to A, B, C. The same letter shall not appear as a
+single letter, or be included in a range of letters,
+more than once in all of the IMPLICIT statements
+in a scoping unit.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The following are examples of the use of IMPLICIT statements:
+<P>
+<PRE>
+        module example_module
+           implicit none
+           &#46;&#46;&#46;
+           interface
+              function fun (i)    ! not all data entities need to
+                 integer fun      ! be declared explicitly
+              end function fun
+           end interface
+        contains
+           function jfun (j)      ! all data entities need to
+              integer jfun, j     ! be declared explicitly.
+              &#46;&#46;&#46;
+           end function jfun
+        end module example_module
+<P>
+        subroutine sub
+           implicit complex (c)
+           CM = (3.0, 2.0)      ! CM is implicitly declared COMPLEX
+           &#46;&#46;&#46;
+        contains
+           subroutine sub1
+              IMPLICIT INTEGER (A, C)
+              C = (0.0, 0.0) ! C is host associated and of
+                             ! type complex
+              Z = 1.0        ! Z is implicitly declared REAL
+              A = 2          ! A is implicitly declared INTEGER
+              CC = 1         ! CC is implicitly declared INTEGER
+              &#46;&#46;&#46;
+           end subroutine sub1
+           subroutine sub2
+              Z = 2.0         ! Z is implicitly declared REAL and
+                              ! is different from the variable of
+                              ! the same name in SUB1
+              &#46;&#46;&#46;
+           end subroutine sub2
+           subroutine sub3
+              USE EXAMPLE_MODULE ! Accesses integer function FUN
+                                  ! by use association
+              Q = FUN (K)         ! Q is implicitly declared REAL and
+              &#46;&#46;&#46;                 ! K is implicitly declared INTEGER
+           end subroutine sub3
+        end subroutine sub
+<P>
+        The following is an example of a mapping to a derived type that is inaccessible in the local scope:
+<P>
+              program main
+                implicit type(blob) (a)
+                type blob
+                  integer :: i
+                end type blob
+                type(blob) :: b
+                call steve
+              contains
+                subroutine steve
+                  integer :: blob
+                  ..
+                  aa = b
+                  ..
+                end subroutine steve
+              end program main
+<P>
+</PRE>
+<BLOCKQUOTE>
+In the subroutine STEVE, it is not possible to explicitly declare a variable to be of type BLOB because
+BLOB has been given a different meaning, but implicit mapping for the letter A still maps to type BLOB,
+so AA is of type BLOB.
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>implicit (7)</TD> <TD align=right width=33%><I>March 14, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a51399c6-5e3b-4e6e-9e22-4061423cefc1 using man macros.</FONT>
+<br><br><center><img src="images/implicit.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
