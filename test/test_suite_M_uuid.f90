@@ -1,4 +1,4 @@
-module scr_uuid
+module M_testsuite_M_uuid
 use M_msg
 use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
 use M_uuid, only : generate_uuid
@@ -147,12 +147,12 @@ integer,intent(out)                         :: ivals
    endif
 end subroutine unique_strings
 !==================================================================================================================================!
-end module scr_uuid
+end module M_testsuite_M_uuid
 !==================================================================================================================================!
 program runtest
 use M_msg
 use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
-use scr_uuid
+use M_testsuite_M_uuid
 implicit none
    unit_check_command=''
    unit_check_keep_going=.true.

@@ -1,7 +1,7 @@
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-module M_testsuite
+module M_testsuite_M_color
 use M_color, only : rgbmono, hue, closest_color_name, color_name2rgb
 use M_verify, only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
 contains
@@ -248,13 +248,13 @@ character(len=20)  :: closestname
 end subroutine check_name
 !===================================================================================================================================
 end subroutine test_color_name2rgb
-end module M_testsuite
+end module M_testsuite_M_color
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 program runtest
 use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
-use M_testsuite
+use M_testsuite_M_color
 implicit none
    unit_check_command=''
    unit_check_keep_going=.true.

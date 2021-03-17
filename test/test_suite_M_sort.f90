@@ -1,5 +1,5 @@
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-module M_testsuite
+module M_testsuite_M_sort
 use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
 use M_verify, only : unit_check_level
 use M_msg, only : str
@@ -323,14 +323,14 @@ character(len=16)   :: string2(2)=["The other string","First string    "],string
 
 end subroutine test_swap
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-end module M_testsuite
+end module M_testsuite_M_sort
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 program runtest
 use M_msg
 use M_verify
 use M_verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
 use M_verify, only : unit_check_level
-use M_testsuite
+use M_testsuite_M_sort
 implicit none
    unit_check_command=''
    unit_check_keep_going=.true.

@@ -1,7 +1,7 @@
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-module M_testsuite
+module M_testsuite_M_readline
 use M_verify
 use M_readline
 
@@ -23,13 +23,13 @@ subroutine test_system_readline()
    call unit_check_done('system_readline',msg='')
 end subroutine test_system_readline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-end module M_testsuite
+end module M_testsuite_M_readline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 program runtest
 use M_msg
 use M_verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
 use M_verify, only : unit_check_level, unit_check_keep_going, unit_check_command
-use M_testsuite
+use M_testsuite_M_readline
    unit_check_command=''
    unit_check_keep_going=.true.
    unit_check_level=0
