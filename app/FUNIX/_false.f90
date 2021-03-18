@@ -105,7 +105,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20170125>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       Tue, Mar 9th, 2021 8:04:31 PM>',&
+'@(#)COMPILED:       Mon, Mar 15th, 2021 12:50:50 AM>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
    stop ! if -version was specified, stop

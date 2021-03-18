@@ -5,15 +5,15 @@
           use M_math,     only : polyarea        ! compute the area bounded by a closed polygonal curve
           implicit none
           integer,parameter :: n=6
-          !  3--------------4
-          !   \           /
-          !     \       /
-          !       \   /
-          !         X 2,5
-          !       /  \
-          !     /      \
-          !   /          \
-          !  1--------------6
+          !   3--------------4   !
+          !    \           /     !
+          !      \       /       !
+          !        \   /         !
+          !          X 2,5       !
+          !        /  \          !
+          !      /      \        !
+          !    /          \      !
+          !   1--------------6   !
           real,parameter    :: x(n)=[-5.0, 0.0,-5.0, 5.0, 0.0, 5.0]
           real,parameter    :: y(n)=[-5.0, 0.0, 5.0, 5.0, 0.0,-5.0]
           real              :: xy(2,n)

@@ -577,7 +577,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    convert text files with ASA carriage return to Adobe PDF files>',&
 '@(#)VERSION:        2.0, 20170210>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       Tue, Mar 9th, 2021 8:04:26 PM>',&
+'@(#)COMPILED:       Mon, Mar 15th, 2021 12:50:43 AM>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
    stop ! if -version was specified, stop
@@ -871,8 +871,8 @@ real :: step
             write(GLOBAL_OUTFILE,'(4(f0.6,1x),"re f")')x1,y1,width,height
             step=2.0
 
-            !! x1 y1 m x2 y2 l S
-            !! xxx w  # line width
+            !*! x1 y1 m x2 y2 l S
+            !*! xxx w  # line width
             !write(GLOBAL_OUTFILE,'("0.6 0.8 0.6 RG",/,1x,f0.6,1x, f0.6," m ",%f %f," l S")')x1,y1,x1+width,y1
 
       else

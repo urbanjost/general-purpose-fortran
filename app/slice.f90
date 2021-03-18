@@ -131,7 +131,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.1, 20190326>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       Tue, Mar 9th, 2021 8:04:01 PM>',&
+'@(#)COMPILED:       Mon, Mar 15th, 2021 12:50:08 AM>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
    stop ! if -version was specified, stop
@@ -279,7 +279,7 @@ end program slice
 !==================================================================================================================================!
 subroutine slices(surfdat,kix,kiz,nx,nz,a0,b0,title)
    use M_draw
-   use :: m_slices, only : dl_slices, dl_init, dl_symbol
+   use :: M_slices, only : dl_slices, dl_init, dl_symbol
 !-----------------------------------------------------------------------------------------------------------------------------------
    real,intent(in)              :: SURFDAT(kix,kiz) ! array of y values
    integer,intent(in)           :: kix              ! x dimension of surfdat array

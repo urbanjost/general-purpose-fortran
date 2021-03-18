@@ -128,7 +128,7 @@
 !!      if (.true. /= .false. ) &
 !!       & write(*,*)'/= works like .neqv. for LOGICAL values'
 !!
-!!       write(*,*)' The value is '//10//' which is less than //20.2
+!!       write(*,*)' The value is '//10//' which is less than '//20.2
 !!
 !!
 !!      write(*,*) merge('sign works','sign fails',&
@@ -282,7 +282,7 @@ function g_g(value1,value2) result (string)
 
 class(*),intent(in)          :: value1, value2
 character(len=:),allocatable :: string
-   ! use this instead of str() so character variables are not trimmed
+   ! use this instead of str() so character variables are not trimmed and/or spaces are not added
    string = fmt(value1,'(g0)') // fmt(value2,'(g0)')
 end function g_g
 !-----------------------------------------------------------------------------------------------------------------------------------

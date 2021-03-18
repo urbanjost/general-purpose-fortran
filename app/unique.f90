@@ -1,6 +1,5 @@
 program unique ! this is a utility program. It is typically built using ccall(1).
 use M_CLI2,                       only : set_args, lget, sgets, iget, unnamed
-use M_CLI2,                       only : debug_m_cli2
 use M_uuid,                       only : generate_uuid
 use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
@@ -12,7 +11,6 @@ character(len=:),allocatable  :: prefix
 character(len=:),allocatable  :: help_text(:)
 character(len=:),allocatable  :: version_text(:)
 
-   debug_m_cli2=.false.
    ! define arguments, default values and crack command line
    call setup()
    call set_args('--method:m "4" --urn:U F --repeat:r 1',help_text,version_text)

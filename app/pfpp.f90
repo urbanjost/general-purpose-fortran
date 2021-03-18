@@ -214,7 +214,7 @@ subroutine ident(opts)                                 !@(#)ident(3f): process $
    lang=sget('ident_language')
 
    select case(lang)
-   case('fortran')    !! should make look for characters not allowed in metadata, continue over multiple lines, ...
+   case('fortran')    !*! should make look for characters not allowed in metadata, continue over multiple lines, ...
       select case(len(text))
       case(:89)
          write(G_iout,'("character(len=*),parameter::ident_",i0,"=""@(#)",a,''"'')')ident_count,text
@@ -979,7 +979,7 @@ integer                                      :: ipos2
    enddo OVERALL
 
    if (minus1.eq.-1.and.(loc.eq.0.or.loc.eq.1)) then
-      newl(:G_line_length)='-'//newl  !!! note potentially trimming a character off the end
+      newl(:G_line_length)='-'//newl  !*! note potentially trimming a character off the end
    elseif (minus1.eq.-1.and.loc.ne.1) then
       newl=newl(:loc-1)//'-'//newl(loc:)
    endif
@@ -1305,8 +1305,8 @@ character(len=*),intent(in) :: opts
       write(G_iout,'("''@(#)COMPILED:       ",a,"'',&")') date()//'>'
       write(G_iout,'(a)')"'']"
       write(G_iout,'(a)')"   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))"
-      !!write(G_iout,'(a)')'   write(*,*)"COMPILER VERSION=",COMPILER_VERSION()'
-      !!write(G_iout,'(a)')'   write(*,*)"COMPILER OPTIONS=",COMPILER_OPTIONS()'
+      !*!write(G_iout,'(a)')'   write(*,*)"COMPILER VERSION=",COMPILER_VERSION()'
+      !*!write(G_iout,'(a)')'   write(*,*)"COMPILER OPTIONS=",COMPILER_OPTIONS()'
       write(G_iout,'(a)')"   stop ! if -version was specified, stop"
       write(G_iout,'(a)')"endif"
       write(G_iout,'(a)')"end subroutine help_version"
@@ -1512,14 +1512,14 @@ subroutine format_g_man()
             if(len(G_MAN).gt.1)then      ! the way the string is built it starts with a newline
                CALL split(G_MAN,array_bug,delimiters=new_line('N'),nulls='return') ! parse string to an array parsing on delimiters
                ibug=len(array_bug)+6 !*! nvfortran bug
-               array=[character(len=ibug) :: array_bug] !! pad with trailing spaces
+               array=[character(len=ibug) :: array_bug] !*! pad with trailing spaces
                deallocate(array_bug)
                do i=1,size(array)        ! lines starting with a letter and all uppercase letters is prefixed with "##"
                   if( upper(array(i)).eq.array(i) .and. isalpha(array(i)(1:1)).and.lower(array(i)).ne.array(i))then
                      array(i)='##'//trim(array(i))
                      select case(array(i))
                      case('##SYNOPSIS','##EXAMPLES','##EXAMPLE')
-                        array(i)=trim(array(i))//new_line('N')//'!!'
+                        array(i)=trim(array(i))//new_line('N')//'!'//'!'
                      endselect
                   else
                      array(i)=' '//trim(array(i))
@@ -1527,11 +1527,11 @@ subroutine format_g_man()
                enddo
 
                if(size(array).gt.0)then
-                  write(G_iout,'("!>",a)')trim(array(1))
+                  write(G_iout,'("!",">",a)')trim(array(1))
                endif
 
                do i=2,size(array)
-                  write(G_iout,'("!!",a)',iostat=ios)trim(array(i))
+                  write(G_iout,'("!","!",a)',iostat=ios)trim(array(i))
                   if(ios.ne.0)exit WRITEIT
                enddo
 
@@ -1542,7 +1542,7 @@ subroutine format_g_man()
             if(len(G_MAN).gt.1)then      ! the way the string is built it starts with a newline
                CALL split(G_MAN,array_bug,delimiters=new_line('N'),nulls='return') ! parse string to an array parsing on delimiters
                ibug=len(array_bug)+6 !*! nvfortran bug
-               array=[character(len=ibug) :: array_bug] !! pad with trailing spaces
+               array=[character(len=ibug) :: array_bug] !*! pad with trailing spaces
                deallocate(array_bug)
                do i=1,size(array)        ! lines starting with a letter and all uppercase letters is prefixed with "##"
                   if( upper(array(i)).eq.array(i) .and. isalpha(array(i)(1:1)).and.lower(array(i)).ne.array(i))then
@@ -1787,7 +1787,7 @@ subroutine opens()                   !@(#)opens(3f): use expression on command l
             if(G_inc_files(ii).eq.dir)exit ALREADY
          enddo
          G_inc_count=G_inc_count+1
-         G_inc_count=min(G_inc_count,size(G_inc_files)) ! guard against too many files; !! should warn on overflow
+         G_inc_count=min(G_inc_count,size(G_inc_files)) ! guard against too many files; !*! should warn on overflow
          G_inc_files(G_inc_count)=dir
       endblock ALREADY
 
@@ -2419,7 +2419,7 @@ integer                        :: ilen
 !===================================================================================================================================
    select case(trim(G_outtype))
 !----------------------------------------------------------------------------------------------------------------------------------=
-   case('comment')                             ! write as a Fortran comment preceded by "!! "
+   case('comment')                             ! write as a Fortran comment preceded by two explanations and a space
                                                ! will be written later at end of BLOCK section
 !----------------------------------------------------------------------------------------------------------------------------------=
    case('null')                                ! do not write
@@ -2440,7 +2440,7 @@ integer                        :: ilen
    case('version')                             ! write version information with SCCS ID prefix for use with what(1) command
       write(G_iout,'("''@(#)",a,"'',&")')trim(line(:min(len_trim(line),128-1)))//'>'
 !----------------------------------------------------------------------------------------------------------------------------------=
-                                               !! should handle longer lines and split them
+                                               !*! should handle longer lines and split them
    case('write')                               ! convert string to a Fortran write statement to unit "IO"
       buff=trim(line)                          ! do not make a line over 132 characters. Trim input line if needed
       buff=buff//repeat(' ',max(80,len(buff))) ! ensure space in buffer for substitute

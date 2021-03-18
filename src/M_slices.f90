@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 ! ==================================================================================================================================
 module m_slices
 !
@@ -53,72 +64,74 @@ contains
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-! NAME
-!    dl_slices(3f) - [M_slices] plot data in 3-D overlay form
-!    (LICENSE:PD)
-! SYNOPSIS
-!    subroutine dl_slices(a,inx,inz,nx,nz,alpha,beta,xh,yh,zh,iflag,iaxis, &
-! 
-!                          & xt,nxt,xastart,xaend,nmx,nnx,mlx,tsx,ndx,smx, &
-!                          & yt,nyt,              nmy,nny,mly,tsy,ndy,smy, &
-!                          & zt,nzt,zastart,zaend,nmz,nnz,mlz,tsz,ndz,smz, &
-!                          & aminin,amaxin,icol,maxsize)
-! 
-! DESCRIPTION
-!    Routine to plot data in 3-D overlay form.
-! 
-! OPTIONS
-! 
-!    coordinate system is:  Y  Z
-! 
-!      A           array a(inx,inz) containing vertical height data
-!      INX,INZ     integers dimension of A array
-!      NX,NZ       integers indicating size of A array to plot
-!      ALPHA       real angle (in degrees) of x axis (NX) from horizontal
-!      BETA        real angle (in degrees) of z axis (NZ) from horizontal
-!      XH,YH,ZH    real length of each axis
-!      IFLAG       integer
-!                     (one's digit)  = 2 use pen color control array
-!                                    = 1 do not use pen color array
-!                     (ten's digit)  = 0 plot side plates
-!                                    = 1 do not plot side plates
-!      IAXIS       integer axis option flag
-!                     = 0 do not plot axis
-!                         --following variables not accessed
-!                     < 0 plot axis, use input y axis scale
-!                         --following variables accessed
-!                     > 0 plot axis, use computed y axis scale
-!                         --following variables accessed
-!                     (one's digit)  = 1 plot axis, y axis scale
-!                                      --variables accessed
-!                                    = 2 plot axis, auto scale y axis
-!                                      --variables accessed
-!                     (ten's digit)  = 0 default axis parameters
-!                                    = 1 specialized axisb_ parameters
-!      XT,YT,ZT          char strings for axis titles
-!      NXT,NYT,NZT       int  length of axis titles.
-!                        if zero then that axis not plotted
-!      XASTART,ZASTART   real axis start values
-!      XAEND,ZAEND       real axis end values
-! 
-!  following only accessed if ten's digit of iflag=1
-! 
-!      NMX,NMY,NMZ     int number of minor ticks between major ticks
-!      NNX,NNY,NNZ     int highlight length of nnx-th minor tick on axis
-!      MLX,MLY,MLZ     int number of major tick marks on axis
-!      TSX,TSY,TSZ     real size of title and numbers of axis.
-!                      if less than zero do not auto-scale by (x10^power)
-!      NDX,NDY,NDZ     int number of digits to right of decimal point
-!      SMX,SMY,SMZ     real major tick length
-!      AMININ,AMAXIN   real yaxis scaling factors (only needed if iaxis < 0)
-!      ICOL            integer color control (accessed if mag(iflag)=2)
-! 
-!                        icol(1) axis line
-!                        icol(2) axis numbers
-!                        icol(3) axis title
-!                        icol(4) axis exponent
-!                        icol(5) plot
-!      maxsize         size for working array
+!>
+!!##NAME
+!!    dl_slices(3f) - [M_slices] plot data in 3-D overlay form
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    subroutine dl_slices(a,inx,inz,nx,nz,alpha,beta,xh,yh,zh,iflag,iaxis, &
+!!
+!!                          & xt,nxt,xastart,xaend,nmx,nnx,mlx,tsx,ndx,smx, &
+!!                          & yt,nyt,              nmy,nny,mly,tsy,ndy,smy, &
+!!                          & zt,nzt,zastart,zaend,nmz,nnz,mlz,tsz,ndz,smz, &
+!!                          & aminin,amaxin,icol,maxsize)
+!!
+!!##DESCRIPTION
+!!    Routine to plot data in 3-D overlay form.
+!!
+!!##OPTIONS
+!!
+!!    coordinate system is:  Y  Z
+!!
+!!      A           array a(inx,inz) containing vertical height data
+!!      INX,INZ     integers dimension of A array
+!!      NX,NZ       integers indicating size of A array to plot
+!!      ALPHA       real angle (in degrees) of x axis (NX) from horizontal
+!!      BETA        real angle (in degrees) of z axis (NZ) from horizontal
+!!      XH,YH,ZH    real length of each axis
+!!      IFLAG       integer
+!!                     (one's digit)  = 2 use pen color control array
+!!                                    = 1 do not use pen color array
+!!                     (ten's digit)  = 0 plot side plates
+!!                                    = 1 do not plot side plates
+!!      IAXIS       integer axis option flag
+!!                     = 0 do not plot axis
+!!                         --following variables not accessed
+!!                     < 0 plot axis, use input y axis scale
+!!                         --following variables accessed
+!!                     > 0 plot axis, use computed y axis scale
+!!                         --following variables accessed
+!!                     (one's digit)  = 1 plot axis, y axis scale
+!!                                      --variables accessed
+!!                                    = 2 plot axis, auto scale y axis
+!!                                      --variables accessed
+!!                     (ten's digit)  = 0 default axis parameters
+!!                                    = 1 specialized axisb_ parameters
+!!      XT,YT,ZT          char strings for axis titles
+!!      NXT,NYT,NZT       int  length of axis titles.
+!!                        if zero then that axis not plotted
+!!      XASTART,ZASTART   real axis start values
+!!      XAEND,ZAEND       real axis end values
+!!
+!!  following only accessed if ten's digit of iflag=1
+!!
+!!      NMX,NMY,NMZ     int number of minor ticks between major ticks
+!!      NNX,NNY,NNZ     int highlight length of nnx-th minor tick on axis
+!!      MLX,MLY,MLZ     int number of major tick marks on axis
+!!      TSX,TSY,TSZ     real size of title and numbers of axis.
+!!                      if less than zero do not auto-scale by (x10^power)
+!!      NDX,NDY,NDZ     int number of digits to right of decimal point
+!!      SMX,SMY,SMZ     real major tick length
+!!      AMININ,AMAXIN   real yaxis scaling factors (only needed if iaxis < 0)
+!!      ICOL            integer color control (accessed if mag(iflag)=2)
+!!
+!!                        icol(1) axis line
+!!                        icol(2) axis numbers
+!!                        icol(3) axis title
+!!                        icol(4) axis exponent
+!!                        icol(5) plot
+!!      maxsize         size for working array
 SUBROUTINE dl_slices(a,INX,INZ,NX,NZ,ALPHA,BETA,XH,YH,ZH,IFLAG,IAXIS,XT,NXT, &
                     & XASTART,XAEND,NMX,NNX,MLX,TSX,NDX,SMX,&
                     & YT,NYT,NMY,NNY,MLY,TSY,NDY,SMY, ZT,NZT,ZASTART,ZAEND, &
@@ -1667,28 +1680,29 @@ real    :: ytemp1
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-! NAME
-!      dl_init(3f) - [M_slices] initialize the longlib graphics plot package
-!      (LICENSE:PD)
-! SYNOPSIS
-!   subroutine dl_init(xmax0,ymax0,vpx,vpy,zom)
-! 
-!    real,intent(in) :: xmax0
-!    real,intent(in) :: ymax0
-!    real,intent(in) :: vpx
-!    real,intent(in) :: vpy
-!    real,intent(in) :: zom
-! 
-! DESCRIPTION
-! 
-!    Routine to initialize the longlib graphics plot package
-! 
-!    XMAX0,YMAX0  size in inches M_DRAW will simulate as the
-!                 display size for this library
-! 
-!    VPX,VPY      coordinates of bottom left origin
-!    ZOM          zoom factor
-!
+!>
+!!##NAME
+!!      dl_init(3f) - [M_slices] initialize the longlib graphics plot package
+!!      (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!   subroutine dl_init(xmax0,ymax0,vpx,vpy,zom)
+!!
+!!    real,intent(in) :: xmax0
+!!    real,intent(in) :: ymax0
+!!    real,intent(in) :: vpx
+!!    real,intent(in) :: vpy
+!!    real,intent(in) :: zom
+!!
+!!##DESCRIPTION
+!!
+!!    Routine to initialize the longlib graphics plot package
+!!
+!!    XMAX0,YMAX0  size in inches M_DRAW will simulate as the
+!!                 display size for this library
+!!
+!!    VPX,VPY      coordinates of bottom left origin
+!!    ZOM          zoom factor
 subroutine dl_init(xmax0,ymax0,vpx,vpy,zom)
 !     FORTRAN-77 VERSION:   DGL JULY, 1987
 use M_draw
@@ -1774,67 +1788,68 @@ END SUBROUTINE clipit_
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-! NAME
-!      dl_symbol(3f) - [M_slices] routine to plot characters and symbols
-!      (LICENSE:PD)
-! SYNOPSIS
-!       SUBROUTINE DL_SYMBOL(X,Y,S,T,A,NN,IS)
-! DESCRIPTION
-! 
-!      Routine to plot characters and symbols
-! 
-!      X,Y   string position. If x>998 or y>998 then plotting
-!            of the string is continued from the last DL_SYMBOL(3f) call
-! 
-!      S     height of the string to be printed
-! 
-!      T     character variable containing the ascii text to be plotted
-! 
-!      A     angle at which the string is to be plotted
-!            counter-clockwise from x axis
-! 
-!      N     number of characters to use from T
-! 
-!            note: plotting will terminate if an ASCII zero is
-!            encountered at any other position than the first character.
-! 
-!            If N<0, a plot(x,y,2) will be executed prior to plotting
-!            the first character and ABS(N) characters will be plotted.
-! 
-!            For N<2, the plot pen is left at the 1st character origin
-!            point; otherwise it is at the end of the last plotted
-!            vector in the last plotted character.
-! 
-!      IS    centering option flag.
-! 
-!            = -3  end coordinates of string (if it were to be
-!                  plotted will be returned in x,y where the input
-!                  (x,y) are the lower left corner of string. This
-!                  permits computation of the plotted length.
-!                  However, no plotting is done and the last position
-!                  variables are not changed.
-!            = -2  end coordinates of string are returned in x,y.
-!                  Initial (x,y) to be lower left corner of plotted
-!                  string. String is plotted.
-!            = -1  (x,y) to be lower left corner of plotted string
-!                  (x and y not altered) String is plotted.
-!            = 0   (x,y) to be center of plotted string
-!                  (x and y not altered) String is plotted.
-!            = 1   (x,y) to be lower right corner of plotted string
-!                  (x and y not altered) String is plotted.
-! 
-!    DL_SYMBOL plots an ASCII string in a CHARACTER array. Each character
-!    (or string of characters) can be imagined as a square box with the
-!    origin at the lower left corner. The routine determines the initial
-!    position of the lower left of the first character than plots each
-!    character relative to this position. As each character is plotted the
-!    "current position" is moved to the right (along the string baseline)
-!    a fixed amount S. When the string centering option is selected,
-!    the length of the plotted string is determined and, based on the
-!    character height, the lower left corner is computed from the input
-!    (x,y) position. The special plot symbols (ASCII 0-31) are always
-!    centered about the current position.
-!
+!>
+!!##NAME
+!!      dl_symbol(3f) - [M_slices] routine to plot characters and symbols
+!!      (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!       SUBROUTINE DL_SYMBOL(X,Y,S,T,A,NN,IS)
+!!##DESCRIPTION
+!!
+!!      Routine to plot characters and symbols
+!!
+!!      X,Y   string position. If x>998 or y>998 then plotting
+!!            of the string is continued from the last DL_SYMBOL(3f) call
+!!
+!!      S     height of the string to be printed
+!!
+!!      T     character variable containing the ascii text to be plotted
+!!
+!!      A     angle at which the string is to be plotted
+!!            counter-clockwise from x axis
+!!
+!!      N     number of characters to use from T
+!!
+!!            note: plotting will terminate if an ASCII zero is
+!!            encountered at any other position than the first character.
+!!
+!!            If N<0, a plot(x,y,2) will be executed prior to plotting
+!!            the first character and ABS(N) characters will be plotted.
+!!
+!!            For N<2, the plot pen is left at the 1st character origin
+!!            point; otherwise it is at the end of the last plotted
+!!            vector in the last plotted character.
+!!
+!!      IS    centering option flag.
+!!
+!!            = -3  end coordinates of string (if it were to be
+!!                  plotted will be returned in x,y where the input
+!!                  (x,y) are the lower left corner of string. This
+!!                  permits computation of the plotted length.
+!!                  However, no plotting is done and the last position
+!!                  variables are not changed.
+!!            = -2  end coordinates of string are returned in x,y.
+!!                  Initial (x,y) to be lower left corner of plotted
+!!                  string. String is plotted.
+!!            = -1  (x,y) to be lower left corner of plotted string
+!!                  (x and y not altered) String is plotted.
+!!            = 0   (x,y) to be center of plotted string
+!!                  (x and y not altered) String is plotted.
+!!            = 1   (x,y) to be lower right corner of plotted string
+!!                  (x and y not altered) String is plotted.
+!!
+!!    DL_SYMBOL plots an ASCII string in a CHARACTER array. Each character
+!!    (or string of characters) can be imagined as a square box with the
+!!    origin at the lower left corner. The routine determines the initial
+!!    position of the lower left of the first character than plots each
+!!    character relative to this position. As each character is plotted the
+!!    "current position" is moved to the right (along the string baseline)
+!!    a fixed amount S. When the string centering option is selected,
+!!    the length of the plotted string is determined and, based on the
+!!    character height, the lower left corner is computed from the input
+!!    (x,y) position. The special plot symbols (ASCII 0-31) are always
+!!    centered about the current position.
 SUBROUTINE DL_SYMBOL(X,Y,S,T,A,NN,IS)
 !     WRITTEN BY: D. LONG  JAN 1991,1995   BYU
 !     THIS ROUTINE IS FORTRAN-77 COMPATIBLE WITH THE FOLLOWING
