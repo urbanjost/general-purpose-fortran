@@ -3056,7 +3056,7 @@ character(len=:),allocatable         :: right_local
          string=string//left_local//str(i)//right_local//sep_local
       endif
    enddo
-   if(size(str).ge.i)then ! if str is zero-sized i will be 1, not zero
+   if(size(str).lt.i)then ! if str is zero-sized i will be 1, not zero
       string=string//left_local//right_local
    else
       if(trm_local)then
