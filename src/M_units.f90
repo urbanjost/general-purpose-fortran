@@ -37,7 +37,7 @@
 !!       elemental real function atan2d(x,y)
 !!
 !!       elemental double function norm_angle_rad(radians)
-!!       elemental real|double function norm_angle_360(radians)
+!!       elemental real|double function norm_angle_deg(radians)
 !!
 !!       subroutine cartesian_to_spherical(x,y,z,radius,inclination,azimuth)
 !!       subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
@@ -97,7 +97,7 @@
 !!    Normalize angles into specific ranges
 !!
 !!     o elemental double function norm_angle_rad(angle_in_radians)
-!!     o elemental real|double function norm_angle_360(angle_in_degrees)
+!!     o elemental real|double function norm_angle_deg(angle_in_degrees)
 !!
 !!    Coordinates
 !!
@@ -201,7 +201,7 @@ private
       public atan2d
 !  normalize angles
       public norm_angle_rad
-      public norm_angle_360
+      public norm_angle_deg
 !  convert between degrees and radians
       public d2r
       public r2d
@@ -278,9 +278,9 @@ real(kind=DP), public, parameter ::              &
    end=99999    ! END OF CONSTANTS
 !===================================================================================================================================
 
-   interface norm_angle_360                                  ! a Generic Interface in a module with PRIVATE specific procedures
-      module procedure norm_angle_360_real, norm_angle_360_double
-      module procedure norm_angle_360_integer
+   interface norm_angle_deg                                  ! a Generic Interface in a module with PRIVATE specific procedures
+      module procedure norm_angle_deg_real, norm_angle_deg_double
+      module procedure norm_angle_deg_integer
    end interface
 
    interface r2d
@@ -1663,12 +1663,12 @@ end function norm_angle_rad
 !===================================================================================================================================
 !>
 !!##NAME
-!!    norm_angle_360(3f) - [M_units:TRIGONOMETRY] Return input angle given in degrees as angle between 0 and 360
+!!    norm_angle_deg(3f) - [M_units:TRIGONOMETRY] Return input angle given in degrees as angle between 0 and 360
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!    elemental function norm_angle_360(ang) result(rev)
+!!    elemental function norm_angle_deg(ang) result(rev)
 !!
 !!     doubleprecision, intent(in) :: ang
 !!     doubleprecision             :: rev
@@ -1681,7 +1681,7 @@ end function norm_angle_rad
 !!
 !!##DESCRIPTION
 !!    Given an input angle in degrees, normalize the value to fall in the
-!!    range 0 to 360  degrees.
+!!    range 0 to 360 degrees.
 !!
 !!##OPTIONS
 !!    ang  Input angle (degrees)
@@ -1693,19 +1693,19 @@ end function norm_angle_rad
 !!
 !!   Sample program:
 !!
-!!    program demo_norm_angle_360
-!!    use M_units, only : norm_angle_360
+!!    program demo_norm_angle_deg
+!!    use M_units, only : norm_angle_deg
 !!    implicit none
 !!    real,parameter :: PI=360
 !!    real           :: val
 !!    integer        :: i
 !!    do i=-2,2
-!!       val=i*2*pi;   write(*,*)val,norm_angle_360(val)
-!!       val=i*pi;     write(*,*)val,norm_angle_360(val)
-!!       val=i*pi/2;   write(*,*)val,norm_angle_360(val)
+!!       val=i*2*pi;   write(*,*)val,norm_angle_deg(val)
+!!       val=i*pi;     write(*,*)val,norm_angle_deg(val)
+!!       val=i*pi/2;   write(*,*)val,norm_angle_deg(val)
 !!       write(*,*)
 !!    enddo
-!!    end program demo_norm_angle_360
+!!    end program demo_norm_angle_deg
 !!
 !!   Results:
 !!
@@ -1731,43 +1731,43 @@ end function norm_angle_rad
 !!
 !!##LICENSE
 !!    MIT License
-elemental function norm_angle_360_class(ang)
+elemental function norm_angle_deg_class(ang)
 
-! ident_26="@(#)M_units:: norm_angle_360_class(3fp): Returns angle in degrees between 0 and 360"
+! ident_26="@(#)M_units:: norm_angle_deg_class(3fp): Returns angle in degrees between 0 and 360"
 
 class(*),intent(in) :: ang
 doubleprecision     :: ang_local
-doubleprecision     :: norm_angle_360_class
+doubleprecision     :: norm_angle_deg_class
 ang_local=anyscalar_to_double(ang)
-   norm_angle_360_class = ang_local - dble(floor(ang_local/360.d0)) * 360.d0
-end function norm_angle_360_class
+   norm_angle_deg_class = ang_local - dble(floor(ang_local/360.d0)) * 360.d0
+end function norm_angle_deg_class
 !===================================================================================================================================
-elemental function norm_angle_360_double(ang)
+elemental function norm_angle_deg_double(ang)
 
-! ident_27="@(#)M_units:: norm_angle_360_double(3fp): Returns angle in degrees between 0 and 360"
+! ident_27="@(#)M_units:: norm_angle_deg_double(3fp): Returns angle in degrees between 0 and 360"
 
 doubleprecision,intent(in) :: ang
-doubleprecision            :: norm_angle_360_double
-   norm_angle_360_double = norm_angle_360_class(ang)
-end function norm_angle_360_double
+doubleprecision            :: norm_angle_deg_double
+   norm_angle_deg_double = norm_angle_deg_class(ang)
+end function norm_angle_deg_double
 !===================================================================================================================================
-elemental function norm_angle_360_real(ang)
+elemental function norm_angle_deg_real(ang)
 
-! ident_28="@(#)M_units:: norm_angle_360_real(3fp): Returns angle in degrees between 0 and 360"
+! ident_28="@(#)M_units:: norm_angle_deg_real(3fp): Returns angle in degrees between 0 and 360"
 
 real,intent(in) :: ang
-real            :: norm_angle_360_real
-   norm_angle_360_real = norm_angle_360_class(ang)
-end function norm_angle_360_real
+real            :: norm_angle_deg_real
+   norm_angle_deg_real = norm_angle_deg_class(ang)
+end function norm_angle_deg_real
 !===================================================================================================================================
-elemental function norm_angle_360_integer(ang)
+elemental function norm_angle_deg_integer(ang)
 
-! ident_29="@(#)M_units:: norm_angle_360_integer(3fp): Returns angle in degrees between 0 and 360"
+! ident_29="@(#)M_units:: norm_angle_deg_integer(3fp): Returns angle in degrees between 0 and 360"
 
 integer,intent(in) :: ang
-integer            :: norm_angle_360_integer
-   norm_angle_360_integer = norm_angle_360_class(ang)
-end function norm_angle_360_integer
+integer            :: norm_angle_deg_integer
+   norm_angle_deg_integer = norm_angle_deg_class(ang)
+end function norm_angle_deg_integer
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2165,9 +2165,9 @@ use M_msg,   only : str
    call test_f2c()
    call test_feet_to_meters()
    call test_meters_to_feet()
-   call test_norm_angle_360_double()
-   call test_norm_angle_360_integer()
-   call test_norm_angle_360_real()
+   call test_norm_angle_deg_double()
+   call test_norm_angle_deg_integer()
+   call test_norm_angle_deg_real()
    call test_norm_angle_rad()
    call test_polar_to_cartesian()
    call test_pounds_to_kilograms()
@@ -2416,26 +2416,26 @@ subroutine test_meters_to_feet()
    call unit_check_done('meters_to_feet',msg='')
 end subroutine test_meters_to_feet
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_norm_angle_360_double()
+subroutine test_norm_angle_deg_double()
 
-   call unit_check_start('norm_angle_360_double',msg='')
-   !!call unit_check('norm_angle_360_double', 0.eq.0, 'checking', 100)
-   call unit_check_done('norm_angle_360_double',msg='')
-end subroutine test_norm_angle_360_double
+   call unit_check_start('norm_angle_deg_double',msg='')
+   !!call unit_check('norm_angle_deg_double', 0.eq.0, 'checking', 100)
+   call unit_check_done('norm_angle_deg_double',msg='')
+end subroutine test_norm_angle_deg_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_norm_angle_360_integer()
+subroutine test_norm_angle_deg_integer()
 
-   call unit_check_start('norm_angle_360_integer',msg='')
-   !!call unit_check('norm_angle_360_integer', 0.eq.0, 'checking', 100)
-   call unit_check_done('norm_angle_360_integer',msg='')
-end subroutine test_norm_angle_360_integer
+   call unit_check_start('norm_angle_deg_integer',msg='')
+   !!call unit_check('norm_angle_deg_integer', 0.eq.0, 'checking', 100)
+   call unit_check_done('norm_angle_deg_integer',msg='')
+end subroutine test_norm_angle_deg_integer
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_norm_angle_360_real()
+subroutine test_norm_angle_deg_real()
 
-   call unit_check_start('norm_angle_360_real',msg='')
-   !!call unit_check('norm_angle_360_real', 0.eq.0, 'checking', 100)
-   call unit_check_done('norm_angle_360_real',msg='')
-end subroutine test_norm_angle_360_real
+   call unit_check_start('norm_angle_deg_real',msg='')
+   !!call unit_check('norm_angle_deg_real', 0.eq.0, 'checking', 100)
+   call unit_check_done('norm_angle_deg_real',msg='')
+end subroutine test_norm_angle_deg_real
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_norm_angle_rad()
 

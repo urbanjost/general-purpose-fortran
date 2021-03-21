@@ -1,24 +1,24 @@
           program demo_get_subcommand
-          !*! SUBCOMMANDS
-          !*! For a command with subcommands like git(1)
-          !*! you can make separate namelists for each subcommand.
-          !*! You can call this program which has two subcommands (run, test),
-          !*! like this:
-          !*!    demo_get_subcommand --help
-          !*!    demo_get_subcommand run -x -y -z -title -l -L
-          !*!    demo_get_subcommand test -title -l -L -testname
-          !*!    demo_get_subcommand run --help
+          !x! SUBCOMMANDS
+          !x! For a command with subcommands like git(1)
+          !x! you can make separate namelists for each subcommand.
+          !x! You can call this program which has two subcommands (run, test),
+          !x! like this:
+          !x!    demo_get_subcommand --help
+          !x!    demo_get_subcommand run -x -y -z -title -l -L
+          !x!    demo_get_subcommand test -title -l -L -testname
+          !x!    demo_get_subcommand run --help
              implicit none
-          !*! DEFINE VALUES TO USE AS ARGUMENTS WITH INITIAL VALUES
+          !x! DEFINE VALUES TO USE AS ARGUMENTS WITH INITIAL VALUES
              real               :: x=-999.0,y=-999.0,z=-999.0
              character(len=80)  :: title="not set"
              logical            :: l=.false.
              logical            :: l_=.false.
              character(len=80)  :: testname="not set"
              character(len=20)  :: name
-             call parse(name) !*! DEFINE AND PARSE COMMAND LINE
-             !*! ALL DONE CRACKING THE COMMAND LINE.
-             !*! USE THE VALUES IN YOUR PROGRAM.
+             call parse(name) !x! DEFINE AND PARSE COMMAND LINE
+             !x! ALL DONE CRACKING THE COMMAND LINE.
+             !x! USE THE VALUES IN YOUR PROGRAM.
              write(*,*)'command was ',name
              write(*,*)'x,y,z .... ',x,y,z
              write(*,*)'title .... ',title
@@ -26,7 +26,7 @@
              write(*,*)'testname . ',testname
           contains
           subroutine parse(name)
-          !*! PUT EVERYTHING TO DO WITH COMMAND PARSING HERE FOR CLARITY
+          !x! PUT EVERYTHING TO DO WITH COMMAND PARSING HERE FOR CLARITY
           use M_CLI2, only : set_args, get_args, get_args_fixed_length
           use M_CLI2, only : get_subcommand
           use M_CLI2, only : CLI_RESPONSE_FILE

@@ -42,6 +42,7 @@ use M_verify, only : unit_check_level
    call test_separator()
    call test_which()
    call test_getname()
+   call test_lookfor()
 !! teardown
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -199,6 +200,12 @@ subroutine test_which()
    !!call unit_check('which', 0.eq.0, 'checking',100)
    call unit_check_done('which',msg='')
 end subroutine test_which
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_lookfor()
+   call unit_check_start('lookfor',msg='')
+   !!call unit_check('lookfor', 0.eq.0, 'checking',100)
+   call unit_check_done('lookfor',msg='')
+end subroutine test_lookfor
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getname()
    call unit_check_start('getname',msg='')

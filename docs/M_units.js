@@ -17,7 +17,7 @@ append("is_even.3m_units.html");
 append("is_nan.3m_units.html");
 append("meters_to_feet.3m_units.html");
 append("nan.3m_units.html");
-append("norm_angle_360.3m_units.html");
+append("norm_angle_deg.3m_units.html");
 append("norm_angle_rad.3m_units.html");
 append("polar_to_cartesian.3m_units.html");
 append("pounds_to_kilograms.3m_units.html");

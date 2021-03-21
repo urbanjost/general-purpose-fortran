@@ -46,7 +46,7 @@
 !!    UNIT TESTS
 !!    unit_check_start(3f)   start tests of a procedure and optionally call
 !!
-!!                              command NAME start ..."
+!!                              command NAME start ...
 !!    unit_check(3f)         if expression is false optionally call
 !!
 !!                              command NAME bad
@@ -85,7 +85,7 @@
 !!    for each unit in an SQLite data file which is then used to create
 !!    CSV and HTML reports on the status of each unit. A sample goodbad(1)
 !!    command written in the bash(1) shell and using the sqlite3(1) command
-!!    should be included in this distribution as an example
+!!    should be included in this distribution as an example.
 !!
 !!    The flexibility introduced by calling an external script or program
 !!    is that The goodbad(1) command can be changed as desired to write CSV
@@ -240,6 +240,7 @@ integer,save               :: clicks=0.0d0
 logical,save ::  STOP_G=.true.                       ! global value indicating whether failed unit checks should stop program or not
 integer,save :: IPASSED_G=0                          ! counter of successes initialized by unit_check_start(3f)
 integer,save :: IFAILED_G=0                          ! counter of failures  initialized by unit_check_start(3f)
+integer,save :: IUNTESTED=0                          ! counter of untested  initialized by unit_check_start(3f)
 logical,save :: no_news_is_good_news=.false.         ! flag on whether to display SUCCESS: messages
 
 public stderr
@@ -775,6 +776,7 @@ character(len=4096)                  :: var
 !-----------------------------------------------------------------------------------------------------------------------------------
    IPASSED_G=0
    IFAILED_G=0
+   IUNTESTED=0
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine unit_check_start
 !===================================================================================================================================
@@ -897,6 +899,7 @@ integer                              :: clicks_now
 !-----------------------------------------------------------------------------------------------------------------------------------
    IPASSED_G=0
    IFAILED_G=0
+   IUNTESTED=0
    duration=0.0d0
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine unit_check_done

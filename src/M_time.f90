@@ -60,7 +60,7 @@ private
    public easter         !(year,dat)                          ! calculate month and day Easter falls on for given year
    public moon_fullness  !(datin) result(FULLNESS)            ! percentage of moon phase from new to full
    public phase_of_moon  !(datin) result(PHASE)               ! return name for phase of moon for given date
-!! public ephemeris      !(dat,planet,DD,DM,DC,AH,AM)         ! ephemeris position of planets for adjusting an equatorial telescope
+!x! public ephemeris      !(dat,planet,DD,DM,DC,AH,AM)         ! ephemeris position of planets for adjusting an equatorial telescope
 ! READING DATES
    public guessdate      !(anot,dat)                          ! Converts a date string to a date array, in various formats
 ! C INTERFACE
@@ -102,8 +102,8 @@ real(kind=realtime),public,parameter :: dt_week=dt_day*7.0d0  ! one week in seco
 !!     integer,intent(out)              :: ierr
 !!
 !!##DESCRIPTION
-!!    Converts a DAT date-time array to a Unix Epoch Time (UET) value.
-!!    UET is the number of seconds since 00:00 on January 1st, 1970, UTC.
+!!   Converts a DAT date-time array to a Unix Epoch Time (UET) value.
+!!   UET is the number of seconds since 00:00 on January 1st, 1970, UTC.
 !!
 !!##OPTIONS
 !!    dat   Integer array holding a "DAT" array, similar in structure
@@ -219,8 +219,8 @@ end subroutine date_to_julian
 !!     integer,intent(out)            :: ierr
 !!
 !!##DESCRIPTION
-!!    Converts a Unix Epoch Time (UET) value to a DAT date-time array.
-!!    UET is the number of seconds since 00:00 on January 1st, 1970, UTC.
+!!   Converts a Unix Epoch Time (UET) value to a DAT date-time array.
+!!   UET is the number of seconds since 00:00 on January 1st, 1970, UTC.
 !!
 !!##OPTIONS
 !!     julian  Julian Date (days)
@@ -360,7 +360,7 @@ end subroutine julian_to_date
 !!     integer,intent(out)              :: ierr
 !!
 !!##DESCRIPTION
-!!    Converts a DAT date-time array to a UET (Unix Epoch Time).
+!!   Converts a DAT date-time array to a UET (Unix Epoch Time).
 !!
 !!##OPTIONS
 !!    dat   Integer array holding a "DAT" array, similar in structure
@@ -439,7 +439,7 @@ end subroutine date_to_unix
 !!     integer,intent(out)            :: ierr
 !!
 !!##DESCRIPTION
-!!     Converts a Unix Epoch Time (UET) to a DAT date-time array.
+!!   Converts a Unix Epoch Time (UET) to a DAT date-time array.
 !!
 !!##OPTIONS
 !!
@@ -537,8 +537,8 @@ end subroutine unix_to_date
 !!     integer                     :: ordinal
 !!
 !!##DESCRIPTION
-!!    Given a date in the form of a "DAT" array return the Ordinal Day,
-!!    (ie. "the day of the year").
+!!   Given a date in the form of a "DAT" array return the Ordinal Day,
+!!   (ie. "the day of the year").
 !!
 !!##OPTIONS
 !!     dat  Integer array holding a "DAT" array, similar in structure
@@ -632,10 +632,10 @@ end function d2o
 !!
 !!     integer :: ordinal_seconds
 !!##DESCRIPTION
-!!    Return number of seconds since beginning of current year.
+!!   Return number of seconds since beginning of current year.
 !!
-!!    Before using this routine consider the consequences if the application
-!!    is running at the moment a new year begins.
+!!   Before using this routine consider the consequences if the application
+!!   is running at the moment a new year begins.
 !!
 !!##EXAMPLE
 !!
@@ -693,8 +693,8 @@ end function ordinal_seconds
 !!       integer, intent(in)   :: ddd
 !!       integer, intent(out)  :: dat
 !!##DESCRIPTION
-!!    When given a valid year, YYYY, and day of the year, DDD, returns the
-!!    date as a DAT date array
+!!   When given a valid year, YYYY, and day of the year, DDD, returns the
+!!   date as a DAT date array
 !!##OPTIONS
 !!       yyyy  known year
 !!       ddd   known ordinal day of the year
@@ -707,7 +707,7 @@ end function ordinal_seconds
 !!     program demo_ordinal_to_date
 !!     use M_time, only : ordinal_to_date
 !!     implicit none
-!!     INTEGER            :: yyyy, ddd, mm, dd
+!!     INTEGER            :: yyyy, ddd, mm, dd, yy
 !!     integer            :: dat(8)
 !!     integer            :: ios
 !!       INFINITE: do
@@ -717,14 +717,16 @@ end function ordinal_seconds
 !!          if(ios.ne.0)exit INFINITE
 !!          ! recover month and day from year and day number.
 !!          call ordinal_to_date(yyyy, ddd, dat)
+!!          yy=dat(1)
 !!          mm=dat(2)
 !!          dd=dat(3)
-!!          write(*,*)'For Year ',yyyy,' and Ordinal day ',ddd, &
-!!          &         ' Month is ',mm,' and Day of Month is',dd
+!!          write(*,'(*(g0))')'For Year ',yyyy,' and Ordinal day ',ddd,  &
+!!          &         ' Month is ',mm,' and Day of Month is ',dd, &
+!!          &         ' and Year is ',yy
 !!        enddo INFINITE
 !!     end program demo_ordinal_to_date
 subroutine ordinal_to_date(yyyy,ddd,dat)
-!!use M_time, only : d2j,j2d, realtime
+!x!use M_time, only : d2j,j2d, realtime
 
 ! ident_8="@(#)M_time::ordinal_to_date(3f): given a valid year and day of the year returns the DAT array for the date"
 
@@ -752,8 +754,8 @@ end subroutine ordinal_to_date
 !!     integer            :: dat(8)   ! date time array
 !!
 !!##DESCRIPTION
-!!    Given an Ordinal day of the year return a date in the form of a
-!!    "DAT" array.
+!!   Given an Ordinal day of the year return a date in the form of a
+!!   "DAT" array.
 !!
 !!##OPTIONS
 !!     ordinal  The day of the year for the given year, where Jan 1st=1.
@@ -844,8 +846,8 @@ end function o2d
 !!     character(len=:),allocatable :: month_name  ! month name
 !!
 !!##DESCRIPTION
-!!    Given a Common Calendar month number, return the name of the month
-!!    as a string.
+!!   Given a Common Calendar month number, return the name of the month
+!!   as a string.
 !!
 !!##OPTIONS
 !!    imonth      Common month number (1-12). If out of the allowable range
@@ -918,9 +920,9 @@ end function v2mo
 !!        integer                     :: dat(8)
 !!
 !!##DESCRIPTION
-!!    Given a Common Calendar month name, return the date as a "DAT" array
-!!    for the 1st day of the month. An optional year may be specified. The
-!!    year defaults to the current year.
+!!   Given a Common Calendar month name, return the date as a "DAT" array
+!!   for the 1st day of the month. An optional year may be specified. The
+!!   year defaults to the current year.
 !!
 !!##OPTIONS
 !!    month_name  A string representing a Common Calendar month name.
@@ -989,10 +991,10 @@ end function mo2d
 !!      integer                    :: imonth     ! month number
 !!
 !!##DESCRIPTION
-!!    Given a string representing the name or abbreviation of a Gregorian
-!!    Calendar month return a number representing the position of the
-!!    month in the calendar starting with 1 for January and ending with
-!!    12 for December.
+!!   Given a string representing the name or abbreviation of a Gregorian
+!!   Calendar month return a number representing the position of the
+!!   month in the calendar starting with 1 for January and ending with
+!!   12 for December.
 !!
 !!##OPTIONS
 !!    month_name  name or abbreviation of month. Case is ignored
@@ -1077,9 +1079,9 @@ end function mo2v
 !!     character(len=:),allocatable    :: timestr ! formatted date
 !!
 !!##DESCRIPTION
-!!    The now(3f) function is a call to the fmtdate(3f) function using the
-!!    current date and time. That is, it is a convenient way to print the
-!!    current date and time.
+!!   The now(3f) function is a call to the fmtdate(3f) function using the
+!!   current date and time. That is, it is a convenient way to print the
+!!   current date and time.
 !!
 !!##OPTIONS
 !!     format      string describing how to format the current date and time.
@@ -1149,10 +1151,10 @@ end function now
 !!     character(len=:),allocatable         :: timestr
 !!
 !!##DESCRIPTION
-!!    The fmtdate(3f) procedure lets you reformat a DAT array in
-!!    many common formats using a special string containing macro names
-!!    beginning with '%'. To see the allowable macros call or see the
-!!    fmtdate_usage(3f) routine.
+!!   The fmtdate(3f) procedure lets you reformat a DAT array in
+!!   many common formats using a special string containing macro names
+!!   beginning with '%'. To see the allowable macros call or see the
+!!   fmtdate_usage(3f) routine.
 !!
 !!##OPTIONS
 !!     values   date in a "DAT" array, which is the same format as
@@ -1475,13 +1477,13 @@ end function fmtdate
 !!
 !!##DESCRIPTION
 !!
-!!    The fmtdate_usage(3f) subroutine displays the formatting options
-!!    available for use in procedures such as fmtdate(3f) and now(3f).
-!!    It is typically used to produce up-to-date help text in commands
-!!    that use the M_time(3fm) module, so that the formatting information
-!!    only needs maintained in one place (this routine) and is easily
-!!    displayed so users can quickly obtain a description of the formatting
-!!    macros.
+!!   The fmtdate_usage(3f) subroutine displays the formatting options
+!!   available for use in procedures such as fmtdate(3f) and now(3f).
+!!   It is typically used to produce up-to-date help text in commands
+!!   that use the M_time(3fm) module, so that the formatting information
+!!   only needs maintained in one place (this routine) and is easily
+!!   displayed so users can quickly obtain a description of the formatting
+!!   macros.
 !!
 !!##OPTIONS
 !!     indent      how many spaces to prefix the output with, so that
@@ -1761,19 +1763,19 @@ end subroutine fmtdate_usage
 !!
 !!##DESCRIPTION
 !!
-!!    Read in strings and except for looking for month names remove
-!!    non-numeric characters and try to convert a string assumed to represent
-!!    a date to a date-time array.
+!!   Read in strings and except for looking for month names remove
+!!   non-numeric characters and try to convert a string assumed to represent
+!!   a date to a date-time array.
 !!
-!!    Years should always be expressed as four-digit numbers, and except for
-!!    the special format yyyy-mm-dd the day should come after the year. Named
-!!    months are preferred. If ambiguous the order is assumed to be day -
-!!    month - year. Times are assumed to be of the form HH:MM:SS
+!!   Years should always be expressed as four-digit numbers, and except for
+!!   the special format yyyy-mm-dd the day should come after the year. Named
+!!   months are preferred. If ambiguous the order is assumed to be day -
+!!   month - year. Times are assumed to be of the form HH:MM:SS
 !!
-!!    It is planned that this routine will be superseded. As an alternative,
-!!    a C routine exists in the standard C libraries that allows for
-!!    expansive features when reading dates that can be called via the
-!!    ISO_C_BINDING interface.
+!!   It is planned that this routine will be superseded. As an alternative,
+!!   a C routine exists in the standard C libraries that allows for
+!!   expansive features when reading dates that can be called via the
+!!   ISO_C_BINDING interface.
 !!
 !!##OPTIONS
 !!    anot  A string assumed to represent a date including a year, month and day.
@@ -1841,7 +1843,7 @@ subroutine guessdate(datestring,dat,ier)
 ! makes an odd number of assumptions trying to guess what date format is being used. If you know the format of your date
 ! values READ(3f) and parse them directly instead of using this procedure, even though it does a good job with common USA formats.
 !
-!! REDO more rigorously with regular expressions and recognize standard formats directly
+!x! REDO more rigorously with regular expressions and recognize standard formats directly
 
 
 ! NOTE : Main constraint is that day is input BEFORE year unless use YYYY-MM-DD and a : implies HH:MM:SS, no timezone names
@@ -2070,9 +2072,9 @@ integer                           :: loops
          read(buff,*,iostat=ios) idy,mon,iye
          if(ios.ne.0)cycle INFINITE
       endif
-      !!if(iye.le.99)then
-      !!   iye=iye+2000                                       ! Cope with two digit year (assume 21st century.)
-      !!endif
+      !x!if(iye.le.99)then
+      !x!   iye=iye+2000                                       ! Cope with two digit year (assume 21st century.)
+      !x!endif
       if(mon.lt.1.or.mon.gt.12) cycle INFINITE              ! Check range of months
       if(mon.eq.2) then                                     ! Special check for Feb.
          if((iye/4)*4.eq.iye) then                          ! Leap year
@@ -2118,8 +2120,8 @@ end subroutine guessdate
 !!     integer,intent(out),optional :: ierr
 !!
 !!##DESCRIPTION
-!!    Given a date array DAT
-!!    return the day of the week as a number and a name, Mon=1.
+!!   Given a date array DAT
+!!   return the day of the week as a number and a name, Mon=1.
 !!
 !!##OPTIONS
 !!    values   "DAT" array (an integer array of the same format as
@@ -2239,9 +2241,9 @@ end subroutine dow
 !!     character(len=10),intent(out)   :: iso_name
 !!
 !!##DESCRIPTION
-!!    Given a "DAT" array defining a date and time, return the ISO-8601
-!!    Week in two formats -- as three integer values defining the ISO year,
-!!    week of year and weekday; and as a string of the form "yyyy-Www-d".
+!!   Given a "DAT" array defining a date and time, return the ISO-8601
+!!   Week in two formats -- as three integer values defining the ISO year,
+!!   week of year and weekday; and as a string of the form "yyyy-Www-d".
 !!
 !!##OPTIONS
 !!    dat          "DAT" array (an integer array of the same format as
@@ -2280,20 +2282,20 @@ end subroutine dow
 !!     ISO-8601 weekday 1
 !!
 !!##DEFINITION
-!!    The ISO-8601 date and time standard was issued by the International Organization for Standardization (ISO).
-!!    It is used (mainly) in government and business for fiscal years, as well as in timekeeping.
-!!    The system specifies a week year atop the Gregorian calendar by defining a notation for ordinal weeks of the year.
+!!   The ISO-8601 date and time standard was issued by the International Organization for Standardization (ISO).
+!!   It is used (mainly) in government and business for fiscal years, as well as in timekeeping.
+!!   The system specifies a week year atop the Gregorian calendar by defining a notation for ordinal weeks of the year.
 !!
-!!    An ISO week-numbering year (also called ISO year informally) has 52 or 53 full weeks.
-!!    That is 364 or 371 days instead of the usual 365 or 366 days.
-!!    The extra week is referred to here as a leap week, although ISO-8601 does not use this term.
-!!    Weeks start with Monday.
-!!    The first week of a year is the week that contains the first Thursday of the year (and, hence, always contains 4 January).
-!!    ISO week year numbering therefore slightly deviates from the Gregorian for some days close to January 1st.
+!!   An ISO week-numbering year (also called ISO year informally) has 52 or 53 full weeks.
+!!   That is 364 or 371 days instead of the usual 365 or 366 days.
+!!   The extra week is referred to here as a leap week, although ISO-8601 does not use this term.
+!!   Weeks start with Monday.
+!!   The first week of a year is the week that contains the first Thursday of the year (and, hence, always contains 4 January).
+!!   ISO week year numbering therefore slightly deviates from the Gregorian for some days close to January 1st.
 !!
 !!##CALCULATION
-!!    The ISO-8601 week number of any date can be calculated, given its ordinal date (i.e. position within the year)
-!!    and its day of the week.
+!!   The ISO-8601 week number of any date can be calculated, given its ordinal date (i.e. position within the year)
+!!   and its day of the week.
 !!
 !!##METHOD
 !!     Using ISO weekday numbers (running from 1 for Monday to 7 for Sunday),
@@ -2310,13 +2312,13 @@ end subroutine dow
 !!     o January 4th is always in the first week.
 !!
 !!##ISO_NAME
-!!     Week date representations are in the format YYYYWww-D.
+!!   Week date representations are in the format YYYYWww-D.
 !!
 !!     o [YYYY] indicates the ISO week-numbering year which is slightly different from the traditional Gregorian calendar year.
 !!     o [Www] is the week number prefixed by the letter W, from W01 through W53.
 !!     o [D] is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday.
 !!
-!!    For example, the Gregorian date 31 December 2006 corresponds to the Sunday of the 52nd week of 2006, and is written
+!!   For example, the Gregorian date 31 December 2006 corresponds to the Sunday of the 52nd week of 2006, and is written
 !!
 !!     2006-W52-7 (extended form)
 !!     or
@@ -2389,9 +2391,9 @@ end subroutine d2w
 !!     integer,intent(out)     :: dat(8)     ! output date array
 !!
 !!##DESCRIPTION
-!!    Given an ISO-8601 week return a "DAT" array defining a date and time,
-!!    The ISO-8601 is supplied as three integer values defining the ISO
-!!    year, week of year and weekday.
+!!   Given an ISO-8601 week return a "DAT" array defining a date and time,
+!!   The ISO-8601 is supplied as three integer values defining the ISO
+!!   year, week of year and weekday.
 !!
 !!##OPTIONS
 !!    iso_year     ISO-8601 year number for the given date
@@ -2411,38 +2413,38 @@ end subroutine d2w
 !!
 !!  Sample program:
 !!
-!!   program demo_w2d
-!!   use M_time, only : w2d, fmtdate
-!!   implicit none
-!!     write(*,'(a)')&
-!!     & 'Given Monday 29 December 2008 is written "2009-W01-1"'
-!!     call printit(2009,1,1)
-!!     write(*,'(a)')&
-!!     & 'Given Sunday 3 January 2010 is written "2009-W53-7"'
-!!     call printit(2009,53,7)
-!!     write(*,'(a)')&
-!!     & 'Given the Gregorian date Sun 31 December 2006 &
-!!     &is written 2006-W52-7'
-!!     call printit(2006,52,7)
-!!     write(*,'(a)')&
-!!     & 'Given 27 September 2008 is 2008-W39-6'
-!!     call printit(2008,39,6)
-!!   contains
-!!   subroutine printit(iso_year,iso_week,iso_weekday)
-!!   ! ISO-8601 Week: 2016-W29-1
-!!   integer  :: iso_year, iso_week, iso_weekday
-!!   ! input date array
-!!   integer  :: dat(8)
-!!    call w2d(iso_year,iso_week,iso_weekday,dat)
-!!    write(*,'(a,i0)')'GIVEN:           '
-!!    write(*,'(a,i0)')'ISO-8601 year    ',iso_year
-!!    write(*,'(a,i0)')'ISO-8601 week    ',iso_week
-!!    write(*,'(a,i0)')'ISO-8601 weekday ',iso_weekday
-!!    write(*,'(a,i0)')'RESULT:          '
-!!    write(*,'(a,*(i0:,","))')'   DAT array        ',dat
-!!    write(*,'(a,/,67("="))')'    '//fmtdate(dat,'long')
-!!   end subroutine printit
-!!   end program demo_w2d
+!!     program demo_w2d
+!!     use M_time, only : w2d, fmtdate
+!!     implicit none
+!!       write(*,'(a)')&
+!!       & 'Given Monday 29 December 2008 is written "2009-W01-1"'
+!!       call printit(2009,1,1)
+!!       write(*,'(a)')&
+!!       & 'Given Sunday 3 January 2010 is written "2009-W53-7"'
+!!       call printit(2009,53,7)
+!!       write(*,'(a)')&
+!!       & 'Given the Gregorian date Sun 31 December 2006 &
+!!       &is written 2006-W52-7'
+!!       call printit(2006,52,7)
+!!       write(*,'(a)')&
+!!       & 'Given 27 September 2008 is 2008-W39-6'
+!!       call printit(2008,39,6)
+!!     contains
+!!     subroutine printit(iso_year,iso_week,iso_weekday)
+!!     ! ISO-8601 Week: 2016-W29-1
+!!     integer  :: iso_year, iso_week, iso_weekday
+!!     ! input date array
+!!     integer  :: dat(8)
+!!      call w2d(iso_year,iso_week,iso_weekday,dat)
+!!      write(*,'(a,i0)')'GIVEN:           '
+!!      write(*,'(a,i0)')'ISO-8601 year    ',iso_year
+!!      write(*,'(a,i0)')'ISO-8601 week    ',iso_week
+!!      write(*,'(a,i0)')'ISO-8601 weekday ',iso_weekday
+!!      write(*,'(a,i0)')'RESULT:          '
+!!      write(*,'(a,*(i0:,","))')'   DAT array        ',dat
+!!      write(*,'(a,/,67("="))')'    '//fmtdate(dat,'long')
+!!     end subroutine printit
+!!    end program demo_w2d
 !!
 !!  Results:
 !!
@@ -2484,20 +2486,20 @@ end subroutine d2w
 !!     =========================================================
 !!
 !!##DEFINITION
-!!    The ISO-8601 date and time standard was issued by the International
-!!    Organization for Standardization (ISO). It is used (mainly) in
-!!    government and business for fiscal years, as well as in timekeeping.
-!!    The system specifies a week year atop the Gregorian calendar by
-!!    defining a notation for ordinal weeks of the year.
+!!   The ISO-8601 date and time standard was issued by the International
+!!   Organization for Standardization (ISO). It is used (mainly) in
+!!   government and business for fiscal years, as well as in timekeeping.
+!!   The system specifies a week year atop the Gregorian calendar by
+!!   defining a notation for ordinal weeks of the year.
 !!
-!!    An ISO week-numbering year (also called ISO year informally) has
-!!    52 or 53 full weeks. That is 364 or 371 days instead of the usual
-!!    365 or 366 days. The extra week is referred to here as a leap week,
-!!    although ISO-8601 does not use this term. Weeks start with Monday.
-!!    The first week of a year is the week that contains the first Thursday
-!!    of the year (and, hence, always contains 4 January). ISO week year
-!!    numbering therefore slightly deviates from the Gregorian for some
-!!    days close to January 1st.
+!!   An ISO week-numbering year (also called ISO year informally) has
+!!   52 or 53 full weeks. That is 364 or 371 days instead of the usual
+!!   365 or 366 days. The extra week is referred to here as a leap week,
+!!   although ISO-8601 does not use this term. Weeks start with Monday.
+!!   The first week of a year is the week that contains the first Thursday
+!!   of the year (and, hence, always contains 4 January). ISO week year
+!!   numbering therefore slightly deviates from the Gregorian for some
+!!   days close to January 1st.
 !!
 !!##METHOD
 !!     Calculating a date given the year, week number and weekday
@@ -2521,7 +2523,7 @@ end subroutine d2w
 !!     Result: 27 September 2008
 !!
 !!##ISO_NAME
-!!     Week date representations are in the format YYYYWww-D.
+!!   Week date representations are in the format YYYYWww-D.
 !!
 !!     o [YYYY] indicates the ISO week-numbering year which is slightly
 !!       different from the traditional Gregorian calendar year.
@@ -2529,8 +2531,8 @@ end subroutine d2w
 !!     o [D] is the weekday number, from 1 through 7, beginning with Monday
 !!       and ending with Sunday.
 !!
-!!    For example, the Gregorian date 31 December 2006 corresponds to the
-!!    Sunday of the 52nd week of 2006, and is written
+!!   For example, the Gregorian date 31 December 2006 corresponds to the
+!!   Sunday of the 52nd week of 2006, and is written
 !!
 !!     2006-W52-7 (extended form)
 !!     or
@@ -2576,8 +2578,8 @@ end subroutine w2d
 !!     character(len=21)     :: calen(8)
 !!
 !!##DESCRIPTION
-!!    box_month(3f) uses a year and month from a date array to populate
-!!    a small character array with a calendar representing the month.
+!!   box_month(3f) uses a year and month from a date array to populate
+!!   a small character array with a calendar representing the month.
 !!
 !!##OPTIONS
 !!    dat  "DAT" array (an integer array of the same format as
@@ -2672,7 +2674,7 @@ end subroutine box_month
 !!     real(kind=realtime) :: julian
 !!
 !!##DESCRIPTION
-!!    Given DAT date-time array returns Julian Date
+!!   Given DAT date-time array returns Julian Date
 !!
 !!##OPTIONS
 !!    dat       Integer array holding a "DAT" array, similar in structure
@@ -2741,7 +2743,7 @@ end function d2j
 !!     integer                                 :: dat(8)
 !!
 !!##DESCRIPTION
-!!     Converts a Julian Ephemeris Date to a DAT date-time array.
+!!   Converts a Julian Ephemeris Date to a DAT date-time array.
 !!
 !!##OPTIONS
 !!    julian  A Julian Ephemeris Date (JED) is the number of days since
@@ -2807,10 +2809,10 @@ end function j2d
 !!       real(kind=realtime)         :: unixtime
 !!
 !!##DESCRIPTION
-!!    Converts a DAT date-time array to a Unix Epoch Time value. Typically
-!!    mathematical operations such as sums, sorting and comparison are
-!!    performed with simple UET numeric values, and then they are converted
-!!    back.
+!!   Converts a DAT date-time array to a Unix Epoch Time value. Typically
+!!   mathematical operations such as sums, sorting and comparison are
+!!   performed with simple UET numeric values, and then they are converted
+!!   back.
 !!
 !!##OPTIONS
 !!    dat   Integer array holding a "DAT" array, similar in structure
@@ -2882,7 +2884,7 @@ end function d2u
 !!     integer                           :: dat(8)
 !!
 !!##DESCRIPTION
-!!    Given Unix Epoch Time returns DAT date-time array
+!!   Given Unix Epoch Time returns DAT date-time array
 !!
 !!##OPTIONS
 !!    unixtime  The "Unix Epoch" time, or the number of seconds since
@@ -2988,11 +2990,11 @@ end function get_timezone
 !!     character(len=:),allocatable   :: dhms
 !!
 !!##DESCRIPTION
-!!    Given a number of seconds convert it to a string of the form
+!!   Given a number of seconds convert it to a string of the form
 !!
 !!       dd-hh:mm:ss
 !!
-!!    where dd is days, hh hours, mm minutes and ss seconds.
+!!   where dd is days, hh hours, mm minutes and ss seconds.
 !!
 !!##OPTIONS
 !!    seconds    number of seconds to convert to string of form dd-hh:mm:ss. May
@@ -3180,14 +3182,14 @@ end function sec2days
 !!     real(kind=realtime)               :: time
 !!
 !!##DESCRIPTION
-!!      Given a string representing a duration of the form
-!!      "[-][[[dd-]hh:]mm:]ss"  or [NNd][NNh][NNm[]NNs][NNw]
-!!      return a value representing seconds
+!!   Given a string representing a duration of the form
+!!   "[-][[[dd-]hh:]mm:]ss"  or [NNd][NNh][NNm[]NNs][NNw]
+!!   return a value representing seconds.
 !!
-!!      If "dd-" is present, units for the numbers are assumed to
-!!      proceed from day to hour to minute to second. But if no
-!!      day is present, the units are assumed to proceed from second
-!!      to minutes to hour from left to right. That is ...
+!!   If "dd-" is present, units for the numbers are assumed to
+!!   proceed from day to hour to minute to second. But if no
+!!   day is present, the units are assumed to proceed from second
+!!   to minutes to hour from left to right. That is ...
 !!
 !!         [-]dd-hh:mm:ss
 !!         [-]dd-hh:mm
@@ -3199,14 +3201,14 @@ end function sec2days
 !!
 !!         Where dd is days, hh hours, mm minutes and ss seconds.
 !!
-!!      A decimal fraction is supported on the seconds (Actually,
-!!      any of the numeric values may represent positive floating
-!!      point numbers). Spaces are ignored.
+!!   A decimal fraction is supported on the seconds (Actually,
+!!   any of the numeric values may represent positive floating
+!!   point numbers). Spaces are ignored.
 !!
 !!
-!!      Simple numeric values may also be used with unit suffixes; where
-!!      s,m,h, or d represents seconds, minutes, hours or days and w
-!!      represents a week. Allowed aliases for w,d,h,m, and s units are
+!!   Simple numeric values may also be used with unit suffixes; where
+!!   s,m,h, or d represents seconds, minutes, hours or days and w
+!!   represents a week. Allowed aliases for w,d,h,m, and s units are
 !!
 !!        [NNd][NNh][NNm][NNs][NNw]
 !!
@@ -3216,9 +3218,9 @@ end function sec2days
 !!          s -  seconds,second,sec,secs
 !!          w -  week, weeks, wk, wks
 !!
-!!      The numeric values may represent floating point numbers.
+!!   The numeric values may represent floating point numbers.
 !!
-!!      Spaces, commas and case are ignored.
+!!   Spaces, commas and case are ignored.
 !!
 !!##OPTIONS
 !!       str   string of the general form dd-hh:mm:ss.nn
@@ -3386,17 +3388,17 @@ end function days2sec
 !!    character(len=:),allocatable  :: phase_of_moon
 !!
 !!##DESCRIPTION
-!!  Phases Of The Moon
+!!   Phases Of The Moon
 !!
-!!  This procedure is used to support the %p field descriptor for the
-!!  fmtdate(3f) routine.
+!!   This procedure is used to support the %p field descriptor for the
+!!   fmtdate(3f) routine.
 !!
-!!  The moon circles the earth every 29.530588853 days on average, so pick a
-!!  starting point and count. A new moon occurred at Julian date 2451550.1
-!!  (January 6, 2000, 18:14 UTC). Then it is easy to count the number of
-!!  days since the last new moon. This is an approximate calculation.
+!!   The moon circles the earth every 29.530588853 days on average, so pick a
+!!   starting point and count. A new moon occurred at Julian date 2451550.1
+!!   (January 6, 2000, 18:14 UTC). Then it is easy to count the number of
+!!   days since the last new moon. This is an approximate calculation.
 !!
-!!  There are eight generally recognized phases of the moon in common use
+!!   There are eight generally recognized phases of the moon in common use
 !!
 !!    o new or dark
 !!    o waxing crescent
@@ -3407,12 +3409,12 @@ end function days2sec
 !!    o laster quarter
 !!    o waning crescent
 !!
-!!  To calculate the phase of the moon simply divide the days since the
-!!  last new moon by eight and select the appropriate phase.
+!!   To calculate the phase of the moon simply divide the days since the
+!!   last new moon by eight and select the appropriate phase.
 !!
-!!  Note that technically the four states (new, first quarter, full, third
-!!  quarter) are events not phases. That is to say, the moon is technically
-!!  only new for an instant.
+!!   Note that technically the four states (new, first quarter, full, third
+!!   quarter) are events not phases. That is to say, the moon is technically
+!!   only new for an instant.
 !!
 !!##EXAMPLES
 !!
@@ -3438,9 +3440,9 @@ end function days2sec
 !!
 !!  Sample output:
 !!
-!!   Today is:2018:11:3:-240:20:18:44:245
-!!   The phase of the moon is Waning crescent, with a fullness of -30%
-!!   The phase of the moon is Waning crescent, with a fullness of -30%
+!!     Today is:2018:11:3:-240:20:18:44:245
+!!     The phase of the moon is Waning crescent, with a fullness of -30%
+!!     The phase of the moon is Waning crescent, with a fullness of -30%
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
@@ -3488,13 +3490,13 @@ end function phase_of_moon
 !!
 !!##DESCRIPTION
 !!
-!!  This procedure is used to support the %P field descriptor for the
-!!  fmtdate(3f) routine.
+!!   This procedure is used to support the %P field descriptor for the
+!!   fmtdate(3f) routine.
 !!
-!!  The moon circles the earth every 29.530588853 days on average, so pick
-!!  a starting point and count. A new moon occurred at January 6, 2000,
-!!  18:14 UTC. Then it is easy to count the number of days since the last
-!!  new moon. This is an approximate calculation.
+!!   The moon circles the earth every 29.530588853 days on average, so pick
+!!   a starting point and count. A new moon occurred at January 6, 2000,
+!!   18:14 UTC. Then it is easy to count the number of days since the last
+!!   new moon. This is an approximate calculation.
 !!
 !!##OPTIONS
 !!
@@ -3502,8 +3504,8 @@ end function phase_of_moon
 !!
 !!##RESULTS
 !!
-!!  moon_fullness  0 is a new or dark moon, 100 is a full moon, + for waxing
-!!                 and - for waning.
+!!     moon_fullness  0 is a new or dark moon, 100 is a full moon, + for waxing
+!!                    and - for waning.
 !!
 !!##EXAMPLES
 !!
@@ -3575,14 +3577,14 @@ end function moon_fullness
 !!     integer, intent(out)  :: dat
 !!
 !!##DESCRIPTION
-!!     The Date of Easter (Sunday)
+!!   The Date of Easter (Sunday)
 !!
-!!     The algorithm is due to J.-M. Oudin (1940) and is reprinted
-!!     in the Explanatory Supplement to the Astronomical Almanac,
-!!     ed. P. K. Seidelmann (1992). See Chapter 12, "Calendars", by
-!!     L. E. Doggett.
+!!   The algorithm is due to J.-M. Oudin (1940) and is reprinted
+!!   in the Explanatory Supplement to the Astronomical Almanac,
+!!   ed. P. K. Seidelmann (1992). See Chapter 12, "Calendars", by
+!!   L. E. Doggett.
 !!
-!!     The following are dates of Easter from 1980 to 2024:
+!!   The following are dates of Easter from 1980 to 2024:
 !!
 !!        1980  April  6        1995  April 16        2010  April  4
 !!        1981  April 19        1996  April  7        2011  April 24
@@ -3600,7 +3602,7 @@ end function moon_fullness
 !!        1993  April 11        2008  March 23        2023  April  9
 !!        1994  April  3        2009  April 12        2024  March 31
 !!
-!!     N.B. The date of Easter for the Eastern Orthodox Church may be different.
+!!   N.B. The date of Easter for the Eastern Orthodox Church may be different.
 !!
 !!##OPTIONS
 !!      year    Year for which to calculate day that Easter falls on
@@ -3696,9 +3698,9 @@ end subroutine Easter
 !!       real,intent(in)  :: wait_seconds
 !!
 !!##DESCRIPTION
-!!    The system_sleep(3f) routine uses the intrinsic ISO_C_BINDING
-!!    interface to call the C sleep(3c) procedure or usleep(3c)
-!!    routine.
+!!   The system_sleep(3f) routine uses the intrinsic ISO_C_BINDING
+!!   interface to call the C sleep(3c) procedure or usleep(3c)
+!!   routine.
 !!
 !!##OPTIONS
 !!    wait_seconds  integer,real or doubleprecision number of seconds for
@@ -3731,18 +3733,18 @@ end subroutine Easter
 !!
 !!  results
 !!
-!!   Time before integer call is:
-!!   Sunday, July 17th, 2016 2:29:45 AM UTC-0240
-!!   Time after integer call is:
-!!   Sunday, July 17th, 2016 2:29:49 AM UTC-0240
-!!   Time before real call is:
-!!   Sunday, July 17th, 2016 2:29:49 AM UTC-0240
-!!   Time after  real call is:
-!!   Sunday, July 17th, 2016 2:29:53 AM UTC-0240
-!!   Time before loop is:
-!!   Sunday, July 17th, 2016 2:29:53 AM UTC-0240
-!!   Time after loop  is:
-!!   Sunday, July 17th, 2016 2:30:09 AM UTC-0240
+!!      Time before integer call is:
+!!      Sunday, July 17th, 2016 2:29:45 AM UTC-0240
+!!      Time after integer call is:
+!!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
+!!      Time before real call is:
+!!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
+!!      Time after  real call is:
+!!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
+!!      Time before loop is:
+!!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
+!!      Time after loop  is:
+!!      Sunday, July 17th, 2016 2:30:09 AM UTC-0240
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015

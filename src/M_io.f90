@@ -643,36 +643,6 @@ end function separator
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function system_getenv(name,default) result(value)
-!@(#) M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)
-character(len=*),intent(in)          :: name
-character(len=*),intent(in),optional :: default
-integer                              :: howbig
-integer                              :: stat
-character(len=:),allocatable         :: value
-   if(NAME.ne.'')then
-      call get_environment_variable(name, length=howbig, status=stat, trim_name=.true.)  ! get length required to hold value
-      if(howbig.ne.0)then
-         select case (stat)
-         case (1); value=''   ! NAME is not defined in the environment. Strange...
-         case (2); value=''   ! This processor doesn't support environment variables. Boooh!
-         case default         !  make string to hold value of sufficient size and get value
-          if(allocated(value))deallocate(value)
-          allocate(character(len=max(howbig,1)) :: VALUE)
-          call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
-          if(stat.ne.0)VALUE=''
-         end select
-      else
-         value=''
-      endif
-   else
-      value=''
-   endif
-   if(value.eq.''.and.present(default))value=default
-end function system_getenv
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 !>
 !!##NAME
 !!    read_table(3f) - [M_io] read file containing a table of numeric values
@@ -3006,7 +2976,7 @@ end function rd_integer
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getname(3f) - [M_io:ENVIRONMENT] get name of the currnt executable
+!!    getname(3f) - [M_io:ENVIRONMENT] get name of the current executable
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -3105,7 +3075,7 @@ character(len=*),intent(in)     :: command
 character(len=:),allocatable    :: pathname, checkon, paths(:), exts(:)
 integer                         :: i, j
    pathname=''
-   call split(system_getenv('PATH'),paths,delimiters=merge(';',':',separator().eq.'\'))
+   call split(get_env('PATH'),paths,delimiters=merge(';',':',separator().eq.'\'))
    SEARCH: do i=1,size(paths)
       checkon=trim(joinpath(trim(paths(i)),command))
       select case(separator())
@@ -3127,7 +3097,7 @@ integer                         :: i, j
             pathname=checkon//'.exe'
             exit SEARCH
          endif
-         call split(system_getenv('PATHEXT'),exts,delimiters=';')
+         call split(get_env('PATHEXT'),exts,delimiters=';')
          do j=1,size(exts)
             if(exists(checkon//'.'//trim(exts(j))))then
                pathname=checkon//'.'//trim(exts(j))
@@ -3197,7 +3167,7 @@ character(len=:),allocatable    :: pathname, checkon, paths(:)
 integer                         :: i
 logical                         :: r
    pathname=''
-   call split(system_getenv(env),paths,delimiters=merge(';',':',separator().eq.'\'))
+   call split(get_env(env),paths,delimiters=merge(';',':',separator().eq.'\'))
    if(size(paths).eq.0)then
       paths=['']
    endif

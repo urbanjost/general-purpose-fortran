@@ -333,7 +333,7 @@ integer                                          :: istart
 integer                                          :: iback
    if(get('usage').eq.'T')then
       call print_dictionary('USAGE:')
-      !*!call default_help()
+      !x!call default_help()
       call mystop(32)
       return
    endif
@@ -367,7 +367,7 @@ integer                                          :: iback
             write(*,gen)'<DEBUG>CHECK_COMMANDLINE:VERSION_TEXT:LEN',version_text
          endif
          do i=1,size(version_text)
-            !*INTEL BUG*!call journal('sc',version_text(i)(istart:len_trim(version_text(i))-iback))
+            !xINTEL BUG*!call journal('sc',version_text(i)(istart:len_trim(version_text(i))-iback))
             line=version_text(i)(istart:len_trim(version_text(i))-iback)
             call journal('sc',line)
          enddo
@@ -908,26 +908,26 @@ end subroutine set_args
 !! Sample program:
 !!
 !!    program demo_get_subcommand
-!!    !*! SUBCOMMANDS
-!!    !*! For a command with subcommands like git(1)
-!!    !*! you can make separate namelists for each subcommand.
-!!    !*! You can call this program which has two subcommands (run, test),
-!!    !*! like this:
-!!    !*!    demo_get_subcommand --help
-!!    !*!    demo_get_subcommand run -x -y -z -title -l -L
-!!    !*!    demo_get_subcommand test -title -l -L -testname
-!!    !*!    demo_get_subcommand run --help
+!!    !x! SUBCOMMANDS
+!!    !x! For a command with subcommands like git(1)
+!!    !x! you can make separate namelists for each subcommand.
+!!    !x! You can call this program which has two subcommands (run, test),
+!!    !x! like this:
+!!    !x!    demo_get_subcommand --help
+!!    !x!    demo_get_subcommand run -x -y -z -title -l -L
+!!    !x!    demo_get_subcommand test -title -l -L -testname
+!!    !x!    demo_get_subcommand run --help
 !!       implicit none
-!!    !*! DEFINE VALUES TO USE AS ARGUMENTS WITH INITIAL VALUES
+!!    !x! DEFINE VALUES TO USE AS ARGUMENTS WITH INITIAL VALUES
 !!       real               :: x=-999.0,y=-999.0,z=-999.0
 !!       character(len=80)  :: title="not set"
 !!       logical            :: l=.false.
 !!       logical            :: l_=.false.
 !!       character(len=80)  :: testname="not set"
 !!       character(len=20)  :: name
-!!       call parse(name) !*! DEFINE AND PARSE COMMAND LINE
-!!       !*! ALL DONE CRACKING THE COMMAND LINE.
-!!       !*! USE THE VALUES IN YOUR PROGRAM.
+!!       call parse(name) !x! DEFINE AND PARSE COMMAND LINE
+!!       !x! ALL DONE CRACKING THE COMMAND LINE.
+!!       !x! USE THE VALUES IN YOUR PROGRAM.
 !!       write(*,*)'command was ',name
 !!       write(*,*)'x,y,z .... ',x,y,z
 !!       write(*,*)'title .... ',title
@@ -935,7 +935,7 @@ end subroutine set_args
 !!       write(*,*)'testname . ',testname
 !!    contains
 !!    subroutine parse(name)
-!!    !*! PUT EVERYTHING TO DO WITH COMMAND PARSING HERE FOR CLARITY
+!!    !x! PUT EVERYTHING TO DO WITH COMMAND PARSING HERE FOR CLARITY
 !!    use M_CLI2, only : set_args, get_args, get_args_fixed_length
 !!    use M_CLI2, only : get_subcommand
 !!    use M_CLI2, only : CLI_RESPONSE_FILE
@@ -1180,7 +1180,7 @@ integer                           :: place
       if((currnt=="-" .and. prev==" " .and. delmt == "off" .and. index("0123456789.",forwrd) == 0).or.ipoint > islen)then
          ! beginning of a keyword
          if(forwrd.eq.'-')then                      ! change --var to -var so "long" syntax is supported
-            !*!dummy(ifwd:ifwd)='_'
+            !x!dummy(ifwd:ifwd)='_'
             ipoint=ipoint+1                         ! ignore second - instead (was changing it to _)
             G_keyword_single_letter=.false.         ! flag this is a long keyword
          else
@@ -1204,7 +1204,7 @@ integer                           :: place
             elseif( G_remaining_option_allowed)then  ! meaning "--" has been encountered
                call update('_args_',trim(value))
             else
-               !*!write(warn,'(*(g0))')'*prototype_to_dictionary* warning: ignoring string [',trim(value),'] for ',trim(keyword)
+               !x!write(warn,'(*(g0))')'*prototype_to_dictionary* warning: ignoring string [',trim(value),'] for ',trim(keyword)
                G_RESPONSE_IGNORED=TRIM(VALUE)
                if(debug_m_cli2)write(*,gen)'<DEBUG>PROTOTYPE_TO_DICTIONARY:G_RESPONSE_IGNORED:',G_RESPONSE_IGNORED
             endif
@@ -1273,37 +1273,6 @@ integer                           :: place
    enddo
 
 end subroutine prototype_to_dictionary
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!>
-!!##NAME
-!!      update(3f) - [ARGUMENTS:M_CLI2] update internal dictionary given
-!!      keyword and value
-!!      (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!
-!!
-!!     subroutine update(key,val)
-!!
-!!      character(len=*),intent(in)           :: key
-!!      character(len=*),intent(in),optional  :: val
-!!##DESCRIPTION
-!!      Update internal dictionary in M_CLI2(3fm) module.
-!!##OPTIONS
-!!      key  name of keyword to add, replace, or delete from dictionary
-!!      val  if present add or replace value associated with keyword. If not
-!!           present remove keyword entry from dictionary.
-!!
-!!           If "present" is true, a value will be appended
-!!##EXAMPLE
-!!
-!!
-!!##AUTHOR
-!!      John S. Urban, 2019
-!!##LICENSE
-!!      Public Domain
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1400,6 +1369,35 @@ end function specified
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
+!>
+!!##NAME
+!!      update(3f) - [ARGUMENTS:M_CLI2] update internal dictionary given
+!!      keyword and value
+!!      (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!
+!!
+!!     subroutine update(key,val)
+!!
+!!      character(len=*),intent(in)           :: key
+!!      character(len=*),intent(in),optional  :: val
+!!##DESCRIPTION
+!!      Update internal dictionary in M_CLI2(3fm) module.
+!!##OPTIONS
+!!      key  name of keyword to add, replace, or delete from dictionary
+!!      val  if present add or replace value associated with keyword. If not
+!!           present remove keyword entry from dictionary.
+!!
+!!           If "present" is true, a value will be appended
+!!##EXAMPLE
+!!
+!!
+!!##AUTHOR
+!!      John S. Urban, 2019
+!!##LICENSE
+!!      Public Domain
+!===================================================================================================================================
 subroutine update(key,val)
 character(len=*),intent(in)           :: key
 character(len=*),intent(in),optional  :: val
@@ -1428,7 +1426,7 @@ logical                               :: set_mandatory
    case(1)
       long=trim(long_short(1))
       if(len_trim(long).eq.1)then
-         !*!ii= findloc (shorts, long, dim=1) ! if parsing arguments on line and a short keyword look up long value
+         !x!ii= findloc (shorts, long, dim=1) ! if parsing arguments on line and a short keyword look up long value
          ii=maxloc([0,merge(1, 0, shorts.eq.long)],dim=1)
          if(ii.gt.1)then
             long=keywords(ii-1)
@@ -1721,7 +1719,7 @@ character(len=:),allocatable             :: search_for
 integer                                  :: lun
 integer                                  :: ios
 integer                                  :: itrim
-character(len=4096)                      :: line !*! assuming input never this long
+character(len=4096)                      :: line !x! assuming input never this long
 character(len=256)                       :: message
 character(len=:),allocatable             :: array(:) ! output array of tokens
 integer                                  :: lines_processed
@@ -1902,10 +1900,10 @@ integer                              :: length
       call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
       select case (stat)
       case (1)
-          !*!print *, NAME, " is not defined in the environment. Strange..."
+          !x!print *, NAME, " is not defined in the environment. Strange..."
           VALUE=''
       case (2)
-          !*!print *, "This processor doesn't support environment variables. Boooh!"
+          !x!print *, "This processor doesn't support environment variables. Boooh!"
           VALUE=''
       case default
           ! make string to hold value of sufficient size
@@ -2043,7 +2041,7 @@ character(len=:),allocatable :: fname
             if(existing)then
                sep='/'
             else
-               !*!write(*,gen)'<WARNING>unknown system directory path separator'
+               !x!write(*,gen)'<WARNING>unknown system directory path separator'
                sep='/'
             endif
          endif
@@ -2091,16 +2089,16 @@ integer                      :: ios
 integer                      :: i
 logical                      :: existing=.false.
 character(len=1)             :: sep
-!*!IFORT BUG:character(len=1),save        :: sep_cache=' '
+!x!IFORT BUG:character(len=1),save        :: sep_cache=' '
 integer,save                 :: isep=-1
 character(len=4096)          :: name
 character(len=:),allocatable :: envnames(:)
 
     ! NOTE:  A parallel code might theoretically use multiple OS
-    !*!FORT BUG:if(sep_cache.ne.' ')then  ! use cached value.
-    !*!FORT BUG:    sep=sep_cache
-    !*!FORT BUG:    return
-    !*!FORT BUG:endif
+    !x!FORT BUG:if(sep_cache.ne.' ')then  ! use cached value.
+    !x!FORT BUG:    sep=sep_cache
+    !x!FORT BUG:    return
+    !x!FORT BUG:endif
     if(isep.ne.-1)then  ! use cached value.
         sep=char(isep)
         return
@@ -2133,7 +2131,7 @@ character(len=:),allocatable :: envnames(:)
     write(*,*)'<WARNING>unknown system directory path separator'
     sep='\'
     endblock FOUND
-    !*!IFORT BUG:sep_cache=sep
+    !x!IFORT BUG:sep_cache=sep
     isep=ichar(sep)
 end function separator
 !===================================================================================================================================
@@ -2143,7 +2141,7 @@ subroutine cmd_args_to_dictionary(check)
 ! convert command line arguments to dictionary entries
 logical,intent(in),optional  :: check
 logical                      :: check_local
-!*!logical                      :: guess_if_value
+!x!logical                      :: guess_if_value
 integer                      :: pointer
 character(len=:),allocatable :: lastkeyword
 integer                      :: i, jj, kk
@@ -2185,7 +2183,7 @@ logical                      :: next_mandatory
       dummy=current_argument//'   '
       current_argument_padded=current_argument//'   '
 
-      !*!guess_if_value=maybe_value()
+      !x!guess_if_value=maybe_value()
 
       if(.not.next_mandatory.and..not.nomore.and.current_argument_padded(1:2).eq.'--')then    ! beginning of long word
          G_keyword_single_letter=.false.
@@ -2945,14 +2943,14 @@ integer                              :: half,sz,i
       allocate(xarray(0))
    endif
 
-   !*!================================================================================================
-   !*!IFORT,GFORTRAN OK, NVIDIA RETURNS NULL ARRAY: xarray=cmplx(real(darray(1::2)),real(darray(2::2)))
+   !x!================================================================================================
+   !x!IFORT,GFORTRAN OK, NVIDIA RETURNS NULL ARRAY: xarray=cmplx(real(darray(1::2)),real(darray(2::2)))
    if(allocated(xarray))deallocate(xarray)
    allocate(xarray(half))
    do i=1,sz,2
       xarray((i+1)/2)=cmplx( darray(i),darray(i+1) )
    enddo
-   !*!================================================================================================
+   !x!================================================================================================
 
 end subroutine get_anyarray_x
 !===================================================================================================================================
@@ -3467,7 +3465,7 @@ class(*),intent(in) :: generic
       type is (real(kind=real64))
          if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:REAL64'
          write(line(istart:),'(1pg0)') generic
-      !*! DOES NOT WORK WITH NVFORTRAN: type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+      !x! DOES NOT WORK WITH NVFORTRAN: type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
       type is (logical)
          if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:REAL64'
          write(line(istart:),'(l1)') generic
@@ -3534,8 +3532,8 @@ integer :: i
       type is (integer(kind=int64));    write(line(istart:),'("[",*(i0,1x))') generic
       type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
-      !*! DOES NOT WORK WITH nvfortran: type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
-      !*! DOES NOT WORK WITH ifort:     type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
+      !x! DOES NOT WORK WITH nvfortran: type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
+      !x! DOES NOT WORK WITH ifort:     type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
       type is (character(len=*))
          if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:CHARACTER'
@@ -3883,9 +3881,9 @@ integer                       :: imax                   ! length of longest toke
    if(present(nulls))then; nlls=lower(adjustl(nulls)); else; nlls='ignore'    ; endif ! optional parameter
 !-----------------------------------------------------------------------------------------------------------------------------------
    n=len(input_line)+1                        ! max number of strings INPUT_LINE could split into if all delimiter
-   if(allocated(ibegin))deallocate(ibegin)    !*! intel compiler says allocated already ???
+   if(allocated(ibegin))deallocate(ibegin)    !x! intel compiler says allocated already ???
    allocate(ibegin(n))                        ! allocate enough space to hold starting location of tokens if string all tokens
-   if(allocated(iterm))deallocate(iterm)      !*! intel compiler says allocated already ???
+   if(allocated(iterm))deallocate(iterm)      !x! intel compiler says allocated already ???
    allocate(iterm(n))                         ! allocate enough space to hold ending location of tokens if string all tokens
    ibegin(:)=1
    iterm(:)=1
@@ -5920,7 +5918,7 @@ class(*),intent(out)         :: generic
       type is (real);                           call get_args(name,generic)
       type is (real(kind=real64));              call get_args(name,generic)
       type is (logical);                        call get_args(name,generic)
-      !*!type is (character(len=:),allocatable ::);   call get_args(name,generic)
+      !x!type is (character(len=:),allocatable ::);   call get_args(name,generic)
       type is (character(len=*));
       call get_args_fixed_length(name,generic)
       type is (complex);                        call get_args(name,generic)
@@ -6028,10 +6026,10 @@ subroutine mystop(sig,msg)
 !
 integer,intent(in) :: sig
 character(len=*),intent(in),optional :: msg
-   !*!write(*,*)'MYSTOP:',sig,trim(msg)
+   !x!write(*,*)'MYSTOP:',sig,trim(msg)
    if(sig.lt.0)then
       if(present(msg))call journal('sc',msg)
-      !*!stop abs(sig)
+      !x!stop abs(sig)
       stop 1
    elseif(G_STOPON)then
       stop
@@ -6042,7 +6040,7 @@ character(len=*),intent(in),optional :: msg
          G_STOP_MESSAGE=''
       endif
       G_STOP=sig
-      !*!write(*,*)'G_STOP:',g_stop,trim(msg)
+      !x!write(*,*)'G_STOP:',g_stop,trim(msg)
    endif
 end subroutine mystop
 !===================================================================================================================================
@@ -6073,7 +6071,7 @@ character(len=*),intent(in)             :: value
 integer,intent(out)                     :: place
 integer                                 :: ii
    if(len_trim(value).eq.1)then
-      !*!ii=findloc(shorts,value,dim=1)
+      !x!ii=findloc(shorts,value,dim=1)
       ii=maxloc([0,merge(1, 0, shorts.eq.value)],dim=1)
       if(ii.gt.1)then
          place=ii-1
