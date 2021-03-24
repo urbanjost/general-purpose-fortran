@@ -31,10 +31,10 @@ contains
 !!    Syntax:
 !!
 !!      function str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-!!      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,nospace)
+!!      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
 !!      class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
 !!      class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-!!      logical,intent(in),optional   :: nospace
+!!      character(len=*),intent(in),optional :: sep
 !!      character,len=(:),allocatable :: str
 !!
 !!##DESCRIPTION
@@ -49,7 +49,7 @@ contains
 !!                single-dimensioned arrays. Currently, mixing scalar
 !!                arguments and array arguments is not supported.
 !!
-!!    nospace     if nospace=.true., then no spaces are added between values
+!!    sep         separator string used between values. Defaults to a space.
 !!
 !!##RETURNS
 !!    str     description to print
@@ -77,7 +77,7 @@ contains
 !!
 !!    ! create a format on the fly
 !!    biggest=huge(0)
-!!    frmt=str('(*(i',int(log10(real(biggest))),':,1x))',nospace=.true.)
+!!    frmt=str('(*(i',int(log10(real(biggest))),':,1x))',sep='')
 !!    write(*,*)'format=',frmt
 !!
 !!    ! although it will often work, using str(3f)
@@ -105,7 +105,7 @@ contains
 !!    Public Domain
 function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
                   & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
-                  & nospace)
+                  & sep)
 implicit none
 
 ! ident_2="@(#)M_msg::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
@@ -114,19 +114,18 @@ class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
 class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
 class(*),intent(in),optional  :: genericf, genericg, generich, generici, genericj
-logical,intent(in),optional   :: nospace
-character(len=:), allocatable :: msg_scalar
+character(len=:),allocatable  :: msg_scalar
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
+   if(present(sep))then
+      increment=len(sep)+1
+      sep_local=sep
    else
       increment=2
+      sep_local=' '
    endif
 
    istart=1
@@ -171,6 +170,7 @@ class(*),intent(in) :: generic
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
    end select
    istart=len_trim(line)+increment
+   line=trim(line)//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end function msg_scalar
@@ -179,7 +179,7 @@ end function msg_scalar
 !===================================================================================================================================
 function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,&
                & generica,genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj,&
-               & nospace)
+               & sep)
 implicit none
 
 ! ident_3="@(#)M_msg::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
@@ -189,18 +189,17 @@ class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4
 class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
 class(*),intent(in),optional  :: generica(:), genericb(:), genericc(:), genericd(:), generice(:)
 class(*),intent(in),optional  :: genericf(:), genericg(:), generich(:), generici(:), genericj(:)
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg_one
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      increment=1+len(sep)
+      sep_local=sep
    else
+      sep_local=' '
       increment=2
    endif
 
@@ -249,8 +248,8 @@ integer :: i
       class default
          stop 'unknown type in *print_generic*'
    end select
-   line=trim(line)//"]"
-   istart=len_trim(line)+increment
+   istart=len_trim(line)+increment+1
+   line=trim(line)//']'//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end function msg_one

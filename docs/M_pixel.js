@@ -29,6 +29,7 @@ append("move2.3m_pixel.html");
 append("ortho2.3m_pixel.html");
 append("page.3m_pixel.html");
 append("pixel.3m_pixel.html");
+append("pixel_slice.3m_pixel.html");
 append("point2.3m_pixel.html");
 append("polar_to_cartesian.3m_pixel.html");
 append("poly2.3m_pixel.html");

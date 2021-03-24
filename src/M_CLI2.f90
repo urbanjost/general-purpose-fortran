@@ -3305,7 +3305,7 @@ end function longest_command_argument
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine journal(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj, nospace)
+subroutine journal(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj, sep)
 implicit none
 
 ! ident_13="@(#)M_CLI2::journal(3f): writes a message to a string composed of any standard scalar types"
@@ -3314,11 +3314,11 @@ character(len=*),intent(in)   :: where
 class(*),intent(in)           :: g0
 class(*),intent(in),optional  :: g1, g2, g3, g4, g5, g6, g7, g8 ,g9
 class(*),intent(in),optional  :: ga, gb, gc, gd, ge, gf, gg, gh ,gi, gj
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
 if(debug_m_cli2)write(*,*)'<DEBUG>JOURNAL:',present(g1)
 if(debug_m_cli2)write(*,*)'<DEBUG>JOURNAL:',present(g2)
-if(debug_m_cli2)write(*,*)'<DEBUG>JOURNAL:',present(nospace)
-write(*,'(a)')str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj ,nospace)
+if(debug_m_cli2)write(*,*)'<DEBUG>JOURNAL:',present(sep)
+write(*,'(a)')str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj, sep)
 end subroutine journal
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3329,11 +3329,11 @@ end subroutine journal
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    function str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,nospace)
+!!    function str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
 !!
 !!     class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
 !!     class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-!!     logical,intent(in),optional   :: nospace
+!!     character(len=*),intent(in),optional :: sep
 !!     character,len=(:),allocatable :: str
 !!
 !!##DESCRIPTION
@@ -3348,7 +3348,7 @@ end subroutine journal
 !!                single-dimensioned arrays. Currently, mixing scalar
 !!                arguments and array arguments is not supported.
 !!
-!!    nospace     if nospace=.true., then no spaces are added between values
+!!    sep         separator to place between values. Defaults to a space.
 !!##RETURNS
 !!    str     description to print
 !!##EXAMPLES
@@ -3373,7 +3373,7 @@ end subroutine journal
 !!
 !!       ! create a format on the fly
 !!       biggest=huge(0)
-!!       frmt=str('(*(i',int(log10(real(biggest))),':,1x))',nospace=.true.)
+!!       frmt=str('(*(i',int(log10(real(biggest))),':,1x))',sep=' ')
 !!       write(*,*)'format=',frmt
 !!
 !!       ! although it will often work, using str(3f) in an I/O statement is not recommended
@@ -3398,7 +3398,7 @@ end subroutine journal
 !!    Public Domain
 function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
                   & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
-                  & nospace)
+                  & sep)
 implicit none
 
 ! ident_14="@(#)M_CLI2::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
@@ -3407,19 +3407,18 @@ class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
 class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
 class(*),intent(in),optional  :: genericf, genericg, generich, generici, genericj
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg_scalar
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
    if(debug_m_cli2)write(*,gen)'<DEBUG>:MSG_SCALAR'
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      sep_local=sep
+      increment=len(sep_local)+1
    else
+      sep_local=' '
       increment=2
    endif
    if(debug_m_cli2)write(*,gen)'<DEBUG>:MSG_SCALAR'
@@ -3477,13 +3476,14 @@ class(*),intent(in) :: generic
    end select
    if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:START'
    istart=len_trim(line)+increment
+   line=trim(line)//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end function msg_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,nospace)
+function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,sep)
 implicit none
 
 ! ident_15="@(#)M_CLI2::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
@@ -3491,18 +3491,17 @@ implicit none
 class(*),intent(in)           :: generic0(:)
 class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)
 class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg_one
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      sep_local=sep
+      increment=len(sep_local)+1
    else
+      sep_local=' '
       increment=2
    endif
 
@@ -3543,8 +3542,8 @@ integer :: i
       class default
          call mystop(-22,'unknown type in *print_generic*')
    end select
-   line=trim(line)//"]"
-   istart=len_trim(line)+increment
+   istart=len_trim(line)+increment+1
+   line=trim(line)//"]"//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end function msg_one

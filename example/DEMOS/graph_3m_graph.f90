@@ -23,7 +23,7 @@
                 call prefsize(ixsize,iysize)
              else
                 call prefsize(ixsize,iysize)
-                !!call voutput(str(filename,'_',int(a),'x',int(b),'.',device,nospace=.true.))
+                !!call voutput(str(filename,'_',int(a),'x',int(b),'.',device,sep=''))
              endif
              call vinit(device)
              call vsetflush(.false.)

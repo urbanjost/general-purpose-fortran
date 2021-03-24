@@ -563,12 +563,12 @@ end subroutine set_stdout_lun
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine where_write_message_all(where,g0,g1,g2g3,g4,g5,g6,g7,g8,g9,nospace)
+!!   subroutine where_write_message_all(where,g0,g1,g2g3,g4,g5,g6,g7,g8,g9,sep)
 !!
 !!     character(len=*),intent(in)   :: where
 !!     class(*),intent(in)           :: g0
 !!     class(*),intent(in),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9
-!!     logical,intent(in),optional   :: nospace
+!!     character,intent(in),optional :: sep
 !!
 !!##DESCRIPTION
 !!    where_write_message_all(3f) builds and writes a space-separated string from up to nine scalar values.
@@ -580,7 +580,7 @@ end subroutine set_stdout_lun
 !!             be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
 !!             or CHARACTER.
 !!    g[1-9]   optional additional values to print the value of after g0.
-!!    nospace  if nospace=.true., then no spaces are added between values
+!!    sep      separator to add between values. Default is a space
 !!##RETURNS
 !!    where_write_message_all  description to print
 !!
@@ -596,7 +596,7 @@ end subroutine set_stdout_lun
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine where_write_message_all(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, nospace)
+subroutine where_write_message_all(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, sep)
 implicit none
 
 ! ident_5="@(#)M_journal::where_write_message_all(3f): writes a message to a string composed of any standard scalar types"
@@ -604,8 +604,8 @@ implicit none
 character(len=*),intent(in)   :: where
 class(*),intent(in)           :: g0
 class(*),intent(in),optional  :: g1, g2, g3, g4, g5, g6, g7, g8 ,g9
-logical,intent(in),optional   :: nospace
-call where_write_message(where,str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9,nospace))
+character,intent(in),optional :: sep
+call where_write_message(where,str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9,sep))
 end subroutine where_write_message_all
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

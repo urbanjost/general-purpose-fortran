@@ -17,7 +17,7 @@
 
           ! create a format on the fly
           biggest=huge(0)
-          frmt=str('(*(i',int(log10(real(biggest))),':,1x))',nospace=.true.)
+          frmt=str('(*(i',int(log10(real(biggest))),':,1x))',sep='')
           write(*,*)'format=',frmt
 
           ! although it will often work, using str(3f)

@@ -2413,7 +2413,7 @@ end subroutine draw_line_single
 !!          call textang(0.0)
 !!          call move2(0.0,0.0)
 !!          call textsize(150.0,150.0)
-!!          call drawstr('\',i+1000,'\',nospace=.true.)
+!!          call drawstr('\',i+1000,'\',sep='')
 !!
 !!          call centertext(.false.)
 !!          call color(1)
@@ -6799,11 +6799,12 @@ end subroutine PPM_ENDCAP_CIRCLE
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine drawstr(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,nospace)
+!!    subroutine drawstr(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
 !!
 !!     class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
 !!     class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-!!     logical,intent(in),optional   :: nospace
+!!     character(len=*),intent(in),optional :: sep
+!!     character(len=:),allocatable  :: sep_local
 !!
 !!##DESCRIPTION
 !!    drawstr(3f) builds a space-separated string from up to twenty scalar values.
@@ -6817,7 +6818,7 @@ end subroutine PPM_ENDCAP_CIRCLE
 !!                single-dimensioned arrays. Currently, mixing scalar
 !!                arguments and array arguments is not supported.
 !!
-!!    nospace     if nospace=.true., then no spaces are added between values
+!!    sep         separator between values. Defaults to a space.
 !!
 !!
 !!##EXAMPLES
@@ -6842,7 +6843,7 @@ end subroutine PPM_ENDCAP_CIRCLE
 !!
 !!       ! create a format on the fly
 !!       biggest=huge(0)
-!!       frmt=str('(*(i',int(log10(real(biggest))),':,1x))',nospace=.true.)
+!!       frmt=str('(*(i',int(log10(real(biggest))),':,1x))',sep='')
 !!       write(*,*)'format=',frmt
 !!
 !!       ! although it will often work, using str(3f) in an I/O statement is not recommended
@@ -6868,7 +6869,7 @@ end subroutine PPM_ENDCAP_CIRCLE
 !!    Public Domain
 subroutine msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
                   & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
-                  & nospace)
+                  & sep)
 implicit none
 
 ! ident_2="@(#)M_msg::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
@@ -6877,18 +6878,17 @@ class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
 class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
 class(*),intent(in),optional  :: genericf, genericg, generich, generici, genericj
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      increment=1+len(sep)
+      sep_local=sep
    else
+      sep_local=' '
       increment=2
    endif
 
@@ -6934,6 +6934,7 @@ class(*),intent(in) :: generic
       type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
    end select
+   line=line(:istart-1)//sep_local
    istart=len_trim(line)+increment
 end subroutine print_generic
 !===================================================================================================================================
@@ -6941,7 +6942,7 @@ end subroutine msg_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,nospace)
+subroutine msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,sep)
 implicit none
 
 ! ident_3="@(#)M_msg::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
@@ -6949,18 +6950,17 @@ implicit none
 class(*),intent(in)           :: generic0(:)
 class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)
 class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      increment=1+len(sep)
+      sep_local=sep
    else
+      sep_local=' '
       increment=2
    endif
 
@@ -7000,8 +7000,8 @@ integer :: i
       class default
          stop 'unknown type in *print_generic*'
    end select
-   line=trim(line)//"]"
    istart=len_trim(line)+increment
+   line=trim(line)//"]"//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end subroutine msg_one

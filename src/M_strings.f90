@@ -2965,10 +2965,10 @@ end function rotate13
 !!     character(len=:),allocatable         :: string
 !!
 !!##DESCRIPTION
-!!      JOIN(3f) appends the elements of a CHARACTER array into a single
-!!      CHARACTER variable, with elements 1 to N joined from left to right.
-!!      By default each element is trimmed of trailing spaces and the
-!!      default separator is a null string.
+!!   JOIN(3f) appends the elements of a CHARACTER array into a single
+!!   CHARACTER variable, with elements 1 to N joined from left to right.
+!!   By default each element is trimmed of trailing spaces and the
+!!   default separator is a null string.
 !!
 !!##OPTIONS
 !!      STR(:)  array of CHARACTER variables to be joined
@@ -3027,38 +3027,30 @@ end function rotate13
 !!    Public Domain
 pure function join(str,sep,trm,left,right,start,end) result (string)
 
-! ident_19="@(#)M_strings::join(3f): append an array of character variables with specified separator into a single CHARACTER variable"
+! ident_19="@(#)M_strings::join(3f): merge string array into a single CHARACTER value adding specified separators, caps, prefix and suffix"
 
 character(len=*),intent(in)          :: str(:)
-character(len=*),intent(in),optional :: sep
-character(len=*),intent(in),optional :: right
-character(len=*),intent(in),optional :: left
-character(len=*),intent(in),optional :: start
-character(len=*),intent(in),optional :: end
+character(len=*),intent(in),optional :: sep, right, left, start, end
 logical,intent(in),optional          :: trm
+character(len=:),allocatable         :: sep_local, left_local, right_local
 character(len=:),allocatable         :: string
-integer                              :: i
 logical                              :: trm_local
-character(len=:),allocatable         :: sep_local
-character(len=:),allocatable         :: left_local
-character(len=:),allocatable         :: right_local
-
-   if(present(sep))then    ;  sep_local=sep      ;  else  ;  sep_local=''      ;  endif
-   if(present(trm))then    ;  trm_local=trm      ;  else  ;  trm_local=.true.  ;  endif
-   if(present(left))then   ;  left_local=left    ;  else  ;  left_local=''     ;  endif
-   if(present(right))then  ;  right_local=right  ;  else  ;  right_local=''    ;  endif
-
+integer                              :: i
+   if(present(sep))then   ; sep_local=sep     ; else ; sep_local=''     ; endif
+   if(present(trm))then   ; trm_local=trm     ; else ; trm_local=.true. ; endif
+   if(present(left))then  ; left_local=left   ; else ; left_local=''    ; endif
+   if(present(right))then ; right_local=right ; else ; right_local=''   ; endif
    string=''
-   do i = 1,size(str)-1
-      if(trm_local)then
-         string=string//left_local//trim(str(i))//right_local//sep_local
-      else
-         string=string//left_local//str(i)//right_local//sep_local
-      endif
-   enddo
-   if(size(str).lt.i)then ! if str is zero-sized i will be 1, not zero
+   if(size(str).eq.0)then
       string=string//left_local//right_local
    else
+      do i = 1,size(str)-1
+         if(trm_local)then
+            string=string//left_local//trim(str(i))//right_local//sep_local
+         else
+            string=string//left_local//str(i)//right_local//sep_local
+         endif
+      enddo
       if(trm_local)then
          string=string//left_local//trim(str(i))//right_local
       else
@@ -8690,11 +8682,11 @@ end function setbits64
 !!##SYNOPSIS
 !!
 !!
-!!     function msg(g1,g2g3,g4,g5,g6,g7,g8,g9,nospace)
+!!     function msg(g1,g2g3,g4,g5,g6,g7,g8,g9,sep)
 !!
 !!      class(*),intent(in),optional  :: g1,g2,g3,g4,g5,g6,g7,g8,g9
-!!      logical,intent(in),optional   :: nospace
-!!      character,len=(:),allocatable :: msg
+!!      character(len=*),intent(in),optional :: sep
+!!      character(len=:),allocatable :: msg
 !!
 !!##DESCRIPTION
 !!     msg(3f) builds a space-separated string from up to nine scalar values.
@@ -8703,7 +8695,7 @@ end function setbits64
 !!     g[1-9]  optional value to print the value of after the message. May
 !!             be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION, COMPLEX,
 !!             or CHARACTER.
-!!     nospace  if nospace=.true., then no spaces are added between values
+!!     sep     separator between values. Defaults to a space
 !!
 !!##RETURNS
 !!     msg     description to print
@@ -8735,7 +8727,7 @@ end function setbits64
 !!
 !!        ! create a format on the fly
 !!        biggest=huge(0)
-!!        frmt=msg('(*(i',int(log10(real(biggest))),':,1x))',nospace=.true.)
+!!        frmt=msg('(*(i',int(log10(real(biggest))),':,1x))',sep='')
 !!        write(*,*)'format=',frmt
 !!
 !!        ! although it will often work, using msg(3f) in an I/O statement
@@ -8762,25 +8754,24 @@ end function setbits64
 !!##LICENSE
 !!    Public Domain
 !===================================================================================================================================
-function msg_scalar(generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,nospace)
+function msg_scalar(generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,sep)
 implicit none
 
 ! ident_78="@(#)M_strings::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
 
 class(*),intent(in),optional  :: generic1 ,generic2 ,generic3 ,generic4 ,generic5
 class(*),intent(in),optional  :: generic6 ,generic7 ,generic8 ,generic9
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg_scalar
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      sep_local=sep
+      increment=len(sep)+1
    else
+      sep_local=' '
       increment=2
    endif
 
@@ -8815,13 +8806,14 @@ class(*),intent(in) :: generic
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
    end select
    istart=len_trim(line)+increment
+   line=trim(line)//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end function msg_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function msg_one(generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,nospace)
+function msg_one(generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,sep)
 implicit none
 
 ! ident_79="@(#)M_strings::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
@@ -8829,18 +8821,17 @@ implicit none
 class(*),intent(in)           :: generic1(:)
 class(*),intent(in),optional  :: generic2(:), generic3(:), generic4(:), generic5(:)
 class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable   :: sep_local
 character(len=:), allocatable :: msg_one
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      sep_local=sep
+      increment=len(sep)+1
    else
+      sep_local=' '
       increment=2
    endif
 
@@ -8875,8 +8866,8 @@ integer :: i
       type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic
    end select
-   line=trim(line)//"]"
    istart=len_trim(line)+increment
+   line=trim(line)//"]"//sep_local
 end subroutine print_generic
 !===================================================================================================================================
 end function msg_one

@@ -32,7 +32,7 @@
                 call textang(0.0)
                 call move2(0.0,0.0)
                 call textsize(150.0,150.0)
-                call drawstr('\',i+1000,'\',nospace=.true.)
+                call drawstr('\',i+1000,'\',sep='')
 
                 call centertext(.false.)
                 call color(1)
