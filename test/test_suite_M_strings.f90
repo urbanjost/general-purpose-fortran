@@ -261,23 +261,23 @@ character(len=:),allocatable :: targetline
    ! a null new string deletes occurrences of the old substring
    call testit('i','', 'BEFORE:THs s THe nput strng')
 
-   targetline=replace('a b ab baaa aaaa aa aa a a a aa aaaaaa','aa','CCCC',range=[3,5])
-   call unit_check('replace',targetline.eq.'a b ab baaa aaCCCC CCCC CCCC a a a aa aaaaaa','example of using RANGE=',targetline)
+   targetline=replace('a b ab baaa aaaa aa aa a a a aa aaaaaa','aa','CCCC',occurrence=3,repeat=3)
+   call unit_check('replace',targetline.eq.'a b ab baaa aaCCCC CCCC CCCC a a a aa aaaaaa','example of using RANGE',targetline)
 
    targetline=replace('10-9','-',' -')
-   call unit_check('replace',targetline.eq.'10 -9','example of using RANGE=',targetline)
+   call unit_check('replace',targetline.eq.'10 -9','example of leading space in new=',targetline)
 
    targetline=replace('12-10','-',' -')
-   call unit_check('replace',targetline.eq.'12 -10','example of using RANGE=',targetline)
+   call unit_check('replace',targetline.eq.'12 -10','example of leading space in new=',targetline)
 
    targetline=replace('-','-',' -')
-   call unit_check('replace',targetline.eq.' -','example of using RANGE=',targetline)
+   call unit_check('replace',targetline.eq.' -','spaces=',targetline)
 
    targetline=replace('---','-',' -')
-   call unit_check('replace',targetline.eq.' - - -','example of using RANGE=',targetline)
+   call unit_check('replace',targetline.eq.' - - -','spaces=',targetline)
 
    targetline=replace('12-10-','-',' -')
-   call unit_check('replace',targetline.eq.'12 -10 -','example of using RANGE=',targetline)
+   call unit_check('replace',targetline.eq.'12 -10 -','spaces=',targetline)
 
    call unit_check_done('replace',msg='finished test of replacing substrings')
 

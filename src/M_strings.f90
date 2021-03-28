@@ -1617,15 +1617,16 @@ end subroutine delim
 !!
 !!##SYNOPSIS
 !!
-!!    function replace(targetline[,old,new|cmd],range,ierr,clip) result (newline)
+!!    function replace(targetline[,old,new|cmd],range,ignorecase,ierr) result (newline)
 !!
 !!     character(len=*)                       :: targetline
 !!     character(len=*),intent(in),optional   :: old
 !!     character(len=*),intent(in),optional   :: new
 !!     character(len=*),intent(in),optional   :: cmd
-!!     integer,intent(in),optional            :: range(2)
+!!     integer,intent(in),optional            :: occurrence
+!!     integer,intent(in),optional            :: repeat
+!!     logical,intent(in),optional            :: ignorecase
 !!     integer,intent(out),optional           :: ierr
-!!     logical,intent(in),optional            :: clip
 !!     character(len=:),allocatable           :: newline
 !!
 !!##DESCRIPTION
@@ -1639,14 +1640,17 @@ end subroutine delim
 !!     cmd         alternate way to specify old and new string, in
 !!                 the form c/old/new/; where "/" can be any character
 !!                 not in "old" or "new"
-!!     range       if present, only change range(1) to range(2) of
-!!                 occurrences of old string
-!!     ierr        error code. iF ier = -1 bad directive, >= 0 then
-!!                 count of changes made
-!!     clip        whether to return trailing spaces or not. Defaults
+!!     occurrence  if present, start changing at the Nth occurrence of the
+!!                 OLD string. If negative start replacing from the left
+!!                 end of the string.
+!!     repeat      number of replacements to perform. Defaults to a global
+!!                 replacement.
+!!     ignorecase  whether to ignore ASCII case or not. Defaults
 !!                 to .false.
 !!##RETURNS
 !!     newline     allocatable string returned
+!!     ierr        error code. iF ier = -1 bad directive, >= 0 then
+!!                 count of changes made
 !!
 !!##EXAMPLES
 !!
@@ -1657,72 +1661,36 @@ end subroutine delim
 !!    implicit none
 !!    character(len=:),allocatable :: targetline
 !!
-!!    targetline='this is the input string'
-!!
-!!    call testit('th','TH','THis is THe input string')
+!!    write(*,*) replace('Xis is Xe input string','X','th')
+!!    write(*,*) replace('Xis is xe input string','x','th',ignorecase=.true.)
+!!    write(*,*) replace('Xis is xe input string','X','th',ignorecase=.false.)
 !!
 !!    ! a null old substring means "at beginning of line"
-!!    call testit('','BEFORE:', 'BEFORE:THis is THe input string')
+!!    write(*,*) replace('my line of text','','BEFORE:')
 !!
-!!    ! a null new string deletes occurrences of the old substring
-!!    call testit('i','', 'BEFORE:THs s THe nput strng')
+!!    ! a null old string deletes occurrences of the old substring
+!!    write(*,*) replace('I wonder i ii iii','i','')
 !!
-!!    write(*,*)'Examples of the use of RANGE='
+!!    ! Examples of the use of RANGE
 !!
-!!    targetline=replace('a b ab baaa aaaa','a','A')
-!!    write(*,*)'replace a with A ['//targetline//']'
+!!    targetline=replace('aaaaaaaaa','a','A',occurrence=1,repeat=1)
+!!    write(*,*)'replace first a with A ['//targetline//']'
 !!
-!!    targetline=replace('a b ab baaa aaaa','a','A',range=[3,5])
-!!    write(*,*)'replace a with A instances 3 to 5 ['//targetline//']'
+!!    targetline=replace('aaaaaaaaa','a','A',occurrence=3,repeat=3)
+!!    write(*,*)'replace a with A for 3rd to 5th occurrence ['//targetline//']'
 !!
-!!    targetline=replace('a b ab baaa aaaa','a','',range=[3,5])
+!!    targetline=replace('ababababa','a','',occurrence=3,repeat=3)
 !!    write(*,*)'replace a with null instances 3 to 5 ['//targetline//']'
 !!
-!!    targetline=&
-!!    &replace('a b ab baaa aaaa aa aa a a a aa aaaaaa',&
-!!    & 'aa','CCCC',range=[3,5])
-!!    write(*,*)'replace aa with CCCC instances 3 to 5 ['//targetline//']'
+!!    targetline=replace( &
+!!     & 'a b ab baaa aaaa aa aa a a a aa aaaaaa',&
+!!     & 'aa','CCCC',occurrence=-1,repeat=1)
+!!    write(*,*)'replace lastaa with CCCC ['//targetline//']'
 !!
-!!    contains
-!!    subroutine testit(old,new,expected)
-!!    character(len=*),intent(in) :: old,new,expected
-!!    write(*,*)repeat('=',65)
-!!    write(*,*)'STARTED ['//targetline//']'
-!!    write(*,*)'OLD['//old//']', ' NEW['//new//']'
-!!    targetline=replace(targetline,old,new)
-!!    write(*,*)'GOT     ['//targetline//']'
-!!    write(*,*)'EXPECTED['//expected//']'
-!!    write(*,*)'TEST    [',targetline.eq.expected,']'
-!!    end subroutine testit
+!!    write(*,*)replace('myf90stuff.f90.f90','.f90','for',occurrence=-1,repeat=1)
+!!    write(*,*)replace('myf90stuff.f90.f90','f90','for',occurrence=-2,repeat=2)
 !!
 !!    end program demo_replace
-!!
-!!   Expected output
-!!
-!!     =================================================================
-!!     STARTED [this is the input string]
-!!     OLD[th] NEW[TH]
-!!     GOT     [THis is THe input string]
-!!     EXPECTED[THis is THe input string]
-!!     TEST    [ T ]
-!!     =================================================================
-!!     STARTED [THis is THe input string]
-!!     OLD[] NEW[BEFORE:]
-!!     GOT     [BEFORE:THis is THe input string]
-!!     EXPECTED[BEFORE:THis is THe input string]
-!!     TEST    [ T ]
-!!     =================================================================
-!!     STARTED [BEFORE:THis is THe input string]
-!!     OLD[i] NEW[]
-!!     GOT     [BEFORE:THs s THe nput strng]
-!!     EXPECTED[BEFORE:THs s THe nput strng]
-!!     TEST    [ T ]
-!!     Examples of the use of RANGE=
-!!     replace a with A [A b Ab bAAA AAAA]
-!!     replace a with A instances 3 to 5 [a b ab bAAA aaaa]
-!!     replace a with null instances 3 to 5 [a b ab b aaaa]
-!!     replace aa with CCCC instances 3 to 5 [a b ab baaa aaCCCC
-!!     CCCC CCCC a a a aa aaaaaa]
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -1774,7 +1742,7 @@ end subroutine crack_cmd
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function replace(targetline,old,new,ierr,cmd,range) result (newline)
+function replace(targetline,old,new,cmd,occurrence,repeat,ignorecase,ierr) result (newline)
 
 ! ident_11="@(#)M_strings::replace(3f): Globally replace one substring for another in string"
 
@@ -1783,15 +1751,17 @@ function replace(targetline,old,new,ierr,cmd,range) result (newline)
 character(len=*),intent(in)            :: targetline   ! input line to be changed
 character(len=*),intent(in),optional   :: old          ! old substring to replace
 character(len=*),intent(in),optional   :: new          ! new substring
-integer,intent(out),optional           :: ierr         ! error code. if ierr = -1 bad directive, >=0 then ierr changes made
 character(len=*),intent(in),optional   :: cmd          ! contains the instructions changing the string
-integer,intent(in),optional            :: range(2)     ! start and end of which changes to make
+integer,intent(in),optional            :: occurrence   ! Nth occurrence of OLD string to start replacement at
+integer,intent(in),optional            :: repeat       ! how many replacements
+logical,intent(in),optional            :: ignorecase
+integer,intent(out),optional           :: ierr         ! error code. if ierr = -1 bad directive, >=0 then ierr changes made
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! returns
 character(len=:),allocatable  :: newline               ! output string buffer
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! local
-character(len=:),allocatable  :: new_local, old_local
+character(len=:),allocatable  :: new_local, old_local, old_local_for_comparison
 integer                       :: icount,ichange,ier2
 integer                       :: original_input_length
 integer                       :: len_old, len_new
@@ -1801,7 +1771,15 @@ integer                       :: ind
 integer                       :: ic
 integer                       :: ichar
 integer                       :: range_local(2)
+character(len=:),allocatable  :: targetline_for_comparison   ! input line to be changed
+logical                       :: ignorecase_local
+logical                       :: flip
+character(len=:),allocatable  :: targetline_local   ! input line to be changed
 !-----------------------------------------------------------------------------------------------------------------------------------
+   flip=.false.
+   ignorecase_local=.false.
+   original_input_length=len_trim(targetline)          ! get non-blank length of input line
+
 !  get old_local and new_local from cmd or old and new
    if(present(cmd))then
       call crack_cmd(cmd,old_local,new_local,ier2)
@@ -1818,45 +1796,76 @@ integer                       :: range_local(2)
       call journal('sc','*replace* must specify OLD and NEW or CMD')
       return
    endif
+   if(present(ignorecase))then
+      ignorecase_local=ignorecase
+   else
+      ignorecase_local=.false.
+   endif
+   if(present(occurrence))then
+      range_local(1)=abs(occurrence)
+   else
+      range_local(1)=1
+   endif
+   if(present(repeat))then
+      range_local(2)=range_local(1)+repeat-1
+   else
+      range_local(2)=original_input_length
+   endif
+   if(ignorecase_local)then
+      targetline_for_comparison=lower(targetline)
+      old_local_for_comparison=lower(old_local)
+   else
+      targetline_for_comparison=targetline
+      old_local_for_comparison=old_local
+   endif
+   if(present(occurrence))then
+      if(occurrence.lt.0)then
+         flip=.true.
+         targetline_for_comparison=reverse(targetline_for_comparison)
+         targetline_local=reverse(targetline)
+         old_local_for_comparison=reverse(old_local_for_comparison)
+         old_local=reverse(old_local)
+         new_local=reverse(new_local)
+      else
+         targetline_local=targetline
+      endif
+   else
+      targetline_local=targetline
+   endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    icount=0                                            ! initialize error flag/change count
    ichange=0                                           ! initialize error flag/change count
-   original_input_length=len_trim(targetline)          ! get non-blank length of input line
    len_old=len(old_local)                              ! length of old substring to be replaced
    len_new=len(new_local)                              ! length of new substring to replace old substring
    left_margin=1                                       ! left_margin is left margin of window to change
    right_margin=len(targetline)                        ! right_margin is right margin of window to change
    newline=''                                          ! begin with a blank line as output string
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(present(range))then
-      range_local=range
-   else
-      range_local=[1,original_input_length]
-   endif
-!-----------------------------------------------------------------------------------------------------------------------------------
    if(len_old.eq.0)then                                ! c//new/ means insert new at beginning of line (or left margin)
       ichar=len_new + original_input_length
       if(len_new.gt.0)then
-         newline=new_local(:len_new)//targetline(left_margin:original_input_length)
+         newline=new_local(:len_new)//targetline_local(left_margin:original_input_length)
       else
-         newline=targetline(left_margin:original_input_length)
+         newline=targetline_local(left_margin:original_input_length)
       endif
       ichange=1                                        ! made one change. actually, c/// should maybe return 0
       if(present(ierr))ierr=ichange
+      if(flip) newline=reverse(newline)
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    ichar=left_margin                                   ! place to put characters into output string
    ic=left_margin                                      ! place looking at in input string
    loop: do
-      ind=index(targetline(ic:),old_local(:len_old))+ic-1 ! try finding start of OLD in remaining part of input in change window
-      if(ind.eq.ic-1.or.ind.gt.right_margin)then          ! did not find old string or found old string past edit window
-         exit loop                                        ! no more changes left to make
+                                                       ! try finding start of OLD in remaining part of input in change window
+      ind=index(targetline_for_comparison(ic:),old_local_for_comparison(:len_old))+ic-1
+      if(ind.eq.ic-1.or.ind.gt.right_margin)then       ! did not find old string or found old string past edit window
+         exit loop                                     ! no more changes left to make
       endif
       icount=icount+1                                  ! found an old string to change, so increment count of change candidates
       if(ind.gt.ic)then                                ! if found old string past at current position in input string copy unchanged
          ladd=ind-ic                                   ! find length of character range to copy as-is from input to output
-         newline=newline(:ichar-1)//targetline(ic:ind-1)
+         newline=newline(:ichar-1)//targetline_local(ic:ind-1)
          ichar=ichar+ladd
       endif
       if(icount.ge.range_local(1).and.icount.le.range_local(2))then    ! check if this is an instance to change or keep
@@ -1876,13 +1885,14 @@ integer                       :: range_local(2)
 !-----------------------------------------------------------------------------------------------------------------------------------
    select case (ichange)
    case (0)                                            ! there were no changes made to the window
-      newline=targetline                               ! if no changes made output should be input
+      newline=targetline_local                         ! if no changes made output should be input
    case default
       if(ic.le.len(targetline))then                    ! if there is more after last change on original line add it
-         newline=newline(:ichar-1)//targetline(ic:max(ic,original_input_length))
+         newline=newline(:ichar-1)//targetline_local(ic:max(ic,original_input_length))
       endif
    end select
    if(present(ierr))ierr=ichange
+   if(flip) newline=reverse(newline)
 !-----------------------------------------------------------------------------------------------------------------------------------
 end function replace
 !===================================================================================================================================

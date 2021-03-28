@@ -53,7 +53,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_regex</B>(3fm) - [M_regex] Fortran interface to POSIX 1003.2 regular expression library using ISO_C_BINDING.
+<B>M_regex</B>(3fm) - [M_regex] Fortran interface to POSIX 1003.2 regular
+expression library using ISO_C_BINDING.
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -83,9 +84,9 @@ use <I>M_regex</I>, only : <B>regmatch</B>(<I>3f</I>), <B>regsub</B>(<I>3f</I>)
 </A>
 <BLOCKQUOTE>
 <P>
-These routines interface with the C implementation of IEEE Std 1003.2 ( POSIX.2 ) RE (Regular
-Expressions).
-<TABLE cellpadding=3><!-- tsb: These routines interface with the C implementation of IEEE Std 1003.2 ( POSIX.2 ) RE (Regular
+These routines interface with the C implementation of IEEE Std 1003.2
+( POSIX.2 ) RE (Regular Expressions).
+<TABLE cellpadding=3><!-- tsb: These routines interface with the C implementation of IEEE Std 1003.2
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -96,46 +97,50 @@ The <B>regcomp</B>(3c) function compiles a RE string into an internal form
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>regexec</B>(3c) matches that internal form against a string and reports results
+<B>regexec</B>(3c) matches that internal form against a string and reports
+results
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>regerror</B>(3c) transforms error codes from either into human-readable messages
+<B>regerror</B>(3c) transforms error codes from either into human-readable
+messages
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-and <B>regfree</B>(3c) frees any dynamically-allocated storage used by the internal form of an RE.
+and <B>regfree</B>(3c) frees any dynamically-allocated storage used by
+the internal form of an RE.
 </TD></TR>
 <TR></TR></TABLE>The Fortran interface is composed of wrapper routines that call the C
 library, plus some extensions (ie. <B>regmatch</B>(<I>3f</I>), <B>regsub</B>(<I>3f</I>)). See the
 C documentation for further details about implementation, performance,
 and limitations.
 <P>
-The following constructs are recognized in a ERE (Extended Regular Expression):
+The following constructs are recognized in a ERE (Extended Regular
+Expression):
 <P>
 <PRE>
-       .     Matches any character except newline.
-       *     (postfix) Matches the preceding expression zero, one or several times
-       +     (postfix) Matches the preceding expression one or several times
-       ?     (postfix) Matches the preceding expression once or not at all
-       [..]  Character set. Ranges are denoted with - , as in [a-z] .
-             An initial ^ , as in [^0-9] , complements the set. To
-             include a ] character in a set, make it the first character
-             of the set. To include a - character in a set, make it
-             the first or the last character of the set.
+    .     Matches any character except newline.
+    *     (postfix) Matches the preceding expression zero, one or several times
+    +     (postfix) Matches the preceding expression one or several times
+    ?     (postfix) Matches the preceding expression once or not at all
+    [..]  Character set. Ranges are denoted with - , as in [a-z] .
+          An initial ^ , as in [^0-9] , complements the set. To
+          include a ] character in a set, make it the first character
+          of the set. To include a - character in a set, make it
+          the first or the last character of the set.
 <P>
-       ^        Matches at beginning of line: either at the beginning
-                of the matched string, or just after a &#146;\n&#146; character.
-       $        Matches at end of line: either at the end of the matched
-                string, or just before a &#146;\n&#146; character.
-       |        (infix) Alternative between two expressions.
-       (..)     Grouping and naming of the enclosed expression.
-       \1       The text matched by the first \(&#46;&#46;&#46;\) expression (
-                \2 for the second expression, and so on up to \9 ).
-       \b       Matches word boundaries.
-       \        Quotes special characters. The special characters are $^\.*+?[] .
+    ^        Matches at beginning of line: either at the beginning
+             of the matched string, or just after a &#146;\n&#146; character.
+    $        Matches at end of line: either at the end of the matched
+             string, or just before a &#146;\n&#146; character.
+    |        (infix) Alternative between two expressions.
+    (..)     Grouping and naming of the enclosed expression.
+    \1       The text matched by the first \(&#46;&#46;&#46;\) expression (
+             \2 for the second expression, and so on up to \9 ).
+    \b       Matches word boundaries.
+    \        Quotes special characters. The special characters are $^\.*+?[] .
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -515,7 +520,7 @@ IEEE Std 1003.2 (POSIX.2), sections 2.8 (Regular Expression Notation) and B.5 (C
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_regex (3)</TD> <TD align=right width=33%><I>March 27, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3724f717-c8f8-4e2d-a3ce-384fcf609470 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_regex (3)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f9c35610-5a2c-4183-a2e8-cad2818b97d5 using man macros.</FONT>
 <br><br><center><img src="images/M_regex.3m_regex.gif"></center>
 </div>
 </div>

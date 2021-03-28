@@ -74,16 +74,17 @@ substring for another in string
 
 </A>
 <BLOCKQUOTE>
-function <B>replace</B>(targetline[,old,new|cmd],range,ierr,clip) result (<I>newline</I>)
+function <B>replace</B>(targetline[,old,new|cmd],range,ignorecase,ierr) result (<I>newline</I>)
 <P>
 <PRE>
     character(len=*)                       :: targetline
     character(len=*),intent(in),optional   :: old
     character(len=*),intent(in),optional   :: new
     character(len=*),intent(in),optional   :: cmd
-    integer,intent(in),optional            :: range(2)
+    integer,intent(in),optional            :: occurrence
+    integer,intent(in),optional            :: repeat
+    logical,intent(in),optional            :: ignorecase
     integer,intent(out),optional           :: ierr
-    logical,intent(in),optional            :: clip
     character(len=:),allocatable           :: newline
 <P>
 </PRE>
@@ -122,19 +123,20 @@ alternate way to specify old and new string, in
 the form c/old/new/; where "/" can be any character
 not in "old" or "new"
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>range</B> </TD><TD valign=bottom>
-if present, only change <B>range</B>(1) to <B>range</B>(2) of
-occurrences of old string
+<TR valign=top><TD colspan=2>
+<B>occurrence</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if present, start changing at the Nth occurrence of the
+OLD string. If negative start replacing from the left
+end of the string.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>ierr</B> </TD><TD valign=bottom>
-error code. iF ier = <B>-1</B> bad directive, &gt;= 0 then
-count of changes made
+<B>repeat</B> </TD><TD valign=bottom>
+number of replacements to perform. Defaults to a global
+replacement.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>clip</B> </TD><TD valign=bottom>
-whether to return trailing spaces or not. Defaults
+<TR valign=top><TD colspan=2>
+<B>ignorecase</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+whether to ignore ASCII case or not. Defaults
 to .false.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -148,6 +150,11 @@ to .false.
 <TR valign=top><TD colspan=2>
 <B></B><I>newline</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 allocatable string returned
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ierr</B> </TD><TD valign=bottom>
+error code. iF ier = <B>-1</B> bad directive, &gt;= 0 then
+count of changes made
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -164,74 +171,36 @@ Sample Program:
    implicit none
    character(len=:),allocatable :: targetline
 <P>
-   targetline=&#146;this is the input string&#146;
-<P>
-   call testit(&#146;th&#146;,&#146;TH&#146;,&#146;THis is THe input string&#146;)
+   write(*,*) replace(&#146;Xis is Xe input string&#146;,&#146;X&#146;,&#146;th&#146;)
+   write(*,*) replace(&#146;Xis is xe input string&#146;,&#146;x&#146;,&#146;th&#146;,ignorecase=.true.)
+   write(*,*) replace(&#146;Xis is xe input string&#146;,&#146;X&#146;,&#146;th&#146;,ignorecase=.false.)
 <P>
    ! a null old substring means "at beginning of line"
-   call testit(&#146;&#146;,&#146;BEFORE:&#146;, &#146;BEFORE:THis is THe input string&#146;)
+   write(*,*) replace(&#146;my line of text&#146;,&#146;&#146;,&#146;BEFORE:&#146;)
 <P>
-   ! a null new string deletes occurrences of the old substring
-   call testit(&#146;i&#146;,&#146;&#146;, &#146;BEFORE:THs s THe nput strng&#146;)
+   ! a null old string deletes occurrences of the old substring
+   write(*,*) replace(&#146;I wonder i ii iii&#146;,&#146;i&#146;,&#146;&#146;)
 <P>
-   write(*,*)&#146;Examples of the use of RANGE=&#146;
+   ! Examples of the use of RANGE
 <P>
-   targetline=replace(&#146;a b ab baaa aaaa&#146;,&#146;a&#146;,&#146;A&#146;)
-   write(*,*)&#146;replace a with A [&#146;//targetline//&#146;]&#146;
+   targetline=replace(&#146;aaaaaaaaa&#146;,&#146;a&#146;,&#146;A&#146;,occurrence=1,repeat=1)
+   write(*,*)&#146;replace first a with A [&#146;//targetline//&#146;]&#146;
 <P>
-   targetline=replace(&#146;a b ab baaa aaaa&#146;,&#146;a&#146;,&#146;A&#146;,range=[3,5])
-   write(*,*)&#146;replace a with A instances 3 to 5 [&#146;//targetline//&#146;]&#146;
+   targetline=replace(&#146;aaaaaaaaa&#146;,&#146;a&#146;,&#146;A&#146;,occurrence=3,repeat=3)
+   write(*,*)&#146;replace a with A for 3rd to 5th occurrence [&#146;//targetline//&#146;]&#146;
 <P>
-   targetline=replace(&#146;a b ab baaa aaaa&#146;,&#146;a&#146;,&#146;&#146;,range=[3,5])
+   targetline=replace(&#146;ababababa&#146;,&#146;a&#146;,&#146;&#146;,occurrence=3,repeat=3)
    write(*,*)&#146;replace a with null instances 3 to 5 [&#146;//targetline//&#146;]&#146;
 <P>
-   targetline=&
-   &replace(&#146;a b ab baaa aaaa aa aa a a a aa aaaaaa&#146;,&
-   & &#146;aa&#146;,&#146;CCCC&#146;,range=[3,5])
-   write(*,*)&#146;replace aa with CCCC instances 3 to 5 [&#146;//targetline//&#146;]&#146;
+   targetline=replace( &
+    & &#146;a b ab baaa aaaa aa aa a a a aa aaaaaa&#146;,&
+    & &#146;aa&#146;,&#146;CCCC&#146;,occurrence=-1,repeat=1)
+   write(*,*)&#146;replace lastaa with CCCC [&#146;//targetline//&#146;]&#146;
 <P>
-   contains
-   subroutine testit(old,new,expected)
-   character(len=*),intent(in) :: old,new,expected
-   write(*,*)repeat(&#146;=&#146;,65)
-   write(*,*)&#146;STARTED [&#146;//targetline//&#146;]&#146;
-   write(*,*)&#146;OLD[&#146;//old//&#146;]&#146;, &#146; NEW[&#146;//new//&#146;]&#146;
-   targetline=replace(targetline,old,new)
-   write(*,*)&#146;GOT     [&#146;//targetline//&#146;]&#146;
-   write(*,*)&#146;EXPECTED[&#146;//expected//&#146;]&#146;
-   write(*,*)&#146;TEST    [&#146;,targetline.eq.expected,&#146;]&#146;
-   end subroutine testit
+   write(*,*)replace(&#146;myf90stuff.f90.f90&#146;,&#146;.f90&#146;,&#146;for&#146;,occurrence=-1,repeat=1)
+   write(*,*)replace(&#146;myf90stuff.f90.f90&#146;,&#146;f90&#146;,&#146;for&#146;,occurrence=-2,repeat=2)
 <P>
    end program demo_replace
-<P>
-</PRE>
-Expected output
-<P>
-<PRE>
-    =================================================================
-    STARTED [this is the input string]
-    OLD[th] NEW[TH]
-    GOT     [THis is THe input string]
-    EXPECTED[THis is THe input string]
-    TEST    [ T ]
-    =================================================================
-    STARTED [THis is THe input string]
-    OLD[] NEW[BEFORE:]
-    GOT     [BEFORE:THis is THe input string]
-    EXPECTED[BEFORE:THis is THe input string]
-    TEST    [ T ]
-    =================================================================
-    STARTED [BEFORE:THis is THe input string]
-    OLD[i] NEW[]
-    GOT     [BEFORE:THs s THe nput strng]
-    EXPECTED[BEFORE:THs s THe nput strng]
-    TEST    [ T ]
-    Examples of the use of RANGE=
-    replace a with A [A b Ab bAAA AAAA]
-    replace a with A instances 3 to 5 [a b ab bAAA aaaa]
-    replace a with null instances 3 to 5 [a b ab b aaaa]
-    replace aa with CCCC instances 3 to 5 [a b ab baaa aaCCCC
-    CCCC CCCC a a a aa aaaaaa]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -252,7 +221,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>replace (3)</TD> <TD align=right width=33%><I>March 27, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d36a75f4-f5a2-4fd4-95e0-0b4a4b8b49d2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>replace (3)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fd396446-edc0-4c44-895e-41025afaedbc using man macros.</FONT>
 <br><br><center><img src="images/replace.3m_strings.gif"></center>
 </div>
 </div>

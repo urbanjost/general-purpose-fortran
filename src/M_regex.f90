@@ -14,7 +14,8 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!      M_regex(3fm) - [M_regex] Fortran interface to POSIX 1003.2 regular expression library using ISO_C_BINDING.
+!!      M_regex(3fm) - [M_regex] Fortran interface to POSIX 1003.2 regular
+!!      expression library using ISO_C_BINDING.
 !!##SYNOPSIS
 !!
 !!      use M_regex, only : regcomp(3f), regexec(3f), regerror(3f), regfree(3f)
@@ -22,41 +23,45 @@
 !!
 !!##DESCRIPTION
 !!
-!!    These routines interface with the C implementation of IEEE Std 1003.2 ( POSIX.2 ) RE (Regular
-!!    Expressions).
+!!    These routines interface with the C implementation of IEEE Std 1003.2
+!!    ( POSIX.2 ) RE (Regular Expressions).
 !!
 !!    o The regcomp(3c) function compiles a RE string into an internal form
-!!    o regexec(3c) matches that internal form against a string and reports results
-!!    o regerror(3c) transforms error codes from either into human-readable messages
-!!    o and regfree(3c) frees any dynamically-allocated storage used by the internal form of an RE.
+!!    o regexec(3c) matches that internal form against a string and reports
+!!      results
+!!    o regerror(3c) transforms error codes from either into human-readable
+!!      messages
+!!    o and regfree(3c) frees any dynamically-allocated storage used by
+!!      the internal form of an RE.
 !!
 !!    The Fortran interface is composed of wrapper routines that call the C
 !!    library, plus some extensions (ie. regmatch(3f), regsub(3f)). See the
 !!    C documentation for further details about implementation, performance,
 !!    and limitations.
 !!
-!!    The following constructs are recognized in a ERE (Extended Regular Expression):
+!!    The following constructs are recognized in a ERE (Extended Regular
+!!    Expression):
 !!
-!!        .     Matches any character except newline.
-!!        *     (postfix) Matches the preceding expression zero, one or several times
-!!        +     (postfix) Matches the preceding expression one or several times
-!!        ?     (postfix) Matches the preceding expression once or not at all
-!!        [..]  Character set. Ranges are denoted with - , as in [a-z] .
-!!              An initial ^ , as in [^0-9] , complements the set. To
-!!              include a ] character in a set, make it the first character
-!!              of the set. To include a - character in a set, make it
-!!              the first or the last character of the set.
+!!     .     Matches any character except newline.
+!!     *     (postfix) Matches the preceding expression zero, one or several times
+!!     +     (postfix) Matches the preceding expression one or several times
+!!     ?     (postfix) Matches the preceding expression once or not at all
+!!     [..]  Character set. Ranges are denoted with - , as in [a-z] .
+!!           An initial ^ , as in [^0-9] , complements the set. To
+!!           include a ] character in a set, make it the first character
+!!           of the set. To include a - character in a set, make it
+!!           the first or the last character of the set.
 !!
-!!        ^        Matches at beginning of line: either at the beginning
-!!                 of the matched string, or just after a '\n' character.
-!!        $        Matches at end of line: either at the end of the matched
-!!                 string, or just before a '\n' character.
-!!        |        (infix) Alternative between two expressions.
-!!        (..)     Grouping and naming of the enclosed expression.
-!!        \1       The text matched by the first \(...\) expression (
-!!                 \2 for the second expression, and so on up to \9 ).
-!!        \b       Matches word boundaries.
-!!        \        Quotes special characters. The special characters are $^\.*+?[] .
+!!     ^        Matches at beginning of line: either at the beginning
+!!              of the matched string, or just after a '\n' character.
+!!     $        Matches at end of line: either at the end of the matched
+!!              string, or just before a '\n' character.
+!!     |        (infix) Alternative between two expressions.
+!!     (..)     Grouping and naming of the enclosed expression.
+!!     \1       The text matched by the first \(...\) expression (
+!!              \2 for the second expression, and so on up to \9 ).
+!!     \b       Matches word boundaries.
+!!     \        Quotes special characters. The special characters are $^\.*+?[] .
 !!
 !!##DESCRIPTION
 !!
@@ -739,7 +744,8 @@ end function regmatch
 !===================================================================================================================================
 !>
 !!##NAME
-!!    regerror(3f) - [M_regex] maps a non-zero errcode from either regcomp(3f) or regexec(3f) to a human-readable, printable message.
+!!    regerror(3f) - [M_regex] maps a non-zero errcode from either
+!!    regcomp(3f) or regexec(3f) to a human-readable, printable message.
 !!##SYNOPSIS
 !!
 !!    function regerror(this,errcode) result(errmsg)
@@ -869,7 +875,8 @@ end function regerror
 !===================================================================================================================================
 !>
 !!##NAME
-!!    regfree(3f) - [M_regex] Release storage used by the internal form of the RE (Regular Expression)
+!!    regfree(3f) - [M_regex] Release storage used by the internal form of
+!!    the RE (Regular Expression)
 !!##SYNOPSIS
 !!
 !!    subroutine regfree(this)
@@ -878,13 +885,16 @@ end function regerror
 !!
 !!##DESCRIPTION
 !!
-!!      regfree(3f) frees any dynamically-allocated storage used by the internal form of an RE.
+!!   regfree(3f) frees any dynamically-allocated storage used by the
+!!   internal form of an RE.
 !!
-!!      The regfree(3f) function frees any dynamically-allocated storage associated with the compiled RE pointed to by THIS. The
-!!      remaining regex_type is no longer a valid compiled RE and the effect of supplying it to regexec() or regerror() is undefined.
+!!   The regfree(3f) function frees any dynamically-allocated storage
+!!   associated with the compiled RE pointed to by THIS. The remaining
+!!   regex_type is no longer a valid compiled RE and the effect of
+!!   supplying it to regexec() or regerror() is undefined.
 !!
 !!##OPTIONS
-!!      THIS  a compiled regular expression previously allocated using regcomp(3f).
+!!   THIS  a compiled regular expression previously allocated using regcomp(3f).
 !!
 !!##EXAMPLE
 !!
@@ -934,17 +944,17 @@ end subroutine regfree
 !!    character(len=:),allocatable,intent(out) :: dest
 !!
 !!##DESCRIPTION
-!!    The regsub() function copies source to dest, making substitutions
-!!    according to the most recent regexec() performed using MATCHES(:,:).
+!!   The regsub() function copies source to dest, making substitutions
+!!   according to the most recent regexec() performed using MATCHES(:,:).
 !!
-!!    Each instance of "&" in source is replaced by the substring indicated by
-!!    the start and end array MATCHES(:,:).
+!!   Each instance of "&" in source is replaced by the substring indicated
+!!   by the start and end array MATCHES(:,:).
 !!
-!!    Each instance of "\n", where n is a digit,
-!!    is replaced by the substring indicated by MATCHES(1,n) and MATCHES(2,n).
+!!   Each instance of "\n", where n is a digit, is replaced by the substring
+!!   indicated by MATCHES(1,n) and MATCHES(2,n).
 !!
-!!    To get a literal "&" or "\n" into dest, prefix it with "\"; to get
-!!    a literal "\" preceding "&" or "\n", prefix it with another "\".
+!!   To get a literal "&" or "\n" into dest, prefix it with "\"; to get a
+!!   literal "\" preceding "&" or "\n", prefix it with another "\".
 !!
 !!##OPTIONS
 !!    MATCHLINE  line REGEXEC(3f) was run against
