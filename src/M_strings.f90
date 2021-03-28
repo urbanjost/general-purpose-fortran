@@ -1617,7 +1617,12 @@ end subroutine delim
 !!
 !!##SYNOPSIS
 !!
-!!    function replace(targetline[,old,new|cmd],range,ignorecase,ierr) result (newline)
+!!    function replace(targetline[,old,new|cmd],&
+!!
+!!     & occurrence, &
+!!     & repeat, &
+!!     & ignorecase, &
+!!     & ierr) result (newline)
 !!
 !!     character(len=*)                       :: targetline
 !!     character(len=*),intent(in),optional   :: old
@@ -1691,6 +1696,20 @@ end subroutine delim
 !!    write(*,*)replace('myf90stuff.f90.f90','f90','for',occurrence=-2,repeat=2)
 !!
 !!    end program demo_replace
+!!
+!!   Results:
+!!
+!!     this is the input string
+!!     this is the input string
+!!     this is xe input string
+!!     BEFORE:my line of text
+!!     I wonder
+!!     replace first a with A [Aaaaaaaaa]
+!!     replace a with A for 3rd to 5th occurrence [aaAAAaaaa]
+!!     replace a with null instances 3 to 5 [ababbb]
+!!     replace lastaa with CCCC [a b ab baaa aaaa aa aa a a a aa aaaaCCCC]
+!!     myf90stuff.f90for
+!!     myforstuff.for.f90
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -9236,18 +9255,18 @@ do i=1,ilen
     iquote=1
     iqc=iav
     cycle
-  end if
+  endif
   if(iquote==1 .and. iav==iqc) then
     iquote=0
     cycle
-  end if
+  endif
   if (iquote==1) cycle
   if(iav >= iachar('A') .and. iav <= iachar('Z')) then
     lcstr(i:i)=achar(iav-ioffset)
   else
     lcstr(i:i)=str(i:i)
-  end if
-end do
+  endif
+enddo
 
 end function lowercase
 !===================================================================================================================================
@@ -9276,18 +9295,18 @@ do i=1,ilen
     iquote=1
     iqc=iav
     cycle
-  end if
+  endif
   if(iquote==1 .and. iav==iqc) then
     iquote=0
     cycle
-  end if
+  endif
   if (iquote==1) cycle
   if(iav >= iachar('a') .and. iav <= iachar('z')) then
     ucstr(i:i)=achar(iav+ioffset)
   else
     ucstr(i:i)=str(i:i)
-  end if
-end do
+  endif
+enddo
 
 end function uppercase
 !===================================================================================================================================
@@ -9339,7 +9358,7 @@ end select
 if(istart < 1 .or. istart > lenstr) then
    write(*,*) delim1,' has no matching delimiter'
    return
-end if
+endif
 delim2=achar(idelim2) ! matching delimiter
 
 isum=1
@@ -9349,11 +9368,11 @@ do i=istart,iend,inc
    if(ch == delim1) isum=isum+1
    if(ch == delim2) isum=isum-1
    if(isum == 0) exit
-end do
+enddo
 if(isum /= 0) then
    write(*,*) delim1,' has no matching delimiter'
    return
-end if
+endif
 imatch=i
 
 end subroutine matching_delimiter
