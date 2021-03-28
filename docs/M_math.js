@@ -10,6 +10,7 @@ append("gcsgau1.3m_math.html");
 append("gcsgau2.3m_math.html");
 append("glstsq.3m_math.html");
 append("hypot.3m_math.html");
+append("in.3m_math.html");
 append("inpolygon.3m_math.html");
 append("invert_2x2.3m_math.html");
 append("invert_3x3.3m_math.html");

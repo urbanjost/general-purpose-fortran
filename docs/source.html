@@ -1216,7 +1216,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_strings::strtok(3f): Tokenize a string<br/>
 	 M_strings::modif(3f): Emulate the MODIFY command from the line editor XEDIT<br/>
 	M_strings::len_white(3f): return position of last non-blank/non-null character in string<br/>
-	M_strings::crop(3f): trim leading and trailings blanks from string<br/>
+	M_strings::crop(3f): replace control characters with whitespace and trim leading and trailings spaces from resulting string<br/>
 	M_strings::transliterate(3f): replace characters from old set with new set<br/>
 	M_strings::rotate13(3f): converts a character to its ROT13 equivalent, which is a trivial encryption.<br/>
 	M_strings::join(3f): merge string array into a single CHARACTER value adding specified separators, caps, prefix and suffix<br/>

@@ -3321,8 +3321,6 @@ end subroutine clear
 !!
 !!   Sample program
 !!
-!! 1
-!! 1
 !!    program demo_pixel
 !!    use :: M_pixel
 !!    implicit none

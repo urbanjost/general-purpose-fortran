@@ -27,7 +27,7 @@
 !!
 !!  public entities:
 !!
-!!      use M_strings, only : split,sep,delim,chomp
+!!      use M_strings, only : split,sep,delim,chomp,strtok
 !!      use M_strings, only : substitute,change,modif,transliterate,reverse
 !!      use M_strings, only : replace,join
 !!      use M_strings, only : upper,lower,upper_quoted
@@ -47,7 +47,9 @@
 !!      use M_strings, only : isalnum, isalpha, iscntrl, isdigit
 !!      use M_strings, only : isgraph, islower, isprint, ispunct
 !!      use M_strings, only : isspace, isupper, isascii, isblank, isxdigit
+!!      use M_strings, only : isnumber
 !!      use M_strings, only : fortran_name
+!!      use M_strings, only : describe
 !!
 !!   TOKENS
 !!       split  subroutine parses string using specified delimiter characters
@@ -58,6 +60,7 @@
 !!       chomp  function consumes input line as it returns next token in a
 !!              string using specified delimiters
 !!       fmt    convert a string into a paragraph
+!!       strtok tokenize a string like C strtok(3c) routine
 !!
 !!   EDITING
 !!       substitute     subroutine non-recursively globally replaces old
@@ -67,8 +70,8 @@
 !!                      (version of substitute(3f) without limitation on
 !!                      length of output string)
 !!       change         subroutine non-recursively globally replaces old
-!!                      substring
-!!                      with new substring with a directive like line editor
+!!                      substring with new substring with a directive like
+!!                      line editor
 !!       modif          subroutine modifies a string with a directive like the
 !!                      XEDIT line editor MODIFY command
 !!       transliterate  replace characters found in set one with characters
@@ -119,7 +122,7 @@
 !!       dilate   function to convert tabs to spaces assuming tabs are set
 !!                every 8 characters
 !!       expand   expand escape sequences in a string
-!!       visible  expand escape sequences in a string to control and
+!!       visible  expand escape sequences in a string to "control" and
 !!                meta-control representations
 !!
 !!   NUMERIC STRINGS
@@ -2656,8 +2659,7 @@ end function len_white
 !===================================================================================================================================
 !>
 !!##NAME
-!!    crop(3f) - [M_strings:WHITESPACE] trim leading blanks and trailing
-!!    blanks from a string
+!!    crop(3f) - [M_strings:WHITESPACE] trim leading and trailing blanks and control characters from a string
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -2668,10 +2670,15 @@ end function len_white
 !!     character(len=:),allocatable :: strout
 !!
 !!##DESCRIPTION
-!!    trim leading and trailing blanks from a string
+!!    All control characters throughout the string are replaced with spaces
+!!    and leading and trailing spaces are trimmed from the resulting string.
+!!    Tabs are expanded assuming a stop every eight characters.
+!!
 !!
 !!##OPTIONS
-!!    strin   input string to trim leading and trailing space from
+!!    strin   input string to trim leading and trailing space and control
+!!    characters
+!!            from
 !!
 !!##RETURNS
 !!    strout  cropped version of input string
@@ -2700,11 +2707,11 @@ end function len_white
 !!    Public Domain
 function crop(strin) result (strout)
 
-! ident_16="@(#)M_strings::crop(3f): trim leading and trailings blanks from string"
+! ident_16="@(#)M_strings::crop(3f): replace control characters with whitespace and trim leading and trailings spaces from resulting string"
 
 character(len=*),intent(in)  :: strin
 character(len=:),allocatable :: strout
-   strout=trim(adjustl(strin))
+   strout=trim(adjustl(noesc(dilate(strin))))
 end function crop
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
