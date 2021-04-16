@@ -11,10 +11,11 @@ new features, changes, and relevant notifications.
 ### ADD:
 Added the new routine `system_signal` to module `M_system`.
 
-    system_signal(3f) - [M_system:SIGNALS] install a signal handler (LICENSE:PD)
+   > system_signal(3f) - [M_system:SIGNALS] install a signal handler (LICENSE:PD)
 
-   + MANPAGE: [X]
-   + DEMO PROGRAM: [X]
+   - [x] manpage
+   - [x] demo program
+   - [ ] unit test
 ---
 
 <!--
