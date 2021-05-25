@@ -172,9 +172,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_DRAW:author - John S. Urban<br/>
 	M_DRAW:version - 1.0, Aug 1997<br/>
 </td>
-<tr><td><a href="../src/C-gauss.c">../src/C-gauss.c</a></td>
-<td>
-</td>
 <tr><td><a href="../src/C-getgp.c">../src/C-getgp.c</a></td>
 <td>
 	M_DRAW:getgp - return the current (x, y, z) graphics position<br/>
@@ -612,6 +609,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_Compare_Float_Numbers.f90">../src/M_Compare_Float_Numbers.f90</a></td>
 <td>
 </td>
+<tr><td><a href="../src/M_LA.f90">../src/M_LA.f90</a></td>
+<td>
+	M_LA::mat_set(3f):<br/>
+	M_LA::mat_rrot(3f): Applies a plane rotation.<br/>
+	M_LA::mat_rset(3f): copies a scalar, dx, to a vector, dy.<br/>
+</td>
 <tr><td><a href="../src/M_anything.f90">../src/M_anything.f90</a></td>
 <td>
 	M_anything::anyscalar_to_real128(3f): convert integer or real parameter of any kind to real128<br/>
@@ -810,6 +813,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_hashkeys::crc32_hash_arr: CRC (Cyclic Redundancy Check) calculation<br/>
 	djb2(3f): call C routine djb2(3c) with a Fortran CHARACTER variable<br/>
 </td>
+<tr><td><a href="../src/M_help.f90">../src/M_help.f90</a></td>
+<td>
+	M_help::help_command(3f): interactively display help text<br/>
+	M_strings::lower(3f): Changes a string to lowercase over specified range<br/>
+</td>
 <tr><td><a href="../src/M_history.f90">../src/M_history.f90</a></td>
 <td>
 	M_history::redo(3f): open binary direct access file for keeping history<br/>
@@ -981,14 +989,21 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_matrix.f90">../src/M_matrix.f90</a></td>
 <td>
-	M_matrix::mat88(3f): initialize and/or pass commands to matrix laboratory interpreter<br/>
+	M_matrix::laff(3f): initialize and/or pass commands to matrix laboratory interpreter<br/>
+	M_matrix::laff(3f): run a single command in matrix laboratory interpreter and return to calling program<br/>
+	M_matrix::laff(3f): run an array of commands in matrix laboratory interpreter and return to calling program<br/>
+	M_matrix::ints2str(3f) convert laff integers to a character variable<br/>
 	M_matrix::mat_matfn6(3f):evaluate utility functions<br/>
-	M_matrix::mat_getch(3f): get next character from input line<br/>
+	M_matrix::mat_getch(3f): get next character from input line into G_CHRA<br/>
 	M_matrix::mat_formz: system dependent routine to print with z format<br/>
-	issue interactive prompt with optional pause<br/>
+	M_matrix::mat_prompt(3f): issue interactive prompt with optional pause<br/>
 	M_matrix::mat_stack1(3f): Unary Operations<br/>
-	M_matrix::mat_rrot(3f): Applies a plane rotation.<br/>
-	M_matrix::mat_rset(3f): copies a scalar, dx, to a scalar, dy.<br/>
+	M_matrix::sh_command(3f): start system shell interactively<br/>
+	M_matrix::ifin_laff(3f) :: access LAFF variable stack and see if a variable name exists<br/>
+	M_matrix::get_double_from_laff(3f) :: access LAFF variable stack and get a variable by name and its data from the stack<br/>
+	M_matrix:: _store_double_into_laff(3f): put a variable name and its data onto LAFF stack<br/>
+	too much memory required<br/>
+	M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)<br/>
 </td>
 <tr><td><a href="../src/M_messages.f90">../src/M_messages.f90</a></td>
 <td>
@@ -1210,7 +1225,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_strings::split(3f): parse string on delimiter characters and store tokens into an allocatable array<br/>
 	M_strings::chomp(3f): Tokenize a string : JSU- 20151030<br/>
 	M_strings::delim(3f): parse a string and store tokens into an array<br/>
-	M_strings::replace(3f): Globally replace one substring for another in string<br/>
+	M_strings::replace(3f): replace one substring for another in string<br/>
 	M_strings::substitute(3f): Globally substitute one substring for another in string<br/>
 	M_strings::change(3f): change a character string like a line editor<br/>
 	M_strings::strtok(3f): Tokenize a string<br/>
@@ -1580,9 +1595,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/dparanoia.f90">../src/dparanoia.f90</a></td>
 <td>
 	dparanoia(3f): test doubleprecisions operations in programming environment<br/>
-</td>
-<tr><td><a href="../src/mat88_user.f90">../src/mat88_user.f90</a></td>
-<td>
 </td>
 <tr><td><a href="../src/nc_errmessage.f90">../src/nc_errmessage.f90</a></td>
 <td>

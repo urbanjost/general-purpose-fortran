@@ -28,26 +28,26 @@
               !
               write(*,*)'interfaced assumed-shape arr2ay'
               !
-              ! ‘source’ argument of ‘shape’ intrinsic at (1) must not be
+              !    source    argument of    shape    intrinsic at (1) must not be
               ! an assumed size array
               !!write(*,*)'SHAPE(arr2)       :',shape(arr2)
               ! The upper bound in the last dimension must appear in the reference
-              ! to the assumed size array ‘arr2’ at (1)
+              ! to the assumed size array    arr2    at (1)
               !!write(*,*)'SIZE(arr2)        :',size(arr2)
               write(*,*)'SIZE(arr2,DIM=1)  :',size(arr2,dim=1)
-              ! ‘dim’ argument of ‘size’ intrinsic at (1) is not
+              !    dim    argument of    size    intrinsic at (1) is not
               !a valid dimension index
               !!write(*,*)'SIZE(arr2,DIM=2)  :',size(arr2,dim=2)
               write(*,*)'note lower bound is "1"'
               write(*,*)'LBOUND(arr2)      :',lbound(arr2)
               write(*,*)'LBOUND(arr2)      :',lbound(arr2)
               ! The upper bound in the last dimension must appear in the
-              ! reference to the assumed size array ‘arr2’ at (1)
+              ! reference to the assumed size array    arr2    at (1)
               !!write(*,*)'UBOUND(arr2)      :',ubound(arr2)
               write(*,*)'LBOUND(arr2,DIM=1):',lbound(arr2,dim=1)
               write(*,*)'UBOUND(arr2,DIM=1):',ubound(arr2,dim=1)
               write(*,*)'LBOUND(arr2,DIM=2):',lbound(arr2,dim=2)
-              ! ‘dim’ argument of ‘ubound’ intrinsic at (1) is not
+              !    dim    argument of    ubound    intrinsic at (1) is not
               ! a valid dimension index
               !!write(*,*)'UBOUND(arr2,DIM=2):',ubound(arr2,dim=2)
               !

@@ -53,12 +53,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>NULLIFY</B>(7f) - [FORTRAN:STATEMENT] causes pointers to be disassociated
-(LICENSE:PD)
+<B>NULLIFY</B>(7f) - [FORTRAN:STATEMENT] causes pointers to be disassociated from a target
+<P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=4>
+<A name=6>
 
      <H3>SYNOPSIS</H3>
 
@@ -67,11 +67,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 NULLIFY ( pointer-object-list )
 <P>
 <PRE>
-   pointer-object               is variable-name
-                                or structure-component
-                                or proc-pointer-name
-<P>
-   Each pointer-object shall have the POINTER attribute.
+   pointer-object   is variable-name
+                    or structure-component
+                    or proc-pointer-name
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -82,20 +80,950 @@ NULLIFY ( pointer-object-list )
 </A>
 <BLOCKQUOTE>
 <P>
-A pointer-object shall not depend on the value, bounds, or association status of another pointer-object in the
-same NULLIFY statement.
+<B>NULLIFY</B>(3f) breaks a pointers&#146; association with a target. Note
+it is NOT used to deallocate memory -- that is the function of
+<B>DEALLOCATE</B>(3f).
 <P>
-When a NULLIFY statement is applied to a polymorphic pointer, its dynamic type becomes the declared type.
+In addition, since the initial association status of a pointer is
+undefined <B>NULLIFY</B>(7f) can be used to initialize an undefined pointer,
+giving it disassociated status &#46;&#46;&#46; then the pointer can be tested
+using the intrinsic function <B>ASSOCIATED</B>(3f).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MEMORY LOSS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NULLIFY IS USED TO DISCONNECT A POINTER BUT NOT DEALLOCATE TARGET</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Do not use <B>NULLIFY</B>(3f) when you mean <B>DEALLOCATE</B>(3f) or you can cause
+memory leaks.
+<P>
+The inappropriate use of <B>NULLIFY</B>(3f) can result in large blocks of
+memory being left inaccessible to the program.
+<P>
+For instance, if you nullify a pointer that pointed to an array
+created with an allocate statement the memory space associated with
+the array becomes inaccessible to the program (unless that memory
+space has previously had another pointer associated with it).
+<P>
+All of the pointers in the following code leave memory space
+inaccessible when they are nullified because no other name remains
+by which to deallocate the memory. Hopefully, procedures may well
+release the memory when they go out of scope, but that is not
+required. Here in the main program this will almost certainly be
+problematic.
+<P>
+<PRE>
+     program memoryloss
+     implicit none
+     real, pointer, dimension(:,:) :: p1,p2
+     character(len=80), pointer    :: c1
+     character(len=1)              :: paws
+        write(*,*)&#146;look at memory use before allocation&#146;; read(*,*)paws
+        allocate ( p1(5000,5000), c1)
+        p1=1.0
+        write(*,*)&#146;look at memory use after allocation&#146;; read(*,*)paws
+        write(*,*)sum(p1)
+        c1 = &#146;example   &#146;
+        ! p2=&gt;p1 ! would leave you with a way to still deallocate via "p2"
+        nullify(p1,c1) ! NO!: last name to reference memory is being lost
+        write(*,*)&#146;IS P1 ASSOCIATED?&#146;,associated(p1)
+        write(*,*)&#146;look at memory use after nullify&#146;; read(*,*)paws
+     end program memoryloss
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; THERE ARE TIMES WHEN YOU REALLY DO ONLY WANT TO NULLIFY AND NOT DEALLOCATE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+There are times you absolutely need to use <B>NULLIFY</B>(3f) instead of
+<B>DEALLOCATE</B>(3f).
+<P>
+In the opposite case from above where the pointer merely points to
+a target instead of having been used in the <B>ALLOCATE</B>(3f) statement
+The nullify statement is necessary.
+<P>
+For example, in the next few lines of code an allocatable array called
+"big" is created and then the pointer p1 is set to point at this
+array. Later, when an attempt is made to deallocate p1, the computer
+<TABLE cellpadding=3><!-- tsb: For example, in the next few lines of code an allocatable array called
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>will actually try to deallocate the array big .</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+This should result
+in an error message, due to the indirect attempt at deallocation.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+       program wrong_wrong_wrong
+       implicit none
+       real, allocatable             :: big(:,:)
+       real, pointer, dimension(:,:) :: p1
+          allocate(big(600,700))
+          p1 =&gt; big
+          deallocate (p1)  ! NO: indirect deallocation is not allowed
+       end program wrong_wrong_wrong
+<P>
+</PRE>
+To prevent the problems that this can cause, replace the DEALLOCATE
+statement with <B>NULLIFY</B>(3f).
 </BLOCKQUOTE>
 <A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>pointer-object-list</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A pointer-object is a variable-name,
+structure-component, or proc-pointer-name
+Each pointer-object shall have the POINTER
+attribute (ie. it must be a pointer).
+<P>
+A pointer-object shall not depend on the value,
+bounds, or association status of another
+pointer-object in the same NULLIFY statement.
+<P>
+When a NULLIFY statement is applied to a
+polymorphic pointer, its dynamic type becomes
+the declared type.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
 
      <H3>EXAMPLE</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
+The following is an example of the NULLIFY statement:
+<P>
+<PRE>
+  real, target  :: values(0:100)
+  real, pointer :: ptr_a(:), ptr_b(:)
+  ptr_a =&gt; values
+  ptr_b =&gt; values
+  &#46;&#46;&#46;
+  nullify(ptr_a)
+<P>
+</PRE>
+At this point PTR_A will have disassociated status, but PTR_B will
+continue to be associated with variable <B>VALUES</B>().
+<P>
+<PRE>
+   program demo_nullify
+   implicit none
+   real, pointer :: dart1 (:)
+   real, pointer :: dart2 (:)
+   real, allocatable, target :: island (:)
+<P>
+   allocate (island (7))
+   island = 1.0
+   island (1:7:2) = 10.0
+<P>
+   write (*,&#146;(a,7f8.0)&#146;) &#146;target   &#146;,island
+   dart1 =&gt; island
+   write (*,&#146;(a,7f8.0)&#146;) &#146;pointer 1&#146;,dart1
+<P>
+   dart2 =&gt; dart1
+   write (*,&#146;(/a)&#146;) merge(&#146;dart2 is pointed    &#146;,&
+                          &#146;dart2 is not pointed&#146;,associated(dart2))
+   write (*,&#146;(a,7f8.0)&#146;) &#146;pointer 2&#146;,dart2
+<P>
+   nullify (dart1)
+   write (*,&#146;(/a)&#146;) merge(&#146;dart1 is pointed    &#146;,&
+                          &#146;dart1 is not pointed&#146;,associated(dart1))
+<P>
+   ! so if dart2 pointed to dart1 and dart1 is nullified can you test dart2?
+   write (*,&#146;(/a)&#146;) merge(&#146;dart2 is pointed    &#146;,&
+                          &#146;dart2 is not pointed&#146;,associated(dart2))
+<P>
+   write (*,&#146;( a,7f8.0)&#146;) &#146;pointer 2&#146;,dart2
+<P>
+   end program demo_nullify
+<P>
+</PRE>
+<BLOCKQUOTE>
+Results:
+<P>
+<PRE>
+   target        10.      1.     10.      1.     10.      1.     10.
+   pointer 1     10.      1.     10.      1.     10.      1.     10.
+<P>
+   dart2 is pointed
+   pointer 2     10.      1.     10.      1.     10.      1.     10.
+<P>
+   dart1 is not pointed
+<P>
+   dart2 is pointed
+   pointer 2     10.      1.     10.      1.     10.      1.     10.
+<P>
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>deallocate</B>(7f), <B>allocate</B>(3f), <B>allocated</B>(3f), <B>associated</B>(3f), <B>null</B>(3f)
+################################################################################
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <B>deallocate</B>(7f), <B>allocate</B>(3f), <B>allocated</B>(3f), <B>associated</B>(3f), <B>null</B>(3f)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Fortran Learner</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+10/4/06
+Hi, Nice to be here. I am a beginer in Fortran, So I want to know the
+following:
+What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+in Fortran 90?
+And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+the pointer variable?
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
+I also found that the pointer can be allocated several times. And every
+time been allocated, the previous memory space assciated by the pointer
+will inaccessible. It could be a possible way to memory leak. Is this a
+bug in fortran standard? if not, may be my logical doesn&#146;t work.
+<BLOCKQUOTE>
+<P>
+In my program, there are various pointer variable, after an complicated
+calculation ,even for me it&#146;s not easy to free them.
+<P>
+Please give me more information about it. Thank you very much.
+<P>
+Click here to Reply
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Click here to Reply
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Craig Powers</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+10/4/06
+Fortran Learner wrote:
+&gt; Hi, Nice to be here. I am a beginer in Fortran, So I want to know the
+&gt; following:
+&gt; What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+&gt; in Fortran 90?
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Deallocate does what it says, deallocates memory and returns it to the
+Fortran RTL memory manager (which may in turn return it to the system,
+or retain it to satisfy potential future allocation requests).
+<P>
+Nullify puts a pointer in a well-defined "cleared" assocation status.
+If the pointer is associated with a block of allocated memory, nullify
+does not (AFAIK) deallocate the memory.
+<P>
+&gt; And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+&gt; the pointer variable?
+<P>
+For a pointer variable, allocate will allocate a block of memory and
+associate it with the pointer variable.
+<P>
+=&gt; will change the association of the pointer variable to associate it
+with something else (whatever is on the RHS of the statement)
+<P>
+= will assign to whatever is associated with the pointer.
+<P>
+&gt; I meet some quite serious problem in my program. There are even some
+&gt; very stranger problem,
+&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt; function to test it. The resutl for this function is true, but when I
+&gt; try to deallocate it an error occured.The error ifnormation such like
+&gt; that: allocatable array or pointer is not allocated.
+&gt;
+&gt; I am amuszing, why the test function <B>associated</B>() is true?
+<P>
+If the pointer is associated with a variable, rather than an allocated
+<TABLE cellpadding=3><!-- tsb: If the pointer is associated with a variable, rather than an allocated
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>block of memory, then you would not be able to allocate it.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+No other
+issues spring to mind.
+</TD></TR>
+<TR><TD colspan=2>
+&gt; I also found that the pointer can be allocated several times. And every
+&gt; time been allocated, the previous memory space assciated by the pointer
+&gt; will inaccessible. It could be a possible way to memory leak. Is this a
+&gt; bug in fortran standard? if not, may be my logical doesn&#146;t work.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>I wouldn&#146;t say it&#146;s a bug, exactly.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+It&#146;d be more correct to say that
+the main reason you might want to use this feature (only way to do
+allocatable components of a derived type in F95) is a bug, which was
+corrected with a TR that has been incorporated into F2003 and
+implemented in most F95 compilers.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+        Michael Metcalf        
+</PRE>
+10/4/06
+</TD></TR>
+<TR><TD colspan=2>
+"Craig Powers" &lt;eni&#46;&#46;&#46;@hal-pc.org&gt; wrote in message
+news:45241887$0$40072$<A HREF="mailto:a726171b@news.hal-pc.org">a726171b@news.hal-pc.org</A>&#46;&#46;&#46;
+</TD></TR>
+<TR><TD colspan=2>
+&gt;&gt; I meet some quite serious problem in my program. There are even some
+&gt;&gt; very stranger problem,
+&gt;&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt;&gt; function to test it. The resutl for this function is true, but when I
+&gt;&gt; try to deallocate it an error occured.The error ifnormation such like
+&gt;&gt; that: allocatable array or pointer is not allocated.
+&gt;&gt;
+&gt;&gt; I am amuszing, why the test function <B>associated</B>() is true?
+&gt;
+&gt; If the pointer is associated with a variable, rather than an allocated
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&gt; block of memory, then you would not be able to allocate it.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+No other
+&gt; issues spring to mind.
+</TD></TR>
+<TR></TR></TABLE>Remember that a pointer is created with the status of &#146;undefined association
+status&#146;. To get it in a defined state, it must be allocated, pointer
+assigned (=&gt;) or nullified. Before any of these occurs, the status may not
+be tested with associated. In general, pointers should be given a defined
+status as early in the program as possible, where possible by initialization
+as in
+<P>
+integer, pointer :: <B>kkk=&gt;null</B>()
+<P>
+or otherwise as in
+<P>
+<B>nullify</B>(kkk)
+<P>
+Regards,
+<P>
+Mike Metcalf
+</BLOCKQUOTE>
+<P>
+<P>
+<P>
+<P>
+<PRE>
+        glen herrmannsfeldt    
+</PRE>
+10/4/06
+Michael Metcalf &lt;michael&#46;&#46;&#46;@compuserve.com&gt; wrote:
+<BLOCKQUOTE>
+<P>
+&gt; Remember that a pointer is created with the status of &#146;undefined
+&gt; association status&#146;. To get it in a defined state, it must be
+&gt; allocated, pointer assigned (=&gt;) or nullified. Before any of these occurs,
+&gt; the status may not be tested with associated. In general, pointers
+&gt; should be given a defined status as early in the program as possible,
+&gt; where possible by initialization as in
+<P>
+&gt; integer, pointer :: <B>kkk=&gt;null</B>()
+<P>
+As we have been discussing for days, does this cause kkk
+to be SAVEd?
+<P>
+This might be one case where I would want it <B>null</B>() each
+<TABLE cellpadding=3><!-- tsb: This might be one case where I would want it <B>null</B>() each
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>time through a subprogram.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+That is, unless one actually
+wanted to keep it between calls.
+</TD></TR>
+<TR></TR></TABLE>-- glen
+<P>
+<PRE>
+        Richard E Maine        
+</PRE>
+10/4/06
+Craig gave seveal good answers. I&#146;ll try to supplement what he said and
+add answers to some of the things that he didn&#146;t.
+<P>
+Fortran Learner &lt;ding.xi&#46;&#46;&#46;@gmail.com&gt; wrote:
+<P>
+&gt; Hi, Nice to be here. I am a beginer in Fortran,
+<P>
+My first, and probably most important comment is that pointers are *NOT*
+a good thing to start out with. Pointers provide many extra
+opportunities for error and confusion, even for experiences users of the
+language.
+<P>
+The answers here aren&#146;t going to be enough to make you proficient in
+using pointers.
+<P>
+&gt; What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+&gt; in Fortran 90?
+<P>
+As Craig said, deallocate frees the space. Nullify does nothing to the
+allocated space. It just makes that pointer not point to that space any
+more. I can see that you are missing one of the most fundamental ideas
+of what pointers are about in the first place. In fact, I can see that
+trend inmost of these questions. More on that below.
+<P>
+&gt; And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+&gt; the pointer variable?
+<P>
+Allocate allocates a new target and makes the pointer point to it.
+Pointer assignment (the =&gt;) makes the pointer point to some existing
+target. Ordinary assignment (the =) assigns data to the target.
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt; function to test it&#46;&#46;&#46;
+<P>
+Ok. Stop right there. A major and common problem. Pointers can be in one
+of *THREE* states. Yes, that is three, not two. A pointer can be
+associated, nullified (aka disassociated), or its association status can
+be undefined. The associated intrinsic can *ONLY* distinguish between
+associated vs null. It is illegal to even use the associated intrinsic
+on a pointer whose status is undefined. If you do that, then your
+program is ilegal and pretty much anything can happen. That can
+definitely include giving bogus results from the intrinsic. That&#146;s one
+of the many things that makes pointer usage tricky. It is your
+resposability as the programmer to make sure that you know that the
+pointer can&#146;t be undefined when you use the associated intrinsic. There
+is no standard way to inquire about that; you just have to know all the
+rules (which are way too much to go into here). But the first rule is
+that pointers normally start out in the undefined state. So if the first
+thing you do with a pointer is use the associated function on it, that
+is an error there.
+<P>
+&gt; I also found that the pointer can be allocated several times. And every
+&gt; time been allocated, the previous memory space assciated by the pointer
+&gt; will inaccessible. It could be a possible way to memory leak. Is this a
+&gt; bug in fortran standard? if not, may be my logical doesn&#146;t work.
+<P>
+Ah. This is what makes it clear to me that you have missed what pointers
+are about. Because this is fundamental to the whole idea. I think you
+are probably looking for allocatables instead of pointers. The most
+fundamental difference between the two (there are many, many
+consequences, but I&#146;d say this one is the most fundamental) is that an
+allocatable variable is uniquely tied to the space allocated for it.
+That space "belongs" to the variable. If the variable "goes away" for
+any reason, so does the space. By design, allocatables cannot leak
+memory.
+<P>
+A pointer, on the other hand, does not uniquely "own" any allocation. It
+can point to a target, but the target has existance completely
+independent of the pointer. When you "allocate a pointer", you really do
+2 things, although in one statement. First, you allocate a target. Then
+you make the pointer point to that target. But the pointer and its
+target are still separate things and can go their own ways. Just because
+you do something like allocate the pointer again, that doesn&#146;t mean the
+old target goes away. You don&#146;t want the old target to go away&#46;&#46;&#46; or if
+you do want that, then what you want is an allocatable instead of a
+pointer. There might be other pointers pointing to that target. I could
+elaborate on that, but&#46;&#46;&#46; it takes a bit of time to do well; books will
+do it better than anything I could write on the fly in a posting; and I
+really, really think this is probably all irrelevant because you are
+probably looking at the wrong tool anyway.
+<P>
+Your questions strongly suggest to me that you are thinking about
+alocatables and wondering why pointers don&#146;t act like allocatables.
+Allocatables has limitations that sevverely handicapped their use in
+f90, and even in f95 prior to the so-called allocatable TR. It is
+possible to use pointers as a substitute for allocatables as an interim
+measure. But it does cause several confusions and it is important to
+understand how they are different. That gets into quite a bit more. I
+know I haven&#146;t explained that adequately, but this is long enough
+already, I&#146;m short on time, and with any luck it is all irrelevant
+because you can switch to allocatables instead.
+<P>
+--
+<TABLE cellpadding=3><!-- tsb: --
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Richard Maine</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+| Good judgment comes from experience;
+email: my first.last at org.domain| experience comes from bad judgment.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>org: nasa, domain: gov</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+|       -- Mark Twain
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+        Michael Metcalf        
+</PRE>
+10/4/06
+<P>
+"glen herrmannsfeldt" &lt;g&#46;&#46;&#46;@seniti.ugcs.caltech.edu&gt; wrote in message
+news:eg1886$oc6$<A HREF="mailto:1@naig.caltech.edu">1@naig.caltech.edu</A>&#46;&#46;&#46;
+<P>
+&gt; Michael Metcalf &lt;michael&#46;&#46;&#46;@compuserve.com&gt; wrote:
+&gt;
+&gt;&gt; Remember that a pointer is created with the status of &#146;undefined
+&gt;&gt; association status&#146;. To get it in a defined state, it must be
+&gt;&gt; allocated, pointer assigned (=&gt;) or nullified. Before any of these
+&gt;&gt; occurs,
+&gt;&gt; the status may not be tested with associated. In general, pointers
+&gt;&gt; should be given a defined status as early in the program as possible,
+&gt;&gt; where possible by initialization as in
+&gt;
+&gt;&gt; integer, pointer :: <B>kkk=&gt;null</B>()
+&gt;
+&gt; As we have been discussing for days, does this cause kkk
+&gt; to be SAVEd?
+&gt;
+Yes, as is the pointer association status. (Note: if the statement above is
+within a type definition, it becomes a *default* initialization with
+different semantics, see "Fortran 95/2003 Explained", Sections 7.5.3 and
+7.5.4.)
+<P>
+Regards,
+<P>
+Mike Metcalf
+</BLOCKQUOTE>
+<P>
+<P>
+<PRE>
+        John Harper    
+</PRE>
+10/4/06
+In article &lt;45241887$0$40072$a726&#46;&#46;&#46;@news.hal-pc.org&gt;,
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:         John Harper    
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Craig Powers</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&lt;eni&#46;&#46;&#46;@hal-pc.org&gt; wrote:
+&gt;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&gt;I wouldn&#146;t say it&#146;s a bug, exactly.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+It&#146;d be more correct to say that
+&gt;the main reason you might want to use this feature (only way to do
+&gt;allocatable components of a derived type in F95) is a bug, which was
+&gt;corrected with a TR that has been incorporated into F2003 and
+&gt;implemented in most F95 compilers.
+</TD></TR>
+<TR><TD colspan=2>
+Just yesterday I tested g95 on that in the array (not pointer)
+context. That compiler deals with the following program as described
+in the first 3 comment lines, as it should.
+</TD></TR>
+<TR><TD colspan=2>
+! Q. Are allocatable components OK in a type declaration?
+! A. Not in f95 unless TR15581 is followed, so this program won&#146;t
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!</B> </TD><TD valign=bottom>
+compile with g95 <B>-std</B>=f95 but will with g95 <B>-std</B>=f95 <B>-ftr15581</B>
+!
+MODULE myProject
+TYPE myData
+REAL , ALLOCATABLE :: <B>values</B>(:)
+END TYPE myData
+END MODULE myProject
+! ----------------------------------------
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PROGRAM TEST</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+USE myProject
+<B>TYPE</B>(myData) :: data
+<B>ALLOCATE</B>(data%<B>values</B>(3))
+data%values = (/2,4,6/)
+<B>WRITE</B>(*,*) data%values
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END PROGRAM TEST</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<P>
+<P>
+-- John Harper, School of Mathematics, Statistics and Computer Science,
+Victoria University, PO Box 600, Wellington 6140, New Zealand
+e-mail john&#46;&#46;&#46;<A HREF="mailto:.@vuw.ac.nz">.@vuw.ac.nz</A> phone (+<I>64</I>)(4)463 5341 fax (+<I>64</I>)(4)463 5045
+<P>
+<PRE>
+        Fortran Learner        
+</PRE>
+10/5/06
+<P>
+Thanks about all the reply above.
+I got it. Until now, I am begin to clear about the fundemental concept.
+:)
+<P>
+Actually, I had debug my program last night, and I found most of all
+the memory leak in my program are caused by undefined pointer. As
+mentioned by Craig Powers and Richard E Maine, every pointer has three
+status. Before any using of an pointer, the status of the pointer
+should be undefined. So, if tested by <B>associated</B>(), the result should
+unpredictable and will lead memory leak. This is the main problem in my
+program.
+<P>
+Thank you all, anyway, I had learn many fundemental concept here.
+<P>
+<PRE>
+        Tobias Schlemmer       
+</PRE>
+10/5/06
+Hi
+<P>
+Let&#146;s try it to explain how a C programmer would do it (for me the
+fortran descriptions are always very confusing).
+<P>
+A Pointer in computer science is a number describing a memory position.
+In Fortran it can be accessed in two cases:
+<TABLE cellpadding=3><!-- tsb: A Pointer in computer science is a number describing a memory position.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+as pointer
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+as Reference to the data at the position it points to.
+</TD></TR>
+<TR></TR></TABLE>Fortran Learner wrote:
+&gt; Hi, Nice to be here. I am a beginer in Fortran, So I want to know the
+&gt; following:
+&gt; What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+&gt; in Fortran 90?
+<P>
+nullify sets the pointer pointing to a definite non existent memory
+position. Let&#146;s say it is 0. In fact it will be 0 in most cases as C
+does use this value for none associated pointers.
+<P>
+deallocate frees the space where the pointer points to, but doesn&#146;t
+change the pointer. So the pointer will look like pointing to a memory
+position, which is no longer owned by the program. But the memory can be
+used again for other programs/variables.
+<P>
+&gt; And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+&gt; the pointer variable?
+<P>
+=&gt; changes where the pointer points to
+= sets the value of the memory position referenced by the pointer
+<P>
+&gt; I meet some quite serious problem in my program. There are even some
+&gt; very stranger problem,
+&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt; function to test it. The resutl for this function is true, but when I
+&gt; try to deallocate it an error occured.The error ifnormation such like
+&gt; that: allocatable array or pointer is not allocated.
+<P>
+Either the pointer is not initialized or it was freed, but not set to 0.
+So the program has no chance to detect, that the pointer does not point
+to a proper memory position.
+<P>
+&gt; I am amuszing, why the test function <B>associated</B>() is true?
+<P>
+Associated only tests if the pointer is 0.
+<P>
+&gt; I also found that the pointer can be allocated several times. And every
+&gt; time been allocated, the previous memory space assciated by the pointer
+&gt; will inaccessible. It could be a possible way to memory leak. Is this a
+&gt; bug in fortran standard? if not, may be my logical doesn&#146;t work.
+<P>
+No. This is the major advantage of using pointers over allocatable
+variables. Consider
+<P>
+type list
+integer:: value
+<B>type</B>(list),pointer :: next
+end type
+<P>
+<B>type</B>(list),pointer :: root, element
+<P>
+so you can create a list of several elements:
+<P>
+<B>allocate</B>(root)
+root % next = <B>null</B>() ! end of list marker
+root % value = 1
+<P>
+<B>allocate</B>(element)
+element % next =&gt; root
+element % value = 2
+root % element
+<P>
+<B>allocate</B>(element)
+element % next =&gt; root
+element % value = 3
+root % element
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+Now root points to a linked list:
+<P>
+root -&gt; {3} -&gt; {2} -&gt; {1} -&gt; 0
+<P>
+(the last 0 is the <B>null</B>() pointer). All three elements are still in memory.
+<P>
+&gt; In my program, there are various pointer variable, after an complicated
+&gt; calculation, even for me it&#146;s not easy to free them.
+<P>
+That&#146;s a common problem with pointers. For our linked list we must do
+the following:
+<P>
+do while (<B>associated</B>(root))
+element =&gt; root
+root =&gt; root % next
+<B>deallocate</B>(element)
+end do
+<P>
+That will delete all elements. Remember the last next pointer has been
+nullified.
+<P>
+&gt; Please give me more information about it. Thank you very much.
+<P>
+Maybe you should have a look to C or Pascal literature to get some
+intuition about pointers. In that languages pointers are common
+practise. In Fortran the pointer type has a mixed semantics: some of it
+is pointer and some is reference.
+<P>
+Tobias
+<P>
+<PRE>
+        Richard E Maine        
+</PRE>
+10/5/06
+Tobias Schlemmer &lt;Tobias&#46;&#46;&#46;<A HREF="mailto:.@mailbox.tu-dresden.de">.@mailbox.tu-dresden.de</A>&gt; wrote:
+<P>
+&gt; deallocate frees the space where the pointer points to, but doesn&#146;t
+&gt; change the pointer. So the pointer will look like pointing to a memory
+&gt; position, which is no longer owned by the program.
+<P>
+That is incorrrect, although it seems a common misconception. In
+addition to freeing the space, deallocate also leaves the pointer
+nullified. After all, there is no reason for it not to. This isn&#146;t one
+of the kinds of situation where it is any work at all to make the
+pointer correctly reflect reality.
+<P>
+I have fairly often seen the construct
+<P>
+<PRE>
+   deallocate(p)
+   nullify(p)
+<P>
+</PRE>
+The nullify there is completely redundant.
+<P>
+--
+<TABLE cellpadding=3><!-- tsb: --
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Richard Maine</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+| Good judgment comes from experience;
+email: my first.last at org.domain| experience comes from bad judgment.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>org: nasa, domain: gov</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+|       -- Mark Twain
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+        glen herrmannsfeldt    
+</PRE>
+10/5/06
+Richard E Maine &lt;<A HREF="mailto:nospam@see.signature">nospam@see.signature</A>&gt; wrote:
+(snip on deallocate and pointers)
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+&gt; That is incorrrect, although it seems a common misconception. In
+&gt; addition to freeing the space, deallocate also leaves the pointer
+&gt; nullified. After all, there is no reason for it not to. This isn&#146;t one
+&gt; of the kinds of situation where it is any work at all to make the
+&gt; pointer correctly reflect reality.
+<TABLE cellpadding=3><!-- tsb: &gt; That is incorrrect, although it seems a common misconception. In
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>But what about copies of the pointer?</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+&gt; I have fairly often seen the construct
+<TABLE cellpadding=3><!-- tsb: &gt; I have fairly often seen the construct
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>deallocate</B>(p)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+<B>nullify</B>(p)
+</TD></TR>
+<TR><TD colspan=2>
+&gt; The nullify there is completely redundant.
+</TD></TR>
+<TR><TD colspan=2>
+In C, with call by value, the <B>free</B>() function only
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>gets a copy of the pointer.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+In that case, if you
+expect to test for null you need to assign null
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>after the call to </B><B>free</B>(). <!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+For Java, which uses garbage collection instead of
+free/deallocate the way to directly free memory is
+to assign null to an object reference variable
+(the Java name for a pointer).
+</TD></TR>
+<TR><TD colspan=2>
+-- glen
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+        Richard E Maine        
+</PRE>
+10/5/06
+glen herrmannsfeldt &lt;g&#46;&#46;&#46;@seniti.ugcs.caltech.edu&gt; wrote:
+</TD></TR>
+<TR><TD colspan=2>
+&gt; Richard E Maine &lt;<A HREF="mailto:nospam@see.signature">nospam@see.signature</A>&gt; wrote:
+&gt; (snip on deallocate and pointers)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+&gt; &gt; That is incorrrect, although it seems a common misconception. In
+&gt; &gt; addition to freeing the space, deallocate also leaves the pointer
+&gt; &gt; nullified. After all, there is no reason for it not to. This isn&#146;t one
+&gt; &gt; of the kinds of situation where it is any work at all to make the
+&gt; &gt; pointer correctly reflect reality.
+&gt;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&gt; But what about copies of the pointer?</B> <!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+Yes? What about them? They are not the subject of the quoted para. They
+are different things. The above para has nothing to do with them. I
+suppose I could branch off onto a tutorial of everything about pointers,
+but I don&#146;t feel inclined to do so. There are plenty of good books with
+coverage of the subject. I was only correcting a specific misstatement.
+If you somehow think that this bears directly on the accuracy of my
+comment, then that is incorrect; it does not. If you are branching off
+onto a more general discussion, then that&#146;s fine, but I&#146;ll decline to
+follow (and I might wish that the change of subject were more explicit;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>I have trouble telling from the above</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+whether one was intended or not).
+</TD></TR>
+<TR><TD colspan=2>
+By the way, strictly speaking, there is no such thing as a "copy" of a
+pointer. There might be other pointers with the same target. While one
+might say that this is word quibble, it is a quibble that might help
+avoid confusions such as the one that this question illustrates if it
+was notr intended to be a change of subject.
+</TD></TR>
+<TR><TD colspan=2>
+--
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Richard Maine</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+| Good judgment comes from experience;
+email: my first.last at org.domain| experience comes from bad judgment.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>org: nasa, domain: gov</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+|       -- Mark Twain
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+        glen herrmannsfeldt    
+</PRE>
+10/5/06
+Richard E Maine &lt;<A HREF="mailto:nospam@see.signature">nospam@see.signature</A>&gt; wrote:
+&gt; glen herrmannsfeldt &lt;g&#46;&#46;&#46;@seniti.ugcs.caltech.edu&gt; wrote:
+&gt;&gt; Richard E Maine &lt;<A HREF="mailto:nospam@see.signature">nospam@see.signature</A>&gt; wrote:
+&gt;&gt; (snip on deallocate and pointers)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&gt;&gt; But what about copies of the pointer?</B> <!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+&gt; Yes? What about them? They are not the subject of the quoted para. They
+&gt; are different things. The above para has nothing to do with them. I
+&gt; suppose I could branch off onto a tutorial of everything about pointers,
+&gt; but I don&#146;t feel inclined to do so.
+</TD></TR>
+<TR><TD colspan=2>
+For the subject of possible ways to go wrong while using pointers,
+keeping a copy of a pointer is one way.
+</TD></TR>
+<TR><TD colspan=2>
+&gt; There are plenty of good books with
+&gt; coverage of the subject. I was only correcting a specific misstatement.
+&gt; If you somehow think that this bears directly on the accuracy of my
+&gt; comment, then that is incorrect; it does not.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Clarifying the range of the statement.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(snip)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+&gt; By the way, strictly speaking, there is no such thing as a "copy" of a
+&gt; pointer. There might be other pointers with the same target. While one
+&gt; might say that this is word quibble, it is a quibble that might help
+&gt; avoid confusions such as the one that this question illustrates if it
+&gt; was notr intended to be a change of subject.
+<P>
+Different languages work with pointers in different ways.
+Java is somewhat different as far as pointers (object reference
+variables), as one example.
+<P>
+Thanks for the clarification.
+<P>
+-- glen
+<P>
+################################################################################
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>nullify (7)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 989f76a7-232f-4b10-b465-8102944871dc using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>nullify (7)</TD> <TD align=right width=33%><I>May 25, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 34e05baf-ec64-47c9-aa77-94926a9edeb4 using man macros.</FONT>
 <br><br><center><img src="images/nullify.7fortran.gif"></center>
 </div>
 </div>

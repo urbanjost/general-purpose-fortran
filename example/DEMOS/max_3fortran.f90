@@ -18,7 +18,7 @@
               !!
               !! That is it unless you want to use the elemental features of max(3f)!
 
-              !! Error: Intrinsic ‘max’ at (1) must have at least two arguments
+              !! Error: Intrinsic    max    at (1) must have at least two arguments
               !!write(*,*)max(arr1)
               !! This does not work because it is like trying to return
               !! [(max(arr1(i)),i=1,size(arr1))]

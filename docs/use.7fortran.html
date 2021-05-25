@@ -53,8 +53,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>use</B>(7f) - [FORTRAN] gives a program unit accessibility to public entities in a module.
-(LICENSE:PD)
+<B>use</B>(7f) - [FORTRAN] gives a program unit access to public entities in a module.
+<P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
@@ -76,6 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 The <B>USE</B> statement makes the specified <I>namespace</I> accessible to the
 current scoping unit. It also provides a means of renaming or limiting
 the accessibility of entities in the <I>namespace</I>.
+<P>
+If more than one <B>USE</B> statement appears in a scoping unit, the rename-lists
+and only-lists are treated as one concatenated <I>rename-list</I>.
 <P>
 WHERE:
 <TABLE cellpadding=3><!-- tsb: WHERE:
@@ -103,25 +106,32 @@ is a comma-separated list of local-name =&gt; use-name
 <B></B><I>only-list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 is a comma-separated list of access-id or [local-name =&gt; use-name]
 </TD></TR>
-<TR></TR></TABLE><!-- .nf -->
+<TR></TR></TABLE>A <B>USE</B> statement with ONLY provides access only to those entities that
+appear in the <I>only-list</I>.
+<P>
+A <B>USE</B> statement without ONLY provides access to all PUBLIC entities in
+the specified <I>namespace</I>.
+<P>
+where
+<P>
 <PRE>
-                 local-name      is the local name for the entity specified by use-name
-                                 Is the name of the entity in the program unit using the module or is
-                                 "OPERATOR (op-name)", where op-name is the name of a defined operator
-                                 in the program unit using the module.
-                 use-name        is the name of a public entity in the specified namespace
-                 access-id       is use-name or generic-spec
-                 generic-spec    is generic-name
-                                 or OPERATOR (defined-operator)
-                                 or ASSIGNMENT (=)
+         local-name      is the local name for the entity specified by use-name
+                         Is the name of the entity in the program unit using the module or is
+                         "OPERATOR (op-name)", where op-name is the name of a defined operator
+                         in the program unit using the module.
+         use-name        is the name of a public entity in the specified namespace
+         access-id       is use-name or generic-spec
+         generic-spec    is generic-name
+                         or OPERATOR (defined-operator)
+                         or ASSIGNMENT (=)
 <P>
-                               generic-name is the name of a generic procedure
+         generic-name is the name of a generic procedure
 <P>
-                               defined-operator is one of the intrinsic operators
+         defined-operator is one of the intrinsic operators
 <P>
-                               or .op-name.
+         or .op-name.
 <P>
-                               .op-name. is a user-defined name for the operation
+         .op-name. is a user-defined name for the operation
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -133,16 +143,10 @@ is a comma-separated list of access-id or [local-name =&gt; use-name]
 <P>
 <I>rename-list</I> and ONLY: <I>only-list</I> may only appear if the <I>namespace</I> being
 used was implemented with Fortran for .NET
+</BLOCKQUOTE>
 <P>
-A <B>USE</B> statement without ONLY provides access to all PUBLIC entities in
-the specified <I>namespace</I>.
 <P>
-A <B>USE</B> statement with ONLY provides access only to those entities that
-appear in the <I>only-list</I>.
-<P>
-If more than one <B>USE</B> statement appears in a scoping unit, the rename-lists
-and only-lists are treated as one concatenated <I>rename-list</I>.
-<P>
+<BLOCKQUOTE>
 If two or more generic interfaces that are accessible in the same
 scoping unit have the same name, same operator, or are assignments,
 they are interpreted as a single generic interface.
@@ -173,34 +177,44 @@ Samples:
 <P>
 <PRE>
    module example ! example is the namespace name
+<P>
       type type1 ! type1 is the class prototype name
       contains
          procedure, nopass :: static_method1
       end type type1
+<P>
       type type2 ! type1 is the class prototype name
       contains
          procedure, nopass :: static_method2
       end type type2
-   contains
+<P>
+</PRE>
+<BLOCKQUOTE>
+contains
+<P>
+<PRE>
       subroutine static_method1(arg)
          integer :: arg
          ! code to implement method goes here
       end subroutine static_method1
+<P>
       subroutine static_method2(arg)
          integer :: arg
          ! code to implement method goes here
       end subroutine static_method2
-   end module example
-<P>
-   use example ! all public objects in namespace example available
-<P>
-   use example, only: type1 ! class prototype type1 available,
-                            ! class prototype type2 not available
-<P>
-   ! within this scoping unit, type1 is referred to as "mytype"
-   use example, mytype =&gt; type1
 <P>
 </PRE>
+end module example
+!==============================================================
+use example ! all public objects in <I>namespace</I> example available
+!==============================================================
+use example, only: type1 ! class prototype type1 available,
+! class prototype type2 not available
+!==============================================================
+! within this scoping unit, type1 is referred to as "mytype"
+use example, mytype =&gt; type1
+!==============================================================
+</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
 
@@ -211,7 +225,7 @@ Samples:
 <P>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f5981629-458d-41f5-88fb-3befc05f0a0c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>May 25, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fa0f2a4f-8846-43fb-b05c-a42ab56ee06f using man macros.</FONT>
 <br><br><center><img src="images/use.7fortran.gif"></center>
 </div>
 </div>

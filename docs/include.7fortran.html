@@ -54,7 +54,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <B>include</B>(7f) - [FORTRAN] including source text
-(LICENSE:PD)
+<P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
@@ -74,57 +74,120 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <BLOCKQUOTE>
 Additional text may be incorporated into the source text of a program
 unit during processing. This is accomplished with the <B>INCLUDE</B> line,
-which has the form
+which typically has the form
 <P>
 <PRE>
-         INCLUDE char-literal-constant
+     INCLUDE "filename"
 <P>
 </PRE>
-An <B>INCLUDE</B> line is not a Fortran statement.
-<P>
-The <I>char-literal-constant</I> shall not have a kind type parameter value
-that is a named-constant.
-The interpretation of <I>char-literal-constant</I> is processor dependent. An
-example of a possible valid interpretation is that <I>char-literal-constant</I>
-is the name of a file that contains the source text to be included.
-<P>
-An <B>INCLUDE</B> line shall appear on a single source line where a statement
-may appear; it shall be the only nonblank text on this line other than
-an optional trailing comment. Thus, a statement label is not allowed.
-<P>
-The effect of the <B>INCLUDE</B> line is as if the referenced source text
-physically replaced the <B>INCLUDE</B> line prior to program
+An <B>INCLUDE</B> line is not a Fortran statement. It is processed at
+compilation. The effect of the <B>INCLUDE</B> line is as if the referenced
+source text physically replaced the <B>INCLUDE</B> line prior to program
 processing. Included text may contain any source text, including
 additional <B>INCLUDE</B> lines; such nested <B>INCLUDE</B> lines are similarly
 replaced with the specified source text. The maximum depth of nesting
 of any nested <B>INCLUDE</B> lines is processor dependent. Inclusion of the
 source text referenced by an <B>INCLUDE</B> line shall not, at any level of
-nesting, result in inclusion of the same source text.
+nesting, result in inclusion of the same source text (ie. it cannot
+be recursive).
 <P>
+The interpretation of <I>char-literal-constant</I> is processor dependent.
+<TABLE cellpadding=3><!-- tsb: The interpretation of <I>char-literal-constant</I> is processor dependent.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>It is generally implemented</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+as a filename containing text to be
+included, but could be interpreted as a URL or a system command that
+generates text or a database query, or a list of files, for example.
+That being said, all current implementations appear to at
+least treat it as a simple filename.
+</TD></TR>
+<TR></TR></TABLE>Where the compiler searches for the filename is
+implementation-dependent. All current implementations appear to at
+least search for the file in the same directory as the file containing
+the <B>INCLUDE</B> statement if it is not a complete filepath specification. It
+is common but not required that other directories are searched as
+specified with the common <B>-I</B> switch found on most compiler commands.
+<P>
+The <I>char-literal-constant</I> shall not have a kind type parameter value
+that is a named-constant. That is, it must be a quoted string. It cannot
+be something like
+<P>
+<PRE>
+      character(len=*),parameter :: filename=&#146;willnotwork.inc&#146;
+      include filename
+<P>
+</PRE>
+An <B>INCLUDE</B> line shall appear on a single source line where a statement
+may appear (many compilers support an extension allowing continuation
+lines to be supported); it must be the only nonblank text on the line
+other than an optional trailing comment (no statement label is allowed).
+So here are some bad ideas
+<P>
+<PRE>
+      INCLUDE "filename";I=10 ! NO: multiple statements on line
+      100 INCLUDE &#146;filename&#146;  ! NO: statement label not allowed
+      ! continuation often works but is non-standard
+      INCLUDE &
+      & &#146;filename&#146;
+      INCLUDE &#146;file&
+      &name&#146;
+<P>
+</PRE>
 When an <B>INCLUDE</B> line is resolved, the first included statement line
-shall not be a continuation line and the last included statement line
-shall not be continued.
+cannot be a continuation line and the last included statement line
+cannot be continued.
 </BLOCKQUOTE>
-<P>
-<P>
 <A name=>
 
-    <H4>&nbsp; &nbsp; NOTE</H4>
+    <H4>&nbsp; &nbsp; PREPROCESSING</H4>
 </A>
 <BLOCKQUOTE>
 <P>
-In some circumstances, for example where source code is
-maintained in an <B>INCLUDE</B> file for use in programs whose source
-form might be either fixed or free, observing the following
-rules allows the code to be used with either source form.
-<TABLE cellpadding=3><!-- tsb: In some circumstances, for example where source code is
+Note that an <B>INCLUDE</B> line is generally processed after any preprocessor
+so the <B>INCLUDE</B> file should not include preprocessor directives such as
+<B>cpp</B>(1) or <B>fpp</B>(1) directives. If that is required you probably need to
+use an equivalent preprocessor directive such as a <B>cpp</B>(1) "#include"
+directive instead of a Fortran <B>INCLUDE</B>.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SUMMARY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+So it is a de-facto standard that an <B>INCLUDE</B> at least supports a simple
+filename pointing to a file in the directory where the file containing
+the <B>INCLUDE</B> file resides or a full path name in single or double quotes.
+<P>
+An <B>INCLUDE</B> statement was a common way to ensure a COMMONBLOCK was
+declared the same in multiple files (at least if every file with the
+<B>INCLUDE</B> was recompiled). It should generally be avoided and a MODULE
+should be used instead of a COMMONBLOCK in the vast majority of cases
+in new code.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; RULES FOR FIXED AND FREE FILE FORMAT PORTABILITY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+If the code in your "include file" needs read by both old fixed-format
+files and free-format files it is not necessary to maintain two copies
+of the file.
+<P>
+Observing the following rules allows included code to be used with
+either free or fixed source forms.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Observing the following rules allows included code to be used with
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 Confine statement labels to character positions 1 to
-5 and statements to character positions 7 to 72.
+5 and statements to character positions 7 to 72
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -146,15 +209,28 @@ both character position 73 of a continued line and character
 position 6 of a continuation line.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
 <A name=3>
 
      <H3>EXAMPLE</H3>
 
 </A>
 <BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+     program show_include
+     implicit none
+     include "declarations.inc"
+        write(*,*)&#146;Hello World!&#146;
+        include "somecode.inc"
+     includes
+        include "somemorecode.inc"
+     end program show_include
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>include (7)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1cd16675-9e9f-4d78-a762-f215942ba818 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>include (7)</TD> <TD align=right width=33%><I>May 25, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c0d1323a-6cf5-42e1-8bf4-872c91d4a8e8 using man macros.</FONT>
 <br><br><center><img src="images/include.7fortran.gif"></center>
 </div>
 </div>

@@ -835,7 +835,7 @@ end subroutine read_table_r
 !!      or
 !!    integer,intent(in)          :: io
 !!
-!!    character(len=1),allocatable,intent(out) :: pageout(:)
+!!    character(len=:),allocatable,intent(out) :: pageout(:)
 !!##DESCRIPTION
 !!    Read an entire file into memory as a character array, one character
 !!    variable per line.

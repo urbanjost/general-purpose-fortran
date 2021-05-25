@@ -4731,13 +4731,29 @@ textblock=[character(len=256) :: &
 '   value lies in the range -1 <= cos(x) <= 1.', &
 '', &
 'EXAMPLE', &
-'   Sample program:', &
+'  Sample program:', &
 '', &
-'    program demo_cos', &
-'    implicit none', &
-'    real :: x = 0.0', &
-'       x = cos(x)', &
-'    end program demo_cos', &
+'   program demo_cos', &
+'   implicit none', &
+'   doubleprecision,parameter :: PI=atan(1.0d0)*4.0d0', &
+'   write(*,*)''COS(0.0)='',cos(0.0)', &
+'   write(*,*)''COS(PI)='',cos(PI)', &
+'   write(*,*)''COS(PI/2.0d0)='',cos(PI/2.0d0),'' EPSILON='',epsilon(PI)', &
+'   write(*,*)''COS(2*PI)='',cos(2*PI)', &
+'   write(*,*)''COS(-2*PI)='',cos(-2*PI)', &
+'   write(*,*)''COS(-2000*PI)='',cos(-2000*PI)', &
+'   write(*,*)''COS(3000*PI)='',cos(3000*PI)', &
+'   end program demo_cos', &
+'', &
+'  Expected output:', &
+'', &
+'   COS(0.0)=        1.00000000', &
+'   COS(PI)=        -1.0000000000000000', &
+'   COS(PI/2.0d0)=   6.1232339957367660E-017', &
+'   EPSILON=         2.2204460492503131E-016', &
+'   COS(2*PI)=       1.0000000000000000', &
+'   COS(-2*PI)=      1.0000000000000000', &
+'   COS(-2000*PI)=   1.0000000000000000', &
 '', &
 'STANDARD', &
 '   [[FORTRAN 77]] and later', &
@@ -8006,14 +8022,17 @@ textblock=[character(len=256) :: &
 '   function', &
 '', &
 'SYNTAX', &
-'   result = ichar(c [, kind])', &
+'   elemental function ichar(c,kind)', &
+'', &
+'    character(len=1),intent(in) :: c', &
+'    integer,intent(in),optional :: kind', &
 '', &
 'DESCRIPTION', &
 '   ICHAR(C) returns the code for the character in the system''s native', &
 '   character set. The correspondence between characters and their codes', &
 '   is not necessarily the same across different Fortran implementations.', &
-'   Therefore, a platform using EBCDIC would return different values than', &
-'   an ASCII platform, for example.', &
+'   For example, a platform using EBCDIC would return different values', &
+'   than an ASCII platform.', &
 '', &
 '   See IACHAR(3f) for specifically working with the ASCII character set.', &
 '', &
@@ -8032,6 +8051,7 @@ textblock=[character(len=256) :: &
 '   program demo_ichar', &
 '   implicit none', &
 '   integer i', &
+'      write(*,*)ichar([''a'',''z'',''A'',''Z''])', &
 '      do i=0,127', &
 '         call printme()', &
 '      enddo', &

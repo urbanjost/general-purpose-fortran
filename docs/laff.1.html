@@ -1,0 +1,280 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>laff (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>laff</B>(1f) - interpret matrix expressions using a shell-like interface
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Author</A><BR>
+<A HREF=#5>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+laff <B>[expression</B>(<I>s</I>)] | [ <B>--help</B>| <B>--version</B>]
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>laff</B>(1) is an interactive computer program that serves as a convenient
+"laboratory" for computations involving matrices. It provides easy
+access to matrix software developed by the LINPACK and EISPACK
+projects. The capabilities range from standard tasks such as solving
+simultaneous linear equations and inverting matrices, through symmetric
+and nonsymmetric eigenvalue problems, to fairly sophisticated matrix
+tools such as the singular value decomposition.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--help</B> </TD><TD valign=bottom>
+display this help and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+output version information and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>expression</B>(<I>s</I>) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if expressions are supplied they are evaluated and the
+program terminates.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+This is heavily based on a program from the Department of Computer
+Science, University of New Mexico, by Cleve Moler.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample commands
+<P>
+<PRE>
+    # Example 1: introductory usage:
+    laff
+    a=&lt;1 2 3;5 4 6;7 8 9&gt;
+    b=&lt;5;6;7&gt;
+    a*b
+    b*a
+    det(a)
+    quit
+<P>
+</PRE>
+<BLOCKQUOTE>
+An explanation of Example 1:
+<P>
+<PRE>
+    // For this session the &lt;&gt; character is the LAFF prompt.
+     &lt;&gt; A=&lt;1 2 3;5 4 6;7 8 9&gt;            &lt;---  you enter this
+     A     =                             &lt;---  LAFF response
+         1.    2.    3.
+         5.    4.    6.
+         7.    8.    9.
+     &lt;&gt; b=&lt;5;6;7&gt;
+     b     =
+         5.
+         6.
+         7.
+<P>
+     &lt;&gt; A*b             &lt;--- you enter "multiply A and b"
+<P>
+     ANS   =            &lt;--- LAFF response
+        38.
+        91.
+       146.
+<P>
+     &lt;&gt; b*A             &lt;---you enter "multiply b and A"
+        /--ERROR                         &lt;--- LAFF response
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INCOMPATIBLE FOR MULTIPLICATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>&lt;&gt; </B><B>det</B>(A) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&lt;--- Take the determinant of A
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ANS</B> </TD><TD valign=bottom>
+=           &lt;<B>---LAFF</B> response
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+        18.
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&lt;&gt; quit</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&lt;--- you quit LAFF
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>total flops</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+34
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ADIOS</H4>
+</A>
+<BLOCKQUOTE>
+// --------------------------------------
+</BLOCKQUOTE>
+<P>
+Example 2: Simple looping and conditionals are also available
+<P>
+<PRE>
+    laff
+    //Eigenvalue sensitivity example. See section 8 of the Users&#146; Guide.
+    B = &lt;3 0 7; 0 2 0; 0 0 1&gt;
+    L = &lt;1 0 0; 2 1 0; -3 4 1&gt;,  M = L\L&#146;
+    A = M*B/M
+    A = round(A)
+    &lt;X,D&gt; = eig(A)
+    long,  diag(D),  short
+    cond(X)
+    X = X/diag(X(3,:)),  cond(X)
+    Y = inv(X&#146;),  Y&#146;*A*X
+    for j = 1:3, c(j) = norm(Y(:,j))*norm(X(:,j));
+</PRE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; C</H4>
+</A>
+<BLOCKQUOTE>
+E = <B>-1.e-6</B>*Y(:,1)*X(:,1)&#146;
+<TABLE cellpadding=3><!-- tsb: E = <B>-1.e-6</B>*Y(:,1)*X(:,1)&#146;
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>eig</B>(A + .4*E), </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>eig</B>(A + .5*E)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>r = .4;</B> </TD><TD valign=bottom>
+<I>s</I> = .5;
+while <I>s</I>-r &gt; 1.e-14, t = (r+<I>s</I>)/2; d = <B>eig</B>(A+t*E); &#46;&#46;&#46;
+if <B>imag</B>(d(1))=0, r = t; else, <I>s</I> = t;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>long,</B> </TD><TD valign=bottom>
+t = r
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>A+t*e,</B> </TD><TD valign=bottom>
+<B>eig</B>(A+t*E)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>&lt;X,D&gt; = </B><B>eig</B>(A+t*E); </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X = <B>X/diag</B>(X(3,:))
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>short,</B> </TD><TD valign=bottom>
+<B>cond</B>(X)
+// --------------------------------------
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Use the HELP command for further information.
+For example, to enter HELP on the entire manual,
+display directions for using HELP and
+place a User manual in the file "laff.userguide.txt",
+enter
+<P>
+<PRE>
+    laff
+    &lt;&gt;help manual
+    continue &#46;&#46;&#46;
+    h // show directions for using "help"
+    w laff.userguide.txt
+    continue &#46;&#46;&#46;
+    q
+    quit
+</PRE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>laff (1)</TD> <TD align=right width=33%><I>May 25, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4cf92fea-8939-43e8-975a-5dd5db77050c using man macros.</FONT>
+<br><br><center><img src="images/laff.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

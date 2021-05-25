@@ -43,7 +43,7 @@
 !!      use M_strings, only : listout,getvals
 !!      use M_strings, only : glob, ends_with
 !!      use M_strings, only : fmt
-!!      use M_strings, only : base, decodebase, codebase
+!!      use M_strings, only : base, decodebase, codebase, base2
 !!      use M_strings, only : isalnum, isalpha, iscntrl, isdigit
 !!      use M_strings, only : isgraph, islower, isprint, ispunct
 !!      use M_strings, only : isspace, isupper, isascii, isblank, isxdigit
@@ -179,6 +179,7 @@
 !!   BASE CONVERSION
 !!       base       convert whole number string in base [2-36] to string
 !!                  in alternate base [2-36]
+!!       base2      convert INTEGER to a string representing a binary value
 !!       codebase   convert whole number string in base [2-36] to base
 !!                  10 number
 !!       decodebase convert whole number in base 10 to string in base [2-36]
@@ -252,7 +253,7 @@
 !!     use M_strings, only : listout, getvals
 !!     use M_strings, only : glob, ends_with
 !!     use M_strings, only : fmt
-!!     use M_strings, only : base, decodebase, codebase
+!!     use M_strings, only : base, decodebase, codebase, base2
 !!     use M_strings, only : isalnum, isalpha, iscntrl, isdigit, isgraph
 !!     use M_strings, only : islower, isprint, ispunct, isspace, isupper
 !!     use M_strings, only : isascii, isblank, isxdigit
@@ -372,6 +373,7 @@ PUBLIC setbits64       !  use a string representing a positive binary value to f
 PUBLIC base            !  convert whole number string in base [2-36] to string in alternate base [2-36]
 PUBLIC codebase        !  convert whole number string in base [2-36] to base 10 number
 PUBLIC decodebase      !  convert whole number in base 10 to string in base [2-36]
+PUBLIC base2           !  convert INTEGER to a string representing a binary value
 !----------------------# LOGICAL TESTS
 PUBLIC glob            !  compares given string for match to pattern which may contain wildcard characters
 PUBLIC matchw          !  clone of glob -- for backward compatibiity
@@ -1611,31 +1613,31 @@ end subroutine delim
 !===================================================================================================================================
 !>
 !!##NAME
-!!    replace(3f) - [M_strings:EDITING] function globally replaces one
+!!    replace(3f) - [M_strings:EDITING] function replaces one
 !!    substring for another in string
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!    function replace(targetline[,old,new|cmd],&
+!! syntax:
 !!
-!!     & occurrence, &
-!!     & repeat, &
-!!     & ignorecase, &
-!!     & ierr) result (newline)
-!!
-!!     character(len=*)                       :: targetline
-!!     character(len=*),intent(in),optional   :: old
-!!     character(len=*),intent(in),optional   :: new
-!!     character(len=*),intent(in),optional   :: cmd
-!!     integer,intent(in),optional            :: occurrence
-!!     integer,intent(in),optional            :: repeat
-!!     logical,intent(in),optional            :: ignorecase
-!!     integer,intent(out),optional           :: ierr
-!!     character(len=:),allocatable           :: newline
+!!      function replace(targetline,old,new,cmd,&
+!!       & occurrence, &
+!!       & repeat, &
+!!       & ignorecase, &
+!!       & ierr) result (newline)
+!!      character(len=*)                       :: targetline
+!!      character(len=*),intent(in),optional   :: old
+!!      character(len=*),intent(in),optional   :: new
+!!      character(len=*),intent(in),optional   :: cmd
+!!      integer,intent(in),optional            :: occurrence
+!!      integer,intent(in),optional            :: repeat
+!!      logical,intent(in),optional            :: ignorecase
+!!      integer,intent(out),optional           :: ierr
+!!      character(len=:),allocatable           :: newline
 !!
 !!##DESCRIPTION
-!!    Globally replace one substring for another in string.
+!!    Replace one substring for another in string.
 !!    Either CMD or OLD and NEW must be specified.
 !!
 !!##OPTIONS
@@ -1664,51 +1666,51 @@ end subroutine delim
 !!    program demo_replace
 !!    use M_strings, only : replace
 !!    implicit none
-!!    character(len=:),allocatable :: targetline
+!!    character(len=:),allocatable :: line
 !!
-!!    write(*,*) replace('Xis is Xe input string','X','th')
-!!    write(*,*) replace('Xis is xe input string','x','th',ignorecase=.true.)
-!!    write(*,*) replace('Xis is xe input string','X','th',ignorecase=.false.)
+!!    write(*,*)replace('Xis is Xe string','X','th')
+!!    write(*,*)replace('Xis is xe string','x','th',ignorecase=.true.)
+!!    write(*,*)replace('Xis is xe string','X','th',ignorecase=.false.)
 !!
 !!    ! a null old substring means "at beginning of line"
 !!    write(*,*) replace('my line of text','','BEFORE:')
 !!
-!!    ! a null old string deletes occurrences of the old substring
+!!    ! a null new string deletes occurrences of the old substring
 !!    write(*,*) replace('I wonder i ii iii','i','')
 !!
 !!    ! Examples of the use of RANGE
 !!
-!!    targetline=replace('aaaaaaaaa','a','A',occurrence=1,repeat=1)
-!!    write(*,*)'replace first a with A ['//targetline//']'
+!!    line=replace('aaaaaaaaa','a','A',occurrence=1,repeat=1)
+!!    write(*,*)'replace first a with A ['//line//']'
 !!
-!!    targetline=replace('aaaaaaaaa','a','A',occurrence=3,repeat=3)
-!!    write(*,*)'replace a with A for 3rd to 5th occurrence ['//targetline//']'
+!!    line=replace('aaaaaaaaa','a','A',occurrence=3,repeat=3)
+!!    write(*,*)'replace a with A for 3rd to 5th occurrence ['//line//']'
 !!
-!!    targetline=replace('ababababa','a','',occurrence=3,repeat=3)
-!!    write(*,*)'replace a with null instances 3 to 5 ['//targetline//']'
+!!    line=replace('ababababa','a','',occurrence=3,repeat=3)
+!!    write(*,*)'replace a with null instances 3 to 5 ['//line//']'
 !!
-!!    targetline=replace( &
+!!    line=replace( &
 !!     & 'a b ab baaa aaaa aa aa a a a aa aaaaaa',&
 !!     & 'aa','CCCC',occurrence=-1,repeat=1)
-!!    write(*,*)'replace lastaa with CCCC ['//targetline//']'
+!!    write(*,*)'replace lastaa with CCCC ['//line//']'
 !!
-!!    write(*,*)replace('myf90stuff.f90.f90','.f90','for',occurrence=-1,repeat=1)
+!!    write(*,*)replace('myf90stuff.f90.f90','f90','for',occurrence=-1,repeat=1)
 !!    write(*,*)replace('myf90stuff.f90.f90','f90','for',occurrence=-2,repeat=2)
 !!
 !!    end program demo_replace
 !!
 !!   Results:
 !!
-!!     this is the input string
-!!     this is the input string
-!!     this is xe input string
+!!     this is the string
+!!     this is the string
+!!     this is xe string
 !!     BEFORE:my line of text
 !!     I wonder
 !!     replace first a with A [Aaaaaaaaa]
 !!     replace a with A for 3rd to 5th occurrence [aaAAAaaaa]
 !!     replace a with null instances 3 to 5 [ababbb]
 !!     replace lastaa with CCCC [a b ab baaa aaaa aa aa a a a aa aaaaCCCC]
-!!     myf90stuff.f90for
+!!     myf90stuff.f90.for
 !!     myforstuff.for.f90
 !!
 !!##AUTHOR
@@ -1763,7 +1765,7 @@ end subroutine crack_cmd
 !===================================================================================================================================
 function replace(targetline,old,new,cmd,occurrence,repeat,ignorecase,ierr) result (newline)
 
-! ident_11="@(#)M_strings::replace(3f): Globally replace one substring for another in string"
+! ident_11="@(#)M_strings::replace(3f): replace one substring for another in string"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! parameters
@@ -8175,6 +8177,124 @@ end function base
 !===================================================================================================================================
 !>
 !!##NAME
+!!    base2(3f) - [M_strings:BASE] convert whole number to string in base 2
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!   logical function base2(int)
+!!
+!!    integer,intent(in)           :: int
+!!    character(len=:),allocatable :: base2
+!!##DESCRIPTION
+!!
+!!    Convert a whole number to a string in base 2.
+!!
+!!    The letters A,B,...,Z represent 10,11,...,36 in the base > 10.
+!!
+!!##OPTIONS
+!!    int   input string representing numeric whole value
+!!##RETURNS
+!!    base2   string representing input value in base 2
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!    program demo_base2
+!!    use M_strings, only : base2
+!!    implicit none
+!!    integer                      :: i
+!!    character(len=:),allocatable :: string
+!!       write(*,'(a)') base2(huge(0))
+!!       write(*,'(a)') base2(0)
+!!       write(*,'(a)') base2(1-huge(0))
+!!    end program demo_base2
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+! 0 in binary: 0
+! 42 in binary: 101010
+! huge(int) in binary: 1111111111111111111111111111111
+! 032 in binary is 100000
+! itimes=10000000
+!      G_TRICK=base2_f(32)   <BASE2_F  >Processor Time =  0.766 seconds.
+!      G_TRICK=base2_fdo(32) <BASE2_FDO>Processor Time =  0.958 seconds.
+!      G_TRICK=base2_a(32)   <BASE2_A  >Processor Time =  1.022 seconds.
+!      G_TRICK=base2_c(32)   <BASE2_C  >Processor Time =  7.208 seconds.
+!      G_TRICK=empty(32)     <EMPTY    >Processor Time =  0.132 seconds.
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function base2(x) result(str)
+!  return string representing number as a binary number.  Fixed-length string:
+integer, intent(in) :: x
+integer           :: i
+character(len=max(1,bit_size(x)-leadz(x))) :: str
+    associate(n => len(str))
+      str = repeat('0',n)
+      do i = 0,n-1
+        if (btest(x,i)) str(n-i:n-i) = '1'
+      end do
+    end associate
+end function base2
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function base2_fdo(x) result(str)
+!  return string representing number as a binary number.  Fixed-length string: do concurrent
+integer, intent(in) :: x
+character(len=max(1,bit_size(x)-leadz(x))) :: str
+
+integer :: n, i
+
+    if (x == 0) then
+      str(1:1) = '0'
+      return
+    endif
+    n = len(str)
+    str = repeat('0',n)
+    do concurrent (i = 0:n-1, btest(x,i))
+      str(n-i:n-i) = '1'
+    end do
+end function base2_fdo
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function base2_a(x) result(str)
+!  return string representing number as a binary number. Allocatable-length string:
+integer, intent(in) :: x
+character(len=:), allocatable :: str
+
+integer :: n, i
+
+    n = max(1,bit_size(x)-leadz(x))
+    allocate(character(len=n) :: str)
+    if (x == 0) then
+      str(1:1) = '0'
+      return
+    endif
+
+    str = repeat('0',n)
+    do concurrent (i = 0:n-1, btest(x,i))
+      str(n-i:n-i) = '1'
+    end do
+end function base2_a
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function base2_c(x) result(str)
+! internal write
+integer, intent(in) :: x
+character(len=max(1,bit_size(x)-leadz(x))) :: str
+    write( str, fmt="(b0)" ) x
+end function base2_c
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
 !!
 !!    decodebase(3f) - [M_strings:BASE] convert whole number string in base
 !!    [2-36] to base 10 number
@@ -9087,7 +9207,7 @@ end function msg_one
 !!
 !!      > ??? option to skip adjacent delimiters (not return null tokens) common with whitespace
 !!      > ??? quoted strings, especially CSV both " and ', Fortran adjacent is insert versus other rules
-!!      > ??? escape character like !!      > ??? multi-character delimiters like \n, \t,
+!!      > ??? escape character like \!!      > ??? multi-character delimiters like \\n, \\t,
 !!      > ??? regular expression separator
 !!
 !!##AUTHOR

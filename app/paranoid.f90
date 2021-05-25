@@ -158,7 +158,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PROGRAM:        paranoid(1)>',&
 '@(#)DESCRIPTION:    call doubleprecision and real versions of paranoia(3f)>',&
 '@(#)VERSION:        1.0, 20150508>',&
-'@(#)COMPILED:       Mon, Mar 15th, 2021 12:51:18 AM>',&
+'@(#)COMPILED:       Mon, May 24th, 2021 11:23:37 PM>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
    stop ! if -version was specified, stop
