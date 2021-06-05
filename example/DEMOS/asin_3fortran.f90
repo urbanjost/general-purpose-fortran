@@ -4,9 +4,9 @@
            ! value to convert degrees to radians
            real(kind=dp),parameter :: D2R=acos(-1.0_dp)/180.0_dp
            real(kind=dp)           :: angle, rise, run
-             ! given sine(Θ) = 1.25 miles/50 miles (opposite/hypotenuse)
+             ! given sine(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
              ! then taking the arcsine of both sides of the equality yields
-             ! Θ = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)
+             ! theta = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)
              rise=1.250_dp
              run=50.00_dp
              angle = asin(rise/run)

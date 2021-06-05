@@ -53,20 +53,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>STOP</B>(7f),ALLSTOP(7f) - [FORTRAN:STATEMENT] initiates termination of execution
-(LICENSE:PD)
+<B>STOP</B>(7f),ALLSTOP(7f) - [FORTRAN:STATEMENT] initiates termination of
+execution
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=3>
+<A name=5>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
 <B>STOP</B> [ <I>stop-code</I> ]
-<B>ALL</B> <I>STOP</I> [ <I>stop-code</I> ]
+<B>ERROR</B> <I>STOP</I> [ <I>stop-code</I> ]
 <TABLE cellpadding=3><!-- tsb: <B>STOP</B> [ <I>stop-code</I> ]
  -->
 <TR></TR><TR></TR>
@@ -92,29 +92,84 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+A <I>STOP</I> statement will cause the program to terminate normally. It may
+provide additional information in the form <I>of</I> output <B>or</B> a system status
+code, depending on the system.
 <P>
-Execution <I>of</I> a <I>STOP</I> statement initiates normal termination <I>of</I> execution. Execution <I>of</I> an <B>ALL</B> <I>STOP</I>
-statement initiates error termination <I>of</I> execution.
+Any messages generated appear on the ERROR_UNIT file, as identified in
+the intrinsic module ISO_FORTRAN_ENV. This unit <I>is</I> often referred to as
+"stderr". It <I>is</I> recommended that systems write the value <I>of</I> the stop
+code whether numeric <B>or</B> a string.
 <P>
-When an image <I>is</I> terminated by a <I>STOP</I> <B>or</B> <B>ALL</B> <I>STOP</I> statement, its stop code, if any, <I>is</I> made available in a
-processor-dependent manner. If any exception <I>is</I> signaling on that image, the processor <I>shall</I> issue a warning
-indicating which exceptions are signaling; this warning <I>shall</I> <I>be</I> on the unit identified by the named constant
-ERROR_UNIT. It <I>is</I> recommended that the stop code <I>is</I> made available by formatted output to the same unit.
+Note that although <I>STOP</I> <I>is</I> a "normal" termination system status codes
+<B>or</B> "exit codes" are often used for error processing in many scripting
+languages. This code may <I>be</I> detectable by <B>EXECUTE_SYSTEM_COMMAND</B>(3f).
 <P>
-When normal termination occurs on more than one image, it <I>is</I> expected that a processor-dependent summary
-<I>of</I> any stop codes and signaling exceptions will <I>be</I> made available.
+Execution <I>of</I> an <B>ERROR</B> <I>STOP</I> statement initiates error termination <I>of</I>
+an execution, which on several systems includes the output from
+a traceback.
 <P>
-If the <B>stop-code</B> <I>is</I> an integer, it <I>is</I> recommended that the value also <I>be</I> used as the process exit status, if the
-processor supports that concept. If the integer <B>stop-code</B> <I>is</I> used as the process exit status, the processor
-might <I>be</I> able to interpret only values within a limited range, <B>or</B> only a limited portion <I>of</I> the integer value
-(for example, only the least-significant 8 bits).
+So when an image <I>is</I> terminated by a <I>STOP</I> <B>or</B> <B>ERROR</B> <I>STOP</I> statement, its
+stop code, if any, <I>is</I> made available in a processor-dependent manner.
 <P>
-If the <B>stop-code</B> <I>is</I> <I>of</I> type character <B>or</B> does not appear, <B>or</B> if an END PROGRAM statement <I>is</I> executed,
-it <I>is</I> recommended that the value zero <I>be</I> supplied as the process exit status, if the processor supports that
-concept.
+If any exception <I>is</I> signaling on a stopped image, the processor issues a
+warning indicating which exceptions are signaling;
+<P>
+When normal termination occurs on more than one image, it <I>is</I> expected
+that a processor-dependent summary <I>of</I> any stop codes and signaling
+exceptions will <I>be</I> made available.
+<P>
+If an integer <B>stop-code</B> <I>is</I> used as the process exit status,
+the processor might <I>be</I> able to interpret only values within a limited
+range, <B>or</B> only a limited portion <I>of</I> the integer value (for example,
+only the least-significant 8 bits).
+<P>
+If the <B>stop-code</B> <I>is</I> <I>of</I> type character <B>or</B> does not appear, <B>or</B> if an
+END PROGRAM statement <I>is</I> executed, it <I>is</I> recommended that the value
+zero <I>be</I> supplied as the process exit status, if the processor supports
+that concept.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample:
+<P>
+<PRE>
+   program demo_stop
+   use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT
+   implicit none
+   integer :: stopcode
+   ! Normal terminations
+      ! A STOP with no parameter is a normal termination and generally
+      ! returns a zero status value if the system supports return statuses
+      stop
+      ! All other stops are error stops
+      stop 10
+      stop &#146;That is all, folks!&#146;
+      stopcode=11
+      stop stopcode
+   ! Error terminations
+      ! ERROR STOP is always an error stop, even without a stop-code
+      error stop
+      ! ERROR STOP often displays a traceback but that is not required
+      error stop 10
+      error stop &#146;That is all, folks!&#146;
+      error stop stopcode
+   end program demo_stop
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; JSU</H4>
+</A>
+<BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>stop (7)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 892691d3-b352-4e61-baab-9805adf8e607 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>stop (7)</TD> <TD align=right width=33%><I>June 05, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b65a11c0-d609-4587-a755-4e4d01504018 using man macros.</FONT>
 <br><br><center><img src="images/stop.7fortran.gif"></center>
 </div>
 </div>

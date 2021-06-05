@@ -16,7 +16,7 @@
            use M_strings, only : listout, getvals
            use M_strings, only : glob, ends_with
            use M_strings, only : fmt
-           use M_strings, only : base, decodebase, codebase
+           use M_strings, only : base, decodebase, codebase, base2
            use M_strings, only : isalnum, isalpha, iscntrl, isdigit, isgraph
            use M_strings, only : islower, isprint, ispunct, isspace, isupper
            use M_strings, only : isascii, isblank, isxdigit

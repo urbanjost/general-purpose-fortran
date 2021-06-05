@@ -1,0 +1,194 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>M_matrix (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>M_matrix</B>(3f) - [M_matrix] The Linear ALgebra Fortran Facility (LAFF)
+<B>LICENSE</B>(MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Example</A><BR>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The M_matrix module contains the Linear Algebra Fortran Facility (LAFF)
+which allows for interacting with a Fortran program using Matlab
+<TABLE cellpadding=3><!-- tsb: The M_matrix module contains the Linear Algebra Fortran Facility (LAFF)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>or Octave-like commands.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+LAFF is also usable as a simple one-line
+language. It is a WIP (Work In Progress) but is already useful.
+<TABLE width=100% cellpadding=3><!-- tsb: LAFF is also usable as a simple one-line
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+You can pass intrinsic-type data easily between your Fortran
+program and the LAFF utility.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+blocks of LAFF commands may be passed to <B>laff</B>(3f) as well.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+external files containing <B>laff</B>(3f) commands may be read to create
+data or as configuration files.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LAFF commands may be recorded and played back.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a command-line based command history allowed for recalling and editing
+input.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a stand-alone program lets you create and test LAFF files. It is
+a flexible calculator utility all by itself.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a built-in help command describes the many functions and commands
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a user-added Fortran routine may be called via the <B>USER</B>() function.
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>All together, this allows <B>laff</B>(3f) to be used for self-describing
+configuration and data files, inspecting data in existing programs,
+transferring small amounts of data between programs or assisting in
+debugging and development, unit testing and macro-level timing.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+    program demo_M_matrix
+    use M_matrix, only : laff, put_into_laff, get_from_laff, ifin_laff
+    !real,allocatable             :: r
+    !complex,allocatable          :: cvec(:)
+    integer,allocatable          :: iarr(:,:)
+    character(len=:),allocatable :: t(:)
+    integer                      :: ierr
+<P>
+    ! store some data into laff(3)
+    call put_into_laff(&#146;A&#146;,[1,2,3,4,5]*10.5,ierr)
+    write(*,*)&#146;is A defined in LAFF?&#146;,ifin_laff(&#146;A&#146;)
+    call laff(&#146;A/2.0&#146;)
+<P>
+    ! pass some commands to laff(3f)
+    call laff([character(len=80) :: &
+    &&#146;PI=atan(1)*4               &#146;, &
+    &"mytitle=&#146;this is my title&#146;;", &
+    &&#146;littlearray=&lt;              &#146;, &
+    &&#146;   1 2 3;                  &#146;, &
+    &&#146;   4 5 6;                  &#146;, &
+    &&#146;   7 8 9;                  &#146;, &
+    &&#146;&gt;                          &#146;, &
+    &&#146;S=sum(A)                   &#146;, &
+    &&#146;I=inv(littlearray);        &#146;, &
+    &&#146;B=littlearray*sin(PI/3)    &#146;, &
+    &"save(&#146;keepB&#146;,B)            ", &
+    &&#146;&#146;])
+<P>
+    ! read a file containing laff(3f) commands
+    call laff("exec(&#146;mycommands&#146;);")
+<P>
+    ! interactively interact with laff(3f) interpreter
+    call laff()
+<P>
+    ! get some data from LAFF into the calling program
+    call get_from_laff(&#146;littlearray&#146;,iarr,ierr)
+    write(*,&#146;(a)&#146;)&#146;IN CALLING PROGRAM IARR=&#146;
+    write(*,&#146;(1x,*(g0,1x))&#146;)(IARR(i,:),new_line(&#146;A&#146;),i=1,size(iarr,dim=1))
+<P>
+    call get_from_laff(&#146;mytitle&#146;,t,ierr)
+    write(*,*)&#146;IN CALLING PROGRAM T=&#146;,t
+<P>
+    end program demo_M_matrix
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>M_matrix (3)</TD> <TD align=right width=33%><I>June 05, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 836be7ae-40cb-40eb-a025-3a4b04316e83 using man macros.</FONT>
+<br><br><center><img src="images/M_matrix.3m_matrix.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

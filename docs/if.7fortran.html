@@ -54,7 +54,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <B>if</B>(7f) - [FORTRAN:EXECUTION CONTROL] selects a block based on a sequence of logical expressions.
-(LICENSE:PD)
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -93,26 +92,40 @@ blocks. The selection is based on a sequence of logical expressions.
 If an if-construct-name is specified, both the <B>IF</B> and <B>ENDIF</B> must use
 that same name. If an <B>ELSE</B> or <B>ELSEIF</B> uses an if-construct-name it must
 be the same as the one specified on the corresponding <B>IF</B>/<B>ENDIF</B>.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; EXECUTION OF AN IF CONSTRUCT</H4>
+</A>
+<BLOCKQUOTE>
 <P>
-Execution of an <B>IF</B> construct
-<P>
-At most one of the blocks in the <B>IF</B> construct is executed. If there
-is an <B>ELSE</B> statement in the construct, exactly one of the blocks
-in the construct is executed. The scalar logical expressions are
-evaluated in the order of their appearance in the construct until
-a true value is found or an <B>ELSE</B> statement or <B>ENDIF</B> statement is
-encountered. If a true value or an <B>ELSE</B> statement is found, the <B>block</B>
-immediately following is executed and this completes the execution
-of the construct. The scalar logical expressions in any remaining
-<B>ELSEIF</B> statements of the <B>IF</B> construct are not evaluated. If none
-of the evaluated expressions is true and there is no <B>ELSE</B> statement,
+If there is an <B>ELSE</B> statement in the construct it acts as a default
+if all the preceding conditionals on the <B>IF</B> or <B>ELSEIF</B> where false,
+ensuring exactly one of the blocks in the construct is executed. The
+scalar logical expressions are evaluated in the order of their
+appearance in the construct until a true value is found or an <B>ELSE</B>
+statement or <B>ENDIF</B> statement is encountered. <B>IF</B> an <B>ELSE</B> statement is
+found, the <B>block</B> immediately following is executed and this completes
+the execution of the construct. That is, an <B>ELSE</B> should follow any
+<TABLE cellpadding=3><!-- tsb: If there is an <B>ELSE</B> statement in the construct it acts as a default
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ELSEIF</B> statements. </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The scalar logical expressions in any remaining
+<B>ELSEIF</B> statements of the <B>IF</B> construct are not evaluated. If none of
+the evaluated expressions is true and there is no <B>ELSE</B> statement,
 the execution of the construct is completed without the execution of
 any <B>block</B> within the construct.
-<P>
-It is permissible to branch to an <B>ENDIF</B> statement only from within
+</TD></TR>
+<TR></TR></TABLE>It is permissible to branch to an <B>ENDIF</B> statement only from within
 its <B>IF</B> construct. Execution of an <B>ENDIF</B> statement has no effect.
-<P>
-Execution of an <B>IF</B> statement
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; STANDALONE IF</H4>
+</A>
+<BLOCKQUOTE>
 <P>
 The <B>IF</B> statement controls the execution of a single action statement
 based on a single logical expression.
@@ -122,13 +135,35 @@ end-mp-subprogram-stmt, end-program-stmt, end-subroutine-stmt,
 or if-stmt.
 <P>
 Execution of an <B>IF</B> statement causes evaluation of the scalar logical
-expression. If the value of the expression is true, the action statement
-is executed. If the value is false, the action statement is not executed
-and execution continues.
+expression. If the value of the expression is true, the action
+statement is executed. If the value is false, the action statement
+is not executed and execution continues.
 <P>
 The execution of a function reference in the scalar logical expression
-may affect entities in the action statement.
+may affect entities in the action statement. That is, if values are
+changed by the functions used in the logical expressions the selected
+<B>block</B> will use those values. It is generally a bad idea to use functions
+changing the values, but what would you expect this to produce?
 <P>
+<PRE>
+        program change
+        i=1
+        if(increment(i).gt.10)then
+           write(*,*)&#146;IF&#146;,i
+        elseif(increment(i).ge.20)then
+           write(*,*)&#146;ELSEIF&#146;,i
+        else
+           write(*,*)&#146;ELSE&#146;,i
+        endif
+        contains
+        function increment(i)
+           increment=i*5
+           i=i+3
+        end function increment
+        end program change
+<P>
+<P>
+</PRE>
 An example of an <B>IF</B> statement is:
 <P>
 <PRE>
@@ -146,14 +181,19 @@ An example of an <B>IF</B> statement is:
 Sample <B>IF</B> constructs:
 <P>
 <PRE>
+    program demo_if
+    character(len=:),allocatable :: cvar
+    logical :: PROP
+     !
+     ! basic IF
+     !
+     cvar=&#146;NO&#146;
      if (cvar == &#146;RESET&#146;) then
         i = 0; j = 0; k = 0
-<P>
-</PRE>
-</BLOCKQUOTE>
-endif
-<P>
-<PRE>
+     endif
+     !
+     ! labeled and nested IF constructs
+     !
      OUTER: if (case.eq.0)then
         PROOF_DONE: if (PROP) then
            write (3, &#146;(&#146;&#146;QED&#146;&#146;)&#146;)
@@ -165,12 +205,14 @@ endif
      else OUTER
              write(*,*)&#146;else outer&#146;
      endif OUTER
-<P>
+     !
+     ! if-elseif-endif
+     !
      if (a &gt; 0) then
         b = c/a
         if (b &gt; 0) then
            d = 1.0
-        end if
+        endif
      elseif (c &gt; 0) then
         b = a/c
         d = -1.0
@@ -178,10 +220,12 @@ endif
         b = abs (max (a, c))
         d = 0
      endif
-<P>
+     !
+    end program demo_if
 </PRE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>if (7)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e3b26c85-c240-463d-bfa5-baa7c20b3005 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>if (7)</TD> <TD align=right width=33%><I>June 05, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e02863c6-7f79-453a-84b5-dc7d535ae7e6 using man macros.</FONT>
 <br><br><center><img src="images/if.7fortran.gif"></center>
 </div>
 </div>

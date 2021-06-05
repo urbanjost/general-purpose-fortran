@@ -45,7 +45,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>mat (1)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>laff (1)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -53,7 +53,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>mat</B>(1f) - interpret matrix expressions using a shell-like interface
+<B>laff</B>(1f) - interpret matrix expressions using a shell-like interface
 <P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
@@ -70,7 +70,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>mat</B> [ <B>--help</B>| <B>--version</B>]
+laff <B>[expression</B>(<I>s</I>)] | [ <B>--help</B>| <B>--version</B>]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -78,13 +78,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>mat</B>(1) is an interactive computer program that serves as a convenient
-"laboratory" for computations involving matrices. It provides easy access
-to matrix software developed by the LINPACK and EISPACK projects. The
-capabilities range from standard tasks such as solving simultaneous linear
-equations and inverting matrices, through symmetric and nonsymmetric
-eigenvalue problems, to fairly sophisticated matrix tools such as the
-singular value decomposition.
+<B>laff</B>(1) is an interactive computer program that serves as a convenient
+"laboratory" for computations involving matrices. It provides easy
+access to matrix software developed by the LINPACK and EISPACK
+projects. The capabilities range from standard tasks such as solving
+simultaneous linear equations and inverting matrices, through symmetric
+and nonsymmetric eigenvalue problems, to fairly sophisticated matrix
+tools such as the singular value decomposition.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -101,6 +101,11 @@ display this help and exit
 <B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 output version information and exit
 </TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>expression</B>(<I>s</I>) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if expressions are supplied they are evaluated and the
+program terminates.
+</TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
@@ -108,8 +113,8 @@ output version information and exit
 
 </A>
 <BLOCKQUOTE>
-This is heavily based on a program from the Department of Computer Science,
-University of New Mexico, by Cleve Moler.
+This is heavily based on a program from the Department of Computer
+Science, University of New Mexico, by Cleve Moler.
 </BLOCKQUOTE>
 <A name=5>
 
@@ -120,66 +125,44 @@ University of New Mexico, by Cleve Moler.
 Sample commands
 <P>
 <PRE>
-   # Example 1: introductory usage:
-   mat
-   a=&lt;1 2 3;5 4 6;7 8 9&gt;
-   b=&lt;5;6;7&gt;
-   a*b
-   b*a
-   det(a)
-   quit
+    # Example 1: introductory usage:
+    laff
+    a=&lt;1 2 3;5 4 6;7 8 9&gt;
+    b=&lt;5;6;7&gt;
+    a*b
+    b*a
+    det(a)
+    quit
 <P>
 </PRE>
+<BLOCKQUOTE>
 An explanation of Example 1:
 <P>
 <PRE>
-   // For this session the &lt;&gt; character is the MATLAB prompt.
-    &lt;&gt; a=&lt;1 2 3;5 4 6;7 8 9&gt;            &lt;---  you enter this
-<P>
-    A     =                             &lt;---  MATLAB response
-<P>
+    // For this session the &lt;&gt; character is the LAFF prompt.
+     &lt;&gt; A=&lt;1 2 3;5 4 6;7 8 9&gt;            &lt;---  you enter this
+     A     =                             &lt;---  LAFF response
          1.    2.    3.
-        5.    4.    6.
-        7.    8.    9.
+         5.    4.    6.
+         7.    8.    9.
+     &lt;&gt; b=&lt;5;6;7&gt;
+     b     =
+         5.
+         6.
+         7.
 <P>
-    &lt;&gt; b=&lt;5;6;7&gt;                        &lt;--- you enter this
+     &lt;&gt; A*b             &lt;--- you enter "multiply A and b"
 <P>
-    B     =                             &lt;--- MATLAB response
+     ANS   =            &lt;--- LAFF response
+        38.
+        91.
+       146.
 <P>
-        5.
-        6.
-        7.
-<P>
-    &lt;&gt; a*b             &lt;--- you enter "multiply a and b"
-<P>
-    ANS   =            &lt;--- MATLAB response
-<P>
-       38.
-       91.
+     &lt;&gt; b*A             &lt;---you enter "multiply b and A"
+        /--ERROR                         &lt;--- LAFF response
 </PRE>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:        38.
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-146.
-</TD><TD>
-<P>
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>&lt;&gt; b*a</B> </TD><TD valign=bottom>
-&lt;<B>---you</B> enter "multiply b and a"
-<TABLE width=100% cellpadding=3><!-- tsb: &lt;<B>---you</B> enter "multiply b and a"
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>/</B><B>--ERROR</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-&lt;--- MATLAB response
-</TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
 <A name=>
 
     <H4>&nbsp; &nbsp; INCOMPATIBLE FOR MULTIPLICATION</H4>
@@ -188,22 +171,22 @@ An explanation of Example 1:
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>&lt;&gt; </B><B>det</B>(a) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-&lt;--- Take the determinant of a
+<B>&lt;&gt; </B><B>det</B>(A) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&lt;--- Take the determinant of A
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>ANS</B> </TD><TD valign=bottom>
-=           &lt;<B>---MATLAB</B> response
+=           &lt;<B>---LAFF</B> response
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
-       18.
+        18.
 <P>
 </PRE>
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>&lt;&gt; quit</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-&lt;--- you quit MATLAB
+&lt;--- you quit LAFF
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>total flops</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
@@ -215,24 +198,24 @@ An explanation of Example 1:
     <H4>&nbsp; &nbsp; ADIOS</H4>
 </A>
 <BLOCKQUOTE>
-// ----------------------------------------------------------------------------
+// --------------------------------------
 </BLOCKQUOTE>
 <P>
 Example 2: Simple looping and conditionals are also available
 <P>
 <PRE>
-   mat
-   //Eigenvalue sensitivity example. See section 8 of the Users&#146; Guide.
-   B = &lt;3 0 7; 0 2 0; 0 0 1&gt;
-   L = &lt;1 0 0; 2 1 0; -3 4 1&gt;,  M = L\L&#146;
-   A = M*B/M
-   A = round(A)
-   &lt;X,D&gt; = eig(A)
-   long,  diag(D),  short
-   cond(X)
-   X = X/diag(X(3,:)),  cond(X)
-   Y = inv(X&#146;),  Y&#146;*A*X
-   for j = 1:3, c(j) = norm(Y(:,j))*norm(X(:,j));
+    laff
+    //Eigenvalue sensitivity example. See section 8 of the Users&#146; Guide.
+    B = &lt;3 0 7; 0 2 0; 0 0 1&gt;
+    L = &lt;1 0 0; 2 1 0; -3 4 1&gt;,  M = L\L&#146;
+    A = M*B/M
+    A = round(A)
+    &lt;X,D&gt; = eig(A)
+    long,  diag(D),  short
+    cond(X)
+    X = X/diag(X(3,:)),  cond(X)
+    Y = inv(X&#146;),  Y&#146;*A*X
+    for j = 1:3, c(j) = norm(Y(:,j))*norm(X(:,j));
 </PRE>
 <A name=>
 
@@ -249,9 +232,9 @@ E = <B>-1.e-6</B>*Y(:,1)*X(:,1)&#146;
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>r = .4;</B> </TD><TD valign=bottom>
-s = .5;
-while s-r &gt; 1.e-14, t = (r+s)/2; d = <B>eig</B>(A+t*E); &#46;&#46;&#46;
-if <B>imag</B>(d(1))=0, r = t; else, s = t;
+<I>s</I> = .5;
+while <I>s</I>-r &gt; 1.e-14, t = (r+<I>s</I>)/2; d = <B>eig</B>(A+t*E); &#46;&#46;&#46;
+if <B>imag</B>(d(1))=0, r = t; else, <I>s</I> = t;
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>long,</B> </TD><TD valign=bottom>
@@ -267,23 +250,30 @@ X = <B>X/diag</B>(X(3,:))
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>short,</B> </TD><TD valign=bottom>
-<B>cond</B>(X)
-// ----------------------------------------------------------------------------
+<B>cond</B>(X)
+// --------------------------------------
 </TD></TR>
-<TR></TR></TABLE>Use the HELP command and the DOC command for further information.
-For example:
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Use the HELP command for further information.
+For example, to enter HELP on the entire manual,
+display directions for using HELP and
+place a User manual in the file "laff.userguide.txt",
+enter
 <P>
 <PRE>
-      mat
-      &lt;&gt;doc(&#146;mat.txt&#146;)
-      &lt;&gt;quit
-<P>
+    laff
+    &lt;&gt;help manual
+    continue &#46;&#46;&#46;
+    h // show directions for using "help"
+    w laff.userguide.txt
+    continue &#46;&#46;&#46;
+    q
+    quit
 </PRE>
-will place a User manual in the file "mat.txt".
-</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>mat (1)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d3fd5579-3bf7-475c-b758-cd30bc2fe611 using man macros.</FONT>
-<br><br><center><img src="images/mat.1.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>laff (1)</TD> <TD align=right width=33%><I>June 05, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9fdb9d41-556c-4fd1-92e9-39d02095b720 using man macros.</FONT>
+<br><br><center><img src="images/laff.1.gif"></center>
 </div>
 </div>
 </body>

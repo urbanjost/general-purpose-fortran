@@ -435,7 +435,7 @@ data numbers/'123456789012345678901234567890123456789012345678901234567890&
          call modif(redoline,cin(2:))
 !-----------------------------------------------------------------------------------------------------------------------------------
        case('c','s')                                                     ! change old string to new
-         call change(redoline,cin(1:255),ier)                            ! xedit-like change command
+         call change(redoline,trim(cin(1:255)),ier)                      ! xedit-like change command
 !     C/STRING1/STRING2/    OR CW/STRING1/STRING2/  (CHANGE IN WINDOW)
 !     WHERE / MAY BE ANY CHARACTER OTHER THAN W OR BLANK, WHICH IS NOT
 !     INCLUDED IN STRING1 OR STRING2
@@ -637,7 +637,7 @@ WRITE: block
          exit WRITE
       endif
    enddo
-   call journal('sc','wrote file',cin)
+   call journal('sc','wrote file ',cin)
 endblock WRITE
 close(idump,iostat=ios)
 end subroutine do_w
@@ -665,7 +665,7 @@ REPLACE: block
       endif
    enddo
 endblock REPLACE
-call journal('sc','read file',cin)
+call journal('sc','read file ',cin)
 close(idump,iostat=ios)
 end subroutine do_ar
 !-----------------------------------------------------------------------------------------------------------------------------------

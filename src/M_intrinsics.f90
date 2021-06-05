@@ -13,16 +13,17 @@ contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-function help_intrinsics(name,prefix,topic) result (textblock)
+function help_intrinsics(name,prefix,topic,m_help) result (textblock)
 character(len=*),intent(in)                       :: name
 logical,intent(in),optional                       :: prefix
 logical,intent(in),optional                       :: topic
+logical,intent(in),optional                       :: m_help
 character(len=256),allocatable                    :: textblock(:)
 character(len=:),allocatable                      :: a, b, c
 integer                                           :: i, p, pg
    select case(name)
    case('','manual','intrinsics','fortranmanual','fortran_manual')
-      textblock=help_intrinsics_all(prefix,topic)
+      textblock=help_intrinsics_all(prefix,topic,m_help)
    case('fortran','toc')
       textblock=help_intrinsics_section()
       do i=1,size(textblock)
@@ -37,7 +38,7 @@ integer                                           :: i, p, pg
       enddo
       call sort_name(textblock)
    case default
-      textblock=help_intrinsics_one(name,prefix,topic)
+      textblock=help_intrinsics_one(name,prefix,topic,m_help)
    end select
 end function help_intrinsics
 !===================================================================================================================================
@@ -83,10 +84,12 @@ end function help_intrinsics_section
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-function help_intrinsics_all(prefix,topic) result (textblock)
+function help_intrinsics_all(prefix,topic,m_help) result (textblock)
 logical,intent(in),optional     :: prefix
 logical,intent(in),optional     :: topic
+logical,intent(in),optional     :: m_help
 character(len=256),allocatable  :: textblock(:)
+character(len=256),allocatable  :: header(:)
 character(len=256),allocatable  :: add(:)
 character(len=10)               :: cnum
 integer                         :: icount
@@ -94,18 +97,99 @@ integer                         :: icount
    icount=1
    do
       write(cnum,'(i0)') icount
-      add=help_intrinsics_one(cnum,prefix,topic)
+      add=help_intrinsics_one(cnum,prefix,topic,m_help)
       if( size(add) .eq. 0 ) exit
       textblock=[character(len=256) :: textblock,add]
       icount=icount + 1
    enddo
+   if(present(m_help))then
+      if(m_help)then
+         header=[ character(len=256) :: &
+         '================================================================================',    &
+         'SUMMARY',    &
+         ' The primary Fortran topics are',    &
+         ' abs                   achar                     acos',    &
+         ' acosh                 adjustl                   adjustr',    &
+         ' aimag                 aint                      all',    &
+         ' allocated             anint                     any',    &
+         ' asin                  asinh                     associated',    &
+         ' atan                  atan2                     atanh',    &
+         ' atomic_add            atomic_and                atomic_cas',    &
+         ' atomic_define         atomic_fetch_add          atomic_fetch_and',    &
+         ' atomic_fetch_or       atomic_fetch_xor          atomic_or',    &
+         ' atomic_ref            atomic_xor                backspace',    &
+         ' bessel_j0             bessel_j1                 bessel_jn',    &
+         ' bessel_y0             bessel_y1                 bessel_yn',    &
+         ' bge                   bgt                       bit_size',    &
+         ' ble                   block                     blt',    &
+         ' btest                 c_associated              ceiling',    &
+         ' c_f_pointer           c_f_procpointer           c_funloc',    &
+         ' char                  c_loc                     close',    &
+         ' cmplx                 co_broadcast              co_lbound',    &
+         ' co_max                co_min                    command_argument_count',    &
+         ' compiler_options      compiler_version          conjg',    &
+         ' continue              co_reduce                 cos',    &
+         ' cosh                  co_sum                    co_ubound',    &
+         ' count                 cpu_time                  cshift',    &
+         ' c_sizeof              date_and_time             dble',    &
+         ' digits                dim                       dot_product',    &
+         ' dprod                 dshiftl                   dshiftr',    &
+         ' eoshift               epsilon                   erf',    &
+         ' erfc                  erfc_scaled               event_query',    &
+         ' execute_command_line  exit                      exp',    &
+         ' exponent              extends_type_of           findloc',    &
+         ' float                 floor                     flush',    &
+         ' fraction              gamma                     get_command',    &
+         ' get_command_argument  get_environment_variable  huge',    &
+         ' hypot                 iachar                    iall',    &
+         ' iand                  iany                      ibclr',    &
+         ' ibits                 ibset                     ichar',    &
+         ' ieor                  image_index               include',    &
+         ' index                 int                       ior',    &
+         ' iparity               is_contiguous             ishft',    &
+         ' ishftc                is_iostat_end             is_iostat_eor',    &
+         ' kind                  lbound                    leadz',    &
+         ' len                   len_trim                  lge',    &
+         ' lgt                   lle                       llt',    &
+         ' log                   log10                     log_gamma',    &
+         ' logical               maskl                     maskr',    &
+         ' matmul                max                       maxexponent',    &
+         ' maxloc                maxval                    merge',    &
+         ' merge_bits            min                       minexponent',    &
+         ' minloc                minval                    mod',    &
+         ' modulo                move_alloc                mvbits',    &
+         ' nearest               new_line                  nint',    &
+         ' norm2                 not                       null',    &
+         ' num_images            pack                      parity',    &
+         ' popcnt                poppar                    precision',    &
+         ' present               product                   radix',    &
+         ' random_number         random_seed               range',    &
+         ' rank                  real                      repeat',    &
+         ' reshape               return                    rewind',    &
+         ' rrspacing             same_type_as              scale',    &
+         ' scan                  selected_char_kind        selected_int_kind',    &
+         ' selected_real_kind    set_exponent              shape',    &
+         ' shifta                shiftl                    shiftr',    &
+         ' sign                  sin                       sinh',    &
+         ' size                  sngl                      spacing',    &
+         ' spread                sqrt                      stop',    &
+         ' storage_size          sum                       system_clock',    &
+         ' tan                   tanh                      this_image',    &
+         ' tiny                  trailz                    transfer',    &
+         ' transpose             trim                      ubound',    &
+         ' unpack                verify',    &
+         '']
+         textblock=[header,textblock]
+      endif
+   endif
 end function help_intrinsics_all
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-function help_intrinsics_one(name,prefix,topic) result (textblock)
+function help_intrinsics_one(name,prefix,topic,m_help) result (textblock)
 character(len=*),intent(in)      :: name
 logical,intent(in),optional      :: prefix
+logical,intent(in),optional      :: m_help
 logical,intent(in),optional      :: topic
 character(len=256),allocatable   :: textblock(:)
 character(len=:),allocatable     :: shortname
@@ -187,6 +271,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -295,6 +387,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('3','acos')
 
@@ -367,6 +467,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('4','acosh')
 
@@ -423,6 +531,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -506,6 +622,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -608,6 +732,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('7','aimag')
 
@@ -682,6 +814,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('8','aint')
 
@@ -745,6 +885,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -874,6 +1022,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('10','allocated')
 
@@ -938,6 +1094,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('11','anint')
 
@@ -999,6 +1163,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -1078,6 +1250,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -1181,6 +1361,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('14','asinh')
 
@@ -1237,6 +1425,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -1343,6 +1539,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('16','atan2')
 
@@ -1421,6 +1625,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('17','atan')
 
@@ -1488,6 +1700,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('18','atanh')
 
@@ -1545,6 +1765,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -1613,6 +1841,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('20','atomic_and')
 
@@ -1677,6 +1913,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -1749,6 +1993,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('22','atomic_define')
 
@@ -1811,6 +2063,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -1883,6 +2143,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('24','atomic_fetch_and')
 
@@ -1952,6 +2220,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('25','atomic_fetch_or')
 
@@ -2016,6 +2292,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2088,6 +2372,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('27','atomic_or')
 
@@ -2152,6 +2444,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2230,6 +2530,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('29','atomic_xor')
 
@@ -2293,6 +2601,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2403,6 +2719,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('31','bessel_j0')
 
@@ -2461,6 +2785,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2523,6 +2855,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2595,6 +2935,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('34','bessel_y0')
 
@@ -2655,6 +3003,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('35','bessel_y1')
 
@@ -2711,6 +3067,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2784,6 +3148,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('37','bge')
 
@@ -2829,6 +3201,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2880,6 +3260,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -2956,6 +3344,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('40','ble')
 
@@ -3001,6 +3397,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -3091,6 +3495,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('42','blt')
 
@@ -3135,6 +3547,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -3199,6 +3619,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -3268,6 +3696,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('45','ceiling')
 
@@ -3325,6 +3761,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -3399,6 +3843,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('47','c_f_procpointer')
 
@@ -3470,6 +3922,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -3551,6 +4011,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('49','char')
 
@@ -3621,6 +4089,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('50','c_loc')
 
@@ -3683,6 +4159,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -3843,6 +4327,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('52','cmplx')
 
@@ -3997,6 +4489,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('53','co_broadcast')
 
@@ -4064,6 +4564,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('54','co_lbound')
 
@@ -4116,6 +4624,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -4190,6 +4706,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('56','co_min')
 
@@ -4259,6 +4783,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -4336,6 +4868,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('58','compiler_options')
 
@@ -4405,6 +4945,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -4479,6 +5027,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('60','conjg')
 
@@ -4537,6 +5093,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -4605,6 +5169,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -4708,6 +5280,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('63','cos')
 
@@ -4731,13 +5311,29 @@ textblock=[character(len=256) :: &
 '   value lies in the range -1 <= cos(x) <= 1.', &
 '', &
 'EXAMPLE', &
-'   Sample program:', &
+'  Sample program:', &
 '', &
-'    program demo_cos', &
-'    implicit none', &
-'    real :: x = 0.0', &
-'       x = cos(x)', &
-'    end program demo_cos', &
+'   program demo_cos', &
+'   implicit none', &
+'   doubleprecision,parameter :: PI=atan(1.0d0)*4.0d0', &
+'   write(*,*)''COS(0.0)='',cos(0.0)', &
+'   write(*,*)''COS(PI)='',cos(PI)', &
+'   write(*,*)''COS(PI/2.0d0)='',cos(PI/2.0d0),'' EPSILON='',epsilon(PI)', &
+'   write(*,*)''COS(2*PI)='',cos(2*PI)', &
+'   write(*,*)''COS(-2*PI)='',cos(-2*PI)', &
+'   write(*,*)''COS(-2000*PI)='',cos(-2000*PI)', &
+'   write(*,*)''COS(3000*PI)='',cos(3000*PI)', &
+'   end program demo_cos', &
+'', &
+'  Expected output:', &
+'', &
+'   COS(0.0)=        1.00000000', &
+'   COS(PI)=        -1.0000000000000000', &
+'   COS(PI/2.0d0)=   6.1232339957367660E-017', &
+'   EPSILON=         2.2204460492503131E-016', &
+'   COS(2*PI)=       1.0000000000000000', &
+'   COS(-2*PI)=      1.0000000000000000', &
+'   COS(-2000*PI)=   1.0000000000000000', &
 '', &
 'STANDARD', &
 '   [[FORTRAN 77]] and later', &
@@ -4762,6 +5358,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -4822,6 +5426,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -4900,6 +5512,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('66','co_ubound')
 
@@ -4952,6 +5572,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -5052,6 +5680,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('68','cpu_time')
 
@@ -5136,6 +5772,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('69','cshift')
 
@@ -5206,6 +5850,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('70','c_sizeof')
 
@@ -5271,6 +5923,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -5377,6 +6037,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('72','dble')
 
@@ -5431,6 +6099,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -5499,6 +6175,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('74','dim')
 
@@ -5556,6 +6240,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -5627,6 +6319,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -5716,6 +6416,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('77','dshiftl')
 
@@ -5768,6 +6476,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('78','dshiftr')
 
@@ -5816,6 +6532,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -5899,6 +6623,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('80','epsilon')
 
@@ -5950,6 +6682,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6008,6 +6748,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6070,6 +6818,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('83','erfc_scaled')
 
@@ -6126,6 +6882,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6193,6 +6957,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6313,6 +7085,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('86','exit')
 
@@ -6413,6 +7193,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('87','exp')
 
@@ -6462,6 +7250,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6521,6 +7317,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('89','extends_type_of')
 
@@ -6576,6 +7380,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6746,6 +7558,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('91','float')
 
@@ -6798,6 +7618,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6859,6 +7687,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -6953,6 +7789,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('94','fraction')
 
@@ -7008,6 +7852,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -7071,6 +7923,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -7167,6 +8027,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -7294,6 +8162,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('98','get_environment_variable')
 
@@ -7396,6 +8272,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('99','huge')
 
@@ -7486,6 +8370,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('100','hypot')
 
@@ -7538,6 +8430,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -7629,6 +8529,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('102','iall')
 
@@ -7702,6 +8610,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('103','iand')
 
@@ -7760,6 +8676,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -7837,6 +8761,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('105','ibclr')
 
@@ -7887,6 +8819,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -7944,6 +8884,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('107','ibset')
 
@@ -7996,6 +8944,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('108','ichar')
 
@@ -8006,14 +8962,17 @@ textblock=[character(len=256) :: &
 '   function', &
 '', &
 'SYNTAX', &
-'   result = ichar(c [, kind])', &
+'   elemental function ichar(c,kind)', &
+'', &
+'    character(len=1),intent(in) :: c', &
+'    integer,intent(in),optional :: kind', &
 '', &
 'DESCRIPTION', &
 '   ICHAR(C) returns the code for the character in the system''s native', &
 '   character set. The correspondence between characters and their codes', &
 '   is not necessarily the same across different Fortran implementations.', &
-'   Therefore, a platform using EBCDIC would return different values than', &
-'   an ASCII platform, for example.', &
+'   For example, a platform using EBCDIC would return different values', &
+'   than an ASCII platform.', &
 '', &
 '   See IACHAR(3f) for specifically working with the ASCII character set.', &
 '', &
@@ -8032,6 +8991,7 @@ textblock=[character(len=256) :: &
 '   program demo_ichar', &
 '   implicit none', &
 '   integer i', &
+'      write(*,*)ichar([''a'',''z'',''A'',''Z''])', &
 '      do i=0,127', &
 '         call printme()', &
 '      enddo', &
@@ -8103,6 +9063,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('109','ieor')
 
@@ -8150,6 +9118,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -8211,6 +9187,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -8349,6 +9333,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('112','index')
 
@@ -8434,6 +9426,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('113','int')
 
@@ -8498,6 +9498,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -8568,6 +9576,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -8642,6 +9658,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -8740,6 +9764,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('117','ishft')
 
@@ -8790,6 +9822,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -8848,6 +9888,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -8913,6 +9961,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('120','is_iostat_eor')
 
@@ -8972,6 +10028,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('121','kind')
 
@@ -9026,6 +10090,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -9142,6 +10214,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -9281,6 +10361,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('124','len')
 
@@ -9347,6 +10435,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -9438,6 +10534,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('126','lge')
 
@@ -9500,6 +10604,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -9566,6 +10678,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -9674,6 +10794,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('129','llt')
 
@@ -9740,6 +10868,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('130','log10')
 
@@ -9792,6 +10928,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -9855,6 +10999,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('132','log_gamma')
 
@@ -9912,6 +11064,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('133','logical')
 
@@ -9960,6 +11120,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -10015,6 +11183,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('135','maskr')
 
@@ -10063,6 +11239,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -10115,6 +11299,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -10244,6 +11436,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('138','maxexponent')
 
@@ -10299,6 +11499,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -10382,6 +11590,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -10478,6 +11694,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('141','merge')
 
@@ -10552,6 +11776,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('142','merge_bits')
 
@@ -10598,6 +11830,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -10661,6 +11901,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('144','minexponent')
 
@@ -10717,6 +11965,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -10814,6 +12070,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('146','minval')
 
@@ -10899,6 +12163,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('147','mod')
 
@@ -10970,6 +12242,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('148','modulo')
 
@@ -11038,6 +12318,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -11120,6 +12408,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('150','mvbits')
 
@@ -11172,6 +12468,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -11235,6 +12539,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('152','new_line')
 
@@ -11284,6 +12596,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -11402,6 +12722,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('154','norm2')
 
@@ -11461,6 +12789,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -11527,6 +12863,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('156','null')
 
@@ -11583,6 +12927,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -11656,6 +13008,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -11761,6 +13121,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('159','parity')
 
@@ -11820,6 +13188,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -11893,6 +13269,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('161','poppar')
 
@@ -11957,6 +13341,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('162','precision')
 
@@ -12018,6 +13410,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('163','present')
 
@@ -12076,6 +13476,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -12147,6 +13555,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('165','radix')
 
@@ -12203,6 +13619,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('166','random_number')
 
@@ -12226,8 +13650,8 @@ textblock=[character(len=256) :: &
 '  Sample program:', &
 '', &
 '   program demo_random_number', &
+'   use, intrinsic :: iso_fortran_env, only : dp=>real64', &
 '   implicit none', &
-'   intrinsic :: iso_fortran_env, only : dp=>real64', &
 '   integer, allocatable :: seed(:)', &
 '   integer              :: n', &
 '   integer              :: first,last', &
@@ -12304,6 +13728,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('167','random_seed')
 
@@ -12376,6 +13808,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('168','range')
 
@@ -12437,6 +13877,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('169','rank')
 
@@ -12490,6 +13938,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -12573,6 +14029,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('171','repeat')
 
@@ -12631,6 +14095,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -12702,6 +14174,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -12832,6 +14312,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('174','rewind')
 
@@ -12931,6 +14419,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('175','rrspacing')
 
@@ -12981,6 +14477,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('176','same_type_as')
 
@@ -13027,6 +14531,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -13089,6 +14601,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -13166,6 +14686,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('179','selected_char_kind')
 
@@ -13234,6 +14762,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('180','selected_int_kind')
 
@@ -13291,6 +14827,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -13381,6 +14925,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('182','set_exponent')
 
@@ -13437,6 +14989,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -13506,6 +15066,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('184','shifta')
 
@@ -13555,6 +15123,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -13608,6 +15184,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('186','shiftr')
 
@@ -13655,6 +15239,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -13715,6 +15307,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -13837,6 +15437,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('189','sinh')
 
@@ -13891,6 +15499,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14090,6 +15706,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('191','sngl')
 
@@ -14136,6 +15760,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14196,6 +15828,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14319,6 +15959,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('194','sqrt')
 
@@ -14373,6 +16021,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14478,6 +16134,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('196','storage_size')
 
@@ -14537,6 +16201,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14631,6 +16303,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14737,6 +16417,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('199','tan')
 
@@ -14792,6 +16480,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14853,6 +16549,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -14942,6 +16646,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('202','tiny')
 
@@ -14993,6 +16705,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -15120,6 +16840,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('204','transfer')
 
@@ -15212,6 +16940,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -15308,6 +17044,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('206','trim')
 
@@ -15370,6 +17114,14 @@ if(present(prefix))then
    endif
 endif
 
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
 
 case('207','ubound')
 
@@ -15410,7 +17162,7 @@ textblock=[character(len=256) :: &
 ' Sample program', &
 '', &
 '  ! program demo_ubound', &
-'  module m_bounds', &
+'  module m2_bounds', &
 '  implicit none', &
 '   contains', &
 '      subroutine msub(arr)', &
@@ -15419,9 +17171,9 @@ textblock=[character(len=256) :: &
 '         write(*,*)''MSUB: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
 '         & ''SIZE='',size(arr)', &
 '      end subroutine msub', &
-'   end module m_bounds', &
+'   end module m2_bounds', &
 '', &
-'   use m_bounds, only : msub', &
+'   use m2_bounds, only : msub', &
 '   implicit none', &
 '   interface', &
 '      subroutine esub(arr)', &
@@ -15481,6 +17233,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -15546,6 +17306,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 
@@ -15668,6 +17436,14 @@ if(present(prefix))then
       do i=1,size(textblock)
          textblock(i)= shortname//':'//trim(textblock(i))
       enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
    endif
 endif
 

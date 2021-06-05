@@ -58,13 +58,21 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=9>
+<A name=8>
 
      <H3>SYNTAX</H3>
 
 </A>
 <BLOCKQUOTE>
-call <B>date_and_time</B>([date, time, zone, values])
+subroutine <B>date_and_time</B>([date, time, zone, values])
+<P>
+<PRE>
+     character(len=8),intent(out) :: date
+     character(len=10),intent(out) :: time
+     character(len=5),intent(out) :: zone
+     integer,intent(out) :: values
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -72,15 +80,60 @@ call <B>date_and_time</B>([date, time, zone, values])
 
 </A>
 <BLOCKQUOTE>
-<B>date_and_time</B>(date, time, zone, values) gets the corresponding date and
-time information from the real-time system clock. DATE is <B>intent</B>(out)
-and has form ccyymmdd. TIME is <B>intent</B>(out) and has form hhmmss.sss.
-ZONE is <B>intent</B>(out) and has form (+-)hhmm, representing the difference
-with respect to Coordinated Universal Time (UTC). Unavailable time and
-date parameters return blanks.
+<B>DATE_AND_TIME</B>(date, time, zone, values) gets the corresponding date
+and time information from the real-time system clock.
 <P>
-VALUES is <B>intent</B>(out) and provides the following:
-<TABLE cellpadding=3><!-- tsb: VALUES is <B>intent</B>(out) and provides the following:
+Unavailable time and date parameters return blanks.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>DATE</B> </TD><TD valign=bottom>
+The type shall be <B>character</B>(len=8) or larger,
+<TABLE width=100% cellpadding=3><!-- tsb: The type shall be <B>character</B>(len=8) or larger,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>and of default kind.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+DATE has form ccyymmdd.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>TIME</B> </TD><TD valign=bottom>
+The type shall be <B>character</B>(len=10) or
+<TABLE width=100% cellpadding=3><!-- tsb: The type shall be <B>character</B>(len=10) or
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>larger, and of default kind.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+TIME has form hhmmss.sss.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ZONE</B> </TD><TD valign=bottom>
+The type shall be <B>character</B>(len=5) or larger,
+<TABLE width=100% cellpadding=3><!-- tsb: The type shall be <B>character</B>(len=5) or larger,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>and of default kind.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+ZONE has form (+-)hhmm, representing
+the difference
+with respect to Coordinated Universal Time (UTC).
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>VALUES</B> </TD><TD valign=bottom>
+The type shall be <B>integer</B>(8). VALUES provide the following:
+<TABLE width=100% cellpadding=3><!-- tsb: The type shall be <B>integer</B>(8). VALUES provide the following:
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -123,43 +176,9 @@ o
 </TD><TD>
 <B>value</B>(8): - The milliseconds of the second
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>DATE</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-(Optional) The type shall be <B>character</B>(len=8) or larger,
-and of default kind.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>TIME</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-(Optional) The type shall be <B>character</B>(len=10) or
-larger, and of default kind.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>ZONE</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-(Optional) The type shall be <B>character</B>(len=5) or larger,
-and of default kind.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>VALUES</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-(Optional) The type shall be <B>integer</B>(8).
-</TD></TR>
+<TR></TR></TABLE></TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
-
-     <H3>RETURN VALUE</H3>
-
-</A>
-<BLOCKQUOTE>
-None
-</BLOCKQUOTE>
-<A name=5>
 
      <H3>EXAMPLE</H3>
 
@@ -170,23 +189,43 @@ Sample program:
 <PRE>
     program demo_time_and_date
     implicit none
-    character(8)  :: date
-    character(10) :: time
-    character(5)  :: zone
+    character(len=8)     :: date
+    character(len=10)    :: time
+    character(len=5)     :: zone
     integer,dimension(8) :: values
-        ! using keyword arguments
         call date_and_time(date,time,zone,values)
-        call date_and_time(DATE=date,ZONE=zone)
-        call date_and_time(TIME=time)
+        ! using keyword arguments
+        call date_and_time(DATE=date,TIME=time,ZONE=zone)
         call date_and_time(VALUES=values)
-        print &#146;(a,2x,a,2x,a)&#146;, date, time, zone
-        print &#146;(8i5)&#146;, values
-<P>
+        print &#146;(*(g0))&#146;,&#146;DATE="&#146;,date,&#146;" TIME="&#146;,time,&#146;" ZONE="&#146;,zone,&#146;"&#146;
+        write(*,&#146;(i5,a)&#146;) &
+         & values(1),&#146; - The year&#146;, &
+         & values(2),&#146; - The month&#146;, &
+         & values(3),&#146; - The day of the month&#146;, &
+         & values(4),&#146; - Time difference with UTC in minutes&#146;, &
+         & values(5),&#146; - The hour of the day&#146;, &
+         & values(6),&#146; - The minutes of the hour&#146;, &
+         & values(7),&#146; - The seconds of the minute&#146;, &
+         & values(8),&#146; - The milliseconds of the second&#146;
     end program demo_time_and_date
 <P>
 </PRE>
+Results:
+<P>
+<PRE>
+   DATE="20201222" TIME="165738.779" ZONE="-0500"
+    2020 - The year
+      12 - The month
+      22 - The day of the month
+    -300 - Time difference with UTC in minutes
+      16 - The hour of the day
+      57 - The minutes of the hour
+      38 - The seconds of the minute
+     779 - The milliseconds of the second
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>STANDARD</H3>
 
@@ -194,15 +233,7 @@ Sample program:
 <BLOCKQUOTE>
 [[Fortran 95]] and later
 </BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Subroutine
-</BLOCKQUOTE>
-<A name=8>
+<A name=6>
 
      <H3>SEE ALSO</H3>
 
@@ -210,8 +241,14 @@ Subroutine
 <BLOCKQUOTE>
 <B>cpu_time</B>(3), <B>system_clock</B>(3)
 </BLOCKQUOTE>
+<A name=7>
+
+    <H4>&nbsp; &nbsp; JSU</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7e84f6de-6cee-45b7-9c29-0f4829dadd51 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>June 05, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from af6fcbf6-89d0-4eca-8f76-23f35deb1e8a using man macros.</FONT>
 <br><br><center><img src="images/date_and_time.3fortran.gif"></center>
 </div>
 </div>

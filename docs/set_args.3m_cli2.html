@@ -323,7 +323,6 @@ command arguments go into the character array "UNUSED".
 
 </A>
 <BLOCKQUOTE>
-<P>
 Sample program:
 <P>
 <PRE>
@@ -332,7 +331,6 @@ Sample program:
     use M_CLI2,  only : get_args_fixed_size
     implicit none
     integer                      :: i
-    !
     ! DEFINE ARGS
     real                         :: x, y, z
     real                         :: p(3)
@@ -400,25 +398,27 @@ add:
 <P>
 </PRE>
 M_CLI2 Response files are small files containing CLI (Command Line
-Interface) arguments that are used when command lines are so long that
-they would exceed line length limits or so complex that it is useful to
-have a platform-independent method of creating an abbreviation.
+Interface) arguments that end with ".rsp" that can be used when command
+lines are so long that they would exceed line length limits or so complex
+that it is useful to have a platform-independent method of creating
+an abbreviation.
 <P>
-Examples of commands that support similar response files are the Clang
-and Intel compilers, although there is no standard format for the files.
-<TABLE cellpadding=3><!-- tsb: Examples of commands that support similar response files are the Clang
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>The file names must end with .rsp .</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-They are read if you add options
-of the syntax "@NAME" as the FIRST parameters on your program command
-line calls.
-</TD></TR>
-<TR></TR></TABLE>Shell aliases and scripts are often used for similar purposes (and
+Shell aliases and scripts are often used for similar purposes (and
 allow for much more complex conditional execution, of course), but
 they generally cannot be used to overcome line length limits and are
 typically platform-specific.
+<P>
+Examples of commands that support similar response files are the Clang
+and Intel compilers, although there is no standard format for the files.
+<P>
+They are read if you add options of the syntax "@NAME" as the FIRST
+parameters on your program command line calls. They are not recursive --
+that is, an option in a response file cannot be given the value "@NAME2"
+to call another response file.
+<P>
+Note that more than one response name may appear on a command line.
+<P>
+They are case-sensitive names.
 </BLOCKQUOTE>
 <A name=>
 
@@ -426,13 +426,13 @@ typically platform-specific.
 </A>
 <BLOCKQUOTE>
 <P>
-The first resource file found that results in lines being processed
-will be used and processing stops after that first match is found. If
-no match is found an error occurs and the program is stopped.
-<P>
 A search for the response file always starts with the current directory.
 The search then proceeds to look in any additional directories specified
 with the colon-delimited environment variable CLI_RESPONSE_PATH.
+<P>
+The first resource file found that results in lines being processed
+will be used and processing stops after that first match is found. If
+no match is found an error occurs and the program is stopped.
 </BLOCKQUOTE>
 <A name=>
 
@@ -440,48 +440,56 @@ with the colon-delimited environment variable CLI_RESPONSE_PATH.
 </A>
 <BLOCKQUOTE>
 <P>
-A simple response file just has options for calling the program in it.
-But they can also contain section headers to denote sections that are
-only executed when a specific OS is being used. In addition a special
-response file named PROGRAM.rsp can contain multiple abbreviations.
+A simple response file just has options for calling the program in it
+prefixed with the word "options".
+But they can also contain section headers to denote selections that are
+only executed when a specific OS is being used, print messages, and
+execute system commands.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SEARCHING FOR OSTYPE IN REGULAR FILES</H4>
+</A>
+<BLOCKQUOTE>
 <P>
-<PRE>
-  SEARCH FOR @OSTYPE IN REGULAR FILES (NAME.rsp)
+So assuming the name @NAME was specified on the command line a file
+named NAME.rsp will be searched for in all the search directories
+and then in that file a string that starts with the string @OSTYPE
+(if the environment variables $OS and $OSTYPE are not blank. $OSTYPE
+takes precedence over $OS).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SEARCHING FOR UNLABELED DIRECTIVES IN REGULAR FILES</H4>
+</A>
+<BLOCKQUOTE>
 <P>
-</PRE>
-Assuming the name @NAME was specified on the command line a file named
-NAME.rsp will be searched for in all those search locations for a string
-that starts with the string @OSTYPE if the environment variables $OS and
-$OSTYPE are not blank.
+Then, the same files will be searched for lines above any line starting
+with "@". That is, if there is no special section for the current OS
+it just looks at the top of the file for unlabeled options.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SEARCHING FOR OSTYPE AND NAME IN THE COMPOUND FILE</H4>
+</A>
+<BLOCKQUOTE>
 <P>
-If $OSTYPE is unset, the value of the variable OS will be used.
+In addition or instead of files with the same name as the @NAME option
+on the command line, you can have one file named after the executable
+name that contains multiple abbreviation names.
 <P>
-<PRE>
-  SEARCH FOR UNLABELED DIRECTIVES IN REGULAR FILES (NAME.rsp)
+So if your program executable is named EXEC you create a single file
+called EXEC.rsp and can append all the simple files described above
+separating them with lines of the form @OSTYPE@NAME or just @NAME.
 <P>
-</PRE>
-Then, the same files will be searched for lines before any line
-starting with "@". That is, if there is no special section for the current
-OS it just looks at the top of the file for unlabeled options.
+So if no specific file for the abbreviation is found a file called
+"EXEC.rsp" is searched for where "EXEC" is the name of the executable.
+This file is always a "compound" response file that uses the following format:
 <P>
-<PRE>
-  SEARCH FOR @OSTYPE@NAME IN THE COMPLEX FILE (EXECUTABLE.rsp)
-<P>
-</PRE>
-Then, if nothing was found a file name EXECUTABLE.rsp will be searched
-for in the same locations where EXECUTABLE is the basename of the program
-being executed. This file is always a "complex" response file that uses
-the format described below to allow for multiple entries.
-<P>
-Any complex EXECUTABLE.rsp file found in the current or searched directories
+Any compound EXEC.rsp file found in the current or searched directories
 will be searched for the string @OSTYPE@NAME first.
 <P>
-<PRE>
-  SEARCH FOR @NAME IN THE COMPLEX FILE (EXECUTABLE.rsp)
-<P>
-</PRE>
-The last search is to search all the EXECUTABLE.rsp files for the string
-@NAME.
+Then if nothing is found, the less specific line @NAME is searched for.
 </BLOCKQUOTE>
 <A name=>
 
@@ -495,20 +503,14 @@ file ends up needing different cases for different platforms add a line
 like "@Linux" to the file and some more lines and that will only be
 executed if the environment variable OSTYPE or OS is "Linux". If no match
 is found for named sections the lines at the top before any "@" lines
-will be used as a default if not match is found.
+will be used as a default if no match is found.
 <P>
 If you end up using a lot of files like this you can combine them all
-together and put them info a file called "program_name.rsp" and just
-put lines like @NAME or @OSTYPE@NAME at that top of each section.
+together and put them into a file called "program_name".rsp and just
+put lines like @NAME or @OSTYPE@NAME at that top of each selection.
 <P>
-Note that more than one response name may appear on a command line.
-<P>
-They are case-sensitive names.
-<P>
-As mentioned, they must be the first options on the command line.
+Now, back to the details on just what you can put in the files.
 </BLOCKQUOTE>
-<P>
-<P>
 <A name=8>
 
      <H3>SPECIFICATION FOR RESPONSE FILES</H3>
@@ -542,34 +544,47 @@ The first word of a line is special and has the following meanings:
    stop       display message and stop program.
 <P>
 </PRE>
-So if a program that echoed its parameters has a call of the form
+So if a program that does nothing but echos its parameters
 <P>
 <PRE>
-    set_args(&#146;-x 10.0 -y 20.0 --title "my title")
+   program testit
+   use M_CLI2, only : set_args, rget, sget, lget
+   use M_CLI2, only : CLI_response_file
+   implicit none
+      real :: x,y                           ; namelist/args/ x,y
+      character(len=:),allocatable :: title ; namelist/args/ title
+      logical :: big                        ; namelist/args/ big
+      CLI_response_file=.true.
+      call set_args(&#146;-x 10.0 -y 20.0 --title "my title" --big F&#146;)
+      x=rget(&#146;x&#146;)
+      y=rget(&#146;y&#146;)
+      title=sget(&#146;title&#146;)
+      big=lget(&#146;big&#146;)
+      write(*,nml=args)
+   end program testit
 <P>
 </PRE>
-And a file in the current directory called "a.rsp" contained
+And a file in the current directory called "a.rsp" contains
 <P>
 <PRE>
     # defaults for project A
     options -x 1000 -y 9999
-    options --title "my new default title"
+    options --title " "
+    options --big T
 <P>
 </PRE>
 The program could be called with
 <P>
 <PRE>
-   # normal
-   $myprog
-    X=10.0 Y=20.0 TITLE="my title"
+    $myprog     # normal call
+     X=10.0 Y=20.0 TITLE="my title"
 <P>
-   # change defaults as specified in "a.rsp"
-   $myprog @a
-    X=1000.0 Y=9999.0 TITLE="my new default title"
+    $myprog @a  # change defaults as specified in "a.rsp"
+    X=1000.0 Y=9999.0 TITLE=" "
 <P>
-   # change defaults but use any option as normal to override defaults
-   $myprog @a -y 1234
-    X=1000.0 Y=1234.0 TITLE="my new default title"
+    # change defaults but use any option as normal to override defaults
+    $myprog @a -y 1234
+     X=1000.0 Y=1234.0 TITLE=" "
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -584,7 +599,7 @@ A compound response file has the same basename as the executable with a
 must be "myprg.rsp".
 <P>
 <PRE>
-   Note that here &#145;basename&#145; means the basename of the
+   Note that here &#145;basename&#145; means the last leaf  of the
    name of the program as returned by the Fortran intrinsic
    GET_COMMAND_ARGUMENT(0,&#46;&#46;&#46;) trimmed of anything after a period ("."),
    so it is a good idea not to use hidden files.
@@ -593,8 +608,9 @@ must be "myprg.rsp".
 Unlike simple response files compound response files can contain multiple
 setting names.
 <P>
-If the environment variable $OSTYPE (first) or $OS is set the search
-will first be for a line of the form (no leading spaces should be used):
+Specifically in a compound file
+if the environment variable $OSTYPE (first) or $OS is set the first search
+will be for a line of the form (no leading spaces should be used):
 <P>
 <PRE>
    @OSTYPE@alias_name
@@ -607,15 +623,15 @@ set or a match is not found then a line of the form
    @alias_name
 <P>
 </PRE>
-is searched for. Subsequent lines will be ignored that start with "@"
-<TABLE cellpadding=3><!-- tsb: is searched for. Subsequent lines will be ignored that start with "@"
+is searched for in simple or compound files. If found subsequent lines
+will be ignored that start with "@" until a line not starting with
+<TABLE cellpadding=3><!-- tsb: is searched for in simple or compound files. If found subsequent lines
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>until a line not starting with @ is encountered.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Lines will then be
-processed until another line starting with "@" is found or end-of-file
-is encountered.
+<B>@ is encountered.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Lines will then be processed until another line
+starting with "@" is found or end-of-file is encountered.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -629,19 +645,19 @@ An example compound file
    #################
    @if
    &gt; RUNNING TESTS USING RELEASE VERSION AND ifort
-   - test --release --compiler ifort
+   options test --release --compiler ifort
    #################
    @gf
    &gt; RUNNING TESTS USING RELEASE VERSION AND gfortran
-   - test --release --compiler gfortran
+   options test --release --compiler gfortran
    #################
    @nv
    &gt; RUNNING TESTS USING RELEASE VERSION AND nvfortran
-   - test --release --compiler nvfortran
+   options test --release --compiler nvfortran
    #################
    @nag
    &gt; RUNNING TESTS USING RELEASE VERSION AND nagfor
-   - test --release --compiler nagfor
+   options test --release --compiler nagfor
    #
    #################
    # OS-specific example:
@@ -649,10 +665,10 @@ An example compound file
    #
    # install executables in directory (assuming install(1) exists)
    #
-   !mkdir -p ~/.local/bin
-   - run --release T --compiler gfortran --runner "install -vbp -m 0711 -t ~/.local/bin"
+   system mkdir -p ~/.local/bin
+   options run --release T --compiler gfortran --runner "install -vbp -m 0711 -t ~/.local/bin"
    @install
-   @STOP INSTALL NOT SUPPORTED ON THIS PLATFORM OR $OSTYPE NOT SET
+   STOP INSTALL NOT SUPPORTED ON THIS PLATFORM OR $OSTYPE NOT SET
    #
    #################
    @fpm@testall
@@ -708,7 +724,7 @@ John S. Urban, 2019
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>set_args (3)</TD> <TD align=right width=33%><I>March 28, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e1151e37-96f9-4156-9dad-4650047363ba using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>set_args (3)</TD> <TD align=right width=33%><I>June 05, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d16233a8-f0f8-405b-a71a-88d3082ede85 using man macros.</FONT>
 <br><br><center><img src="images/set_args.3m_cli2.gif"></center>
 </div>
 </div>

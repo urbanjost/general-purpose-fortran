@@ -1,4 +1,5 @@
           program demo_random_number
+          use, intrinsic :: iso_fortran_env, only : dp=>real64
           implicit none
           integer, allocatable :: seed(:)
           integer              :: n
@@ -6,7 +7,7 @@
           integer              :: i
           integer              :: rand_int
           integer,allocatable  :: count(:)
-          real                 :: rand_val
+          real(kind=dp)        :: rand_val
           call random_seed(size = n)
           allocate(seed(n))
           call random_seed(get=seed)

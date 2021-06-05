@@ -1,4 +1,4 @@
-program testit
+program fman
 use M_intrinsics, only : help_intrinsics
 use M_CLI2,       only : set_args, sget, lget, topics=>unnamed
 use M_match,      only : getpat, match, regex_pattern
@@ -223,8 +223,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                    Output is prefixed with the topic it was found in.          ',&
 '  --itopic_only,-t  Only show topic names. Other switches are ignored.          ',&
 '  --ignorecase,-i   Ignore case when searching for a Regular Expression.        ',&
-'  --demo,-d         extract first demo program found for a topic, starting with ',&
-'                    "program demo_" and ending with "end program demo_".        ',&
+'  --demo,-d         extract first demo program found for a topic (starting with ',&
+'                    "program demo_" and ending with "end program demo_").       ',&
 '  --color           Use ANSI in-line escape sequences to display the text in    ',&
 '                    set colors. Does not work with all terminal emulators or    ',&
 '                    terminals. Must use the -r switch with less(1) for less(1)  ',&
@@ -263,5 +263,5 @@ version_text=[ CHARACTER(LEN=128) :: &
 '']
 
 end subroutine setup
-end program testit
+end program fman
 ! kludge1: older versions of gfortran do not handle character arrays with both line and size allocatable

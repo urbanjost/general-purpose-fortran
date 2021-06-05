@@ -4,6 +4,7 @@ append("M_strings_oop.3m_strings.html");
 append("adjustc.3m_strings.html");
 append("atleast.3m_strings.html");
 append("base.3m_strings.html");
+append("base2.3m_strings.html");
 append("c2s.3m_strings.html");
 append("change.3m_strings.html");
 append("chomp.3m_strings.html");

@@ -192,9 +192,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 '      > fpm-dict              # list dictionary names and descriptions          ',&
 '      > fpm-dict bash         # search all the dictionaries for specified word  ',&
 '      > fpm-dict bash:        # use just the default dictionary                 ',&
-'      > # Find the meaning of "bash" in the "computer terms"                    ',&
-'      > # dictionary (search in the foldoc dictionary) :                        ',&
-'      > fpm-dict bash:foldoc  # just use dictionary "folddoc"                   ',&
+'      > # Find the meaning of "bash" in the "computer terms" dictionary:        ',&
+'      > fpm-dict bash:foldoc                                                    ',&
 '      > fpm-dict gold:elements     # just use the "elements" dictionary         ',&
 '      > fpm-dict slovakia:world02                                               ',&
 '      >                                                                         ',&
@@ -260,9 +259,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 !!       > fpm-dict              # list dictionary names and descriptions
 !!       > fpm-dict bash         # search all the dictionaries for specified word
 !!       > fpm-dict bash:        # use just the default dictionary
-!!       > # Find the meaning of "bash" in the "computer terms"
-!!       > # dictionary (search in the foldoc dictionary) :
-!!       > fpm-dict bash:foldoc  # just use dictionary "folddoc"
+!!       > # Find the meaning of "bash" in the "computer terms" dictionary:
+!!       > fpm-dict bash:foldoc
 !!       > fpm-dict gold:elements     # just use the "elements" dictionary
 !!       > fpm-dict slovakia:world02
 !!       >

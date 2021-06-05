@@ -1,5 +1,5 @@
          ! program demo_ubound
-         module m_bounds
+         module m2_bounds
          implicit none
           contains
              subroutine msub(arr)
@@ -8,9 +8,9 @@
                 write(*,*)'MSUB: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
                 & 'SIZE=',size(arr)
              end subroutine msub
-          end module m_bounds
+          end module m2_bounds
 
-          use m_bounds, only : msub
+          use m2_bounds, only : msub
           implicit none
           interface
              subroutine esub(arr)
