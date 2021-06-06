@@ -9,7 +9,7 @@
                 & 'semi;                         ',&
                 & 'a=magic(4),b=-a               ',&
                 & 'a+b;a;b                       ',&
-                & 'display("That is all Folks!") '])
+                & "display('That is all Folks!') "])
 
                 write(*,'(a)')'do a single command'
                 call LAFF('who')

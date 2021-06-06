@@ -173,7 +173,7 @@ scratch space will be allocated to 200000.
 </A>
 <BLOCKQUOTE>
 <P>
-Sample program
+Example 1:
 <P>
 <PRE>
       program demo_LAFF
@@ -187,7 +187,7 @@ Sample program
          & &#146;semi;                         &#146;,&
          & &#146;a=magic(4),b=-a               &#146;,&
          & &#146;a+b;a;b                       &#146;,&
-         & &#146;display("That is all Folks!") &#146;])
+         & "display(&#146;That is all Folks!&#146;) "])
 <P>
          write(*,&#146;(a)&#146;)&#146;do a single command&#146;
          call LAFF(&#146;who&#146;)
@@ -210,34 +210,35 @@ Example 2:
       call laff( [character(len=80) :: &
        & &#146;semi;lines(999999)                                    &#146;,&
        & &#146;// create a magic square and add 100 to all the values&#146;,&
-       & &#146;A=magic(4),&lt;X,Y&gt;=size(A)                              &#146;,&
+       & &#146;A=magic(4),&lt;X,Y&gt;=shape(A)                             &#146;,&
        & &#146;B=A+ones(X,Y)*100                                     &#146;,&
        & &#146;// save all current values to a file                  &#146;,&
-       & &#146;save("sample.laf")                                    &#146;,&
+       & "save(&#146;sample.laf&#146;)                                    ",&
        & &#146;// clear all user values                              &#146;,&
        & &#146;clear                                                 &#146;,&
        & &#146;// show variable names, load values from file         &#146;,&
        & &#146;// and show again to show the variables are restored  &#146;,&
-       & &#146;who;load("sample.laf");who                            &#146;])
+       & "who;load(&#146;sample.laf&#146;);who                            "])
    end program bigmat
 <P>
 </PRE>
-Sample program with custom user function
+Example 3: Sample program with custom user function
 <P>
 <PRE>
-      program sample_user
-      use M_matrix, only : laff
-         call LAFF(20000)
-         call LAFF(&#146; &#146;)
-      end program
-<P>
+      program custom_user
+      use M_matrix
+      implicit none
+      call set_usersub(laff_user)
+      call laff()
+      contains
       !-------------------------------------------------------------
-      SUBROUTINE laff_user(A,M,N,S,T)  ! sample laff_user routine
+      subroutine laff_user(a,m,n,s,t)  ! sample user routine
       ! Allows personal  Fortran  subroutines  to  be  linked  into
       ! LAFF. The subroutine should have the heading
       !
-      !               SUBROUTINE laff_user(A,M,N,S,T)
-      !               DOUBLEPRECISION A(M,N),S,T
+      !    subroutine name(a,m,n,s,t)
+      !    integer :: m,n
+      !    doubleprecision a(:),s,t
       !
       ! The LAFF statement Y = USER(X,s,t) results in a call to
       ! the subroutine with a copy of the matrix X stored in the
@@ -249,31 +250,35 @@ Sample program with custom user function
       ! USER(K) results in a call with M = 1, N = 1 and A(1,1) =
       ! FLOAT(K). After the subroutine has been written, it must
       ! be compiled and linked to the LAFF object code within the
-      ! local operating system.
+      ! local programming environment.
       !
-      integer m,n
-      doubleprecision a(m,n),s,t
-      !
-      if(s.eq.0.and.t.eq.0)then
-         ! print statistics for matrix, for example
-         write(*,*)&#146;m=&#146;,m
-         write(*,*)&#146;n=&#146;,n
-         write(*,*)&#146;s=&#146;,s
-         write(*,*)&#146;t=&#146;,t
-<P>
-         do i10 = 1, m
-            write(*,*)(a(i10,i20),i20=1,n)
-         enddo
-      else  ! a(i,j)=a(i,j)*s+t  in a linear fashion
-         do i30 = 1, m
-            do i40 = 1, n
-               a(i30,i40)=a(i30,i40)*s+t
+      implicit none
+      integer                    :: m,n
+      doubleprecision            :: a(:)
+      doubleprecision            :: s,t
+      integer                    :: i, j, k
+         write(*,*)&#146;MY ROUTINE&#146;
+         write(*,*)&#146;M=&#146;,m
+         write(*,*)&#146;N=&#146;,n
+         write(*,*)&#146;S=&#146;,s
+         write(*,*)&#146;T=&#146;,t
+         k=0
+         do i = 1, m
+            do j = 1, n
+               k=k+1
+               write(*,*)i,j,a(k)
             enddo
          enddo
-      endif
+         k=0
+         if(s.eq.0)s=1
+         do i = 1, m
+            do j = 1, n
+               k=k+1
+               a(k)=a(k)*s+t
+            enddo
+         enddo
       end subroutine laff_user
-<P>
-      ! end program sample_user
+      end program custom_user
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -337,7 +342,7 @@ Example inputs
      &gt; end, s = norm(x(k,:)), x(k,:) = x(k,:)/s;
 <P>
      &gt; :jacobi:
-     &gt; [n, n] = size(A);
+     &gt; [n, n] = shape(A);
      &gt; X = eye(n);
      &gt; anorm = norm(A,&#146;fro&#146;);
      &gt; cnt = 1;
@@ -367,7 +372,7 @@ Example inputs
      &gt; :kron:
 <P>
      &gt; //  C = Kronecker product of A and B
-     &gt; [m, n] = size(A);
+     &gt; [m, n] = shape(A);
      &gt; for i = 1:m, &#46;&#46;&#46;
      &gt;    ci = a(i,1)*B; &#46;&#46;&#46;
      &gt;    for j = 2:n, ci = [ci a(i,j)*B]; end &#46;&#46;&#46;
@@ -375,7 +380,7 @@ Example inputs
 <P>
      &gt; :lanczos:
 <P>
-     &gt; [n,n] = size(A);
+     &gt; [n,n] = shape(A);
      &gt; q1 = rand(n,1);
      &gt; ort
      &gt; alpha = []; beta = [];
@@ -440,7 +445,7 @@ Example inputs
      &gt; 38  14  36  37  .   .
      &gt; 39  24  26  .   .   .
      &gt; ];
-     &gt; [n, m] = size(C);
+     &gt; [n, m] = shape(C);
      &gt; A = 0*ones(n,n);
      &gt; for i=1:n, for j=2:m, k=c(i,j); if k&gt;0, a(i,k)=1;
      &gt; check = norm(A-A&#146;,1), if check &gt; 0, quit
@@ -452,7 +457,7 @@ Example inputs
      &gt; :pascal:
 <P>
      &gt; //Generate next Pascal matrix
-     &gt; [k,k] = size(L);
+     &gt; [k,k] = shape(L);
      &gt; k = k + 1;
      &gt; L(k,1:k) = [L(k-1,:) 0] + [0 L(k-1,:)];
 <P>
@@ -554,7 +559,7 @@ Example inputs
      &gt;    for i = 1:m2, b(i) = 1;
      &gt;    for i = m2+1:m, b(i) = 0;
      &gt; //solve for coefficients
-     &gt;    c = A$b
+     &gt;    c = A\b
      &gt; //compute effective conductivity
      &gt;    c(2:2:n) = -c(2:2:n)
      &gt;    sigma = sum(c)
@@ -563,8 +568,8 @@ Example inputs
 <P>
      &gt; :rogers.exec:
 <P>
-     &gt; exec(&#146;d.boug&#146;);                        // reads data
-     &gt; [g,k] = size(p);               // p is matrix of gene frequencies
+     &gt; exec(&#146;d.boug&#146;);                // reads data
+     &gt; [g,k] = shape(p);              // p is matrix of gene frequencies
      &gt; wv = ncen/sum(ncen);           // ncen contains population sizes
      &gt; pbar = wv*p;                   // weighted average of p
      &gt; p = p - ones(g,1)*pbar;        // deviations from mean
@@ -674,7 +679,7 @@ Example inputs
      &gt;  116.9  554.894  400.7  282.7  130.081  1962  70.551];
      &gt; short
      &gt; X = data;
-     &gt; [n,p] = size(X)
+     &gt; [n,p] = shape(X)
      &gt; mu = ones(1,n)*X/n
      &gt; X = X - ones(n,1)*mu;  X = X/diag(sqrt(diag(X&#146;*X)))
      &gt; corr = X&#146;*X
@@ -739,7 +744,7 @@ Example inputs
      &gt;      ]
 </PRE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>laff (3)</TD> <TD align=right width=33%><I>May 25, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7abc0f58-7418-446f-bac6-79d6d7801765 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>laff (3)</TD> <TD align=right width=33%><I>June 05, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a11bbd62-dcd4-483d-90fc-05fc32632f61 using man macros.</FONT>
 <br><br><center><img src="images/laff.3m_matrix.gif"></center>
 </div>
 </div>

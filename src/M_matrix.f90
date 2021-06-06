@@ -32,7 +32,7 @@
 !!   * a stand-alone program lets you create and test LAFF files. It is
 !!     a flexible calculator utility all by itself.
 !!   * a built-in help command describes the many functions and commands
-!!   * user-added Fortran routines to do work at this point
+!!   * a user-added Fortran routine may be called via the USER() function.
 !!
 !! All together, this allows laff(3f) to be used for self-describing
 !! configuration and data files, inspecting data in existing programs,
@@ -59,7 +59,7 @@
 !!     ! pass some commands to laff(3f)
 !!     call laff([character(len=80) :: &
 !!     &'PI=atan(1)*4               ', &
-!!     &'mytitle="this is my title";', &
+!!     &"mytitle='this is my title';", &
 !!     &'littlearray=<              ', &
 !!     &'   1 2 3;                  ', &
 !!     &'   4 5 6;                  ', &
@@ -68,11 +68,11 @@
 !!     &'S=sum(A)                   ', &
 !!     &'I=inv(littlearray);        ', &
 !!     &'B=littlearray*sin(PI/3)    ', &
-!!     &'save("keepB",B)            ', &
+!!     &"save('keepB',B)            ", &
 !!     &''])
 !!
 !!     ! read a file containing laff(3f) commands
-!!     call laff('exec("mycommands");')
+!!     call laff("exec('mycommands');")
 !!
 !!     ! interactively interact with laff(3f) interpreter
 !!     call laff()
@@ -91,12 +91,13 @@ module M_matrix
 use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-use M_strings, only : value_to_string, lower, v2s, s2v
-use M_journal, only : journal
-use M_help, only    : help_command
-use M_history, only : redo
-use M_list, only    : insert, locate, replace, remove
-use M_io, only      : lookfor
+use M_strings, only     : value_to_string, lower, v2s, s2v
+use M_journal, only     : journal
+use M_help, only        : help_command
+use M_history, only     : redo
+use M_list, only        : insert, locate, replace, remove
+use M_io, only          : lookfor
+use M_intrinsics, only  : help_intrinsics
 
 use M_LA, only : mat_flop,   mat_inverse_hilbert,  mat_iwamax,  mat_magic,   mat_pythag,  mat_rat,    mat_round,  mat_rref
 use M_LA, only : mat_rrot,   mat_rrotg,            mat_rset,    mat_rswap,   mat_urand,   mat_wasum,  mat_wcopy
@@ -325,11 +326,13 @@ public mat_wdotci
 ! till get rid of type mismatches, the following are public
 
 integer,parameter,private:: sp=kind(1.0),dp=kind(1.0d0)
+character(len=*),parameter :: gen0='(*(g0))'
+character(len=*),parameter :: gen1='(*(g0,1x))'
 !==================================================================================================================================!
 ! program limits
 integer,parameter        :: GG_LINELEN=1024
 integer,parameter        :: GG_MAX_NUMBER_OF_NAMES=480
-integer,parameter        :: GG_MAX_NAME_LENGTH=32       ! <WARNING> just began changing this to a constant
+integer,parameter        :: GG_MAX_NAME_LENGTH=63
 integer,parameter        :: GG_EOL=99999           ! make > 2256
 
 !==================================================================================================================================!
@@ -385,10 +388,10 @@ integer                  :: G_LINE_POINTER(6) ! [1] first character to process i
 integer,save                   :: GM_BIGMEM=-1                           ! allocated size of data storage
 doubleprecision,allocatable    :: GM_REALS(:), GM_IMAGS(:)               ! set to size of GM_BIGMEM
 
-integer                        :: G_STACK_IDS(GG_MAX_NAME_LENGTH, GG_MAX_NUMBER_OF_NAMES)
-integer                        :: G_STACK_ID_LOC(GG_MAX_NUMBER_OF_NAMES)
-integer                        :: G_STACK_ROWS(GG_MAX_NUMBER_OF_NAMES)
-integer                        :: G_STACK_COLS(GG_MAX_NUMBER_OF_NAMES)
+integer                        :: G_VAR_IDS(GG_MAX_NAME_LENGTH, GG_MAX_NUMBER_OF_NAMES)
+integer                        :: G_VAR_DATALOC(GG_MAX_NUMBER_OF_NAMES)
+integer                        :: G_VAR_ROWS(GG_MAX_NUMBER_OF_NAMES)
+integer                        :: G_VAR_COLS(GG_MAX_NUMBER_OF_NAMES)
 
 type vctr
    integer :: rows
@@ -408,14 +411,14 @@ integer,allocatable            :: scr_locs(:)
 integer,allocatable            :: scr_rows(:)
 integer,allocatable            :: scr_cols(:)
 
-integer                     :: G_TOP_OF_SAVED, G_BOTTOM_OF_SCRATCH_IN_USE
+integer                     :: G_TOP_OF_SAVED, G_ARGUMENT_POINTER
 
 !   Two large real arrays, GM_REALS and GM_IMAGS (for real and imaginary parts), are used to store all
-!   the matrices. Four integer arrays (G_STACK_IDS, G_STACK_ROWS, G_STACK_COLS, G_STACK_ID_LOC) are used to store the names,
+!   the matrices. Four integer arrays (G_VAR_IDS, G_VAR_ROWS, G_VAR_COLS, G_VAR_DATALOC) are used to store the names,
 !   the row and column dimensions, and the pointers into the real stacks. The following diagram illustrates this storage scheme.
 !
-!                    TOP        IDSTK     MSTK NSTK LSTK              GM_REALS    GM_IMAGS
-!                     --      -- -- -- --   --   --   --              --------   --------    <<== G_BOTTOM_OF_SCRATCH_IN_USE
+!                    TOP        IDS       ROWS COLS LOCS              GM_REALS    GM_IMAGS
+!                     --      -- -- -- --   --   --   --              --------   --------    <<== G_ARGUMENT_POINTER
 !                    |  |--->|  |  |  |  | |  | |  | |  |----------->|        | |        |
 !                     --      -- -- -- --   --   --   --              --------   --------
 !                            |  |  |  |  | |  | |  | |  |            |        | |        |
@@ -551,6 +554,7 @@ interface laff
 end interface laff
 
 character(len=:),allocatable :: G_HELP_TEXT(:)
+character(len=:),allocatable :: G_FORTRAN_TEXT(:)
 
 !==================================================================================================================================!
 ! CHARACTER SET
@@ -560,11 +564,6 @@ integer,parameter        :: G_CHARSET_SIZE=256      ! number of characters in ch
 ! now allow all characters, using !#
 ! thinking ! for comments, & for continue like Fortran
 ! use % for shell commands?
-! fold {} to ()
-!       | to :
-!       $ to !       @ to .
-!       " to '
-!      [] to <>
 
 character(len=*),parameter :: digit='0123456789'
 character(len=*),parameter :: little='abcdefghijklmnopqrstuvwxyz'
@@ -634,8 +633,9 @@ integer,parameter ::  e_up=69   ! E
 !integer,parameter ::  =88 ! X
 !integer,parameter ::  =89 ! Y
 integer,parameter ::  z_up=90   ! Z
-!integer,parameter ::  =91 ! [
-integer,parameter ::  bslash=92 ! !integer,parameter ::  =93 ! ]
+integer,parameter ::  lbracket=91 ! [
+integer,parameter ::  bslash=92 ! backslash
+integer,parameter ::  rbracket=93 ! ]
 !integer,parameter ::  =94 ! ^
 integer,parameter ::  score=95  ! _
 !integer,parameter ::  =96 ! `
@@ -665,12 +665,12 @@ integer,parameter ::  e_low=101 ! e
 !integer,parameter ::  =120 ! x
 !integer,parameter ::  =121 ! y
 integer,parameter ::  z_low=122 ! z
-!integer,parameter ::  =123 ! {
+integer,parameter ::  lbrace=123 ! {
 !integer,parameter ::  =124 ! |
-!integer,parameter ::  =125 ! }
+integer,parameter ::  rbrace=125 ! }
 !integer,parameter ::  =126 ! ~
 
-integer,parameter        :: GG_PAD(32)=blank
+integer,parameter        :: GG_PAD(63)=blank
 !==================================================================================================================================!
 ! allow for a user-defined subroutine.
 ! ??? expand this to allow for multiple routines and a user-specified name for the procedure
@@ -681,7 +681,7 @@ abstract interface
    subroutine usersub_interface(a,m,n,s,t)
       import dp
       integer :: m,n
-      doubleprecision :: a(m,n)
+      doubleprecision :: a(:)
       doubleprecision :: s,t
    end subroutine usersub_interface
 end interface
@@ -689,6 +689,7 @@ end interface
 public usersub_interface
 
 procedure(usersub_interface),pointer :: usersub => usersub_placeholder
+!==================================================================================================================================!
 !==================================================================================================================================!
 
 contains
@@ -705,21 +706,30 @@ end subroutine set_usersub
 subroutine usersub_placeholder(a,m,n,s,t)  ! sample usersub_placeholder routine
 implicit none
 integer                    :: m,n
-doubleprecision            :: a(m,n)
+doubleprecision            :: a(:)
 doubleprecision            :: s,t
-integer                    :: i, j
+integer                    :: i, j, k
+!  allowing for m and n to be changed complicates dimensioning a(m,n)
+!  on most compilers overindexing would probably not be a problem in actuality
+!  and dimensioning would not be either but not standard unless make allocatable.
+!  See RESHAPE() and PACK() if passing to other routines
    write(*,*)'M=',m
    write(*,*)'N=',n
    write(*,*)'S=',s
    write(*,*)'T=',t
+   k=0
    do i = 1, m
       do j = 1, n
-         write(*,*)i,j,a(i,j)
+         k=k+1
+         write(*,*)i,j,a(k)
       enddo
    enddo
+   k=0
+   if(s.eq.0)s=1
    do i = 1, m
       do j = 1, n
-         a(i,j)=a(i,j)*s+t
+         k=k+1
+         a(k)=a(k)*s+t
       enddo
    enddo
 end subroutine usersub_placeholder
@@ -789,7 +799,7 @@ end subroutine usersub_placeholder
 !!##EXAMPLE
 !!
 !!
-!!   Sample program
+!!   Example 1:
 !!
 !!       program demo_LAFF
 !!       use M_matrix, only : laff
@@ -802,7 +812,7 @@ end subroutine usersub_placeholder
 !!          & 'semi;                         ',&
 !!          & 'a=magic(4),b=-a               ',&
 !!          & 'a+b;a;b                       ',&
-!!          & 'display("That is all Folks!") '])
+!!          & "display('That is all Folks!') "])
 !!
 !!          write(*,'(a)')'do a single command'
 !!          call LAFF('who')
@@ -823,32 +833,33 @@ end subroutine usersub_placeholder
 !!       call laff( [character(len=80) :: &
 !!        & 'semi;lines(999999)                                    ',&
 !!        & '// create a magic square and add 100 to all the values',&
-!!        & 'A=magic(4),<X,Y>=size(A)                              ',&
+!!        & 'A=magic(4),<X,Y>=shape(A)                             ',&
 !!        & 'B=A+ones(X,Y)*100                                     ',&
 !!        & '// save all current values to a file                  ',&
-!!        & 'save("sample.laf")                                    ',&
+!!        & "save('sample.laf')                                    ",&
 !!        & '// clear all user values                              ',&
 !!        & 'clear                                                 ',&
 !!        & '// show variable names, load values from file         ',&
 !!        & '// and show again to show the variables are restored  ',&
-!!        & 'who;load("sample.laf");who                            '])
+!!        & "who;load('sample.laf');who                            "])
 !!    end program bigmat
 !!
-!!   Sample program with custom user function
+!!   Example 3: Sample program with custom user function
 !!
-!!       program sample_user
-!!       use M_matrix, only : laff
-!!          call LAFF(20000)
-!!          call LAFF(' ')
-!!       end program
-!!
+!!       program custom_user
+!!       use M_matrix
+!!       implicit none
+!!       call set_usersub(laff_user)
+!!       call laff()
+!!       contains
 !!       !-------------------------------------------------------------
-!!       SUBROUTINE laff_user(A,M,N,S,T)  ! sample laff_user routine
+!!       subroutine laff_user(a,m,n,s,t)  ! sample user routine
 !!       ! Allows personal  Fortran  subroutines  to  be  linked  into
 !!       ! LAFF. The subroutine should have the heading
 !!       !
-!!       !               SUBROUTINE laff_user(A,M,N,S,T)
-!!       !               DOUBLEPRECISION A(M,N),S,T
+!!       !    subroutine name(a,m,n,s,t)
+!!       !    integer :: m,n
+!!       !    doubleprecision a(:),s,t
 !!       !
 !!       ! The LAFF statement Y = USER(X,s,t) results in a call to
 !!       ! the subroutine with a copy of the matrix X stored in the
@@ -860,31 +871,35 @@ end subroutine usersub_placeholder
 !!       ! USER(K) results in a call with M = 1, N = 1 and A(1,1) =
 !!       ! FLOAT(K). After the subroutine has been written, it must
 !!       ! be compiled and linked to the LAFF object code within the
-!!       ! local operating system.
+!!       ! local programming environment.
 !!       !
-!!       integer m,n
-!!       doubleprecision a(m,n),s,t
-!!       !
-!!       if(s.eq.0.and.t.eq.0)then
-!!          ! print statistics for matrix, for example
-!!          write(*,*)'m=',m
-!!          write(*,*)'n=',n
-!!          write(*,*)'s=',s
-!!          write(*,*)'t=',t
-!!
-!!          do i10 = 1, m
-!!             write(*,*)(a(i10,i20),i20=1,n)
-!!          enddo
-!!       else  ! a(i,j)=a(i,j)*s+t  in a linear fashion
-!!          do i30 = 1, m
-!!             do i40 = 1, n
-!!                a(i30,i40)=a(i30,i40)*s+t
+!!       implicit none
+!!       integer                    :: m,n
+!!       doubleprecision            :: a(:)
+!!       doubleprecision            :: s,t
+!!       integer                    :: i, j, k
+!!          write(*,*)'MY ROUTINE'
+!!          write(*,*)'M=',m
+!!          write(*,*)'N=',n
+!!          write(*,*)'S=',s
+!!          write(*,*)'T=',t
+!!          k=0
+!!          do i = 1, m
+!!             do j = 1, n
+!!                k=k+1
+!!                write(*,*)i,j,a(k)
 !!             enddo
 !!          enddo
-!!       endif
+!!          k=0
+!!          if(s.eq.0)s=1
+!!          do i = 1, m
+!!             do j = 1, n
+!!                k=k+1
+!!                a(k)=a(k)*s+t
+!!             enddo
+!!          enddo
 !!       end subroutine laff_user
-!!
-!!       ! end program sample_user
+!!       end program custom_user
 !!
 !!  Example inputs
 !!
@@ -945,7 +960,7 @@ end subroutine usersub_placeholder
 !!      > end, s = norm(x(k,:)), x(k,:) = x(k,:)/s;
 !!
 !!      > :jacobi:
-!!      > [n, n] = size(A);
+!!      > [n, n] = shape(A);
 !!      > X = eye(n);
 !!      > anorm = norm(A,'fro');
 !!      > cnt = 1;
@@ -975,7 +990,7 @@ end subroutine usersub_placeholder
 !!      > :kron:
 !!
 !!      > //  C = Kronecker product of A and B
-!!      > [m, n] = size(A);
+!!      > [m, n] = shape(A);
 !!      > for i = 1:m, ...
 !!      >    ci = a(i,1)*B; ...
 !!      >    for j = 2:n, ci = [ci a(i,j)*B]; end ...
@@ -983,7 +998,7 @@ end subroutine usersub_placeholder
 !!
 !!      > :lanczos:
 !!
-!!      > [n,n] = size(A);
+!!      > [n,n] = shape(A);
 !!      > q1 = rand(n,1);
 !!      > ort
 !!      > alpha = []; beta = [];
@@ -1048,7 +1063,7 @@ end subroutine usersub_placeholder
 !!      > 38  14  36  37  .   .
 !!      > 39  24  26  .   .   .
 !!      > ];
-!!      > [n, m] = size(C);
+!!      > [n, m] = shape(C);
 !!      > A = 0*ones(n,n);
 !!      > for i=1:n, for j=2:m, k=c(i,j); if k>0, a(i,k)=1;
 !!      > check = norm(A-A',1), if check > 0, quit
@@ -1060,7 +1075,7 @@ end subroutine usersub_placeholder
 !!      > :pascal:
 !!
 !!      > //Generate next Pascal matrix
-!!      > [k,k] = size(L);
+!!      > [k,k] = shape(L);
 !!      > k = k + 1;
 !!      > L(k,1:k) = [L(k-1,:) 0] + [0 L(k-1,:)];
 !!
@@ -1162,7 +1177,7 @@ end subroutine usersub_placeholder
 !!      >    for i = 1:m2, b(i) = 1;
 !!      >    for i = m2+1:m, b(i) = 0;
 !!      > //solve for coefficients
-!!      >    c = A$b
+!!      >    c = A\b
 !!      > //compute effective conductivity
 !!      >    c(2:2:n) = -c(2:2:n)
 !!      >    sigma = sum(c)
@@ -1171,8 +1186,8 @@ end subroutine usersub_placeholder
 !!
 !!      > :rogers.exec:
 !!
-!!      > exec('d.boug');                        // reads data
-!!      > [g,k] = size(p);               // p is matrix of gene frequencies
+!!      > exec('d.boug');                // reads data
+!!      > [g,k] = shape(p);              // p is matrix of gene frequencies
 !!      > wv = ncen/sum(ncen);           // ncen contains population sizes
 !!      > pbar = wv*p;                   // weighted average of p
 !!      > p = p - ones(g,1)*pbar;        // deviations from mean
@@ -1282,7 +1297,7 @@ end subroutine usersub_placeholder
 !!      >  116.9  554.894  400.7  282.7  130.081  1962  70.551];
 !!      > short
 !!      > X = data;
-!!      > [n,p] = size(X)
+!!      > [n,p] = shape(X)
 !!      > mu = ones(1,n)*X/n
 !!      > X = X - ones(n,1)*mu;  X = X/diag(sqrt(diag(X'*X)))
 !!      > corr = X'*X
@@ -1367,17 +1382,13 @@ integer                     :: i,j
    allocate(G_PSEUDO_FILE(0))
 
    G_LIN=blank
-   do i=1,size(G_STACK_IDS,dim=1)
-      do j=1,size(G_STACK_IDS,dim=2)
-         G_STACK_IDS(i,j)=blank
-      enddo
-   enddo
+   G_VAR_IDS=blank
 
    GM_BIGMEM=INIT
    if(GM_BIGMEM.lt.0)GM_BIGMEM=200000
    if(allocated(GM_REALS) )deallocate(GM_REALS)
    if(allocated(GM_IMAGS) )deallocate(GM_IMAGS)
-   allocate(GM_REALS(GM_BIGMEM),GM_IMAGS(GM_BIGMEM))          ! set to size of GM_BIGMEM
+   allocate(GM_REALS(GM_BIGMEM),GM_IMAGS(GM_BIGMEM))                      ! set to size of GM_BIGMEM
 
    G_INPUT_LUN = STDIN                                                    ! unit number for terminal input
    call mat_files(G_INPUT_LUN,G_BUF)
@@ -1396,10 +1407,10 @@ integer                     :: i,j
 
    call update('eps',1,1,GM_BIGMEM-4)
       !=============================================================
-      call mat_copyid(G_STACK_IDS(1,GG_MAX_NUMBER_OF_NAMES-3),EPS)
-      G_STACK_ID_LOC(GG_MAX_NUMBER_OF_NAMES-3) = GM_BIGMEM-4
-      G_STACK_ROWS(GG_MAX_NUMBER_OF_NAMES-3) = 1
-      G_STACK_COLS(GG_MAX_NUMBER_OF_NAMES-3) = 1
+      call mat_copyid(G_VAR_IDS(1,GG_MAX_NUMBER_OF_NAMES-3),EPS)
+      G_VAR_DATALOC(GG_MAX_NUMBER_OF_NAMES-3) = GM_BIGMEM-4
+      G_VAR_ROWS(GG_MAX_NUMBER_OF_NAMES-3) = 1
+      G_VAR_COLS(GG_MAX_NUMBER_OF_NAMES-3) = 1
       !=============================================================
 
    ! interesting way to calculate the epsilon value of a machine
@@ -1414,28 +1425,28 @@ integer                     :: i,j
 
    call update('flops',1,2,GM_BIGMEM-3)
       !=============================================================
-      call mat_copyid(G_STACK_IDS(1,GG_MAX_NUMBER_OF_NAMES-2),flops)
-      G_STACK_ID_LOC(GG_MAX_NUMBER_OF_NAMES-2) = GM_BIGMEM-3
-      G_STACK_ROWS(GG_MAX_NUMBER_OF_NAMES-2) = 1
-      G_STACK_COLS(GG_MAX_NUMBER_OF_NAMES-2) = 2
+      call mat_copyid(G_VAR_IDS(1,GG_MAX_NUMBER_OF_NAMES-2),flops)
+      G_VAR_DATALOC(GG_MAX_NUMBER_OF_NAMES-2) = GM_BIGMEM-3
+      G_VAR_ROWS(GG_MAX_NUMBER_OF_NAMES-2) = 1
+      G_VAR_COLS(GG_MAX_NUMBER_OF_NAMES-2) = 2
       !=============================================================
 
    call update('eye',-1,-1,GM_BIGMEM-1)
       !=============================================================
-      call mat_copyid(G_STACK_IDS(1,GG_MAX_NUMBER_OF_NAMES-1), eye)
-      G_STACK_ID_LOC(GG_MAX_NUMBER_OF_NAMES-1) = GM_BIGMEM-1
-      G_STACK_ROWS(GG_MAX_NUMBER_OF_NAMES-1) = -1
-      G_STACK_COLS(GG_MAX_NUMBER_OF_NAMES-1) = -1
+      call mat_copyid(G_VAR_IDS(1,GG_MAX_NUMBER_OF_NAMES-1), eye)
+      G_VAR_DATALOC(GG_MAX_NUMBER_OF_NAMES-1) = GM_BIGMEM-1
+      G_VAR_ROWS(GG_MAX_NUMBER_OF_NAMES-1) = -1
+      G_VAR_COLS(GG_MAX_NUMBER_OF_NAMES-1) = -1
       !=============================================================
 
    GM_REALS(GM_BIGMEM-1) = 1.0D0
 
    call update('rand',1,1,GM_BIGMEM)
       !=============================================================
-      call mat_copyid(G_STACK_IDS(1,GG_MAX_NUMBER_OF_NAMES), rand)
-      G_STACK_ID_LOC(GG_MAX_NUMBER_OF_NAMES) = GM_BIGMEM
-      G_STACK_ROWS(GG_MAX_NUMBER_OF_NAMES) = 1
-      G_STACK_COLS(GG_MAX_NUMBER_OF_NAMES) = 1
+      call mat_copyid(G_VAR_IDS(1,GG_MAX_NUMBER_OF_NAMES), rand)
+      G_VAR_DATALOC(GG_MAX_NUMBER_OF_NAMES) = GM_BIGMEM
+      G_VAR_ROWS(GG_MAX_NUMBER_OF_NAMES) = 1
+      G_VAR_COLS(GG_MAX_NUMBER_OF_NAMES) = 1
       !=============================================================
 
    G_FMT = 1
@@ -1444,6 +1455,8 @@ integer                     :: i,j
    G_DEBUG_LEVEL = 0
    G_PTZ = 0
    G_PT = G_PTZ
+
+   G_FORTRAN_TEXT=help_intrinsics('manual',m_help=.true.)  ! load Fortran documentation
 
 end subroutine LAFF_init
 !==================================================================================================================================
@@ -1534,15 +1547,15 @@ character(len=255)   :: msg
     case(15); msg='Improper assignment to submatrix'
     case(16); msg='Improper command'
     case(17)
-      lb = GM_BIGMEM - G_STACK_ID_LOC(G_TOP_OF_SAVED) + 1
-      lt = g_err + G_STACK_ID_LOC(G_TOP_OF_SAVED)
+      lb = GM_BIGMEM - G_VAR_DATALOC(G_TOP_OF_SAVED) + 1
+      lt = g_err + G_VAR_DATALOC(G_TOP_OF_SAVED)
       call journal(' Too much memory required')
       write(msg,'(1X,I7,'' Variables,'',I7,'' Temporaries,'',I7,'' Available.'')') lb,lt,GM_BIGMEM
     case(18); msg='Too many names'
     case(19); msg='Matrix is singular to working precision'
     case(20); msg='Matrix must be square'
     case(21); msg='Subscript out of range'
-    case(22); write(msg, "(1x,'Recursion difficulties',*(i4))") (G_RSTK(i),i=1,G_PT)
+    case(22); write(msg, '(1x,"Recursion difficulties",*(i4))') (G_RSTK(i),i=1,G_PT)
     case(23); msg='Only 1, 2 or INF norm of matrix'
     case(24); msg='No convergence'
     case(25); msg='Can not use function name as variable'
@@ -1844,13 +1857,13 @@ character(len=80) :: message
 character(len=GG_LINELEN) :: string_buf
 !
 
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
 
 !  functions/G_FIN
-!  magi diag sum  prod user eye  rand ones chop size kron  tril triu zeros
-!    1    2    3    4    5    6    7    8    9   10  11-13  14   15   16
+!  magi diag sum  prod user eye  rand ones chop shape kron  tril triu zeros
+!    1    2    3    4    5    6    7    8    9   10   11-13  14   15   16
 
    FUN6: select case(G_FIN)
 !===================================================================================================================================
@@ -1859,22 +1872,22 @@ character(len=GG_LINELEN) :: string_buf
       IF (N .EQ. 2) N = 0
       IF (N .GT. 0) call mat_magic(GM_REALS(location),N,N)
       call mat_rset(N*N,0.0D0,GM_IMAGS(location),1)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = N
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N
 !===================================================================================================================================
    case(11,12,13) !  COMMAND::KRONECKER PRODUCT
       if (G_RHS .ne. 2) then
          call mat_err(39) ! Incorrect number of arguments
          return
       endif
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 1
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      MA = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      NA = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 1
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      MA = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      NA = G_VAR_COLS(G_ARGUMENT_POINTER)
       LA = location + MAX(M*N*MA*NA,M*N+MA*NA)
       LB = LA + MA*NA
 
-      if(too_much_memory(LB + M*N - G_STACK_ID_LOC(G_TOP_OF_SAVED)) )return
+      if(too_much_memory(LB + M*N - G_VAR_DATALOC(G_TOP_OF_SAVED)) )return
 
 !     MOVE A AND B ABOVE RESULT
       call mat_wcopy(MA*NA+M*N,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(LA),GM_IMAGS(LA),1)
@@ -1902,12 +1915,12 @@ character(len=GG_LINELEN) :: string_buf
                              GM_REALS(location),  GM_IMAGS(location))
               IF (G_ERR .GT. 0) return
               location = location + 1
-            ENDDO
+            enddo
           enddo
         enddo
       enddo
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = M*MA
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N*NA
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = M*MA
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N*NA
 !===================================================================================================================================
    case(9) ! COMMAND::CHOP
 
@@ -1935,7 +1948,7 @@ character(len=GG_LINELEN) :: string_buf
 
       t = GM_REALS(GM_BIGMEM-4)
       if (t.lt.eps .or. t.eq.eps0) GM_REALS(GM_BIGMEM-4) = eps
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
    case(3) ! COMMAND::SUM
       sr = 0.0d0
@@ -1948,8 +1961,8 @@ character(len=GG_LINELEN) :: string_buf
       enddo
       GM_REALS(location) = sr
       GM_IMAGS(location) = si
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
 !===================================================================================================================================
    case(4) ! COMMAND::PROD
       SR = 1.0D0
@@ -1961,8 +1974,8 @@ character(len=GG_LINELEN) :: string_buf
       enddo
       GM_REALS(location) = SR
       GM_IMAGS(location) = SI
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
 !===================================================================================================================================
    case(5) ! COMMAND::USER
       ! The LAFF statement "Y = user(X,s,t)" results in a call to the
@@ -1970,50 +1983,59 @@ character(len=GG_LINELEN) :: string_buf
       ! its column and row dimensions in M and N, and the scalar parameters
       ! s and t stored in S and T. If s and t are omitted, they are set
       ! to 0.0. After the return, A is stored in Y. The dimensions M and
-      ! N may be reset within the subroutine. The statement Y = "user(K)"
+      ! N may be reset within the subroutine. The statement Y = user(K)"
       ! results in a call with M = 1, N = 1 and A(1,1) = "float(K)".
 
-      if(G_RHS.gt.2)then
-         t = GM_REALS(location)
-      else
-         t = 0.0D0
-      endif
-
-      if(G_RHS.eq.2)then
+      ! all of the arguments are in a vector that is part of the stack.
+      ! the location points to the last value and M and N are set to the
+      ! the row and column size of the last argument. G_RHS is the number
+      ! of arguments.
+      s = 0.0d0
+      t = 0.0d0
+      if (G_RHS .eq. 2) then
          s = GM_REALS(location)
-      else
-         s = 0.0D0
+         ! back up the stack one argument
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)   ! the end of argument X
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)            ! the size of X(M,N)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+      elseif(G_RHS.gt.2)then
+         t = GM_REALS(location)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1       ! back up to s
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         s = GM_REALS(location)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1       ! back up to X
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+      else  ! if not 1,2,3 should it be an error???
       endif
-
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
-
-      call usersub(GM_REALS(location),m,n,s,t)
-      call mat_rset(M*N,0.0D0,GM_IMAGS(location),1)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      ! ??? if user routine changes size of array and/or should pass vector instead of address ???
+      ! ??? user routine cannot do complex values? Just REAL ???
+      call usersub(GM_REALS(location:),m,n,s,t)
+      call mat_rset(m*n,0.0d0,GM_IMAGS(location),1)      ! set the imaginary values to zero
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n               ! store the possibly new size
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = m
 !===================================================================================================================================
-   case(10) ! COMMAND::SIZE
+   case(10) ! COMMAND::SHAPE
       ! store the two output values onto stack
       GM_REALS(location) = M
       GM_IMAGS(location) = 0.0D0
       GM_REALS(location+1) = N
       GM_IMAGS(location+1) = 0.0D0
       if(G_LHS.eq.1)then
-         ! output is a 1x2 array so store values indicating the size of the new stack value
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 2
+         ! output is a 1x2 array so store values indicating the shape of the new stack value
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 2
       else
          ! output is two scalars
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
 
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
-         G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location+1
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
+         G_VAR_DATALOC(G_ARGUMENT_POINTER) = location+1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       endif
 !===================================================================================================================================
    case(2,14,15) ! COMMAND::DIAG=2
@@ -2022,10 +2044,10 @@ character(len=GG_LINELEN) :: string_buf
       k = 0
       if (G_RHS .eq. 2) then
          k = int(GM_REALS(location))
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-         location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-         m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-         n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
       endif
 
       if (G_FIN .ge. 14) then ! COMMAND::TRIL, COMMAND::TRIU
@@ -2044,10 +2066,10 @@ character(len=GG_LINELEN) :: string_buf
       elseif (m .eq. 1 .or. n .eq. 1) then
          n = max(m,n)+iabs(k)
 
-         if(too_much_memory( location+n*n - G_STACK_ID_LOC(G_TOP_OF_SAVED)) )return
+         if(too_much_memory( location+n*n - G_VAR_DATALOC(G_TOP_OF_SAVED)) )return
 
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n
          do jb = 1, n
             do ib = 1, n
                j = n+1-jb
@@ -2066,8 +2088,8 @@ character(len=GG_LINELEN) :: string_buf
       else
          if (k.ge.0) mn=min(m,n-k)
          if (k.lt.0) mn=min(m+k,n)
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = max(mn,0)
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = max(mn,0)
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
          if (mn .le. 0) exit FUN6
          do i = 1, mn
             if (k.ge.0) ls = location+(i-1)+(i+k-1)*m
@@ -2087,9 +2109,9 @@ character(len=GG_LINELEN) :: string_buf
 
          if (G_RHS .eq. 2) then
             nn = int(GM_REALS(location))
-            G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-            location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-            n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+            G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+            location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+            n = G_VAR_COLS(G_ARGUMENT_POINTER)
          endif
 
          if (G_FIN.eq.7.and.n.lt.GG_MAX_NAME_LENGTH)then        ! a call to RAND might be RAND('UNIFORM'|'SEED'|'NORMAL')
@@ -2100,14 +2122,14 @@ character(len=GG_LINELEN) :: string_buf
             enddo
             if(mat_eqid(id,unifor).or.mat_eqid(id,normal))then ! SWITCH UNIFORM AND NORMAL(if a matrix just happens to match, a bug)
                G_CURRENT_RANDOM_TYPE = id(1) - unifor(1)        ! set random type to generate by seeing if first letter is a "u"
-               G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+               G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
                exit FUN6
             elseif (mat_eqid(id,seed)) then                     ! if a matrix just happens to match "seed" , a bug)
                if (G_RHS .eq. 2) G_CURRENT_RANDOM_SEED = nn
                GM_REALS(location) = G_CURRENT_RANDOM_SEED
-               G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-               if (G_RHS .eq. 2) G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
-               G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+               G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+               if (G_RHS .eq. 2) G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+               G_VAR_COLS(G_ARGUMENT_POINTER) = 1
                exit FUN6
             endif
          endif
@@ -2117,10 +2139,10 @@ character(len=GG_LINELEN) :: string_buf
             if (G_RHS .eq. 2) n = max(nn,0)
             if (G_RHS .ne. 2) n = m
 
-            if(too_much_memory( location+m*n - G_STACK_ID_LOC(G_TOP_OF_SAVED))) return
+            if(too_much_memory( location+m*n - G_VAR_DATALOC(G_TOP_OF_SAVED))) return
 
-            G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-            G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+            G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+            G_VAR_COLS(G_ARGUMENT_POINTER) = n
             if (m*n .eq. 0) exit FUN6
          endif
 
@@ -2184,18 +2206,11 @@ character(len=GG_LINELEN) :: string_buf
 
       ll=location
       do j=1,m
-         id=blank
-         id(1:n)=int(GM_REALS(ll:ll+n-1))
-         varname=''
-         do i=1,n
-            if(id(i).le.0)exit   ! ??? why exit. What is the special meaning?
-            if(id(i).lt.G_CHARSET_SIZE.and.id(i).ge.0)then
-               varname(i:i)=achar(id(i))
-            else
-               call journal('sc',' function name contains unacceptable characters:',id(i))
+         varname=ade2str( int(GM_REALS(ll:ll+n-1)) )
+         if(.not.mat_is_name(varname))then
+               call journal('sc',' function name contains unacceptable characters')
                return
-            endif
-         enddo
+         endif
          ll=ll+n
          env_value=system_getenv(varname)
          ! do not leave it undefined or any variable on LHS will not be defined so make sure at least 1
@@ -2204,9 +2219,9 @@ character(len=GG_LINELEN) :: string_buf
 
       m=size(answers,dim=1)
       n=len(answers)
-      if(too_much_memory( location+m*n - G_STACK_ID_LOC(G_TOP_OF_SAVED)) )return
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      if(too_much_memory( location+m*n - G_VAR_DATALOC(G_TOP_OF_SAVED)) )return
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
       if (m*n .eq. 0) exit FUN6
 
       ! so starting at GM_REALS(location) convert the characters to numbers and store the M x N number of characters
@@ -2234,8 +2249,8 @@ character(len=GG_LINELEN) :: string_buf
       GM_REALS(location:location+8-1) = dble(time_values)
       GM_IMAGS(location:location+8-1) = 0.0D0
       ! output is a 1x8 array so store values indicating the size of the new stack value
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 8
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 8
       endblock DATETIME
 !===================================================================================================================================
    end select FUN6
@@ -2293,7 +2308,7 @@ integer                           :: i
    case('abs');             selector=221  !  calling  codes  corresponding  to  the  function  names
    case('round');           selector=222
    case('real');            selector=223
-   case('imag');            selector=224
+   case('imag','aimag');    selector=224
    case('conjg');           selector=225
 
    case('svd');             selector=301
@@ -2317,7 +2332,7 @@ integer                           :: i
    case('plot');            selector=510
    case('rat');             selector=511
    case('debug');           selector=512
-   case('doc');             selector=513
+   case('show');            selector=513
    case('delete');          selector=514
 
    case('magic');           selector=601
@@ -2329,7 +2344,7 @@ integer                           :: i
    case('rand','random');   selector=607
    case('ones');            selector=608
    case('chop');            selector=609
-   case('size');            selector=610
+   case('shape');           selector=610
    case('kron');            selector=611
    case('tril');            selector=614
    case('triu');            selector=615
@@ -2405,15 +2420,15 @@ end subroutine mat_getch
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine mat_base(x,b,eps,s,n)
+subroutine mat_base(x,base,eps,s,n)
 
-! ident_17="@(#)M_matrix::mat_base(3fp): store base b representation of x in s(1:n)"
+! ident_17="@(#)M_matrix::mat_base(3fp): store representation of x in s(1:n) using specified base"
 
-doubleprecision :: x
-doubleprecision :: b
-doubleprecision :: eps
-doubleprecision :: s(*)
-integer         :: n
+doubleprecision            :: x
+doubleprecision,intent(in) :: base
+doubleprecision,intent(in) :: eps
+doubleprecision            :: s(*)
+integer                    :: n
 
 doubleprecision :: t
 
@@ -2432,37 +2447,38 @@ integer      :: m
    s(l+2) = dot
    x = dabs(x)
    if (x .ne. 0.0d0) then
-      k = dlog(x)/dlog(b)
+      k = dlog(x)/dlog(base)
    else
       k = 0
    endif
    if (x .gt. 1.0d0) k = k + 1
-   x = x/b**k
-   if (b*x .ge. b) k = k + 1
-   if (b*x .ge. b) x = x/b
+   x = x/base**k
+   if (base*x .ge. base) k = k + 1
+   if (base*x .ge. base) x = x/base
    if (eps .ne. 0.0d0)then
-      m = (-1)*dlog(eps)/dlog(b) + 4
+      m = (-1)*dlog(eps)/dlog(base) + 4
    else
       m = 54
    endif
    do l = 4, m
-      x = b*x
+      x = base*x
       j = int(x)
       s(l) = dble(j)
       x = x - s(l)
+      s(l)=s(l)+48
    enddo
    s(m+1) = comma
    if (k .ge. 0) s(m+2) = plus
    if (k .lt. 0) s(m+2) = minus
    t = dabs(dble(k))
    n = m + 3
-   if (t .ge. b) n = n + int(dlog(t)/dlog(b))
+   if (t .ge. base) n = n + int(dlog(t)/dlog(base))
    l = n
    INFINITE: do
-      j = int(dmod(t,b))
-      s(l) = dble(j)
+      j = int(dmod(t,base))
+      s(l) = dble(j+48)
       l = l - 1
-      t = t/b
+      t = t/base
       if (l .lt. m+3) exit
    enddo INFINITE
 end subroutine mat_base
@@ -2512,9 +2528,9 @@ integer           :: itype
 !.......................................................................
    if (G_LINECOUNT(1) .lt. 0) goto 99
 !.......................................................................
-   location = G_STACK_ID_LOC(k)
-   m = G_STACK_ROWS(k)
-   n = G_STACK_COLS(k)
+   location = G_VAR_DATALOC(k)
+   m = G_VAR_ROWS(k)
+   n = G_VAR_COLS(k)
    mn = m*n
    typ = 1
    s = 0.0d0
@@ -2748,9 +2764,9 @@ integer           :: m
 integer           :: mn
 integer           :: n
 
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
    mn = m*n
    if (mn .eq. 0) then
    elseif (op .ne. quote) then                                 ! unary minus
@@ -2758,13 +2774,13 @@ integer           :: n
    else                                                        ! transpose
       ll = location + mn
 
-      if(too_much_memory( ll+mn - G_STACK_ID_LOC(G_TOP_OF_SAVED)) )return
+      if(too_much_memory( ll+mn - G_VAR_DATALOC(G_TOP_OF_SAVED)) )return
 
       call mat_wcopy(MN,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(ll),GM_IMAGS(ll),1)
-      M = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      N = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      M = G_VAR_COLS(G_ARGUMENT_POINTER)
+      N = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
       do i = 1, m
          do j = 1, n
             ls = location+mn+(j-1)+(i-1)*n
@@ -2843,7 +2859,7 @@ integer  :: mn, mn1, mn2, mnk
 integer  :: mt
 integer  :: n, nk, nt
 
-   if (G_BOTTOM_OF_SCRATCH_IN_USE .le. 0) then
+   if (G_ARGUMENT_POINTER .le. 0) then
       call mat_err(1)  ! Improper multiple assignment
       return
    endif
@@ -2854,10 +2870,10 @@ integer  :: n, nk, nt
       return
    endif
 
-   m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
    if (m .gt. 0) then
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
    elseif(m.lt.0) then
       call mat_err(14) ! EYE-dentity undefined by CONTEXT
       return
@@ -2875,17 +2891,17 @@ integer  :: n, nk, nt
    nt = 0
 
    ! unconditionally add name to end of list
-   call mat_copyid(G_STACK_IDS(1,G_TOP_OF_SAVED-1),id)
+   call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1),id)
 
    ! did variable already exist (knowning name is there at least once)
    do k=GG_MAX_NUMBER_OF_NAMES,1,-1
-      if (mat_eqid(G_STACK_IDS(1:,k),id)) exit
+      if (mat_eqid(G_VAR_IDS(1:,k),id)) exit
    enddo
 
    if (k .ne. G_TOP_OF_SAVED-1) then        ! variable exists
-      lk = G_STACK_ID_LOC(k)
-      mk = G_STACK_ROWS(k)
-      nk = G_STACK_COLS(k)
+      lk = G_VAR_DATALOC(k)
+      mk = G_VAR_ROWS(k)
+      nk = G_VAR_COLS(k)
       mnk = mk*nk
       if (G_RHS .gt. 2) then
          call mat_err(15)                   ! Improper assignment to submatrix
@@ -2894,7 +2910,7 @@ integer  :: n, nk, nt
          mt = mk
          nt = nk
          lt = location + mn
-         if(too_much_memory( lt + mnk - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )then
+         if(too_much_memory( lt + mnk - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )then
             return
          endif
          call mat_wcopy(mnk,GM_REALS(lk),GM_IMAGS(lk),1,GM_REALS(lt),GM_IMAGS(lt),1)
@@ -2912,16 +2928,16 @@ integer  :: n, nk, nt
 
       if (k .ne. G_TOP_OF_SAVED) then
          ! shift storage
-         ls = G_STACK_ID_LOC(G_TOP_OF_SAVED)
+         ls = G_VAR_DATALOC(G_TOP_OF_SAVED)
          ll = ls + mnk
          call mat_wcopy(lk-ls,GM_REALS(ls),GM_IMAGS(ls),-1,GM_REALS(ll),GM_IMAGS(ll),-1)
          km1 = k-1
          do ib = G_TOP_OF_SAVED, km1
             i = G_TOP_OF_SAVED+km1-ib
-            call mat_copyid(G_STACK_IDS(1,i+1),G_STACK_IDS(1,i))
-            G_STACK_ROWS(i+1) = G_STACK_ROWS(i)
-            G_STACK_COLS(i+1) = G_STACK_COLS(i)
-            G_STACK_ID_LOC(i+1) = G_STACK_ID_LOC(i)+mnk
+            call mat_copyid(G_VAR_IDS(1,i+1),G_VAR_IDS(1,i))
+            G_VAR_ROWS(i+1) = G_VAR_ROWS(i)
+            G_VAR_COLS(i+1) = G_VAR_COLS(i)
+            G_VAR_DATALOC(i+1) = G_VAR_DATALOC(i)+mnk
          enddo
       endif
 
@@ -2934,17 +2950,17 @@ integer  :: n, nk, nt
       goto 99
    endif
 
-   if (G_TOP_OF_SAVED-2 .le. G_BOTTOM_OF_SCRATCH_IN_USE) then
+   if (G_TOP_OF_SAVED-2 .le. G_ARGUMENT_POINTER) then
       call mat_err(18) ! Too many names
       return
    endif
 
    k = G_TOP_OF_SAVED-1
-   call mat_copyid(G_STACK_IDS(1,k), id)
+   call mat_copyid(G_VAR_IDS(1,k), id)
 
    if (G_RHS .eq. 1) then
       !  vect(arg)
-      if (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-1) .lt. 0) then
+      if (G_VAR_ROWS(G_ARGUMENT_POINTER-1) .lt. 0) then
          goto 59
       endif
       mn1 = 1
@@ -2956,40 +2972,40 @@ integer  :: n, nk, nt
             call mat_err(15) ! Improper assignment to submatrix
             return
          endif
-         l2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE-1)
-         m2 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-1)
-         mn2 = m2*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE-1)
+         l2 = G_VAR_DATALOC(G_ARGUMENT_POINTER-1)
+         m2 = G_VAR_ROWS(G_ARGUMENT_POINTER-1)
+         mn2 = m2*G_VAR_COLS(G_ARGUMENT_POINTER-1)
          m1 = -1
          goto 60
       endif
-      l1 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE-1)
-      m1 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-1)
-      mn1 = m1*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE-1)
+      l1 = G_VAR_DATALOC(G_ARGUMENT_POINTER-1)
+      m1 = G_VAR_ROWS(G_ARGUMENT_POINTER-1)
+      mn1 = m1*G_VAR_COLS(G_ARGUMENT_POINTER-1)
       m2 = -1
       goto 60
    elseif (G_RHS .eq. 2)then
       ! matrix(arg,arg)
-      if (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-1).lt.0 .and. G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-2).lt.0) then
+      if (G_VAR_ROWS(G_ARGUMENT_POINTER-1).lt.0 .and. G_VAR_ROWS(G_ARGUMENT_POINTER-2).lt.0) then
          goto 59
       endif
-      l2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE-1)
-      m2 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-1)
-      mn2 = m2*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE-1)
+      l2 = G_VAR_DATALOC(G_ARGUMENT_POINTER-1)
+      m2 = G_VAR_ROWS(G_ARGUMENT_POINTER-1)
+      mn2 = m2*G_VAR_COLS(G_ARGUMENT_POINTER-1)
       if (m2 .lt. 0) mn2 = n
-      l1 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE-2)
-      m1 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-2)
-      mn1 = m1*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE-2)
+      l1 = G_VAR_DATALOC(G_ARGUMENT_POINTER-2)
+      m1 = G_VAR_ROWS(G_ARGUMENT_POINTER-2)
+      mn1 = m1*G_VAR_COLS(G_ARGUMENT_POINTER-2)
       if (m1 .lt. 0) mn1 = m
       goto 60
    endif
 !
 !  STORE
 40 continue
-   if (k .lt. GG_MAX_NUMBER_OF_NAMES) G_STACK_ID_LOC(k) = G_STACK_ID_LOC(k+1) - mn
-   G_STACK_ROWS(k) = m
-   G_STACK_COLS(k) = n
+   if (k .lt. GG_MAX_NUMBER_OF_NAMES) G_VAR_DATALOC(k) = G_VAR_DATALOC(k+1) - mn
+   G_VAR_ROWS(k) = m
+   G_VAR_COLS(k) = n
 
-   lk = G_STACK_ID_LOC(k)
+   lk = G_VAR_DATALOC(k)
    call mat_wcopy(mn,GM_REALS(location),GM_IMAGS(location),-1,GM_REALS(lk),GM_IMAGS(lk),-1)
    goto 90
 !===================================================================================================================================
@@ -2999,7 +3015,7 @@ integer  :: n, nk, nt
       return
    endif
 
-   lk = G_STACK_ID_LOC(k)
+   lk = G_VAR_DATALOC(k)
    call mat_wcopy(mn,GM_REALS(location),GM_IMAGS(location),-1,GM_REALS(lk),GM_IMAGS(lk),-1)
    goto 90
 !===================================================================================================================================
@@ -3031,13 +3047,13 @@ integer  :: n, nk, nt
       return
    endif
    mnk = mk*nk
-   lk = G_STACK_ID_LOC(k+1) - mnk
+   lk = G_VAR_DATALOC(k+1) - mnk
 
    if(too_much_memory( lt + mt*nt - lk) )return
 
-   G_STACK_ID_LOC(k) = lk
-   G_STACK_ROWS(k) = mk
-   G_STACK_COLS(k) = nk
+   G_VAR_DATALOC(k) = lk
+   G_VAR_ROWS(k) = mk
+   G_VAR_COLS(k) = nk
    call mat_wset(mnk,0.0d0,0.0d0,GM_REALS(lk),GM_IMAGS(lk),1)
    if (nt .ge. 1) then
       do j = 1, nt
@@ -3069,9 +3085,9 @@ integer  :: n, nk, nt
 
 99 continue
    if (m .eq. 0) then
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 1
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 1
    else
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 1 - G_RHS
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 1 - G_RHS
    endif
 end subroutine MAT_STACK_PUT
 !==================================================================================================================================!
@@ -3174,7 +3190,7 @@ character(len=:),allocatable :: symbol
       if (r.eq.15) goto 93
       if (r.eq.16 .or. r.eq.17) goto 94
       G_SYM = GG_EOL
-      G_BOTTOM_OF_SCRATCH_IN_USE = 0
+      G_ARGUMENT_POINTER = 0
       if (G_RIO .ne. G_INPUT_LUN) call mat_files(-G_RIO,G_BUF)
       G_RIO = G_INPUT_LUN
       G_LINECOUNT(3) = 0
@@ -3222,7 +3238,7 @@ character(len=:),allocatable :: symbol
             call mat_getsym()
             goto 50
          endif
-         IF (G_CHRA .EQ. LPAREN) then
+         IF (G_CHRA .EQ. LPAREN .or. G_CHRA .EQ. LBRACE) then
             ! lhs is name(...)
             G_LINE_POINTER(5) = G_LINE_POINTER(4)
             call mat_copyid(ID,G_SYN)
@@ -3231,8 +3247,8 @@ character(len=:),allocatable :: symbol
          endif
          goto 50
       endif
-      if (G_SYM .eq. less) goto 40
-      if (G_SYM .eq. great) goto 45
+      if (G_SYM .eq. less .or. G_SYM .eq. lbracket) goto 40
+      if (G_SYM .eq. great .or. G_SYM .eq. rbracket) goto 45
       goto 50
 !.......................................................................
 !     lhs is name(...)
@@ -3251,15 +3267,15 @@ character(len=:),allocatable :: symbol
       excnt = G_PSTK(G_PT)
       G_PT = G_PT-1
       if (G_SYM .eq. comma) goto 32
-      if (G_SYM .ne. rparen) then
+      if ((G_SYM .ne. rparen) .and. (G_SYM.ne.rbrace)) then
          call mat_err(3)
          goto 01
          return  ! ???? cannot unconditionally goto and return
       endif
-      if (G_SYM .eq. rparen) call mat_getsym()
+      if ((G_SYM .eq. rparen) .or. (G_SYM.eq.rbrace)) call mat_getsym()
       if (G_SYM .eq. equal) goto 50
 !     lhs is really rhs, forget scan just done
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - excnt
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - excnt
       G_LINE_POINTER(4) = G_LINE_POINTER(5)
       G_CHRA = lparen
       G_SYM = isname
@@ -3279,7 +3295,7 @@ character(len=:),allocatable :: symbol
       endif
       call mat_copyid(id,G_SYN)
       call mat_getsym()
-      if (G_SYM .eq. great)then
+      if (G_SYM .eq. great.or. G_SYM.eq.rbracket)then
          call mat_getsym()
          if (G_SYM .eq. equal) goto 50
          goto 43
@@ -3303,7 +3319,7 @@ character(len=:),allocatable :: symbol
 !     macros string
    45 continue
       call mat_getsym()
-      if (G_SYM.eq.less .and. G_CHRA.eq.GG_EOL) then
+      if ((G_SYM.eq.less .or. G_SYM.eq.lbracket) .and. G_CHRA.eq.GG_EOL) then
          call mat_err(28) ! Empty macro
          goto 01
       endif
@@ -3314,11 +3330,11 @@ character(len=:),allocatable :: symbol
 !.......................................................................
    46 continue
       G_PT = G_PT-1
-      if (G_SYM.ne.less .and. G_SYM.ne.GG_EOL) then
+      if ((G_SYM.ne.less .and. G_SYM.ne.lbracket) .and. G_SYM.ne.GG_EOL) then
          call mat_err(37) ! Improper MACROS
          goto 01
       endif
-      if (G_SYM .eq. less) call mat_getsym()
+      if (G_SYM .eq. less .or. G_SYM.eq. lbracket) call mat_getsym()
       k = G_LINE_POINTER(6)
       G_LIN(k+1) = G_LINE_POINTER(1)
       G_LIN(k+2) = G_LINE_POINTER(2)
@@ -3326,8 +3342,8 @@ character(len=:),allocatable :: symbol
       G_LINE_POINTER(1) = k + 4
 !     transfer stack to input line
       k = G_LINE_POINTER(1)
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      n = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      n = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
       do j = 1, n
          ls = location + j-1
          G_LIN(k) = int(GM_REALS(ls))
@@ -3340,7 +3356,7 @@ character(len=:),allocatable :: symbol
             call journal('sc',' input buffer limit is',k,'characters')
           endif
       enddo
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
       G_LIN(K) = GG_EOL; G_LIN(K+1:)=blank
       G_LINE_POINTER(6) = k
       G_LINE_POINTER(4) = G_LINE_POINTER(1)
@@ -3488,10 +3504,10 @@ character(len=:),allocatable :: symbol
 !.......................................................................
 !     call mat_matfns by returning to LAFF
    95 continue
-      if(G_BOTTOM_OF_SCRATCH_IN_USE.lt.1)then
-         !call journal('sc','*mat_parse* stack emptied',G_BOTTOM_OF_SCRATCH_IN_USE)
+      if(G_ARGUMENT_POINTER.lt.1)then
+         !call journal('sc','*mat_parse* stack emptied',G_ARGUMENT_POINTER)
       else
-         if (G_FIN.gt.0 .and. G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE).lt.0) call mat_err(14)
+         if (G_FIN.gt.0 .and. G_VAR_ROWS(G_ARGUMENT_POINTER).lt.0) call mat_err(14)
       endif
       if (G_ERR .gt. 0) goto 01
       return
@@ -3510,10 +3526,10 @@ integer                      :: ierr
 
 ! a list of names this procedure matches to use for some preliminary tests
 character(len=10),parameter :: cmd(*)=[ character(len=10) :: &
- & 'clear', 'else',  'end',      'exit',  'for',  &
- & 'help',  'if',    'long',     'quit',  'semi', &
- & 'short', 'what',  'while',    'who',   'sh',   &
- & 'laff',  'shell', 'continue', 'return'         &
+ & 'clear', 'else',  'end',      'exit',   'for',  &
+ & 'help',  'if',    'long',     'quit',   'semi', &
+ & 'short', 'what',  'while',    'who',    'sh',   &
+ & 'laff',  'shell', 'continue', 'return', 'fhelp'   &
  & ]
 
 FINISHED: block
@@ -3534,6 +3550,8 @@ FINISHED: block
 
         if (id.eq.'help')then                ! special case where anything after the help could be a topic
            exit
+        elseif(id.eq.'fhelp')then
+           exit
         else
            call mat_err(16)                  ! improper command
            return
@@ -3550,9 +3568,9 @@ FINISHED: block
    ! alphameric character
       if(verify(achar(G_CHRA),big//little//digit)==0)then ! is alphanumeric so good to go by name
          call mat_getsym()
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 0
          G_RHS = 0
          call mat_stack_put(G_SYN)
          if (G_ERR .gt. 0) return
@@ -3642,11 +3660,11 @@ FINISHED: block
 !===================================================================================================================================
    case('who')
       call journal(' Your current variables are...')
-      call mat_print_id(G_STACK_IDS(1,G_TOP_OF_SAVED),GG_MAX_NUMBER_OF_NAMES-G_TOP_OF_SAVED+1)
+      call mat_print_id(G_VAR_IDS(1,G_TOP_OF_SAVED),GG_MAX_NUMBER_OF_NAMES-G_TOP_OF_SAVED+1)
       !x!do i=1,size(keywords)
       !x!   write(*,*)keywords(i),rows(i),cols(i),locs(i)
       !x!enddo
-      l = GM_BIGMEM-G_STACK_ID_LOC(G_TOP_OF_SAVED)+1
+      l = GM_BIGMEM-G_VAR_DATALOC(G_TOP_OF_SAVED)+1
       call journal('sc','using',l,'out of',GM_BIGMEM,'elements')
 !===================================================================================================================================
    case('what')
@@ -3654,7 +3672,7 @@ FINISHED: block
    case('sh')
       call sh_command()
 !===================================================================================================================================
-   case('help')
+   case('help','fhelp')
       HELP_ : block
       character(len=GG_LINELEN) :: topic_name
          G_BUF=blank
@@ -3671,7 +3689,20 @@ FINISHED: block
             endif
             call mat_buf2str(topic_name,G_BUF,len(topic_name))      ! convert ADE array to string
          endif
-         call help_command(G_HELP_TEXT,topic_name,merge(G_LINECOUNT(:2),[0,huge(0)],G_PROMPT))
+         if(topic_name.eq.'search')then
+            topic_name=ade2str(pack(G_LIN,G_LIN.gt.0.and.G_LIN.lt.255))
+            i=index(topic_name,'search')                            ! assuming help command on line by itself to some extent
+            if(i.ne.0)topic_name=topic_name(i:)
+         endif
+         if(id.eq.'help')then
+            call help_command(G_HELP_TEXT,trim(topic_name),&
+            & merge(G_LINECOUNT(:2),[0,huge(0)],&                      ! page length
+            & G_PROMPT))
+         else
+            call help_command(G_FORTRAN_TEXT,trim(topic_name),&
+            & merge(G_LINECOUNT(:2),[0,huge(0)],&                      ! page length
+            & G_PROMPT))
+         endif
       endblock HELP_
 !===================================================================================================================================
    case default ! did not find a match
@@ -3823,16 +3854,16 @@ integer           :: n
 integer           :: n2
 integer           :: nn
 !
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   M = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   N = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   N = G_VAR_COLS(G_ARGUMENT_POINTER)
 !===================================================================================================================================
    select case(G_FIN)
 !===================================================================================================================================
     case(-1) ! MATRIX RIGHT DIVISION, A/A2
-      l2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      m2 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      n2 = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
+      l2 = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
+      m2 = G_VAR_ROWS(G_ARGUMENT_POINTER+1)
+      n2 = G_VAR_COLS(G_ARGUMENT_POINTER+1)
       if (m2 .ne. n2) then
          call mat_err(20)
          return
@@ -3844,7 +3875,7 @@ integer           :: nn
          endif
          l3 = l2 + m2*n2
 
-         if(too_much_memory( l3+n2 - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+         if(too_much_memory( l3+n2 - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
          call ml_wgeco(GM_REALS(l2),GM_IMAGS(l2),m2,n2,G_BUF,rcond,GM_REALS(l3),GM_IMAGS(l3))
          if (rcond .eq. 0.0d0) then
@@ -3895,14 +3926,14 @@ integer           :: nn
       si(1) = GM_IMAGS(location)
       n = n2
       m = n
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
       call mat_wcopy(n*n,GM_REALS(l2),GM_IMAGS(l2),1,GM_REALS(location),GM_IMAGS(location),1)
 !===================================================================================================================================
     case(-2) ! MATRIX LEFT DIVISION A BACKSLASH A2
-      l2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      m2 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      n2 = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
+      l2 = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
+      m2 = G_VAR_ROWS(G_ARGUMENT_POINTER+1)
+      n2 = G_VAR_COLS(G_ARGUMENT_POINTER+1)
       if (m .ne. n) then
          call mat_err(20)
          return
@@ -3910,7 +3941,7 @@ integer           :: nn
       if (m2*n2 .ne. 1) then
          l3 = l2 + m2*n2
 
-         if(too_much_memory( l3+n - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+         if(too_much_memory( l3+n - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
          call ml_wgeco(GM_REALS(location),GM_IMAGS(location),m,n,G_BUF,rcond,GM_REALS(l3),GM_IMAGS(l3))
          if (rcond .eq. 0.0d0) then
@@ -3932,7 +3963,7 @@ integer           :: nn
             lj = l2+(j-1)*m2
             call ml_wgesl(GM_REALS(location),GM_IMAGS(location),m,n,G_BUF,GM_REALS(lj),GM_IMAGS(lj),0)
          enddo
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n2
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n2
          call mat_wcopy(m2*n2,GM_REALS(l2),GM_IMAGS(l2),1,GM_REALS(location),GM_IMAGS(location),1)
          goto 99
       endif
@@ -3963,7 +3994,7 @@ integer           :: nn
 32    continue
       l3 = location + n*n
 
-      if(too_much_memory( l3+n - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( l3+n - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       call ml_wgeco(GM_REALS(location),GM_IMAGS(location),m,n,G_BUF,rcond,GM_REALS(l3),GM_IMAGS(l3))
       if (rcond .eq. 0.0d0) then
@@ -3997,8 +4028,8 @@ integer           :: nn
       enddo
       GM_REALS(location) = dtr(1)*10.d0**k
       GM_IMAGS(location) = dti(1)*10.d0**k
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       goto 99
 42    continue
       if (dti(1) .eq. 0.0d0)then
@@ -4012,8 +4043,8 @@ integer           :: nn
       GM_IMAGS(location) = dti(1)
       GM_REALS(location+1) = dtr(2)
       GM_IMAGS(location+1) = 0.0d0
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 2
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 2
 43    format(' det =  ',f7.4,7h * 10**,i4)
 44    format(' det =  ',f7.4,' + ',f7.4,' i ',7h * 10**,i4)
 !===================================================================================================================================
@@ -4024,20 +4055,20 @@ integer           :: nn
       endif
       l3 = location + n*n
 
-      if(too_much_memory( l3+n - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( l3+n - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       call ml_wgeco(GM_REALS(location),GM_IMAGS(location),m,n,G_BUF,rcond,GM_REALS(l3),GM_IMAGS(l3))
       GM_REALS(location) = rcond
       GM_IMAGS(location) = 0.0d0
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       if (G_lhs .ne. 1)then
          location = location + 1
          call mat_wcopy(n,GM_REALS(l3),GM_IMAGS(l3),1,GM_REALS(location),GM_IMAGS(location),1)
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
-         G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
+         G_VAR_DATALOC(G_ARGUMENT_POINTER) = location
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       endif
 !===================================================================================================================================
     case(4) ! COMMAND::LU
@@ -4048,16 +4079,16 @@ integer           :: nn
       call ml_wgefa(GM_REALS(location),GM_IMAGS(location),m,n,G_BUF,info)
       if (G_lhs .ne. 2) goto 99
       nn = n*n
-      if (G_BOTTOM_OF_SCRATCH_IN_USE+1 .ge. G_TOP_OF_SAVED) then
+      if (G_ARGUMENT_POINTER+1 .ge. G_TOP_OF_SAVED) then
          call mat_err(18)
          return
       endif
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-      G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location + nn
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+      G_VAR_DATALOC(G_ARGUMENT_POINTER) = location + nn
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
 
-      if(too_much_memory( location+nn+nn - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( location+nn+nn - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       do kb = 1, n
          k = n+1-kb
@@ -4084,8 +4115,8 @@ integer           :: nn
 !===================================================================================================================================
     case(5) ! COMMAND::inverse_hilbert
       n = int(GM_REALS(location))
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
       call mat_inverse_hilbert(GM_REALS(location),n,n)
       call mat_rset(n*n,0.0d0,GM_IMAGS(location),1)
       if (G_FIN .lt. 0) call mat_wscal(n*n,sr(1),si(1),GM_REALS(location),GM_IMAGS(location),1)
@@ -4107,16 +4138,16 @@ integer           :: nn
 !===================================================================================================================================
     case(7) ! COMMAND::RREF
       if (G_RHS .ge. 2)then
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-         location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-         if (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .ne. m) then
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         if (G_VAR_ROWS(G_ARGUMENT_POINTER) .ne. m) then
             call mat_err(5)
             return
          endif
-         n = n + G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+         n = n + G_VAR_COLS(G_ARGUMENT_POINTER)
       endif
       call mat_rref(GM_REALS(location),GM_IMAGS(location),m,m,n,GM_REALS(GM_BIGMEM-4))
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
 !===================================================================================================================================
    end select
 !
@@ -4157,13 +4188,13 @@ integer          :: nn
 !    ABS  ROUN REAL IMAG CONJ
 !     21   22   23   24   25
       if (G_FIN .ne. 0) goto 05
-         location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+1)
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
          powr = GM_REALS(location)
          powi = GM_IMAGS(location)
    05 continue
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      n = G_VAR_COLS(G_ARGUMENT_POINTER)
       if (G_FIN .ge. 11 .and. G_FIN .le. 13) goto 10
       if (G_FIN .eq. 14 .and. (m.eq.1 .or. n.eq.1))then
          goto 50
@@ -4190,7 +4221,7 @@ integer          :: nn
       LE = LD + N
       LW = LE + N
 
-      if(too_much_memory( LW+N - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( LW+N - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       call mat_wcopy(NN,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(L2),GM_IMAGS(L2),1)
 !
@@ -4247,14 +4278,14 @@ integer          :: nn
 !     VECTORS
    31 continue
       IF (.NOT.VECT) goto 34
-      IF (G_BOTTOM_OF_SCRATCH_IN_USE+1 .GE. G_TOP_OF_SAVED) then
+      IF (G_ARGUMENT_POINTER+1 .GE. G_TOP_OF_SAVED) then
          call mat_err(18)
          return
       endif
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-      G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = L2
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+      G_VAR_DATALOC(G_ARGUMENT_POINTER) = L2
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = N
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N
 !
 !     DIAGONAL OF VALUES OR CANONICAL FORMS
    34 continue
@@ -4280,79 +4311,81 @@ integer          :: nn
    37 continue
       IF (G_FIN .EQ. 14) goto 52
       call mat_wcopy(N,GM_REALS(LD),GM_IMAGS(LD),1,GM_REALS(location),GM_IMAGS(location),1)
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       goto 99
 !===================================================================================================================================
-!     ELEMENTARY FUNCTIONS
-!     FOR MATRICES.. X,D = EIG(A), FUN(A) = X*FUN(D)/X
+!     elementary functions
+!     for matrices.. x,d = eig(a), fun(a) = x*fun(d)/x
    40 continue
-      INC = 1
-      N = M*N
-      L2 = location
+      inc = 1
+      n = m*n
+      l2 = location
       goto 44
+
    42 continue
       INC = N+1
+
    44 continue
-      DO J = 1, N
-        LS = L2+(J-1)*INC
-        SR = GM_REALS(LS)
-        SI = GM_IMAGS(LS)
-        TI = 0.0D0
-        IF (G_FIN .eq. 0) then
-          call mat_wlog(SR,SI,SR,SI)
-          call mat_wmul(SR,SI,POWR,POWI,SR,SI)
-          TR(1) = DEXP(SR)*DCOS(SI)
-          TI(1) = DEXP(SR)*DSIN(SI)
+      do j = 1, n
+        ls = l2+(j-1)*inc
+        sr = GM_REALS(ls)
+        si = GM_IMAGS(ls)
+        ti = 0.0d0
+        if (G_FIN .eq. 0) then
+          call mat_wlog(sr,si,sr,si)
+          call mat_wmul(sr,si,powr,powi,sr,si)
+          tr(1) = dexp(sr)*dcos(si)
+          ti(1) = dexp(sr)*dsin(si)
         endif
 
         select case(G_FIN)
-        CASE( 1)
-                 TR(1) = DSIN(SR)*DCOSH(SI)
-                 TI(1) = DCOS(SR)*DSINH(SI)
-        CASE( 2)
-                 TR(1) = DCOS(SR)*DCOSH(SI)
-                 TI(1) = (-DSIN(SR))*DSINH(SI)
-        CASE( 3)
-                 call mat_watan(SR,SI,TR(1),TI(1))
-        CASE( 4)
-                 TR(1) = DEXP(SR)*DCOS(SI)
-                 TI(1) = DEXP(SR)*DSIN(SI)
-        CASE( 5)
-                 call mat_wsqrt(SR,SI,TR(1),TI(1))
-        CASE( 6)
-                 call mat_wlog(SR,SI,TR(1),TI(1))
-        CASE( 21)
-                 TR(1) = mat_pythag(SR,SI)
-        CASE( 22)
-                 TR(1) = mat_round(SR)
-        CASE( 23)
-                 TR(1) = SR
-        CASE( 24)
-                 TR(1) = SI
-        CASE( 25)
-                 TR(1) = SR
-                 TI(1) = -SI
+        case( 1)                                      ! sin
+                 tr(1) = dsin(sr)*dcosh(si)
+                 ti(1) = dcos(sr)*dsinh(si)
+        case( 2)                                      ! cos
+                 tr(1) = dcos(sr)*dcosh(si)
+                 ti(1) = (-dsin(sr))*dsinh(si)
+        case( 3)                                      ! atan
+                 call mat_watan(sr,si,tr(1),ti(1))
+        case( 4)                                      ! exp
+                 tr(1) = dexp(sr)*dcos(si)
+                 ti(1) = dexp(sr)*dsin(si)
+        case( 5)                                      ! sqrt
+                 call mat_wsqrt(sr,si,tr(1),ti(1))
+        case( 6)                                      ! log
+                 call mat_wlog(sr,si,tr(1),ti(1))
+        case( 21)
+                 tr(1) = mat_pythag(sr,si)
+        case( 22)
+                 tr(1) = mat_round(sr)
+        case( 23)
+                 tr(1) = sr
+        case( 24)
+                 tr(1) = si
+        case( 25)
+                 tr(1) = sr
+                 ti(1) = -si
         end select
 
-        IF (G_ERR .GT. 0) return
-        GM_REALS(LS) = mat_flop(TR(1))
-        GM_IMAGS(LS) = 0.0D0
-        IF (TI(1) .NE. 0.0D0) GM_IMAGS(LS) = mat_flop(TI(1))
+        if (G_ERR .gt. 0) return
+        GM_REALS(ls) = mat_flop(tr(1))
+        GM_IMAGS(ls) = 0.0d0
+        if (ti(1) .ne. 0.0d0) GM_IMAGS(ls) = mat_flop(ti(1))
       enddo
-      IF (INC .EQ. 1) goto 99
-      DO J = 1, N
-        LS = L2+(J-1)*INC
-        SR = GM_REALS(LS)
-        SI = GM_IMAGS(LS)
-        LS = location+(J-1)*N
-        LL = L2+(J-1)*N
-        call mat_wcopy(N,GM_REALS(LS),GM_IMAGS(LS),1,GM_REALS(LL),GM_IMAGS(LL),1)
-        call mat_wscal(N,SR,SI,GM_REALS(LS),GM_IMAGS(LS),1)
+      if (inc .eq. 1) goto 99
+      do j = 1, n
+        ls = l2+(j-1)*inc
+        sr = GM_REALS(ls)
+        si = GM_IMAGS(ls)
+        ls = location+(j-1)*n
+        ll = l2+(j-1)*n
+        call mat_wcopy(n,GM_REALS(ls),GM_IMAGS(ls),1,GM_REALS(ll),GM_IMAGS(ll),1)
+        call mat_wscal(n,sr,si,GM_REALS(ls),GM_IMAGS(ls),1)
       enddo
-!     SIGNAL MATFN1 TO DIVIDE BY EIGENVECTORS
+      ! signal matfn1 to divide by eigenvectors
       G_FUN = 21
       G_FIN = -1
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
       goto 99
 !===================================================================================================================================
 !     POLY
@@ -4375,8 +4408,8 @@ integer          :: nn
                             -1)
          LD = LD+1
       enddo
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = N+1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = N+1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       goto 99
 !===================================================================================================================================
 !     ROOTS
@@ -4394,7 +4427,7 @@ integer          :: nn
       L2 = L1+N+1
       LW = L2+N*N
 
-      if(too_much_memory( LW+N - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( LW+N - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       call mat_wset(N*N+N,0.0D0,0.0D0,GM_REALS(L2),GM_IMAGS(L2),1)
       DO J = 1, N
@@ -4416,8 +4449,8 @@ integer          :: nn
          return
       endif
    65 continue
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = N
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       goto 99
 !===================================================================================================================================
    99 continue
@@ -4450,10 +4483,10 @@ integer         :: n
 logical         :: fro,inf
 doubleprecision :: p,s,t(1,1),tol,eps
 !
-   if (G_FIN.eq.1 .and. G_RHS.eq.2) G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   if (G_FIN.eq.1 .and. G_RHS.eq.2) G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
    mn = m*n
    !      SVD PINV COND NORM RANK
    !        1    2    3    4    5
@@ -4464,7 +4497,7 @@ doubleprecision :: p,s,t(1,1),tol,eps
       l1 = ld + min(m+1,n)
       l2 = l1 + n
 
-      if(too_much_memory( l2+min(m,n) - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( l2+min(m,n) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       call ml_wsvdc(GM_REALS(location),GM_IMAGS(location),   &
                   & m,m,n,                               &
@@ -4483,11 +4516,11 @@ doubleprecision :: p,s,t(1,1),tol,eps
       if (t(1,1) .ne. 0.0d0) then
          GM_REALS(location) = mat_flop(s/t(1,1))
          GM_IMAGS(location) = 0.0d0
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       else
          call journal(' CONDITION IS INFINITE')
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
       endif
 !===================================================================================================================================
     case(4) ! command::norm
@@ -4501,10 +4534,10 @@ doubleprecision :: p,s,t(1,1),tol,eps
          if (.not. fro) then
             p = GM_REALS(location)
          endif
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-         location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-         m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-         n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
          mn = m*n
          if (fro) then
             m = mn
@@ -4537,7 +4570,7 @@ doubleprecision :: p,s,t(1,1),tol,eps
             l1 = ld + min(m+1,n)
             l2 = l1 + n
 
-            if(too_much_memory( l2+min(m,n) - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )then
+            if(too_much_memory( l2+min(m,n) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )then
                return
             endif
 
@@ -4580,8 +4613,8 @@ doubleprecision :: p,s,t(1,1),tol,eps
 
       GM_REALS(location) = s
       GM_IMAGS(location) = 0.0d0
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
 !===================================================================================================================================
     case(1) !     COMMAND::SVD
       IF (G_LHS .EQ. 3)then
@@ -4593,7 +4626,7 @@ doubleprecision :: p,s,t(1,1),tol,eps
          L1 = LV + N*N
          L2 = L1 + N
 
-         if(too_much_memory( L2+MIN(M,N) - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+         if(too_much_memory( L2+MIN(M,N) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
          JOB = 11
          IF (G_RHS .EQ. 2) JOB = 21
@@ -4626,30 +4659,30 @@ doubleprecision :: p,s,t(1,1),tol,eps
                       & 1, &
                       & GM_REALS(location),GM_IMAGS(location), &
                       & 1)
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = M
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = K
-         IF (G_BOTTOM_OF_SCRATCH_IN_USE+1 .GE. G_TOP_OF_SAVED) then
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = M
+         G_VAR_COLS(G_ARGUMENT_POINTER) = K
+         IF (G_ARGUMENT_POINTER+1 .GE. G_TOP_OF_SAVED) then
             call mat_err(18)
             return
          endif
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-         G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location + M*K
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = K
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
-         IF (G_BOTTOM_OF_SCRATCH_IN_USE+1 .GE. G_TOP_OF_SAVED) then
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+         G_VAR_DATALOC(G_ARGUMENT_POINTER) = location + M*K
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = K
+         G_VAR_COLS(G_ARGUMENT_POINTER) = N
+         IF (G_ARGUMENT_POINTER+1 .GE. G_TOP_OF_SAVED) then
             call mat_err(18)
             return
          endif
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-         G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location + M*K + K*N
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+         G_VAR_DATALOC(G_ARGUMENT_POINTER) = location + M*K + K*N
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = N
+         G_VAR_COLS(G_ARGUMENT_POINTER) = N
       else
          LD = location + M*N
          L1 = LD + MIN(M+1,N)
          L2 = L1 + N
 
-         if(too_much_memory( L2+MIN(M,N) - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+         if(too_much_memory( L2+MIN(M,N) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
          call ml_wsvdc(GM_REALS(location),GM_IMAGS(location),m,m,n, &
          & GM_REALS(ld),GM_IMAGS(ld),GM_REALS(l1),GM_IMAGS(l1), &
@@ -4660,18 +4693,18 @@ doubleprecision :: p,s,t(1,1),tol,eps
          endif
          K = MIN(M,N)
          call mat_wcopy(K,GM_REALS(LD),GM_IMAGS(LD),1,GM_REALS(location),GM_IMAGS(location),1)
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = K
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = K
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       endif
 !===================================================================================================================================
     case(2,5) ! COMMAND::PINV AND RANK
       TOL = -1.0D0
       IF (G_RHS .EQ. 2) then
          TOL = GM_REALS(location)
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-         location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-         M = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-         N = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         N = G_VAR_COLS(G_ARGUMENT_POINTER)
       endif
       LU = location + M*N
       LD = LU + M*M
@@ -4681,7 +4714,7 @@ doubleprecision :: p,s,t(1,1),tol,eps
       IF (G_FIN .EQ. 5) L1 = LD + N
       L2 = L1 + N
 
-      if(too_much_memory( L2+MIN(M,N) - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( L2+MIN(M,N) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       IF (G_FIN .EQ. 2) JOB = 11
       IF (G_FIN .EQ. 5) JOB = 0
@@ -4720,13 +4753,13 @@ doubleprecision :: p,s,t(1,1),tol,eps
                GM_IMAGS(ll) = mat_wdotci(k,GM_REALS(l2),GM_IMAGS(l2),m,GM_REALS(l1),GM_IMAGS(l1),n)
             enddo
          enddo
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+         G_VAR_COLS(G_ARGUMENT_POINTER) = m
       else
          GM_REALS(location) = dble(k)
          GM_IMAGS(location) = 0.0d0
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       endif
 !===================================================================================================================================
    end select FUN3
@@ -4760,9 +4793,9 @@ integer           :: n2
 character(len=81) :: message
 DOUBLEPRECISION   :: T(1),TOL,EPS
 !
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      M = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      N = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      N = G_VAR_COLS(G_ARGUMENT_POINTER)
 
       IF (G_FIN .EQ. -1) then
          goto 10
@@ -4774,10 +4807,10 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
 !
 !     RECTANGULAR MATRIX RIGHT DIVISION, A/A2
    10 continue
-      L2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      M2 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      N2 = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
+      L2 = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
+      M2 = G_VAR_ROWS(G_ARGUMENT_POINTER+1)
+      N2 = G_VAR_COLS(G_ARGUMENT_POINTER+1)
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
       IF (N.GT.1 .AND. N.NE.N2) then
          call mat_err(11)
          return
@@ -4787,12 +4820,12 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
       LL = L2+M2*N2
       call mat_wcopy(M*N,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(LL),GM_IMAGS(LL),1)
       call mat_wcopy(M*N+M2*N2,GM_REALS(L2),GM_IMAGS(L2),1,GM_REALS(location),GM_IMAGS(location),1)
-      G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location+M2*N2
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = M
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
+      G_VAR_DATALOC(G_ARGUMENT_POINTER) = location+M2*N2
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = M
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N
       call mat_stack1(QUOTE)
       IF (G_ERR .GT. 0) return
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 1
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 1
       M = N2
       N = M2
       goto 20
@@ -4800,14 +4833,14 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
 !     RECTANGULAR MATRIX LEFT DIVISION A BACKSLASH A2
 !
    20 continue
-      L2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      M2 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      N2 = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
+      L2 = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
+      M2 = G_VAR_ROWS(G_ARGUMENT_POINTER+1)
+      N2 = G_VAR_COLS(G_ARGUMENT_POINTER+1)
       IF (M2*N2 .GT. 1) goto 21
         M2 = M
         N2 = M
 
-        if(too_much_memory( L2+M*M - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+        if(too_much_memory( L2+M*M - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
         call mat_wset(M*M-1,0.0D0,0.0D0,GM_REALS(L2+1),GM_IMAGS(L2+1),1)
         call mat_wcopy(M,GM_REALS(L2),GM_IMAGS(L2),0,GM_REALS(L2),GM_IMAGS(L2),M+1)
@@ -4819,7 +4852,7 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
       L3 = L2 + MAX(M,N)*N2
       L4 = L3 + N
 
-      if(too_much_memory( L4 + N - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( L4 + N - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       IF (M .GT. N) goto 23
       DO JB = 1, N2
@@ -4887,8 +4920,8 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
         LL = location+(J-1)*N
         call mat_wcopy(N,GM_REALS(LS),GM_IMAGS(LS),1,GM_REALS(LL),GM_IMAGS(LL),1)
       enddo
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N2
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = N
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N2
       IF (G_FIN .EQ. -1) call mat_stack1(QUOTE)
       IF (G_ERR .GT. 0) return
       goto 99
@@ -4902,7 +4935,7 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
       le = ls + m*n
       l4 = le + mm
 
-      if(too_much_memory( l4+mm - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( l4+mm - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       if (ls.ne.location) then
          call mat_wcopy(m*n,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(ls),GM_IMAGS(ls),1)
@@ -4928,33 +4961,33 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
      &             t,t,t,t,t,t,10000,info)
       enddo
       if (G_FIN .eq. 2) goto 99
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = M
+      G_VAR_COLS(G_ARGUMENT_POINTER) = M
       do j = 1, n
         ll = ls+j+(j-1)*m
         call mat_wset(m-j,0.0d0,0.0d0,GM_REALS(ll),GM_IMAGS(ll),1)
       enddo
-      if (G_BOTTOM_OF_SCRATCH_IN_USE+1 .ge. G_TOP_OF_SAVED) then
+      if (G_ARGUMENT_POINTER+1 .ge. G_TOP_OF_SAVED) then
          call mat_err(18)
          return
       endif
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-      G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = ls
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+      G_VAR_DATALOC(G_ARGUMENT_POINTER) = ls
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
       if (G_LHS .eq. 2) goto 99
       call mat_wset(N*N,0.0D0,0.0D0,GM_REALS(le),GM_IMAGS(le),1)
       do j = 1, n
         ll = le+G_BUF(j)-1+(j-1)*n
         GM_REALS(ll) = 1.0d0
       enddo
-      if (G_BOTTOM_OF_SCRATCH_IN_USE+1 .ge. G_TOP_OF_SAVED) then
+      if (G_ARGUMENT_POINTER+1 .ge. G_TOP_OF_SAVED) then
          call mat_err(18)
          return
       endif
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-      G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = le
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+      G_VAR_DATALOC(G_ARGUMENT_POINTER) = le
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n
       goto 99
 !===================================================================================================================================
 !
@@ -4994,9 +5027,9 @@ integer                    :: ly
 integer                    :: mn
 logical                    :: isfound
 !
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
 
    !  functions/G_FIN
    !  exec save load prin diar disp base line char plot rat  debu doc  delete
@@ -5015,10 +5048,10 @@ logical                    :: isfound
 
          if (G_RHS .ge. 2) then            ! if more than one parameter on exec('filename',flag) get value of FLAG
             flag = int(GM_REALS(location))
-            top2 = G_BOTTOM_OF_SCRATCH_IN_USE
-            G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-            location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-            mn = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+            top2 = G_ARGUMENT_POINTER
+            G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+            location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+            mn = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
          endif
 
          ! if a single character and a digit set LUN to that so exec(0) works
@@ -5078,7 +5111,7 @@ logical                    :: isfound
          endif
 
          G_SYM = GG_EOL
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
       endif
       endblock EXEC_CMD
 !===================================================================================================================================
@@ -5088,13 +5121,13 @@ logical                    :: isfound
       k = GG_MAX_NUMBER_OF_NAMES-4
       if (k .lt. G_TOP_OF_SAVED) k = GG_MAX_NUMBER_OF_NAMES
       if (G_RHS .eq. 2) k = top2
-      if (G_RHS .eq. 2) call mat_copyid(G_STACK_IDS(1,k),G_SYN)
+      if (G_RHS .eq. 2) call mat_copyid(G_VAR_IDS(1,k),G_SYN)
       do
-         location = G_STACK_ID_LOC(k)
-         m = G_STACK_ROWS(k)
-         n = G_STACK_COLS(k)
+         location = G_VAR_DATALOC(k)
+         m = G_VAR_ROWS(k)
+         n = G_VAR_COLS(k)
          do i = 1, GG_MAX_NAME_LENGTH
-            j = G_STACK_IDS(i,k)
+            j = G_VAR_IDS(i,k)
             G_BUF(i) = j
          enddo
          img = 0
@@ -5104,7 +5137,7 @@ logical                    :: isfound
          if (k .lt. G_TOP_OF_SAVED) exit
       enddo
       call mat_files(-lunit,G_BUF) ! close unit
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0  ! do not set "ans" to filename
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0  ! do not set "ans" to filename
 !===================================================================================================================================
       case(14) ! COMMAND::DELETE
          DELETE_IT: block
@@ -5123,7 +5156,7 @@ logical                    :: isfound
             G_ERR=999
             exit FUN5
          endif
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0  ! do not set "ans" to filename
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0  ! do not set "ans" to filename
          endblock DELETE_IT
 !===================================================================================================================================
       case(3) ! command::load
@@ -5134,19 +5167,19 @@ logical                    :: isfound
       call mat_buf2str(mline,G_BUF,GG_LINELEN)
 
       do
-         space_left = G_STACK_ID_LOC(G_TOP_OF_SAVED) - location
+         space_left = G_VAR_DATALOC(G_TOP_OF_SAVED) - location
          IF(.not.G_FILE_OPEN_ERROR)then
             call mat_savlod(lunit, &
                 & id, &
-                & G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE), &
-                & G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE), &
+                & G_VAR_ROWS(G_ARGUMENT_POINTER), &
+                & G_VAR_COLS(G_ARGUMENT_POINTER), &
                 & img, &
                 & space_left, &
                 & GM_REALS(location), &
                 & GM_IMAGS(location))
          endif
 
-         mn = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+         mn = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
 
          if (mn .ne. 0)then
             if (img .eq. 0) call mat_rset(mn,0.0d0,GM_IMAGS(location),1)
@@ -5168,7 +5201,7 @@ logical                    :: isfound
             G_SYM = semi
             G_RHS = 0
             call MAT_STACK_PUT(ID)
-            G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
+            G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
          else
             exit
          endif
@@ -5177,7 +5210,7 @@ logical                    :: isfound
 
       call mat_files(-lunit,G_BUF) ! close unit
 
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       case(4) ! command::print
       k = G_OUTPUT_LUN                                ! hold
@@ -5191,19 +5224,19 @@ logical                    :: isfound
       G_LINECOUNT(2) = location                       ! restore
       G_OUTPUT_LUN = k                                ! restore
 
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       case(5) ! command::diary
       call mat_files(8,G_BUF)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       case(6,7) !     COMMAND::DISPLAY
 60    continue
       if (G_FIN.eq.7)goto 65
       if (G_RHS .ge. 2)then
-         if (G_RHS .ne. 2) call mat_err(39) ! Incorrect number of arguments
-         if (GM_REALS(location) .lt. 1.0d0)then ! test if base is 0
-            call mat_err(36) ! Argument out of range
+         if (G_RHS .ne. 2) call mat_err(39)           ! Incorrect number of arguments
+         if (GM_REALS(location) .lt. 1.0d0)then       ! test if base is 0
+            call mat_err(36)                          ! Argument out of range
             exit FUN5
          endif
          b = GM_REALS(location)
@@ -5235,22 +5268,25 @@ logical                    :: isfound
          call mat_buf2str(mline,G_BUF,n)
          call journal(mline)
       enddo
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
       exit FUN5
 !. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 !     command::base
    65 CONTINUE
-      if (G_RHS .ne. 2) call mat_err(39) ! Incorrect number of arguments
-      if (GM_REALS(location) .le. 1.0d0)then ! test if base is 0
-         call mat_err(36) ! Argument out of range
+      if (G_RHS .ne. 2) then
+         call mat_err(39)                         ! Incorrect number of arguments
+         exit FUN5
+      endif
+      if (GM_REALS(location) .le. 1.0d0) then     ! test if base is <= 0
+         call mat_err(36)                         ! Argument out of range
          exit FUN5
       endif
       b = GM_REALS(location)
       l2 = location
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
       G_RHS = 1
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      m = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
       eps = GM_REALS(GM_BIGMEM-4)
       do i = 1, m
          ls = l2+(i-1)*n
@@ -5259,15 +5295,15 @@ logical                    :: isfound
       enddo
       call mat_rset(m*n,0.0d0,GM_IMAGS(l2),1)
       call mat_wcopy(m*n,GM_REALS(l2),GM_IMAGS(l2),1,GM_REALS(location),GM_IMAGS(location),1)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = n
+      G_VAR_COLS(G_ARGUMENT_POINTER) = m
       call mat_stack1(quote)
       if (G_FIN .eq. 6) goto 60
 !===================================================================================================================================
       case(8)
 !     command::lines
       G_LINECOUNT(2) = int(GM_REALS(location))
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       !!! BROKEN BY GOING TO ASCII. ELIMINATE OR CORRECT
       case(9) !     COMMAND::CHAR                   ! does currently not do anything
@@ -5277,7 +5313,7 @@ logical                    :: isfound
          exit FUN5
       endif
       CH = K
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       case(10) !     COMMAND::PLOT
       IF (G_RHS .GE. 2) goto 82
@@ -5287,7 +5323,7 @@ logical                    :: isfound
          GM_IMAGS(LL) = dble(I)
       enddo
       call mat_plot(G_OUTPUT_LUN,GM_IMAGS(location),GM_REALS(location),N,TDUM,0)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
       exit FUN5
 !. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -5295,17 +5331,17 @@ logical                    :: isfound
       IF (G_RHS .EQ. 2) K = 0
       IF (G_RHS .EQ. 3) K = M*N
       IF (G_RHS .GT. 3) K = G_RHS - 2
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - (G_RHS - 1)
-      N = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1) .NE. N) then
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - (G_RHS - 1)
+      N = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
+      IF (G_VAR_ROWS(G_ARGUMENT_POINTER+1)*G_VAR_COLS(G_ARGUMENT_POINTER+1) .NE. N) then
          call mat_err(5)
          exit FUN5
       endif
-      LX = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      LY = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      IF (G_RHS .GT. 3) location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+2)
+      LX = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      LY = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
+      IF (G_RHS .GT. 3) location = G_VAR_DATALOC(G_ARGUMENT_POINTER+2)
       call mat_plot(G_OUTPUT_LUN,GM_REALS(LX),GM_REALS(LY),N,GM_REALS(location),K)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       case(11) ! COMMAND::RAT
       if (G_RHS .ne. 2) then
@@ -5314,12 +5350,12 @@ logical                    :: isfound
          if (G_lhs .eq. 2) l2 = location + mn
          lw = l2 + mn
 
-         if(too_much_memory( lw + lrat - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+         if(too_much_memory( lw + lrat - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
-         if (G_lhs .eq. 2) G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
-         G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = l2
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+         if (G_lhs .eq. 2) G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
+         G_VAR_DATALOC(G_ARGUMENT_POINTER) = l2
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n
          call mat_rset(G_lhs*mn,0.0d0,GM_IMAGS(location),1)
          do i = 1, mn
             call mat_rat(GM_REALS(location),lrat,mrat,s,t,GM_REALS(lw))
@@ -5332,17 +5368,18 @@ logical                    :: isfound
       else
          mrat = int(GM_REALS(location))
          lrat = int(GM_REALS(location-1))
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 1
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
       endif
 !===================================================================================================================================
       case(12) !     COMMAND::DEBUG
       G_DEBUG_LEVEL = int(GM_REALS(location))
       call journal('sc',' DEBUG ',G_DEBUG_LEVEL)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
-      case(13) !     COMMAND::DOC
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      case(13) !     COMMAND::SHOW
+      call printit()
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       end select FUN5
 !===================================================================================================================================
@@ -5373,10 +5410,10 @@ integer             :: mnk
 integer             :: n
 character(len=GG_MAX_NAME_LENGTH)    :: id_name
 
-   call mat_copyid(G_STACK_IDS(1,G_TOP_OF_SAVED-1), ID)    ! copy ID to next blank entry in G_STACK_IDS in case it is not there(?)
+   call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1), ID)    ! copy ID to next blank entry in G_VAR_IDS in case it is not there(?)
 
-   do k=GG_MAX_NUMBER_OF_NAMES,1,-1                       ! start at bottom and search up through names till find the name
-      if (mat_eqid(G_STACK_IDS(1:,k), id))exit             ! if found name exit loop
+   do k=GG_MAX_NUMBER_OF_NAMES,1,-1                      ! start at bottom and search up through names till find the name
+      if (mat_eqid(G_VAR_IDS(1:,k), id))exit             ! if found name exit loop
    enddo
    ! if (?)
    ! or if matched the name inserted above did not find it.
@@ -5385,17 +5422,17 @@ character(len=GG_MAX_NAME_LENGTH)    :: id_name
       return
    endif
 
-   current_location = G_STACK_ID_LOC(K)                               ! found it, so this is the location where the data begins
+   current_location = G_VAR_DATALOC(K)                               ! found it, so this is the location where the data begins
    IF (G_RHS .EQ. 1) then                                             ! VECT(ARG)
-      IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .EQ. 0) goto 99
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      MN = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      MNK = G_STACK_ROWS(K)*G_STACK_COLS(K)                            ! number of values in this variable
-      IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .LT. 0) MN = MNK
+      IF (G_VAR_ROWS(G_ARGUMENT_POINTER) .EQ. 0) goto 99
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      MN = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
+      MNK = G_VAR_ROWS(K)*G_VAR_COLS(K)                            ! number of values in this variable
+      IF (G_VAR_ROWS(G_ARGUMENT_POINTER) .LT. 0) MN = MNK
       DO I = 1, MN
         LL = location+I-1
         LS = current_location+I-1
-        IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .GT. 0) LS = current_location + int(GM_REALS(LL)) - 1
+        IF (G_VAR_ROWS(G_ARGUMENT_POINTER) .GT. 0) LS = current_location + int(GM_REALS(LL)) - 1
         IF (LS .LT. current_location .OR. LS .GE. current_location+MNK) then
            call mat_err(21)          ! Subscript out of range
            return
@@ -5403,30 +5440,30 @@ character(len=GG_MAX_NAME_LENGTH)    :: id_name
         GM_REALS(LL) = GM_REALS(LS)
         GM_IMAGS(LL) = GM_IMAGS(LS)
       enddo
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      IF (G_STACK_ROWS(K) .GT. 1) G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = MN
-      IF (G_STACK_ROWS(K) .EQ. 1) G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = MN
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+      IF (G_VAR_ROWS(K) .GT. 1) G_VAR_ROWS(G_ARGUMENT_POINTER) = MN
+      IF (G_VAR_ROWS(K) .EQ. 1) G_VAR_COLS(G_ARGUMENT_POINTER) = MN
       goto 99
    elseif (G_RHS .EQ. 2) then                                              ! MATRIX(ARG,ARG)
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-      IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1) .EQ. 0) G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
-      IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .EQ. 0) goto 99
-      L2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      M = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .LT. 0) M = G_STACK_ROWS(K)
-      N = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1) .LT. 0) N = G_STACK_COLS(K)
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      IF (G_VAR_ROWS(G_ARGUMENT_POINTER+1) .EQ. 0) G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+      IF (G_VAR_ROWS(G_ARGUMENT_POINTER) .EQ. 0) goto 99
+      L2 = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
+      M = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
+      IF (G_VAR_ROWS(G_ARGUMENT_POINTER) .LT. 0) M = G_VAR_ROWS(K)
+      N = G_VAR_ROWS(G_ARGUMENT_POINTER+1)*G_VAR_COLS(G_ARGUMENT_POINTER+1)
+      IF (G_VAR_ROWS(G_ARGUMENT_POINTER+1) .LT. 0) N = G_VAR_COLS(K)
       L3 = L2 + N
-      MK = G_STACK_ROWS(K)
-      MNK = G_STACK_ROWS(K)*G_STACK_COLS(K)
+      MK = G_VAR_ROWS(K)
+      MNK = G_VAR_ROWS(K)*G_VAR_COLS(K)
       DO J = 1, N
          DO I = 1, M
            LI = location+I-1
-           IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .GT. 0) LI = location + int(GM_REALS(LI)) - 1
+           IF (G_VAR_ROWS(G_ARGUMENT_POINTER) .GT. 0) LI = location + int(GM_REALS(LI)) - 1
            LJ = L2+J-1
-           IF (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1) .GT. 0) LJ = L2 + int(GM_REALS(LJ)) - 1
+           IF (G_VAR_ROWS(G_ARGUMENT_POINTER+1) .GT. 0) LJ = L2 + int(GM_REALS(LJ)) - 1
            LS = current_location + LI-location + (LJ-L2)*MK
            IF (LS.LT.current_location .OR. LS.GE.current_location+MNK) then
               call mat_err(21)
@@ -5439,31 +5476,31 @@ character(len=GG_MAX_NAME_LENGTH)    :: id_name
       enddo
       MN = M*N
       call mat_wcopy(MN,GM_REALS(L3),GM_IMAGS(L3),1,GM_REALS(location),GM_IMAGS(location),1)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = M
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = M
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N
       goto 99
    elseif (G_RHS .GT. 2) then
       call mat_err(21)                                                     ! Subscript out of range
       return
    else                                                                    ! SCALAR
       location = 1
-      IF (G_BOTTOM_OF_SCRATCH_IN_USE .GT. 0) &
-        & location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) + &
-        & G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
-      IF (G_BOTTOM_OF_SCRATCH_IN_USE+1 .GE. G_TOP_OF_SAVED) then
+      IF (G_ARGUMENT_POINTER .GT. 0) &
+        & location = G_VAR_DATALOC(G_ARGUMENT_POINTER) + &
+        & G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
+      IF (G_ARGUMENT_POINTER+1 .GE. G_TOP_OF_SAVED) then
          call mat_err(18)  ! Too many names
          return
       endif
 
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
 
       !  LOAD VARIABLE TO TOP OF STACK
-      G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = G_STACK_ROWS(K)
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = G_STACK_COLS(K)
-      MN = G_STACK_ROWS(K)*G_STACK_COLS(K)
+      G_VAR_DATALOC(G_ARGUMENT_POINTER) = location
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = G_VAR_ROWS(K)
+      G_VAR_COLS(G_ARGUMENT_POINTER) = G_VAR_COLS(K)
+      MN = G_VAR_ROWS(K)*G_VAR_COLS(K)
 
-      if(too_much_memory( location+MN - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+      if(too_much_memory( location+MN - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
       !  IF RAND, MATFN6 GENERATES RANDOM NUMBER
       IF (K .EQ. GG_MAX_NUMBER_OF_NAMES) then
@@ -5514,13 +5551,13 @@ integer           ::  n2
 integer           ::  nexp
 integer           :: op_select
 
-   l2 = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   m2 = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n2 = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   l2 = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m2 = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n2 = G_VAR_COLS(G_ARGUMENT_POINTER)
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
    G_FUN = 0
 
    if(op.eq.DSTAR)then
@@ -5538,8 +5575,8 @@ integer           :: op_select
          endif
          m = m2
          n = n2
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n
          sr = GM_REALS(location)
          si = GM_IMAGS(location)
          call mat_wcopy(m*n,GM_REALS(location+1),GM_IMAGS(location+1),1,GM_REALS(location),GM_IMAGS(location),1)
@@ -5574,8 +5611,8 @@ integer           :: op_select
          endif
          m = m2
          n = n2
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n
          sr = GM_REALS(location)
          si = GM_IMAGS(location)
          call mat_wcopy(m*n,GM_REALS(location+1),GM_IMAGS(location+1),1,GM_REALS(location),GM_IMAGS(location),1)
@@ -5615,7 +5652,7 @@ integer           :: op_select
       mn = m*n2
       ll = location + mn
 
-      if(too_much_memory( ll+m*n+m2*n2 - G_STACK_ID_LOC(G_TOP_OF_SAVED)) ) exit do_op
+      if(too_much_memory( ll+m*n+m2*n2 - G_VAR_DATALOC(G_TOP_OF_SAVED)) ) exit do_op
 
       call mat_wcopy(m*n+m2*n2,GM_REALS(location),GM_IMAGS(location),-1,GM_REALS(ll),GM_IMAGS(ll),-1)
       do j = 1, n2
@@ -5627,7 +5664,7 @@ integer           :: op_select
             GM_IMAGS(k) = mat_wdotui(N,GM_REALS(k1),GM_IMAGS(k1),m,GM_REALS(k2),GM_IMAGS(k2),1)
          enddo
       enddo
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n2
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n2
       exit do_op
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! multiplication by scalar
@@ -5640,10 +5677,10 @@ integer           :: op_select
       sr = GM_REALS(location)
       si = GM_IMAGS(location)
       l1 = location+1
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m2
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n2
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = m2
+      G_VAR_COLS(G_ARGUMENT_POINTER) = n2
    13 continue
-      mn = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+      mn = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
       call mat_wscal(mn,sr,si,GM_REALS(l1),GM_IMAGS(l1),1)
       if (l1.ne.location) call mat_wcopy(mn,GM_REALS(l1),GM_IMAGS(l1),1,GM_REALS(location),GM_IMAGS(location),1)
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -5667,7 +5704,7 @@ integer           :: op_select
 
       MN = M*N
 
-      if(too_much_memory( L2+MN+N - G_STACK_ID_LOC(G_TOP_OF_SAVED)) ) exit do_op
+      if(too_much_memory( L2+MN+N - G_VAR_DATALOC(G_TOP_OF_SAVED)) ) exit do_op
 
       call mat_wcopy(MN,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(L2),GM_IMAGS(L2),1)
       L3 = L2+MN
@@ -5711,8 +5748,8 @@ integer           :: op_select
       endif
       SR = GM_REALS(location)
       SI = GM_IMAGS(location)
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = M2
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N2
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = M2
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N2
       MN = M2*N2
       DO I = 1, MN
          LL = location+I-1
@@ -5726,8 +5763,8 @@ integer           :: op_select
       N = 0
       IF (G_RHS .GE. 3) then
          ST = GM_REALS(location)
-         G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
-         location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
          IF (ST .EQ. 0.0D0) goto 63
       endif
 
@@ -5738,12 +5775,12 @@ integer           :: op_select
          GM_REALS(location) = E1
          GM_REALS(location+1) = ST
          GM_REALS(location+2) = E2
-         G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = -3
-         G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = -1
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = -3
+         G_VAR_COLS(G_ARGUMENT_POINTER) = -1
          exit DO_OP
       endif
 
-      if(too_much_memory( location + MAX(3,int((E2-E1)/ST)) - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) ) exit do_op
+      if(too_much_memory( location + MAX(3,int((E2-E1)/ST)) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) ) exit do_op
 
       do
          IF (ST .GT. 0.0D0 .AND. GM_REALS(location) .GT. E2) exit
@@ -5755,9 +5792,9 @@ integer           :: op_select
       enddo
 
    63 continue
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = N
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      IF (N .EQ. 0) G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      IF (N .EQ. 0) G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !-----------------------------------------------------------------------------------------------------------------------------------
    case (1000:2000-1) ! element-wise operations
       op = op -1000
@@ -5789,7 +5826,7 @@ integer           :: op_select
    case (2000:) ! kronecker
       G_FIN = op - 2000 - star + 11
       G_FUN = 6
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
       G_RHS = 2
 !-----------------------------------------------------------------------------------------------------------------------------------
    case default
@@ -5848,7 +5885,6 @@ integer                   :: ios
          endif
       endif
       if(G_ECHO)write(*,'(*(g0))')'',trim(mline)
-      call fold(mline)
       shift_mline=adjustl(mline)
       if(shift_mline(1:2).eq.'??')then            ! edit command line history
          mline='. '//mline(3:)
@@ -5943,25 +5979,6 @@ character(len=GG_LINELEN) :: line
    endif
 end function get_pseudo_line
 
-subroutine fold(line)
-! the Fortran matlab version folded these characters, I think even in strings in quotes, so do that for now but probably
-! want to allow both instead of folding or these characters cannot be used in filenames and display() functions
-character(len=*) :: line
-   do i=1,len(line)
-      select case(line(i:i))
-      case('{');line(i:i)='('
-      case('}');line(i:i)=')'
-      case('|');line(i:i)=':'
-      case('$');line(i:i)='\'
-      case('@');line(i:i)='.'
-      case('"');line(i:i)="'"
-      case('[');line(i:i)='<'
-      case(']');line(i:i)='>'
-      case default
-      endselect
-   enddo
-end subroutine fold
-
 end subroutine mat_getlin
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -6031,9 +6048,9 @@ integer            :: n
    G_SYM = semi
    G_CHRA = blank
    j = j+1
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   m = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
    lj = location+(j-1)*m
    l2 = location + m*n
    if (m .ne. -3) goto 12
@@ -6047,16 +6064,16 @@ integer            :: n
    n = j
 12 continue
    if (j .gt. n) goto 20
-   if (G_BOTTOM_OF_SCRATCH_IN_USE+1 .ge. G_TOP_OF_SAVED) then
+   if (G_ARGUMENT_POINTER+1 .ge. G_TOP_OF_SAVED) then
       call mat_err(18) ! too many names
       return
    endif
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-   G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = l2
-   G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = m
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+   G_VAR_DATALOC(G_ARGUMENT_POINTER) = l2
+   G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+   G_VAR_COLS(G_ARGUMENT_POINTER) = 1
 
-   if(too_much_memory( l2+m - G_STACK_ID_LOC(G_TOP_OF_SAVED) ) )return
+   if(too_much_memory( l2+m - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
 
    call mat_wcopy(m,GM_REALS(lj),GM_IMAGS(lj),1,GM_REALS(l2),GM_IMAGS(l2),1)
    G_RHS = 0
@@ -6070,8 +6087,8 @@ integer            :: n
 15 continue
    goto 10
 20 continue
-   G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+   G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+   G_VAR_COLS(G_ARGUMENT_POINTER) = 0
    G_RHS = 0
    call mat_stack_put(G_IDS(1,G_PT))
    if (G_ERR .gt. 0) return
@@ -6093,13 +6110,13 @@ integer            :: n
 !     *call* EXPR
    return
 40 continue
-   if (G_SYM.ne.equal .and. G_SYM.NE.LESS .and. G_SYM.NE.GREAT)then
+   if (G_SYM.ne.equal .and. (G_SYM.NE.LESS.and.G_SYM.ne.lbracket) .and. (G_SYM.NE.GREAT.and.G_SYM.ne.rbracket))then
       call mat_err(35)    ! improper WHILE or IF clause
       return
    endif
    op = G_SYM
    call mat_getsym()
-   if (G_SYM.EQ.equal .or. G_SYM.EQ.great) op = op + G_SYM
+   if (G_SYM.EQ.equal .or. (G_SYM.EQ.great)) op = op + G_SYM
    if (op .gt. great) call mat_getsym()
    G_PSTK(G_PT) = 256*G_PSTK(G_PT) + op
    G_RSTK(G_PT) = 5
@@ -6108,19 +6125,19 @@ integer            :: n
 45 continue
    op = mod(G_PSTK(G_PT),256)
    G_PSTK(G_PT) = G_PSTK(G_PT)/256
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE-1)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER-1)
    e1 = GM_REALS(location)
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
    e2 = GM_REALS(location)
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 2
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 2
    if (mat_eqid(G_SYN,do) .or. mat_eqid(G_SYN,thenn)) G_SYM = semi
    if (G_SYM .EQ. COMMA) G_SYM = SEMI
    if (G_SYM .NE. SEMI) then
       call mat_err(35) ! improper WHILE or IF clause
       return
    endif
-   if (op.eq.equal         .and. e1.eq.e2) goto 50
-   if (op.eq.less          .and. e1.lt.e2) goto 50
+   if (op.eq.equal .and. e1.eq.e2) goto 50
+   if ((op.eq.less) .and. e1.lt.e2) goto 50
    if (op.eq.great         .and. e1.gt.e2) goto 50
    if (op.eq.(less+equal)  .and. e1.le.e2) goto 50
    if (op.eq.(great+equal) .and. e1.ge.e2) goto 50
@@ -6161,7 +6178,7 @@ integer            :: n
    if (G_RSTK(G_PT) .eq. 14) G_PT = G_PT-1
    if (G_PT-1 .le. G_PTZ) return
 
-   if (G_RSTK(G_PT) .eq. 13) G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
+   if (G_RSTK(G_PT) .eq. 13) G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
    if (G_RSTK(G_PT) .eq. 13) G_PT = G_PT-2
    goto 80
 !.......................................................................
@@ -6274,12 +6291,12 @@ integer           :: n
    !      1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
    goto (99,99,99,99,99,99,99,01,01,25,45,65,99,99,99,55,75,32,37),r
 01 continue
-   if (.not.(G_SYM.eq.isnum .or. G_SYM.eq.quote .or.  G_SYM.EQ.less)) then
+   if (.not.(G_SYM.eq.isnum .or. G_SYM.eq.quote .or.  (G_SYM.EQ.less.or.G_SYM.eq.lbracket))) then
 
-      if (G_SYM .eq. great)then
+      if (G_SYM .eq. great.or.G_SYM.eq.rbracket)then
          !  MACROS STRING
             call mat_getsym()
-            if (G_SYM .eq. less .and. G_CHRA.EQ.GG_EOL) then
+            if ((G_SYM .eq. less.or.G_SYM.eq.lbracket) .and. G_CHRA.EQ.GG_EOL) then
             call mat_err(28) ! Empty macro
             return
          endif
@@ -6294,7 +6311,7 @@ integer           :: n
          ! FUNCTION OR MATRIX ELEMENT
          call mat_copyid(id,G_SYN)
          call mat_getsym()
-         if (G_SYM .eq. lparen) goto 42
+         if (G_SYM .eq. lparen .or. G_SYM.eq. lbrace) goto 42
          G_RHS = 0
          call mat_funs(ID)
          if (G_FIN .ne. 0) then
@@ -6313,30 +6330,30 @@ integer           :: n
          goto 60
       endif
       id(1) = BLANK
-      if (G_SYM .eq. lparen) goto 42
+      if (G_SYM .eq. lparen .or. G_SYM.eq. lbrace) goto 42
       call mat_err(2)
       return
    endif
 !======================================================================
    ! put something on the stack
    location = 1
-   if (G_BOTTOM_OF_SCRATCH_IN_USE .gt. 0) then
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) &
-       & + G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) &
-       & * G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   if (G_ARGUMENT_POINTER .gt. 0) then
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER) &
+       & + G_VAR_ROWS(G_ARGUMENT_POINTER) &
+       & * G_VAR_COLS(G_ARGUMENT_POINTER)
    endif
-   if (G_BOTTOM_OF_SCRATCH_IN_USE+1 .ge. G_TOP_OF_SAVED) then
+   if (G_ARGUMENT_POINTER+1 .ge. G_TOP_OF_SAVED) then
       call mat_err(18)
       return
    endif
 
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE+1
-   G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = location
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+   G_VAR_DATALOC(G_ARGUMENT_POINTER) = location
    if (G_SYM .ne. quote) then
-      if (G_SYM .eq. less) goto 20
+      if (G_SYM .eq. less.or.G_SYM.eq.lbracket) goto 20
       ! single number, getsym stored it in GM_IMAGS
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       GM_REALS(location) = GM_IMAGS(GM_BIGMEM)
       GM_IMAGS(location) = 0.0D0
       call mat_getsym()
@@ -6372,43 +6389,43 @@ integer           :: n
       call mat_err(31) ! Improper string
       return
    endif
-   G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 1
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = n
+   G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+   G_VAR_COLS(G_ARGUMENT_POINTER) = n
    call mat_getsym()
    goto 60
 !==================================================================================================================================!
 !  explicit matrix
 20 continue
-   G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+   G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+   G_VAR_COLS(G_ARGUMENT_POINTER) = 0
 
 21 continue
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
-   G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) = &
-      &   G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE-1) &
-      & + G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE-1)&
-      & * G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE-1)
-   G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
+   G_VAR_DATALOC(G_ARGUMENT_POINTER) = &
+      &   G_VAR_DATALOC(G_ARGUMENT_POINTER-1) &
+      & + G_VAR_ROWS(G_ARGUMENT_POINTER-1)&
+      & * G_VAR_COLS(G_ARGUMENT_POINTER-1)
+   G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+   G_VAR_COLS(G_ARGUMENT_POINTER) = 0
    call mat_getsym()
 
 22 continue
-   if (G_SYM.eq.semi .or. G_SYM.eq.great .or. G_SYM.eq.GG_EOL) then
+   if (G_SYM.eq.semi .or. (G_SYM.eq.great.or.G_SYM.eq.rbracket) .or. G_SYM.eq.GG_EOL) then
       if (G_SYM.eq.semi .and. G_CHRA.eq.GG_EOL) call mat_getsym()
       call mat_stack1(quote)
       if (G_ERR .gt. 0) return
-      G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 1
-      if (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .eq. 0)  &
-         & G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
-      if (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .ne. G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1) &
-         & .and. G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1) .gt. 0) then
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 1
+      if (G_VAR_ROWS(G_ARGUMENT_POINTER) .eq. 0)  &
+         & G_VAR_ROWS(G_ARGUMENT_POINTER) = G_VAR_ROWS(G_ARGUMENT_POINTER+1)
+      if (G_VAR_ROWS(G_ARGUMENT_POINTER) .ne. G_VAR_ROWS(G_ARGUMENT_POINTER+1) &
+         & .and. G_VAR_ROWS(G_ARGUMENT_POINTER+1) .gt. 0) then
          call mat_err(6)
          return
       endif
-      G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) &
-         & + G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
+      G_VAR_COLS(G_ARGUMENT_POINTER) = G_VAR_COLS(G_ARGUMENT_POINTER) &
+         & + G_VAR_COLS(G_ARGUMENT_POINTER+1)
       if (G_SYM .eq. GG_EOL) call mat_getlin()
-      if (G_SYM .ne. great) goto 21
+      if (G_SYM .ne. great.and. G_SYM.ne.rbracket) goto 21
       call mat_stack1(quote)
       if (G_ERR .gt. 0) return
       call mat_getsym()
@@ -6422,26 +6439,26 @@ integer           :: n
 !==================================================================================================================================!
 25 continue
    G_PT = G_PT-1
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE - 1
-   if (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .eq. 0) then
-      G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 1
+   if (G_VAR_ROWS(G_ARGUMENT_POINTER) .eq. 0) then
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = G_VAR_ROWS(G_ARGUMENT_POINTER+1)
    endif
 
-   if (G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) .ne. G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE+1))then
+   if (G_VAR_ROWS(G_ARGUMENT_POINTER) .ne. G_VAR_ROWS(G_ARGUMENT_POINTER+1))then
       call mat_err(5)
       return
    endif
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) =  &
-      & G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) + G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE+1)
+   G_VAR_COLS(G_ARGUMENT_POINTER) =  &
+      & G_VAR_COLS(G_ARGUMENT_POINTER) + G_VAR_COLS(G_ARGUMENT_POINTER+1)
    goto 22
 !==================================================================================================================================!
 32 continue
    G_PT = G_PT-1
-   if (G_SYM.ne.less .and. G_SYM.NE.GG_EOL) then
+   if ((G_SYM.ne.less.or.G_SYM.eq.lbracket) .and. G_SYM.NE.GG_EOL) then
       call mat_err(37) ! Improper MACROS
       return
    endif
-   if (G_SYM .EQ. LESS) call mat_getsym()
+   if (G_SYM .EQ. LESS.or.G_SYM.eq.lbracket) call mat_getsym()
    k = G_LINE_POINTER(6)
    G_LIN(k+1) = G_LINE_POINTER(1)
    G_LIN(k+2) = G_LINE_POINTER(2)
@@ -6449,8 +6466,8 @@ integer           :: n
    G_LINE_POINTER(1) = k + 4
 !     transfer stack to input line
    k = G_LINE_POINTER(1)
-   location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)
-   n = G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)*G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   n = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
    do j = 1, n
       ls = location + j-1
       G_LIN(k) = int(GM_REALS(ls))
@@ -6461,7 +6478,7 @@ integer           :: n
       if (k.lt.1024) k = k+1
       if (k.eq.1024)call journal('sc','Input buffer char limit exceeded=',K)
    enddo
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE-1
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
    G_LIN(k) = GG_EOL;G_LIN(k+1:)=blank
    G_LINE_POINTER(6) = k
    G_LINE_POINTER(4) = G_LINE_POINTER(1)
@@ -6500,11 +6517,11 @@ integer           :: n
    excnt = G_PSTK(G_PT)
    G_PT = G_PT-1
    if (G_SYM .eq. comma) goto 42
-   if (G_SYM .ne. rparen) then
+   if ((G_SYM .ne. rparen) .and. (G_SYM.ne.rbrace)) then
       call mat_err(3)
       return
    endif
-   if (G_SYM .eq. rparen) call mat_getsym()
+   if ((G_SYM .eq. rparen) .or. (G_SYM .eq. rbrace)) call mat_getsym()
    if (id(1) .eq. blank) goto 60
    G_RHS = excnt
    call MAT_STACK_GET(id)
@@ -6762,10 +6779,10 @@ integer                            :: k
    ! convert character name to laff character set
    id=iachar(' ')
    call mat_str2buf(varname,id,len(varname))
-   call mat_copyid(G_STACK_IDS(1,G_TOP_OF_SAVED-1), ID)   ! copy ID to next blank entry in G_STACK_IDS for messages(?)
+   call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1), ID)   ! copy ID to next blank entry in G_VAR_IDS for messages(?)
 
    do k=GG_MAX_NUMBER_OF_NAMES,1,-1                       ! start at bottom and search up through names till find the name
-      if (mat_eqid(G_STACK_IDS(1:,k), id))exit            ! if found name exit loop
+      if (mat_eqid(G_VAR_IDS(1:,k), id))exit            ! if found name exit loop
    enddo
 
    ! if matched the name inserted above did not find it.
@@ -6897,10 +6914,10 @@ integer                                  :: i,j,k,location,m,n
    id=iachar(' ')
    call mat_str2buf(varname,id,len(varname))
    ! ??? make sure this letter is in set of LAFF characters and get its LAFF number
-   call mat_copyid(G_STACK_IDS(1,G_TOP_OF_SAVED-1), ID)   ! copy ID to next blank entry in G_STACK_IDS for messages(?)
+   call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1), ID)   ! copy ID to next blank entry in G_VAR_IDS for messages(?)
 
    do k=GG_MAX_NUMBER_OF_NAMES,1,-1                       ! start at bottom and search up through names till find the name
-      if (mat_eqid(G_STACK_IDS(1:,k), id))exit            ! if found name exit loop
+      if (mat_eqid(G_VAR_IDS(1:,k), id))exit            ! if found name exit loop
    enddo
 
    ! if matched the name inserted above did not find it.
@@ -6911,10 +6928,10 @@ integer                                  :: i,j,k,location,m,n
       allocate(a(0,0))
    else
       if(allocated(a))deallocate(a)
-      M=G_STACK_ROWS(k)
-      N=G_STACK_COLS(k)
+      M=G_VAR_ROWS(k)
+      N=G_VAR_COLS(k)
       allocate(a(m,n))
-      location=G_STACK_ID_LOC(k)
+      location=G_VAR_DATALOC(k)
       do j=1,n
          do i=1,m
             if(type.eq.0)then
@@ -7033,15 +7050,15 @@ integer                              :: size_of_a
       img=0
    endif
 
-   if(G_BOTTOM_OF_SCRATCH_IN_USE.ne.0)then
-      location = G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE) ! location of bottom of used scratch space
+   if(G_ARGUMENT_POINTER.ne.0)then
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER) ! location of bottom of used scratch space
    else
-     !call journal('sc','<WARNING>G_BOTTOM_OF_SCRATCH_IN_USE=',G_BOTTOM_OF_SCRATCH_IN_USE)
-     G_BOTTOM_OF_SCRATCH_IN_USE= 1
-     G_STACK_ID_LOC(G_BOTTOM_OF_SCRATCH_IN_USE)=1
+     !call journal('sc','<WARNING>G_ARGUMENT_POINTER=',G_ARGUMENT_POINTER)
+     G_ARGUMENT_POINTER= 1
+     G_VAR_DATALOC(G_ARGUMENT_POINTER)=1
      location=1
    endif
-   space_left = G_STACK_ID_LOC(G_TOP_OF_SAVED) - location
+   space_left = G_VAR_DATALOC(G_TOP_OF_SAVED) - location
    !! assume input arrays can be one or two dimension but laff stores everything as a vector and store m and n
    m=size(realxx,dim=1)
    n=size(realxx,dim=2)
@@ -7061,8 +7078,8 @@ integer                              :: size_of_a
       endif
       GM_REALS(location:location+m*n-1)=rowpack(realxx)
    endif
-   G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE)=m
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE)=n
+   G_VAR_ROWS(G_ARGUMENT_POINTER)=m
+   G_VAR_COLS(G_ARGUMENT_POINTER)=n
    G_SYM = semi   !! ??? why
    G_RHS = 0      !! ??? why
    call mat_str2buf(varname,id,GG_MAX_NAME_LENGTH)                        ! convert character string to an ID
@@ -7070,9 +7087,9 @@ integer                              :: size_of_a
    !! ???? check if varname is an acceptable name
    call mat_stack_put(id)
    !! ???? if(G_ERR.ne.0)
-   G_BOTTOM_OF_SCRATCH_IN_USE = G_BOTTOM_OF_SCRATCH_IN_USE + 1
-   G_STACK_ROWS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
-   G_STACK_COLS(G_BOTTOM_OF_SCRATCH_IN_USE) = 0
+   G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
+   G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+   G_VAR_COLS(G_ARGUMENT_POINTER) = 0
 end subroutine store_double_into_laff
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -7960,8 +7977,10 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   procedures that serves as a convenient tool for Fortran programs to          ',&
 '   interact with their data (interactively or in batch mode) with a             ',&
 '   tool that acts as a basic "laboratory" for computations involving            ',&
-'   matrices. It provides easy access to matrix software developed by            ',&
-'   the LINPACK and EISPACK projects.                                            ',&
+'   matrices.                                                                    ',&
+'                                                                                ',&
+'   It provides easy access to matrix software developed by the LINPACK          ',&
+'   and EISPACK projects.                                                        ',&
 '                                                                                ',&
 '   It is based on the Los Alamos procedure MATLAB, and owes much to             ',&
 '   Cleve Moler, Department of Computer Science, University of New Mexico.       ',&
@@ -7986,24 +8005,21 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   nonsymmetric eigenvalue problems, to fairly sophisticated matrix             ',&
 '   tools such as the singular value decomposition.                              ',&
 '                                                                                ',&
-'   LAFF is well suited for classroom use.  It should be useful in               ',&
-'   introductory courses in applied linear algebra, as well as more              ',&
-'   advanced courses in numerical analysis, matrix theory, statistics and        ',&
-'   applications of matrices to other disciplines. In nonacademic settings,      ',&
-'   LAFF can serve as a "desk calculator" for the quick solution of              ',&
-'   small problems involving matrices.                                           ',&
+'   LAFF should be useful in applied linear algebra, as well as more             ',&
+'   general numerical analysis, matrix theory, statistics and applications       ',&
+'   of matrices to other disciplines.                                            ',&
+'                                                                                ',&
+'   LAFF can serve as a "desk calculator" for the quick solution of small        ',&
+'   problems involving matrices.                                                 ',&
 '                                                                                ',&
 '   The program is written in Fortran and is designed to be readily              ',&
 '   installed under any operating system which permits interactive               ',&
 '   execution of Fortran programs. The resources required are fairly             ',&
-'   modest. There are less than 7000 lines of Fortran source code,               ',&
-'   including the LINPACK and EISPACK subroutines used.                          ',&
+'   modest.                                                                      ',&
 '                                                                                ',&
-'   The size of the matrices that can be handled in LAFF depends upon            ',&
-'   the amount of storage that is set aside when the system is compiled          ',&
-'   on a particular machine.  Since most of the algorithms used access           ',&
-'   memory in a sequential fashion, a large amount of allocated storage          ',&
-'   causes little or no difficulties even when virtual memory is used.           ',&
+'   The size of the matrices that can be handled in LAFF depends upon the        ',&
+'   amount of storage available on the supporting platform and the optional      ',&
+'   word count that can be supplied on an initial call to LAFF(3f).              ',&
 '                                                                                ',&
 '   In some ways, LAFF resembles SPEAKEASY [4] and, to a lesser extent,          ',&
 '   APL. All are interactive terminal languages that ordinarily accept           ',&
@@ -8028,12 +8044,11 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   In more advanced applications, LAFF can be used in conjunction with          ',&
 '   other programs in several ways. It is possible to define new LAFF            ',&
-'   functions and add them to the system. With most operating systems,           ',&
-'   it is possible to use the local file system to pass matrices between         ',&
-'   LAFF and other programs. LAFF command and statement input can be             ',&
-'   obtained from a local file instead of from the terminal. The most            ',&
-'   power and flexibility is obtained by using LAFF as a subroutine              ',&
-'   which is called by other programs.                                           ',&
+'   functions and add them to the system.  it is possible to use the local       ',&
+'   file system to pass matrices between LAFF and other programs. LAFF           ',&
+'   command and statement input can be obtained from a local file instead        ',&
+'   of from the terminal. The most power and flexibility is obtained by          ',&
+'   using LAFF as a subroutine which is called by other programs.                ',&
 '                                                                                ',&
 '   This document first gives an overview of LAFF from the user''s               ',&
 '   point of view. Several extended examples involving data fitting,             ',&
@@ -8131,8 +8146,8 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   Two consecutive slashes anywhere on a line cause the remainder of            ',&
 '   the line to be ignored. This is useful for inserting comments.               ',&
 '                                                                                ',&
-'   Names of variables are formed by a letter, followed by any number of         ',&
-'   letters and digits, but only the first 32 characters are remembered.         ',&
+'   Names of variables are formed by a letter, followed by any of                ',&
+'   letters, digits and underscores, up to 63 characters in length.              ',&
 '                                                                                ',&
 '   The special character prime ('') is used to denote the transpose of          ',&
 '   a matrix, so                                                                 ',&
@@ -8180,15 +8195,13 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   Note that both upper and lower case letters are allowed for input            ',&
 '   (on those systems which have both).                                          ',&
 '                                                                                ',&
-'   There are two "matrix division" symbols in LAFF, \ and / .                   ',&
-'   (If your terminal does not have a backslash, use $ instead, or               ',&
-'   see "CHAR".) If A and B are matrices, then A\B and B/A correspond            ',&
-'   formally to left and right multiplication of B by the inverse of             ',&
-'   A, that is inv(A)*B and B*inv(A), but the result is obtained                 ',&
-'   directly without the computation of the inverse. In the scalar               ',&
-'   case, 3\1 and 1/3 have the same value, namely one-third. In                  ',&
-'   general, A\B denotes the solution X to the equation A*X = B and              ',&
-'   B/A denotes the solution to X*A = B.                                         ',&
+'   There are two "matrix division" symbols in LAFF, \ and / .  If A and         ',&
+'   B are matrices, then A\B and B/A correspond formally to left and right       ',&
+'   multiplication of B by the inverse of A, that is inv(A)*B and B*inv(A),      ',&
+'   but the result is obtained directly without the computation of the           ',&
+'   inverse. In the scalar case, 3\1 and 1/3 have the same value, namely         ',&
+'   one-third. In general, A\B denotes the solution X to the equation A*X =      ',&
+'   B and B/A denotes the solution to X*A = B.                                   ',&
 '                                                                                ',&
 '   Left division, A\B, is defined whenever B has as many rows as A. If A        ',&
 '   is square, it is factored using Gaussian elimination. The factors are        ',&
@@ -8323,12 +8336,10 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   (Roundoff error usually causes this result to be a matrix of "small"         ',&
 '   numbers, rather than all zeros.)                                             ',&
 '                                                                                ',&
-'   All computations are done using either single or double precision real       ',&
-'   arithmetic, whichever is appropriate for the particular computer. There      ',&
+'   All computations are done using double precision real arithmetic. There      ',&
 '   is no mixed-precision arithmetic.  The Fortran COMPLEX data type             ',&
 '   is not used because many systems create unnecessary underflows and           ',&
-'   overflows with complex operations and because some systems do not            ',&
-'   allow double precision complex arithmetic.                                   ',&
+'   overflows with complex operations.                                           ',&
 '                                                                                ',&
 '================================================================================',&
 'FUNCTIONS                                                                       ',&
@@ -8538,10 +8549,14 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   The "quit" and "exit" commands cause return to the underlying operating      ',&
 '   system through the Fortran RETURN statement.                                 ',&
 '                                                                                ',&
-'   LAFF has a limited facility for handling text. Any string of                 ',&
-'   characters delineated by quotes (with two quotes used to allow one           ',&
-'   quote within the string) is saved as a vector of integer values that         ',&
-'   are the ADE (Ascii Decimal Equivalent) value of the character.               ',&
+'   LAFF has a limited facility for handling text. Any string of characters      ',&
+'   delineated by quotes (with two quotes used to allow one quote within         ',&
+'   the string) is saved as a vector of integer values that are the ADE          ',&
+'   (Ascii Decimal Equivalent) value of the character, with special              ',&
+'   equivalencing of the characters {}[]" into ()<>'' in expressions. It         ',&
+'   is important to know you use those characters as part of an expression       ',&
+'   or command without treating them as equivalent outside of strings.           ',&
+'                                                                                ',&
 '   (The complete list is in the appendix under "CHAR".) For example             ',&
 '                                                                                ',&
 '      ''2*A + 3''  is the same as  < 50 42 65 32 43 32 51 >.                    ',&
@@ -9599,46 +9614,64 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   There are four different ways LAFF can be used in                            ',&
 '   conjunction with other programs:                                             ',&
 '                                                                                ',&
-'         -- user,                                                               ',&
-'         -- exec,                                                               ',&
-'         -- save and load,                                                      ',&
-'         -- MATZ, call and quit .                                               ',&
+'      -- user() - a user-supplied subroutine                                    ',&
+'      -- exec() - reading commands from a file                                  ',&
+'      -- save() and load() -- reading specially formatted data files.           ',&
+'      -- laff() - call the interpreter with a CHARACTER array of                ',&
+'                  commands or interactively.                                    ',&
 '                                                                                ',&
-'   Let us illustrate each of these by the following simple                      ',&
-'   example.                                                                     ',&
+'   Let us illustrate each of these by equivalents of the following              ',&
+'   simple example.                                                              ',&
+'                                                                                ',&
+'   You can start the laff(1) program up and simply enter:                       ',&
 '                                                                                ',&
 '         n = 6                                                                  ',&
 '         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);                           ',&
-'         A                                                                      ',&
-'         X = inv(A)                                                             ',&
+'         a                                                                      ',&
+'         x = inv(a)                                                             ',&
 '                                                                                ',&
-'   The example A could be introduced into LAFF by writing                       ',&
-'   the following Fortran subroutine.                                            ',&
+'   An example user routine could be introduced into LAFF that                   ',&
+'   does the same thing as the "for" statement by compiling and                  ',&
+'   linking the following subroutine into the calling program.                   ',&
 '                                                                                ',&
-'            SUBROUTINE laff_user(A,M,N,S,T)                                     ',&
-'            DOUBLEPRECISION A(*),S,T                                            ',&
-'            N = int(A(1))                                                       ',&
-'            M = N                                                               ',&
-'            DO J = 1, N                                                         ',&
-'               DO I = 1, N                                                      ',&
-'                  K = I + (J-1)*M                                               ',&
-'                  A(K) = IABS(I-J)                                              ',&
+'         program demo_user                                                      ',&
+'         implicit none                                                          ',&
+'         use M_matrix                                                           ',&
+'         call set_usersub(laff_user)                                            ',&
+'         call laff()                                                            ',&
+'         subroutine laff_user(a,m,n,s,t)                                        ',&
+'            implicit none                                                       ',&
+'            doubleprecision a(:),s,t                                            ',&
+'            integer m,n                                                         ',&
+'            n = int(a(1))                                                       ',&
+'            m = n                                                               ',&
+'            do j = 1, n                                                         ',&
+'               do i = 1, n                                                      ',&
+'                  k = i + (j-1)*m                                               ',&
+'                  a(k) = iabs(i-j)                                              ',&
 '               enddo                                                            ',&
 '            enddo                                                               ',&
-'            END SUBROUTINE USER                                                 ',&
+'            end subroutine laff_user                                            ',&
+'         end program demo_user                                                  ',&
 '                                                                                ',&
-'   This subroutine should be compiled and linked into LAFF in                   ',&
-'   place of the original version of USER. Then the LAFF                         ',&
-'   statements                                                                   ',&
+'   A user-defined function can then be registered with the program              ',&
+'   with                                                                         ',&
+'                                                                                ',&
+'           call set_usersub(SUBROUTINE_NAME)                                    ',&
+'                                                                                ',&
+'   Note the routine must be defined with an explicit interface                  ',&
+'   available in the calling unit.                                               ',&
+'                                                                                ',&
+'   Then the LAFF statements                                                     ',&
 '                                                                                ',&
 '         n = 6                                                                  ',&
-'         A = user(n)                                                            ',&
-'         X = inv(A)                                                             ',&
+'         a = user(n)                                                            ',&
+'         x = inv(a)                                                             ',&
 '                                                                                ',&
 '   do the job.                                                                  ',&
 '                                                                                ',&
-'   The example A could be generated by storing the following                    ',&
-'   text in a file named, say, EXAMPLE .                                         ',&
+'   The example procedure could be called by storing the following               ',&
+'   text in a file named, say, EXAMPLE.                                          ',&
 '                                                                                ',&
 '         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);                           ',&
 '                                                                                ',&
@@ -9646,7 +9679,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '         n = 6                                                                  ',&
 '         exec(''EXAMPLE'',0)                                                    ',&
-'         X = inv(A)                                                             ',&
+'         x = inv(a)                                                             ',&
 '                                                                                ',&
 '   have the desired effect. The 0 as the optional second parameter              ',&
 '   of exec indicates that the text in the file should not be printed            ',&
@@ -9655,25 +9688,25 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   The matrices A and X could also be stored in files. Two                      ',&
 '   separate main programs would be involved. The first is:                      ',&
 '                                                                                ',&
-'            PROGRAM MAINA                                                       ',&
-'            DOUBLEPRECISION A(10,10)                                            ',&
-'            N = 6                                                               ',&
-'            DO J = 1, N                                                         ',&
-'               DO I = 1, N                                                      ',&
-'                  A(I,J) = IABS(I-J)                                            ',&
+'            program maina                                                       ',&
+'            doubleprecision a(10,10)                                            ',&
+'            n = 6                                                               ',&
+'            do j = 1, n                                                         ',&
+'               do i = 1, n                                                      ',&
+'                  a(i,j) = iabs(i-j)                                            ',&
 '               enddo                                                            ',&
 '            enddo                                                               ',&
 '            OPEN(UNIT=1,FILE=''A'')                                             ',&
-'            WRITE(1,101) N,N                                                    ',&
-'        101 FORMAT(''A   '',2I4)                                                ',&
-'            DO J = 1, N                                                         ',&
-'               WRITE(1,102) (A(I,J),I=1,N)                                      ',&
+'            write(1,''(a32,2i4)'') ''a'', n,n                                   ',&
+'            do j = 1, n                                                         ',&
+'               write(1,102) (a(i,j),i=1,n)                                      ',&
 '            enddo                                                               ',&
-'        102 FORMAT(4Z18)                                                        ',&
-'            END PROGRAM MAINA                                                   ',&
+'        102 format(4z18)                                                        ',&
+'            end program maina                                                   ',&
 '                                                                                ',&
 '   The OPEN statement may take different forms on different systems.            ',&
 '   It attaches Fortran logical unit number 1 to the file named A.               ',&
+'                                                                                ',&
 '   The FORMAT number 102 may also be system dependent. This                     ',&
 '   particular one is appropriate for hexadecimal computers with an 8            ',&
 '   byte double precision floating point word. Check, or modify,                 ',&
@@ -9683,30 +9716,29 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   following statements:                                                        ',&
 '                                                                                ',&
 '         load(''A'')                                                            ',&
-'         X = inv(A)                                                             ',&
+'         X = inv(a)                                                             ',&
 '         save(''X'',X)                                                          ',&
 '                                                                                ',&
-'   If all goes according to plan, this will read the matrix A from              ',&
+'   If all goes according to plan, this will read the matrix "a" from            ',&
 '   the file A, invert it, store the inverse in X and then write the             ',&
 '   matrix X on the file X. The following program can then access X.             ',&
 '                                                                                ',&
-'            PROGRAM MAINX                                                       ',&
-'            DOUBLEPRECISION X(10,10)                                            ',&
-'            OPEN(UNIT=1,FILE=''X'')                                             ',&
-'            REWIND 1                                                            ',&
-'            READ (1,101) ID,M,N                                                 ',&
-'        101 FORMAT(A32,2I4)                                                     ',&
-'            DO J = 1, N                                                         ',&
-'               READ(1,102) (X(I,J),I=1,M)                                       ',&
-'            ENDDO                                                               ',&
-'        102 FORMAT(4Z18)                                                        ',&
+'            program mainx                                                       ',&
+'            doubleprecision x(10,10)                                            ',&
+'            open(unit=1,file=''x'')                                             ',&
+'            rewind 1                                                            ',&
+'            read (1, ''(a32,2i4)'') id,m,n                                      ',&
+'            do j = 1, n                                                         ',&
+'               read(1,''(4z18)'') (x(i,j),i=1,m)                                ',&
+'            enddo                                                               ',&
 '            ...                                                                 ',&
 '            ...                                                                 ',&
 '                                                                                ',&
+'                                                                                ',&
 '   The most elaborate mechanism involves using LAFF as a subroutine             ',&
 '   within another program. Communication with the LAFF stack is                 ',&
-'   accomplished using subroutine MATZ which is distributed with LAFF,           ',&
-'   but which is not used by LAFF itself. The preamble of MATZ is:               ',&
+'   accomplished using subroutine laff().                                        ',&
+'    The preamble of MATZ is:                                                    ',&
 '                                                                                ',&
 '         SUBROUTINE MATZ(A,LDA,M,N,ID,JOB,IERR)                                 ',&
 '         INTEGER LDA,M,N,JOB,IERR                                               ',&
@@ -9771,15 +9803,15 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'ACKNOWLEDGEMENT                                                                 ',&
 '                                                                                ',&
-'   Most of the work on LAFF has been carried out at the University              ',&
-'   of New Mexico, where it is being supported by the National Science           ',&
-'   Foundation. Additional work has been done during visits to Stanford          ',&
-'   Linear Accelerator Center, Argonne National Laboratory and Los Alamos        ',&
-'   Scientific Laboratory, where support has been provided by NSF and            ',&
-'   the Department of Energy.                                                    ',&
+'   LAFF was inspired by the MATLAB subroutine.  Most of the work on             ',&
+'   MATLAB was carried out at the University of New Mexico, where it was         ',&
+'   being supported by the National Science Foundation. Additional work          ',&
+'   has been done during visits to Stanford Linear Accelerator Center,           ',&
+'   Argonne National Laboratory and Los Alamos Scientific Laboratory,            ',&
+'   where support has been provided by NSF and the Department of Energy.         ',&
 '                                                                                ',&
 '================================================================================',&
-'REFERENCES                                                                      ',&
+'REFERENCES FOR THE MATLAB ROUTINE                                               ',&
 '                                                                                ',&
 ' [1]  J. J. Dongarra, J. R. Bunch, C. B. Moler and G. W. Stewart,               ',&
 '      LINPACK Users'' Guide, Society for Industrial and Applied                 ',&
@@ -9824,7 +9856,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'SUMMARY    A list of basic (case-sensitive) section and topic names             ',&
 '   .______________._________________________________________________________.   ',&
-'   |SYNTAX        | [ ] < > ( ) = .  , !  ; \ / '''' + - * : semi             | ',&
+'   |SYNTAX        | [ ] < > ( ) = .  , !  ; \ / '''' + - * : semi ?           | ',&
 '   |______________._________________________________________________________|   ',&
 '   |VARIABLES     | ans    clear who                                        |   ',&
 '   |______________._________________________________________________________|   ',&
@@ -9834,7 +9866,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   |              | eig    eye   hess   invh   imag     inv    kron   lu    |   ',&
 '   |              | magic  norm  ones   orth   pinv     poly   prod   qr    |   ',&
 '   |              | rand   rank  rcond  rat    real     rref   roots  round |   ',&
-'   |              | schur  size  sum    svd    tril     triu   user   zeros |   ',&
+'   |              | schur  shape sum    svd    tril     triu   user   zeros |   ',&
 '   |______________._________________________________________________________|   ',&
 '   |FLOW control  | else   end   if     for    while    exit   quit         |   ',&
 '   |______________._________________________________________________________|   ',&
@@ -9844,7 +9876,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   |______________._________________________________________________________|   ',&
 '   |ENVIRONMENT   | getenv                                                  |   ',&
 '   |______________._________________________________________________________|   ',&
-'   |DOCUMENTATION | help   manual topics NEWS                               |   ',&
+'   |DOCUMENTATION | help   fhelp  NEWS                                      |   ',&
 '   |______________._________________________________________________________|   ',&
 '   |MISCELLANEOUS | eps    debug  flops sh     MACROS   EDIT   CHARS        |   ',&
 '   |______________._________________________________________________________|   ',&
@@ -9867,6 +9899,15 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '        q                                                                       ',&
 '================================================================================',&
 'DOCUMENTATION                                                                   ',&
+'fhelp topic|SECTION_NAME                                                        ',&
+'                                                                                ',&
+'      "fhelp" is identical in usage to "help" except that it searches a         ',&
+'      collection of descriptions of Fortran intrinsics.                         ',&
+'                                                                                ',&
+'        fhelp verify                                                            ',&
+'        fhelp pack                                                              ',&
+'                                                                                ',&
+'      See "help"                                                                ',&
 '                                                                                ',&
 'help  topic|SECTION_NAME                                                        ',&
 '                                                                                ',&
@@ -9876,6 +9917,9 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      o  "help" with no options lists common topic and section names.           ',&
 '      o  The special topic "topics" shows all topic lines.                      ',&
 '      o  The special topic "manual" displays all the help text.                 ',&
+'      o  The special topic "search" shows lines from the manual                 ',&
+'         containing the subsequent string                                       ',&
+'                                                                                ',&
 '         Enter "h" at the "continue ..." prompt for additional options.         ',&
 '                                                                                ',&
 '      For example:                                                              ',&
@@ -9887,6 +9931,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '         help FLOW   // the entire section on flow control is displayed.        ',&
 '         help manual // show all the help text                                  ',&
 '         help help   // obviously prints this message.                          ',&
+'         help search factor // show all lines containing "factor".              ',&
 '                                                                                ',&
 '      Alternatively, To place all the documenation in a file, use               ',&
 '      "help manual" and enter "w help.txt" at the "continue .." prompt.         ',&
@@ -9902,7 +9947,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      Mar, 1990.                                                                ',&
 '                                                                                ',&
-'      Input lines can now be recalled and edited.  A "!!" on a line by          ',&
+'      Input lines can now be recalled and edited.  A "??" on a line by          ',&
 '      itself calls the command history mode. Enter "?" after entering           ',&
 '      the mode for details.                                                     ',&
 '                                                                                ',&
@@ -9991,12 +10036,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      situation, it may be replaced by a semicolon to suppress                  ',&
 '      printing.                                                                 ',&
 '                                                                                ',&
-'!     If the line begins with two exclamations command history                  ',&
-'      mode is entered. The rest of the line is treated as an optional           ',&
-'      initial history edit command. Enter "!!?" to enter history mode           ',&
-'      and then display additional instructions.                                 ',&
-'                                                                                ',&
-'      Otherwise if the exclamation is the first character of a line the         ',&
+'!     If an exclamation is the first character of a line the                    ',&
 '      rest of the line is passed to the system to be executed.                  ',&
 '                                                                                ',&
 '      Examples:                                                                 ',&
@@ -10046,13 +10086,15 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      IF A and B have the same dimensions, then A ./ B has                      ',&
 '      elements a(i,j)/b(i,j) .                                                  ',&
 '                                                                                ',&
-'      Two or more slashes together on a line indicate a logical                 ',&
-'      end of line. Any following text is ignored.                               ',&
+'      Two or more slashes together on a line indicate a logical end of          ',&
+'      line. Any following text is ignored.                                      ',&
 '                                                                                ',&
 '''     Transpose. X'' is the complex conjugate transpose of X .                 ',&
-'      Quote. ''ANY TEXT'' is a vector whose components are the LAFF             ',&
-'      internal codes for the characters. A quote within the text is             ',&
-'      indicated by two quotes. See "display" and "FILE" .                       ',&
+'                                                                                ',&
+'      A quote is also use to delmit text. ''ANY TEXT'' is a vector whose        ',&
+'      components are the LAFF internal codes for the characters. A              ',&
+'      quote within the text is indicated by two quotes. See "display"           ',&
+'      and "FILE" .                                                              ',&
 '                                                                                ',&
 '+     Addition. X + Y . X and Y must have the same dimensions.                  ',&
 '                                                                                ',&
@@ -10073,18 +10115,24 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 ':     Colon. Used in subscripts, "for" iterations and possibly                  ',&
 '      elsewhere.                                                                ',&
 '                                                                                ',&
-'         J:K  is the same as  <J, J+1, ..., K>                                  ',&
-'         J:K  is empty if  J > K .                                              ',&
-'         J:I:K  is the same as  <J, J+I, J+2I, ..., K>                          ',&
-'         J:I:K  is empty if  I > 0 and J > K or if I < 0 and J < K .            ',&
+'        j:k   is the same as  <j, j+1, ..., k>                                  ',&
+'              is empty if  j > k .                                              ',&
+'        j:i:k is the same as [j, j+i,j+2*i, ..., k]                             ',&
+'              (Fortran DO loop users beware of the unusual order!)              ',&
+'                                                                                ',&
+'         j:i:k  is the same as  <j, j+i, j+2i, ..., k>                          ',&
+'         j:i:k  is empty if  i > 0 and j > k or if i < 0 and j < k .            ',&
 '                                                                                ',&
 '      The colon notation can be used to pick out selected rows,                 ',&
 '      columns and elements of vectors and matrices.                             ',&
 '                                                                                ',&
-'         A(:) is all the elements of A, regarded as a single column.            ',&
-'         A(:,J)  is the J-th column of A                                        ',&
-'         A(J:K)  is A(J),A(J+1),...,A(K)                                        ',&
-'         A(:,J:K)  is A(:,J),A(:,J+1),...,A(:,K) and so on.                     ',&
+'         A(:)    is all the elements of A, regarded as a single column.         ',&
+'                 However, used on the left side of an assignment, A(:)          ',&
+'                 fills A, but preserves its shape.                              ',&
+'        A(:,j)   is the j-th column of A                                        ',&
+'        A(j:k)   is A(j), A(j+1), ... , A(k)                                    ',&
+'        A(:,j:k) is A(:,j), A(:,j+1), ... ,A(:,k) and so on.                    ',&
+'        A(:,:)   is the same as A.                                              ',&
 '                                                                                ',&
 '      For the use of the colon in the "for" statement, See "for" .              ',&
 '                                                                                ',&
@@ -10234,6 +10282,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      "invh" has an alias of "inverse_hilbert" and "invhilb".                   ',&
 '                                                                                ',&
+'aimag see "imag"                                                                ',&
 'imag  "imag(X)" is the imaginary part of X .                                    ',&
 '                                                                                ',&
 'inv   "inv(X)" is the inverse of the square matrix X . A warning                ',&
@@ -10318,7 +10367,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      so that A*X*A = A , X*A*X = X and AX and XA are Hermitian . The           ',&
 '      computation is based on "svd(A)" and any singular values less             ',&
 '      than a tolerance are treated as zero. The default tolerance is            ',&
-'      "norm(size(A),''inf'')*norM(A)*eps". This tolerance may be overridden     ',&
+'      "norm(shape(A),''inf'')*norM(A)*eps". This tolerance may be overridden    ',&
 '      with "X = pinv(A,tol)". See "rank".                                       ',&
 '                                                                                ',&
 'poly  Characteristic polynomial.                                                ',&
@@ -10361,7 +10410,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      is first entered.                                                         ',&
 '                                                                                ',&
 'rank  Rank. "K = rank(X)" is the number of singular values of X                 ',&
-'      that are larger than "norm(size(X),''inf'')*norm(X)*eps".                 ',&
+'      that are larger than "norm(shape(X),''inf'')*norm(X)*eps".                ',&
 '      "K = rank(X,tol)" is the number of singular values of X that              ',&
 '      are larger than tol.                                                      ',&
 '                                                                                ',&
@@ -10427,9 +10476,9 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '       diagonal, and a unitary matrix U so that X = U*T*U'' and                 ',&
 '       U''*U = eye . By itself, "schur(X)" returns T .                          ',&
 '                                                                                ',&
-'size  If X is an M by N matrix, then size(X) is <M, N> .                        ',&
-'      Can also be used with a multiple assignment,                              ',&
-'            <M, N> = size(X) .                                                  ',&
+'shape  If X is an M by N matrix, then shape(X) is <M, N> .                      ',&
+'       Can also be used with a multiple assignment,                             ',&
+'            <M, N> = shape(X) .                                                 ',&
 '                                                                                ',&
 'sum   "sum(X)" is the sum of all the elements of X.                             ',&
 '      "sum(diag(X))" is the trace of X.                                         ',&
@@ -10603,7 +10652,8 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      Files are searched for by the given name. If not found, it is searched    ',&
 '      for in the colon-separated directory names in the environment variable    ',&
-'      LAFF_PATH.                                                                ',&
+'      LAFF_PATH. It is looked for first literally by the given name, and then   ',&
+'      by the name suffixed with ".la".                                          ',&
 '                                                                                ',&
 '      "include" is an alias for "exec".                                         ',&
 '                                                                                ',&
@@ -10748,7 +10798,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '            // read commands from a file if an environment variable is set.     ',&
 '            MATRC=getenv(''MATRC'');                                            ',&
-'            if MATRC <> " ", exec(''MATRC'');                                   ',&
+'            if MATRC <> '' '', exec(''MATRC'');                                 ',&
 '================================================================================',&
 'PERFORMANCE INFORMATION                                                         ',&
 '                                                                                ',&
@@ -10775,38 +10825,31 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   characters delineated by quotes (with two quotes used to allow one           ',&
 '   quote within the string) is saved as a vector of integer values that         ',&
 '   are the ADE (Ascii Decimal Equivalent) value of the character.               ',&
+'                                                                                ',&
+'   In commands { and } are equivalent to ( and )                                ',&
+'                                                                                ',&
+'   When defining an array [ and ] or < and > may be used as the delimiters.     ',&
+'                                                                                ',&
+'   laff(3f)  is too flexible about that and lets them be interchanged freely    ',&
+'   instead of being matched but that will probably change to be more strictly   ',&
+'   enforced.                                                                    ',&
+'                                                                                ',&
+'   Currently " is not a special character but will probably be allowed as a     ',&
+'   string quoting character in the future.                                      ',&
+'                                                                                ',&
 '   For example                                                                  ',&
 '                                                                                ',&
 '      ''2*A + 3''        //  is the same as  < 50 42 65 32 43 32 51 >.          ',&
 '      display(32:126)  //  display the basic visible ASCII characters           ',&
 '                                                                                ',&
-'   Currently, upon input certain alternate characters are folded into           ',&
-'   others so that if you input any of the characters {}|$@"[] they will         ',&
-'   be converted to other characters.                                            ',&
-'                K  character alternate name                                     ',&
-'               36                      blank                                    ',&
-'               37       (        {     lparen                                   ',&
-'               38       )        }     rparen                                   ',&
-'               40       :        |     colon                                    ',&
-'               45       \        $     backslash                                ',&
-'               47       .        @     dot                                      ',&
-'               49       ''        "     quote                                   ',&
-'               50       <        [     less                                     ',&
-'               51       >        ]     great                                    ',&
-'                                                                                ',&
-'   unused: `~!#%^&_?                                                            ',&
 '                                                                                ',&
 '   So if you wanted to home the cursor and clear the screen on an               ',&
 '   ANSI-compatible terminal and entered                                         ',&
 '                                                                                ',&
 '       display(<27,''[H'',27,''[2J''>)                                          ',&
 '                                                                                ',&
-'   It would not work as the [ character got mapped to <. You would              ',&
-'   instead enter                                                                ',&
-'                                                                                ',&
-'       display([27,91,''H'',27,91,''2J''])                                      ',&
-'                                                                                ',&
-'   More usefully, if you define the string                                      ',&
+'   The terminal screen would clear. More usefully, if you define the            ',&
+'   string                                                                       ',&
 '                                                                                ',&
 '       clr=''display([27,91,''''H'''',27,91,''''2J''''])''                      ',&
 '                                                                                ',&
@@ -10836,7 +10879,13 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      |112  p |113  q |114  r |115  s |116  t |117  u |118  v |119  w |         ',&
 '      |120  x |121  y |122  z |123  { |124  | |125  } |126  ~ |127 del|         ',&
 '      *-------*-------*-------*-------*-------*-------*-------*-------*         ',&
-'??    See "EDIT"                                                                ',&
+'                                                                                ',&
+'??    Two exclamation marks beginning a line enters command history mode.       ',&
+'      The rest of the line is treated as an optional initial history            ',&
+'      edit command. Enter "???" to enter history mode and then display          ',&
+'      additional instructions.                                                  ',&
+'      see "EDIT" for further details.                                           ',&
+'                                                                                ',&
 'EDIT                                                                            ',&
 '      A command line consisting of two question marks("??") will cause a        ',&
 '      small line-based editor to be called (very similar to the CDC NOS         ',&
@@ -10859,7 +10908,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      For example, if you had entered a line such as:                           ',&
 '                                                                                ',&
-'         <M,N>=size(A);for I = 1:M, for J = 1:N, A(I,J) = A(I,J)+3.6;           ',&
+'         <M,N>=shape(A);for I = 1:M, for J = 1:N, A(I,J) = A(I,J)+3.6;          ',&
 '                                                                                ',&
 '      Then to repeat the command changing "3.6" to "5.1" enter                  ',&
 '                                                                                ',&
@@ -10926,29 +10975,40 @@ end function
 !===================================================================================================================================
 subroutine printit()
 integer :: i
+integer :: m,n
+integer :: l
 if(allocated(G_PSEUDO_FILE)) write(*,*)'G_PSEUDO_FILE:SIZE:',size(G_PSEUDO_FILE)
-write(*,*)'G_PROMPT:',G_PROMPT,':G_ECHO:',G_ECHO
-write(*,*)'G_LIN:',trim(ade2str(G_LIN))
-write(*,*)'G_LHS:',G_LHS,':G_RHS:',G_RHS
-write(*,*)'G_FIN:',G_FIN,':G_FUN:',G_FUN,':G_FMT:',G_FMT
-write(*,*)'G_RIO:',G_RIO,':G_INPUT_LUN:',G_INPUT_LUN,':G_OUTPUT_LUN:',G_OUTPUT_LUN
-write(*,*)'G_PTZ:',G_PTZ,':G_SYM:',G_SYM,':G_SYN:',trim(ade2str(G_SYN))
-write(*,*)'G_CURRENT_RANDOM_SEED:',G_CURRENT_RANDOM_SEED,':G_CURRENT_RANDOM_TYPE:',G_CURRENT_RANDOM_TYPE
-write(*,*)'G_FLOP_COUNTER:',G_FLOP_COUNTER
-write(*,*)'G_DEBUG_LEVEL:',G_DEBUG_LEVEL
-write(*,*)'G_FILE_OPEN_ERROR:',G_FILE_OPEN_ERROR,':G_ERR:',G_ERR
-write(*,*)'G_LINECOUNT:',G_LINECOUNT
-                                     ! [1] lines displayed since count started
-                                     ! [2] line limit before warning (ie. page length+1)
-                                     ! [3] 0 or 1 for "semi" mode to be on or off
-                                     ! [4] flag from "exec" command, and ...
-
-write(*,*)'G_BUF:',trim(ade2str(G_BUF))
-write(*,*)'GM_BIGMEM:',GM_BIGMEM
-write(*,*)'G_TOP_OF_SAVED:',G_TOP_OF_SAVED,':G_BOTTOM_OF_SCRATCH_IN_USE:',G_BOTTOM_OF_SCRATCH_IN_USE
+write(*,gen1)'G_PROMPT:',G_PROMPT,':G_ECHO:',G_ECHO
+write(*,gen1)'G_LIN:',trim(ade2str(G_LIN))
+write(*,gen1)'G_LINE_POINTER:',G_LINE_POINTER
+!                                              ! [1] first character to process in current line
+!                                              ! [2] last character to process in current line
+!                                              ! [3]
+!                                              ! [4] pointer into current character in current line being processed
+!                                              ! [5]
+!                                              ! [6]
+write(*,gen1)'G_LHS:',G_LHS,':G_RHS:',G_RHS
+write(*,gen1)'G_FIN:',G_FIN,':G_FUN:',G_FUN,':G_FMT:',G_FMT
+write(*,gen1)'G_RIO:',G_RIO,':G_INPUT_LUN:',G_INPUT_LUN,':G_OUTPUT_LUN:',G_OUTPUT_LUN
+write(*,gen1)'G_PTZ:',G_PTZ,':G_SYM:',G_SYM,':G_SYN:',trim(ade2str(G_SYN))
+write(*,gen1)'G_CURRENT_RANDOM_SEED:',G_CURRENT_RANDOM_SEED,':G_CURRENT_RANDOM_TYPE:',G_CURRENT_RANDOM_TYPE
+write(*,gen1)'G_FLOP_COUNTER:',G_FLOP_COUNTER
+write(*,gen1)'G_DEBUG_LEVEL:',G_DEBUG_LEVEL
+write(*,gen1)'G_FILE_OPEN_ERROR:',G_FILE_OPEN_ERROR,':G_ERR:',G_ERR
+write(*,gen1)'G_LINECOUNT:',G_LINECOUNT
+!                                    ! [1] lines displayed since count started
+!                                    ! [2] line limit before warning (ie. page length+1)
+!                                    ! [3] 0 or 1 for "semi" mode to be on or off
+!                                    ! [4] flag from "exec" command, and ...
+write(*,gen1)'G_BUF:',trim(ade2str(G_BUF))
+write(*,gen1)'GM_BIGMEM:',GM_BIGMEM
+write(*,gen1)'G_TOP_OF_SAVED:',G_TOP_OF_SAVED,':G_ARGUMENT_POINTER:',G_ARGUMENT_POINTER
 do i=1,GG_MAX_NUMBER_OF_NAMES
-   if(.not.(ade2str(G_STACK_IDS(:,i)).eq.''.and.G_STACK_ID_LOC(i).eq.0.and.G_STACK_ROWS(i).eq.0.and.G_STACK_ROWS(i).eq.0))then
-      write(*,*)ade2str(G_STACK_IDS(:,i)),G_STACK_ID_LOC(i),G_STACK_ROWS(i),G_STACK_ROWS(i)
+   m=G_VAR_ROWS(i)
+   n=G_VAR_COLS(i)
+   l=G_VAR_DATALOC(i)
+   if(.not.(ade2str(G_VAR_IDS(:,i)).eq.''.and.l.eq.0.and.m.eq.0.and.n.eq.0))then
+      write(*,*)i,ade2str(G_VAR_IDS(:,i)),l,m,n,'VALS=',real(GM_REALS(l:l+m*n-1))
    endif
 enddo
 !==================================================================================================================================!
@@ -10960,12 +11020,6 @@ enddo
 !integer                  :: G_PT
 !
 !integer                  :: G_CHRA ! current character in line
-!integer                  :: G_LINE_POINTER(6) ! [1] first character to process in current line
-!                                              ! [2] last character to process in current line
-!                                              ! [3]
-!                                              ! [4] pointer into current character in current line being processed
-!                                              ! [5]
-!                                              ! [6]
 !==================================================================================================================================!
 !doubleprecision,allocatable    :: GM_REALS(:), GM_IMAGS(:)               ! set to size of GM_BIGMEM
 !==================================================================================================================================!
@@ -11033,14 +11087,11 @@ end subroutine mat_wlog
 !==================================================================================================================================!
 subroutine mat_watan(xr,xi,yr,yi)
 
-! ident_47="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
+! ident_38="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
 
-doubleprecision :: xr
-doubleprecision :: xi
-doubleprecision :: yr
-doubleprecision :: yi
-doubleprecision :: tr
-doubleprecision :: ti
+doubleprecision,intent(in)  :: xr, xi
+doubleprecision,intent(out) :: yr, yi
+doubleprecision             :: tr, ti
 
    if (xi .eq. 0.0d0) then
       yr = datan2(xr,1.0d0)
@@ -11062,4 +11113,3 @@ end module M_matrix
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-

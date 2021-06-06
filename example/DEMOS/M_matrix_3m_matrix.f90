@@ -14,7 +14,7 @@
            ! pass some commands to laff(3f)
            call laff([character(len=80) :: &
            &'PI=atan(1)*4               ', &
-           &'mytitle="this is my title";', &
+           &"mytitle='this is my title';", &
            &'littlearray=<              ', &
            &'   1 2 3;                  ', &
            &'   4 5 6;                  ', &
@@ -23,11 +23,11 @@
            &'S=sum(A)                   ', &
            &'I=inv(littlearray);        ', &
            &'B=littlearray*sin(PI/3)    ', &
-           &'save("keepB",B)            ', &
+           &"save('keepB',B)            ", &
            &''])
 
            ! read a file containing laff(3f) commands
-           call laff('exec("mycommands");')
+           call laff("exec('mycommands');")
 
            ! interactively interact with laff(3f) interpreter
            call laff()

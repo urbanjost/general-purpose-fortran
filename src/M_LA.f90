@@ -65,10 +65,144 @@ public mat_wsign
 !public :: ml_wqrsl
 !public :: ml_wsvdc
 
+public :: linspace
+
 integer,parameter,private:: sp=kind(1.0),dp=kind(1.0d0)
 
 integer,save             :: LA_FLOP_COUNTER(2)=[0,0]
+
+interface linspace
+   module procedure  &
+   & linspace_real128, linspace_real64, linspace_real32, &
+   & linspace_int64,   linspace_int32,  linspace_int16,  linspace_int8
+end interface linspace
+
 contains
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+!>
+!!##NAME
+!!     linspace(3f) - [M_LA] - return a vector of linearly spaced values
+!!##SYNOPSIS
+!!
+!!     y = linspace(x1,x2)
+!!     y = linspace(x1,x2,n)
+!!##DESCRIPTION
+!!    linspace returns a vector of linearly spaced values from x1 to
+!!    x2 inclusive. It gives direct control over the number of points
+!!    and always includes the endpoints, the results being the same as
+!!    [(x1+i*(x2-x1)/(n-1),i=0,n-1)] if n>1 and [x1,x2] if n<=1.
+!!##OPTIONS
+!!    X1,X2     X1 and X2 are the upper and lower bound of the values
+!!              returned. The options can be of type REAL or INTEGER,
+!!              but must be of the same type.
+!!##RETURNS
+!!    LINSPACE  The returned row vector starts with X1 and ends with X2,
+!!              returning N evenly spaced values.
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!    program demo_linspace
+!!    use M_LA,  only : linspace
+!!    implicit none
+!!    character(len=*), parameter :: gen='(*(g0, 1x))'
+!!       write( *, gen ) linspace(  0,      9,    10 )
+!!       write( *, gen ) linspace( 10.0,   20.0,  11 )
+!!       write( *, gen ) linspace( 11.1d0, 12.1d0, 5 )
+!!       write( *, gen ) linspace( 11.1,   12.1,   5 )
+!!    end program demo_linspace
+!!   Results:
+!!    0 1 2 3 4 5 6 7 8 9
+!!    10.00 11.00 12.00 13.00 14.00 15.00 16.00 17.00 18.00 19.00 20.00
+!!    11.1000000000 11.3500000000 11.6000000000 11.8500000000 12.100000000
+!!    11.1000004 11.3500004 11.6000004 11.8500004 12.1000004
+!!
+!!   Results:
+function linspace_real128(x1,x2,n)
+integer,intent(in)             :: n
+real(kind=real128),intent(in)  :: x1,x2
+real(kind=real128)             :: linspace_real128(n)
+integer(kind=int64)            :: i
+   if(n.le.1)then
+      linspace_real128=[x1,x2]
+   else
+      linspace_real128=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+   endif
+end function linspace_real128
+!-----------------------------------------------------------------------------------------------------------------------------------
+function linspace_real64(x1,x2,n)
+integer,intent(in)             :: n
+real(kind=real64),intent(in)   :: x1,x2
+real(kind=real64)              :: linspace_real64(n)
+integer(kind=int64)            :: i
+   if(n.le.1)then
+      linspace_real64=[x1,x2]
+   else
+      linspace_real64=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+   endif
+end function linspace_real64
+!-----------------------------------------------------------------------------------------------------------------------------------
+function linspace_real32(x1,x2,n)
+integer,intent(in)             :: n
+real(kind=real32),intent(in)   :: x1,x2
+real(kind=real32)              :: linspace_real32(n)
+integer(kind=int64)            :: i
+   if(n.le.1)then
+      linspace_real32=[x1,x2]
+   else
+      linspace_real32=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+   endif
+end function linspace_real32
+!-----------------------------------------------------------------------------------------------------------------------------------
+function linspace_int64(x1,x2,n)
+integer,intent(in)             :: n
+integer(kind=int64),intent(in) :: x1,x2
+integer(kind=int64)            :: linspace_int64(n)
+integer(kind=int64)            :: i
+   if(n.le.1)then
+      linspace_int64=[x1,x2]
+   else
+      linspace_int64=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+   endif
+end function linspace_int64
+!-----------------------------------------------------------------------------------------------------------------------------------
+function linspace_int32(x1,x2,n)
+integer,intent(in)             :: n
+integer(kind=int32),intent(in) :: x1,x2
+integer(kind=int32)            :: linspace_int32(n)
+integer(kind=int64)            :: i
+   if(n.le.1)then
+      linspace_int32=[x1,x2]
+   else
+      linspace_int32=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+   endif
+end function linspace_int32
+!-----------------------------------------------------------------------------------------------------------------------------------
+function linspace_int16(x1,x2,n)
+integer,intent(in)             :: n
+integer(kind=int16),intent(in) :: x1,x2
+integer(kind=int16)            :: linspace_int16(n)
+integer(kind=int64)            :: i
+   if(n.le.1)then
+      linspace_int16=[x1,x2]
+   else
+      linspace_int16=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+   endif
+end function linspace_int16
+!-----------------------------------------------------------------------------------------------------------------------------------
+function linspace_int8(x1,x2,n)
+integer,intent(in)             :: n
+integer(kind=int8),intent(in)  :: x1,x2
+integer(kind=int8)             :: linspace_int8(n)
+integer(kind=int64)            :: i
+   if(n.le.1)then
+      linspace_int8=[x1,x2]
+   else
+   linspace_int8=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+   endif
+end function linspace_int8
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -1242,7 +1376,7 @@ end subroutine matX_waxpy
 !                IF  RCOND  IS SO SMALL THAT THE LOGICAL EXPRESSION
 !        1.0 + RCOND .EQ. 1.0
 !                IS TRUE, THEN  A  MAY BE SINGULAR TO WORKING
-!                PRECISION.  IN PARTICULAR,  RCOND  IS ZERO  IF
+!                PRECISION. IN PARTICULAR,  RCOND  IS ZERO  IF
 !                EXACT SINGULARITY IS DETECTED OR THE ESTIMATE
 !                UNDERFLOWS.
 !
@@ -1456,10 +1590,10 @@ SUBROUTINE ML_WGEFA(AR,AI,LDA,N,IPVT,INFO)
 !
 !        INFO    INTEGER
 !                = 0  NORMAL VALUE.
-!                = K  IF  U(K,K) .EQ. 0.0 .  THIS IS NOT AN ERROR
+!                = K  IF  U(K,K) .EQ. 0.0 . THIS IS NOT AN ERROR
 !  CONDITION FOR THIS SUBROUTINE, BUT IT DOES
 !  INDICATE THAT WGESL OR WGEDI WILL DIVIDE BY ZERO
-!  IF CALLED.  USE  RCOND  IN WGECO FOR A RELIABLE
+!  IF CALLED. USE  RCOND  IN WGECO FOR A RELIABLE
 !  INDICATION OF SINGULARITY.
 !
 !     LINPACK. THIS VERSION DATED 07/01/79 .
@@ -1575,9 +1709,9 @@ DOUBLEPRECISION AR(LDA,*),AI(LDA,*),BR(*),BI(*)
 !     ERROR CONDITION
 !
 !        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS A
-!        ZERO ON THE DIAGONAL.  TECHNICALLY THIS INDICATES SINGULARITY
+!        ZERO ON THE DIAGONAL. TECHNICALLY THIS INDICATES SINGULARITY
 !        BUT IT IS OFTEN CAUSED BY IMPROPER ARGUMENTS OR IMPROPER
-!        SETTING OF LDA .  IT WILL NOT OCCUR IF THE SUBROUTINES ARE
+!        SETTING OF LDA . IT WILL NOT OCCUR IF THE SUBROUTINES ARE
 !        CALLED CORRECTLY AND IF WGECO HAS SET RCOND .GT. 0.0
 !        OR WGEFA HAS SET INFO .EQ. 0 .
 !
@@ -1688,7 +1822,7 @@ SUBROUTINE ML_WGEDI(ar,ai,LDA,N,ipvt,detr,deti,workr,worki,JOB)
 !                THE PIVOT VECTOR FROM WGECO OR WGEFA.
 !
 !        WORK    DOUBLE-COMPLEX(N)
-!                WORK VECTOR.  CONTENTS DESTROYED.
+!                WORK VECTOR. CONTENTS DESTROYED.
 !
 !        JOB     INTEGER
 !                = 11   BOTH DETERMINANT AND INVERSE.
@@ -1846,13 +1980,13 @@ SUBROUTINE ML_HTRIDI(NM,N,AR,AI,D,E,E2,TAU)
 !
 !        AR AND AI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
 !          FORMATIONS USED IN THE REDUCTION IN THEIR FULL LOWER
-!          TRIANGLES.  THEIR STRICT UPPER TRIANGLES AND THE
+!          TRIANGLES. THEIR STRICT UPPER TRIANGLES AND THE
 !          DIAGONAL OF AR ARE UNALTERED.
 !
 !        D CONTAINS THE DIAGONAL ELEMENTS OF THE THE TRIDIAGONAL MATRIX.
 !
 !        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE TRIDIAGONAL
-!          MATRIX IN ITS LAST N-1 POSITIONS.  E(1) IS SET TO ZERO.
+!          MATRIX IN ITS LAST N-1 POSITIONS. E(1) IS SET TO ZERO.
 !
 !        E2 CONTAINS THE SQUARES OF THE CORRESPONDING ELEMENTS OF E.
 !          E2 MAY COINCIDE WITH E IF THE SQUARES ARE NOT NEEDED.
@@ -2091,23 +2225,23 @@ SUBROUTINE ML_IMTQL2(NM,N,D,E,Z,IERR,JOB)
 !        D CONTAINS THE DIAGONAL ELEMENTS OF THE INPUT MATRIX.
 !
 !        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE INPUT MATRIX
-!          IN ITS LAST N-1 POSITIONS.  E(1) IS ARBITRARY.
+!          IN ITS LAST N-1 POSITIONS. E(1) IS ARBITRARY.
 !
 !        Z CONTAINS THE TRANSFORMATION MATRIX PRODUCED IN THE
-!          REDUCTION BY  TRED2, IF PERFORMED.  IF THE EIGENVECTORS
+!          REDUCTION BY  TRED2, IF PERFORMED. IF THE EIGENVECTORS
 !          OF THE TRIDIAGONAL MATRIX ARE DESIRED, Z MUST CONTAIN
 !          THE IDENTITY MATRIX.
 !
 !      ON OUTPUT.
 !
-!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER.  IF AN
+!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER. IF AN
 !          ERROR EXIT IS MADE, THE EIGENVALUES ARE CORRECT BUT
 !          UNORDERED FOR INDICES 1,2,...,IERR-1.
 !
 !        E HAS BEEN DESTROYED.
 !
 !        Z CONTAINS ORTHONORMAL EIGENVECTORS OF THE SYMMETRIC
-!          TRIDIAGONAL (OR FULL) MATRIX.  IF AN ERROR EXIT IS MADE,
+!          TRIDIAGONAL (OR FULL) MATRIX. IF AN ERROR EXIT IS MADE,
 !          Z CONTAINS THE EIGENVECTORS ASSOCIATED WITH THE STORED
 !          EIGENVALUES.
 !
@@ -2260,7 +2394,7 @@ DOUBLEPRECISION F,G,H,FI,FR,SCALE
 !        N IS THE ORDER OF THE MATRIX.
 !
 !        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE ML_CBAL.  IF  CBAL  HAS NOT BEEN USED,
+!          SUBROUTINE ML_CBAL. IF  CBAL  HAS NOT BEEN USED,
 !          SET LOW=1, IGH=N.
 !
 !        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
@@ -2269,13 +2403,13 @@ DOUBLEPRECISION F,G,H,FI,FR,SCALE
 !     ON OUTPUT.
 !
 !        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE HESSENBERG MATRIX.  INFORMATION
+!          RESPECTIVELY, OF THE HESSENBERG MATRIX. INFORMATION
 !          ABOUT THE UNITARY TRANSFORMATIONS USED IN THE REDUCTION
 !          IS STORED IN THE REMAINING TRIANGLES UNDER THE
 !          HESSENBERG MATRIX.
 !
 !        ORTR AND ORTI CONTAIN FURTHER INFORMATION ABOUT THE
-!          TRANSFORMATIONS.  ONLY ELEMENTS LOW THROUGH IGH ARE USED.
+!          TRANSFORMATIONS. ONLY ELEMENTS LOW THROUGH IGH ARE USED.
 !
 !     QUESTIONS AND COMMENTS SHOULD BE DIRECTED TO B. S. GARBOW,
 !     APPLIED MATHEMATICS DIVISION, ARGONNE NATIONAL LABORATORY
@@ -2390,7 +2524,7 @@ subroutine ml_comqr3(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr ,job)
 !
 !     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS
 !     OF A COMPLEX UPPER HESSENBERG MATRIX BY THE QR
-!     METHOD.  THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
+!     METHOD. THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
 !     CAN ALSO BE FOUND IF  CORTH  HAS BEEN USED TO REDUCE
 !     THIS GENERAL MATRIX TO HESSENBERG FORM.
 !
@@ -2403,12 +2537,12 @@ subroutine ml_comqr3(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr ,job)
 !        N IS THE ORDER OF THE MATRIX.
 !
 !        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE ML_CBAL.  IF  CBAL  HAS NOT BEEN USED,
+!          SUBROUTINE ML_CBAL. IF  CBAL  HAS NOT BEEN USED,
 !          SET LOW=1, IGH=N.
 !
 !        ORTR AND ORTI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
 !          FORMATIONS USED IN THE REDUCTION BY  CORTH, IF PERFORMED.
-!          ONLY ELEMENTS LOW THROUGH IGH ARE USED.  IF THE EIGENVECTORS
+!          ONLY ELEMENTS LOW THROUGH IGH ARE USED. IF THE EIGENVECTORS
 !          OF THE HESSENBERG MATRIX ARE DESIRED, SET ORTR(J) AND
 !          ORTI(J) TO 0.0D0 FOR THESE ELEMENTS.
 !
@@ -2416,7 +2550,7 @@ subroutine ml_comqr3(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr ,job)
 !          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
 !          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN FURTHER
 !          INFORMATION ABOUT THE TRANSFORMATIONS WHICH WERE USED IN THE
-!          REDUCTION BY  CORTH, IF PERFORMED.  IF THE EIGENVECTORS OF
+!          REDUCTION BY  CORTH, IF PERFORMED. IF THE EIGENVECTORS OF
 !          THE HESSENBERG MATRIX ARE DESIRED, THESE ELEMENTS MAY BE
 !          ARBITRARY.
 !
@@ -2426,13 +2560,13 @@ subroutine ml_comqr3(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr ,job)
 !          HAVE BEEN DESTROYED.
 !
 !        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
+!          RESPECTIVELY, OF THE EIGENVALUES. IF AN ERROR
 !          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
 !          FOR INDICES IERR+1,...,N.
 !
 !        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS.  THE EIGENVECTORS
-!          ARE UNNORMALIZED.  IF AN ERROR EXIT IS MADE, NONE OF
+!          RESPECTIVELY, OF THE EIGENVECTORS. THE EIGENVECTORS
+!          ARE UNNORMALIZED. IF AN ERROR EXIT IS MADE, NONE OF
 !          THE EIGENVECTORS HAS BEEN FOUND.
 !
 !        IERR IS SET TO
@@ -2711,7 +2845,7 @@ integer :: jj
    wi(en) = hi(en,en)
    en = enm1
    goto 220
-!     .......... ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
+!     .......... ALL ROOTS FOUND. BACKSUBSTITUTE TO FIND
 !                VECTORS OF UPPER TRIANGULAR FORM ..........
 !
 !*****  THE FOLLOWING SECTION CHANGED FOR OVERFLOW CONTROL
@@ -2818,8 +2952,8 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !
 !
 !     WSVDC IS A SUBROUTINE TO REDUCE A DOUBLE-COMPLEX NXP MATRIX X BY
-!     UNITARY TRANSFORMATIONS U AND V TO DIAGONAL FORM.  THE
-!     DIAGONAL ELEMENTS S(I) ARE THE SINGULAR VALUES OF X.  THE
+!     UNITARY TRANSFORMATIONS U AND V TO DIAGONAL FORM. THE
+!     DIAGONAL ELEMENTS S(I) ARE THE SINGULAR VALUES OF X. THE
 !     COLUMNS OF U ARE THE CORRESPONDING LEFT SINGULAR VECTORS,
 !     AND THE COLUMNS OF V THE RIGHT SINGULAR VECTORS.
 !
@@ -2827,7 +2961,7 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !
 !         X         DOUBLE-COMPLEX(LDX,P), WHERE LDX.GE.N.
 !                   X CONTAINS THE MATRIX WHOSE SINGULAR VALUE
-!                   DECOMPOSITION IS TO BE COMPUTED.  X IS
+!                   DECOMPOSITION IS TO BE COMPUTED. X IS
 !                   DESTROYED BY WSVDC.
 !
 !         LDX       INTEGER.
@@ -2852,7 +2986,7 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !
 !         JOB       INTEGER.
 !                   JOB CONTROLS THE COMPUTATION OF THE SINGULAR
-!                   VECTORS.  IT HAS THE DECIMAL EXPANSION AB
+!                   VECTORS. IT HAS THE DECIMAL EXPANSION AB
 !                   WITH THE FOLLOWING MEANING
 !
 !     A.EQ.0    DO NOT COMPUTE THE LEFT SINGULAR
@@ -2874,33 +3008,33 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !                   ORDER OF MAGNITUDE.
 !
 !         E         DOUBLE-COMPLEX(P).
-!                   E ORDINARILY CONTAINS ZEROS.  HOWEVER SEE THE
+!                   E ORDINARILY CONTAINS ZEROS. HOWEVER SEE THE
 !                   DISCUSSION OF INFO FOR EXCEPTIONS.
 !
 !         U         DOUBLE-COMPLEX(LDU,K), WHERE LDU.GE.N.
 !                   IF JOBA.EQ.1 THEN K.EQ.N,
 !                   IF JOBA.EQ.2 THEN K.EQ.MIN(N,P).
 !                   U CONTAINS THE MATRIX OF RIGHT SINGULAR VECTORS.
-!                   U IS NOT REFERENCED IF JOBA.EQ.0.  IF N.LE.P
+!                   U IS NOT REFERENCED IF JOBA.EQ.0. IF N.LE.P
 !                   OR IF JOBA.GT.2, THEN U MAY BE IDENTIFIED WITH X
 !                   IN THE SUBROUTINE CALL.
 !
 !         V         DOUBLE-COMPLEX(LDV,P), WHERE LDV.GE.P.
 !                   V CONTAINS THE MATRIX OF RIGHT SINGULAR VECTORS.
-!                   V IS NOT REFERENCED IF JOBB.EQ.0.  IF P.LE.N,
+!                   V IS NOT REFERENCED IF JOBB.EQ.0. IF P.LE.N,
 !                   THEN V MAY BE IDENTIFIED WHTH X IN THE
 !                   SUBROUTINE ML_CALL.
 !
 !         INFO      INTEGER.
 !                   THE SINGULAR VALUES (AND THEIR CORRESPONDING
 !                   SINGULAR VECTORS) S(INFO+1),S(INFO+2),...,S(M)
-!                   ARE CORRECT (HERE M=MIN(N,P)).  THUS IF
+!                   ARE CORRECT (HERE M=MIN(N,P)). THUS IF
 !                   INFO.EQ.0, ALL THE SINGULAR VALUES AND THEIR
-!                   VECTORS ARE CORRECT.  IN ANY EVENT, THE MATRIX
+!                   VECTORS ARE CORRECT. IN ANY EVENT, THE MATRIX
 !                   B = CTRANS(U)*X*V IS THE BIDIAGONAL MATRIX
 !                   WITH THE ELEMENTS OF S ON ITS DIAGONAL AND THE
 !                   ELEMENTS OF E ON ITS SUPER-DIAGONAL (CTRANS(U)
-!                   IS THE CONJUGATE-TRANSPOSE OF U).  THUS THE
+!                   IS THE CONJUGATE-TRANSPOSE OF U). THUS THE
 !                   SINGULAR VALUES OF X AND B ARE THE SAME.
 !
 !     LINPACK. THIS VERSION DATED 07/03/79 .
@@ -3184,7 +3318,7 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
   450    CONTINUE
 !
 !        THIS SECTION OF THE PROGRAM INSPECTS FOR
-!        NEGLIGIBLE ELEMENTS IN THE S AND E ARRAYS.  ON
+!        NEGLIGIBLE ELEMENTS IN THE S AND E ARRAYS. ON
 !        COMPLETION THE VARIABLE KASE IS SET AS FOLLOWS.
 !
 !           KASE = 1     IF SR(M) AND ER(L-1) ARE NEGLIGIBLE AND L.LT.M
@@ -3369,7 +3503,7 @@ SUBROUTINE ML_WQRDC(XR,XI,LDX,N,P,QRAUXR,QRAUXI,JPVT,WORKR,WORKI, JOB)
       DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*), WORKR(*),WORKI(*)
 !
 !     WQRDC USES HOUSEHOLDER TRANSFORMATIONS TO COMPUTE THE QR
-!     FACTORIZATION OF AN N BY P MATRIX X.  COLUMN PIVOTING
+!     FACTORIZATION OF AN N BY P MATRIX X. COLUMN PIVOTING
 !     BASED ON THE 2-NORMS OF THE REDUCED COLUMNS MAY BE
 !     PERFORMED AT THE USERS OPTION.
 !
@@ -3390,7 +3524,7 @@ SUBROUTINE ML_WQRDC(XR,XI,LDX,N,P,QRAUXR,QRAUXI,JPVT,WORKR,WORKI, JOB)
 !
 !        JPVT    INTEGER(P).
 !                JPVT CONTAINS INTEGERS THAT CONTROL THE SELECTION
-!                OF THE PIVOT COLUMNS.  THE K-TH COLUMN X(K) OF X
+!                OF THE PIVOT COLUMNS. THE K-TH COLUMN X(K) OF X
 !                IS PLACED IN ONE OF THREE CLASSES ACCORDING TO THE
 !                VALUE OF JPVT(K).
 !
@@ -3403,16 +3537,16 @@ SUBROUTINE ML_WQRDC(XR,XI,LDX,N,P,QRAUXR,QRAUXI,JPVT,WORKR,WORKI, JOB)
 !
 !                BEFORE THE DECOMPOSITION IS COMPUTED, INITIAL COLUMNS
 !                ARE MOVED TO THE BEGINNING OF THE ARRAY X AND FINAL
-!                COLUMNS TO THE END.  BOTH INITIAL AND FINAL COLUMNS
+!                COLUMNS TO THE END. BOTH INITIAL AND FINAL COLUMNS
 !                ARE FROZEN IN PLACE DURING THE COMPUTATION AND ONLY
-!                FREE COLUMNS ARE MOVED.  AT THE K-TH STAGE OF THE
+!                FREE COLUMNS ARE MOVED. AT THE K-TH STAGE OF THE
 !                REDUCTION, IF X(K) IS OCCUPIED BY A FREE COLUMN
 !                IT IS INTERCHANGED WITH THE FREE COLUMN OF LARGEST
-!                REDUCED NORM.  JPVT IS NOT REFERENCED IF
+!                REDUCED NORM. JPVT IS NOT REFERENCED IF
 !                JOB .EQ. 0.
 !
 !        WORK    DOUBLE-COMPLEX(P).
-!                WORK IS A WORK ARRAY.  WORK IS NOT REFERENCED IF
+!                WORK IS A WORK ARRAY. WORK IS NOT REFERENCED IF
 !                JOB .EQ. 0.
 !
 !        JOB     INTEGER.
@@ -3426,7 +3560,7 @@ SUBROUTINE ML_WQRDC(XR,XI,LDX,N,P,QRAUXR,QRAUXI,JPVT,WORKR,WORKI, JOB)
 !                TRIANGULAR MATRIX R OF THE QR FACTORIZATION.
 !                BELOW ITS DIAGONAL X CONTAINS INFORMATION FROM
 !                WHICH THE UNITARY PART OF THE DECOMPOSITION
-!                CAN BE RECOVERED.  NOTE THAT IF PIVOTING HAS
+!                CAN BE RECOVERED. NOTE THAT IF PIVOTING HAS
 !                BEEN REQUESTED, THE DECOMPOSITION IS NOT THAT
 !                OF THE ORIGINAL MATRIX X BUT THAT OF X
 !                WITH ITS COLUMNS PERMUTED AS DESCRIBED BY JPVT.
@@ -3464,7 +3598,7 @@ integer :: jj
       PU = 0
       IF (JOB .EQ. 0) GOTO 60
 !
-!        PIVOTING HAS BEEN REQUESTED.  REARRANGE THE COLUMNS
+!        PIVOTING HAS BEEN REQUESTED. REARRANGE THE COLUMNS
 !        ACCORDING TO JPVT.
 !
          DO 20 J = 1, P
@@ -3609,7 +3743,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !     FORMED FROM COLUMNS JPVT(1), ... ,JPVT(K) OF THE ORIGINAL
 !     N X P MATRIX X THAT WAS INPUT TO WQRDC (IF NO PIVOTING WAS
 !     DONE, XK CONSISTS OF THE FIRST K COLUMNS OF X IN THEIR
-!     ORIGINAL ORDER).  WQRDC PRODUCES A FACTORED UNITARY MATRIX Q
+!     ORIGINAL ORDER). WQRDC PRODUCES A FACTORED UNITARY MATRIX Q
 !     AND AN UPPER TRIANGULAR MATRIX R SUCH THAT
 !
 !              XK = Q * (R)
@@ -3627,11 +3761,11 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !               LDX IS THE LEADING DIMENSION OF THE ARRAY X.
 !
 !        N      INTEGER.
-!               N IS THE NUMBER OF ROWS OF THE MATRIX XK.  IT MUST
+!               N IS THE NUMBER OF ROWS OF THE MATRIX XK. IT MUST
 !               HAVE THE SAME VALUE AS N IN WQRDC.
 !
 !        K      INTEGER.
-!               K IS THE NUMBER OF COLUMNS OF THE MATRIX XK.  K
+!               K IS THE NUMBER OF COLUMNS OF THE MATRIX XK. K
 !               MUST NNOT BE GREATER THAN MIN(N,P), WHERE P IS THE
 !               SAME AS IN THE CALLING SEQUENCE TO WQRDC.
 !
@@ -3643,7 +3777,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !               BY WQRSL.
 !
 !        JOB    INTEGER.
-!               JOB SPECIFIES WHAT IS TO BE COMPUTED.  JOB HAS
+!               JOB SPECIFIES WHAT IS TO BE COMPUTED. JOB HAS
 !               THE DECIMAL EXPANSION ABCDE, WITH THE FOLLOWING
 !               MEANING.
 !
@@ -3666,7 +3800,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !
 !        QTY    DOUBLE-COMPLEX(N).
 !               QTY CONTAINS CTRANS(Q)*Y, IF ITS COMPUTATION HAS
-!               BEEN REQUESTED.  HERE CTRANS(Q) IS THE CONJUGATE
+!               BEEN REQUESTED. HERE CTRANS(Q) IS THE CONJUGATE
 !               TRANSPOSE OF THE MATRIX Q.
 !
 !        B      DOUBLE-COMPLEX(K)
@@ -3674,26 +3808,26 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !
 ! MINIMIZE NORM2(Y - XK*B),
 !
-!               IF ITS COMPUTATION HAS BEEN REQUESTED.  (NOTE THAT
+!               IF ITS COMPUTATION HAS BEEN REQUESTED. (NOTE THAT
 !               IF PIVOTING WAS REQUESTED IN WQRDC, THE J-TH
 !               COMPONENT OF B WILL BE ASSOCIATED WITH COLUMN JPVT(J)
 !               OF THE ORIGINAL MATRIX X THAT WAS INPUT INTO WQRDC.)
 !
 !        RSD    DOUBLE-COMPLEX(N).
 !               RSD CONTAINS THE LEAST SQUARES RESIDUAL Y - XK*B,
-!               IF ITS COMPUTATION HAS BEEN REQUESTED.  RSD IS
+!               IF ITS COMPUTATION HAS BEEN REQUESTED. RSD IS
 !               ALSO THE ORTHOGONAL PROJECTION OF Y ONTO THE
 !               ORTHOGONAL COMPLEMENT OF THE COLUMN SPACE OF XK.
 !
 !        XB     DOUBLE-COMPLEX(N).
 !               XB CONTAINS THE LEAST SQUARES APPROXIMATION XK*B,
-!               IF ITS COMPUTATION HAS BEEN REQUESTED.  XB IS ALSO
+!               IF ITS COMPUTATION HAS BEEN REQUESTED. XB IS ALSO
 !               THE ORTHOGONAL PROJECTION OF Y ONTO THE COLUMN SPACE
 !               OF X.
 !
 !        INFO   INTEGER.
 !               INFO IS ZERO UNLESS THE COMPUTATION OF B HAS
-!               BEEN REQUESTED AND R IS EXACTLY SINGULAR.  IN
+!               BEEN REQUESTED AND R IS EXACTLY SINGULAR. IN
 !               THIS CASE, INFO IS THE INDEX OF THE FIRST ZERO
 !               DIAGONAL ELEMENT OF R AND B IS LEFT UNALTERED.
 !
@@ -3701,17 +3835,17 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !     IF THEIR COMPUTATION IS NOT REQUESTED AND IN THIS CASE
 !     CAN BE REPLACED BY DUMMY VARIABLES IN THE CALLING PROGRAM.
 !     TO SAVE STORAGE, THE USER MAY IN SOME CASES USE THE SAME
-!     ARRAY FOR DIFFERENT PARAMETERS IN THE CALLING SEQUENCE.  A
+!     ARRAY FOR DIFFERENT PARAMETERS IN THE CALLING SEQUENCE. A
 !     FREQUENTLY OCCURRING EXAMPLE IS WHEN ONE WISHES TO COMPUTE
-!     ANY OF B, RSD, OR XB AND DOES NOT NEED Y OR QTY.  IN THIS
+!     ANY OF B, RSD, OR XB AND DOES NOT NEED Y OR QTY. IN THIS
 !     CASE ONE MAY IDENTIFY Y, QTY, AND ONE OF B, RSD, OR XB, WHILE
 !     PROVIDING SEPARATE ARRAYS FOR ANYTHING ELSE THAT IS TO BE
-!     COMPUTED.  THUS THE CALLING SEQUENCE
+!     COMPUTED. THUS THE CALLING SEQUENCE
 !
 !          CALL ML_WQRSL(X,LDX,N,K,QRAUX,Y,DUM,Y,B,Y,DUM,110,INFO)
 !
 !     WILL RESULT IN THE COMPUTATION OF B AND RSD, WITH RSD
-!     OVERWRITING Y.  MORE GENERALLY, EACH ITEM IN THE FOLLOWING
+!     OVERWRITING Y. MORE GENERALLY, EACH ITEM IN THE FOLLOWING
 !     LIST CONTAINS GROUPS OF PERMISSIBLE IDENTIFICATIONS FOR
 !     A SINGLE CALLING SEQUENCE.
 !

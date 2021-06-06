@@ -67,7 +67,7 @@
 !!    Sample program:
 !!
 !!     ! program demo_M_generic_list and module
-!!     module data
+!!     module data1
 !!       implicit none
 !!
 !!       private
@@ -84,11 +84,11 @@
 !!          type(data_t), pointer :: p
 !!       end type data_ptr
 !!
-!!     end module data
+!!     end module data1
 !!
 !!     program demo_M_generic_list
 !!       use M_generic_list
-!!       use data
+!!       use data1
 !!       implicit none
 !!
 !!       type(list_node_t), pointer :: list => null()
@@ -177,7 +177,7 @@ contains
 !!    Sample program:
 !!
 !!      ! program demo_list_init and module
-!!      module data
+!!      module data2
 !!        implicit none
 !!
 !!        private
@@ -194,11 +194,11 @@ contains
 !!           type(data_t), pointer :: p
 !!        end type data_ptr
 !!
-!!      end module data
+!!      end module data2
 !!
 !!      program demo_list_init
 !!      use M_generic_list
-!!      use data
+!!      use data2
 !!      implicit none
 !!      type(list_node_t), pointer :: list => null()
 !!      type(data_ptr) :: ptr
@@ -274,7 +274,7 @@ end subroutine list_init
 !!   Sample program:
 !!
 !!    ! program demo_list_free and module
-!!    module data
+!!    module data3
 !!    implicit none
 !!
 !!    private
@@ -291,11 +291,11 @@ end subroutine list_init
 !!       type(data_t), pointer :: p
 !!    end type data_ptr
 !!
-!!    end module data
+!!    end module data3
 !!
 !!    program demo_list_free
 !!    use M_generic_list
-!!    use data
+!!    use data3
 !!    implicit none
 !!
 !!    type(list_node_t), pointer :: list => null()
@@ -388,7 +388,7 @@ end subroutine list_free
 !!   Sample program:
 !!
 !!    ! program demo_list_insert and module
-!!    module data
+!!    module data4
 !!    implicit none
 !!
 !!    private
@@ -405,11 +405,11 @@ end subroutine list_free
 !!       type(data_t), pointer :: p
 !!    end type data_ptr
 !!
-!!    end module data
+!!    end module data4
 !!
 !!    program demo_list_insert
 !!    use M_generic_list
-!!    use data
+!!    use data4
 !!    implicit none
 !!
 !!    type(list_node_t), pointer :: list => null()
@@ -500,7 +500,7 @@ end subroutine list_insert
 !!   Sample program:
 !!
 !!    ! program demo_list_put and module
-!!    module data
+!!    module data5
 !!    implicit none
 !!
 !!    private
@@ -517,11 +517,11 @@ end subroutine list_insert
 !!       type(data_t), pointer :: p
 !!    end type data_ptr
 !!
-!!    end module data
+!!    end module data5
 !!
 !!    program demo_list_put
 !!    use M_generic_list
-!!    use data
+!!    use data5
 !!    implicit none
 !!
 !!    type(list_node_t), pointer :: list => null()
@@ -607,7 +607,7 @@ end subroutine list_put
 !!   Sample program:
 !!
 !!    ! program demo_list_get and module
-!!    module data
+!!    module data6
 !!    implicit none
 !!
 !!    private
@@ -624,11 +624,11 @@ end subroutine list_put
 !!       type(data_t), pointer :: p
 !!    end type data_ptr
 !!
-!!    end module data
+!!    end module data6
 !!
 !!    program demo_list_get
 !!    use M_generic_list
-!!    use data
+!!    use data6
 !!    implicit none
 !!
 !!    type(list_node_t), pointer :: list => null()
@@ -709,7 +709,7 @@ end function list_get
 !!   Sample program:
 !!
 !!    ! program demo_list_next and module
-!!    module data
+!!    module data7
 !!    implicit none
 !!
 !!    private
@@ -726,11 +726,11 @@ end function list_get
 !!       type(data_t), pointer :: p
 !!    end type data_ptr
 !!
-!!    end module data
+!!    end module data7
 !!
 !!    program demo_list_next
 !!    use M_generic_list
-!!    use data
+!!    use data7
 !!    implicit none
 !!
 !!    type(list_node_t), pointer :: list => null()

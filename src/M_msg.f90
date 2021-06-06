@@ -12,6 +12,7 @@ public str
 public stderr
 public wrt
 public fmt
+!!public :: a,i,f,g
 
 interface str
    module procedure msg_scalar, msg_one
