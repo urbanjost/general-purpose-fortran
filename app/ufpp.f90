@@ -760,7 +760,7 @@
 !     o Allow sections to be input to a system process so other tools are integrated? Makes input very system-dependent
 !     o cpp-compatible or fpp-compatible for simple directives, excluding macro expansion.
 !===================================================================================================================================
-module M_fpp                                                      !@(#)M_fpp(3f): module used by UFPP(1) program
+module M_ufpp                                                      !@(#)M_ufpp(3f): module used by UFPP(1) program
 USE ISO_FORTRAN_ENV, ONLY : ERROR_UNIT, OUTPUT_UNIT ! access computing environment ; Standard: Fortran 2003
 use M_verify, only   : fstop, stderr, debug_flag=>debug
 use M_msg, only     : str
@@ -4300,7 +4300,7 @@ end subroutine www
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-end module M_fpp
+end module M_ufpp
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -4309,8 +4309,8 @@ use M_kracken, only: kracken, lget, rget, iget, sget, retrev, sget
 !--------------------------------------------------------
 use M_strings, only : notabs, isdigit, switch, replace, v2s
 use M_kracken, only: kracken_comment
-use M_fpp
-!use M_fpp,only : G_line_length,source,write,G_nestl,G_file_dictionary,G_iocount,G_io_total_lines,G_html_switch,G_system_on
+use M_ufpp
+!use M_ufpp,only : G_line_length,source,write,G_nestl,G_file_dictionary,G_iocount,G_io_total_lines,G_html_switch,G_system_on
 ! G_line_length   allowed length of input lines
 ! SOURCE        current input line
 ! WRITE         flag whether current data lines should be written
