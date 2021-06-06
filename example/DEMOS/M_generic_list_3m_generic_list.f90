@@ -1,5 +1,5 @@
            ! program demo_M_generic_list and module
-           module data
+           module data1
              implicit none
 
              private
@@ -16,11 +16,11 @@
                 type(data_t), pointer :: p
              end type data_ptr
 
-           end module data
+           end module data1
 
            program demo_M_generic_list
              use M_generic_list
-             use data
+             use data1
              implicit none
 
              type(list_node_t), pointer :: list => null()

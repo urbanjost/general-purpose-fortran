@@ -7,7 +7,7 @@
 !
 ! NOTE: Assuming at least an 80x24 character window
 
-module m_simple_key
+module m_simple_key2
    use M_ncurses
    character(len=8)  :: choices(0:4)=[ "Choice 1", "Choice 2", "Choice 3", "Choice 4", "Exit    "] ! menu choices to display
    integer           :: n_choices                                                                  ! number of choices in menu
@@ -36,10 +36,10 @@ subroutine print_menu(menu_win, highlight)                        ! draw a menu 
    ierr=wrefresh(menu_win)                                            ! post everything to the real screen
 end subroutine print_menu
 !-------------------------------------------------------------------------------
-end module m_simple_key
+end module m_simple_key2
 !-------------------------------------------------------------------------------
 program simple_key
-   use m_simple_key
+   use m_simple_key2
    implicit none
    type (C_PTR)        :: menu_win
    integer             :: highlight = 1
