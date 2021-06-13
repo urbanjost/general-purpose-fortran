@@ -1,0 +1,834 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>prep (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>prep</B>(1) - [DEVELOPER] pre-process FORTRAN source files
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Limitations</A><BR>
+<A HREF=#5>Examples</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#6>Mixing Block And Printenv</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#7>Set Usage</A><BR>
+<A HREF=#8>Author</A><BR>
+<A HREF=#9>License</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>prep</B> </TD><TD valign=bottom>
+[[-D] <I>define_list</I>]
+[-I <I>include_directories</I>]
+[-i <B>input_file</B>(s)]
+[-o <I>output_file</I>]
+[-<B>-system</B>]
+[-<B>-verbose</B>]
+[-<B>-prefix</B> character|ADE]
+[-<B>-keeptabs</B>]
+[-<B>-noenv</B>]
+[-<B>-width</B> <I>n</I>]
+[-d ignore|remove|blank]
+[-<B>-comment</B> default|doxygen|ford|none]
+[-<B>-version</B>]
+[-<B>-help</B>]
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+By default the stand-alone pre-processor <B>prep</B>(1) will interpret lines with
+"$" in column one, and will output no such lines. Other input is
+conditionally written to the output file based on the directives encountered
+in the input. It does not support macros but does support string
+substitution and the inclusion of free-format text blocks that may be
+converted to Fortran comments or CHARACTER variable definitions which may
+also be used for generating documentation files. INTEGER or LOGICAL
+expressions may be used to select output lines.
+<P>
+The suggested suffix for Fortran input files is ".ff" for code files unless
+they contain $SYSTEM directives in which case ".FF" is preferred. $INCLUDE
+files should use ".ffinc" and ".FFINC" if they include <B>prep</B>(1) directives.
+This naming convention is not required.
+<P>
+The syntax for the directive lines is as follows:
+<P>
+<PRE>
+     $DEFINE   variable_name[=expression]                 [! comment ]
+     $UNDEFINE variable_name                              [! comment ]
+<P>
+     $IF       {LOGICAL or INTEGER expression}            [! comment ]
+      or
+     $IFDEF    {variable_name}                            [! comment ]
+      or
+     $IFNDEF   {variable_name}                            [! comment ]
+               { sequence of source statements}
+     [$ELSEIF  {LOGICAL or INTEGER expression}            [! comment ]
+               { sequence of source statements}]
+     [$ELSE                                               [! comment ]
+               { sequence of source statements}]
+     $ENDIF                                               [! comment ]
+<P>
+     $PARCEL   [name]                                     [! comment ]
+     $POST     name                                       [! comment ]
+     $SET      name  string
+     $INCLUDE  filename                                   [! comment ]
+     $OUTPUT   filename  [-append]                        [! comment ]
+     $BLOCK    [comment|null|write|help|version]|
+               [variable [-varname NAME]]
+               [-file NAME [-append]]                     [! comment ]
+<P>
+     $PRINTENV predefined_name|environment_variable_name  [! comment ]
+     $SYSTEM system_command                               [! comment ]
+     $IDENT    metadata                                   [! comment ]
+     $@(#)     metadata                                   [! comment ]
+     $MESSAGE  message_to_stderr
+     $SHOW                                                [! comment ]
+     $STOP {stop_value}                                   [! comment ]
+<P>
+</PRE>
+Compiler directives are specified by a "$" in column one, followed by a
+keyword.
+<P>
+An exclamation character on a valid directive begins an in-line comment
+that is terminated by an end-of-line.
+<P>
+Any LOGICAL expression composed of integer constants, parameters
+and operators, is valid. Operators are
+<P>
+<PRE>
+     .NOT.  .AND.  .OR.  .EQV.  .NEQV.  .EQ.  .NE.  .GE.
+     .GT.   .LE.   .LT.  +      -       *     /     (
+     )      **
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><I>define_list</I>, <B>-D</B> <I>define_list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+An optional space-delimited list of expressions
+used to define variables before file processing
+commences.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-i</B> <I>input_file(s)</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The default input file is stdin. Filenames are
+space-delimited. In a list, @ represents stdin.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-o</B> <I>output_file</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The default output file is stdout.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-I</B> <I>include_directories</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The directories to search for files specified on
+$INCLUDE directives.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--prefix</B> ADE|letter </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The default directive prefix character is "$".
+Alternatives may be specified by providing an
+ASCII Decimal Equivalent (Common values are 37=%
+42=* 35=# 36=$ 64=@). If the value is not numeric
+it is assumed to be a literal character.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--help</B> </TD><TD valign=bottom>
+Display documentation and exit.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--verbose</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+All commands on a $SYSTEM directive are echoed
+to stderr with a + prefix. Text following the
+string "@(#)" is printed to stderr similar to
+the Unix command <B>what</B>(1) but is otherwise
+treated as other text input.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--noenv</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The $IFDEF and $IFNDEF directives test for an
+internal <B>prep</B>(1) variable and then an
+environment variable by default. This option
+turns off testing for environment variables.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--system</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Allow system commands on $SYSTEM directives to
+be executed.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--keeptabs</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+By default tab characters are expanded assuming
+a stop has been set every eight columns; and
+trailing carriage-return characters are removed.
+Use this flag to prevent this processing from
+occurring.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--comment</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+try to style comments generated in $BLOCK blocks
+for other utilities such as doxygen. Default is to
+prefix lines with &#146;! &#146;. Allowed keywords are
+currently "default", "doxygen","none","ford".
+THIS IS AN ALPHA FEATURE AND NOT FULLY IMPLEMENTED.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-d</B> ignore|remove|blank </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Enable special treatment for lines beginning
+with "d" or "D" The letter will be left as-is
+(the default); removed; or replaced with a blank
+character. This non-standard syntax has been
+used to support the optional compilation of
+"debug" code by many Fortran compilers when
+compiling fixed-format Fortran source.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Display version and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--width</B> <I>n</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Maximum line length of the output file. Default
+is 1024. Typically used to trim fixed-format
+FORTRAN code that contains comments or "ident"
+labels past column 72 when compiling
+fixed-format Fortran code.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DIRECTIVES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+$DEFINE variable_name [=expression]
+<P>
+A $DEFINE may appear anywhere in a source file. If the value is ".TRUE."
+or ".FALSE." then the parameter is of type LOGICAL, otherwise the
+parameter is of type INTEGER and the value must be an INTEGER. If no
+value is supplied, the parameter is of type INTEGER and is given the
+value 1.
+<P>
+Constant parameters are defined from the point they are encountered in a
+$DEFINE directive until program termination unless explicitly
+undefined with a $UNDEFINE directive.
+<P>
+Example:
+<P>
+<PRE>
+    $define A=1
+    $define B=1
+    $define C=2
+    $if ( A + B ) / C .eq. 1
+       (a+b)/c is one
+    $endif
+<P>
+</PRE>
+$IF/$ELSEIF/$ELSE/$ENDIF directives
+<P>
+Each of the control lines delineates a block of FORTRAN source. If the
+expression following the $IF is ".TRUE.", then the lines of FORTRAN
+source following are output. If it is ".FALSE.", and an $ELSEIF
+follows, the expression is evaluated and treated the same as the $IF. If
+the $IF and all $ELSEIF expressions are ".FALSE.", then the lines of
+source following the $ELSE are output. A matching $ENDIF ends the
+conditional block.
+<P>
+$IFDEF/$IFNDEF directives
+<P>
+$IFDEF and $IFNDEF are special forms of the $IF directive that simply test
+if a variable name is defined or not. Essentially, these are equivalent:
+<P>
+<PRE>
+     $IFDEF varname  ==&gt; $IF DEFINED(varname)
+     $IFNDEF varname ==&gt; $IF .NOT. DEFINED(varname)
+<P>
+</PRE>
+except that environment variables are tested as well if the <B>--noenv</B> option
+is not specified.
+<P>
+$IDENT metadata [-language fortran|c|shell]
+<P>
+Writes a line using SCCS-metadata format of the following forms:
+<P>
+<PRE>
+     language:
+     fortran   character(len=*),parameter::ident="@(#)metadata"
+     c         #ident "@(#)metadata"
+     shell     #@(#) metadata
+<P>
+</PRE>
+This string is generally included for use with the <B>what</B>(1) command.
+<P>
+The default language is fortran. Depending on your compiler and the
+optimization level used when compiling, these strings may or may not
+remain in the object files and executables created.
+<P>
+Do not use the characters double-quote, greater-than, backslash ("&gt;\)
+in the metadata to remain compatible with SCCS metadata syntax.
+Do not use strings starting with " -" either.
+<P>
+$OUTPUT filename [-append]
+<P>
+Specify the output file to write to. Overrides the initial output file
+specified with command line options. If no output filename is given
+revert back to initial output file. @ is a synonym for stdout.
+<P>
+<PRE>
+      -append [.true.|.false]
+<P>
+</PRE>
+Named files open at the beginning by default. Use the <B>-append</B> switch to
+append to the end of an existing file instead of overwriting it.
+<P>
+$INCLUDE filename
+<P>
+Nested read of specified input file. Fifty (50) nesting levels are allowed.
+<P>
+$PARCEL [name]
+<P>
+The lines between a "$PARCEL name" and "$PARCEL" block are written WITHOUT
+expanding directives to a scratch file that can then be read in with the
+$POST directive much like a named file can be with $INCLUDE.
+<P>
+$POST name
+<P>
+Read in the scratch file created by the $PARCEL directive. Combined with
+$SET directives this allows you to replay a section of input and replace
+strings as a simple templating technique.
+<P>
+$SET name string
+<P>
+If a $SET directive defines a name <B>prep</B>(1) enters expansion mode. In this
+mode anywhere the string "${NAME}" is encountered in subsequent output it
+is replaced by "string". Comments should not be used on a $SET directive.
+Note expansion of a line may cause it to be longer than allowed by some
+compilers. Automatic breaking into continuation lines does not occur.
+<P>
+IF A $SET DIRECTIVE HAS BEEN DEFINED the "standard" preprocessor values
+${FILE}, ${LINE}, ${DATE}, and ${TIME} are also available. The time
+data refers to the time of processing, not the current time nor the time
+of compilation or loading.
+<P>
+$PRINTENV name
+<P>
+If the name of an uppercase environment variable is given the value
+of the variable will be placed in the output file. If the value is a
+null string or if the variable is undefined output will be stopped.
+This allows the system shell to generate code lines. This is usually
+used to pass in information about the compiler environment. For
+example:
+<P>
+<PRE>
+     # If the following command were executed in the bash(1) shell&#46;&#46;&#46;
+<P>
+      export STAMP="      write(*,*)&#146;&#146;COMPILED ON:&#145;uname -s&#145;;AT &#145;date&#145;&#146;&#146;"
+<P>
+</PRE>
+the environment variable STAMP would be set to something like
+<P>
+<PRE>
+     write(*,*)&#146;&#146;COMPILED ON:Eureka;AT Wed, Jun 12, 2013  8:12:06 PM&#146;&#146;
+<P>
+</PRE>
+A version number would be another possibility
+<P>
+<PRE>
+     export VERSION="      program_version=2.2"
+<P>
+</PRE>
+Special predefined variable names are:
+<P>
+<PRE>
+     Variable Name      Output
+     PREP_DATE  &#46;&#46;&#46;...  PREP_DATE="12:58 14Jun2013"
+     Where code is assumed to have defined PREP_DATE as CHARACTER(LEN=15)
+     PREP_FILE  &#46;&#46;&#46;...  PREP_FILE="current filename"
+     Where code is assumed to have defined PREP_FILE as CHARACTER(LEN=1024)
+     PREP_LINE  &#46;&#46;&#46;...  PREP_LINE=    nnnnnn
+     Where code is assumed to have defined PREP_LINE as INTEGER
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>$BLOCK [comment|null|write|help|version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+[-file NAME [-append]]
+or
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>$BLOCK VARIABLE </B><B>--varname</B> NAME </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+[-<B>-file</B> NAME]
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+      COMMENT:   write text prefixed by an exclamation and a space
+      WRITE:     write text as Fortran WRITE(3f) statements
+                 The Fortran generated is free-format. It is assumed the
+                 output will not generate lines over 132 columns.
+      HELP:      write text as a subroutine called HELP_USAGE
+      VERSION:   write text as a subroutine called HELP_VERSION
+                 prefixing lines with @(#) for use with the what(1) command.
+      NULL:      Do not write into current output file
+      VARIABLE:  write as a text variable. The name may be defined using the
+                 --varname switch. Default name is "textblock".
+      END:       End block of specially processed text
+<P>
+</PRE>
+If the "<B>-file</B> NAME" option is present the *unaltered* text is written to
+the specified file. This allows documentation to easily be maintained in
+the source file. It can be tex, html, markdown or any plain text.
+The filename will be prefixed with $PREP_DOCUMENT_DIR/doc/ . If the
+environment variable $PREP_DOCUMENT_DIR is not set the option is ignored.
+<P>
+The text can easily be processed by other utilities such as <B>markdown</B>(1)
+or <B>txt2man</B>(1) to produce <B>man</B>(1) pages and HTML documents. $SYSTEM commands
+may follow the $BLOCK block text to optionally post-process the doc files.
+<P>
+A blank value or "END" returns to normal output processing.
+<P>
+$SHOW
+<P>
+Shows current state of <B>prep</B>(1); including variable names and values; and
+the name of the current input files. All output is preceded by an
+exclamation character.
+<P>
+Example:
+<P>
+<PRE>
+    prep A=10 B C D -o paper
+    $define z=22
+    $show
+    $stop 0
+<P>
+    !======================================================================
+    !  CURRENT STATE
+    !     TOTAL LINES READ &#46;&#46;&#46;......... 2
+    !     CONDITIONAL_NESTING_LEVEL&#46;&#46;&#46;. 0
+    !     DATE&#46;&#46;&#46;...................... 11:18 21Jun2013
+    !     ARGUMENTS &#46;&#46;&#46;................ A=10 B C D -o paper
+    !  VARIABLES:
+    !     ! A                               !          10
+    !     ! B                               !           1
+    !     ! C                               !           1
+    !     ! D                               !           1
+    !     ! Z                               !          22
+    !  OPEN FILES:
+    !     ! ---- ! UNIT ! LINE NUMBER ! FILENAME
+    !     !    1 !    5 !           2 !
+    !======================================================================
+<P>
+</PRE>
+$STOP stop_value
+<P>
+Stops input file processing. An optional integer value of 0 to 20
+will be returned as a status value to the system where supported. A
+value of two ("2") is returned if no value is specified. Any value
+from one ("1") to twenty ("20") also causes an implicit execution of
+the "$SHOW" directive before the program is stopped. A value of "0"
+causes normal program termination. "$QUIT" is an alias for "$STOP 0".
+<P>
+$SYSTEM system_command
+<P>
+If system command processing is enabled using the <B>--system</B> switch system
+commands can be executed for such tasks as creating files to be read or to
+further process documents created by $BLOCK. $SYSTEM directives are ignored
+by default; as you clearly need to ensure the input file is trusted before
+before allowing commands to be executed. Commands that are system-specific
+may need to be executed conditionally as well.
+<P>
+Examples:
+<P>
+<PRE>
+    $! build variable definitions using GNU/Linux commands
+    $SYSTEM echo system=&#145;hostname&#145; &gt; compiled.h
+    $SYSTEM echo compile_time="&#145;date&#145;" &gt;&gt; compiled.h
+    $INCLUDE compiled.h
+<P>
+    $! obtain up-to-date copy of source file from HTTP server:
+    $SYSTEM wget <A HREF="http://repository.net/src/func.F90">http://repository.net/src/func.F90</A> -O - &gt;_tmp.f90
+    $INCLUDE _tmp.f90
+    $SYSTEM  rm _tmp.f90
+<P>
+</PRE>
+$UNDEFINE variable_name
+<P>
+A symbol defined with $DEFINE can be removed with the $UNDEFINE
+directive.
+<P>
+<B>DEFINED</B>(variable_name)
+<P>
+A special function called <B>DEFINED</B>() may appear only in a $IF or $ELSEIF.
+If "variable_name" has been defined at that point in the source code,
+then the function value is ".TRUE.", otherwise it is ".FALSE.". A name is
+defined only if it has appeared in the source previously in a $DEFINE
+directive or been declared on the command line.
+The names used in compiler directives are district from names in the
+FORTRAN source, which means that "a" in a $DEFINE and "a" in a FORTRAN
+source statement are totally unrelated.
+The <B>DEFINED</B>() parameter is NOT valid in a $DEFINE directive.
+<P>
+Example:
+<P>
+<PRE>
+    &gt;        Program test
+    &gt; $IF .NOT. DEFINED (inc)
+    &gt;        INCLUDE &#146;&#146;comm.inc&#146;&#146;
+    &gt; $ELSE
+    &gt;        INCLUDE &#146;&#146;comm2.inc&#146;&#146;
+    &gt; $ENDIF
+    &gt;        END
+<P>
+</PRE>
+The file, "comm.inc" will be INCLUDEd in the source if the parameter,
+"inc", has not been previously defined, while INCLUDE "comm2.inc" will
+be included in the source if "inc" has been previously defined. This is
+useful for setting up a default inclusion.
+<P>
+Predefined values are
+<P>
+<PRE>
+    UNKNOWN = 0 LINUX   = 1 MACOS   = 2 WINDOWS = 3
+    CYGWIN  = 4 SOLARIS = 5 FREEBSD = 6 OPENBSD = 7
+    In addition OS is set to what the program guesses the system type is.
+<P>
+</PRE>
+$MESSAGE WARNING message
+<P>
+Write message to stderr
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>LIMITATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+$IF constructs can be nested up to 20 levels deep. Note that using
+more than two levels typically makes input files less readable.
+<P>
+$BLOCK END is required after a $BLOCK or <B>--file</B> FILENAME is not written.
+<P>
+Nesting of $BLOCK sections not allowed.
+<P>
+Messages for $MESSAGE do not treat an exclamation as starting a comment
+</BLOCKQUOTE>
+<P>
+Input files
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Input files
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+lines are limited to 1024 columns. Text past column 1024 is ignored.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+files currently opened cannot be opened again.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a maximum of 50 files can be nested by $INCLUDE
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+filenames cannot contain spaces on the command line.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Variable names
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Variable names
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+cannot be redefined unless first undefined.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+are limited to 31 characters.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+must start with a letter (A-Z).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+are composed of the letters A-Z, digits 0-9 and _ and $.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+2048 variable names may be defined at a time.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Define variables on command line:
+<P>
+<PRE>
+   Typically, variables are defined on the command line when prep(1) is invoked
+   but can be grouped together into small files that are included with a
+   $INCLUDE or as input files.
+<P>
+     prep HP size=64 -i hp_directives.dirs test.F90 -o test_out.f90
+<P>
+</PRE>
+<BLOCKQUOTE>
+defines variables HP and SIZE as if the expressions had been on a $DEFINE
+and reads file "hp_directives.dirs" and then test.F90. Output is directed
+to test_out.f90
+</BLOCKQUOTE>
+<P>
+Basic conditionals:
+<P>
+<PRE>
+   &gt; $! set value of variable "a" if it is not specified on the prep(1) command.
+   &gt; $IF .NOT.DEFINED(A)
+   &gt; $   DEFINE a=1  ! so only define the following first version of SUB(3f)
+   &gt; $ENDIF
+   &gt;    program conditional_compile
+   &gt;       call sub()
+   &gt;    end program conditional_compile
+   &gt; $! select a version of SUB depending on the value of variable "a"
+   &gt; $IF a .EQ. 1
+   &gt;    subroutine sub
+   &gt;       print*, "This is the first SUB"
+   &gt;    end subroutine sub
+   &gt; $ELSEIF a .eq. 2
+   &gt;    subroutine sub
+   &gt;       print*, "This is the second SUB"
+   &gt;    end subroutine sub
+   &gt; $ELSE
+   &gt;    subroutine sub
+   &gt;       print*, "This is the third SUB"
+   &gt;    end subroutine sub
+   &gt; $ENDIF
+<P>
+</PRE>
+Common use of $BLOCK
+<P>
+<PRE>
+   &gt; $!
+   &gt; $BLOCK NULL --file manual.tex
+   &gt; This is a block of text that will be ignored on output but optionally
+   &gt; written to a doc/ file when $PREP_DOCUMENT_DIR is set.
+   &gt; $BLOCK END
+   &gt; $!
+   &gt; $BLOCK COMMENT --file manual.tex --append
+   &gt; This is a block of text that will be converted to comments and optionally
+   &gt; appended to a doc/ file when $PREP_DOCUMENT_DIR is set.
+   &gt; $BLOCK END
+   &gt; $!
+<P>
+</PRE>
+Creating a <B>help_usage</B>(3f) subroutine and writing the same documentation to
+a doc file (if the environment variable $PREP_DOCUMENT_DIR is set).
+<P>
+<PRE>
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt; $! generate help_usage() procedure and file to run thru txt2man(1) or other
+   &gt; $! filters to make man(1) page if $PREP_DOCUMENT_DIR is set.
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt; $BLOCK HELP --file conditional_compile.man
+   &gt; NAME
+   &gt;     conditional_compile - basic example for prep(1) pre-processor.
+   &gt; SYNOPSIS
+   &gt;     conditional_example [--help] [--version]
+   &gt; DESCRIPTION
+   &gt;     This is a basic example program showing how documentation can be used
+   &gt;     to generate program help text
+   &gt; OPTIONS
+   &gt;        --help
+   &gt;               display this help and exit
+   &gt;        --version
+   &gt;               output version information and exit
+   &gt; $BLOCK END
+<P>
+</PRE>
+Creating a <B>help_version</B>(3f) subroutine
+<P>
+<PRE>
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt; $! generate help_version() procedure
+   &gt; $BLOCK VERSION
+   &gt; DESCRIPTION: example program showing conditional compilation with prep(1)
+   &gt; PROGRAM:     conditional_compile
+   &gt; VERSION:     1.0.0, 20160703
+   &gt; AUTHOR:      John S. Urban
+   &gt; $BLOCK END
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<P>
+</PRE>
+Sample program using <B>help_usage</B>(3f) and <B>help_version</B>(3f) and <B>M_kracken95</B>(3f):
+<P>
+<PRE>
+   &gt; program conditional_compile
+   &gt;    use M_kracken95, only : kracken, lget
+   &gt;    ! use M_kracken95 module to crack command line arguments
+   &gt;    call kracken("cmd","--help .false. --version .false.")
+   &gt;    ! call routine generated by $BLOCK HELP
+   &gt;    call help_usage(lget("cmd_help"))
+   &gt;    ! call routine generated by $BLOCK VERSION
+   &gt;    call help_version(lget("cmd_version"))
+   &gt; end program conditional_compile
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+    <H4>&nbsp; &nbsp; MIXING BLOCK AND PRINTENV</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+This example shows one way how an environment variable can be turned
+into a write statement
+<P>
+<PRE>
+   &gt; $block write
+   &gt; $ifdef HOME
+   &gt; $printenv HOME
+   &gt; $else
+   &gt;    HOME not defined
+   &gt; $endif
+   &gt; $block end
+<P>
+   Sample output
+<P>
+     write(io,&#146;(a)&#146;)&#146;/home/urbanjs/V600&#146;
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+    <H4>&nbsp; &nbsp; SET USAGE</H4>
+</A>
+<BLOCKQUOTE>
+Note values are case-sensitive by variable names are not, and there are
+pre-defined values for input file, line in input file, date and time that
+are NOT ACTIVE until at least one $SET directive is processed. That is,
+unset a $SET directive is processed no ${NAME} expansion occurs.
+<P>
+<PRE>
+   &gt; $set author  William Shakespeare
+   &gt; write(*,*)&#146;By ${AUTHOR}&#146;
+   &gt; write(*,*)&#146;File ${FILE}&#146;
+   &gt; write(*,*)&#146;Line ${LINE}&#146;
+   &gt; write(*,*)&#146;Date ${DATE}&#146;
+   &gt; write(*,*)&#146;Time ${TIME}&#146;
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>prep (1)</TD> <TD align=right width=33%><I>June 13, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cefa2c82-0134-4bf2-ab3d-10d1dc16a247 using man macros.</FONT>
+<br><br><center><img src="images/prep.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

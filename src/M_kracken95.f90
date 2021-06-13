@@ -34,7 +34,8 @@ implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    public  :: dissect               ! for user-defined commands: define defaults, then process user input
    private :: parse                 ! parse user command and store tokens into Language Dictionary
-   private :: store                 ! replace dictionary name's value (if allow=add add name if necessary)
+   ! only public for special purpose, should not generally be used by user for regular command line parsing
+   public  :: store                 ! replace dictionary name's value (if allow=add add name if necessary)
    private :: bounce                ! find location (index) in Language Dictionary where VARNAM can be found
    private :: add_string            ! Add new string name to Language Library dictionary
    private :: send_message
@@ -48,7 +49,7 @@ implicit none
 ! length of verbs and entries in Language dictionary
 ! NOTE:   many parameters were reduced in size so as to just accommodate being used as a command line parser.
 !         In particular, some might want to change:
-   integer, parameter,public :: IPic=100                           ! number of entries in language dictionary
+   integer, parameter,public :: IPic=1000                          ! number of entries in language dictionary
    integer, parameter,public :: IPvalue=4096                       ! length of keyword value
    integer, parameter,public :: IPcmd=32768                        ! length of command
    integer, parameter,public :: IPverb=20                          ! length of verb
@@ -515,7 +516,7 @@ end subroutine parse
 subroutine store(name1,value1,allow1,ier)
 ! "@(#)store(3f,private): replace dictionary name's value (if allow='add' add name if necessary)"
 !-----------------------------------------------------------------------------------------------------------------------------------
-      character(len=*),intent(in)        :: name1       ! name in dictionary of from VERB_KEYWORD
+      character(len=*),intent(in)        :: name1       ! name in dictionary of form VERB_KEYWORD
       character(len=*),intent(in)        :: value1      ! value to be associated to NAME1
       character(len=*),intent(in)        :: allow1      ! flag to allow new VERB_KEYWORD name being added
       integer,intent(out)                :: ier         ! flag if error occurs in adding or setting value

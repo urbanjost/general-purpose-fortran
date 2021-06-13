@@ -163,17 +163,17 @@
 !!       write(*,'(*(g0))',advance='yes')' Back to normal writes.'
 !!    end subroutine printme
 !!    end program functional
-!!
-!!##ALTERNATE OBJECT ORIENTED
 module M_escape
 use M_list, only : insert, locate, replace, remove
 use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT,stdin=>INPUT_UNIT    ! access computing environment
+use, intrinsic :: iso_c_binding, only: c_int
 implicit none
 private
 public esc
 public esc_mode
 public update
 public print_dictionary
+public M_escape_initialize
 
 !-!public flush_colors, init_colors
 public attr
@@ -263,6 +263,13 @@ character(len=*),parameter,public :: ununderline =  CODE_START//UNDERLINE_OFF//C
 
 character(len=*),parameter,public :: reset       =  CODE_RESET
 character(len=*),parameter,public :: clear       =  HOME_DISPLAY//CLEAR_DISPLAY
+
+interface
+    function M_escape_initialize() result(r) bind(c, name="M_escape_initialize")
+        import c_int
+        integer(kind=c_int) :: r
+    end function
+end interface
 
 
 contains
