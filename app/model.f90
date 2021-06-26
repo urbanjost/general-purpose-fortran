@@ -1,9 +1,11 @@
 subroutine help_usage(l_help)
 implicit none
-! @(#)help_usage(3f): prints help information
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
 logical,intent(in)             :: l_help
 character(len=:),allocatable :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
@@ -22,10 +24,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if -help was specified, stop
+   stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    model(1f) - [FORTRAN:iso_fortran_env] fortran numeric model information

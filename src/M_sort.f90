@@ -34,7 +34,7 @@ public tree_node
 
 !===================================================================================================================================
 
-! ident_1="@(#)M_sort::sort_shell(3f): Generic subroutine sorts the array X using a shell sort"
+character(len=*),parameter::ident_1="@(#)M_sort::sort_shell(3f): Generic subroutine sorts the array X using a shell sort"
 
 ! SORT_SHELL is a Generic Interface in a module with PRIVATE specific procedures. This means the individual subroutines
 ! cannot be called from outside of this module.
@@ -44,15 +44,18 @@ interface sort_shell
 end interface
 !===================================================================================================================================
 
-! ident_2="@(#)M_sort::unique(3f): assuming an array is sorted, return array with duplicate values removed"
+character(len=*),parameter::ident_2="&
+&@(#)M_sort::unique(3f): assuming an array is sorted, return array with duplicate values removed"
 
 interface unique
-   module procedure unique_integers, unique_reals, unique_strings_allocatable_len !!, unique_strings
-   module procedure unique_complex, unique_doubles, unique_complex_double
+   module procedure unique_integer_int8, unique_integer_int16, unique_integer_int32, unique_integer_int64
+   module procedure unique_real_real32, unique_real_real64, unique_real_real128
+   module procedure unique_complex_real32, unique_complex_real64, unique_complex_real128
+   module procedure unique_strings_allocatable_len !!, unique_strings
 end interface
 !===================================================================================================================================
 
-! ident_3="@(#)M_sort::swap(3f): swap two variables of like type (real,integer,complex,character,double)"
+character(len=*),parameter::ident_3="@(#)M_sort::swap(3f): swap two variables of like type (real,integer,complex,character,double)"
 
 interface swap
    module procedure r_swap, i_swap, c_swap, s_swap, d_swap, l_swap, cd_swap
@@ -295,7 +298,7 @@ contains
 !===================================================================================================================================
 subroutine sort_shell_strings(lines,order,startcol,endcol)
 
-! ident_4="@(#)M_sort::sort_shell_strings(3fp):sort strings over specified field using shell sort"
+character(len=*),parameter::ident_4="@(#)M_sort::sort_shell_strings(3fp):sort strings over specified field using shell sort"
 
 character(len=*),  intent(inout)          :: lines(:)       ! input/output array
 character(len=*),  intent(in)             :: order          ! sort order 'ascending'|'descending'
@@ -327,7 +330,8 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_strings_lh(lines,startcol,endcol)
 
-! ident_5="@(#)M_sort::sort_shell_strings_lh(3fp):sort strings(a-z) over specified field using shell sort"
+character(len=*),parameter::ident_5="&
+&@(#)M_sort::sort_shell_strings_lh(3fp):sort strings(a-z) over specified field using shell sort"
 
 !  1989 John S. Urban
 !  lle to sort 'a-z', lge to sort 'z-a'
@@ -377,7 +381,8 @@ end subroutine sort_shell_strings_lh
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_strings_hl(lines,startcol,endcol)
 
-! ident_6="@(#)M_sort::sort_shell_strings_hl(3fp):sort strings(z-a) over specified field using shell sort"
+character(len=*),parameter::ident_6="&
+&@(#)M_sort::sort_shell_strings_hl(3fp):sort strings(z-a) over specified field using shell sort"
 
 !  1989 John S. Urban
 !  lle to sort 'a-z', lge to sort 'z-a'
@@ -431,7 +436,7 @@ end subroutine sort_shell_strings
 !===================================================================================================================================
 subroutine sort_shell_integers(iarray,order)
 
-! ident_7="@(#)M_sort::sort_shell_integers(3fp):sort integer array using Shell sort and specified order"
+character(len=*),parameter::ident_7="@(#)M_sort::sort_shell_integers(3fp):sort integer array using Shell sort and specified order"
 
 integer,intent(inout)          :: iarray(:)   ! iarray input/output array
 character(len=*),  intent(in)  ::  order      ! sort order 'ascending'|'descending'
@@ -447,7 +452,7 @@ contains
 subroutine sort_shell_integers_hl(iarray)
 ! Copyright (C) 1989,1996 John S. Urban;  all rights reserved
 
-! ident_8="@(#)M_sort::sort_shell_integers_hl(3fp):sort integer array using Shell sort (high to low)"
+character(len=*),parameter::ident_8="@(#)M_sort::sort_shell_integers_hl(3fp):sort integer array using Shell sort (high to low)"
 
 integer,intent(inout)      :: iarray(:)  ! input/output array
 integer                    :: n          ! number of elements in input array (iarray)
@@ -477,7 +482,7 @@ end subroutine sort_shell_integers_hl
 subroutine sort_shell_integers_lh(iarray) ! sort an integer array in ascending order (low to high)
 ! Copyright (C) 1989,1996 John S. Urban;  all rights reserved
 
-! ident_9="@(#)M_sort::sort_shell_integers_lh(3fp):sort integer array using Shell sort low to high"
+character(len=*),parameter::ident_9="@(#)M_sort::sort_shell_integers_lh(3fp):sort integer array using Shell sort low to high"
 
 integer,intent(inout) :: iarray(:)      ! iarray input/output array
    integer            :: n
@@ -511,7 +516,7 @@ end subroutine sort_shell_integers
 !===================================================================================================================================
 subroutine sort_shell_reals(array,order)
 
-! ident_10="@(#)M_sort::sort_shell_reals(3fp):sort real array using Shell sort and specified order"
+character(len=*),parameter::ident_10="@(#)M_sort::sort_shell_reals(3fp):sort real array using Shell sort and specified order"
 
 real,intent(inout)          :: array(:)   ! input/output array
 character(len=*),intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -526,7 +531,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_reals_hl(array)
 
-! ident_11="@(#)M_sort::sort_shell_reals_hl(3fp):sort real array using Shell sort (high to low)"
+character(len=*),parameter::ident_11="@(#)M_sort::sort_shell_reals_hl(3fp):sort real array using Shell sort (high to low)"
 
 !  Copyright(C) 1989 John S. Urban
 real,intent(inout) :: array(:) ! input array
@@ -556,7 +561,7 @@ end subroutine sort_shell_reals_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_reals_lh(array)
 
-! ident_12="@(#)M_sort::sort_shell_reals_lh(3fp):sort real array using Shell sort (low to high)"
+character(len=*),parameter::ident_12="@(#)M_sort::sort_shell_reals_lh(3fp):sort real array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban
 real,intent(inout) :: array(:)            ! input array
@@ -590,7 +595,7 @@ end subroutine sort_shell_reals
 !===================================================================================================================================
 subroutine sort_shell_doubles(array,order)
 
-! ident_13="@(#)M_sort::sort_shell_doubles(3fp):sort double array using Shell sort and specified order"
+character(len=*),parameter::ident_13="@(#)M_sort::sort_shell_doubles(3fp):sort double array using Shell sort and specified order"
 
 doubleprecision,intent(inout)          :: array(:)   ! input/output array
 character(len=*),intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -605,7 +610,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_doubles_hl(array)
 
-! ident_14="@(#)M_sort::sort_shell_doubles_hl(3fp):sort double array using Shell sort (high to low)"
+character(len=*),parameter::ident_14="@(#)M_sort::sort_shell_doubles_hl(3fp):sort double array using Shell sort (high to low)"
 
 !  Copyright(C) 1989 John S. Urban
 doubleprecision,intent(inout) :: array(:) ! input array
@@ -635,7 +640,7 @@ end subroutine sort_shell_doubles_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_doubles_lh(array)
 
-! ident_15="@(#)M_sort::sort_shell_doubles_lh(3fp):sort double array using Shell sort (low to high)"
+character(len=*),parameter::ident_15="@(#)M_sort::sort_shell_doubles_lh(3fp):sort double array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban
 doubleprecision,intent(inout) :: array(:)            ! input array
@@ -669,7 +674,7 @@ end subroutine sort_shell_doubles
 !===================================================================================================================================
 subroutine sort_shell_complex(array,order,type)  ! select ascending or descending order
 
-! ident_16="@(#)M_sort::sort_shell_complex(3fp):sort complex array using Shell sort"
+character(len=*),parameter::ident_16="@(#)M_sort::sort_shell_complex(3fp):sort complex array using Shell sort"
 
 complex,intent(inout)         :: array(:)   ! array  input/output array
 character(len=*),  intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -685,7 +690,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_hl(array,type)
 
-! ident_17="@(#)M_sort::sort_shell_reals_hl(3fp):sort complex array using Shell sort (high to low)"
+character(len=*),parameter::ident_17="@(#)M_sort::sort_shell_reals_hl(3fp):sort complex array using Shell sort (high to low)"
 
 !     Copyright(C) 1989 John S. Urban   all rights reserved
    complex,intent(inout)       :: array(:)            ! input array
@@ -727,7 +732,7 @@ end subroutine sort_shell_complex_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_lh(array,type)
 
-! ident_18="@(#)M_sort::sort_shell_reals_lh(3fp):sort complex array using Shell sort (low to high)"
+character(len=*),parameter::ident_18="@(#)M_sort::sort_shell_reals_lh(3fp):sort complex array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban   all rights reserved
 !  array    input array
@@ -774,7 +779,7 @@ end subroutine sort_shell_complex
 !===================================================================================================================================
 subroutine sort_shell_complex_double(array,order,type)  ! select ascending or descending order
 
-! ident_19="@(#)M_sort::sort_shell_complex_double(3fp):sort double complex array using Shell sort"
+character(len=*),parameter::ident_19="@(#)M_sort::sort_shell_complex_double(3fp):sort double complex array using Shell sort"
 
 complex(kind=cd),intent(inout)         :: array(:)   ! array  input/output array
 character(len=*),  intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -790,7 +795,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_double_hl(array,type)
 
-! ident_20="@(#)M_sort::sort_shell_reals_hl(3fp):sort double complex array using Shell sort (high to low)"
+character(len=*),parameter::ident_20="@(#)M_sort::sort_shell_reals_hl(3fp):sort double complex array using Shell sort (high to low)"
 
 !     Copyright(C) 1989 John S. Urban   all rights reserved
    complex(kind=cd),intent(inout)       :: array(:)            ! input array
@@ -832,7 +837,7 @@ end subroutine sort_shell_complex_double_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_double_lh(array,type)
 
-! ident_21="@(#)M_sort::sort_shell_reals_lh(3fp):sort double complex array using Shell sort (low to high)"
+character(len=*),parameter::ident_21="@(#)M_sort::sort_shell_reals_lh(3fp):sort double complex array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban   all rights reserved
 !  array    input array
@@ -988,7 +993,7 @@ end subroutine sort_shell_complex_double
 !==================================================================================================================================!
 subroutine sort_quick_rx_character(data,indx)
 
-! ident_22="@(#)M_sort::sort_quick_rx_character(3f): indexed hybrid quicksort of a real array"
+character(len=*),parameter::ident_22="@(#)M_sort::sort_quick_rx_character(3f): indexed hybrid quicksort of a real array"
 
 character(len=*),intent(in)  :: data(:)
 integer,intent(out)          :: indx(:)
@@ -1163,7 +1168,7 @@ end subroutine sort_quick_rx_character
 !==================================================================================================================================!
 subroutine sort_quick_rx_integer(data,indx)
 
-! ident_23="@(#)M_sort::sort_quick_rx_integer(3f): indexed hybrid quicksort of a real array"
+character(len=*),parameter::ident_23="@(#)M_sort::sort_quick_rx_integer(3f): indexed hybrid quicksort of a real array"
 
 integer,intent(in)         :: data(:)
 integer,intent(out)     :: indx(:)
@@ -1338,7 +1343,7 @@ end subroutine sort_quick_rx_integer
 !==================================================================================================================================!
 subroutine sort_quick_rx_complex(data,indx)
 
-! ident_24="@(#)M_sort::sort_quick_rx_complex(3f): indexed hybrid quicksort of a real array"
+character(len=*),parameter::ident_24="@(#)M_sort::sort_quick_rx_complex(3f): indexed hybrid quicksort of a real array"
 
 complex,intent(in)   :: data(:)
 integer,intent(out)  :: indx(:)
@@ -1528,7 +1533,7 @@ end subroutine sort_quick_rx_complex
 !==================================================================================================================================!
 subroutine sort_quick_rx_doubleprecision(data,indx)
 
-! ident_25="@(#)M_sort::sort_quick_rx_doubleprecision(3f): indexed hybrid quicksort of a real array"
+character(len=*),parameter::ident_25="@(#)M_sort::sort_quick_rx_doubleprecision(3f): indexed hybrid quicksort of a real array"
 
 doubleprecision,intent(in) :: data(:)
 integer,intent(out)        :: indx(:)
@@ -1703,7 +1708,7 @@ end subroutine sort_quick_rx_doubleprecision
 !==================================================================================================================================!
 subroutine sort_quick_rx_real(data,indx)
 
-! ident_26="@(#)M_sort::sort_quick_rx_real(3f): indexed hybrid quicksort of a real array"
+character(len=*),parameter::ident_26="@(#)M_sort::sort_quick_rx_real(3f): indexed hybrid quicksort of a real array"
 
 real,intent(in)         :: data(:)
 integer,intent(out)     :: indx(:)
@@ -1927,13 +1932,17 @@ end subroutine sort_quick_rx_real
 !!     AFTER   : 1   2   3   4   10  20  30
 !!     SIZE=10
 !!     ICOUNT=7
+
+
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine unique_integers(array,ivals)
-integer,intent(inout)  :: array(:)
-integer,intent(out)    :: ivals
-   integer             :: i,isize
+!<<<<<<<<<<< unique_template
+subroutine unique_integer_int8(array,ivals)
+integer(kind=int8),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -1946,147 +1955,294 @@ integer,intent(out)    :: ivals
    else
       ivals=isize
    endif
-end subroutine unique_integers
+! unique >>>>>>>>>>>
+end subroutine unique_integer_int8
+! unique_template >>>>>>>>>>>
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine unique_reals(array,ivals)
-real,intent(inout)  :: array(:)
-integer,intent(out) :: ivals
-   integer          :: i,isize
+!<<<<<<<<<<< unique_template
+subroutine unique_integer_int16(array,ivals)
+integer(kind=int16),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
       do i=2,isize
-        if(array(i).ne.array(i-1))then
-           ivals=ivals+1
-           array(ivals)=array(i)
-        endif
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
       enddo
    else
       ivals=isize
    endif
-end subroutine unique_reals
+! unique >>>>>>>>>>>
+end subroutine unique_integer_int16
+! unique_template >>>>>>>>>>>
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_integer_int32(array,ivals)
+integer(kind=int32),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_integer_int32
+! unique_template >>>>>>>>>>>
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_integer_int64(array,ivals)
+integer(kind=int64),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_integer_int64
+! unique_template >>>>>>>>>>>
+
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_real_real32(array,ivals)
+real(kind=real32),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_real_real32
+! unique_template >>>>>>>>>>>
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_real_real64(array,ivals)
+real(kind=real64),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_real_real64
+! unique_template >>>>>>>>>>>
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_real_real128(array,ivals)
+real(kind=real128),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_real_real128
+! unique_template >>>>>>>>>>>
+
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_complex_real32(array,ivals)
+complex(kind=real32),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_complex_real32
+! unique_template >>>>>>>>>>>
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_complex_real64(array,ivals)
+complex(kind=real64),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_complex_real64
+! unique_template >>>>>>>>>>>
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!<<<<<<<<<<< unique_template
+subroutine unique_complex_real128(array,ivals)
+complex(kind=real128),intent(inout)  :: array(:)
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
+   isize=size(array)
+   if(isize.ge.2)then
+      ivals=1
+      do i=2,isize
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
+      enddo
+   else
+      ivals=isize
+   endif
+! unique >>>>>>>>>>>
+end subroutine unique_complex_real128
+! unique_template >>>>>>>>>>>
+
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine unique_strings_allocatable_len(array,ivals)
 character(len=:),intent(inout),allocatable  :: array(:)
-integer,intent(out)                         :: ivals
-   integer                                  :: i,isize
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
       do i=2,isize
-        if(array(i).ne.array(i-1))then
-           ivals=ivals+1
-           array(ivals)=array(i)
-        endif
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
       enddo
    else
       ivals=isize
    endif
+! unique >>>>>>>>>>>
 end subroutine unique_strings_allocatable_len
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine unique_strings(array,ivals)
 character(len=*),intent(inout),allocatable  :: array(:)
-integer,intent(out)                         :: ivals
-   integer                                  :: i,isize
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
       do i=2,isize
-        if(array(i).ne.array(i-1))then
-           ivals=ivals+1
-           array(ivals)=array(i)
-        endif
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
       enddo
    else
       ivals=isize
    endif
+! unique >>>>>>>>>>>
 end subroutine unique_strings
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine unique_allocatable_strings(array,ivals)
 character(len=:),intent(inout),allocatable  :: array(:)
-integer,intent(out)                         :: ivals
-   integer                                  :: i,isize
+!<<<<<<<<<<< unique
+integer,intent(out)                  :: ivals
+integer                              :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
       do i=2,isize
-        if(array(i).ne.array(i-1))then
-           ivals=ivals+1
-           array(ivals)=array(i)
-        endif
+         if(array(i).ne.array(i-1))then
+            ivals=ivals+1
+            array(ivals)=array(i)
+         endif
       enddo
    else
       ivals=isize
    endif
+! unique >>>>>>>>>>>
 end subroutine unique_allocatable_strings
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine unique_complex(array,ivals)
-complex,intent(inout)  :: array(:)
-integer,intent(out)    :: ivals
-   integer             :: i,isize
-   isize=size(array)
-   if(isize.ge.2)then
-      ivals=1
-      do i=2,isize
-        if(array(i).ne.array(i-1))then
-           ivals=ivals+1
-           array(ivals)=array(i)
-        endif
-      enddo
-   else
-      ivals=isize
-   endif
-end subroutine unique_complex
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine unique_doubles(array,ivals)
-doubleprecision,intent(inout)  :: array(:)
-integer,intent(out)            :: ivals
-   integer                     :: i,isize
-   isize=size(array)
-   if(isize.ge.2)then
-      ivals=1
-      do i=2,isize
-        if(array(i).ne.array(i-1))then
-           ivals=ivals+1
-           array(ivals)=array(i)
-        endif
-      enddo
-   else
-      ivals=isize
-   endif
-end subroutine unique_doubles
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine unique_complex_double(array,ivals)
-complex(kind=cd),intent(inout) :: array(:)   ! array  input/output array
-integer,intent(out)            :: ivals
-   integer                     :: i,isize
-   isize=size(array)
-   if(isize.ge.2)then
-      ivals=1
-      do i=2,isize
-        if(array(i).ne.array(i-1))then
-           ivals=ivals+1
-           array(ivals)=array(i)
-        endif
-      enddo
-   else
-      ivals=isize
-   endif
-end subroutine unique_complex_double
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2261,42 +2417,42 @@ end subroutine unique_complex_double
 !!    >1,1,1
 !===================================================================================================================================
 elemental subroutine d_swap(x,y)
-! ident_27="@(#)M_sort::d_swap(3fp): swap two double variables"
+character(len=*),parameter::ident_27="@(#)M_sort::d_swap(3fp): swap two double variables"
 doubleprecision, intent(inout) :: x,y
 doubleprecision                :: temp
    temp = x; x = y; y = temp
 end subroutine d_swap
 !===================================================================================================================================
 elemental subroutine r_swap(x,y)
-! ident_28="@(#)M_sort::r_swap(3fp): swap two real variables"
+character(len=*),parameter::ident_28="@(#)M_sort::r_swap(3fp): swap two real variables"
 real, intent(inout) :: x,y
 real                :: temp
    temp = x; x = y; y = temp
 end subroutine r_swap
 !===================================================================================================================================
 elemental subroutine i_swap(i,j)
-! ident_29="@(#)M_sort::i_swap(3fp): swap two integer variables"
+character(len=*),parameter::ident_29="@(#)M_sort::i_swap(3fp): swap two integer variables"
 integer, intent(inout) :: i,j
 integer                :: itemp
    itemp = i; i = j; j = itemp
 end subroutine i_swap
 !===================================================================================================================================
 elemental subroutine l_swap(l,ll)
-! ident_30="@(#)M_sort::l_swap(3fp): swap two logical variables"
+character(len=*),parameter::ident_30="@(#)M_sort::l_swap(3fp): swap two logical variables"
 logical, intent(inout) :: l,ll
 logical                :: ltemp
    ltemp = l; l = ll; ll = ltemp
 end subroutine l_swap
 !===================================================================================================================================
 elemental subroutine c_swap(xx,yy)
-! ident_31="@(#)M_sort::c_swap(3fp): swap two complex variables"
+character(len=*),parameter::ident_31="@(#)M_sort::c_swap(3fp): swap two complex variables"
 complex, intent(inout) :: xx,yy
 complex                :: tt
    tt = xx; xx = yy; yy = tt
 end subroutine c_swap
 !===================================================================================================================================
 elemental subroutine cd_swap(xx,yy)
-! ident_32="@(#)M_sort::cd_swap(3fp): swap two double complex variables"
+character(len=*),parameter::ident_32="@(#)M_sort::cd_swap(3fp): swap two double complex variables"
 complex(kind=cd), intent(inout) :: xx,yy
 complex(kind=cd)                :: tt
    tt = xx; xx = yy; yy = tt
@@ -2311,7 +2467,7 @@ elemental subroutine s_swap(string1,string2)
 !!    Note that the len of a dummy argument can be used to calculate the automatic variable length.
 !!    Therefore, you can make sure len is at least max(len(string1),len(string2)) by adding the two lengths together:
 
-! ident_33="@(#)M_sort::s_swap(3fp): swap two double variables"
+character(len=*),parameter::ident_33="@(#)M_sort::s_swap(3fp): swap two double variables"
 character(len=*), intent(inout)             :: string1,string2
 !character( len=len(string1) + len(string2)) :: string_temp
 character( len=max(len(string1),len(string2))) :: string_temp
@@ -2749,7 +2905,8 @@ end subroutine swap_any_array
 recursive subroutine tree_insert (t, number)
 implicit none
 
-! ident_34="@(#)M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order"
+character(len=*),parameter::ident_34="&
+&@(#)M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order"
 
 type (tree_node), pointer :: t  ! a tree
 integer, intent (in) :: number
@@ -2808,7 +2965,7 @@ end subroutine tree_insert
 recursive subroutine tree_print(t)
 implicit none
 
-! ident_35="@(#)M_sort::tree_print(3f):"
+character(len=*),parameter::ident_35="@(#)M_sort::tree_print(3f):"
 
 type (tree_node), pointer :: t  ! a tree
 
@@ -2900,7 +3057,8 @@ end subroutine tree_print
 function anything_to_bytes_arr(anything) result(chars)
 implicit none
 
-! ident_36="@(#)M_sort::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+character(len=*),parameter::ident_36="&
+&@(#)M_sort::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything(:)
 character(len=1),allocatable :: chars(:)
@@ -2926,7 +3084,8 @@ end function anything_to_bytes_arr
 function  anything_to_bytes_scalar(anything) result(chars)
 implicit none
 
-! ident_37="@(#)M_sort::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
+character(len=*),parameter::ident_37="&
+&@(#)M_sort::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything
 character(len=1),allocatable :: chars(:)

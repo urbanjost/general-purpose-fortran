@@ -60,7 +60,8 @@
 program testit
 use iso_fortran_env
 implicit none
-! ident_1="@(#)an example of the use of the numeric formatting facilities to create a Japanese date stamp."
+character(len=*),parameter::ident_1="&
+&@(#)an example of the use of the numeric formatting facilities to create a Japanese date stamp."
 character(len=*),parameter :: ident = "@(#) print date and time in japanese"
 integer, parameter :: ascii = selected_char_kind ("ascii")
 integer,parameter :: ucs4 = selected_char_kind("ISO_10646")

@@ -877,7 +877,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_kracken::sgets(3f): Fetch strings value for specified NAME from the lang. dictionary<br/>
 	M_kracken::kracken(3f): define and parse command line options<br/>
 	M_kracken::setprompts(3f): set explicit prompts for keywords in interactive mode<br/>
-	M_kracken::dissect(3f): convenient call to parse() define defaults, then process<br/>
+	M_kracken::dissect(3f): convenient call to parse()<br/>
 	M_kracken::parse(3f): parse user command and store tokens into Language Dictionary<br/>
 	M_kracken::store(3f): replace or add dictionary entry name  and value (if allow='add' add name if necessary)<br/>
 	M_kracken::show(3f): dump dictionary entries<br/>
@@ -992,7 +992,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_matrix::laff(3f): initialize and/or pass commands to matrix laboratory interpreter<br/>
 	M_matrix::laff(3f): run a single command in matrix laboratory interpreter and return to calling program<br/>
 	M_matrix::laff(3f): run an array of commands in matrix laboratory interpreter and return to calling program<br/>
-	M_matrix::ints2str(3f) convert laff integers to a character variable<br/>
+	M_matrix::ints2str(3f): convert laff integers to a character variable<br/>
 	M_matrix::mat_matfn6(3f):evaluate utility functions<br/>
 	M_matrix::mat_getch(3f): get next character from input line into G_CHRA<br/>
 	M_matrix::mat_formz: system dependent routine to print with z format<br/>
@@ -1023,6 +1023,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_msg.f90">../src/M_msg.f90</a></td>
 <td>
 	M_msg::str(3f): {msg_scalar,msg_one}<br/>
+	M_msg::ffmt(3f): convert any intrinsic to a string using specified format<br/>
 	M_msg::fmt(3f): convert any intrinsic to a string using specified format<br/>
 	M_msg::stderr(3f): writes a message to standard error using a standard f2003 method<br/>
 	M_msg::write(3f): writes a message to any number of open files with any scalar values<br/>
@@ -1122,7 +1123,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>
 	M_random::random_string(3f): create random string composed of provided characters of specified length<br/>
 	M_random::random_hex(3f): create random hexadecimal string of specified length<br/>
-	M_random::scramble(3f): return integer array of random values 1 to N. JSU 20190813<br/>
+	M_random::scramble(3f): return integer array of random values 1 to N.<br/>
 	M_random::random_kiss64(3f): A 64-bit KISS random number generator by George Margaglia.<br/>
 	M_random::init_random_seed_by_system_clock(3f): initialize random_number(3f) to return a single value with system clock<br/>
 	M_random::init_random_seed_by_dat(3f): initialize random_number(3f) to return a single value using date_and_time(3f)<br/>
@@ -1205,7 +1206,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_steam67::sssiss67(3f): specific entropy, temperature, specific volume, steam quality of liquid at pressure P and enthalpy H<br/>
 	M_steam67::hssiss67(3f):  specific enthalpy, temperature, specific volume, steam quality of water at pressure P and entropy S<br/>
 	M_steam67::hcl67(3f): calculate specific enthalpy and entropy of water at pressure P and temp T<br/>
-	M_steam67::p23t67(3f) [M_steam67] calculate the pressure at the boundary of regions 2 and 3, given temperature T.<br/>
+	M_steam67::p23t67(3f)<br/>
 	M_steam67::zsrh67(3f) calculate remaining variables at extremities of isentropic process in compressed liquid region.<br/>
 	M_steam67::steam67(3f):print pedigree of library and return version value<br/>
 </td>
@@ -1216,7 +1217,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_strings.f90">../src/M_strings.f90</a></td>
 <td>
 	M_strings(3f): Fortran module containing routines that deal with character strings<br/>
-	M_strings::switch(3f): toggle between string and array of characters<br/>
+	M_strings::switch(3f): toggle between string and array of characters; generic{a2s,s2a}<br/>
 	M_strings::string_to_value(3f): Generic subroutine converts numeric string to a number (a2d,a2r,a2i)<br/>
 	M_strings::v2s(3f): Generic function returns string given REAL|INTEGER|DOUBLEPRECISION value(d2s,r2s,i2s)<br/>
 	M_strings::msg(3f): convert up to nine scalar values to a string. Alternatively can also handle one-dimensional arrays<br/>
@@ -1242,7 +1243,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_strings::s2c(3f): copy string(1:Clen(string)) to char array with null terminator<br/>
 	M_strings::c2s(3f): copy pointer to C char array till a null is encountered to a Fortran string up to 4096 characters<br/>
 	M_strings::indent(3f): find number of leading spaces in a string<br/>
-	M_strings::visible(3f) expand escape sequences in a string to control and meta-control representations<br/>
+	M_strings::visible(3f): expand escape sequences in a string to control and meta-control representations<br/>
 	M_strings::expand(3f): return string with escape sequences expanded<br/>
 	M_strings::notabs(3f): convert tabs to spaces while maintaining columns, remove CRLF chars<br/>
 	M_strings::dilate(3f): convert tabs to spaces and trims line, removing CRLF chars<br/>
@@ -1252,9 +1253,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_strings::atleast(3f): return string padded to at least specified length<br/>
 	M_strings::lenset(3f): return string trimmed or padded to specified length<br/>
 	M_strings::merge_str(3f): pads first and second arguments to MERGE(3f) to same length<br/>
-	M_strings::compact(3f): Converts white-space to single spaces<br/>
+	M_strings::compact(3f): Converts white-space to single spaces; removes leading spaces<br/>
 	M_strings::noesc(3f): convert non-printable characters to a space<br/>
-	M_strings::s2v(3f): returns doubleprecision number from string<br/>
+	M_strings::s2v(3f): returns doubleprecision number from string;zero if error occurs<br/>
 	M_strings::v2s_bug(3f): function returns string given numeric value<br/>
 	M_strings::isnumber(3f): Determines if a string is a number of not.<br/>
 	M_strings::listout(3f): copy icurve_lists to icurve_expanded expanding negative numbers to ranges (1 -10 means 1 thru 10)<br/>
@@ -1578,7 +1579,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_xyplot::xy_con_y(3f): scale an axis value to the overall window/viewport<br/>
 	M_xyplot::xy_setcnv(3f): set up conversion table for xy_con_x and xy_con_y functions<br/>
 	M_xyplot::xy_jugetwn(3f): query current window ( appropriate for 2-d only)<br/>
-	M_xyplot::xy_zoom(3f):  given current four numbers defining a box<br/>
+	M_xyplot::xy_zoom(3f):  given current four numbers defining a box; alter them by indicated selections of an old and new box<br/>
 	M_xyplot::xy_convert(3f): do a linear conversion on an xy_array of the form y=ax+b<br/>
 	M_xyplot::xy_obj12345(3f): create or close M_plot object 12345<br/>
 	 M_xyplot::xy_getmark(3f):get marker geometries<br/>

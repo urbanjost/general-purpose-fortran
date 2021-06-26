@@ -217,9 +217,9 @@ module m_overload
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 use M_strings,                    only : s2v, atleast
 use M_anything,                   only : anyscalar_to_real, anyscalar_to_double, anyscalar_to_int64
-use M_msg,                        only : fmt
+use M_msg,                        only : ffmt
 implicit none
-! ident_1="@(#)M_overload(3fm): overloads of standard operators and intrinsic procedures"
+character(len=*),parameter::ident_1="@(#)M_overload(3fm): overloads of standard operators and intrinsic procedures"
 private
 public boolean_equal, boolean_notequal      !
 public operator(==)
@@ -232,7 +232,7 @@ public sign
 public adjustl, adjustr
 public merge
 interface operator ( .fmt. )
-   module procedure fmt
+   module procedure ffmt
 end interface operator ( .fmt. )
 
 interface operator ( == )
@@ -278,12 +278,12 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 function g_g(value1,value2) result (string)
 
-! ident_2="@(#)M_overload::g_g(3f): convert two single intrinsic values to a string"
+character(len=*),parameter::ident_2="@(#)M_overload::g_g(3f): convert two single intrinsic values to a string"
 
 class(*),intent(in)          :: value1, value2
 character(len=:),allocatable :: string
    ! use this instead of str() so character variables are not trimmed and/or spaces are not added
-   string = fmt(value1,'(g0)') // fmt(value2,'(g0)')
+   string = ffmt(value1,'(g0)') // ffmt(value2,'(g0)')
 end function g_g
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental function strmerge(str1,str2,expr) result(strout)
@@ -301,7 +301,8 @@ end function strmerge
 !-----------------------------------------------------------------------------------------------------------------------------------
 function adjustl_atleast(line,length) result(strout)
 
-! ident_3="@(#)M_strings::adjustl_atleast(3f): return string padded on right to at least specified length"
+character(len=*),parameter::ident_3="&
+&@(#)M_strings::adjustl_atleast(3f): return string padded on right to at least specified length"
 
 character(len=*),intent(in)                :: line
 integer,intent(in)                         :: length
@@ -311,7 +312,8 @@ end function adjustl_atleast
 !-----------------------------------------------------------------------------------------------------------------------------------
 function adjustr_atleast(line,length) result(strout)
 
-! ident_4="@(#)M_overload::adjustr_atleast(3f): return string padded on left to at least specified length"
+character(len=*),parameter::ident_4="&
+&@(#)M_overload::adjustr_atleast(3f): return string padded on left to at least specified length"
 
 character(len=*),intent(in)                :: line
 integer,intent(in)                         :: length
@@ -476,7 +478,7 @@ subroutine test_sign()
          & -library libGPF  &
          & -filename `pwd`/M_overload.FF &
          & -documentation y &
-         &  -ufpp         y &
+         &  -prep         y &
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
@@ -501,7 +503,7 @@ subroutine test_boolean_equal()
          & -library libGPF  &
          & -filename `pwd`/M_overload.FF &
          & -documentation y &
-         &  -ufpp         y &
+         &  -prep         y &
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
@@ -517,7 +519,7 @@ subroutine test_boolean_notequal()
          & -library libGPF  &
          & -filename `pwd`/M_overload.FF &
          & -documentation y &
-         &  -ufpp         y &
+         &  -prep         y &
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
@@ -533,7 +535,7 @@ subroutine test_dble_s2v()
          & -library libGPF  &
          & -filename `pwd`/M_overload.FF &
          & -documentation y &
-         &  -ufpp         y &
+         &  -prep         y &
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
@@ -554,7 +556,7 @@ subroutine test_dbles_s2v()
          & -library libGPF  &
          & -filename `pwd`/M_overload.FF &
          & -documentation y &
-         &  -ufpp         y &
+         &  -prep         y &
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
@@ -575,7 +577,7 @@ subroutine test_int_s2v()
          & -library libGPF  &
          & -filename `pwd`/M_overload.FF &
          & -documentation y &
-         &  -ufpp         y &
+         &  -prep         y &
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
@@ -591,7 +593,7 @@ integer,allocatable :: ibug(:)
          & -library libGPF  &
          & -filename `pwd`/M_overload.FF &
          & -documentation y &
-         &  -ufpp         y &
+         &  -prep         y &
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
@@ -611,7 +613,7 @@ subroutine test_real_s2v()
          & -library libGPF               &
          & -filename `pwd`/M_overload.FF &
          & -documentation y              &
-         &  -ufpp         y              &
+         &  -prep         y              &
          &  -ccall        n              &
          &  -archive      GPF.a          &
          & ')
@@ -632,7 +634,7 @@ real,allocatable :: rbug(:)
          & -library libGPF               &
          & -filename `pwd`/M_overload.FF &
          & -documentation y              &
-         &  -ufpp         y              &
+         &  -prep         y              &
          &  -ccall        n              &
          &  -archive      GPF.a          &
          & ')

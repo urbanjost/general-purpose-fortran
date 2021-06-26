@@ -11,19 +11,18 @@
 
 !===================================================================================================================================
 MODULE M_io
-use, intrinsic :: iso_fortran_env, only : error_unit,input_unit,output_unit     ! access computing environment
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 use M_strings, only : merge_str, lower, notabs, s2v, isnumber, decodebase, s2vs, split, substitute
 use M_uuid,    only : generate_uuid
 use M_journal, only : journal
 implicit none
-integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 private
+integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 public uniq
 public print_inquire
 public notopen
 public slurp
-public swallow
+public gulp,swallow
 public number_of_lines
 public dirname
 public basename
@@ -45,9 +44,9 @@ public which
 public get_env
 public getname
 
-! ident_1="@(#)M_io::read_table(3f): read file containing a table of numeric values"
+character(len=*),parameter::ident_1="@(#)M_io::read_table(3f): read file containing a table of numeric values"
 
-! ident_2="@(#)M_io::rd(3f): ask for string or number from standard input with user-definable prompt"
+character(len=*),parameter::ident_2="@(#)M_io::rd(3f): ask for string or number from standard input with user-definable prompt"
 interface rd
    module procedure rd_character
    module procedure rd_integer
@@ -59,6 +58,15 @@ interface read_table
    module procedure read_table_i
    module procedure read_table_r
    module procedure read_table_d
+end interface
+
+interface swallow
+   module procedure gulp
+end interface
+
+interface filedelete
+   module procedure filedelete_filename
+   module procedure filedelete_lun
 end interface
 
 
@@ -148,7 +156,8 @@ CONTAINS
 function uniq(name,istart,verbose,create)
 implicit none
 
-! ident_3="@(#)M_io::uniq(3f): append a number to the end of filename to make a unique name if name exists"
+character(len=*),parameter::ident_3="&
+&@(#)M_io::uniq(3f): append a number to the end of filename to make a unique name if name exists"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)  :: name
@@ -307,7 +316,7 @@ end function uniq
 !!    Public Domain
 subroutine print_inquire(lun_in,namein_in) ! Version: JSU-1997-12-31, 2020-01-11
 
-! ident_4="@(#)M_io::print_inquire(3f): Do INQUIRE on file by name/number and print results"
+character(len=*),parameter::ident_4="@(#)M_io::print_inquire(3f): Do INQUIRE on file by name/number and print results"
 
 integer,intent(in),optional             :: lun_in        ! if unit >= 0 then query by unit number, else by name
 character(len=*),intent(in),optional    :: namein_in
@@ -321,37 +330,37 @@ integer                        :: lun
 !  FORM      =  FORMATTED   |  UNFORMATTED
 !  POSITION  =  ASIS        |  REWIND       |  APPEND
 !  STATUS    =  NEW         |  REPLACE      |  OLD     |  SCRATCH   | UNKNOWN
-character(len=20)              :: access         ; namelist/inquire/access
-character(len=20)              :: action         ; namelist/inquire/action
-character(len=20)              :: asynchronous   ; namelist/inquire/asynchronous
-character(len=20)              :: blank          ; namelist/inquire/blank
-character(len=20)              :: decimal        ; namelist/inquire/decimal
-character(len=20)              :: delim          ; namelist/inquire/delim
-character(len=20)              :: direct         ; namelist/inquire/direct
-character(len=20)              :: encoding       ; namelist/inquire/encoding
-logical                        :: exist          ; namelist/inquire/exist
-character(len=20)              :: form           ; namelist/inquire/form
-character(len=20)              :: formatted      ; namelist/inquire/formatted
-integer                        :: id             ; namelist/inquire/id
-character(len=20)              :: name           ; namelist/inquire/name
-logical                        :: named          ; namelist/inquire/named
-integer                        :: nextrec        ; namelist/inquire/nextrec
-integer                        :: number         ; namelist/inquire/number
-logical                        :: opened         ; namelist/inquire/opened
-character(len=20)              :: pad            ; namelist/inquire/pad
-logical                        :: pending        ; namelist/inquire/pending
-integer                        :: pos            ; namelist/inquire/pos
-character(len=20)              :: position       ; namelist/inquire/position
-character(len=20)              :: read           ; namelist/inquire/read
-character(len=20)              :: readwrite      ; namelist/inquire/readwrite
-integer                        :: recl           ; namelist/inquire/recl
-character(len=20)              :: round          ; !BUG!namelist/inquire/round
-character(len=20)              :: sequential     ; namelist/inquire/sequential
-character(len=20)              :: sign           ; !BUG!namelist/inquire/sign
-integer                        :: size           ; namelist/inquire/size
-character(len=20)              :: stream         ; namelist/inquire/stream
-character(len=20)              :: unformatted    ; namelist/inquire/unformatted
-character(len=20)              :: write          ; namelist/inquire/write
+character(len=20)             :: access         ; namelist/inquire/access
+character(len=20)             :: action         ; namelist/inquire/action
+character(len=20)             :: asynchronous   ; namelist/inquire/asynchronous
+character(len=20)             :: blank          ; namelist/inquire/blank
+character(len=20)             :: decimal        ; namelist/inquire/decimal
+character(len=20)             :: delim          ; namelist/inquire/delim
+character(len=20)             :: direct         ; namelist/inquire/direct
+character(len=20)             :: encoding       ; namelist/inquire/encoding
+logical                       :: exist          ; namelist/inquire/exist
+character(len=20)             :: form           ; namelist/inquire/form
+character(len=20)             :: formatted      ; namelist/inquire/formatted
+integer                       :: id             ; namelist/inquire/id
+character(len=20)             :: name           ; namelist/inquire/name
+logical                       :: named          ; namelist/inquire/named
+integer                       :: nextrec        ; namelist/inquire/nextrec
+integer                       :: number         ; namelist/inquire/number
+logical                       :: opened         ; namelist/inquire/opened
+character(len=20)             :: pad            ; namelist/inquire/pad
+logical                       :: pending        ; namelist/inquire/pending
+integer                       :: pos            ; namelist/inquire/pos
+character(len=20)             :: position       ; namelist/inquire/position
+character(len=20)             :: read           ; namelist/inquire/read
+character(len=20)             :: readwrite      ; namelist/inquire/readwrite
+integer                       :: recl           ; namelist/inquire/recl
+character(len=20)             :: round          ; !BUG!namelist/inquire/round
+character(len=20)             :: sequential     ; namelist/inquire/sequential
+character(len=20)             :: sign           ; !BUG!namelist/inquire/sign
+integer                       :: size           ; namelist/inquire/size
+character(len=20)             :: stream         ; namelist/inquire/stream
+character(len=20)             :: unformatted    ; namelist/inquire/unformatted
+character(len=20)             :: write          ; namelist/inquire/write
 !==============================================================================================
    namein=merge_str(namein_in,'',present(namein_in))
    lun=merge(lun_in,-1,present(lun_in))
@@ -825,11 +834,11 @@ end subroutine read_table_r
 !===================================================================================================================================
 !>
 !!##NAME
-!!    swallow(3f) - [M_io] read a file into a character array line by line
+!!    gulp(3f) - [M_io] read a file into a character array line by line
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine swallow(filename,pageout)
+!!   subroutine gulp(filename,pageout)
 !!
 !!    character(len=*),intent(in) :: filename
 !!      or
@@ -865,8 +874,8 @@ end subroutine read_table_r
 !!
 !!   Sample program
 !!
-!!    program demo_swallow
-!!    use M_io,      only : swallow
+!!    program demo_gulp
+!!    use M_io,      only : gulp
 !!    implicit none
 !!    character(len=4096)          :: FILENAME   ! file to read
 !!    character(len=:),allocatable :: pageout(:) ! array to hold file in memory
@@ -874,9 +883,9 @@ end subroutine read_table_r
 !!       ! get a filename
 !!       call get_command_argument(1, FILENAME)
 !!       ! allocate character array and copy file into it
-!!       call swallow(FILENAME,pageout)
+!!       call gulp(FILENAME,pageout)
 !!       if(.not.allocated(pageout))then
-!!          write(*,*)'*demo_swallow* failed to load file '//FILENAME
+!!          write(*,*)'*demo_gulp* failed to load file '//FILENAME
 !!       else
 !!          ! write file from last line to first line
 !!          longest=len(pageout)
@@ -888,7 +897,7 @@ end subroutine read_table_r
 !!          write(*,'(a)')repeat('%',longest+2)
 !!          deallocate(pageout)  ! release memory
 !!       endif
-!!    end program demo_swallow
+!!    end program demo_gulp
 !!
 !!   Given
 !!
@@ -910,7 +919,7 @@ end subroutine read_table_r
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine swallow(FILENAME,pageout)
+subroutine gulp(FILENAME,pageout)
 implicit none
 class(*),intent(in)                      :: FILENAME   ! file to read
 character(len=:),allocatable,intent(out) :: pageout(:) ! page to hold file in memory
@@ -920,8 +929,8 @@ character(len=1),allocatable             :: text(:)    ! array to hold file in m
 
    if(.not.allocated(text))then
       select type(FILENAME)
-       type is (character(len=*)); write(*,*)'*swallow* failed to load file '//FILENAME
-       type is (integer);          write(*,'(a,i0)')'*swallow* failed to load file unit ',FILENAME
+       type is (character(len=*)); write(*,*)'*gulp* failed to load file '//FILENAME
+       type is (integer);          write(*,'(a,i0)')'*gulp* failed to load file unit ',FILENAME
       end select
    else  ! convert array of characters to array of lines
       pageout=page(text)
@@ -931,7 +940,7 @@ character(len=1),allocatable             :: text(:)    ! array to hold file in m
 contains
 function page(array)  result (table)
 
-! ident_5="@(#)page(3fp): function to copy char array to page of text"
+character(len=*),parameter::ident_5="@(#)page(3fp): function to copy char array to page of text"
 
 character(len=1),intent(in)  :: array(:)
 character(len=:),allocatable :: table(:)
@@ -979,7 +988,7 @@ character(len=1),parameter   :: nl=char(10)
       endif
    enddo
 end function page
-end subroutine swallow
+end subroutine gulp
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -1066,7 +1075,7 @@ end subroutine swallow
 subroutine slurp(filename,text,length,lines)
 implicit none
 
-! ident_6="@(#)M_io::slurp(3f): allocate text array and read file filename into it"
+character(len=*),parameter::ident_6="@(#)M_io::slurp(3f): allocate text array and read file filename into it"
 
 class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
@@ -1138,7 +1147,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine stderr_local(message)
 character(len=*) :: message
-   write(error_unit,'(a)')trim(message)    ! write message to standard error
+   write(stderr,'(a)')trim(message)    ! write message to standard error
 end subroutine stderr_local
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine slurp
@@ -1338,7 +1347,7 @@ end function number_of_lines
 integer function notopen(start,end,err)
 implicit none
 
-! ident_7="@(#)M_io::notopen(3f): find free FORTRAN unit number to OPEN() a file"
+character(len=*),parameter::ident_7="@(#)M_io::notopen(3f): find free FORTRAN unit number to OPEN() a file"
 
 integer,optional,intent(in)    :: start                           ! unit number to start looking at
 integer,optional,intent(in)    :: end                             ! last unit number to look at
@@ -1360,7 +1369,7 @@ logical         :: lexist                                         ! returned fro
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i10=istart,iend                                             ! check units over selected range
       select case (i10)                                           ! always skip these predefined units
-      case(error_unit,input_unit,output_unit)
+      case(stderr,stdin,stdout)
           cycle
       end select
       inquire( unit=i10, opened=lopen, exist=lexist, iostat=ios )
@@ -1370,7 +1379,7 @@ logical         :: lexist                                         ! returned fro
             exit                                                  ! only need to find one, so return
          endif
       else
-         write(error_unit,*)'*notopen*:error on unit ',i10,'=',ios
+         write(stderr,*)'*notopen*:error on unit ',i10,'=',ios
       endif
    enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1459,7 +1468,7 @@ end function notopen
 function dirname(filename) result (directory)
 implicit none
 
-! ident_8="@(#)M_io::dirname(3f): strip last component from filename"
+character(len=*),parameter::ident_8="@(#)M_io::dirname(3f): strip last component from filename"
 
 character(len=*),intent(in)      :: filename
 character(len=:),allocatable     :: directory
@@ -1575,7 +1584,7 @@ end function dirname
 function basename(filename,suffix) result (leaf)
 implicit none
 
-! ident_9="@(#)M_io::basename(3f): strip last component from filename"
+character(len=*),parameter::ident_9="@(#)M_io::basename(3f): strip last component from filename"
 
 character(len=*),intent(in)          :: filename
 character(len=*),intent(in),optional :: suffix
@@ -1908,7 +1917,7 @@ end function fileclose
 !!
 !!##SYNOPSIS
 !!
-!!     function filewrite(filename,data,status) result(ierr)
+!!     function filewrite(filename,data,status,position) result(ierr)
 !!
 !!      character(len=*),intent(in) :: filename
 !!      character(len=*),intent(in) :: data(:)
@@ -2032,13 +2041,16 @@ end function filewrite
 !!    function filedelete(lun) result(ios)
 !!
 !!     integer,intent(in)    :: lun
+!!       or
+!!     character(len=*),intent(in)    :: filename
 !!     integer               :: ios
 !!
 !!##DESCRIPTION
 !!   A convenience command for deleting an OPEN(3f) file that leaves an
-!!   error message in the current journal file if active.
+!!   error message in the current journal file if active or a file by
+!!   filename.
 !!##OPTION
-!!   LUN  unit number of open file to delete
+!!   LUN  unit number of open file to delete or filename.
 !!##RETURNS
 !!   IOS  status returned by CLOSE().
 !!##EXAMPLE
@@ -2057,15 +2069,33 @@ end function filewrite
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-function filedelete(lun) result(ios)
+function filedelete_lun(lun) result(iostat)
 integer,intent(in)    :: lun
-integer               :: ios
+integer               :: iostat
 character(len=256)    :: message
-   close(unit=lun,iostat=ios,status='delete',iomsg=message)
-   if(ios.ne.0)then
+   close(unit=lun,iostat=iostat,status='delete',iomsg=message)
+   if(iostat.ne.0)then
       call journal('sc','*filedelete* ',message)
    endif
-end function filedelete
+end function filedelete_lun
+function filedelete_filename(filename) result(iostat)
+character(len=*),intent(in) :: filename
+integer                     :: number
+integer                     :: iostat
+character(len=256)          :: message
+logical                     :: opened
+logical                     :: exist
+   inquire(file=filename,opened=opened,iostat=iostat,exist=exist,number=number)
+   if(exist)then
+      if(.not.opened)then
+         open(newunit=number,iostat=iostat,file=filename)
+      endif
+      close(unit=number,iostat=iostat,status='delete',iomsg=message)
+      if(iostat.ne.0)then
+         call journal('sc','*filedelete* ',message)
+      endif
+   endif
+end function filedelete_filename
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2262,7 +2292,7 @@ end function joinpath
 subroutine splitpath(path,dir,name,basename,ext)
 implicit none
 
-! ident_10="@(#)M_io::splitpath(3f): split Unix pathname into components (dir,name,basename,extension)"
+character(len=*),parameter::ident_10="@(#)M_io::splitpath(3f): split Unix pathname into components (dir,name,basename,extension)"
 
 !===================================================================================================================================
 character(len=*),intent(in)           :: path
@@ -2424,7 +2454,8 @@ end subroutine splitpath
 function getline(line,lun) result(ier)
 implicit none
 
-! ident_11="@(#)M_io::getline(3f): read a line from specified LUN into allocatable string up to line length limit"
+character(len=*),parameter::ident_11="&
+&@(#)M_io::getline(3f): read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
@@ -2442,7 +2473,7 @@ integer                                  :: lun_local
    if(present(lun))then
       lun_local=lun
    else
-      lun_local=INPUT_UNIT
+      lun_local=stdin
    endif
    open(lun_local,pad='yes')
 
@@ -2542,7 +2573,8 @@ end function getline
 function read_line(line,lun,ios) result(ier)
 implicit none
 
-! ident_12="@(#)M_io::read_line(3f): read a line from specified LUN into allocatable string up to line length limit"
+character(len=*),parameter::ident_12="&
+&@(#)M_io::read_line(3f): read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
@@ -2560,7 +2592,7 @@ integer                                  :: lun_local
 
    line_local=''
    ier=0
-   lun_local=merge(lun,INPUT_UNIT,present(lun))
+   lun_local=merge(lun,stdin,present(lun))
    open(lun_local,pad='yes')
    INFINITE: do                                                           ! read characters from line and append to result
       read(lun_local,iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
@@ -2637,7 +2669,7 @@ end function read_line
 !!    Public Domain
 function get_tmp() result(tname)
 
-! ident_13="@(#)M_io::get_tmp(3f): Return the name of the scratch directory"
+character(len=*),parameter::ident_13="@(#)M_io::get_tmp(3f): Return the name of the scratch directory"
 
 character(len=:),allocatable :: tname
 integer                      :: lngth
@@ -2744,7 +2776,7 @@ end function get_tmp
 !!    Public Domain
 function scratch(prefix) result(tname)
 
-! ident_14="@(#)M_io::scratch(3f): Return the name of a scratch file"
+character(len=*),parameter::ident_14="@(#)M_io::scratch(3f): Return the name of a scratch file"
 
 character(len=*),intent(in),optional :: prefix
 character(len=:),allocatable         :: tname
@@ -2847,7 +2879,7 @@ function rd_character(prompt,default) result(strout)
 !
 implicit none
 
-! ident_15="@(#)M_io::rd_character(3fp): ask for string from standard input with user-definable prompt"
+character(len=*),parameter::ident_15="@(#)M_io::rd_character(3fp): ask for string from standard input with user-definable prompt"
 
 character(len=*),intent(in)  :: prompt
 character(len=*),intent(in)  :: default
@@ -2882,7 +2914,8 @@ end function rd_character
 function rd_doubleprecision(prompt,default,iostat) result(dvalue)
 implicit none
 
-! ident_16="@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
+character(len=*),parameter::ident_16="&
+&@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
 
 doubleprecision              :: dvalue
 integer                      :: ivalue
@@ -2925,7 +2958,7 @@ end function rd_doubleprecision
 function rd_real(prompt,default,iostat) result(rvalue)
 implicit none
 
-! ident_17="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
+character(len=*),parameter::ident_17="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
 
 real                         :: rvalue
 real(kind=dp)                :: dvalue
@@ -2946,7 +2979,7 @@ end function rd_real
 function rd_integer(prompt,default,iostat) result(ivalue)
 implicit none
 
-! ident_18="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
+character(len=*),parameter::ident_18="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
 
 integer                      :: ivalue
 real(kind=dp)                :: dvalue

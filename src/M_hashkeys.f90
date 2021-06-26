@@ -240,7 +240,7 @@ contains
 function sha256(str)
 implicit none
 
-! ident_1="@(#)M_hashkeys::sha256(3f): SHA-256 interface function"
+character(len=*),parameter::ident_1="@(#)M_hashkeys::sha256(3f): SHA-256 interface function"
 
 ! Define the interface.
 character(len=64) :: sha256           ! The SHA-256 digest as a string of length 64.
@@ -329,7 +329,8 @@ end function sha256
 function dirty_sha256(str)
 implicit none
 
-! ident_2="@(#)M_hashkeys::dirty_sha256(3f): Quick and dirty SHA-256 interface function (no bit-swapping)."
+character(len=*),parameter::ident_2="&
+&@(#)M_hashkeys::dirty_sha256(3f): Quick and dirty SHA-256 interface function (no bit-swapping)."
 
 ! Define the interface.
 character(len=64) :: dirty_sha256   ! The SHA-256 digest as a string of length 64.
@@ -1401,7 +1402,7 @@ end subroutine test_suite_sha256
 function luhn_checksum(string)
 use M_strings, only : transliterate
 
-! ident_3="@(#)LUHN_CHECKSUM determines the Luhn checksum of a string composed of digits"
+character(len=*),parameter::ident_3="@(#)LUHN_CHECKSUM determines the Luhn checksum of a string composed of digits"
 
 character(len=*),intent(in)  :: string
 character(len=:),allocatable :: luhn_checksum, string_local
@@ -1552,7 +1553,7 @@ end subroutine test_luhn_checksum
 function djb2_hash_arr(anything,continue) result(hash_128)
 implicit none
 
-! ident_4="@(#)djb2_hash(3fp): DJB2 hash of array (algorithm by Daniel J. Bernstein )"
+character(len=*),parameter::ident_4="@(#)djb2_hash(3fp): DJB2 hash of array (algorithm by Daniel J. Bernstein )"
 
 class(*),intent(in)          :: anything(:)
 logical,intent(in),optional  :: continue
@@ -1588,7 +1589,7 @@ end function djb2_hash_arr
 function djb2_hash_scalar(anything,continue) result(hash_128)
 implicit none
 
-! ident_5="@(#)djb2_hash(3fp): djb2 hash of scalar"
+character(len=*),parameter::ident_5="@(#)djb2_hash(3fp): djb2 hash of scalar"
 
 class(*),intent(in)          :: anything
 logical,intent(in),optional  :: continue
@@ -1692,7 +1693,7 @@ function crc32_hash_arr(anything,continue) result (crc_64)
 use,intrinsic :: ISO_FORTRAN_ENV, only : int8,int16,int32,int64,real32,real64,real128
 implicit none
 
-! ident_6="@(#)M_hashkeys::crc32_hash_arr: CRC (Cyclic Redundancy Check) calculation"
+character(len=*),parameter::ident_6="@(#)M_hashkeys::crc32_hash_arr: CRC (Cyclic Redundancy Check) calculation"
 
 class(*),intent(in)          :: anything(:)
 logical,intent(in),optional  :: continue
@@ -1751,7 +1752,7 @@ end function crc32_hash_arr
 function crc32_hash_scalar(anything,continue) result(hash_64)
 implicit none
 
-! ident_7="@(#)crc32_hash_scalar(3fp): crc32 hash of scalar"
+character(len=*),parameter::ident_7="@(#)crc32_hash_scalar(3fp): crc32 hash of scalar"
 
 class(*),intent(in)          :: anything
 logical,intent(in),optional  :: continue
@@ -1867,7 +1868,7 @@ function sdbm_hash_arr(anything,continue) result(hash_128)
 use,intrinsic :: ISO_FORTRAN_ENV, only : int8,int16,int32,int64,real32,real64,real128
 implicit none
 
-! ident_8="@(#)sdbm_hash_arr(3fp): sdbm hash of array"
+character(len=*),parameter::ident_8="@(#)sdbm_hash_arr(3fp): sdbm hash of array"
 
 class(*),intent(in)          :: anything(:)
 logical,intent(in),optional  :: continue
@@ -1903,7 +1904,7 @@ end function sdbm_hash_arr
 function sdbm_hash_scalar(anything,continue) result(hash_128)
 implicit none
 
-! ident_9="@(#)sdbm_hash_scalar(3fp): sdbm hash of scalar"
+character(len=*),parameter::ident_9="@(#)sdbm_hash_scalar(3fp): sdbm hash of scalar"
 
 class(*),intent(in)          :: anything
 logical,intent(in),optional  :: continue
@@ -1936,7 +1937,7 @@ end function sdbm_hash_scalar
 function djb2(anything)
 implicit none
 
-! ident_10="@(#)djb2(3f): call C routine djb2(3c) with a Fortran CHARACTER variable"
+character(len=*),parameter::ident_10="@(#)djb2(3f): call C routine djb2(3c) with a Fortran CHARACTER variable"
 
 ! extern int djb2(char *s);
 interface

@@ -157,7 +157,8 @@ contains
 SUBROUTINE BES(X,NO,KODE,RSLT1,RSLT2,T1,T2,IERR)
 implicit none
 
-! ident_1="@(#)M_bessel::bes(3f):calculate Bessel functions J(X), Y(X), I(X), K(X) for doubleprecision arguments and integer orders"
+character(len=*),parameter::ident_1="&
+&@(#)M_bessel::bes(3f):calculate Bessel functions J(X), Y(X), I(X), K(X) for doubleprecision arguments and integer orders"
 
 integer         :: i
 integer         :: i2
@@ -705,7 +706,7 @@ END SUBROUTINE BES
 SUBROUTINE BESI(X,N, BI,IER)
 implicit none
 
-! ident_2="@(#)M_bessel::besi(3f):compute the I Bessel function for a given argument and order"
+character(len=*),parameter::ident_2="@(#)M_bessel::besi(3f):compute the I Bessel function for a given argument and order"
 
 integer         :: n
 doubleprecision :: x
@@ -856,7 +857,7 @@ END SUBROUTINE BESI
 SUBROUTINE BESJ(X,N,BJ,D,IER)
 implicit none
 
-! ident_3="@(#)M_bessel::besj(3f):compute the J Bessel function for a given argument and order"
+character(len=*),parameter::ident_3="@(#)M_bessel::besj(3f):compute the J Bessel function for a given argument and order"
 
 integer         :: ier
 integer         :: jt
@@ -987,7 +988,7 @@ END SUBROUTINE BESJ
 FUNCTION BESJ0(XX)
 implicit none
 
-! ident_4="@(#)M_bessel::besj0(3f):calculates the Bessel function J(X) of order zero."
+character(len=*),parameter::ident_4="@(#)M_bessel::besj0(3f):calculates the Bessel function J(X) of order zero."
 
 doubleprecision :: besj0
 doubleprecision :: chi
@@ -1076,7 +1077,7 @@ END FUNCTION BESJ0
 FUNCTION BESJ1(XX)
 implicit none
 
-! ident_5="@(#)M_bessel::besj1(3f): calculates the Bessel function J(X) of order one."
+character(len=*),parameter::ident_5="@(#)M_bessel::besj1(3f): calculates the Bessel function J(X) of order one."
 
 integer         :: ierr
 doubleprecision :: besj1
@@ -1169,7 +1170,7 @@ END FUNCTION BESJ1
 SUBROUTINE BESK(X,N,BK,IER)
 implicit none
 
-! ident_6="@(#)M_bessel::besk(3f):compute the K Bessel function for a given argument and order"
+character(len=*),parameter::ident_6="@(#)M_bessel::besk(3f):compute the K Bessel function for a given argument and order"
 
 integer :: ier
 integer :: j
@@ -1329,7 +1330,7 @@ END SUBROUTINE BESK
 SUBROUTINE BESY(X,N,BY,IER)
 implicit none
 
-! ident_7="@(#)M_bessel::besy(3f):compute the Y Bessel function for a given argument and order"
+character(len=*),parameter::ident_7="@(#)M_bessel::besy(3f):compute the Y Bessel function for a given argument and order"
 
 integer         :: ier
 integer         :: k
@@ -1522,7 +1523,7 @@ END SUBROUTINE BESY
 FUNCTION BESY0(X)
 implicit none
 
-! ident_8="@(#)M_bessel::besy0(3f): calculates the Bessel function Y(X) of order zero."
+character(len=*),parameter::ident_8="@(#)M_bessel::besy0(3f): calculates the Bessel function Y(X) of order zero."
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 integer           :: ierr

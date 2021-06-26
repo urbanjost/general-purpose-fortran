@@ -234,7 +234,8 @@ contains
 !!     Head node data:   2.7183001
 subroutine list_init(self, data)
 
-! ident_1="@(#)M_generic_list::list_init(3f): Initialize a head node SELF and optionally store the provided DATA."
+character(len=*),parameter::ident_1="&
+&@(#)M_generic_list::list_init(3f): Initialize a head node SELF and optionally store the provided DATA."
 
 type(list_node_t), pointer :: self
 integer, dimension(:), intent(in), optional :: data
@@ -339,7 +340,7 @@ end subroutine list_init
 !!    !   Head node data:   2.7183001
 subroutine list_free(self)
 
-! ident_2="@(#)M_generic_list::list_free(3f): Free the entire list and all data, beginning at SELF"
+character(len=*),parameter::ident_2="@(#)M_generic_list::list_free(3f): Free the entire list and all data, beginning at SELF"
 
 type(list_node_t), pointer :: self
 type(list_node_t), pointer :: current
@@ -453,7 +454,7 @@ end subroutine list_free
 !!    !   Head node data:   2.7183001
 subroutine list_insert(self, data)
 
-! ident_3="@(#)M_generic_list::list_insert(3f): Insert a list node after SELF containing DATA (optional)"
+character(len=*),parameter::ident_3="@(#)M_generic_list::list_insert(3f): Insert a list node after SELF containing DATA (optional)"
 
 type(list_node_t), pointer :: self
 integer, dimension(:), intent(in), optional :: data
@@ -565,7 +566,7 @@ end subroutine list_insert
 !!    !   Head node data:   2.7183001
 subroutine list_put(self, data)
 
-! ident_4="@(#)M_generic_list::list_put(3f): Store the encoded DATA in list node SELF"
+character(len=*),parameter::ident_4="@(#)M_generic_list::list_put(3f): Store the encoded DATA in list node SELF"
 
 type(list_node_t), pointer :: self
 integer, dimension(:), intent(in) :: data
@@ -672,7 +673,7 @@ end subroutine list_put
 !!    !   Head node data:   2.7183001
 function list_get(self) result(data)
 
-! ident_5="@(#)M_generic_list::list_put(3f): Return the DATA stored in the node SELF"
+character(len=*),parameter::ident_5="@(#)M_generic_list::list_put(3f): Return the DATA stored in the node SELF"
 
 type(list_node_t), pointer :: self
 integer, dimension(:), pointer :: data
@@ -774,7 +775,7 @@ end function list_get
 !!    !   Head node data:   2.7183001
 function list_next(self)
 
-! ident_6="@(#)M_generic_list::list_put(3f): Return the next node after SELF"
+character(len=*),parameter::ident_6="@(#)M_generic_list::list_put(3f): Return the next node after SELF"
 
 type(list_node_t), pointer :: self
 type(list_node_t), pointer :: list_next

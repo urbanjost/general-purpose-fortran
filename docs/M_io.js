@@ -9,6 +9,7 @@ append("filewrite.3m_io.html");
 append("get_tmp.3m_io.html");
 append("getline.3m_io.html");
 append("getname.3m_io.html");
+append("gulp.3m_io.html");
 append("joinpath.3m_io.html");
 append("lookfor.3m_io.html");
 append("notopen.3m_io.html");

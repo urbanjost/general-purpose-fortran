@@ -28,7 +28,7 @@ use M_verify, only : unit_check_level
    call test_splitpath()
    call test_uniq()
    call test_notopen()
-   call test_swallow()
+   call test_gulp()
    call test_number_of_lines()
    call test_basename()
    call test_joinpath()
@@ -135,11 +135,11 @@ subroutine test_slurp()
    call unit_check_done('slurp',msg='')
 end subroutine test_slurp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_swallow()
-   call unit_check_start('swallow',msg='')
-   !!call unit_check('swallow', 0.eq.0, 'checking',100)
-   call unit_check_done('swallow',msg='')
-end subroutine test_swallow
+subroutine test_gulp()
+   call unit_check_start('gulp',msg='')
+   !!call unit_check('gulp', 0.eq.0, 'checking',100)
+   call unit_check_done('gulp',msg='')
+end subroutine test_gulp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_number_of_lines()
    call unit_check_start('number_of_lines',msg='')

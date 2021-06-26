@@ -5945,27 +5945,26 @@ textblock=[character(len=256) :: &
 'SYNTAX', &
 '    subroutine date_and_time([date, time, zone, values])', &
 '', &
-'     character(len=8),intent(out) :: date', &
-'     character(len=10),intent(out) :: time', &
-'     character(len=5),intent(out) :: zone', &
-'     integer,intent(out) :: values', &
+'     character(len=8),intent(out),optional :: date', &
+'     character(len=10),intent(out),optional :: time', &
+'     character(len=5),intent(out),optional :: zone', &
+'     integer,intent(out),optional :: values', &
 '', &
 'DESCRIPTION', &
 '   DATE_AND_TIME(date, time, zone, values) gets the corresponding date', &
 '   and time information from the real-time system clock.', &
 '', &
-'   Unavailable time and date parameters return blanks.', &
+'   Unavailable time and date CHARACTER parameters return blanks.', &
 '', &
 'ARGUMENTS', &
-'   DATE      The type shall be character(len=8) or larger,', &
-'             and of default kind.  DATE has form ccyymmdd.', &
-'   TIME      The type shall be character(len=10) or', &
-'             larger, and of default kind.  TIME has form hhmmss.sss.', &
-'   ZONE      The type shall be character(len=5) or larger,', &
-'             and of default kind.  ZONE has form (+-)hhmm, representing', &
-'             the difference', &
-'             with respect to Coordinated Universal Time (UTC). ', &
-'   VALUES    The type shall be integer(8). VALUES provide the following:', &
+'   DATE      The type shall be CHARACTER(len=8) or larger,', &
+'             and of default kind. DATE has the form ccyymmdd.', &
+'   TIME      The type shall be CHARACTER(len=10) or', &
+'             larger, and of default kind. TIME has the form hhmmss.sss.', &
+'   ZONE      The type shall be CHARACTER(len=5) or larger,', &
+'             and of default kind. ZONE has form (+-)hhmm, representing', &
+'             the difference with respect to Coordinated Universal Time (UTC). ', &
+'   VALUES    An INTEGER array of eight elements. On return VALUES contains:', &
 '', &
 '               * value(1): - The year', &
 '               * value(2): - The month', &

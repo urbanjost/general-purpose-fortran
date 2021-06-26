@@ -354,7 +354,8 @@ use M_calculator,      only : expression
 use M_journal,         only : journal
 implicit none
 
-! ident_1="@(#)M_xyplot::fetch(3f): call sget(3f) (and calculator if fetched string starts with $ or double-quote)"
+character(len=*),parameter::ident_1="&
+&@(#)M_xyplot::fetch(3f): call sget(3f) (and calculator if fetched string starts with $ or double-quote)"
 
 character(len=:),allocatable :: fetch
 character(len=*),intent(in)  :: dicname

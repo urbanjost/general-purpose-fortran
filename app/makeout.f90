@@ -1,9 +1,11 @@
 subroutine help_usage(l_help)
 implicit none
-! @(#)help_usage(3f): prints help information
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
 logical,intent(in)             :: l_help
 character(len=:),allocatable :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
@@ -81,10 +83,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if -help was specified, stop
+   stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    makeout(1f) - [DEVELOPER] Generate a Makefile from the sources (C, Fortran) in the current directory
@@ -163,10 +164,12 @@ end subroutine help_usage
 !!    Public Domain
 subroutine help_version(l_version)
 implicit none
-! @(#)help_version(3f): prints version information
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
 logical,intent(in)             :: l_version
 character(len=:),allocatable   :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_version)then
 help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
@@ -174,13 +177,12 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    create Makefile for current directory>',&
 '@(#)VERSION:        1.0, 2017-12-09>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       Mon, May 24th, 2021 11:23:19 PM>',&
+'@(#)COMPILED:       2021-06-26 18:31:10 UTC-240>',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
-   stop ! if -version was specified, stop
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
 endif
 end subroutine help_version
-!-----------------------------------------------------------------------------------------------------------------------------------
 !----------------------------------------------------------------------------------------------------------------------------------
 program makeout
 use M_io, only                         : splitpath, read_line
@@ -194,7 +196,7 @@ use,intrinsic :: iso_c_binding, only   : c_ptr
 use,intrinsic :: iso_fortran_env, only : OUTPUT_UNIT, ERROR_UNIT ! , INPUT_UNIT    ! access computing environment
 implicit none
 
-! ident_1="@(#)makeout(1f): Generate a Makefile from the sources (C, Fortran) in the current directory."
+character(len=*),parameter::ident_1="@(#)makeout(1f): Generate a Makefile from the sources (C, Fortran) in the current directory."
 
 character(len=:),allocatable    :: programs(:)
 character(len=:),allocatable    :: c_programs(:)
@@ -429,8 +431,8 @@ character(len=:),allocatable    :: COMMAND_LINE
       &'                                                   ',&
       &'.SUFFIXES: $(SUFFIXES) .f90 .F90 .ff .FF .shf      ',&
       &'# .shf -- assumed to write Fortran code to stdout when executed  ',&
-      &'# .FF -- run thru ufpp(1) with    $system directives allowed     ',&
-      &'# .ff -- run thru ufpp(1) without $system directives allowed     ',&
+      &'# .FF -- run thru prep(1) with    $system directives allowed     ',&
+      &'# .ff -- run thru prep(1) without $system directives allowed     ',&
       &'                                                   ',&
       &'.f90.o:                                            ',&
       &'\t$(F90) $(F90FLAGS) -c $<                         ',&
@@ -450,20 +452,20 @@ character(len=:),allocatable    :: COMMAND_LINE
       &'.F03.o:                                            ',&
       &'\t$(F90) $(F90FLAGS) -c $<                         ',&
       &'#=================================================================================',&
-      &'# Fortran free format file known to have ufpp(1) preprocessor directives          ',&
-      &'# run thru ufpp(1) preprocessor with system commands allowed, variable F90 defined',&
+      &'# Fortran free format file known to have prep(1) preprocessor directives          ',&
+      &'# run thru prep(1) preprocessor with system commands allowed, variable F90 defined',&
       &'# Assumes .F90 file does not exist previously, as it will overwrite it.           ',&
       &'.FF.F90:                                                                            ',&
-      &'\t@# run thru ufpp(1) preprocessor with system commands allowed                   ',&
-      &'\tufpp -D F90 `uname -o` -verbose -system .true. -i $(<) -o $(*F).F90             ',&
+      &'\t@# run thru prep(1) preprocessor with system commands allowed                   ',&
+      &'\tprep -D F90 `uname -o` -verbose -system .true. -i $(<) -o $(*F).F90             ',&
       &'\t@[ -s $(*F).F90 ] || echo "error: $(*F).F90 is empty"                           ',&
       &'#=================================================================================',&
-      &'# Fortran free format file known to have ufpp(1) preprocessor directives          ',&
-      &'# run thru ufpp(1) preprocessor with no system commands allowed, variable F90     ',&
+      &'# Fortran free format file known to have prep(1) preprocessor directives          ',&
+      &'# run thru prep(1) preprocessor with no system commands allowed, variable F90     ',&
       &'# defined. Assumes .F90 file does not exist previously, as it will overwrite it.  ',&
       &'.ff.f90:                                                                            ',&
-      &'\t@# run thru ufpp(1) preprocessor with system commands allowed                   ',&
-      &'\tufpp -D F90 `uname -o` -verbose -i $(<) -o $(*F).F90                            ',&
+      &'\t@# run thru prep(1) preprocessor with system commands allowed                   ',&
+      &'\tprep -D F90 `uname -o` -verbose -i $(<) -o $(*F).F90                            ',&
       &'\t@[ -s $(*F).F90 ] || echo "error: $(*F).F90 is empty"                           ',&
       &'#=================================================================================',&
       &'']
@@ -482,8 +484,8 @@ character(len=:),allocatable    :: COMMAND_LINE
       &'                                                   ',&
       &'.SUFFIXES: $(SUFFIXES) .f90 .F90 .ff .FF .shf      ',&
       &'# .shf -- assumed to write Fortran code to stdout when executed  ',&
-      &'# .FF -- run thru ufpp(1) with    $system directives allowed     ',&
-      &'# .ff -- run thru ufpp(1) without $system directives allowed     ',&
+      &'# .FF -- run thru prep(1) with    $system directives allowed     ',&
+      &'# .ff -- run thru prep(1) without $system directives allowed     ',&
       &'                                                   ',&
       &'.f90.o:                                            ',&
       &'\t$(F90) $(F90FLAGS) -c $<                         ',&
@@ -503,20 +505,20 @@ character(len=:),allocatable    :: COMMAND_LINE
       &'.F03.o:                                            ',&
       &'\t$(F90) $(F90FLAGS) -c $<                         ',&
       &'#=================================================================================',&
-      &'# Fortran free format file known to have ufpp(1) preprocessor directives          ',&
-      &'# run thru ufpp(1) preprocessor with system commands allowed, variable F90 defined',&
+      &'# Fortran free format file known to have prep(1) preprocessor directives          ',&
+      &'# run thru prep(1) preprocessor with system commands allowed, variable F90 defined',&
       &'# Assumes .F90 file does not exist previously, as it will overwrite it.           ',&
       &'.FF.F90:                                                                            ',&
-      &'\t@# run thru ufpp(1) preprocessor with system commands allowed                   ',&
-      &'\tufpp -D F90 `uname -o` -verbose -system .true. -i $(<) -o $(*F).F90             ',&
+      &'\t@# run thru prep(1) preprocessor with system commands allowed                   ',&
+      &'\tprep -D F90 `uname -o` -verbose -system .true. -i $(<) -o $(*F).F90             ',&
       &'\t@[ -s $(*F).F90 ] || echo "error: $(*F).F90 is empty"                           ',&
       &'#=================================================================================',&
-      &'# Fortran free format file known to have ufpp(1) preprocessor directives          ',&
-      &'# run thru ufpp(1) preprocessor with no system commands allowed, variable F90     ',&
+      &'# Fortran free format file known to have prep(1) preprocessor directives          ',&
+      &'# run thru prep(1) preprocessor with no system commands allowed, variable F90     ',&
       &'# defined. Assumes .F90 file does not exist previously, as it will overwrite it.  ',&
       &'.ff.f90:                                                                            ',&
-      &'\t@# run thru ufpp(1) preprocessor with system commands allowed                   ',&
-      &'\tufpp -D F90 `uname -o` -verbose -i $(<) -o $(*F).F90                            ',&
+      &'\t@# run thru prep(1) preprocessor with system commands allowed                   ',&
+      &'\tprep -D F90 `uname -o` -verbose -i $(<) -o $(*F).F90                            ',&
       &'\t@[ -s $(*F).F90 ] || echo "error: $(*F).F90 is empty"                           ',&
       &'#=================================================================================',&
       &'']

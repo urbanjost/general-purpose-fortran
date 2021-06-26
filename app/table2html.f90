@@ -1,9 +1,11 @@
 subroutine help_usage(l_help)
 implicit none
-! @(#)help_usage(3f): prints help information
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
 logical,intent(in)             :: l_help
 character(len=:),allocatable :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
@@ -52,10 +54,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if -help was specified, stop
+   stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    table2html(1f) - [FILE FILTER] filter to format simple columns into an HTML table form
@@ -105,10 +106,12 @@ end subroutine help_usage
 !!    Public Domain
 subroutine help_version(l_version)
 implicit none
-! @(#)help_version(3f): prints version information
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
 logical,intent(in)             :: l_version
 character(len=:),allocatable   :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_version)then
 help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
@@ -120,18 +123,17 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       Mon, May 24th, 2021 9:28:51 PM>',&
+'@(#)COMPILED:       2021-06-26 18:31:07 UTC-240>',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
-   stop ! if -version was specified, stop
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
 endif
 end subroutine help_version
-!-----------------------------------------------------------------------------------------------------------------------------------
 program table2html
 use M_kracken, only : kracken, iget, sgets, sget, lget, IPvalue
 use M_strings, only : substitute, split
 implicit none
-! ident_1="@(#)table2html(1f): filter to format input into an HTML table form"
+character(len=*),parameter::ident_1="@(#)table2html(1f): filter to format input into an HTML table form"
 
 character(len=IPvalue)             :: line
 character(len=IPvalue),allocatable :: listof_classes(:)

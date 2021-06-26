@@ -6,7 +6,7 @@ use M_strings,                    only : switch
 use M_system,                     only : system_isreg
 implicit none
 
-! ident_1="@(#)sha256(1f): read file into memory and generate SHA-256 digest value"
+character(len=*),parameter::ident_1="@(#)sha256(1f): read file into memory and generate SHA-256 digest value"
 
 character(len=1),allocatable :: text(:)                      ! array to hold file in memory
 character(len=:),allocatable :: string

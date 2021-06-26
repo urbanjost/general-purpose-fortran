@@ -214,7 +214,7 @@ DESCRIPTION .... $GOODBAD_description
 DOCUMENTATION .. $GOODBAD_documentation
 FILENAME ....... $GOODBAD_filename
 LIBRARY ........ $GOODBAD_library
-UFPP ........... $GOODBAD_ufpp
+PREP ........... $GOODBAD_prep
 CCALL .......... $GOODBAD_ccall
 ARCHIVE ........ $GOODBAD_archive
 SECTION ........ $GOODBAD_section
@@ -286,7 +286,7 @@ DESCRIPTION
 
        -filename
        -library
-       -ufpp
+       -prep
        -ccall
        -archive
 
@@ -352,7 +352,7 @@ CREATE TABLE IF NOT EXISTS tests(
    documentation  TEXT  ,
    filename       TEXT  ,
    library        TEXT  ,
-   ufpp           TEXT  ,
+   prep           TEXT  ,
    ccall          TEXT  ,
    archive        TEXT  ,
    date           DATE  NOT  NULL  ,
@@ -381,7 +381,7 @@ export GOODBAD_documentation
 export GOODBAD_man
 export GOODBAD_filename
 export GOODBAD_library
-export GOODBAD_ufpp
+export GOODBAD_prep
 export GOODBAD_ccall
 export GOODBAD_archive
 export GOODBAD_show
@@ -402,7 +402,7 @@ ANSWER=$(PARSE GOODBAD \
         -documentation \
         -filename \
         -library \
-        -ufpp \
+        -prep \
         -ccall \
         -archive  \
         -section 3 \
@@ -414,7 +414,7 @@ export DOCUMENTATION="$GOODBAD_documentation"
 export MAN_DESCRIPTION="$GOODBAD_man"
 export FILENAME="$GOODBAD_filename"
 export LIBRARY="$GOODBAD_library"
-export UFPP="$GOODBAD_ufpp"
+export PREP="$GOODBAD_prep"
 export CCALL="$GOODBAD_ccall"
 export ARCHIVE="$GOODBAD_archive"
 export SECTION="$GOODBAD_section"
@@ -532,7 +532,7 @@ EOF
 fi
 ####################################################################################################################################
 # Database schema
-# entryname â|date  â|descriptionâ|documentationâ|filenameâ|libraryâ|ufppâ|ccallâ|archiveâ|status
+# entryname â|date  â|descriptionâ|documentationâ|filenameâ|libraryâ|prepâ|ccallâ|archiveâ|status
 ################################################################################
 # if -delete switch specified
 if [ "$GOODBAD_delete" != 'NO' ]
@@ -576,7 +576,7 @@ exit
    [ "$DOCUMENTATION" != DEFAULT ] && sqlite3 goodbad.db "UPDATE tests SET documentation='$DOCUMENTATION' WHERE entryname='$ENTRYNAME';"
    [ "$FILENAME" != DEFAULT ]      && sqlite3 goodbad.db "UPDATE tests SET filename='$FILENAME' WHERE entryname='$ENTRYNAME';"
    [ "$LIBRARY" != DEFAULT ]       && sqlite3 goodbad.db "UPDATE tests SET library='$LIBRARY' WHERE entryname='$ENTRYNAME';"
-   [ "$UFPP" != DEFAULT ]          && sqlite3 goodbad.db "UPDATE tests SET ufpp='$UFPP' WHERE entryname='$ENTRYNAME';"
+   [ "$PREP" != DEFAULT ]          && sqlite3 goodbad.db "UPDATE tests SET prep='$PREP' WHERE entryname='$ENTRYNAME';"
    [ "$CCALL" != DEFAULT ]         && sqlite3 goodbad.db "UPDATE tests SET ccall='$CCALL' WHERE entryname='$ENTRYNAME';"
    [ "$ARCHIVE" != DEFAULT ]       && sqlite3 goodbad.db "UPDATE tests SET archive='$ARCHIVE' WHERE entryname='$ENTRYNAME';"
 

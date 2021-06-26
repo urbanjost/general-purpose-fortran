@@ -13,7 +13,7 @@
              & -library        libGPF               &
              & -filename       `pwd`/M_verify.FF     &
              & -documentation  y                    &
-             & -ufpp           y                    &
+             & -prep           y                    &
              & -ccall          n                    &
              & -archive        GPF.a                &
              & ')

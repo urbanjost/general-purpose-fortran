@@ -30,7 +30,7 @@ use M_sha3,                       only : sha3_auto_test, sha3_file
 use M_system,                     only : system_isreg
 implicit none
 
-! ident_1="@(#)sha3(1f): generate SHA-256 digest values for specified files"
+character(len=*),parameter::ident_1="@(#)sha3(1f): generate SHA-256 digest values for specified files"
 
 integer                      :: i
 integer                      :: start

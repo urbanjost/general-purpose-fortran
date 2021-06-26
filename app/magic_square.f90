@@ -3,7 +3,7 @@ program demo_magic_square
 use M_math, only : magic_square
 implicit none
 
-! ident_1="@(#)magic_square(1f):"
+character(len=*),parameter::ident_1="@(#)magic_square(1f):"
 
 character(len=4096) :: arg
 integer             :: ilen

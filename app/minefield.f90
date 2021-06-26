@@ -1,11 +1,10 @@
 program sweepit
-!(LICENSE:PD)
 use M_draw
 use M_time, only : system_sleep, ordinal_seconds
 use M_kracken, only: kracken, iget, sget, lget
 implicit none
 
-! ident_1="@(#)minefield(1f) [M_draw] minefield sweeper game"
+character(len=*),parameter::ident_1="@(#)minefield(1f): [M_draw] minefield sweeper game"
 
 logical :: switch
 integer :: irows
@@ -16,8 +15,8 @@ real    :: xx, yy
 
 !  define command arguments, default values and crack command line
    call kracken('mine','-c 30 -r 16 -d X11 -help .F. -version .F. -switch .F. -x  1240 -y 700')
-   call help_usage(lget('mine_help'))                               ! if -help option is present, display help text and exit
-   call help_version(lget('mine_version'))                          ! if -version option is present, display version text and exit
+   call help_usage(lget('mine_help'))                   ! if -help option is present, display help text and exit
+   call help_version(lget('mine_version'))              ! if -version option is present, display version text and exit
    call prefsize(iget('mine_x'),iget('mine_y'))
    call vinit('X11')
    call system_sleep(2)
@@ -27,15 +26,13 @@ real    :: xx, yy
 
    INFINITE: do
       call minefield(irows,icols,switch)
-      !!write(*,*)'ORDINAL=',iordinal
       write(*,*)'"q" to quit; any other character to start new game'
-      !!iordinal=getkey()
       LOOP : do
-         iordinal=checkkey()          ! see if a character was pressed in graphic window, get ordinal of letter last pressed
-         istat=locator(xx,yy)                                     ! get location and mouse key pressed
-         call system_sleep(0.04)                                  ! pause
-         if(iordinal.eq.113) exit INFINITE                        ! quit if letter q
-         if(istat.ne.0)exit LOOP                                  ! if mouse clicked start new session
+         iordinal=checkkey()                ! see if a character was pressed in graphic window, get ordinal of letter last pressed
+         istat=locator(xx,yy)               ! get location and mouse key pressed
+         call system_sleep(0.04)            ! pause
+         if(iordinal.eq.113) exit INFINITE  ! quit if letter q
+         if(istat.ne.0)exit LOOP            ! if mouse clicked start new session
       enddo LOOP
    enddo INFINITE
 
@@ -44,10 +41,12 @@ real    :: xx, yy
    contains
 subroutine help_usage(l_help)
 implicit none
-! @(#)help_usage(3f): prints help information
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
 logical,intent(in)             :: l_help
 character(len=:),allocatable :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
@@ -91,10 +90,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if -help was specified, stop
+   stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    minefield(1f) - [M_draw] minefield game
@@ -138,10 +136,12 @@ end subroutine help_usage
 !!    Public Domain
 subroutine help_version(l_version)
 implicit none
-! @(#)help_version(3f): prints version information
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
 logical,intent(in)             :: l_version
 character(len=:),allocatable   :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_version)then
 help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF library utilities and examples>',&
@@ -149,20 +149,19 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    minefield game>',&
 '@(#)VERSION:        4.0, 20180616>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       Mon, May 24th, 2021 11:23:40 PM>',&
+'@(#)COMPILED:       2021-06-26 18:31:38 UTC-240>',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
-   stop ! if -version was specified, stop
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
 endif
 end subroutine help_version
-!-----------------------------------------------------------------------------------------------------------------------------------
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine minefield(irows0,icols0,switch) ! draw a minesweep program
 ! Created: 19971231
 use M_draw
-! ident_2="@(#)draw a minesweep game that quits on 'q'"
+character(len=*),parameter::ident_2="@(#)draw a minesweep game that quits on 'q'"
 !      storage
 !        -1 to -9 for unexposed and 0 to 8 adjacent bombs
 !        -10 for unexposed and a bomb
@@ -188,11 +187,11 @@ logical switch
 logical iwon
 
 iwon=.false.
-!----------------------------------------------------------------------------------------------------------------------------------!
+
    istart=ordinal_seconds()
    irows=min(max(1,irows0),99)                                  ! make sure OK values for rows and columns
    icols=min(max(1,icols0),99)
-!----------------------------------------------------------------------------------------------------------------------------------!
+
    call pushattributes()                                        ! save graphics environment
    call pushmatrix()
    call pushviewport()
@@ -503,7 +502,7 @@ integer :: i, j
       endif
       exit INFINITE
    enddo INFINITE
-!----------------------------------------------------------------------------------------------------------------------------------!
+
 999   continue
 end subroutine check_value
 !==================================================================================================================================!
@@ -519,7 +518,7 @@ integer :: s(0:100,0:100)
 integer :: ilimit
 integer :: ichange
 integer :: i1,i2,i3,i4
-!----------------------------------------------------------------------------------------------------------------------------------!
+
    ilimit=0
    do
       ichange=0
@@ -563,11 +562,11 @@ integer            :: i,j
 integer            :: irand
 integer            :: isum
 real               :: fval
-!----------------------------------------------------------------------------------------------------------------------------------!
+
    call init_random_seed(ordinal_seconds())    ! set the seed for random_number
-!----------------------------------------------------------------------------------------------------------------------------------!
+
    switch=.true. ! fill storage with 9 and bomb map with no bombs
-!----------------------------------------------------------------------------------------------------------------------------------!
+
    icount=0
    do i=1,irows           ! place bombs
       do j=1,icols
@@ -580,7 +579,7 @@ real               :: fval
          endif
       enddo
    enddo
-!----------------------------------------------------------------------------------------------------------------------------------!
+
    do i=1,irows           ! figure out value for each box
       do j=1,icols
          if(switch(i,j).neqv..false.)then
@@ -663,14 +662,23 @@ subroutine smiley(xmin,xmax,ymin,ymax)
 ! draw a smiley face in the box defined by xmin,xmax,ymin,ymax
 use M_draw
 use M_drawplus, only : uconic
-real,intent(in) :: xmin
-real,intent(in) :: xmax
-real,intent(in) :: ymin
-real,intent(in) :: ymax
+real,intent(in) :: xmin, xmax
+real,intent(in) :: ymin, ymax
 real            :: x,y
 real            :: radius
 real            :: xc,yc,long,tall,a,b,e,ae,pf,ph,xq1,yq1,h
-integer         :: i
+integer         :: i,j
+real,parameter  :: xx(*)=[ &
+-3.249,   -3.225,       -3.176,   -2.692,  -2.039,  -0.9985,  +0.5985,  +1.445, &
++2.438,   +2.825,       +2.921,   +3.551,  +2.534,  +2.849,   +2.317,   +1.566, &
++0.7437,  +0.4197E-01,  -0.9743,  -1.942,  -2.547,  -2.886,   -3.152,   -3.152, &
+-3.176,   -2.838,       -3.515,   -3.249]
+real,parameter  :: yy(*)=[ &
+-0.6698,  -0.8426,  -1.448,   -2.269,   -2.895,   -3.457,   -3.414,  -2.873, &
+-1.901,   -1.123,   -0.7778,  -0.5185,  -0.3673,  -0.7994,  -1.448,  -2.204, &
+-2.830,   -3.003,   -2.938,   -2.528,   -1.923,   -1.469,   -1.102,  -0.8210, &
+-0.7346,  -0.4105,  -0.2377,  -0.6698]
+
    X=(xmax+xmin)/2.0
    Y=(ymax+ymin)/2.0
    radius=abs(xmax-xmin)/2.0
@@ -687,7 +695,7 @@ integer         :: i
    call polyfill(.false.)
    call color(0)
    call circle(X,Y,radius)                           ! outline the circular face
-   XC=3.0/5.0*radius                               ! draw an elliptical eye
+   XC=3.0/5.0*radius                                 ! draw an elliptical eye
    YC=1.0/5.0*radius
    LONG=3.0/5.0*radius
    TALL=2.0/5.0*radius
@@ -705,7 +713,7 @@ integer         :: i
    !CALL UCONIC (X,Y,P,E,THETA1,THETA2,ORIENTATION)
    call UCONIC(X+XQ1,Y+YQ1,H,E,0.0,360.0,90.0)
    !call closepoly()
-   call circle(X+XQ1,Y+1.5*YQ1,H/2.0)                ! draw the pupil
+   call circle(X+XQ1,Y+1.5*YQ1,H/2.0)                 ! draw the pupil
    XC=(-0.5)/5.0*radius                               ! draw the other eye
    YC=+1.0/5.0*radius
    XQ1=XC-AE
@@ -716,34 +724,10 @@ integer         :: i
    call circle(X+XQ1,Y+1.5*YQ1,H/2.0)                ! fill the other pupil
    do i=1,2                                          ! fill and outline the smile
       call makepoly()
-      call move2(X-3.249/5.0*radius,Y-0.6698/5.0*radius)
-      call draw2(X-3.225/5.0*radius,Y-0.8426/5.0*radius)
-      call draw2(X-3.176/5.0*radius,Y-1.448/5.0*radius)
-      call draw2(X-2.692/5.0*radius,Y-2.269/5.0*radius)
-      call draw2(X-2.039/5.0*radius,Y-2.895/5.0*radius)
-      call draw2(X-0.9985/5.0*radius,Y-3.457/5.0*radius)
-      call draw2(X+0.5985/5.0*radius,Y-3.414/5.0*radius)
-      call draw2(X+1.445/5.0*radius,Y-2.873/5.0*radius)
-      call draw2(X+2.438/5.0*radius,Y-1.901/5.0*radius)
-      call draw2(X+2.825/5.0*radius,Y-1.123/5.0*radius)
-      call draw2(X+2.921/5.0*radius,Y-0.7778/5.0*radius)
-      call draw2(X+3.551/5.0*radius,Y-0.5185/5.0*radius)
-      call draw2(X+2.534/5.0*radius,Y-0.3673/5.0*radius)
-      call draw2(X+2.849/5.0*radius,Y-0.7994/5.0*radius)
-      call draw2(X+2.317/5.0*radius,Y-1.448/5.0*radius)
-      call draw2(X+1.566/5.0*radius,Y-2.204/5.0*radius)
-      call draw2(X+0.7437/5.0*radius,Y-2.830/5.0*radius)
-      call draw2(X+0.4197E-01/5.0*radius,Y-3.003/5.0*radius)
-      call draw2(X-0.9743/5.0*radius,Y-2.938/5.0*radius)
-      call draw2(X-1.942/5.0*radius,Y-2.528/5.0*radius)
-      call draw2(X-2.547/5.0*radius,Y-1.923/5.0*radius)
-      call draw2(X-2.886/5.0*radius,Y-1.469/5.0*radius)
-      call draw2(X-3.152/5.0*radius,Y-1.102/5.0*radius)
-      call draw2(X-3.152/5.0*radius,Y-0.8210/5.0*radius)
-      call draw2(X-3.176/5.0*radius,Y-0.7346/5.0*radius)
-      call draw2(X-2.838/5.0*radius,Y-0.4105/5.0*radius)
-      call draw2(X-3.515/5.0*radius,Y-0.2377/5.0*radius)
-      call draw2(X-3.249/5.0*radius,Y-0.6698/5.0*radius)
+      call move2(x+xx(1)/5.0*radius,Y+yy(1)/5.0*radius)
+      do j=2,size(xx)
+         call draw2(x+xx(j)/5.0*radius,y+yy(j)/5.0*radius)
+      enddo
       call closepoly()
       call polyfill(.false.)
    enddo

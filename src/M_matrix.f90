@@ -9,7 +9,6 @@
 
 
 
-! ident_1="@(#)M_matrix::mat_str2buf(3fp): convert CHARACTER TO ADE array vector"
 !>
 !!##NAME
 !!    M_matrix(3f) - [M_matrix] The Linear ALgebra Fortran Facility (LAFF)
@@ -350,7 +349,6 @@ integer                  :: G_FMT
 
 integer                  :: G_RIO
 integer                  :: G_INPUT_LUN
-integer                  :: G_OUTPUT_LUN
 
 integer                  :: G_PTZ
 integer                  :: G_SYM
@@ -1362,7 +1360,7 @@ end subroutine usersub_placeholder
 !!      >      ]
 subroutine LAFF_init(init,echo)
 
-! ident_2="@(#)M_matrix::laff(3f): initialize and/or pass commands to matrix laboratory interpreter"
+character(len=*),parameter::ident_1="@(#)M_matrix::laff(3f): initialize and/or pass commands to matrix laboratory interpreter"
 
 integer,intent(in)          :: init
 logical,intent(in),optional :: echo
@@ -1371,7 +1369,6 @@ integer,parameter           :: EPS(GG_MAX_NAME_LENGTH)=   [iachar(['e','p','s','
 integer,parameter           :: FLOPS(GG_MAX_NAME_LENGTH)= [iachar(['f','l','o','p','s']),GG_PAD(6:)]
 integer,parameter           :: EYE(GG_MAX_NAME_LENGTH)=   [iachar(['e','y','e',' ',' ']),GG_PAD(6:)]
 integer,parameter           :: RAND(GG_MAX_NAME_LENGTH)=  [iachar(['r','a','n','d',' ']),GG_PAD(6:)]
-integer                     :: i,j
 
    if(present(echo)) G_ECHO=echo
 
@@ -1393,8 +1390,7 @@ integer                     :: i,j
    G_INPUT_LUN = STDIN                                                    ! unit number for terminal input
    call mat_files(G_INPUT_LUN,G_BUF)
    G_RIO = G_INPUT_LUN                                                    ! current file to read commands from
-   G_OUTPUT_LUN = STDOUT                                                  ! unit number for terminal output
-   call mat_files(G_OUTPUT_LUN,G_BUF)
+   call mat_files(STDOUT,G_BUF)
 
    call mat_help_text()                                                   ! initialize help text
    G_CURRENT_RANDOM_SEED = 0                                              ! random number seed
@@ -1462,7 +1458,8 @@ end subroutine LAFF_init
 !==================================================================================================================================
 subroutine LAFF_cmd(input_string,echo)
 
-! ident_3="@(#)M_matrix::laff(3f): run a single command in matrix laboratory interpreter and return to calling program"
+character(len=*),parameter::ident_2="&
+&@(#)M_matrix::laff(3f): run a single command in matrix laboratory interpreter and return to calling program"
 
 character(len=*),intent(in) :: input_string
 logical,intent(in),optional :: echo
@@ -1473,7 +1470,8 @@ end subroutine LAFF_cmd
 !==================================================================================================================================
 subroutine LAFF_cmds(pseudo_file,echo)
 
-! ident_4="@(#)M_matrix::laff(3f): run an array of commands in matrix laboratory interpreter and return to calling program"
+character(len=*),parameter::ident_3="&
+&@(#)M_matrix::laff(3f): run an array of commands in matrix laboratory interpreter and return to calling program"
 
 character(len=*),intent(in),optional :: pseudo_file(:)
 logical,intent(in),optional          :: echo
@@ -1485,7 +1483,6 @@ logical,intent(in),optional          :: echo
    else
       G_INPUT_LUN = STDIN                                                    ! unit number for terminal input
       G_RIO = G_INPUT_LUN                                                    ! current file to read commands from
-      G_OUTPUT_LUN = STDOUT                                                  ! unit number for terminal output
       G_PROMPT=.true.
    endif
 
@@ -1518,7 +1515,7 @@ end subroutine LAFF_cmds
 !==================================================================================================================================!
 subroutine mat_err(n)
 
-! ident_5="@(#)M_matrix::mat_err(3fp): given error number, write associated error message and set G_ERR"
+character(len=*),parameter::ident_4="@(#)M_matrix::mat_err(3fp): given error number, write associated error message and set G_ERR"
 
 integer,intent(in)   :: n
 
@@ -1596,7 +1593,6 @@ integer                      :: lunit             ! logical unit number
 integer                      :: iname(GG_LINELEN) ! INAME = FILE NAME, 1 character per word
                                                   ! how to know length of iname?
 character(len=1024)          :: name
-character(len=1024)          :: temp1
 character(len=*),optional    :: status
 character(len=20)            :: status_local
 integer                      :: ios
@@ -1643,7 +1639,7 @@ end subroutine mat_files
 !==================================================================================================================================!
 subroutine mat_getsym()
 
-! ident_6="@(#)M_matrix::mat_getsym(3fp): get a symbol"
+character(len=*),parameter::ident_5="@(#)M_matrix::mat_getsym(3fp): get a symbol"
 
 doubleprecision   :: syv
 doubleprecision   :: s
@@ -1728,7 +1724,7 @@ end subroutine mat_getsym
 !==================================================================================================================================!
 subroutine mat_str2buf(string,buf,lrecl)
 
-! ident_7="@(#)M_matrix::mat_str2buf(3fp): convert string to hollerith"
+character(len=*),parameter::ident_6="@(#)M_matrix::mat_str2buf(3fp): convert string to hollerith"
 
 ! g95 compiler does not support Hollerith, this is a KLUDGE to give time to think about it
 
@@ -1748,7 +1744,7 @@ end subroutine mat_str2buf
 !==================================================================================================================================!
 function str2ade(string) result(vec)
 
-! ident_8="@(#)M_matrix::mat_str2buf(3fp): convert CHARACTER TO ADE array vector"
+character(len=*),parameter::ident_7="@(#)M_matrix::mat_str2buf(3fp): convert CHARACTER TO ADE array vector"
 
 character(len=*),intent(in)  :: string
 integer,allocatable          :: vec(:)
@@ -1763,7 +1759,7 @@ end function str2ade
 !==================================================================================================================================!
 function ade2str(buf) result(string)
 
-! ident_9="@(#)M_matrix::mat_str2buf(3fp): convert ADE array to CHARACTER"
+character(len=*),parameter::ident_8="@(#)M_matrix::mat_str2buf(3fp): convert ADE array to CHARACTER"
 
 character(len=:),allocatable :: string
 integer,intent(in)           :: buf(:)
@@ -1782,7 +1778,7 @@ end function ade2str
 !==================================================================================================================================!
 subroutine mat_buf2str(string,buf,lrecl)
 
-! ident_10="@(#)M_matrix::mat_buf2string(3fp): convert hollerith to string"
+character(len=*),parameter::ident_9="@(#)M_matrix::mat_buf2string(3fp): convert hollerith to string"
 
 integer,intent(in)     :: lrecl
 integer,intent(in)     :: buf(:)
@@ -1800,7 +1796,7 @@ end subroutine mat_buf2str
 !==================================================================================================================================!
 subroutine ints2str(ints,string,ierr)
 
-! ident_11="@(#)M_matrix::ints2str(3f) convert laff integers to a character variable"
+character(len=*),parameter::ident_10="@(#)M_matrix::ints2str(3f): convert laff integers to a character variable"
 
 ! temporary procedure while writing ASCII-based upgrade
 
@@ -1828,7 +1824,7 @@ end subroutine ints2str
 !==================================================================================================================================!
 subroutine mat_matfn6()
 !
-! ident_12="@(#)M_matrix::mat_matfn6(3f):evaluate utility functions"
+character(len=*),parameter::ident_11="@(#)M_matrix::mat_matfn6(3f):evaluate utility functions"
 !
 integer :: i, j, k
 integer :: ia
@@ -1854,8 +1850,6 @@ integer,parameter :: seed(GG_MAX_NAME_LENGTH)   =  [iachar(['s','e','e','d',' ',
 integer           :: id(GG_MAX_NAME_LENGTH)
 doubleprecision   :: eps0,eps,s,sr,si,t
 character(len=80) :: message
-character(len=GG_LINELEN) :: string_buf
-!
 
    location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
    m = G_VAR_ROWS(G_ARGUMENT_POINTER)
@@ -2260,7 +2254,7 @@ end subroutine mat_matfn6
 !==================================================================================================================================!
 subroutine mat_funs(id)
 
-! ident_13="@(#)M_matrix::ml_funcs(3fp):scan function list and set G_FUN and G_FIN"
+character(len=*),parameter::ident_12="@(#)M_matrix::ml_funcs(3fp):scan function list and set G_FUN and G_FIN"
 
 integer,intent(in)                :: id(GG_MAX_NAME_LENGTH)
 integer                           :: selector
@@ -2370,7 +2364,7 @@ end subroutine mat_funs
 !==================================================================================================================================!
 subroutine mat_copyid(x,y)
 
-! ident_14="@(#)M_matrix::mat_copyid(3fp): copy a name to allow an easy way to store a name"
+character(len=*),parameter::ident_13="@(#)M_matrix::mat_copyid(3fp): copy a name to allow an easy way to store a name"
 
 integer,intent(out) :: x(GG_MAX_NAME_LENGTH)
 integer,intent(in)  :: y(GG_MAX_NAME_LENGTH)
@@ -2384,7 +2378,7 @@ end subroutine mat_copyid
 !==================================================================================================================================!
 subroutine mat_getval(s)
 
-! ident_15="@(#)M_matrix::mat_getval(3fp): form numerical value from string of integer characters"
+character(len=*),parameter::ident_14="@(#)M_matrix::mat_getval(3fp): form numerical value from string of integer characters"
 
 doubleprecision,intent(out) :: s
       s = 0.0d0
@@ -2411,7 +2405,7 @@ end subroutine mat_getval
 !==================================================================================================================================!
 subroutine mat_getch()
 
-! ident_16="@(#)M_matrix::mat_getch(3f): get next character from input line into G_CHRA"
+character(len=*),parameter::ident_15="@(#)M_matrix::mat_getch(3f): get next character from input line into G_CHRA"
 
    G_CHRA = G_LIN(G_LINE_POINTER(4))
    if (G_CHRA .ne. GG_EOL) G_LINE_POINTER(4) = G_LINE_POINTER(4) + 1
@@ -2422,7 +2416,7 @@ end subroutine mat_getch
 !==================================================================================================================================!
 subroutine mat_base(x,base,eps,s,n)
 
-! ident_17="@(#)M_matrix::mat_base(3fp): store representation of x in s(1:n) using specified base"
+character(len=*),parameter::ident_16="@(#)M_matrix::mat_base(3fp): store representation of x in s(1:n) using specified base"
 
 doubleprecision            :: x
 doubleprecision,intent(in) :: base
@@ -2487,7 +2481,7 @@ end subroutine mat_base
 !==================================================================================================================================!
 subroutine mat_print(ID,K)
 
-! ident_18="@(#)M_matrix::mat_print(3fp): primary output routine"
+character(len=*),parameter::ident_17="@(#)M_matrix::mat_print(3fp): primary output routine"
 
 integer           :: id(GG_MAX_NAME_LENGTH)
 integer           :: k
@@ -2601,21 +2595,13 @@ integer           :: itype
    G_LINECOUNT(1) = G_LINECOUNT(1)+2
    if (s .ne. 1.0d0)then
       write(message,'(''  '',1PD9.1," *")') s
-      if(G_OUTPUT_LUN.eq.STDOUT)then
-         call journal(message)
-      else
-         write(G_OUTPUT_LUN,'(a)')message(1:80)
-      endif
+      call journal(message)
    endif
    do j1 = 1, n, jinc
       j2 = min(n, j1+jinc-1)
       if (n .gt. jinc)then
          write(message,'(''     COLUMNS'',I6,'' THRU'',I6)') j1,j2
-         if(G_OUTPUT_LUN.eq.STDOUT)then
-            call journal(message)
-         else
-            write(G_OUTPUT_LUN,'(a)')message(1:80)
-         endif
+         call journal(message)
       endif
       do i = 1, m
          jm = j2-j1+1
@@ -2669,7 +2655,7 @@ integer           :: itype
             istep=3
             itype= 888
          case(-1)
-            call mat_formz(G_OUTPUT_LUN,GM_REALS(ls),GM_IMAGS(ls))
+            call mat_formz(GM_REALS(ls),GM_IMAGS(ls))
             istep=-1
             itype=-1
          case default
@@ -2685,11 +2671,7 @@ integer           :: itype
                case(999); write(message,form)(pr(j),j=j3,min(j3+istep,jm))
                case(888); write(message,form)(pr(j),sig(j),pi(j),j=j3,min(j3+istep-1,jm))
                end select
-               if(G_OUTPUT_LUN.eq.STDOUT)then
-                  call journal(message)
-               else
-                  write(G_OUTPUT_LUN,'(a)')message(1:80)
-               endif
+               call journal(message)
             enddo
          endif
 
@@ -2698,17 +2680,16 @@ integer           :: itype
    enddo
 
 99 continue
-   if(G_OUTPUT_LUN.ne.STDOUT)flush(unit=G_OUTPUT_LUN,iostat=ios)
+   flush(unit=STDOUT,iostat=ios)
 
 end subroutine mat_print
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine mat_formz(lunit,x,y)
+subroutine mat_formz(x,y)
 
-! ident_19="@(#)M_matrix::mat_formz: system dependent routine to print with z format"
+character(len=*),parameter::ident_18="@(#)M_matrix::mat_formz: system dependent routine to print with z format"
 
-integer                    :: lunit
 doubleprecision,intent(in) :: x,y
 
 character(len=36)          :: mline
@@ -2727,23 +2708,16 @@ end subroutine mat_formz
 !==================================================================================================================================!
 subroutine mat_prompt(pause)
 
-! ident_20="@(#)M_matrix::mat_prompt(3f): issue interactive prompt with optional pause"
+character(len=*),parameter::ident_19="@(#)M_matrix::mat_prompt(3f): issue interactive prompt with optional pause"
 
 integer,intent(in) :: pause
 character(len=1)   :: dummy
 
    if(.not.G_PROMPT)return ! in batch mode
-   ! paranoid checks
-   if(G_OUTPUT_LUN.le.0)then
-      call journal('*mat_prompt* internal error: G_OUTPUT_LUN <= 0')
-   elseif(G_INPUT_LUN.lt.0)then
-      call journal('*mat_prompt* internal error: G_INPUT_LUN <= 0')
-   else
-      ! write prompt using format that stays on current line
-      if(G_OUTPUT_LUN.eq.STDOUT)then
-         WRITE(G_OUTPUT_LUN,'(''<>'')',advance='no')   ! write prompt to interactive input
-      endif
-      if (pause .eq. 1) read(G_INPUT_LUN,'(a1)') dummy
+   ! write prompt using format that stays on current line
+   if(G_INPUT_LUN.eq.STDIN)then
+     WRITE(STDOUT,'(''<>'')',advance='no')   ! write prompt to interactive input
+     if (pause .eq. 1) read(G_INPUT_LUN,'(a1)') dummy
    endif
 
 end subroutine mat_prompt
@@ -2752,7 +2726,7 @@ end subroutine mat_prompt
 !==================================================================================================================================!
 subroutine mat_stack1(op)
 
-! ident_21="@(#)M_matrix::mat_stack1(3f): Unary Operations"
+character(len=*),parameter::ident_20="@(#)M_matrix::mat_stack1(3f): Unary Operations"
 
 integer           :: op
 integer           :: i
@@ -2796,7 +2770,7 @@ end subroutine mat_stack1
 !==================================================================================================================================!
 subroutine mat_print_id(id,argcnt)
 
-! ident_22="@(#)M_matrix::mat_print_id(3fp): print table of variable id names (up to) eight per line"
+character(len=*),parameter::ident_21="@(#)M_matrix::mat_print_id(3fp): print table of variable id names (up to) eight per line"
 
 !     ID     Is array of GG_MAX_NAME_LENGTH character IDs to print
 !     ARGCNT is number of IDs to print
@@ -2831,11 +2805,7 @@ character(len=(8*GG_MAX_NAME_LENGTH+2*8+1)) :: mline           ! scratch space f
       endif
 
       call mat_buf2str(mline,linebuf,line_position)       ! write LINEBUF(1:line_position) line to a character variable
-      if(G_OUTPUT_LUN.eq.STDOUT)then
-         call journal(mline)                              ! print the line to stdout
-      else
-         write(G_OUTPUT_LUN,'(a)')trim(mline)             ! print the line to a file
-      endif
+      call journal(mline)                                 ! print the line to stdout
 
       id_counter = id_counter+8                           ! prepare to get up to eight more IDs
       if (id_counter .gt. iabs(argcnt)) exit INFINITE     ! if not done do another line
@@ -2846,7 +2816,7 @@ end subroutine mat_print_id
 !==================================================================================================================================!
 subroutine mat_stack_put(id)
 
-! ident_23="@(#)M_matrix::mat_stack_put(3fp): put variables into storage"
+character(len=*),parameter::ident_22="@(#)M_matrix::mat_stack_put(3fp): put variables into storage"
 
 integer  :: id(GG_MAX_NAME_LENGTH)
 integer  :: i, j, k
@@ -3174,7 +3144,6 @@ integer            :: p
 integer            :: r
 integer            :: i5
 integer            :: ierr
-integer            :: ilen
 integer            :: j
 integer            :: k
 integer            :: location
@@ -3520,9 +3489,8 @@ subroutine mat_comand(id)
 
 character(len=*),intent(in)  :: id
 integer                      :: chr
-integer                      :: i, j, k, ii, jj
+integer                      :: i, k
 integer                      :: l
-integer                      :: ierr
 
 ! a list of names this procedure matches to use for some preliminary tests
 character(len=10),parameter :: cmd(*)=[ character(len=10) :: &
@@ -3719,7 +3687,7 @@ end subroutine mat_comand
 !==================================================================================================================================!
 subroutine sh_command()
 
-! ident_24="@(#)M_matrix::sh_command(3f): start system shell interactively"
+character(len=*),parameter::ident_23="@(#)M_matrix::sh_command(3f): start system shell interactively"
 
 character(len=GG_LINELEN) :: line
 integer                   :: istat
@@ -3737,7 +3705,8 @@ end subroutine sh_command
 !==================================================================================================================================!
 subroutine mat_plot(lplot,x,y,n,p,k)
 
-! ident_25="@(#)M_matrix::mat_plot(3fp): Plot X vs. Y on LPLOT.  If K is nonzero, then P(1),...,P(K) are extra parameters"
+character(len=*),parameter::ident_24="&
+&@(#)M_matrix::mat_plot(3fp): Plot X vs. Y on LPLOT.  If K is nonzero, then P(1),...,P(K) are extra parameters"
 
 integer           :: lplot
 integer           :: n
@@ -3821,7 +3790,7 @@ end subroutine mat_plot
 !==================================================================================================================================!
 subroutine mat_matfn1()
 
-! ident_26="@(#)M_matrix::mat_matfn1(3fp): evaluate functions involving gaussian elimination"
+character(len=*),parameter::ident_25="@(#)M_matrix::mat_matfn1(3fp): evaluate functions involving gaussian elimination"
 
 doubleprecision   :: dtr(2)
 doubleprecision   :: dti(2)
@@ -4460,7 +4429,7 @@ end subroutine mat_matfn2
 !==================================================================================================================================!
 subroutine mat_matfn3()
 
-! ident_27="@(#)M_matrix::mat_matfn3(3fp): evaluate functions involving singular value decomposition"
+character(len=*),parameter::ident_26="@(#)M_matrix::mat_matfn3(3fp): evaluate functions involving singular value decomposition"
 
 integer         :: i
 integer         :: j
@@ -4770,7 +4739,7 @@ end subroutine mat_matfn3
 !==================================================================================================================================!
 SUBROUTINE mat_matfn4()
 
-! ident_28="@(#)M_matrix::mat_matfn4(3fp): evaluate functions involving qr decomposition (least squares)"
+character(len=*),parameter::ident_27="@(#)M_matrix::mat_matfn4(3fp): evaluate functions involving qr decomposition (least squares)"
 
 integer           :: info
 integer           :: j
@@ -4998,24 +4967,20 @@ END SUBROUTINE mat_matfn4
 !==================================================================================================================================!
 subroutine mat_matfn5()
 
-! ident_29="@(#)M_matrix::mat_matfn5(3fp):file handling and other I/O"
+character(len=*),parameter::ident_28="@(#)M_matrix::mat_matfn5(3fp):file handling and other I/O"
 
 character(len=GG_LINELEN)  :: mline
 character(len=256)         :: errmsg
-character(len=1024)        :: name
-character(len=1)           :: ch_char
-integer                    :: temp_lun
-integer                    :: ios
 integer,save               :: flag=0  ! should be saved or set at each call?
 integer,save               :: lrat=5
 integer,save               :: mrat=100
-integer                    :: ch,top2,ch1(1)
+integer                    :: ch,top2
 integer                    :: id(GG_MAX_NAME_LENGTH)
 doubleprecision            :: eps,b,s,t,tdum(2)
 logical                    :: text
 integer                    :: i, j, k, location, m, n
 integer                    :: img
-integer                    :: job, space_left
+integer                    :: space_left
 integer                    :: l2
 integer                    :: ll
 integer                    :: ls
@@ -5025,7 +4990,6 @@ integer                    :: lw
 integer                    :: lx
 integer                    :: ly
 integer                    :: mn
-logical                    :: isfound
 !
    location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
    m = G_VAR_ROWS(G_ARGUMENT_POINTER)
@@ -5213,16 +5177,13 @@ logical                    :: isfound
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       case(4) ! command::print
-      k = G_OUTPUT_LUN                                ! hold
-      G_OUTPUT_LUN = 7
-      call mat_files(G_OUTPUT_LUN,G_BUF)
+      call mat_files(7,G_BUF)
 
       location = G_LINECOUNT(2)                       ! hold
       G_LINECOUNT(2) = 999999                         ! turn off paging of output
       if (G_RHS .gt. 1) call mat_print(G_SYN,top2)
 
       G_LINECOUNT(2) = location                       ! restore
-      G_OUTPUT_LUN = k                                ! restore
 
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
@@ -5322,7 +5283,7 @@ logical                    :: isfound
          LL = location+I-1
          GM_IMAGS(LL) = dble(I)
       enddo
-      call mat_plot(G_OUTPUT_LUN,GM_IMAGS(location),GM_REALS(location),N,TDUM,0)
+      call mat_plot(STDOUT,GM_IMAGS(location),GM_REALS(location),N,TDUM,0)
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
       exit FUN5
 !. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -5340,7 +5301,7 @@ logical                    :: isfound
       LX = G_VAR_DATALOC(G_ARGUMENT_POINTER)
       LY = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
       IF (G_RHS .GT. 3) location = G_VAR_DATALOC(G_ARGUMENT_POINTER+2)
-      call mat_plot(G_OUTPUT_LUN,GM_REALS(LX),GM_REALS(LY),N,GM_REALS(location),K)
+      call mat_plot(STDOUT,GM_REALS(LX),GM_REALS(LY),N,GM_REALS(location),K)
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
       case(11) ! COMMAND::RAT
@@ -5389,7 +5350,7 @@ end subroutine mat_matfn5
 !==================================================================================================================================!
 subroutine mat_stack_get(id)
 
-! ident_30="@(#)M_matrix::mat_stack_get(3fp): get variables from storage"
+character(len=*),parameter::ident_29="@(#)M_matrix::mat_stack_get(3fp): get variables from storage"
 
 integer,intent(in)  :: id(GG_MAX_NAME_LENGTH)
 integer             :: i
@@ -5408,7 +5369,6 @@ integer             :: mk
 integer             :: mn
 integer             :: mnk
 integer             :: n
-character(len=GG_MAX_NAME_LENGTH)    :: id_name
 
    call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1), ID)    ! copy ID to next blank entry in G_VAR_IDS in case it is not there(?)
 
@@ -5526,7 +5486,7 @@ END SUBROUTINE MAT_STACK_GET
 !==================================================================================================================================!
 subroutine mat_stack2(op)
 
-! ident_31="@(#)M_matrix::ml_stackp(3fp): binary and ternary operations"
+character(len=*),parameter::ident_30="@(#)M_matrix::ml_stackp(3fp): binary and ternary operations"
 
 integer           :: op
 doubleprecision   :: sr,si,e1,st,e2
@@ -5984,19 +5944,17 @@ end subroutine mat_getlin
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine mat_clause()
-character(len=GG_LINELEN) :: mline
 doubleprecision    :: e1,e2
 integer            :: op
 integer            :: r
-integer,parameter :: for(GG_MAX_NAME_LENGTH)   =  [iachar(['f','o','r',' ',' ',' ',' ']),GG_PAD(8:)]
-integer,parameter :: while(GG_MAX_NAME_LENGTH) =  [iachar(['w','h','i','l','e',' ',' ']),GG_PAD(8:)]
-integer,parameter :: iff(GG_MAX_NAME_LENGTH)   =  [iachar(['i','f',' ',' ',' ',' ',' ']),GG_PAD(8:)]
-integer,parameter :: else(GG_MAX_NAME_LENGTH)  =  [iachar(['e','l','s','e',' ',' ',' ']),GG_PAD(8:)]
-integer,parameter :: ennd(GG_MAX_NAME_LENGTH)  =  [iachar(['e','n','d',' ',' ',' ',' ']),GG_PAD(8:)]
-integer,parameter :: do(GG_MAX_NAME_LENGTH)    =  [iachar(['d','o',' ',' ',' ',' ',' ']),GG_PAD(8:)]
-integer,parameter :: thenn(GG_MAX_NAME_LENGTH) =  [iachar(['t','h','e','n',' ',' ',' ']),GG_PAD(8:)]
+integer,parameter  :: for(GG_MAX_NAME_LENGTH)   =  [iachar(['f','o','r',' ',' ',' ',' ']),GG_PAD(8:)]
+integer,parameter  :: while(GG_MAX_NAME_LENGTH) =  [iachar(['w','h','i','l','e',' ',' ']),GG_PAD(8:)]
+integer,parameter  :: iff(GG_MAX_NAME_LENGTH)   =  [iachar(['i','f',' ',' ',' ',' ',' ']),GG_PAD(8:)]
+integer,parameter  :: else(GG_MAX_NAME_LENGTH)  =  [iachar(['e','l','s','e',' ',' ',' ']),GG_PAD(8:)]
+integer,parameter  :: ennd(GG_MAX_NAME_LENGTH)  =  [iachar(['e','n','d',' ',' ',' ',' ']),GG_PAD(8:)]
+integer,parameter  :: do(GG_MAX_NAME_LENGTH)    =  [iachar(['d','o',' ',' ',' ',' ',' ']),GG_PAD(8:)]
+integer,parameter  :: thenn(GG_MAX_NAME_LENGTH) =  [iachar(['t','h','e','n',' ',' ',' ']),GG_PAD(8:)]
 
-integer            :: i
 integer            :: j
 integer            :: kount
 integer            :: location
@@ -6583,11 +6541,7 @@ end subroutine mat_factor
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine mat_term()
-
-character(len=GG_LINELEN) :: mline
-integer            :: op
-integer            :: ierr
-integer            :: ilen
+integer                   :: op
 
    select case( G_RSTK(G_PT) )
    case(6,7)
@@ -6651,7 +6605,8 @@ end subroutine mat_term
 !==================================================================================================================================!
 subroutine mat_savlod(lun,id,m,n,img,space_left,xreal,ximag)
 
-! ident_32="@(#)M_matrix::mat_savlod(3fp): read next variable from a save file or write next variable to it"
+character(len=*),parameter::ident_31="&
+&@(#)M_matrix::mat_savlod(3fp): read next variable from a save file or write next variable to it"
 
 integer,intent(in)                :: lun                                       ! logical unit number
 integer                           :: id(GG_MAX_NAME_LENGTH)                    ! name, format 32a1
@@ -6762,7 +6717,7 @@ end function mat_eqid
 !!     unknown  F
 function ifin_laff(varname)
 
-! ident_33="@(#)M_matrix::ifin_laff(3f) :: access LAFF variable stack and see if a variable name exists"
+character(len=*),parameter::ident_32="@(#)M_matrix::ifin_laff(3f) :: access LAFF variable stack and see if a variable name exists"
 
 character(len=*),intent(in)        :: varname
 integer                            :: id(GG_MAX_NAME_LENGTH)
@@ -6896,7 +6851,8 @@ end function ifin_laff
 !!    > 2 8 0 3 7 7 9 7 9 1 6 7 8 2 6 2 2 2 9 7
 subroutine get_double_from_laff(varname,A,type,IERR)
 
-! ident_34="@(#)M_matrix::get_double_from_laff(3f) :: access LAFF variable stack and get a variable by name and its data from the stack"
+character(len=*),parameter::ident_33="&
+&@(#)M_matrix::get_double_from_laff(3f) :: access LAFF variable stack and get a variable by name and its data from the stack"
 
 character(len=*),intent(in)              :: varname    ! the name of A.
 integer,intent(in)                       :: type       ! type =  0  get REAL A from LAFF, type  = 1  get IMAGINARY A into LAFF,
@@ -7019,7 +6975,7 @@ end function rowpack
 !!      >This is my title
 subroutine store_double_into_laff(varname,realxx,imagxx,ierr)
 
-! ident_35="@(#)M_matrix:: _store_double_into_laff(3f): put a variable name and its data onto LAFF stack"
+character(len=*),parameter::ident_34="@(#)M_matrix:: _store_double_into_laff(3f): put a variable name and its data onto LAFF stack"
 
 character(len=*),intent(in)          :: varname                ! the name of realxx.
 doubleprecision,intent(in)           :: realxx(:,:)            ! inputarray is an M by N matrix
@@ -7029,9 +6985,8 @@ integer,intent(out)                  :: ierr                   ! return with non
 integer                              :: img
 integer                              :: space_left
 integer                              :: id(GG_MAX_NAME_LENGTH) ! ID = name, in numeric format
-integer                              :: i,j,k,location
+integer                              :: location
 integer                              :: m,n                    ! m, n = dimensions
-integer                              :: size_of_a
 
    if(GM_BIGMEM.LT.0) then
       call laff_init(200000) ! if not initialized initialize
@@ -7098,27 +7053,25 @@ subroutine store_array_into_laff(varname,anything,ierr)
 character(len=*),intent(in)  :: varname
 class(*)                     :: anything(:,:)
 integer,intent(out)          :: ierr
-logical,parameter            :: T=.true.
-integer                      :: i
    select type(anything)
 !!    type is (character(len=*));
 !!       call store_double_into_laff(varname,
 !!       reshape(real(str2ade(anything),kind=dp),[1,len(anything)])
 !!       ,ierr=ierr)
 !!       call store_double_into_laff(varname,reshape(real(str2ade(anything),kind=dp),[1,len(anything)]),ierr=ierr)
-    type is (complex);              call store_double_into_laff(varname,real(anything,kind=dp), &
-                                                                       & real(aimag(anything),kind=dp),ierr=ierr)
-    type is (complex(kind=dp));     call store_double_into_laff(varname,real(anything),aimag(anything),ierr=ierr)
-    type is (integer(kind=int8));   call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-    type is (integer(kind=int16));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-    type is (integer(kind=int32));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-    type is (integer(kind=int64));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-    type is (real(kind=real32));    call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-    type is (real(kind=real64));    call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-    type is (real(kind=real128));   call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-    ! arbitrarily, 0 is false and not 0 is true, although I prefer the opposite
-    type is (logical);              call store_double_into_laff(varname,merge(0.1d0,0.0d0,anything),ierr=ierr)
-    class default
+   type is (complex);              call store_double_into_laff(varname,real(anything,kind=dp), &
+                                                                     & real(aimag(anything),kind=dp),ierr=ierr)
+   type is (complex(kind=dp));     call store_double_into_laff(varname,real(anything),aimag(anything),ierr=ierr)
+   type is (integer(kind=int8));   call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   type is (integer(kind=int16));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   type is (integer(kind=int32));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   type is (integer(kind=int64));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   type is (real(kind=real32));    call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   type is (real(kind=real64));    call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   type is (real(kind=real128));   call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   ! arbitrarily, 0 is false and not 0 is true, although I prefer the opposite
+   type is (logical);              call store_double_into_laff(varname,merge(0.1d0,0.0d0,anything),ierr=ierr)
+   class default
       stop 'crud. store_array_into_laff(1) does not know about this type'
    end select
 end subroutine store_array_into_laff
@@ -7129,7 +7082,6 @@ subroutine store_vector_into_laff(varname,anything,ierr)
 character(len=*),intent(in)  :: varname
 class(*)                     :: anything(:)
 integer,intent(out)          :: ierr
-logical,parameter            :: T=.true.
 integer                      :: i
    select type(anything)
     type is (character(len=*));
@@ -7845,7 +7797,7 @@ function too_much_memory(expression)
 integer,intent(in) :: expression
 logical            :: too_much_memory
 
-! ident_36="@(#)too much memory required"
+character(len=*),parameter::ident_35="@(#)too much memory required"
 
    G_ERR=expression
    if(G_ERR.gt.0)then
@@ -7861,7 +7813,8 @@ end function too_much_memory
 !===================================================================================================================================
 function system_getenv(name,default) result(value)
 
-! ident_37="@(#)M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)"
+character(len=*),parameter::ident_36="&
+&@(#)M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: default
@@ -7969,2978 +7922,2981 @@ end subroutine get
 subroutine mat_help_text()
 G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
-'LAFF USERS'' GUIDE                                                              ',&
-'                                                                                ',&
-'                        LAFF (May, 1981 - Apr, 2021)                            ',&
-'                                                                                ',&
-'   The Linear Algebra Fortran Facility (LAFF) is a collection of Fortran        ',&
-'   procedures that serves as a convenient tool for Fortran programs to          ',&
-'   interact with their data (interactively or in batch mode) with a             ',&
-'   tool that acts as a basic "laboratory" for computations involving            ',&
-'   matrices.                                                                    ',&
-'                                                                                ',&
-'   It provides easy access to matrix software developed by the LINPACK          ',&
-'   and EISPACK projects.                                                        ',&
-'                                                                                ',&
-'   It is based on the Los Alamos procedure MATLAB, and owes much to             ',&
-'   Cleve Moler, Department of Computer Science, University of New Mexico.       ',&
-'                                                                                ',&
-'                            CONTENTS                                            ',&
-'                                                                                ',&
-'          -  Elementary operations                                              ',&
-'          -  LAFF functions                                                     ',&
-'          -  Rows, columns and submatrices                                      ',&
-'          -  "for", "while" and "if"                                            ',&
-'          -  Characters, text, files and macros                                 ',&
-'          -  The numerical algorithms                                           ',&
-'          -  "flop" and "chop"                                                  ',&
-'          -  Census example                                                     ',&
-'          -  Partial differential equation example                              ',&
-'          -  Eigenvalue sensitivity example                                     ',&
-'          -  Communicating with other programs                                  ',&
-'          -  Appendix  (The HELP file)                                          ',&
-'                                                                                ',&
-'   The capabilities range from standard tasks such as solving simultaneous      ',&
-'   linear equations and inverting matrices, through symmetric and               ',&
-'   nonsymmetric eigenvalue problems, to fairly sophisticated matrix             ',&
-'   tools such as the singular value decomposition.                              ',&
-'                                                                                ',&
-'   LAFF should be useful in applied linear algebra, as well as more             ',&
-'   general numerical analysis, matrix theory, statistics and applications       ',&
-'   of matrices to other disciplines.                                            ',&
-'                                                                                ',&
-'   LAFF can serve as a "desk calculator" for the quick solution of small        ',&
-'   problems involving matrices.                                                 ',&
-'                                                                                ',&
-'   The program is written in Fortran and is designed to be readily              ',&
-'   installed under any operating system which permits interactive               ',&
-'   execution of Fortran programs. The resources required are fairly             ',&
-'   modest.                                                                      ',&
-'                                                                                ',&
-'   The size of the matrices that can be handled in LAFF depends upon the        ',&
-'   amount of storage available on the supporting platform and the optional      ',&
-'   word count that can be supplied on an initial call to LAFF(3f).              ',&
-'                                                                                ',&
-'   In some ways, LAFF resembles SPEAKEASY [4] and, to a lesser extent,          ',&
-'   APL. All are interactive terminal languages that ordinarily accept           ',&
-'   single-line commands or statements, process them immediately, and print      ',&
-'   the results. All have arrays or matrices as principal data types. But        ',&
-'   for LAFF, the matrix is the only data type (although scalars, vectors        ',&
-'   and text are special cases), the underlying system is portable and           ',&
-'   requires fewer resources, and the supporting subroutines are more            ',&
-'   powerful and in some cases, have better numerical properties.                ',&
-'                                                                                ',&
-'   Together, LINPACK and EISPACK provide for powerful matrix                    ',&
-'   computation. EISPACK is a package of over 70 Fortran subroutines for         ',&
-'   various matrix eigenvalue computations that are based for the most           ',&
-'   part on Algol procedures published by Wilkinson, Reinsch and their           ',&
-'   colleagues [5]. LINPACK is a package of 40 Fortran subroutines (in           ',&
-'   each of four data types) for solving and analyzing simultaneous linear       ',&
-'   equations and related matrix problems. Since LAFF is not primarily           ',&
-'   concerned with either execution time efficiency or storage savings,          ',&
-'   it ignores most of the special matrix properties that LINPACK and            ',&
-'   EISPACK subroutines use to advantage. Consequently, only 8 subroutines       ',&
-'   from LINPACK and 5 from EISPACK are actually involved.                       ',&
-'                                                                                ',&
-'   In more advanced applications, LAFF can be used in conjunction with          ',&
-'   other programs in several ways. It is possible to define new LAFF            ',&
-'   functions and add them to the system.  it is possible to use the local       ',&
-'   file system to pass matrices between LAFF and other programs. LAFF           ',&
-'   command and statement input can be obtained from a local file instead        ',&
-'   of from the terminal. The most power and flexibility is obtained by          ',&
-'   using LAFF as a subroutine which is called by other programs.                ',&
-'                                                                                ',&
-'   This document first gives an overview of LAFF from the user''s               ',&
-'   point of view. Several extended examples involving data fitting,             ',&
-'   partial differential equations, eigenvalue sensitivity and other             ',&
-'   topics are included.  The system was designed and programmed using           ',&
-'   techniques described by Wirth [6], implemented in nonrecursive,              ',&
-'   portable Fortran. There is a brief discussion of some of the matrix          ',&
-'   algorithms and of their numerical properties. A final section describes      ',&
-'   how LAFF can be used with other programs. The appendix includes the          ',&
-'   HELP documentation available on-line.                                        ',&
-'                                                                                ',&
+'LAFF USERS'' GUIDE',&
+'',&
+'                        LAFF (May, 1981 - Apr, 2021)',&
+'',&
+'   The Linear Algebra Fortran Facility (LAFF) is a collection of Fortran',&
+'   procedures that serves as a convenient tool for Fortran programs to',&
+'   interact with their data (interactively or in batch mode) with a',&
+'   tool that acts as a basic "laboratory" for computations involving',&
+'   matrices.',&
+'',&
+'   It provides easy access to matrix software developed by the LINPACK',&
+'   and EISPACK projects.',&
+'',&
+'   It is based on the Los Alamos procedure MATLAB, and owes much to',&
+'   Cleve Moler, Department of Computer Science, University of New Mexico.',&
+'',&
+'                            CONTENTS',&
+'',&
+'          -  Elementary operations',&
+'          -  LAFF functions',&
+'          -  Rows, columns and submatrices',&
+'          -  "for", "while" and "if"',&
+'          -  Characters, text, files and macros',&
+'          -  The numerical algorithms',&
+'          -  "flop" and "chop"',&
+'          -  Census example',&
+'          -  Partial differential equation example',&
+'          -  Eigenvalue sensitivity example',&
+'          -  Communicating with other programs',&
+'          -  Appendix  (The HELP file)',&
+'',&
+'   The capabilities range from standard tasks such as solving simultaneous',&
+'   linear equations and inverting matrices, through symmetric and',&
+'   nonsymmetric eigenvalue problems, to fairly sophisticated matrix',&
+'   tools such as the singular value decomposition.',&
+'',&
+'   LAFF should be useful in applied linear algebra, as well as more',&
+'   general numerical analysis, matrix theory, statistics and applications',&
+'   of matrices to other disciplines.',&
+'',&
+'   LAFF can serve as a "desk calculator" for the quick solution of small',&
+'   problems involving matrices.',&
+'',&
+'   The program is written in Fortran and is designed to be readily',&
+'   installed under any operating system which permits interactive',&
+'   execution of Fortran programs. The resources required are fairly',&
+'   modest.',&
+'',&
+'   The size of the matrices that can be handled in LAFF depends upon the',&
+'   amount of storage available on the supporting platform and the optional',&
+'   word count that can be supplied on an initial call to LAFF(3f).',&
+'',&
+'   In some ways, LAFF resembles SPEAKEASY [4] and, to a lesser extent,',&
+'   APL. All are interactive terminal languages that ordinarily accept',&
+'   single-line commands or statements, process them immediately, and print',&
+'   the results. All have arrays or matrices as principal data types. But',&
+'   for LAFF, the matrix is the only data type (although scalars, vectors',&
+'   and text are special cases), the underlying system is portable and',&
+'   requires fewer resources, and the supporting subroutines are more',&
+'   powerful and in some cases, have better numerical properties.',&
+'',&
+'   Together, LINPACK and EISPACK provide for powerful matrix',&
+'   computation. EISPACK is a package of over 70 Fortran subroutines for',&
+'   various matrix eigenvalue computations that are based for the most',&
+'   part on Algol procedures published by Wilkinson, Reinsch and their',&
+'   colleagues [5]. LINPACK is a package of 40 Fortran subroutines (in',&
+'   each of four data types) for solving and analyzing simultaneous linear',&
+'   equations and related matrix problems. Since LAFF is not primarily',&
+'   concerned with either execution time efficiency or storage savings,',&
+'   it ignores most of the special matrix properties that LINPACK and',&
+'   EISPACK subroutines use to advantage. Consequently, only 8 subroutines',&
+'   from LINPACK and 5 from EISPACK are actually involved.',&
+'',&
+'   In more advanced applications, LAFF can be used in conjunction with',&
+'   other programs in several ways. It is possible to define new LAFF',&
+'   functions and add them to the system.  it is possible to use the local',&
+'   file system to pass matrices between LAFF and other programs. LAFF',&
+'   command and statement input can be obtained from a local file instead',&
+'   of from the terminal. The most power and flexibility is obtained by',&
+'   using LAFF as a subroutine which is called by other programs.',&
+'',&
+'   This document first gives an overview of LAFF from the user''s',&
+'   point of view. Several extended examples involving data fitting,',&
+'   partial differential equations, eigenvalue sensitivity and other',&
+'   topics are included.  The system was designed and programmed using',&
+'   techniques described by Wirth [6], implemented in nonrecursive,',&
+'   portable Fortran. There is a brief discussion of some of the matrix',&
+'   algorithms and of their numerical properties. A final section describes',&
+'   how LAFF can be used with other programs. The appendix includes the',&
+'   HELP documentation available on-line.',&
+'',&
 '================================================================================',&
-'ELEMENTARY OPERATIONS                                                           ',&
-'                                                                                ',&
-'   LAFF works with essentially only one kind of object, a rectangular           ',&
-'   matrix with complex elements. If the imaginary parts of the elements         ',&
-'   are all zero, they are not printed, but they still occupy storage. In        ',&
-'   some situations, special meaning is attached to 1 by 1 matrices,             ',&
-'   that is scalars, and to 1 by n and m by 1 matrices, that is row and          ',&
-'   column vectors.                                                              ',&
-'                                                                                ',&
-'   Matrices can be introduced into LAFF in four different                       ',&
-'   ways:                                                                        ',&
-'                                                                                ',&
-'           --  Explicit list of elements,                                       ',&
-'           --  Use of "for" and "while" statements,                             ',&
-'           --  Read from an external file,                                      ',&
-'           --  Execute an external Fortran program.                             ',&
-'                                                                                ',&
-'   The explicit list is surrounded by angle brackets, ''<'' and ''>'' or        ',&
-'   braces ''['' and '']'', and uses the semicolon '';'' to indicate the ends    ',&
-'   of the rows. For example, the input line                                     ',&
-'                                                                                ',&
-'      A = <1 2 3; 4 5 6; 7 8 9>                                                 ',&
-'                                                                                ',&
-'   will result in the output                                                    ',&
-'                                                                                ',&
-'      A     =                                                                   ',&
-'                                                                                ',&
-'          1.    2.   3.                                                         ',&
-'          4.    5.   6.                                                         ',&
-'          7.    8.   9.                                                         ',&
-'                                                                                ',&
-'   The matrix A will be saved for later use. The individual elements            ',&
-'   are separated by commas or blanks and can be any LAFF expressions,           ',&
-'   for example                                                                  ',&
-'                                                                                ',&
-'      x = < -1.3, 4/5, 4*atan(1) >                                              ',&
-'                                                                                ',&
-'   results in                                                                   ',&
-'                                                                                ',&
-'      x     =                                                                   ',&
-'                                                                                ',&
-'        -1.3000   0.8000   3.1416                                               ',&
-'                                                                                ',&
-'   The elementary functions available include sqrt, log, exp, sin, cos,         ',&
-'   atan, abs, round, real, imag, and conjg.                                     ',&
-'                                                                                ',&
-'   Large matrices can be spread across several input lines, with the            ',&
-'   carriage returns replacing the semicolons. The above matrix could            ',&
-'   also have been produced by                                                   ',&
-'                                                                                ',&
-'      A = < 1 2 3                                                               ',&
-'            4 5 6                                                               ',&
-'            7 8 9 >                                                             ',&
-'                                                                                ',&
-'   Matrices can be input from the local file system. Say a file named           ',&
-'   ''xyz'' contains five lines of text,                                         ',&
-'                                                                                ',&
-'      A = <                                                                     ',&
-'      1 2 3                                                                     ',&
-'      4 5 6                                                                     ',&
-'      7 8 9                                                                     ',&
-'      >;                                                                        ',&
-'                                                                                ',&
-'   then the LAFF statement exec(''xyz'') reads the matrix and assigns it        ',&
-'   to A .                                                                       ',&
-'                                                                                ',&
-'   The "for" statement allows the generation of matrices whose elements         ',&
-'   are given by simple formulas. Our example matrix A could also have           ',&
-'   been produced by                                                             ',&
-'                                                                                ',&
-'      for i = 1:3, for j = 1:3, A(i,j) = 3*(i-1)+j;                             ',&
-'                                                                                ',&
-'   The semicolon at the end of the line suppresses the printing, which          ',&
-'   in this case would have been nine versions of A with changing elements.      ',&
-'                                                                                ',&
-'   Several statements may be given on a line, separated by semicolons           ',&
-'   or commas.                                                                   ',&
-'                                                                                ',&
-'   Two consecutive periods anywhere on a line indicate continuation. The        ',&
-'   periods and any following characters are deleted, then another line          ',&
-'   is input and concatenated onto the previous line.                            ',&
-'                                                                                ',&
-'   Two consecutive slashes anywhere on a line cause the remainder of            ',&
-'   the line to be ignored. This is useful for inserting comments.               ',&
-'                                                                                ',&
-'   Names of variables are formed by a letter, followed by any of                ',&
-'   letters, digits and underscores, up to 63 characters in length.              ',&
-'                                                                                ',&
-'   The special character prime ('') is used to denote the transpose of          ',&
-'   a matrix, so                                                                 ',&
-'                                                                                ',&
-'      X = X''                                                                   ',&
-'                                                                                ',&
-'   changes the row vector above into the column vector                          ',&
-'                                                                                ',&
-'      X     =                                                                   ',&
-'                                                                                ',&
-'        -1.3000                                                                 ',&
-'         0.8000                                                                 ',&
-'         3.1416                                                                 ',&
-'                                                                                ',&
-'   Individual matrix elements may be referenced by enclosing their              ',&
-'   subscripts in parentheses. When any element is changed, the entire           ',&
-'   matrix is reprinted. For example, using the above matrix,                    ',&
-'                                                                                ',&
-'      B(3,3) = B(1,3) + B(3,1)                                                  ',&
-'                                                                                ',&
-'   results in                                                                   ',&
-'                                                                                ',&
-'      B     =                                                                   ',&
-'                                                                                ',&
-'          1.    2.    3.                                                        ',&
-'          4.    5.    6.                                                        ',&
-'          7.    8.   10.                                                        ',&
-'                                                                                ',&
-'   Addition, subtraction and multiplication of matrices are denoted by          ',&
-'   +, -, and * . The operations are performed whenever the matrices             ',&
-'   have the proper dimensions. For example, with the above A and x,             ',&
-'   the expressions A + X and X*A are incorrect because A is 3 by 3 and          ',&
-'   X is now 3 by 1. However,                                                    ',&
-'                                                                                ',&
-'      B = A*B                                                                   ',&
-'                                                                                ',&
-'   is correct and results in the output                                         ',&
-'                                                                                ',&
-'      B     =                                                                   ',&
-'                                                                                ',&
-'         9.7248                                                                 ',&
-'        17.6496                                                                 ',&
-'        28.7159                                                                 ',&
-'                                                                                ',&
-'   Note that both upper and lower case letters are allowed for input            ',&
-'   (on those systems which have both).                                          ',&
-'                                                                                ',&
-'   There are two "matrix division" symbols in LAFF, \ and / .  If A and         ',&
-'   B are matrices, then A\B and B/A correspond formally to left and right       ',&
-'   multiplication of B by the inverse of A, that is inv(A)*B and B*inv(A),      ',&
-'   but the result is obtained directly without the computation of the           ',&
-'   inverse. In the scalar case, 3\1 and 1/3 have the same value, namely         ',&
-'   one-third. In general, A\B denotes the solution X to the equation A*X =      ',&
-'   B and B/A denotes the solution to X*A = B.                                   ',&
-'                                                                                ',&
-'   Left division, A\B, is defined whenever B has as many rows as A. If A        ',&
-'   is square, it is factored using Gaussian elimination. The factors are        ',&
-'   used to solve the equations A*X(:,j) = B(:,j) where B(:,j) denotes the       ',&
-'   j-th column of B. The result is a matrix X with the same dimensions          ',&
-'   as B. If A is nearly singular (according to the LINPACK condition            ',&
-'   estimator, RCOND(3f)), a warning message is printed. If A is not             ',&
-'   square, it is factored using Householder orthogonalization with column       ',&
-'   pivoting. The factors are used to solve the under- or overdetermined         ',&
-'   equations in a least squares sense. The result is an M by N matrix X         ',&
-'   where M is the number of columns of A and N is the number of columns         ',&
-'   of B . Each column of X has at most K nonzero components, where K is         ',&
-'   the effective rank of A .                                                    ',&
-'                                                                                ',&
-'   Right division, B/A, can be defined in terms of left division by B/A =       ',&
-'   (A''\B'')''.                                                                 ',&
-'                                                                                ',&
-'   For example, since our vector b was computed as A*X, the statement           ',&
-'                                                                                ',&
-'      Y = A\B                                                                   ',&
-'                                                                                ',&
-'   results in                                                                   ',&
-'                                                                                ',&
-'      Y     =                                                                   ',&
-'                                                                                ',&
-'        -1.3000                                                                 ',&
-'         0.8000                                                                 ',&
-'         3.1416                                                                 ',&
-'                                                                                ',&
-'   Of course, Y is not exactly equal to X because of the roundoff errors        ',&
-'   involved in both A*X and A\B , but we are not printing enough digits         ',&
-'   to see the difference. The result of the statement                           ',&
-'                                                                                ',&
-'      E = X - Y                                                                 ',&
-'                                                                                ',&
-'   depends upon the particular computer being used. In one case it              ',&
-'   produces                                                                     ',&
-'                                                                                ',&
-'      E     =                                                                   ',&
-'                                                                                ',&
-'         1.0e-15 *                                                              ',&
-'                                                                                ',&
-'           .3053                                                                ',&
-'          -.2498                                                                ',&
-'           .0000                                                                ',&
-'                                                                                ',&
-'   The quantity 1.0e-15 is a scale factor which multiplies all the              ',&
-'   components which follow. Thus our vectors X and Y actually                   ',&
-'   agree to about 15 decimal places on this computer.                           ',&
-'                                                                                ',&
-'   It is also possible to obtain element-by-element                             ',&
-'   multiplicative operations. If A and B have the same dimensions,              ',&
-'   then A .* B denotes the matrix whose elements are simply the                 ',&
-'   products of the individual elements of A and B . The expressions             ',&
-'   A ./ B and A .\ B give the quotients of the individual elements.             ',&
-'                                                                                ',&
-'   There are several possible output formats. The statement                     ',&
-'                                                                                ',&
-'      long, X                                                                   ',&
-'                                                                                ',&
-'   results in                                                                   ',&
-'                                                                                ',&
-'      X     =                                                                   ',&
-'                                                                                ',&
-'         -1.300000000000000                                                     ',&
-'           .800000000000000                                                     ',&
-'          3.141592653589793                                                     ',&
-'                                                                                ',&
-'   The statement                                                                ',&
-'                                                                                ',&
-'      short                                                                     ',&
-'                                                                                ',&
-'   restores the original format.                                                ',&
-'                                                                                ',&
-'   The expression A**p means A to the p-th power. It is                         ',&
-'   defined if A is a square matrix and p is a scalar. If p is an                ',&
-'   integer greater than one, the power is computed by repeated                  ',&
-'   multiplication. For other values of p the calculation involves               ',&
-'   the eigenvalues and eigenvectors of A.                                       ',&
-'                                                                                ',&
-'   Previously defined matrices and matrix expressions can be                    ',&
-'   used inside brackets to generate larger matrices, for example                ',&
-'                                                                                ',&
-'      C = <A, B; <4 2 0>*X, X''>                                                ',&
-'                                                                                ',&
-'   results in                                                                   ',&
-'                                                                                ',&
-'      C     =                                                                   ',&
-'                                                                                ',&
-'         1.0000   2.0000   3.0000   9.7248                                      ',&
-'         4.0000   5.0000   6.0000  17.6496                                      ',&
-'         7.0000   8.0000  10.0000  28.7159                                      ',&
-'        -3.6000  -1.3000   0.8000   3.1416                                      ',&
-'                                                                                ',&
-'   There are four predefined variables, "eps", "flop", "rand" and               ',&
-'   "eye". The variable "eps" is used as a tolerance is determining such         ',&
-'   things as near singularity and rank. Its initial value is the distance       ',&
-'   from 1.0 to the next largest floating point number on the particular         ',&
-'   computer being used. The user may reset this to any other value,             ',&
-'   including zero. "eps" is changed by "chop", which is described later         ',&
-'   in this manual.                                                              ',&
-'                                                                                ',&
-'   The value of "rand" is a random variable, with a choice of a uniform         ',&
-'   or a normal distribution.                                                    ',&
-'                                                                                ',&
-'   The name "eye" is used in place of "i" to denote identity matrices           ',&
-'   because "i" is often used as a subscript or as sqrt(-1).  The dimensions     ',&
-'   of "eye" are determined by context. For example,                             ',&
-'                                                                                ',&
-'      B = A + 3*eye                                                             ',&
-'                                                                                ',&
-'   adds 3 to the diagonal elements of A and                                     ',&
-'                                                                                ',&
-'      X = eye/A                                                                 ',&
-'                                                                                ',&
-'   is one of several ways in LAFF to invert a matrix.                           ',&
-'                                                                                ',&
-'   "flop" provides a measure of the number of floating point operations,        ',&
-'   or "flops", required for each calculation by reporting the CPU time          ',&
-'   consumed.                                                                    ',&
-'                                                                                ',&
-'   A statement may consist of an expression alone, in which case a              ',&
-'   variable named "ans" is created and the result stored in "ans" for           ',&
-'   possible future use. Thus                                                    ',&
-'                                                                                ',&
-'      A\A - eye                                                                 ',&
-'                                                                                ',&
-'   is the same as                                                               ',&
-'                                                                                ',&
-'      ans = A\A - eye                                                           ',&
-'                                                                                ',&
-'   (Roundoff error usually causes this result to be a matrix of "small"         ',&
-'   numbers, rather than all zeros.)                                             ',&
-'                                                                                ',&
-'   All computations are done using double precision real arithmetic. There      ',&
-'   is no mixed-precision arithmetic.  The Fortran COMPLEX data type             ',&
-'   is not used because many systems create unnecessary underflows and           ',&
-'   overflows with complex operations.                                           ',&
-'                                                                                ',&
+'ELEMENTARY OPERATIONS',&
+'',&
+'   LAFF works with essentially only one kind of object, a rectangular',&
+'   matrix with complex elements. If the imaginary parts of the elements',&
+'   are all zero, they are not printed, but they still occupy storage. In',&
+'   some situations, special meaning is attached to 1 by 1 matrices,',&
+'   that is scalars, and to 1 by n and m by 1 matrices, that is row and',&
+'   column vectors.',&
+'',&
+'   Matrices can be introduced into LAFF in four different',&
+'   ways:',&
+'',&
+'           --  Explicit list of elements,',&
+'           --  Use of "for" and "while" statements,',&
+'           --  Read from an external file,',&
+'           --  Execute an external Fortran program.',&
+'',&
+'   The explicit list is surrounded by angle brackets, ''<'' and ''>'' or',&
+'   braces ''['' and '']'', and uses the semicolon '';'' to indicate the ends',&
+'   of the rows. For example, the input line',&
+'',&
+'      A = <1 2 3; 4 5 6; 7 8 9>',&
+'',&
+'   will result in the output',&
+'',&
+'      A     =',&
+'',&
+'          1.    2.   3.',&
+'          4.    5.   6.',&
+'          7.    8.   9.',&
+'',&
+'   The matrix A will be saved for later use. The individual elements',&
+'   are separated by commas or blanks and can be any LAFF expressions,',&
+'   for example',&
+'',&
+'      x = < -1.3, 4/5, 4*atan(1) >',&
+'',&
+'   results in',&
+'',&
+'      x     =',&
+'',&
+'        -1.3000   0.8000   3.1416',&
+'',&
+'   The elementary functions available include sqrt, log, exp, sin, cos,',&
+'   atan, abs, round, real, imag, and conjg.',&
+'',&
+'   Large matrices can be spread across several input lines, with the',&
+'   carriage returns replacing the semicolons. The above matrix could',&
+'   also have been produced by',&
+'',&
+'      A = < 1 2 3',&
+'            4 5 6',&
+'            7 8 9 >',&
+'',&
+'   Matrices can be input from the local file system. Say a file named',&
+'   ''xyz'' contains five lines of text,',&
+'',&
+'      A = <',&
+'      1 2 3',&
+'      4 5 6',&
+'      7 8 9',&
+'      >;',&
+'',&
+'   then the LAFF statement exec(''xyz'') reads the matrix and assigns it',&
+'   to A .',&
+'',&
+'   The "for" statement allows the generation of matrices whose elements',&
+'   are given by simple formulas. Our example matrix A could also have',&
+'   been produced by',&
+'',&
+'      for i = 1:3, for j = 1:3, A(i,j) = 3*(i-1)+j;',&
+'',&
+'   The semicolon at the end of the line suppresses the printing, which',&
+'   in this case would have been nine versions of A with changing elements.',&
+'',&
+'   Several statements may be given on a line, separated by semicolons',&
+'   or commas.',&
+'',&
+'   Two consecutive periods anywhere on a line indicate continuation. The',&
+'   periods and any following characters are deleted, then another line',&
+'   is input and concatenated onto the previous line.',&
+'',&
+'   Two consecutive slashes anywhere on a line cause the remainder of',&
+'   the line to be ignored. This is useful for inserting comments.',&
+'',&
+'   Names of variables are formed by a letter, followed by any of',&
+'   letters, digits and underscores, up to 63 characters in length.',&
+'',&
+'   The special character prime ('') is used to denote the transpose of',&
+'   a matrix, so',&
+'',&
+'      X = X''',&
+'',&
+'   changes the row vector above into the column vector',&
+'',&
+'      X     =',&
+'',&
+'        -1.3000',&
+'         0.8000',&
+'         3.1416',&
+'',&
+'   Individual matrix elements may be referenced by enclosing their',&
+'   subscripts in parentheses. When any element is changed, the entire',&
+'   matrix is reprinted. For example, using the above matrix,',&
+'',&
+'      B(3,3) = B(1,3) + B(3,1)',&
+'',&
+'   results in',&
+'',&
+'      B     =',&
+'',&
+'          1.    2.    3.',&
+'          4.    5.    6.',&
+'          7.    8.   10.',&
+'',&
+'   Addition, subtraction and multiplication of matrices are denoted by',&
+'   +, -, and * . The operations are performed whenever the matrices',&
+'   have the proper dimensions. For example, with the above A and x,',&
+'   the expressions A + X and X*A are incorrect because A is 3 by 3 and',&
+'   X is now 3 by 1. However,',&
+'',&
+'      B = A*B',&
+'',&
+'   is correct and results in the output',&
+'',&
+'      B     =',&
+'',&
+'         9.7248',&
+'        17.6496',&
+'        28.7159',&
+'',&
+'   Note that both upper and lower case letters are allowed for input',&
+'   (on those systems which have both).',&
+'',&
+'   There are two "matrix division" symbols in LAFF, \ and / .  If A and',&
+'   B are matrices, then A\B and B/A correspond formally to left and right',&
+'   multiplication of B by the inverse of A, that is inv(A)*B and B*inv(A),',&
+'   but the result is obtained directly without the computation of the',&
+'   inverse. In the scalar case, 3\1 and 1/3 have the same value, namely',&
+'   one-third. In general, A\B denotes the solution X to the equation A*X =',&
+'   B and B/A denotes the solution to X*A = B.',&
+'',&
+'   Left division, A\B, is defined whenever B has as many rows as A. If A',&
+'   is square, it is factored using Gaussian elimination. The factors are',&
+'   used to solve the equations A*X(:,j) = B(:,j) where B(:,j) denotes the',&
+'   j-th column of B. The result is a matrix X with the same dimensions',&
+'   as B. If A is nearly singular (according to the LINPACK condition',&
+'   estimator, RCOND(3f)), a warning message is printed. If A is not',&
+'   square, it is factored using Householder orthogonalization with column',&
+'   pivoting. The factors are used to solve the under- or overdetermined',&
+'   equations in a least squares sense. The result is an M by N matrix X',&
+'   where M is the number of columns of A and N is the number of columns',&
+'   of B . Each column of X has at most K nonzero components, where K is',&
+'   the effective rank of A .',&
+'',&
+'   Right division, B/A, can be defined in terms of left division by B/A =',&
+'   (A''\B'')''.',&
+'',&
+'   For example, since our vector b was computed as A*X, the statement',&
+'',&
+'      Y = A\B',&
+'',&
+'   results in',&
+'',&
+'      Y     =',&
+'',&
+'        -1.3000',&
+'         0.8000',&
+'         3.1416',&
+'',&
+'   Of course, Y is not exactly equal to X because of the roundoff errors',&
+'   involved in both A*X and A\B , but we are not printing enough digits',&
+'   to see the difference. The result of the statement',&
+'',&
+'      E = X - Y',&
+'',&
+'   depends upon the particular computer being used. In one case it',&
+'   produces',&
+'',&
+'      E     =',&
+'',&
+'         1.0e-15 *',&
+'',&
+'           .3053',&
+'          -.2498',&
+'           .0000',&
+'',&
+'   The quantity 1.0e-15 is a scale factor which multiplies all the',&
+'   components which follow. Thus our vectors X and Y actually',&
+'   agree to about 15 decimal places on this computer.',&
+'',&
+'   It is also possible to obtain element-by-element',&
+'   multiplicative operations. If A and B have the same dimensions,',&
+'   then A .* B denotes the matrix whose elements are simply the',&
+'   products of the individual elements of A and B . The expressions',&
+'   A ./ B and A .\ B give the quotients of the individual elements.',&
+'',&
+'   There are several possible output formats. The statement',&
+'',&
+'      long, X',&
+'',&
+'   results in',&
+'',&
+'      X     =',&
+'',&
+'         -1.300000000000000',&
+'           .800000000000000',&
+'          3.141592653589793',&
+'',&
+'   The statement',&
+'',&
+'      short',&
+'',&
+'   restores the original format.',&
+'',&
+'   The expression A**p means A to the p-th power. It is',&
+'   defined if A is a square matrix and p is a scalar. If p is an',&
+'   integer greater than one, the power is computed by repeated',&
+'   multiplication. For other values of p the calculation involves',&
+'   the eigenvalues and eigenvectors of A.',&
+'',&
+'   Previously defined matrices and matrix expressions can be',&
+'   used inside brackets to generate larger matrices, for example',&
+'',&
+'      C = <A, B; <4 2 0>*X, X''>',&
+'',&
+'   results in',&
+'',&
+'      C     =',&
+'',&
+'         1.0000   2.0000   3.0000   9.7248',&
+'         4.0000   5.0000   6.0000  17.6496',&
+'         7.0000   8.0000  10.0000  28.7159',&
+'        -3.6000  -1.3000   0.8000   3.1416',&
+'',&
+'   There are four predefined variables, "eps", "flop", "rand" and',&
+'   "eye". The variable "eps" is used as a tolerance is determining such',&
+'   things as near singularity and rank. Its initial value is the distance',&
+'   from 1.0 to the next largest floating point number on the particular',&
+'   computer being used. The user may reset this to any other value,',&
+'   including zero. "eps" is changed by "chop", which is described later',&
+'   in this manual.',&
+'',&
+'   The value of "rand" is a random variable, with a choice of a uniform',&
+'   or a normal distribution.',&
+'',&
+'   The name "eye" is used in place of "i" to denote identity matrices',&
+'   because "i" is often used as a subscript or as sqrt(-1).  The dimensions',&
+'   of "eye" are determined by context. For example,',&
+'',&
+'      B = A + 3*eye',&
+'',&
+'   adds 3 to the diagonal elements of A and',&
+'',&
+'      X = eye/A',&
+'',&
+'   is one of several ways in LAFF to invert a matrix.',&
+'',&
+'   "flop" provides a measure of the number of floating point operations,',&
+'   or "flops", required for each calculation by reporting the CPU time',&
+'   consumed.',&
+'',&
+'   A statement may consist of an expression alone, in which case a',&
+'   variable named "ans" is created and the result stored in "ans" for',&
+'   possible future use. Thus',&
+'',&
+'      A\A - eye',&
+'',&
+'   is the same as',&
+'',&
+'      ans = A\A - eye',&
+'',&
+'   (Roundoff error usually causes this result to be a matrix of "small"',&
+'   numbers, rather than all zeros.)',&
+'',&
+'   All computations are done using double precision real arithmetic. There',&
+'   is no mixed-precision arithmetic.  The Fortran COMPLEX data type',&
+'   is not used because many systems create unnecessary underflows and',&
+'   overflows with complex operations.',&
+'',&
 '================================================================================',&
-'FUNCTIONS                                                                       ',&
-'                                                                                ',&
-'   Much of LAFF''s computational power comes from the various                   ',&
-'   matrix functions available. The current list includes:                       ',&
-'                                                                                ',&
-'      inv(A)          - Inverse.                                                ',&
-'      det(A)          - Determinant.                                            ',&
-'      cond(A)         - Condition number.                                       ',&
-'      rcond(A)        - A measure of nearness to singularity.                   ',&
-'      eig(A)          - Eigenvalues and eigenvectors.                           ',&
-'      schur(A)        - Schur triangular form.                                  ',&
-'      hess(A)         - Hessenberg or tridiagonal form.                         ',&
-'      poly(A)         - Characteristic polynomial.                              ',&
-'      svd(A)          - Singular value decomposition.                           ',&
-'      pinv(A,eps)     - Pseudo-inverse with optional tolerance.                 ',&
-'      rank(A,eps)     - Matrix rank with optional tolerance.                    ',&
-'      lu(A)           - Factors from Gaussian elimination.                      ',&
-'      chol(A)         - Factor from Cholesky factorization.                     ',&
-'      qr(A)           - Factors from Householder orthogonalization.             ',&
-'      rref(A)         - Reduced row echelon form.                               ',&
-'      orth(A)         - Orthogonal vectors spanning range of A.                 ',&
-'      exp(A)          - e to the A.                                             ',&
-'      log(A)          - Natural logarithm.                                      ',&
-'      sqrt(A)         - Square root.                                            ',&
-'      sin(A)          - Trigonometric sine.                                     ',&
-'      cos(A)          - Cosine.                                                 ',&
-'      atan(A)         - Arctangent.                                             ',&
-'      round(A)        - Round the elements to nearest integers.                 ',&
-'      abs(A)          - Absolute value of the elements.                         ',&
-'      real(A)         - Real parts of the elements.                             ',&
-'      imag(A)         - Imaginary parts of the elements.                        ',&
-'      conjg(A)        - Complex conjugate.                                      ',&
-'      sum(A)          - Sum of the elements.                                    ',&
-'      prod(A)         - Product of the elements.                                ',&
-'      diag(A)         - Extract or create diagonal matrices.                    ',&
-'      tril(A)         - Lower triangular part of A.                             ',&
-'      triu(A)         - Upper triangular part of A.                             ',&
-'      norm(A,p)       - Norm with p = 1, 2 or ''Infinity''.                     ',&
-'      eye(m,n)        - Portion of identity matrix.                             ',&
-'      rand(m,n)       - Matrix with random elements.                            ',&
-'      ones(m,n)       - Matrix of all ones.                                     ',&
-'      magic(n)        - Interesting test matrices.                              ',&
-'      invh(n)         - Inverse Hilbert matrices.                               ',&
-'      roots(C)        - Roots of polynomial with coefficients C.                ',&
-'      display(A,p)    - Print base p representation of A.                       ',&
-'      kron(A,B)       - Kronecker tensor product of A and B.                    ',&
-'      plot(X,Y)       - Plot Y as a function of X .                             ',&
-'      rat(A)          - Find "simple" rational approximation to A.              ',&
-'      user(A)         - Function defined by external program.                   ',&
-'                                                                                ',&
-'   Some of these functions have different interpretations when the              ',&
-'   argument is a matrix or a vector and some of them have additional            ',&
-'   optional arguments. Details are given in the HELP document in the            ',&
-'   appendix.                                                                    ',&
-'                                                                                ',&
-'   Several of these functions can be used in a generalized assignment           ',&
-'   statement with two or three variables on the left hand side. For             ',&
-'   example                                                                      ',&
-'                                                                                ',&
-'      <X,D> = eig(A)                                                            ',&
-'                                                                                ',&
-'   stores the eigenvectors of A in the matrix X and a diagonal matrix           ',&
-'   containing the eigenvalues in the matrix D. The statement                    ',&
-'                                                                                ',&
-'      eig(A)                                                                    ',&
-'                                                                                ',&
-'   simply computes the eigenvalues and stores them in "ans".                    ',&
-'                                                                                ',&
-'   Future versions of LAFF will probably include additional functions,          ',&
-'   since they can easily be added to the system.                                ',&
-'                                                                                ',&
+'FUNCTIONS',&
+'',&
+'   Much of LAFF''s computational power comes from the various',&
+'   matrix functions available. The current list includes:',&
+'',&
+'      inv(A)          - Inverse.',&
+'      det(A)          - Determinant.',&
+'      cond(A)         - Condition number.',&
+'      rcond(A)        - A measure of nearness to singularity.',&
+'      eig(A)          - Eigenvalues and eigenvectors.',&
+'      schur(A)        - Schur triangular form.',&
+'      hess(A)         - Hessenberg or tridiagonal form.',&
+'      poly(A)         - Characteristic polynomial.',&
+'      svd(A)          - Singular value decomposition.',&
+'      pinv(A,eps)     - Pseudo-inverse with optional tolerance.',&
+'      rank(A,eps)     - Matrix rank with optional tolerance.',&
+'      lu(A)           - Factors from Gaussian elimination.',&
+'      chol(A)         - Factor from Cholesky factorization.',&
+'      qr(A)           - Factors from Householder orthogonalization.',&
+'      rref(A)         - Reduced row echelon form.',&
+'      orth(A)         - Orthogonal vectors spanning range of A.',&
+'      exp(A)          - e to the A.',&
+'      log(A)          - Natural logarithm.',&
+'      sqrt(A)         - Square root.',&
+'      sin(A)          - Trigonometric sine.',&
+'      cos(A)          - Cosine.',&
+'      atan(A)         - Arctangent.',&
+'      round(A)        - Round the elements to nearest integers.',&
+'      abs(A)          - Absolute value of the elements.',&
+'      real(A)         - Real parts of the elements.',&
+'      imag(A)         - Imaginary parts of the elements.',&
+'      conjg(A)        - Complex conjugate.',&
+'      sum(A)          - Sum of the elements.',&
+'      prod(A)         - Product of the elements.',&
+'      diag(A)         - Extract or create diagonal matrices.',&
+'      tril(A)         - Lower triangular part of A.',&
+'      triu(A)         - Upper triangular part of A.',&
+'      norm(A,p)       - Norm with p = 1, 2 or ''Infinity''.',&
+'      eye(m,n)        - Portion of identity matrix.',&
+'      rand(m,n)       - Matrix with random elements.',&
+'      ones(m,n)       - Matrix of all ones.',&
+'      magic(n)        - Interesting test matrices.',&
+'      invh(n)         - Inverse Hilbert matrices.',&
+'      roots(C)        - Roots of polynomial with coefficients C.',&
+'      display(A,p)    - Print base p representation of A.',&
+'      kron(A,B)       - Kronecker tensor product of A and B.',&
+'      plot(X,Y)       - Plot Y as a function of X .',&
+'      rat(A)          - Find "simple" rational approximation to A.',&
+'      user(A)         - Function defined by external program.',&
+'',&
+'   Some of these functions have different interpretations when the',&
+'   argument is a matrix or a vector and some of them have additional',&
+'   optional arguments. Details are given in the HELP document in the',&
+'   appendix.',&
+'',&
+'   Several of these functions can be used in a generalized assignment',&
+'   statement with two or three variables on the left hand side. For',&
+'   example',&
+'',&
+'      <X,D> = eig(A)',&
+'',&
+'   stores the eigenvectors of A in the matrix X and a diagonal matrix',&
+'   containing the eigenvalues in the matrix D. The statement',&
+'',&
+'      eig(A)',&
+'',&
+'   simply computes the eigenvalues and stores them in "ans".',&
+'',&
+'   Future versions of LAFF will probably include additional functions,',&
+'   since they can easily be added to the system.',&
+'',&
 '================================================================================',&
-'ROWS COLUMNS AND SUBMATRICES                                                    ',&
-'                                                                                ',&
-'   Individual elements of a matrix can be accessed by giving their              ',&
-'   subscripts in parentheses, eg. A(1,2), x(i), TAB(ind(k)+1).                  ',&
-'   An expression used as a subscript is rounded to the nearest integer.         ',&
-'                                                                                ',&
-'   Individual rows and columns can be accessed using a colon '':'' (or a        ',&
-'   ''|'') for the free subscript. For example, A(1,:) is the first row of       ',&
-'   A and A(:,j) is the j-th column. Thus                                        ',&
-'                                                                                ',&
-'      A(i,:) = A(i,:) + c*A(k,:)                                                ',&
-'                                                                                ',&
-'   adds c times the k-th row of A to the i-th row.                              ',&
-'                                                                                ',&
-'   The colon is used in several other ways in LAFF, but all of the uses         ',&
-'   are based on the following definition.                                       ',&
-'                                                                                ',&
-'      j:k    is the same as  <j, j+1, ..., k>                                   ',&
-'      j:k    is empty if  j > k .                                               ',&
-'      j:i:k  is the same as  <j, j+i, j+2i, ..., k>                             ',&
-'      j:i:k  is empty if  i > 0 and j > k or if i < 0 and j < k .               ',&
-'                                                                                ',&
-'   The colon is usually used with integers, but it is possible to               ',&
-'   use arbitrary real scalars as well. Thus                                     ',&
-'                                                                                ',&
-'      1:4  is the same as  <1, 2, 3, 4>                                         ',&
-'      0: 0.1: 0.5 is the same as <0.0, 0.1, 0.2, 0.3, 0.4, 0.5>                 ',&
-'                                                                                ',&
-'   In general, a subscript can be a vector. If X and V are vectors,             ',&
-'   then X(V) is <X(V(1)), X(V(2)), ..., X(V(n))> . This can also be             ',&
-'   used with matrices. If V has m components and W has n components,            ',&
-'   then A(V,W) is the m by n matrix formed from the elements of A whose         ',&
-'   subscripts are the elements of V and W.  Combinations of the colon           ',&
-'   notation and the indirect subscripting allow manipulation of various         ',&
-'   submatrices. For example,                                                    ',&
-'                                                                                ',&
-'      A(<1,5>,:) = A(<5,1>,:)  interchanges rows 1 and 5 of A.                  ',&
-'      A(2:k,1:n)  is the submatrix formed from rows 2 through k                 ',&
-'         and columns 1 through n of A .                                         ',&
-'      A(:,<3 1 2>)  is a permutation of the first three columns.                ',&
-'                                                                                ',&
-'   The notation A(:) has a special meaning. On the right hand side of an        ',&
-'   assignment statement, it denotes all the elements of A, regarded as          ',&
-'   a single column. When an expression is assigned to A(:), the current         ',&
-'   dimensions of A, rather than of the expression, are used.                    ',&
-'                                                                                ',&
+'ROWS COLUMNS AND SUBMATRICES',&
+'',&
+'   Individual elements of a matrix can be accessed by giving their',&
+'   subscripts in parentheses, eg. A(1,2), x(i), TAB(ind(k)+1).',&
+'   An expression used as a subscript is rounded to the nearest integer.',&
+'',&
+'   Individual rows and columns can be accessed using a colon '':'' (or a',&
+'   ''|'') for the free subscript. For example, A(1,:) is the first row of',&
+'   A and A(:,j) is the j-th column. Thus',&
+'',&
+'      A(i,:) = A(i,:) + c*A(k,:)',&
+'',&
+'   adds c times the k-th row of A to the i-th row.',&
+'',&
+'   The colon is used in several other ways in LAFF, but all of the uses',&
+'   are based on the following definition.',&
+'',&
+'      j:k    is the same as  <j, j+1, ..., k>',&
+'      j:k    is empty if  j > k .',&
+'      j:i:k  is the same as  <j, j+i, j+2i, ..., k>',&
+'      j:i:k  is empty if  i > 0 and j > k or if i < 0 and j < k .',&
+'',&
+'   The colon is usually used with integers, but it is possible to',&
+'   use arbitrary real scalars as well. Thus',&
+'',&
+'      1:4  is the same as  <1, 2, 3, 4>',&
+'      0: 0.1: 0.5 is the same as <0.0, 0.1, 0.2, 0.3, 0.4, 0.5>',&
+'',&
+'   In general, a subscript can be a vector. If X and V are vectors,',&
+'   then X(V) is <X(V(1)), X(V(2)), ..., X(V(n))> . This can also be',&
+'   used with matrices. If V has m components and W has n components,',&
+'   then A(V,W) is the m by n matrix formed from the elements of A whose',&
+'   subscripts are the elements of V and W.  Combinations of the colon',&
+'   notation and the indirect subscripting allow manipulation of various',&
+'   submatrices. For example,',&
+'',&
+'      A(<1,5>,:) = A(<5,1>,:)  interchanges rows 1 and 5 of A.',&
+'      A(2:k,1:n)  is the submatrix formed from rows 2 through k',&
+'         and columns 1 through n of A .',&
+'      A(:,<3 1 2>)  is a permutation of the first three columns.',&
+'',&
+'   The notation A(:) has a special meaning. On the right hand side of an',&
+'   assignment statement, it denotes all the elements of A, regarded as',&
+'   a single column. When an expression is assigned to A(:), the current',&
+'   dimensions of A, rather than of the expression, are used.',&
+'',&
 '================================================================================',&
-'FOR WHILE AND IF                                                                ',&
-'                                                                                ',&
-'   The "for" clause allows statements to be repeated a specific                 ',&
-'   number of times. The general form is                                         ',&
-'                                                                                ',&
-'      for variable = expr, statement, ..., statement, end                       ',&
-'                                                                                ',&
-'   The "end" and the comma before it may be omitted. In general, the            ',&
-'   expression may be a matrix, in which case the columns are stored one         ',&
-'   at a time in the variable and the following statements, up to the            ',&
-'   "end" or the end of the line, are executed. The expression is often          ',&
-'   of the form j:k, and its "columns" are simply the scalars from j to          ',&
-'   k. Some examples (assume n has already been assigned a value):               ',&
-'                                                                                ',&
-'      for i = 1:n, for j = 1:n, A(i,j) = 1/(i+j-1);                             ',&
-'                                                                                ',&
-'   generates the Hilbert matrix.                                                ',&
-'                                                                                ',&
-'      for j = 2:n-1, for i = j:n-1, ...                                         ',&
-'         A(i,j) = 0; end; A(j,j) = j; end; A                                    ',&
-'                                                                                ',&
-'   changes all but the "outer edge" of the lower triangle and then              ',&
-'   prints the final matrix.                                                     ',&
-'                                                                                ',&
-'      for h = 1.0: -0.1: -1.0, (<h, cos(pi*h)>)                                 ',&
-'                                                                                ',&
-'   prints a table of cosines.                                                   ',&
-'                                                                                ',&
-'      <X,D> = eig(A); for v = X, v, A*v                                         ',&
-'                                                                                ',&
-'   displays eigenvectors, one at a time.                                        ',&
-'                                                                                ',&
-'        The "while" clause allows statements to be repeated an                  ',&
-'   indefinite number of times. The general form is                              ',&
-'                                                                                ',&
-'      while expr relop expr,   statement,..., statement, end                    ',&
-'                                                                                ',&
-'   where relop is =, <, >, <=, >=, or <> (not equal). The statements are        ',&
-'   repeatedly executed as long as the indicated comparison between the          ',&
-'   real parts of the first components of the two expressions is true. Here      ',&
-'   are two examples. (Exercise for the reader: What do these segments do?)      ',&
-'                                                                                ',&
-'      eps = 1;                                                                  ',&
-'      while 1 + eps > 1, eps = eps/2;                                           ',&
-'      eps = 2*eps                                                               ',&
-'                                                                                ',&
-'      E = 0*A;  F = E + eye; n = 1;                                             ',&
-'      while norm(E+F-E,1) > 0, E = E + F; F = A*F/n; n = n + 1;                 ',&
-'      E                                                                         ',&
-'                                                                                ',&
-'   The IF clause allows conditional execution of statements.  The general       ',&
-'   form is                                                                      ',&
-'                                                                                ',&
-'      if expr relop expr,  statement, ..., statement,                           ',&
-'         else statement, ..., statement                                         ',&
-'                                                                                ',&
-'   The first group of statements are executed if the relation is true and       ',&
-'   the second group are executed if the relation is false.  The "else"          ',&
-'   and the statements following it may be omitted. For example,                 ',&
-'                                                                                ',&
-'      if abs(i-j) = 2, A(i,j) = 0;                                              ',&
-'                                                                                ',&
+'FOR WHILE AND IF',&
+'',&
+'   The "for" clause allows statements to be repeated a specific',&
+'   number of times. The general form is',&
+'',&
+'      for variable = expr, statement, ..., statement, end',&
+'',&
+'   The "end" and the comma before it may be omitted. In general, the',&
+'   expression may be a matrix, in which case the columns are stored one',&
+'   at a time in the variable and the following statements, up to the',&
+'   "end" or the end of the line, are executed. The expression is often',&
+'   of the form j:k, and its "columns" are simply the scalars from j to',&
+'   k. Some examples (assume n has already been assigned a value):',&
+'',&
+'      for i = 1:n, for j = 1:n, A(i,j) = 1/(i+j-1);',&
+'',&
+'   generates the Hilbert matrix.',&
+'',&
+'      for j = 2:n-1, for i = j:n-1, ...',&
+'         A(i,j) = 0; end; A(j,j) = j; end; A',&
+'',&
+'   changes all but the "outer edge" of the lower triangle and then',&
+'   prints the final matrix.',&
+'',&
+'      for h = 1.0: -0.1: -1.0, (<h, cos(pi*h)>)',&
+'',&
+'   prints a table of cosines.',&
+'',&
+'      <X,D> = eig(A); for v = X, v, A*v',&
+'',&
+'   displays eigenvectors, one at a time.',&
+'',&
+'        The "while" clause allows statements to be repeated an',&
+'   indefinite number of times. The general form is',&
+'',&
+'      while expr relop expr,   statement,..., statement, end',&
+'',&
+'   where relop is =, <, >, <=, >=, or <> (not equal). The statements are',&
+'   repeatedly executed as long as the indicated comparison between the',&
+'   real parts of the first components of the two expressions is true. Here',&
+'   are two examples. (Exercise for the reader: What do these segments do?)',&
+'',&
+'      eps = 1;',&
+'      while 1 + eps > 1, eps = eps/2;',&
+'      eps = 2*eps',&
+'',&
+'      E = 0*A;  F = E + eye; n = 1;',&
+'      while norm(E+F-E,1) > 0, E = E + F; F = A*F/n; n = n + 1;',&
+'      E',&
+'',&
+'   The IF clause allows conditional execution of statements.  The general',&
+'   form is',&
+'',&
+'      if expr relop expr,  statement, ..., statement,',&
+'         else statement, ..., statement',&
+'',&
+'   The first group of statements are executed if the relation is true and',&
+'   the second group are executed if the relation is false.  The "else"',&
+'   and the statements following it may be omitted. For example,',&
+'',&
+'      if abs(i-j) = 2, A(i,j) = 0;',&
+'',&
 '================================================================================',&
-'CHARACTERS AND TEXTFILES AND MACROS                                             ',&
-'                                                                                ',&
-'   LAFF has several commands which control the output format and the            ',&
-'   overall execution of the system.                                             ',&
-'                                                                                ',&
-'   The "help" command allows on-line access to short portions of text           ',&
-'   describing various operations, functions and special characters. The         ',&
-'   entire "help" document is reproduced in an appendix.                         ',&
-'                                                                                ',&
-'   Results are usually printed in a scaled fixed point format that shows        ',&
-'   4 or 5 significant figures. The commands "short", "long", "short e",         ',&
-'   "long e" and "long z" alter the output format, but do not alter the          ',&
-'   precision of the computations or the internal storage.                       ',&
-'                                                                                ',&
-'   The "who" command provides information about the functions and               ',&
-'   variables that are currently defined.                                        ',&
-'                                                                                ',&
-'   The "clear" command erases all variables, except "eps", "flop",              ',&
-'   "rand" and "eye". The statement A = <> indicates that a "0 by 0"             ',&
-'   matrix is to be stored in A. This causes A to be erased so that its          ',&
-'   storage can be used for other variables.                                     ',&
-'                                                                                ',&
-'   The "quit" and "exit" commands cause return to the underlying operating      ',&
-'   system through the Fortran RETURN statement.                                 ',&
-'                                                                                ',&
-'   LAFF has a limited facility for handling text. Any string of characters      ',&
-'   delineated by quotes (with two quotes used to allow one quote within         ',&
-'   the string) is saved as a vector of integer values that are the ADE          ',&
-'   (Ascii Decimal Equivalent) value of the character, with special              ',&
-'   equivalencing of the characters {}[]" into ()<>'' in expressions. It         ',&
-'   is important to know you use those characters as part of an expression       ',&
-'   or command without treating them as equivalent outside of strings.           ',&
-'                                                                                ',&
-'   (The complete list is in the appendix under "CHAR".) For example             ',&
-'                                                                                ',&
-'      ''2*A + 3''  is the same as  < 50 42 65 32 43 32 51 >.                    ',&
-'                                                                                ',&
-'   It is possible, though seldom very meaningful, to use such                   ',&
-'   strings in matrix operations. More frequently, the text is used              ',&
-'   as a special argument to various functions.                                  ',&
-'                                                                                ',&
-'      norm(A,''inf'')    computes the infinity norm of A .                      ',&
-'      display(T)       prints the text stored in T .                            ',&
-'      exec(''file'')     obtains LAFF input from an external file.              ',&
-'      save(''file'')     stores all the current variables in a file.            ',&
-'      load(''file'')     retrieves all the variables from a file.               ',&
-'      print(''file'',X)  prints X on a file.                                    ',&
-'      diary(''file'')    makes a copy of the complete LAFF session.             ',&
-'                                                                                ',&
-'   The text can also be used in a limited string substitution                   ',&
-'   macro facility. If a variable, say T, contains the source text               ',&
-'   for a LAFF statement or expression, then the construction                    ',&
-'                                                                                ',&
-'      > T <                                                                     ',&
-'                                                                                ',&
-'   causes T to be executed or evaluated. For example                            ',&
-'                                                                                ',&
-'      T = ''2*A + 3'';                                                          ',&
-'      S = ''B = >T< + 5''                                                       ',&
-'      A = 4;                                                                    ',&
-'      > S <                                                                     ',&
-'                                                                                ',&
-'   produces                                                                     ',&
-'                                                                                ',&
-'      B     =                                                                   ',&
-'                                                                                ',&
-'         16.                                                                    ',&
-'                                                                                ',&
-'   Some other examples are given under MACROS in the appendix. This             ',&
-'   facility is useful for fairly short statements and expressions.              ',&
-'   More complicated LAFF "programs" should use the "exec" facility.             ',&
-'                                                                                ',&
+'CHARACTERS AND TEXTFILES AND MACROS',&
+'',&
+'   LAFF has several commands which control the output format and the',&
+'   overall execution of the system.',&
+'',&
+'   The "help" command allows on-line access to short portions of text',&
+'   describing various operations, functions and special characters. The',&
+'   entire "help" document is reproduced in an appendix.',&
+'',&
+'   Results are usually printed in a scaled fixed point format that shows',&
+'   4 or 5 significant figures. The commands "short", "long", "short e",',&
+'   "long e" and "long z" alter the output format, but do not alter the',&
+'   precision of the computations or the internal storage.',&
+'',&
+'   The "who" command provides information about the functions and',&
+'   variables that are currently defined.',&
+'',&
+'   The "clear" command erases all variables, except "eps", "flop",',&
+'   "rand" and "eye". The statement A = <> indicates that a "0 by 0"',&
+'   matrix is to be stored in A. This causes A to be erased so that its',&
+'   storage can be used for other variables.',&
+'',&
+'   The "quit" and "exit" commands cause return to the underlying operating',&
+'   system through the Fortran RETURN statement.',&
+'',&
+'   LAFF has a limited facility for handling text. Any string of characters',&
+'   delineated by quotes (with two quotes used to allow one quote within',&
+'   the string) is saved as a vector of integer values that are the ADE',&
+'   (Ascii Decimal Equivalent) value of the character, with special',&
+'   equivalencing of the characters {}[]" into ()<>'' in expressions. It',&
+'   is important to know you use those characters as part of an expression',&
+'   or command without treating them as equivalent outside of strings.',&
+'',&
+'   (The complete list is in the appendix under "CHAR".) For example',&
+'',&
+'      ''2*A + 3''  is the same as  < 50 42 65 32 43 32 51 >.',&
+'',&
+'   It is possible, though seldom very meaningful, to use such',&
+'   strings in matrix operations. More frequently, the text is used',&
+'   as a special argument to various functions.',&
+'',&
+'      norm(A,''inf'')    computes the infinity norm of A .',&
+'      display(T)       prints the text stored in T .',&
+'      exec(''file'')     obtains LAFF input from an external file.',&
+'      save(''file'')     stores all the current variables in a file.',&
+'      load(''file'')     retrieves all the variables from a file.',&
+'      print(''file'',X)  prints X on a file.',&
+'      diary(''file'')    makes a copy of the complete LAFF session.',&
+'',&
+'   The text can also be used in a limited string substitution',&
+'   macro facility. If a variable, say T, contains the source text',&
+'   for a LAFF statement or expression, then the construction',&
+'',&
+'      > T <',&
+'',&
+'   causes T to be executed or evaluated. For example',&
+'',&
+'      T = ''2*A + 3'';',&
+'      S = ''B = >T< + 5''',&
+'      A = 4;',&
+'      > S <',&
+'',&
+'   produces',&
+'',&
+'      B     =',&
+'',&
+'         16.',&
+'',&
+'   Some other examples are given under MACROS in the appendix. This',&
+'   facility is useful for fairly short statements and expressions.',&
+'   More complicated LAFF "programs" should use the "exec" facility.',&
+'',&
 '================================================================================',&
-'NUMERICAL ALGORITHMS                                                            ',&
-'                                                                                ',&
-'   The algorithms underlying the basic LAFF functions are described in          ',&
-'   the LINPACK and EISPACK guides [1-3]. The following list gives the           ',&
-'   subroutines used by these functions.                                         ',&
-'                                                                                ',&
-'      inv(A)          - CGECO,CGEDI                                             ',&
-'      det(A)          - CGECO,CGEDI                                             ',&
-'      lu(A)           - CGEFA                                                   ',&
-'      rcond(A)        - CGECO                                                   ',&
-'      chol(A)         - CPOFA                                                   ',&
-'      svd(A)          - CSVDC                                                   ',&
-'      cond(A)         - CSVDC                                                   ',&
-'      norm(A,2)       - CSVDC                                                   ',&
-'      pinv(A,eps)     - CSVDC                                                   ',&
-'      rank(A,eps)     - CSVDC                                                   ',&
-'      qr(A)           - CQRDC,CQRSL                                             ',&
-'      orth(A)         - CQRDC,CSQSL                                             ',&
-'      A\B and B/A     - CGECO,CGESL if A is square.                             ',&
-'                      - CQRDC,CQRSL if A is not square.                         ',&
-'      eig(A)          - HTRIDI,IMTQL2,HTRIBK if A is Hermitian.                 ',&
-'                      - CORTH,COMQR2         if A is not Hermitian.             ',&
-'      schur(A)        - same as EIG.                                            ',&
-'      hess(A)         - same as EIG.                                            ',&
-'                                                                                ',&
-'   Minor modifications were made to all these subroutines. The LINPACK          ',&
-'   routines were changed to replace the Fortran complex arithmetic              ',&
-'   with explicit references to real and imaginary parts.  Since most            ',&
-'   of the floating point arithmetic is concentrated in a few low-level          ',&
-'   subroutines which perform vector operations (the Basic Linear Algebra        ',&
-'   Subprograms), this was not an extensive change. It also facilitated          ',&
-'   implementation of the "flop" and "chop" features which count and             ',&
-'   optionally truncate each floating point operation.                           ',&
-'                                                                                ',&
-'   The EISPACK subroutine COMQR2 was modified to allow access to the            ',&
-'   Schur triangular form, ordinarily just an intermediate result. IMTQL2        ',&
-'   was modified to make computation of the eigenvectors optional. Both          ',&
-'   subroutines were modified to eliminate the machine-dependent accuracy        ',&
-'   parameter and all the EISPACK subroutines were changed to include            ',&
-'   "flop" and "chop".                                                           ',&
-'                                                                                ',&
-'   The algorithms employed for the "poly" and "roots" functions                 ',&
-'   illustrate an interesting aspect of the modern approach to eigenvalue        ',&
-'   computation. "poly(A)" generates the characteristic polynomial of            ',&
-'   A and "roots(poly(A))" finds the roots of that polynomial, which             ',&
-'   are, of course, the eigenvalues of A . But both "poly" and "roots"           ',&
-'   use EISPACK eigenvalues subroutines, which are based on similarity           ',&
-'   transformations. So the classical approach which characterizes               ',&
-'   eigenvalues as roots of the characteristic polynomial is actually            ',&
-'   reversed.                                                                    ',&
-'                                                                                ',&
-'   If A is an n by n matrix, "poly(A)" produces the coefficients C(1)           ',&
-'   through C(n+1), with C(1) = 1, in                                            ',&
-'                                                                                ',&
-'         det(z*eye-A) = C(1)*z**n + ... + C(n)*z + C(n+1) .                     ',&
-'                                                                                ',&
-'   The algorithm can be expressed compactly using LAFF:                         ',&
-'                                                                                ',&
-'         Z = eig(A);                                                            ',&
-'         C = 0*ones(n+1,1);  C(1) = 1;                                          ',&
-'         for j = 1:n, C(2:j+1) = C(2:j+1) - Z(j)*C(1:j);                        ',&
-'         C                                                                      ',&
-'                                                                                ',&
-'   This recursion is easily derived by expanding the product                    ',&
-'                                                                                ',&
-'         (z - z(1))*(z - z(2))* ... * (z-z(n)) .                                ',&
-'                                                                                ',&
-'   It is possible to prove that "poly(A)" produces the coefficients in          ',&
-'   the characteristic polynomial of a matrix within roundoff error of           ',&
-'   A. This is true even if the eigenvalues of A are badly conditioned. The      ',&
-'   traditional algorithms for obtaining the characteristic polynomial           ',&
-'   which do not use the eigenvalues do not have such satisfactory               ',&
-'   numerical properties.                                                        ',&
-'                                                                                ',&
-'   If C is a vector with n+1 components, "roots(C)" finds the roots of          ',&
-'   the polynomial of degree n ,                                                 ',&
-'                                                                                ',&
-'          p(z) = C(1)*z**n + ... + C(n)*z + C(n+1) .                            ',&
-'                                                                                ',&
-'   The algorithm simply involves computing the eigenvalues of the               ',&
-'   companion matrix:                                                            ',&
-'                                                                                ',&
-'         A = 0*ones(n,n)                                                        ',&
-'         for j = 1:n, A(1,j) = -C(j+1)/C(1);                                    ',&
-'         for i = 2:n, A(i,i-1) = 1;                                             ',&
-'         eig(A)                                                                 ',&
-'                                                                                ',&
-'   It is possible to prove that the results produced are the exact              ',&
-'   eigenvalues of a matrix within roundoff error of the companion matrix        ',&
-'   A, but this does not mean that they are the exact roots of a polynomial      ',&
-'   with coefficients within roundoff error of those in C . There are            ',&
-'   more accurate, more efficient methods for finding polynomial roots,          ',&
-'   but this approach has the crucial advantage that it does not require         ',&
-'   very much additional code.                                                   ',&
-'                                                                                ',&
-'   The elementary functions "exp", "log", "sqrt", "sin", "cos" and "atan"       ',&
-'   are applied to square matrices by diagonalizing the matrix, applying         ',&
-'   the functions to the individual eigenvalues and then transforming            ',&
-'   back. For example, "exp(A)" is computed by                                   ',&
-'                                                                                ',&
-'         <X,D> = eig(A);                                                        ',&
-'         for j = 1:n, D(j,j) = exp(D(j,j));                                     ',&
-'         X*D/X                                                                  ',&
-'                                                                                ',&
-'   This is essentially method number 14 out of the 19 ''dubious''               ',&
-'   possibilities described in [8]. It is dubious because it doesn''t always     ',&
-'   work. The matrix of eigenvectors X can be arbitrarily badly conditioned      ',&
-'   and all accuracy lost in the computation of X*D/X. A warning message         ',&
-'   is printed if "rcond(X)" is very small, but this only catches the            ',&
-'   extreme cases. An example of a case not detected is when A has a double      ',&
-'   eigenvalue, but theoretically only one linearly independent eigenvector      ',&
-'   associated with it.  The computed eigenvalues will be separated by           ',&
-'   something on the order of the square root of the roundoff level. This        ',&
-'   separation will be reflected in "rcond(X)" which will probably not           ',&
-'   be small enough to trigger the error message. The computed "exp(A)"          ',&
-'   will be accurate to only half precision. Better methods are known for        ',&
-'   computing "exp(A)", but they do not easily extend to the other five          ',&
-'   functions and would require a considerable amount of additional code.        ',&
-'                                                                                ',&
-'   The expression A**p is evaluated by repeated multiplication if p is          ',&
-'   an integer greater than 1. Otherwise it is evaluated by                      ',&
-'                                                                                ',&
-'         <X,D> = eig(A);                                                        ',&
-'         for j = 1:n, D(j,j) = exp(p*log(D(j,j)))                               ',&
-'         X*D/X                                                                  ',&
-'                                                                                ',&
-'   This suffers from the same potential loss of accuracy if X is                ',&
-'   badly conditioned. It was partly for this reason that the case p =           ',&
-'   1 is included in the general case. Comparison of A**1 with A gives           ',&
-'   some idea of the loss of accuracy for other values of p and for the          ',&
-'   elementary functions.                                                        ',&
-'                                                                                ',&
-'   "rref", the reduced row echelon form, is of some interest in                 ',&
-'   theoretical linear algebra, although it has little computational             ',&
-'   value. It is included in LAFF for pedagogical reasons. The algorithm         ',&
-'   is essentially Gauss-Jordan elimination with detection of negligible         ',&
-'   columns applied to rectangular matrices.                                     ',&
-'                                                                                ',&
-'   There are three separate places in LAFF where the rank of a matrix           ',&
-'   is implicitly computed: in rref(A), in A\B for non-square A, and             ',&
-'   in the pseudoinverse pinv(A). Three different algorithms with three          ',&
-'   different criteria for negligibility are used and so it is possible          ',&
-'   that three different values could be produced for the same matrix. With      ',&
-'   rref(A), the rank of A is the number of nonzero rows. The elimination        ',&
-'   algorithm used for "rref" is the fastest of the three rank-determining       ',&
-'   algorithms, but it is the least sophisticated numerically and the            ',&
-'   least reliable.  With A\B, the algorithm is essentially that used            ',&
-'   by example subroutine SQRST in chapter 9 of the LINPACK guide. With          ',&
-'   pinv(A), the algorithm is based on the singular value decomposition          ',&
-'   and is described in chapter 11 of the LINPACK guide. The SVD algorithm       ',&
-'   is the most time-consuming, but the most reliable and is therefore           ',&
-'   also used for rank(A).                                                       ',&
-'                                                                                ',&
-'   The uniformly distributed random numbers in "rand" are obtained from         ',&
-'   the machine-independent random number generator URAND described in           ',&
-'   [9]. It is possible to switch to normally distributed random numbers,        ',&
-'   which are obtained using a transformation also described in [9].             ',&
-'                                                                                ',&
-'        The computation of                                                      ',&
-'                                                                                ',&
-'                   2    2                                                       ',&
-'             sqrt(a  + b )                                                      ',&
-'                                                                                ',&
-'   is required in many matrix algorithms, particularly those involving          ',&
-'   complex arithmetic. A new approach to carrying out this operation is         ',&
-'   described by Moler and Morrison [10]. It is a cubically convergent           ',&
-'   algorithm which starts with a and b , rather than with their squares,        ',&
-'   and thereby avoids destructive arithmetic underflows and overflows. In       ',&
-'   LAFF, the algorithm is used for complex modulus, Euclidean vector            ',&
-'   norm, plane rotations, and the shift calculation in the eigenvalue           ',&
-'   and singular value iterations.                                               ',&
-'                                                                                ',&
+'NUMERICAL ALGORITHMS',&
+'',&
+'   The algorithms underlying the basic LAFF functions are described in',&
+'   the LINPACK and EISPACK guides [1-3]. The following list gives the',&
+'   subroutines used by these functions.',&
+'',&
+'      inv(A)          - CGECO,CGEDI',&
+'      det(A)          - CGECO,CGEDI',&
+'      lu(A)           - CGEFA',&
+'      rcond(A)        - CGECO',&
+'      chol(A)         - CPOFA',&
+'      svd(A)          - CSVDC',&
+'      cond(A)         - CSVDC',&
+'      norm(A,2)       - CSVDC',&
+'      pinv(A,eps)     - CSVDC',&
+'      rank(A,eps)     - CSVDC',&
+'      qr(A)           - CQRDC,CQRSL',&
+'      orth(A)         - CQRDC,CSQSL',&
+'      A\B and B/A     - CGECO,CGESL if A is square.',&
+'                      - CQRDC,CQRSL if A is not square.',&
+'      eig(A)          - HTRIDI,IMTQL2,HTRIBK if A is Hermitian.',&
+'                      - CORTH,COMQR2         if A is not Hermitian.',&
+'      schur(A)        - same as EIG.',&
+'      hess(A)         - same as EIG.',&
+'',&
+'   Minor modifications were made to all these subroutines. The LINPACK',&
+'   routines were changed to replace the Fortran complex arithmetic',&
+'   with explicit references to real and imaginary parts.  Since most',&
+'   of the floating point arithmetic is concentrated in a few low-level',&
+'   subroutines which perform vector operations (the Basic Linear Algebra',&
+'   Subprograms), this was not an extensive change. It also facilitated',&
+'   implementation of the "flop" and "chop" features which count and',&
+'   optionally truncate each floating point operation.',&
+'',&
+'   The EISPACK subroutine COMQR2 was modified to allow access to the',&
+'   Schur triangular form, ordinarily just an intermediate result. IMTQL2',&
+'   was modified to make computation of the eigenvectors optional. Both',&
+'   subroutines were modified to eliminate the machine-dependent accuracy',&
+'   parameter and all the EISPACK subroutines were changed to include',&
+'   "flop" and "chop".',&
+'',&
+'   The algorithms employed for the "poly" and "roots" functions',&
+'   illustrate an interesting aspect of the modern approach to eigenvalue',&
+'   computation. "poly(A)" generates the characteristic polynomial of',&
+'   A and "roots(poly(A))" finds the roots of that polynomial, which',&
+'   are, of course, the eigenvalues of A . But both "poly" and "roots"',&
+'   use EISPACK eigenvalues subroutines, which are based on similarity',&
+'   transformations. So the classical approach which characterizes',&
+'   eigenvalues as roots of the characteristic polynomial is actually',&
+'   reversed.',&
+'',&
+'   If A is an n by n matrix, "poly(A)" produces the coefficients C(1)',&
+'   through C(n+1), with C(1) = 1, in',&
+'',&
+'         det(z*eye-A) = C(1)*z**n + ... + C(n)*z + C(n+1) .',&
+'',&
+'   The algorithm can be expressed compactly using LAFF:',&
+'',&
+'         Z = eig(A);',&
+'         C = 0*ones(n+1,1);  C(1) = 1;',&
+'         for j = 1:n, C(2:j+1) = C(2:j+1) - Z(j)*C(1:j);',&
+'         C',&
+'',&
+'   This recursion is easily derived by expanding the product',&
+'',&
+'         (z - z(1))*(z - z(2))* ... * (z-z(n)) .',&
+'',&
+'   It is possible to prove that "poly(A)" produces the coefficients in',&
+'   the characteristic polynomial of a matrix within roundoff error of',&
+'   A. This is true even if the eigenvalues of A are badly conditioned. The',&
+'   traditional algorithms for obtaining the characteristic polynomial',&
+'   which do not use the eigenvalues do not have such satisfactory',&
+'   numerical properties.',&
+'',&
+'   If C is a vector with n+1 components, "roots(C)" finds the roots of',&
+'   the polynomial of degree n ,',&
+'',&
+'          p(z) = C(1)*z**n + ... + C(n)*z + C(n+1) .',&
+'',&
+'   The algorithm simply involves computing the eigenvalues of the',&
+'   companion matrix:',&
+'',&
+'         A = 0*ones(n,n)',&
+'         for j = 1:n, A(1,j) = -C(j+1)/C(1);',&
+'         for i = 2:n, A(i,i-1) = 1;',&
+'         eig(A)',&
+'',&
+'   It is possible to prove that the results produced are the exact',&
+'   eigenvalues of a matrix within roundoff error of the companion matrix',&
+'   A, but this does not mean that they are the exact roots of a polynomial',&
+'   with coefficients within roundoff error of those in C . There are',&
+'   more accurate, more efficient methods for finding polynomial roots,',&
+'   but this approach has the crucial advantage that it does not require',&
+'   very much additional code.',&
+'',&
+'   The elementary functions "exp", "log", "sqrt", "sin", "cos" and "atan"',&
+'   are applied to square matrices by diagonalizing the matrix, applying',&
+'   the functions to the individual eigenvalues and then transforming',&
+'   back. For example, "exp(A)" is computed by',&
+'',&
+'         <X,D> = eig(A);',&
+'         for j = 1:n, D(j,j) = exp(D(j,j));',&
+'         X*D/X',&
+'',&
+'   This is essentially method number 14 out of the 19 ''dubious''',&
+'   possibilities described in [8]. It is dubious because it doesn''t always',&
+'   work. The matrix of eigenvectors X can be arbitrarily badly conditioned',&
+'   and all accuracy lost in the computation of X*D/X. A warning message',&
+'   is printed if "rcond(X)" is very small, but this only catches the',&
+'   extreme cases. An example of a case not detected is when A has a double',&
+'   eigenvalue, but theoretically only one linearly independent eigenvector',&
+'   associated with it.  The computed eigenvalues will be separated by',&
+'   something on the order of the square root of the roundoff level. This',&
+'   separation will be reflected in "rcond(X)" which will probably not',&
+'   be small enough to trigger the error message. The computed "exp(A)"',&
+'   will be accurate to only half precision. Better methods are known for',&
+'   computing "exp(A)", but they do not easily extend to the other five',&
+'   functions and would require a considerable amount of additional code.',&
+'',&
+'   The expression A**p is evaluated by repeated multiplication if p is',&
+'   an integer greater than 1. Otherwise it is evaluated by',&
+'',&
+'         <X,D> = eig(A);',&
+'         for j = 1:n, D(j,j) = exp(p*log(D(j,j)))',&
+'         X*D/X',&
+'',&
+'   This suffers from the same potential loss of accuracy if X is',&
+'   badly conditioned. It was partly for this reason that the case p =',&
+'   1 is included in the general case. Comparison of A**1 with A gives',&
+'   some idea of the loss of accuracy for other values of p and for the',&
+'   elementary functions.',&
+'',&
+'   "rref", the reduced row echelon form, is of some interest in',&
+'   theoretical linear algebra, although it has little computational',&
+'   value. It is included in LAFF for pedagogical reasons. The algorithm',&
+'   is essentially Gauss-Jordan elimination with detection of negligible',&
+'   columns applied to rectangular matrices.',&
+'',&
+'   There are three separate places in LAFF where the rank of a matrix',&
+'   is implicitly computed: in rref(A), in A\B for non-square A, and',&
+'   in the pseudoinverse pinv(A). Three different algorithms with three',&
+'   different criteria for negligibility are used and so it is possible',&
+'   that three different values could be produced for the same matrix. With',&
+'   rref(A), the rank of A is the number of nonzero rows. The elimination',&
+'   algorithm used for "rref" is the fastest of the three rank-determining',&
+'   algorithms, but it is the least sophisticated numerically and the',&
+'   least reliable.  With A\B, the algorithm is essentially that used',&
+'   by example subroutine SQRST in chapter 9 of the LINPACK guide. With',&
+'   pinv(A), the algorithm is based on the singular value decomposition',&
+'   and is described in chapter 11 of the LINPACK guide. The SVD algorithm',&
+'   is the most time-consuming, but the most reliable and is therefore',&
+'   also used for rank(A).',&
+'',&
+'   The uniformly distributed random numbers in "rand" are obtained from',&
+'   the machine-independent random number generator URAND described in',&
+'   [9]. It is possible to switch to normally distributed random numbers,',&
+'   which are obtained using a transformation also described in [9].',&
+'',&
+'        The computation of',&
+'',&
+'                   2    2',&
+'             sqrt(a  + b )',&
+'',&
+'   is required in many matrix algorithms, particularly those involving',&
+'   complex arithmetic. A new approach to carrying out this operation is',&
+'   described by Moler and Morrison [10]. It is a cubically convergent',&
+'   algorithm which starts with a and b , rather than with their squares,',&
+'   and thereby avoids destructive arithmetic underflows and overflows. In',&
+'   LAFF, the algorithm is used for complex modulus, Euclidean vector',&
+'   norm, plane rotations, and the shift calculation in the eigenvalue',&
+'   and singular value iterations.',&
+'',&
 '================================================================================',&
-'FLOP AND CHOP                                                                   ',&
-'                                                                                ',&
-'   Detailed information about the amount of work involved in matrix             ',&
-'   calculations and the resulting accuracy is provided by "flop" and            ',&
-'   "chop". The basic unit of work is the "flop", or floating point              ',&
-'   operation. Roughly, one flop is one execution of a Fortran statement         ',&
-'   like                                                                         ',&
-'                                                                                ',&
-'         S = S + X(I)*Y(I)                                                      ',&
-'                                                                                ',&
-'   or                                                                           ',&
-'                                                                                ',&
-'         Y(I) = Y(I) + T*X(I)                                                   ',&
-'                                                                                ',&
-'   In other words, it consists of one floating point multiplication,            ',&
-'   together with one floating point addition and the associated                 ',&
-'   indexing and storage reference operations.                                   ',&
-'                                                                                ',&
-'   LAFF will print the CPU time required for a particular                       ',&
-'   statement when the statement is terminated by an extra comma. For            ',&
-'   example, the line                                                            ',&
-'                                                                                ',&
-'         n = 20;  rand(n)*rand(n);,                                             ',&
-'                                                                                ',&
-'   ends with an extra comma. Two 20 by 20 random matrices are generated         ',&
-'   and multiplied together. The result is assigned to "ans", but the            ',&
-'   semicolon suppresses its printing. The only output is                        ',&
-'                                                                                ',&
-'           8800 flops                                                           ',&
-'                                                                                ',&
-'   This is n**3 + 2*n**2 flops, n**2 for each random matrix and n**3            ',&
-'   for the product.                                                             ',&
-'                                                                                ',&
-'   "flop" is a predefined vector with two components. "flop(1)" is              ',&
-'   the number of flops used by the most recently executed statement,            ',&
-'   except that statements with zero flops are ignored. For example,             ',&
-'   after executing the previous statement,                                      ',&
-'                                                                                ',&
-'         flop(1)/n**3                                                           ',&
-'                                                                                ',&
-'   results in                                                                   ',&
-'                                                                                ',&
-'         ans   =                                                                ',&
-'                                                                                ',&
-'             1.1000                                                             ',&
-'                                                                                ',&
-'   "flop(2)" is the cumulative total of all the flops used since                ',&
-'   the beginning of the LAFF session. The statement                             ',&
-'                                                                                ',&
-'         flop = <0 0>                                                           ',&
-'                                                                                ',&
-'   resets the total.                                                            ',&
-'                                                                                ',&
-'   There are several difficulties associated with keeping a                     ',&
-'   precise count of floating point operations.                                  ',&
-'                                                                                ',&
-'   As the program generally uses complex values but only performs               ',&
-'   operations on the real matrices in many cases where all the imaginary        ',&
-'   values are zero it may not provide an accurate measure of the relative       ',&
-'   costs of real and complex arithmetic.                                        ',&
-'                                                                                ',&
-'   The result of each floating point operation may also be "chopped"            ',&
-'   to simulate a computer with a shorter word length. The details               ',&
-'   of this chopping operation depend upon the format of the floating            ',&
-'   point word. Usually, the fraction in the floating point word can be          ',&
-'   regarded as consisting of several octal or hexadecimal digits. The           ',&
-'   least significant of these digits can be set to zero by a logical            ',&
-'   masking operation. Thus the statement                                        ',&
-'                                                                                ',&
-'         chop(p)                                                                ',&
-'                                                                                ',&
-'   causes the p least significant octal or hexadecimal digits in                ',&
-'   the result of each floating point operation to be set to zero.               ',&
-'   For example, if the computer being used has an IBM 360 long floating         ',&
-'   point word with 14 hexadecimal digits in the fraction, then "chop(8)"        ',&
-'   results in simulation of a computer with only 6 hexadecimal digits           ',&
-'   in the fraction, i.e. a short floating point word. On a computer such        ',&
-'   as the CDC 6600 with 16 octal digits, "chop(8)" results in about the         ',&
-'   same accuracy because the remaining 8 octal digits represent the same        ',&
-'   number of bits as 6 hexadecimal digits.                                      ',&
-'                                                                                ',&
-'   Some idea of the effect of "chop" on any particular system can               ',&
-'   be obtained by executing the following statements.                           ',&
-'                                                                                ',&
-'         long,   t = 1/10                                                       ',&
-'         long z, t = 1/10                                                       ',&
-'         chop(8)                                                                ',&
-'         long,   t = 1/10                                                       ',&
-'         long z, t = 1/10                                                       ',&
-'                                                                                ',&
-'   The following Fortran subprograms illustrate more details of                 ',&
-'   "flop" and "chop". The first subprogram is a simplified example of a         ',&
-'   system-dependent function used within LAFF itself. The common variable       ',&
-'   G_FLOP_COUNTER is essentially the first component of the variable            ',&
-'   FLOP. The common variable CHP is initially zero, but it is set to p          ',&
-'   by the statement "chop(p)". To shorten the DATA statement, we assume         ',&
-'   there are only 6 hexadecimal digits. We also assume an extension of          ',&
-'   Fortran that allows .AND. to be used as a binary operation between           ',&
-'   two real variables.                                                          ',&
-'                                                                                ',&
-'         REAL FUNCTION FLOP(X)                                                  ',&
-'         REAL X                                                                 ',&
-'         INTEGER G_FLOP_COUNTER,CHP                                             ',&
-'         COMMON G_FLOP_COUNTER,CHP                                              ',&
-'         REAL MASK(5)                                                           ',&
-'         DATA MASK/ZFFFFFFF0,ZFFFFFF00,ZFFFFF000,ZFFFF0000,ZFFF00000/           ',&
-'         G_FLOP_COUNTER = G_FLOP_COUNTER + 1                                    ',&
-'         IF (CHP .EQ. 0) FLOP = X                                               ',&
-'         IF (CHP .GE. 1 .AND. CHP .LE. 5) FLOP = X .AND. MASK(CHP)              ',&
-'         IF (CHP .GE. 6) FLOP = 0.0                                             ',&
-'         END REAL FUNCTION FLOP                                                 ',&
-'                                                                                ',&
-'   The following subroutine illustrates a typical use of the                    ',&
-'   previous function within LAFF. It is a simplified version of                 ',&
-'   the Basic Linear Algebra Subprogram that adds a scalar multiple              ',&
-'   of one vector to another. We assume here that the vectors are                ',&
-'   stored with a memory increment of one.                                       ',&
-'                                                                                ',&
-'         SUBROUTINE SAXPY(N,TR,TI,XR,XI,YR,YI)                                  ',&
-'         REAL TR,TI,XR(N),XI(N),YR(N),YI(N),FLOP                                ',&
-'         IF (N .LE. 0) return                                                   ',&
-'         IF (TR .EQ. 0.0 .AND. TI .EQ. 0.0) return                              ',&
-'         DO I = 1, N                                                            ',&
-'            YR(I) = FLOP(YR(I) + TR*XR(I) - TI*XI(I))                           ',&
-'            YI(I) = YI(I) + TR*XI(I) + TI*XR(I)                                 ',&
-'            IF (YI(I) .NE. 0.0D0) YI(I) = FLOP(YI(I))                           ',&
-'         enddo                                                                  ',&
-'         END SUBROUTINE SAXPY                                                   ',&
-'                                                                                ',&
-'   The saxpy operation is perhaps the most fundamental                          ',&
-'   operation within LINPACK. It is used in the computation of the               ',&
-'   LU, the QR and the SVD factorizations, and in several other                  ',&
-'   places. We see that adding a multiple of one vector with n                   ',&
-'   components to another uses n flops if the vectors are real and               ',&
-'   between n and 2*n flops if the vectors have nonzero imaginary                ',&
-'   components.                                                                  ',&
-'                                                                                ',&
-'   The permanent LAFF variable "eps" is reset by the statement                  ',&
-'   CHOP(p). Its new value is usually the smallest inverse power of              ',&
-'   two that satisfies the Fortran logical test                                  ',&
-'                                                                                ',&
-'               FLOP(1.0+eps) .GT. 1.0                                           ',&
-'                                                                                ',&
-'   However, if "eps" had been directly reset to a larger value, the             ',&
-'   old value is retained.                                                       ',&
-'                                                                                ',&
+'FLOP AND CHOP',&
+'',&
+'   Detailed information about the amount of work involved in matrix',&
+'   calculations and the resulting accuracy is provided by "flop" and',&
+'   "chop". The basic unit of work is the "flop", or floating point',&
+'   operation. Roughly, one flop is one execution of a Fortran statement',&
+'   like',&
+'',&
+'         S = S + X(I)*Y(I)',&
+'',&
+'   or',&
+'',&
+'         Y(I) = Y(I) + T*X(I)',&
+'',&
+'   In other words, it consists of one floating point multiplication,',&
+'   together with one floating point addition and the associated',&
+'   indexing and storage reference operations.',&
+'',&
+'   LAFF will print the CPU time required for a particular',&
+'   statement when the statement is terminated by an extra comma. For',&
+'   example, the line',&
+'',&
+'         n = 20;  rand(n)*rand(n);,',&
+'',&
+'   ends with an extra comma. Two 20 by 20 random matrices are generated',&
+'   and multiplied together. The result is assigned to "ans", but the',&
+'   semicolon suppresses its printing. The only output is',&
+'',&
+'           8800 flops',&
+'',&
+'   This is n**3 + 2*n**2 flops, n**2 for each random matrix and n**3',&
+'   for the product.',&
+'',&
+'   "flop" is a predefined vector with two components. "flop(1)" is',&
+'   the number of flops used by the most recently executed statement,',&
+'   except that statements with zero flops are ignored. For example,',&
+'   after executing the previous statement,',&
+'',&
+'         flop(1)/n**3',&
+'',&
+'   results in',&
+'',&
+'         ans   =',&
+'',&
+'             1.1000',&
+'',&
+'   "flop(2)" is the cumulative total of all the flops used since',&
+'   the beginning of the LAFF session. The statement',&
+'',&
+'         flop = <0 0>',&
+'',&
+'   resets the total.',&
+'',&
+'   There are several difficulties associated with keeping a',&
+'   precise count of floating point operations.',&
+'',&
+'   As the program generally uses complex values but only performs',&
+'   operations on the real matrices in many cases where all the imaginary',&
+'   values are zero it may not provide an accurate measure of the relative',&
+'   costs of real and complex arithmetic.',&
+'',&
+'   The result of each floating point operation may also be "chopped"',&
+'   to simulate a computer with a shorter word length. The details',&
+'   of this chopping operation depend upon the format of the floating',&
+'   point word. Usually, the fraction in the floating point word can be',&
+'   regarded as consisting of several octal or hexadecimal digits. The',&
+'   least significant of these digits can be set to zero by a logical',&
+'   masking operation. Thus the statement',&
+'',&
+'         chop(p)',&
+'',&
+'   causes the p least significant octal or hexadecimal digits in',&
+'   the result of each floating point operation to be set to zero.',&
+'   For example, if the computer being used has an IBM 360 long floating',&
+'   point word with 14 hexadecimal digits in the fraction, then "chop(8)"',&
+'   results in simulation of a computer with only 6 hexadecimal digits',&
+'   in the fraction, i.e. a short floating point word. On a computer such',&
+'   as the CDC 6600 with 16 octal digits, "chop(8)" results in about the',&
+'   same accuracy because the remaining 8 octal digits represent the same',&
+'   number of bits as 6 hexadecimal digits.',&
+'',&
+'   Some idea of the effect of "chop" on any particular system can',&
+'   be obtained by executing the following statements.',&
+'',&
+'         long,   t = 1/10',&
+'         long z, t = 1/10',&
+'         chop(8)',&
+'         long,   t = 1/10',&
+'         long z, t = 1/10',&
+'',&
+'   The following Fortran subprograms illustrate more details of',&
+'   "flop" and "chop". The first subprogram is a simplified example of a',&
+'   system-dependent function used within LAFF itself. The common variable',&
+'   G_FLOP_COUNTER is essentially the first component of the variable',&
+'   FLOP. The common variable CHP is initially zero, but it is set to p',&
+'   by the statement "chop(p)". To shorten the DATA statement, we assume',&
+'   there are only 6 hexadecimal digits. We also assume an extension of',&
+'   Fortran that allows .AND. to be used as a binary operation between',&
+'   two real variables.',&
+'',&
+'         REAL FUNCTION FLOP(X)',&
+'         REAL X',&
+'         INTEGER G_FLOP_COUNTER,CHP',&
+'         COMMON G_FLOP_COUNTER,CHP',&
+'         REAL MASK(5)',&
+'         DATA MASK/ZFFFFFFF0,ZFFFFFF00,ZFFFFF000,ZFFFF0000,ZFFF00000/',&
+'         G_FLOP_COUNTER = G_FLOP_COUNTER + 1',&
+'         IF (CHP .EQ. 0) FLOP = X',&
+'         IF (CHP .GE. 1 .AND. CHP .LE. 5) FLOP = X .AND. MASK(CHP)',&
+'         IF (CHP .GE. 6) FLOP = 0.0',&
+'         END REAL FUNCTION FLOP',&
+'',&
+'   The following subroutine illustrates a typical use of the',&
+'   previous function within LAFF. It is a simplified version of',&
+'   the Basic Linear Algebra Subprogram that adds a scalar multiple',&
+'   of one vector to another. We assume here that the vectors are',&
+'   stored with a memory increment of one.',&
+'',&
+'         SUBROUTINE SAXPY(N,TR,TI,XR,XI,YR,YI)',&
+'         REAL TR,TI,XR(N),XI(N),YR(N),YI(N),FLOP',&
+'         IF (N .LE. 0) return',&
+'         IF (TR .EQ. 0.0 .AND. TI .EQ. 0.0) return',&
+'         DO I = 1, N',&
+'            YR(I) = FLOP(YR(I) + TR*XR(I) - TI*XI(I))',&
+'            YI(I) = YI(I) + TR*XI(I) + TI*XR(I)',&
+'            IF (YI(I) .NE. 0.0D0) YI(I) = FLOP(YI(I))',&
+'         enddo',&
+'         END SUBROUTINE SAXPY',&
+'',&
+'   The saxpy operation is perhaps the most fundamental',&
+'   operation within LINPACK. It is used in the computation of the',&
+'   LU, the QR and the SVD factorizations, and in several other',&
+'   places. We see that adding a multiple of one vector with n',&
+'   components to another uses n flops if the vectors are real and',&
+'   between n and 2*n flops if the vectors have nonzero imaginary',&
+'   components.',&
+'',&
+'   The permanent LAFF variable "eps" is reset by the statement',&
+'   CHOP(p). Its new value is usually the smallest inverse power of',&
+'   two that satisfies the Fortran logical test',&
+'',&
+'               FLOP(1.0+eps) .GT. 1.0',&
+'',&
+'   However, if "eps" had been directly reset to a larger value, the',&
+'   old value is retained.',&
+'',&
 '================================================================================',&
-'CENSUS EXAMPLE                                                                  ',&
-'                                                                                ',&
-'   Our first extended example involves predicting the population of the         ',&
-'   United States in 1980 using extrapolation of various fits to the             ',&
-'   census data from 1900 through 1970. There are eight observations,            ',&
-'   so we begin with the LAFF statement                                          ',&
-'                                                                                ',&
-'      n = 8                                                                     ',&
-'                                                                                ',&
-'   The values of the dependent variable, the population in millions,            ',&
-'   can be entered with                                                          ',&
-'                                                                                ',&
-'      y = < 75.995   91.972  105.711  123.203   ...                             ',&
-'           131.669  150.697  179.323  203.212>''                                ',&
-'                                                                                ',&
-'   In order to produce a reasonably scaled matrix, the independent              ',&
-'   variable, time, is transformed from the interval [1900,1970] to              ',&
-'   [-1.00,0.75]. This can be accomplished directly with                         ',&
-'                                                                                ',&
-'      t = -1.0:0.25:0.75                                                        ',&
-'                                                                                ',&
-'   or in a fancier, but perhaps clearer, way with                               ',&
-'                                                                                ',&
-'      t = 1900:10:1970;   t = (t - 1940*ones(t))/40                             ',&
-'                                                                                ',&
-'   Either of these is equivalent to                                             ',&
-'                                                                                ',&
-'      t = <-1 -.75 -.50 -.25 0 .25 .50 .75>                                     ',&
-'                                                                                ',&
-'   The interpolating polynomial of degree n-1 involves an Vandermonde           ',&
-'   matrix of order n with elements that might be generated by                   ',&
-'                                                                                ',&
-'      for i = 1:n, for j = 1:n, a(i,j) = t(i)**(j-1);                           ',&
-'                                                                                ',&
-'   However, this results in an error caused by 0**0 when i = 5 and              ',&
-'   j = 1 . The preferable approach is                                           ',&
-'                                                                                ',&
-'      A = ones(n,n);                                                            ',&
-'      for i = 1:n, for j = 2:n, a(i,j) = t(i)*a(i,j-1);                         ',&
-'                                                                                ',&
-'   Now the statement                                                            ',&
-'                                                                                ',&
-'      cond(A)                                                                   ',&
-'                                                                                ',&
-'   produces the output                                                          ',&
-'                                                                                ',&
-'      ans  =                                                                    ',&
-'                                                                                ',&
-'         1.1819E+03                                                             ',&
-'                                                                                ',&
-'   which indicates that transformation of the time variable has resulted        ',&
-'   in a reasonably well conditioned matrix.                                     ',&
-'                                                                                ',&
-'        The statement                                                           ',&
-'                                                                                ',&
-'      c = A\y                                                                   ',&
-'                                                                                ',&
-'   results in                                                                   ',&
-'                                                                                ',&
-'      C     =                                                                   ',&
-'                                                                                ',&
-'        131.6690                                                                ',&
-'         41.0406                                                                ',&
-'        103.5396                                                                ',&
-'        262.4535                                                                ',&
-'       -326.0658                                                                ',&
-'       -662.0814                                                                ',&
-'        341.9022                                                                ',&
-'        533.6373                                                                ',&
-'                                                                                ',&
-'   These are the coefficients in the interpolating polynomial                   ',&
-'                                                                                ',&
-'         n-1                                                                    ',&
-'                                                                                ',&
-'         c  + c t + ... + c t                                                   ',&
-'          1    2           n                                                    ',&
-'                                                                                ',&
-'   Our transformation of the time variable has resulted in t = 1                ',&
-'   corresponding to the year 1980. Consequently, the extrapolated               ',&
-'   population is simply the sum of the coefficients. This can be                ',&
-'   computed by                                                                  ',&
-'                                                                                ',&
-'      p = sum(c)                                                                ',&
-'                                                                                ',&
-'   The result is                                                                ',&
-'                                                                                ',&
-'      P     =                                                                   ',&
-'                                                                                ',&
-'        426.0950                                                                ',&
-'                                                                                ',&
-'   which indicates a 1980 population of over 426 million. Clearly, using        ',&
-'   the seventh degree interpolating polynomial to extrapolate even a            ',&
-'   fairly short distance beyond the end of the data interval is not a           ',&
-'   good idea.                                                                   ',&
-'                                                                                ',&
-'   The coefficients in least squares fits by polynomials of lower degree        ',&
-'   can be computed using fewer than n columns of the matrix.                    ',&
-'                                                                                ',&
-'      for k = 1:n, c = A(:,1:k)\y,  p = sum(c)                                  ',&
-'                                                                                ',&
-'   would produce the coefficients of these fits, as well as the                 ',&
-'   resulting extrapolated population. If we do not want to print all the        ',&
-'   coefficients, we can simply generate a small table of populations            ',&
-'   predicted by polynomials of degrees zero through seven. We also              ',&
-'   compute the maximum deviation between the fitted and observed values.        ',&
-'                                                                                ',&
-'      for k = 1:n, X = A(:,1:k);  c = X\y;  ...                                 ',&
-'         d(k) = k-1;  p(k) = sum(c);  e(k) = norm(X*c-y,''inf'');               ',&
-'      <d, p, e>                                                                 ',&
-'                                                                                ',&
-'   The resulting output is                                                      ',&
-'                                                                                ',&
-'         0   132.7227  70.4892                                                  ',&
-'         1   211.5101   9.8079                                                  ',&
-'         2   227.7744   5.0354                                                  ',&
-'         3   241.9574   3.8941                                                  ',&
-'         4   234.2814   4.0643                                                  ',&
-'         5   189.7310   2.5066                                                  ',&
-'         6   118.3025   1.6741                                                  ',&
-'         7   426.0950   0.0000                                                  ',&
-'                                                                                ',&
-'   The zeroth degree fit, 132.7 million, is the result of fitting a             ',&
-'   constant to the data and is simply the average. The results obtained         ',&
-'   with polynomials of degree one through four all appear reasonable. The       ',&
-'   maximum deviation of the degree four fit is slightly greater than the        ',&
-'   degree three, even though the sum of the squares of the deviations           ',&
-'   is less. The coefficients of the highest powers in the fits of degree        ',&
-'   five and six turn out to be negative and the predicted populations of        ',&
-'   less than 200 million are probably unrealistic. The hopefully absurd         ',&
-'   prediction of the interpolating polynomial concludes the table.              ',&
-'                                                                                ',&
-'   We wish to emphasize that roundoff errors are not significant                ',&
-'   here. Nearly identical results would be obtained on other computers,         ',&
-'   or with other algorithms. The results simply indicate the difficulties       ',&
-'   associated with extrapolation of polynomial fits of even modest degree.      ',&
-'                                                                                ',&
-'   A stabilized fit by a seventh degree polynomial can be obtained using        ',&
-'   the pseudoinverse, but it requires a fairly delicate choice of a             ',&
-'   tolerance. The statement                                                     ',&
-'                                                                                ',&
-'      s = svd(A)                                                                ',&
-'                                                                                ',&
-'   produces the singular values                                                 ',&
-'                                                                                ',&
-'      S     =                                                                   ',&
-'                                                                                ',&
-'         3.4594                                                                 ',&
-'         2.2121                                                                 ',&
-'         1.0915                                                                 ',&
-'         0.4879                                                                 ',&
-'         0.1759                                                                 ',&
-'         0.0617                                                                 ',&
-'         0.0134                                                                 ',&
-'         0.0029                                                                 ',&
-'                                                                                ',&
-'   We see that the last three singular values are less than 0.1 ,               ',&
-'   consequently, A can be approximately by a matrix of rank five with an        ',&
-'   error less than 0.1 . The Moore-Penrose pseudoinverse of this rank           ',&
-'   five matrix is obtained from the singular value decomposition with           ',&
-'   the following statements                                                     ',&
-'                                                                                ',&
-'      c = pinv(A,0.1)*y, p = sum(c), e = norm(a*c-y,''inf'')                    ',&
-'                                                                                ',&
-'   The output is                                                                ',&
-'                                                                                ',&
-'      C     =                                                                   ',&
-'                                                                                ',&
-'       134.7972                                                                 ',&
-'        67.5055                                                                 ',&
-'        23.5523                                                                 ',&
-'         9.2834                                                                 ',&
-'         3.0174                                                                 ',&
-'         2.6503                                                                 ',&
-'        -2.8808                                                                 ',&
-'         3.2467                                                                 ',&
-'                                                                                ',&
-'      P     =                                                                   ',&
-'                                                                                ',&
-'       241.1720                                                                 ',&
-'                                                                                ',&
-'      E     =                                                                   ',&
-'                                                                                ',&
-'         3.9469                                                                 ',&
-'                                                                                ',&
-'   The resulting seventh degree polynomial has coefficients which are much      ',&
-'   smaller than those of the interpolating polynomial given earlier. The        ',&
-'   predicted population and the maximum deviation are reasonable. Any           ',&
-'   choice of the tolerance between the fifth and sixth singular values          ',&
-'   would produce the same results, but choices outside this range result        ',&
-'   in pseudoinverses of different rank and do not work as well.                 ',&
-'                                                                                ',&
-'   The one term exponential approximation                                       ',&
-'                                                                                ',&
-'        y(t) = k exp(pt)                                                        ',&
-'                                                                                ',&
-'   can be transformed into a linear approximation by taking logarithms.         ',&
-'                                                                                ',&
-'        log(y(t)) = log k + pt                                                  ',&
-'                                                                                ',&
-'                  = c  + c t                                                    ',&
-'                     1    2                                                     ',&
-'                                                                                ',&
-'   The following segment makes use of the fact that a function of a             ',&
-'   vector is the function applied to the individual components.                 ',&
-'                                                                                ',&
-'      X = A(:,1:2);                                                             ',&
-'      c = X\log(y)                                                              ',&
-'      p = exp(sum(c))                                                           ',&
-'      e = norm(exp(X*c)-y,''inf'')                                              ',&
-'                                                                                ',&
-'   The resulting output is                                                      ',&
-'                                                                                ',&
-'      C     =                                                                   ',&
-'                                                                                ',&
-'         4.9083                                                                 ',&
-'         0.5407                                                                 ',&
-'                                                                                ',&
-'      P     =                                                                   ',&
-'                                                                                ',&
-'       232.5134                                                                 ',&
-'                                                                                ',&
-'      E     =                                                                   ',&
-'                                                                                ',&
-'         4.9141                                                                 ',&
-'                                                                                ',&
-'   The predicted population and maximum deviation appear satisfactory and       ',&
-'   indicate that the exponential model is a reasonable one to consider.         ',&
-'                                                                                ',&
-'   As a curiosity, we return to the degree six polynomial.  Since the           ',&
-'   coefficient of the high order term is negative and the value of the          ',&
-'   polynomial at t = 1 is positive, it must have a root at some value           ',&
-'   of t greater than one. The statements                                        ',&
-'                                                                                ',&
-'      X = A(:,1:7);                                                             ',&
-'      c = X\y;                                                                  ',&
-'      c = c(7:-1:1);  //reverse the order of the coefficients                   ',&
-'      z = roots(c)                                                              ',&
-'                                                                                ',&
-'   produce                                                                      ',&
-'                                                                                ',&
-'      Z     =                                                                   ',&
-'                                                                                ',&
-'         1.1023-  0.0000*i                                                      ',&
-'         0.3021+  0.7293*i                                                      ',&
-'        -0.8790+  0.6536*i                                                      ',&
-'        -1.2939-  0.0000*i                                                      ',&
-'        -0.8790-  0.6536*i                                                      ',&
-'         0.3021-  0.7293*i                                                      ',&
-'                                                                                ',&
-'   There is only one real, positive root. The corresponding time on the         ',&
-'   original scale is                                                            ',&
-'                                                                                ',&
-'      1940 + 40*real(z(1))                                                      ',&
-'                                                                                ',&
-'        =  1984.091                                                             ',&
-'                                                                                ',&
-'   We conclude that the United States population should become zero             ',&
-'   early in February of 1984.                                                   ',&
-'                                                                                ',&
+'CENSUS EXAMPLE',&
+'',&
+'   Our first extended example involves predicting the population of the',&
+'   United States in 1980 using extrapolation of various fits to the',&
+'   census data from 1900 through 1970. There are eight observations,',&
+'   so we begin with the LAFF statement',&
+'',&
+'      n = 8',&
+'',&
+'   The values of the dependent variable, the population in millions,',&
+'   can be entered with',&
+'',&
+'      y = < 75.995   91.972  105.711  123.203   ...',&
+'           131.669  150.697  179.323  203.212>''',&
+'',&
+'   In order to produce a reasonably scaled matrix, the independent',&
+'   variable, time, is transformed from the interval [1900,1970] to',&
+'   [-1.00,0.75]. This can be accomplished directly with',&
+'',&
+'      t = -1.0:0.25:0.75',&
+'',&
+'   or in a fancier, but perhaps clearer, way with',&
+'',&
+'      t = 1900:10:1970;   t = (t - 1940*ones(t))/40',&
+'',&
+'   Either of these is equivalent to',&
+'',&
+'      t = <-1 -.75 -.50 -.25 0 .25 .50 .75>',&
+'',&
+'   The interpolating polynomial of degree n-1 involves an Vandermonde',&
+'   matrix of order n with elements that might be generated by',&
+'',&
+'      for i = 1:n, for j = 1:n, a(i,j) = t(i)**(j-1);',&
+'',&
+'   However, this results in an error caused by 0**0 when i = 5 and',&
+'   j = 1 . The preferable approach is',&
+'',&
+'      A = ones(n,n);',&
+'      for i = 1:n, for j = 2:n, a(i,j) = t(i)*a(i,j-1);',&
+'',&
+'   Now the statement',&
+'',&
+'      cond(A)',&
+'',&
+'   produces the output',&
+'',&
+'      ans  =',&
+'',&
+'         1.1819E+03',&
+'',&
+'   which indicates that transformation of the time variable has resulted',&
+'   in a reasonably well conditioned matrix.',&
+'',&
+'        The statement',&
+'',&
+'      c = A\y',&
+'',&
+'   results in',&
+'',&
+'      C     =',&
+'',&
+'        131.6690',&
+'         41.0406',&
+'        103.5396',&
+'        262.4535',&
+'       -326.0658',&
+'       -662.0814',&
+'        341.9022',&
+'        533.6373',&
+'',&
+'   These are the coefficients in the interpolating polynomial',&
+'',&
+'         n-1',&
+'',&
+'         c  + c t + ... + c t',&
+'          1    2           n',&
+'',&
+'   Our transformation of the time variable has resulted in t = 1',&
+'   corresponding to the year 1980. Consequently, the extrapolated',&
+'   population is simply the sum of the coefficients. This can be',&
+'   computed by',&
+'',&
+'      p = sum(c)',&
+'',&
+'   The result is',&
+'',&
+'      P     =',&
+'',&
+'        426.0950',&
+'',&
+'   which indicates a 1980 population of over 426 million. Clearly, using',&
+'   the seventh degree interpolating polynomial to extrapolate even a',&
+'   fairly short distance beyond the end of the data interval is not a',&
+'   good idea.',&
+'',&
+'   The coefficients in least squares fits by polynomials of lower degree',&
+'   can be computed using fewer than n columns of the matrix.',&
+'',&
+'      for k = 1:n, c = A(:,1:k)\y,  p = sum(c)',&
+'',&
+'   would produce the coefficients of these fits, as well as the',&
+'   resulting extrapolated population. If we do not want to print all the',&
+'   coefficients, we can simply generate a small table of populations',&
+'   predicted by polynomials of degrees zero through seven. We also',&
+'   compute the maximum deviation between the fitted and observed values.',&
+'',&
+'      for k = 1:n, X = A(:,1:k);  c = X\y;  ...',&
+'         d(k) = k-1;  p(k) = sum(c);  e(k) = norm(X*c-y,''inf'');',&
+'      <d, p, e>',&
+'',&
+'   The resulting output is',&
+'',&
+'         0   132.7227  70.4892',&
+'         1   211.5101   9.8079',&
+'         2   227.7744   5.0354',&
+'         3   241.9574   3.8941',&
+'         4   234.2814   4.0643',&
+'         5   189.7310   2.5066',&
+'         6   118.3025   1.6741',&
+'         7   426.0950   0.0000',&
+'',&
+'   The zeroth degree fit, 132.7 million, is the result of fitting a',&
+'   constant to the data and is simply the average. The results obtained',&
+'   with polynomials of degree one through four all appear reasonable. The',&
+'   maximum deviation of the degree four fit is slightly greater than the',&
+'   degree three, even though the sum of the squares of the deviations',&
+'   is less. The coefficients of the highest powers in the fits of degree',&
+'   five and six turn out to be negative and the predicted populations of',&
+'   less than 200 million are probably unrealistic. The hopefully absurd',&
+'   prediction of the interpolating polynomial concludes the table.',&
+'',&
+'   We wish to emphasize that roundoff errors are not significant',&
+'   here. Nearly identical results would be obtained on other computers,',&
+'   or with other algorithms. The results simply indicate the difficulties',&
+'   associated with extrapolation of polynomial fits of even modest degree.',&
+'',&
+'   A stabilized fit by a seventh degree polynomial can be obtained using',&
+'   the pseudoinverse, but it requires a fairly delicate choice of a',&
+'   tolerance. The statement',&
+'',&
+'      s = svd(A)',&
+'',&
+'   produces the singular values',&
+'',&
+'      S     =',&
+'',&
+'         3.4594',&
+'         2.2121',&
+'         1.0915',&
+'         0.4879',&
+'         0.1759',&
+'         0.0617',&
+'         0.0134',&
+'         0.0029',&
+'',&
+'   We see that the last three singular values are less than 0.1 ,',&
+'   consequently, A can be approximately by a matrix of rank five with an',&
+'   error less than 0.1 . The Moore-Penrose pseudoinverse of this rank',&
+'   five matrix is obtained from the singular value decomposition with',&
+'   the following statements',&
+'',&
+'      c = pinv(A,0.1)*y, p = sum(c), e = norm(a*c-y,''inf'')',&
+'',&
+'   The output is',&
+'',&
+'      C     =',&
+'',&
+'       134.7972',&
+'        67.5055',&
+'        23.5523',&
+'         9.2834',&
+'         3.0174',&
+'         2.6503',&
+'        -2.8808',&
+'         3.2467',&
+'',&
+'      P     =',&
+'',&
+'       241.1720',&
+'',&
+'      E     =',&
+'',&
+'         3.9469',&
+'',&
+'   The resulting seventh degree polynomial has coefficients which are much',&
+'   smaller than those of the interpolating polynomial given earlier. The',&
+'   predicted population and the maximum deviation are reasonable. Any',&
+'   choice of the tolerance between the fifth and sixth singular values',&
+'   would produce the same results, but choices outside this range result',&
+'   in pseudoinverses of different rank and do not work as well.',&
+'',&
+'   The one term exponential approximation',&
+'',&
+'        y(t) = k exp(pt)',&
+'',&
+'   can be transformed into a linear approximation by taking logarithms.',&
+'',&
+'        log(y(t)) = log k + pt',&
+'',&
+'                  = c  + c t',&
+'                     1    2',&
+'',&
+'   The following segment makes use of the fact that a function of a',&
+'   vector is the function applied to the individual components.',&
+'',&
+'      X = A(:,1:2);',&
+'      c = X\log(y)',&
+'      p = exp(sum(c))',&
+'      e = norm(exp(X*c)-y,''inf'')',&
+'',&
+'   The resulting output is',&
+'',&
+'      C     =',&
+'',&
+'         4.9083',&
+'         0.5407',&
+'',&
+'      P     =',&
+'',&
+'       232.5134',&
+'',&
+'      E     =',&
+'',&
+'         4.9141',&
+'',&
+'   The predicted population and maximum deviation appear satisfactory and',&
+'   indicate that the exponential model is a reasonable one to consider.',&
+'',&
+'   As a curiosity, we return to the degree six polynomial.  Since the',&
+'   coefficient of the high order term is negative and the value of the',&
+'   polynomial at t = 1 is positive, it must have a root at some value',&
+'   of t greater than one. The statements',&
+'',&
+'      X = A(:,1:7);',&
+'      c = X\y;',&
+'      c = c(7:-1:1);  //reverse the order of the coefficients',&
+'      z = roots(c)',&
+'',&
+'   produce',&
+'',&
+'      Z     =',&
+'',&
+'         1.1023-  0.0000*i',&
+'         0.3021+  0.7293*i',&
+'        -0.8790+  0.6536*i',&
+'        -1.2939-  0.0000*i',&
+'        -0.8790-  0.6536*i',&
+'         0.3021-  0.7293*i',&
+'',&
+'   There is only one real, positive root. The corresponding time on the',&
+'   original scale is',&
+'',&
+'      1940 + 40*real(z(1))',&
+'',&
+'        =  1984.091',&
+'',&
+'   We conclude that the United States population should become zero',&
+'   early in February of 1984.',&
+'',&
 '================================================================================',&
-'PARTIAL DIFFERENTIAL EQUATION EXAMPLE                                           ',&
-'                                                                                ',&
-'   Our second extended example is a boundary value problem for Laplace''s       ',&
-'   equation. The underlying physical problem involves the conductivity          ',&
-'   of a medium with cylindrical inclusions and is considered by Keller          ',&
-'   and Sachs [7].                                                               ',&
-'                                                                                ',&
-'        Find a function  u(x,y)  satisfying Laplace''s equation                 ',&
-'                                                                                ',&
-'                  u   + u   = 0                                                 ',&
-'                   xx    yy                                                     ',&
-'                                                                                ',&
-'   The domain is a unit square with a quarter circle of radius rho removed      ',&
-'   from one corner. There are Neumann conditions on the top and bottom          ',&
-'   edges and Dirichlet conditions on the remainder of the boundary.             ',&
-'                                                                                ',&
-'                            u  = 0                                              ',&
-'                             n                                                  ',&
-'                                                                                ',&
-'                        -------------                                           ',&
-'                       |             .                                          ',&
-'                       |             .                                          ',&
-'                       |              .                                         ',&
-'                       |               .  u = 1                                 ',&
-'                       |                 .                                      ',&
-'                       |                    .                                   ',&
-'                       |                       .                                ',&
-'                u = 0  |                        |                               ',&
-'                       |                        |                               ',&
-'                       |                        |                               ',&
-'                       |                        |  u = 1                        ',&
-'                       |                        |                               ',&
-'                       |                        |                               ',&
-'                       |                        |                               ',&
-'                        ------------------------                                ',&
-'                                                                                ',&
-'                                 u  = 0                                         ',&
-'                                  n                                             ',&
-'                                                                                ',&
-'   The effective conductivity of an medium is then given by the integral        ',&
-'   along the left edge,                                                         ',&
-'                                                                                ',&
-'                               1                                                ',&
-'                    sigma = integral  u (0,y) dy                                ',&
-'                              0        n                                        ',&
-'                                                                                ',&
-'   It is of interest to study the relation between the radius rho and           ',&
-'   the conductivity sigma. In particular, as rho approaches one, sigma          ',&
-'   becomes infinite.                                                            ',&
-'                                                                                ',&
-'   Keller and Sachs use a finite difference approximation. The following        ',&
-'   technique makes use of the fact that the equation is actually Laplace''s     ',&
-'   equation and leads to a much smaller matrix problem to solve.                ',&
-'                                                                                ',&
-'        Consider an approximate solution of the form                            ',&
-'                                                                                ',&
-'                    n      2j-1                                                 ',&
-'              u =  sum  c r    cos(2j-1)t                                       ',&
-'                   j=1   j                                                      ',&
-'                                                                                ',&
-'   where r,t are polar coordinates (t is theta). The coefficients are           ',&
-'   to be determined. For any set of coefficients, this function already         ',&
-'   satisfies the differential equation because the basis functions are          ',&
-'   harmonic; it satisfies the normal derivative boundary condition on           ',&
-'   the bottom edge of the domain because we used cos t in preference to         ',&
-'   sin t ; and it satisfies the boundary condition on the left edge of          ',&
-'   the domain because we use only odd multiples of t .                          ',&
-'                                                                                ',&
-'   The computational task is to find coefficients so that the boundary          ',&
-'   conditions on the remaining edges are satisfied as well as possible. To      ',&
-'   accomplish this, pick m points (r,t) on the remaining edges. It is           ',&
-'   desirable to have m > n and in practice we usually choose m to be two        ',&
-'   or three times as large as n .  Typical values of n are 10 or 20 and         ',&
-'   of m are 20 to 60. An m by n matrix A is generated. The i,j element          ',&
-'   is the j-th basis function, or its normal derivative, evaluated at           ',&
-'   the i-th boundary point. A right hand side with m components is also         ',&
-'   generated. In this example, the elements of the right hand side are          ',&
-'   either zero or one. The coefficients are then found by solving the           ',&
-'   overdetermined set of equations                                              ',&
-'                                                                                ',&
-'               Ac = b                                                           ',&
-'                                                                                ',&
-'   in a least squares sense.                                                    ',&
-'                                                                                ',&
-'   Once the coefficients have been determined, the approximate solution         ',&
-'   is defined everywhere on the domain. It is then possible to compute the      ',&
-'   effective conductivity sigma . In fact, a very simple formula results,       ',&
-'                                                                                ',&
-'                        n       j-1                                             ',&
-'              sigma =  sum  (-1)   c                                            ',&
-'                       j=1          j                                           ',&
-'                                                                                ',&
-'   To use LAFF for this problem, the following "program" is first stored        ',&
-'   in the local computer file system, say under the name "PDE".                 ',&
-'                                                                                ',&
-'      //Conductivity example.                                                   ',&
-'      //Parameters ---                                                          ',&
-'         rho       //radius of cylindrical inclusion                            ',&
-'         n         //number of terms in solution                                ',&
-'         m         //number of boundary points                                  ',&
-'      //initialize operation counter                                            ',&
-'         flop = <0 0>;                                                          ',&
-'      //initialize variables                                                    ',&
-'         m1 = round(m/3);   //number of points on each straight edge            ',&
-'         m2 = m - m1;       //number of points with Dirichlet conditions        ',&
-'         pi = 4*atan(1);                                                        ',&
-'      //generate points in Cartesian coordinates                                ',&
-'         //right hand edge                                                      ',&
-'         for i = 1:m1, x(i) = 1; y(i) = (1-rho)*(i-1)/(m1-1);                   ',&
-'         //top edge                                                             ',&
-'         for i = m2+1:m, x(i) = (1-rho)*(m-i)/(m-m2-1); y(i) = 1;               ',&
-'         //circular edge                                                        ',&
-'         for i = m1+1:m2, t = pi/2*(i-m1)/(m2-m1+1); ...                        ',&
-'            x(i) = 1-rho*sin(t);  y(i) = 1-rho*cos(t);                          ',&
-'      //convert to polar coordinates                                            ',&
-'         for i = 1:m-1, th(i) = atan(y(i)/x(i));  ...                           ',&
-'            r(i) = sqrt(x(i)**2+y(i)**2);                                       ',&
-'         th(m) = pi/2;  r(m) = 1;                                               ',&
-'      //generate matrix                                                         ',&
-'         //Dirichlet conditions                                                 ',&
-'         for i = 1:m2, for j = 1:n, k = 2*j-1; ...                              ',&
-'            a(i,j) = r(i)**k*cos(k*th(i));                                      ',&
-'         //Neumann conditions                                                   ',&
-'         for i = m2+1:m, for j = 1:n, k = 2*j-1; ...                            ',&
-'            a(i,j) = k*r(i)**(k-1)*sin((k-1)*th(i));                            ',&
-'      //generate right hand side                                                ',&
-'         for i = 1:m2, b(i) = 1;                                                ',&
-'         for i = m2+1:m, b(i) = 0;                                              ',&
-'      //solve for coefficients                                                  ',&
-'         c = A\b                                                                ',&
-'      //compute effective conductivity                                          ',&
-'         c(2:2:n) = -c(2:2:n);                                                  ',&
-'         sigma = sum(c)                                                         ',&
-'      //output total operation count                                            ',&
-'         ops = flop(2)                                                          ',&
-'                                                                                ',&
-'   The program can be used within LAFF by setting the three parameters          ',&
-'   and then accessing the file. For example,                                    ',&
-'                                                                                ',&
-'      rho = .9;                                                                 ',&
-'      n = 15;                                                                   ',&
-'      m = 30;                                                                   ',&
-'      exec(''PDE'')                                                             ',&
-'                                                                                ',&
-'   The resulting output is                                                      ',&
-'                                                                                ',&
-'      rho   =                                                                   ',&
-'                                                                                ',&
-'         .9000                                                                  ',&
-'                                                                                ',&
-'      n     =                                                                   ',&
-'                                                                                ',&
-'       15.                                                                      ',&
-'                                                                                ',&
-'      m     =                                                                   ',&
-'                                                                                ',&
-'       30.                                                                      ',&
-'                                                                                ',&
-'      c     =                                                                   ',&
-'                                                                                ',&
-'         2.2275                                                                 ',&
-'        -2.2724                                                                 ',&
-'         1.1448                                                                 ',&
-'         0.1455                                                                 ',&
-'        -0.1678                                                                 ',&
-'        -0.0005                                                                 ',&
-'        -0.3785                                                                 ',&
-'         0.2299                                                                 ',&
-'         0.3228                                                                 ',&
-'        -0.2242                                                                 ',&
-'        -0.1311                                                                 ',&
-'         0.0924                                                                 ',&
-'         0.0310                                                                 ',&
-'        -0.0154                                                                 ',&
-'        -0.0038                                                                 ',&
-'                                                                                ',&
-'      sigm  =                                                                   ',&
-'                                                                                ',&
-'         5.0895                                                                 ',&
-'                                                                                ',&
-'      ops   =                                                                   ',&
-'                                                                                ',&
-'         16204.                                                                 ',&
-'                                                                                ',&
-'   A total of 16204 floating point operations were necessary to set up the      ',&
-'   matrix, solve for the coefficients and compute the conductivity. The         ',&
-'   operation count is roughly proportional to m*n**2. The results obtained      ',&
-'   for sigma as a function of rho by this approach are essentially the          ',&
-'   same as those obtained by the finite difference technique of Keller          ',&
-'   and Sachs, but the computational effort involved is much less.               ',&
-'                                                                                ',&
+'PARTIAL DIFFERENTIAL EQUATION EXAMPLE',&
+'',&
+'   Our second extended example is a boundary value problem for Laplace''s',&
+'   equation. The underlying physical problem involves the conductivity',&
+'   of a medium with cylindrical inclusions and is considered by Keller',&
+'   and Sachs [7].',&
+'',&
+'        Find a function  u(x,y)  satisfying Laplace''s equation',&
+'',&
+'                  u   + u   = 0',&
+'                   xx    yy',&
+'',&
+'   The domain is a unit square with a quarter circle of radius rho removed',&
+'   from one corner. There are Neumann conditions on the top and bottom',&
+'   edges and Dirichlet conditions on the remainder of the boundary.',&
+'',&
+'                            u  = 0',&
+'                             n',&
+'',&
+'                        -------------',&
+'                       |             .',&
+'                       |             .',&
+'                       |              .',&
+'                       |               .  u = 1',&
+'                       |                 .',&
+'                       |                    .',&
+'                       |                       .',&
+'                u = 0  |                        |',&
+'                       |                        |',&
+'                       |                        |',&
+'                       |                        |  u = 1',&
+'                       |                        |',&
+'                       |                        |',&
+'                       |                        |',&
+'                        ------------------------',&
+'',&
+'                                 u  = 0',&
+'                                  n',&
+'',&
+'   The effective conductivity of an medium is then given by the integral',&
+'   along the left edge,',&
+'',&
+'                               1',&
+'                    sigma = integral  u (0,y) dy',&
+'                              0        n',&
+'',&
+'   It is of interest to study the relation between the radius rho and',&
+'   the conductivity sigma. In particular, as rho approaches one, sigma',&
+'   becomes infinite.',&
+'',&
+'   Keller and Sachs use a finite difference approximation. The following',&
+'   technique makes use of the fact that the equation is actually Laplace''s',&
+'   equation and leads to a much smaller matrix problem to solve.',&
+'',&
+'        Consider an approximate solution of the form',&
+'',&
+'                    n      2j-1',&
+'              u =  sum  c r    cos(2j-1)t',&
+'                   j=1   j',&
+'',&
+'   where r,t are polar coordinates (t is theta). The coefficients are',&
+'   to be determined. For any set of coefficients, this function already',&
+'   satisfies the differential equation because the basis functions are',&
+'   harmonic; it satisfies the normal derivative boundary condition on',&
+'   the bottom edge of the domain because we used cos t in preference to',&
+'   sin t ; and it satisfies the boundary condition on the left edge of',&
+'   the domain because we use only odd multiples of t .',&
+'',&
+'   The computational task is to find coefficients so that the boundary',&
+'   conditions on the remaining edges are satisfied as well as possible. To',&
+'   accomplish this, pick m points (r,t) on the remaining edges. It is',&
+'   desirable to have m > n and in practice we usually choose m to be two',&
+'   or three times as large as n .  Typical values of n are 10 or 20 and',&
+'   of m are 20 to 60. An m by n matrix A is generated. The i,j element',&
+'   is the j-th basis function, or its normal derivative, evaluated at',&
+'   the i-th boundary point. A right hand side with m components is also',&
+'   generated. In this example, the elements of the right hand side are',&
+'   either zero or one. The coefficients are then found by solving the',&
+'   overdetermined set of equations',&
+'',&
+'               Ac = b',&
+'',&
+'   in a least squares sense.',&
+'',&
+'   Once the coefficients have been determined, the approximate solution',&
+'   is defined everywhere on the domain. It is then possible to compute the',&
+'   effective conductivity sigma . In fact, a very simple formula results,',&
+'',&
+'                        n       j-1',&
+'              sigma =  sum  (-1)   c',&
+'                       j=1          j',&
+'',&
+'   To use LAFF for this problem, the following "program" is first stored',&
+'   in the local computer file system, say under the name "PDE".',&
+'',&
+'      //Conductivity example.',&
+'      //Parameters ---',&
+'         rho       //radius of cylindrical inclusion',&
+'         n         //number of terms in solution',&
+'         m         //number of boundary points',&
+'      //initialize operation counter',&
+'         flop = <0 0>;',&
+'      //initialize variables',&
+'         m1 = round(m/3);   //number of points on each straight edge',&
+'         m2 = m - m1;       //number of points with Dirichlet conditions',&
+'         pi = 4*atan(1);',&
+'      //generate points in Cartesian coordinates',&
+'         //right hand edge',&
+'         for i = 1:m1, x(i) = 1; y(i) = (1-rho)*(i-1)/(m1-1);',&
+'         //top edge',&
+'         for i = m2+1:m, x(i) = (1-rho)*(m-i)/(m-m2-1); y(i) = 1;',&
+'         //circular edge',&
+'         for i = m1+1:m2, t = pi/2*(i-m1)/(m2-m1+1); ...',&
+'            x(i) = 1-rho*sin(t);  y(i) = 1-rho*cos(t);',&
+'      //convert to polar coordinates',&
+'         for i = 1:m-1, th(i) = atan(y(i)/x(i));  ...',&
+'            r(i) = sqrt(x(i)**2+y(i)**2);',&
+'         th(m) = pi/2;  r(m) = 1;',&
+'      //generate matrix',&
+'         //Dirichlet conditions',&
+'         for i = 1:m2, for j = 1:n, k = 2*j-1; ...',&
+'            a(i,j) = r(i)**k*cos(k*th(i));',&
+'         //Neumann conditions',&
+'         for i = m2+1:m, for j = 1:n, k = 2*j-1; ...',&
+'            a(i,j) = k*r(i)**(k-1)*sin((k-1)*th(i));',&
+'      //generate right hand side',&
+'         for i = 1:m2, b(i) = 1;',&
+'         for i = m2+1:m, b(i) = 0;',&
+'      //solve for coefficients',&
+'         c = A\b',&
+'      //compute effective conductivity',&
+'         c(2:2:n) = -c(2:2:n);',&
+'         sigma = sum(c)',&
+'      //output total operation count',&
+'         ops = flop(2)',&
+'',&
+'   The program can be used within LAFF by setting the three parameters',&
+'   and then accessing the file. For example,',&
+'',&
+'      rho = .9;',&
+'      n = 15;',&
+'      m = 30;',&
+'      exec(''PDE'')',&
+'',&
+'   The resulting output is',&
+'',&
+'      rho   =',&
+'',&
+'         .9000',&
+'',&
+'      n     =',&
+'',&
+'       15.',&
+'',&
+'      m     =',&
+'',&
+'       30.',&
+'',&
+'      c     =',&
+'',&
+'         2.2275',&
+'        -2.2724',&
+'         1.1448',&
+'         0.1455',&
+'        -0.1678',&
+'        -0.0005',&
+'        -0.3785',&
+'         0.2299',&
+'         0.3228',&
+'        -0.2242',&
+'        -0.1311',&
+'         0.0924',&
+'         0.0310',&
+'        -0.0154',&
+'        -0.0038',&
+'',&
+'      sigm  =',&
+'',&
+'         5.0895',&
+'',&
+'      ops   =',&
+'',&
+'         16204.',&
+'',&
+'   A total of 16204 floating point operations were necessary to set up the',&
+'   matrix, solve for the coefficients and compute the conductivity. The',&
+'   operation count is roughly proportional to m*n**2. The results obtained',&
+'   for sigma as a function of rho by this approach are essentially the',&
+'   same as those obtained by the finite difference technique of Keller',&
+'   and Sachs, but the computational effort involved is much less.',&
+'',&
 '================================================================================',&
-'EIGENVALUE SENSITIVITY EXAMPLE                                                  ',&
-'                                                                                ',&
-'   In this example, we construct a matrix whose eigenvalues are moderately      ',&
-'   sensitive to perturbations and then analyze that sensitivity. We             ',&
-'   begin with the statement                                                     ',&
-'                                                                                ',&
-'      B = <3 0 7; 0 2 0; 0 0 1>                                                 ',&
-'                                                                                ',&
-'   which produces                                                               ',&
-'                                                                                ',&
-'      B     =                                                                   ',&
-'                                                                                ',&
-'          3.    0.    7.                                                        ',&
-'          0.    2.    0.                                                        ',&
-'          0.    0.    1.                                                        ',&
-'                                                                                ',&
-'   Obviously, the eigenvalues of B are 1, 2 and 3 . Moreover, since             ',&
-'   B is not symmetric, these eigenvalues are slightly sensitive to              ',&
-'   perturbation. (The value b(1,3) = 7 was chosen so that the elements          ',&
-'   of the matrix A below are less than 1000.)                                   ',&
-'                                                                                ',&
-'   We now generate a similarity transformation to disguise the eigenvalues      ',&
-'   and make them more sensitive.                                                ',&
-'                                                                                ',&
-'      L = <1 0 0; 2 1 0; -3 4 1>, M = L\L''                                     ',&
-'                                                                                ',&
-'      L     =                                                                   ',&
-'                                                                                ',&
-'          1.    0.    0.                                                        ',&
-'          2.    1.    0.                                                        ',&
-'         -3.    4.    1.                                                        ',&
-'                                                                                ',&
-'      M     =                                                                   ',&
-'                                                                                ',&
-'          1.0000    2.0000   -3.0000                                            ',&
-'         -2.0000   -3.0000   10.0000                                            ',&
-'         11.0000   18.0000  -48.0000                                            ',&
-'                                                                                ',&
-'   The matrix M has determinant equal to 1 and is moderately badly              ',&
-'   conditioned. The similarity transformation is                                ',&
-'                                                                                ',&
-'      A = M*B/M                                                                 ',&
-'                                                                                ',&
-'      A     =                                                                   ',&
-'                                                                                ',&
-'        -64.0000   82.0000   21.0000                                            ',&
-'        144.0000 -178.0000  -46.0000                                            ',&
-'       -771.0000  962.0000  248.0000                                            ',&
-'                                                                                ',&
-'   Because det(M) = 1 , the elements of A would be exact integers               ',&
-'   if there were no roundoff. So,                                               ',&
-'                                                                                ',&
-'      A = round(A)                                                              ',&
-'                                                                                ',&
-'      A     =                                                                   ',&
-'                                                                                ',&
-'        -64.   82.   21.                                                        ',&
-'        144. -178.  -46.                                                        ',&
-'       -771.  962.  248.                                                        ',&
-'                                                                                ',&
-'   This, then, is our test matrix. We can now forget how it                     ',&
-'   was generated and analyze its eigenvalues.                                   ',&
-'                                                                                ',&
-'      <X,D> = eig(A)                                                            ',&
-'                                                                                ',&
-'      D     =                                                                   ',&
-'                                                                                ',&
-'          3.0000    0.0000    0.0000                                            ',&
-'          0.0000    1.0000    0.0000                                            ',&
-'          0.0000    0.0000    2.0000                                            ',&
-'                                                                                ',&
-'      X     =                                                                   ',&
-'                                                                                ',&
-'          -.0891    3.4903   41.8091                                            ',&
-'           .1782   -9.1284  -62.7136                                            ',&
-'          -.9800   46.4473  376.2818                                            ',&
-'                                                                                ',&
-'   Since A is similar to B, its eigenvalues are also 1, 2 and 3.  They          ',&
-'   happen to be computed in another order by the EISPACK subroutines. The       ',&
-'   fact that the columns of X, which are the eigenvectors, are so far           ',&
-'   from being orthonormal is our first indication that the eigenvalues          ',&
-'   are sensitive. To see this sensitivity, we display more figures of           ',&
-'   the computed eigenvalues.                                                    ',&
-'                                                                                ',&
-'      long, diag(D)                                                             ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'         2.999999999973599                                                      ',&
-'         1.000000000015625                                                      ',&
-'         2.000000000011505                                                      ',&
-'                                                                                ',&
-'   We see that, on this computer, the last five significant figures are         ',&
-'   contaminated by roundoff error. A somewhat superficial explanation           ',&
-'   of this is provided by                                                       ',&
-'                                                                                ',&
-'      short,  cond(X)                                                           ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'         3.2216e+05                                                             ',&
-'                                                                                ',&
-'   The condition number of X gives an upper bound for the relative              ',&
-'   error in the computed eigenvalues. However, this condition                   ',&
-'   number is affected by scaling.                                               ',&
-'                                                                                ',&
-'      X = X/diag(X(3,:)),  cond(X)                                              ',&
-'                                                                                ',&
-'      X     =                                                                   ',&
-'                                                                                ',&
-'           .0909     .0751     .1111                                            ',&
-'          -.1818    -.1965    -.1667                                            ',&
-'          1.0000    1.0000    1.0000                                            ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'         1.7692e+03                                                             ',&
-'                                                                                ',&
-'   Rescaling the eigenvectors so that their last components are all             ',&
-'   equal to one has two consequences. The condition of X is decreased           ',&
-'   by over two orders of magnitude. (This is about the minimum condition        ',&
-'   that can be obtained by such diagonal scaling.)  Moreover, it is now         ',&
-'   apparent that the three eigenvectors are nearly parallel.                    ',&
-'                                                                                ',&
-'   More detailed information on the sensitivity of the individual               ',&
-'   eigenvalues involves the left eigenvectors.                                  ',&
-'                                                                                ',&
-'      Y = inv(X''),  Y''*A*X                                                    ',&
-'                                                                                ',&
-'      Y     =                                                                   ',&
-'                                                                                ',&
-'       -511.5000  259.5000  252.0000                                            ',&
-'        616.0000 -346.0000 -270.0000                                            ',&
-'        159.5000  -86.5000  -72.0000                                            ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'          3.0000     .0000     .0000                                            ',&
-'           .0000    1.0000     .0000                                            ',&
-'           .0000     .0000    2.0000                                            ',&
-'                                                                                ',&
-'   We are now in a position to compute the sensitivities of the individual      ',&
-'   eigenvalues.                                                                 ',&
-'                                                                                ',&
-'      for j = 1:3, c(j) = norm(Y(:,j))*norm(X(:,j)); end,  C                    ',&
-'                                                                                ',&
-'      C     =                                                                   ',&
-'                                                                                ',&
-'        833.1092                                                                ',&
-'        450.7228                                                                ',&
-'        383.7564                                                                ',&
-'                                                                                ',&
-'   These three numbers are the reciprocals of the cosines of the                ',&
-'   angles between the left and right eigenvectors. It can be shown that         ',&
-'   perturbation of the elements of A can result in a perturbation of            ',&
-'   the j-th eigenvalue which is c(j) times as large.  In this example,          ',&
-'   the first eigenvalue has the largest sensitivity.                            ',&
-'                                                                                ',&
-'   We now proceed to show that A is close to a matrix with a double             ',&
-'   eigenvalue. The direction of the required perturbation is given by           ',&
-'                                                                                ',&
-'      E = -1.e-6*Y(:,1)*X(:,1)''                                                ',&
-'                                                                                ',&
-'      E     =                                                                   ',&
-'                                                                                ',&
-'         1.0e-03 *                                                              ',&
-'                                                                                ',&
-'           .0465    -.0930     .5115                                            ',&
-'          -.0560     .1120    -.6160                                            ',&
-'          -.0145     .0290    -.1595                                            ',&
-'                                                                                ',&
-'   With some trial and error which we do not show, we bracket the               ',&
-'   point where two eigenvalues of a perturbed A coalesce and then               ',&
-'   become complex.                                                              ',&
-'                                                                                ',&
-'      eig(A + .4*E),  eig(A + .5*E)                                             ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'          1.1500                                                                ',&
-'          2.5996                                                                ',&
-'          2.2504                                                                ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'         2.4067 +  .1753*i                                                      ',&
-'         2.4067 -  .1753*i                                                      ',&
-'         1.1866 + 0.0000*i                                                      ',&
-'                                                                                ',&
-'   Now, a bisecting search, driven by the imaginary part of one of              ',&
-'   the eigenvalues, finds the point where two eigenvalues are nearly            ',&
-'   equal.                                                                       ',&
-'                                                                                ',&
-'      r = .4;  s = .5;                                                          ',&
-'                                                                                ',&
-'      while s-r > 1.e-14, t = (r+s)/2; d = eig(A+t*E); ...                      ',&
-'        if imag(d(1))=0, r = t; else, s = t;                                    ',&
-'                                                                                ',&
-'      long,  T                                                                  ',&
-'                                                                                ',&
-'      T     =                                                                   ',&
-'                                                                                ',&
-'           .450380734134507                                                     ',&
-'                                                                                ',&
-'   Finally, we display the perturbed matrix, which is obviously close           ',&
-'   to the original, and its pair of nearly equal eigenvalues.  (We have         ',&
-'   dropped a few digits from the long output.)                                  ',&
-'                                                                                ',&
-'      A+t*E,  eig(A+t*E)                                                        ',&
-'                                                                                ',&
-'      A                                                                         ',&
-'                                                                                ',&
-'       -63.999979057   81.999958114   21.000230369                              ',&
-'       143.999974778 -177.999949557  -46.000277434                              ',&
-'      -771.000006530  962.000013061  247.999928164                              ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'         2.415741150                                                            ',&
-'         2.415740621                                                            ',&
-'         1.168517777                                                            ',&
-'                                                                                ',&
-'   The first two eigenvectors of A + t*E are almost indistinguishable           ',&
-'   indicating that the perturbed matrix is almost defective.                    ',&
-'                                                                                ',&
-'      <X,D> = eig(A+t*E);  X = X/diag(X(3,:))                                   ',&
-'                                                                                ',&
-'      X     =                                                                   ',&
-'                                                                                ',&
-'          .096019578     .096019586    .071608466                               ',&
-'         -.178329614    -.178329608   -.199190520                               ',&
-'         1.000000000    1.000000000   1.000000000                               ',&
-'                                                                                ',&
-'      short,  cond(X)                                                           ',&
-'                                                                                ',&
-'      ans   =                                                                   ',&
-'                                                                                ',&
-'         3.3997e+09                                                             ',&
-'                                                                                ',&
+'EIGENVALUE SENSITIVITY EXAMPLE',&
+'',&
+'   In this example, we construct a matrix whose eigenvalues are moderately',&
+'   sensitive to perturbations and then analyze that sensitivity. We',&
+'   begin with the statement',&
+'',&
+'      B = <3 0 7; 0 2 0; 0 0 1>',&
+'',&
+'   which produces',&
+'',&
+'      B     =',&
+'',&
+'          3.    0.    7.',&
+'          0.    2.    0.',&
+'          0.    0.    1.',&
+'',&
+'   Obviously, the eigenvalues of B are 1, 2 and 3 . Moreover, since',&
+'   B is not symmetric, these eigenvalues are slightly sensitive to',&
+'   perturbation. (The value b(1,3) = 7 was chosen so that the elements',&
+'   of the matrix A below are less than 1000.)',&
+'',&
+'   We now generate a similarity transformation to disguise the eigenvalues',&
+'   and make them more sensitive.',&
+'',&
+'      L = <1 0 0; 2 1 0; -3 4 1>, M = L\L''',&
+'',&
+'      L     =',&
+'',&
+'          1.    0.    0.',&
+'          2.    1.    0.',&
+'         -3.    4.    1.',&
+'',&
+'      M     =',&
+'',&
+'          1.0000    2.0000   -3.0000',&
+'         -2.0000   -3.0000   10.0000',&
+'         11.0000   18.0000  -48.0000',&
+'',&
+'   The matrix M has determinant equal to 1 and is moderately badly',&
+'   conditioned. The similarity transformation is',&
+'',&
+'      A = M*B/M',&
+'',&
+'      A     =',&
+'',&
+'        -64.0000   82.0000   21.0000',&
+'        144.0000 -178.0000  -46.0000',&
+'       -771.0000  962.0000  248.0000',&
+'',&
+'   Because det(M) = 1 , the elements of A would be exact integers',&
+'   if there were no roundoff. So,',&
+'',&
+'      A = round(A)',&
+'',&
+'      A     =',&
+'',&
+'        -64.   82.   21.',&
+'        144. -178.  -46.',&
+'       -771.  962.  248.',&
+'',&
+'   This, then, is our test matrix. We can now forget how it',&
+'   was generated and analyze its eigenvalues.',&
+'',&
+'      <X,D> = eig(A)',&
+'',&
+'      D     =',&
+'',&
+'          3.0000    0.0000    0.0000',&
+'          0.0000    1.0000    0.0000',&
+'          0.0000    0.0000    2.0000',&
+'',&
+'      X     =',&
+'',&
+'          -.0891    3.4903   41.8091',&
+'           .1782   -9.1284  -62.7136',&
+'          -.9800   46.4473  376.2818',&
+'',&
+'   Since A is similar to B, its eigenvalues are also 1, 2 and 3.  They',&
+'   happen to be computed in another order by the EISPACK subroutines. The',&
+'   fact that the columns of X, which are the eigenvectors, are so far',&
+'   from being orthonormal is our first indication that the eigenvalues',&
+'   are sensitive. To see this sensitivity, we display more figures of',&
+'   the computed eigenvalues.',&
+'',&
+'      long, diag(D)',&
+'',&
+'      ans   =',&
+'',&
+'         2.999999999973599',&
+'         1.000000000015625',&
+'         2.000000000011505',&
+'',&
+'   We see that, on this computer, the last five significant figures are',&
+'   contaminated by roundoff error. A somewhat superficial explanation',&
+'   of this is provided by',&
+'',&
+'      short,  cond(X)',&
+'',&
+'      ans   =',&
+'',&
+'         3.2216e+05',&
+'',&
+'   The condition number of X gives an upper bound for the relative',&
+'   error in the computed eigenvalues. However, this condition',&
+'   number is affected by scaling.',&
+'',&
+'      X = X/diag(X(3,:)),  cond(X)',&
+'',&
+'      X     =',&
+'',&
+'           .0909     .0751     .1111',&
+'          -.1818    -.1965    -.1667',&
+'          1.0000    1.0000    1.0000',&
+'',&
+'      ans   =',&
+'',&
+'         1.7692e+03',&
+'',&
+'   Rescaling the eigenvectors so that their last components are all',&
+'   equal to one has two consequences. The condition of X is decreased',&
+'   by over two orders of magnitude. (This is about the minimum condition',&
+'   that can be obtained by such diagonal scaling.)  Moreover, it is now',&
+'   apparent that the three eigenvectors are nearly parallel.',&
+'',&
+'   More detailed information on the sensitivity of the individual',&
+'   eigenvalues involves the left eigenvectors.',&
+'',&
+'      Y = inv(X''),  Y''*A*X',&
+'',&
+'      Y     =',&
+'',&
+'       -511.5000  259.5000  252.0000',&
+'        616.0000 -346.0000 -270.0000',&
+'        159.5000  -86.5000  -72.0000',&
+'',&
+'      ans   =',&
+'',&
+'          3.0000     .0000     .0000',&
+'           .0000    1.0000     .0000',&
+'           .0000     .0000    2.0000',&
+'',&
+'   We are now in a position to compute the sensitivities of the individual',&
+'   eigenvalues.',&
+'',&
+'      for j = 1:3, c(j) = norm(Y(:,j))*norm(X(:,j)); end,  C',&
+'',&
+'      C     =',&
+'',&
+'        833.1092',&
+'        450.7228',&
+'        383.7564',&
+'',&
+'   These three numbers are the reciprocals of the cosines of the',&
+'   angles between the left and right eigenvectors. It can be shown that',&
+'   perturbation of the elements of A can result in a perturbation of',&
+'   the j-th eigenvalue which is c(j) times as large.  In this example,',&
+'   the first eigenvalue has the largest sensitivity.',&
+'',&
+'   We now proceed to show that A is close to a matrix with a double',&
+'   eigenvalue. The direction of the required perturbation is given by',&
+'',&
+'      E = -1.e-6*Y(:,1)*X(:,1)''',&
+'',&
+'      E     =',&
+'',&
+'         1.0e-03 *',&
+'',&
+'           .0465    -.0930     .5115',&
+'          -.0560     .1120    -.6160',&
+'          -.0145     .0290    -.1595',&
+'',&
+'   With some trial and error which we do not show, we bracket the',&
+'   point where two eigenvalues of a perturbed A coalesce and then',&
+'   become complex.',&
+'',&
+'      eig(A + .4*E),  eig(A + .5*E)',&
+'',&
+'      ans   =',&
+'',&
+'          1.1500',&
+'          2.5996',&
+'          2.2504',&
+'',&
+'      ans   =',&
+'',&
+'         2.4067 +  .1753*i',&
+'         2.4067 -  .1753*i',&
+'         1.1866 + 0.0000*i',&
+'',&
+'   Now, a bisecting search, driven by the imaginary part of one of',&
+'   the eigenvalues, finds the point where two eigenvalues are nearly',&
+'   equal.',&
+'',&
+'      r = .4;  s = .5;',&
+'',&
+'      while s-r > 1.e-14, t = (r+s)/2; d = eig(A+t*E); ...',&
+'        if imag(d(1))=0, r = t; else, s = t;',&
+'',&
+'      long,  T',&
+'',&
+'      T     =',&
+'',&
+'           .450380734134507',&
+'',&
+'   Finally, we display the perturbed matrix, which is obviously close',&
+'   to the original, and its pair of nearly equal eigenvalues.  (We have',&
+'   dropped a few digits from the long output.)',&
+'',&
+'      A+t*E,  eig(A+t*E)',&
+'',&
+'      A',&
+'',&
+'       -63.999979057   81.999958114   21.000230369',&
+'       143.999974778 -177.999949557  -46.000277434',&
+'      -771.000006530  962.000013061  247.999928164',&
+'',&
+'      ans   =',&
+'',&
+'         2.415741150',&
+'         2.415740621',&
+'         1.168517777',&
+'',&
+'   The first two eigenvectors of A + t*E are almost indistinguishable',&
+'   indicating that the perturbed matrix is almost defective.',&
+'',&
+'      <X,D> = eig(A+t*E);  X = X/diag(X(3,:))',&
+'',&
+'      X     =',&
+'',&
+'          .096019578     .096019586    .071608466',&
+'         -.178329614    -.178329608   -.199190520',&
+'         1.000000000    1.000000000   1.000000000',&
+'',&
+'      short,  cond(X)',&
+'',&
+'      ans   =',&
+'',&
+'         3.3997e+09',&
+'',&
 '================================================================================',&
-'COMMUNICATING WITH OTHER PROGRAMS                                               ',&
-'                                                                                ',&
-'   There are four different ways LAFF can be used in                            ',&
-'   conjunction with other programs:                                             ',&
-'                                                                                ',&
-'      -- user() - a user-supplied subroutine                                    ',&
-'      -- exec() - reading commands from a file                                  ',&
-'      -- save() and load() -- reading specially formatted data files.           ',&
-'      -- laff() - call the interpreter with a CHARACTER array of                ',&
-'                  commands or interactively.                                    ',&
-'                                                                                ',&
-'   Let us illustrate each of these by equivalents of the following              ',&
-'   simple example.                                                              ',&
-'                                                                                ',&
-'   You can start the laff(1) program up and simply enter:                       ',&
-'                                                                                ',&
-'         n = 6                                                                  ',&
-'         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);                           ',&
-'         a                                                                      ',&
-'         x = inv(a)                                                             ',&
-'                                                                                ',&
-'   An example user routine could be introduced into LAFF that                   ',&
-'   does the same thing as the "for" statement by compiling and                  ',&
-'   linking the following subroutine into the calling program.                   ',&
-'                                                                                ',&
-'         program demo_user                                                      ',&
-'         implicit none                                                          ',&
-'         use M_matrix                                                           ',&
-'         call set_usersub(laff_user)                                            ',&
-'         call laff()                                                            ',&
-'         subroutine laff_user(a,m,n,s,t)                                        ',&
-'            implicit none                                                       ',&
-'            doubleprecision a(:),s,t                                            ',&
-'            integer m,n                                                         ',&
-'            n = int(a(1))                                                       ',&
-'            m = n                                                               ',&
-'            do j = 1, n                                                         ',&
-'               do i = 1, n                                                      ',&
-'                  k = i + (j-1)*m                                               ',&
-'                  a(k) = iabs(i-j)                                              ',&
-'               enddo                                                            ',&
-'            enddo                                                               ',&
-'            end subroutine laff_user                                            ',&
-'         end program demo_user                                                  ',&
-'                                                                                ',&
-'   A user-defined function can then be registered with the program              ',&
-'   with                                                                         ',&
-'                                                                                ',&
-'           call set_usersub(SUBROUTINE_NAME)                                    ',&
-'                                                                                ',&
-'   Note the routine must be defined with an explicit interface                  ',&
-'   available in the calling unit.                                               ',&
-'                                                                                ',&
-'   Then the LAFF statements                                                     ',&
-'                                                                                ',&
-'         n = 6                                                                  ',&
-'         a = user(n)                                                            ',&
-'         x = inv(a)                                                             ',&
-'                                                                                ',&
-'   do the job.                                                                  ',&
-'                                                                                ',&
-'   The example procedure could be called by storing the following               ',&
-'   text in a file named, say, EXAMPLE.                                          ',&
-'                                                                                ',&
-'         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);                           ',&
-'                                                                                ',&
-'   Then the LAFF statements                                                     ',&
-'                                                                                ',&
-'         n = 6                                                                  ',&
-'         exec(''EXAMPLE'',0)                                                    ',&
-'         x = inv(a)                                                             ',&
-'                                                                                ',&
-'   have the desired effect. The 0 as the optional second parameter              ',&
-'   of exec indicates that the text in the file should not be printed            ',&
-'   on the terminal.                                                             ',&
-'                                                                                ',&
-'   The matrices A and X could also be stored in files. Two                      ',&
-'   separate main programs would be involved. The first is:                      ',&
-'                                                                                ',&
-'            program maina                                                       ',&
-'            doubleprecision a(10,10)                                            ',&
-'            n = 6                                                               ',&
-'            do j = 1, n                                                         ',&
-'               do i = 1, n                                                      ',&
-'                  a(i,j) = iabs(i-j)                                            ',&
-'               enddo                                                            ',&
-'            enddo                                                               ',&
-'            OPEN(UNIT=1,FILE=''A'')                                             ',&
-'            write(1,''(a32,2i4)'') ''a'', n,n                                   ',&
-'            do j = 1, n                                                         ',&
-'               write(1,102) (a(i,j),i=1,n)                                      ',&
-'            enddo                                                               ',&
-'        102 format(4z18)                                                        ',&
-'            end program maina                                                   ',&
-'                                                                                ',&
-'   The OPEN statement may take different forms on different systems.            ',&
-'   It attaches Fortran logical unit number 1 to the file named A.               ',&
-'                                                                                ',&
-'   The FORMAT number 102 may also be system dependent. This                     ',&
-'   particular one is appropriate for hexadecimal computers with an 8            ',&
-'   byte double precision floating point word. Check, or modify,                 ',&
-'   LAFF subroutine SAVLOD.                                                      ',&
-'                                                                                ',&
-'   After this program is executed, enter LAFF and give the                      ',&
-'   following statements:                                                        ',&
-'                                                                                ',&
-'         load(''A'')                                                            ',&
-'         X = inv(a)                                                             ',&
-'         save(''X'',X)                                                          ',&
-'                                                                                ',&
-'   If all goes according to plan, this will read the matrix "a" from            ',&
-'   the file A, invert it, store the inverse in X and then write the             ',&
-'   matrix X on the file X. The following program can then access X.             ',&
-'                                                                                ',&
-'            program mainx                                                       ',&
-'            doubleprecision x(10,10)                                            ',&
-'            open(unit=1,file=''x'')                                             ',&
-'            rewind 1                                                            ',&
-'            read (1, ''(a32,2i4)'') id,m,n                                      ',&
-'            do j = 1, n                                                         ',&
-'               read(1,''(4z18)'') (x(i,j),i=1,m)                                ',&
-'            enddo                                                               ',&
-'            ...                                                                 ',&
-'            ...                                                                 ',&
-'                                                                                ',&
-'                                                                                ',&
-'   The most elaborate mechanism involves using LAFF as a subroutine             ',&
-'   within another program. Communication with the LAFF stack is                 ',&
-'   accomplished using subroutine laff().                                        ',&
-'    The preamble of MATZ is:                                                    ',&
-'                                                                                ',&
-'         SUBROUTINE MATZ(A,LDA,M,N,ID,JOB,IERR)                                 ',&
-'         INTEGER LDA,M,N,JOB,IERR                                               ',&
-'         character(len=*) :: id                                                 ',&
-'         DOUBLEPRECISION A(LDA,N)                                               ',&
-'                                                                                ',&
-'         ! ACCESS LAFF VARIABLE STACK                                           ',&
-'         ! A IS AN M BY N MATRIX, STORED IN AN ARRAY WITH                       ',&
-'         !     LEADING DIMENSION LDA.                                           ',&
-'         ! ID IS THE NAME OF A. ID IS UP TO FOUR CHARACTERS.                    ',&
-'         ! JOB =  0  GET REAL A FROM LAFF,                                      ',&
-'         !     =  1  PUT REAL A INTO LAFF,                                      ',&
-'         !     = 10  GET IMAG PART OF A FROM LAFF,                              ',&
-'         !     = 11  PUT IMAG PART OF A INTO LAFF.                              ',&
-'         ! RETURN WITH NONZERO IERR AFTER LAFF ERROR MESSAGE.                   ',&
-'         !                                                                      ',&
-'         ! USES LAFF ROUTINES STACKG, STACKP AND ERROR                          ',&
-'                                                                                ',&
-'        The preamble of subroutine LAFF is:                                     ',&
-'                                                                                ',&
-'         SUBROUTINE LAFF(INIT)                                                  ',&
-'         ! INIT = 0 FOR FIRST ENTRY, NONZERO FOR SUBSEQUENT ENTRIES             ',&
-'                                                                                ',&
-'        To do our example, write the following program:                         ',&
-'                                                                                ',&
-'            DOUBLEPRECISION A(10,10),X(10,10)                                   ',&
-'            DATA LDA/10/                                                        ',&
-'            call M_88(0,'''')                                                   ',&
-'            N = 6                                                               ',&
-'            DO J = 1, N                                                         ',&
-'               DO I = 1, N                                                      ',&
-'                  A(I,J) = IABS(I-J)                                            ',&
-'               enddo                                                            ',&
-'            enddo                                                               ',&
-'            call MATZ(A,LDA,N,N,''A'',1,IERR)                                   ',&
-'            IF (IERR .NE. 0) GO TO ...                                          ',&
-'            call LAFF(1,'''')                                                   ',&
-'            call MATZ(X,LDA,N,N,''X'',0,IERR)                                   ',&
-'            IF (IERR .NE. 0) GO TO ...                                          ',&
-'            ...                                                                 ',&
-'            ...                                                                 ',&
-'                                                                                ',&
-'   When this program is executed, the call to LAFF(0) produces the              ',&
-'   LAFF greeting, then waits for input. The command                             ',&
-'                                                                                ',&
-'            quit                                                                ',&
-'                                                                                ',&
-'   sends control back to our example program. The matrix A is                   ',&
-'   generated by the program and sent to the stack by the first call             ',&
-'   to MATZ. The call to LAFF(1) produces the LAFF(1) prompt. Then               ',&
-'   the statements                                                               ',&
-'                                                                                ',&
-'            X = inv(A)                                                          ',&
-'            quit                                                                ',&
-'                                                                                ',&
-'   will invert our matrix, put the result on the stack and go back              ',&
-'   to our program. The second call to MATZ will retrieve X .                    ',&
-'                                                                                ',&
-'   By the way, this matrix X is interesting. Take a look at                     ',&
-'   round(2*(n-1)*X).                                                            ',&
-'                                                                                ',&
+'COMMUNICATING WITH OTHER PROGRAMS',&
+'',&
+'   There are four different ways LAFF can be used in',&
+'   conjunction with other programs:',&
+'',&
+'      -- user() - a user-supplied subroutine',&
+'      -- exec() - reading commands from a file',&
+'      -- save() and load() -- reading specially formatted data files.',&
+'      -- laff() - call the interpreter with a CHARACTER array of',&
+'                  commands or interactively.',&
+'',&
+'   Let us illustrate each of these by equivalents of the following',&
+'   simple example.',&
+'',&
+'   You can start the laff(1) program up and simply enter:',&
+'',&
+'         n = 6',&
+'         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);',&
+'         a',&
+'         x = inv(a)',&
+'',&
+'   An example user routine could be introduced into LAFF that',&
+'   does the same thing as the "for" statement by compiling and',&
+'   linking the following subroutine into the calling program.',&
+'',&
+'         program demo_user',&
+'         implicit none',&
+'         use M_matrix',&
+'         call set_usersub(laff_user)',&
+'         call laff()',&
+'         subroutine laff_user(a,m,n,s,t)',&
+'            implicit none',&
+'            doubleprecision a(:),s,t',&
+'            integer m,n',&
+'            n = int(a(1))',&
+'            m = n',&
+'            do j = 1, n',&
+'               do i = 1, n',&
+'                  k = i + (j-1)*m',&
+'                  a(k) = iabs(i-j)',&
+'               enddo',&
+'            enddo',&
+'            end subroutine laff_user',&
+'         end program demo_user',&
+'',&
+'   A user-defined function can then be registered with the program',&
+'   with',&
+'',&
+'           call set_usersub(SUBROUTINE_NAME)',&
+'',&
+'   Note the routine must be defined with an explicit interface',&
+'   available in the calling unit.',&
+'',&
+'   Then the LAFF statements',&
+'',&
+'         n = 6',&
+'         a = user(n)',&
+'         x = inv(a)',&
+'',&
+'   do the job.',&
+'',&
+'   The example procedure could be called by storing the following',&
+'   text in a file named, say, EXAMPLE.',&
+'',&
+'         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);',&
+'',&
+'   Then the LAFF statements',&
+'',&
+'         n = 6',&
+'         exec(''EXAMPLE'',0)',&
+'         x = inv(a)',&
+'',&
+'   have the desired effect. The 0 as the optional second parameter',&
+'   of exec indicates that the text in the file should not be printed',&
+'   on the terminal.',&
+'',&
+'   The matrices A and X could also be stored in files. Two',&
+'   separate main programs would be involved. The first is:',&
+'',&
+'            program maina',&
+'            doubleprecision a(10,10)',&
+'            n = 6',&
+'            do j = 1, n',&
+'               do i = 1, n',&
+'                  a(i,j) = iabs(i-j)',&
+'               enddo',&
+'            enddo',&
+'            OPEN(UNIT=1,FILE=''A'')',&
+'            write(1,''(a32,2i4)'') ''a'', n,n',&
+'            do j = 1, n',&
+'               write(1,102) (a(i,j),i=1,n)',&
+'            enddo',&
+'        102 format(4z18)',&
+'            end program maina',&
+'',&
+'   The OPEN statement may take different forms on different systems.',&
+'   It attaches Fortran logical unit number 1 to the file named A.',&
+'',&
+'   The FORMAT number 102 may also be system dependent. This',&
+'   particular one is appropriate for hexadecimal computers with an 8',&
+'   byte double precision floating point word. Check, or modify,',&
+'   LAFF subroutine SAVLOD.',&
+'',&
+'   After this program is executed, enter LAFF and give the',&
+'   following statements:',&
+'',&
+'         load(''A'')',&
+'         X = inv(a)',&
+'         save(''X'',X)',&
+'',&
+'   If all goes according to plan, this will read the matrix "a" from',&
+'   the file A, invert it, store the inverse in X and then write the',&
+'   matrix X on the file X. The following program can then access X.',&
+'',&
+'            program mainx',&
+'            doubleprecision x(10,10)',&
+'            open(unit=1,file=''x'')',&
+'            rewind 1',&
+'            read (1, ''(a32,2i4)'') id,m,n',&
+'            do j = 1, n',&
+'               read(1,''(4z18)'') (x(i,j),i=1,m)',&
+'            enddo',&
+'            ...',&
+'            ...',&
+'',&
+'',&
+'   The most elaborate mechanism involves using LAFF as a subroutine',&
+'   within another program. Communication with the LAFF stack is',&
+'   accomplished using subroutine laff().',&
+'    The preamble of MATZ is:',&
+'',&
+'         SUBROUTINE MATZ(A,LDA,M,N,ID,JOB,IERR)',&
+'         INTEGER LDA,M,N,JOB,IERR',&
+'         character(len=*) :: id',&
+'         DOUBLEPRECISION A(LDA,N)',&
+'',&
+'         ! ACCESS LAFF VARIABLE STACK',&
+'         ! A IS AN M BY N MATRIX, STORED IN AN ARRAY WITH',&
+'         !     LEADING DIMENSION LDA.',&
+'         ! ID IS THE NAME OF A. ID IS UP TO FOUR CHARACTERS.',&
+'         ! JOB =  0  GET REAL A FROM LAFF,',&
+'         !     =  1  PUT REAL A INTO LAFF,',&
+'         !     = 10  GET IMAG PART OF A FROM LAFF,',&
+'         !     = 11  PUT IMAG PART OF A INTO LAFF.',&
+'         ! RETURN WITH NONZERO IERR AFTER LAFF ERROR MESSAGE.',&
+'         !',&
+'         ! USES LAFF ROUTINES STACKG, STACKP AND ERROR',&
+'',&
+'        The preamble of subroutine LAFF is:',&
+'',&
+'         SUBROUTINE LAFF(INIT)',&
+'         ! INIT = 0 FOR FIRST ENTRY, NONZERO FOR SUBSEQUENT ENTRIES',&
+'',&
+'        To do our example, write the following program:',&
+'',&
+'            DOUBLEPRECISION A(10,10),X(10,10)',&
+'            DATA LDA/10/',&
+'            call M_88(0,'''')',&
+'            N = 6',&
+'            DO J = 1, N',&
+'               DO I = 1, N',&
+'                  A(I,J) = IABS(I-J)',&
+'               enddo',&
+'            enddo',&
+'            call MATZ(A,LDA,N,N,''A'',1,IERR)',&
+'            IF (IERR .NE. 0) GO TO ...',&
+'            call LAFF(1,'''')',&
+'            call MATZ(X,LDA,N,N,''X'',0,IERR)',&
+'            IF (IERR .NE. 0) GO TO ...',&
+'            ...',&
+'            ...',&
+'',&
+'   When this program is executed, the call to LAFF(0) produces the',&
+'   LAFF greeting, then waits for input. The command',&
+'',&
+'            quit',&
+'',&
+'   sends control back to our example program. The matrix A is',&
+'   generated by the program and sent to the stack by the first call',&
+'   to MATZ. The call to LAFF(1) produces the LAFF(1) prompt. Then',&
+'   the statements',&
+'',&
+'            X = inv(A)',&
+'            quit',&
+'',&
+'   will invert our matrix, put the result on the stack and go back',&
+'   to our program. The second call to MATZ will retrieve X .',&
+'',&
+'   By the way, this matrix X is interesting. Take a look at',&
+'   round(2*(n-1)*X).',&
+'',&
 '================================================================================',&
-'ACKNOWLEDGEMENT                                                                 ',&
-'                                                                                ',&
-'   LAFF was inspired by the MATLAB subroutine.  Most of the work on             ',&
-'   MATLAB was carried out at the University of New Mexico, where it was         ',&
-'   being supported by the National Science Foundation. Additional work          ',&
-'   has been done during visits to Stanford Linear Accelerator Center,           ',&
-'   Argonne National Laboratory and Los Alamos Scientific Laboratory,            ',&
-'   where support has been provided by NSF and the Department of Energy.         ',&
-'                                                                                ',&
+'ACKNOWLEDGEMENT',&
+'',&
+'   LAFF was inspired by the MATLAB subroutine.  Most of the work on',&
+'   MATLAB was carried out at the University of New Mexico, where it was',&
+'   being supported by the National Science Foundation. Additional work',&
+'   has been done during visits to Stanford Linear Accelerator Center,',&
+'   Argonne National Laboratory and Los Alamos Scientific Laboratory,',&
+'   where support has been provided by NSF and the Department of Energy.',&
+'',&
 '================================================================================',&
-'REFERENCES FOR THE MATLAB ROUTINE                                               ',&
-'                                                                                ',&
-' [1]  J. J. Dongarra, J. R. Bunch, C. B. Moler and G. W. Stewart,               ',&
-'      LINPACK Users'' Guide, Society for Industrial and Applied                 ',&
-'      Mathematics, Philadelphia, 1979.                                          ',&
-'                                                                                ',&
-' [2]  B. T. Smith, J. M. Boyle, J. J. Dongarra, B. S. Garbow, Y.                ',&
-'      Ikebe, V. C. Klema, C. B. Moler, Matrix Eigensystem Routines              ',&
-'      -- EISPACK Guide, Lecture Notes in Computer Science, volume               ',&
-'      6, second edition, Springer-Verlag, 1976.                                 ',&
-'                                                                                ',&
-' [3]  B. S. Garbow, J. M. Boyle, J. J. Dongarra, C. B. Moler,                   ',&
-'      Matrix Eigensystem Routines -- EISPACK Guide Extension,                   ',&
-'      Lecture Notes in Computer Science, volume 51, Springer-                   ',&
-'      Verlag, 1977.                                                             ',&
-'                                                                                ',&
-' [4]  S. Cohen and S. Piper, SPEAKEASY III Reference Manual,                    ',&
-'      Speakeasy Computing Corp., Chicago, Ill., 1979.                           ',&
-'                                                                                ',&
-' [5]  J. H. Wilkinson and C. Reinsch, Handbook for Automatic                    ',&
-'      Computation, volume II, Linear Algebra, Springer-Verlag,                  ',&
-'     1971.                                                                      ',&
-'                                                                                ',&
-' [6]  Niklaus Wirth, Algorithms + Data Structures = Programs,                   ',&
-'      Prentice-Hall, 1976.                                                      ',&
-'                                                                                ',&
-' [7]  H. B. Keller and D. Sachs, "Calculations of the Conductivity              ',&
-'      of a Medium Containing Cylindrical Inclusions", J. Applied                ',&
-'      Physics 35, 537-538, 1964.                                                ',&
-'                                                                                ',&
-' [8]  C. B. Moler and C. F. Van Loan, Nineteen Dubious Ways to                  ',&
-'      Compute the Exponential of a Matrix, SIAM Review 20, 801-                 ',&
-'      836, 1979.                                                                ',&
-'                                                                                ',&
-' [9]  G. E. Forsythe, M. A. Malcolm and C. B. Moler, Computer                   ',&
-'      Methods for Mathematical Computations, Prentice-Hall, 1977.               ',&
-'                                                                                ',&
-' [10] C. B. Moler and D. R. Morrison, "Replacing square roots by                ',&
-'      Pythagorean sums", University of New Mexico, Computer                     ',&
-'      Science Department, technical report, submitted for                       ',&
-'     publication, 1980.                                                         ',&
-'                                                                                ',&
+'REFERENCES FOR THE MATLAB ROUTINE',&
+'',&
+' [1]  J. J. Dongarra, J. R. Bunch, C. B. Moler and G. W. Stewart,',&
+'      LINPACK Users'' Guide, Society for Industrial and Applied',&
+'      Mathematics, Philadelphia, 1979.',&
+'',&
+' [2]  B. T. Smith, J. M. Boyle, J. J. Dongarra, B. S. Garbow, Y.',&
+'      Ikebe, V. C. Klema, C. B. Moler, Matrix Eigensystem Routines',&
+'      -- EISPACK Guide, Lecture Notes in Computer Science, volume',&
+'      6, second edition, Springer-Verlag, 1976.',&
+'',&
+' [3]  B. S. Garbow, J. M. Boyle, J. J. Dongarra, C. B. Moler,',&
+'      Matrix Eigensystem Routines -- EISPACK Guide Extension,',&
+'      Lecture Notes in Computer Science, volume 51, Springer-',&
+'      Verlag, 1977.',&
+'',&
+' [4]  S. Cohen and S. Piper, SPEAKEASY III Reference Manual,',&
+'      Speakeasy Computing Corp., Chicago, Ill., 1979.',&
+'',&
+' [5]  J. H. Wilkinson and C. Reinsch, Handbook for Automatic',&
+'      Computation, volume II, Linear Algebra, Springer-Verlag,',&
+'     1971.',&
+'',&
+' [6]  Niklaus Wirth, Algorithms + Data Structures = Programs,',&
+'      Prentice-Hall, 1976.',&
+'',&
+' [7]  H. B. Keller and D. Sachs, "Calculations of the Conductivity',&
+'      of a Medium Containing Cylindrical Inclusions", J. Applied',&
+'      Physics 35, 537-538, 1964.',&
+'',&
+' [8]  C. B. Moler and C. F. Van Loan, Nineteen Dubious Ways to',&
+'      Compute the Exponential of a Matrix, SIAM Review 20, 801-',&
+'      836, 1979.',&
+'',&
+' [9]  G. E. Forsythe, M. A. Malcolm and C. B. Moler, Computer',&
+'      Methods for Mathematical Computations, Prentice-Hall, 1977.',&
+'',&
+' [10] C. B. Moler and D. R. Morrison, "Replacing square roots by',&
+'      Pythagorean sums", University of New Mexico, Computer',&
+'      Science Department, technical report, submitted for',&
+'     publication, 1980.',&
+'',&
 '================================================================================',&
-'SUMMARY    A list of basic (case-sensitive) section and topic names             ',&
-'   .______________._________________________________________________________.   ',&
-'   |SYNTAX        | [ ] < > ( ) = .  , !  ; \ / '''' + - * : semi ?           | ',&
-'   |______________._________________________________________________________|   ',&
-'   |VARIABLES     | ans    clear who                                        |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |BASIC         | atan   cos   exp    log    sin      sqrt                |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |HIGH          | abs    base  chol   chop   cond     conjg  det    diag  |   ',&
-'   |              | eig    eye   hess   invh   imag     inv    kron   lu    |   ',&
-'   |              | magic  norm  ones   orth   pinv     poly   prod   qr    |   ',&
-'   |              | rand   rank  rcond  rat    real     rref   roots  round |   ',&
-'   |              | schur  shape sum    svd    tril     triu   user   zeros |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |FLOW control  | else   end   if     for    while    exit   quit         |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |FILE access   | exec   load  print  save   delete                       |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |OUTPUT options| lines  long  short  diary  display  plot                |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |ENVIRONMENT   | getenv                                                  |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |DOCUMENTATION | help   fhelp  NEWS                                      |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |MISCELLANEOUS | eps    debug  flops sh     MACROS   EDIT   CHARS        |   ',&
-'   |______________._________________________________________________________|   ',&
+'SUMMARY    A list of basic (case-sensitive) section and topic names',&
+'   .______________._________________________________________________________.',&
+'   |SYNTAX        | [ ] < > ( ) = .  , !  ; \ / '''' + - * : semi ?           |',&
+'   |______________._________________________________________________________|',&
+'   |VARIABLES     | ans    clear who                                        |',&
+'   |______________._________________________________________________________|',&
+'   |BASIC         | atan   cos   exp    log    sin      sqrt                |',&
+'   |______________._________________________________________________________|',&
+'   |HIGH          | abs    base  chol   chop   cond     conjg  det    diag  |',&
+'   |              | eig    eye   hess   invh   imag     inv    kron   lu    |',&
+'   |              | magic  norm  ones   orth   pinv     poly   prod   qr    |',&
+'   |              | rand   rank  rcond  rat    real     rref   roots  round |',&
+'   |              | schur  shape sum    svd    tril     triu   user   zeros |',&
+'   |______________._________________________________________________________|',&
+'   |FLOW control  | else   end   if     for    while    exit   quit         |',&
+'   |______________._________________________________________________________|',&
+'   |FILE access   | exec   load  print  save   delete                       |',&
+'   |______________._________________________________________________________|',&
+'   |OUTPUT options| lines  long  short  diary  display  plot                |',&
+'   |______________._________________________________________________________|',&
+'   |ENVIRONMENT   | getenv                                                  |',&
+'   |______________._________________________________________________________|',&
+'   |DOCUMENTATION | help   fhelp  NEWS                                      |',&
+'   |______________._________________________________________________________|',&
+'   |MISCELLANEOUS | eps    debug  flops sh     MACROS   EDIT   CHARS        |',&
+'   |______________._________________________________________________________|',&
 '================================================================================',&
-'SAMPLE                                                                          ',&
-'      Here are a few sample statements:                                         ',&
-'                                                                                ',&
-'       A = <1 2; 3 4>                                                           ',&
-'       b = <5 6>''                                                              ',&
-'       x = A\b                                                                  ',&
-'       <V,D> = eig(A),  norm(A-V*D/V)                                           ',&
-'       help \ , help eig                                                        ',&
-'       exec(''demo'',7)                                                         ',&
-'                                                                                ',&
-'      For more information, generate the LAFF Users'' Guide                     ',&
-'      using                                                                     ',&
-'                                                                                ',&
-'        help manual                                                             ',&
-'        w help.txt                                                              ',&
-'        q                                                                       ',&
+'SAMPLE',&
+'      Here are a few sample statements:',&
+'',&
+'       A = <1 2; 3 4>',&
+'       b = <5 6>''',&
+'       x = A\b',&
+'       <V,D> = eig(A),  norm(A-V*D/V)',&
+'       help \ , help eig',&
+'       exec(''demo'',7)',&
+'',&
+'      For more information, generate the LAFF Users'' Guide',&
+'      using',&
+'',&
+'        help manual',&
+'        w help.txt',&
+'        q',&
 '================================================================================',&
-'DOCUMENTATION                                                                   ',&
-'fhelp topic|SECTION_NAME                                                        ',&
-'                                                                                ',&
-'      "fhelp" is identical in usage to "help" except that it searches a         ',&
-'      collection of descriptions of Fortran intrinsics.                         ',&
-'                                                                                ',&
-'        fhelp verify                                                            ',&
-'        fhelp pack                                                              ',&
-'                                                                                ',&
-'      See "help"                                                                ',&
-'                                                                                ',&
-'help  topic|SECTION_NAME                                                        ',&
-'                                                                                ',&
-'      "help" gives assistance. It is equivalent to "help SUMMARY"               ',&
-'      by default.                                                               ',&
-'                                                                                ',&
-'      o  "help" with no options lists common topic and section names.           ',&
-'      o  The special topic "topics" shows all topic lines.                      ',&
-'      o  The special topic "manual" displays all the help text.                 ',&
-'      o  The special topic "search" shows lines from the manual                 ',&
-'         containing the subsequent string                                       ',&
-'                                                                                ',&
-'         Enter "h" at the "continue ..." prompt for additional options.         ',&
-'                                                                                ',&
-'      For example:                                                              ',&
-'                                                                                ',&
-'         help        // a list of common topics and section names               ',&
-'         help topics // a list of topics including the first line of            ',&
-'                     // the topic.                                              ',&
-'         help abs    // produces help on the function "abs".                    ',&
-'         help FLOW   // the entire section on flow control is displayed.        ',&
-'         help manual // show all the help text                                  ',&
-'         help help   // obviously prints this message.                          ',&
-'         help search factor // show all lines containing "factor".              ',&
-'                                                                                ',&
-'      Alternatively, To place all the documenation in a file, use               ',&
-'      "help manual" and enter "w help.txt" at the "continue .." prompt.         ',&
-'NEWS                                                                            ',&
-'      LAFF is intended to be used primarily by families of FORTRAN              ',&
-'      programs that wish to add a consistent interactive "calculator"           ',&
-'      mode for interactively inspecting and modifying data.                     ',&
-'                                                                                ',&
-'      May, 1981.                                                                ',&
-'                                                                                ',&
-'      This is a port of the Argonne National Lab. FORTRAN 77 MATLAB             ',&
-'      routine circa 1981.                                                       ',&
-'                                                                                ',&
-'      Mar, 1990.                                                                ',&
-'                                                                                ',&
-'      Input lines can now be recalled and edited.  A "??" on a line by          ',&
-'      itself calls the command history mode. Enter "?" after entering           ',&
-'      the mode for details.                                                     ',&
-'                                                                                ',&
-'      Apr, 2021.                                                                ',&
-'                                                                                ',&
-'      Rewritten but largely true to the original documentation.                 ',&
-'                                                                                ',&
-'what  does nothing for now                                                      ',&
-'                                                                                ',&
-'sh    Starts the command shell interactively, using the command defined by      ',&
-'      the environment variable SHELL. Note that in addition any line            ',&
-'      starting with an exclamation (!) is passed to the system for              ',&
-'      execution.                                                                ',&
+'DOCUMENTATION',&
+'fhelp topic|SECTION_NAME',&
+'',&
+'      "fhelp" is identical in usage to "help" except that it searches a',&
+'      collection of descriptions of Fortran intrinsics.',&
+'',&
+'        fhelp verify',&
+'        fhelp pack',&
+'',&
+'      See "help"',&
+'',&
+'help  topic|SECTION_NAME',&
+'',&
+'      "help" gives assistance. It is equivalent to "help SUMMARY"',&
+'      by default.',&
+'',&
+'      o  "help" with no options lists common topic and section names.',&
+'      o  The special topic "topics" shows all topic lines.',&
+'      o  The special topic "manual" displays all the help text.',&
+'      o  The special topic "search" shows lines from the manual',&
+'         containing the subsequent string',&
+'',&
+'         Enter "h" at the "continue ..." prompt for additional options.',&
+'',&
+'      For example:',&
+'',&
+'         help        // a list of common topics and section names',&
+'         help topics // a list of topics including the first line of',&
+'                     // the topic.',&
+'         help abs    // produces help on the function "abs".',&
+'         help FLOW   // the entire section on flow control is displayed.',&
+'         help manual // show all the help text',&
+'         help help   // obviously prints this message.',&
+'         help search factor // show all lines containing "factor".',&
+'',&
+'      Alternatively, To place all the documenation in a file, use',&
+'      "help manual" and enter "w help.txt" at the "continue .." prompt.',&
+'NEWS',&
+'      LAFF is intended to be used primarily by families of FORTRAN',&
+'      programs that wish to add a consistent interactive "calculator"',&
+'      mode for interactively inspecting and modifying data.',&
+'',&
+'      May, 1981.',&
+'',&
+'      This is a port of the Argonne National Lab. FORTRAN 77 MATLAB',&
+'      routine circa 1981.',&
+'',&
+'      Mar, 1990.',&
+'',&
+'      Input lines can now be recalled and edited.  A "??" on a line by',&
+'      itself calls the command history mode. Enter "?" after entering',&
+'      the mode for details.',&
+'',&
+'      Apr, 2021.',&
+'',&
+'      Rewritten but largely true to the original documentation.',&
+'',&
+'what  does nothing for now',&
+'',&
+'sh    Starts the command shell interactively, using the command defined by',&
+'      the environment variable SHELL. Note that in addition any line',&
+'      starting with an exclamation (!) is passed to the system for',&
+'      execution.',&
 '================================================================================',&
-'SYNTAX                                                                          ',&
-'[     See "<"                                                                   ',&
-']     See "<"                                                                   ',&
-'>     See "<" . Also see MACROS.                                                ',&
-'<     < > or [ ] are brackets used in forming vectors and matrices.             ',&
-'      "<6.9 9.64 sqrt(-1)>" is a vector with three elements separated by        ',&
-'      blanks. "[1+I 2-I 3]" and "[1 +I 2 -I 3]" are not the same. The           ',&
-'      first has three elements, the second has five.  <11 12 13; 21 22          ',&
-'      23> is a 2 by 3 matrix. The semicolon ends the first row.                 ',&
-'                                                                                ',&
-'      Vectors and matrices can be used inside < > brackets.  <A B; C>           ',&
-'      is allowed if the number of rows of A equals the number of rows           ',&
-'      of B and the number of columns of A plus the number of columns of         ',&
-'      B equals the number of columns of C. This rule generalizes in a           ',&
-'      hopefully obvious way to allow fairly complicated constructions.          ',&
-'                                                                                ',&
-'      A = < > stores an empty matrix in A, thereby removing it from the         ',&
-'      list of current variables.                                                ',&
-'                                                                                ',&
-'      For the use of < and > on the left of the = in multiple assignment        ',&
-'      statements, See "lu", "eig", "svd" and so on.                             ',&
-'                                                                                ',&
-'      In "while" and "if" clauses, "<>" means less than or greater than,        ',&
-'      i.e. not equal, "<" means less than, ">" means greater than,              ',&
-'      "<=" means less than or equal, ">=" means greater than or equal.          ',&
-'                                                                                ',&
-'      For the use of ">" and "<" to delineate macros, see MACROS.               ',&
-'                                                                                ',&
-'{     see "(".                                                                  ',&
-'}     see "(".                                                                  ',&
-')     See "(" .                                                                 ',&
-'(     ( ) or { } are used to indicate precedence in arithmetic expressions      ',&
-'      and to enclose arguments of functions in the usual way. They are          ',&
-'      also used to enclose subscripts of vectors and matrices in a manner       ',&
-'      somewhat more general than the usual way. If X and V are vectors,         ',&
-'      then X(V) is <X(V(1)), X(V(2)), ..., X(V(N))>. The components of V        ',&
-'      are rounded to nearest integers and used as subscripts. An error          ',&
-'      occurs if any such subscript is less than 1 or greater than the           ',&
-'      dimension of X. Some examples:                                            ',&
-'                                                                                ',&
-'         X(3) is the third element of X .                                       ',&
-'         X([1 2 3]) is the first three elements of X. So is                     ',&
-'         X([sqrt(2), sqrt(3), 4*atan(1)]) .                                     ',&
-'         If X has N components, X(N:-1:1) reverses them.                        ',&
-'                                                                                ',&
-'      The same indirect subscripting is used in matrices. If V has              ',&
-'      M components and W has N components, then A(V,W) is the M by N            ',&
-'      matrix formed from the elements of A whose subscripts are the             ',&
-'      elements of V and W. For example...  A(<1,5>,:) = A(<5,1>,:)              ',&
-'      interchanges rows 1 and 5 of A.                                           ',&
-'                                                                                ',&
-'=     Used in assignment statements and to mean equality in "while"             ',&
-'      and "if" clauses.                                                         ',&
-'                                                                                ',&
-'.     Decimal point. 314/100, 3.14 and .314E1 are all the                       ',&
-'      same.                                                                     ',&
-'                                                                                ',&
-'      Element-by-element multiplicative operations are obtained                 ',&
-'      using .* , ./ , or .\ . For example, C = A ./ B is the                    ',&
-'      matrix with elements c(i,j) = a(i,j)/b(i,j) .                             ',&
-'                                                                                ',&
-'      Kronecker tensor products and quotients are obtained with                 ',&
-'      .*. , ./. and .\. . See "kron".                                           ',&
-'                                                                                ',&
-'      Two or more points at the end of the line indicate                        ',&
-'      continuation. The total line length limit is 1024                         ',&
-'      characters.                                                               ',&
-'                                                                                ',&
-',     Used to separate matrix subscripts and function arguments.                ',&
-'      Used at the end of "for", "while" and "if" clauses. Used to               ',&
-'      separate statements in multi-statement lines. In this                     ',&
-'      situation, it may be replaced by a semicolon to suppress                  ',&
-'      printing.                                                                 ',&
-'                                                                                ',&
-'!     If an exclamation is the first character of a line the                    ',&
-'      rest of the line is passed to the system to be executed.                  ',&
-'                                                                                ',&
-'      Examples:                                                                 ',&
-'                                                                                ',&
-'         // enter command history mode and change all occurrences of            ',&
-'         // "abc" to "123" on the last command entered.                         ',&
-'         !!c/abc/123                                                            ',&
-'                                                                                ',&
-'         // pass command to system                                              ',&
-'         !ls -ltrasd                                                            ',&
-'                                                                                ',&
-'      see "EDIT"                                                                ',&
-'                                                                                ',&
-';     Used inside brackets to end rows.                                         ',&
-'                                                                                ',&
-'      Used after an expression or statement to suppress printing.               ',&
-'      See "semi".                                                               ',&
-'                                                                                ',&
-'\     Backslash or matrix left division. A\B is roughly the                     ',&
-'      same as "inv(A)*B", except it is computed in a different                  ',&
-'      way. If A is an N by N matrix and B is a column vector                    ',&
-'      with N components, or a matrix with several such columns,                 ',&
-'      then X = A\B is the solution to the equation A*X = B                      ',&
-'      computed by Gaussian elimination. A warning message is                    ',&
-'      printed if A is badly scaled or nearly singular.                          ',&
-'      A\eye produces the inverse of A .                                         ',&
-'                                                                                ',&
-'      If A is an M by N matrix with M < or > N and B is a                       ',&
-'      column vector with M components, or a matrix with several                 ',&
-'      such columns, then X = A\B is the solution in the least                   ',&
-'      squares sense to the under- or overdetermined system of                   ',&
-'      equations A*X = B. The effective rank, K, of A is                         ',&
-'      determined from the QR decomposition with pivoting. A                     ',&
-'      solution X is computed which has at most K nonzero                        ',&
-'      components per column. If K < N this will usually not be                  ',&
-'      the same solution as pinv(A)*B .                                          ',&
-'      A\eye produces a generalized inverse of A.                                ',&
-'                                                                                ',&
-'      If A and B have the same dimensions, then A .\ B has                      ',&
-'      elements a(i,j)\b(i,j) .                                                  ',&
-'                                                                                ',&
-'      Also, see "edit".                                                         ',&
-'                                                                                ',&
-'/     Slash or matrix right division. B/A is roughly the same                   ',&
-'      as B*inv(A) . More precisely, B/A = (A''\B'')'' . See \ .                 ',&
-'                                                                                ',&
-'      IF A and B have the same dimensions, then A ./ B has                      ',&
-'      elements a(i,j)/b(i,j) .                                                  ',&
-'                                                                                ',&
-'      Two or more slashes together on a line indicate a logical end of          ',&
-'      line. Any following text is ignored.                                      ',&
-'                                                                                ',&
-'''     Transpose. X'' is the complex conjugate transpose of X .                 ',&
-'                                                                                ',&
-'      A quote is also use to delmit text. ''ANY TEXT'' is a vector whose        ',&
-'      components are the LAFF internal codes for the characters. A              ',&
-'      quote within the text is indicated by two quotes. See "display"           ',&
-'      and "FILE" .                                                              ',&
-'                                                                                ',&
-'+     Addition. X + Y . X and Y must have the same dimensions.                  ',&
-'                                                                                ',&
-'-     Subtraction. X - Y . X and Y must have the same                           ',&
-'      dimensions.                                                               ',&
-'                                                                                ',&
-'*     Matrix multiplication, X*Y . Any scalar (1 by 1 matrix)                   ',&
-'      may multiply anything. Otherwise, the number of columns of                ',&
-'      X must equal the number of rows of Y .                                    ',&
-'                                                                                ',&
-'      Element-by-element multiplication is obtained with X .* Y .               ',&
-'                                                                                ',&
-'      The Kronecker tensor product is denoted by X .*. Y .                      ',&
-'                                                                                ',&
-'      Powers. X**p is X to the p power. p must be a                             ',&
-'      scalar. If X is a matrix, see "HIGH" .                                    ',&
-'                                                                                ',&
-':     Colon. Used in subscripts, "for" iterations and possibly                  ',&
-'      elsewhere.                                                                ',&
-'                                                                                ',&
-'        j:k   is the same as  <j, j+1, ..., k>                                  ',&
-'              is empty if  j > k .                                              ',&
-'        j:i:k is the same as [j, j+i,j+2*i, ..., k]                             ',&
-'              (Fortran DO loop users beware of the unusual order!)              ',&
-'                                                                                ',&
-'         j:i:k  is the same as  <j, j+i, j+2i, ..., k>                          ',&
-'         j:i:k  is empty if  i > 0 and j > k or if i < 0 and j < k .            ',&
-'                                                                                ',&
-'      The colon notation can be used to pick out selected rows,                 ',&
-'      columns and elements of vectors and matrices.                             ',&
-'                                                                                ',&
-'         A(:)    is all the elements of A, regarded as a single column.         ',&
-'                 However, used on the left side of an assignment, A(:)          ',&
-'                 fills A, but preserves its shape.                              ',&
-'        A(:,j)   is the j-th column of A                                        ',&
-'        A(j:k)   is A(j), A(j+1), ... , A(k)                                    ',&
-'        A(:,j:k) is A(:,j), A(:,j+1), ... ,A(:,k) and so on.                    ',&
-'        A(:,:)   is the same as A.                                              ',&
-'                                                                                ',&
-'      For the use of the colon in the "for" statement, See "for" .              ',&
-'                                                                                ',&
-'semi  "semi" toggles the action of semicolons at the end of lines.              ',&
-'      It will make semicolons cause rather than suppress printing.              ',&
-'      A second "semi" restores the initial interpretation.                      ',&
+'SYNTAX',&
+'[     See "<"',&
+']     See "<"',&
+'>     See "<" . Also see MACROS.',&
+'<     < > or [ ] are brackets used in forming vectors and matrices.',&
+'      "<6.9 9.64 sqrt(-1)>" is a vector with three elements separated by',&
+'      blanks. "[1+I 2-I 3]" and "[1 +I 2 -I 3]" are not the same. The',&
+'      first has three elements, the second has five.  <11 12 13; 21 22',&
+'      23> is a 2 by 3 matrix. The semicolon ends the first row.',&
+'',&
+'      Vectors and matrices can be used inside < > brackets.  <A B; C>',&
+'      is allowed if the number of rows of A equals the number of rows',&
+'      of B and the number of columns of A plus the number of columns of',&
+'      B equals the number of columns of C. This rule generalizes in a',&
+'      hopefully obvious way to allow fairly complicated constructions.',&
+'',&
+'      A = < > stores an empty matrix in A, thereby removing it from the',&
+'      list of current variables.',&
+'',&
+'      For the use of < and > on the left of the = in multiple assignment',&
+'      statements, See "lu", "eig", "svd" and so on.',&
+'',&
+'      In "while" and "if" clauses, "<>" means less than or greater than,',&
+'      i.e. not equal, "<" means less than, ">" means greater than,',&
+'      "<=" means less than or equal, ">=" means greater than or equal.',&
+'',&
+'      For the use of ">" and "<" to delineate macros, see MACROS.',&
+'',&
+'{     see "(".',&
+'}     see "(".',&
+')     See "(" .',&
+'(     ( ) or { } are used to indicate precedence in arithmetic expressions',&
+'      and to enclose arguments of functions in the usual way. They are',&
+'      also used to enclose subscripts of vectors and matrices in a manner',&
+'      somewhat more general than the usual way. If X and V are vectors,',&
+'      then X(V) is <X(V(1)), X(V(2)), ..., X(V(N))>. The components of V',&
+'      are rounded to nearest integers and used as subscripts. An error',&
+'      occurs if any such subscript is less than 1 or greater than the',&
+'      dimension of X. Some examples:',&
+'',&
+'         X(3) is the third element of X .',&
+'         X([1 2 3]) is the first three elements of X. So is',&
+'         X([sqrt(2), sqrt(3), 4*atan(1)]) .',&
+'         If X has N components, X(N:-1:1) reverses them.',&
+'',&
+'      The same indirect subscripting is used in matrices. If V has',&
+'      M components and W has N components, then A(V,W) is the M by N',&
+'      matrix formed from the elements of A whose subscripts are the',&
+'      elements of V and W. For example...  A(<1,5>,:) = A(<5,1>,:)',&
+'      interchanges rows 1 and 5 of A.',&
+'',&
+'=     Used in assignment statements and to mean equality in "while"',&
+'      and "if" clauses.',&
+'',&
+'.     Decimal point. 314/100, 3.14 and .314E1 are all the',&
+'      same.',&
+'',&
+'      Element-by-element multiplicative operations are obtained',&
+'      using .* , ./ , or .\ . For example, C = A ./ B is the',&
+'      matrix with elements c(i,j) = a(i,j)/b(i,j) .',&
+'',&
+'      Kronecker tensor products and quotients are obtained with',&
+'      .*. , ./. and .\. . See "kron".',&
+'',&
+'      Two or more points at the end of the line indicate',&
+'      continuation. The total line length limit is 1024',&
+'      characters.',&
+'',&
+',     Used to separate matrix subscripts and function arguments.',&
+'      Used at the end of "for", "while" and "if" clauses. Used to',&
+'      separate statements in multi-statement lines. In this',&
+'      situation, it may be replaced by a semicolon to suppress',&
+'      printing.',&
+'',&
+'!     If an exclamation is the first character of a line the',&
+'      rest of the line is passed to the system to be executed.',&
+'',&
+'      Examples:',&
+'',&
+'         // enter command history mode and change all occurrences of',&
+'         // "abc" to "123" on the last command entered.',&
+'         !!c/abc/123',&
+'',&
+'         // pass command to system',&
+'         !ls -ltrasd',&
+'',&
+'      see "EDIT"',&
+'',&
+';     Used inside brackets to end rows.',&
+'',&
+'      Used after an expression or statement to suppress printing.',&
+'      See "semi".',&
+'',&
+'\     Backslash or matrix left division. A\B is roughly the',&
+'      same as "inv(A)*B", except it is computed in a different',&
+'      way. If A is an N by N matrix and B is a column vector',&
+'      with N components, or a matrix with several such columns,',&
+'      then X = A\B is the solution to the equation A*X = B',&
+'      computed by Gaussian elimination. A warning message is',&
+'      printed if A is badly scaled or nearly singular.',&
+'      A\eye produces the inverse of A .',&
+'',&
+'      If A is an M by N matrix with M < or > N and B is a',&
+'      column vector with M components, or a matrix with several',&
+'      such columns, then X = A\B is the solution in the least',&
+'      squares sense to the under- or overdetermined system of',&
+'      equations A*X = B. The effective rank, K, of A is',&
+'      determined from the QR decomposition with pivoting. A',&
+'      solution X is computed which has at most K nonzero',&
+'      components per column. If K < N this will usually not be',&
+'      the same solution as pinv(A)*B .',&
+'      A\eye produces a generalized inverse of A.',&
+'',&
+'      If A and B have the same dimensions, then A .\ B has',&
+'      elements a(i,j)\b(i,j) .',&
+'',&
+'      Also, see "edit".',&
+'',&
+'/     Slash or matrix right division. B/A is roughly the same',&
+'      as B*inv(A) . More precisely, B/A = (A''\B'')'' . See \ .',&
+'',&
+'      IF A and B have the same dimensions, then A ./ B has',&
+'      elements a(i,j)/b(i,j) .',&
+'',&
+'      Two or more slashes together on a line indicate a logical end of',&
+'      line. Any following text is ignored.',&
+'',&
+'''     Transpose. X'' is the complex conjugate transpose of X .',&
+'',&
+'      A quote is also use to delmit text. ''ANY TEXT'' is a vector whose',&
+'      components are the LAFF internal codes for the characters. A',&
+'      quote within the text is indicated by two quotes. See "display"',&
+'      and "FILE" .',&
+'',&
+'+     Addition. X + Y . X and Y must have the same dimensions.',&
+'',&
+'-     Subtraction. X - Y . X and Y must have the same',&
+'      dimensions.',&
+'',&
+'*     Matrix multiplication, X*Y . Any scalar (1 by 1 matrix)',&
+'      may multiply anything. Otherwise, the number of columns of',&
+'      X must equal the number of rows of Y .',&
+'',&
+'      Element-by-element multiplication is obtained with X .* Y .',&
+'',&
+'      The Kronecker tensor product is denoted by X .*. Y .',&
+'',&
+'      Powers. X**p is X to the p power. p must be a',&
+'      scalar. If X is a matrix, see "HIGH" .',&
+'',&
+':     Colon. Used in subscripts, "for" iterations and possibly',&
+'      elsewhere.',&
+'',&
+'        j:k   is the same as  <j, j+1, ..., k>',&
+'              is empty if  j > k .',&
+'        j:i:k is the same as [j, j+i,j+2*i, ..., k]',&
+'              (Fortran DO loop users beware of the unusual order!)',&
+'',&
+'         j:i:k  is the same as  <j, j+i, j+2i, ..., k>',&
+'         j:i:k  is empty if  i > 0 and j > k or if i < 0 and j < k .',&
+'',&
+'      The colon notation can be used to pick out selected rows,',&
+'      columns and elements of vectors and matrices.',&
+'',&
+'         A(:)    is all the elements of A, regarded as a single column.',&
+'                 However, used on the left side of an assignment, A(:)',&
+'                 fills A, but preserves its shape.',&
+'        A(:,j)   is the j-th column of A',&
+'        A(j:k)   is A(j), A(j+1), ... , A(k)',&
+'        A(:,j:k) is A(:,j), A(:,j+1), ... ,A(:,k) and so on.',&
+'        A(:,:)   is the same as A.',&
+'',&
+'      For the use of the colon in the "for" statement, See "for" .',&
+'',&
+'semi  "semi" toggles the action of semicolons at the end of lines.',&
+'      It will make semicolons cause rather than suppress printing.',&
+'      A second "semi" restores the initial interpretation.',&
 '================================================================================',&
-'VARIABLES                                                                       ',&
-'                                                                                ',&
-'ans   Variable created automatically when expressions are not                   ',&
-'      assigned to anything else.                                                ',&
-'                                                                                ',&
-'clear  Erases all variables, except "eps", "flop", "eye" and "rand".            ',&
-'       X = <> erases only variable X . So does "clear X".                       ',&
-'                                                                                ',&
-'who   Lists current variables.                                                  ',&
+'VARIABLES',&
+'',&
+'ans   Variable created automatically when expressions are not',&
+'      assigned to anything else.',&
+'',&
+'clear  Erases all variables, except "eps", "flop", "eye" and "rand".',&
+'       X = <> erases only variable X . So does "clear X".',&
+'',&
+'who   Lists current variables.',&
 '================================================================================',&
-'MACROS                                                                          ',&
-'                                                                                ',&
-'       The macro facility involves text and inward pointing angle               ',&
-'       brackets. If "STRING" is the source text for any LAFF                    ',&
-'       expression or statement, then                                            ',&
-'                                                                                ',&
-'             t = ''STRING'';                                                    ',&
-'       encodes the text as a vector of integers and stores that                 ',&
-'       vector in t. "display(t)" will print the text and                        ',&
-'                                                                                ',&
-'             >t<                                                                ',&
-'       causes the text to be interpreted, either as a statement or              ',&
-'       as a factor in an expression. For example                                ',&
-'                                                                                ',&
-'             t = ''1/(i+j-1)'';                                                 ',&
-'             display(t)                                                         ',&
-'             for i = 1:n, for j = 1:n, a(i,j) = >t<;                            ',&
-'                                                                                ',&
-'       generates the Hilbert matrix of order n.                                 ',&
-'       Another example showing indexed text,                                    ',&
-'                                                                                ',&
-'             S = <''x = 3            ''                                         ',&
-'                  ''y = 4            ''                                         ',&
-'                  ''z = sqrt(x*x+y*y)''>                                        ',&
-'             for k = 1:3, >S(k,:)<                                              ',&
-'                                                                                ',&
-'       It is necessary that the strings making up the "rows" of                 ',&
-'       the "matrix" S have the same lengths.                                    ',&
-'                                                                                ',&
+'MACROS',&
+'',&
+'       The macro facility involves text and inward pointing angle',&
+'       brackets. If "STRING" is the source text for any LAFF',&
+'       expression or statement, then',&
+'',&
+'             t = ''STRING'';',&
+'       encodes the text as a vector of integers and stores that',&
+'       vector in t. "display(t)" will print the text and',&
+'',&
+'             >t<',&
+'       causes the text to be interpreted, either as a statement or',&
+'       as a factor in an expression. For example',&
+'',&
+'             t = ''1/(i+j-1)'';',&
+'             display(t)',&
+'             for i = 1:n, for j = 1:n, a(i,j) = >t<;',&
+'',&
+'       generates the Hilbert matrix of order n.',&
+'       Another example showing indexed text,',&
+'',&
+'             S = <''x = 3            ''',&
+'                  ''y = 4            ''',&
+'                  ''z = sqrt(x*x+y*y)''>',&
+'             for k = 1:3, >S(k,:)<',&
+'',&
+'       It is necessary that the strings making up the "rows" of',&
+'       the "matrix" S have the same lengths.',&
+'',&
 '================================================================================',&
-'BASIC FUNCTIONS                                                                 ',&
-'                                                                                ',&
-'      For matrix arguments X , the functions "sin", "cos", "atan",              ',&
-'      "sqrt", "log", "exp" and X**p are computed using eigenvalues D            ',&
-'      and eigenvectors V . If <V,D> = eig(X) then f(X) = V*f(D)/V . This        ',&
-'      method may give inaccurate results if V is badly conditioned. Some        ',&
-'      idea of the accuracy can be obtained by comparing X**1 with X .           ',&
-'      For vector arguments, the function is applied to each component.          ',&
-'                                                                                ',&
-'atan  atan(X) is the arctangent of X . See "BASIC" .                            ',&
-'                                                                                ',&
-'cos   cos(X) is the cosine of X . See "BASIC" .                                 ',&
-'                                                                                ',&
-'exp   exp(X) is the exponential of X , e to the X . See "BASIC".                ',&
-'                                                                                ',&
-'log   log(X) is the natural logarithm of X.                                     ',&
-'                                                                                ',&
-'      Complex results are produced if X is not positive, or has                 ',&
-'      nonpositive eigenvalues.                                                  ',&
-'                                                                                ',&
-'      See "BASIC".                                                              ',&
-'                                                                                ',&
-'sin   sin(X) is the sine of X. See "BASIC".                                     ',&
-'                                                                                ',&
-'sqrt  sqrt(X) is the square root of X. See "BASIC". Complex                     ',&
-'      results are produced if X is not positive, or has                         ',&
-'      nonpositive eigenvalues.                                                  ',&
+'BASIC FUNCTIONS',&
+'',&
+'      For matrix arguments X , the functions "sin", "cos", "atan",',&
+'      "sqrt", "log", "exp" and X**p are computed using eigenvalues D',&
+'      and eigenvectors V . If <V,D> = eig(X) then f(X) = V*f(D)/V . This',&
+'      method may give inaccurate results if V is badly conditioned. Some',&
+'      idea of the accuracy can be obtained by comparing X**1 with X .',&
+'      For vector arguments, the function is applied to each component.',&
+'',&
+'atan  atan(X) is the arctangent of X . See "BASIC" .',&
+'',&
+'cos   cos(X) is the cosine of X . See "BASIC" .',&
+'',&
+'exp   exp(X) is the exponential of X , e to the X . See "BASIC".',&
+'',&
+'log   log(X) is the natural logarithm of X.',&
+'',&
+'      Complex results are produced if X is not positive, or has',&
+'      nonpositive eigenvalues.',&
+'',&
+'      See "BASIC".',&
+'',&
+'sin   sin(X) is the sine of X. See "BASIC".',&
+'',&
+'sqrt  sqrt(X) is the square root of X. See "BASIC". Complex',&
+'      results are produced if X is not positive, or has',&
+'      nonpositive eigenvalues.',&
 '================================================================================',&
-'HIGH LEVEL FUNCTIONS                                                            ',&
-'                                                                                ',&
-'abs   abs(X) is the absolute value, or complex modulus,                         ',&
-'      of the elements of X .                                                    ',&
-'                                                                                ',&
-'base  base(X,B) is a vector containing the base B representation                ',&
-'      of X. This is often used in conjunction with "display".                   ',&
-'      "display(X,B)" is the same as "display(base(X,B))". For example,          ',&
-'      "display(4*atan(1),16)" prints the hexadecimal representation of pi.      ',&
-'                                                                                ',&
-'chol  Cholesky factorization. "chol(X)" uses only the diagonal                  ',&
-'      and upper triangle of X. The lower triangular is assumed to be            ',&
-'      the (complex conjugate) transpose of the upper. If X is positive          ',&
-'      definite, then "R = chol(X)" produces an upper triangular R so            ',&
-'      that R''*R = X . If X is not positive definite, an error message          ',&
-'      is printed.                                                               ',&
-'                                                                                ',&
-'chop  Truncate arithmetic. "chop(P)" causes P places to be chopped              ',&
-'      off after each arithmetic operation in subsequent computations. This      ',&
-'      means P hexadecimal digits on some computers and P octal digits           ',&
-'      on others. "chop(0)" restores full precision.                             ',&
-'                                                                                ',&
-'cond  Condition number in 2-norm. "cond(X)" is the ratio of the                 ',&
-'      largest singular value of X to the smallest.                              ',&
-'                                                                                ',&
-'conjg  "conjg(X)" is the complex conjugate of X .                               ',&
-'                                                                                ',&
-'det   "det(X)" is the determinant of the square matrix X .                      ',&
-'                                                                                ',&
-'diag  If V is a row or column vector with N components,                         ',&
-'      "diag(V,K)" is a square matrix of order "N+abs(K)" with the               ',&
-'      elements of V on the K-th diagonal. K = 0 is the main diagonal,           ',&
-'      K > 0 is above the main diagonal and K < 0 is below the main              ',&
-'      diagonal. "diag(V)" simply puts V on the main diagonal. eg.               ',&
-'                                                                                ',&
-'         diag(-M:M) + diag(ones(2*M,1),1) + diag(ones(2*M,1),-1)                ',&
-'                                                                                ',&
-'      produces a tridiagonal matrix of order 2*M+1 .                            ',&
-'                                                                                ',&
-'      If X is a matrix, "diag(X,K)" is a column vector formed from the          ',&
-'      elements of the K-th diagonal of X.  "diag(X)" is the main diagonal       ',&
-'      of X.  "diag(diag(X))" is a diagonal matrix .                             ',&
-'                                                                                ',&
-'eig   Eigenvalues and eigenvectors.                                             ',&
-'      "eig(X)" is a vector containing the eigenvalues of a square               ',&
-'      matrix X.                                                                 ',&
-'      "<V,D> = eig(X)" produces a diagonal matrix D of                          ',&
-'      eigenvalues and a full matrix V whose columns are the                     ',&
-'      corresponding eigenvectors so that X*V = V*D .                            ',&
-'                                                                                ',&
-'eye   Identity matrix. "eye(N)" is the N by N identity matrix.                  ',&
-'      "eye(M,N)" is an M by N matrix with 1''s on the diagonal and              ',&
-'      zeros elsewhere. "eye(A)" is the same size as A. "eye"                    ',&
-'      with no arguments is an identity matrix of whatever order                 ',&
-'      is appropriate in the context. For example "A + 3*eye"                    ',&
-'      adds 3 to each diagonal element of A.                                     ',&
-'                                                                                ',&
-'hess  Hessenberg form. The Hessenberg form of a matrix is zero                  ',&
-'      below the first subdiagonal. If the matrix is symmetric or                ',&
-'      Hermitian, the form is tridiagonal. <P,H> = "hess(A)" produces a          ',&
-'      unitary matrix P and a Hessenberg matrix H so that A = P*H*P''. By        ',&
-'      itself, "hess(A)" returns H.                                              ',&
-'                                                                                ',&
-'invh  Inverse Hilbert matrix. "invh(N)" is the inverse of a N_by_N              ',&
-'      Hilbert matrix (which is a famous example of a badly conditioned          ',&
-'      matrix). The result is exact for N less than about 15, depending          ',&
-'      upon the computer.                                                        ',&
-'                                                                                ',&
-'         for i = 1:N, for j = 1:N, A(i,j) = 1/(i+j-1);                          ',&
-'                                                                                ',&
-'      generates the NxN Hilbert matrix.                                         ',&
-'                                                                                ',&
-'      "invh" has an alias of "inverse_hilbert" and "invhilb".                   ',&
-'                                                                                ',&
-'aimag see "imag"                                                                ',&
-'imag  "imag(X)" is the imaginary part of X .                                    ',&
-'                                                                                ',&
-'inv   "inv(X)" is the inverse of the square matrix X . A warning                ',&
-'      message is printed if X is badly scaled or nearly                         ',&
-'      singular.                                                                 ',&
-'                                                                                ',&
-'kron  "kron(X,Y)" is the Kronecker tensor product of X and Y. It                ',&
-'      is also denoted by X .*. Y . The result is a large matrix                 ',&
-'      formed by taking all possible products between the elements               ',&
-'      of X and those of Y . For example, if X is 2 by 3, then                   ',&
-'      X .*. Y is                                                                ',&
-'                                                                                ',&
-'            < x(1,1)*Y  x(1,2)*Y  x(1,3)*Y                                      ',&
-'              x(2,1)*Y  x(2,2)*Y  x(2,3)*Y >                                    ',&
-'                                                                                ',&
-'      The five-point discrete Laplacian for an n-by-n grid can be               ',&
-'      generated by                                                              ',&
-'                                                                                ',&
-'            T = diag(ones(n-1,1),1);  T = T + T'';  I = eye(T);                 ',&
-'            A = T.*.I + I.*.T - 4*eye;                                          ',&
-'                                                                                ',&
-'      Just in case they might be useful, LAFF includes                          ',&
-'      constructions called Kronecker tensor quotients, denoted by               ',&
-'      X ./. Y and X .\. Y . They are obtained by replacing the                  ',&
-'      element-wise multiplications in X .*. Y with divisions.                   ',&
-'                                                                                ',&
-'lu    Factors from Gaussian elimination. <L,U> = LU(X) stores a                 ',&
-'      upper triangular matrix in U and a ''psychologically lower                ',&
-'      triangular matrix'', i.e. a product of lower triangular and               ',&
-'      permutation matrices, in L , so that X = L*U . By itself,                 ',&
-'      "lu(X)" returns the output from CGEFA .                                   ',&
-'                                                                                ',&
-'magic  Magic square. "magic(N)" is an N by N matrix constructed                 ',&
-'       from the integers 1 through N**2 with equal row, column and              ',&
-'       diagonal sums. N must be a positive whole number not equal to two.       ',&
-'                                                                                ',&
-'norm  computes the norm or P-norm of X                                          ',&
-'                                                                                ',&
-'      norm(X,P) computes the P-norm of X. P=2 is the default, which defines     ',&
-'      the standard norm.                                                        ',&
-'                                                                                ',&
-'      For matrices..                                                            ',&
-'          norm(X,1)      is the 1-norm of X; ie. the largest column sum         ',&
-'                         of X.                                                  ',&
-'                                                                                ',&
-'          norm(X,2)      the largest singular value of X.                       ',&
-'          or norm(X)                                                            ',&
-'                                                                                ',&
-'          norm(X,''inf'')  is the infinity norm of X; ie. the largest row       ',&
-'                         sum of X.                                              ',&
-'                                                                                ',&
-'          norm(X,''fro'')  is the F-norm, i.e. "sqrt(sum(diag(X''*X)))" .       ',&
-'                                                                                ',&
-'      For vectors..                                                             ',&
-'          norm(V,P)      the same as sum(V(I)**P)**(1/P) .                      ',&
-'                         ??? what about negative values of (I) and odd P? abs() or not',&
-'                                                                                ',&
-'          norm(V,2)      the square root of the sum of the squares of           ',&
-'          or norm(V)     the entries of V.                                      ',&
-'                                                                                ',&
-'          norm(V,''inf'')  the value is max(abs(V)) .                           ',&
+'HIGH LEVEL FUNCTIONS',&
+'',&
+'abs   abs(X) is the absolute value, or complex modulus,',&
+'      of the elements of X .',&
+'',&
+'base  base(X,B) is a vector containing the base B representation',&
+'      of X. This is often used in conjunction with "display".',&
+'      "display(X,B)" is the same as "display(base(X,B))". For example,',&
+'      "display(4*atan(1),16)" prints the hexadecimal representation of pi.',&
+'',&
+'chol  Cholesky factorization. "chol(X)" uses only the diagonal',&
+'      and upper triangle of X. The lower triangular is assumed to be',&
+'      the (complex conjugate) transpose of the upper. If X is positive',&
+'      definite, then "R = chol(X)" produces an upper triangular R so',&
+'      that R''*R = X . If X is not positive definite, an error message',&
+'      is printed.',&
+'',&
+'chop  Truncate arithmetic. "chop(P)" causes P places to be chopped',&
+'      off after each arithmetic operation in subsequent computations. This',&
+'      means P hexadecimal digits on some computers and P octal digits',&
+'      on others. "chop(0)" restores full precision.',&
+'',&
+'cond  Condition number in 2-norm. "cond(X)" is the ratio of the',&
+'      largest singular value of X to the smallest.',&
+'',&
+'conjg  "conjg(X)" is the complex conjugate of X .',&
+'',&
+'det   "det(X)" is the determinant of the square matrix X .',&
+'',&
+'diag  If V is a row or column vector with N components,',&
+'      "diag(V,K)" is a square matrix of order "N+abs(K)" with the',&
+'      elements of V on the K-th diagonal. K = 0 is the main diagonal,',&
+'      K > 0 is above the main diagonal and K < 0 is below the main',&
+'      diagonal. "diag(V)" simply puts V on the main diagonal. eg.',&
+'',&
+'         diag(-M:M) + diag(ones(2*M,1),1) + diag(ones(2*M,1),-1)',&
+'',&
+'      produces a tridiagonal matrix of order 2*M+1 .',&
+'',&
+'      If X is a matrix, "diag(X,K)" is a column vector formed from the',&
+'      elements of the K-th diagonal of X.  "diag(X)" is the main diagonal',&
+'      of X.  "diag(diag(X))" is a diagonal matrix .',&
+'',&
+'eig   Eigenvalues and eigenvectors.',&
+'      "eig(X)" is a vector containing the eigenvalues of a square',&
+'      matrix X.',&
+'      "<V,D> = eig(X)" produces a diagonal matrix D of',&
+'      eigenvalues and a full matrix V whose columns are the',&
+'      corresponding eigenvectors so that X*V = V*D .',&
+'',&
+'eye   Identity matrix. "eye(N)" is the N by N identity matrix.',&
+'      "eye(M,N)" is an M by N matrix with 1''s on the diagonal and',&
+'      zeros elsewhere. "eye(A)" is the same size as A. "eye"',&
+'      with no arguments is an identity matrix of whatever order',&
+'      is appropriate in the context. For example "A + 3*eye"',&
+'      adds 3 to each diagonal element of A.',&
+'',&
+'hess  Hessenberg form. The Hessenberg form of a matrix is zero',&
+'      below the first subdiagonal. If the matrix is symmetric or',&
+'      Hermitian, the form is tridiagonal. <P,H> = "hess(A)" produces a',&
+'      unitary matrix P and a Hessenberg matrix H so that A = P*H*P''. By',&
+'      itself, "hess(A)" returns H.',&
+'',&
+'invh  Inverse Hilbert matrix. "invh(N)" is the inverse of a N_by_N',&
+'      Hilbert matrix (which is a famous example of a badly conditioned',&
+'      matrix). The result is exact for N less than about 15, depending',&
+'      upon the computer.',&
+'',&
+'         for i = 1:N, for j = 1:N, A(i,j) = 1/(i+j-1);',&
+'',&
+'      generates the NxN Hilbert matrix.',&
+'',&
+'      "invh" has an alias of "inverse_hilbert" and "invhilb".',&
+'',&
+'aimag see "imag"',&
+'imag  "imag(X)" is the imaginary part of X .',&
+'',&
+'inv   "inv(X)" is the inverse of the square matrix X . A warning',&
+'      message is printed if X is badly scaled or nearly',&
+'      singular.',&
+'',&
+'kron  "kron(X,Y)" is the Kronecker tensor product of X and Y. It',&
+'      is also denoted by X .*. Y . The result is a large matrix',&
+'      formed by taking all possible products between the elements',&
+'      of X and those of Y . For example, if X is 2 by 3, then',&
+'      X .*. Y is',&
+'',&
+'            < x(1,1)*Y  x(1,2)*Y  x(1,3)*Y',&
+'              x(2,1)*Y  x(2,2)*Y  x(2,3)*Y >',&
+'',&
+'      The five-point discrete Laplacian for an n-by-n grid can be',&
+'      generated by',&
+'',&
+'            T = diag(ones(n-1,1),1);  T = T + T'';  I = eye(T);',&
+'            A = T.*.I + I.*.T - 4*eye;',&
+'',&
+'      Just in case they might be useful, LAFF includes',&
+'      constructions called Kronecker tensor quotients, denoted by',&
+'      X ./. Y and X .\. Y . They are obtained by replacing the',&
+'      element-wise multiplications in X .*. Y with divisions.',&
+'',&
+'lu    Factors from Gaussian elimination. <L,U> = LU(X) stores a',&
+'      upper triangular matrix in U and a ''psychologically lower',&
+'      triangular matrix'', i.e. a product of lower triangular and',&
+'      permutation matrices, in L , so that X = L*U . By itself,',&
+'      "lu(X)" returns the output from CGEFA .',&
+'',&
+'magic  Magic square. "magic(N)" is an N by N matrix constructed',&
+'       from the integers 1 through N**2 with equal row, column and',&
+'       diagonal sums. N must be a positive whole number not equal to two.',&
+'',&
+'norm  computes the norm or P-norm of X',&
+'',&
+'      norm(X,P) computes the P-norm of X. P=2 is the default, which defines',&
+'      the standard norm.',&
+'',&
+'      For matrices..',&
+'          norm(X,1)      is the 1-norm of X; ie. the largest column sum',&
+'                         of X.',&
+'',&
+'          norm(X,2)      the largest singular value of X.',&
+'          or norm(X)',&
+'',&
+'          norm(X,''inf'')  is the infinity norm of X; ie. the largest row',&
+'                         sum of X.',&
+'',&
+'          norm(X,''fro'')  is the F-norm, i.e. "sqrt(sum(diag(X''*X)))" .',&
+'',&
+'      For vectors..',&
+'          norm(V,P)      the same as sum(V(I)**P)**(1/P) .',&
+'                         ??? what about negative values of (I) and odd P? abs() ',&
+'',&
+'          norm(V,2)      the square root of the sum of the squares of',&
+'          or norm(V)     the entries of V.',&
+'',&
+'          norm(V,''inf'')  the value is max(abs(V)) .',&
 '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<',&
-'!!          If X is a vector, then                                              ',&
-'!!                                                                              ',&
-'!!            norm(x,p) = sum(abs(x) .^ p) ^ (1/p)                              ',&
-'!!            norm(x,1) is the sum of the absolute values of X.                 ',&
-'!!            norm(x)/sqrt(n) is the root-mean-square value.                    ',&
-'!!            norm(x,-inf)=min(abs(x))                                          ',&
+'!!          If X is a vector, then',&
+'!!',&
+'!!            norm(x,p) = sum(abs(x) .^ p) ^ (1/p)',&
+'!!            norm(x,1) is the sum of the absolute values of X.',&
+'!!            norm(x)/sqrt(n) is the root-mean-square value.',&
+'!!            norm(x,-inf)=min(abs(x))',&
 '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<',&
-'                                                                                ',&
-'ones  All ones. "ones(N)" is an N by N matrix of ones. "ones(M,N)"              ',&
-'      is an M by N matrix of ones . "ones(A)" is the same size as A and         ',&
-'      all ones .                                                                ',&
-'                                                                                ',&
-'orth  Orthogonalization. "Q = orth(X)" is a matrix with                         ',&
-'      orthonormal columns, i.e. Q''*Q = eye, which span the same                ',&
-'      space as the columns of X .                                               ',&
-'                                                                                ',&
-'pinv  Pseudoinverse.                                                            ',&
-'                                                                                ',&
-'      "X = pinv(A)" produces a matrix X of the same dimensions as A''           ',&
-'      so that A*X*A = A , X*A*X = X and AX and XA are Hermitian . The           ',&
-'      computation is based on "svd(A)" and any singular values less             ',&
-'      than a tolerance are treated as zero. The default tolerance is            ',&
-'      "norm(shape(A),''inf'')*norM(A)*eps". This tolerance may be overridden    ',&
-'      with "X = pinv(A,tol)". See "rank".                                       ',&
-'                                                                                ',&
-'poly  Characteristic polynomial.                                                ',&
-'                                                                                ',&
-'      If A is an N by N matrix, "poly(A)" is a column vector with               ',&
-'      N+1 elements which are the coefficients of the characteristic             ',&
-'      polynomial, "det(lambda*eye - A)" .                                       ',&
-'                                                                                ',&
-'      If V is a vector, "poly(V)" is a vector whose elements are the            ',&
-'      coefficients of the polynomial whose roots are the elements of V          ',&
-'      . For vectors, "roots" and "poly" are inverse functions of each           ',&
-'      other, up to ordering, scaling, and roundoff error.                       ',&
-'                                                                                ',&
-'      "roots(poly(1:20))" generates Wilkinson''s famous example.                ',&
-'                                                                                ',&
-'prod  "prod(X)" is the product of all the elements of X .                       ',&
-'                                                                                ',&
-'qr    Orthogonal-triangular decomposition.  "<Q,R> = qr(X)" produces an         ',&
-'      upper triangular matrix R of the same                                     ',&
-'      dimension as X and a unitary matrix Q so that X = Q*R .                   ',&
-'                                                                                ',&
-'      "<Q,R,E> = qr(X)" produces a permutation matrix E, an upper               ',&
-'      triangular R with decreasing diagonal elements and a unitary Q            ',&
-'      so that X*E = Q*R .  By itself, "qr(X)" returns the output of             ',&
-'      "cqrdc". "triu(qr(X))" is R .                                             ',&
-'                                                                                ',&
-'rand  Random numbers and matrices. "rand(N)" is an N by N matrix                ',&
-'      with random entries. "rand(M,N)" is an M by N matrix with                 ',&
-'      random entries. "rand(A)" is the same size as A. "rand"                   ',&
-'      with no arguments is a scalar whose value changes each time               ',&
-'      it is referenced.                                                         ',&
-'                                                                                ',&
-'      Ordinarily, random numbers are uniformly distributed in                   ',&
-'      the interval "(0.0,1.0). rand(''normal'')" switches to a                  ',&
-'      normal distribution with mean 0.0 and variance 1.0.                       ',&
-'      "rand(''uniform'')" switches back to the uniform distribution.            ',&
-'      "rand(''seed'')" returns the current value of the seed for the            ',&
-'      generator. "rand(''seed'',n)" sets the seed to n.                         ',&
-'      "rand(''seed'',0)" resets the seed to 0, its value when LAFF              ',&
-'      is first entered.                                                         ',&
-'                                                                                ',&
-'rank  Rank. "K = rank(X)" is the number of singular values of X                 ',&
-'      that are larger than "norm(shape(X),''inf'')*norm(X)*eps".                ',&
-'      "K = rank(X,tol)" is the number of singular values of X that              ',&
-'      are larger than tol.                                                      ',&
-'                                                                                ',&
-'rcond  "rcond(X)" is an estimate for the reciprocal of the                      ',&
-'       condition of X in the 1-norm obtained by the LINPACK                     ',&
-'       condition estimator. If X is well conditioned, rcond(X)                  ',&
-'       is near 1.0. If X is badly conditioned, rcond(X) is                      ',&
-'       near 0.0.                                                                ',&
-'       <R, Z> = rcond(A) sets R to rcond(A) and also produces a                 ',&
-'       vector Z so that                                                         ',&
-'                                                                                ',&
-'                 norm(A*Z,1) = R*norm(A,1)*norm(Z,1)                            ',&
-'                                                                                ',&
-'       So, if rcond(A) is small, then Z is an approximate null                  ',&
-'       vector.                                                                  ',&
-'                                                                                ',&
-'rat   An experimental function which attempts to remove the                     ',&
-'      roundoff error from results that should be "simple"                       ',&
-'      rational numbers.                                                         ',&
-'      "rat(X)" approximates each element of X by a continued                    ',&
-'      fraction of the form                                                      ',&
-'                                                                                ',&
-'                a/b = d1 + 1/(d2 + 1/(d3 + ... + 1/dk))                         ',&
-'                                                                                ',&
-'      with k <= len, integer di and abs(di) <= max . The default                ',&
-'      values of the parameters are len = 5 and max = 100.                       ',&
-'      "rat(len,max)" changes the default values. Increasing either              ',&
-'      len or max increases the number of possible fractions.                    ',&
-'      "<A,B> = rat(X)" produces integer matrices A and B so that                ',&
-'                                                                                ',&
-'                A ./ B  =  rat(X)                                               ',&
-'                                                                                ',&
-'      Some examples:                                                            ',&
-'                                                                                ',&
-'            long                                                                ',&
-'            T = invh(6), X = inv(T)                                             ',&
-'            <A,B> = rat(X)                                                      ',&
-'            H = A ./ B, S = inv(H)                                              ',&
-'                                                                                ',&
-'            short e                                                             ',&
-'            d = 1:8,  e = ones(d),  A = abs(d''*e - e''*d)                      ',&
-'            X = inv(A)                                                          ',&
-'            rat(X)                                                              ',&
-'            display(ans)                                                        ',&
-'                                                                                ',&
-'real  "real(X)" is the real part of X.                                          ',&
-'                                                                                ',&
-'rref  "rref(A)" is the reduced row echelon form of the rectangular              ',&
-'      matrix. rref(A,B) is the same as rref(<A,B>) .                            ',&
-'                                                                                ',&
-'roots  Find polynomial roots. "roots(C)" computes the roots of the              ',&
-'       polynomial whose coefficients are the elements of the vector C.          ',&
-'       If C has N+1 components, the polynomial is                               ',&
-'                                                                                ',&
-'          C(1)*X**N + ... + C(N)*X + C(N+1)                                     ',&
-'                                                                                ',&
-'       See "poly".                                                              ',&
-'                                                                                ',&
-'round  "round(X)" rounds the elements of X to the nearest integers.             ',&
-'                                                                                ',&
-'schur  Schur decomposition. "<U,T> = schur(X)" produces an upper                ',&
-'       triangular matrix T , with the eigenvalues of X on the                   ',&
-'       diagonal, and a unitary matrix U so that X = U*T*U'' and                 ',&
-'       U''*U = eye . By itself, "schur(X)" returns T .                          ',&
-'                                                                                ',&
-'shape  If X is an M by N matrix, then shape(X) is <M, N> .                      ',&
-'       Can also be used with a multiple assignment,                             ',&
-'            <M, N> = shape(X) .                                                 ',&
-'                                                                                ',&
-'sum   "sum(X)" is the sum of all the elements of X.                             ',&
-'      "sum(diag(X))" is the trace of X.                                         ',&
-'                                                                                ',&
-'svd   Singular value decomposition. "<U,S,V> = svd(X)" produces a               ',&
-'      diagonal matrix S , of the same dimension as X and with                   ',&
-'      nonnegative diagonal elements in decreasing order, and                    ',&
-'      unitary matrices U and V so that X = U*S*V'' .                            ',&
-'                                                                                ',&
-'      By itself, "svd(X)" returns a vector containing the singular              ',&
-'      values.                                                                   ',&
-'                                                                                ',&
-'      "<U,S,V> = svd(X,0)" produces the "economy size"                          ',&
-'      decomposition. If X is m by n with m > n, then only the                   ',&
-'      first n columns of U are computed and S is n by n .                       ',&
-'                                                                                ',&
-'tril  Lower triangle. "tril(X)" is the lower triangular part of X.              ',&
-'      "tril(X,K)" is the elements on and below the K-th diagonal of             ',&
-'      X. K = 0 is the main diagonal, K > 0 is above the main                    ',&
-'      diagonal and K < 0 is below the main diagonal.                            ',&
-'                                                                                ',&
-'triu  Upper triangle. "triu(X)" is the upper triangular part of X.              ',&
-'      "triu(X,K)" is the elements on and above the K-th diagonal of X. K        ',&
-'      = 0 is the main diagonal, K > 0 is above the main diagonal and K <        ',&
-'      0 is below the main diagonal.                                             ',&
-'                                                                                ',&
-'user  Allows personal Fortran subroutines to be linked into                     ',&
-'      LAFF. The subroutine should have the heading                              ',&
-'                                                                                ',&
-'         SUBROUTINE USER(A,M,N,S,T)                                             ',&
-'         REAL or DOUBLEPRECISION A(M,N),S,T                                     ',&
-'                                                                                ',&
-'      The LAFF statement "Y = user(X,s,t)" results in a call to the             ',&
-'      subroutine with a copy of the matrix X stored in the argument A,          ',&
-'      its column and row dimensions in M and N, and the scalar parameters       ',&
-'      s and t stored in S and T. If s and t are omitted, they are set           ',&
-'      to 0.0. After the return, A is stored in Y. The dimensions M and          ',&
-'      N may be reset within the subroutine. The statement Y = "user(K)"         ',&
-'      results in a call with M = 1, N = 1 and A(1,1) = "float(K)". After        ',&
-'      the subroutine has been written, it must be compiled and linked           ',&
-'      to the LAFF object code within the local operating system.                ',&
-'                                                                                ',&
-'zeros                                                                           ',&
-'      Returns a matrix of all zeros.                                            ',&
-'                                                                                ',&
-'         zeros(N)    returns an N by N matrix of zeroes.                        ',&
-'         zeros(M,N)  returns an M by N matrix of zeroes.                        ',&
-'         zeros(X)    returns a matrix of zeroes of the same order as X.         ',&
+'',&
+'ones  All ones. "ones(N)" is an N by N matrix of ones. "ones(M,N)"',&
+'      is an M by N matrix of ones . "ones(A)" is the same size as A and',&
+'      all ones .',&
+'',&
+'         a=magic(4)',&
+'         a=a+ones(a)*3 // Add 3 to each element of "a"',&
+'',&
+'orth  Orthogonalization. "Q = orth(X)" is a matrix with',&
+'      orthonormal columns, i.e. Q''*Q = eye, which span the same',&
+'      space as the columns of X .',&
+'',&
+'pinv  Pseudoinverse.',&
+'',&
+'      "X = pinv(A)" produces a matrix X of the same dimensions as A''',&
+'      so that A*X*A = A , X*A*X = X and AX and XA are Hermitian . The',&
+'      computation is based on "svd(A)" and any singular values less',&
+'      than a tolerance are treated as zero. The default tolerance is',&
+'      "norm(shape(A),''inf'')*norM(A)*eps". This tolerance may be overridden',&
+'      with "X = pinv(A,tol)". See "rank".',&
+'',&
+'poly  Characteristic polynomial.',&
+'',&
+'      If A is an N by N matrix, "poly(A)" is a column vector with',&
+'      N+1 elements which are the coefficients of the characteristic',&
+'      polynomial, "det(lambda*eye - A)" .',&
+'',&
+'      If V is a vector, "poly(V)" is a vector whose elements are the',&
+'      coefficients of the polynomial whose roots are the elements of V',&
+'      . For vectors, "roots" and "poly" are inverse functions of each',&
+'      other, up to ordering, scaling, and roundoff error.',&
+'',&
+'      "roots(poly(1:20))" generates Wilkinson''s famous example.',&
+'',&
+'prod  "prod(X)" is the product of all the elements of X .',&
+'',&
+'qr    Orthogonal-triangular decomposition.  "<Q,R> = qr(X)" produces an',&
+'      upper triangular matrix R of the same',&
+'      dimension as X and a unitary matrix Q so that X = Q*R .',&
+'',&
+'      "<Q,R,E> = qr(X)" produces a permutation matrix E, an upper',&
+'      triangular R with decreasing diagonal elements and a unitary Q',&
+'      so that X*E = Q*R .  By itself, "qr(X)" returns the output of',&
+'      "cqrdc". "triu(qr(X))" is R .',&
+'',&
+'rand  Random numbers and matrices. "rand(N)" is an N by N matrix',&
+'      with random entries. "rand(M,N)" is an M by N matrix with',&
+'      random entries. "rand(A)" is the same size as A. "rand"',&
+'      with no arguments is a scalar whose value changes each time',&
+'      it is referenced.',&
+'',&
+'      Ordinarily, random numbers are uniformly distributed in',&
+'      the interval "(0.0,1.0). rand(''normal'')" switches to a',&
+'      normal distribution with mean 0.0 and variance 1.0.',&
+'      "rand(''uniform'')" switches back to the uniform distribution.',&
+'      "rand(''seed'')" returns the current value of the seed for the',&
+'      generator. "rand(''seed'',n)" sets the seed to n.',&
+'      "rand(''seed'',0)" resets the seed to 0, its value when LAFF',&
+'      is first entered.',&
+'',&
+'rank  Rank. "K = rank(X)" is the number of singular values of X',&
+'      that are larger than "norm(shape(X),''inf'')*norm(X)*eps".',&
+'      "K = rank(X,tol)" is the number of singular values of X that',&
+'      are larger than tol.',&
+'',&
+'rcond  "rcond(X)" is an estimate for the reciprocal of the',&
+'       condition of X in the 1-norm obtained by the LINPACK',&
+'       condition estimator. If X is well conditioned, rcond(X)',&
+'       is near 1.0. If X is badly conditioned, rcond(X) is',&
+'       near 0.0.',&
+'       <R, Z> = rcond(A) sets R to rcond(A) and also produces a',&
+'       vector Z so that',&
+'',&
+'                 norm(A*Z,1) = R*norm(A,1)*norm(Z,1)',&
+'',&
+'       So, if rcond(A) is small, then Z is an approximate null',&
+'       vector.',&
+'',&
+'rat   An experimental function which attempts to remove the',&
+'      roundoff error from results that should be "simple"',&
+'      rational numbers.',&
+'      "rat(X)" approximates each element of X by a continued',&
+'      fraction of the form',&
+'',&
+'                a/b = d1 + 1/(d2 + 1/(d3 + ... + 1/dk))',&
+'',&
+'      with k <= len, integer di and abs(di) <= max . The default',&
+'      values of the parameters are len = 5 and max = 100.',&
+'      "rat(len,max)" changes the default values. Increasing either',&
+'      len or max increases the number of possible fractions.',&
+'      "<A,B> = rat(X)" produces integer matrices A and B so that',&
+'',&
+'                A ./ B  =  rat(X)',&
+'',&
+'      Some examples:',&
+'',&
+'            long',&
+'            T = invh(6), X = inv(T)',&
+'            <A,B> = rat(X)',&
+'            H = A ./ B, S = inv(H)',&
+'',&
+'            short e',&
+'            d = 1:8,  e = ones(d),  A = abs(d''*e - e''*d)',&
+'            X = inv(A)',&
+'            rat(X)',&
+'            display(ans)',&
+'',&
+'real  "real(X)" is the real part of X.',&
+'',&
+'rref  "rref(A)" is the reduced row echelon form of the rectangular',&
+'      matrix. rref(A,B) is the same as rref(<A,B>) .',&
+'',&
+'roots  Find polynomial roots. "roots(C)" computes the roots of the',&
+'       polynomial whose coefficients are the elements of the vector C.',&
+'       If C has N+1 components, the polynomial is',&
+'',&
+'          C(1)*X**N + ... + C(N)*X + C(N+1)',&
+'',&
+'       See "poly".',&
+'',&
+'round  "round(X)" rounds the elements of X to the nearest integers.',&
+'',&
+'schur  Schur decomposition. "<U,T> = schur(X)" produces an upper',&
+'       triangular matrix T , with the eigenvalues of X on the',&
+'       diagonal, and a unitary matrix U so that X = U*T*U'' and',&
+'       U''*U = eye . By itself, "schur(X)" returns T .',&
+'',&
+'shape  If X is an M by N matrix, then shape(X) is <M, N> .',&
+'       Can also be used with a multiple assignment,',&
+'            <M, N> = shape(X) .',&
+'',&
+'sum   "sum(X)" is the sum of all the elements of X.',&
+'      "sum(diag(X))" is the trace of X.',&
+'',&
+'svd   Singular value decomposition. "<U,S,V> = svd(X)" produces a',&
+'      diagonal matrix S , of the same dimension as X and with',&
+'      nonnegative diagonal elements in decreasing order, and',&
+'      unitary matrices U and V so that X = U*S*V'' .',&
+'',&
+'      By itself, "svd(X)" returns a vector containing the singular',&
+'      values.',&
+'',&
+'      "<U,S,V> = svd(X,0)" produces the "economy size"',&
+'      decomposition. If X is m by n with m > n, then only the',&
+'      first n columns of U are computed and S is n by n .',&
+'',&
+'tril  Lower triangle. "tril(X)" is the lower triangular part of X.',&
+'      "tril(X,K)" is the elements on and below the K-th diagonal of',&
+'      X. K = 0 is the main diagonal, K > 0 is above the main',&
+'      diagonal and K < 0 is below the main diagonal.',&
+'',&
+'triu  Upper triangle. "triu(X)" is the upper triangular part of X.',&
+'      "triu(X,K)" is the elements on and above the K-th diagonal of X. K',&
+'      = 0 is the main diagonal, K > 0 is above the main diagonal and K <',&
+'      0 is below the main diagonal.',&
+'',&
+'user  Allows personal Fortran subroutines to be linked into',&
+'      LAFF. The subroutine should have the heading',&
+'',&
+'         SUBROUTINE USER(A,M,N,S,T)',&
+'         REAL or DOUBLEPRECISION A(M,N),S,T',&
+'',&
+'      The LAFF statement "Y = user(X,s,t)" results in a call to the',&
+'      subroutine with a copy of the matrix X stored in the argument A,',&
+'      its column and row dimensions in M and N, and the scalar parameters',&
+'      s and t stored in S and T. If s and t are omitted, they are set',&
+'      to 0.0. After the return, A is stored in Y. The dimensions M and',&
+'      N may be reset within the subroutine. The statement Y = "user(K)"',&
+'      results in a call with M = 1, N = 1 and A(1,1) = "float(K)". After',&
+'      the subroutine has been written, it must be compiled and linked',&
+'      to the LAFF object code within the local operating system.',&
+'',&
+'zeros',&
+'      Returns a matrix of all zeros.',&
+'',&
+'         zeros(N)    returns an N by N matrix of zeroes.',&
+'         zeros(M,N)  returns an M by N matrix of zeroes.',&
+'         zeros(X)    returns a matrix of zeroes of the same order as X.',&
 '================================================================================',&
-'FLOW CONTROL                                                                    ',&
-'                                                                                ',&
-'else  Used with "if".                                                           ',&
-'                                                                                ',&
-'end   Terminates the scope of "for", "while" and "if" statements.               ',&
-'      Without "end"s, "for" and "while" repeat all statements up to             ',&
-'      the end of the line. Each "end" is paired with the closest                ',&
-'      previous unpaired "for" or "while" and serves to terminate its            ',&
-'      scope. The line                                                           ',&
-'                                                                                ',&
-'         for I=1:N, for J=1:N, A(I,J)=1/(I+J-1); A                              ',&
-'                                                                                ',&
-'      would cause A to be printed N**2 times, once for each new                 ',&
-'      element. On the other hand, the line                                      ',&
-'                                                                                ',&
-'         for I=1:N, for J=1:N, A(I,J)=1/(I+J-1); end, end, A                    ',&
-'                                                                                ',&
-'      will lead to only the final printing of A.                                ',&
-'      Similar considerations apply to "while".                                  ',&
-'                                                                                ',&
-'      See "exit" (terminates execution of loops or of LAFF itself).             ',&
-'                                                                                ',&
-'if    Conditionally execute statements                                          ',&
-'                                                                                ',&
-'      SIMPLE FORM                                                               ',&
-'       Enter                                                                    ',&
-'                                                                                ',&
-'         if expression rop expression, statements                               ',&
-'                                                                                ',&
-'      where rop is =, <, >, <=, >=, or <> (not equal). The                      ',&
-'      statements are executed once if the indicated comparison                  ',&
-'      between the real parts of the first components of the two                 ',&
-'      expressions is true, otherwise the statements are skipped.                ',&
-'                                                                                ',&
-'      EXAMPLE                                                                   ',&
-'        Enter                                                                   ',&
-'                                                                                ',&
-'         if abs(i-j) = 1, a(i,j) = -1;                                          ',&
-'                                                                                ',&
-'      More complicated forms use "end" in the same way it is used with          ',&
-'      "for" and "while" and use "else" as an abbreviation for "end",            ',&
-'                                                                                ',&
-'         if expression not rop expression                                       ',&
-'                                                                                ',&
-'      EXAMPLE                                                                   ',&
-'        Enter                                                                   ',&
-'                                                                                ',&
-'         for i = 1:n, for j = 1:n, ...                                          ',&
-'            if i = j, a(i,j) = 2; else if abs(i-j) = 1, a(i,j) = -1; ...        ',&
-'            else a(i,j) = 0;                                                    ',&
-'                                                                                ',&
-'      An easier way to accomplish the same thing is                             ',&
-'                                                                                ',&
-'         a = 2*eye(n);                                                          ',&
-'         for i = 1:n-1, a(i,i+1) = -1; a(i+1,i) = -1;                           ',&
-'                                                                                ',&
-'for   Repeat statements a specific number of times.                             ',&
-'                                                                                ',&
-'         for variable = expr, statement, ..., statement, end                    ',&
-'                                                                                ',&
-'      The "end" at the end of a line may be omitted. The comma before the       ',&
-'      "end" may also be omitted. The columns of the expression are stored       ',&
-'      one at a time in the variable and then the following statements,          ',&
-'      up to the "end", are executed.  The expression is often of the form       ',&
-'      X:Y, in which case its columns are simply scalars. Some examples          ',&
-'      (assume N has already been assigned a value).                             ',&
-'                                                                                ',&
-'       for I = 1:N, for J = 1:N, A(I,J) = 1/(I+J-1);                            ',&
-'       for J = 2:N-1, A(J,J) = J; end; A                                        ',&
-'       for S = 1.0: -0.1: 0.0, ... steps S with increments of -0.1 .            ',&
-'       for E = eye(N), ... sets E to the unit N-vectors.                        ',&
-'       for V = A, ... has the same effect as                                    ',&
-'       for J = 1:N, V = A(:,J); ... except J is also set here.                  ',&
-'                                                                                ',&
-'while  Repeat statements an indefinite number of times.                         ',&
-'                                                                                ',&
-'          while expr rop expr, statement, ..., statement, end                   ',&
-'                                                                                ',&
-'       where rop is =, <, >, <=, >=, or <> (not equal). The "end"               ',&
-'       at the end of a line may be omitted. The comma before the                ',&
-'       "end" may also be omitted. The commas may be replaced by                 ',&
-'       semicolons to avoid printing. The statements are                         ',&
-'       repeatedly executed as long as the indicated comparison                  ',&
-'       between the real parts of the first components of the two                ',&
-'       expressions is true.                                                     ',&
-'                                                                                ',&
-'       EXAMPLE                                                                  ',&
-'       (assume a matrix A is already defined).                                  ',&
-'                                                                                ',&
-'        E = 0*A; F = E + eye; N = 1;                                            ',&
-'        while norm(E+F-E,1) > 0, E = E + F; F = A*F/N; N = N + 1;               ',&
-'        E                                                                       ',&
-'                                                                                ',&
-'exit  Causes termination of a "for" or "while" loop.                            ',&
-'      If not in a loop, terminates execution of LAFF.                           ',&
-'      Also see "quit".                                                          ',&
-'                                                                                ',&
-'quit  From the terminal, causes return to the operating system                  ',&
-'      or other program which invoked LAFF. From inside an                       ',&
-'      "exec", causes return to the invoking "exec", or to the                   ',&
-'      terminal.                                                                 ',&
+'FLOW CONTROL',&
+'',&
+'else  Used with "if".',&
+'',&
+'end   Terminates the scope of "for", "while" and "if" statements.',&
+'      Without "end"s, "for" and "while" repeat all statements up to',&
+'      the end of the line. Each "end" is paired with the closest',&
+'      previous unpaired "for" or "while" and serves to terminate its',&
+'      scope. The line',&
+'',&
+'         for I=1:N, for J=1:N, A(I,J)=1/(I+J-1); A',&
+'',&
+'      would cause A to be printed N**2 times, once for each new',&
+'      element. On the other hand, the line',&
+'',&
+'         for I=1:N, for J=1:N, A(I,J)=1/(I+J-1); end, end, A',&
+'',&
+'      will lead to only the final printing of A.',&
+'      Similar considerations apply to "while".',&
+'',&
+'      See "exit" (terminates execution of loops or of LAFF itself).',&
+'',&
+'if    Conditionally execute statements',&
+'',&
+'      SIMPLE FORM',&
+'       Enter',&
+'',&
+'         if expression rop expression, statements',&
+'',&
+'      where rop is =, <, >, <=, >=, or <> (not equal). The',&
+'      statements are executed once if the indicated comparison',&
+'      between the real parts of the first components of the two',&
+'      expressions is true, otherwise the statements are skipped.',&
+'',&
+'      EXAMPLE',&
+'        Enter',&
+'',&
+'         if abs(i-j) = 1, a(i,j) = -1;',&
+'',&
+'      More complicated forms use "end" in the same way it is used with',&
+'      "for" and "while" and use "else" as an abbreviation for "end",',&
+'',&
+'         if expression not rop expression',&
+'',&
+'      EXAMPLE',&
+'        Enter',&
+'',&
+'         for i = 1:n, for j = 1:n, ...',&
+'            if i = j, a(i,j) = 2; else if abs(i-j) = 1, a(i,j) = -1; ...',&
+'            else a(i,j) = 0;',&
+'',&
+'      An easier way to accomplish the same thing is',&
+'',&
+'         a = 2*eye(n);',&
+'         for i = 1:n-1, a(i,i+1) = -1; a(i+1,i) = -1;',&
+'',&
+'for   Repeat statements a specific number of times.',&
+'',&
+'         for variable = expr, statement, ..., statement, end',&
+'',&
+'      The "end" at the end of a line may be omitted. The comma before the',&
+'      "end" may also be omitted. The columns of the expression are stored',&
+'      one at a time in the variable and then the following statements,',&
+'      up to the "end", are executed.  The expression is often of the form',&
+'      X:Y, in which case its columns are simply scalars. Some examples',&
+'      (assume N has already been assigned a value).',&
+'',&
+'       for I = 1:N, for J = 1:N, A(I,J) = 1/(I+J-1);',&
+'       for J = 2:N-1, A(J,J) = J; end; A',&
+'       for S = 1.0: -0.1: 0.0, ... steps S with increments of -0.1 .',&
+'       for E = eye(N), ... sets E to the unit N-vectors.',&
+'       for V = A, ... has the same effect as',&
+'       for J = 1:N, V = A(:,J); ... except J is also set here.',&
+'',&
+'while  Repeat statements an indefinite number of times.',&
+'',&
+'          while expr rop expr, statement, ..., statement, end',&
+'',&
+'       where rop is =, <, >, <=, >=, or <> (not equal). The "end"',&
+'       at the end of a line may be omitted. The comma before the',&
+'       "end" may also be omitted. The commas may be replaced by',&
+'       semicolons to avoid printing. The statements are',&
+'       repeatedly executed as long as the indicated comparison',&
+'       between the real parts of the first components of the two',&
+'       expressions is true.',&
+'',&
+'       EXAMPLE',&
+'       (assume a matrix A is already defined).',&
+'',&
+'        E = 0*A; F = E + eye; N = 1;',&
+'        while norm(E+F-E,1) > 0, E = E + F; F = A*F/N; N = N + 1;',&
+'        E',&
+'',&
+'exit  Causes termination of a "for" or "while" loop.',&
+'      If not in a loop, terminates execution of LAFF.',&
+'      Also see "quit".',&
+'',&
+'quit  From the terminal, causes return to the operating system',&
+'      or other program which invoked LAFF. From inside an',&
+'      "exec", causes return to the invoking "exec", or to the',&
+'      terminal.',&
 '================================================================================',&
-'FILE ACCESS                                                                     ',&
-'                                                                                ',&
-'      The "exec", "save", "delete", "load", "diary", and "print"                ',&
-'      functions access files.  The ''file'' parameter takes different           ',&
-'      forms for different operating systems. On most systems, ''file''          ',&
-'      may be a string of up to 1024 characters in quotes. For example,          ',&
-'      "save(''A'')" or "exec(''LAFF/demo.exec'')" . The string will be used     ',&
-'      as the name of a file in the local operating system.                      ',&
-'                                                                                ',&
-'      Check your local installation for details.  The filename must be          ',&
-'      composed of recognized characters. See "char".                            ',&
-'                                                                                ',&
-'      Also see "quit" and "exit".                                               ',&
-'                                                                                ',&
-'delete  "delete(''filename'')" deletes the given file.                          ',&
-'                                                                                ',&
-'exec  "exec(''file'',k)" obtains subsequent LAFF input from an                  ',&
-'      external file. The printing of input is controlled by the                 ',&
-'      optional parameter k .                                                    ',&
-'                                                                                ',&
-'      Files are searched for by the given name. If not found, it is searched    ',&
-'      for in the colon-separated directory names in the environment variable    ',&
-'      LAFF_PATH. It is looked for first literally by the given name, and then   ',&
-'      by the name suffixed with ".la".                                          ',&
-'                                                                                ',&
-'      "include" is an alias for "exec".                                         ',&
-'                                                                                ',&
-'         If k = 0 , there is no echo, prompt or pause. This is the              ',&
-'                    default if the exec command is followed by a semicolon.     ',&
-'         If k = 1 , the input is echoed.                                        ',&
-'         If k = 2 , the LAFF prompt <> is printed.                              ',&
-'         If k = 3 , there will be echos and prompts, but no pauses.             ',&
-'                    This is the the default if the exec command is not          ',&
-'                    followed by a semicolon.                                    ',&
-'         If k = 4 , LAFF pauses before each prompt and waits for a              ',&
-'                    null line to continue.                                      ',&
-'         If k = 7 , there will be echos, prompts and pauses. This is            ',&
-'                    useful for demonstrations on video terminals.               ',&
-'                                                                                ',&
-'      "exec"''s may be nested, i.e. the text in the file may contain            ',&
-'      "exec" of another file.                                                   ',&
-'                                                                                ',&
-'      "exec" may not be recursive, as Fortran (currently) does not allow        ',&
-'      for multiple opens of a file.                                             ',&
-'                                                                                ',&
-'      "exec"s may also be driven by "for" and "while" loops.                    ',&
-'                                                                                ',&
-'include  "include" is an alias for "exec".                                      ',&
-'                                                                                ',&
-'load  "load(''file'')" retrieves all the variables from the file .              ',&
-'      See FILE and "save" for more details. To prepare your own                 ',&
-'      file for "load"ing, change the "read" to "write" in the code              ',&
-'      given under "save".                                                       ',&
-'                                                                                ',&
-'print  "print(''file'',X)" prints X on the file using the current               ',&
-'       format determined by "short", "long z", etc. See FILE.                   ',&
-'                                                                                ',&
-'doc   does nothing at the moment                                                ',&
-'                                                                                ',&
-'save  "save(''file'')" stores all the current variables in a file.              ',&
-'      "save(''file'',X)" saves only X . See FILE .                              ',&
-'                                                                                ',&
-'      The variables may be retrieved later by "load(''file'')" or by your       ',&
-'      own program using the following code for each matrix.  The lines          ',&
-'      involving "ximag" may be eliminated if everything is known to             ',&
-'      be real.                                                                  ',&
-'                                                                                ',&
-'        > ! attach LUN to ''file'', then ...                                    ',&
-'        > doubleprecision :: xreal(mmax,nmax)                                   ',&
-'        > doubleprecision :: ximag(mmax,nmax)                                   ',&
-'        > character(len=32) :: id                                               ',&
-'        > read(LUN,''(a32,3i9)'') id,m,n,img                                    ',&
-'        > do j = 1, n                                                           ',&
-'        >    read(LUN,''(4z18)'') (xreal(i,j), i=1,m)                           ',&
-'        >    if (img .ne. 0) read(LUN,102) (ximag(i,j),i=1,m)                   ',&
-'        > enddo                                                                 ',&
-'        > ! The formats used are system dependent. These are typical.           ',&
-'        > ! See SUBROUTINE mat_savlod(3f) in your local implementation          ',&
-'        > ! of LAFF.                                                            ',&
-'                                                                                ',&
+'FILE ACCESS',&
+'',&
+'      The "exec", "save", "delete", "load", "diary", and "print"',&
+'      functions access files.  The ''file'' parameter takes different',&
+'      forms for different operating systems. On most systems, ''file''',&
+'      may be a string of up to 1024 characters in quotes. For example,',&
+'      "save(''A'')" or "exec(''LAFF/demo.exec'')" . The string will be used',&
+'      as the name of a file in the local operating system.',&
+'',&
+'      Check your local installation for details.  The filename must be',&
+'      composed of recognized characters. See "char".',&
+'',&
+'      Also see "quit" and "exit".',&
+'',&
+'delete  "delete(''filename'')" deletes the given file.',&
+'',&
+'exec  "exec(''file'',k)" obtains subsequent LAFF input from an',&
+'      external file. The printing of input is controlled by the',&
+'      optional parameter k .',&
+'',&
+'      Files are searched for by the given name. If not found, it is searched',&
+'      for in the colon-separated directory names in the environment variable',&
+'      LAFF_PATH. It is looked for first literally by the given name, and then',&
+'      by the name suffixed with ".la".',&
+'',&
+'      "include" is an alias for "exec".',&
+'',&
+'         If k = 0 , there is no echo, prompt or pause. This is the',&
+'                    default if the exec command is followed by a semicolon.',&
+'         If k = 1 , the input is echoed.',&
+'         If k = 2 , the LAFF prompt <> is printed.',&
+'         If k = 3 , there will be echos and prompts, but no pauses.',&
+'                    This is the the default if the exec command is not',&
+'                    followed by a semicolon.',&
+'         If k = 4 , LAFF pauses before each prompt and waits for a',&
+'                    null line to continue.',&
+'         If k = 7 , there will be echos, prompts and pauses. This is',&
+'                    useful for demonstrations on video terminals.',&
+'',&
+'      "exec"''s may be nested, i.e. the text in the file may contain',&
+'      "exec" of another file.',&
+'',&
+'      "exec" may not be recursive, as Fortran (currently) does not allow',&
+'      for multiple opens of a file.',&
+'',&
+'      "exec"s may also be driven by "for" and "while" loops.',&
+'',&
+'include  "include" is an alias for "exec".',&
+'',&
+'load  "load(''file'')" retrieves all the variables from the file .',&
+'      See FILE and "save" for more details. To prepare your own',&
+'      file for "load"ing, change the "read" to "write" in the code',&
+'      given under "save".',&
+'',&
+'print  "print(''file'',X)" prints X on the file using the current',&
+'       format determined by "short", "long z", etc. See FILE.',&
+'',&
+'doc   does nothing at the moment',&
+'',&
+'save  "save(''file'')" stores all the current variables in a file.',&
+'      "save(''file'',X)" saves only X . See FILE .',&
+'',&
+'      The variables may be retrieved later by "load(''file'')" or by your',&
+'      own program using the following code for each matrix.  The lines',&
+'      involving "ximag" may be eliminated if everything is known to',&
+'      be real.',&
+'',&
+'        > ! attach LUN to ''file'', then ...',&
+'        > doubleprecision :: xreal(mmax,nmax)',&
+'        > doubleprecision :: ximag(mmax,nmax)',&
+'        > character(len=32) :: id',&
+'        > read(LUN,''(a32,3i9)'') id,m,n,img',&
+'        > do j = 1, n',&
+'        >    read(LUN,''(4z18)'') (xreal(i,j), i=1,m)',&
+'        >    if (img .ne. 0) read(LUN,102) (ximag(i,j),i=1,m)',&
+'        > enddo',&
+'        > ! The formats used are system dependent. These are typical.',&
+'        > ! See SUBROUTINE mat_savlod(3f) in your local implementation',&
+'        > ! of LAFF.',&
+'',&
 '================================================================================',&
-'OUTPUT OPTIONS                                                                  ',&
-'      ( Also see "FILE" ("exec", "load", "print", "save" ))                     ',&
-'                                                                                ',&
-'lines  An internal count is kept of the number of lines of output               ',&
-'       since the last input. Whenever this count approaches a                   ',&
-'       limit, the user is asked whether or not to suppress                      ',&
-'       printing until the next input. Initially the limit is 21.                ',&
-'       "lines(N)" resets the limit to N .                                       ',&
-'                                                                                ',&
-'long   See "short" also.                                                        ',&
-'                                                                                ',&
-'       Determine output format. All computations are done in                    ',&
-'       complex arithmetic and double precision if it is available.              ',&
-'       "short" and "long" merely switch between different output                ',&
-'       formats.                                                                 ',&
-'                                                                                ',&
-'        long     // Scaled fixed point format with about 15 digits.             ',&
-'        long e   // Floating point format with about 15 digits.                 ',&
-'        long z   // System dependent format, often hexadecimal.                 ',&
-'                                                                                ',&
-'short  See "long" also.                                                         ',&
-'       Determine output format. All computations are done in                    ',&
-'       complex arithmetic and double precision if it is available.              ',&
-'       "short" and "long" merely switch between different output                ',&
-'       formats.                                                                 ',&
-'                                                                                ',&
-'        short    // Scaled fixed point format with about 5 digits.              ',&
-'        short e  // Floating point format with about 5 digits.                  ',&
-'                                                                                ',&
-'diary  "diary(''file'')" causes a copy of all subsequent terminal input and     ',&
-'       most of the resulting output to be written on the file. "diary(0)"       ',&
-'       turns it off. See "FILE".                                                ',&
-'                                                                                ',&
-'display  "display(X)" prints X in a compact format.                             ',&
-'                                                                                ',&
-'      If base >= 2 is specified the values are printed as numeric               ',&
-'      values in the specified base.                                             ',&
-'                                                                                ',&
-'           display(0:10,10 ) // display values in base 10                       ',&
-'           display(0:10,16 ) // display values as hexadecimal values            ',&
-'           display(0:10,2 )  // display values as binary numbers                ',&
-'                                                                                ',&
-'      If no base is specified and all the elements of X are integers            ',&
-'      between 0 and 255, then X is interpreted as LAFF text and printed         ',&
-'      accordingly.                                                              ',&
-'                                                                                ',&
-'         <>display(''the analysis is complete'')                                ',&
-'           the analysis is complete                                             ',&
-'         display(32:126) // print the printable default LAFF characters         ',&
-'                                                                                ',&
-'      Otherwise or if the base is one, + , - and blank are printed for          ',&
-'      positive, negative and zero elements.                                     ',&
-'                                                                                ',&
-'         display(rand(24,80)-rand(24,80))                                       ',&
-'                                                                                ',&
-'      Imaginary parts are ignored.                                              ',&
-'                                                                                ',&
-'      Note that "display(X,B)" is the same as "display(base(X,B))" except       ',&
-'      for base 1 except it forces "display" to display numeric values.          ',&
-'                                                                                ',&
-'      "display" has an alias of "disp".                                         ',&
-'                                                                                ',&
-'plot  "plot(X,Y)" produces a plot of the elements of Y against                  ',&
-'      those of X. plot(Y) is the same as plot(1:n,Y) where n is the number      ',&
-'      of elements in Y. plot(X,Y,P) or "plot(X,Y,p1,...,pk)" passes the         ',&
-'      optional parameter vector P or scalars p1 through pk to the plot          ',&
-'      routine. The default plot routine is a crude printer-plot. This           ',&
-'      version writes the data as a simple X Y table into a scratch file         ',&
-'      called "scratch.dat" and then calls the command                           ',&
-'                                                                                ',&
-'        xy scratch.dat [options]                                                ',&
-'                                                                                ',&
-'      Hopefully, you have the command xy(1) in your search path.                ',&
-'      If not, you can make one by creating a script that calls                  ',&
-'      a plotting utility.                                                       ',&
-'                                                                                ',&
-'         t = 0:50;                                                              ',&
-'         plot( t.*cos(t), t.*sin(t) )                                           ',&
-'         opts='' -m -1 -title test plot -d pdf''                                ',&
-'         plot( t.*cos(t), t.*sin(t),opts)                                       ',&
+'OUTPUT OPTIONS',&
+'      ( Also see "FILE" ("exec", "load", "print", "save" ))',&
+'',&
+'lines  An internal count is kept of the number of lines of output',&
+'       since the last input. Whenever this count approaches a',&
+'       limit, the user is asked whether or not to suppress',&
+'       printing until the next input. Initially the limit is 21.',&
+'       "lines(N)" resets the limit to N .',&
+'',&
+'long   See "short" also.',&
+'',&
+'       Determine output format. All computations are done in',&
+'       complex arithmetic and double precision if it is available.',&
+'       "short" and "long" merely switch between different output',&
+'       formats.',&
+'',&
+'        long     // Scaled fixed point format with about 15 digits.',&
+'        long e   // Floating point format with about 15 digits.',&
+'        long z   // System dependent format, often hexadecimal.',&
+'',&
+'short  See "long" also.',&
+'       Determine output format. All computations are done in',&
+'       complex arithmetic and double precision if it is available.',&
+'       "short" and "long" merely switch between different output',&
+'       formats.',&
+'',&
+'        short    // Scaled fixed point format with about 5 digits.',&
+'        short e  // Floating point format with about 5 digits.',&
+'',&
+'diary  "diary(''file'')" causes a copy of all subsequent terminal input and',&
+'       most of the resulting output to be written on the file. "diary(0)"',&
+'       turns it off. See "FILE".',&
+'',&
+'display  "display(X)" prints X in a compact format.',&
+'',&
+'      If base >= 2 is specified the values are printed as numeric',&
+'      values in the specified base.',&
+'',&
+'           display(0:10,10 ) // display values in base 10',&
+'           display(0:10,16 ) // display values as hexadecimal values',&
+'           display(0:10,2 )  // display values as binary numbers',&
+'',&
+'      If no base is specified and all the elements of X are integers',&
+'      between 0 and 255, then X is interpreted as LAFF text and printed',&
+'      accordingly.',&
+'',&
+'         <>display(''the analysis is complete'')',&
+'           the analysis is complete',&
+'         display(32:126) // print the printable default LAFF characters',&
+'',&
+'      Otherwise or if the base is one, + , - and blank are printed for',&
+'      positive, negative and zero elements.',&
+'',&
+'         display(rand(24,80)-rand(24,80))',&
+'',&
+'      Imaginary parts are ignored.',&
+'',&
+'      Note that "display(X,B)" is the same as "display(base(X,B))" except',&
+'      for base 1 except it forces "display" to display numeric values.',&
+'',&
+'      "display" has an alias of "disp".',&
+'',&
+'plot  "plot(X,Y)" produces a plot of the elements of Y against',&
+'      those of X. plot(Y) is the same as plot(1:n,Y) where n is the number',&
+'      of elements in Y. plot(X,Y,P) or "plot(X,Y,p1,...,pk)" passes the',&
+'      optional parameter vector P or scalars p1 through pk to the plot',&
+'      routine. The default plot routine is a crude printer-plot. This',&
+'      version writes the data as a simple X Y table into a scratch file',&
+'      called "scratch.dat" and then calls the command',&
+'',&
+'        xy scratch.dat [options]',&
+'',&
+'      Hopefully, you have the command xy(1) in your search path.',&
+'      If not, you can make one by creating a script that calls',&
+'      a plotting utility.',&
+'',&
+'         t = 0:50;',&
+'         plot( t.*cos(t), t.*sin(t) )',&
+'         opts='' -m -1 -title test plot -d pdf''',&
+'         plot( t.*cos(t), t.*sin(t),opts)',&
 '================================================================================',&
-'ENVIRONMENT                                                                     ',&
-'                                                                                ',&
-'getenv   get environment variable or return a space                             ',&
-'                                                                                ',&
-'            // read commands from a file if an environment variable is set.     ',&
-'            MATRC=getenv(''MATRC'');                                            ',&
-'            if MATRC <> '' '', exec(''MATRC'');                                 ',&
+'ENVIRONMENT',&
+'',&
+'getenv   get environment variable or return a space',&
+'',&
+'            // read commands from a file if an environment variable is set.',&
+'            MATRC=getenv(''MATRC'');',&
+'            if MATRC <> '' '', exec(''MATRC'');',&
 '================================================================================',&
-'PERFORMANCE INFORMATION                                                         ',&
-'                                                                                ',&
-'flops  Count of floating point operations.                                      ',&
-'                                                                                ',&
-'       "flops" is a permanently defined row vector with two elements.           ',&
-'       "flops(1)" is the cpu time consumed by the the previous                  ',&
-'       statement. "flops(2)" is a cumulative total. "flops" can be used         ',&
-'       in the same way as any other vector. "flops(2) = 0" resets the           ',&
-'       cumulative total. In addition, "flops(1)" will be printed whenever       ',&
-'       a statement is terminated by an extra comma. For example,                ',&
-'                                                                                ',&
-'         X = inv(A);,                                                           ',&
-'                                                                                ',&
-'       or                                                                       ',&
-'                                                                                ',&
-'         cond(A), (as the last statement on the line).                          ',&
+'PERFORMANCE INFORMATION',&
+'',&
+'flops  Count of floating point operations.',&
+'',&
+'       "flops" is a permanently defined row vector with two elements.',&
+'       "flops(1)" is the cpu time consumed by the the previous',&
+'       statement. "flops(2)" is a cumulative total. "flops" can be used',&
+'       in the same way as any other vector. "flops(2) = 0" resets the',&
+'       cumulative total. In addition, "flops(1)" will be printed whenever',&
+'       a statement is terminated by an extra comma. For example,',&
+'',&
+'         X = inv(A);,',&
+'',&
+'       or',&
+'',&
+'         cond(A), (as the last statement on the line).',&
 '================================================================================',&
-'MISCELLANEOUS                                                                   ',&
-'                                                                                ',&
-'CHAR  special issues regarding strings                                          ',&
-'                                                                                ',&
-'   LAFF has a limited facility for handling text. Any string of                 ',&
-'   characters delineated by quotes (with two quotes used to allow one           ',&
-'   quote within the string) is saved as a vector of integer values that         ',&
-'   are the ADE (Ascii Decimal Equivalent) value of the character.               ',&
-'                                                                                ',&
-'   In commands { and } are equivalent to ( and )                                ',&
-'                                                                                ',&
-'   When defining an array [ and ] or < and > may be used as the delimiters.     ',&
-'                                                                                ',&
-'   laff(3f)  is too flexible about that and lets them be interchanged freely    ',&
-'   instead of being matched but that will probably change to be more strictly   ',&
-'   enforced.                                                                    ',&
-'                                                                                ',&
-'   Currently " is not a special character but will probably be allowed as a     ',&
-'   string quoting character in the future.                                      ',&
-'                                                                                ',&
-'   For example                                                                  ',&
-'                                                                                ',&
-'      ''2*A + 3''        //  is the same as  < 50 42 65 32 43 32 51 >.          ',&
-'      display(32:126)  //  display the basic visible ASCII characters           ',&
-'                                                                                ',&
-'                                                                                ',&
-'   So if you wanted to home the cursor and clear the screen on an               ',&
-'   ANSI-compatible terminal and entered                                         ',&
-'                                                                                ',&
-'       display(<27,''[H'',27,''[2J''>)                                          ',&
-'                                                                                ',&
-'   The terminal screen would clear. More usefully, if you define the            ',&
-'   string                                                                       ',&
-'                                                                                ',&
-'       clr=''display([27,91,''''H'''',27,91,''''2J''''])''                      ',&
-'                                                                                ',&
-'   Then entering                                                                ',&
-'                                                                                ',&
-'       >clr                                                                     ',&
-'                                                                                ',&
-'   will clear the screen on ANSI terminals and emulators.                       ',&
-'                                                                                ',&
-'DECIMAL ADE TABLE                                                               ',&
-'      The ASCII Decimal Equivalents                                             ',&
-'      *-------*-------*-------*-------*-------*-------*-------*-------*         ',&
-'      | 00 nul| 01 soh| 02 stx| 03 etx| 04 eot| 05 enq| 06 ack| 07 bel|         ',&
-'      | 08 bs | 09 ht | 10 nl | 11 vt | 12 np | 13 cr | 14 so | 15 si |         ',&
-'      | 16 dle| 17 dc1| 18 dc2| 19 dc3| 20 dc4| 21 nak| 22 syn| 23 etb|         ',&
-'      | 24 can| 25 em | 26 sub| 27 esc| 28 fs | 29 gs | 30 rs | 31 us |         ',&
-'      | 32 sp | 33  ! | 34  " | 35  # | 36  $ | 37  % | 38  & | 39  '' |        ',&
-'      | 40  ( | 41  ) | 42  * | 43  + | 44  , | 45  - | 46  . | 47  / |         ',&
-'      | 48  0 | 49  1 | 50  2 | 51  3 | 52  4 | 53  5 | 54  6 | 55  7 |         ',&
-'      | 56  8 | 57  9 | 58  : | 59  ; | 60  < | 61  = | 62  > | 63  ? |         ',&
-'      | 64  @ | 65  A | 66  B | 67  C | 68  D | 69  E | 70  F | 71  G |         ',&
-'      | 72  H | 73  I | 74  J | 75  K | 76  L | 77  M | 78  N | 79  O |         ',&
-'      | 80  P | 81  Q | 82  R | 83  S | 84  T | 85  U | 86  V | 87  W |         ',&
-'      | 88  X | 89  Y | 90  Z | 91  [ | 92  \ | 93  ] | 94  ^ | 95  _ |         ',&
-'      | 96  ` | 97  a | 98  b | 99  c |100  d |101  e |102  f |103  g |         ',&
-'      |104  h |105  i |106  j |107  k |108  l |109  m |110  n |111  o |         ',&
-'      |112  p |113  q |114  r |115  s |116  t |117  u |118  v |119  w |         ',&
-'      |120  x |121  y |122  z |123  { |124  | |125  } |126  ~ |127 del|         ',&
-'      *-------*-------*-------*-------*-------*-------*-------*-------*         ',&
-'                                                                                ',&
-'??    Two exclamation marks beginning a line enters command history mode.       ',&
-'      The rest of the line is treated as an optional initial history            ',&
-'      edit command. Enter "???" to enter history mode and then display          ',&
-'      additional instructions.                                                  ',&
-'      see "EDIT" for further details.                                           ',&
-'                                                                                ',&
-'EDIT                                                                            ',&
-'      A command line consisting of two question marks("??") will cause a        ',&
-'      small line-based editor to be called (very similar to the CDC NOS         ',&
-'      editor "xedit") with a copy of the previous input lines. When the         ',&
-'      editor returns control to LAFF, it will execute the edited command        ',&
-'      (by default).                                                             ',&
-'                                                                                ',&
-'      In editor mode the command to be edited is shifted over one and the       ',&
-'      first character of input determines the edit mode. The letter "c"         ',&
-'      begins a string change (ie. "c/oldstring/newstring/").  The "l"           ',&
-'      command lists the lines. A number goes to that command line as            ',&
-'      listed by the "l" command. If the change command begins with a            ',&
-'      space a letter replaces the one above it with the exception of            ',&
-'      the special characters # (delete) & (blank out) and ^ (insert the         ',&
-'      following string here).                                                   ',&
-'                                                                                ',&
-'      An editing loop is entered until a carriage return on an empty            ',&
-'      line is entered to accept the new line or a period is entered to          ',&
-'      cancel the editing.                                                       ',&
-'                                                                                ',&
-'      For example, if you had entered a line such as:                           ',&
-'                                                                                ',&
-'         <M,N>=shape(A);for I = 1:M, for J = 1:N, A(I,J) = A(I,J)+3.6;          ',&
-'                                                                                ',&
-'      Then to repeat the command changing "3.6" to "5.1" enter                  ',&
-'                                                                                ',&
-'         ??                                                                     ',&
-'      the previous command is then displayed. Now enter                         ',&
-'                                                                                ',&
-'         c/3.6/5.1                                                              ',&
-'                                                                                ',&
-'      and then enter a carriage return and the edited line will be              ',&
-'      executed.                                                                 ',&
-'                                                                                ',&
-'      The first command can appear on the same line if the line starts          ',&
-'      with "?? " (two question marks followed by a space). For example          ',&
-'                                                                                ',&
-'         ?? /rand                                                               ',&
-'                                                                                ',&
-'      would take you into edit mode on the last command containing the          ',&
-'      string "rand"                                                             ',&
-'                                                                                ',&
-'      Enter "?" in edit mode to display further help on editor mode.            ',&
-'                                                                                ',&
-'eps   Floating point relative accuracy. A permanent variable                    ',&
-'      whose value is initially the distance from 1.0 to the next largest        ',&
-'      floating point number. The value is changed by "chop", and other          ',&
-'      values may be assigned. "eps" is used as a default tolerance by "pinv"    ',&
-'      and "rank".                                                               ',&
-'                                                                                ',&
-'laff  A placeholder for a new command.                                          ',&
-'                                                                                ',&
-'debug  "debu(1)" turns on verbose low-level debugging for the developer,        ',&
-'       "debu(0)" turns it back off.                                             ',&
-'                                                                                ',&
+'MISCELLANEOUS',&
+'',&
+'CHAR  special issues regarding strings',&
+'',&
+'   LAFF has a limited facility for handling text. Any string of',&
+'   characters delineated by quotes (with two quotes used to allow one',&
+'   quote within the string) is saved as a vector of integer values that',&
+'   are the ADE (Ascii Decimal Equivalent) value of the character.',&
+'',&
+'   In commands { and } are equivalent to ( and )',&
+'',&
+'   When defining an array [ and ] or < and > may be used as the delimiters.',&
+'',&
+'   laff(3f)  is too flexible about that and lets them be interchanged freely',&
+'   instead of being matched but that will probably change to be more strictly',&
+'   enforced.',&
+'',&
+'   Currently " is not a special character but will probably be allowed as a',&
+'   string quoting character in the future.',&
+'',&
+'   For example',&
+'',&
+'      ''2*A + 3''        //  is the same as  < 50 42 65 32 43 32 51 >.',&
+'      display(32:126)  //  display the basic visible ASCII characters',&
+'',&
+'',&
+'   So if you wanted to home the cursor and clear the screen on an',&
+'   ANSI-compatible terminal and entered',&
+'',&
+'       display(<27,''[H'',27,''[2J''>)',&
+'',&
+'   The terminal screen would clear. More usefully, if you define the',&
+'   string',&
+'',&
+'       clr=''display([27,91,''''H'''',27,91,''''2J''''])''',&
+'',&
+'   Then entering',&
+'',&
+'       >clr',&
+'',&
+'   will clear the screen on ANSI terminals and emulators.',&
+'',&
+'DECIMAL ADE TABLE',&
+'      The ASCII Decimal Equivalents',&
+'      *-------*-------*-------*-------*-------*-------*-------*-------*',&
+'      | 00 nul| 01 soh| 02 stx| 03 etx| 04 eot| 05 enq| 06 ack| 07 bel|',&
+'      | 08 bs | 09 ht | 10 nl | 11 vt | 12 np | 13 cr | 14 so | 15 si |',&
+'      | 16 dle| 17 dc1| 18 dc2| 19 dc3| 20 dc4| 21 nak| 22 syn| 23 etb|',&
+'      | 24 can| 25 em | 26 sub| 27 esc| 28 fs | 29 gs | 30 rs | 31 us |',&
+'      | 32 sp | 33  ! | 34  " | 35  # | 36  $ | 37  % | 38  & | 39  '' |',&
+'      | 40  ( | 41  ) | 42  * | 43  + | 44  , | 45  - | 46  . | 47  / |',&
+'      | 48  0 | 49  1 | 50  2 | 51  3 | 52  4 | 53  5 | 54  6 | 55  7 |',&
+'      | 56  8 | 57  9 | 58  : | 59  ; | 60  < | 61  = | 62  > | 63  ? |',&
+'      | 64  @ | 65  A | 66  B | 67  C | 68  D | 69  E | 70  F | 71  G |',&
+'      | 72  H | 73  I | 74  J | 75  K | 76  L | 77  M | 78  N | 79  O |',&
+'      | 80  P | 81  Q | 82  R | 83  S | 84  T | 85  U | 86  V | 87  W |',&
+'      | 88  X | 89  Y | 90  Z | 91  [ | 92  \ | 93  ] | 94  ^ | 95  _ |',&
+'      | 96  ` | 97  a | 98  b | 99  c |100  d |101  e |102  f |103  g |',&
+'      |104  h |105  i |106  j |107  k |108  l |109  m |110  n |111  o |',&
+'      |112  p |113  q |114  r |115  s |116  t |117  u |118  v |119  w |',&
+'      |120  x |121  y |122  z |123  { |124  | |125  } |126  ~ |127 del|',&
+'      *-------*-------*-------*-------*-------*-------*-------*-------*',&
+'',&
+'??    Two exclamation marks beginning a line enters command history mode.',&
+'      The rest of the line is treated as an optional initial history',&
+'      edit command. Enter "???" to enter history mode and then display',&
+'      additional instructions.',&
+'      see "EDIT" for further details.',&
+'',&
+'EDIT',&
+'      A command line consisting of two question marks("??") will cause a',&
+'      small line-based editor to be called (very similar to the CDC NOS',&
+'      editor "xedit") with a copy of the previous input lines. When the',&
+'      editor returns control to LAFF, it will execute the edited command',&
+'      (by default).',&
+'',&
+'      In editor mode the command to be edited is shifted over one and the',&
+'      first character of input determines the edit mode. The letter "c"',&
+'      begins a string change (ie. "c/oldstring/newstring/").  The "l"',&
+'      command lists the lines. A number goes to that command line as',&
+'      listed by the "l" command. If the change command begins with a',&
+'      space a letter replaces the one above it with the exception of',&
+'      the special characters # (delete) & (blank out) and ^ (insert the',&
+'      following string here).',&
+'',&
+'      An editing loop is entered until a carriage return on an empty',&
+'      line is entered to accept the new line or a period is entered to',&
+'      cancel the editing.',&
+'',&
+'      For example, if you had entered a line such as:',&
+'',&
+'         <M,N>=shape(A);for I = 1:M, for J = 1:N, A(I,J) = A(I,J)+3.6;',&
+'',&
+'      Then to repeat the command changing "3.6" to "5.1" enter',&
+'',&
+'         ??',&
+'      the previous command is then displayed. Now enter',&
+'',&
+'         c/3.6/5.1',&
+'',&
+'      and then enter a carriage return and the edited line will be',&
+'      executed.',&
+'',&
+'      The first command can appear on the same line if the line starts',&
+'      with "?? " (two question marks followed by a space). For example',&
+'',&
+'         ?? /rand',&
+'',&
+'      would take you into edit mode on the last command containing the',&
+'      string "rand"',&
+'',&
+'      Enter "?" in edit mode to display further help on editor mode.',&
+'',&
+'eps   Floating point relative accuracy. A permanent variable',&
+'      whose value is initially the distance from 1.0 to the next largest',&
+'      floating point number. The value is changed by "chop", and other',&
+'      values may be assigned. "eps" is used as a default tolerance by "pinv"',&
+'      and "rank".',&
+'',&
+'laff  A placeholder for a new command.',&
+'',&
+'debug  "debu(1)" turns on verbose low-level debugging for the developer,',&
+'       "debu(0)" turns it back off.',&
+'',&
 '================================================================================',&
 '']
 end subroutine mat_help_text
@@ -10989,7 +10945,7 @@ write(*,gen1)'G_LINE_POINTER:',G_LINE_POINTER
 !                                              ! [6]
 write(*,gen1)'G_LHS:',G_LHS,':G_RHS:',G_RHS
 write(*,gen1)'G_FIN:',G_FIN,':G_FUN:',G_FUN,':G_FMT:',G_FMT
-write(*,gen1)'G_RIO:',G_RIO,':G_INPUT_LUN:',G_INPUT_LUN,':G_OUTPUT_LUN:',G_OUTPUT_LUN
+write(*,gen1)'G_RIO:',G_RIO,':G_INPUT_LUN:',G_INPUT_LUN
 write(*,gen1)'G_PTZ:',G_PTZ,':G_SYM:',G_SYM,':G_SYN:',trim(ade2str(G_SYN))
 write(*,gen1)'G_CURRENT_RANDOM_SEED:',G_CURRENT_RANDOM_SEED,':G_CURRENT_RANDOM_TYPE:',G_CURRENT_RANDOM_TYPE
 write(*,gen1)'G_FLOP_COUNTER:',G_FLOP_COUNTER
@@ -11087,7 +11043,7 @@ end subroutine mat_wlog
 !==================================================================================================================================!
 subroutine mat_watan(xr,xi,yr,yi)
 
-! ident_38="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
+character(len=*),parameter::ident_37="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
 
 doubleprecision,intent(in)  :: xr, xi
 doubleprecision,intent(out) :: yr, yi

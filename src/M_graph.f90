@@ -320,7 +320,7 @@ contains
 !!                 Version 3.0 Wed Jun 12 10:34:11 MDT 1996
 SUBROUTINE graph(X,Y,NDP,NDL,F,C,NC)
 
-! ident_1="@(#)M_graph::graph(3f): routine for plotting lines"
+character(len=*),parameter::ident_1="@(#)M_graph::graph(3f): routine for plotting lines"
 
 !
 !     X  (R) X INPUT ARRAY DIMENSIONED X(NDP,NDL)
@@ -1204,7 +1204,7 @@ subroutine graph_init(xmax0,ymax0,vpx,vpy,zom)
 !     FORTRAN-77 VERSION:   DGL JULY, 1987
 use M_draw
 
-! ident_2="@(#)M_graph::graph_init(3f): initialize the longlib graphics plot package"
+character(len=*),parameter::ident_2="@(#)M_graph::graph_init(3f): initialize the longlib graphics plot package"
 
 real,intent(in)   :: xmax0
 real,intent(in)   :: ymax0
@@ -1727,7 +1727,7 @@ SUBROUTINE symbol_(X,Y,S,T,A,NN,IS)
 !        1. THE FUNCTION IBITS(I,J,K) RETURNS THE VALUE OF THE BITS
 !           IN I STARTING AT J FOR K BITS.
 
-! ident_3="@(#)M_graph::symbol_(3f): routine to plot characters and symbols"
+character(len=*),parameter::ident_3="@(#)M_graph::symbol_(3f): routine to plot characters and symbols"
 
 real                :: X
 real                :: Y
@@ -2966,7 +2966,7 @@ END FUNCTION inbox_
 !==================================================================================================================================!
 SUBROUTINE clipit_(IVTB,XV2,YV2,AV1,AV2,XM,YM,XX,YX)
 !
-! ident_4="@(#)M_graph::clipit(3f):clips a line segment partially visible"
+character(len=*),parameter::ident_4="@(#)M_graph::clipit(3f):clips a line segment partially visible"
 !
 real    :: av1
 real    :: av2

@@ -18,7 +18,8 @@
 module M_messages
 implicit none
 private
-! ident_1="@(#)M_messages::messages(3f): module collecting various general routines for displaying messages"
+character(len=*),parameter::ident_1="&
+&@(#)M_messages::messages(3f): module collecting various general routines for displaying messages"
    ! LINEART
    public junbad        ! <a href="junbad.3m_messages.html">print eye-catching ASCII graphic (skull)</a>
    public junbat        ! <a href="junbat.3m_messages.html">print eye-catching ASCII graphic (bat)</a>
@@ -1347,7 +1348,7 @@ subroutine signs(str,iout,letter)
 use M_strings, only : replace, atleast
 implicit none
 
-! ident_2="@(#)M_messages::signs(3f):write large block letters"
+character(len=*),parameter::ident_2="@(#)M_messages::signs(3f):write large block letters"
 
 character(len=*),intent(in)          :: str         ! string to write
 integer,intent(in)                   :: iout        ! unit number to write to
@@ -1743,7 +1744,7 @@ end subroutine signs
 subroutine percent_done(part,whole)
 use M_anything, only : anyscalar_to_real
 implicit none
-! ident_3="@(#)place a non-advancing status counter on terminal display (not redirected)"
+character(len=*),parameter::ident_3="@(#)place a non-advancing status counter on terminal display (not redirected)"
 class(*),intent(in)  :: part
 class(*),intent(in)  :: whole
 real                 :: part_local

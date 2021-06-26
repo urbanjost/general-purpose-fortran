@@ -387,20 +387,20 @@ ioout=20
 filename=scratch()
 open(unit=ioout, file=filename,iomsg=message,iostat=ios)
 expected=[ CHARACTER(LEN=128) :: &
-'00002 A=10===>10                                                                ',&
-'00002 B=1234.0===>1234                                                          ',&
-'00002 check_count=0===>0                                                        ',&
-'SKIP    check_count=check_count+2                                               ',&
-'SKIP    A=1000                                                                  ',&
-'SKIP    ! SHOULD NOT BE                                                         ',&
-'COMMENT    ! CORRECT BRANCH                                                     ',&
-'COMMENT       ! CORRECT AGAIN                                                   ',&
-'SKIP       ! SHOULD NOT BE                                                      ',&
-'SKIP       check_count=check_count+5                                            ',&
-'COMMENT    ! CORRECT BRANCH END                                                 ',&
-'SKIP    check_count=check_count+3                                               ',&
-'SKIP    ! SHOULD NOT BE                                                         ',&
-'COMMENT ! GOT TO END                                                            ',&
+'00002 A=10===>10',&
+'00002 B=1234.0===>1234',&
+'00002 check_count=0===>0',&
+'SKIP    check_count=check_count+2',&
+'SKIP    A=1000',&
+'SKIP    ! SHOULD NOT BE',&
+'COMMENT    ! CORRECT BRANCH',&
+'COMMENT       ! CORRECT AGAIN',&
+'SKIP       ! SHOULD NOT BE',&
+'SKIP       check_count=check_count+5',&
+'COMMENT    ! CORRECT BRANCH END',&
+'SKIP    check_count=check_count+3',&
+'SKIP    ! SHOULD NOT BE',&
+'COMMENT ! GOT TO END',&
 '']
    rewind(io)
    call unit_check_start('cond')                           ! Change database entry to indicate changes have begun

@@ -22,10 +22,12 @@ implicit none
 contains
 subroutine help_usage(l_help)
 implicit none
-! @(#)help_usage(3f): prints help information
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
 logical,intent(in)             :: l_help
 character(len=:),allocatable :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
@@ -215,10 +217,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if -help was specified, stop
+   stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    esc(1) - [NCURSES] set xterm(1) attributes using a screen or line mode
@@ -409,10 +410,12 @@ end subroutine help_usage
 !!    Public Domain
 subroutine help_version(l_version)
 implicit none
-! @(#)help_version(3f): prints version information
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
 logical,intent(in)             :: l_version
 character(len=:),allocatable   :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_version)then
 help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
@@ -421,13 +424,12 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180408>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       Mon, May 24th, 2021 11:23:04 PM>',&
+'@(#)COMPILED:       2021-06-26 18:30:50 UTC-240>',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
-   stop ! if -version was specified, stop
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
 endif
 end subroutine help_version
-!-----------------------------------------------------------------------------------------------------------------------------------
 !-----------------------------------------------------------------------------------------------------------------------------------
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -911,99 +913,99 @@ implicit none
 integer                      :: i
 character(len=:),allocatable :: text(:)
 text=[ CHARACTER(LEN=128) :: &
-'alias 80=''esc 80''                                                             ',&
-'alias 132=''esc 132''                                                           ',&
-'alias lower=''esc lower''                                                       ',&
-'alias raise=''esc raise''                                                       ',&
-'alias icon=''esc iconify''                                                      ',&
-'alias unicon=''esc uniconify''                                                  ',&
-'alias 0=''esc -fn 0''                                                           ',&
-'alias 1=''esc -fn 1''                                                           ',&
-'alias 2=''esc -fn 2''                                                           ',&
-'alias 3=''esc -fn 3''                                                           ',&
-'alias 4=''esc -fn 4''                                                           ',&
-'alias 5=''esc -fn 5''                                                           ',&
-'alias 6=''esc -fn 6''                                                           ',&
-'alias 7=''esc -fn 7''                                                           ',&
-'alias 8=''esc -fn 8''                                                           ',&
-'alias small=''esc -rows 24 -cols 80''                                           ',&
-'alias full=''esc maximize''                                                     ',&
-'alias fullback=''esc restore''                                                  ',&
+'alias 80=''esc 80''',&
+'alias 132=''esc 132''',&
+'alias lower=''esc lower''',&
+'alias raise=''esc raise''',&
+'alias icon=''esc iconify''',&
+'alias unicon=''esc uniconify''',&
+'alias 0=''esc -fn 0''',&
+'alias 1=''esc -fn 1''',&
+'alias 2=''esc -fn 2''',&
+'alias 3=''esc -fn 3''',&
+'alias 4=''esc -fn 4''',&
+'alias 5=''esc -fn 5''',&
+'alias 6=''esc -fn 6''',&
+'alias 7=''esc -fn 7''',&
+'alias 8=''esc -fn 8''',&
+'alias small=''esc -rows 24 -cols 80''',&
+'alias full=''esc maximize''',&
+'alias fullback=''esc restore''',&
 '################################################################################',&
-'# some favorite terminal configurations as examples                             ',&
-'alias default="esc \                                                            ',&
-'   -fn ''*-cronyx-courier-medium-r-normal--17-120-100-100-m-90-koi8-r'' \       ',&
-'   -rows 36 -cols 132 \                                                         ',&
-'   -down 0 -right 0 \                                                           ',&
-'   -bg black -fg white -cr red \                                                ',&
-'   -cn \                                                                        ',&
-'      0  rgb:0000/0000/0000 \                                                   ',&
-'      1  rgb:cdcd/0000/0000 \                                                   ',&
-'      2  rgb:0000/cdcd/cdcd \                                                   ',&
-'      3  rgb:cdcd/cdcd/0000 \                                                   ',&
-'      4  rgb:0000/0000/eeee \                                                   ',&
-'      5  rgb:cdcd/0000/cdcd \                                                   ',&
-'      6  rgb:0000/cdcd/0000 \                                                   ',&
-'      7  rgb:e5e5/e5e5/e5e5 \                                                   ',&
-'      8  rgb:7f7f/7f7f/7f7f \                                                   ',&
-'      9  rgb:ffff/0000/0000 \                                                   ',&
-'      10 rgb:0000/ffff/0000 \                                                   ',&
-'      11 rgb:ffff/ffff/0000 \                                                   ',&
-'      12 rgb:5c5c/5c5c/ffff \                                                   ',&
-'      13 rgb:ffff/0000/ffff \                                                   ',&
-'      14 rgb:0000/ffff/ffff \                                                   ',&
-'      15 rgb:ffff/ffff/ffff                                                     ',&
-'"                                                                               ',&
-'alias green=''esc -rows 24 -cols 80 -fn huge -bg green4 -fg yellow -cr red''    ',&
-'alias brown=''esc -fn huge -bg brown4 -fg white -cr red''                       ',&
+'# some favorite terminal configurations as examples',&
+'alias default="esc \',&
+'   -fn ''*-cronyx-courier-medium-r-normal--17-120-100-100-m-90-koi8-r'' \',&
+'   -rows 36 -cols 132 \',&
+'   -down 0 -right 0 \',&
+'   -bg black -fg white -cr red \',&
+'   -cn \',&
+'      0  rgb:0000/0000/0000 \',&
+'      1  rgb:cdcd/0000/0000 \',&
+'      2  rgb:0000/cdcd/cdcd \',&
+'      3  rgb:cdcd/cdcd/0000 \',&
+'      4  rgb:0000/0000/eeee \',&
+'      5  rgb:cdcd/0000/cdcd \',&
+'      6  rgb:0000/cdcd/0000 \',&
+'      7  rgb:e5e5/e5e5/e5e5 \',&
+'      8  rgb:7f7f/7f7f/7f7f \',&
+'      9  rgb:ffff/0000/0000 \',&
+'      10 rgb:0000/ffff/0000 \',&
+'      11 rgb:ffff/ffff/0000 \',&
+'      12 rgb:5c5c/5c5c/ffff \',&
+'      13 rgb:ffff/0000/ffff \',&
+'      14 rgb:0000/ffff/ffff \',&
+'      15 rgb:ffff/ffff/ffff',&
+'"',&
+'alias green=''esc -rows 24 -cols 80 -fn huge -bg green4 -fg yellow -cr red''',&
+'alias brown=''esc -fn huge -bg brown4 -fg white -cr red''',&
 '################################################################################',&
-'function ID(){                                                                  ',&
-'# color terminal according to which cluster logged onto                         ',&
-'case $(hostname) in                                                             ',&
-'b15*) set -bg yellow -fg black;;                                                ',&
-'b16*) set -bg brown  -fg white;;                                                ',&
-'b17*) set -bg white  -fg black;;                                                ',&
-'*) default;;                                                                    ',&
-'esac                                                                            ',&
-'}                                                                               ',&
+'function ID(){',&
+'# color terminal according to which cluster logged onto',&
+'case $(hostname) in',&
+'b15*) set -bg yellow -fg black;;',&
+'b16*) set -bg brown  -fg white;;',&
+'b17*) set -bg white  -fg black;;',&
+'*) default;;',&
+'esac',&
+'}',&
 '################################################################################',&
-'function kolor(){                                                               ',&
-'   # set foreground and background color                                        ',&
-'   case $# in                                                                   ',&
-'   0) showrgb ;;                                                                ',&
-'   1) esc -bg $1        ;;                                                      ',&
-'   2) esc -bg $1 -fg $2 ;;                                                      ',&
-'   3) esc -bg $1 -fg $2 -cr $3;;                                                ',&
-'   *) esc -bg $1 -fg $2 -cr $3;;                                                ',&
-'   esac                                                                         ',&
-'}                                                                               ',&
+'function kolor(){',&
+'   # set foreground and background color',&
+'   case $# in',&
+'   0) showrgb ;;',&
+'   1) esc -bg $1        ;;',&
+'   2) esc -bg $1 -fg $2 ;;',&
+'   3) esc -bg $1 -fg $2 -cr $3;;',&
+'   *) esc -bg $1 -fg $2 -cr $3;;',&
+'   esac',&
+'}',&
 '################################################################################',&
-'function trykolor(){                                                            ',&
-'# try all named background colors                                               ',&
-'TTY=$(tty)                                                                      ',&
-'showrgb|while read R G B COLOR_NAME                                             ',&
-'do                                                                              ',&
-'   [ "$COLOR_NAME" = '''' ] && continue                                         ',&
-'   esc -bg $COLOR_NAME                                                          ',&
-'   printf ''\nColor %s Next ...'', "$COLOR_NAME"                                ',&
-'   read PAWS < $TTY                                                             ',&
-'done                                                                            ',&
-'}                                                                               ',&
+'function trykolor(){',&
+'# try all named background colors',&
+'TTY=$(tty)',&
+'showrgb|while read R G B COLOR_NAME',&
+'do',&
+'   [ "$COLOR_NAME" = '''' ] && continue',&
+'   esc -bg $COLOR_NAME',&
+'   printf ''\nColor %s Next ...'', "$COLOR_NAME"',&
+'   read PAWS < $TTY',&
+'done',&
+'}',&
 '################################################################################',&
-'tryfont(){                                                                      ',&
-'list and select all fixed-space fonts until prompted to stop                    ',&
-'export TTY="`tty`"                                                              ',&
-'(xlsfonts "*-${1}-*-c-*"; xlsfonts "*-${1}-*-m-*") 2>/dev/null| while read FONT ',&
-'do                                                                              ',&
-'   echo " $FONT"                                                                ',&
-'   esc -fn ''*''"$FONT"                                                         ',&
-'   printf ''Keep? (y or n):''                                                   ',&
-'   read PAUSE < $TTY                                                            ',&
-'   case "$PAUSE" in                                                             ',&
-'   y*|Y*) break;;                                                               ',&
-'   esac                                                                         ',&
-'done                                                                            ',&
-'}                                                                               ',&
+'tryfont(){',&
+'list and select all fixed-space fonts until prompted to stop',&
+'export TTY="`tty`"',&
+'(xlsfonts "*-${1}-*-c-*"; xlsfonts "*-${1}-*-m-*") 2>/dev/null| while read FONT',&
+'do',&
+'   echo " $FONT"',&
+'   esc -fn ''*''"$FONT"',&
+'   printf ''Keep? (y or n):''',&
+'   read PAUSE < $TTY',&
+'   case "$PAUSE" in',&
+'   y*|Y*) break;;',&
+'   esac',&
+'done',&
+'}',&
 '################################################################################',&
 '']
 !!write(*,'(a)')text

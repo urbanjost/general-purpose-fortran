@@ -54,7 +54,7 @@ else
       export MANPATH_OVERRIDE="$MANPATH"
       manvi $@
    else
-      man $@
+      man -a $@
    fi
 fi
 #SEE ALSO: apropos

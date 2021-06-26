@@ -254,28 +254,32 @@ do
 	 (
 	    set +x
 	    cd $(dirname $NAME)
-	    ufpp UFPP_TEST -verbose --allow_links -i $(basename $NAME)
+	    #ufpp UFPP_TEST -verbose --allow_links -i $(basename $NAME)
+	    prep UFPP_TEST -verbose -i $(basename $NAME)
 	 )
    ;;
    *.INC)SHORTNAME=$(basename $NAME .INC)
 	 (
 	    set +x
 	    cd $(dirname $NAME)
-	    ufpp UFPP_TEST -verbose --allow_links -system -i $(basename $NAME)
+	    #ufpp UFPP_TEST -verbose --allow_links -system -i $(basename $NAME)
+	    pre UFPP_TEST -verbose -system -i $(basename $NAME)
 	 )
    ;;
    *.FF) SHORTNAME=$(basename $NAME .FF)
 	 (
 	    set +x
 	    cd $(dirname $NAME)
-	    ufpp UFPP_TEST -verbose --allow_links -system -i $(basename $NAME)
+	    #ufpp UFPP_TEST -verbose --allow_links -system -i $(basename $NAME)
+	    prep UFPP_TEST -verbose -system -i $(basename $NAME)
 	 )
    ;;
    *.ff) SHORTNAME=$(basename $NAME .ff)
 	 (
 	    set +x
 	    cd $(dirname $NAME)
-	    ufpp UFPP_TEST -verbose --allow_links -i $(basename $NAME)
+	    #ufpp UFPP_TEST -verbose --allow_links -i $(basename $NAME)
+	    prep UFPP_TEST -verbose -i $(basename $NAME)
 	 )
    ;;
    *.f)  SHORTNAME=$(basename $NAME .f)

@@ -152,7 +152,7 @@ contains
 !!    end program demo_help_command
 subroutine help_command(help_text,topic_name,position)
 
-! ident_1="@(#)M_help::help_command(3f): interactively display help text"
+character(len=*),parameter::ident_1="@(#)M_help::help_command(3f): interactively display help text"
 
 character(len=*),intent(in)            :: help_text(:)
 character(len=*),intent(in)            :: topic_name
@@ -548,7 +548,7 @@ end subroutine help_command
 
 subroutine a2d(chars,valu,ierr)
 
-! ident_2="@(#)M_strings::a2d(3fp): subroutine returns double value from string"
+character(len=*),parameter::ident_2="@(#)M_strings::a2d(3fp): subroutine returns double value from string"
 
 !     1989,2016 John S. Urban.
 !
@@ -584,7 +584,7 @@ end subroutine a2d
 
 elemental pure function lower(str,begin,end) result (string)
 
-! ident_3="@(#)M_strings::lower(3f): Changes a string to lowercase over specified range"
+character(len=*),parameter::ident_3="@(#)M_strings::lower(3f): Changes a string to lowercase over specified range"
 
 character(*), intent(in)     :: str
 character(len(str))          :: string

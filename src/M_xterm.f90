@@ -120,7 +120,7 @@ use           :: M_system,        only : system_getenv
 implicit none
 private
 
-! ident_1="@(#)M_xterm(3fm): send xterm control sequences. John S. Urban, 19910719"
+character(len=*),parameter::ident_1="@(#)M_xterm(3fm): send xterm control sequences. John S. Urban, 19910719"
 
 character(len=1),parameter :: esc=char(27)
 character(len=1),parameter :: bel=char(7)
@@ -318,7 +318,7 @@ end subroutine xterm_xrdb
 subroutine xterm_occupancy(windowname)
 implicit none
 
-! ident_2="@(#)M_xterm::xterm_occupancy(3f): move xterm(1) to specified virtual display, if supported"
+character(len=*),parameter::ident_2="@(#)M_xterm::xterm_occupancy(3f): move xterm(1) to specified virtual display, if supported"
 
 character(len=*),intent(in)   :: windowname
 
@@ -374,7 +374,8 @@ function xterm_get_pencolor(pennum) result(color)
 use M_strings, only : v2s, split
 implicit none
 
-! ident_3="@(#)M_xterm::xterm_get_pencolor(3f): get description of color assigned to an xterm(1) color number"
+character(len=*),parameter::ident_3="&
+&@(#)M_xterm::xterm_get_pencolor(3f): get description of color assigned to an xterm(1) color number"
 
 integer,intent(in)            :: pennum
 character(len=:),allocatable  :: color
@@ -464,7 +465,7 @@ function xterm_get_colors(type) result(color)
 use M_strings, only : isdigit, isspace, switch
 use M_strings, only : split
 
-! ident_4="@(#)M_xterm::xterm_get_colors(3f): set various xterm(1) window colors using escape sequences"
+character(len=*),parameter::ident_4="@(#)M_xterm::xterm_get_colors(3f): set various xterm(1) window colors using escape sequences"
 
 !   Esc]Ps;ColorBel
 !   Ps = 1 0  -> Change VT100 text foreground color to Pt
@@ -556,7 +557,7 @@ end function xterm_get_colors
 subroutine xterm_pencolor(pennum,color)
 implicit none
 
-! ident_5="@(#)M_xterm::xterm_pencolor(3f): set xterm(1) color by number using escape sequences"
+character(len=*),parameter::ident_5="@(#)M_xterm::xterm_pencolor(3f): set xterm(1) color by number using escape sequences"
 
 integer,intent(in)          :: pennum
 character(len=*),intent(in) :: color
@@ -620,7 +621,7 @@ end subroutine xterm_pencolor
 subroutine xterm_colors(type,color)
 use M_strings, only : isdigit, isspace, switch
 
-! ident_6="@(#)M_xterm::xterm_colors(3f): set various xterm(1) window colors using escape sequences"
+character(len=*),parameter::ident_6="@(#)M_xterm::xterm_colors(3f): set various xterm(1) window colors using escape sequences"
 
 !   esc]Ps;bel
 !   Ps = 1 0  -> Change VT100 text foreground color to Pt
@@ -745,7 +746,7 @@ end subroutine xterm_colors
 subroutine xterm_font(fontname)
 character(len=*),intent(in) :: fontname
 
-! ident_7="@(#)M_xterm::xterm_font(3f): set a font by name in an xterm window"
+character(len=*),parameter::ident_7="@(#)M_xterm::xterm_font(3f): set a font by name in an xterm window"
 
    ! NOTE: list of fonts in font menu (ctrl-Mouse3) can be set via xterm(1) X11 resources
    call set_G_io()
@@ -821,7 +822,8 @@ subroutine xterm_keywords(keyword)
 character(len=*),intent(in)  :: keyword
 character(len=:),allocatable :: code
 
-! ident_8="@(#)M_xterm::xterm_keywords(3f): send keywords to the X11 Window Manager to change xterm(1) window and select modes"
+character(len=*),parameter::ident_8="&
+&@(#)M_xterm::xterm_keywords(3f): send keywords to the X11 Window Manager to change xterm(1) window and select modes"
 
    select case(keyword)
    ! WINDOW STACK
@@ -888,7 +890,7 @@ subroutine xterm_position(right,down)
 integer,intent(in),optional :: right,down
 integer                     :: current_right,current_down
 
-! ident_9="@(#)M_xterm::xterm_position(3f): set xterm(1) window position using escape sequences"
+character(len=*),parameter::ident_9="@(#)M_xterm::xterm_position(3f): set xterm(1) window position using escape sequences"
 
    call set_G_io()
    if(present(right).and.present(down))then
@@ -946,7 +948,7 @@ end subroutine xterm_position
 subroutine xterm_geometry(rows,cols)
 integer,intent(in),optional :: rows,cols
 
-! ident_10="@(#)M_xterm::xterm_geometry(3f): set size of xterm(1) window using escape sequences"
+character(len=*),parameter::ident_10="@(#)M_xterm::xterm_geometry(3f): set size of xterm(1) window using escape sequences"
 
    call set_G_io()
    if(present(rows).and.present(cols))then
@@ -1004,7 +1006,8 @@ end subroutine xterm_geometry
 subroutine xterm_width(iwidth)
 integer,intent(in) :: iwidth
 
-! ident_11="@(#)M_xterm::xterm_width(3f): set size of xterm(1) window to standard sizes using escape sequences"
+character(len=*),parameter::ident_11="&
+&@(#)M_xterm::xterm_width(3f): set size of xterm(1) window to standard sizes using escape sequences"
 
    call set_G_io()
    write(G_io,'(a)',advance='no') CSI//'?40h' ! enable 80/132 modes
@@ -1059,7 +1062,8 @@ subroutine xterm_labels(type,label)
 character(len=*),intent(in) :: type
 character(len=*),intent(in) :: label
 
-! ident_12="@(#)M_xterm::xterm_labels(3f): set various strings and labels associated with an xterm(1) such as title and icon name"
+character(len=*),parameter::ident_12="&
+&@(#)M_xterm::xterm_labels(3f): set various strings and labels associated with an xterm(1) such as title and icon name"
 
    call set_G_io()
    select case(type)
@@ -1101,7 +1105,7 @@ end subroutine xterm_labels
 !!    Public Domain
 subroutine xterm_clear()
 
-! ident_13="@(#)M_xterm::xterm_clear(3f): clear the screen of an xterm(1) window using escape sequences"
+character(len=*),parameter::ident_13="@(#)M_xterm::xterm_clear(3f): clear the screen of an xterm(1) window using escape sequences"
 
    call set_G_io()
    write(G_io,'(a)',advance='no') CSI//'2J'
@@ -1196,7 +1200,8 @@ function xterm_get_font() result(fontname)
 use M_strings, only : split
 implicit none
 
-! ident_14="@(#)M_xterm::xterm_get_font(3f): Obtain current xterm(1) window font name using escape sequences"
+character(len=*),parameter::ident_14="&
+&@(#)M_xterm::xterm_get_font(3f): Obtain current xterm(1) window font name using escape sequences"
 
 character(len=:),allocatable  :: fontname
 character(len=:),allocatable  :: string
@@ -1254,7 +1259,8 @@ use M_strings, only : split
 use M_strings, only : visible
 implicit none
 
-! ident_15="@(#)M_xterm::xterm_get_iconstate(3f): Obtain current xterm(1) window icon state using escape sequences"
+character(len=*),parameter::ident_15="&
+&@(#)M_xterm::xterm_get_iconstate(3f): Obtain current xterm(1) window icon state using escape sequences"
 
 character(len=:),allocatable   :: string
 character(len=:),allocatable   :: state
@@ -1313,7 +1319,8 @@ subroutine xterm_get_geometry(rows,cols)
 use M_strings, only : split, s2v
 implicit none
 
-! ident_16="@(#)M_xterm::xterm_get_geometry(3f): Obtain current xterm(1) window size in character rows and columns"
+character(len=*),parameter::ident_16="&
+&@(#)M_xterm::xterm_get_geometry(3f): Obtain current xterm(1) window size in character rows and columns"
 
 integer,intent(out)           :: rows
 integer,intent(out)           :: cols
@@ -1367,7 +1374,7 @@ use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 use M_strings, only : split, s2v
 implicit none
 
-! ident_17="@(#)M_xterm::xterm_get_position(3f): Obtain current xterm(1) window position"
+character(len=*),parameter::ident_17="@(#)M_xterm::xterm_get_position(3f): Obtain current xterm(1) window position"
 
 ! Ps = 1 3  -> Report xterm window position as CSI 3 ; x; yt
 ! Obtain current screen size and place in wide and high
@@ -1393,7 +1400,8 @@ end subroutine xterm_get_position
 !===================================================================================================================================
 subroutine set_g_io()
 
-! ident_18="@(#)M_xterm::set_g_io(3f): send output to alternative file for use with programs like screen(1) and tmux(1)"
+character(len=*),parameter::ident_18="&
+&@(#)M_xterm::set_g_io(3f): send output to alternative file for use with programs like screen(1) and tmux(1)"
 
 character(len=:),allocatable :: altout
 integer :: IOS
