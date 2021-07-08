@@ -22,6 +22,7 @@ use M_list,      only : insert, locate, replace, remove                      ! B
    integer,public,parameter             :: G_var_len=31                   ! allowed length of variable names
 
    integer,public                       :: G_numdef=0                     ! number of defined variables in dictionary
+   logical,public                       :: G_ident=.false.                ! whether to write IDENT as a comment or CHARACTER
 
    character(len=G_line_length),public  :: G_source                       ! original source file line
    character(len=G_line_length),public  :: G_outline                      ! message to build for writing to output
@@ -279,11 +280,19 @@ subroutine ident(opts)                                 !@(#)ident(3f): process $
    case('fortran')    !*! should make look for characters not allowed in metadata, continue over multiple lines, ...
       select case(len(text))
       case(:89)
-         write(G_iout,'("character(len=*),parameter::ident_",i0,"=""@(#)",a,''"'')')ident_count,text
+         if(G_ident)then
+            write(G_iout,'("character(len=*),parameter::ident_",i0,"=""@(#)",a,''"'')')ident_count,text
+         else
+            write(G_iout,'("! ident_",i0,"=""@(#)",a,''"'')')ident_count,text
+         endif
          ident_count=ident_count+1
       case(90:126)
-         write(G_iout,'("character(len=*),parameter::ident_",i0,"=""&")')ident_count
-         write(G_iout,'(''&@(#)'',a,''"'')')text
+         if(G_ident)then
+            write(G_iout,'("character(len=*),parameter::ident_",i0,"=""&")')ident_count
+            write(G_iout,'(''&@(#)'',a,''"'')')text
+         else
+            write(G_iout,'("! ident_",i0,"=""@(#)",a,''"'')')ident_count,text
+         endif
          ident_count=ident_count+1
       case default
          call stop_prep('*prep:exe* ERROR(006) - IDENT TOO LONG:'//trim(G_SOURCE))
@@ -1291,7 +1300,6 @@ subroutine document(opts)                    ! @(#)document(3f): process BLOCK c
 character(len=*),intent(in)  :: opts
 integer                      :: ierr
 integer                      :: ios
-integer                      :: i
 character(len=G_line_length) :: options                 ! everything after first word of command till end of line or !
 
 ! CHECK COMMAND SYNTAX
@@ -1650,8 +1658,8 @@ character(len=*),parameter  :: fmt='(*(g0,1x))'
    write(G_iout,'(a)')'! Current state of prep(1):('//getdate()//')'
    write(G_iout,'("! Total lines read ............... ",i0)')G_io_total_lines     ! write number of lines read
    write(G_iout,'("! Conditional nesting level....... ",i0)')G_nestl              ! write nesting level
-   write(G_iout,'("! G_WRITE (general processing).... ",l0)')G_write              ! non-if/else/endif directives processed
-   write(G_iout,'("! G_LLWRITE (write input lines)... ",l0)')G_llwrite            ! non-if/else/endif directives processed
+   write(G_iout,'("! G_WRITE (general processing).... ",l1)')G_write              ! non-if/else/endif directives processed
+   write(G_iout,'("! G_LLWRITE (write input lines)... ",l1)')G_llwrite            ! non-if/else/endif directives processed
 
    call write_arguments()
 
@@ -1972,6 +1980,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '         [--width n]                                                            ',&
 '         [-d ignore|remove|blank]                                               ',&
 '         [--comment default|doxygen|ford|none]                                  ',&
+'         [--ident]                                                              ',&
 '         [--version]                                                            ',&
 '         [--help]                                                               ',&
 'DESCRIPTION                                                                     ',&
@@ -2081,6 +2090,13 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                    prefix lines with ''! ''. Allowed keywords are              ',&
 '                    currently "default", "doxygen","none","ford".               ',&
 '                    THIS IS AN ALPHA FEATURE AND NOT FULLY IMPLEMENTED.         ',&
+'   --ident          The output of the $IDENT directive is in the form of a      ',&
+'                    comment by default. If this flag is set the output is       ',&
+'                    of the form described in the $IDENT documentation           ',&
+'                    so executables and object code can contain the metadata     ',&
+'                    for use with the what(1) command. Note this generates an    ',&
+'                    unused variable which some compilers might optimize         ',&
+'                    away depending on what compilation options are used.        ',&
 '   -d ignore|remove|blank  Enable special treatment for lines beginning         ',&
 '                           with "d" or "D" The letter will be left as-is        ',&
 '                           (the default); removed; or replaced with a blank     ',&
@@ -2140,7 +2156,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   $IDENT metadata [-language fortran|c|shell]                                  ',&
 '                                                                                ',&
-'   Writes a line using SCCS-metadata format of the following forms:             ',&
+'   When the command line option "-ident" is specified this directive            ',&
+'   writes a line using SCCS-metadata format of one of the following forms:      ',&
 '                                                                                ',&
 '     language:                                                                  ',&
 '     fortran   character(len=*),parameter::ident="@(#)metadata"                 ',&
@@ -2947,6 +2964,7 @@ character(len=1024)          :: cmd=' &
    & --version          .false.  &
    & --noenv            .false.  &
    & --comment          COMMENT  &
+   & --ident            .false.  &
    & --width            1024     &
    & '
 logical                       :: isscratch
@@ -2968,6 +2986,7 @@ logical                       :: isscratch
    else
       prefix = sget('prep_prefix')                               ! not a digit so not an ADE so assume a literal character
    endif
+   G_ident=lget('ufpp_ident')                                    ! write IDENT as comment or CHARACTER variable
    G_iwidth                     = iget('prep_width')
    G_iwidth=max(0,G_iwidth)
    letterd(1:1)               = sget('prep_d')

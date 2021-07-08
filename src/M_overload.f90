@@ -217,7 +217,6 @@ module m_overload
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 use M_strings,                    only : s2v, atleast
 use M_anything,                   only : anyscalar_to_real, anyscalar_to_double, anyscalar_to_int64
-use M_msg,                        only : ffmt
 implicit none
 character(len=*),parameter::ident_1="@(#)M_overload(3fm): overloads of standard operators and intrinsic procedures"
 private
@@ -281,10 +280,28 @@ function g_g(value1,value2) result (string)
 character(len=*),parameter::ident_2="@(#)M_overload::g_g(3f): convert two single intrinsic values to a string"
 
 class(*),intent(in)          :: value1, value2
+character(len=:),allocatable :: string1
+character(len=:),allocatable :: string2
 character(len=:),allocatable :: string
    ! use this instead of str() so character variables are not trimmed and/or spaces are not added
-   string = ffmt(value1,'(g0)') // ffmt(value2,'(g0)')
+   !ifort_bug!string = ffmt(value1,'(g0)') // ffmt(value2,'(g0)')
+   string1 = ffmt(value1,'(g0)')
+   string2 = ffmt(value2,'(g0)')
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
 end function g_g
+!-----------------------------------------------------------------------------------------------------------------------------------
+!x! uses // in module that redefines //. gfortran built it, ifort does not
+!x!function g_g(value1,value2) result (string)
+!x!
+!x!$@(#) M_overload::g_g(3f): convert two single intrinsic values to a string
+!x!
+!x!class(*),intent(in)          :: value1, value2
+!x!character(len=:),allocatable :: string
+!x!   ! use this instead of str() so character variables are not trimmed and/or spaces are not added
+!x!   string = ffmt(value1,'(g0)') // ffmt(value2,'(g0)')
+!x!end function g_g
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental function strmerge(str1,str2,expr) result(strout)
 !$@(#) M_strings::strmerge(3f): pads first and second arguments to MERGE(3f) to same length
@@ -652,6 +669,68 @@ end subroutine test_reals_s2v
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !===================================================================================================================================
 end subroutine test_suite_M_overload
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+function ffmt(generic,format) result (line)
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+
+character(len=*),parameter::ident_5="@(#)M_msg::ffmt(3f): convert any intrinsic to a string using specified format"
+
+class(*),intent(in)          :: generic
+character(len=*),intent(in)  :: format
+character(len=:),allocatable :: line
+character(len=:),allocatable :: fmt_local
+integer                      :: ios
+character(len=255)           :: msg
+character(len=1),parameter   :: null=char(0)
+integer                      :: ilen
+   fmt_local=format
+   ! add ",a" and print null and use position of null to find length of output
+   ! add cannot use SIZE= or POS= or ADVANCE='NO' on WRITE() on INTERNAL READ,
+   ! and do not want to trim as trailing spaces can be significant
+   if(fmt_local.eq.'')then
+      select type(generic)
+         type is (integer(kind=int8));     fmt_local='(i0,a)'
+         type is (integer(kind=int16));    fmt_local='(i0,a)'
+         type is (integer(kind=int32));    fmt_local='(i0,a)'
+         type is (integer(kind=int64));    fmt_local='(i0,a)'
+         type is (real(kind=real32));      fmt_local='(1pg0,a)'
+         type is (real(kind=real64));      fmt_local='(1pg0,a)'
+         type is (real(kind=real128));     fmt_local='(1pg0,a)'
+         type is (logical);                fmt_local='(l1,a)'
+         type is (character(len=*));       fmt_local='(a,a)'
+         type is (complex);                fmt_local='("(",1pg0,",",1pg0,")",a)'
+      end select
+   else
+      if(format(1:1).eq.'(')then
+         fmt_local=format(:len_trim(format)-1)//',a)'
+      else
+         fmt_local='('//fmt_local//',a)'
+      endif
+   endif
+   allocate(character(len=256) :: line) ! cannot currently write into allocatable variable
+   ios=0
+   select type(generic)
+      type is (integer(kind=int8));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (integer(kind=int16));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (integer(kind=int32));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (integer(kind=int64));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (real(kind=real32));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (real(kind=real64));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (real(kind=real128));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (logical);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (character(len=*));       write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (complex);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+   end select
+   if(ios.ne.0)then
+      line='<ERROR>'//trim(msg)
+   else
+      ilen=index(line,null,back=.true.)
+      if(ilen.eq.0)ilen=len(line)
+      line=line(:ilen-1)
+   endif
+end function ffmt
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

@@ -2476,7 +2476,7 @@ end subroutine s_swap
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-!-$DOCUMENT COMMENT -file exchange.3m_sort.man
+!-$BLOCK COMMENT -file exchange.3m_sort.man
 !-NAME
 !-   exchange(3f) - [M_sort] subroutine exchanges two variables of like type
 !-   (LICENSE:PD)
@@ -2637,7 +2637,7 @@ end subroutine s_swap
 !-   >1,1,1
 !-   >1,1,1
 !-
-!-$DOCUMENT END
+!-$BLOCK
 !-subroutine exchange_scalar(lhs,rhs)
 !-use iso_c_binding, only : c_ptr, c_size_t
 !-use M_system,      only : system_memcpy

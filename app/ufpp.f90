@@ -308,11 +308,11 @@
 !    and the output file
 !    $ENDIF
 !    $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-!    $IFDEF UFPP_TEST
+!    $IFDEF PREP_TEST
 !       Normally you would not just put text here,
 !       but $SYSTEM and $OUTPUT sections to unit test
 !       your commands. Then you would call
-!          ufpp UFPP_TEST -system ...
+!          ufpp PREP_TEST -system ...
 !       to run your tests, and
 !          ufpp F90 ...
 !       to generate the expanded source code when compiling
@@ -886,9 +886,11 @@ subroutine cond()       !@(#)cond(3f): process conditional directive assumed to 
       case('INCLUDE');          call include(options,50+G_iocount)    ! Filenames can be case sensitive
       case('PRINTENV');         call printenv(upopts)
       case('ASSERT');           call call_assert(options)
+
       case('DOCUMENT');         call document(options)
       case('FILTER');           call document(options)
       case('BLOCK');            call document(options)
+
       case('IDENT','@(#)');     call ident(options)
       case('SHOW') ;            call debug(options)
       case('STOP');             call stop(upopts)
@@ -2689,10 +2691,12 @@ end subroutine stop_ufpp
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine help_usage(l_help)
 implicit none
-! @(#)help_usage(3f): prints help information
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
 logical,intent(in)             :: l_help
 character(len=:),allocatable :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
@@ -2892,7 +2896,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   $ASSERT expression [,values]                                                 ',&
 '                                                                                ',&
-'   If debug mode is activated then then input line                              ',&
+'   If debug mode is activated then input line                                   ',&
 '                                                                                ',&
 '      $ASSERT i .gt. 10, ''I='', i, ''bigger than'', 10                         ',&
 '                                                                                ',&
@@ -2902,7 +2906,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   and if "I" were 2000, would produce the output                               ',&
 '                                                                                ',&
-'      ERROR:filename: xx.ff :line number: 32070 : I= 2000.00000 bigger than 10  ',&
+'      ERROR:filename: xx.ff :line number: 32070 : I= 2000 bigger than 10        ',&
 '      STOP 1                                                                    ',&
 '                                                                                ',&
 '   The manpage for ASSERT(3f) describes the meaning of the parameters in        ',&
@@ -3426,16 +3430,17 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if -help was specified, stop
+   stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!-----------------------------------------------------------------------------------------------------------------------------------
 subroutine help_version(l_version)
 implicit none
-! @(#)help_version(3f): prints version information
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
 logical,intent(in)             :: l_version
 character(len=:),allocatable   :: help_text(:)
 integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
 if(l_version)then
 help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
@@ -3444,13 +3449,12 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        4.0: 20170502>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)COMPILED:       Sat, Jun 5th, 2021 7:28:37 PM>',&
+'@(#)COMPILED:       2021-07-08 18:06:06 UTC-240>',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i),kind=kind(1))-1)),i=1,size(help_text))
-   stop ! if -version was specified, stop
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
 endif
 end subroutine help_version
-!-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3495,6 +3499,7 @@ end subroutine write_out
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine www(line) ! @(#)www(3f):  change line into a WRITE, HELP/VERSION, COMMENT output line
+integer,parameter              :: wid=80
 character(len=*),intent(in)    :: line
 character(len=:),allocatable   :: buff
 integer,parameter              :: chunkmax=115
@@ -3516,25 +3521,25 @@ integer                        :: ierr
       endif
 !----------------------------------------------------------------------------------------------------------------------------------=
    case('variable')
-      buff=trim(line)                          ! do not make a line over 132 characters. Trim input line if needed
-      buff=buff//repeat(' ',max(80,len(buff))) ! ensure space in buffer for substitute
-      call substitute(buff,"'","''")           ! change single quotes in input to two adjacent single quotes
-      ilen=max(len_trim(buff),80)              ! make all lines have at least 80 characters in the string for a more legible output
+      buff=trim(line)                           ! do not make a line over 132 characters. Trim input line if needed
+      buff=buff//repeat(' ',max(wid,len(buff))) ! ensure space in buffer for substitute
+      call substitute(buff,"'","''")            ! change single quotes in input to two adjacent single quotes
+      ilen=min(len_trim(buff),wid)              ! make all lines have at least wid characters for a more legible output
       write(G_iout,'("''",a,"'',&")') buff(:ilen)
    case('help')
-      buff=trim(line)                          ! do not make a line over 132 characters. Trim input line if needed
-      buff=buff//repeat(' ',max(80,len(buff))) ! ensure space in buffer for substitute
-      call substitute(buff,"'","''")           ! change single quotes in input to two adjacent single quotes
-      ilen=max(len_trim(buff),80)              ! make all lines have at least 80 characters in the string for a more legible output
+      buff=trim(line)                           ! do not make a line over 132 characters. Trim input line if needed
+      buff=buff//repeat(' ',max(wid,len(buff))) ! ensure space in buffer for substitute
+      call substitute(buff,"'","''")            ! change single quotes in input to two adjacent single quotes
+      ilen=min(len_trim(buff),wid)              ! make all lines have at least wid characters for a more legible output
       write(G_iout,'("''",a,"'',&")') buff(:ilen)
 !----------------------------------------------------------------------------------------------------------------------------------=
    case('version')                             ! write version information with SCCS ID prefix for use with what(1) command
       write(G_iout,'("''@(#)",a,"'',&")')trim(line(:min(len_trim(line,kind=kind(1)),128-1)))//'>'
 !----------------------------------------------------------------------------------------------------------------------------------=
-                                               !! should handle longer lines and split them
-   case('write')                               ! convert string to a Fortran write statement to unit "IO"
-      buff=trim(line)                          ! do not make a line over 132 characters. Trim input line if needed
-      buff=buff//repeat(' ',max(80,len(buff))) ! ensure space in buffer for substitute
+                                                !! should handle longer lines and split them
+   case('write')                                ! convert string to a Fortran write statement to unit "IO"
+      buff=trim(line)                           ! do not make a line over 132 characters. Trim input line if needed
+      buff=buff//repeat(' ',max(wid,len(buff))) ! ensure space in buffer for substitute
       call substitute(buff,"'","''")
       write(G_iout,'(a)',advance='no')'write(io,''(a)'')'''
       chunk=buff

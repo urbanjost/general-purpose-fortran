@@ -4185,7 +4185,6 @@ END SUBROUTINE notabs
 !!    use M_strings, only : dilate
 !!    implicit none
 !!    character(len=:),allocatable :: in
-!!    character(len=:),allocatable :: out
 !!    integer                      :: i
 !!       in='  this is my string  '
 !!       ! change spaces to tabs to make a sample input
@@ -8219,8 +8218,6 @@ end function base
 !!    program demo_base2
 !!    use M_strings, only : base2
 !!    implicit none
-!!    integer                      :: i
-!!    character(len=:),allocatable :: string
 !!       write(*,'(a)') base2(huge(0))
 !!       write(*,'(a)') base2(0)
 !!       write(*,'(a)') base2(1-huge(0))

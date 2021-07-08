@@ -499,7 +499,7 @@ end subroutine get_command_arguments_string
 !!     ! need changed except for possibly the length of HOLD_NAMELIST
 !!     use M_args,    only : get_namelist, print_dictionary, oneline
 !!     !
-!!     integer :: ios, i
+!!     integer :: ios
 !!     character(len=255) :: message ! use for I/O error messages
 !!     character(len=:),allocatable :: readme  ! stores updated namelist
 !!     ! make big enough for all of namelist

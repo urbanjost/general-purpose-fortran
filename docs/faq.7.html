@@ -310,7 +310,7 @@ generating man(1) pages as well as documented code. For example, the following
 input file
 
  $!==============================================================================
- $DOCUMENT COMMENT -file example.3.man
+ $BLOCK COMMENT -file example.3.man
  NAME
     example(3f) - [FORTRAN] subroutine example using ufpp(1)
  SYNOPSIS
@@ -329,17 +329,17 @@ input file
     and *roff files.
 
  EXAMPLE
- $DOCUMENT END
+ $BLOCK
  $!==============================================================================
  program testit
  implicit none
  integer :: i,io=6
  $!==============================================================================
- $DOCUMENT WRITE !  These will become write statements to unit IO
+ $BLOCK WRITE !  These will become write statements to unit IO
  hello world!
    hello world,again!
      hello world, once more!
- $DOCUMENT END
+ $BLOCK
  end program testit
  $!==============================================================================
 

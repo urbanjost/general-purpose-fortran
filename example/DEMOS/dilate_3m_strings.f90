@@ -5,7 +5,6 @@
           use M_strings, only : dilate
           implicit none
           character(len=:),allocatable :: in
-          character(len=:),allocatable :: out
           integer                      :: i
              in='  this is my string  '
              ! change spaces to tabs to make a sample input

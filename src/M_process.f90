@@ -1009,18 +1009,22 @@ end subroutine process_readline
 !!
 !!   Read all output of a command to a single string
 !!
-!!      program test_process_readall
-!!       use M_process ,only: process_readall
-!!       implicit none
-!!       integer :: ierr
-!!       character(len=:),allocatable :: string
+!!     program demo_process_readall
+!!      use M_process, only: process_readall
+!!      implicit none
+!!      integer :: ierr
+!!      character(len=:),allocatable :: string
 !!          string=process_readall('ls',ierr=ierr)
 !!          write(*,*)ierr,string
-!!       end program test_process_readall
+!!      end program demo_process_readall
+!!
+!!   Results:
+!!
+!!    app build docs example fpm.toml LICENSE man README.md src test
 !!
 !!   Read all output of a command to an array using split(3f)
 !!
-!!      program demo_process_readall
+!!      program test_process_readall
 !!       use M_process ,only: process_readall
 !!       !!use M_strings ,only: split
 !!       implicit none
@@ -1029,14 +1033,14 @@ end subroutine process_readline
 !!       character(len=:),allocatable :: string
 !!       character(len=:),allocatable :: array(:)
 !!          string=process_readall('ls',delim=NEW_LINE("A"),ierr=ierr)
-!!          !!call split(string,array,delimiters=NEW_LINE("A"))
-!!          !!do i=1,size(array)
-!!          !!   write(*,'(i0,t10,"[",a,"]")')i,trim(array(i))
-!!          !!enddo
-!!          !!write(*,*)string=process_readall(&
-!!          !!& 'ls',delim=NEW_LINE("A"),ierr=ierr)
+!!          call split(string,array,delimiters=NEW_LINE("A"))
+!!          do i=1,size(array)
+!!             write(*,'(i0,t10,"[",a,"]")')i,trim(array(i))
+!!          enddo
+!!          write(*,*)string=process_readall(&
+!!          & 'ls',delim=NEW_LINE("A"),ierr=ierr)
 !!          write(*,*)string
-!!       end program demo_process_readall
+!!       end program test_process_readall
 !!
 !!   Results:
 !!

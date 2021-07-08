@@ -920,21 +920,21 @@ subroutine update(key,valin)
 character(len=*),intent(in)           :: key
 character(len=*),intent(in),optional  :: valin
 integer                               :: place
-integer                               :: ilen
+integer                               :: iilen
 character(len=:),allocatable          :: val
 if(present(valin))then
    val=valin
-   ilen=len_trim(val)
+   iilen=len_trim(val)
    ! find where string is or should be
    call locate(keywords,key,place)
    ! if string was not found insert it
    if(place.lt.1)then
       call insert(keywords,key,iabs(place))
       call insert(values,val,iabs(place))
-      call insert(counts,ilen,iabs(place))
+      call insert(counts,iilen,iabs(place))
    else
       call replace(values,val,place)
-      call replace(counts,ilen,place)
+      call replace(counts,iilen,place)
    endif
 else
    call locate(keywords,key,place)
@@ -1050,7 +1050,7 @@ integer,allocatable           :: iterm(:)               ! positions in input str
 character(len=:),allocatable  :: dlim                   ! string containing delimiter characters
 integer                       :: ii                     ! loop parameters used to control print order
 integer                       :: icount                 ! number of tokens found
-integer                       :: ilen                   ! length of input string with trailing spaces trimmed
+integer                       :: iilen                  ! length of input string with trailing spaces trimmed
 integer                       :: i10,i20,i30            ! loop counters
 integer                       :: icol                   ! pointer into input string as it is being parsed
 integer                       :: idlim                  ! number of delimiter characters
@@ -1079,23 +1079,23 @@ integer                       :: imax                   ! length of longest toke
    ibegin(:)=1
    iterm(:)=1
 !-----------------------------------------------------------------------------------------------------------------------------------
-   ilen=len(input_line)                                           ! ILEN is the column position of the last non-blank character
+   iilen=len(input_line)                                          ! IILEN is the column position of the last non-blank character
    icount=0                                                       ! how many tokens found
    inotnull=0                                                     ! how many tokens found not composed of delimiters
    imax=0                                                         ! length of longest token found
 !-----------------------------------------------------------------------------------------------------------------------------------
-   select case (ilen)
+   select case (iilen)
 !-----------------------------------------------------------------------------------------------------------------------------------
    case (:0)                                                      ! command was totally blank
 !-----------------------------------------------------------------------------------------------------------------------------------
    case default                                                   ! there is at least one non-delimiter in INPUT_LINE if get here
       icol=1                                                      ! initialize pointer into input line
-      INFINITE: do i30=1,ilen,1                                   ! store into each array element
+      INFINITE: do i30=1,iilen,1                                  ! store into each array element
          ibegin(i30)=icol                                         ! assume start new token on the character
          if(index(dlim(1:idlim),input_line(icol:icol)).eq.0)then  ! if current character is not a delimiter
-            iterm(i30)=ilen                                       ! initially assume no more tokens
+            iterm(i30)=iilen                                      ! initially assume no more tokens
             do i10=1,idlim                                        ! search for next delimiter
-               ifound=index(input_line(ibegin(i30):ilen),dlim(i10:i10))
+               ifound=index(input_line(ibegin(i30):iilen),dlim(i10:i10))
                IF(ifound.gt.0)then
                   iterm(i30)=min(iterm(i30),ifound+ibegin(i30)-2)
                endif
@@ -1108,7 +1108,7 @@ integer                       :: imax                   ! length of longest toke
          endif
          imax=max(imax,iterm(i30)-ibegin(i30)+1)
          icount=i30                                               ! increment count of number of tokens found
-         if(icol.gt.ilen)then                                     ! no text left
+         if(icol.gt.iilen)then                                    ! no text left
             exit INFINITE
          endif
       enddo INFINITE

@@ -56,6 +56,33 @@ contains
 !!    Entering a "q" at the prompt exits the help text. To see other options
 !!    enter an "h" at the prompt.
 !!
+!!       h
+!!       #----------------------------------------------------# PAGING
+!!       | f|SPACE b  forward or backward one page            |
+!!       | u d        redraw up or down one-half page         |
+!!       | r          refresh page                            |
+!!       | e y | j k  refresh page moving up or down one line |
+!!       #----------------------------------------------------# JUMPING
+!!       | g          go to top of manual                     |
+!!       | NNN        go to line number NNN. Use a sign (+-)  |
+!!       |            for a relative move.                    |
+!!       | .          toggle line numbering                   |
+!!       #----------------------------------------------------# SEARCHING
+!!       | /STRING    advance to next line containing string  |
+!!       | ?STRING    search for string above current line    |
+!!       | n N        find next occurrence up or down in file |
+!!       | \STRING    show all lines with specified string.   |
+!!       | t          displays topic lines.                   |
+!!       #----------------------------------------------------#
+!!       | w FILENAME write entire user guide to local file   |
+!!       | h          display this help                       |
+!!       | q          quit                                    |
+!!       #----------------------------------------------------#
+!!       Anything else is ignored.
+!!       Line count is 25 out of 54 . Page size is 23 (see "lines")
+!!       continue ..
+!!
+!!
 !!    A normal topic is displayed until another topic line (line beginning
 !!    with a non-blank) is encountered
 !!

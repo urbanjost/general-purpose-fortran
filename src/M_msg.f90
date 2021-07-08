@@ -12,7 +12,6 @@ public str
 public stderr
 public wrt
 public fmt
-public ffmt
 !!public :: a,i,f,g
 
 interface str
@@ -262,121 +261,6 @@ end function msg_one
 !===================================================================================================================================
 !>
 !!##NAME
-!!    ffmt(3f) - [M_msg] convert any intrinsic to a string using specified format
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    function ffmt(value,format) result(string)
-!!
-!!     class(*),intent(in),optional :: value
-!!     character(len=*),intent(in)  :: format
-!!     character(len=:),allocatable :: string
-!!##DESCRIPTION
-!!    ffmt(3f) converts any standard intrinsic value to a string using the specified
-!!    format.
-!!##OPTIONS
-!!    value    value to print the value of. May be of type INTEGER, LOGICAL,
-!!             REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
-!!    format   format to use to print value. It is up to the user to use an
-!!             appropriate format. The format does not require being
-!!             surrounded by parenthesis.
-!!##RETURNS
-!!    string   A string value
-!!##EXAMPLES
-!!
-!!   Sample program:
-!!
-!!     program demo_fmt
-!!     use :: M_msg, only : ffmt
-!!     implicit none
-!!     character(len=:),allocatable :: output
-!!
-!!        output=ffmt(10,"'[',i0,']'")
-!!        write(*,*)'result is ',output
-!!
-!!        output=ffmt(10.0/3.0,"'[',g0.5,']'")
-!!        write(*,*)'result is ',output
-!!
-!!        output=ffmt(.true.,"'The final answer is [',g0,']'")
-!!        write(*,*)'result is ',output
-!!
-!!     end program demo_fmt
-!!
-!!   Results:
-!!
-!!     result is [10]
-!!     result is [3.3333]
-!!     result is The final answer is [T]
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!
-!!##LICENSE
-!!    Public Domain
-recursive function ffmt(generic,format) result (line)
-use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
-
-character(len=*),parameter::ident_4="@(#)M_msg::ffmt(3f): convert any intrinsic to a string using specified format"
-
-class(*),intent(in)          :: generic
-character(len=*),intent(in)  :: format
-character(len=:),allocatable :: line
-character(len=:),allocatable :: fmt_local
-integer                      :: ios
-character(len=255)           :: msg
-character(len=1),parameter   :: null=char(0)
-integer                      :: ilen
-   fmt_local=format
-   ! add ",a" and print null and use position of null to find length of output
-   ! add cannot use SIZE= or POS= or ADVANCE='NO' on WRITE() on INTERNAL READ,
-   ! and do not want to trim as trailing spaces can be significant
-   if(fmt_local.eq.'')then
-      select type(generic)
-         type is (integer(kind=int8));     fmt_local='(i0,a)'
-         type is (integer(kind=int16));    fmt_local='(i0,a)'
-         type is (integer(kind=int32));    fmt_local='(i0,a)'
-         type is (integer(kind=int64));    fmt_local='(i0,a)'
-         type is (real(kind=real32));      fmt_local='(1pg0,a)'
-         type is (real(kind=real64));      fmt_local='(1pg0,a)'
-         type is (real(kind=real128));     fmt_local='(1pg0,a)'
-         type is (logical);                fmt_local='(l1,a)'
-         type is (character(len=*));       fmt_local='(a,a)'
-         type is (complex);                fmt_local='("(",1pg0,",",1pg0,")",a)'
-      end select
-   else
-      if(format(1:1).eq.'(')then
-         fmt_local=format(:len_trim(format)-1)//',a)'
-      else
-         fmt_local='('//fmt_local//',a)'
-      endif
-   endif
-   allocate(character(len=256) :: line) ! cannot currently write into allocatable variable
-   ios=0
-   select type(generic)
-      type is (integer(kind=int8));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int16));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int32));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int64));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real32));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real64));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real128));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (logical);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (character(len=*));       write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (complex);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-   end select
-   if(ios.ne.0)then
-      line='<ERROR>'//trim(msg)
-   else
-      ilen=index(line,null,back=.true.)
-      if(ilen.eq.0)ilen=len(line)
-      line=line(:ilen-1)
-   endif
-end function ffmt
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!>
-!!##NAME
 !!    fmt(3f) - [M_msg] convert any intrinsic to a string using specified format
 !!    (LICENSE:PD)
 !!##SYNOPSIS
@@ -432,7 +316,7 @@ end function ffmt
 recursive function fmt(generic,format) result (line)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-character(len=*),parameter::ident_5="@(#)M_msg::fmt(3f): convert any intrinsic to a string using specified format"
+character(len=*),parameter::ident_4="@(#)M_msg::fmt(3f): convert any intrinsic to a string using specified format"
 
 class(*),intent(in)          :: generic
 character(len=*),intent(in),optional  :: format
@@ -575,7 +459,7 @@ end function fmt
 subroutine stderr(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj)
 implicit none
 
-character(len=*),parameter::ident_6="@(#)M_msg::stderr(3f): writes a message to standard error using a standard f2003 method"
+character(len=*),parameter::ident_5="@(#)M_msg::stderr(3f): writes a message to standard error using a standard f2003 method"
 
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
 class(*),intent(in),optional :: ga, gb, gc, gd, ge, gf, gg, gh, gi, gj
@@ -659,7 +543,7 @@ end subroutine stderr
 subroutine wrt(luns,g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj,iostat)
 implicit none
 
-character(len=*),parameter::ident_7="@(#)M_msg::write(3f): writes a message to any number of open files with any scalar values"
+character(len=*),parameter::ident_6="@(#)M_msg::write(3f): writes a message to any number of open files with any scalar values"
 
 integer,intent(in)           :: luns(:)
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
