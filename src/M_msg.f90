@@ -6,7 +6,7 @@ private
 ! USED SO FREQUENTLY IN OTHER MODULES PUT IN THIS ONE WITH NO DEPENDENCIES TO PREVENT CIRCULAR DEPENDENCY
 !-----------------------------------------------------------------------------------------------------------------------------------
 
-character(len=*),parameter::ident_1="@(#)M_msg::str(3f): {msg_scalar,msg_one}"
+! ident_1="@(#)M_msg::str(3f): {msg_scalar,msg_one}"
 
 public str
 public stderr
@@ -109,8 +109,7 @@ function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, 
                   & sep)
 implicit none
 
-character(len=*),parameter::ident_2="&
-&@(#)M_msg::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
+! ident_2="@(#)M_msg::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
 
 class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
@@ -184,8 +183,7 @@ function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, gene
                & sep)
 implicit none
 
-character(len=*),parameter::ident_3="&
-&@(#)M_msg::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
+! ident_3="@(#)M_msg::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
 
 class(*),intent(in)           :: generic0(:)
 class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)
@@ -316,7 +314,7 @@ end function msg_one
 recursive function fmt(generic,format) result (line)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-character(len=*),parameter::ident_4="@(#)M_msg::fmt(3f): convert any intrinsic to a string using specified format"
+! ident_4="@(#)M_msg::fmt(3f): convert any intrinsic to a string using specified format"
 
 class(*),intent(in)          :: generic
 character(len=*),intent(in),optional  :: format
@@ -459,7 +457,7 @@ end function fmt
 subroutine stderr(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj)
 implicit none
 
-character(len=*),parameter::ident_5="@(#)M_msg::stderr(3f): writes a message to standard error using a standard f2003 method"
+! ident_5="@(#)M_msg::stderr(3f): writes a message to standard error using a standard f2003 method"
 
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
 class(*),intent(in),optional :: ga, gb, gc, gd, ge, gf, gg, gh, gi, gj
@@ -543,7 +541,7 @@ end subroutine stderr
 subroutine wrt(luns,g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj,iostat)
 implicit none
 
-character(len=*),parameter::ident_6="@(#)M_msg::write(3f): writes a message to any number of open files with any scalar values"
+! ident_6="@(#)M_msg::write(3f): writes a message to any number of open files with any scalar values"
 
 integer,intent(in)           :: luns(:)
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9

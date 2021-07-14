@@ -1,6 +1,8 @@
 
 !-----------------------------------------------------------------------
 subroutine jsh_v(i) ! assume long routine names are supported
+
+use iso_fortran_env
 implicit none
 integer,intent(in) :: i
       ! return version number in character variable version and print
@@ -9,9 +11,11 @@ integer,intent(in) :: i
       write(i,'(1x,79("-"))')
       call trimit('@(#)File ................ jsh_v>')
       call trimit('@(#)Program Version ..... 0.0.0>')
-      call trimit('@(#)Build Target ........ Linux_ifort>')
+      call trimit('@(#)Build Target ........ Linux_gfortran>')
+      call trimit('@(#)Compiler Version .... '//trim(compiler_version())//'>')
+      call trimit('@(#)Compiler Options .... '//trim(compiler_options())//'>')
       call trimit('@(#)Compile Date ........ '//&
-     &'Thu 08 Jul 2021 06:13:59 PM EDT>')
+     &'Fri 09 Jul 2021 07:48:36 AM EDT>')
      call trimit('@(#)Compiled on node:>')
       call trimit('@(#) Nodename ........... '// &
      &'venus>')

@@ -44,6 +44,11 @@
 !!   use M_overload, only : merge
 !!   ! str=merge('one','three',i.eq.10)
 !!
+!!##OTHER OPERATORS
+!!
+!!    intrinsic_value .fmt. ''   convert an intrinsic value to a CHARACTER variable
+!!
+!!
 !!##DESCRIPTION
 !!
 !!   Operator and function overloads have a wide range of applications
@@ -218,7 +223,7 @@ use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real
 use M_strings,                    only : s2v, atleast
 use M_anything,                   only : anyscalar_to_real, anyscalar_to_double, anyscalar_to_int64
 implicit none
-character(len=*),parameter::ident_1="@(#)M_overload(3fm): overloads of standard operators and intrinsic procedures"
+! ident_1="@(#)M_overload(3fm): overloads of standard operators and intrinsic procedures"
 private
 public boolean_equal, boolean_notequal      !
 public operator(==)
@@ -277,7 +282,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 function g_g(value1,value2) result (string)
 
-character(len=*),parameter::ident_2="@(#)M_overload::g_g(3f): convert two single intrinsic values to a string"
+! ident_2="@(#)M_overload::g_g(3f): convert two single intrinsic values to a string"
 
 class(*),intent(in)          :: value1, value2
 character(len=:),allocatable :: string1
@@ -318,8 +323,7 @@ end function strmerge
 !-----------------------------------------------------------------------------------------------------------------------------------
 function adjustl_atleast(line,length) result(strout)
 
-character(len=*),parameter::ident_3="&
-&@(#)M_strings::adjustl_atleast(3f): return string padded on right to at least specified length"
+! ident_3="@(#)M_strings::adjustl_atleast(3f): return string padded on right to at least specified length"
 
 character(len=*),intent(in)                :: line
 integer,intent(in)                         :: length
@@ -329,8 +333,7 @@ end function adjustl_atleast
 !-----------------------------------------------------------------------------------------------------------------------------------
 function adjustr_atleast(line,length) result(strout)
 
-character(len=*),parameter::ident_4="&
-&@(#)M_overload::adjustr_atleast(3f): return string padded on left to at least specified length"
+! ident_4="@(#)M_overload::adjustr_atleast(3f): return string padded on left to at least specified length"
 
 character(len=*),intent(in)                :: line
 integer,intent(in)                         :: length
@@ -675,7 +678,7 @@ end subroutine test_suite_M_overload
 function ffmt(generic,format) result (line)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-character(len=*),parameter::ident_5="@(#)M_msg::ffmt(3f): convert any intrinsic to a string using specified format"
+! ident_5="@(#)M_msg::ffmt(3f): convert any intrinsic to a string using specified format"
 
 class(*),intent(in)          :: generic
 character(len=*),intent(in)  :: format

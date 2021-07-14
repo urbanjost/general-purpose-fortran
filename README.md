@@ -12,13 +12,6 @@ solve the day-to-day non-numeric(mostly) issues in programming. Large
 repositories of numeric algorithms written in Fortran exist at such
 sites as the [ netlib ](http://www.netlib.org) repository.
 
-I like a language when it empowers me. I prefer not to have to empower
-the language; but I have found I sometimes need to do so, as have
-others. __This repository is a collection of those solutions__ for
-Fortran, primarily concentrating on tasks like command-line parsing,
-string functions, date-and-time manipulation and display, interfacing
-to the C POSIX system routines, ...
-
 Modern Fortran is quite capable of accessing many commonly available
 C libraries or expressing many commonly desired utility procedures
 directly, but the standard language does not define many of these
@@ -422,3 +415,33 @@ or just list it as a dependency in your fpm.toml project file.
 ```
  + A `ford` configuration file is available to build documentation
  + A `doxygen` configuration file is available to build documentation
+
+<!--
+==================================================================================================
+At least recently, Fortran has centered around solving large
+numerically-intensive problems in STEM-related fields; often in parallel,
+particularly on large HPC platforms.  And this work was done almost
+exclusively with commercial compilers. Where once Fortran was available
+on nearly every platform (usually with many extensions provided on a
+per-platform basis) it became something primarily available in these
+somewhat elite environments.
+
+Then came the open-source compilers G95 and subsequently gfortran, and
+more recently several previously commerical-only compilers from Intel,
+NAG, Nvidia and new open-source projects. And newer standards standardized
+C interfaces and added back a few of the common features once found in
+almost all compilers via extensions.
+
+So Fortran is once again available almost everywhere. But as critical as
+it is for many fields it is rarely taught, as instructors generally prefer
+teaching the most general programming tools, as they can be useful in many
+different disciplines.
+
+But Fortran is just as capable at its core of doing general functions as
+any language now, given it's standarized C interface and new modern features.
+
+But, largely due to historical reasons, there still is no standard library
+for such tasks as command-line parsing, string functions, date-and-time
+manipulation and display, interfacing to the C POSIX system routines, ...
+==================================================================================================
+ -->
