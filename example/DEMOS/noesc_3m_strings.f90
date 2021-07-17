@@ -30,15 +30,15 @@
 
                 ! replace lower unprintable characters with spaces
                 write(*,101)(merge(string(i:i),' ',&
-                & ichar(string(i:i)).ge.32         &
+                & iachar(string(i:i)).ge.32        &
                 & .and.                            &
-                & ichar(string(i:i)).le.126)       &
+                & iachar(string(i:i)).le.126)      &
                 & ,i=1,ilen)
 
                 ! print ADE value of character underneath it
-                write(*,202)     (ichar(string(i:i))/100,    i=1,ilen)
-                write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,ilen)
-                write(*,202)(mod((ichar(string(i:i))),10),   i=1,ilen)
+                write(*,202)     (iachar(string(i:i))/100,    i=1,ilen)
+                write(*,202)(mod( iachar(string(i:i)),100)/10,i=1,ilen)
+                write(*,202)(mod((iachar(string(i:i))),10),   i=1,ilen)
              ! format for printing string characters
              101   format(*(a1:))
              ! format for printing ADE values
