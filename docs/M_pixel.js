@@ -35,6 +35,7 @@ append("polar_to_cartesian.3m_pixel.html");
 append("poly2.3m_pixel.html");
 append("polyline2.3m_pixel.html");
 append("prefsize.3m_pixel.html");
+append("print_ansi.3m_pixel.html");
 append("print_ascii.3m_pixel.html");
 append("print_p3.3m_pixel.html");
 append("print_p6.3m_pixel.html");

@@ -1790,7 +1790,7 @@ integer                       :: ladd
 integer                       :: left_margin, right_margin
 integer                       :: ind
 integer                       :: ic
-integer                       :: ichar
+integer                       :: ichr
 integer                       :: range_local(2)
 character(len=:),allocatable  :: targetline_for_comparison   ! input line to be changed
 logical                       :: ignorecase_local
@@ -1863,7 +1863,7 @@ character(len=:),allocatable  :: targetline_local   ! input line to be changed
    newline=''                                          ! begin with a blank line as output string
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(len_old.eq.0)then                                ! c//new/ means insert new at beginning of line (or left margin)
-      ichar=len_new + original_input_length
+      ichr=len_new + original_input_length
       if(len_new.gt.0)then
          newline=new_local(:len_new)//targetline_local(left_margin:original_input_length)
       else
@@ -1875,7 +1875,7 @@ character(len=:),allocatable  :: targetline_local   ! input line to be changed
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   ichar=left_margin                                   ! place to put characters into output string
+   ichr=left_margin                                    ! place to put characters into output string
    ic=left_margin                                      ! place looking at in input string
    loop: do
                                                        ! try finding start of OLD in remaining part of input in change window
@@ -1886,19 +1886,19 @@ character(len=:),allocatable  :: targetline_local   ! input line to be changed
       icount=icount+1                                  ! found an old string to change, so increment count of change candidates
       if(ind.gt.ic)then                                ! if found old string past at current position in input string copy unchanged
          ladd=ind-ic                                   ! find length of character range to copy as-is from input to output
-         newline=newline(:ichar-1)//targetline_local(ic:ind-1)
-         ichar=ichar+ladd
+         newline=newline(:ichr-1)//targetline_local(ic:ind-1)
+         ichr=ichr+ladd
       endif
       if(icount.ge.range_local(1).and.icount.le.range_local(2))then    ! check if this is an instance to change or keep
          ichange=ichange+1
          if(len_new.ne.0)then                                          ! put in new string
-            newline=newline(:ichar-1)//new_local(:len_new)
-            ichar=ichar+len_new
+            newline=newline(:ichr-1)//new_local(:len_new)
+            ichr=ichr+len_new
          endif
       else
          if(len_old.ne.0)then                                          ! put in copy of old string
-            newline=newline(:ichar-1)//old_local(:len_old)
-            ichar=ichar+len_old
+            newline=newline(:ichr-1)//old_local(:len_old)
+            ichr=ichr+len_old
          endif
       endif
       ic=ind+len_old
@@ -1909,7 +1909,7 @@ character(len=:),allocatable  :: targetline_local   ! input line to be changed
       newline=targetline_local                         ! if no changes made output should be input
    case default
       if(ic.le.len(targetline))then                    ! if there is more after last change on original line add it
-         newline=newline(:ichar-1)//targetline_local(ic:max(ic,original_input_length))
+         newline=newline(:ichr-1)//targetline_local(ic:max(ic,original_input_length))
       endif
    end select
    if(present(ierr))ierr=ichange
@@ -2015,7 +2015,7 @@ integer                        :: ind
 integer                        :: il
 integer                        :: id
 integer                        :: ic
-integer                        :: ichar
+integer                        :: ichr
 !-----------------------------------------------------------------------------------------------------------------------------------
    if (present(start)) then                            ! optional starting column
       ml=start
@@ -2047,8 +2047,8 @@ integer                        :: ichar
    endif                                               ! end of window settings
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(len_old.eq.0)then                                ! c//new/ means insert new at beginning of line (or left margin)
-      ichar=len_new + original_input_length
-      if(ichar.gt.maxlengthout)then
+      ichr=len_new + original_input_length
+      if(ichr.gt.maxlengthout)then
          call journal('sc','*substitute* new line will be too long')
          ier1=-1
          if (present(ierr))ierr=ier1
@@ -2065,7 +2065,7 @@ integer                        :: ichar
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   ichar=il                                            ! place to put characters into output string
+   ichr=il                                            ! place to put characters into output string
    ic=il                                               ! place looking at in input string
    loop: do
       ind=index(targetline(ic:),old(:len_old))+ic-1    ! try to find start of old string in remaining part of input in change window
@@ -2075,20 +2075,20 @@ integer                        :: ichar
       ier1=ier1+1                                      ! found an old string to change, so increment count of changes
       if(ind.gt.ic)then                                ! if found old string past at current position in input string copy unchanged
          ladd=ind-ic                                   ! find length of character range to copy as-is from input to output
-         if(ichar-1+ladd.gt.maxlengthout)then
+         if(ichr-1+ladd.gt.maxlengthout)then
             ier1=-1
             exit loop
          endif
-         dum1(ichar:)=targetline(ic:ind-1)
-         ichar=ichar+ladd
+         dum1(ichr:)=targetline(ic:ind-1)
+         ichr=ichr+ladd
       endif
-      if(ichar-1+len_new.gt.maxlengthout)then
+      if(ichr-1+len_new.gt.maxlengthout)then
          ier1=-2
          exit loop
       endif
       if(len_new.ne.0)then
-         dum1(ichar:)=new(:len_new)
-         ichar=ichar+len_new
+         dum1(ichr:)=new(:len_new)
+         ichr=ichr+len_new
       endif
       ic=ind+len_old
    enddo loop
@@ -2099,14 +2099,14 @@ integer                        :: ichar
    case (0)                                                ! there were no changes made to the window
    case default
       ladd=original_input_length-ic
-      if(ichar+ladd.gt.maxlengthout)then
+      if(ichr+ladd.gt.maxlengthout)then
          call journal('sc','*substitute* new line will be too long')
          ier1=-1
          if(present(ierr))ierr=ier1
          return
       endif
       if(ic.lt.len(targetline))then
-         dum1(ichar:)=targetline(ic:max(ic,original_input_length))
+         dum1(ichr:)=targetline(ic:max(ic,original_input_length))
       endif
       targetline=dum1(:maxlengthout)
    end select
@@ -2516,7 +2516,7 @@ character(len=3),parameter  :: c='#&^'      !ASSIGN DEFAULT EDIT CHARACTERS
 integer                     :: maxscra      !LENGTH OF SCRATCH BUFFER
 character(len=len(cline))   :: dum2         !SCRATCH CHARACTER BUFFER
 logical                     :: linsrt       !FLAG FOR INSERTING DATA ON LINE
-integer :: i, j, ic, ichar, iend, lmax, lmx1
+integer :: i, j, ic, ichr, iend, lmax, lmx1
 maxscra=len(cline)
    CMOD=TRIM(MOD)
    LMAX=MIN0(LEN(CLINE),MAXSCRA)         !DETERMINE MAXIMUM LINE LENGTH
@@ -2526,28 +2526,28 @@ maxscra=len(cline)
    IEND=len_trim(CMOD)                   !DETERMINE END OF MODS
    I=0                                   !CHAR COUNTER FOR MOD LINE CMOD
    IC=0                                  !CHAR COUNTER FOR CURRENT LINE CLINE
-   ICHAR=0                               !CHAR COUNTER NEW LINE DUM2
+   ICHR=0                                !CHAR COUNTER NEW LINE DUM2
 11 CONTINUE
    I=I+1                                 !NEXT CHAR IN MOD LINE
-   IF(ICHAR.GT.LMX1)GOTO 999             !IF TOO MANY CHARS IN NEW LINE
+   IF(ICHR.GT.LMX1)GOTO 999              !IF TOO MANY CHARS IN NEW LINE
    IF(LINSRT) THEN                       !IF INSERTING NEW CHARS
       IF(I.GT.IEND) CMOD(I:I)=C(1:1)     !FORCE END OF INSERT MODE
       IF(CMOD(I:I).EQ.C(1:1))THEN        !IF END OF INSERT MODE
          LINSRT=.FALSE.                  !RESET INSERT MODE FLAG
          IF(IC+1.EQ.I)THEN               !NULL INSERT STRING
-            ICHAR=ICHAR+1                !INCREMENT COUNTER FOR NEW LINE
-            DUM2(ICHAR:ICHAR)=C(1:1)     !INSERT INSERT MODE TERMINATOR
+            ICHR=ICHR+1                  !INCREMENT COUNTER FOR NEW LINE
+            DUM2(ICHR:ICHR)=C(1:1)       !INSERT INSERT MODE TERMINATOR
          ENDIF
          DO J=IC,I                       !LOOP OF NUMBER OF CHARS INSERTED
-            ICHAR=ICHAR+1                !INCREMENT COUNTER FOR NEW LINE
-            IF(ICHAR.GT.LMAX)GOTO 999    !IF AT BUFFER LIMIT, QUIT
-            DUM2(ICHAR:ICHAR)=CLINE(J:J) !APPEND CHARS FROM ORIG LINE
+            ICHR=ICHR+1                  !INCREMENT COUNTER FOR NEW LINE
+            IF(ICHR.GT.LMAX)GOTO 999     !IF AT BUFFER LIMIT, QUIT
+            DUM2(ICHR:ICHR)=CLINE(J:J)   !APPEND CHARS FROM ORIG LINE
          ENDDO                           !...WHICH ALIGN WITH INSERTED CHARS
          IC=I                            !RESET CHAR COUNT TO END OF INSERT
          GOTO 1                          !CHECK NEW LINE LENGTH AND CYCLE
       ENDIF                              !END OF TERMINATED INSERT LOGIC
-      ICHAR=ICHAR+1                      !INCREMENT NEW LINE COUNT
-      DUM2(ICHAR:ICHAR)=CMOD(I:I)        !SET NEWLINE CHAR TO INSERTED CHAR
+      ICHR=ICHR+1                        !INCREMENT NEW LINE COUNT
+      DUM2(ICHR:ICHR)=CMOD(I:I)          !SET NEWLINE CHAR TO INSERTED CHAR
    ELSE                                  !IF NOT INSERTING CHARACTERS
       IC=IC+1                            !INCREMENT ORIGINAL LINE COUNTER
       IF(CMOD(I:I).EQ.C(1:1))GOTO 1      !IF DELETE CHAR. NO COPY AND CYCLE
@@ -2555,15 +2555,15 @@ maxscra=len(cline)
          LINSRT=.TRUE.                   !SET INSERT FLAG TRUE
          GOTO 1                          !CHECK LINE LENGTH AND CONTINUE
       ENDIF                              !IF NOT BEGINNING INSERT MODE
-      ICHAR=ICHAR+1                      !INCREMENT NEW LINE COUNTER
+      ICHR=ICHR+1                        !INCREMENT NEW LINE COUNTER
       IF(CMOD(I:I).EQ.C(2:2))THEN        !IF REPLACE WITH BLANK
-         DUM2(ICHAR:ICHAR)=' '           !SET NEWLINE CHAR TO BLANK
+         DUM2(ICHR:ICHR)=' '             !SET NEWLINE CHAR TO BLANK
          GOTO 1                          !CHECK LINE LENGTH AND CYCLE
       ENDIF                              !IF NOT REPLACE WITH BLANK
       IF(CMOD(I:I).EQ.' ')THEN           !IF BLANK, KEEP ORIGINAL CHARACTER
-         DUM2(ICHAR:ICHAR)=CLINE(IC:IC)  !SET NEW CHAR TO ORIGINAL CHAR
+         DUM2(ICHR:ICHR)=CLINE(IC:IC)    !SET NEW CHAR TO ORIGINAL CHAR
       ELSE                               !IF NOT KEEPING OLD CHAR
-         DUM2(ICHAR:ICHAR)=CMOD(I:I)     !REPLACE ORIGINAL CHAR WITH NEW
+         DUM2(ICHR:ICHR)=CMOD(I:I)       !REPLACE ORIGINAL CHAR WITH NEW
       ENDIF                              !END CHAR KEEP OR REPLACE
    ENDIF                                 !END INSERT OR NO-INSERT
 1  CONTINUE
@@ -2969,7 +2969,7 @@ integer                     :: itemp
 integer                     :: i
    rotate13=' '
    do i=1,len_trim(input)
-      itemp = ichar (input(i:i))
+      itemp = iachar(input(i:i))
       select case(itemp)
        case(65:77,97:109)
          itemp = itemp + 13
@@ -3622,9 +3622,9 @@ end function s2a
 !!        ! write array with ASCII Decimal Equivalent below it except show
 !!        ! unprintable characters like NULL as "XXX"
 !!        write(*,'(1x,*("[",a3,"]":))')&
-!!             & merge('XXX',array,ichar(array(:)(1:1)).lt.32)
+!!             & merge('XXX',array,iachar(array(:)(1:1)).lt.32)
 !!        write(*,'(1x,*("[",i3,"]":))')&
-!!             & ichar(array(:)(1:1))
+!!             & iachar(array(:)(1:1))
 !!     end program demo_s2c
 !!
 !!   Expected output:
@@ -3864,7 +3864,7 @@ do i=1,len(input)
    if(c.eq.' ')then
       output=output//' '
    else
-      output=output//trim(chars(ichar(c)))
+      output=output//trim(chars(iachar(c)))
    endif
 enddo
 end function visible
@@ -4112,7 +4112,7 @@ integer                       :: iade         ! ADE (ASCII Decimal Equivalent) o
 !===================================================================================================================================
       SCAN_LINE: do istep=1,lenin             ! look through input string one character at a time
          c=instr(istep:istep)                 ! get next character
-         iade=ichar(c)                        ! get ADE of the character
+         iade=iachar(c)                       ! get ADE of the character
          EXPAND_TABS : select case (iade)     ! take different actions depending on which character was found
          case(9)                              ! test if character is a tab and move pointer out to appropriate column
             ipos = ipos + (tabsize - (mod(ipos-1,tabsize)))
@@ -4824,7 +4824,7 @@ endif
 
    IFSPACE: do i=1,len_trim(str)
      ch=str(i:i)
-     select case(ichar(ch))
+     select case(iachar(ch))
        case(0:32,127)                                         ! space or tab character or control character
          if(position_in_output.eq.0)then                      ! still at beginning so ignore leading whitespace
             cycle IFSPACE
@@ -4898,15 +4898,15 @@ end function compact
 !!
 !!          ! replace lower unprintable characters with spaces
 !!          write(*,101)(merge(string(i:i),' ',&
-!!          & ichar(string(i:i)).ge.32         &
+!!          & iachar(string(i:i)).ge.32        &
 !!          & .and.                            &
-!!          & ichar(string(i:i)).le.126)       &
+!!          & iachar(string(i:i)).le.126)      &
 !!          & ,i=1,ilen)
 !!
 !!          ! print ADE value of character underneath it
-!!          write(*,202)     (ichar(string(i:i))/100,    i=1,ilen)
-!!          write(*,202)(mod( ichar(string(i:i)),100)/10,i=1,ilen)
-!!          write(*,202)(mod((ichar(string(i:i))),10),   i=1,ilen)
+!!          write(*,202)     (iachar(string(i:i))/100,    i=1,ilen)
+!!          write(*,202)(mod( iachar(string(i:i)),100)/10,i=1,ilen)
+!!          write(*,202)(mod((iachar(string(i:i))),10),   i=1,ilen)
 !!       ! format for printing string characters
 !!       101   format(*(a1:))
 !!       ! format for printing ADE values
@@ -4963,7 +4963,7 @@ integer                     :: ic,i10
 !-----------------------------------------------------------------------------------------------------------------------------------
    noesc=''                               ! initialize output string
    do i10=1,len_trim(INSTR(1:len(INSTR)))
-      ic=ichar(INSTR(i10:i10))
+      ic=iachar(INSTR(i10:i10))
       if(ic.le.31.or.ic.eq.127)then       ! find characters with ADE of 0-31, 127
          noesc(I10:I10)=' '               ! replace non-printable characters with a space
       else
@@ -6330,7 +6330,7 @@ integer                              :: i
 logical                              :: inside
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(present(esc))then                           ! select escape character as specified character or special value meaning not set
-      iesc=ichar(esc)                             ! allow for an escape character
+      iesc=iachar(esc)                            ! allow for an escape character
    else
       iesc=-1                                     ! set to value that matches no character
    endif
@@ -6340,12 +6340,12 @@ logical                              :: inside
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(inlen.ge.1)then                             ! double_quote is the default quote unless the first character is single_quote
       if(quoted_str(1:1).eq.single_quote)then
-         quote=ichar(single_quote)
+         quote=iachar(single_quote)
       else
-         quote=ichar(double_quote)
+         quote=iachar(double_quote)
       endif
    else
-      quote=ichar(double_quote)
+      quote=iachar(double_quote)
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    before=-2                                      ! initially set previous character to impossible value
@@ -6353,7 +6353,7 @@ logical                              :: inside
    iput=1
    inside=.false.
    STEPTHROUGH: do i=1,inlen
-      current=ichar(quoted_str(i:i))
+      current=iachar(quoted_str(i:i))
       if(before.eq.iesc)then                      ! if previous character was escape use current character unconditionally
            iput=iput-1                            ! backup
            unquoted_str(iput:iput)=char(current)
@@ -6556,7 +6556,7 @@ character(len=1),intent(in)   :: ch
 character(len=:),allocatable  :: string
 ! LATER: add hex, octal, decimal, key-press description, alternate names
 !  ASCII character codes
-   select case (ichar(ch))
+   select case (iachar(ch))
    case(     0  ); STRING="ctrl-@ or ctrl-? (NUL) null"
    case(     1  ); STRING="ctrl-A (SOH) start of heading"
    case(     2  ); STRING="ctrl-B (STX) start of text"
@@ -6686,7 +6686,7 @@ character(len=:),allocatable  :: string
    case(   126  ); STRING="~ tilde"
    case(   127  ); STRING="ctrl-? (DEL) delete"
    case default
-         STRING='UNKNOWN'//v2s(ICHAR(ch))
+         STRING='UNKNOWN'//v2s(IACHAR(ch))
    end select
 end function describe
 !===================================================================================================================================
@@ -7478,7 +7478,7 @@ end function isdigit
 !!     integer                    :: i
 !!     character(len=1),parameter :: string(*)=[(char(i),i=0,127)]
 !!        write(*,'(*(g0,1x))')'ISXBLANK: ',&
-!!        & ichar(pack( string, isblank(string) ))
+!!        & iachar(pack( string, isblank(string) ))
 !!     end program demo_isblank
 !!
 !!   Results:
@@ -7540,7 +7540,7 @@ end function isblank
 !!     integer                    :: i
 !!     character(len=1),parameter :: string(*)=[(char(i),i=0,255)]
 !!        write(*,'(10(g0,1x))')'ISASCII: ', &
-!!        & ichar(pack( string, isascii(string) ))
+!!        & iachar(pack( string, isascii(string) ))
 !!     end program demo_isascii
 !!
 !!  Results:
@@ -7570,7 +7570,7 @@ elemental function isascii(ch) result(res)
 
 character,intent(in) :: ch
 logical              :: res
-   select case(ichar(ch))
+   select case(iachar(ch))
    case(0:127)
      res=.true.
    case default
@@ -7614,7 +7614,7 @@ end function isascii
 !!     integer                    :: i
 !!     character(len=1),parameter :: string(*)=[(char(i),i=0,127)]
 !!        write(*,'(20(g0,1x))')'ISSPACE: ', &
-!!        & ichar(pack( string, isspace(string) ))
+!!        & iachar(pack( string, isspace(string) ))
 !!     end program demo_isspace
 !!
 !!   Results:
@@ -7680,7 +7680,7 @@ end function isspace
 !!     integer                    :: i
 !!     character(len=1),parameter :: string(*)=[(char(i),i=0,127)]
 !!        write(*,'(20(g0,1x))')'ISCNTRL: ', &
-!!        & ichar(pack( string, iscntrl(string) ))
+!!        & iachar(pack( string, iscntrl(string) ))
 !!     end program demo_iscntrl
 !!
 !!   Results:
@@ -7744,7 +7744,7 @@ end function iscntrl
 !!     integer                    :: i
 !!     character(len=1),parameter :: string(*)=[(char(i),i=0,127)]
 !!        write(*,'(20(g0,1x))')'ISPUNCT: ', &
-!!        & ichar(pack( string, ispunct(string) ))
+!!        & iachar(pack( string, ispunct(string) ))
 !!        write(*,'(20(g0,1x))')'ISPUNCT: ', &
 !!        & pack( string, ispunct(string) )
 !!     end program demo_ispunct
@@ -7895,7 +7895,7 @@ end function fortran_name
 !!     integer                    :: i
 !!     character(len=1),parameter :: string(*)=[(char(i),i=0,127)]
 !!        write(*,'(10(g0,1x))')'ISUPPER: ', &
-!!        & ichar(pack( string, isupper(string) ))
+!!        & iachar(pack( string, isupper(string) ))
 !!        write(*,'(10(g0,1x))')'ISUPPER: ', &
 !!        & pack( string, isupper(string) )
 !!     end program demo_isupper
@@ -7963,7 +7963,7 @@ end function isupper
 !!     integer                    :: i
 !!     character(len=1),parameter :: string(*)=[(char(i),i=0,127)]
 !!        write(*,'(15(g0,1x))')'ISLOWER: ', &
-!!        & ichar(pack( string, islower(string) ))
+!!        & iachar(pack( string, islower(string) ))
 !!        write(*,'(15(g0,1x))')'ISLOWER: ', &
 !!        & pack( string, islower(string) )
 !!     end program demo_islower

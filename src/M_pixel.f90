@@ -32,14 +32,14 @@
 !!    use :: M_pixel, only : makepoly,  closepoly,       font
 !!
 !!    use :: M_pixel, only : state,     hershey,         justfy
-!!    use :: M_pixel, only : print_ascii, print_ppm, print_p3, print_p6
+!!    use :: M_pixel, only : print_ascii, print_ppm, print_p3, print_p6, print_ansi
 !!    use :: M_pixel, only : pixel
 !!    use :: M_pixel, only : hue
 !!
 !!    ! Differences between M_pixel and M_draw and M_draw-related procedures:
 !!    !    hershey(3f) and justfy(3f) do not exist in M_draw and might be replaced
 !!    !    and the same font names are not available
-!!    !    print_ascii(3f) and print_ppm|p3|p6(3f) do not exist in M_draw
+!!    !    print_ansi, print_ascii(3f) and print_ppm|p3|p6(3f) do not exist in M_draw
 !!    !    state(3f) does not exist in M_draw
 !!    !    viewport is in terms of pixels, not range -1.0 to 1.0
 !!
@@ -313,6 +313,7 @@ public  :: print_p3            ! print pixel array as a P3 ppm file, replacing o
 public  :: print_p6            ! print pixel array as a P6 ppm file, replacing output file
 public  :: print_ppm           ! print pixel array as a P6 ppm file, appending to existing files
 public  :: print_ascii         ! print small pixel array as ASCII text
+public  :: print_ansi          ! print small pixel array as ANSI escape sequences
 
 public  :: pixel               ! directly set pixel value
 
@@ -5372,6 +5373,100 @@ end subroutine print_p3
 !==================================================================================================================================!
 !>
 !!##NAME
+!!   print_ansi(3f) - [M_pixel:PRINT] print small pixel array as colored
+!!   text on terminals and terminal emulators that obey ANSI escape sequences
+!!   (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!  definition:
+!!
+!!    subroutine print_ansi(filename)
+!!    character(len=*),intent(in) :: filename
+!!
+!!##DESCRIPTION
+!!   This driver prints the pixmap as a simple array of ANSI terminal
+!!   escape sequences. It assumes only single-digit colors are used. It is
+!!   appropriate for inspecting small pixmaps.
+!!
+!!##OPTIONS
+!!   FILENAME  name of output file. If blank write to stdout.
+!!
+!!##EXAMPLE
+!!
+!!
+!!   Sample Program:
+!!
+!!    program demo_print_ansi
+!!    use M_pixel
+!!    implicit none
+!!    call prefsize(80,24)
+!!       call vinit()
+!!       call ortho2(0.0,80.0,0.0,24.0)
+!!       call linewidth(400)
+!!       call color(1)
+!!       call circle(12.0,12.0,6.0)
+!!       call color(2)
+!!       call circle(72.0,12.0,6.0)
+!!       call print_ansi()
+!!       call vexit()
+!!    end program demo_print_ansi
+!!
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+subroutine print_ansi(filename)
+use,intrinsic :: iso_fortran_env, only : ERROR_UNIT, INPUT_UNIT, OUTPUT_UNIT
+
+character(len=*),parameter::ident_39="@(#)M_pixel::print_ansi(3f): print pixel array as an ASCII block of text"
+
+character(len=*),intent(in),optional  :: filename
+character(len=1024)                   :: message
+   integer                            :: iu,ios,i,j
+
+   if(present(filename))then  ! if filename is present and not blank open specified filename else use stdout
+      if(filename.eq.'')then
+         iu=OUTPUT_UNIT
+         ios=0
+      else
+         open(file=trim(filename),newunit=iu,iostat=ios,iomsg=message,action='write')
+         if(ios.ne.0)then
+            write(ERROR_UNIT,'(*(a))',iostat=ios)'*P_print_ansi* OPEN ERROR:',trim(message)
+         endif
+      endif
+   else
+      iu=OUTPUT_UNIT
+      ios=0
+   endif
+
+   if(ios.eq.0)then
+      call if_init()
+      do i=0,size(P_pixel,dim=2)-1
+         do j=1,size(P_pixel,dim=1)
+            write(iu,'(*(g0))',iostat=ios,iomsg=message,advance='no')char(27),'[4',P_pixel(j,i),'m '
+            if(ios.ne.0)then
+               write(ERROR_UNIT,'(*(a))',iostat=ios)'*P_print_ansi* WRITE ERROR:',trim(message)
+               exit
+            endif
+         enddo
+         write(iu,'(*(g0))',iostat=ios,iomsg=message,advance='yes')char(27),'[0m'
+      enddo
+   endif
+
+   flush(unit=iu,iostat=ios)
+   if(iu.ne.OUTPUT_UNIT)then
+      close(unit=iu,iostat=ios)
+   endif
+
+end subroutine print_ansi
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+!>
+!!##NAME
 !!   print_ascii(3f) - [M_pixel:PRINT] print small pixel array as ASCII text
 !!   (LICENSE:PD)
 !!
@@ -5445,7 +5540,7 @@ end subroutine print_p3
 subroutine print_ascii(filename)
 use,intrinsic :: iso_fortran_env, only : ERROR_UNIT, INPUT_UNIT, OUTPUT_UNIT
 
-character(len=*),parameter::ident_39="@(#)M_pixel::print_ascii(3f): print pixel array as an ASCII block of text"
+character(len=*),parameter::ident_40="@(#)M_pixel::print_ascii(3f): print pixel array as an ASCII block of text"
 
 character(len=*),intent(in),optional  :: filename
 character(len=1024)                   :: message
@@ -5626,7 +5721,7 @@ end subroutine print_ascii
 !!    Public Domain
 subroutine textsize(width,height)
 
-character(len=*),parameter::ident_40="@(#)M_pixel::textsize(3f): set text size in world units"
+character(len=*),parameter::ident_41="@(#)M_pixel::textsize(3f): set text size in world units"
 
 real,intent(in) :: width
 real,intent(in) :: height
@@ -5664,7 +5759,7 @@ end subroutine textsize
 !!    Public Domain
 subroutine ycentertext()
 
-character(len=*),parameter::ident_41="&
+character(len=*),parameter::ident_42="&
 &@(#)M_pixel::ycentertext(3f): set text centering mode on for drawstr(3f) and drawc(3f) in Y direction"
 
    P_X_centertext=.false.
@@ -5704,7 +5799,7 @@ end subroutine ycentertext
 !!    Public Domain
 subroutine xcentertext()
 
-character(len=*),parameter::ident_42="&
+character(len=*),parameter::ident_43="&
 &@(#)M_pixel::xcentertext(3f): set text centering mode for drawstr(3f) and drawc(3f) in X direction"
 
    P_X_CENTERTEXT=.true.
@@ -5794,7 +5889,7 @@ end subroutine xcentertext
 !!    Public Domain
 subroutine centertext(onoff)
 
-character(len=*),parameter::ident_43="@(#)M_pixel::centertext(3f): set text centering mode for drawstr(3f) and drawc(3f)"
+character(len=*),parameter::ident_44="@(#)M_pixel::centertext(3f): set text centering mode for drawstr(3f) and drawc(3f)"
 
 logical,intent(in) :: onoff
 
@@ -5868,7 +5963,7 @@ end subroutine centertext
 !!    Public Domain
 subroutine textang(ang)
 
-character(len=*),parameter::ident_44="@(#)M_pixel::textang(3f): set angle in degrees to draw text at using drawstr(3f)"
+character(len=*),parameter::ident_45="@(#)M_pixel::textang(3f): set angle in degrees to draw text at using drawstr(3f)"
 
 real,intent(in) :: ang
 
@@ -5961,7 +6056,7 @@ end subroutine textang
 !!    end program demo_font
 subroutine font(fontname)
 
-character(len=*),parameter::ident_45="@(#)M_pixel::font(3f): select font style by name"
+character(len=*),parameter::ident_46="@(#)M_pixel::font(3f): select font style by name"
 
 character(len=*),intent(in) :: fontname
       select case(fontname)
@@ -6045,7 +6140,7 @@ end subroutine font
 !!    Public Domain
 subroutine drawchar(ch)
 
-character(len=*),parameter::ident_46="@(#)M_pixel::drawchar(3f): draw text at the current position"
+character(len=*),parameter::ident_47="@(#)M_pixel::drawchar(3f): draw text at the current position"
 
 character(len=1),intent(in) :: ch
 
@@ -6125,7 +6220,7 @@ end subroutine drawchar
 subroutine drawstr_(string)
 !-!use :: M_pixel, only : cosd, sind
 
-character(len=*),parameter::ident_47="@(#)M_pixel::drawstr(3f): draw text at the current position"
+character(len=*),parameter::ident_48="@(#)M_pixel::drawstr(3f): draw text at the current position"
 
 character(len=*),intent(in)  :: string
 character(len=:),allocatable :: fontstring
@@ -6254,7 +6349,7 @@ end subroutine drawstr_
 !!    Public Domain
 subroutine getgp2(x, y)
 
-character(len=*),parameter::ident_48="@(#)M_pixel::getgp2(3f): get current graphics position"
+character(len=*),parameter::ident_49="@(#)M_pixel::getgp2(3f): get current graphics position"
 
 real,intent(out) :: x, y
 
@@ -6287,7 +6382,7 @@ end subroutine getgp2
 !!    Public Domain
 subroutine getdisplaysize(w, h)
 
-character(len=*),parameter::ident_49="@(#)M_pixel::getdisplaysize(3f): Returns the width and height of the device in pixels"
+character(len=*),parameter::ident_50="@(#)M_pixel::getdisplaysize(3f): Returns the width and height of the device in pixels"
 
 real,intent(out) :: w, h
 
@@ -6340,7 +6435,7 @@ end subroutine getdisplaysize
 !!    Public Domain
 subroutine point2(x, y)
 
-character(len=*),parameter::ident_50="@(#)M_pixel::point2(3f): Draw a point at x, y"
+character(len=*),parameter::ident_51="@(#)M_pixel::point2(3f): Draw a point at x, y"
 
 real,intent(in) :: x, y
 
@@ -6407,7 +6502,7 @@ end subroutine point2
 !!    Public Domain
 recursive subroutine state(string)
 
-character(len=*),parameter::ident_51="@(#)M_pixel::state(3f): print graphics state of M_pixel graphics module"
+character(len=*),parameter::ident_52="@(#)M_pixel::state(3f): print graphics state of M_pixel graphics module"
 
 character(len=*),intent(in),optional :: string
 character(len=40)         :: string_local
@@ -6529,7 +6624,7 @@ end subroutine state
 !!    Public Domain
 subroutine poly2(n,points)
 
-character(len=*),parameter::ident_52="@(#)M_pixel::poly2(3f): construct a polygon from an array of points"
+character(len=*),parameter::ident_53="@(#)M_pixel::poly2(3f): construct a polygon from an array of points"
 
 integer,intent(in) :: n
 real,intent(in)    :: points(2, n)
@@ -6551,7 +6646,7 @@ end subroutine poly2
 !==================================================================================================================================!
 subroutine vflush()
 
-character(len=*),parameter::ident_53="@(#)M_pixel::vflush(3f): flush current page"
+character(len=*),parameter::ident_54="@(#)M_pixel::vflush(3f): flush current page"
 
 end subroutine vflush
 !==================================================================================================================================!
@@ -6559,7 +6654,7 @@ end subroutine vflush
 !==================================================================================================================================!
 subroutine PPM_DRAW_FILL_LINE(xstart,ystart,x,y)
 
-character(len=*),parameter::ident_54="@(#)M_pixel::PPM_DRAW_FILL_LINE(3fp): draws a line across a graphics array"
+character(len=*),parameter::ident_55="@(#)M_pixel::PPM_DRAW_FILL_LINE(3fp): draws a line across a graphics array"
 
 integer,intent(in) :: xstart,ystart
 integer,intent(in) :: x,y
@@ -6625,7 +6720,7 @@ end subroutine PPM_DRAW_FILL_LINE
 !===================================================================================================================================
 subroutine PPM_draw_thick_line(inx1,iny1,inx2, iny2)
 
-character(len=*),parameter::ident_55="&
+character(len=*),parameter::ident_56="&
 &@(#)M_pixel::PPM_DRAW_THICK_LINE(3fp): draw line from current pixel graphics position to (x, y) using polygons for line thickness"
 
 integer,intent(in) :: inx1,iny1,inx2,iny2
@@ -6709,7 +6804,7 @@ end function PPM_YINTERCEPT
 subroutine PPM_SOLID_FILL(x,y,n)
 !-!use M_sort, only : sort_shell
 
-character(len=*),parameter::ident_56="@(#)M_pixel::PPM_SOLID_FILL(3fp): fill polygon of n points that are in viewport coordinates"
+character(len=*),parameter::ident_57="@(#)M_pixel::PPM_SOLID_FILL(3fp): fill polygon of n points that are in viewport coordinates"
 
 integer,intent(in) :: n
 integer,intent(in) :: x(0:n-1)
@@ -6776,7 +6871,7 @@ end subroutine PPM_SOLID_FILL
 !===================================================================================================================================
 subroutine PPM_ENDCAP_CIRCLE(x, y)
 
-character(len=*),parameter::ident_57="@(#)M_pixel::PPM_ENDCAP_CIRCLE(3fp): Draw a circle on thick line segment end point"
+character(len=*),parameter::ident_58="@(#)M_pixel::PPM_ENDCAP_CIRCLE(3fp): Draw a circle on thick line segment end point"
 
 integer,intent(in) :: x
 integer,intent(in) :: y
@@ -7019,7 +7114,7 @@ end subroutine msg_one
 !===================================================================================================================================
 elemental real function cosd(angle_in_degrees)
 
-character(len=*),parameter::ident_58="@(#)M_pixel::cosd(3f): cos(3f) with degrees as input instead of radians"
+character(len=*),parameter::ident_59="@(#)M_pixel::cosd(3f): cos(3f) with degrees as input instead of radians"
 
 class(*),intent(in) :: angle_in_degrees
 real                :: angle_in_degrees_local
@@ -7029,7 +7124,7 @@ end function cosd
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function sind(angle_in_degrees)
 
-character(len=*),parameter::ident_59="@(#)M_pixel::sind(3f): sin(3f) with degrees as input instead of radians"
+character(len=*),parameter::ident_60="@(#)M_pixel::sind(3f): sin(3f) with degrees as input instead of radians"
 
 class(*),intent(in)  :: angle_in_degrees
 real                 :: angle_in_degrees_local
@@ -7116,7 +7211,7 @@ end subroutine journal
 !===================================================================================================================================
 function i2s(ivalue) result(outstr)
 
-character(len=*),parameter::ident_60="@(#)M_strings::i2s(3fp): private function returns string given integer value"
+character(len=*),parameter::ident_61="@(#)M_strings::i2s(3fp): private function returns string given integer value"
 
 integer,intent(in)           :: ivalue                         ! input value to convert to a string
 character(len=:),allocatable :: outstr                         ! output string to generate
@@ -7130,7 +7225,7 @@ end function i2s
 subroutine sort_shell_integers_hl(iarray)
 ! Copyright (C) 1989,1996 John S. Urban;  all rights reserved
 
-character(len=*),parameter::ident_61="@(#)M_sort::sort_shell_integers_hl(3fp):sort integer array using Shell sort (high to low)"
+character(len=*),parameter::ident_62="@(#)M_sort::sort_shell_integers_hl(3fp):sort integer array using Shell sort (high to low)"
 
 integer,intent(inout)      :: iarray(:)  ! input/output array
 integer                    :: n          ! number of elements in input array (iarray)
@@ -7574,7 +7669,7 @@ end subroutine rgbhls
 !===================================================================================================================================
 subroutine rgbhvs(r0,g0,b0,h,v,s,status)
 
-character(len=*),parameter::ident_62="@(#)M_pixel::rgbhvs(3fp): given red,green,blue calculate hue,saturation,value components"
+character(len=*),parameter::ident_63="@(#)M_pixel::rgbhvs(3fp): given red,green,blue calculate hue,saturation,value components"
 
 !---- this procedure calculates a hue, saturation, value equivalent for a
 !     color given in red, green, & blue components.
@@ -7635,7 +7730,7 @@ end subroutine rgbhvs
 !===================================================================================================================================
 subroutine cmyrgb(c,m,y,r,g,b,status)
 
-character(len=*),parameter::ident_63="@(#)M_pixel::cmyrgb(3fp): given cyan,magenta,yellow calculate red,green,blue components"
+character(len=*),parameter::ident_64="@(#)M_pixel::cmyrgb(3fp): given cyan,magenta,yellow calculate red,green,blue components"
 
 ! given  : r, g, b each as a value of 0 to 100
 ! desired: c, m, y each as a value of 0 to 100
@@ -7654,7 +7749,7 @@ end subroutine cmyrgb
 !===================================================================================================================================
 subroutine rgbcmy(r,g,b,c,m,y,status)
 
-character(len=*),parameter::ident_64="@(#)M_pixel::rgbcmy(3fp): given red,green,blue calculate cyan,magenta,yellow components"
+character(len=*),parameter::ident_65="@(#)M_pixel::rgbcmy(3fp): given red,green,blue calculate cyan,magenta,yellow components"
 
 !     given  : r, g, b each as a value of 0 to 100
 !     desired: c, m, y each as a value of 0 to 100
@@ -7674,7 +7769,7 @@ end subroutine rgbcmy
 !===================================================================================================================================
 subroutine rgbmono(rr,rg,rb,ri,status)
 
-character(len=*),parameter::ident_65="@(#)M_pixel::rgbmono(3f): convert RGB colors to a reasonable grayscale"
+character(len=*),parameter::ident_66="@(#)M_pixel::rgbmono(3f): convert RGB colors to a reasonable grayscale"
 
 ! monochrome devices that support intensity can have intensity calculated from the specified Red, Green, Blue
 ! intensities as 0.30*R + 0.59*G + 0.11*B, as in US color television systems, NTSC encoding.
@@ -7694,7 +7789,7 @@ end subroutine rgbmono
 !===================================================================================================================================
 real function rgbval(clr1,clr2,h)
 
-character(len=*),parameter::ident_66="@(#)M_pixel::rgbval(3fp): ensure a value is in the appropriate range and quadrant"
+character(len=*),parameter::ident_67="@(#)M_pixel::rgbval(3fp): ensure a value is in the appropriate range and quadrant"
 
 real    :: clr1,clr2
 real    :: h
@@ -7732,7 +7827,7 @@ end function rgbval
 !===================================================================================================================================
 subroutine hlsrgb(H,L,S,R,G,B,status)
 
-character(len=*),parameter::ident_67="@(#)M_pixel::hlsrgb(3fp): convert HLS(hue,lightness,saturation) values to RGB components"
+character(len=*),parameter::ident_68="@(#)M_pixel::hlsrgb(3fp): convert HLS(hue,lightness,saturation) values to RGB components"
 
 !     given  : hue as a value of 0 to 360 degrees.
 !     .        lightness and saturation each as a value of 0 to 100.
@@ -7769,7 +7864,7 @@ end subroutine hlsrgb
 !===================================================================================================================================
 subroutine hvsrgb(h,v,s,r,g,b,status)
 
-character(len=*),parameter::ident_68="@(#)M_pixel::hvsrgb(3fp): given hue,saturation,value calculate red,green,blue components"
+character(len=*),parameter::ident_69="@(#)M_pixel::hvsrgb(3fp): given hue,saturation,value calculate red,green,blue components"
 
 !     given  : hue as value of 0 to 360 degrees.
 !     .        saturation and value each as a value of 0 to 100.
@@ -7821,7 +7916,7 @@ end subroutine hvsrgb
 !===================================================================================================================================
 subroutine yiqrgb(y,i,q,r,g,b,status)
 
-character(len=*),parameter::ident_69="&
+character(len=*),parameter::ident_70="&
 &@(#)M_pixel::yiqrgb(3fp): convert luma,orange-blue chrominance,purple-green chrominance to RGB"
 
 real,intent(in)  :: y,i,q
@@ -7858,7 +7953,7 @@ end subroutine yiqrgb
 !===================================================================================================================================
 subroutine rgbyiq(r,g,b,y,i,q,status)
 
-character(len=*),parameter::ident_70="&
+character(len=*),parameter::ident_71="&
 &@(#)M_pixel::rgbyiq(3fp): convert RGB to luma,orange-blue chrominance,purple-green chrominance"
 
 real,intent(in)  :: r,g,b
@@ -7939,7 +8034,7 @@ end subroutine rgbyiq
 !!    Public Domain
 SUBROUTINE closest_color_name(r,g,b,closestname)
 
-character(len=*),parameter::ident_71="@(#)M_pixel::closest_color_name(3f): given RGB values, try to find closest named color"
+character(len=*),parameter::ident_72="@(#)M_pixel::closest_color_name(3f): given RGB values, try to find closest named color"
 
 real,intent(in)               :: r,g,b
 character(len=*),intent(out) :: closestname
@@ -8016,7 +8111,7 @@ end SUBROUTINE closest_color_name
 !!    Public Domain
 subroutine color_name2rgb(name,r,g,b,echoname)
 
-character(len=*),parameter::ident_72="&
+character(len=*),parameter::ident_73="&
 &@(#)M_pixel::color_name2rgb(3f): given a color name, return rgb color values in range 0 to 100"
 
 character(len=*),intent(in)            :: name
@@ -8602,7 +8697,7 @@ END SUBROUTINE color_name2rgb
 !===================================================================================================================================
 elemental pure function lower(str) result (string)
 
-character(len=*),parameter::ident_73="@(#)M_strings::lower(3f): Changes a string to lowercase"
+character(len=*),parameter::ident_74="@(#)M_strings::lower(3f): Changes a string to lowercase"
 
 character(*), intent(In)     :: str
 character(len(str))          :: string
@@ -8675,7 +8770,7 @@ end function lower
 !!    Public Domain
 subroutine polar_to_cartesian(radius,inclination,x,y)
 implicit none
-character(len=*),parameter::ident_74="@(#)M_pixel::polar_to_cartesian(3f): convert polar coordinates to cartesian coordinates"
+character(len=*),parameter::ident_75="@(#)M_pixel::polar_to_cartesian(3f): convert polar coordinates to cartesian coordinates"
 real,intent(in) :: radius,inclination
 real,intent(out)  :: x,y
    if(radius.eq.0)then
@@ -8737,7 +8832,7 @@ end subroutine polar_to_cartesian
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function d2r_r(degrees)
 
-character(len=*),parameter::ident_75="@(#)M_pixel::d2r_r(3f): Convert degrees to radians"
+character(len=*),parameter::ident_76="@(#)M_pixel::d2r_r(3f): Convert degrees to radians"
 
 doubleprecision,parameter :: RADIAN=57.2957795131d0 ! degrees
 real,intent(in)           :: degrees                ! input degrees to convert to radians
@@ -8746,7 +8841,7 @@ end function d2r_r
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function d2r_d(degrees)
 
-character(len=*),parameter::ident_76="@(#)M_pixel::d2r_d(3f): Convert degrees to radians"
+character(len=*),parameter::ident_77="@(#)M_pixel::d2r_d(3f): Convert degrees to radians"
 
 doubleprecision,parameter :: RADIAN=57.2957795131d0 ! degrees
 doubleprecision,intent(in) :: degrees               ! input degrees to convert to radians
@@ -8755,7 +8850,7 @@ end function d2r_d
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function d2r_i(idegrees)
 
-character(len=*),parameter::ident_77="@(#)M_pixel::d2r_i(3f): Convert degrees to radians"
+character(len=*),parameter::ident_78="@(#)M_pixel::d2r_i(3f): Convert degrees to radians"
 
 doubleprecision,parameter :: RADIAN=57.2957795131d0 ! degrees
 integer,intent(in) :: idegrees                      ! input degrees to convert to radians
