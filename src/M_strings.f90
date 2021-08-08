@@ -1163,7 +1163,7 @@ character(len=:),allocatable  :: ordr                   ! string containing orde
 character(len=:),allocatable  :: nlls                   ! string containing nulls keyword
 integer                       :: ii,iiii                ! loop parameters used to control print order
 integer                       :: icount                 ! number of tokens found
-integer                       :: ilen                   ! length of input string with trailing spaces trimmed
+integer                       :: lgth                   ! length of input string with trailing spaces trimmed
 integer                       :: i10,i20,i30            ! loop counters
 integer                       :: icol                   ! pointer into input string as it is being parsed
 integer                       :: idlim                  ! number of delimiter characters
@@ -1195,19 +1195,19 @@ integer                       :: imax                   ! length of longest toke
    ibegin(:)=1
    iterm(:)=1
 !-----------------------------------------------------------------------------------------------------------------------------------
-   ilen=len(input_line)                                           ! ILEN is the column position of the last non-blank character
+   lgth=len(input_line)                                           ! lgth is the column position of the last non-blank character
    icount=0                                                       ! how many tokens found
    inotnull=0                                                     ! how many tokens found not composed of delimiters
    imax=0                                                         ! length of longest token found
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(ilen.gt.0)then                                              ! there is at least one non-delimiter in INPUT_LINE if get here
+   if(lgth.gt.0)then                                              ! there is at least one non-delimiter in INPUT_LINE if get here
       icol=1                                                      ! initialize pointer into input line
-      INFINITE: do i30=1,ilen,1                                   ! store into each array element
+      INFINITE: do i30=1,lgth,1                                   ! store into each array element
          ibegin(i30)=icol                                         ! assume start new token on the character
          if(index(dlim(1:idlim),input_line(icol:icol)).eq.0)then  ! if current character is not a delimiter
-            iterm(i30)=ilen                                       ! initially assume no more tokens
+            iterm(i30)=lgth                                       ! initially assume no more tokens
             do i10=1,idlim                                        ! search for next delimiter
-               ifound=index(input_line(ibegin(i30):ilen),dlim(i10:i10))
+               ifound=index(input_line(ibegin(i30):lgth),dlim(i10:i10))
                IF(ifound.gt.0)then
                   iterm(i30)=min(iterm(i30),ifound+ibegin(i30)-2)
                endif
@@ -1220,7 +1220,7 @@ integer                       :: imax                   ! length of longest toke
          endif
          imax=max(imax,iterm(i30)-ibegin(i30)+1)
          icount=i30                                               ! increment count of number of tokens found
-         if(icol.gt.ilen)then                                     ! no text left
+         if(icol.gt.lgth)then                                     ! no text left
             exit INFINITE
          endif
       enddo INFINITE
@@ -1401,7 +1401,7 @@ end function chomp
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine delim(line,array,n,icount,ibegin,iterm,ilen,dlim)
+!!    subroutine delim(line,array,n,icount,ibegin,iterm,lgth,dlim)
 !!
 !!     character(len=*),intent(in)  :: line
 !!     integer,integer(in)          :: n
@@ -1409,7 +1409,7 @@ end function chomp
 !!     character(len=*)             :: array(n)
 !!     integer,intent(out)          :: ibegin(n)
 !!     integer,intent(out)          :: iterm(n)
-!!     integer,intent(out)          :: ilen
+!!     integer,intent(out)          :: lgth
 !!     character(len=*)             :: dlim
 !!
 !!##DESCRIPTION
@@ -1422,7 +1422,7 @@ end function chomp
 !!      and ITERM(N).
 !!
 !!      Return position of last non-blank character (even if more
-!!      than N elements were found) in ILEN
+!!      than N elements were found) in lgth
 !!
 !!      No quoting or escaping of delimiter is allowed, so the delimiter
 !!      character can not be placed in a token.
@@ -1436,7 +1436,7 @@ end function chomp
 !!    ICOUNT    number of tokens found
 !!    IBEGIN(N) starting columns of tokens found
 !!    ITERM(N)  ending columns of tokens found
-!!    ILEN      position of last non-blank character in input string LINE
+!!    LGTH      position of last non-blank character in input string LINE
 !!    DLIM      delimiter characters
 !!
 !!##EXAMPLES
@@ -1452,7 +1452,7 @@ end function chomp
 !!     integer,parameter :: n=10
 !!     character(len=20) :: array(n)=' '
 !!     integer           :: ibegin(n),iterm(n)
-!!     integer           :: i20, icount, ilen, i10
+!!     integer           :: i20, icount, lgth, i10
 !!     line=' first  second 10.3 words_of_stuff  '
 !!     do i20=1,4
 !!        ! change delimiter list and what is calculated or parsed
@@ -1467,12 +1467,12 @@ end function chomp
 !!        ! show line being parsed
 !!        write(*,'(a)')'PARSING=['//trim(line)//'] on '//trim(dlm)
 !!        ! call parsing procedure
-!!        call delim(line,array,n,icount,ibegin,iterm,ilen,dlm)
+!!        call delim(line,array,n,icount,ibegin,iterm,lgth,dlm)
 !!        write(*,*)'number of tokens found=',icount
-!!        write(*,*)'last character in column ',ilen
+!!        write(*,*)'last character in column ',lgth
 !!        if(icount.gt.0)then
-!!           if(ilen.ne.iterm(icount))then
-!!              write(*,*)'ignored from column ',iterm(icount)+1,' to ',ilen
+!!           if(lgth.ne.iterm(icount))then
+!!              write(*,*)'ignored from column ',iterm(icount)+1,' to ',lgth
 !!           endif
 !!           do i10=1,icount
 !!              ! check flag to see if ARRAY() was set
@@ -1501,7 +1501,7 @@ end function chomp
 !!
 !!##LICENSE
 !!    Public Domain
-subroutine delim(line,array,n,icount,ibegin,iterm,ilen,dlim)
+subroutine delim(line,array,n,icount,ibegin,iterm,lgth,dlim)
 
 ! ident_10="@(#)M_strings::delim(3f): parse a string and store tokens into an array"
 
@@ -1525,7 +1525,7 @@ character(len=*)               :: array(n)
 integer,intent(out)            :: icount
 integer,intent(out)            :: ibegin(n)
 integer,intent(out)            :: iterm(n)
-integer,intent(out)            :: ilen
+integer,intent(out)            :: lgth
 character(len=*),intent(in)    :: dlim
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=len(line)):: line_local
@@ -1539,7 +1539,7 @@ integer             :: ifound
 integer             :: istart
 !-----------------------------------------------------------------------------------------------------------------------------------
       icount=0
-      ilen=len_trim(line)
+      lgth=len_trim(line)
       line_local=line
 
       idlim=len(dlim)
@@ -1550,12 +1550,12 @@ integer             :: istart
          endif
       endif
 
-      if(ilen == 0)then                                        ! command was totally blank
+      if(lgth == 0)then                                        ! command was totally blank
          return
       endif
 !
 !     there is at least one non-blank character in the command
-!     ilen is the column position of the last non-blank character
+!     lgth is the column position of the last non-blank character
 !     find next non-delimiter
       icol=1
 
@@ -1570,17 +1570,17 @@ integer             :: istart
             if(index(dlim(1:idlim),line_local(icol:icol)) == 0)then  ! if current character is not a delimiter
                istart=icol                                     ! start new token on the non-delimiter character
                ibegin(iarray)=icol
-               iend=ilen-istart+1+1                            ! assume no delimiters so put past end of line
+               iend=lgth-istart+1+1                            ! assume no delimiters so put past end of line
                do i10=1,idlim
-                  ifound=index(line_local(istart:ilen),dlim(i10:i10))
+                  ifound=index(line_local(istart:lgth),dlim(i10:i10))
                   if(ifound > 0)then
                      iend=min(iend,ifound)
                   endif
                enddo
                if(iend <= 0)then                               ! no remaining delimiters
-                 iterm(iarray)=ilen
+                 iterm(iarray)=lgth
                  if(lstore)then
-                    array(iarray)=line_local(istart:ilen)
+                    array(iarray)=line_local(istart:lgth)
                  endif
                  icount=iarray
                  return
@@ -1598,7 +1598,7 @@ integer             :: istart
          enddo NOINCREMENT
 !        last character in line was a delimiter, so no text left
 !        (should not happen where blank=delimiter)
-         if(icol > ilen)then
+         if(icol > lgth)then
            icount=iarray
            if( (iterm(icount)-ibegin(icount)) < 0)then         ! last token was all delimiters
               icount=icount-1
@@ -2613,14 +2613,14 @@ END SUBROUTINE MODIF                     !RETURN
 !!      use M_strings, only : len_white
 !!      implicit none
 !!      character(len=80) ::  s
-!!      integer           :: ilen, lastnb
+!!      integer           :: lgth, lastnb
 !!      intrinsic len
 !!
 !!      s=' ABCDEFG abcdefg '
-!!      ilen = len(s)
+!!      lgth = len(s)
 !!      lastnb = len_white(s)
 !!
-!!      write(*,*) 'total length of variable is ',ilen
+!!      write(*,*) 'total length of variable is ',lgth
 !!      write(*,*) 'trimmed length of variable is ',lastnb
 !!      write(*,*) 'trimmed string=[',s(:lastnb),']'
 !!
@@ -2644,9 +2644,9 @@ END SUBROUTINE MODIF                     !RETURN
 !!
 !!       subroutine message(s)
 !!        character(len=*) :: s ! s is of variable length
-!!           ilen=len(s)        ! get total length of variable
+!!           lgth=len(s)        ! get total length of variable
 !!           ! explicitly specify a substring instead of just variable name
-!!           lastnb = len_white(s(:ilen))
+!!           lastnb = len_white(s(:lgth))
 !!           write(*,*)'error:[',s(:lastnb),']'
 !!       end subroutine messages
 !!
@@ -3962,16 +3962,16 @@ character(len=1),intent(in),optional  :: escape ! escape character. Default is b
 character(len=1)                      :: esc    ! escape character. Default is %
 character(len=:),allocatable          :: lineout
 integer                               :: i
-integer                               :: ilen
+integer                               :: lgth
 character(len=3)                      :: thr
 integer                               :: xxx
 integer                               :: ios
    i=0 ! pointer into input
 
-   ilen=len_trim(line)
+   lgth=len_trim(line)
    lineout=''
 
-   if(ilen.eq.0)return
+   if(lgth.eq.0)return
 
    if (present(escape))then
       esc=escape
@@ -3981,10 +3981,10 @@ integer                               :: ios
 
    EXP: do
       i=i+1
-      if(i.gt.ilen)exit
+      if(i.gt.lgth)exit
       if(line(i:i).eq.esc)then
          i=i+1
-         if(i.gt.ilen)exit
+         if(i.gt.lgth)exit
          if(line(i:i).ne.esc)then
             BACKSLASH: select case(line(i:i))
             case('a','A','g','G');lineout=lineout//char(  7) ! %a     alert (BEL)
@@ -4019,7 +4019,7 @@ integer                               :: ios
       else
          lineout=lineout//line(i:i)
       endif
-      if(i.ge.ilen)exit EXP
+      if(i.ge.lgth)exit EXP
    enddo EXP
 
 end function expand
@@ -4033,11 +4033,11 @@ end function expand
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine notabs(INSTR,OUTSTR,ILEN)
+!!    subroutine notabs(INSTR,OUTSTR,lgth)
 !!
 !!     character(len=*),intent=(in)  :: INSTR
 !!     character(len=*),intent=(out) :: OUTSTR
-!!     integer,intent=(out)          :: ILEN
+!!     integer,intent=(out)          :: lgth
 !!
 !!##DESCRIPTION
 !!     NOTABS() converts tabs in INSTR to spaces in OUTSTR while maintaining
@@ -4059,7 +4059,7 @@ end function expand
 !!##RESULTS
 !!     outstr    Output string with tabs expanded. Assumed to be of sufficient
 !!               length
-!!     ilen      Significant length of returned string
+!!     lgth      Significant length of returned string
 !!
 !!##EXAMPLES
 !!
@@ -4088,14 +4088,14 @@ end function expand
 !!
 !!##LICENSE
 !!    Public Domain
-elemental impure subroutine notabs(instr,outstr,ilen)
+elemental impure subroutine notabs(instr,outstr,lgth)
 
 ! ident_31="@(#)M_strings::notabs(3f): convert tabs to spaces while maintaining columns, remove CRLF chars"
 
 character(len=*),intent(in)   :: instr        ! input line to scan for tab characters
 character(len=*),intent(out)  :: outstr       ! tab-expanded version of INSTR produced
-integer,intent(out)           :: ilen         ! column position of last character put into output string
-                                              ! that is, ILEN holds the position of the last non-blank character in OUTSTR
+integer,intent(out)           :: lgth         ! column position of last character put into output string
+                                              ! that is, lgth holds the position of the last non-blank character in OUTSTR
 !===================================================================================================================================
 integer,parameter             :: tabsize=8    ! assume a tab stop is set every 8th column
 integer                       :: ipos         ! position in OUTSTR to put next character of INSTR
@@ -4130,7 +4130,7 @@ integer                       :: iade         ! ADE (ASCII Decimal Equivalent) o
       enddo SCAN_LINE
 !===================================================================================================================================
       ipos=min(ipos,lenout)                   ! tabs or newline or return characters or last character might have gone too far
-      ilen=len_trim(outstr(:ipos))            ! trim trailing spaces
+      lgth=len_trim(outstr(:ipos))            ! trim trailing spaces
 !===================================================================================================================================
 end subroutine notabs
 !===================================================================================================================================
@@ -4194,14 +4194,14 @@ CHARACTER(LEN=*),INTENT(IN)   :: instr        ! input line to scan for tab chara
 CHARACTER(LEN=:),allocatable  :: outstr       ! tab-expanded version of INSTR produced
 integer                       :: i
 integer                       :: icount
-integer                       :: ilen
+integer                       :: lgth
    icount=0
    do i=1,len(instr)
       if(instr(i:i).eq.char(9))icount=icount+1
    enddo
    allocate(character(len=(len(instr)+8*icount)) :: outstr)
-   call notabs(instr,outstr,ilen)
-   outstr=outstr(:ilen)
+   call notabs(instr,outstr,lgth)
+   outstr=outstr(:lgth)
 !===================================================================================================================================
 END function dilate
 !===================================================================================================================================
@@ -4890,23 +4890,23 @@ end function compact
 !!       ! the string to print
 !!       character(len=*),intent(in) :: string
 !!       ! number of characters in string to print
-!!       integer :: ilen
+!!       integer :: lgth
 !!       ! counter used to step thru string
 !!       integer :: i
 !!          ! get trimmed length of input string
-!!          ilen=len_trim(string(:len(string)))
+!!          lgth=len_trim(string(:len(string)))
 !!
 !!          ! replace lower unprintable characters with spaces
 !!          write(*,101)(merge(string(i:i),' ',&
 !!          & iachar(string(i:i)).ge.32        &
 !!          & .and.                            &
 !!          & iachar(string(i:i)).le.126)      &
-!!          & ,i=1,ilen)
+!!          & ,i=1,lgth)
 !!
 !!          ! print ADE value of character underneath it
-!!          write(*,202)     (iachar(string(i:i))/100,    i=1,ilen)
-!!          write(*,202)(mod( iachar(string(i:i)),100)/10,i=1,ilen)
-!!          write(*,202)(mod((iachar(string(i:i))),10),   i=1,ilen)
+!!          write(*,202)     (iachar(string(i:i))/100,    i=1,lgth)
+!!          write(*,202)(mod( iachar(string(i:i)),100)/10,i=1,lgth)
+!!          write(*,202)(mod((iachar(string(i:i))),10),   i=1,lgth)
 !!       ! format for printing string characters
 !!       101   format(*(a1:))
 !!       ! format for printing ADE values
@@ -5364,7 +5364,7 @@ end function dbles_s2v
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine value_to_string(value,chars[,ilen,ierr,fmt,trimz])
+!!    subroutine value_to_string(value,chars[,lgth,ierr,fmt,trimz])
 !!
 !!     character(len=*) :: chars  ! minimum of 23 characters required
 !!     !--------
@@ -5375,7 +5375,7 @@ end function dbles_s2v
 !!     logical,intent(in)                       :: value
 !!     !--------
 !!     character(len=*),intent(out)             :: chars
-!!     integer,intent(out),optional             :: ilen
+!!     integer,intent(out),optional             :: lgth
 !!     integer,optional                         :: ierr
 !!     character(len=*),intent(in),optional     :: fmt
 !!     logical,intent(in)                       :: trimz
@@ -5399,7 +5399,7 @@ end function dbles_s2v
 !!       CHARS   returned string representing input value, must be at least
 !!               23 characters long; or what is required by optional FMT
 !!               if longer.
-!!       ILEN    position of last non-blank character in returned string;
+!!       LGTH    position of last non-blank character in returned string;
 !!               optional.
 !!       IERR    If not zero, error occurred; optional.
 !!
@@ -5411,22 +5411,22 @@ end function dbles_s2v
 !!      use M_strings, only: value_to_string
 !!      implicit none
 !!      character(len=80) :: string
-!!      integer           :: ilen
-!!         call value_to_string(3.0/4.0,string,ilen)
-!!         write(*,*) 'The value is [',string(:ilen),']'
+!!      integer           :: lgth
+!!         call value_to_string(3.0/4.0,string,lgth)
+!!         write(*,*) 'The value is [',string(:lgth),']'
 !!
-!!         call value_to_string(3.0/4.0,string,ilen,fmt='')
-!!         write(*,*) 'The value is [',string(:ilen),']'
+!!         call value_to_string(3.0/4.0,string,lgth,fmt='')
+!!         write(*,*) 'The value is [',string(:lgth),']'
 !!
 !!         call value_to_string&
-!!         &(3.0/4.0,string,ilen,fmt='("THE VALUE IS ",g0)')
-!!         write(*,*) 'The value is [',string(:ilen),']'
+!!         &(3.0/4.0,string,lgth,fmt='("THE VALUE IS ",g0)')
+!!         write(*,*) 'The value is [',string(:lgth),']'
 !!
-!!         call value_to_string(1234,string,ilen)
-!!         write(*,*) 'The value is [',string(:ilen),']'
+!!         call value_to_string(1234,string,lgth)
+!!         write(*,*) 'The value is [',string(:lgth),']'
 !!
-!!         call value_to_string(1.0d0/3.0d0,string,ilen)
-!!         write(*,*) 'The value is [',string(:ilen),']'
+!!         call value_to_string(1.0d0/3.0d0,string,lgth)
+!!         write(*,*) 'The value is [',string(:lgth),']'
 !!
 !!      end program demo_value_to_string
 !!
@@ -6955,7 +6955,7 @@ character(len=*),intent(in)  :: delims        ! allowed delimiters
 integer,intent(out)          :: ierr          ! 0 if no error, else column number undecipherable string starts at
 !----------------------------------------------------------------------------------------------------------------------------------
 character(len=256)           :: delims_local        ! mutable copy of allowed delimiters
-integer                      :: istart,iend,ilen,icol
+integer                      :: istart,iend,lgth,icol
 integer                      :: i10,i20,i40
 real                         :: rval
 integer                      :: ier
@@ -6973,35 +6973,35 @@ integer                      :: delimiters_length
       inums=0                                       ! initialize count of values successfully returned
       istart=0
 !----------------------------------------------------------------------------------------------------------------------------------
-      ilen=0                                        ! ilen will be the position of the right-most non-delimiter in the input line
+      lgth=0                                        ! lgth will be the position of the right-most non-delimiter in the input line
       do i20=len(line),1,-1                         ! loop from end of string to beginning to find right-most non-delimiter
          if(index(delims_local(:delimiters_length),line(i20:i20)).eq.0)then   ! found a non-delimiter
-            ilen=i20
+            lgth=i20
             exit
          endif
       enddo
-      if(ilen.eq.0)then                             ! command was totally composed of delimiters
+      if(lgth.eq.0)then                             ! command was totally composed of delimiters
          call journal('*string_to_values* blank line passed as a list of numbers')
          return
       endif
 !----------------------------------------------------------------------------------------------------------------------------------
 !     there is at least one non-delimiter sub-string
-!     ilen is the column position of the last non-delimiter character
+!     lgth is the column position of the last non-delimiter character
 !     now, starting at beginning of string find next non-delimiter
       icol=1                                                     ! pointer to beginning of unprocessed part of LINE
       LOOP: dO i10=1,iread,1                                     ! each pass should find a value
-         if(icol.gt.ilen) EXIT LOOP                              ! everything is done
+         if(icol.gt.lgth) EXIT LOOP                              ! everything is done
          INFINITE: do
             if(index(delims_local(:delimiters_length),line(icol:icol)).eq.0)then           ! found non-delimiter
                istart=icol
                iend=0                                            ! FIND END OF SUBSTRING
-               do i40=istart,ilen                                ! look at each character starting at left
+               do i40=istart,lgth                                ! look at each character starting at left
                   if(index(delims_local(:delimiters_length),line(i40:i40)).ne.0)then       ! determine if character is a delimiter
                      iend=i40                                    ! found a delimiter. record where it was found
                      EXIT                                        ! found end of substring so leave loop
                   endif
                enddo
-              if(iend.eq.0)iend=ilen+1                           ! no delimiters found, so this substring goes to end of line
+              if(iend.eq.0)iend=lgth+1                           ! no delimiters found, so this substring goes to end of line
                iend=iend-1                                       ! do not want to pass delimiter to be converted
                rval=0.0
                call string_to_value(line(istart:iend),rval,ier)  ! call procedure to convert string to a numeric value
@@ -8729,14 +8729,14 @@ implicit none
 integer(kind=int8)          :: answer
 character(len=8),intent(in) :: string
 integer                     :: pos
-integer                     :: ilen
+integer                     :: lgth
    answer=0_int8
-   ilen=len(string)
-   if(ilen.ne.bit_size(answer))then
-      write(stderr,*)'*setbits8* wrong string length =',ilen
-      ilen=min(ilen,int(bit_size(answer)))
+   lgth=len(string)
+   if(lgth.ne.bit_size(answer))then
+      write(stderr,*)'*setbits8* wrong string length =',lgth
+      lgth=min(lgth,int(bit_size(answer)))
    endif
-   do pos=1,ilen
+   do pos=1,lgth
       select case(string(pos:pos))
        case('1')
          answer = ibset(answer, pos-1)
@@ -8755,12 +8755,12 @@ implicit none
 integer(kind=int16)          :: answer
 character(len=16),intent(in) :: string
 integer                      :: pos
-integer                      :: ilen
+integer                      :: lgth
    answer=0_int16
-   ilen=len(string)
-   if(ilen.ne.bit_size(answer))then
-      write(stderr,*)'*setbits16* wrong string length =',ilen
-      ilen=min(ilen,int(bit_size(answer)))
+   lgth=len(string)
+   if(lgth.ne.bit_size(answer))then
+      write(stderr,*)'*setbits16* wrong string length =',lgth
+      lgth=min(lgth,int(bit_size(answer)))
    endif
    do pos=1,len(string)
       select case(string(pos:pos))
@@ -8781,12 +8781,12 @@ implicit none
 integer(kind=int32)          :: answer
 character(len=32),intent(in) :: string
 integer                      :: pos
-integer                      :: ilen
+integer                      :: lgth
    answer=0_int32
-   ilen=len(string)
-   if(ilen.ne.bit_size(answer))then
-      write(stderr,*)'*setbits32* wrong string length =',ilen
-      ilen=min(ilen,int(bit_size(answer)))
+   lgth=len(string)
+   if(lgth.ne.bit_size(answer))then
+      write(stderr,*)'*setbits32* wrong string length =',lgth
+      lgth=min(lgth,int(bit_size(answer)))
    endif
    do pos=1,len(string)
       select case(string(pos:pos))
@@ -8807,12 +8807,12 @@ implicit none
 integer(kind=int64)          :: answer
 character(len=64),intent(in) :: string
 integer                      :: pos
-integer                      :: ilen
+integer                      :: lgth
    answer=0_int64
-   ilen=len(string)
-   if(ilen.ne.bit_size(answer))then
-      write(stderr,*)'*setbits64* wrong string length =',ilen
-      ilen=min(ilen,int(bit_size(answer)))
+   lgth=len(string)
+   if(lgth.ne.bit_size(answer))then
+      write(stderr,*)'*setbits64* wrong string length =',lgth
+      lgth=min(lgth,int(bit_size(answer)))
    endif
    do pos=1,len(string)
       select case(string(pos:pos))
@@ -9355,18 +9355,18 @@ function lowercase(str) result(lcstr)
 
 character (len=*):: str
 character (len=len_trim(str)):: lcstr
-integer :: ilen
+integer :: lgth
 integer :: ioffset
 integer :: iquote
 integer :: i
 integer :: iav
 integer :: iqc
 
-ilen=len_trim(str)
+lgth=len_trim(str)
 ioffset=iachar('A')-iachar('a')
 iquote=0
 lcstr=str
-do i=1,ilen
+do i=1,lgth
   iav=iachar(str(i:i))
   if(iquote==0 .and. (iav==34 .or.iav==39)) then
     iquote=1
@@ -9395,18 +9395,18 @@ function uppercase(str) result(ucstr)
 
 character (len=*):: str
 character (len=len_trim(str)):: ucstr
-integer :: ilen
+integer :: lgth
 integer :: ioffset
 integer :: iquote
 integer :: i
 integer :: iav
 integer :: iqc
 
-ilen=len_trim(str)
+lgth=len_trim(str)
 ioffset=iachar('A')-iachar('a')
 iquote=0
 ucstr=str
-do i=1,ilen
+do i=1,lgth
   iav=iachar(str(i:i))
   if(iquote==0 .and. (iav==34 .or.iav==39)) then
     iquote=1

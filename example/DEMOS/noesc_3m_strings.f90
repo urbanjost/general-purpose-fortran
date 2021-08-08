@@ -22,23 +22,23 @@
              ! the string to print
              character(len=*),intent(in) :: string
              ! number of characters in string to print
-             integer :: ilen
+             integer :: lgth
              ! counter used to step thru string
              integer :: i
                 ! get trimmed length of input string
-                ilen=len_trim(string(:len(string)))
+                lgth=len_trim(string(:len(string)))
 
                 ! replace lower unprintable characters with spaces
                 write(*,101)(merge(string(i:i),' ',&
                 & iachar(string(i:i)).ge.32        &
                 & .and.                            &
                 & iachar(string(i:i)).le.126)      &
-                & ,i=1,ilen)
+                & ,i=1,lgth)
 
                 ! print ADE value of character underneath it
-                write(*,202)     (iachar(string(i:i))/100,    i=1,ilen)
-                write(*,202)(mod( iachar(string(i:i)),100)/10,i=1,ilen)
-                write(*,202)(mod((iachar(string(i:i))),10),   i=1,ilen)
+                write(*,202)     (iachar(string(i:i))/100,    i=1,lgth)
+                write(*,202)(mod( iachar(string(i:i)),100)/10,i=1,lgth)
+                write(*,202)(mod((iachar(string(i:i))),10),   i=1,lgth)
              ! format for printing string characters
              101   format(*(a1:))
              ! format for printing ADE values

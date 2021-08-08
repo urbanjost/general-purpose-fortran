@@ -7,7 +7,7 @@
            integer,parameter :: n=10
            character(len=20) :: array(n)=' '
            integer           :: ibegin(n),iterm(n)
-           integer           :: i20, icount, ilen, i10
+           integer           :: i20, icount, lgth, i10
            line=' first  second 10.3 words_of_stuff  '
            do i20=1,4
               ! change delimiter list and what is calculated or parsed
@@ -22,12 +22,12 @@
               ! show line being parsed
               write(*,'(a)')'PARSING=['//trim(line)//'] on '//trim(dlm)
               ! call parsing procedure
-              call delim(line,array,n,icount,ibegin,iterm,ilen,dlm)
+              call delim(line,array,n,icount,ibegin,iterm,lgth,dlm)
               write(*,*)'number of tokens found=',icount
-              write(*,*)'last character in column ',ilen
+              write(*,*)'last character in column ',lgth
               if(icount.gt.0)then
-                 if(ilen.ne.iterm(icount))then
-                    write(*,*)'ignored from column ',iterm(icount)+1,' to ',ilen
+                 if(lgth.ne.iterm(icount))then
+                    write(*,*)'ignored from column ',iterm(icount)+1,' to ',lgth
                  endif
                  do i10=1,icount
                     ! check flag to see if ARRAY() was set

@@ -5963,7 +5963,12 @@ function lget(n); logical                      :: lget; character(len=*),intent(
 function igs(n); integer,allocatable          :: igs(:); character(len=*),intent(in) :: n; call get_args(n,igs); end function igs
 function rgs(n); real,allocatable             :: rgs(:); character(len=*),intent(in) :: n; call get_args(n,rgs); end function rgs
 function dgs(n); real(kind=dp),allocatable    :: dgs(:); character(len=*),intent(in) :: n; call get_args(n,dgs); end function dgs
-function sgs(n); character(len=:),allocatable :: sgs(:); character(len=*),intent(in) :: n; call get_args(n,sgs); end function sgs
+function sgs(n,delims)
+character(len=:),allocatable         :: sgs(:)
+character(len=*),optional,intent(in) :: delims
+character(len=*),intent(in)          :: n
+   call get_args(n,sgs,delims)
+end function sgs
 function cgs(n); complex,allocatable          :: cgs(:); character(len=*),intent(in) :: n; call get_args(n,cgs); end function cgs
 function lgs(n); logical,allocatable          :: lgs(:); character(len=*),intent(in) :: n; call get_args(n,lgs); end function lgs
 !===================================================================================================================================

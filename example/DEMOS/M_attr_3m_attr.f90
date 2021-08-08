@@ -1,5 +1,5 @@
            program demo_M_attr
-           use M_attr, only : attr, attr_mode, attr_update
+           use M_attr, only : attr, attr_mode, attr_update, advice
            implicit none
            character(len=256) :: line
            character(len=*),parameter :: f='( &
@@ -26,6 +26,10 @@
               write(*,'(a)')attr('<ERROR> Woe is nigh.')
               write(*,'(a)')attr('<WARNING> The night is young.')
               write(*,'(a)')attr('<INFO> It is Monday')
+
+              call advice('<ERROR>', 'Woe is nigh.')
+              call advice('<WARNING>', 'The night is young.')
+              call advice('<INFO>', 'It is Monday')
 
               ! create a custom mneumonic
               call attr_update('MYERROR',attr(&

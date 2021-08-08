@@ -246,6 +246,8 @@ append("stop.7fortran.html");
 append("use.7fortran.html");
 append("wait.7fortran.html");
 append("where.7fortran.html");
+append("continuation.5fortran.html");
+append("implied_do.5fortran.html");
 append("model.1.html");
 append("unicode_example1.1.html");
 }

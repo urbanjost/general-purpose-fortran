@@ -1,0 +1,165 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>fcmd (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fcmd</B>(1f) - [FUNIX:FILESYSTEM] find the full path of commands and
+optionally perform commands on them.
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+fcmd <B>[commands</B>(<I>s</I>) [[-<B>-wild</B>] [ <B>--first</B>]
+[ <B>--cmd</B> COMMAND;COMMAND,COMMAND;&#46;&#46;&#46; ]|
+[ <B>--help</B>|<B>--version</B>]
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fcmd</B>(1f) takes one or more command names. For each of its arguments
+by default it prints to stdout the full path of the executables that
+would have been executed when this argument had been entered at the
+shell prompt. It does this by searching for an executable or script
+in the directories listed in the environment variable PATH.
+<P>
+Optionally, commands can be specified to act on the path names found.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+If no options are supplied the current search path is displayed one directory
+per line.
+<P>
+<PRE>
+     command(s)   names of commands to locate.
+                  simple globbing with * and ? is allowed if the name is quoted.
+     --first,-f   locate only first matching executable in PATH, not all.
+     --cmd,-c     invoke the command on the files found. If present with
+                  no parameter the desired command is assumed to be the
+                  default editor (useful for finding and looking at scripts).
+                  The command is therefore looked for in the
+                  environment variables as if the bash(1) expression
+                  CMD=${FCEDIT:-${EDITOR:-${VISUAL:-vi}}} was used.
+                  Multiple commands delimited by a semi-colon may be used.
+     --ok         If present, prompt for a y/n answer before executing the
+                  list of commands on each file found.
+     --wild,-w    add asterisk as a suffix and prefix to all command names
+                  being search for.
+     --version    Print version information on standard output then
+                  exit successfully.
+     --help       Print usage information on standard output then
+                  exit successfully.
+<P>
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample commands
+<P>
+<PRE>
+    fcmd ls           # find full path to ls(1) command
+    fcmd &#146;*sum*&#146;      # find all commands containing "sum"
+    fcmd sum -w       # also find all commands containing "sum"
+    fcmd &#146;*&#146;          # list all commands in search path
+    fcmd gunzip -c    # edit the script gunzip(1)
+<P>
+    # find all commands in path and a man-page if they have one
+    fcmd &#146;*&#146; -c whereis
+<P>
+    # find a command and use the commands file(1) and stat(1) on the
+    # pathnames found.
+    fcmd pwd -c &#146;file;stat&#146;
+<P>
+</PRE>
+Common commands to use are "cat <B>-vet</B>", "ls <B>-l</B>", "strings", "what",
+"sum", "whereis", "stat", "wc", "ldd", and "file".
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>which</B>(1), <B>xargs</B>(1)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>fcmd (1)</TD> <TD align=right width=33%><I>August 07, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6a948e8b-4208-4043-b5b9-c161db8ef3d3 using man macros.</FONT>
+<br><br><center><img src="images/fcmd.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

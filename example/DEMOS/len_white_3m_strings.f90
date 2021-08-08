@@ -3,14 +3,14 @@
             use M_strings, only : len_white
             implicit none
             character(len=80) ::  s
-            integer           :: ilen, lastnb
+            integer           :: lgth, lastnb
             intrinsic len
 
             s=' ABCDEFG abcdefg '
-            ilen = len(s)
+            lgth = len(s)
             lastnb = len_white(s)
 
-            write(*,*) 'total length of variable is ',ilen
+            write(*,*) 'total length of variable is ',lgth
             write(*,*) 'trimmed length of variable is ',lastnb
             write(*,*) 'trimmed string=[',s(:lastnb),']'
 

@@ -1,7 +1,7 @@
 program terminal_attributes
 ! read stdin and run it through M_attr::attr to display color
 use M_attr,  only : attr, attr_update, attr_mode
-use M_CLI2,  only : set_args, sget, iget, remaining, lget, unnamed
+use M_CLI2,  only : set_args, sget, iget, remaining, lget, unnamed, specified
 implicit none
 character(len=1024)          :: line
 character(len=:),allocatable :: prefix
@@ -16,7 +16,11 @@ character(len=:),allocatable :: help_text(:), version_text(:)
    ! example: tat '<clear><B><w><bo><CSI>12;36f Good Morning! '
    iwidth=iget('chars')
    call attr_mode(sget('manner'))
-   prefix=sget('prefix')
+   if(specified('prefix'))then
+      prefix=sget('prefix')
+   else
+      prefix=''
+   endif
 
    if(lget('debug'))then
       write(*,*)'REMAINING:',remaining
@@ -47,9 +51,11 @@ help_text=[character(len=80) :: &
 '    tat(1f) - [M_attr] filter terminal attribute strings                       ',&
 '    (LICENSE:MIT)                                                              ',&
 'SYNOPSIS                                                                       ',&
-'    _yes [[string(s)][ --chars N] --manner MODE]|[ --help| --version]          ',&
+'    tat [[string(s)][ --chars N] [ --prefix STR] [ --manner MODE] ]|           ',&
+'    [ --help| --version]                                                       ',&
 'OPTIONS                                                                        ',&
-'   STRINGS                                                                     ',&
+'   STRINGS    if present process and print these strings instead of reading    ',&
+'              and processing stdin.                                            ',&
 '   --manner   Set output mode ("color"|"plain"|"raw"). Default is "color".     ',&
 '   --chars    column to fill background color out to. Default is 0 (zero);     ',&
 '              meaning to not padd the lines. Note multi-byte character sets    ',&
@@ -63,7 +69,6 @@ help_text=[character(len=80) :: &
 'EXAMPLES                                                                       ',&
 '  Sample commands                                                              ',&
 '                                                                               ',&
-'     cmd|tat -chars 132 -prefix "<B><w>"                                       ',&
 '     cmd|tat -chars 132 -prefix "<B><w>"                                       ',&
 '     tat "<clear><B><w><bo><CSI>12;36f Good Morning!"                          ',&
 '     tat --chars 80 --prefix "<B><w>"                                          ',&

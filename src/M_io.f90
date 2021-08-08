@@ -52,6 +52,7 @@ interface rd
    module procedure rd_integer
    module procedure rd_real
    module procedure rd_doubleprecision
+   module procedure rd_logical
 end interface
 
 interface read_table
@@ -2816,19 +2817,27 @@ end function scratch
 !! rd(3f) - [M_io] ask for string from standard input with user-definable prompt
 !! (LICENSE:PD)
 !!
-!!   function rd(prompt,default) result(strout)
+!!   function rd(prompt,default) result(out)
 !!
 !!    character(len=*),intent(in)              :: prompt
 !!
-!!    character(len=*),intent(in)              :: default
-!!          or
-!!    integer,intent(in)                       :: default
-!!          or
-!!    real,intent(in)                          :: default
-!!          or
-!!    doubleprecision,intent(in)               :: default
+!!   One of
 !!
-!!    character(len=:),allocatable,intent(out) :: strout
+!!    character(len=*),intent(in)              :: default
+!!    character(len=:),allocatable,intent(out) :: out
+!!
+!!    integer,intent(in)                       :: default
+!!    integer,intent(out)                      :: out
+!!
+!!    real,intent(in)                          :: default
+!!    real,intent(out)                         :: out
+!!
+!!    doubleprecision,intent(in)               :: default
+!!    doubleprecision,intent(out)              :: out
+!!
+!!    logical,intent(in)                       :: default
+!!    logical,intent(out)                      :: out
+!!
 !!
 !!##DESCRIPTION
 !!    Ask for string or value from standard input with user-definable prompt
@@ -2844,9 +2853,9 @@ end function scratch
 !!    default   default answer on carriage-return. The type of the default
 !!              determines the type of the output.
 !!##RETURNS
-!!    strout    returned string or value. If an end-of-file or system error
+!!    out       returned string or value. If an end-of-file or system error
 !!              is encountered the string "EOF" is returned, or a "Nan"
-!!              numeric value.
+!!              REAL numeric value, or huge(0), or .false. .
 !!##EXAMPLE
 !!
 !!   Sample program:
@@ -2858,6 +2867,7 @@ end function scratch
 !!    doubleprecision              :: d
 !!    real                         :: r
 !!    integer                      :: i
+!!    logical                      :: l
 !!
 !!    INFINITE: do
 !!       mystring=rd('Enter string or "STOP":',default='Today')
@@ -2865,8 +2875,10 @@ end function scratch
 !!       i=rd('Enter integer:',default=huge(0))
 !!       r=rd('Enter real:',default=huge(0.0))
 !!       d=rd('Enter double:',default=huge(0.0d0))
+!!       l=rd('Enter logical:',default=.false.)
 !!
 !!       write(*,*)'I=', i, 'R=', r, 'D=',d,  'MYSTRING=', mystring
+!!       write(*,*)'L=', l
 !!    enddo INFINITE
 !!
 !!    end program demo_rd
@@ -2875,12 +2887,64 @@ end function scratch
 !!    John S. Urban, 1993
 !!##LICENSE
 !!    Public Domain
+function rd_logical(prompt,default) result(out)
+! 1995 John S. Urban
+!
+implicit none
+
+! ident_15="@(#)M_io::rd_logical(3fp): ask for logical value from standard input with user-definable prompt"
+
+character(len=*),intent(in)  :: prompt
+logical,intent(in)           :: default
+logical                      :: out
+
+integer                      :: prompt_len
+integer                      :: igot
+integer                      :: ierr
+integer                      :: icount
+integer                      :: ios
+character(:),allocatable     :: response
+character(len=256)           :: iomsg
+   out=.false.
+   response=''
+   prompt_len=len(prompt)
+   do icount=1,20                                                 ! prevent infinite loop on error or end-of-file
+      if(prompt_len.gt.0)write(*,'(a,'' '')',advance='no')prompt  ! write prompt
+      ierr=getline(response,stdin)                                ! get back string
+      igot=len(response)
+      if(ierr.ne.0)then
+         cycle
+      elseif(igot.eq.0.and.prompt_len.gt.0)then
+         out=default
+         exit
+      elseif(igot.le.0)then
+         call journal('*rd* blank string not allowed')
+         cycle
+      else
+         response=response//' '
+         select case(response(1:1))
+         case('y','Y')
+            out=.true.
+         case('n','N')
+            out=.false.
+         case default
+            read(response,*,iostat=ios,iomsg=iomsg)out
+            if(ios.ne.0)then
+               write(*,*)trim(iomsg)
+               cycle
+            endif
+         end select
+         exit
+      endif
+   enddo
+end function rd_logical
+!===================================================================================================================================
 function rd_character(prompt,default) result(strout)
 ! 1995 John S. Urban
 !
 implicit none
 
-! ident_15="@(#)M_io::rd_character(3fp): ask for string from standard input with user-definable prompt"
+! ident_16="@(#)M_io::rd_character(3fp): ask for string from standard input with user-definable prompt"
 
 character(len=*),intent(in)  :: prompt
 character(len=*),intent(in)  :: default
@@ -2915,7 +2979,7 @@ end function rd_character
 function rd_doubleprecision(prompt,default,iostat) result(dvalue)
 implicit none
 
-! ident_16="@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
+! ident_17="@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
 
 doubleprecision              :: dvalue
 integer                      :: ivalue
@@ -2958,7 +3022,7 @@ end function rd_doubleprecision
 function rd_real(prompt,default,iostat) result(rvalue)
 implicit none
 
-! ident_17="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
+! ident_18="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
 
 real                         :: rvalue
 real(kind=dp)                :: dvalue
@@ -2979,7 +3043,7 @@ end function rd_real
 function rd_integer(prompt,default,iostat) result(ivalue)
 implicit none
 
-! ident_18="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
+! ident_19="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
 
 integer                      :: ivalue
 real(kind=dp)                :: dvalue

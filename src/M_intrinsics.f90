@@ -5105,7 +5105,349 @@ if(present(m_help))then
 endif
 
 
-case('61','continue')
+case('61','continuation')
+
+textblock=[character(len=256) :: &
+'', &
+'', &
+'NAME', &
+'   CONTINUATION(5f) - [FORTRAN] - the rules for line continuation', &
+'', &
+'SYNOPSIS', &
+'', &
+'   original statement', &
+'', &
+'   becomes', &
+'', &
+'   original&', &
+'   & statement', &
+'', &
+'DESCRIPTION', &
+'', &
+'You may split almost any free-format Fortran statement into multiple lines', &
+'by inserting the sequence "&\n&", where "\n" represents a newline. That is,', &
+'split the line into two lines and place an ampersand at the right end of the', &
+'first line and as the first (non-space) character in the second line.', &
+'', &
+'So for example, the line', &
+'', &
+'  integer,save :: xx(2,3)= reshape([ 1, 2, 3, 4, 5, 6 ],shape(xx),order=[2,1])', &
+'', &
+'may be split into many lines by simple repeated application of the rule:', &
+'', &
+'    integer,save :: xx(2,3)= reshape([&', &
+'    & 1, 2, 3,  &', &
+'    & 4, 5, 6   &', &
+'    &],shape(xx),order=[2,1])', &
+'', &
+'That it basically it, but there are a few variants and details to cover.', &
+'', &
+'When a line is split any leading spaces before the ampersand beginning', &
+'the second line are ignored. So you can indent the lines beginning with an', &
+'ampersand any way you like:', &
+'', &
+'    integer,save :: xx(2,3)= reshape([&', &
+'       & 1, 2, 3,  &', &
+'       & 4, 5, 6   &', &
+'    &],shape(xx),order=[2,1])', &
+'', &
+'COMMENTING CONTINUED LINES', &
+'', &
+'Now there is the issue of whether comments are allowed after the trailing', &
+'ampersands. They are! So lets explain why we wanted this line to be split up:', &
+'', &
+'    integer,save :: xx(2,3)= reshape([& ! define array in row-column order', &
+'       & 1, 2, 3,  &                    ! row 1', &
+'       & 4, 5, 6   &                    ! row 2', &
+'    ],shape(xx),order=[2,1])', &
+'', &
+'Continuation lines may be separated by blank or comment lines as well. So', &
+'the following is still equivalent to the first example line:', &
+'', &
+'    integer,save :: xx(2,3)= reshape([& ! define array in row-column order', &
+'', &
+'       !===========!', &
+'       & 1, 2, 3,  &', &
+'       & 4, 5, 6   &', &
+'       !===========!', &
+'', &
+'       ],shape(xx),order=[2,1])', &
+'   NOTE:', &
+'', &
+'   This might be a good time to mention ampersands in a comment are', &
+'   ignored, so you cannot continue a comment onto another line, but', &
+'   must start an additional comment line if you want it to appear across', &
+'   multiple lines.', &
+'', &
+'To summarize, the rule is simple for comments, really. They can go in', &
+'the same places on continued lines as on non-continued lines.', &
+'', &
+'SOMETIMES OPTIONAL LEADING AMPERSANDS', &
+'', &
+'If you want to make things a little prettier the leading ampersand on', &
+'the second line is optional if you are splitting where a non-significant', &
+'space would be allowed (we will get to the opposite issue - when the', &
+'second ampersand is required, next).', &
+'', &
+'    integer,save :: xx(2,3)= reshape([& ! define array in row-column order', &
+'         1, 2, 3,  &', &
+'         4, 5, 6   &', &
+'    ],shape(xx),order=[2,1])', &
+'', &
+'YOU HAVE TO HAVE THE LEADING AMPERSANDS WHEN SPLITTING IN A BAD PLACE', &
+'', &
+'But you have to have the leading amersand on continued lines when splitting', &
+'quoted strings or lexical words or values in the middle. So this line', &
+'', &
+'    character(len=*), parameter :: str1=''my first str'', str2=''my second str''', &
+'', &
+'could be written as', &
+'', &
+'    char&', &
+'    &acter(len=*), para&', &
+'    &meter :: str1=''my fi&', &
+'    &rst str'', str2=''my se&', &
+'    &cond str''', &
+'', &
+'where things were split in two in a haphazard way as long as no spaces', &
+'are introduced before the ending amersand and after the leading amersand', &
+'that would make the statement illegal if all appearing on one line', &
+'(ignoring length for the moment).', &
+'', &
+'But try to never split constants or lexical words!', &
+'', &
+'   NB.: To reiterate, it is bad practice to split strings and words and', &
+'   constants in their middles onto two lines, with the possible exception', &
+'   of long string constants.', &
+'', &
+'This is a more realistic example (a very long string):', &
+'', &
+'   character(len=*),parameter=''this is a really long string &', &
+'     &that I needed to put onto several lines because it would be&', &
+'     & so long if I left it on a single line that it might be longer&', &
+'     & than allowed in older compilers and would certainly not fit &', &
+'     &in my favorite 80-column&', &
+'     & terminal window''', &
+'', &
+'So lines can be broken within a string constant or lexical word or', &
+'constant, in which case the initiating ampersand on the second line is', &
+'mandatory and inside of split strings spaces preceeding the ampersand at', &
+'the end of the first line and after the second ampersand are significant', &
+'(and retained if part of a split string).', &
+'', &
+'HOW LONG YOU CAN CONTINUE', &
+'', &
+'Since we are talking about very long lines, how long can a single', &
+'statement be? In the Fortran 95 standard, only a maximum of 39', &
+'continuation lines is required to be conformant. In Fortran 2003 and', &
+'Fortran 2008, at least 255 is to be allowed. There is no limit specified', &
+'in Fortran 2018. See your compiler documentation to see if your compiler', &
+'still has a limit, but it is probably at least a few hundred lines.', &
+'', &
+'FIXED FORMAT AND INTERSECTION FORMAT INCLUDE FILES', &
+'', &
+'NOTE:', &
+'Skip this session if you do not need to deal with (typically old) ', &
+'fixed-format Fortran files.', &
+'', &
+'Fixed-format Fortran has a very different continuation rule where the', &
+'first line has nothing added to it except an optional zero in column', &
+'six and all continuations have a non-space non-zero character that is', &
+'part of the Fortran character set in column six. If a quoted string is', &
+'broken the first line acts as if padded with spaces out to column 72.', &
+'', &
+'Surprisingly, source code can be formatted in an “intersection”', &
+'format that works in both free and fixed-format files.', &
+'', &
+'Other than a curiosity, an "intersection" file might be required for', &
+'an INCLUDE file that is needed by both free and fixed-format files.', &
+'(Note that INCLUDE statements themselves are one of the few statements', &
+'that cannot be split across multiple lines!).', &
+'', &
+'So here is how to make an "intersection format" INCLUDE file:', &
+'', &
+'   If every line being continued has an ampersand in column 73 or further', &
+'   the ampersand will be ignored by standard fixed-format Fortran and if', &
+'   the second ampersand is always present and in column six both rules', &
+'   are satisfied (so fixed-format files can use most printable characters', &
+'   in column six to indicate a continued line, but you have to use', &
+'   an ampersand in this case, because that is the only continuation', &
+'   character in free-format files).', &
+'', &
+'So, to summarize "intersection" continued line format in an example,', &
+'the following is equivalent in fixed and free-format parsing:', &
+'', &
+'     12345 continue', &
+'           character(len=*), parameter :: string1="hello world", string2="hel&', &
+'          &lo world"', &
+'', &
+'Obviously, this is not compatible with extended length fixed-format', &
+'source files (which some compilers support as an extension) unless', &
+'the ampersand is shifted beyond the extended limit (which in standard', &
+'fixed-format files would be past column 72).', &
+'', &
+'You may want to look for a compiler option to disable long-line warnings', &
+'when using "intersection format" INCLUDE files.', &
+'', &
+'FORMAL RULES', &
+'', &
+'So, to put it another way, here is part of what the f2018 standard draft', &
+'(J3/18-007r1WD 1539-12018-08-286.3.2.3) says:', &
+'', &
+'  FREE FORM COMMENTARY', &
+'', &
+'  The character “!” initiates a comment except where it appears', &
+'  within a character context. The comment extends to the end of the line.', &
+'  If the first nonblank character on a line is an “!”, the line', &
+'  is a comment line. Lines containing only blanks or containing no', &
+'  characters are also comment lines. Comments may appear anywhere in a', &
+'  program unit and may precede the first statement of a program unit or', &
+'  follow the last statement of a program unit. Comments have no effect', &
+'  on the interpretation of the program unit.', &
+'', &
+'  NOTE', &
+'', &
+'  The standard does not restrict the number of consecutive comment lines.', &
+'', &
+'', &
+'  FREE FORM STATEMENT CONTINUATION', &
+'', &
+'  Per (6.3.2.4):', &
+'', &
+'  The character “&” is used to indicate that the statement is', &
+'  continued on the next line that is not a comment line. Comment lines', &
+'  cannot be continued; an “&” in a comment has no effect. Comments', &
+'  may occur within a continued statement. When used for continuation,', &
+'  the “&” is not part of the statement. No line shall contain a', &
+'  single “&” as the only nonblank character or as the only nonblank', &
+'  character before an “!” that initiates a comment.', &
+'', &
+'  If a noncharacter context is to be continued, an “&” shall be the', &
+'  last nonblank character on the line, or the last nonblank character', &
+'  before an “!”. There shall be a later line that is not a comment;', &
+'  the statement is continued on the next such line. If the first nonblank', &
+'  character on that line is an “&”, the statement continues at the', &
+'  next character position following that “&”; otherwise, it continues', &
+'  with the first character position of that line.', &
+'', &
+'  If a lexical token is split across the end of a line, the first nonblank', &
+'  character on the first following noncomment line shall be an “&”', &
+'  immediately followed by the successive characters of the split token.', &
+'', &
+'  If a character context is to be continued, an “&” shall be the', &
+'  last nonblank character on the line. There shall be a later line that', &
+'  is not a comment; an “&” shall be the first nonblank character on', &
+'  the next such line and the statement continues with the next character', &
+'  following that “&”.', &
+'', &
+'EXAMPLE', &
+'  Example program', &
+'', &
+'   > program demo_continuation', &
+'   >', &
+'   >  implicit none', &
+'   >  ! one statement using continuation:', &
+'   >', &
+'   >  integer,save :: xx(3,5)= reshape([& ! define in row-column order', &
+'   >', &
+'   >   !-------------------------!', &
+'   >    1,    2,   3,   4,   5,  &  ! row 1', &
+'   >    10,  20,  30,  40,  50,  &  ! row 2', &
+'   >    11,  22,  33,  44,  55   &  ! row 3', &
+'   >   !-------------------------!', &
+'   >', &
+'   >   ],shape(xx),order=[2,1])', &
+'   >', &
+'   >   ! and for fun, print it in row-column order too', &
+'   >', &
+'   >  call print_matrix_int(''xx array:'',xx)', &
+'   >  xx(3,5)= -1051', &
+'   >  call print_matrix_int(''xx array:'',xx)', &
+'   >', &
+'   >  contains', &
+'   >  subroutine print_matrix_int(title,arr)', &
+'   >  ! bonus points -- print an integer array in RC order with bells on.', &
+'   >  ! ie. It calculates the width needed for the longest variable and', &
+'   >  ! puts a frame around the array', &
+'   >  implicit none', &
+'   >  character(len=*),intent(in)  :: title', &
+'   >  integer,intent(in)           :: arr(:,:)', &
+'   >  integer                      :: i', &
+'   >  integer                      :: size_needed', &
+'   >  character(len=:),allocatable :: biggest', &
+'   >     write(*,*)trim(title)', &
+'   >     biggest=''           ''  ! make buffer to write integer into', &
+'   >     ! find how many characters to use for integers', &
+'   >     size_needed=ceiling(log10(real(maxval(abs(arr)))))+2', &
+'   >     write(biggest,''(i0)'')size_needed', &
+'   >     ! use this format to write a row', &
+'   >     biggest=''("   |",*(i''//trim(biggest)//'':," |"))''', &
+'   >     ! print one row of array at a time', &
+'   >     write(*,''(*(g0))'')&', &
+'   >     &''   #'',(repeat(''-'',size_needed),''-#'',i=1,size(arr,dim=2))', &
+'   >     do i=1,size(arr,dim=1)', &
+'   >        write(*,fmt=biggest,advance=''no'')arr(i,:)', &
+'   >        write(*,''(" |")'')', &
+'   >     enddo', &
+'   >     write(*,''(*(g0))'')&', &
+'   >     &''   #'',(repeat(''-'',size_needed),''-#'',i=1,size(arr,dim=2))', &
+'   >   end subroutine print_matrix_int', &
+'   >   end program demo_continuation', &
+'', &
+'  Results:', &
+'', &
+'    xx array:', &
+'      #-----#-----#-----#-----#-----#', &
+'      |   1 |   2 |   3 |   4 |   5 |', &
+'      |  10 |  20 |  30 |  40 |  50 |', &
+'      |  11 |  22 |  33 |  44 |  55 |', &
+'      #-----#-----#-----#-----#-----#', &
+'    xx array:', &
+'      #-------#-------#-------#-------#-------#', &
+'      |     1 |     2 |     3 |     4 |     5 |', &
+'      |    10 |    20 |    30 |    40 |    50 |', &
+'      |    11 |    22 |    33 |    44 | -1051 |', &
+'      #-------#-------#-------#-------#-------#', &
+'', &
+'SUMMARY', &
+'  Splitting a line with the sequence "&\n&" where "\n" represents a', &
+'  newline will continue a Fortran line onto two lines. Comments can', &
+'  go onto continued lines just like they do on other statements. The', &
+'  beginning ampersand on the second line is optional if you are not', &
+'  splitting a constant or lexical token or quoted string (but required', &
+'  if you are). Any modern compiler supports at least 39 continuation', &
+'  lines, and probably much more. Spaces before the leading amersand on', &
+'  the second part of the split line are ignored.', &
+'', &
+'  JSU', &
+'']
+
+shortname="continuation"
+
+if(present(topic))then
+   if(topic)then
+      textblock=[shortname]
+   endif
+endif
+
+if(present(prefix))then
+   if(prefix)then
+      do i=1,size(textblock)
+         textblock(i)= shortname//':'//trim(textblock(i))
+      enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
+
+case('62','continue')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5181,7 +5523,7 @@ if(present(m_help))then
 endif
 
 
-case('62','co_reduce')
+case('63','co_reduce')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5290,7 +5632,7 @@ if(present(m_help))then
 endif
 
 
-case('63','cos')
+case('64','cos')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5371,7 +5713,7 @@ if(present(m_help))then
 endif
 
 
-case('64','cosh')
+case('65','cosh')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5439,7 +5781,7 @@ if(present(m_help))then
 endif
 
 
-case('65','co_sum')
+case('66','co_sum')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5522,7 +5864,7 @@ if(present(m_help))then
 endif
 
 
-case('66','co_ubound')
+case('67','co_ubound')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5585,7 +5927,7 @@ if(present(m_help))then
 endif
 
 
-case('67','count')
+case('68','count')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5690,7 +6032,7 @@ if(present(m_help))then
 endif
 
 
-case('68','cpu_time')
+case('69','cpu_time')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5782,7 +6124,7 @@ if(present(m_help))then
 endif
 
 
-case('69','cshift')
+case('70','cshift')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5860,7 +6202,7 @@ if(present(m_help))then
 endif
 
 
-case('70','c_sizeof')
+case('71','c_sizeof')
 
 textblock=[character(len=256) :: &
 '', &
@@ -5936,7 +6278,7 @@ if(present(m_help))then
 endif
 
 
-case('71','date_and_time')
+case('72','date_and_time')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6046,7 +6388,7 @@ if(present(m_help))then
 endif
 
 
-case('72','dble')
+case('73','dble')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6111,7 +6453,7 @@ if(present(m_help))then
 endif
 
 
-case('73','digits')
+case('74','digits')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6184,7 +6526,7 @@ if(present(m_help))then
 endif
 
 
-case('74','dim')
+case('75','dim')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6252,7 +6594,7 @@ if(present(m_help))then
 endif
 
 
-case('75','dot_product')
+case('76','dot_product')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6331,7 +6673,7 @@ if(present(m_help))then
 endif
 
 
-case('76','dprod')
+case('77','dprod')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6425,7 +6767,7 @@ if(present(m_help))then
 endif
 
 
-case('77','dshiftl')
+case('78','dshiftl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6485,7 +6827,7 @@ if(present(m_help))then
 endif
 
 
-case('78','dshiftr')
+case('79','dshiftr')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6544,7 +6886,7 @@ if(present(m_help))then
 endif
 
 
-case('79','eoshift')
+case('80','eoshift')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6632,7 +6974,7 @@ if(present(m_help))then
 endif
 
 
-case('80','epsilon')
+case('81','epsilon')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6694,7 +7036,7 @@ if(present(m_help))then
 endif
 
 
-case('81','erf')
+case('82','erf')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6760,7 +7102,7 @@ if(present(m_help))then
 endif
 
 
-case('82','erfc')
+case('83','erfc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6827,7 +7169,7 @@ if(present(m_help))then
 endif
 
 
-case('83','erfc_scaled')
+case('84','erfc_scaled')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6894,7 +7236,7 @@ if(present(m_help))then
 endif
 
 
-case('84','event_query')
+case('85','event_query')
 
 textblock=[character(len=256) :: &
 '', &
@@ -6969,7 +7311,7 @@ if(present(m_help))then
 endif
 
 
-case('85','execute_command_line')
+case('86','execute_command_line')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7094,7 +7436,7 @@ if(present(m_help))then
 endif
 
 
-case('86','exit')
+case('87','exit')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7202,7 +7544,7 @@ if(present(m_help))then
 endif
 
 
-case('87','exp')
+case('88','exp')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7262,7 +7604,7 @@ if(present(m_help))then
 endif
 
 
-case('88','exponent')
+case('89','exponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7326,7 +7668,7 @@ if(present(m_help))then
 endif
 
 
-case('89','extends_type_of')
+case('90','extends_type_of')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7392,7 +7734,7 @@ if(present(m_help))then
 endif
 
 
-case('90','findloc')
+case('91','findloc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7567,7 +7909,7 @@ if(present(m_help))then
 endif
 
 
-case('91','float')
+case('92','float')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7630,7 +7972,7 @@ if(present(m_help))then
 endif
 
 
-case('92','floor')
+case('93','floor')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7699,7 +8041,7 @@ if(present(m_help))then
 endif
 
 
-case('93','flush')
+case('94','flush')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7798,7 +8140,7 @@ if(present(m_help))then
 endif
 
 
-case('94','fraction')
+case('95','fraction')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7864,7 +8206,7 @@ if(present(m_help))then
 endif
 
 
-case('95','gamma')
+case('96','gamma')
 
 textblock=[character(len=256) :: &
 '', &
@@ -7935,7 +8277,7 @@ if(present(m_help))then
 endif
 
 
-case('96','get_command')
+case('97','get_command')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8039,7 +8381,7 @@ if(present(m_help))then
 endif
 
 
-case('97','get_command_argument')
+case('98','get_command_argument')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8171,7 +8513,7 @@ if(present(m_help))then
 endif
 
 
-case('98','get_environment_variable')
+case('99','get_environment_variable')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8281,7 +8623,7 @@ if(present(m_help))then
 endif
 
 
-case('99','huge')
+case('100','huge')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8379,7 +8721,7 @@ if(present(m_help))then
 endif
 
 
-case('100','hypot')
+case('101','hypot')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8442,7 +8784,7 @@ if(present(m_help))then
 endif
 
 
-case('101','iachar')
+case('102','iachar')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8538,7 +8880,7 @@ if(present(m_help))then
 endif
 
 
-case('102','iall')
+case('103','iall')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8619,7 +8961,7 @@ if(present(m_help))then
 endif
 
 
-case('103','iand')
+case('104','iand')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8688,7 +9030,7 @@ if(present(m_help))then
 endif
 
 
-case('104','iany')
+case('105','iany')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8770,7 +9112,7 @@ if(present(m_help))then
 endif
 
 
-case('105','ibclr')
+case('106','ibclr')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8831,7 +9173,7 @@ if(present(m_help))then
 endif
 
 
-case('106','ibits')
+case('107','ibits')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8893,7 +9235,7 @@ if(present(m_help))then
 endif
 
 
-case('107','ibset')
+case('108','ibset')
 
 textblock=[character(len=256) :: &
 '', &
@@ -8953,7 +9295,7 @@ if(present(m_help))then
 endif
 
 
-case('108','ichar')
+case('109','ichar')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9072,7 +9414,7 @@ if(present(m_help))then
 endif
 
 
-case('109','ieor')
+case('110','ieor')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9130,7 +9472,7 @@ if(present(m_help))then
 endif
 
 
-case('110','image_index')
+case('111','image_index')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9199,7 +9541,7 @@ if(present(m_help))then
 endif
 
 
-case('111','include')
+case('112','include')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9342,7 +9684,7 @@ if(present(m_help))then
 endif
 
 
-case('112','index')
+case('113','index')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9378,28 +9720,28 @@ textblock=[character(len=256) :: &
 '               If KIND is absent, the return value is of default integer', &
 '               kind.', &
 '', &
-'STANDARD', &
-'   [[FORTRAN 77]] and later, with KIND argument [[Fortran 2003]] and later', &
-'', &
-'CLASS', &
-'   [[Elemental function]]', &
-'', &
 'EXAMPLE', &
 '  Example program', &
 '', &
 '   program demo_index', &
 '   implicit none', &
-'                                     !1234567890123456789012345678901234567890', &
-'   character(len=*),parameter :: str=''Search this string for this expression''', &
-'      write(*,*)index(str,''this'').eq.8,              &', &
-'                index(str,''this'',back=.true.).eq.24, &', &
-'                ! INDEX is case-sensitive', &
-'                index(str,''This'').eq.0', &
+'   character(len=*),parameter :: str=&', &
+'   ''Search this string for this expression''', &
+'   !1234567890123456789012345678901234567890', &
+'   write(*,*)&', &
+'      index(str,''this'').eq.8,              &', &
+'      ! return value is counted from the left end even if BACK=.TRUE.', &
+'      index(str,''this'',back=.true.).eq.24, &', &
+'      ! INDEX is case-sensitive', &
+'      index(str,''This'').eq.0  ', &
 '   end program demo_index', &
 '', &
 '  Expected Results:', &
 '', &
 '   > T T T', &
+'', &
+'STANDARD', &
+'   [[FORTRAN 77]] and later, with KIND argument [[Fortran 2003]] and later', &
 '', &
 'SEE ALSO', &
 '   Functions that perform operations on character strings, return lengths', &
@@ -9435,7 +9777,7 @@ if(present(m_help))then
 endif
 
 
-case('113','int')
+case('114','int')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9510,7 +9852,7 @@ if(present(m_help))then
 endif
 
 
-case('114','ior')
+case('115','ior')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9588,7 +9930,7 @@ if(present(m_help))then
 endif
 
 
-case('115','iparity')
+case('116','iparity')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9670,7 +10012,7 @@ if(present(m_help))then
 endif
 
 
-case('116','is_contiguous')
+case('117','is_contiguous')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9773,7 +10115,7 @@ if(present(m_help))then
 endif
 
 
-case('117','ishft')
+case('118','ishft')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9834,7 +10176,7 @@ if(present(m_help))then
 endif
 
 
-case('118','ishftc')
+case('119','ishftc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9900,7 +10242,7 @@ if(present(m_help))then
 endif
 
 
-case('119','is_iostat_end')
+case('120','is_iostat_end')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9970,7 +10312,7 @@ if(present(m_help))then
 endif
 
 
-case('120','is_iostat_eor')
+case('121','is_iostat_eor')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10037,7 +10379,7 @@ if(present(m_help))then
 endif
 
 
-case('121','kind')
+case('122','kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10102,7 +10444,7 @@ if(present(m_help))then
 endif
 
 
-case('122','lbound')
+case('123','lbound')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10226,7 +10568,7 @@ if(present(m_help))then
 endif
 
 
-case('123','leadz')
+case('124','leadz')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10370,7 +10712,7 @@ if(present(m_help))then
 endif
 
 
-case('124','len')
+case('125','len')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10447,7 +10789,7 @@ if(present(m_help))then
 endif
 
 
-case('125','len_trim')
+case('126','len_trim')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10543,7 +10885,7 @@ if(present(m_help))then
 endif
 
 
-case('126','lge')
+case('127','lge')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10616,7 +10958,7 @@ if(present(m_help))then
 endif
 
 
-case('127','lgt')
+case('128','lgt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10690,7 +11032,7 @@ if(present(m_help))then
 endif
 
 
-case('128','lle')
+case('129','lle')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10803,7 +11145,7 @@ if(present(m_help))then
 endif
 
 
-case('129','llt')
+case('130','llt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10877,7 +11219,7 @@ if(present(m_help))then
 endif
 
 
-case('130','log10')
+case('131','log10')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10940,7 +11282,7 @@ if(present(m_help))then
 endif
 
 
-case('131','log')
+case('132','log')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11008,7 +11350,7 @@ if(present(m_help))then
 endif
 
 
-case('132','log_gamma')
+case('133','log_gamma')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11073,7 +11415,7 @@ if(present(m_help))then
 endif
 
 
-case('133','logical')
+case('134','logical')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11132,7 +11474,7 @@ if(present(m_help))then
 endif
 
 
-case('134','maskl')
+case('135','maskl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11192,7 +11534,7 @@ if(present(m_help))then
 endif
 
 
-case('135','maskr')
+case('136','maskr')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11251,7 +11593,7 @@ if(present(m_help))then
 endif
 
 
-case('136','matmul')
+case('137','matmul')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11311,7 +11653,7 @@ if(present(m_help))then
 endif
 
 
-case('137','max')
+case('138','max')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11445,7 +11787,7 @@ if(present(m_help))then
 endif
 
 
-case('138','maxexponent')
+case('139','maxexponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11511,7 +11853,7 @@ if(present(m_help))then
 endif
 
 
-case('139','maxloc')
+case('140','maxloc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11602,7 +11944,7 @@ if(present(m_help))then
 endif
 
 
-case('140','maxval')
+case('141','maxval')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11703,7 +12045,7 @@ if(present(m_help))then
 endif
 
 
-case('141','merge')
+case('142','merge')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11785,7 +12127,7 @@ if(present(m_help))then
 endif
 
 
-case('142','merge_bits')
+case('143','merge_bits')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11842,7 +12184,7 @@ if(present(m_help))then
 endif
 
 
-case('143','min')
+case('144','min')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11910,7 +12252,7 @@ if(present(m_help))then
 endif
 
 
-case('144','minexponent')
+case('145','minexponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11977,7 +12319,7 @@ if(present(m_help))then
 endif
 
 
-case('145','minloc')
+case('146','minloc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12079,7 +12421,7 @@ if(present(m_help))then
 endif
 
 
-case('146','minval')
+case('147','minval')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12172,7 +12514,7 @@ if(present(m_help))then
 endif
 
 
-case('147','mod')
+case('148','mod')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12251,7 +12593,7 @@ if(present(m_help))then
 endif
 
 
-case('148','modulo')
+case('149','modulo')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12330,7 +12672,7 @@ if(present(m_help))then
 endif
 
 
-case('149','move_alloc')
+case('150','move_alloc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12417,7 +12759,7 @@ if(present(m_help))then
 endif
 
 
-case('150','mvbits')
+case('151','mvbits')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12480,7 +12822,7 @@ if(present(m_help))then
 endif
 
 
-case('151','nearest')
+case('152','nearest')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12548,7 +12890,7 @@ if(present(m_help))then
 endif
 
 
-case('152','new_line')
+case('153','new_line')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12608,7 +12950,7 @@ if(present(m_help))then
 endif
 
 
-case('153','nint')
+case('154','nint')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12731,7 +13073,7 @@ if(present(m_help))then
 endif
 
 
-case('154','norm2')
+case('155','norm2')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12801,7 +13143,7 @@ if(present(m_help))then
 endif
 
 
-case('155','not')
+case('156','not')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12872,7 +13214,7 @@ if(present(m_help))then
 endif
 
 
-case('156','null')
+case('157','null')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12939,7 +13281,7 @@ if(present(m_help))then
 endif
 
 
-case('157','num_images')
+case('158','num_images')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13020,7 +13362,7 @@ if(present(m_help))then
 endif
 
 
-case('158','pack')
+case('159','pack')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13130,7 +13472,7 @@ if(present(m_help))then
 endif
 
 
-case('159','parity')
+case('160','parity')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13200,7 +13542,7 @@ if(present(m_help))then
 endif
 
 
-case('160','popcnt')
+case('161','popcnt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13278,7 +13620,7 @@ if(present(m_help))then
 endif
 
 
-case('161','poppar')
+case('162','poppar')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13350,7 +13692,7 @@ if(present(m_help))then
 endif
 
 
-case('162','precision')
+case('163','precision')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13419,7 +13761,7 @@ if(present(m_help))then
 endif
 
 
-case('163','present')
+case('164','present')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13488,7 +13830,7 @@ if(present(m_help))then
 endif
 
 
-case('164','product')
+case('165','product')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13564,7 +13906,7 @@ if(present(m_help))then
 endif
 
 
-case('165','radix')
+case('166','radix')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13628,7 +13970,7 @@ if(present(m_help))then
 endif
 
 
-case('166','random_number')
+case('167','random_number')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13737,7 +14079,7 @@ if(present(m_help))then
 endif
 
 
-case('167','random_seed')
+case('168','random_seed')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13817,7 +14159,7 @@ if(present(m_help))then
 endif
 
 
-case('168','range')
+case('169','range')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13886,7 +14228,7 @@ if(present(m_help))then
 endif
 
 
-case('169','rank')
+case('170','rank')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13950,7 +14292,7 @@ if(present(m_help))then
 endif
 
 
-case('170','real')
+case('171','real')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14038,7 +14380,7 @@ if(present(m_help))then
 endif
 
 
-case('171','repeat')
+case('172','repeat')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14107,7 +14449,7 @@ if(present(m_help))then
 endif
 
 
-case('172','reshape')
+case('173','reshape')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14186,7 +14528,7 @@ if(present(m_help))then
 endif
 
 
-case('173','return')
+case('174','return')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14321,7 +14663,7 @@ if(present(m_help))then
 endif
 
 
-case('174','rewind')
+case('175','rewind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14428,7 +14770,7 @@ if(present(m_help))then
 endif
 
 
-case('175','rrspacing')
+case('176','rrspacing')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14486,7 +14828,7 @@ if(present(m_help))then
 endif
 
 
-case('176','same_type_as')
+case('177','same_type_as')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14543,7 +14885,7 @@ if(present(m_help))then
 endif
 
 
-case('177','scale')
+case('178','scale')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14613,7 +14955,7 @@ if(present(m_help))then
 endif
 
 
-case('178','scan')
+case('179','scan')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14695,7 +15037,7 @@ if(present(m_help))then
 endif
 
 
-case('179','selected_char_kind')
+case('180','selected_char_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14771,7 +15113,7 @@ if(present(m_help))then
 endif
 
 
-case('180','selected_int_kind')
+case('181','selected_int_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14839,7 +15181,7 @@ if(present(m_help))then
 endif
 
 
-case('181','selected_real_kind')
+case('182','selected_real_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14934,7 +15276,7 @@ if(present(m_help))then
 endif
 
 
-case('182','set_exponent')
+case('183','set_exponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15001,7 +15343,7 @@ if(present(m_help))then
 endif
 
 
-case('183','shape')
+case('184','shape')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15075,7 +15417,7 @@ if(present(m_help))then
 endif
 
 
-case('184','shifta')
+case('185','shifta')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15135,7 +15477,7 @@ if(present(m_help))then
 endif
 
 
-case('185','shiftl')
+case('186','shiftl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15193,7 +15535,7 @@ if(present(m_help))then
 endif
 
 
-case('186','shiftr')
+case('187','shiftr')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15251,7 +15593,7 @@ if(present(m_help))then
 endif
 
 
-case('187','sign')
+case('188','sign')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15319,7 +15661,7 @@ if(present(m_help))then
 endif
 
 
-case('188','sin')
+case('189','sin')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15446,7 +15788,7 @@ if(present(m_help))then
 endif
 
 
-case('189','sinh')
+case('190','sinh')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15511,7 +15853,7 @@ if(present(m_help))then
 endif
 
 
-case('190','size')
+case('191','size')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15715,7 +16057,7 @@ if(present(m_help))then
 endif
 
 
-case('191','sngl')
+case('192','sngl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15772,7 +16114,7 @@ if(present(m_help))then
 endif
 
 
-case('192','spacing')
+case('193','spacing')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15840,7 +16182,7 @@ if(present(m_help))then
 endif
 
 
-case('193','spread')
+case('194','spread')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15968,7 +16310,7 @@ if(present(m_help))then
 endif
 
 
-case('194','sqrt')
+case('195','sqrt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16033,7 +16375,7 @@ if(present(m_help))then
 endif
 
 
-case('195','stop')
+case('196','stop')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16143,7 +16485,7 @@ if(present(m_help))then
 endif
 
 
-case('196','storage_size')
+case('197','storage_size')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16213,7 +16555,7 @@ if(present(m_help))then
 endif
 
 
-case('197','sum')
+case('198','sum')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16315,7 +16657,7 @@ if(present(m_help))then
 endif
 
 
-case('198','system_clock')
+case('199','system_clock')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16426,7 +16768,7 @@ if(present(m_help))then
 endif
 
 
-case('199','tan')
+case('200','tan')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16492,7 +16834,7 @@ if(present(m_help))then
 endif
 
 
-case('200','tanh')
+case('201','tanh')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16561,7 +16903,7 @@ if(present(m_help))then
 endif
 
 
-case('201','this_image')
+case('202','this_image')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16655,7 +16997,7 @@ if(present(m_help))then
 endif
 
 
-case('202','tiny')
+case('203','tiny')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16717,7 +17059,7 @@ if(present(m_help))then
 endif
 
 
-case('203','trailz')
+case('204','trailz')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16849,7 +17191,7 @@ if(present(m_help))then
 endif
 
 
-case('204','transfer')
+case('205','transfer')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16952,7 +17294,7 @@ if(present(m_help))then
 endif
 
 
-case('205','transpose')
+case('206','transpose')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17053,7 +17395,7 @@ if(present(m_help))then
 endif
 
 
-case('206','trim')
+case('207','trim')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17123,7 +17465,7 @@ if(present(m_help))then
 endif
 
 
-case('207','ubound')
+case('208','ubound')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17245,7 +17587,7 @@ if(present(m_help))then
 endif
 
 
-case('208','unpack')
+case('209','unpack')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17318,7 +17660,7 @@ if(present(m_help))then
 endif
 
 
-case('209','verify')
+case('210','verify')
 
 textblock=[character(len=256) :: &
 '', &

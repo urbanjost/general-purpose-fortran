@@ -1,0 +1,487 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>continuation (5)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>CONTINUATION</B>(5f) - [FORTRAN] - the rules for line continuation
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Commenting Continued Lines</A><BR>
+<A HREF=#4>Sometimes Optional Leading Ampersands</A><BR>
+<A HREF=#5>You Have To Have The Leading Ampersands When Splitting In A Bad Place</A><BR>
+<A HREF=#6>How Long You Can Continue</A><BR>
+<A HREF=#7>Fixed Format And Intersection Format Include Files</A><BR>
+<A HREF=#8>Formal Rules</A><BR>
+<A HREF=#9>Example</A><BR>
+<A HREF=#10>Summary</A><BR>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>original</B> <I>statement</I>
+<P>
+<B>becomes</B>
+<P>
+<B>original</B>&
+& <I>statement</I>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+You may split almost any free-format Fortran <I>statement</I> into multiple lines
+by inserting the sequence "&\n&", where "\n" represents a newline. That is,
+split the line into two lines and place an ampersand at the right end of the
+first line and as the first (non-space) character in the second line.
+<P>
+So for example, the line
+<P>
+<PRE>
+  integer,save :: xx(2,3)= reshape([ 1, 2, 3, 4, 5, 6 ],shape(xx),order=[2,1])
+<P>
+</PRE>
+may be split into many lines by simple repeated application of the rule:
+<P>
+<PRE>
+    integer,save :: xx(2,3)= reshape([&
+    & 1, 2, 3,  &
+    & 4, 5, 6   &
+    &],shape(xx),order=[2,1])
+<P>
+</PRE>
+That it basically it, but there are a few variants and details to cover.
+<P>
+When a line is split any leading spaces before the ampersand beginning
+the second line are ignored. So you can indent the lines beginning with an
+ampersand any way you like:
+<P>
+<PRE>
+    integer,save :: xx(2,3)= reshape([&
+       & 1, 2, 3,  &
+       & 4, 5, 6   &
+    &],shape(xx),order=[2,1])
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>COMMENTING CONTINUED LINES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Now there is the issue of whether comments are allowed after the trailing
+ampersands. They are! So lets explain why we wanted this line to be split up:
+<P>
+<PRE>
+    integer,save :: xx(2,3)= reshape([& ! define array in row-column order
+       & 1, 2, 3,  &                    ! row 1
+       & 4, 5, 6   &                    ! row 2
+    ],shape(xx),order=[2,1])
+<P>
+</PRE>
+Continuation lines may be separated by blank or comment lines as well. So
+the following is still equivalent to the first example line:
+<P>
+<PRE>
+    integer,save :: xx(2,3)= reshape([& ! define array in row-column order
+<P>
+       !===========!
+       & 1, 2, 3,  &
+       & 4, 5, 6   &
+       !===========!
+<P>
+       ],shape(xx),order=[2,1])
+</PRE>
+NOTE:
+<BLOCKQUOTE>
+<P>
+This might be a good time to mention ampersands in a comment are
+ignored, so you cannot continue a comment onto another line, but
+must start an additional comment line if you want it to appear across
+multiple lines.
+</BLOCKQUOTE>
+<P>
+To summarize, the rule is simple for comments, really. They can go in
+the same places on continued lines as on non-continued lines.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SOMETIMES OPTIONAL LEADING AMPERSANDS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If you want to make things a little prettier the leading ampersand on
+the second line is optional if you are splitting where a non-significant
+space would be allowed (we will get to the opposite issue - when the
+second ampersand is required, next).
+<P>
+<PRE>
+    integer,save :: xx(2,3)= reshape([& ! define array in row-column order
+         1, 2, 3,  &
+         4, 5, 6   &
+    ],shape(xx),order=[2,1])
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>YOU HAVE TO HAVE THE LEADING AMPERSANDS WHEN SPLITTING IN A BAD PLACE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+But you have to have the leading amersand on continued lines when splitting
+quoted strings or lexical words or values in the middle. So this line
+<P>
+<PRE>
+    character(len=*), parameter :: str1=&#146;my first str&#146;, str2=&#146;my second str&#146;
+<P>
+</PRE>
+could be written as
+<P>
+<PRE>
+    char&
+    &acter(len=*), para&
+    &meter :: str1=&#146;my fi&
+    &rst str&#146;, str2=&#146;my se&
+    &cond str&#146;
+<P>
+</PRE>
+where things were split in two in a haphazard way as long as no spaces
+are introduced before the ending amersand and after the leading amersand
+that would make the <I>statement</I> illegal if all appearing on one line
+(ignoring length for the moment).
+<P>
+But try to never split constants or lexical words!
+<P>
+<PRE>
+   NB.: To reiterate, it is bad practice to split strings and words and
+   constants in their middles onto two lines, with the possible exception
+   of long string constants.
+<P>
+</PRE>
+This is a more realistic example (a very long string):
+<P>
+<PRE>
+   character(len=*),parameter=&#146;this is a really long string &
+     &that I needed to put onto several lines because it would be&
+     & so long if I left it on a single line that it might be longer&
+     & than allowed in older compilers and would certainly not fit &
+     &in my favorite 80-column&
+     & terminal window&#146;
+<P>
+</PRE>
+So lines can be broken within a string constant or lexical word or
+constant, in which case the initiating ampersand on the second line is
+mandatory and inside of split strings spaces preceeding the ampersand at
+the end of the first line and after the second ampersand are significant
+(and retained if part of a split string).
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>HOW LONG YOU CAN CONTINUE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Since we are talking about very long lines, how long can a single
+<I>statement</I> be? In the Fortran 95 standard, only a maximum of 39
+continuation lines is required to be conformant. In Fortran 2003 and
+Fortran 2008, at least 255 is to be allowed. There is no limit specified
+in Fortran 2018. See your compiler documentation to see if your compiler
+still has a limit, but it is probably at least a few hundred lines.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>FIXED FORMAT AND INTERSECTION FORMAT INCLUDE FILES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+NOTE:
+Skip this session if you do not need to deal with (typically old)
+fixed-format Fortran files.
+<P>
+Fixed-format Fortran has a very different continuation rule where the
+first line has nothing added to it except an optional zero in column
+six and all continuations have a non-space non-zero character that is
+part of the Fortran character set in column six. If a quoted string is
+broken the first line acts as if padded with spaces out to column 72.
+<P>
+Surprisingly, source code can be formatted in an “intersection”
+format that works in both free and fixed-format files.
+<P>
+Other than a curiosity, an "intersection" file might be required for
+an INCLUDE file that is needed by both free and fixed-format files.
+(Note that INCLUDE statements themselves are one of the few statements
+that cannot be split across multiple lines!).
+<P>
+So here is how to make an "intersection format" INCLUDE file:
+<P>
+<PRE>
+   If every line being continued has an ampersand in column 73 or further
+   the ampersand will be ignored by standard fixed-format Fortran and if
+   the second ampersand is always present and in column six both rules
+   are satisfied (so fixed-format files can use most printable characters
+   in column six to indicate a continued line, but you have to use
+   an ampersand in this case, because that is the only continuation
+   character in free-format files).
+<P>
+</PRE>
+So, to summarize "intersection" continued line format in an example,
+the following is equivalent in fixed and free-format parsing:
+<P>
+<PRE>
+     12345 continue
+           character(len=*), parameter :: string1="hello world", string2="hel&
+          &lo world"
+<P>
+</PRE>
+Obviously, this is not compatible with extended length fixed-format
+source files (which some compilers support as an extension) unless
+the ampersand is shifted beyond the extended limit (which in standard
+fixed-format files would be past column 72).
+<P>
+You may want to look for a compiler option to disable long-line warnings
+when using "intersection format" INCLUDE files.
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>FORMAL RULES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+So, to put it another way, here is part of what the f2018 standard draft
+(J3/18-007r1WD 1539-12018-08-286.3.2.3) says:
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FREE FORM COMMENTARY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The character “!” initiates a comment except where it appears
+within a character context. The comment extends to the end of the line.
+If the first nonblank character on a line is an “!”, the line
+is a comment line. Lines containing only blanks or containing no
+characters are also comment lines. Comments may appear anywhere in a
+program unit and may precede the first <I>statement</I> of a program unit or
+follow the last <I>statement</I> of a program unit. Comments have no effect
+on the interpretation of the program unit.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NOTE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The standard does not restrict the number of consecutive comment lines.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=>
+
+    <H4>&nbsp; &nbsp; FREE FORM STATEMENT CONTINUATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Per (6.3.2.4):
+<P>
+The character “&” is used to indicate that the <I>statement</I> is
+continued on the next line that is not a comment line. Comment lines
+cannot be continued; an “&” in a comment has no effect. Comments
+may occur within a continued <I>statement</I>. When used for continuation,
+the “&” is not part of the <I>statement</I>. No line shall contain a
+single “&” as the only nonblank character or as the only nonblank
+character before an “!” that initiates a comment.
+<P>
+If a noncharacter context is to be continued, an “&” shall be the
+last nonblank character on the line, or the last nonblank character
+before an “!”. There shall be a later line that is not a comment;
+the <I>statement</I> is continued on the next such line. If the first nonblank
+character on that line is an “&”, the <I>statement</I> continues at the
+next character position following that “&”; otherwise, it continues
+with the first character position of that line.
+<P>
+If a lexical token is split across the end of a line, the first nonblank
+character on the first following noncomment line shall be an “&”
+immediately followed by the successive characters of the split token.
+<P>
+If a character context is to be continued, an “&” shall be the
+last nonblank character on the line. There shall be a later line that
+is not a comment; an “&” shall be the first nonblank character on
+the next such line and the <I>statement</I> continues with the next character
+following that “&”.
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Example program
+<P>
+<PRE>
+   &gt; program demo_continuation
+   &gt;
+   &gt;  implicit none
+   &gt;  ! one statement using continuation:
+   &gt;
+   &gt;  integer,save :: xx(3,5)= reshape([& ! define in row-column order
+   &gt;
+   &gt;   !-------------------------!
+   &gt;    1,    2,   3,   4,   5,  &  ! row 1
+   &gt;    10,  20,  30,  40,  50,  &  ! row 2
+   &gt;    11,  22,  33,  44,  55   &  ! row 3
+   &gt;   !-------------------------!
+   &gt;
+   &gt;   ],shape(xx),order=[2,1])
+   &gt;
+   &gt;   ! and for fun, print it in row-column order too
+   &gt;
+   &gt;  call print_matrix_int(&#146;xx array:&#146;,xx)
+   &gt;  xx(3,5)= -1051
+   &gt;  call print_matrix_int(&#146;xx array:&#146;,xx)
+   &gt;
+   &gt;  contains
+   &gt;  subroutine print_matrix_int(title,arr)
+   &gt;  ! bonus points -- print an integer array in RC order with bells on.
+   &gt;  ! ie. It calculates the width needed for the longest variable and
+   &gt;  ! puts a frame around the array
+   &gt;  implicit none
+   &gt;  character(len=*),intent(in)  :: title
+   &gt;  integer,intent(in)           :: arr(:,:)
+   &gt;  integer                      :: i
+   &gt;  integer                      :: size_needed
+   &gt;  character(len=:),allocatable :: biggest
+   &gt;     write(*,*)trim(title)
+   &gt;     biggest=&#146;           &#146;  ! make buffer to write integer into
+   &gt;     ! find how many characters to use for integers
+   &gt;     size_needed=ceiling(log10(real(maxval(abs(arr)))))+2
+   &gt;     write(biggest,&#146;(i0)&#146;)size_needed
+   &gt;     ! use this format to write a row
+   &gt;     biggest=&#146;("   |",*(i&#146;//trim(biggest)//&#146;:," |"))&#146;
+   &gt;     ! print one row of array at a time
+   &gt;     write(*,&#146;(*(g0))&#146;)&
+   &gt;     &&#146;   #&#146;,(repeat(&#146;-&#146;,size_needed),&#146;-#&#146;,i=1,size(arr,dim=2))
+   &gt;     do i=1,size(arr,dim=1)
+   &gt;        write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+   &gt;        write(*,&#146;(" |")&#146;)
+   &gt;     enddo
+   &gt;     write(*,&#146;(*(g0))&#146;)&
+   &gt;     &&#146;   #&#146;,(repeat(&#146;-&#146;,size_needed),&#146;-#&#146;,i=1,size(arr,dim=2))
+   &gt;   end subroutine print_matrix_int
+   &gt;   end program demo_continuation
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    xx array:
+      #-----#-----#-----#-----#-----#
+      |   1 |   2 |   3 |   4 |   5 |
+      |  10 |  20 |  30 |  40 |  50 |
+      |  11 |  22 |  33 |  44 |  55 |
+      #-----#-----#-----#-----#-----#
+    xx array:
+      #-------#-------#-------#-------#-------#
+      |     1 |     2 |     3 |     4 |     5 |
+      |    10 |    20 |    30 |    40 |    50 |
+      |    11 |    22 |    33 |    44 | -1051 |
+      #-------#-------#-------#-------#-------#
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SUMMARY</H3>
+
+</A>
+<BLOCKQUOTE>
+Splitting a line with the sequence "&\n&" where "\n" represents a
+newline will continue a Fortran line onto two lines. Comments can
+go onto continued lines just like they do on other statements. The
+beginning ampersand on the second line is optional if you are not
+splitting a constant or lexical token or quoted string (but required
+if you are). Any modern compiler supports at least 39 continuation
+lines, and probably much more. Spaces before the leading amersand on
+the second part of the split line are ignored.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; JSU</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>continuation (5)</TD> <TD align=right width=33%><I>August 07, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6aa19775-1cd5-405e-a0e9-3fe40ac017dd using man macros.</FONT>
+<br><br><center><img src="images/continuation.5fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
