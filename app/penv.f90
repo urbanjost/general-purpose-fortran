@@ -8,63 +8,63 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'       penv(1f) - [M_system:ENVIRONMENT] print all or part of environment in formats readable by various shells',&
-'       (LICENSE:PD)                                                             ',&
-'SYNOPSIS                                                                        ',&
-'       penv [variable...] [ -C| -B| -v] [ -p PREFIX]                            ',&
-'       penv [ --help| --version]                                                ',&
-'DESCRIPTION                                                                     ',&
-'       If no arguments are given, penv(1f) prints the entire environment.       ',&
-'       If one or more variable names are given, it prints the value of          ',&
-'       each one that is set, and nothing for each one that is not set.          ',&
-'                                                                                ',&
-'       If the -p switch is used variables beginning with that prefix will be    ',&
-'       displayed.                                                               ',&
-'OPTIONS                                                                         ',&
-'    OUTPUT FORMAT                                                               ',&
-'       -C           print output in a form that can be sourced into a           ',&
-'                    C shell (eg. as a setenv(1) command).                       ',&
-'       -B           print output in a form that can be sourced into a           ',&
-'                    Bourne shell.                                               ',&
-'       -v           values only. Do not print variable names                    ',&
-'    VARIABLE SELECTION                                                          ',&
-'       -p           print only variables with the given prefix                  ',&
-'       variable(s)  if variable names are given, print the value for            ',&
-'                    each one that is set.                                       ',&
-'    INFORMATION                                                                 ',&
-'       --help       display this help and exit                                  ',&
-'       --version    output version information and exit                         ',&
-'                                                                                ',&
-'USAGE                                                                           ',&
-'     Example commands:                                                          ',&
-'                                                                                ',&
-'      penv           # print entire environment                                 ',&
-'      penv -p PREFIX # print environment variables beginning with PREFIX        ',&
-'      penv HOME TMP LOGNAME USER # print selected variables                     ',&
-'                                                                                ',&
-'      # csh(1)/tcsh(1) example:                                                 ',&
-'        % penv -C > readme.csh                                                  ',&
-'        % source readme.csh                                                     ',&
-'      # sh(1)/bash(1)/zsh(1) ... example:                                       ',&
-'        $ penv -B > readme.sh                                                   ',&
-'        $ . readme.sh                                                           ',&
-'      # print specified variable names                                          ',&
-'        % penv TMP TEMPDIR TMPDIR TEMP                                          ',&
-'      # print variables starting with A or H                                    ',&
-'        % penv -p A H                                                           ',&
-'                                                                                ',&
-'EXIT STATUS                                                                     ',&
-'       The exit status is:                                                      ',&
-'                                                                                ',&
-'        0  if all variables specified were found                                ',&
-'        1  otherwise                                                            ',&
-'SEE ALSO                                                                        ',&
-'       env(1), printenv(1)                                                      ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'       penv(1f) - [M_system:ENVIRONMENT] print all or part of environment in formats readable by various shells                 ',&
+'       (LICENSE:PD)                                                                                                             ',&
+'SYNOPSIS                                                                                                                        ',&
+'       penv [variable...] [ -C| -B| -v] [ -p PREFIX]                                                                            ',&
+'       penv [ --help| --version]                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'       If no arguments are given, penv(1f) prints the entire environment.                                                       ',&
+'       If one or more variable names are given, it prints the value of                                                          ',&
+'       each one that is set, and nothing for each one that is not set.                                                          ',&
+'                                                                                                                                ',&
+'       If the -p switch is used variables beginning with that prefix will be                                                    ',&
+'       displayed.                                                                                                               ',&
+'OPTIONS                                                                                                                         ',&
+'    OUTPUT FORMAT                                                                                                               ',&
+'       -C           print output in a form that can be sourced into a                                                           ',&
+'                    C shell (eg. as a setenv(1) command).                                                                       ',&
+'       -B           print output in a form that can be sourced into a                                                           ',&
+'                    Bourne shell.                                                                                               ',&
+'       -v           values only. Do not print variable names                                                                    ',&
+'    VARIABLE SELECTION                                                                                                          ',&
+'       -p           print only variables with the given prefix                                                                  ',&
+'       variable(s)  if variable names are given, print the value for                                                            ',&
+'                    each one that is set.                                                                                       ',&
+'    INFORMATION                                                                                                                 ',&
+'       --help       display this help and exit                                                                                  ',&
+'       --version    output version information and exit                                                                         ',&
+'                                                                                                                                ',&
+'USAGE                                                                                                                           ',&
+'     Example commands:                                                                                                          ',&
+'                                                                                                                                ',&
+'      penv           # print entire environment                                                                                 ',&
+'      penv -p PREFIX # print environment variables beginning with PREFIX                                                        ',&
+'      penv HOME TMP LOGNAME USER # print selected variables                                                                     ',&
+'                                                                                                                                ',&
+'      # csh(1)/tcsh(1) example:                                                                                                 ',&
+'        % penv -C > readme.csh                                                                                                  ',&
+'        % source readme.csh                                                                                                     ',&
+'      # sh(1)/bash(1)/zsh(1) ... example:                                                                                       ',&
+'        $ penv -B > readme.sh                                                                                                   ',&
+'        $ . readme.sh                                                                                                           ',&
+'      # print specified variable names                                                                                          ',&
+'        % penv TMP TEMPDIR TMPDIR TEMP                                                                                          ',&
+'      # print variables starting with A or H                                                                                    ',&
+'        % penv -p A H                                                                                                           ',&
+'                                                                                                                                ',&
+'EXIT STATUS                                                                                                                     ',&
+'       The exit status is:                                                                                                      ',&
+'                                                                                                                                ',&
+'        0  if all variables specified were found                                                                                ',&
+'        1  otherwise                                                                                                            ',&
+'SEE ALSO                                                                                                                        ',&
+'       env(1), printenv(1)                                                                                                      ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -147,7 +147,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)COPYRIGHT:      Copyright (C) 2016 John S. Urban. Public Domain>',&
-'@(#)COMPILED:       2021-06-26 18:31:06 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:04:58 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -8,50 +8,50 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   table2html(1f) - [FILE FILTER] filter to format simple columns into an HTML table form',&
-'   (LICENSE:PD)                                                                 ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'   table2html [[ -classes classnames] [ -caption caption line] [ -delimiters delim]',&
-'              [ -asis] [ -header] [ -tabletags tags] ] |-help|-version          ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'   table2html is a filter that converts tabular text input to an HTML           ',&
-'   table. The program can create an HTML table displaying alternating           ',&
-'   hues per row.                                                                ',&
-'                                                                                ',&
-'   The "-classes" option generates code using cascading style sheet             ',&
-'   (CSS) class names for alternating rows; default names are "even" and         ',&
-'   "odd". The following style definition in a page''s <head> section will       ',&
-'   assign different background hues to be used:                                 ',&
-'                                                                                ',&
-'      <style type="text/css">                                                   ',&
-'         .even { background-color: #FFFFFF; }                                   ',&
-'         .odd  { background-color: #F0F0F0; }                                   ',&
-'      </style>                                                                  ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'    -caption     a caption line for the table                                   ',&
-'    -classes     use CSS class names for different rows (empty argument: odd even)',&
-'    -delimiters  input column delimiter (default: whitespace). If a list contains space',&
-'                 the space must not be last in the list.                        ',&
-'    -header      the first row is assumed to be a header line (default: no header lines)',&
-'    -tabletags   specify own HTML table tags instead of the default: border="1" ',&
-'    -document    write complete HTML document instead of just table             ',&
-'    -asis        by default the characters ><& are converted to their HTML equivalents.',&
-'                 This option turns that conversion off.                         ',&
-'    -help        display command help and exit                                  ',&
-'    -version     display command metadata and exit                              ',&
-'EXAMPLES                                                                        ',&
-'  Sample usage:                                                                 ',&
-'                                                                                ',&
-'   # list month as a table                                                      ',&
-'   cal|tail -n +2|table2html -caption $(cal|head -n 1) -document |w3m -dump -T text/html|more',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   table2html(1f) - [FILE FILTER] filter to format simple columns into an HTML table form                                       ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'   table2html [[ -classes classnames] [ -caption caption line] [ -delimiters delim]                                             ',&
+'              [ -asis] [ -header] [ -tabletags tags] ] |-help|-version                                                          ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'   table2html is a filter that converts tabular text input to an HTML                                                           ',&
+'   table. The program can create an HTML table displaying alternating                                                           ',&
+'   hues per row.                                                                                                                ',&
+'                                                                                                                                ',&
+'   The "-classes" option generates code using cascading style sheet                                                             ',&
+'   (CSS) class names for alternating rows; default names are "even" and                                                         ',&
+'   "odd". The following style definition in a page''s <head> section will                                                       ',&
+'   assign different background hues to be used:                                                                                 ',&
+'                                                                                                                                ',&
+'      <style type="text/css">                                                                                                   ',&
+'         .even { background-color: #FFFFFF; }                                                                                   ',&
+'         .odd  { background-color: #F0F0F0; }                                                                                   ',&
+'      </style>                                                                                                                  ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'    -caption     a caption line for the table                                                                                   ',&
+'    -classes     use CSS class names for different rows (empty argument: odd even)                                              ',&
+'    -delimiters  input column delimiter (default: whitespace). If a list contains space                                         ',&
+'                 the space must not be last in the list.                                                                        ',&
+'    -header      the first row is assumed to be a header line (default: no header lines)                                        ',&
+'    -tabletags   specify own HTML table tags instead of the default: border="1"                                                 ',&
+'    -document    write complete HTML document instead of just table                                                             ',&
+'    -asis        by default the characters ><& are converted to their HTML equivalents.                                         ',&
+'                 This option turns that conversion off.                                                                         ',&
+'    -help        display command help and exit                                                                                  ',&
+'    -version     display command metadata and exit                                                                              ',&
+'EXAMPLES                                                                                                                        ',&
+'  Sample usage:                                                                                                                 ',&
+'                                                                                                                                ',&
+'   # list month as a table                                                                                                      ',&
+'   cal|tail -n +2|table2html -caption $(cal|head -n 1) -document |w3m -dump -T text/html|more                                   ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -123,7 +123,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:07 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:05:00 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -133,7 +133,7 @@ program table2html
 use M_kracken, only : kracken, iget, sgets, sget, lget, IPvalue
 use M_strings, only : substitute, split
 implicit none
-character(len=*),parameter::ident_1="@(#)table2html(1f): filter to format input into an HTML table form"
+! ident_1="@(#)table2html(1f): filter to format input into an HTML table form"
 
 character(len=IPvalue)             :: line
 character(len=IPvalue),allocatable :: listof_classes(:)

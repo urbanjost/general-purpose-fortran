@@ -75,7 +75,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    --method NAME  Select the UUID version type. Supported methods are',&
 '                   nil|0, random|4, time|1.',&
 '',&
-'                   0. Nil UUID (ie. ''''00000000-0000-0000-0000-000000000000''''',&
+'                   0. Nil UUID (ie. ''''00000000-0000-0000-0000-000000000000'''')',&
 '                   1. time-based UUID',&
 '                   2. Not implemented',&
 '                   3. Not implemented',&

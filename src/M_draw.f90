@@ -7778,7 +7778,7 @@ use M_journal, only : journal
 use ISO_C_BINDING
 implicit none
 
-character(len=*),parameter::ident_1="@(#)M_draw::M_draw(3fm):: The M_draw graphics library module"
+! ident_1="@(#)M_draw::M_draw(3fm):: The M_draw graphics library module"
 
 private
 !-------------------------------------------------------------------------------
@@ -10228,8 +10228,7 @@ end subroutine test_suite_M_draw
 !!    Public Domain
 subroutine invokeobj(xt,yt,zt,xs,ys,zs,xr,yr,zr,iobject)
 
-character(len=*),parameter::ident_2="&
-&@(#)M_draw::invokeobj(3f): invoke object with specified transformation applied and then restored"
+! ident_2="@(#)M_draw::invokeobj(3f): invoke object with specified transformation applied and then restored"
 
 real,intent(in)    :: xt,yt,zt  ! linear transforms
 real,intent(in)    :: xs,ys,zs  ! scaling
@@ -10332,7 +10331,7 @@ end subroutine test_invokeobj
 !!    Public Domain
 subroutine biggest_ortho2(xsmall,xlarge,ysmall,ylarge)
 
-character(len=*),parameter::ident_3="@(#)M_draw::page(3f): given a window size, find and set to largest accommodating viewport"
+! ident_3="@(#)M_draw::page(3f): given a window size, find and set to largest accommodating viewport"
 
 real,intent(in)  :: xsmall
 real,intent(in)  :: xlarge
@@ -10545,7 +10544,7 @@ end subroutine test_biggest_ortho2
 !!    Public Domain
 subroutine pop()
 
-character(len=*),parameter::ident_4="@(#)M_draw::pop(3f): call popviewport(), popmatrix(), popattributes()"
+! ident_4="@(#)M_draw::pop(3f): call popviewport(), popmatrix(), popattributes()"
 
    call popviewport()
    call popmatrix()
@@ -10657,7 +10656,7 @@ end subroutine print
 !!    Public Domain
 subroutine push()
 
-character(len=*),parameter::ident_5="@(#)M_draw::push(3f): call pushattributes(), pushmatrix(), pushviewport()"
+! ident_5="@(#)M_draw::push(3f): call pushattributes(), pushmatrix(), pushviewport()"
 
    call pushattributes()
    call pushmatrix()

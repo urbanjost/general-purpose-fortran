@@ -14,33 +14,33 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'       dtu(1f) - [FILE FILTER] convert files between Unix and DOS line terminator conventions',&
-'       (LICENSE:PD)                                                             ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'       dtu [[ -make dos|unix] [ -z] [ -n] -i input -o output ]|--help|--version ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'       Convert DOS end-of-line (CR-LF or <carriage-return><line-feed>)          ',&
-'       to a Unix end-of-line (LF or <line-feed>, often called "newline");       ',&
-'       or vice-versa.                                                           ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'       -make unix      (default) convert DOS file to Unix ( CR-LF to newline )  ',&
-'       -make dos       convert Unix file to DOS ( newline to CR-LF )            ',&
-'       -z              guarantee last character of DOS file is ^Z,              ',&
-'                       guarantee last character of Unix file is not ^Z          ',&
-'                       otherwise, ^Z in input is copied or not as-is            ',&
-'       -n              noisy mode reports character and line counts on stderr   ',&
-'       -i input_file   required                                                 ',&
-'       -o output_file  required                                                 ',&
-'       --help          display this help and exit                               ',&
-'       --version       output version information and exit                      ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'       dtu(1f) - [FILE FILTER] convert files between Unix and DOS line terminator conventions                                   ',&
+'       (LICENSE:PD)                                                                                                             ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'       dtu [[ -make dos|unix] [ -z] [ -n] -i input -o output ]|--help|--version                                                 ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'       Convert DOS end-of-line (CR-LF or <carriage-return><line-feed>)                                                          ',&
+'       to a Unix end-of-line (LF or <line-feed>, often called "newline");                                                       ',&
+'       or vice-versa.                                                                                                           ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'       -make unix      (default) convert DOS file to Unix ( CR-LF to newline )                                                  ',&
+'       -make dos       convert Unix file to DOS ( newline to CR-LF )                                                            ',&
+'       -z              guarantee last character of DOS file is ^Z,                                                              ',&
+'                       guarantee last character of Unix file is not ^Z                                                          ',&
+'                       otherwise, ^Z in input is copied or not as-is                                                            ',&
+'       -n              noisy mode reports character and line counts on stderr                                                   ',&
+'       -i input_file   required                                                                                                 ',&
+'       -o output_file  required                                                                                                 ',&
+'       --help          display this help and exit                                                                               ',&
+'       --version       output version information and exit                                                                      ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -94,7 +94,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2021-06-26 18:31:02 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:18:12 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

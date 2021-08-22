@@ -53,6 +53,11 @@ help_text=[character(len=80) :: &
 'SYNOPSIS                                                                       ',&
 '    tat [[string(s)][ --chars N] [ --prefix STR] [ --manner MODE] ]|           ',&
 '    [ --help| --version]                                                       ',&
+'DESCRIPTION                                                                    ',&
+'   tat(1) ("Terminal Attributes") is like cat(1), except it processes          ',&
+'   special strings in the input specifying terminal attributes such as color   ',&
+'   and underlining using an HTML-like syntax via the M_attr(3f) module.        ',&
+'                                                                               ',&
 'OPTIONS                                                                        ',&
 '   STRINGS    if present process and print these strings instead of reading    ',&
 '              and processing stdin.                                            ',&

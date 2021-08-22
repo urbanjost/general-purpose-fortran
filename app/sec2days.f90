@@ -29,52 +29,52 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   sec2days(1f) - [TIME] Convert seconds to string of form dd-hh:mm:ss          ',&
-'   (LICENSE:PD)                                                                 ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'   sec2days nnnn[.xxx] [ -crop]| --version| --help                              ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'   Given a numeric string representing seconds convert it to a string           ',&
-'   of the form                                                                  ',&
-'                                                                                ',&
-'      dd-hh:mm:ss                                                               ',&
-'                                                                                ',&
-'   where dd is days, hh hours, mm minutes and ss seconds.                       ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'   nnnn[.xxx]  number of seconds to convert to string of form dd-hh:mm:ss.      ',&
-'               nnnn may be interspersed with unit codes d,h,m,s. Spaces,        ',&
-'               commas and case are ignored. Allowed aliases for the unit        ',&
-'               codes are                                                        ',&
-'                 d  days and day                                                ',&
-'                 h  hours,hour,hrs, and hr                                      ',&
-'                 m  minutes,minute and min                                      ',&
-'                 s  seconds,second and sec                                      ',&
-'                                                                                ',&
-'   -crop       trim leading zero values from output                             ',&
-'   -radix      character used as decimal separator                              ',&
-'   --help      display this help and exit                                       ',&
-'   --version   output version information and exit                              ',&
-'                                                                                ',&
-'EXAMPLE                                                                         ',&
-' usage                                                                          ',&
-'                                                                                ',&
-'   sec2days 129860                                                              ',&
-'   1-12:04:20                                                                   ',&
-'   sec2days 1d2h3m4s                                                            ',&
-'   1-02:03:04                                                                   ',&
-'   sec2days 1.0 days 2 hours 3 minutes 4 seconds                                ',&
-'   1-02:03:04                                                                   ',&
-'   sec2days 1.5d                                                                ',&
-'   1-12:00:00                                                                   ',&
-'                                                                                ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   sec2days(1f) - [TIME] Convert seconds to string of form dd-hh:mm:ss                                                          ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'   sec2days nnnn[.xxx] [ -crop]| --version| --help                                                                              ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'   Given a numeric string representing seconds convert it to a string                                                           ',&
+'   of the form                                                                                                                  ',&
+'                                                                                                                                ',&
+'      dd-hh:mm:ss                                                                                                               ',&
+'                                                                                                                                ',&
+'   where dd is days, hh hours, mm minutes and ss seconds.                                                                       ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'   nnnn[.xxx]  number of seconds to convert to string of form dd-hh:mm:ss.                                                      ',&
+'               nnnn may be interspersed with unit codes d,h,m,s. Spaces,                                                        ',&
+'               commas and case are ignored. Allowed aliases for the unit                                                        ',&
+'               codes are                                                                                                        ',&
+'                 d  days and day                                                                                                ',&
+'                 h  hours,hour,hrs, and hr                                                                                      ',&
+'                 m  minutes,minute and min                                                                                      ',&
+'                 s  seconds,second and sec                                                                                      ',&
+'                                                                                                                                ',&
+'   -crop       trim leading zero values from output                                                                             ',&
+'   -radix      character used as decimal separator                                                                              ',&
+'   --help      display this help and exit                                                                                       ',&
+'   --version   output version information and exit                                                                              ',&
+'                                                                                                                                ',&
+'EXAMPLE                                                                                                                         ',&
+' usage                                                                                                                          ',&
+'                                                                                                                                ',&
+'   sec2days 129860                                                                                                              ',&
+'   1-12:04:20                                                                                                                   ',&
+'   sec2days 1d2h3m4s                                                                                                            ',&
+'   1-02:03:04                                                                                                                   ',&
+'   sec2days 1.0 days 2 hours 3 minutes 4 seconds                                                                                ',&
+'   1-02:03:04                                                                                                                   ',&
+'   sec2days 1.5d                                                                                                                ',&
+'   1-12:00:00                                                                                                                   ',&
+'                                                                                                                                ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -148,7 +148,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:30:48 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:17:32 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -83,7 +83,7 @@
 module M_writegif
 implicit none         !  Check all declarations
 
-character(len=*),parameter::ident_1="@(#)This module can write a GIF file in GIF89 format from raster data"
+! ident_1="@(#)This module can write a GIF file in GIF89 format from raster data"
 
 private               !  bin_io is used private, no transfer to main program
 public  :: writegif   !  Writes GIF89 image, given pixel array and color map

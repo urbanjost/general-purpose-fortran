@@ -8,22 +8,22 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   _mkfifo(1f) - [FUNIX:FILESYSTEM] make a FIFO pipe by calling mkfifo(3c)      ',&
-'   (LICENSE:PD)                                                                 ',&
-'SYNOPSIS                                                                        ',&
-'   _mkfifo file(s)                                                              ',&
-'DESCRIPTION                                                                     ',&
-'   Create named pipes (FIFOs) with the given NAMEs.                             ',&
-'OPTIONS                                                                         ',&
-'   files      pathnames of named pipes to create                                ',&
-'   --help     display this help and exit                                        ',&
-'   --version  output version information and exit                               ',&
-'EXAMPLE                                                                         ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   _mkfifo(1f) - [FUNIX:FILESYSTEM] make a FIFO pipe by calling mkfifo(3c)                                                      ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'SYNOPSIS                                                                                                                        ',&
+'   _mkfifo file(s)                                                                                                              ',&
+'DESCRIPTION                                                                                                                     ',&
+'   Create named pipes (FIFOs) with the given NAMEs.                                                                             ',&
+'OPTIONS                                                                                                                         ',&
+'   files      pathnames of named pipes to create                                                                                ',&
+'   --help     display this help and exit                                                                                        ',&
+'   --version  output version information and exit                                                                               ',&
+'EXAMPLE                                                                                                                         ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -65,7 +65,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-06-26 18:31:19 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:16 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

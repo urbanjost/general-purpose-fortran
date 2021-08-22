@@ -1,5 +1,5 @@
 program testit
-use M_matrix, only : laff, get_from_laff, put_into_laff
+use M_matrix, only : lala, get_from_lala, put_into_lala
 implicit none
 integer,parameter :: lda=10
 integer           :: m,n, i,j, ierr
@@ -7,7 +7,7 @@ doubleprecision   :: arr(lda,lda),x(lda,lda)
 logical           :: logs=.false.
 
    !!logs=.true.
-   !!call laff(20000,echo=.true.)
+   !!call lala(20000,echo=.true.)
 
       call test_abs ()     ! abs   abs(X) is the absolute value, or complex modulus, of the
    call test_ans ()     ! ans   Variable created automatically when expressions are not
@@ -29,7 +29,7 @@ logical           :: logs=.false.
    call test_else ()    ! else  Used with "if".
    call test_end ()     ! end   Terminates the scope of "for", "while" and "if" statements.
       call test_eps ()     ! eps   Floating point relative accuracy. A permanent variable
-   call test_exec ()    ! exec  "exec('file',k)" obtains subsequent LAFF input from an
+   call test_exec ()    ! exec  "exec('file',k)" obtains subsequent LALA input from an
    call test_exit ()    ! exit  Causes termination of a "for" or "while" loop.
    call test_exp ()     ! exp   exp(X) is the exponential of X , e to the X . See HIGH.
    call test_eye ()     ! eye   Identity matrix. "eye(N)" is the N by N identity matrix.
@@ -84,7 +84,7 @@ logical           :: logs=.false.
 
    call test_doc ()     ! doc   does nothing at the moment
    call test_what ()    ! what  does nothing for now
-   call test_laff ()    ! laff  A placeholder for a new command.
+   call test_lala ()    ! lala  A placeholder for a new command.
 
       call test_zeros ()   ! zeros
       call test_general_avg () 
@@ -121,13 +121,13 @@ logical           :: logs=.false.
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_magic()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help magic')
-   call laff( 'tally=[0];N=10')
-   if(logs)call laff( 'diary(''magic.log'');')
-   call laff( 'a=magic(N);')
-   call laff( 'b=sum(a);')
-   call laff( &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help magic')
+   call lala( 'tally=[0];N=10')
+   if(logs)call lala( 'diary(''magic.log'');')
+   call lala( 'a=magic(N);')
+   call lala( 'b=sum(a);')
+   call lala( &
    & 'display(ones(80,1)''*95);       &
    & if shape(a) = [N,N],             &
    &    display(''magic shape OK'');    &
@@ -136,7 +136,7 @@ subroutine test_magic()
    &    display(''magic shape BAD'');   &
    &    shape(a),                     &
    &    tally=[tally,1];             ')
-   call laff( &
+   call lala( &
    & 'if b = 5050,                   &
    &    display(''magic SUM OK''),     &
    &    tally=[tally,0];             &
@@ -145,20 +145,20 @@ subroutine test_magic()
    &    shape(a),                     &
    &    tally=[tally,1];             &
    & end                             ')
-   call laff( 'if sum(tally) = 0,display(''magic PASSED''),else,display(''magic FAILED'');tally')
+   call lala( 'if sum(tally) = 0,display(''magic PASSED''),else,display(''magic FAILED'');tally')
 end subroutine test_magic
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_ones()
-   call laff( 'display(ones(80,1)''*61); help ones; display(ones(80,1)''*95)')
-   call laff( 'tally=[0];')
-   if(logs)call laff( 'diary(''ones.log'');')
-   call laff( 'a=ones(30,40);')
-   call laff( 'b=sum(a);')
-   call laff(  &
+   call lala( 'display(ones(80,1)''*61); help ones; display(ones(80,1)''*95)')
+   call lala( 'tally=[0];')
+   if(logs)call lala( 'diary(''ones.log'');')
+   call lala( 'a=ones(30,40);')
+   call lala( 'b=sum(a);')
+   call lala(  &
    & 'if b = 1200,display(''ones SUM OK''),tally=[tally,0];else,display(''ones SUM FAILED'');shape(a),tally=[tally,1];end')
-   call laff( &
+   call lala( &
    & 'if shape(a) = [30,40] ,display(''ones shape OK'');tally=[tally,0];else,display(''ones shape BAD'');shape(a),tally=[tally,1];')
-   call laff( &
+   call lala( &
    & 'if sum(a-ones(30,40)) = 0, &
    &    display(''ones DELTA OK''), &
    &    tally=[tally,0]; &
@@ -166,20 +166,20 @@ subroutine test_ones()
    &    display(''ones DELTA FAILED''); &
    &    tally=[tally,1]; &
    & end')
-   call laff( 'if sum(tally) = 0,display(''ones PASSED''),else,display(''ones FAILED'');tally')
+   call lala( 'if sum(tally) = 0,display(''ones PASSED''),else,display(''ones FAILED'');tally')
 end subroutine test_ones
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_zeros()
-  call laff( 'display(ones(80,1)''*61); help zeros; display(ones(80,1)''*95)')
-  call laff( 'tally=[0];')
-  if(logs)call laff( 'diary(''zeros.log'');')
-  call laff( 'a=zeros(30,40);')
-  call laff( 'b=sum(a);')
-  call laff(  &
+  call lala( 'display(ones(80,1)''*61); help zeros; display(ones(80,1)''*95)')
+  call lala( 'tally=[0];')
+  if(logs)call lala( 'diary(''zeros.log'');')
+  call lala( 'a=zeros(30,40);')
+  call lala( 'b=sum(a);')
+  call lala(  &
   & 'if b = 0,display(''zeros SUM OK''),tally=[tally,0];else,display(''zeros SUM FAILED'');shape(a),tally=[tally,1];end')
-  call laff( &
+  call lala( &
   & 'if shape(a) = [30,40],display(''zeros shape OK'');tally=[tally,0];else,display(''zeros shape BAD'');shape(a),tally=[tally,1];')
-  call laff( &
+  call lala( &
   & 'if sum(a-zeros(30,40)) = 0, &
   &    display(''zeros DELTA OK''), &
   &    tally=[tally,0]; &
@@ -187,21 +187,21 @@ subroutine test_zeros()
   &    display(''zeros DELTA FAILED''); &
   &    tally=[tally,1]; &
   & end')
-  call laff( 'if sum(tally) = 0,display(''zeros PASSED''),else,display(''zeros FAILED'');tally')
+  call lala( 'if sum(tally) = 0,display(''zeros PASSED''),else,display(''zeros FAILED'');tally')
 end subroutine test_zeros
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_sum()
-  call laff( 'display(ones(80,1)''*61); help sum; display(ones(80,1)''*95)')
-  call laff( 'tally=[0];')
-  if(logs)call laff( 'diary(''sum.log'');')
-  call laff( 'a=<1 2 3; 4 5 6; 7 8 9>;')
-  call laff( 'b=sum(magic(3));')
-  call laff( 'c=sum(a);')
-  call laff(  &
+  call lala( 'display(ones(80,1)''*61); help sum; display(ones(80,1)''*95)')
+  call lala( 'tally=[0];')
+  if(logs)call lala( 'diary(''sum.log'');')
+  call lala( 'a=<1 2 3; 4 5 6; 7 8 9>;')
+  call lala( 'b=sum(magic(3));')
+  call lala( 'c=sum(a);')
+  call lala(  &
   & "if c = 45,display('sum SUM OF ''a'' OK'),tally=[tally,0];else,display('sum SUM OF ''a'' FAILED');shape(a),tally=[tally,1];end")
-  call laff( &
+  call lala( &
   & 'if shape(c) = [1,1] ,display(''sum shape OK'');tally=[tally,0];else,display(''sum shape BAD'');shape(a),tally=[tally,1];')
-  call laff( &
+  call lala( &
   & 'if sum(a) + b = 90, &
   &    display(''sum ARRAY OK''), &
   &    tally=[tally,0]; &
@@ -209,13 +209,13 @@ subroutine test_sum()
   &    display(''sum ARRAY FAILED''); &
   &    tally=[tally,1]; &
   & end')
-  call laff( 'if sum(tally) = 0,display(''sum PASSED''),else,display(''sum FAILED'');tally')
+  call lala( 'if sum(tally) = 0,display(''sum PASSED''),else,display(''sum FAILED'');tally')
 end subroutine test_sum
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_abs ()
-   call laff( 'display(ones(80,1)''*61); help abs; display(ones(80,1)''*95)')
-   if(logs)call laff( 'diary(''abs.log'');')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61); help abs; display(ones(80,1)''*95)')
+   if(logs)call lala( 'diary(''abs.log'');')
+   call lala( [ character(len=256) :: &
      & 'tally=[0];                                                               ', &
      & 'a=<1 2 3; 4 5 6; 7 8 9>;b=-a;                                            ', &
      & 'if a+b=zeros(a), tally=[tally,0];display(''a-b is zero '');else,tally=[tally,1];display(''a-b is NOT zero'');      ', &
@@ -226,9 +226,9 @@ subroutine test_abs ()
 end subroutine test_abs
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_atan ()
-  call laff( 'display(ones(80,1)''*61)')
-  call laff( 'tally=[0];')
-  call laff( [ character(len=256) :: &
+  call lala( 'display(ones(80,1)''*61)')
+  call lala( 'tally=[0];')
+  call lala( [ character(len=256) :: &
    & 'help atan; display(ones(80,1)''*95)', &
    & 'PI=atan(1)*4;A=cos(PI);B=sin(PI);', &
    & 'if A-1<eps,tally=[tally,0];display(''test if near PI OK'');else,tally=[tally,1];display(''test if near PI FAILED'');', &
@@ -238,9 +238,9 @@ subroutine test_atan ()
 end subroutine test_atan
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_cos ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
      & 'help cos; display(ones(80,1)''*95)', &
      & '                                                                         ', &
      & 'PI=atan(1)*4;P=cos(PI);PP=cos(2*PI);Z=cos(0);HP=cos(PI/2);', &
@@ -256,7 +256,7 @@ subroutine test_cos ()
 end subroutine test_cos
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_round ()
-   call laff( [ character(len=256) :: &
+   call lala( [ character(len=256) :: &
    '// test round()                                                               ', &
    'clear                                                                         ', &
    'display(ones(80,1)''*61)                                                       ', &
@@ -290,10 +290,10 @@ subroutine test_round ()
 end subroutine test_round
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_shape ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help shape')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help shape')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & 'a=10;b=magic(4);c=ones(11,5);                                            ', &
    & '<X,Y>=shape(c);                                                           ', &
    & 'if X=11,display(''X is 11''),else,display(''X is NOT 11'');X                 ', &
@@ -306,10 +306,10 @@ subroutine test_shape ()
 end subroutine test_shape
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_hess ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help hess')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help hess')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
      & 'A=magic(5);                                                              ', &
      & '<P,H>=hess(A);                                                           ', &
      & 'B=P*H*P'';                                                                ', &
@@ -322,7 +322,7 @@ subroutine test_hess ()
 end subroutine test_hess
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_if ()
-   call laff( [ character(len=256) :: &
+   call lala( [ character(len=256) :: &
      & 'display(ones(80,1)''*61)                                                  ', &
      & 'help if                                                                  ', &
      & 'display(ones(80,1)''*95)                                                  ', &
@@ -344,9 +344,9 @@ subroutine test_if ()
 end subroutine test_if
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_norm ()
-   call laff( 'display(ones(80,1)''*61);help norm;display(ones(80,1)''*95)')
-   if(logs)call laff( 'diary(''norm.log'');')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61);help norm;display(ones(80,1)''*95)')
+   if(logs)call lala( 'diary(''norm.log'');')
+   call lala( [ character(len=256) :: &
    &'tally=[0]'';                                                                                                              ',&
    &'//diary(''norm'')                                                                                                         ',&
    &'long                                                                                                                      ',&
@@ -386,9 +386,9 @@ subroutine test_norm ()
 end subroutine test_norm
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_save ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help save')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help save')
+   call lala( [ character(len=256) :: &
      & 'clear                                 // clear out user variables                                             ', &
      & 'A=magic(4); b=ones(3,4); c=12**2;     // define some variables                                                ', &
      & 'test_Variable=1234567890;                                                                                     ', &
@@ -413,9 +413,9 @@ subroutine test_save ()
 end subroutine test_save
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_load ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help load')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help load')
+   call lala( [ character(len=256) :: &
      & 'clear                                                                                                         ', &
      & 'A=magic(4); b=ones(3,4); c=12**2;                                                                             ', &
      & 'test_Variable=1234567890;                                                                                     ', &
@@ -440,10 +440,10 @@ subroutine test_load ()
 end subroutine test_load
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_invh ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help invh')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help invh')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
  & '                                                                         ', &
  & '// generate the Hilbert matrix of order N.                               ', &
  & 'N=5                                                                      ', &
@@ -464,10 +464,10 @@ subroutine test_invh ()
 end subroutine test_invh
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_kron ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help kron')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help kron')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
      & '                                                                         ', &
      & 'lines(888888)                                                            ', &
      & '//  C = Kronecker product of A and B                                     ', &
@@ -498,7 +498,7 @@ subroutine test_kron ()
 end subroutine test_kron
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_prod ()
-   call laff( [ character(len=256) :: &
+   call lala( [ character(len=256) :: &
      & 'display(ones(80,1)''*61);help prod;clear;tally=[0];                                                                ', &
      & 'a = < 1  2  3 ; 4  5  6 ; 7  8  9 >;                                                                              ', &
      & 'expected=362880;                                                                                                  ', &
@@ -513,15 +513,15 @@ end subroutine test_prod
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_eps ()
    !!logs=.true.
-   if(logs)call laff( 'diary(''eps.log'');')
-   call laff( [ character(len=256) :: &
+   if(logs)call lala( 'diary(''eps.log'');')
+   call lala( [ character(len=256) :: &
      & ' display(ones(80,1)''*''='');help eps;display(ones(80,1)''*''_'')              ', &
      & 'tally=[0];                                                               ', &
      & ' // find the eps for this programming environment by brute force         ', &
      & ' myeps = 1;                                                              ', &
      & ' while 1 + myeps > 1, myeps = myeps/2;                                   ', &
      & ' myeps = 2*myeps                                                         ', &
-     & '// compare it to the eps used by LAFF                                   ', &
+     & '// compare it to the eps used by LALA                                   ', &
      & 'if myeps=eps, ...                                                        ', &
      & '   tally=[tally,0];display(''eps matches expected value''); ...            ', &
      & 'else, ...                                                                ', &
@@ -533,10 +533,10 @@ subroutine test_eps ()
 end subroutine test_eps
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_ans ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help ans')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help ans')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
      & '                                                                         ', &
      & '                                                                         ', &
      & '                                                                         ', &
@@ -545,10 +545,10 @@ subroutine test_ans ()
 end subroutine test_ans
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_base ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help base')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help base')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -558,10 +558,10 @@ subroutine test_base ()
 end subroutine test_base
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_chol ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help chol')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help chol')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -571,9 +571,9 @@ subroutine test_chol ()
 end subroutine test_chol
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_chop ()
-   call laff( 'display(ones(80,1)''*61);help chop')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61);help chop')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -583,9 +583,9 @@ subroutine test_chop ()
 end subroutine test_chop
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_clear ()
-   call laff( 'display(ones(80,1)''*61);help clear')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61);help clear')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -595,10 +595,10 @@ subroutine test_clear ()
 end subroutine test_clear
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_cond ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help cond')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help cond')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -608,10 +608,10 @@ subroutine test_cond ()
 end subroutine test_cond
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_conjg ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help conjg')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help conjg')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -621,10 +621,10 @@ subroutine test_conjg ()
 end subroutine test_conjg
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_debug ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help debug')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help debug')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -634,10 +634,10 @@ subroutine test_debug ()
 end subroutine test_debug
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_det ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help det')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help det')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -647,10 +647,10 @@ subroutine test_det ()
 end subroutine test_det
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_diag ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help diag')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help diag')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -660,8 +660,8 @@ subroutine test_diag ()
 end subroutine test_diag
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_diary ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( [ character(len=256) :: &
    & 'help diary                                                                 ', &
    & 'tally=[0];                                                                 ', &
    & 'if sum(tally)=0,display(''diary PASSED'');else,display(''diary FAILED'');tally ', &
@@ -669,7 +669,7 @@ subroutine test_diary ()
 end subroutine test_diary
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_display ()
-   call laff( [ character(len=256) :: &
+   call lala( [ character(len=256) :: &
    & 'display([27,91,''H'',27,91,''2J'']) // clear and home cursor on ANSI device  ', &
    & 'display(ones(80,1)''*61)         // make a line                           ', &
    & 'help display                                                             ', &
@@ -690,10 +690,10 @@ subroutine test_display ()
 end subroutine test_display
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_delete ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help delete')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help delete')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -703,10 +703,10 @@ subroutine test_delete ()
 end subroutine test_delete
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_doc ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help doc')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help doc')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -716,10 +716,10 @@ subroutine test_doc ()
 end subroutine test_doc
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_eig ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help eig')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help eig')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -729,9 +729,9 @@ subroutine test_eig ()
 end subroutine test_eig
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_else ()
-   if(logs)call laff( 'diary(''else.log'');')
-   call laff( 'display(ones(80,1)''*61);help else;tally=[0];')
-   call laff( [ character(len=256) :: &
+   if(logs)call lala( 'diary(''else.log'');')
+   call lala( 'display(ones(80,1)''*61);help else;tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -741,10 +741,10 @@ subroutine test_else ()
 end subroutine test_else
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_end ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help end')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help end')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -754,10 +754,10 @@ subroutine test_end ()
 end subroutine test_end
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_exec ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help exec')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help exec')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -767,10 +767,10 @@ subroutine test_exec ()
 end subroutine test_exec
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_exit ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help exit')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help exit')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -780,10 +780,10 @@ subroutine test_exit ()
 end subroutine test_exit
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_exp ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help exp')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help exp')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -793,10 +793,10 @@ subroutine test_exp ()
 end subroutine test_exp
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_eye ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help eye')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help eye')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -806,10 +806,10 @@ subroutine test_eye ()
 end subroutine test_eye
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_flops ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help flops')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help flops')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -819,10 +819,10 @@ subroutine test_flops ()
 end subroutine test_flops
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_for ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help for')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help for')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -832,10 +832,10 @@ subroutine test_for ()
 end subroutine test_for
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_help ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help help')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help help')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -845,10 +845,10 @@ subroutine test_help ()
 end subroutine test_help
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_imag ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help imag')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help imag')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -858,10 +858,10 @@ subroutine test_imag ()
 end subroutine test_imag
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_inv ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help inv')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help inv')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -870,24 +870,24 @@ subroutine test_inv ()
    & ''])
 end subroutine test_inv
 !-----------------------------------------------------------------------------------------------------------------------------------
-subroutine test_laff ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help laff')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+subroutine test_lala ()
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help lala')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
    !& 'if a+b=zeros(a), tally=[tally,0];display(''a-b is zero       '');else,tally=[tally,1];display(''a-b is NOT zero'');      ', &
-   & 'if sum(tally)=0,display(''laff PASSED'');else,display(''laff FAILED'');tally ', &
+   & 'if sum(tally)=0,display(''lala PASSED'');else,display(''lala FAILED'');tally ', &
    & ''])
-end subroutine test_laff
+end subroutine test_lala
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_lines ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help lines')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help lines')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -897,10 +897,10 @@ subroutine test_lines ()
 end subroutine test_lines
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_log ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help log')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help log')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -910,10 +910,10 @@ subroutine test_log ()
 end subroutine test_log
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_long ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help long')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help long')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -923,10 +923,10 @@ subroutine test_long ()
 end subroutine test_long
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_lu ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help lu')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help lu')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -936,10 +936,10 @@ subroutine test_lu ()
 end subroutine test_lu
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_orth ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help orth')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help orth')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -949,10 +949,10 @@ subroutine test_orth ()
 end subroutine test_orth
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_pinv ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help pinv')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help pinv')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -962,10 +962,10 @@ subroutine test_pinv ()
 end subroutine test_pinv
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_plot ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help plot')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help plot')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -975,10 +975,10 @@ subroutine test_plot ()
 end subroutine test_plot
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_poly ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help poly')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help poly')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -988,10 +988,10 @@ subroutine test_poly ()
 end subroutine test_poly
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_print ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help print')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help print')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1001,10 +1001,10 @@ subroutine test_print ()
 end subroutine test_print
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_qr ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help qr')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help qr')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1014,10 +1014,10 @@ subroutine test_qr ()
 end subroutine test_qr
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_quit ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help quit')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help quit')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1027,10 +1027,10 @@ subroutine test_quit ()
 end subroutine test_quit
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_rand ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help rand')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help rand')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1040,10 +1040,10 @@ subroutine test_rand ()
 end subroutine test_rand
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_rank ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help rank')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help rank')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1053,10 +1053,10 @@ subroutine test_rank ()
 end subroutine test_rank
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_rat ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help rat')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help rat')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1066,10 +1066,10 @@ subroutine test_rat ()
 end subroutine test_rat
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_rcond ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help rcond')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help rcond')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1079,10 +1079,10 @@ subroutine test_rcond ()
 end subroutine test_rcond
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_real ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help real')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help real')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1092,10 +1092,10 @@ subroutine test_real ()
 end subroutine test_real
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_roots ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help roots')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help roots')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1105,10 +1105,10 @@ subroutine test_roots ()
 end subroutine test_roots
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_rref ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help rref')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help rref')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1118,10 +1118,10 @@ subroutine test_rref ()
 end subroutine test_rref
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_schur ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help schur')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help schur')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1131,10 +1131,10 @@ subroutine test_schur ()
 end subroutine test_schur
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_semi ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help semi')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help semi')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1144,10 +1144,10 @@ subroutine test_semi ()
 end subroutine test_semi
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_short ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help short')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help short')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1157,10 +1157,10 @@ subroutine test_short ()
 end subroutine test_short
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_sh ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help sh')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help sh')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1170,10 +1170,10 @@ subroutine test_sh ()
 end subroutine test_sh
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_sin ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help sin')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help sin')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1183,10 +1183,10 @@ subroutine test_sin ()
 end subroutine test_sin
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_sqrt ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help sqrt')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help sqrt')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1196,10 +1196,10 @@ subroutine test_sqrt ()
 end subroutine test_sqrt
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_svd ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help svd')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help svd')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
    & '                                                                         ', &
    & '                                                                         ', &
    & '                                                                         ', &
@@ -1209,10 +1209,10 @@ subroutine test_svd ()
 end subroutine test_svd
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_tril ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help tril')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help tril')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
   & '', &
   & 'a=magic(6);', &
   & '', &
@@ -1233,10 +1233,10 @@ subroutine test_tril ()
 end subroutine test_tril
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_triu ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help triu')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help triu')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
   & '                                                                         ', &
   & '                                                                         ', &
   & '                                                                         ', &
@@ -1246,10 +1246,10 @@ subroutine test_triu ()
 end subroutine test_triu
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_user ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help user')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help user')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
   & '                                                                         ', &
   & '                                                                         ', &
   & '                                                                         ', &
@@ -1259,10 +1259,10 @@ subroutine test_user ()
 end subroutine test_user
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_what ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help what')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help what')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
   & '                                                                         ', &
   & '                                                                         ', &
   & '                                                                         ', &
@@ -1272,10 +1272,10 @@ subroutine test_what ()
 end subroutine test_what
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_while ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help while')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help while')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
   & '                                                                         ', &
   & '                                                                         ', &
   & '                                                                         ', &
@@ -1285,10 +1285,10 @@ subroutine test_while ()
 end subroutine test_while
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_who ()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'help who')
-   call laff( 'tally=[0];')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'help who')
+   call lala( 'tally=[0];')
+   call lala( [ character(len=256) :: &
   & '                                                                         ', &
   & '                                                                         ', &
   & '                                                                         ', &
@@ -1300,7 +1300,7 @@ end subroutine test_who
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_general_char ()
-   call laff( [ character(len=256) :: &
+   call lala( [ character(len=256) :: &
 'display(ones(80,1)''*''=''); // display a line of equals across display     ', &
 'tally=[0];                                                               ', &
 'display(0:126) // display printable ASCII characters                     ', &
@@ -1316,8 +1316,8 @@ end subroutine test_general_char
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_general_dots()
    !!logs=.true.
-   if(logs)call laff( 'diary(''test_general_dots.log'');')
-   call laff( [ character(len=256) :: &
+   if(logs)call lala( 'diary(''test_general_dots.log'');')
+   call lala( [ character(len=256) :: &
    & 'display(ones(80,1)''*61);display(''general expression dots'');               ', &
    & 'tally=[0];                                                                   ', &
    & 'a=magic(3);b=ones(3)*2;                                                      ', &
@@ -1332,8 +1332,8 @@ end subroutine test_general_dots
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_general_pascal()
    !!logs=.true.
-   if(logs)call laff( 'diary(''test_general_pascal.log'');')
-   call laff( [ character(len=256) :: &
+   if(logs)call lala( 'diary(''test_general_pascal.log'');')
+   call lala( [ character(len=256) :: &
    & 'display(ones(80,1)''*61);display(''general pascal test'');                                ', &
    & 'tally=[0];                                                                                ', &
    & '                                                                                          ', &
@@ -1392,8 +1392,8 @@ end subroutine test_general_pascal
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_general_expr()
    !!logs=.true.
-   if(logs)call laff( 'diary(''test_general_expr.log'');')
-   call laff( [ character(len=256) :: &
+   if(logs)call lala( 'diary(''test_general_expr.log'');')
+   call lala( [ character(len=256) :: &
    & 'display(ones(80,1)''*61);display(''general expression tests'');              ', &
    & 'tally=[0];                                                                   ', &
    & 'a=3+4;                                                                       ', &
@@ -1427,10 +1427,10 @@ end subroutine test_general_expr
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_general_avg()
-   call laff( 'display(ones(80,1)''*61)')
-   call laff( 'display(''general tests: avg'')')
-   if(logs)call laff( 'diary(''test-general-avg.log'');')
-   call laff( [ character(len=256) :: &
+   call lala( 'display(ones(80,1)''*61)')
+   call lala( 'display(''general tests: avg'')')
+   if(logs)call lala( 'diary(''test-general-avg.log'');')
+   call lala( [ character(len=256) :: &
    & 'tally=[0];                                                              ', &
    & 'a=magic(8); n=3;                                                        ', &
    & 'for i = 2:2:n, for j=2:2:n,t = (a(i-1,j-1)+a(i-1,j)+a(i,j-1)+a(i,j))/4; ', &

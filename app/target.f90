@@ -110,16 +110,16 @@ f50_small_bore_rifle=[ CHARACTER(LEN=128) :: &
 'genobj SHEET;makeobj SHEET',&
 'set XD=3.5 YD=(7+13.5/16)/3 X2=.85 Y2=.75',&
 'set K=0.1/.65 ;textsize K K*5/7',&
-'invokeobj X1=1.75+0*XD Y1=2.15+0*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+1*XD Y1=2.15+0*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+2*XD Y1=2.15+0*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+0*XD Y1=2.15+1*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+2*XD Y1=2.15+1*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+0*XD Y1=2.15+2*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+2*XD Y1=2.15+2*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+0*XD Y1=2.15+3*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+1*XD Y1=2.15+3*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
-'invokeobj X1=1.75+2*XD Y1=2.15+3*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;dra',&
+'invokeobj X1=1.75+0*XD Y1=2.15+0*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 8',&
+'invokeobj X1=1.75+1*XD Y1=2.15+0*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 9',&
+'invokeobj X1=1.75+2*XD Y1=2.15+0*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 10',&
+'invokeobj X1=1.75+0*XD Y1=2.15+1*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 6',&
+'invokeobj X1=1.75+2*XD Y1=2.15+1*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 7',&
+'invokeobj X1=1.75+0*XD Y1=2.15+2*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 4',&
+'invokeobj X1=1.75+2*XD Y1=2.15+2*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 5',&
+'invokeobj X1=1.75+0*XD Y1=2.15+3*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 1',&
+'invokeobj X1=1.75+1*XD Y1=2.15+3*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 2',&
+'invokeobj X1=1.75+2*XD Y1=2.15+3*YD 0 1 1 1 0 0 0 BULLSEYE;move2 X1+X2 Y1-Y2;drawstr 3',&
 'invokeobj X1=1.75+XD Y1=2.15+1.5*YD 0 1 1 1 0 0 0 BULLSEYE',&
 'circle X1 Y1 R7;move2 X1+X2 Y1-Y2 ;drawstr SS;move2 X1-X2 Y1-Y2;drawstr SS',&
 '#',&
@@ -197,32 +197,32 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   target(1f) - [M_drawplus] draw targets on Adobe PDF files                    ',&
-'   (LICENSE:PD)                                                                 ',&
-'SYNOPSIS                                                                        ',&
-'   target [ --help| --version]                                                  ',&
-'DESCRIPTION                                                                     ',&
-'   Use the M_draw(3fm) and M_drawplus(3fm) modules to create various            ',&
-'   targets. Requires large paper (at least 12x10.5 inches) to be printed        ',&
-'   to scale.                                                                    ',&
-'OPTIONS                                                                         ',&
-'   --help     display this help and exit                                        ',&
-'   --version  output version information and exit                               ',&
-'                                                                                ',&
-'EXAMPLE                                                                         ',&
-'  Sample usage:                                                                 ',&
-'                                                                                ',&
-'   target                                                                       ',&
-'   ls *.pdf                                                                     ',&
-'   f50_instinct_pistol.pdf                                                      ',&
-'   f50_slow_fire_pistol.pdf                                                     ',&
-'   f50_small_bore_rifle.pdf                                                     ',&
-'   f50_timed_and_rapid_fire_pistol.pdf                                          ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   target(1f) - [M_drawplus] draw targets on Adobe PDF files                                                                    ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'SYNOPSIS                                                                                                                        ',&
+'   target [ --help| --version]                                                                                                  ',&
+'DESCRIPTION                                                                                                                     ',&
+'   Use the M_draw(3fm) and M_drawplus(3fm) modules to create various                                                            ',&
+'   targets. Requires large paper (at least 12x10.5 inches) to be printed                                                        ',&
+'   to scale.                                                                                                                    ',&
+'OPTIONS                                                                                                                         ',&
+'   --help     display this help and exit                                                                                        ',&
+'   --version  output version information and exit                                                                               ',&
+'                                                                                                                                ',&
+'EXAMPLE                                                                                                                         ',&
+'  Sample usage:                                                                                                                 ',&
+'                                                                                                                                ',&
+'   target                                                                                                                       ',&
+'   ls *.pdf                                                                                                                     ',&
+'   f50_instinct_pistol.pdf                                                                                                      ',&
+'   f50_slow_fire_pistol.pdf                                                                                                     ',&
+'   f50_small_bore_rifle.pdf                                                                                                     ',&
+'   f50_timed_and_rapid_fire_pistol.pdf                                                                                          ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -272,7 +272,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    create printable targets>',&
 '@(#)VERSION:        1.0, 20190108>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2021-06-26 18:31:39 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:19:13 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -32,23 +32,23 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   _rm(1f) - [FUNIX:FILESYSTEM] remove file(s)                                  ',&
-'   (LICENSE:PD)                                                                 ',&
-'SYNOPSIS                                                                        ',&
-'   _rm file(s) | [--help|--version]                                             ',&
-'DESCRIPTION                                                                     ',&
-'   Remove file(s) by calling remove(C).                                         ',&
-'OPTIONS                                                                         ',&
-'   file(s)  list of files to remove                                             ',&
-'   help     display help and stop                                               ',&
-'   version  display version and stop                                            ',&
-'EXAMPLE                                                                         ',&
-'     _rm *.o                                                                    ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   _rm(1f) - [FUNIX:FILESYSTEM] remove file(s)                                                                                  ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'SYNOPSIS                                                                                                                        ',&
+'   _rm file(s) | [--help|--version]                                                                                             ',&
+'DESCRIPTION                                                                                                                     ',&
+'   Remove file(s) by calling remove(C).                                                                                         ',&
+'OPTIONS                                                                                                                         ',&
+'   file(s)  list of files to remove                                                                                             ',&
+'   help     display help and stop                                                                                               ',&
+'   version  display version and stop                                                                                            ',&
+'EXAMPLE                                                                                                                         ',&
+'     _rm *.o                                                                                                                    ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -93,7 +93,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:23 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:25 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

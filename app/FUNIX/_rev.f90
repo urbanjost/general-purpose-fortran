@@ -8,23 +8,23 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'       _rev(1f) - [FUNIX] reverse lines in a file                               ',&
-'       (LICENSE:PD)                                                             ',&
-'SYNOPSIS                                                                        ',&
-'       _rev INPUT_FILE(S) [ --help][ --version]                                 ',&
-'DESCRIPTION                                                                     ',&
-'       reverse lines in a file                                                  ',&
-'OPTIONS                                                                         ',&
-'       INPUT_FILE(s)  input file(s)                                             ',&
-'       --help         display help text and exit                                ',&
-'       --version      display version information and exit                      ',&
-'SEE ALSO                                                                        ',&
-'       tac(1), rev(1)                                                           ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'       _rev(1f) - [FUNIX] reverse lines in a file                                                                               ',&
+'       (LICENSE:PD)                                                                                                             ',&
+'SYNOPSIS                                                                                                                        ',&
+'       _rev INPUT_FILE(S) [ --help][ --version]                                                                                 ',&
+'DESCRIPTION                                                                                                                     ',&
+'       reverse lines in a file                                                                                                  ',&
+'OPTIONS                                                                                                                         ',&
+'       INPUT_FILE(s)  input file(s)                                                                                             ',&
+'       --help         display help text and exit                                                                                ',&
+'       --version      display version information and exit                                                                      ',&
+'SEE ALSO                                                                                                                        ',&
+'       tac(1), rev(1)                                                                                                           ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -65,7 +65,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 2019-08-31>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-06-26 18:31:22 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:23 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -77,7 +77,7 @@ use M_verify,   only : stderr
 use M_kracken, only : kracken, sgets, lget
 use M_strings, only : reverse
 implicit none
-character(len=*),parameter::ident_1="@(#)reverse lines in a file"
+! ident_1="@(#)reverse lines in a file"
 integer                            :: ios                                        ! I/O error flag
 integer                            :: iputunit                                   ! unit number for output file
 character(len=:),allocatable       :: files(:)                                   ! array to hold files from command line

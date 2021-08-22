@@ -376,8 +376,7 @@ interface journal
    module procedure set_stdout_lun            ! journal(i)               ! first is not a string
 end interface journal
 
-character(len=*),parameter::ident_1="&
-&@(#)M_journal::journal(3fg): provides public message routine, no paging or graphic mode change"
+! ident_1="@(#)M_journal::journal(3fg): provides public message routine, no paging or graphic mode change"
 
 ! global variables
 
@@ -399,7 +398,7 @@ contains
 !===================================================================================================================================
 subroutine where_write_message(where,msg)
 
-character(len=*),parameter::ident_2="@(#)M_journal::where_write_message(3fp): basic message routine used for journal files"
+! ident_2="@(#)M_journal::where_write_message(3fp): basic message routine used for journal files"
 
 character(len=*),intent(in)  :: where
 character(len=*),intent(in)  :: msg
@@ -541,7 +540,7 @@ end subroutine where_write_message
 !===================================================================================================================================
 subroutine flush_trail()
 
-character(len=*),parameter::ident_3="@(#)M_journal::flush_trail(3fp): flush trail file"
+! ident_3="@(#)M_journal::flush_trail(3fp): flush trail file"
 
 call where_write_message('F','IGNORE THIS STRING')
 end subroutine flush_trail
@@ -550,7 +549,7 @@ end subroutine flush_trail
 !===================================================================================================================================
 subroutine set_stdout_lun(iounit)
 
-character(len=*),parameter::ident_4="@(#)M_journal::set_stdout_lun(3fp): change I/O logical unit value for standard writes"
+! ident_4="@(#)M_journal::set_stdout_lun(3fp): change I/O logical unit value for standard writes"
 
 integer,intent(in)                   :: iounit
    my_stdout=iounit
@@ -600,8 +599,7 @@ end subroutine set_stdout_lun
 subroutine where_write_message_all(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, sep)
 implicit none
 
-character(len=*),parameter::ident_5="&
-&@(#)M_journal::where_write_message_all(3f): writes a message to a string composed of any standard scalar types"
+! ident_5="@(#)M_journal::where_write_message_all(3f): writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: where
 class(*),intent(in)           :: g0
@@ -614,7 +612,7 @@ end subroutine where_write_message_all
 !===================================================================================================================================
 subroutine write_message_only(message)
 
-character(len=*),parameter::ident_6="@(#)M_journal::write_message_only(3fp): calls JOURNAL('sc',message)"
+! ident_6="@(#)M_journal::write_message_only(3fp): calls JOURNAL('sc',message)"
 
 character(len=*),intent(in)          :: message
 !-----------------------------------------------------------------------------------------------------------------------------------

@@ -279,12 +279,12 @@ help_text=[ CHARACTER(LEN=128) :: &
 version_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:         GPF (General Purpose Fortran) utilities and examples>',&
 '@(#)PROGRAM:         fpm-dict(1)>',&
-'@(#)DESCRIPTION:     Get definition of a word using DICT Protocol and libcurl(3c',&
+'@(#)DESCRIPTION:     Get definition of a word using DICT Protocol and libcurl(3c)>',&
 '@(#)VERSION:         3.0, 20210127>',&
 '@(#)AUTHOR:          John S. Urban>',&
 '@(#)REPORTING BUGS:  urbanjost@comcast.net>',&
 '@(#)HOME PAGE:       http://www.urbanjost.altervista.org/index.html>',&
-'@(#)LICENSE:         Public Domain. This is free software: you are free to chang',&
+'@(#)LICENSE:         Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                 There is NO WARRANTY, to the extent permitted by law.>',&
 '']
 end subroutine setup

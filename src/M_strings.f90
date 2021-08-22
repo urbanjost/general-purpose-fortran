@@ -37,7 +37,7 @@
 !!      use M_strings, only : len_white,atleast,stretch,lenset,merge_str
 !!      use M_strings, only : switch,s2c,c2s
 !!      use M_strings, only : noesc,notabs,dilate,expand,visible
-!!      !!use M_strings, only : uc
+!!      !*!use M_strings, only : uc
 !!      use M_strings, only : string_to_value,string_to_values,s2v,s2vs
 !!      use M_strings, only : value_to_string,v2s,msg
 !!      use M_strings, only : listout,getvals
@@ -247,7 +247,7 @@
 !!     use M_strings, only : len_white, atleast, stretch, lenset, merge_str
 !!     use M_strings, only : switch, s2c, c2s
 !!     use M_strings, only : noesc, notabs, dilate, expand, visible
-!!     !!use M_strings, only : uc
+!!     !*!use M_strings, only : uc
 !!     use M_strings, only : string_to_value, string_to_values, s2v, s2vs
 !!     use M_strings, only : value_to_string, v2s, msg
 !!     use M_strings, only : listout, getvals
@@ -420,7 +420,7 @@ interface v2s
    module procedure d2s, r2s, i2s, l2s
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-!-!interface setbits !! boz
+!-!interface setbits ! boz
 !-!        module procedure setbits8, setbits16, setbits32, setbits64
 !-!end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -517,7 +517,6 @@ CONTAINS
 !!     do i=1,nReps
 !!      ! Cases with repeating character sequences.
 !!      allpassed=allpassed .and. test("a*abab", "a*b", .true.)
-!!      !!cycle
 !!      allpassed=allpassed .and. test("ab", "*?", .true.)
 !!      allpassed=allpassed .and. test("abc", "*?", .true.)
 !!      allpassed=allpassed .and. test("abcccd", "*ccd", .true.)
@@ -2032,7 +2031,7 @@ integer                        :: ichr
    maxlengthout=len(targetline)                        ! max length of output string
    original_input_length=len_trim(targetline)          ! get non-blank length of input line
    dum1(:)=' '                                         ! initialize string to build output in
-   id=mr-ml                                            ! check for window option !! change to optional parameter(s)
+   id=mr-ml                                            ! check for window option ! change to optional parameter(s)
 !-----------------------------------------------------------------------------------------------------------------------------------
    len_old=len(old)                                    ! length of old substring to be replaced
    len_new=len(new)                                    ! length of new substring to replace old substring
@@ -3998,7 +3997,7 @@ integer                               :: ios
             case('e','E');lineout=lineout//char( 27)         ! %e     escape
             case('f','F');lineout=lineout//char( 12)         ! %f     form feed
             case('n','N');lineout=lineout//char( 10)         ! %n     new line
-          !!case('n','N');lineout=lineout//new_line('A')     ! %n     new line
+           !case('n','N');lineout=lineout//new_line('A')     ! %n     new line
             case('o','O')
                       thr=line(i+1:)
                    read(thr,'(o3)',iostat=ios)xxx
@@ -5517,8 +5516,8 @@ character(len=1024)                      :: msg
    if(present(err)) then
       err=err_local
    elseif(err_local.ne.0)then
-      !! cannot currently do I/O from a function being called from I/O
-      !!write(ERROR_UNIT,'(a)')'*value_to_string* WARNING:['//trim(msg)//']'
+       ! cannot currently do I/O from a function being called from I/O
+       !write(ERROR_UNIT,'(a)')'*value_to_string* WARNING:['//trim(msg)//']'
       chars=chars//' *value_to_string* WARNING:['//trim(msg)//']'
    endif
 
@@ -8943,7 +8942,6 @@ integer                       :: increment
 contains
 !===================================================================================================================================
 subroutine print_generic(generic)
-!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in) :: generic
    select type(generic)
@@ -9003,7 +9001,6 @@ integer                       :: increment
 contains
 !===================================================================================================================================
 subroutine print_generic(generic)
-!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in),optional :: generic(:)
 integer :: i
@@ -9216,8 +9213,8 @@ end function msg_one
 !!##VERSION
 !!    version 0.1.0, copyright 2020, Milan Curcic
   pure subroutine split_tokens(string, set, tokens, separator)
-    !! Splits a string into tokens using characters in set as token delimiters.
-    !! If present, separator contains the array of token delimiters.
+     ! Splits a string into tokens using characters in set as token delimiters.
+     ! If present, separator contains the array of token delimiters.
     character(*), intent(in) :: string
     character(*), intent(in) :: set
     character(:), allocatable, intent(out) :: tokens(:)
@@ -9243,9 +9240,9 @@ end function msg_one
   end subroutine split_tokens
 !===================================================================================================================================
   pure subroutine split_first_last(string, set, first, last)
-    !! Computes the first and last indices of tokens in input string, delimited
-    !! by the characters in set, and stores them into first and last output
-    !! arrays.
+     ! Computes the first and last indices of tokens in input string, delimited
+     ! by the characters in set, and stores them into first and last output
+     ! arrays.
     character(*), intent(in) :: string
     character(*), intent(in) :: set
     integer, allocatable, intent(out) :: first(:)
@@ -9290,10 +9287,10 @@ end function msg_one
   end subroutine split_first_last
 !===================================================================================================================================
   pure subroutine split_pos(string, set, pos, back)
-    !! If back is absent, computes the leftmost token delimiter in string whose
-    !! position is > pos. If back is present and true, computes the rightmost
-    !! token delimiter in string whose position is < pos. The result is stored
-    !! in pos.
+     ! If back is absent, computes the leftmost token delimiter in string whose
+     ! position is > pos. If back is present and true, computes the rightmost
+     ! token delimiter in string whose position is < pos. The result is stored
+     ! in pos.
     character(*), intent(in) :: string
     character(*), intent(in) :: set
     integer, intent(in out) :: pos
@@ -9337,7 +9334,7 @@ end function msg_one
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
   pure function string_tokens(string, set) result(tokens)
-    !! Splits a string into tokens using characters in set as token delimiters.
+     ! Splits a string into tokens using characters in set as token delimiters.
     character(*), intent(in) :: string
     character(*), intent(in) :: set
     character(:), allocatable :: tokens(:)

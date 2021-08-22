@@ -63,7 +63,7 @@ implicit none
 !===================================================================================================================================
 private
 
-character(len=*),parameter::ident_1="@(#)M_uuid::M_uid(3fm): generate UUIDs according to RFC 4122"
+! ident_1="@(#)M_uuid::M_uid(3fm): generate UUIDs according to RFC 4122"
 
 ! Only versions  0(Nil), 1 (time-based) and 4 (pseudo-RNG-based) are implemented.
 
@@ -184,8 +184,7 @@ contains
 !!     urn:uuid:5b0946b8-0eb4-4966-619d-047b7f7e2056
 function generate_uuid(version) result(uuid)
 
-character(len=*),parameter::ident_2="&
-&@(#)M_uuid::generate_uuid(3f): generate(approximately) a UUID (Universally Unique IDentifier) string per RFC 4122"
+! ident_2="@(#)M_uuid::generate_uuid(3f): generate(approximately) a UUID (Universally Unique IDentifier) string per RFC 4122"
 
 integer, intent(in), optional :: version
 character(len=36) :: uuid

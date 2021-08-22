@@ -56,7 +56,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180722>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-06-26 18:31:39 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:19:12 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -72,48 +72,48 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'    draw(1f) - [M_drawplus] basic interpreter for testing M_draw(3fm) routines  ',&
-'    (LICENSE:PD)                                                                ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'    draw [delim DELIMITERS]|[ --help| --version]                                ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'    draw(1) is a basic interpreter for M_draw(3f) routines. It is useful for    ',&
-'    making simple graphics and for testing the M_draw(3fm) module.              ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'    -delim CHARS  delimiter character(s) used to separate commands.             ',&
-'                  Defaults to semi-colon (";").                                 ',&
-'    --help        display this help and exit                                    ',&
-'    --version     output version information and exit                           ',&
-'                                                                                ',&
-'EXAMPLES                                                                        ',&
-'    Sample commands                                                             ',&
-'                                                                                ',&
-'       draw  <<\eof                                                             ',&
-'       prefsize 300 300;prefposition 200 10;vinit X11;color 3;clear;color 2     ',&
-'       ortho2 -1 1 -1 1;                                                        ',&
-'       polyfill .true.;rect 0 0 98 98                                           ',&
-'       color 1;circle 0 0 .25                                                   ',&
-'       polyfill .false.;linewidth 200;color 4;circle 0 0 .2                     ',&
-'       # see calculator document for real expressions                           ',&
-'       set X=-0.25 Y=0.25                                                       ',&
-'       #                                                                        ',&
-'       polyfill .true.; color 5; circle X Y sqrt(Y)/2                           ',&
-'       polyfill .false.;color 5; circle X Y sqrt(2*Y)/2                         ',&
-'       #                                                                        ',&
-'       getkey;vexit                                                             ',&
-'       set dump                                                                 ',&
-'       eof                                                                      ',&
-'                                                                                ',&
-'SEE ALSO                                                                        ',&
-'    M_draw(3fm), M_drawplus(3fm)                                                ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'    draw(1f) - [M_drawplus] basic interpreter for testing M_draw(3fm) routines                                                  ',&
+'    (LICENSE:PD)                                                                                                                ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'    draw [delim DELIMITERS]|[ --help| --version]                                                                                ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'    draw(1) is a basic interpreter for M_draw(3f) routines. It is useful for                                                    ',&
+'    making simple graphics and for testing the M_draw(3fm) module.                                                              ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'    -delim CHARS  delimiter character(s) used to separate commands.                                                             ',&
+'                  Defaults to semi-colon (";").                                                                                 ',&
+'    --help        display this help and exit                                                                                    ',&
+'    --version     output version information and exit                                                                           ',&
+'                                                                                                                                ',&
+'EXAMPLES                                                                                                                        ',&
+'    Sample commands                                                                                                             ',&
+'                                                                                                                                ',&
+'       draw  <<\eof                                                                                                             ',&
+'       prefsize 300 300;prefposition 200 10;vinit X11;color 3;clear;color 2                                                     ',&
+'       ortho2 -1 1 -1 1;                                                                                                        ',&
+'       polyfill .true.;rect 0 0 98 98                                                                                           ',&
+'       color 1;circle 0 0 .25                                                                                                   ',&
+'       polyfill .false.;linewidth 200;color 4;circle 0 0 .2                                                                     ',&
+'       # see calculator document for real expressions                                                                           ',&
+'       set X=-0.25 Y=0.25                                                                                                       ',&
+'       #                                                                                                                        ',&
+'       polyfill .true.; color 5; circle X Y sqrt(Y)/2                                                                           ',&
+'       polyfill .false.;color 5; circle X Y sqrt(2*Y)/2                                                                         ',&
+'       #                                                                                                                        ',&
+'       getkey;vexit                                                                                                             ',&
+'       set dump                                                                                                                 ',&
+'       eof                                                                                                                      ',&
+'                                                                                                                                ',&
+'SEE ALSO                                                                                                                        ',&
+'    M_draw(3fm), M_drawplus(3fm)                                                                                                ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop

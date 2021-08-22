@@ -17,7 +17,7 @@ use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real
 implicit none
 private
 
-character(len=*),parameter::ident_1="@(#)M_math::M_math(3fm): module collecting various general math-related procedures"
+! ident_1="@(#)M_math::M_math(3fm): module collecting various general math-related procedures"
 
   ! GEOMETRY
   public citer              ! determine various geometric properties of circle segment given radius and area of the segment.
@@ -258,7 +258,7 @@ contains
 !===================================================================================================================================
 subroutine julfit(x,y,ixn,itype,a,b,r2)
 use M_journal, only : journal
-character(len=*),parameter::ident_2="@(#)M_math::julfit(3f): linear least squares curve fits, destroys input arrays"
+! ident_2="@(#)M_math::julfit(3f): linear least squares curve fits, destroys input arrays"
 integer,intent(in) :: ixn
 real               :: x(ixn)
 real               :: y(ixn)
@@ -441,7 +441,7 @@ end subroutine julfit
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine julfit1(x,y,ixn,a,b,r2)
 implicit none
-character(len=*),parameter::ident_3="@(#)M_math::julfit1(3f): linear least square fit of (y=a*x+b), changes the y array"
+! ident_3="@(#)M_math::julfit1(3f): linear least square fit of (y=a*x+b), changes the y array"
 !implicit double precision(a-h,o-z)
 !-----------------------------------------------------------------------------------------------------------------------------------
 integer,intent(in) :: ixn
@@ -771,7 +771,7 @@ end subroutine julfit1
 !! AUTHOR:     Bill Cleveland
 subroutine lowess(x, y, n, f, nsteps, delta, ys, rw, res)
 use M_sort, only : sort_shell
-character(len=*),parameter::ident_4="@(#)M_math::lowess(3f): data smoothing using locally weighted regression"
+! ident_4="@(#)M_math::lowess(3f): data smoothing using locally weighted regression"
 integer n
 integer nsteps
 real x(n), y(n), f, delta, ys(n), rw(n)
@@ -1030,7 +1030,7 @@ end subroutine lowest
 SUBROUTINE SPLIFT(X,Y,YP,YPP,N,ierr,a1,b1,an,bn)
 !-----------------------------------------------------------------------------------------------------------------------------------
 use M_journal, only : journal
-character(len=*),parameter::ident_5="@(#)M_math::splift(3f): fits a spline to the n data points given in x and y"
+! ident_5="@(#)M_math::splift(3f): fits a spline to the n data points given in x and y"
 integer,intent(in)            :: N
 real,intent(in)               :: X(N),Y(N)
 real,intent(out)              :: YP(N),YPP(N)
@@ -1189,7 +1189,7 @@ end subroutine splift
 !! AUTHOR:         John S. Urban
 !! REPORTING BUGS: http://www.urbanjost.altervista.org/
 subroutine splint (x,y,ypp,n,xi,yi,ypi,yppi,ni,kerr)
-character(len=*),parameter::ident_6="@(#)M_math::splint(3f): interpolates and twice differentiates a cubic spline"
+! ident_6="@(#)M_math::splint(3f): interpolates and twice differentiates a cubic spline"
 integer,intent(in)  :: n
 integer,intent(in)  :: ni
 real,intent(in)     :: x(n),y(n),ypp(n),xi(ni)
@@ -1308,7 +1308,7 @@ END SUBROUTINE SPLINT
 !! HOME PAGE:      http://www.urbanjost.altervista.org/index.html
 SUBROUTINE linearint(X,Y,N,XI,YI,NI,KERR)
 implicit none
-character(len=*),parameter::ident_7="@(#)M_math::linearint(3f):linear interpolation of curve X(i),Y(i) at given XI(j) values"
+! ident_7="@(#)M_math::linearint(3f):linear interpolation of curve X(i),Y(i) at given XI(j) values"
 !
    INTEGER,intent(in)  :: N, NI
    REAL,intent(in)     :: X(N),Y(N),XI(NI)
@@ -2841,7 +2841,7 @@ end subroutine qtfg
 !!
 subroutine trapezoidal_integral(x,y,ivals,y2)
 
-character(len=*),parameter::ident_8="@(#)trapezoidal integration"
+! ident_8="@(#)trapezoidal integration"
 
 real,intent(in)    :: x(*), y(*)
 real,intent(out)   :: y2(*)
@@ -2912,8 +2912,7 @@ end subroutine trapezoidal_integral
 !-----------------------------------------------------------------------------------------------------------------------------------
 SUBROUTINE CITER(A,R,H,S,C,DADH)
 use M_journal, only : journal
-character(len=*),parameter::ident_9="&
-&@(#)M_math::citer(3f): determine various geometric properties of circle segment given radius and area of the segment."
+! ident_9="@(#)M_math::citer(3f): determine various geometric properties of circle segment given radius and area of the segment."
 !
 ! COPYRIGHT (C) John S. Urban, 08/31/1995
 !
@@ -3159,8 +3158,7 @@ END SUBROUTINE CITER
 SUBROUTINE envelope(x, y, n, vertex, nvert) !-- saved from url=(0048)http://users.bigpond.net.au/amiller/envelope.f90
 IMPLICIT NONE
 
-character(len=*),parameter::ident_10="&
-&@(#)M_math::envelope(3f):Find the vertices (in clockwise order) of a polygon enclosing the points (x(i), y(i), i=1, ..., n."
+! ident_10="@(#)M_math::envelope(3f):Find the vertices (in clockwise order) of a polygon enclosing the points (x(i), y(i), i=1, ..., n."
 
 INTEGER,INTENT(IN) :: n
 REAL,INTENT(IN)    :: x(n), y(n)
@@ -3469,8 +3467,7 @@ END SUBROUTINE envelope
 !!    end program demo_inpolygon
 LOGICAL FUNCTION INPOLYGON(XIN, YIN, XCONV, YCONV, NCONV)
 
-character(len=*),parameter::ident_11="&
-&@(#)M_math::inpolygon(3f):Subroutine to determine whether or not an integer point is in a polygon of integer points"
+! ident_11="@(#)M_math::inpolygon(3f):Subroutine to determine whether or not an integer point is in a polygon of integer points"
 
 integer,intent(in)  :: xin,yin                       ! coordinates of the point to be checked
 integer,intent(in)  :: nconv                         !
@@ -3638,7 +3635,7 @@ integer             :: i, j, m
 !-----------------------------------------------------------------------------------------------------------------------------------
 SUBROUTINE locpt (x0, y0, x, y, n, l, m)
 IMPLICIT NONE
-character(len=*),parameter::ident_12="@(#)M_math::locpt(3f): find if a point is inside a polygonal path"
+! ident_12="@(#)M_math::locpt(3f): find if a point is inside a polygonal path"
 !-----------------------------------------------------------------------------------------------------------------------------------
    REAL, INTENT(IN)     :: x0, y0, x(:), y(:)
    INTEGER, INTENT(IN)  :: n
@@ -3774,7 +3771,7 @@ END SUBROUTINE locpt
 !! VERSION:      Date: 2000-07-04  Time: 12:24:01
 SUBROUTINE Poly_Intercept (a, b, x, y, n, u, v, m, num, ierr)
 IMPLICIT NONE
-character(len=*),parameter::ident_13="@(#)M_math::poly_intercept(3f): Calculates the points at which a line <A,B> crosses a polygon"
+! ident_13="@(#)M_math::poly_intercept(3f): Calculates the points at which a line <A,B> crosses a polygon"
 
 REAL, INTENT(IN)      :: a(2)
 REAL, INTENT(IN)      :: b(2)
@@ -4037,7 +4034,7 @@ END SUBROUTINE Poly_Intercept
 function polyarea(x, y) result(fn_val)
 implicit none
 
-character(len=*),parameter::ident_14="@(#)M_math::polyarea(3f): compute the area bounded by a closed polygonal curve"
+! ident_14="@(#)M_math::polyarea(3f): compute the area bounded by a closed polygonal curve"
 
 real, intent(in)     :: x(:)
 real, intent(in)     :: y(:)
@@ -4193,7 +4190,7 @@ END FUNCTION polyarea_mid_point         ! The units are those of the points.
 doubleprecision function polyarea_shoelace(x,y)
 use m_anything, only : anyscalar_to_double
 
-character(len=*),parameter::ident_15="@(#)Area enclosed by simple (non-intersecting) polygon P, by the shoelace method."
+! ident_15="@(#)Area enclosed by simple (non-intersecting) polygon P, by the shoelace method."
 
 class(*),intent(in)          :: x(:), y(:)
 
@@ -4263,7 +4260,7 @@ END FUNCTION polyarea_shoelace       ! Negative for clockwise, positive for coun
 !!
 function closest(xtarget,ytarget,x,y) result(location)
 
-character(len=*),parameter::ident_16="@(#)find the index of the data point in the <X,Y> arrays that is closest to the target point"
+! ident_16="@(#)find the index of the data point in the <X,Y> arrays that is closest to the target point"
 
 real, dimension(:), intent(in)  :: x, y
 real                            :: xtarget, ytarget
@@ -4386,7 +4383,7 @@ end function hypot
 !===================================================================================================================================
 subroutine extremum(array,small,big)
 implicit none
-character(len=*),parameter::ident_17="@(#)M_math::extremum(3f):Find the minimum and maximum value in a REAL array"
+! ident_17="@(#)M_math::extremum(3f):Find the minimum and maximum value in a REAL array"
 
 real,intent(in)            :: array(:)
 real,intent(out),optional  :: small
@@ -4564,8 +4561,7 @@ end subroutine extremum
 !!##EXAMPLES
 !!
 SUBROUTINE BDS (X,N,STAT)
-character(len=*),parameter::ident_18="&
-&@(#)M_math::bds(3f): Basic Descriptive Statistics (based on a routine from the IBM collection)"
+! ident_18="@(#)M_math::bds(3f): Basic Descriptive Statistics (based on a routine from the IBM collection)"
 !  RETURN WITH M,U2,U3,U4,V,S,G1,G2,BIG,SMALL,IB,IS IN THAT ORDER IN LOCATIONS STAT(1) THROUGH STAT(13)
 !-----------------------------------------------------------------------
 !  nobody likes equivalences any more
@@ -4671,7 +4667,7 @@ END SUBROUTINE BDS
 !!##AUTHOR
 !!    Written by Charles P. Reeve
 SUBROUTINE SKEKUR1(Y,NHI,YSKEW,YKURT,IOPT)
-character(len=*),parameter::ident_19="@(#)M_math::skekur1(3f): variant on calculating skewness and kurtosis of an array"
+! ident_19="@(#)M_math::skekur1(3f): variant on calculating skewness and kurtosis of an array"
 REAL,INTENT(IN)    ::  Y(*)
 INTEGER,INTENT(IN) :: NHI
 REAL,INTENT(OUT)   :: YSKEW
@@ -4744,7 +4740,7 @@ END SUBROUTINE SKEKUR1
 !!      John S. Urban
 !!
 SUBROUTINE SKEKURX(Y,N,YSKEW,YKURT)
-character(len=*),parameter::ident_20="@(#)M_math::skekurx(3f): COMPUTE UNBIASED ESTIMATOR OF THE POPULATION SKEWNESS AND KURTOSIS"
+! ident_20="@(#)M_math::skekurx(3f): COMPUTE UNBIASED ESTIMATOR OF THE POPULATION SKEWNESS AND KURTOSIS"
       integer,intent(in) :: n
       REAL,intent(in)    :: Y(*)
       REAL,intent(out)   :: YSKEW
@@ -5014,7 +5010,7 @@ END FUNCTION lngamma
 !!    From Mark's Handbook, page 17-19, 8th edition
 function stddev(vector,n,avg)
 implicit none
-character(len=*),parameter::ident_21="@(#)M_math::stddev(3f): find standard deviation of a real array"
+! ident_21="@(#)M_math::stddev(3f): find standard deviation of a real array"
 integer,intent(in) :: n            ! number of elements in input array (vector)
 real,intent(in)    :: vector(n)    ! input vector
 real,intent(in)    :: avg          ! average of array
@@ -5084,8 +5080,7 @@ subroutine scale1(xmin0, xmax0, n0, xminp, xmaxp, dist)
 !-----------------------------------------------------------------------------------------------------------------------------------
 use M_journal, only : journal
 implicit none
-character(len=*),parameter::ident_22="&
-&@(#)M_math::scale1(3f):given xmin,xmax,n, find new range xminp xmaxp divisible into approximately n linear intervals of size dist"
+! ident_22="@(#)M_math::scale1(3f):given xmin,xmax,n, find new range xminp xmaxp divisible into approximately n linear intervals of size dist"
 !-----------------------------------------------------------------------------------------------------------------------------------
    real,intent(in)      :: xmin0, xmax0
    integer,intent(in)   :: n0
@@ -5252,7 +5247,7 @@ subroutine scale3(xmin0, xmax0, n0 , xminp, xmaxp, dist)
 !-----------------------------------------------------------------------------------------------------------------------------------
 use M_journal, only : journal
 implicit none
-character(len=*),parameter::ident_23="@(#)M_math::scale3(3f):find nice log range."
+! ident_23="@(#)M_math::scale3(3f):find nice log range."
 
 real,intent(in)               :: xmin0, xmax0
 integer,intent(in)            :: n0
@@ -5423,8 +5418,7 @@ end subroutine scale3
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine quadratic(a,b,c,z1,z2,discriminant)
 implicit none
-character(len=*),parameter::ident_24="&
-&@(#)M_math::quadratic(3f): calculate the roots of a quadratic formula even if they are complex"
+! ident_24="@(#)M_math::quadratic(3f): calculate the roots of a quadratic formula even if they are complex"
 real,intent(in)     :: a, b, c         ! coefficients
 complex,intent(out) :: z1, z2          ! roots
 real,intent(out)    :: discriminant
@@ -5513,7 +5507,7 @@ end subroutine quadratic
 subroutine magic_square(array)
 implicit none
 
-character(len=*),parameter::ident_25="@(#)m_matrix::magic_square(3f): create a magic square"
+! ident_25="@(#)m_matrix::magic_square(3f): create a magic square"
 
 class(*)            :: array(:,:)
 integer,allocatable :: iarray(:,:)
@@ -5627,7 +5621,7 @@ end subroutine magic_square
 !==================================================================================================================================!
 subroutine iswap(n,x,y)
 
-character(len=*),parameter::ident_26="@(#)m_matrix::iswap(3f): swap two integer arrays"
+! ident_26="@(#)m_matrix::iswap(3f): swap two integer arrays"
 
 integer,intent(in) :: n
 integer            :: x(:),y(:)
@@ -5651,7 +5645,7 @@ end subroutine iswap
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 pure function double_invert_2x2(A) result(B)
-character(len=*),parameter::ident_27="@(#)M_math::invert_2x2(3f): performs a direct calculation of the inverse of a 2x2 matrix"
+! ident_27="@(#)M_math::invert_2x2(3f): performs a direct calculation of the inverse of a 2x2 matrix"
    integer,parameter         :: wp=kind(0.0d0)
    real(kind=wp), intent(in) :: A(2,2)   !! Matrix
    real(kind=wp)             :: B(2,2)   !! Inverse matrix
@@ -5670,7 +5664,7 @@ end function double_invert_2x2
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 pure function double_invert_3x3(A) result(B)
-character(len=*),parameter::ident_28="@(#)M_math::invert_3x3(3f): performs a direct calculation of the inverse of a 3x3 matrix"
+! ident_28="@(#)M_math::invert_3x3(3f): performs a direct calculation of the inverse of a 3x3 matrix"
    integer,parameter         :: wp=kind(0.0d0)
    real(kind=wp), intent(in) :: A(3,3)   !! Matrix
    real(kind=wp)             :: B(3,3)   !! Inverse matrix
@@ -5696,7 +5690,7 @@ end function double_invert_3x3
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 pure function double_invert_4x4(A) result(B)
-character(len=*),parameter::ident_29="@(#)M_math::invert_4x4(3f): performs a direct calculation of the inverse of a 4x4 matrix"
+! ident_29="@(#)M_math::invert_4x4(3f): performs a direct calculation of the inverse of a 4x4 matrix"
    integer,parameter            :: wp=kind(0.0d0)
    real(kind=wp), intent(in) :: A(4,4)   !! Matrix
    real(kind=wp)             :: B(4,4)   !! Inverse matrix

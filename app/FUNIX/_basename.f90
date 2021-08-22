@@ -134,7 +134,7 @@ version_text=[ CHARACTER(LEN=128) :: &
 'AUTHOR:         John S. Urban',&
 'REPORTING BUGS: http://www.urbanjost.altervista.org/',&
 'HOME PAGE:      http://www.urbanjost.altervista.org/index.html',&
-'LICENSE:        Public Domain. This is free software: you are free to change and',&
+'LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.',&
 '                There is NO WARRANTY, to the extent permitted by law.',&
 '']
 end subroutine setup

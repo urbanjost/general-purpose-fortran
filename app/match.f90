@@ -78,39 +78,39 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'    match(1f) - find occurrences of a Regular Expression in a file(s).          ',&
-'    (LICENSE:PD)                                                                ',&
-'SYNOPSIS                                                                        ',&
-'    match [-v] [-i] -e EXPRESSION [FILES]| --help| --version                    ',&
-'DESCRIPTION                                                                     ',&
-'    Search for Regular Expressions in input files.                              ',&
-'                                                                                ',&
-'       ^   beginning of line                                                    ',&
-'       $   end of line                                                          ',&
-'       []  class of characters. In a class definition                           ',&
-'            ^  as the first character, means to negate                          ',&
-'            -  if not the first character denotes a range                       ',&
-'               of characters                                                    ',&
-'       .   any character                                                        ',&
-'       *   repeat previous character zero or more times                         ',&
-'       \   escape next character                                                ',&
-'OPTIONS                                                                         ',&
-'    -e EXPRESSION  Regular expression describing strings to locate              ',&
-'                   in the input file(s)                                         ',&
-'    FILES          Names of files to search. Defaults to stdin.                 ',&
-'    -v             veto mode. Show lines NOT matching expression                ',&
-'    -i             ignore case                                                  ',&
-'    --help         display this help and exit                                   ',&
-'    --version      output version information and exit                          ',&
-'EXAMPLES                                                                        ',&
-'    Sample commands                                                             ',&
-'                                                                                ',&
-'     match ''^[A-Z ][A-Z ]*$'' <file.txt                                        ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'    match(1f) - find occurrences of a Regular Expression in a file(s).                                                          ',&
+'    (LICENSE:PD)                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'    match [-v] [-i] -e EXPRESSION [FILES]| --help| --version                                                                    ',&
+'DESCRIPTION                                                                                                                     ',&
+'    Search for Regular Expressions in input files.                                                                              ',&
+'                                                                                                                                ',&
+'       ^   beginning of line                                                                                                    ',&
+'       $   end of line                                                                                                          ',&
+'       []  class of characters. In a class definition                                                                           ',&
+'            ^  as the first character, means to negate                                                                          ',&
+'            -  if not the first character denotes a range                                                                       ',&
+'               of characters                                                                                                    ',&
+'       .   any character                                                                                                        ',&
+'       *   repeat previous character zero or more times                                                                         ',&
+'       \   escape next character                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'    -e EXPRESSION  Regular expression describing strings to locate                                                              ',&
+'                   in the input file(s)                                                                                         ',&
+'    FILES          Names of files to search. Defaults to stdin.                                                                 ',&
+'    -v             veto mode. Show lines NOT matching expression                                                                ',&
+'    -i             ignore case                                                                                                  ',&
+'    --help         display this help and exit                                                                                   ',&
+'    --version      output version information and exit                                                                          ',&
+'EXAMPLES                                                                                                                        ',&
+'    Sample commands                                                                                                             ',&
+'                                                                                                                                ',&
+'     match ''^[A-Z ][A-Z ]*$'' <file.txt                                                                                        ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -171,7 +171,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
 '@(#)COMPILED:       Fri, Apr 24th, 2020 3:14:50 PM>',&
-'@(#)COMPILED:       2021-06-26 18:31:13 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:18:42 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

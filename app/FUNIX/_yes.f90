@@ -73,7 +73,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:29 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:41 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -89,39 +89,39 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'    _yes(1f) - [FUNIX] output a string repeatedly until killed or limit is reached',&
-'    (LICENSE:PD)                                                                ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'    _yes [STRING[ -repeat N]]|[ --help| --version]                              ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'    _yes(1) prints the command line arguments, separated by spaces and followed ',&
-'    by a newline until the repeat count is reached or endlessly until it is     ',&
-'    killed. If no arguments are given, it prints "y" followed by a newline      ',&
-'    endlessly until killed. Upon a write error, _yes(1) exits with status "1".  ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'    -repeat N  specify number of times to display string                        ',&
-'    --help     display this help and exit                                       ',&
-'    --version  output version information and exit                              ',&
-'                                                                                ',&
-'EXAMPLES                                                                        ',&
-'    Sample commands                                                             ',&
-'                                                                                ',&
-'       # repeat a command 20 times, pausing and clearing:                       ',&
-'       _yes  date --repeat 20  |xargs -iXX  sh -c ''XX;sleep 2;clear''          ',&
-'                                                                                ',&
-'REPORTING BUGS                                                                  ',&
-'    Report _yes bugs to <http://www.urbanjost.altervista.org/index.html>        ',&
-'                                                                                ',&
-'SEE ALSO                                                                        ',&
-'    yes(1), repeat(1), xargs(1)                                                 ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'    _yes(1f) - [FUNIX] output a string repeatedly until killed or limit is reached                                              ',&
+'    (LICENSE:PD)                                                                                                                ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'    _yes [STRING[ -repeat N]]|[ --help| --version]                                                                              ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'    _yes(1) prints the command line arguments, separated by spaces and followed                                                 ',&
+'    by a newline until the repeat count is reached or endlessly until it is                                                     ',&
+'    killed. If no arguments are given, it prints "y" followed by a newline                                                      ',&
+'    endlessly until killed. Upon a write error, _yes(1) exits with status "1".                                                  ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'    -repeat N  specify number of times to display string                                                                        ',&
+'    --help     display this help and exit                                                                                       ',&
+'    --version  output version information and exit                                                                              ',&
+'                                                                                                                                ',&
+'EXAMPLES                                                                                                                        ',&
+'    Sample commands                                                                                                             ',&
+'                                                                                                                                ',&
+'       # repeat a command 20 times, pausing and clearing:                                                                       ',&
+'       _yes  date --repeat 20  |xargs -iXX  sh -c ''XX;sleep 2;clear''                                                          ',&
+'                                                                                                                                ',&
+'REPORTING BUGS                                                                                                                  ',&
+'    Report _yes bugs to <http://www.urbanjost.altervista.org/index.html>                                                        ',&
+'                                                                                                                                ',&
+'SEE ALSO                                                                                                                        ',&
+'    yes(1), repeat(1), xargs(1)                                                                                                 ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop

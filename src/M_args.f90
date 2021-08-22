@@ -260,8 +260,7 @@ end function get_command_arguments_stack
 !!    Public Domain
 subroutine get_command_arguments_string(string,istatus)
 
-character(len=*),parameter::ident_1="&
-&@(#)M_args::get_command_arguments_string(3f): return all command arguments as an allocated string"
+! ident_1="@(#)M_args::get_command_arguments_string(3f): return all command arguments as an allocated string"
 
 !  try to guess original quoting and reintroduce quotes
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -696,7 +695,7 @@ end subroutine get_command_arguments_string
 !!    Public Domain
 function get_namelist(definition,all) result (readme)
 
-character(len=*),parameter::ident_2="@(#)M_args::get_namelist(3f): return all command arguments as a NAMELIST(3f) string to read"
+! ident_2="@(#)M_args::get_namelist(3f): return all command arguments as a NAMELIST(3f) string to read"
 
 character(len=*),intent(in),optional :: definition
 logical,intent(in),optional          :: all
@@ -829,8 +828,7 @@ end function get_namelist
 !!    Public Domain
 function get_command_arguments_as_raw_namelist() result (string)
 
-character(len=*),parameter::ident_3="&
-&@(#)M_args::get_command_arguments_as_raw_namelist(3f): return all command arguments as a NAMELIST(3f) string"
+! ident_3="@(#)M_args::get_command_arguments_as_raw_namelist(3f): return all command arguments as a NAMELIST(3f) string"
 
 character(len=:),allocatable :: string                     ! stores command line argument
 character(len=:),allocatable :: string_bug                 ! bug in gfortran 7.4.0 where string in LHS and RHS causes problems
@@ -900,7 +898,7 @@ integer :: command_line_length
 subroutine prototype_to_dictionary(string)
 implicit none
 
-character(len=*),parameter::ident_4="@(#)M_args::prototype_to_dictionary(3f): parse user command and store tokens into dictionary"
+! ident_4="@(#)M_args::prototype_to_dictionary(3f): parse user command and store tokens into dictionary"
 
 character(len=*),intent(in)       :: string ! string is character input string of options and values
 
@@ -1236,8 +1234,7 @@ end function get
 subroutine prototype_and_cmd_args_to_nlist(prototype,nml)
 implicit none
 
-character(len=*),parameter::ident_5="&
-&@(#)M_args::prototype_and_cmd_args_to_nlist: create dictionary from prototype (if not null) and update from command line arguments"
+! ident_5="@(#)M_args::prototype_and_cmd_args_to_nlist: create dictionary from prototype (if not null) and update from command line arguments"
 
 character(len=*)             :: prototype
 character(len=:),allocatable :: nml
@@ -1628,7 +1625,7 @@ end function longest_command_argument
 subroutine namelist_to_dictionary(string)
 implicit none
 
-character(len=*),parameter::ident_6="@(#)M_args::namelist_to_dictionary(3f): parse user command and store tokens into dictionary"
+! ident_6="@(#)M_args::namelist_to_dictionary(3f): parse user command and store tokens into dictionary"
 
 character(len=*),intent(in)       :: string ! string is character input string of options and values
 
@@ -1759,8 +1756,7 @@ end subroutine namelist_to_dictionary
 !===================================================================================================================================
 pure function oneline(str) result (string)
 
-character(len=*),parameter::ident_7="&
-&@(#)M_strings::oneline(3f): append an array of character variables with space separator into a single CHARACTER variable"
+! ident_7="@(#)M_strings::oneline(3f): append an array of character variables with space separator into a single CHARACTER variable"
 
 character(len=*),intent(in)          :: str(:)
 character(len=:),allocatable         :: string

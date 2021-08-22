@@ -266,7 +266,7 @@ version_text=[ CHARACTER(LEN=128) :: &
 'DESCRIPTION:    merge lines of files',&
 'VERSION:        1.0, 20200202',&
 'AUTHOR:         John S. Urban',&
-'LICENSE:        Public Domain. This is free software: you are free to change and',&
+'LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.',&
 '                There is NO WARRANTY, to the extent permitted by law.',&
 '']
 !-----------------------------------------------------------------------------------------------------------------------------------

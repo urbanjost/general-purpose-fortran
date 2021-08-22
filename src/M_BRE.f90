@@ -42,7 +42,7 @@ module M_BRE
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
 
-character(len=*),parameter::ident_1="@(#)M_BRE::M_BRE(3fm): module for Basic Regular Expressions, inspired by Ratfor version"
+! ident_1="@(#)M_BRE::M_BRE(3fm): module for Basic Regular Expressions, inspired by Ratfor version"
 
 private
 
@@ -154,7 +154,7 @@ contains
 pure function locate_(c, pat, offset)
 implicit none
 
-character(len=*),parameter::ident_2="@(#)M_BRE::locate(3f): look for c in char class at pat(offset)"
+! ident_2="@(#)M_BRE::locate(3f): look for c in char class at pat(offset)"
 
 integer            :: locate_
 integer,intent(in) :: c
@@ -193,7 +193,7 @@ end function locate_
 !!   Public Domain
 integer function getpat__(string, pat)
 
-character(len=*),parameter::ident_3="@(#)M_BRE::getpat(3f): convert str into pattern"
+! ident_3="@(#)M_BRE::getpat(3f): convert str into pattern"
 
 character(len=*),intent(in) :: string
 integer,intent(out)         :: pat(*)
@@ -210,7 +210,7 @@ integer                     :: len_string
 end function getpat__
 integer function getpat_(str, pat)
 
-character(len=*),parameter::ident_4="@(#)M_BRE::getpat(3f): convert str into pattern"
+! ident_4="@(#)M_BRE::getpat(3f): convert str into pattern"
 
 integer,intent(in)  :: str(*)
 integer             :: pat(*)
@@ -239,7 +239,7 @@ end function getpat_
 !!   Public Domain
 function addset_(c, string, j, maxsiz)
 
-character(len=*),parameter::ident_5="@(#)M_BRE::addset(3f): put c in string(j) if it fits, increment"
+! ident_5="@(#)M_BRE::addset(3f): put c in string(j) if it fits, increment"
 
    integer            :: addset_
    integer,intent(in) :: c
@@ -277,7 +277,7 @@ end function addset_
 !!   Public Domain
 integer function stclos_(pat, j, lastj, lastcl)
 
-character(len=*),parameter::ident_6="@(#)M_BRE::stclos(3f): insert CLOSURE entry at pat(j)"
+! ident_6="@(#)M_BRE::stclos(3f): insert CLOSURE entry at pat(j)"
 
 integer pat(MAXPAT)
 integer j, lastj, lastcl
@@ -317,7 +317,7 @@ end function stclos_
 !!   Public Domain
 subroutine dodash_(valid, array, i, set, j, maxset)
 
-character(len=*),parameter::ident_7="@(#)M_BRE::dodash(3f): expand array(i-1)-array(i+1) into set(j)... from valid"
+! ident_7="@(#)M_BRE::dodash(3f): expand array(i-1)-array(i+1) into set(j)... from valid"
 
 integer :: valid(*)
 integer :: array(*)
@@ -362,7 +362,7 @@ end subroutine dodash_
 !!   Public Domain
 integer function getccl_(arg, i, pat, j)
 
-character(len=*),parameter::ident_8="@(#)M_BRE::getccl(3f): expand char class at arg(i) into pat(j)"
+! ident_8="@(#)M_BRE::getccl(3f): expand char class at arg(i) into pat(j)"
 
 integer :: arg(MAXARG)
 integer :: i
@@ -416,7 +416,7 @@ end function getccl_
 !!   Public Domain
 subroutine filset_(delim, array, i, set, j, maxset)
 
-character(len=*),parameter::ident_9="@(#)M_BRE::filset(3f): expand set at array(i) into set(j), stop at delim"
+! ident_9="@(#)M_BRE::filset(3f): expand set at array(i) into set(j), stop at delim"
 
    integer           :: delim
    integer           :: array(*)
@@ -476,7 +476,7 @@ end subroutine filset_
 !!   Public Domain
 integer function indx_(str, c)
 
-character(len=*),parameter::ident_10="@(#)M_BRE::indx(3f): returns position of character in string"
+! ident_10="@(#)M_BRE::indx(3f): returns position of character in string"
 
 integer :: str(*)
 integer :: c
@@ -577,7 +577,7 @@ integer                     :: len_line
 end function match__
 integer function match_(lin, pat)
 
-character(len=*),parameter::ident_11="@(#)M_BRE::match(3f): find match anywhere on line"
+! ident_11="@(#)M_BRE::match(3f): find match anywhere on line"
 
    integer :: lin(MAXLINE)
    integer :: pat(MAXPAT)
@@ -624,7 +624,7 @@ end function match_
 !!   Public Domain
 subroutine error_(line)
 
-character(len=*),parameter::ident_12="@(#)M_BRE::error(3f): print message and stop program execution"
+! ident_12="@(#)M_BRE::error(3f): print message and stop program execution"
 
 character(len=*),intent(in) ::  line
    write(*,'(a)') line
@@ -653,7 +653,7 @@ end subroutine error_
 !!   Public Domain
 integer function patsiz_(pat, n)
 
-character(len=*),parameter::ident_13="@(#)M_BRE::patsiz(3f): returns size of pattern entry at pat(n)"
+! ident_13="@(#)M_BRE::patsiz(3f): returns size of pattern entry at pat(n)"
 
    integer :: pat(MAXPAT)
    integer :: n
@@ -695,7 +695,7 @@ end function patsiz_
 !!   Public Domain
 integer function makpat_(arg, from, delim, pat)
 
-character(len=*),parameter::ident_14="@(#)M_BRE::makpat(3f): make pattern from arg(from), terminate on delim"
+! ident_14="@(#)M_BRE::makpat(3f): make pattern from arg(from), terminate on delim"
 
    integer arg(MAXARG)
    integer from
@@ -848,7 +848,7 @@ end function makpat_
 !!    Public Domain
 integer function amatch__(line, from, pat, tagbeg, tagend)
 
-character(len=*),parameter::ident_15="@(#)M_BRE::amatch(3f): (non-recursive) look for match starting at lin(from)"
+! ident_15="@(#)M_BRE::amatch(3f): (non-recursive) look for match starting at lin(from)"
 
 character(len=*),intent(in) :: line
 integer                     :: from
@@ -867,7 +867,7 @@ integer                     :: len_line
 end function amatch__
 integer function amatch_(lin, from, pat, tagbeg, tagend)
 
-character(len=*),parameter::ident_16="@(#)M_BRE::amatch(3f): (non-recursive) look for match starting at lin(from)"
+! ident_16="@(#)M_BRE::amatch(3f): (non-recursive) look for match starting at lin(from)"
 
 integer :: lin(MAXLINE)
 integer :: pat(MAXPAT)
@@ -948,7 +948,7 @@ end function amatch_
 !!   Public Domain
 integer function omatch_(lin, i, pat, j)
 
-character(len=*),parameter::ident_17="@(#)M_BRE::omatch(3f): try to match a single pattern at pat(j)"
+! ident_17="@(#)M_BRE::omatch(3f): try to match a single pattern at pat(j)"
 
 integer :: lin(MAXLINE)
 integer :: pat(MAXPAT)
@@ -1029,7 +1029,7 @@ end function omatch_
 !!   Public Domain
 integer function esc_(array, i)
 
-character(len=*),parameter::ident_18="@(#)M_BRE::esc(3f): map array(i) into escaped character if appropriate"
+! ident_18="@(#)M_BRE::esc(3f): map array(i) into escaped character if appropriate"
 
 integer,intent(in) :: array(*)
 integer            :: i
@@ -1073,8 +1073,7 @@ end function esc_
 !----------------------------------------------------------------------------------------------------------------------------------!
 function f2r(string)
 
-character(len=*),parameter::ident_19="&
-&@(#)M_BRE::f2r(3f): convert Fortran character variable to Ratfor integer array with Ratfor terminator"
+! ident_19="@(#)M_BRE::f2r(3f): convert Fortran character variable to Ratfor integer array with Ratfor terminator"
 
 character(len=*),intent(in) :: string
 integer                     :: isize
@@ -1094,7 +1093,7 @@ end function f2r
 !----------------------------------------------------------------------------------------------------------------------------------!
 function r2f(ints)
 
-character(len=*),parameter::ident_20="@(#)M_BRE::r2f(3f): convert Ratfor integer array to Fortran character variable"
+! ident_20="@(#)M_BRE::r2f(3f): convert Ratfor integer array to Fortran character variable"
 
 integer,intent(in)          :: ints(:)
 character(len=size(ints)-1) :: r2f

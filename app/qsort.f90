@@ -5,7 +5,7 @@ use M_strings, only : upper, notabs, transliterate
 use M_sort,    only : sort_quick_rx
 implicit none
 
-character(len=*),parameter::ident_1="@(#)sort lines in a file"
+! ident_1="@(#)sort lines in a file"
 
 character(len=1024)                :: message
 character(len=:),allocatable       :: pageout(:), pageleft(:), help_text(:), version_text(:), makeblank,line

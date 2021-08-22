@@ -308,8 +308,7 @@ contains
 subroutine unit_check_msg(name,g1, g2, g3, g4, g5, g6, g7, g8, g9)
 implicit none
 
-character(len=*),parameter::ident_1="&
-&@(#)M_verify::unit_check_msg(3f): writes a message to a string composed of any standard scalar types"
+! ident_1="@(#)M_verify::unit_check_msg(3f): writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: name
 class(*),intent(in),optional  :: g1 ,g2 ,g3 ,g4 ,g5
@@ -325,7 +324,7 @@ end subroutine unit_check_msg
 subroutine stderr(msg, gen0, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9)
 implicit none
 
-character(len=*),parameter::ident_2="@(#)M_verify::stderr(3f): writes a message to standard error using a standard f2003 method"
+! ident_2="@(#)M_verify::stderr(3f): writes a message to standard error using a standard f2003 method"
 
 class(*),intent(in),optional :: msg
 class(*),intent(in),optional :: gen0, gen1, gen2, gen3, gen4
@@ -393,7 +392,7 @@ end subroutine stderr
 !!    Public Domain
 subroutine fstop(ierr,stdout,stderr)
 
-character(len=*),parameter::ident_3="@(#)M_verify::fstop(3f): calls 'STOP VALUE' passing in a value (1-32), with optional message"
+! ident_3="@(#)M_verify::fstop(3f): calls 'STOP VALUE' passing in a value (1-32), with optional message"
 
 integer,intent(in)                   :: ierr
 character(len=*),optional,intent(in) :: stdout
@@ -632,7 +631,7 @@ end subroutine fstop
 !!    Public Domain
 subroutine unit_check(name,logical_expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
 
-character(len=*),parameter::ident_4="@(#)M_verify::unit_check(3f):if .not.expression call 'goodbad NAME bad' & stop program"
+! ident_4="@(#)M_verify::unit_check(3f):if .not.expression call 'goodbad NAME bad' & stop program"
 
 character(len=*),intent(in)          :: name
 logical,intent(in)                   :: logical_expression
@@ -738,7 +737,7 @@ end subroutine unit_check
 !!    Public Domain
 subroutine unit_check_start(name,options,msg)
 
-character(len=*),parameter::ident_5="@(#)M_verify::unit_check_start(3f): call 'goodbad NAME start'"
+! ident_5="@(#)M_verify::unit_check_start(3f): call 'goodbad NAME start'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: options
@@ -839,7 +838,7 @@ end subroutine unit_check_start
 subroutine unit_check_done(name,opts,msg)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-character(len=*),parameter::ident_6="@(#)M_verify::unit_check_done(3f): call 'goodbad NAME bad'"
+! ident_6="@(#)M_verify::unit_check_done(3f): call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -961,7 +960,7 @@ end subroutine unit_check_done
 !!    Public Domain
 subroutine unit_check_bad(name,opts,msg)
 
-character(len=*),parameter::ident_7="@(#)M_verify::unit_check_bad(3f): call 'goodbad NAME bad'"
+! ident_7="@(#)M_verify::unit_check_bad(3f): call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -1031,7 +1030,7 @@ end subroutine unit_check_bad
 !!    Public Domain
 subroutine unit_check_good(name,opts,msg)
 
-character(len=*),parameter::ident_8="@(#)M_verify::unit_check_good(3f): call 'goodbad NAME good'"
+! ident_8="@(#)M_verify::unit_check_good(3f): call 'goodbad NAME good'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -1109,8 +1108,7 @@ end subroutine unit_check_good
 !!    Public Domain
 subroutine pdec(string)
 
-character(len=*),parameter::ident_9="&
-&@(#)M_verify::pdec(3f): write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
+! ident_9="@(#)M_verify::pdec(3f): write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
 
 character(len=*),intent(in) :: string   ! the string to print
 integer                     :: ilen     ! number of characters in string to print
@@ -1132,7 +1130,7 @@ end subroutine pdec
 !===================================================================================================================================
 function atleast(line,length) result(strout)
 
-character(len=*),parameter::ident_10="@(#)M_verify::atleast(3fp): return string padded to at least specified length"
+! ident_10="@(#)M_verify::atleast(3fp): return string padded to at least specified length"
 
 character(len=*),intent(in)  ::  line
 integer,intent(in)           ::  length
@@ -1191,7 +1189,7 @@ end function atleast
 subroutine assert(filename,linen,expr,g1, g2, g3, g4, g5, g6, g7, g8, g9)
 implicit none
 
-character(len=*),parameter::ident_11="@(#)M_verify::assert(3f): writes a message to a string composed of any standard scalar types"
+! ident_11="@(#)M_verify::assert(3f): writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: filename
 integer,intent(in)            :: linen
@@ -1212,7 +1210,7 @@ end subroutine assert
 function julian()
 ! REFERENCE: From Wikipedia, the free encyclopedia 2015-12-19
 
-character(len=*),parameter::ident_12="@(#)M_verify::julian(3f): Converts proleptic Gregorian DAT date-time array to Julian Date"
+! ident_12="@(#)M_verify::julian(3f): Converts proleptic Gregorian DAT date-time array to Julian Date"
 
 real(kind=realtime)              :: julian   ! Julian Date (non-negative, but may be non-integer)
 integer                          :: dat(8)   ! array like returned by DATE_AND_TIME(3f)
@@ -1313,8 +1311,7 @@ end function julian
 function almost(x,y,digits,verbose)
 use M_journal,  only : journal
 
-character(len=*),parameter::ident_13="&
-&@(#)M_verify::almost(3f): function to compare two real numbers only up to a specified number of digits by calling DP_ACCDIG(3f)"
+! ident_13="@(#)M_verify::almost(3f): function to compare two real numbers only up to a specified number of digits by calling DP_ACCDIG(3f)"
 
 class(*),intent(in)         :: x,y
 class(*),intent(in)         :: digits
@@ -1507,7 +1504,7 @@ SUBROUTINE accdig(X,Y,digi0,ACURCY,IND)
 use M_journal, only : journal
 implicit none
 
-character(len=*),parameter::ident_14="@(#)M_verify::accdig(3f): compare two real numbers only up to a specified number of digits"
+! ident_14="@(#)M_verify::accdig(3f): compare two real numbers only up to a specified number of digits"
 
 !     INPUT ...
 real,intent(in) :: x           ! First  of two real numbers to be compared.
@@ -1696,7 +1693,7 @@ use,intrinsic :: iso_fortran_env, only : real128
 use M_journal,  only : journal
 implicit none
 
-character(len=*),parameter::ident_15="@(#)M_verify::dp_accdig(3f): compare two values only up to a specified number of digits"
+! ident_15="@(#)M_verify::dp_accdig(3f): compare two values only up to a specified number of digits"
 
 !  INPUT ...
 class(*),intent(in)  :: x           ! FIRST  OF TWO NUMBERS TO BE COMPARED.
@@ -1808,8 +1805,7 @@ end subroutine dp_accdig
 elemental pure function in_margin(expected_value, measured_value, allowed_margin)
 implicit none
 
-character(len=*),parameter::ident_16="&
-&@(#)M_verify::in_margin(3f): check if two reals are approximately equal using a relative margin"
+! ident_16="@(#)M_verify::in_margin(3f): check if two reals are approximately equal using a relative margin"
 
 class(*),intent(in) :: expected_value, measured_value, allowed_margin
 logical             :: in_margin
@@ -1830,7 +1826,7 @@ end function in_margin
 function round(val,idigits0)
 implicit none
 
-character(len=*),parameter::ident_17="@(#)M_verify::round(3f): round val to specified number of significant digits"
+! ident_17="@(#)M_verify::round(3f): round val to specified number of significant digits"
 
 integer,parameter          :: dp=kind(0.0d0)
 real(kind=dp),intent(in)   :: val
@@ -1864,8 +1860,7 @@ pure elemental function anyscalar_to_real128(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-character(len=*),parameter::ident_18="&
-&@(#)M_verify::anyscalar_to_real128(3f): convert integer or real parameter of any kind to real128"
+! ident_18="@(#)M_verify::anyscalar_to_real128(3f): convert integer or real parameter of any kind to real128"
 
 class(*),intent(in)          :: valuein
 real(kind=real128)           :: d_out
@@ -1894,8 +1889,7 @@ pure elemental function anyscalar_to_double(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-character(len=*),parameter::ident_19="&
-&@(#)M_verify::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
+! ident_19="@(#)M_verify::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out

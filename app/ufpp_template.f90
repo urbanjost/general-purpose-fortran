@@ -8,22 +8,22 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   prep_template(1f) - [PREP] write a template of a prep source file            ',&
-'   (LICENSE:MIT)                                                                ',&
-'SYNOPSIS                                                                        ',&
-'   prep_template [ --version| --help]                                           ',&
-'DESCRIPTION                                                                     ',&
-'   A simple program that writes an example input file for prep(1).              ',&
-'OPTIONS                                                                         ',&
-'  --version  display version and quit                                           ',&
-'  --help     display help text and quit                                         ',&
-'EXAMPLE                                                                         ',&
-'   prep_template                                                                ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   MIT License                                                                  ',&
+'NAME                                                                                                                            ',&
+'   prep_template(1f) - [PREP] write a template of a prep source file                                                            ',&
+'   (LICENSE:MIT)                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'   prep_template [ --version| --help]                                                                                           ',&
+'DESCRIPTION                                                                                                                     ',&
+'   A simple program that writes an example input file for prep(1).                                                              ',&
+'OPTIONS                                                                                                                         ',&
+'  --version  display version and quit                                                                                           ',&
+'  --help     display help text and quit                                                                                         ',&
+'EXAMPLE                                                                                                                         ',&
+'   prep_template                                                                                                                ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   MIT License                                                                                                                  ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -45,7 +45,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180223>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-06-26 18:31:09 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:05:04 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -55,18 +55,18 @@ program prep_template
 use M_kracken, only : kracken, lget
 implicit none
 
-character(len=*),parameter::ident_1="@(#)PREP::prep_template(1f)"
+! ident_1="@(#)PREP::prep_template(1f)"
 
 integer :: i
 character(len=:),allocatable :: example_text(:) ! this variable will be defined by $DOCUMENT VARIABLE directive
 example_text=[ CHARACTER(LEN=128) :: &
-'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
 '@IFDEF F90',&
 'module example',&
 'contains',&
 'end module example',&
 '@ENDIF',&
-'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
 '@IFDEF TESTPRG90',&
 'program krackenbasic',&
 'use M_kracken, only : kracken, retrev, lget, rget, iget, sget, sgets',&
@@ -89,7 +89,7 @@ example_text=[ CHARACTER(LEN=128) :: &
 '   real                           :: rval',&
 '',&
 '!  define command arguments, default values and crack command line',&
-'   call kracken(''cmd'',''-i 10 -r 10e3 -l .false. -f input -d x11 -help .false.',&
+'   call kracken(''cmd'',''-i 10 -r 10e3 -l .false. -f input -d x11 -help .false. -version .false.'')',&
 '!  handle version and help requests',&
 '   call help_usage(lget("cmd_help"))',&
 '   call help_version(lget("cmd_version"))',&
@@ -100,7 +100,7 @@ example_text=[ CHARACTER(LEN=128) :: &
 '   rval = rget(''cmd_r'')                    ! get -r RVAL',&
 '   ival = iget(''cmd_i'')                    ! get -i IVAL',&
 '   device = sget(''cmd_d'')                  ! get -d STRING',&
-'   words = sgets(''cmd_d'')                  ! get -d STRING as an array of word',&
+'   words = sgets(''cmd_d'')                  ! get -d STRING as an array of words',&
 '!!',&
 '!  all done parsing; do something with the values',&
 '   print *, "filename=",filename(:iflen)',&
@@ -133,7 +133,7 @@ example_text=[ CHARACTER(LEN=128) :: &
 '',&
 'end program krackenbasic',&
 '@DOCUMENT END',&
-'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
 '@DOCUMENT HELP',&
 'NAME',&
 '   name(3f) - [M_module] description',&
@@ -147,7 +147,7 @@ example_text=[ CHARACTER(LEN=128) :: &
 'LICENSE',&
 '   Public Domain',&
 '@DOCUMENT END',&
-'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
 '@DOCUMENT VERSION',&
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
 'PROGRAM:        prep_template(1)',&
@@ -156,13 +156,13 @@ example_text=[ CHARACTER(LEN=128) :: &
 'AUTHOR:         John S. Urban',&
 'HOME PAGE:      http://www.urbanjost.altervista.org/index.html',&
 '@DOCUMENT END',&
-'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
 '@ENDIF',&
 '@ifdef PREP_TEST',&
-'@!==============================================================================',&
-'@!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()',&
-'@!==============================================================================',&
-'   This begins the section usually used for unit testing . Typically it is calle',&
+'@!================================================================================================================',&
+'@!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()',&
+'@!================================================================================================================',&
+'   This begins the section usually used for unit testing . Typically it is called by',&
 '',&
 '      prep PREP_TEST -system -i FILENAME',&
 '',&
@@ -176,7 +176,7 @@ example_text=[ CHARACTER(LEN=128) :: &
 '',&
 '        Make sure test executable does not exist.',&
 '',&
-'        Test executable should start with underscore and be unique or you could ',&
+'        Test executable should start with underscore and be unique or you could remove a command',&
 '@SYSTEM rm -f `which __xmple 2>/dev/null||echo NOTTHERE`',&
 '',&
 '        Build test program in standard location, assuming ccall(1) is available',&
@@ -197,9 +197,9 @@ example_text=[ CHARACTER(LEN=128) :: &
 '        Remove test executable',&
 '',&
 '@SYSTEM rm -f `which __xmple 2>/dev/null|| echo NOTTHERE`',&
-'@!==============================================================================',&
-'@!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()',&
-'@!==============================================================================',&
+'@!==================================================================================================================',&
+'@!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()',&
+'@!==================================================================================================================',&
 '@ENDIF',&
 '']
    ! the rest of the program

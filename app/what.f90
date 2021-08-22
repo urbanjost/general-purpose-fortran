@@ -132,7 +132,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 'OPTIONS',&
 '     The following options are supported:',&
 '',&
-'     -single, -s    Stops after the first occurrence of the pattern in each file',&
+'     -single, -s    Stops after the first occurrence of the pattern in each file.',&
 '     --html, -H     Print output as a table in an HTML document.',&
 '     --table, -t    Print output as a HTML table.',&
 '     --verbose, -q  Quiet mode (do not report errors when opening filenames)',&
@@ -326,9 +326,9 @@ version_text=[ CHARACTER(LEN=128) :: &
 '@(#)FORMAT           :: Fortran program>',&
 '@(#)SOURCE           :: LIBRARY/libGPF/EXE/WHAT/what.FF>',&
 '@(#)LANGUAGE         :: english>',&
-'@(#)RELATION         :: ISO/IEC DIS 9945-2:1992, Information technology - POSIX-',&
+'@(#)RELATION         :: ISO/IEC DIS 9945-2:1992, Information technology - POSIX-Part 2: Shell and Utilities>',&
 '@(#)COVERAGE         :: ORIGIN=Pennsylvania,USA ORIGIN_TGN=7007710>',&
-'@(#)ORIGIN           :: CYGWIN_NT-6.3 buzz 2.0.3(0.287/5/3) 2015-06-03 13:57 x86',&
+'@(#)ORIGIN           :: CYGWIN_NT-6.3 buzz 2.0.3(0.287/5/3) 2015-06-03 13:57 x86_64 Cygwin> !uname(3c)>',&
 '']
 end subroutine setup
 !-----------------------------------------------------------------------------------------------------------------------------------

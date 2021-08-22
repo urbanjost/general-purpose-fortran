@@ -105,7 +105,7 @@ contains
 subroutine setup()
 help=[ CHARACTER(LEN=128) :: &
 'NAME',&
-'   fcmd(1f) - [FUNIX:FILESYSTEM] find the full path of commands and',&
+'   fcmd(1f) - [FUNIX:FILESYSTEM] find the pathname of commands and',&
 '              optionally perform commands on them.',&
 '   (LICENSE:MIT)',&
 '',&
@@ -116,7 +116,7 @@ help=[ CHARACTER(LEN=128) :: &
 '',&
 'DESCRIPTION',&
 '   fcmd(1f) takes one or more command names. For each of its arguments',&
-'   by default it prints to stdout the full path of the executables that',&
+'   by default it prints to stdout the path of the executables that',&
 '   would have been executed when this argument had been entered at the',&
 '   shell prompt. It does this by searching for an executable or script',&
 '   in the directories listed in the environment variable PATH.',&
@@ -127,30 +127,29 @@ help=[ CHARACTER(LEN=128) :: &
 '   If no options are supplied the current search path is displayed one directory',&
 '   per line.',&
 '',&
-'     command(s)   names of commands to locate.',&
-'                  simple globbing with * and ? is allowed if the name is quoted.',&
-'     --first,-f   locate only first matching executable in PATH, not all.',&
-'     --cmd,-c     invoke the command on the files found. If present with',&
-'                  no parameter the desired command is assumed to be the',&
-'                  default editor (useful for finding and looking at scripts).',&
-'                  The command is therefore looked for in the',&
-'                  environment variables as if the bash(1) expression',&
-'                  CMD=${FCEDIT:-${EDITOR:-${VISUAL:-vi}}} was used.',&
-'                  Multiple commands delimited by a semi-colon may be used.',&
-'     --ok         If present, prompt for a y/n answer before executing the',&
-'                  list of commands on each file found.',&
-'     --wild,-w    add asterisk as a suffix and prefix to all command names',&
-'                  being search for.',&
-'     --version    Print version information on standard output then',&
-'                  exit successfully.',&
-'     --help       Print usage information on standard output then',&
-'                  exit successfully.',&
+'    command(s)  names of commands to locate. simple globbing with *',&
+'                and ? is allowed if the name is quoted.',&
+'    --first,-f  locate only first matching executable in PATH, not all.',&
+'    --cmd,-c    invoke the command on the files found. If present with',&
+'                no parameter the desired command is assumed to be',&
+'                the default editor (useful for finding and looking',&
+'                at scripts). The editor command is looked for in the',&
+'                environment variables FCEDIT, EDITOR and then VISUAL.',&
+'                if not found, "vi" is used.',&
 '',&
-'',&
+'                Multiple commands delimited by a semi-colon may be used.',&
+'    --ok        If present, prompt for a y/n answer before executing the',&
+'                list of commands on each file found.',&
+'    --wild,-w   add asterisk as a suffix and prefix to all command names',&
+'                being searched for.',&
+'    --version,-v  Print version information on standard output then',&
+'                  exit successfully.',&
+'    --help,-h   Print usage information on standard output then',&
+'                exit successfully.',&
 'EXAMPLE',&
 '   Sample commands',&
 '',&
-'    fcmd ls           # find full path to ls(1) command',&
+'    fcmd ls           # find path to ls(1) command',&
 '    fcmd ''*sum*''      # find all commands containing "sum"',&
 '    fcmd sum -w       # also find all commands containing "sum"',&
 '    fcmd ''*''          # list all commands in search path',&
@@ -168,77 +167,78 @@ help=[ CHARACTER(LEN=128) :: &
 'SEE ALSO',&
 '    which(1), xargs(1)',&
 '']
-! NAME
-!    fcmd(1f) - [FUNIX:FILESYSTEM] find the full path of commands and
-!               optionally perform commands on them.
-!    (LICENSE:MIT)
-! 
-! SYNOPSIS
-!     fcmd [commands(s) [[--wild] [ --first]
-!     [ --cmd COMMAND;COMMAND,COMMAND;... ]|
-!     [ --help|--version]
-! 
-! DESCRIPTION
-!    fcmd(1f) takes one or more command names. For each of its arguments
-!    by default it prints to stdout the full path of the executables that
-!    would have been executed when this argument had been entered at the
-!    shell prompt. It does this by searching for an executable or script
-!    in the directories listed in the environment variable PATH.
-! 
-!    Optionally, commands can be specified to act on the path names found.
-! 
-! OPTIONS
-!    If no options are supplied the current search path is displayed one directory
-!    per line.
-! 
-!      command(s)   names of commands to locate.
-!                   simple globbing with * and ? is allowed if the name is quoted.
-!      --first,-f   locate only first matching executable in PATH, not all.
-!      --cmd,-c     invoke the command on the files found. If present with
-!                   no parameter the desired command is assumed to be the
-!                   default editor (useful for finding and looking at scripts).
-!                   The command is therefore looked for in the
-!                   environment variables as if the bash(1) expression
-!                   CMD=${FCEDIT:-${EDITOR:-${VISUAL:-vi}}} was used.
-!                   Multiple commands delimited by a semi-colon may be used.
-!      --ok         If present, prompt for a y/n answer before executing the
-!                   list of commands on each file found.
-!      --wild,-w    add asterisk as a suffix and prefix to all command names
-!                   being search for.
-!      --version    Print version information on standard output then
-!                   exit successfully.
-!      --help       Print usage information on standard output then
-!                   exit successfully.
-! 
-! 
-! EXAMPLE
-!    Sample commands
-! 
-!     fcmd ls           # find full path to ls(1) command
-!     fcmd '*sum*'      # find all commands containing "sum"
-!     fcmd sum -w       # also find all commands containing "sum"
-!     fcmd '*'          # list all commands in search path
-!     fcmd gunzip -c    # edit the script gunzip(1)
-! 
-!     # find all commands in path and a man-page if they have one
-!     fcmd '*' -c whereis
-! 
-!     # find a command and use the commands file(1) and stat(1) on the
-!     # pathnames found.
-!     fcmd pwd -c 'file;stat'
-! 
-!    Common commands to use are "cat -vet", "ls -l", "strings", "what",
-!    "sum", "whereis", "stat", "wc", "ldd", and "file".
-! SEE ALSO
-!     which(1), xargs(1)
+!>
+!!##NAME
+!!    fcmd(1f) - [FUNIX:FILESYSTEM] find the pathname of commands and
+!!               optionally perform commands on them.
+!!    (LICENSE:MIT)
+!!
+!!##SYNOPSIS
+!!
+!!     fcmd [commands(s) [[--wild] [ --first]
+!!     [ --cmd COMMAND;COMMAND,COMMAND;... ]|
+!!     [ --help|--version]
+!!
+!!##DESCRIPTION
+!!    fcmd(1f) takes one or more command names. For each of its arguments
+!!    by default it prints to stdout the path of the executables that
+!!    would have been executed when this argument had been entered at the
+!!    shell prompt. It does this by searching for an executable or script
+!!    in the directories listed in the environment variable PATH.
+!!
+!!    Optionally, commands can be specified to act on the path names found.
+!!
+!!##OPTIONS
+!!    If no options are supplied the current search path is displayed one directory
+!!    per line.
+!!
+!!     command(s)  names of commands to locate. simple globbing with *
+!!                 and ? is allowed if the name is quoted.
+!!     --first,-f  locate only first matching executable in PATH, not all.
+!!     --cmd,-c    invoke the command on the files found. If present with
+!!                 no parameter the desired command is assumed to be
+!!                 the default editor (useful for finding and looking
+!!                 at scripts). The editor command is looked for in the
+!!                 environment variables FCEDIT, EDITOR and then VISUAL.
+!!                 if not found, "vi" is used.
+!!
+!!                 Multiple commands delimited by a semi-colon may be used.
+!!     --ok        If present, prompt for a y/n answer before executing the
+!!                 list of commands on each file found.
+!!     --wild,-w   add asterisk as a suffix and prefix to all command names
+!!                 being searched for.
+!!     --version,-v  Print version information on standard output then
+!!                   exit successfully.
+!!     --help,-h   Print usage information on standard output then
+!!                 exit successfully.
+!!##EXAMPLE
+!!
+!!    Sample commands
+!!
+!!     fcmd ls           # find path to ls(1) command
+!!     fcmd '*sum*'      # find all commands containing "sum"
+!!     fcmd sum -w       # also find all commands containing "sum"
+!!     fcmd '*'          # list all commands in search path
+!!     fcmd gunzip -c    # edit the script gunzip(1)
+!!
+!!     # find all commands in path and a man-page if they have one
+!!     fcmd '*' -c whereis
+!!
+!!     # find a command and use the commands file(1) and stat(1) on the
+!!     # pathnames found.
+!!     fcmd pwd -c 'file;stat'
+!!
+!!    Common commands to use are "cat -vet", "ls -l", "strings", "what",
+!!    "sum", "whereis", "stat", "wc", "ldd", and "file".
+!!##SEE ALSO
+!!     which(1), xargs(1)
 version=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
 'PROGRAM:        fcmd(1f)',&
-'DESCRIPTION:    list pathnames of command names that are executable and can be f',&
+'DESCRIPTION:    list pathnames of command names that are executable in $PATH',&
 'VERSION:        1.0, 2017-10-15',&
 'AUTHOR:         John S. Urban',&
 'LICENSE:        MIT',&
 '']
-
 end subroutine setup
 end program fcmd

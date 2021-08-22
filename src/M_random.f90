@@ -151,8 +151,7 @@ contains
 !!    MIT License
 function random_string(chars,length) result(out)
 
-character(len=*),parameter::ident_1="&
-&@(#)M_random::random_string(3f): create random string composed of provided characters of specified length"
+! ident_1="@(#)M_random::random_string(3f): create random string composed of provided characters of specified length"
 
 character(len=*),intent(in)     :: chars
 integer,intent(in)              :: length
@@ -224,7 +223,7 @@ end function random_string
 !!    MIT License
 function random_hex(length) result(out)
 
-character(len=*),parameter::ident_2="@(#)M_random::random_hex(3f): create random hexadecimal string of specified length"
+! ident_2="@(#)M_random::random_hex(3f): create random hexadecimal string of specified length"
 
 integer,intent(in)              :: length
 character(len=:),allocatable    :: out
@@ -369,7 +368,7 @@ end function random_int
 !!    MIT License
 function scramble( number_of_values ) result(array)
 
-character(len=*),parameter::ident_3="@(#)M_random::scramble(3f): return integer array of random values 1 to N."
+! ident_3="@(#)M_random::scramble(3f): return integer array of random values 1 to N."
 
 integer,intent(in)    :: number_of_values
 integer,allocatable   :: array(:)
@@ -446,7 +445,7 @@ end function scramble
 !!     end program demo_random_kiss64
 function random_kiss64()
 
-character(len=*),parameter::ident_4="@(#)M_random::random_kiss64(3f): A 64-bit KISS random number generator by George Margaglia."
+! ident_4="@(#)M_random::random_kiss64(3f): A 64-bit KISS random number generator by George Margaglia."
 
 ! From: FortranWiki.org
 ! Originally posted to comp.lang.fortran in the message 64-bit KISS RNGs.
@@ -529,8 +528,7 @@ end function random_kiss64
 !!    MIT License
 subroutine init_random_seed_by_system_clock()
 
-character(len=*),parameter::ident_5="&
-&@(#)M_random::init_random_seed_by_system_clock(3f): initialize random_number(3f) to return a single value with system clock"
+! ident_5="@(#)M_random::init_random_seed_by_system_clock(3f): initialize random_number(3f) to return a single value with system clock"
 
    integer :: i, n, clock
    integer, dimension(:), allocatable :: seed
@@ -596,8 +594,7 @@ end subroutine init_random_seed_by_system_clock
 !!    MIT License
 subroutine init_random_seed_by_dat()
 
-character(len=*),parameter::ident_6="&
-&@(#)M_random::init_random_seed_by_dat(3f): initialize random_number(3f) to return a single value using date_and_time(3f)"
+! ident_6="@(#)M_random::init_random_seed_by_dat(3f): initialize random_number(3f) to return a single value using date_and_time(3f)"
 
 ! Initially based on a post on comp.lang.fortran.
   integer :: ival(8)
@@ -674,8 +671,7 @@ end subroutine init_random_seed_by_dat
 !!    MIT License
 subroutine init_random_seed(mine)
 
-character(len=*),parameter::ident_7="&
-&@(#)M_random::init_random_seed(3f): initialize random_number(3f) to return a single value with single integer seed like srand(3c)"
+! ident_7="@(#)M_random::init_random_seed(3f): initialize random_number(3f) to return a single value with single integer seed like srand(3c)"
 
 ! to make this start with a single number like srand(3c) take the seed and
 ! use the value to fill the seed array, adding 37 to each subsequent value
@@ -832,8 +828,7 @@ end subroutine init_random_seed
 !!      867010878
 subroutine mtprng_init(seed, state)
 
-character(len=*),parameter::ident_8="&
-&@(#)M_random::mtprng_int(3f): Initializes the Mersenne Twister random number generator with seed"
+! ident_8="@(#)M_random::mtprng_int(3f): Initializes the Mersenne Twister random number generator with seed"
 
 ! arguments
 integer(INT32),     intent(in)  :: seed
@@ -899,7 +894,7 @@ end subroutine mtprng_init
 !!    end program demo_mtprng_init_by_array
 subroutine mtprng_init_by_array(init_key, state)
 
-character(len=*),parameter::ident_9="@(#)M_random::mtprng_int_by_array(3f): Initialize with an array of seeds"
+! ident_9="@(#)M_random::mtprng_int_by_array(3f): Initialize with an array of seeds"
 
 ! arguments
 integer(INT32),intent(in)       :: init_key(:)
@@ -990,7 +985,7 @@ end subroutine mtprng_init_by_array
 !!    end program demo_mtprng_rand64
 function mtprng_rand64(state) result(r)
 
-character(len=*),parameter::ident_10="@(#)M_random::mtprng_rand64(3f): Obtain the next 64-bit integer in the pseudo-random sequence"
+! ident_10="@(#)M_random::mtprng_rand64(3f): Obtain the next 64-bit integer in the pseudo-random sequence"
 
 ! arguments
 type(mtprng_state), intent(inout) :: state
@@ -1094,7 +1089,7 @@ end function mtprng_rand64
 !!    end program demo_mtprng_rand
 function mtprng_rand(state) result(r)
 
-character(len=*),parameter::ident_11="@(#)M_random::mtprng_rand(3f): Obtain the next 32-bit integer in the pseudo-random sequence"
+! ident_11="@(#)M_random::mtprng_rand(3f): Obtain the next 32-bit integer in the pseudo-random sequence"
 
 ! arguments
 type(mtprng_state), intent(inout) :: state
@@ -1161,7 +1156,7 @@ end function mtprng_rand
 !!    end program demo_mtprng_rand_range
 function mtprng_rand_range(state, lo, hi) result(r)
 
-character(len=*),parameter::ident_12="@(#)M_random::mtprng_rand_range(3f): Obtain a pseudo-random integer in the range [lo,hi]"
+! ident_12="@(#)M_random::mtprng_rand_range(3f): Obtain a pseudo-random integer in the range [lo,hi]"
 
 ! arguments
 type(mtprng_state), intent(inout) :: state
@@ -1217,7 +1212,7 @@ end function mtprng_rand_range
 !!    end program demo_mtprng_real1
 function mtprng_rand_real1(state) result(r)
 
-character(len=*),parameter::ident_13="@(#)M_random::mtprng_rand_real1(3f): Obtain a pseudo-random real number .ge. 0 and .le.= 1."
+! ident_13="@(#)M_random::mtprng_rand_real1(3f): Obtain a pseudo-random real number .ge. 0 and .le.= 1."
 
 ! arguments
 type(mtprng_state), intent(inout) :: state
@@ -1268,7 +1263,7 @@ end function mtprng_rand_real1
 !!      write(*,*) mtprng_rand_real2(state)
 !!    end program demo_mtprng_real2
 function mtprng_rand_real2(state) result(r)
-character(len=*),parameter::ident_14="@(#)M_random::mtprng_rand_real2(3f): Obtain a pseudo-random real number .ge. 0.0 and .lt. 1.0"
+! ident_14="@(#)M_random::mtprng_rand_real2(3f): Obtain a pseudo-random real number .ge. 0.0 and .lt. 1.0"
 
 type(mtprng_state), intent(inout) :: state                                   ! arguments
 real(IEEE64)                      :: r                                       ! return type
@@ -1320,7 +1315,7 @@ end function mtprng_rand_real2
 !!     end program demo_mtprng_real3
 function mtprng_rand_real3(state) result(r)
 
-character(len=*),parameter::ident_15="@(#)M_random::mtprng_rand_real3(3f): Obtain a pseudo-random real number .gt. 0 and .lt. 1."
+! ident_15="@(#)M_random::mtprng_rand_real3(3f): Obtain a pseudo-random real number .gt. 0 and .lt. 1."
 
 ! arguments
 type(mtprng_state), intent(inout) :: state

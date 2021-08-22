@@ -8,38 +8,38 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'       rep(1f) - [FILE FILTER] replace fixed strings in files                   ',&
-'       (LICENSE:PD)                                                             ',&
-'SYNOPSIS                                                                        ',&
-'       rep filenames -c /from/to/ [ -verbose][ -dryrun]|[ -help| -version]      ',&
-'       (LICENSE:PD)                                                             ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'       This is an example program for the REPLACE(3f) function. It              ',&
-'       still has some flaws.                                                    ',&
-'                                                                                ',&
-'       The rep(1) utility changes strings in-place in files.                    ',&
-'                                                                                ',&
-'       files named on the command are modified in-place, so you may want        ',&
-'       to make a copy of the original before converting it. rep(1) prints       ',&
-'       a message indicating which of the input files it actually modifies.      ',&
-'                                                                                ',&
-'       Do not change binary files with this program, which uses sequential      ',&
-'       access to read and write the files. It can corrupt binary files.         ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'       -c /from/to/  "from" represents a string to look for and "to" represents ',&
-'                     its replacement.                                           ',&
-'       -verbose      Print information about what the program does.             ',&
-'       --help        Display a help message and exit.                           ',&
-'       --version     Display version information and exit.                      ',&
-'       --dryrun      Does all file operations except for moving the             ',&
-'                     changed file back to the original. Implies --version.      ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'       rep(1f) - [FILE FILTER] replace fixed strings in files                                                                   ',&
+'       (LICENSE:PD)                                                                                                             ',&
+'SYNOPSIS                                                                                                                        ',&
+'       rep filenames -c /from/to/ [ -verbose][ -dryrun]|[ -help| -version]                                                      ',&
+'       (LICENSE:PD)                                                                                                             ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'       This is an example program for the REPLACE(3f) function. It                                                              ',&
+'       still has some flaws.                                                                                                    ',&
+'                                                                                                                                ',&
+'       The rep(1) utility changes strings in-place in files.                                                                    ',&
+'                                                                                                                                ',&
+'       files named on the command are modified in-place, so you may want                                                        ',&
+'       to make a copy of the original before converting it. rep(1) prints                                                       ',&
+'       a message indicating which of the input files it actually modifies.                                                      ',&
+'                                                                                                                                ',&
+'       Do not change binary files with this program, which uses sequential                                                      ',&
+'       access to read and write the files. It can corrupt binary files.                                                         ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'       -c /from/to/  "from" represents a string to look for and "to" represents                                                 ',&
+'                     its replacement.                                                                                           ',&
+'       -verbose      Print information about what the program does.                                                             ',&
+'       --help        Display a help message and exit.                                                                           ',&
+'       --version     Display version information and exit.                                                                      ',&
+'       --dryrun      Does all file operations except for moving the                                                             ',&
+'                     changed file back to the original. Implies --version.                                                      ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -98,7 +98,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:01 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:18:11 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

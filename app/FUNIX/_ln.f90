@@ -8,31 +8,31 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   _ln(1f) - [FUNIX:FILESYSTEM] create hard links to a file                     ',&
-'   (LICENSE:PD)                                                                 ',&
-'SYNOPSIS                                                                        ',&
-'  Formats:                                                                      ',&
-'                                                                                ',&
-'   _ln TARGET LINK_NAME     #  create a link to TARGET with the name LINK_NAME. ',&
-'   _ln TARGET               #  create a link to TARGET in the current directory.',&
-'   _ln TARGET... DIRECTORY  #  create links to each TARGET in DIRECTORY.        ',&
-'DESCRIPTION                                                                     ',&
-'   Create hard links (not symbolic links)                                       ',&
-'   each destination (name of new link) should not already exist.                ',&
-'   When creating hard links, each TARGET must exist.                            ',&
-'   Symbolic links can hold arbitrary text; if later resolved, a relative        ',&
-'   link is interpreted in relation to its parent directory.                     ',&
-'OPTIONS                                                                         ',&
-'      TARGET     name of existing file                                          ',&
-'      LINK_NAME  if LINK_NAME follows TARGET create a link called LINK_NAME that points to TARGET',&
-'      DIRECTORY  if last option is a directory previous filenames on command  are linked into DIRECTORY',&
-'      --help     display this help and exit                                     ',&
-'      --version  output version information and exit                            ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   _ln(1f) - [FUNIX:FILESYSTEM] create hard links to a file                                                                     ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'SYNOPSIS                                                                                                                        ',&
+'  Formats:                                                                                                                      ',&
+'                                                                                                                                ',&
+'   _ln TARGET LINK_NAME     #  create a link to TARGET with the name LINK_NAME.                                                 ',&
+'   _ln TARGET               #  create a link to TARGET in the current directory.                                                ',&
+'   _ln TARGET... DIRECTORY  #  create links to each TARGET in DIRECTORY.                                                        ',&
+'DESCRIPTION                                                                                                                     ',&
+'   Create hard links (not symbolic links)                                                                                       ',&
+'   each destination (name of new link) should not already exist.                                                                ',&
+'   When creating hard links, each TARGET must exist.                                                                            ',&
+'   Symbolic links can hold arbitrary text; if later resolved, a relative                                                        ',&
+'   link is interpreted in relation to its parent directory.                                                                     ',&
+'OPTIONS                                                                                                                         ',&
+'      TARGET     name of existing file                                                                                          ',&
+'      LINK_NAME  if LINK_NAME follows TARGET create a link called LINK_NAME that points to TARGET                               ',&
+'      DIRECTORY  if last option is a directory previous filenames on command  are linked into DIRECTORY                         ',&
+'      --help     display this help and exit                                                                                     ',&
+'      --version  output version information and exit                                                                            ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -84,7 +84,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:17 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:12 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

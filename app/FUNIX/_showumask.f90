@@ -8,25 +8,25 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'  _showumask(1f) - [FUNIX] show umask in decimal, octal, hex, and binary        ',&
-'  (LICENSE:PD)                                                                  ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'  _showumask [ -help|-version]                                                  ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'   example program calling system_getumask(3f) to get umask value.              ',&
-'                                                                                ',&
-'EXAMPLE                                                                         ',&
-'                                                                                ',&
-'   _showumask                                                                   ',&
-'                                                                                ',&
-'    18 O''0022'' Z''12'' B''000000010010''                                      ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'  _showumask(1f) - [FUNIX] show umask in decimal, octal, hex, and binary                                                        ',&
+'  (LICENSE:PD)                                                                                                                  ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'  _showumask [ -help|-version]                                                                                                  ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'   example program calling system_getumask(3f) to get umask value.                                                              ',&
+'                                                                                                                                ',&
+'EXAMPLE                                                                                                                         ',&
+'                                                                                                                                ',&
+'   _showumask                                                                                                                   ',&
+'                                                                                                                                ',&
+'    18 O''0022'' Z''12'' B''000000010010''                                                                                      ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -74,7 +74,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:24 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:27 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

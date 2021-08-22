@@ -4,7 +4,7 @@ use M_time, only : system_sleep, ordinal_seconds
 use M_kracken, only: kracken, iget, sget, lget
 implicit none
 
-character(len=*),parameter::ident_1="@(#)minefield(1f): [M_draw] minefield sweeper game"
+! ident_1="@(#)minefield(1f): [M_draw] minefield sweeper game"
 
 logical :: switch
 integer :: irows
@@ -49,45 +49,45 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   minefield(1f) - [M_draw] minefield game                                      ',&
-'   (LICENSE:PD)                                                                 ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'   minefield [[ -r rows] [ -c columns]] |[ --help --version ]                   ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'   minefield(1f) is a minefield sweeper game. The game tests many M_DRAW(3fm)   ',&
-'   functions.                                                                   ',&
-'                                                                                ',&
-'   The object of the game is to mark all the mines with mouse 2 and expose      ',&
-'   all the squares that are not mines with mouse 1 as quickly as possible.      ',&
-'   The number in a square indicates how many mines are adjacent to it.          ',&
-'                                                                                ',&
-'   The game can go up to 99 rows or columns.                                    ',&
-'                                                                                ',&
-'   MOUSE 1   Use mouse 1 to expose a square                                     ',&
-'   MOUSE 2   Use mouse 2 to mark a mine                                         ',&
-'   MOUSE 3   Use mouse 3 to take a mine marker back off                         ',&
-'                                                                                ',&
-'   To cheat use mouse 2 and 3 together to expose all squares that have          ',&
-'   no mines adjacent to them. Use mouse 1, 2 and 3 to expose unexposed          ',&
-'   squares with no risk of a bomb going off, use mouse 1 and 3 to solve         ',&
-'   all unexposed squares.                                                       ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'   -r          number of rows                                                   ',&
-'   -c          number of columns                                                ',&
-'   -switch     switch mouse 2 and mouse 3 buttons; typically for                ',&
-'               two-button mouses                                                ',&
-'   -x          width of window in rasters. Defaults to 800                      ',&
-'   -y          height of window in rasters. Defaults to 500                     ',&
-'   --help      display help text and exit                                       ',&
-'   --version   display version text and exit                                    ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   minefield(1f) - [M_draw] minefield game                                                                                      ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'   minefield [[ -r rows] [ -c columns]] |[ --help --version ]                                                                   ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'   minefield(1f) is a minefield sweeper game. The game tests many M_DRAW(3fm)                                                   ',&
+'   functions.                                                                                                                   ',&
+'                                                                                                                                ',&
+'   The object of the game is to mark all the mines with mouse 2 and expose                                                      ',&
+'   all the squares that are not mines with mouse 1 as quickly as possible.                                                      ',&
+'   The number in a square indicates how many mines are adjacent to it.                                                          ',&
+'                                                                                                                                ',&
+'   The game can go up to 99 rows or columns.                                                                                    ',&
+'                                                                                                                                ',&
+'   MOUSE 1   Use mouse 1 to expose a square                                                                                     ',&
+'   MOUSE 2   Use mouse 2 to mark a mine                                                                                         ',&
+'   MOUSE 3   Use mouse 3 to take a mine marker back off                                                                         ',&
+'                                                                                                                                ',&
+'   To cheat use mouse 2 and 3 together to expose all squares that have                                                          ',&
+'   no mines adjacent to them. Use mouse 1, 2 and 3 to expose unexposed                                                          ',&
+'   squares with no risk of a bomb going off, use mouse 1 and 3 to solve                                                         ',&
+'   all unexposed squares.                                                                                                       ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'   -r          number of rows                                                                                                   ',&
+'   -c          number of columns                                                                                                ',&
+'   -switch     switch mouse 2 and mouse 3 buttons; typically for                                                                ',&
+'               two-button mouses                                                                                                ',&
+'   -x          width of window in rasters. Defaults to 800                                                                      ',&
+'   -y          height of window in rasters. Defaults to 500                                                                     ',&
+'   --help      display help text and exit                                                                                       ',&
+'   --version   display version text and exit                                                                                    ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -149,7 +149,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    minefield game>',&
 '@(#)VERSION:        4.0, 20180616>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2021-06-26 18:31:38 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:19:09 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -161,7 +161,7 @@ end subroutine help_version
 subroutine minefield(irows0,icols0,switch) ! draw a minesweep program
 ! Created: 19971231
 use M_draw
-character(len=*),parameter::ident_2="@(#)draw a minesweep game that quits on 'q'"
+! ident_2="@(#)draw a minesweep game that quits on 'q'"
 !      storage
 !        -1 to -9 for unexposed and 0 to 8 adjacent bombs
 !        -10 for unexposed and a bomb

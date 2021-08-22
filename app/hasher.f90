@@ -8,39 +8,39 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   hasher(1f) - [M_hashkeys] exercise the string hash methods in the M_hashkey(3fm) module',&
-'   (LICENSE:PD)                                                                 ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'   hasher [ input_files [ -hash hashname] ]|[ -string string_value]|--help|--version',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'   hasher(1f) does a byte by byte hash of a file or a hash of a string          ',&
-'   using the procedures available in the M_hashkey(3fm) module. It is up        ',&
-'   to the user to determine if the method is suitable for a specific use.       ',&
-'                                                                                ',&
-'   When the I/O was not tuned at all and a simple byte-by-byte read             ',&
-'   was used the program was sixty times slower; in addition the                 ',&
-'   anything_to_bytes(3f) function was slower than expected processing           ',&
-'   one character at a time, so if you are going to do anything similar          ',&
-'   it is at least worth a look to look at the sample code.                      ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'   input_files  files to generate a hash for                                    ',&
-'   hash         name of hash algorithm. Currently allowed                       ',&
-'                values are:                                                     ',&
-'                                                                                ',&
-'                  djb2 (default)   calls djb2_hash(3f)                          ',&
-'                  sdbm             calls sdbm_hash(3f)                          ',&
-'                  crc32            calls cfc32_hash(3f)                         ',&
-'                                                                                ',&
-'   --help       display this help and exit                                      ',&
-'   --version    output version information and exit                             ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   hasher(1f) - [M_hashkeys] exercise the string hash methods in the M_hashkey(3fm) module                                      ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'   hasher [ input_files [ -hash hashname] ]|[ -string string_value]|--help|--version                                            ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'   hasher(1f) does a byte by byte hash of a file or a hash of a string                                                          ',&
+'   using the procedures available in the M_hashkey(3fm) module. It is up                                                        ',&
+'   to the user to determine if the method is suitable for a specific use.                                                       ',&
+'                                                                                                                                ',&
+'   When the I/O was not tuned at all and a simple byte-by-byte read                                                             ',&
+'   was used the program was sixty times slower; in addition the                                                                 ',&
+'   anything_to_bytes(3f) function was slower than expected processing                                                           ',&
+'   one character at a time, so if you are going to do anything similar                                                          ',&
+'   it is at least worth a look to look at the sample code.                                                                      ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'   input_files  files to generate a hash for                                                                                    ',&
+'   hash         name of hash algorithm. Currently allowed                                                                       ',&
+'                values are:                                                                                                     ',&
+'                                                                                                                                ',&
+'                  djb2 (default)   calls djb2_hash(3f)                                                                          ',&
+'                  sdbm             calls sdbm_hash(3f)                                                                          ',&
+'                  crc32            calls cfc32_hash(3f)                                                                         ',&
+'                                                                                                                                ',&
+'   --help       display this help and exit                                                                                      ',&
+'   --version    output version information and exit                                                                             ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -100,7 +100,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)                change and redistribute it.  There is NO WARRANTY;>',&
 '@(#)                without even the implied warranty of MERCHANTABILITY or>',&
 '@(#)                FITNESS FOR A PARTICULAR PURPOSE.>',&
-'@(#)COMPILED:       2021-06-26 18:31:10 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:05:06 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

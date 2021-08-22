@@ -11,30 +11,30 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   xauth_key(1f) - [M_random] generate magic cookies for xauth                  ',&
-'   (LICENSE:PD)                                                                 ',&
-'SYNOPSIS                                                                        ',&
-'   xauth_key [characters] [ -n number_of_characters]                            ',&
-'DESCRIPTION                                                                     ',&
-'   xauth_key generates a random hexadecimal number                              ',&
-'OPTIONS                                                                         ',&
-'   characters  Set of letters to compose string from.                           ',&
-'               Defaults to ''0123456789abcdef''.                                ',&
-'   -n N        Number of digits. Defaults to 128                                ',&
-'   -r N        Number of cookies to generate                                    ',&
-'   --version   Display version information and exit.                            ',&
-'   --help      Display help text and exit.                                      ',&
-'EXAMPLE                                                                         ',&
-'   generate a value for use with the X authority system:                        ',&
-'                                                                                ',&
-'    xauth add :0 . `xauth_key`                                                  ',&
-'SEE ALSO                                                                        ',&
-'   X(1), xauth(1)                                                               ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   xauth_key(1f) - [M_random] generate magic cookies for xauth                                                                  ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'SYNOPSIS                                                                                                                        ',&
+'   xauth_key [characters] [ -n number_of_characters]                                                                            ',&
+'DESCRIPTION                                                                                                                     ',&
+'   xauth_key generates a random hexadecimal number                                                                              ',&
+'OPTIONS                                                                                                                         ',&
+'   characters  Set of letters to compose string from.                                                                           ',&
+'               Defaults to ''0123456789abcdef''.                                                                                ',&
+'   -n N        Number of digits. Defaults to 128                                                                                ',&
+'   -r N        Number of cookies to generate                                                                                    ',&
+'   --version   Display version information and exit.                                                                            ',&
+'   --help      Display help text and exit.                                                                                      ',&
+'EXAMPLE                                                                                                                         ',&
+'   generate a value for use with the X authority system:                                                                        ',&
+'                                                                                                                                ',&
+'    xauth add :0 . `xauth_key`                                                                                                  ',&
+'SEE ALSO                                                                                                                        ',&
+'   X(1), xauth(1)                                                                                                               ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -112,7 +112,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20171219>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-06-26 18:31:32 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:18:57 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

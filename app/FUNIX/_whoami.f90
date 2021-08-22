@@ -8,24 +8,24 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'      _whoami(1f) - [FUNIX] display login name                                  ',&
-'      (LICENSE:PD)                                                              ',&
-'SYNOPSIS                                                                        ',&
-'      _whoami [ -help|-version]                                                 ',&
-'DESCRIPTION                                                                     ',&
-'      Demonstrate call to system_geteuid(3f) and system_getpwuid(3f) interfaces to the corresponding C routines',&
-'OPTIONS                                                                         ',&
-'       --help      display command help and exit                                ',&
-'       --version   output version information and exit                          ',&
-'EXAMPLE                                                                         ',&
-'      Command usage:                                                            ',&
-'                                                                                ',&
-'        _whoami                                                                 ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'      _whoami(1f) - [FUNIX] display login name                                                                                  ',&
+'      (LICENSE:PD)                                                                                                              ',&
+'SYNOPSIS                                                                                                                        ',&
+'      _whoami [ -help|-version]                                                                                                 ',&
+'DESCRIPTION                                                                                                                     ',&
+'      Demonstrate call to system_geteuid(3f) and system_getpwuid(3f) interfaces to the corresponding C routines                 ',&
+'OPTIONS                                                                                                                         ',&
+'       --help      display command help and exit                                                                                ',&
+'       --version   output version information and exit                                                                          ',&
+'EXAMPLE                                                                                                                         ',&
+'      Command usage:                                                                                                            ',&
+'                                                                                                                                ',&
+'        _whoami                                                                                                                 ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -71,7 +71,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:29 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:40 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -18,7 +18,6 @@
            do i=1,nReps
             ! Cases with repeating character sequences.
             allpassed=allpassed .and. test("a*abab", "a*b", .true.)
-            !!cycle
             allpassed=allpassed .and. test("ab", "*?", .true.)
             allpassed=allpassed .and. test("abc", "*?", .true.)
             allpassed=allpassed .and. test("abcccd", "*ccd", .true.)

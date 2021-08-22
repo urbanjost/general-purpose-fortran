@@ -11,29 +11,29 @@
 
 !>
 !!##NAME
-!!    M_matrix(3f) - [M_matrix] The Linear ALgebra Fortran Facility (LAFF)
+!!    M_matrix(3f) - [M_matrix] The Los Alamos-inspired Linear Algebra Fortran Facility (LALA)
 !!    LICENSE(MIT)
 !!
 !!##DESCRIPTION
-!! The M_matrix module contains the Linear Algebra Fortran Facility (LAFF)
+!! The M_matrix module contains the Linear Algebra Fortran Facility (LALA)
 !! which allows for interacting with a Fortran program using Matlab
-!! or Octave-like commands.  LAFF is also usable as a simple one-line
+!! or Octave-like commands.  LALA is also usable as a simple one-line
 !! language. It is a WIP (Work In Progress) but is already useful.
 !!
 !!   * You can pass intrinsic-type data easily between your Fortran
-!!     program and the LAFF utility.
-!!   * blocks of LAFF commands may be passed to laff(3f) as well.
-!!   * external files containing laff(3f) commands may be read to create
+!!     program and the LALA utility.
+!!   * blocks of LALA commands may be passed to lala(3f) as well.
+!!   * external files containing lala(3f) commands may be read to create
 !!     data or as configuration files.
-!!   * LAFF commands may be recorded and played back.
+!!   * LALA commands may be recorded and played back.
 !!   * a command-line based command history allowed for recalling and editing
 !!     input.
-!!   * a stand-alone program lets you create and test LAFF files. It is
+!!   * a stand-alone program lets you create and test LALA files. It is
 !!     a flexible calculator utility all by itself.
 !!   * a built-in help command describes the many functions and commands
 !!   * a user-added Fortran routine may be called via the USER() function.
 !!
-!! All together, this allows laff(3f) to be used for self-describing
+!! All together, this allows lala(3f) to be used for self-describing
 !! configuration and data files, inspecting data in existing programs,
 !! transferring small amounts of data between programs or assisting in
 !! debugging and development, unit testing and macro-level timing.
@@ -43,20 +43,20 @@
 !!   Sample program:
 !!
 !!     program demo_M_matrix
-!!     use M_matrix, only : laff, put_into_laff, get_from_laff, ifin_laff
+!!     use M_matrix, only : lala, put_into_lala, get_from_lala, ifin_lala
 !!     !real,allocatable             :: r
 !!     !complex,allocatable          :: cvec(:)
 !!     integer,allocatable          :: iarr(:,:)
 !!     character(len=:),allocatable :: t(:)
 !!     integer                      :: ierr
 !!
-!!     ! store some data into laff(3)
-!!     call put_into_laff('A',[1,2,3,4,5]*10.5,ierr)
-!!     write(*,*)'is A defined in LAFF?',ifin_laff('A')
-!!     call laff('A/2.0')
+!!     ! store some data into lala(3)
+!!     call put_into_lala('A',[1,2,3,4,5]*10.5,ierr)
+!!     write(*,*)'is A defined in LALA?',ifin_lala('A')
+!!     call lala('A/2.0')
 !!
-!!     ! pass some commands to laff(3f)
-!!     call laff([character(len=80) :: &
+!!     ! pass some commands to lala(3f)
+!!     call lala([character(len=80) :: &
 !!     &'PI=atan(1)*4               ', &
 !!     &"mytitle='this is my title';", &
 !!     &'littlearray=<              ', &
@@ -70,18 +70,18 @@
 !!     &"save('keepB',B)            ", &
 !!     &''])
 !!
-!!     ! read a file containing laff(3f) commands
-!!     call laff("exec('mycommands');")
+!!     ! read a file containing lala(3f) commands
+!!     call lala("exec('mycommands');")
 !!
-!!     ! interactively interact with laff(3f) interpreter
-!!     call laff()
+!!     ! interactively interact with lala(3f) interpreter
+!!     call lala()
 !!
-!!     ! get some data from LAFF into the calling program
-!!     call get_from_laff('littlearray',iarr,ierr)
+!!     ! get some data from LALA into the calling program
+!!     call get_from_lala('littlearray',iarr,ierr)
 !!     write(*,'(a)')'IN CALLING PROGRAM IARR='
 !!     write(*,'(1x,*(g0,1x))')(IARR(i,:),new_line('A'),i=1,size(iarr,dim=1))
 !!
-!!     call get_from_laff('mytitle',t,ierr)
+!!     call get_from_lala('mytitle',t,ierr)
 !!     write(*,*)'IN CALLING PROGRAM T=',t
 !!
 !!     end program demo_M_matrix
@@ -109,8 +109,8 @@ use M_LA, only : mat_wpofa,  mat_wrscal,           mat_wscal,   mat_wset,    mat
 !>
 !!##SYNTAX DIAGRAMS (9)
 !!
-!!    A formal description of the language acceptable to LAFF, as well as
-!!    a flow chart of the laff program, is provided by the syntax diagrams
+!!    A formal description of the language acceptable to LALA, as well as
+!!    a flow chart of the lala program, is provided by the syntax diagrams
 !!    or syntax graphs of wirth [6]. There are eleven non-terminal symbols
 !!    in the language:
 !!
@@ -310,12 +310,12 @@ use M_LA, only : mat_wpofa,  mat_wrscal,           mat_wscal,   mat_wset,    mat
 implicit none
 !private
 
-public laff
-public get_from_laff  ! get_a_laff   ! ??? maybe a function too with a second parameter and returned value is of same type(?)
-public put_into_laff  ! give_a_laff
-public :: ifin_laff   ! laffin
+public lala
+public get_from_lala  ! get_a_lala   ! ??? maybe a function too with a second parameter and returned value is of same type(?)
+public put_into_lala  ! give_a_lala
+public :: ifin_lala   ! lalain
 public :: printit
-!!public :: size_laff
+!!public :: size_lala
 
 ! for other routines
 public mat_flop
@@ -470,86 +470,86 @@ integer                     :: G_TOP_OF_SAVED, G_ARGUMENT_POINTER
 !   the bottom, a message indicating memory has been exceeded is
 !   printed, but the current variables are not affected.
 !
-!   This modular structure makes it possible to implement LAFF
+!   This modular structure makes it possible to implement LALA
 !   on a system with a limited amount of memory, as this can easily be
 !   implemented with a direct-access file as well.
 !==================================================================================================================================!
-interface put_into_laff
-   module procedure store_array_into_laff
-   module procedure store_vector_into_laff
-   module procedure store_scalar_into_laff
-end interface put_into_laff
+interface put_into_lala
+   module procedure store_array_into_lala
+   module procedure store_vector_into_lala
+   module procedure store_scalar_into_lala
+end interface put_into_lala
 
-interface get_from_laff
-   module procedure get_fixed_array_from_laff_dpcmplx
-   module procedure get_fixed_array_from_laff_cmplx
-   module procedure get_fixed_array_from_laff_real32
-   module procedure get_fixed_array_from_laff_real64
-   module procedure get_fixed_array_from_laff_real128
-   module procedure get_fixed_array_from_laff_int8
-   module procedure get_fixed_array_from_laff_int16
-   module procedure get_fixed_array_from_laff_int32
-   module procedure get_fixed_array_from_laff_int64
-   module procedure get_fixed_array_from_laff_logical
-   !module procedure get_fixed_array_from_laff_character !???? hmmm, does not meet current laff model
+interface get_from_lala
+   module procedure get_fixed_array_from_lala_dpcmplx
+   module procedure get_fixed_array_from_lala_cmplx
+   module procedure get_fixed_array_from_lala_real32
+   module procedure get_fixed_array_from_lala_real64
+   module procedure get_fixed_array_from_lala_real128
+   module procedure get_fixed_array_from_lala_int8
+   module procedure get_fixed_array_from_lala_int16
+   module procedure get_fixed_array_from_lala_int32
+   module procedure get_fixed_array_from_lala_int64
+   module procedure get_fixed_array_from_lala_logical
+   !module procedure get_fixed_array_from_lala_character !???? hmmm, does not meet current lala model
 
-   module procedure get_fixed_vector_from_laff_dpcmplx
-   module procedure get_fixed_vector_from_laff_cmplx
-   module procedure get_fixed_vector_from_laff_real32
-   module procedure get_fixed_vector_from_laff_real64
-   module procedure get_fixed_vector_from_laff_real128
-   module procedure get_fixed_vector_from_laff_int8
-   module procedure get_fixed_vector_from_laff_int16
-   module procedure get_fixed_vector_from_laff_int32
-   module procedure get_fixed_vector_from_laff_int64
-   module procedure get_fixed_vector_from_laff_logical
-   module procedure get_fixed_vector_from_laff_character
+   module procedure get_fixed_vector_from_lala_dpcmplx
+   module procedure get_fixed_vector_from_lala_cmplx
+   module procedure get_fixed_vector_from_lala_real32
+   module procedure get_fixed_vector_from_lala_real64
+   module procedure get_fixed_vector_from_lala_real128
+   module procedure get_fixed_vector_from_lala_int8
+   module procedure get_fixed_vector_from_lala_int16
+   module procedure get_fixed_vector_from_lala_int32
+   module procedure get_fixed_vector_from_lala_int64
+   module procedure get_fixed_vector_from_lala_logical
+   module procedure get_fixed_vector_from_lala_character
 
-   module procedure get_fixed_scalar_from_laff_character
+   module procedure get_fixed_scalar_from_lala_character
 
-   module procedure get_array_from_laff_dpcmplx
-   module procedure get_array_from_laff_cmplx
-   module procedure get_array_from_laff_real32
-   module procedure get_array_from_laff_real64
-   module procedure get_array_from_laff_real128
-   module procedure get_array_from_laff_int8
-   module procedure get_array_from_laff_int16
-   module procedure get_array_from_laff_int32
-   module procedure get_array_from_laff_int64
-   module procedure get_array_from_laff_logical
-   !module procedure get_array_from_laff_character !???? hmmm, does not meet current laff model
+   module procedure get_array_from_lala_dpcmplx
+   module procedure get_array_from_lala_cmplx
+   module procedure get_array_from_lala_real32
+   module procedure get_array_from_lala_real64
+   module procedure get_array_from_lala_real128
+   module procedure get_array_from_lala_int8
+   module procedure get_array_from_lala_int16
+   module procedure get_array_from_lala_int32
+   module procedure get_array_from_lala_int64
+   module procedure get_array_from_lala_logical
+   !module procedure get_array_from_lala_character !???? hmmm, does not meet current lala model
 
-   module procedure get_vector_from_laff_dpcmplx
-   module procedure get_vector_from_laff_cmplx
-   module procedure get_vector_from_laff_real32
-   module procedure get_vector_from_laff_real64
-   module procedure get_vector_from_laff_real128
-   module procedure get_vector_from_laff_int8
-   module procedure get_vector_from_laff_int16
-   module procedure get_vector_from_laff_int32
-   module procedure get_vector_from_laff_int64
-   module procedure get_vector_from_laff_logical
-   module procedure get_vector_from_laff_character
+   module procedure get_vector_from_lala_dpcmplx
+   module procedure get_vector_from_lala_cmplx
+   module procedure get_vector_from_lala_real32
+   module procedure get_vector_from_lala_real64
+   module procedure get_vector_from_lala_real128
+   module procedure get_vector_from_lala_int8
+   module procedure get_vector_from_lala_int16
+   module procedure get_vector_from_lala_int32
+   module procedure get_vector_from_lala_int64
+   module procedure get_vector_from_lala_logical
+   module procedure get_vector_from_lala_character
 
-   module procedure get_scalar_from_laff_dpcmplx
-   module procedure get_scalar_from_laff_cmplx
-   module procedure get_scalar_from_laff_real32
-   module procedure get_scalar_from_laff_real64
-   module procedure get_scalar_from_laff_real128
-   module procedure get_scalar_from_laff_int8
-   module procedure get_scalar_from_laff_int16
-   module procedure get_scalar_from_laff_int32
-   module procedure get_scalar_from_laff_int64
-   module procedure get_scalar_from_laff_logical
-   module procedure get_scalar_from_laff_character
+   module procedure get_scalar_from_lala_dpcmplx
+   module procedure get_scalar_from_lala_cmplx
+   module procedure get_scalar_from_lala_real32
+   module procedure get_scalar_from_lala_real64
+   module procedure get_scalar_from_lala_real128
+   module procedure get_scalar_from_lala_int8
+   module procedure get_scalar_from_lala_int16
+   module procedure get_scalar_from_lala_int32
+   module procedure get_scalar_from_lala_int64
+   module procedure get_scalar_from_lala_logical
+   module procedure get_scalar_from_lala_character
 
-end interface get_from_laff
+end interface get_from_lala
 
-interface laff
-   module procedure laff_init
-   module procedure laff_cmd
-   module procedure laff_cmds
-end interface laff
+interface lala
+   module procedure lala_init
+   module procedure lala_cmd
+   module procedure lala_cmds
+end interface lala
 
 character(len=:),allocatable :: G_HELP_TEXT(:)
 character(len=:),allocatable :: G_FORTRAN_TEXT(:)
@@ -736,13 +736,13 @@ end subroutine usersub_placeholder
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    LAFF(3f) - [M_matrix] initialize and/or pass commands to matrix
+!!    LALA(3f) - [M_matrix] initialize and/or pass commands to matrix
 !!    laboratory interpreter
 !!    LICENSE(MIT)
 !!##SYNOPSIS
 !!
 !!
-!!     subroutine laff(init,cmd)
+!!     subroutine lala(init,cmd)
 !!
 !!      integer,intent(in),optional :: init
 !!      character(len=*),intent(in),optional :: cmd
@@ -750,20 +750,20 @@ end subroutine usersub_placeholder
 !!      character(len=*),intent(in),optional :: cmd(:)
 !!
 !!##DESCRIPTION
-!!    LAFF(3f) is modeled on MATLAB(3f) (MATrix LABoratory), a FORTRAN
+!!    LALA(3f) is modeled on MATLAB(3f) (MATrix LABoratory), a FORTRAN
 !!    package developed by Argonne National Laboratories for in-house use.
 !!    It provides comprehensive vector and tensor operations in a package
 !!    which may be programmed, either through a macro language or through
 !!    execution of script files.
 !!
-!!    LAFF(3f) Functions supported include (but are not by any means limited
+!!    LALA(3f) Functions supported include (but are not by any means limited
 !!    to) sin, cos, tan, arcfunctions, upper triangular, lower triangular,
 !!    determinants, matrix multiplication, identity, Hilbert matrices,
 !!    eigenvalues and eigenvectors, matrix roots and products, inversion
 !!    and so on and so forth.
 !!
-!!    LAFF() can be used
-!!       + as a stand-alone utility for working with laff() files and
+!!    LALA() can be used
+!!       + as a stand-alone utility for working with lala() files and
 !!         for basic computations.
 !!       + embedded in a Fortran program, passing variables back and forth
 !!         between the calling program and the utility.
@@ -776,9 +776,9 @@ end subroutine usersub_placeholder
 !!
 !!##OPTIONS
 !!    INIT    indicate size of scratch space to allocate and (re)initialize
-!!            LAFF.
+!!            LALA.
 !!
-!!    CMD     LAFF command(s) to perform. May be CHARACTER scalar or vector
+!!    CMD     LALA command(s) to perform. May be CHARACTER scalar or vector
 !!
 !!    INIT and CMD cannot be combined on a single call.
 !!
@@ -787,7 +787,7 @@ end subroutine usersub_placeholder
 !!    and variable storage area. This form may be repeated and reinitializes
 !!    the utility at each call. A size of zero will deallocate any allocated
 !!    storage (after which the routine cannot be called with commands until
-!!    reallocated by another call to laff()).
+!!    reallocated by another call to lala()).
 !!
 !!    If no parameters are supplied interactive mode is entered.
 !!
@@ -799,36 +799,36 @@ end subroutine usersub_placeholder
 !!
 !!   Example 1:
 !!
-!!       program demo_LAFF
-!!       use M_matrix, only : laff
+!!       program demo_LALA
+!!       use M_matrix, only : lala
 !!
 !!          write(*,'(a)')'optionally initialize scratch area size'
-!!          call LAFF(20000)
+!!          call LALA(20000)
 !!
 !!          write(*,'(a)')'do some commands'
-!!          call LAFF([character(len=80) :: &
+!!          call LALA([character(len=80) :: &
 !!          & 'semi;                         ',&
 !!          & 'a=magic(4),b=-a               ',&
 !!          & 'a+b;a;b                       ',&
 !!          & "display('That is all Folks!') "])
 !!
 !!          write(*,'(a)')'do a single command'
-!!          call LAFF('who')
+!!          call LALA('who')
 !!
 !!          write(*,'(a)')'enter interactive mode'
-!!          call LAFF()
+!!          call LALA()
 !!
 !!          write(*,'(a)')'ending program'
-!!       end program demo_LAFF
+!!       end program demo_LALA
 !!
 !!   Example 2:
 !!
 !!    program bigmat
-!!    use M_matrix, only : laff
-!!       ! pass strings to LAFF but do not enter interactive mode
-!!       call laff(20000)                  ! initialize silently
-!!       call laff( 'a=[1 2 3 4; 5 6 7 8]')
-!!       call laff( [character(len=80) :: &
+!!    use M_matrix, only : lala
+!!       ! pass strings to LALA but do not enter interactive mode
+!!       call lala(20000)                  ! initialize silently
+!!       call lala( 'a=[1 2 3 4; 5 6 7 8]')
+!!       call lala( [character(len=80) :: &
 !!        & 'semi;lines(999999)                                    ',&
 !!        & '// create a magic square and add 100 to all the values',&
 !!        & 'A=magic(4),<X,Y>=shape(A)                             ',&
@@ -847,19 +847,19 @@ end subroutine usersub_placeholder
 !!       program custom_user
 !!       use M_matrix
 !!       implicit none
-!!       call set_usersub(laff_user)
-!!       call laff()
+!!       call set_usersub(lala_user)
+!!       call lala()
 !!       contains
 !!       !-------------------------------------------------------------
-!!       subroutine laff_user(a,m,n,s,t)  ! sample user routine
+!!       subroutine lala_user(a,m,n,s,t)  ! sample user routine
 !!       ! Allows personal  Fortran  subroutines  to  be  linked  into
-!!       ! LAFF. The subroutine should have the heading
+!!       ! LALA. The subroutine should have the heading
 !!       !
 !!       !    subroutine name(a,m,n,s,t)
 !!       !    integer :: m,n
 !!       !    doubleprecision a(:),s,t
 !!       !
-!!       ! The LAFF statement Y = USER(X,s,t) results in a call to
+!!       ! The LALA statement Y = USER(X,s,t) results in a call to
 !!       ! the subroutine with a copy of the matrix X stored in the
 !!       ! argument A, its column and row dimensions in M and N,
 !!       ! and the scalar parameters S and T stored in S and T.
@@ -868,7 +868,7 @@ end subroutine usersub_placeholder
 !!       ! N may be reset within the subroutine. The statement Y =
 !!       ! USER(K) results in a call with M = 1, N = 1 and A(1,1) =
 !!       ! FLOAT(K). After the subroutine has been written, it must
-!!       ! be compiled and linked to the LAFF object code within the
+!!       ! be compiled and linked to the LALA object code within the
 !!       ! local programming environment.
 !!       !
 !!       implicit none
@@ -896,7 +896,7 @@ end subroutine usersub_placeholder
 !!                a(k)=a(k)*s+t
 !!             enddo
 !!          enddo
-!!       end subroutine laff_user
+!!       end subroutine lala_user
 !!       end program custom_user
 !!
 !!  Example inputs
@@ -1358,9 +1358,9 @@ end subroutine usersub_placeholder
 !!      >       205.     0.      0.      1.      1.
 !!      >       024.     0.      0.      0.     -4.
 !!      >      ]
-subroutine LAFF_init(init,echo)
+subroutine LALA_init(init,echo)
 
-character(len=*),parameter::ident_1="@(#)M_matrix::laff(3f): initialize and/or pass commands to matrix laboratory interpreter"
+! ident_1="@(#)M_matrix::lala(3f): initialize and/or pass commands to matrix laboratory interpreter"
 
 integer,intent(in)          :: init
 logical,intent(in),optional :: echo
@@ -1454,24 +1454,22 @@ integer,parameter           :: RAND(GG_MAX_NAME_LENGTH)=  [iachar(['r','a','n','
 
    G_FORTRAN_TEXT=help_intrinsics('manual',m_help=.true.)  ! load Fortran documentation
 
-end subroutine LAFF_init
+end subroutine LALA_init
 !==================================================================================================================================
-subroutine LAFF_cmd(input_string,echo)
+subroutine LALA_cmd(input_string,echo)
 
-character(len=*),parameter::ident_2="&
-&@(#)M_matrix::laff(3f): run a single command in matrix laboratory interpreter and return to calling program"
+! ident_2="@(#)M_matrix::lala(3f): run a single command in matrix laboratory interpreter and return to calling program"
 
 character(len=*),intent(in) :: input_string
 logical,intent(in),optional :: echo
 
-   call laff_cmds( [input_string],echo=echo)
+   call lala_cmds( [input_string],echo=echo)
 
-end subroutine LAFF_cmd
+end subroutine LALA_cmd
 !==================================================================================================================================
-subroutine LAFF_cmds(pseudo_file,echo)
+subroutine LALA_cmds(pseudo_file,echo)
 
-character(len=*),parameter::ident_3="&
-&@(#)M_matrix::laff(3f): run an array of commands in matrix laboratory interpreter and return to calling program"
+! ident_3="@(#)M_matrix::lala(3f): run an array of commands in matrix laboratory interpreter and return to calling program"
 
 character(len=*),intent(in),optional :: pseudo_file(:)
 logical,intent(in),optional          :: echo
@@ -1479,7 +1477,7 @@ logical,intent(in),optional          :: echo
    if(present(echo)) G_ECHO=echo
 
    if(GM_BIGMEM.LT.0)then
-      call laff_init(200000)
+      call lala_init(200000)
    else
       G_INPUT_LUN = STDIN                                                    ! unit number for terminal input
       G_RIO = G_INPUT_LUN                                                    ! current file to read commands from
@@ -1509,13 +1507,13 @@ logical,intent(in),optional          :: echo
       end select
    enddo PARSE_LINE
 
-end subroutine LAFF_cmds
+end subroutine LALA_cmds
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine mat_err(n)
 
-character(len=*),parameter::ident_4="@(#)M_matrix::mat_err(3fp): given error number, write associated error message and set G_ERR"
+! ident_4="@(#)M_matrix::mat_err(3fp): given error number, write associated error message and set G_ERR"
 
 integer,intent(in)   :: n
 
@@ -1639,7 +1637,7 @@ end subroutine mat_files
 !==================================================================================================================================!
 subroutine mat_getsym()
 
-character(len=*),parameter::ident_5="@(#)M_matrix::mat_getsym(3fp): get a symbol"
+! ident_5="@(#)M_matrix::mat_getsym(3fp): get a symbol"
 
 doubleprecision   :: syv
 doubleprecision   :: s
@@ -1724,7 +1722,7 @@ end subroutine mat_getsym
 !==================================================================================================================================!
 subroutine mat_str2buf(string,buf,lrecl)
 
-character(len=*),parameter::ident_6="@(#)M_matrix::mat_str2buf(3fp): convert string to hollerith"
+! ident_6="@(#)M_matrix::mat_str2buf(3fp): convert string to hollerith"
 
 ! g95 compiler does not support Hollerith, this is a KLUDGE to give time to think about it
 
@@ -1744,7 +1742,7 @@ end subroutine mat_str2buf
 !==================================================================================================================================!
 function str2ade(string) result(vec)
 
-character(len=*),parameter::ident_7="@(#)M_matrix::mat_str2buf(3fp): convert CHARACTER TO ADE array vector"
+! ident_7="@(#)M_matrix::mat_str2buf(3fp): convert CHARACTER TO ADE array vector"
 
 character(len=*),intent(in)  :: string
 integer,allocatable          :: vec(:)
@@ -1759,7 +1757,7 @@ end function str2ade
 !==================================================================================================================================!
 function ade2str(buf) result(string)
 
-character(len=*),parameter::ident_8="@(#)M_matrix::mat_str2buf(3fp): convert ADE array to CHARACTER"
+! ident_8="@(#)M_matrix::mat_str2buf(3fp): convert ADE array to CHARACTER"
 
 character(len=:),allocatable :: string
 integer,intent(in)           :: buf(:)
@@ -1778,7 +1776,7 @@ end function ade2str
 !==================================================================================================================================!
 subroutine mat_buf2str(string,buf,lrecl)
 
-character(len=*),parameter::ident_9="@(#)M_matrix::mat_buf2string(3fp): convert hollerith to string"
+! ident_9="@(#)M_matrix::mat_buf2string(3fp): convert hollerith to string"
 
 integer,intent(in)     :: lrecl
 integer,intent(in)     :: buf(:)
@@ -1796,7 +1794,7 @@ end subroutine mat_buf2str
 !==================================================================================================================================!
 subroutine ints2str(ints,string,ierr)
 
-character(len=*),parameter::ident_10="@(#)M_matrix::ints2str(3f): convert laff integers to a character variable"
+! ident_10="@(#)M_matrix::ints2str(3f): convert lala integers to a character variable"
 
 ! temporary procedure while writing ASCII-based upgrade
 
@@ -1824,7 +1822,7 @@ end subroutine ints2str
 !==================================================================================================================================!
 subroutine mat_matfn6()
 !
-character(len=*),parameter::ident_11="@(#)M_matrix::mat_matfn6(3f):evaluate utility functions"
+! ident_11="@(#)M_matrix::mat_matfn6(3f):evaluate utility functions"
 !
 integer :: i, j, k
 integer :: ia
@@ -1972,7 +1970,7 @@ character(len=80) :: message
       G_VAR_COLS(G_ARGUMENT_POINTER) = 1
 !===================================================================================================================================
    case(5) ! COMMAND::USER
-      ! The LAFF statement "Y = user(X,s,t)" results in a call to the
+      ! The LALA statement "Y = user(X,s,t)" results in a call to the
       ! subroutine with a copy of the matrix X stored in the argument A,
       ! its column and row dimensions in M and N, and the scalar parameters
       ! s and t stored in S and T. If s and t are omitted, they are set
@@ -2254,7 +2252,7 @@ end subroutine mat_matfn6
 !==================================================================================================================================!
 subroutine mat_funs(id)
 
-character(len=*),parameter::ident_12="@(#)M_matrix::ml_funcs(3fp):scan function list and set G_FUN and G_FIN"
+! ident_12="@(#)M_matrix::ml_funcs(3fp):scan function list and set G_FUN and G_FIN"
 
 integer,intent(in)                :: id(GG_MAX_NAME_LENGTH)
 integer                           :: selector
@@ -2364,7 +2362,7 @@ end subroutine mat_funs
 !==================================================================================================================================!
 subroutine mat_copyid(x,y)
 
-character(len=*),parameter::ident_13="@(#)M_matrix::mat_copyid(3fp): copy a name to allow an easy way to store a name"
+! ident_13="@(#)M_matrix::mat_copyid(3fp): copy a name to allow an easy way to store a name"
 
 integer,intent(out) :: x(GG_MAX_NAME_LENGTH)
 integer,intent(in)  :: y(GG_MAX_NAME_LENGTH)
@@ -2378,7 +2376,7 @@ end subroutine mat_copyid
 !==================================================================================================================================!
 subroutine mat_getval(s)
 
-character(len=*),parameter::ident_14="@(#)M_matrix::mat_getval(3fp): form numerical value from string of integer characters"
+! ident_14="@(#)M_matrix::mat_getval(3fp): form numerical value from string of integer characters"
 
 doubleprecision,intent(out) :: s
       s = 0.0d0
@@ -2405,7 +2403,7 @@ end subroutine mat_getval
 !==================================================================================================================================!
 subroutine mat_getch()
 
-character(len=*),parameter::ident_15="@(#)M_matrix::mat_getch(3f): get next character from input line into G_CHRA"
+! ident_15="@(#)M_matrix::mat_getch(3f): get next character from input line into G_CHRA"
 
    G_CHRA = G_LIN(G_LINE_POINTER(4))
    if (G_CHRA .ne. GG_EOL) G_LINE_POINTER(4) = G_LINE_POINTER(4) + 1
@@ -2416,7 +2414,7 @@ end subroutine mat_getch
 !==================================================================================================================================!
 subroutine mat_base(x,base,eps,s,n)
 
-character(len=*),parameter::ident_16="@(#)M_matrix::mat_base(3fp): store representation of x in s(1:n) using specified base"
+! ident_16="@(#)M_matrix::mat_base(3fp): store representation of x in s(1:n) using specified base"
 
 doubleprecision            :: x
 doubleprecision,intent(in) :: base
@@ -2481,7 +2479,7 @@ end subroutine mat_base
 !==================================================================================================================================!
 subroutine mat_print(ID,K)
 
-character(len=*),parameter::ident_17="@(#)M_matrix::mat_print(3fp): primary output routine"
+! ident_17="@(#)M_matrix::mat_print(3fp): primary output routine"
 
 integer           :: id(GG_MAX_NAME_LENGTH)
 integer           :: k
@@ -2688,7 +2686,7 @@ end subroutine mat_print
 !==================================================================================================================================!
 subroutine mat_formz(x,y)
 
-character(len=*),parameter::ident_18="@(#)M_matrix::mat_formz: system dependent routine to print with z format"
+! ident_18="@(#)M_matrix::mat_formz: system dependent routine to print with z format"
 
 doubleprecision,intent(in) :: x,y
 
@@ -2708,7 +2706,7 @@ end subroutine mat_formz
 !==================================================================================================================================!
 subroutine mat_prompt(pause)
 
-character(len=*),parameter::ident_19="@(#)M_matrix::mat_prompt(3f): issue interactive prompt with optional pause"
+! ident_19="@(#)M_matrix::mat_prompt(3f): issue interactive prompt with optional pause"
 
 integer,intent(in) :: pause
 character(len=1)   :: dummy
@@ -2726,7 +2724,7 @@ end subroutine mat_prompt
 !==================================================================================================================================!
 subroutine mat_stack1(op)
 
-character(len=*),parameter::ident_20="@(#)M_matrix::mat_stack1(3f): Unary Operations"
+! ident_20="@(#)M_matrix::mat_stack1(3f): Unary Operations"
 
 integer           :: op
 integer           :: i
@@ -2770,7 +2768,7 @@ end subroutine mat_stack1
 !==================================================================================================================================!
 subroutine mat_print_id(id,argcnt)
 
-character(len=*),parameter::ident_21="@(#)M_matrix::mat_print_id(3fp): print table of variable id names (up to) eight per line"
+! ident_21="@(#)M_matrix::mat_print_id(3fp): print table of variable id names (up to) eight per line"
 
 !     ID     Is array of GG_MAX_NAME_LENGTH character IDs to print
 !     ARGCNT is number of IDs to print
@@ -2816,7 +2814,7 @@ end subroutine mat_print_id
 !==================================================================================================================================!
 subroutine mat_stack_put(id)
 
-character(len=*),parameter::ident_22="@(#)M_matrix::mat_stack_put(3fp): put variables into storage"
+! ident_22="@(#)M_matrix::mat_stack_put(3fp): put variables into storage"
 
 integer  :: id(GG_MAX_NAME_LENGTH)
 integer  :: i, j, k
@@ -3067,14 +3065,14 @@ end subroutine MAT_STACK_PUT
 !!##THE PARSER-INTERPRETER (10)
 !!
 !!    The structure of the parser-interpreter is similar to that of Wirth's
-!!    compiler [6] for his simple language, PL/0 , except that LAFF is
+!!    compiler [6] for his simple language, PL/0 , except that LALA is
 !!    programmed in Fortran, which does not have explicit recursion. The
 !!    interrelation of the primary subroutines is shown in the following
 !!    diagram.
 !!
 !!          MAIN
 !!            |
-!!          LAFF     |--CLAUSE
+!!          LALA     |--CLAUSE
 !!            |       |    |
 !!          PARSE-----|--EXPR----TERM----FACTOR
 !!                    |    |       |       |
@@ -3471,7 +3469,7 @@ character(len=:),allocatable :: symbol
          goto 01
       end select
 !.......................................................................
-!     call mat_matfns by returning to LAFF
+!     call mat_matfns by returning to LALA
    95 continue
       if(G_ARGUMENT_POINTER.lt.1)then
          !call journal('sc','*mat_parse* stack emptied',G_ARGUMENT_POINTER)
@@ -3497,7 +3495,7 @@ character(len=10),parameter :: cmd(*)=[ character(len=10) :: &
  & 'clear', 'else',  'end',      'exit',   'for',  &
  & 'help',  'if',    'long',     'quit',   'semi', &
  & 'short', 'what',  'while',    'who',    'sh',   &
- & 'laff',  'shell', 'continue', 'return', 'fhelp'   &
+ & 'lala',  'shell', 'continue', 'return', 'fhelp'   &
  & ]
 
 FINISHED: block
@@ -3606,7 +3604,7 @@ FINISHED: block
       G_FUN = 99
       exit FINISHED
 !===================================================================================================================================
-   case('laff')
+   case('lala')
       call journal('QUIT SINGING AND GET BACK TO WORK.')
 !===================================================================================================================================
    case('shell')
@@ -3687,7 +3685,7 @@ end subroutine mat_comand
 !==================================================================================================================================!
 subroutine sh_command()
 
-character(len=*),parameter::ident_23="@(#)M_matrix::sh_command(3f): start system shell interactively"
+! ident_23="@(#)M_matrix::sh_command(3f): start system shell interactively"
 
 character(len=GG_LINELEN) :: line
 integer                   :: istat
@@ -3705,8 +3703,7 @@ end subroutine sh_command
 !==================================================================================================================================!
 subroutine mat_plot(lplot,x,y,n,p,k)
 
-character(len=*),parameter::ident_24="&
-&@(#)M_matrix::mat_plot(3fp): Plot X vs. Y on LPLOT.  If K is nonzero, then P(1),...,P(K) are extra parameters"
+! ident_24="@(#)M_matrix::mat_plot(3fp): Plot X vs. Y on LPLOT.  If K is nonzero, then P(1),...,P(K) are extra parameters"
 
 integer           :: lplot
 integer           :: n
@@ -3790,7 +3787,7 @@ end subroutine mat_plot
 !==================================================================================================================================!
 subroutine mat_matfn1()
 
-character(len=*),parameter::ident_25="@(#)M_matrix::mat_matfn1(3fp): evaluate functions involving gaussian elimination"
+! ident_25="@(#)M_matrix::mat_matfn1(3fp): evaluate functions involving gaussian elimination"
 
 doubleprecision   :: dtr(2)
 doubleprecision   :: dti(2)
@@ -4429,7 +4426,7 @@ end subroutine mat_matfn2
 !==================================================================================================================================!
 subroutine mat_matfn3()
 
-character(len=*),parameter::ident_26="@(#)M_matrix::mat_matfn3(3fp): evaluate functions involving singular value decomposition"
+! ident_26="@(#)M_matrix::mat_matfn3(3fp): evaluate functions involving singular value decomposition"
 
 integer         :: i
 integer         :: j
@@ -4739,7 +4736,7 @@ end subroutine mat_matfn3
 !==================================================================================================================================!
 SUBROUTINE mat_matfn4()
 
-character(len=*),parameter::ident_27="@(#)M_matrix::mat_matfn4(3fp): evaluate functions involving qr decomposition (least squares)"
+! ident_27="@(#)M_matrix::mat_matfn4(3fp): evaluate functions involving qr decomposition (least squares)"
 
 integer           :: info
 integer           :: j
@@ -4967,7 +4964,7 @@ END SUBROUTINE mat_matfn4
 !==================================================================================================================================!
 subroutine mat_matfn5()
 
-character(len=*),parameter::ident_28="@(#)M_matrix::mat_matfn5(3fp):file handling and other I/O"
+! ident_28="@(#)M_matrix::mat_matfn5(3fp):file handling and other I/O"
 
 character(len=GG_LINELEN)  :: mline
 character(len=256)         :: errmsg
@@ -5350,7 +5347,7 @@ end subroutine mat_matfn5
 !==================================================================================================================================!
 subroutine mat_stack_get(id)
 
-character(len=*),parameter::ident_29="@(#)M_matrix::mat_stack_get(3fp): get variables from storage"
+! ident_29="@(#)M_matrix::mat_stack_get(3fp): get variables from storage"
 
 integer,intent(in)  :: id(GG_MAX_NAME_LENGTH)
 integer             :: i
@@ -5486,7 +5483,7 @@ END SUBROUTINE MAT_STACK_GET
 !==================================================================================================================================!
 subroutine mat_stack2(op)
 
-character(len=*),parameter::ident_30="@(#)M_matrix::ml_stackp(3fp): binary and ternary operations"
+! ident_30="@(#)M_matrix::ml_stackp(3fp): binary and ternary operations"
 
 integer           :: op
 doubleprecision   :: sr,si,e1,st,e2
@@ -5888,7 +5885,7 @@ integer                   :: ios
       endif
 !.......................................................................
       do j = 1, n
-         do k = 1, G_CHARSET_SIZE  ! make sure this letter is in set of LAFF characters and get its LAFF number
+         do k = 1, G_CHARSET_SIZE  ! make sure this letter is in set of LALA characters and get its LALA number
            if (G_BUF(j).eq.k ) goto 30
          enddo
          call journal('sc','Unknown character at column ',j) ! this is not a known character
@@ -6605,8 +6602,7 @@ end subroutine mat_term
 !==================================================================================================================================!
 subroutine mat_savlod(lun,id,m,n,img,space_left,xreal,ximag)
 
-character(len=*),parameter::ident_31="&
-&@(#)M_matrix::mat_savlod(3fp): read next variable from a save file or write next variable to it"
+! ident_31="@(#)M_matrix::mat_savlod(3fp): read next variable from a save file or write next variable to it"
 
 integer,intent(in)                :: lun                                       ! logical unit number
 integer                           :: id(GG_MAX_NAME_LENGTH)                    ! name, format 32a1
@@ -6688,50 +6684,50 @@ end function mat_eqid
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    ifin_laff(3f) - [M_matrix] test if variable name exists in laff()
+!!    ifin_lala(3f) - [M_matrix] test if variable name exists in lala()
 !!    LICENSE(MIT)
 !!##SYNOPSIS
 !!
-!!      logical function ifin_laff(varname)
+!!      logical function ifin_lala(varname)
 !!
 !!      character(len=*),intent(in) :: varname
 !!##DESCRIPTION
-!!    Determine if a variable name currently exists in laff().
+!!    Determine if a variable name currently exists in lala().
 !!
 !!##RETURNS
-!!     ifin_laff  TRUE if varname exists in laff, else FALSE.
+!!     ifin_lala  TRUE if varname exists in lala, else FALSE.
 !!##EXAMPLE
 !!
 !!   sample program:
 !!
-!!      program demo_ifin_laff
-!!      use M_matrix, only : ifin_laff
+!!      program demo_ifin_lala
+!!      use M_matrix, only : ifin_lala
 !!      implicit none
-!!         write(*,*)'eps ',ifin_laff('eps')
-!!         write(*,*)'unknown ',ifin_laff('unknown')
-!!      end program demo_ifin_laff
+!!         write(*,*)'eps ',ifin_lala('eps')
+!!         write(*,*)'unknown ',ifin_lala('unknown')
+!!      end program demo_ifin_lala
 !!
 !!   Results:
 !!
 !!     eps  T
 !!     unknown  F
-function ifin_laff(varname)
+function ifin_lala(varname)
 
-character(len=*),parameter::ident_32="@(#)M_matrix::ifin_laff(3f) :: access LAFF variable stack and see if a variable name exists"
+! ident_32="@(#)M_matrix::ifin_lala(3f) :: access LALA variable stack and see if a variable name exists"
 
 character(len=*),intent(in)        :: varname
 integer                            :: id(GG_MAX_NAME_LENGTH)
-logical                            :: ifin_laff
+logical                            :: ifin_lala
 integer                            :: k
 
-   ifin_laff=.true.
-   if(GM_BIGMEM.LT.0) call laff_init(200000) ! if not initialized initialize
+   ifin_lala=.true.
+   if(GM_BIGMEM.LT.0) call lala_init(200000) ! if not initialized initialize
    if( .not.mat_is_name(varname))then
       call journal('sc',varname,'is not a valid variable name')
-      ifin_laff=.false.
+      ifin_lala=.false.
    endif
 
-   ! convert character name to laff character set
+   ! convert character name to lala character set
    id=iachar(' ')
    call mat_str2buf(varname,id,len(varname))
    call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1), ID)   ! copy ID to next blank entry in G_VAR_IDS for messages(?)
@@ -6742,20 +6738,20 @@ integer                            :: k
 
    ! if matched the name inserted above did not find it.
    if ( (k .ge. GG_MAX_NUMBER_OF_NAMES-1) .or.  (k .eq. G_TOP_OF_SAVED-1)) then
-      ifin_laff=.false.                              ! unknown variable name
+      ifin_lala=.false.                              ! unknown variable name
    endif
 
-end function ifin_laff
+end function ifin_lala
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !>
 !!##NAME
-!!     get_from_laff(3f) - [M_matrix] return data from laff(3f) to calling program
+!!     get_from_lala(3f) - [M_matrix] return data from lala(3f) to calling program
 !!     LICENSE(MIT)
 !!##SYNOPSIS
 !!
-!!     subroutine get_from_laff(varname,A,IERR,fixed)
+!!     subroutine get_from_lala(varname,A,IERR,fixed)
 !!
 !!      character(len=*),intent(in)               :: varname
 !!      [INTRINSIC_TYPE],allocatable,intent(out)  :: a(:,:)
@@ -6763,11 +6759,11 @@ end function ifin_laff
 !!      logical,intent(in),optional               :: fixed
 !!
 !!##DESCRIPTION
-!!    Given the name of a variable defined with laff(3f) commands return
+!!    Given the name of a variable defined with lala(3f) commands return
 !!    the values to the calling program.
 !!
 !!##OPTIONS
-!!    VARNAME Name of laff(3f) variable to retrieve
+!!    VARNAME Name of lala(3f) variable to retrieve
 !!
 !!    FIXED   If .true., A is assumed to be a fixed size. It should only
 !!            be specified if the value is .true.! It is up to the user
@@ -6781,8 +6777,8 @@ end function ifin_laff
 !!
 !!   sample program:
 !!
-!!    program demo_get_from_laff
-!!    use M_matrix, only : laff, get_from_laff, put_into_laff
+!!    program demo_get_from_lala
+!!    use M_matrix, only : lala, get_from_lala, put_into_lala
 !!    implicit none
 !!    doubleprecision,allocatable :: darr(:,:)
 !!    real,allocatable            :: rarr(:,:)
@@ -6791,26 +6787,26 @@ end function ifin_laff
 !!    integer                     :: i
 !!    character(len=*),parameter  :: gen='(*(g0,1x))'
 !!
-!!       ! create an array in LAFF so have something to get
-!!       call laff('A=rand(4,5)*10.5,long,A')
+!!       ! create an array in LALA so have something to get
+!!       call lala('A=rand(4,5)*10.5,long,A')
 !!
 !!       ! get the array as a REAL array
-!!       call get_from_laff('A',rarr,ierr)
+!!       call get_from_lala('A',rarr,ierr)
 !!       write(*,gen)'in calling program RARR=',shape(rarr)
 !!       write(*,gen)(rarr(i,:),new_line('A'),i=1,size(rarr,dim=1))
 !!
 !!       ! get the array as a DOUBLEPRECISION  array
-!!       call get_from_laff('A',darr,ierr)
+!!       call get_from_lala('A',darr,ierr)
 !!       write(*,gen)'in calling program darr=',shape(darr)
 !!       write(*,gen)(darr(i,:),new_line('A'),i=1,size(darr,dim=1))
 !!
 !!       ! get the array as an INTEGER vector, much like the
 !!       ! PUSH(3f) intrinsic
-!!       call get_from_laff('A',ivec,ierr)
+!!       call get_from_lala('A',ivec,ierr)
 !!       write(*,gen)'in calling program ivec=',shape(ivec)
 !!       write(*,gen)ivec
 !!
-!!    end program demo_get_from_laff
+!!    end program demo_get_from_lala
 !!
 !!   Results:
 !!
@@ -6849,27 +6845,26 @@ end function ifin_laff
 !!
 !!    >in calling program ivec= 20
 !!    > 2 8 0 3 7 7 9 7 9 1 6 7 8 2 6 2 2 2 9 7
-subroutine get_double_from_laff(varname,A,type,IERR)
+subroutine get_double_from_lala(varname,A,type,IERR)
 
-character(len=*),parameter::ident_33="&
-&@(#)M_matrix::get_double_from_laff(3f) :: access LAFF variable stack and get a variable by name and its data from the stack"
+! ident_33="@(#)M_matrix::get_double_from_lala(3f) :: access LALA variable stack and get a variable by name and its data from the stack"
 
 character(len=*),intent(in)              :: varname    ! the name of A.
-integer,intent(in)                       :: type       ! type =  0  get REAL A from LAFF, type  = 1  get IMAGINARY A into LAFF,
-integer,INTENT(OUT)                      :: ierr       ! return with nonzero IERR after LAFF error message.
+integer,intent(in)                       :: type       ! type =  0  get REAL A from LALA, type  = 1  get IMAGINARY A into LALA,
+integer,INTENT(OUT)                      :: ierr       ! return with nonzero IERR after LALA error message.
 doubleprecision,allocatable,intent(out)  :: a(:,:)     ! A is an M by N matrix
 integer                                  :: id(GG_MAX_NAME_LENGTH)
 integer                                  :: i,j,k,location,m,n
 
    if(GM_BIGMEM.LT.0) then
-      call laff_init(200000) ! if not initialized initialize
+      call lala_init(200000) ! if not initialized initialize
    endif
    ierr=0
 
-   ! convert character name to laff character set
+   ! convert character name to lala character set
    id=iachar(' ')
    call mat_str2buf(varname,id,len(varname))
-   ! ??? make sure this letter is in set of LAFF characters and get its LAFF number
+   ! ??? make sure this letter is in set of LALA characters and get its LALA number
    call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1), ID)   ! copy ID to next blank entry in G_VAR_IDS for messages(?)
 
    do k=GG_MAX_NUMBER_OF_NAMES,1,-1                       ! start at bottom and search up through names till find the name
@@ -6878,7 +6873,7 @@ integer                                  :: i,j,k,location,m,n
 
    ! if matched the name inserted above did not find it.
    if ( (k .ge. GG_MAX_NUMBER_OF_NAMES-1 .and. G_RHS .gt. 0) .or. (k .eq. G_TOP_OF_SAVED-1) ) then
-      call journal('sc','<ERROR>get_double_from_laff: unknown variable name',varname)
+      call journal('sc','<ERROR>get_double_from_lala: unknown variable name',varname)
       IERR=4
       if(allocated(a))deallocate(a)
       allocate(a(0,0))
@@ -6891,16 +6886,16 @@ integer                                  :: i,j,k,location,m,n
       do j=1,n
          do i=1,m
             if(type.eq.0)then
-               a(i,j)=GM_REALS(location)       ! type =  0  GET REAL A FROM LAFF,
+               a(i,j)=GM_REALS(location)       ! type =  0  GET REAL A FROM LALA,
             else
-               a(i,j)=GM_IMAGS(location)       ! type =  1  GET IMAGINARY A FROM LAFF,
+               a(i,j)=GM_IMAGS(location)       ! type =  1  GET IMAGINARY A FROM LALA,
             endif
             location=location+1
          enddo
       enddo
    endif
 
-end subroutine get_double_from_laff
+end subroutine get_double_from_lala
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -6916,22 +6911,22 @@ end function rowpack
 !===================================================================================================================================
 !>
 !!##NAME
-!!     put_from_laff(3f) - [M_matrix] return data from laff(3f) to calling program
+!!     put_from_lala(3f) - [M_matrix] return data from lala(3f) to calling program
 !!     LICENSE(MIT)
 !!##SYNOPSIS
 !!
-!!   subroutine put_into_laff(varname,A,IERR)
+!!   subroutine put_into_lala(varname,A,IERR)
 !!
 !!    character(len=*),intent(in)              :: varname
 !!    [INTRINSIC_TYPE],allocatable,intent(in)  :: a(:,:)
 !!    integer,intent(out)                      :: ierr
 !!
 !!##DESCRIPTION
-!!    Define a variable in the laff(3f) utility with a variable declared
+!!    Define a variable in the lala(3f) utility with a variable declared
 !!    in the calling program.
 !!
 !!##OPTIONS
-!!    VARNAME Name of laff(3f) variable to retrieve
+!!    VARNAME Name of lala(3f) variable to retrieve
 !!      A     May be of TYPE INTEGER, REAL, CHARACTER, LOGICAL or COMPLEX.
 !!            May be a scalar, vector, or MxN matrix.
 !!
@@ -6942,24 +6937,24 @@ end function rowpack
 !!
 !!   sample program:
 !!
-!!    program demo_put_into_laff
-!!    use M_matrix, only : laff, get_from_laff, put_into_laff
+!!    program demo_put_into_lala
+!!    use M_matrix, only : lala, get_from_lala, put_into_lala
 !!    implicit none
 !!    integer :: ierr
 !!
-!!       ! store some data from the program into laff(3f)
-!!       call put_into_laff('A',[1,2,3,4,5,6,7,8,9],ierr)
-!!       call put_into_laff('B',[1.1,2.2,3.3],ierr)
-!!       call put_into_laff('C',"This is my title",ierr)
+!!       ! store some data from the program into lala(3f)
+!!       call put_into_lala('A',[1,2,3,4,5,6,7,8,9],ierr)
+!!       call put_into_lala('B',[1.1,2.2,3.3],ierr)
+!!       call put_into_lala('C',"This is my title",ierr)
 !!
-!!       ! call laff(3f) and display the values
-!!       call laff([character(len=80) :: &
+!!       ! call lala(3f) and display the values
+!!       call lala([character(len=80) :: &
 !!       & 'who,A,B', &
 !!       & 'display(C);', &
 !!       & '', &
 !!       & ''])
 !!
-!!    end program demo_put_into_laff
+!!    end program demo_put_into_lala
 !!
 !!   Results:
 !!
@@ -6973,14 +6968,14 @@ end function rowpack
 !!      > B  =
 !!      >    1.1000    2.2000    3.3000
 !!      >This is my title
-subroutine store_double_into_laff(varname,realxx,imagxx,ierr)
+subroutine store_double_into_lala(varname,realxx,imagxx,ierr)
 
-character(len=*),parameter::ident_34="@(#)M_matrix:: _store_double_into_laff(3f): put a variable name and its data onto LAFF stack"
+! ident_34="@(#)M_matrix:: _store_double_into_lala(3f): put a variable name and its data onto LALA stack"
 
 character(len=*),intent(in)          :: varname                ! the name of realxx.
 doubleprecision,intent(in)           :: realxx(:,:)            ! inputarray is an M by N matrix
 doubleprecision,intent(in),optional  :: imagxx(:,:)            ! inputarray is an M by N matrix
-integer,intent(out)                  :: ierr                   ! return with nonzero ierr after LAFF error message.
+integer,intent(out)                  :: ierr                   ! return with nonzero ierr after LALA error message.
 
 integer                              :: img
 integer                              :: space_left
@@ -6989,7 +6984,7 @@ integer                              :: location
 integer                              :: m,n                    ! m, n = dimensions
 
    if(GM_BIGMEM.LT.0) then
-      call laff_init(200000) ! if not initialized initialize
+      call lala_init(200000) ! if not initialized initialize
    else
    endif
 
@@ -6997,7 +6992,7 @@ integer                              :: m,n                    ! m, n = dimensio
    if(present(imagxx))then
       img=1
       if(size(realxx,dim=1).ne.size(imagxx,dim=1).or.size(realxx,dim=2).ne.size(imagxx,dim=2))then
-         call journal('sc','<ERROR>*laff_put* real and imaginary parts have different sizes')
+         call journal('sc','<ERROR>*lala_put* real and imaginary parts have different sizes')
          ierr=-1
          return
       endif
@@ -7014,15 +7009,15 @@ integer                              :: m,n                    ! m, n = dimensio
      location=1
    endif
    space_left = G_VAR_DATALOC(G_TOP_OF_SAVED) - location
-   !! assume input arrays can be one or two dimension but laff stores everything as a vector and store m and n
+   !! assume input arrays can be one or two dimension but lala stores everything as a vector and store m and n
    m=size(realxx,dim=1)
    n=size(realxx,dim=2)
    if (m*n .gt. space_left) then
-      call journal('sc','<ERROR>*laff_put* insufficient space to save data to LAFF')
+      call journal('sc','<ERROR>*lala_put* insufficient space to save data to LALA')
       ierr=-2
       return
    elseif(m*n.eq.0)then ! check for zero-size input array
-      call journal('sc','<ERROR>*laff_put* cannot save empty arrays to LAFF')
+      call journal('sc','<ERROR>*lala_put* cannot save empty arrays to LALA')
       ierr=-3
       return
    else
@@ -7045,40 +7040,40 @@ integer                              :: m,n                    ! m, n = dimensio
    G_ARGUMENT_POINTER = G_ARGUMENT_POINTER + 1
    G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
    G_VAR_COLS(G_ARGUMENT_POINTER) = 0
-end subroutine store_double_into_laff
+end subroutine store_double_into_lala
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine store_array_into_laff(varname,anything,ierr)
+subroutine store_array_into_lala(varname,anything,ierr)
 character(len=*),intent(in)  :: varname
 class(*)                     :: anything(:,:)
 integer,intent(out)          :: ierr
    select type(anything)
 !!    type is (character(len=*));
-!!       call store_double_into_laff(varname,
+!!       call store_double_into_lala(varname,
 !!       reshape(real(str2ade(anything),kind=dp),[1,len(anything)])
 !!       ,ierr=ierr)
-!!       call store_double_into_laff(varname,reshape(real(str2ade(anything),kind=dp),[1,len(anything)]),ierr=ierr)
-   type is (complex);              call store_double_into_laff(varname,real(anything,kind=dp), &
+!!       call store_double_into_lala(varname,reshape(real(str2ade(anything),kind=dp),[1,len(anything)]),ierr=ierr)
+   type is (complex);              call store_double_into_lala(varname,real(anything,kind=dp), &
                                                                      & real(aimag(anything),kind=dp),ierr=ierr)
-   type is (complex(kind=dp));     call store_double_into_laff(varname,real(anything),aimag(anything),ierr=ierr)
-   type is (integer(kind=int8));   call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-   type is (integer(kind=int16));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-   type is (integer(kind=int32));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-   type is (integer(kind=int64));  call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-   type is (real(kind=real32));    call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-   type is (real(kind=real64));    call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
-   type is (real(kind=real128));   call store_double_into_laff(varname,real(anything,kind=dp),ierr=ierr)
+   type is (complex(kind=dp));     call store_double_into_lala(varname,real(anything),aimag(anything),ierr=ierr)
+   type is (integer(kind=int8));   call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+   type is (integer(kind=int16));  call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+   type is (integer(kind=int32));  call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+   type is (integer(kind=int64));  call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+   type is (real(kind=real32));    call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+   type is (real(kind=real64));    call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+   type is (real(kind=real128));   call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
    ! arbitrarily, 0 is false and not 0 is true, although I prefer the opposite
-   type is (logical);              call store_double_into_laff(varname,merge(0.1d0,0.0d0,anything),ierr=ierr)
+   type is (logical);              call store_double_into_lala(varname,merge(0.1d0,0.0d0,anything),ierr=ierr)
    class default
-      stop 'crud. store_array_into_laff(1) does not know about this type'
+      stop 'crud. store_array_into_lala(1) does not know about this type'
    end select
-end subroutine store_array_into_laff
+end subroutine store_array_into_lala
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine store_vector_into_laff(varname,anything,ierr)
+subroutine store_vector_into_lala(varname,anything,ierr)
 character(len=*),intent(in)  :: varname
 class(*)                     :: anything(:)
 integer,intent(out)          :: ierr
@@ -7090,319 +7085,319 @@ integer                      :: i
                    & r=> size(anything), &
                    & c=> len(anything) &
                  )
-          call store_double_into_laff(varname,reshape(letters,[r,c],order=[2,1]),ierr=ierr)
+          call store_double_into_lala(varname,reshape(letters,[r,c],order=[2,1]),ierr=ierr)
        end associate
     type is (complex)
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]), &
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]), &
                                           & reshape(real(aimag(anything),kind=dp),[1,size(anything)]), ierr=ierr)
     type is (complex(kind=dp))
-       call store_double_into_laff(varname,reshape(real(anything),[1,size(anything)]), &
+       call store_double_into_lala(varname,reshape(real(anything),[1,size(anything)]), &
                                           & reshape(aimag(anything),[1,size(anything)]), ierr=ierr)
     type is (integer(kind=int8))
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (integer(kind=int16))
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (integer(kind=int32))
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (integer(kind=int64))
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (real(kind=real32))
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (real(kind=real64))
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (real(kind=real128))
-       call store_double_into_laff(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (logical)
-       call store_double_into_laff(varname,reshape(merge(0.1d0,0.0d0,anything),[1,size(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(merge(0.1d0,0.0d0,anything),[1,size(anything)]),ierr=ierr)
     class default
-      stop 'crud. store_vector_into_laff(1) does not know about this type'
+      stop 'crud. store_vector_into_lala(1) does not know about this type'
       ierr=-20
    end select
-end subroutine store_vector_into_laff
+end subroutine store_vector_into_lala
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine store_scalar_into_laff(varname,anything,ierr)
+subroutine store_scalar_into_lala(varname,anything,ierr)
 character(len=*),intent(in)  :: varname
 class(*)                     :: anything
 integer,intent(out)          :: ierr
 logical,parameter            :: T=.true.
    select type(anything)
     type is (character(len=*))
-       call store_double_into_laff(varname,reshape(real(str2ade(anything),kind=dp),[1,len(anything)]),ierr=ierr)
+       call store_double_into_lala(varname,reshape(real(str2ade(anything),kind=dp),[1,len(anything)]),ierr=ierr)
     type is (complex)
-       call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]), &
+       call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]), &
                                           & reshape([real(aimag(anything),kind=dp)],[1,1]), ierr=ierr)
     type is (complex(kind=dp))
-             call store_double_into_laff(varname,reshape([real(anything)],[1,1]), reshape([aimag(anything)],[1,1]), ierr=ierr)
-    type is (integer(kind=int8));  call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
-    type is (integer(kind=int16)); call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
-    type is (integer(kind=int32)); call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
-    type is (integer(kind=int64)); call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
-    type is (real(kind=real32));   call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
-    type is (real(kind=real64));   call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
-    type is (real(kind=real128));  call store_double_into_laff(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+             call store_double_into_lala(varname,reshape([real(anything)],[1,1]), reshape([aimag(anything)],[1,1]), ierr=ierr)
+    type is (integer(kind=int8));  call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+    type is (integer(kind=int16)); call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+    type is (integer(kind=int32)); call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+    type is (integer(kind=int64)); call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+    type is (real(kind=real32));   call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+    type is (real(kind=real64));   call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+    type is (real(kind=real128));  call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
     ! arbitrarily, 0 is false and not 0 is true, although I prefer the opposite
-    type is (logical);             call store_double_into_laff(varname,reshape([merge(1.0d0,0.0d0,anything)],[1,1]),ierr=ierr)
+    type is (logical);             call store_double_into_lala(varname,reshape([merge(1.0d0,0.0d0,anything)],[1,1]),ierr=ierr)
     class default
-      stop 'crud. store_scalar_into_laff(1) does not know about this type'
+      stop 'crud. store_scalar_into_lala(1) does not know about this type'
    end select
-end subroutine store_scalar_into_laff
+end subroutine store_scalar_into_lala
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_int8(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_int8(varname,out,ierr,fixed)
 character(len=*),intent(in)                :: varname
 integer(kind=int8),intent(out) :: out(:,:)
 doubleprecision,allocatable                :: double(:,:)
 integer,intent(out)                        :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(double,kind=int8)
-end subroutine get_fixed_array_from_laff_int8
+end subroutine get_fixed_array_from_lala_int8
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_int16(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_int16(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 integer(kind=int16),intent(out) :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(double,kind=int16)
-end subroutine get_fixed_array_from_laff_int16
+end subroutine get_fixed_array_from_lala_int16
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_int32(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_int32(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 integer(kind=int32),intent(out) :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(double,kind=int32)
-end subroutine get_fixed_array_from_laff_int32
+end subroutine get_fixed_array_from_lala_int32
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_int64(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_int64(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 integer(kind=int64),intent(out) :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=int64)
-end subroutine get_fixed_array_from_laff_int64
+end subroutine get_fixed_array_from_lala_int64
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_real32(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_real32(varname,out,ierr,fixed)
 character(len=*),intent(in)               :: varname
 real(kind=real32),intent(out) :: out(:,:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=real32)
-end subroutine get_fixed_array_from_laff_real32
+end subroutine get_fixed_array_from_lala_real32
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_real64(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_real64(varname,out,ierr,fixed)
 character(len=*),intent(in)               :: varname
 real(kind=real64),intent(out) :: out(:,:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=real64)
-end subroutine get_fixed_array_from_laff_real64
+end subroutine get_fixed_array_from_lala_real64
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_real128(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_real128(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),intent(out)  :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=real128)
-end subroutine get_fixed_array_from_laff_real128
+end subroutine get_fixed_array_from_lala_real128
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_logical(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_logical(varname,out,ierr,fixed)
 character(len=*),intent(in)      :: varname
 logical,intent(out)  :: out(:,:)
 doubleprecision,allocatable      :: double(:,:)
 integer,intent(out)              :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=merge(.false.,.true.,nint(double).eq.0)
-end subroutine get_fixed_array_from_laff_logical
+end subroutine get_fixed_array_from_lala_logical
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_cmplx(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_cmplx(varname,out,ierr,fixed)
 character(len=*),intent(in)      :: varname
 complex,intent(out)  :: out(:,:)
 doubleprecision,allocatable      :: double(:,:), doublei(:,:)
 integer,intent(out)              :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(double,doublei,kind=sp)
-end subroutine get_fixed_array_from_laff_cmplx
+end subroutine get_fixed_array_from_lala_cmplx
 !===================================================================================================================================
-subroutine get_fixed_array_from_laff_dpcmplx(varname,out,ierr,fixed)
+subroutine get_fixed_array_from_lala_dpcmplx(varname,out,ierr,fixed)
 character(len=*),intent(in)               :: varname
 complex(kind=dp),intent(out)  :: out(:,:)
 doubleprecision,allocatable               :: double(:,:), doublei(:,:)
 integer,intent(out)                       :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(double,doublei,kind=sp)
-end subroutine get_fixed_array_from_laff_dpcmplx
+end subroutine get_fixed_array_from_lala_dpcmplx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_character(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_character(varname,out,ierr,fixed)
 character(len=*),intent(in)              :: varname
 character(len=*),intent(out) :: out(:)
 doubleprecision,allocatable              :: double(:,:)
 integer,intent(out)                      :: ierr
 integer                                  :: i,j
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    do i=1,size(double,dim=1)
       do j=1,size(double,dim=2)
          out(i)(j:j)=achar(nint(double(i,j)))
       enddo
    enddo
-end subroutine get_fixed_vector_from_laff_character
+end subroutine get_fixed_vector_from_lala_character
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_int8(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_int8(varname,out,ierr,fixed)
 character(len=*),intent(in)                :: varname
 integer(kind=int8),intent(out) :: out(:)
 doubleprecision,allocatable                :: double(:,:)
 integer,intent(out)                        :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(rowpack(double),kind=int8)
-end subroutine get_fixed_vector_from_laff_int8
+end subroutine get_fixed_vector_from_lala_int8
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_int16(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_int16(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 integer(kind=int16),intent(out) :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(rowpack(double),kind=int16)
-end subroutine get_fixed_vector_from_laff_int16
+end subroutine get_fixed_vector_from_lala_int16
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_int32(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_int32(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 integer(kind=int32),intent(out) :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(rowpack(double),kind=int32)
-end subroutine get_fixed_vector_from_laff_int32
+end subroutine get_fixed_vector_from_lala_int32
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_int64(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_int64(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 integer(kind=int64),intent(out) :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=int64)
-end subroutine get_fixed_vector_from_laff_int64
+end subroutine get_fixed_vector_from_lala_int64
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_real32(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_real32(varname,out,ierr,fixed)
 character(len=*),intent(in)               :: varname
 real(kind=real32),intent(out) :: out(:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real32)
-end subroutine get_fixed_vector_from_laff_real32
+end subroutine get_fixed_vector_from_lala_real32
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_real64(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_real64(varname,out,ierr,fixed)
 character(len=*),intent(in)               :: varname
 real(kind=real64),intent(out) :: out(:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real64)
-end subroutine get_fixed_vector_from_laff_real64
+end subroutine get_fixed_vector_from_lala_real64
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_real128(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_real128(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),intent(out)  :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real128)
-end subroutine get_fixed_vector_from_laff_real128
+end subroutine get_fixed_vector_from_lala_real128
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_logical(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_logical(varname,out,ierr,fixed)
 character(len=*),intent(in)      :: varname
 logical,intent(out)  :: out(:)
 doubleprecision,allocatable      :: double(:,:)
 integer,intent(out)              :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=merge(.false.,.true.,nint(rowpack(double)).eq.0)
-end subroutine get_fixed_vector_from_laff_logical
+end subroutine get_fixed_vector_from_lala_logical
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_cmplx(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_cmplx(varname,out,ierr,fixed)
 character(len=*),intent(in)      :: varname
 complex,intent(out)  :: out(:)
 doubleprecision,allocatable      :: double(:,:), doublei(:,:)
 integer,intent(out)              :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(rowpack(double),rowpack(doublei),kind=sp)
-end subroutine get_fixed_vector_from_laff_cmplx
+end subroutine get_fixed_vector_from_lala_cmplx
 !===================================================================================================================================
-subroutine get_fixed_vector_from_laff_dpcmplx(varname,out,ierr,fixed)
+subroutine get_fixed_vector_from_lala_dpcmplx(varname,out,ierr,fixed)
 character(len=*),intent(in)               :: varname
 complex(kind=dp),intent(out)  :: out(:)
 doubleprecision,allocatable               :: double(:,:), doublei(:,:)
 integer,intent(out)                       :: ierr
 logical,intent(in)                         :: fixed
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(rowpack(double),rowpack(doublei),kind=dp)
-end subroutine get_fixed_vector_from_laff_dpcmplx
+end subroutine get_fixed_vector_from_lala_dpcmplx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine get_fixed_scalar_from_laff_character(varname,out,ierr,fixed)
+subroutine get_fixed_scalar_from_lala_character(varname,out,ierr,fixed)
 character(len=*),intent(in)              :: varname
 character(len=*),intent(out) :: out
 doubleprecision,allocatable              :: double(:,:)
 integer,intent(out)                      :: ierr
 logical,intent(in)                         :: fixed
 integer                                  :: i,j,k
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    k=0
    do i=1,size(double,dim=1)
@@ -7411,131 +7406,131 @@ integer                                  :: i,j,k
          out(k:k)=achar(nint(double(i,j)))
       enddo
    enddo
-end subroutine get_fixed_scalar_from_laff_character
+end subroutine get_fixed_scalar_from_lala_character
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine get_array_from_laff_int8(varname,out,ierr)
+subroutine get_array_from_lala_int8(varname,out,ierr)
 character(len=*),intent(in)                :: varname
 integer(kind=int8),allocatable,intent(out) :: out(:,:)
 doubleprecision,allocatable                :: double(:,:)
 integer,intent(out)                        :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(double,kind=int8)
-end subroutine get_array_from_laff_int8
+end subroutine get_array_from_lala_int8
 !===================================================================================================================================
-subroutine get_array_from_laff_int16(varname,out,ierr)
+subroutine get_array_from_lala_int16(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 integer(kind=int16),allocatable,intent(out) :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(double,kind=int16)
-end subroutine get_array_from_laff_int16
+end subroutine get_array_from_lala_int16
 !===================================================================================================================================
-subroutine get_array_from_laff_int32(varname,out,ierr)
+subroutine get_array_from_lala_int32(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 integer(kind=int32),allocatable,intent(out) :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(double,kind=int32)
-end subroutine get_array_from_laff_int32
+end subroutine get_array_from_lala_int32
 !===================================================================================================================================
-subroutine get_array_from_laff_int64(varname,out,ierr)
+subroutine get_array_from_lala_int64(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 integer(kind=int64),allocatable,intent(out) :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=int64)
-end subroutine get_array_from_laff_int64
+end subroutine get_array_from_lala_int64
 !===================================================================================================================================
-subroutine get_array_from_laff_real32(varname,out,ierr)
+subroutine get_array_from_lala_real32(varname,out,ierr)
 character(len=*),intent(in)               :: varname
 real(kind=real32),allocatable,intent(out) :: out(:,:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=real32)
-end subroutine get_array_from_laff_real32
+end subroutine get_array_from_lala_real32
 !===================================================================================================================================
-subroutine get_array_from_laff_real64(varname,out,ierr)
+subroutine get_array_from_lala_real64(varname,out,ierr)
 character(len=*),intent(in)               :: varname
 real(kind=real64),allocatable,intent(out) :: out(:,:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=real64)
-end subroutine get_array_from_laff_real64
+end subroutine get_array_from_lala_real64
 !===================================================================================================================================
-subroutine get_array_from_laff_real128(varname,out,ierr)
+subroutine get_array_from_lala_real128(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),allocatable,intent(out)  :: out(:,:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(double,kind=real128)
-end subroutine get_array_from_laff_real128
+end subroutine get_array_from_lala_real128
 !===================================================================================================================================
-subroutine get_array_from_laff_logical(varname,out,ierr)
+subroutine get_array_from_lala_logical(varname,out,ierr)
 character(len=*),intent(in)      :: varname
 logical,allocatable,intent(out)  :: out(:,:)
 doubleprecision,allocatable      :: double(:,:)
 integer,intent(out)              :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=merge(.false.,.true.,nint(double).eq.0)
-end subroutine get_array_from_laff_logical
+end subroutine get_array_from_lala_logical
 !===================================================================================================================================
-subroutine get_array_from_laff_cmplx(varname,out,ierr)
+subroutine get_array_from_lala_cmplx(varname,out,ierr)
 character(len=*),intent(in)      :: varname
 complex,allocatable,intent(out)  :: out(:,:)
 doubleprecision,allocatable      :: double(:,:), doublei(:,:)
 integer,intent(out)              :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(double,doublei,kind=sp)
-end subroutine get_array_from_laff_cmplx
+end subroutine get_array_from_lala_cmplx
 !===================================================================================================================================
-subroutine get_array_from_laff_dpcmplx(varname,out,ierr)
+subroutine get_array_from_lala_dpcmplx(varname,out,ierr)
 character(len=*),intent(in)               :: varname
 complex(kind=dp),allocatable,intent(out)  :: out(:,:)
 doubleprecision,allocatable               :: double(:,:), doublei(:,:)
 integer,intent(out)                       :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(double,doublei,kind=sp)
-end subroutine get_array_from_laff_dpcmplx
+end subroutine get_array_from_lala_dpcmplx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine get_vector_from_laff_character(varname,out,ierr)
+subroutine get_vector_from_lala_character(varname,out,ierr)
 character(len=*),intent(in)              :: varname
 character(len=:),allocatable,intent(out) :: out(:)
 doubleprecision,allocatable              :: double(:,:)
 integer,intent(out)                      :: ierr
 integer                                  :: i,j
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(allocated(out))deallocate(out)
    allocate(character(len=size(double,dim=2)) :: out(size(double,dim=1)))
@@ -7544,129 +7539,129 @@ integer                                  :: i,j
          out(i)(j:j)=achar(nint(double(i,j)))
       enddo
    enddo
-end subroutine get_vector_from_laff_character
+end subroutine get_vector_from_lala_character
 !===================================================================================================================================
-subroutine get_vector_from_laff_int8(varname,out,ierr)
+subroutine get_vector_from_lala_int8(varname,out,ierr)
 character(len=*),intent(in)                :: varname
 integer(kind=int8),allocatable,intent(out) :: out(:)
 doubleprecision,allocatable                :: double(:,:)
 integer,intent(out)                        :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(rowpack(double),kind=int8)
-end subroutine get_vector_from_laff_int8
+end subroutine get_vector_from_lala_int8
 !===================================================================================================================================
-subroutine get_vector_from_laff_int16(varname,out,ierr)
+subroutine get_vector_from_lala_int16(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 integer(kind=int16),allocatable,intent(out) :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(rowpack(double),kind=int16)
-end subroutine get_vector_from_laff_int16
+end subroutine get_vector_from_lala_int16
 !===================================================================================================================================
-subroutine get_vector_from_laff_int32(varname,out,ierr)
+subroutine get_vector_from_lala_int32(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 integer(kind=int32),allocatable,intent(out) :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=nint(rowpack(double),kind=int32)
-end subroutine get_vector_from_laff_int32
+end subroutine get_vector_from_lala_int32
 !===================================================================================================================================
-subroutine get_vector_from_laff_int64(varname,out,ierr)
+subroutine get_vector_from_lala_int64(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 integer(kind=int64),allocatable,intent(out) :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=int64)
-end subroutine get_vector_from_laff_int64
+end subroutine get_vector_from_lala_int64
 !===================================================================================================================================
-subroutine get_vector_from_laff_real32(varname,out,ierr)
+subroutine get_vector_from_lala_real32(varname,out,ierr)
 character(len=*),intent(in)               :: varname
 real(kind=real32),allocatable,intent(out) :: out(:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real32)
-end subroutine get_vector_from_laff_real32
+end subroutine get_vector_from_lala_real32
 !===================================================================================================================================
-subroutine get_vector_from_laff_real64(varname,out,ierr)
+subroutine get_vector_from_lala_real64(varname,out,ierr)
 character(len=*),intent(in)               :: varname
 real(kind=real64),allocatable,intent(out) :: out(:)
 doubleprecision,allocatable               :: double(:,:)
 integer,intent(out)                       :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real64)
-end subroutine get_vector_from_laff_real64
+end subroutine get_vector_from_lala_real64
 !===================================================================================================================================
-subroutine get_vector_from_laff_real128(varname,out,ierr)
+subroutine get_vector_from_lala_real128(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),allocatable,intent(out)  :: out(:)
 doubleprecision,allocatable                 :: double(:,:)
 integer,intent(out)                         :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real128)
-end subroutine get_vector_from_laff_real128
+end subroutine get_vector_from_lala_real128
 !===================================================================================================================================
-subroutine get_vector_from_laff_logical(varname,out,ierr)
+subroutine get_vector_from_lala_logical(varname,out,ierr)
 character(len=*),intent(in)      :: varname
 logical,allocatable,intent(out)  :: out(:)
 doubleprecision,allocatable      :: double(:,:)
 integer,intent(out)              :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    out=merge(.false.,.true.,nint(rowpack(double)).eq.0)
-end subroutine get_vector_from_laff_logical
+end subroutine get_vector_from_lala_logical
 !===================================================================================================================================
-subroutine get_vector_from_laff_cmplx(varname,out,ierr)
+subroutine get_vector_from_lala_cmplx(varname,out,ierr)
 character(len=*),intent(in)      :: varname
 complex,allocatable,intent(out)  :: out(:)
 doubleprecision,allocatable      :: double(:,:), doublei(:,:)
 integer,intent(out)              :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(rowpack(double),rowpack(doublei),kind=sp)
-end subroutine get_vector_from_laff_cmplx
+end subroutine get_vector_from_lala_cmplx
 !===================================================================================================================================
-subroutine get_vector_from_laff_dpcmplx(varname,out,ierr)
+subroutine get_vector_from_lala_dpcmplx(varname,out,ierr)
 character(len=*),intent(in)               :: varname
 complex(kind=dp),allocatable,intent(out)  :: out(:)
 doubleprecision,allocatable               :: double(:,:), doublei(:,:)
 integer,intent(out)                       :: ierr
    if(allocated(out))deallocate(out)
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    out=cmplx(rowpack(double),rowpack(doublei),kind=dp)
-end subroutine get_vector_from_laff_dpcmplx
+end subroutine get_vector_from_lala_dpcmplx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine get_scalar_from_laff_character(varname,out,ierr)
+subroutine get_scalar_from_lala_character(varname,out,ierr)
 character(len=*),intent(in)              :: varname
 character(len=:),allocatable,intent(out) :: out
 doubleprecision,allocatable              :: double(:,:)
 integer,intent(out)                      :: ierr
 integer                                  :: i,j,k
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(allocated(out))deallocate(out)
    allocate(character(len=size(double)) :: out)
@@ -7677,119 +7672,119 @@ integer                                  :: i,j,k
          out(k:k)=achar(nint(double(i,j)))
       enddo
    enddo
-end subroutine get_scalar_from_laff_character
+end subroutine get_scalar_from_lala_character
 !===================================================================================================================================
-subroutine get_scalar_from_laff_int8(varname,out,ierr)
+subroutine get_scalar_from_lala_int8(varname,out,ierr)
 character(len=*),intent(in)    :: varname
 integer(kind=int8),intent(out) :: out
 doubleprecision,allocatable    :: double(:,:)
 integer,intent(out)            :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=nint(double(1,1),kind=int8)
-end subroutine get_scalar_from_laff_int8
+end subroutine get_scalar_from_lala_int8
 !===================================================================================================================================
-subroutine get_scalar_from_laff_int16(varname,out,ierr)
+subroutine get_scalar_from_lala_int16(varname,out,ierr)
 character(len=*),intent(in)     :: varname
 integer(kind=int16),intent(out) :: out
 doubleprecision,allocatable     :: double(:,:)
 integer,intent(out)             :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=nint(double(1,1),kind=int16)
-end subroutine get_scalar_from_laff_int16
+end subroutine get_scalar_from_lala_int16
 !===================================================================================================================================
-subroutine get_scalar_from_laff_int32(varname,out,ierr)
+subroutine get_scalar_from_lala_int32(varname,out,ierr)
 character(len=*),intent(in)     :: varname
 integer(kind=int32),intent(out) :: out
 doubleprecision,allocatable     :: double(:,:)
 integer,intent(out)             :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=nint(double(1,1),kind=int32)
-end subroutine get_scalar_from_laff_int32
+end subroutine get_scalar_from_lala_int32
 !===================================================================================================================================
-subroutine get_scalar_from_laff_int64(varname,out,ierr)
+subroutine get_scalar_from_lala_int64(varname,out,ierr)
 character(len=*),intent(in)     :: varname
 integer(kind=int64),intent(out) :: out
 doubleprecision,allocatable     :: double(:,:)
 integer,intent(out)             :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=real(double(1,1),kind=int64)
-end subroutine get_scalar_from_laff_int64
+end subroutine get_scalar_from_lala_int64
 !===================================================================================================================================
-subroutine get_scalar_from_laff_real32(varname,out,ierr)
+subroutine get_scalar_from_lala_real32(varname,out,ierr)
 character(len=*),intent(in)   :: varname
 real(kind=real32),intent(out) :: out
 doubleprecision,allocatable   :: double(:,:)
 integer,intent(out)           :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=real(double(1,1),kind=real32)
-end subroutine get_scalar_from_laff_real32
+end subroutine get_scalar_from_lala_real32
 !===================================================================================================================================
-subroutine get_scalar_from_laff_real64(varname,out,ierr)
+subroutine get_scalar_from_lala_real64(varname,out,ierr)
 character(len=*),intent(in)   :: varname
 real(kind=real64),intent(out) :: out
 doubleprecision,allocatable   :: double(:,:)
 integer,intent(out)           :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=real(double(1,1),kind=real64)
-end subroutine get_scalar_from_laff_real64
+end subroutine get_scalar_from_lala_real64
 !===================================================================================================================================
-subroutine get_scalar_from_laff_real128(varname,out,ierr)
+subroutine get_scalar_from_lala_real128(varname,out,ierr)
 character(len=*),intent(in)    :: varname
 real(kind=real128),intent(out) :: out
 doubleprecision,allocatable    :: double(:,:)
 integer,intent(out)            :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=real(double(1,1),kind=real128)
-end subroutine get_scalar_from_laff_real128
+end subroutine get_scalar_from_lala_real128
 !===================================================================================================================================
-subroutine get_scalar_from_laff_logical(varname,out,ierr)
+subroutine get_scalar_from_lala_logical(varname,out,ierr)
 character(len=*),intent(in)   :: varname
 logical,intent(out)           :: out
 doubleprecision,allocatable   :: double(:,:)
 integer,intent(out)           :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=merge(.false.,.true.,nint(double(1,1)).eq.0)
-end subroutine get_scalar_from_laff_logical
+end subroutine get_scalar_from_lala_logical
 !===================================================================================================================================
-subroutine get_scalar_from_laff_cmplx(varname,out,ierr)
+subroutine get_scalar_from_lala_cmplx(varname,out,ierr)
 character(len=*),intent(in)   :: varname
 complex,intent(out)           :: out
 doubleprecision,allocatable   :: double(:,:), doublei(:,:)
 integer,intent(out)           :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=cmplx(double(1,1),doublei(1,1),kind=sp)
-end subroutine get_scalar_from_laff_cmplx
+end subroutine get_scalar_from_lala_cmplx
 !===================================================================================================================================
-subroutine get_scalar_from_laff_dpcmplx(varname,out,ierr)
+subroutine get_scalar_from_lala_dpcmplx(varname,out,ierr)
 character(len=*),intent(in)   :: varname
 complex(kind=dp),intent(out)  :: out
 doubleprecision,allocatable   :: double(:,:), doublei(:,:)
 integer,intent(out)           :: ierr
-   call get_double_from_laff(varname,double,type=0,ierr=ierr)
-   call get_double_from_laff(varname,doublei,type=1,ierr=ierr)
+   call get_double_from_lala(varname,double,type=0,ierr=ierr)
+   call get_double_from_lala(varname,doublei,type=1,ierr=ierr)
    if(ierr.ne.0)return
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=cmplx(double(1,1),doublei(1,1),kind=dp)
-end subroutine get_scalar_from_laff_dpcmplx
+end subroutine get_scalar_from_lala_dpcmplx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -7797,7 +7792,7 @@ function too_much_memory(expression)
 integer,intent(in) :: expression
 logical            :: too_much_memory
 
-character(len=*),parameter::ident_35="@(#)too much memory required"
+! ident_35="@(#)too much memory required"
 
    G_ERR=expression
    if(G_ERR.gt.0)then
@@ -7813,8 +7808,7 @@ end function too_much_memory
 !===================================================================================================================================
 function system_getenv(name,default) result(value)
 
-character(len=*),parameter::ident_36="&
-&@(#)M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)"
+! ident_36="@(#)M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: default
@@ -7922,11 +7916,11 @@ end subroutine get
 subroutine mat_help_text()
 G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
-'LAFF USERS'' GUIDE',&
+'LALA USERS'' GUIDE',&
 '',&
-'                        LAFF (May, 1981 - Apr, 2021)',&
+'                        LALA (May, 1981 - Apr, 2021)',&
 '',&
-'   The Linear Algebra Fortran Facility (LAFF) is a collection of Fortran',&
+'   The Linear Algebra Fortran Facility (LALA) is a collection of Fortran',&
 '   procedures that serves as a convenient tool for Fortran programs to',&
 '   interact with their data (interactively or in batch mode) with a',&
 '   tool that acts as a basic "laboratory" for computations involving',&
@@ -7941,7 +7935,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                            CONTENTS',&
 '',&
 '          -  Elementary operations',&
-'          -  LAFF functions',&
+'          -  LALA functions',&
 '          -  Rows, columns and submatrices',&
 '          -  "for", "while" and "if"',&
 '          -  Characters, text, files and macros',&
@@ -7958,11 +7952,11 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   nonsymmetric eigenvalue problems, to fairly sophisticated matrix',&
 '   tools such as the singular value decomposition.',&
 '',&
-'   LAFF should be useful in applied linear algebra, as well as more',&
+'   LALA should be useful in applied linear algebra, as well as more',&
 '   general numerical analysis, matrix theory, statistics and applications',&
 '   of matrices to other disciplines.',&
 '',&
-'   LAFF can serve as a "desk calculator" for the quick solution of small',&
+'   LALA can serve as a "desk calculator" for the quick solution of small',&
 '   problems involving matrices.',&
 '',&
 '   The program is written in Fortran and is designed to be readily',&
@@ -7970,15 +7964,15 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   execution of Fortran programs. The resources required are fairly',&
 '   modest.',&
 '',&
-'   The size of the matrices that can be handled in LAFF depends upon the',&
+'   The size of the matrices that can be handled in LALA depends upon the',&
 '   amount of storage available on the supporting platform and the optional',&
-'   word count that can be supplied on an initial call to LAFF(3f).',&
+'   word count that can be supplied on an initial call to LALA(3f).',&
 '',&
-'   In some ways, LAFF resembles SPEAKEASY [4] and, to a lesser extent,',&
+'   In some ways, LALA resembles SPEAKEASY [4] and, to a lesser extent,',&
 '   APL. All are interactive terminal languages that ordinarily accept',&
 '   single-line commands or statements, process them immediately, and print',&
 '   the results. All have arrays or matrices as principal data types. But',&
-'   for LAFF, the matrix is the only data type (although scalars, vectors',&
+'   for LALA, the matrix is the only data type (although scalars, vectors',&
 '   and text are special cases), the underlying system is portable and',&
 '   requires fewer resources, and the supporting subroutines are more',&
 '   powerful and in some cases, have better numerical properties.',&
@@ -7989,41 +7983,41 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   part on Algol procedures published by Wilkinson, Reinsch and their',&
 '   colleagues [5]. LINPACK is a package of 40 Fortran subroutines (in',&
 '   each of four data types) for solving and analyzing simultaneous linear',&
-'   equations and related matrix problems. Since LAFF is not primarily',&
+'   equations and related matrix problems. Since LALA is not primarily',&
 '   concerned with either execution time efficiency or storage savings,',&
 '   it ignores most of the special matrix properties that LINPACK and',&
 '   EISPACK subroutines use to advantage. Consequently, only 8 subroutines',&
 '   from LINPACK and 5 from EISPACK are actually involved.',&
 '',&
-'   In more advanced applications, LAFF can be used in conjunction with',&
-'   other programs in several ways. It is possible to define new LAFF',&
+'   In more advanced applications, LALA can be used in conjunction with',&
+'   other programs in several ways. It is possible to define new LALA',&
 '   functions and add them to the system.  it is possible to use the local',&
-'   file system to pass matrices between LAFF and other programs. LAFF',&
+'   file system to pass matrices between LALA and other programs. LALA',&
 '   command and statement input can be obtained from a local file instead',&
 '   of from the terminal. The most power and flexibility is obtained by',&
-'   using LAFF as a subroutine which is called by other programs.',&
+'   using LALA as a subroutine which is called by other programs.',&
 '',&
-'   This document first gives an overview of LAFF from the user''s',&
+'   This document first gives an overview of LALA from the user''s',&
 '   point of view. Several extended examples involving data fitting,',&
 '   partial differential equations, eigenvalue sensitivity and other',&
 '   topics are included.  The system was designed and programmed using',&
 '   techniques described by Wirth [6], implemented in nonrecursive,',&
 '   portable Fortran. There is a brief discussion of some of the matrix',&
 '   algorithms and of their numerical properties. A final section describes',&
-'   how LAFF can be used with other programs. The appendix includes the',&
+'   how LALA can be used with other programs. The appendix includes the',&
 '   HELP documentation available on-line.',&
 '',&
 '================================================================================',&
 'ELEMENTARY OPERATIONS',&
 '',&
-'   LAFF works with essentially only one kind of object, a rectangular',&
+'   LALA works with essentially only one kind of object, a rectangular',&
 '   matrix with complex elements. If the imaginary parts of the elements',&
 '   are all zero, they are not printed, but they still occupy storage. In',&
 '   some situations, special meaning is attached to 1 by 1 matrices,',&
 '   that is scalars, and to 1 by n and m by 1 matrices, that is row and',&
 '   column vectors.',&
 '',&
-'   Matrices can be introduced into LAFF in four different',&
+'   Matrices can be introduced into LALA in four different',&
 '   ways:',&
 '',&
 '           --  Explicit list of elements,',&
@@ -8046,7 +8040,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '          7.    8.   9.',&
 '',&
 '   The matrix A will be saved for later use. The individual elements',&
-'   are separated by commas or blanks and can be any LAFF expressions,',&
+'   are separated by commas or blanks and can be any LALA expressions,',&
 '   for example',&
 '',&
 '      x = < -1.3, 4/5, 4*atan(1) >',&
@@ -8077,7 +8071,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      7 8 9',&
 '      >;',&
 '',&
-'   then the LAFF statement exec(''xyz'') reads the matrix and assigns it',&
+'   then the LALA statement exec(''xyz'') reads the matrix and assigns it',&
 '   to A .',&
 '',&
 '   The "for" statement allows the generation of matrices whose elements',&
@@ -8148,7 +8142,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   Note that both upper and lower case letters are allowed for input',&
 '   (on those systems which have both).',&
 '',&
-'   There are two "matrix division" symbols in LAFF, \ and / .  If A and',&
+'   There are two "matrix division" symbols in LALA, \ and / .  If A and',&
 '   B are matrices, then A\B and B/A correspond formally to left and right',&
 '   multiplication of B by the inverse of A, that is inv(A)*B and B*inv(A),',&
 '   but the result is obtained directly without the computation of the',&
@@ -8270,7 +8264,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '      X = eye/A',&
 '',&
-'   is one of several ways in LAFF to invert a matrix.',&
+'   is one of several ways in LALA to invert a matrix.',&
 '',&
 '   "flop" provides a measure of the number of floating point operations,',&
 '   or "flops", required for each calculation by reporting the CPU time',&
@@ -8297,7 +8291,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'FUNCTIONS',&
 '',&
-'   Much of LAFF''s computational power comes from the various',&
+'   Much of LALA''s computational power comes from the various',&
 '   matrix functions available. The current list includes:',&
 '',&
 '      inv(A)          - Inverse.',&
@@ -8363,7 +8357,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '   simply computes the eigenvalues and stores them in "ans".',&
 '',&
-'   Future versions of LAFF will probably include additional functions,',&
+'   Future versions of LALA will probably include additional functions,',&
 '   since they can easily be added to the system.',&
 '',&
 '================================================================================',&
@@ -8381,7 +8375,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '   adds c times the k-th row of A to the i-th row.',&
 '',&
-'   The colon is used in several other ways in LAFF, but all of the uses',&
+'   The colon is used in several other ways in LALA, but all of the uses',&
 '   are based on the following definition.',&
 '',&
 '      j:k    is the same as  <j, j+1, ..., k>',&
@@ -8479,7 +8473,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'CHARACTERS AND TEXTFILES AND MACROS',&
 '',&
-'   LAFF has several commands which control the output format and the',&
+'   LALA has several commands which control the output format and the',&
 '   overall execution of the system.',&
 '',&
 '   The "help" command allows on-line access to short portions of text',&
@@ -8502,7 +8496,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   The "quit" and "exit" commands cause return to the underlying operating',&
 '   system through the Fortran RETURN statement.',&
 '',&
-'   LAFF has a limited facility for handling text. Any string of characters',&
+'   LALA has a limited facility for handling text. Any string of characters',&
 '   delineated by quotes (with two quotes used to allow one quote within',&
 '   the string) is saved as a vector of integer values that are the ADE',&
 '   (Ascii Decimal Equivalent) value of the character, with special',&
@@ -8520,15 +8514,15 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '      norm(A,''inf'')    computes the infinity norm of A .',&
 '      display(T)       prints the text stored in T .',&
-'      exec(''file'')     obtains LAFF input from an external file.',&
+'      exec(''file'')     obtains LALA input from an external file.',&
 '      save(''file'')     stores all the current variables in a file.',&
 '      load(''file'')     retrieves all the variables from a file.',&
 '      print(''file'',X)  prints X on a file.',&
-'      diary(''file'')    makes a copy of the complete LAFF session.',&
+'      diary(''file'')    makes a copy of the complete LALA session.',&
 '',&
 '   The text can also be used in a limited string substitution',&
 '   macro facility. If a variable, say T, contains the source text',&
-'   for a LAFF statement or expression, then the construction',&
+'   for a LALA statement or expression, then the construction',&
 '',&
 '      > T <',&
 '',&
@@ -8547,12 +8541,12 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '   Some other examples are given under MACROS in the appendix. This',&
 '   facility is useful for fairly short statements and expressions.',&
-'   More complicated LAFF "programs" should use the "exec" facility.',&
+'   More complicated LALA "programs" should use the "exec" facility.',&
 '',&
 '================================================================================',&
 'NUMERICAL ALGORITHMS',&
 '',&
-'   The algorithms underlying the basic LAFF functions are described in',&
+'   The algorithms underlying the basic LALA functions are described in',&
 '   the LINPACK and EISPACK guides [1-3]. The following list gives the',&
 '   subroutines used by these functions.',&
 '',&
@@ -8606,7 +8600,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '         det(z*eye-A) = C(1)*z**n + ... + C(n)*z + C(n+1) .',&
 '',&
-'   The algorithm can be expressed compactly using LAFF:',&
+'   The algorithm can be expressed compactly using LALA:',&
 '',&
 '         Z = eig(A);',&
 '         C = 0*ones(n+1,1);  C(1) = 1;',&
@@ -8684,11 +8678,11 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '   "rref", the reduced row echelon form, is of some interest in',&
 '   theoretical linear algebra, although it has little computational',&
-'   value. It is included in LAFF for pedagogical reasons. The algorithm',&
+'   value. It is included in LALA for pedagogical reasons. The algorithm',&
 '   is essentially Gauss-Jordan elimination with detection of negligible',&
 '   columns applied to rectangular matrices.',&
 '',&
-'   There are three separate places in LAFF where the rank of a matrix',&
+'   There are three separate places in LALA where the rank of a matrix',&
 '   is implicitly computed: in rref(A), in A\B for non-square A, and',&
 '   in the pseudoinverse pinv(A). Three different algorithms with three',&
 '   different criteria for negligibility are used and so it is possible',&
@@ -8718,7 +8712,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   described by Moler and Morrison [10]. It is a cubically convergent',&
 '   algorithm which starts with a and b , rather than with their squares,',&
 '   and thereby avoids destructive arithmetic underflows and overflows. In',&
-'   LAFF, the algorithm is used for complex modulus, Euclidean vector',&
+'   LALA, the algorithm is used for complex modulus, Euclidean vector',&
 '   norm, plane rotations, and the shift calculation in the eigenvalue',&
 '   and singular value iterations.',&
 '',&
@@ -8741,7 +8735,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   together with one floating point addition and the associated',&
 '   indexing and storage reference operations.',&
 '',&
-'   LAFF will print the CPU time required for a particular',&
+'   LALA will print the CPU time required for a particular',&
 '   statement when the statement is terminated by an extra comma. For',&
 '   example, the line',&
 '',&
@@ -8770,7 +8764,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '             1.1000',&
 '',&
 '   "flop(2)" is the cumulative total of all the flops used since',&
-'   the beginning of the LAFF session. The statement',&
+'   the beginning of the LALA session. The statement',&
 '',&
 '         flop = <0 0>',&
 '',&
@@ -8815,7 +8809,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '   The following Fortran subprograms illustrate more details of',&
 '   "flop" and "chop". The first subprogram is a simplified example of a',&
-'   system-dependent function used within LAFF itself. The common variable',&
+'   system-dependent function used within LALA itself. The common variable',&
 '   G_FLOP_COUNTER is essentially the first component of the variable',&
 '   FLOP. The common variable CHP is initially zero, but it is set to p',&
 '   by the statement "chop(p)". To shorten the DATA statement, we assume',&
@@ -8836,7 +8830,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '         END REAL FUNCTION FLOP',&
 '',&
 '   The following subroutine illustrates a typical use of the',&
-'   previous function within LAFF. It is a simplified version of',&
+'   previous function within LALA. It is a simplified version of',&
 '   the Basic Linear Algebra Subprogram that adds a scalar multiple',&
 '   of one vector to another. We assume here that the vectors are',&
 '   stored with a memory increment of one.',&
@@ -8860,7 +8854,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   between n and 2*n flops if the vectors have nonzero imaginary',&
 '   components.',&
 '',&
-'   The permanent LAFF variable "eps" is reset by the statement',&
+'   The permanent LALA variable "eps" is reset by the statement',&
 '   CHOP(p). Its new value is usually the smallest inverse power of',&
 '   two that satisfies the Fortran logical test',&
 '',&
@@ -8875,7 +8869,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   Our first extended example involves predicting the population of the',&
 '   United States in 1980 using extrapolation of various fits to the',&
 '   census data from 1900 through 1970. There are eight observations,',&
-'   so we begin with the LAFF statement',&
+'   so we begin with the LALA statement',&
 '',&
 '      n = 8',&
 '',&
@@ -9222,7 +9216,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '              sigma =  sum  (-1)   c',&
 '                       j=1          j',&
 '',&
-'   To use LAFF for this problem, the following "program" is first stored',&
+'   To use LALA for this problem, the following "program" is first stored',&
 '   in the local computer file system, say under the name "PDE".',&
 '',&
 '      //Conductivity example.',&
@@ -9266,7 +9260,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      //output total operation count',&
 '         ops = flop(2)',&
 '',&
-'   The program can be used within LAFF by setting the three parameters',&
+'   The program can be used within LALA by setting the three parameters',&
 '   and then accessing the file. For example,',&
 '',&
 '      rho = .9;',&
@@ -9564,35 +9558,35 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'COMMUNICATING WITH OTHER PROGRAMS',&
 '',&
-'   There are four different ways LAFF can be used in',&
+'   There are four different ways LALA can be used in',&
 '   conjunction with other programs:',&
 '',&
 '      -- user() - a user-supplied subroutine',&
 '      -- exec() - reading commands from a file',&
 '      -- save() and load() -- reading specially formatted data files.',&
-'      -- laff() - call the interpreter with a CHARACTER array of',&
+'      -- lala() - call the interpreter with a CHARACTER array of',&
 '                  commands or interactively.',&
 '',&
 '   Let us illustrate each of these by equivalents of the following',&
 '   simple example.',&
 '',&
-'   You can start the laff(1) program up and simply enter:',&
+'   You can start the lala(1) program up and simply enter:',&
 '',&
 '         n = 6',&
 '         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);',&
 '         a',&
 '         x = inv(a)',&
 '',&
-'   An example user routine could be introduced into LAFF that',&
+'   An example user routine could be introduced into LALA that',&
 '   does the same thing as the "for" statement by compiling and',&
 '   linking the following subroutine into the calling program.',&
 '',&
 '         program demo_user',&
 '         implicit none',&
 '         use M_matrix',&
-'         call set_usersub(laff_user)',&
-'         call laff()',&
-'         subroutine laff_user(a,m,n,s,t)',&
+'         call set_usersub(lala_user)',&
+'         call lala()',&
+'         subroutine lala_user(a,m,n,s,t)',&
 '            implicit none',&
 '            doubleprecision a(:),s,t',&
 '            integer m,n',&
@@ -9604,7 +9598,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                  a(k) = iabs(i-j)',&
 '               enddo',&
 '            enddo',&
-'            end subroutine laff_user',&
+'            end subroutine lala_user',&
 '         end program demo_user',&
 '',&
 '   A user-defined function can then be registered with the program',&
@@ -9615,7 +9609,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   Note the routine must be defined with an explicit interface',&
 '   available in the calling unit.',&
 '',&
-'   Then the LAFF statements',&
+'   Then the LALA statements',&
 '',&
 '         n = 6',&
 '         a = user(n)',&
@@ -9628,7 +9622,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '         for i = 1:n, for j = 1:n, a(i,j) = abs(i-j);',&
 '',&
-'   Then the LAFF statements',&
+'   Then the LALA statements',&
 '',&
 '         n = 6',&
 '         exec(''EXAMPLE'',0)',&
@@ -9663,9 +9657,9 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   The FORMAT number 102 may also be system dependent. This',&
 '   particular one is appropriate for hexadecimal computers with an 8',&
 '   byte double precision floating point word. Check, or modify,',&
-'   LAFF subroutine SAVLOD.',&
+'   LALA subroutine SAVLOD.',&
 '',&
-'   After this program is executed, enter LAFF and give the',&
+'   After this program is executed, enter LALA and give the',&
 '   following statements:',&
 '',&
 '         load(''A'')',&
@@ -9688,9 +9682,9 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            ...',&
 '',&
 '',&
-'   The most elaborate mechanism involves using LAFF as a subroutine',&
-'   within another program. Communication with the LAFF stack is',&
-'   accomplished using subroutine laff().',&
+'   The most elaborate mechanism involves using LALA as a subroutine',&
+'   within another program. Communication with the LALA stack is',&
+'   accomplished using subroutine lala().',&
 '    The preamble of MATZ is:',&
 '',&
 '         SUBROUTINE MATZ(A,LDA,M,N,ID,JOB,IERR)',&
@@ -9698,21 +9692,21 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '         character(len=*) :: id',&
 '         DOUBLEPRECISION A(LDA,N)',&
 '',&
-'         ! ACCESS LAFF VARIABLE STACK',&
+'         ! ACCESS LALA VARIABLE STACK',&
 '         ! A IS AN M BY N MATRIX, STORED IN AN ARRAY WITH',&
 '         !     LEADING DIMENSION LDA.',&
 '         ! ID IS THE NAME OF A. ID IS UP TO FOUR CHARACTERS.',&
-'         ! JOB =  0  GET REAL A FROM LAFF,',&
-'         !     =  1  PUT REAL A INTO LAFF,',&
-'         !     = 10  GET IMAG PART OF A FROM LAFF,',&
-'         !     = 11  PUT IMAG PART OF A INTO LAFF.',&
-'         ! RETURN WITH NONZERO IERR AFTER LAFF ERROR MESSAGE.',&
+'         ! JOB =  0  GET REAL A FROM LALA,',&
+'         !     =  1  PUT REAL A INTO LALA,',&
+'         !     = 10  GET IMAG PART OF A FROM LALA,',&
+'         !     = 11  PUT IMAG PART OF A INTO LALA.',&
+'         ! RETURN WITH NONZERO IERR AFTER LALA ERROR MESSAGE.',&
 '         !',&
-'         ! USES LAFF ROUTINES STACKG, STACKP AND ERROR',&
+'         ! USES LALA ROUTINES STACKG, STACKP AND ERROR',&
 '',&
-'        The preamble of subroutine LAFF is:',&
+'        The preamble of subroutine LALA is:',&
 '',&
-'         SUBROUTINE LAFF(INIT)',&
+'         SUBROUTINE LALA(INIT)',&
 '         ! INIT = 0 FOR FIRST ENTRY, NONZERO FOR SUBSEQUENT ENTRIES',&
 '',&
 '        To do our example, write the following program:',&
@@ -9728,20 +9722,20 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            enddo',&
 '            call MATZ(A,LDA,N,N,''A'',1,IERR)',&
 '            IF (IERR .NE. 0) GO TO ...',&
-'            call LAFF(1,'''')',&
+'            call LALA(1,'''')',&
 '            call MATZ(X,LDA,N,N,''X'',0,IERR)',&
 '            IF (IERR .NE. 0) GO TO ...',&
 '            ...',&
 '            ...',&
 '',&
-'   When this program is executed, the call to LAFF(0) produces the',&
-'   LAFF greeting, then waits for input. The command',&
+'   When this program is executed, the call to LALA(0) produces the',&
+'   LALA greeting, then waits for input. The command',&
 '',&
 '            quit',&
 '',&
 '   sends control back to our example program. The matrix A is',&
 '   generated by the program and sent to the stack by the first call',&
-'   to MATZ. The call to LAFF(1) produces the LAFF(1) prompt. Then',&
+'   to MATZ. The call to LALA(1) produces the LALA(1) prompt. Then',&
 '   the statements',&
 '',&
 '            X = inv(A)',&
@@ -9756,7 +9750,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'ACKNOWLEDGEMENT',&
 '',&
-'   LAFF was inspired by the MATLAB subroutine.  Most of the work on',&
+'   LALA was inspired by the MATLAB subroutine.  Most of the work on',&
 '   MATLAB was carried out at the University of New Mexico, where it was',&
 '   being supported by the National Science Foundation. Additional work',&
 '   has been done during visits to Stanford Linear Accelerator Center,',&
@@ -9844,7 +9838,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '       help \ , help eig',&
 '       exec(''demo'',7)',&
 '',&
-'      For more information, generate the LAFF Users'' Guide',&
+'      For more information, generate the LALA Users'' Guide',&
 '      using',&
 '',&
 '        help manual',&
@@ -9889,7 +9883,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      Alternatively, To place all the documenation in a file, use',&
 '      "help manual" and enter "w help.txt" at the "continue .." prompt.',&
 'NEWS',&
-'      LAFF is intended to be used primarily by families of FORTRAN',&
+'      LALA is intended to be used primarily by families of FORTRAN',&
 '      programs that wish to add a consistent interactive "calculator"',&
 '      mode for interactively inspecting and modifying data.',&
 '',&
@@ -10045,7 +10039,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '''     Transpose. X'' is the complex conjugate transpose of X .',&
 '',&
 '      A quote is also use to delmit text. ''ANY TEXT'' is a vector whose',&
-'      components are the LAFF internal codes for the characters. A',&
+'      components are the LALA internal codes for the characters. A',&
 '      quote within the text is indicated by two quotes. See "display"',&
 '      and "FILE" .',&
 '',&
@@ -10106,7 +10100,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 'MACROS',&
 '',&
 '       The macro facility involves text and inward pointing angle',&
-'       brackets. If "STRING" is the source text for any LAFF',&
+'       brackets. If "STRING" is the source text for any LALA',&
 '       expression or statement, then',&
 '',&
 '             t = ''STRING'';',&
@@ -10257,7 +10251,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            T = diag(ones(n-1,1),1);  T = T + T'';  I = eye(T);',&
 '            A = T.*.I + I.*.T - 4*eye;',&
 '',&
-'      Just in case they might be useful, LAFF includes',&
+'      Just in case they might be useful, LALA includes',&
 '      constructions called Kronecker tensor quotients, denoted by',&
 '      X ./. Y and X .\. Y . They are obtained by replacing the',&
 '      element-wise multiplications in X .*. Y with divisions.',&
@@ -10291,7 +10285,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '      For vectors..',&
 '          norm(V,P)      the same as sum(V(I)**P)**(1/P) .',&
-'                         ??? what about negative values of (I) and odd P? abs() ',&
+'                         ??? what about negative values of (I) and odd P? abs() or not',&
 '',&
 '          norm(V,2)      the square root of the sum of the squares of',&
 '          or norm(V)     the entries of V.',&
@@ -10362,7 +10356,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      "rand(''uniform'')" switches back to the uniform distribution.',&
 '      "rand(''seed'')" returns the current value of the seed for the',&
 '      generator. "rand(''seed'',n)" sets the seed to n.',&
-'      "rand(''seed'',0)" resets the seed to 0, its value when LAFF',&
+'      "rand(''seed'',0)" resets the seed to 0, its value when LALA',&
 '      is first entered.',&
 '',&
 'rank  Rank. "K = rank(X)" is the number of singular values of X',&
@@ -10462,12 +10456,12 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      0 is below the main diagonal.',&
 '',&
 'user  Allows personal Fortran subroutines to be linked into',&
-'      LAFF. The subroutine should have the heading',&
+'      LALA. The subroutine should have the heading',&
 '',&
 '         SUBROUTINE USER(A,M,N,S,T)',&
 '         REAL or DOUBLEPRECISION A(M,N),S,T',&
 '',&
-'      The LAFF statement "Y = user(X,s,t)" results in a call to the',&
+'      The LALA statement "Y = user(X,s,t)" results in a call to the',&
 '      subroutine with a copy of the matrix X stored in the argument A,',&
 '      its column and row dimensions in M and N, and the scalar parameters',&
 '      s and t stored in S and T. If s and t are omitted, they are set',&
@@ -10475,7 +10469,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      N may be reset within the subroutine. The statement Y = "user(K)"',&
 '      results in a call with M = 1, N = 1 and A(1,1) = "float(K)". After',&
 '      the subroutine has been written, it must be compiled and linked',&
-'      to the LAFF object code within the local operating system.',&
+'      to the LALA object code within the local operating system.',&
 '',&
 'zeros',&
 '      Returns a matrix of all zeros.',&
@@ -10504,7 +10498,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      will lead to only the final printing of A.',&
 '      Similar considerations apply to "while".',&
 '',&
-'      See "exit" (terminates execution of loops or of LAFF itself).',&
+'      See "exit" (terminates execution of loops or of LALA itself).',&
 '',&
 'if    Conditionally execute statements',&
 '',&
@@ -10578,11 +10572,11 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '        E',&
 '',&
 'exit  Causes termination of a "for" or "while" loop.',&
-'      If not in a loop, terminates execution of LAFF.',&
+'      If not in a loop, terminates execution of LALA.',&
 '      Also see "quit".',&
 '',&
 'quit  From the terminal, causes return to the operating system',&
-'      or other program which invoked LAFF. From inside an',&
+'      or other program which invoked LALA. From inside an',&
 '      "exec", causes return to the invoking "exec", or to the',&
 '      terminal.',&
 '================================================================================',&
@@ -10592,7 +10586,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      functions access files.  The ''file'' parameter takes different',&
 '      forms for different operating systems. On most systems, ''file''',&
 '      may be a string of up to 1024 characters in quotes. For example,',&
-'      "save(''A'')" or "exec(''LAFF/demo.exec'')" . The string will be used',&
+'      "save(''A'')" or "exec(''LALA/demo.exec'')" . The string will be used',&
 '      as the name of a file in the local operating system.',&
 '',&
 '      Check your local installation for details.  The filename must be',&
@@ -10602,13 +10596,13 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 'delete  "delete(''filename'')" deletes the given file.',&
 '',&
-'exec  "exec(''file'',k)" obtains subsequent LAFF input from an',&
+'exec  "exec(''file'',k)" obtains subsequent LALA input from an',&
 '      external file. The printing of input is controlled by the',&
 '      optional parameter k .',&
 '',&
 '      Files are searched for by the given name. If not found, it is searched',&
 '      for in the colon-separated directory names in the environment variable',&
-'      LAFF_PATH. It is looked for first literally by the given name, and then',&
+'      LALA_PATH. It is looked for first literally by the given name, and then',&
 '      by the name suffixed with ".la".',&
 '',&
 '      "include" is an alias for "exec".',&
@@ -10616,11 +10610,11 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '         If k = 0 , there is no echo, prompt or pause. This is the',&
 '                    default if the exec command is followed by a semicolon.',&
 '         If k = 1 , the input is echoed.',&
-'         If k = 2 , the LAFF prompt <> is printed.',&
+'         If k = 2 , the LALA prompt <> is printed.',&
 '         If k = 3 , there will be echos and prompts, but no pauses.',&
 '                    This is the the default if the exec command is not',&
 '                    followed by a semicolon.',&
-'         If k = 4 , LAFF pauses before each prompt and waits for a',&
+'         If k = 4 , LALA pauses before each prompt and waits for a',&
 '                    null line to continue.',&
 '         If k = 7 , there will be echos, prompts and pauses. This is',&
 '                    useful for demonstrations on video terminals.',&
@@ -10664,7 +10658,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '        > enddo',&
 '        > ! The formats used are system dependent. These are typical.',&
 '        > ! See SUBROUTINE mat_savlod(3f) in your local implementation',&
-'        > ! of LAFF.',&
+'        > ! of LALA.',&
 '',&
 '================================================================================',&
 'OUTPUT OPTIONS',&
@@ -10710,12 +10704,12 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '           display(0:10,2 )  // display values as binary numbers',&
 '',&
 '      If no base is specified and all the elements of X are integers',&
-'      between 0 and 255, then X is interpreted as LAFF text and printed',&
+'      between 0 and 255, then X is interpreted as LALA text and printed',&
 '      accordingly.',&
 '',&
 '         <>display(''the analysis is complete'')',&
 '           the analysis is complete',&
-'         display(32:126) // print the printable default LAFF characters',&
+'         display(32:126) // print the printable default LALA characters',&
 '',&
 '      Otherwise or if the base is one, + , - and blank are printed for',&
 '      positive, negative and zero elements.',&
@@ -10777,7 +10771,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 'CHAR  special issues regarding strings',&
 '',&
-'   LAFF has a limited facility for handling text. Any string of',&
+'   LALA has a limited facility for handling text. Any string of',&
 '   characters delineated by quotes (with two quotes used to allow one',&
 '   quote within the string) is saved as a vector of integer values that',&
 '   are the ADE (Ascii Decimal Equivalent) value of the character.',&
@@ -10786,7 +10780,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '',&
 '   When defining an array [ and ] or < and > may be used as the delimiters.',&
 '',&
-'   laff(3f)  is too flexible about that and lets them be interchanged freely',&
+'   lala(3f)  is too flexible about that and lets them be interchanged freely',&
 '   instead of being matched but that will probably change to be more strictly',&
 '   enforced.',&
 '',&
@@ -10846,7 +10840,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      A command line consisting of two question marks("??") will cause a',&
 '      small line-based editor to be called (very similar to the CDC NOS',&
 '      editor "xedit") with a copy of the previous input lines. When the',&
-'      editor returns control to LAFF, it will execute the edited command',&
+'      editor returns control to LALA, it will execute the edited command',&
 '      (by default).',&
 '',&
 '      In editor mode the command to be edited is shifted over one and the',&
@@ -10892,7 +10886,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      values may be assigned. "eps" is used as a default tolerance by "pinv"',&
 '      and "rank".',&
 '',&
-'laff  A placeholder for a new command.',&
+'lala  A placeholder for a new command.',&
 '',&
 'debug  "debu(1)" turns on verbose low-level debugging for the developer,',&
 '       "debu(0)" turns it back off.',&
@@ -10912,9 +10906,9 @@ character(len=:),allocatable            :: returned
    elseif(exists(trim(filename)//'.la'))then
       returned=filename//'.la'
    else
-      returned=lookfor(filename,'LAFF_PATH')
+      returned=lookfor(filename,'LALA_PATH')
       if(returned.eq.'')then
-         returned=lookfor(filename//'.la','LAFF_PATH')
+         returned=lookfor(filename//'.la','LALA_PATH')
       endif
       if(returned.eq.'')returned=filename
    endif
@@ -11043,7 +11037,7 @@ end subroutine mat_wlog
 !==================================================================================================================================!
 subroutine mat_watan(xr,xi,yr,yi)
 
-character(len=*),parameter::ident_37="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
+! ident_37="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
 
 doubleprecision,intent(in)  :: xr, xi
 doubleprecision,intent(out) :: yr, yi

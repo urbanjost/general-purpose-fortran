@@ -8,50 +8,50 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   huegif(1f) - [M_pixel] generate color wheels as GIF pixmap files             ',&
-'   (LICENSE:PD)                                                                 ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'   huegif [ --help| --version]                                                  ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'                                                                                ',&
-'    Generates color wheels using the HSL (Hue Lightness, Saturation)            ',&
-'    model as GIF pixel files.                                                   ',&
-'                                                                                ',&
-'    The following files will be generated, of the name hue.3_NNN.gif,           ',&
-'    where NNN is the lightness for the particular plot:                         ',&
-'                                                                                ',&
-'      hue.3_100.gif                                                             ',&
-'      hue.3_095.gif                                                             ',&
-'      hue.3_090.gif                                                             ',&
-'      hue.3_085.gif                                                             ',&
-'      hue.3_080.gif                                                             ',&
-'      hue.3_075.gif                                                             ',&
-'      hue.3_070.gif                                                             ',&
-'      hue.3_065.gif                                                             ',&
-'      hue.3_060.gif                                                             ',&
-'      hue.3_055.gif                                                             ',&
-'      hue.3_050.gif                                                             ',&
-'      hue.3_045.gif                                                             ',&
-'      hue.3_040.gif                                                             ',&
-'      hue.3_035.gif                                                             ',&
-'      hue.3_030.gif                                                             ',&
-'      hue.3_025.gif                                                             ',&
-'      hue.3_020.gif                                                             ',&
-'      hue.3_015.gif                                                             ',&
-'      hue.3_010.gif                                                             ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'    --help      display this help and exit                                      ',&
-'                                                                                ',&
-'    --version   output version information and exit                             ',&
-'                                                                                ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   huegif(1f) - [M_pixel] generate color wheels as GIF pixmap files                                                             ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'   huegif [ --help| --version]                                                                                                  ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'                                                                                                                                ',&
+'    Generates color wheels using the HSL (Hue Lightness, Saturation)                                                            ',&
+'    model as GIF pixel files.                                                                                                   ',&
+'                                                                                                                                ',&
+'    The following files will be generated, of the name hue.3_NNN.gif,                                                           ',&
+'    where NNN is the lightness for the particular plot:                                                                         ',&
+'                                                                                                                                ',&
+'      hue.3_100.gif                                                                                                             ',&
+'      hue.3_095.gif                                                                                                             ',&
+'      hue.3_090.gif                                                                                                             ',&
+'      hue.3_085.gif                                                                                                             ',&
+'      hue.3_080.gif                                                                                                             ',&
+'      hue.3_075.gif                                                                                                             ',&
+'      hue.3_070.gif                                                                                                             ',&
+'      hue.3_065.gif                                                                                                             ',&
+'      hue.3_060.gif                                                                                                             ',&
+'      hue.3_055.gif                                                                                                             ',&
+'      hue.3_050.gif                                                                                                             ',&
+'      hue.3_045.gif                                                                                                             ',&
+'      hue.3_040.gif                                                                                                             ',&
+'      hue.3_035.gif                                                                                                             ',&
+'      hue.3_030.gif                                                                                                             ',&
+'      hue.3_025.gif                                                                                                             ',&
+'      hue.3_020.gif                                                                                                             ',&
+'      hue.3_015.gif                                                                                                             ',&
+'      hue.3_010.gif                                                                                                             ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'    --help      display this help and exit                                                                                      ',&
+'                                                                                                                                ',&
+'    --version   output version information and exit                                                                             ',&
+'                                                                                                                                ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -119,7 +119,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0 20170604>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-06-26 18:31:00 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:18:09 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

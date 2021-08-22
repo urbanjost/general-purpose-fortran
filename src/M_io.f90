@@ -360,9 +360,9 @@ character(len=20)             :: readwrite      ; namelist/inquire/readwrite
 character(len=20)             :: write          ; namelist/inquire/write
 
 integer                       :: recl           ; namelist/inquire/recl
-character(len=20)             :: round          ; !BUG!namelist/inquire/round
+character(len=20)             :: round          ; namelist/inquire/round
 character(len=20)             :: sequential     ; namelist/inquire/sequential
-character(len=20)             :: sign           ; !BUG!namelist/inquire/sign
+character(len=20)             :: sign           ; namelist/inquire/sign
 integer                       :: size           ; namelist/inquire/size
 character(len=20)             :: stream         ; namelist/inquire/stream
 !==============================================================================================
@@ -381,8 +381,8 @@ character(len=20)             :: stream         ; namelist/inquire/stream
      &   form=form,formatted=formatted,unformatted=unformatted,                                          &
      &   access=access,sequential=sequential,direct=direct,stream=stream,                                &
      &   action=action,read=read,write=write,readwrite=readwrite,                                        &
-     !BUG!&   sign=sign,                                                                                      &
-     !BUG!&   round=round,                                                                                    &
+     &   sign=sign,                                                                                      &
+     &   round=round,                                                                                    &
      &   blank=blank,decimal=decimal,delim=delim,encoding=encoding,pad=pad,                              &
      &   named=named,opened=opened,exist=exist,number=number,pending=pending,asynchronous=asynchronous,  &
      &   iostat=ios,err=999,iomsg=message)
@@ -395,8 +395,8 @@ character(len=20)             :: stream         ; namelist/inquire/stream
      &   form=form,formatted=formatted,unformatted=unformatted,                                          &
      &   access=access,sequential=sequential,direct=direct,stream=stream,                                &
      &   action=action,read=read,write=write,readwrite=readwrite,                                        &
-     !BUG!&   sign=sign,                                                                                      &
-     !BUG!&   round=round,                                                                                    &
+     &   sign=sign,                                                                                      &
+     &   round=round,                                                                                    &
      &   blank=blank,decimal=decimal,delim=delim,encoding=encoding,pad=pad,                              &
      &   named=named,opened=opened,exist=exist,number=number,pending=pending,asynchronous=asynchronous,  &
      &   iostat=ios,err=999,iomsg=message)
@@ -455,118 +455,6 @@ end subroutine print_inquire
 !!    implicit none
 !!       write(*,*)'separator=',separator()
 !!    end program demo_separator
-function separator2() result(sep)
-
-! use the pathname returned as arg0 to determine pathname separator
-implicit none
-character(len=:),allocatable :: arg0
-integer                      :: arg0_length
-integer                      :: ios
-logical                      :: existing
-character(len=1)             :: sep
-character(len=1),save        :: sep_cache=' '
-character(len=4096)          :: name
-character(len=:),allocatable :: fname
-character(len=:),allocatable :: envnames(:)
-integer                      :: i
-
-   if(sep_cache.ne.' ')then  ! use cached value. NOTE:  A parallel code might theoretically use multiple OS
-         sep=sep_cache
-         return
-   endif
-
-   TESTS: block
-
-   ! check variables names common to many platforms that usually have a directory path in them
-   envnames=[character(len=10) :: 'PATH', 'HOME','PWD','SHELL']
-   ! check PATH variable for slash or backslash
-   do i=1,size(envnames)
-      if(index(get_env(envnames(i)),'\').ne.0)then
-         sep='\'
-         exit TESTS
-      elseif(index(get_env(envnames(i)),'/').ne.0)then
-         sep='/'
-         exit TESTS
-      endif
-   enddo
-
-   ! get argument name ARG0, although this may be just the command verb or nothing at all
-   arg0_length=0
-   name=' '
-   call get_command_argument(0,length=arg0_length,status=ios)
-   if(allocated(arg0))deallocate(arg0)
-   allocate(character(len=arg0_length) :: arg0)
-   call get_command_argument(0,arg0,status=ios)
-
-   if(index(arg0,'\').ne.0)then
-      sep='\'
-      exit TESTS
-   elseif(index(arg0,'/').ne.0)then
-      sep='/'
-      exit TESTS
-   endif
-
-   ! used to try './' and '.\' but exist test on some systems only returns true
-   ! for a regular file so directory names always fail; although this can cause
-   ! problems if trying to see if a filename is unused (the reverse is true in
-   ! that you think a data file exists that is actually a directory!)
-
-   ! try name returned by INQUIRE(3f) of arg0, as some PE will give canonical name
-   existing=.false.
-   name=' '
-   inquire(file=arg0,iostat=ios,name=name)
-   if(ios.eq.0)then
-      if(index(name,'\').ne.0)then
-         sep='\'
-         exit TESTS
-      elseif(index(name,'/').ne.0)then
-         sep='/'
-         exit TESTS
-      endif
-   endif
-
-   ! well, try some common syntax and assume arg0 is in current directory
-   ! could try opening a file assuming in a directory with write permission
-   ! or can open /tmp/unique_file_name can be opened, which does on any Unix-Like System I know of
-   fname='.\'//arg0
-   inquire(file=fname,iostat=ios,exist=existing)
-   if(ios.eq.0)then
-      if(existing)then
-         sep='\'
-         exit TESTS
-      endif
-   endif
-   fname='./'//arg0
-   inquire(file=fname,iostat=ios,exist=existing)
-   if(ios.eq.0)then
-      if(existing)then
-         sep='/'
-         exit TESTS
-      endif
-   endif
-
-   ! used to then call which(arg0) and see if could find pathname but now it calls this function
-
-   ! used to then try to open "/tmp/UNIQUE_NAME" and assume "/" if successful, as any normal ULS has /tmp.
-   ! but now some systems allow a "/" in a filename
-
-   inquire(file='///',iostat=ios,exist=existing) ! on POSIX systems this is the same as '/'.
-   if(ios.eq.0)then
-      if(existing)then
-         sep='/'
-         exit TESTS
-      endif
-   endif
-
-   endblock TESTS
-
-   if(sep.eq.' ')then
-      write(*,*)'<WARNING>unknown system directory path separator, defaulting to slash ("/")'
-      sep='\'
-   endif
-
-   sep_cache=sep
-end function separator2
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

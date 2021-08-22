@@ -292,7 +292,7 @@ MODULE M_display_UTIL
   use putstrmodule
   implicit none
 
-character(len=*),parameter::ident_1="@(#)M_display(3fm): module for pretty-printing matrices"
+! ident_1="@(#)M_display(3fm): module for pretty-printing matrices"
 
   ! ***************** PUBLIC ENTITIES (ONLY PUBLIC TO M_display, NOT TO USER PROGRAMS) ***************
   private
@@ -1983,8 +1983,7 @@ end function disp_get
 !===================================================================================================================================
 subroutine disp_scalar_int(x, fmt, advance, sep, trim, unit, zeroas)
 
-character(len=*),parameter::ident_2="&
-&@(#)M_disp::disp_scalar_int(3f): integer scalar without title  (call disp_title_scalar_int(3f) with title='')"
+! ident_2="@(#)M_disp::disp_scalar_int(3f): integer scalar without title  (call disp_title_scalar_int(3f) with title='')"
 
 character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
 integer(dint), intent(in)          :: x
@@ -1998,7 +1997,7 @@ end subroutine disp_scalar_int
 !===================================================================================================================================
 subroutine disp_title_scalar_int(title, x, fmt, advance, sep, style, trim, unit, zeroas)
 
-character(len=*),parameter::ident_3="@(#)M_display::disp_scalar_int(3f): Default integer scalar with title"
+! ident_3="@(#)M_display::disp_scalar_int(3f): Default integer scalar with title"
 
 character(*), intent(in) :: title
 character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
@@ -2013,7 +2012,7 @@ end subroutine disp_title_scalar_int
 !===================================================================================================================================
 subroutine disp_vector_int(x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
 
-character(len=*),parameter::ident_4="@(#)M_display::disp_vector_int(3f): Default integer vector without title"
+! ident_4="@(#)M_display::disp_vector_int(3f): Default integer vector without title"
 
 character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
 integer(dint), intent(in) :: x(:)

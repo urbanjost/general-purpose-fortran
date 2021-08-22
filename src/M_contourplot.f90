@@ -950,8 +950,7 @@ SUBROUTINE ContourLines(x,y,z,ismopt,iexp,jexp,clist,epsilon,ierr,cntcrv)
 
 IMPLICIT NONE
 
-character(len=*),parameter::ident_1="&
-&@(#)M_contourplot::contourlines(3f):calculate contour lines from ungridded data f(x,y) and call user-supplied routine with results"
+! ident_1="@(#)M_contourplot::contourlines(3f):calculate contour lines from ungridded data f(x,y) and call user-supplied routine with results"
 
 REAL,INTENT(IN),DIMENSION(:):: x      ! input list of x values
 REAL,INTENT(IN),DIMENSION(:):: y      ! input list of y values

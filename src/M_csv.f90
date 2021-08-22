@@ -58,7 +58,7 @@ integer,save                  :: G_linecolumn    = 1
 !       - for single items you must indicate whether to advance or not
 !       - for one-dimensional items, the argument is optional. Default is to advance.
 !
-character(len=*),parameter::ident_1="@(#)M_csv::csv_write(3f): write scalar intrinsic type using current CSV style"
+! ident_1="@(#)M_csv::csv_write(3f): write scalar intrinsic type using current CSV style"
 
 public csv_write
 
@@ -246,7 +246,7 @@ function csv(g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12, g13, g14, g15, g
 use M_strings, only : quote
 implicit none
 
-character(len=*),parameter::ident_2="@(#)M_csv::csv(3f): writes up to twenty standard scalar types as a line in a CSV file"
+! ident_2="@(#)M_csv::csv(3f): writes up to twenty standard scalar types as a line in a CSV file"
 
 class(*),intent(in),optional  ::  g1  ,g2  ,g3  ,g4  ,g5,  g6  ,g7  ,g8  ,g9, g10
 class(*),intent(in),optional  :: g11 ,g12 ,g13 ,g14 ,g15, g16 ,g17 ,g18 ,g19, g20

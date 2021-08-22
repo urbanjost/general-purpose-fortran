@@ -335,7 +335,7 @@ contains
 !!    Public Domain
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function c2f(celsius)
-character(len=*),parameter::ident_1="@(#)M_units::c2f(3f): Convert celsius to fahrenheit"
+! ident_1="@(#)M_units::c2f(3f): Convert celsius to fahrenheit"
 class(*),intent(in)           :: celsius        ! celsius value to convert to fahrenheit
    real                       :: celsius_local
    celsius_local=anyscalar_to_real(celsius)
@@ -381,7 +381,7 @@ end function c2f
 !!    Public Domain
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function f2c(fahrenheit)
-character(len=*),parameter::ident_2="@(#)M_units::f2c(3f): Convert fahrenheit to celsius"
+! ident_2="@(#)M_units::f2c(3f): Convert fahrenheit to celsius"
 class(*),intent(in)           :: fahrenheit     ! input fahrenheit to convert to celsius
    real                       :: fahrenheit_local
    fahrenheit_local=anyscalar_to_real(fahrenheit)
@@ -431,7 +431,7 @@ end function f2c
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function r2d_i(iradians)
 
-character(len=*),parameter::ident_3="@(#)M_units::r2d_i(3f): Convert radians to degrees"
+! ident_3="@(#)M_units::r2d_i(3f): Convert radians to degrees"
 
 doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
 integer,intent(in)           :: iradians        ! input radians to convert to degrees
@@ -440,7 +440,7 @@ end function r2d_i
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function r2d_d(radians)
 
-character(len=*),parameter::ident_4="@(#)M_units::r2d_d(3f): Convert radians to degrees"
+! ident_4="@(#)M_units::r2d_d(3f): Convert radians to degrees"
 
 doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
 doubleprecision,intent(in)           :: radians        ! input radians to convert to degrees
@@ -449,7 +449,7 @@ end function r2d_d
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function r2d_r(radians)
 
-character(len=*),parameter::ident_5="@(#)M_units::r2d_r(3f): Convert radians to degrees"
+! ident_5="@(#)M_units::r2d_r(3f): Convert radians to degrees"
 
 doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
 real,intent(in)           :: radians        ! input radians to convert to degrees
@@ -498,7 +498,7 @@ end function r2d_r
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function d2r_r(degrees)
 
-character(len=*),parameter::ident_6="@(#)M_units::d2r_r(3f): Convert degrees to radians"
+! ident_6="@(#)M_units::d2r_r(3f): Convert degrees to radians"
 
 doubleprecision,parameter :: RADIAN=57.2957795131d0 ! degrees
 real,intent(in)           :: degrees                ! input degrees to convert to radians
@@ -507,7 +507,7 @@ end function d2r_r
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function d2r_d(degrees)
 
-character(len=*),parameter::ident_7="@(#)M_units::d2r_d(3f): Convert degrees to radians"
+! ident_7="@(#)M_units::d2r_d(3f): Convert degrees to radians"
 
 doubleprecision,parameter :: RADIAN=57.2957795131d0 ! degrees
 doubleprecision,intent(in) :: degrees               ! input degrees to convert to radians
@@ -516,7 +516,7 @@ end function d2r_d
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function d2r_i(idegrees)
 
-character(len=*),parameter::ident_8="@(#)M_units::d2r_i(3f): Convert degrees to radians"
+! ident_8="@(#)M_units::d2r_i(3f): Convert degrees to radians"
 
 doubleprecision,parameter :: RADIAN=57.2957795131d0 ! degrees
 integer,intent(in) :: idegrees                      ! input degrees to convert to radians
@@ -575,7 +575,7 @@ end function d2r_i
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function sind(angle_in_degrees)
 
-character(len=*),parameter::ident_9="@(#)M_units::sind(3f): sin(3f) with degrees as input instead of radians"
+! ident_9="@(#)M_units::sind(3f): sin(3f) with degrees as input instead of radians"
 
 class(*),intent(in)  :: angle_in_degrees
 real                 :: angle_in_degrees_local
@@ -633,7 +633,7 @@ end function sind
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function cosd(angle_in_degrees)
 
-character(len=*),parameter::ident_10="@(#)M_units::cosd(3f): cos(3f) with degrees as input instead of radians"
+! ident_10="@(#)M_units::cosd(3f): cos(3f) with degrees as input instead of radians"
 
 class(*),intent(in) :: angle_in_degrees
 real                :: angle_in_degrees_local
@@ -692,7 +692,7 @@ end function cosd
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function tand(angle_in_degrees)
 
-character(len=*),parameter::ident_11="@(#)M_units::tand(3f): tan(3f) with degrees as input instead of radians"
+! ident_11="@(#)M_units::tand(3f): tan(3f) with degrees as input instead of radians"
 
 class(*),intent(in) :: angle_in_degrees
 real                :: angle_in_degrees_local
@@ -738,7 +738,7 @@ end function tand
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function asind(x)
 
-character(len=*),parameter::ident_12="@(#)M_units::asind(3f): asin(3f) with degrees as output instead of radians"
+! ident_12="@(#)M_units::asind(3f): asin(3f) with degrees as output instead of radians"
 
 class(*),intent(in) :: x
 real                :: x_local
@@ -785,7 +785,7 @@ end function asind
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function acosd(x)
 
-character(len=*),parameter::ident_13="@(#)M_units::acosd(3f): calculate arc-cos of angle in degrees"
+! ident_13="@(#)M_units::acosd(3f): calculate arc-cos of angle in degrees"
 
 class(*),intent(in) :: x
 real                :: x_local
@@ -833,7 +833,7 @@ end function acosd
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function atand(x)
 
-character(len=*),parameter::ident_14="@(#)M_units::atand(3f): result is arc-tangent of angle in degrees"
+! ident_14="@(#)M_units::atand(3f): result is arc-tangent of angle in degrees"
 
 class(*),intent(in) :: x
 real                :: x_local
@@ -882,7 +882,7 @@ end function atand
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function atan2d(x,y)
 
-character(len=*),parameter::ident_15="@(#)M_units::atan2d(3f): calculate arc-tangent of angle in degrees"
+! ident_15="@(#)M_units::atan2d(3f): calculate arc-tangent of angle in degrees"
 
 class(*),intent(in) :: x
 class(*),intent(in) :: y
@@ -939,7 +939,7 @@ end function atan2d
 !!##LICENSE
 !!    Public Domain
 elemental function feet_to_meters(feet)
-character(len=*),parameter::ident_16="@(#)M_units::feet_to_meters(3f): converts a measurement in feet to meters"
+! ident_16="@(#)M_units::feet_to_meters(3f): converts a measurement in feet to meters"
 class(*),intent(in)           :: feet                           ! the input length in feet.
 doubleprecision               :: feet_to_meters                 ! OUTPUT, the corresponding length in meters.
 doubleprecision               :: feet_local
@@ -990,7 +990,7 @@ end function feet_to_meters
 !!##LICENSE
 !!    Public Domain
 elemental function meters_to_feet(meters)
-character(len=*),parameter::ident_17="@(#)M_units::meters_to_feet(3f): converts a measurement in meters to feet"
+! ident_17="@(#)M_units::meters_to_feet(3f): converts a measurement in meters to feet"
 class(*),intent(in)           :: meters                         ! the input length in meters.
 doubleprecision               :: meters_to_feet                 ! OUTPUT, the corresponding length in feet.
    doubleprecision            :: meters_local
@@ -1057,8 +1057,7 @@ end function meters_to_feet
 !!    Public Domain
 subroutine cartesian_to_spherical(x,y,z,radius,inclination,azimuth)
 implicit none
-character(len=*),parameter::ident_18="&
-&@(#)M_units::cartesian_to_spherical(3f): convert Cartesian coordinates to ISO polar coordinates"
+! ident_18="@(#)M_units::cartesian_to_spherical(3f): convert Cartesian coordinates to ISO polar coordinates"
 real,intent(in)  :: x,y,z
 real,intent(out) :: radius,inclination,azimuth
    radius=sqrt(x**2+y**2+z**2)
@@ -1131,8 +1130,7 @@ end subroutine cartesian_to_spherical
 !!    Public Domain
 subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
 implicit none
-character(len=*),parameter::ident_19="&
-&@(#)M_units::spherical_to_cartesian(3f): convert spherical coordinates to cartesian coordinates"
+! ident_19="@(#)M_units::spherical_to_cartesian(3f): convert spherical coordinates to cartesian coordinates"
 real,intent(in) :: radius,inclination,azimuth
 real,intent(out)  :: x,y,z
    if(radius.eq.0)then
@@ -1201,7 +1199,7 @@ end subroutine spherical_to_cartesian
 !!    Public Domain
 subroutine cartesian_to_polar(x,y,radius,inclination)
 implicit none
-character(len=*),parameter::ident_20="@(#)M_units::cartesian_to_polar(3f): convert Cartesian coordinates to polar coordinates"
+! ident_20="@(#)M_units::cartesian_to_polar(3f): convert Cartesian coordinates to polar coordinates"
 real,intent(in)  :: x,y
 real,intent(out) :: radius,inclination
    radius=sqrt(x**2+y**2)
@@ -1269,7 +1267,7 @@ end subroutine cartesian_to_polar
 !!    Public Domain
 subroutine polar_to_cartesian(radius,inclination,x,y)
 implicit none
-character(len=*),parameter::ident_21="@(#)M_units::polar_to_cartesian(3f): convert polar coordinates to cartesian coordinates"
+! ident_21="@(#)M_units::polar_to_cartesian(3f): convert polar coordinates to cartesian coordinates"
 real,intent(in) :: radius,inclination
 real,intent(out)  :: x,y
    if(radius.eq.0)then
@@ -1437,7 +1435,7 @@ end subroutine polar_to_cartesian
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine atomnum2symbol(atomnum,symbol)
 implicit none
-character(len=*),parameter::ident_22="@(#)M_units::atomnum2symbol(3f): return element symbol given atomic number"
+! ident_22="@(#)M_units::atomnum2symbol(3f): return element symbol given atomic number"
 integer,intent(in)           :: atomnum
 character(len=2),intent(out) :: symbol
 integer,parameter            :: nelements=109
@@ -1511,7 +1509,7 @@ end subroutine atomnum2symbol
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine symbol2atomnum(symbol,atomnum)
 implicit none
-character(len=*),parameter::ident_23="@(#)M_units::symbol2atomnum(3f): return atomic number given element symbol name"
+! ident_23="@(#)M_units::symbol2atomnum(3f): return atomic number given element symbol name"
 character(len=2),intent(in) :: symbol
 integer,intent(out)         :: atomnum
 integer,parameter           :: nelements=109
@@ -1600,7 +1598,7 @@ end subroutine symbol2atomnum
 !!##LICENSE
 !!    Public Domain
 elemental function pounds_to_kilograms ( pounds )
-character(len=*),parameter::ident_24="@(#)M_units::pounds_to_kilograms(3f): converts a measurement in pounds to kilograms."
+! ident_24="@(#)M_units::pounds_to_kilograms(3f): converts a measurement in pounds to kilograms."
 class(*),intent(in) :: pounds
    doubleprecision  :: pounds_to_kilograms
    doubleprecision  :: pounds_local
@@ -1653,8 +1651,7 @@ end function pounds_to_kilograms
 !!    Public Domain
 elemental function norm_angle_rad(ang)
 
-character(len=*),parameter::ident_25="&
-&@(#)M_units::norm_angle_rad(3fp): Return input angle (given in radians) as doubleprecision angle between 0 and 2pi radians"
+! ident_25="@(#)M_units::norm_angle_rad(3fp): Return input angle (given in radians) as doubleprecision angle between 0 and 2pi radians"
 class(*), intent(in) :: ang
 doubleprecision      :: ang_local
 doubleprecision      :: norm_angle_rad
@@ -1736,7 +1733,7 @@ end function norm_angle_rad
 !!    MIT License
 elemental function norm_angle_deg_class(ang)
 
-character(len=*),parameter::ident_26="@(#)M_units:: norm_angle_deg_class(3fp): Returns angle in degrees between 0 and 360"
+! ident_26="@(#)M_units:: norm_angle_deg_class(3fp): Returns angle in degrees between 0 and 360"
 
 class(*),intent(in) :: ang
 doubleprecision     :: ang_local
@@ -1747,7 +1744,7 @@ end function norm_angle_deg_class
 !===================================================================================================================================
 elemental function norm_angle_deg_double(ang)
 
-character(len=*),parameter::ident_27="@(#)M_units:: norm_angle_deg_double(3fp): Returns angle in degrees between 0 and 360"
+! ident_27="@(#)M_units:: norm_angle_deg_double(3fp): Returns angle in degrees between 0 and 360"
 
 doubleprecision,intent(in) :: ang
 doubleprecision            :: norm_angle_deg_double
@@ -1756,7 +1753,7 @@ end function norm_angle_deg_double
 !===================================================================================================================================
 elemental function norm_angle_deg_real(ang)
 
-character(len=*),parameter::ident_28="@(#)M_units:: norm_angle_deg_real(3fp): Returns angle in degrees between 0 and 360"
+! ident_28="@(#)M_units:: norm_angle_deg_real(3fp): Returns angle in degrees between 0 and 360"
 
 real,intent(in) :: ang
 real            :: norm_angle_deg_real
@@ -1765,7 +1762,7 @@ end function norm_angle_deg_real
 !===================================================================================================================================
 elemental function norm_angle_deg_integer(ang)
 
-character(len=*),parameter::ident_29="@(#)M_units:: norm_angle_deg_integer(3fp): Returns angle in degrees between 0 and 360"
+! ident_29="@(#)M_units:: norm_angle_deg_integer(3fp): Returns angle in degrees between 0 and 360"
 
 integer,intent(in) :: ang
 integer            :: norm_angle_deg_integer
@@ -1845,7 +1842,7 @@ function inf32(value)
 use,intrinsic :: iso_fortran_env, only: real32
 implicit none
 
-character(len=*),parameter::ident_30="@(#)M_units:: inf32(3fp): Returns an inf (Infinity) of type real32"
+! ident_30="@(#)M_units:: inf32(3fp): Returns an inf (Infinity) of type real32"
 
 character(len=3),save :: STRING='inf'
 real(kind=real32) :: inf32,value
@@ -1856,7 +1853,7 @@ function inf64(value)
 use,intrinsic :: iso_fortran_env, only: real64
 implicit none
 
-character(len=*),parameter::ident_31="@(#)M_units:: inf64(3fp): Returns an inf (Infinity) of type real64"
+! ident_31="@(#)M_units:: inf64(3fp): Returns an inf (Infinity) of type real64"
 
 character(len=3),save :: STRING='inf'
 real(kind=real64) :: inf64,value
@@ -1867,7 +1864,7 @@ function inf128(value)
 use,intrinsic :: iso_fortran_env, only: real128
 implicit none
 
-character(len=*),parameter::ident_32="@(#)M_units:: inf128(3fp): Returns an inf (Infinity) of type real128"
+! ident_32="@(#)M_units:: inf128(3fp): Returns an inf (Infinity) of type real128"
 
 character(len=3),save :: STRING='inf'
 real(kind=real128) :: inf128,value
@@ -1975,7 +1972,7 @@ function nan32(value)
 use,intrinsic :: iso_fortran_env, only: real32
 implicit none
 
-character(len=*),parameter::ident_33="@(#)M_units:: nan32(3fp): Returns a NAN (Not a number) of type real32"
+! ident_33="@(#)M_units:: nan32(3fp): Returns a NAN (Not a number) of type real32"
 
 character(len=3),save :: STRING='NaN'
 real(kind=real32) :: nan32,value
@@ -1991,7 +1988,7 @@ function nan64(value)
 use,intrinsic :: iso_fortran_env, only: real64
 implicit none
 
-character(len=*),parameter::ident_34="@(#)M_units:: nan64(3fp): Returns a NAN (Not a number) of type real64"
+! ident_34="@(#)M_units:: nan64(3fp): Returns a NAN (Not a number) of type real64"
 
 character(len=3),save :: STRING='NaN'
 real(kind=real64) :: nan64,value
@@ -2063,7 +2060,7 @@ end function nan128
 elemental pure function is_even(ival)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-character(len=*),parameter::ident_35="@(#)M_units::is_even(3f): determine if integer is  even"
+! ident_35="@(#)M_units::is_even(3f): determine if integer is  even"
 
 class(*),intent(in) :: ival
 logical             :: is_even
@@ -2128,7 +2125,7 @@ elemental pure function is_nan(x)
 use,intrinsic :: IEEE_ARITHMETIC, only : IEEE_IS_NAN       ! Determine if value is IEEE Not-a-Number.
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-character(len=*),parameter::ident_36="@(#)M_units::is_nan(3f): determine if value is  IEEE Not-a-Number"
+! ident_36="@(#)M_units::is_nan(3f): determine if value is  IEEE Not-a-Number"
 
 class(*),intent(in) :: x
 logical             :: is_nan

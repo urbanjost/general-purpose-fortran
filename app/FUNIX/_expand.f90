@@ -9,31 +9,31 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'       _expand(1f) - [FUNIX] convert tabs to spaces                             ',&
-'       (LICENSE:PD)                                                             ',&
-'                                                                                ',&
-'SYNOPSIS                                                                        ',&
-'       _expand FILENAME(S) [ -blanks N]| --help| --version                      ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'       Convert tabs in each FILE to spaces, writing to standard output.         ',&
-'       If no filename is specified standard input is read. Tab stops            ',&
-'       are assumed to be every eight (8) columns. Trailing spaces,              ',&
-'       carriage returns, and newlines are removed.                              ',&
-'                                                                                ',&
-'OPTIONS                                                                         ',&
-'       FILENAMES   files to expand tab characters in.                           ',&
-'       -blanks     maximum number of adjacent blank lines to retain.            ',&
-'                   Default is -1, which is equivalent to unlimited.             ',&
-'       --help      display this help and exit                                   ',&
-'       --version   output version information and exit                          ',&
-'                                                                                ',&
-'EXAMPLES                                                                        ',&
-'       Sample commands:                                                         ',&
-'                                                                                ',&
-'        _expand < input.txt > output.txt                                        ',&
-'        _expand input.txt   > output.txt                                        ',&
+'NAME                                                                                                                            ',&
+'       _expand(1f) - [FUNIX] convert tabs to spaces                                                                             ',&
+'       (LICENSE:PD)                                                                                                             ',&
+'                                                                                                                                ',&
+'SYNOPSIS                                                                                                                        ',&
+'       _expand FILENAME(S) [ -blanks N]| --help| --version                                                                      ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'       Convert tabs in each FILE to spaces, writing to standard output.                                                         ',&
+'       If no filename is specified standard input is read. Tab stops                                                            ',&
+'       are assumed to be every eight (8) columns. Trailing spaces,                                                              ',&
+'       carriage returns, and newlines are removed.                                                                              ',&
+'                                                                                                                                ',&
+'OPTIONS                                                                                                                         ',&
+'       FILENAMES   files to expand tab characters in.                                                                           ',&
+'       -blanks     maximum number of adjacent blank lines to retain.                                                            ',&
+'                   Default is -1, which is equivalent to unlimited.                                                             ',&
+'       --help      display this help and exit                                                                                   ',&
+'       --version   output version information and exit                                                                          ',&
+'                                                                                                                                ',&
+'EXAMPLES                                                                                                                        ',&
+'       Sample commands:                                                                                                         ',&
+'                                                                                                                                ',&
+'        _expand < input.txt > output.txt                                                                                        ',&
+'        _expand input.txt   > output.txt                                                                                        ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -86,7 +86,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:04 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:18:19 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -98,7 +98,7 @@ use M_kracken, only: kracken, lget, iget, sget
 use M_strings, only: notabs, split
 implicit none
 
-character(len=*),parameter::ident_1="@(#)_expand(1f):filter removes tabs and trailing white space from files up to 1024 chars wide"
+! ident_1="@(#)_expand(1f):filter removes tabs and trailing white space from files up to 1024 chars wide"
 
 character(len=1024)              :: in,out
 integer                          :: ios          ! error flag from read

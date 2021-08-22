@@ -11,36 +11,36 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'   _shuf - [FUNIX] generate random permutations                                 ',&
-'   (LICENSE:PD)                                                                 ',&
-'SYNOPSIS                                                                        ',&
-'  syntax:                                                                       ',&
-'                                                                                ',&
-'   _shuf FILES(s)   [ -n]                                                       ',&
-'   _shuf STRINGS -e [ -n]                                                       ',&
-'   _shuf -i LO-HI   [ -n]                                                       ',&
-'                                                                                ',&
-'DESCRIPTION                                                                     ',&
-'   Write a random permutation of the input lines to standard output.            ',&
-'                                                                                ',&
-'   FILES(s)   files to use as input                                             ',&
-'   -e         treat each ARG as an input line                                   ',&
-'   -i LO HI   treat each number LO through HI as an input line                  ',&
-'   -n         output at most COUNT lines (per file)                             ',&
-'   --help     display this help and exit                                        ',&
-'   --version  output version information and exit                               ',&
-'EXAMPLES                                                                        ',&
-'  Sample usage:                                                                 ',&
-'                                                                                ',&
-'   # generate a random number from 0 to 100                                     ',&
-'   _shuf -i 0 100 -n 1                                                          ',&
-'   # randomly select xterm(1) color                                             ',&
-'   xterm -bg `_shuf -e green black gray blue -n 1`                              ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'   _shuf - [FUNIX] generate random permutations                                                                                 ',&
+'   (LICENSE:PD)                                                                                                                 ',&
+'SYNOPSIS                                                                                                                        ',&
+'  syntax:                                                                                                                       ',&
+'                                                                                                                                ',&
+'   _shuf FILES(s)   [ -n]                                                                                                       ',&
+'   _shuf STRINGS -e [ -n]                                                                                                       ',&
+'   _shuf -i LO-HI   [ -n]                                                                                                       ',&
+'                                                                                                                                ',&
+'DESCRIPTION                                                                                                                     ',&
+'   Write a random permutation of the input lines to standard output.                                                            ',&
+'                                                                                                                                ',&
+'   FILES(s)   files to use as input                                                                                             ',&
+'   -e         treat each ARG as an input line                                                                                   ',&
+'   -i LO HI   treat each number LO through HI as an input line                                                                  ',&
+'   -n         output at most COUNT lines (per file)                                                                             ',&
+'   --help     display this help and exit                                                                                        ',&
+'   --version  output version information and exit                                                                               ',&
+'EXAMPLES                                                                                                                        ',&
+'  Sample usage:                                                                                                                 ',&
+'                                                                                                                                ',&
+'   # generate a random number from 0 to 100                                                                                     ',&
+'   _shuf -i 0 100 -n 1                                                                                                          ',&
+'   # randomly select xterm(1) color                                                                                             ',&
+'   xterm -bg `_shuf -e green black gray blue -n 1`                                                                              ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -96,7 +96,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-06-26 18:31:24 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:20:28 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

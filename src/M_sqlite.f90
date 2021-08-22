@@ -1131,7 +1131,7 @@ type(SQLITE_DATABASE)             :: db
 character(len=*),intent(in)       :: command
 type(c_ptr)                       :: errmsg_cptr
 
-character(len=*),parameter::ident_1="@(#)M_sqlite::sqlite3_do(3f): Run a single SQL command"
+! ident_1="@(#)M_sqlite::sqlite3_do(3f): Run a single SQL command"
 
    interface
       function sqlite3_do_f(handle, command, errmsg_cptr_c) bind(C,name="sqlite3_do_c")
@@ -1328,7 +1328,7 @@ character(len=*)                   :: tablename
 type(SQLITE_COLUMN), dimension(:)  :: columns
 character(len=*), optional         :: primary
 
-character(len=*),parameter::ident_2="@(#)M_sqlite::sqlite3_create_table(3f): Create a new table"
+! ident_2="@(#)M_sqlite::sqlite3_create_table(3f): Create a new table"
 
    character(len=:),allocatable        :: command
    character(len=:),allocatable        :: primary_
@@ -2134,7 +2134,7 @@ pure function Ca2Fs_v1(array)  result (string)
 character(len=1),intent(in)  :: array(:)
 character(len=size(array))   :: string
 
-character(len=*),parameter::ident_3="@(#)M_system::Ca2Fs_v1(3fp): function copies null-terminated char array to string"
+! ident_3="@(#)M_system::Ca2Fs_v1(3fp): function copies null-terminated char array to string"
 
    integer                      :: i
 
@@ -2155,7 +2155,7 @@ pure function Fs2Ca(string) result (array)
 character(len=*),intent(in)     :: string
 character(len=1,kind=c_char)    :: array(len(string)+1)
 
-character(len=*),parameter::ident_4="@(#)M_system::Fs2Ca(3fp): function copies string to null terminated char array"
+! ident_4="@(#)M_system::Fs2Ca(3fp): function copies string to null terminated char array"
 
    integer                      :: i
 

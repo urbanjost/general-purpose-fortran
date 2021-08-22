@@ -16,7 +16,7 @@
 !!
 !!   for generating standard messages
 !!
-!!      use M_attr, only : advice
+!!      use M_attr, only : alert
 !!
 !!
 !!##DESCRIPTION
@@ -84,7 +84,7 @@
 !!    Sample program
 !!
 !!     program demo_M_attr
-!!     use M_attr, only : attr, attr_mode, attr_update, advice
+!!     use M_attr, only : attr, attr_mode, attr_update, alert
 !!     implicit none
 !!     character(len=256) :: line
 !!     character(len=*),parameter :: f='( &
@@ -112,9 +112,9 @@
 !!        write(*,'(a)')attr('<WARNING> The night is young.')
 !!        write(*,'(a)')attr('<INFO> It is Monday')
 !!
-!!        call advice('<ERROR>', 'Woe is nigh.')
-!!        call advice('<WARNING>', 'The night is young.')
-!!        call advice('<INFO>', 'It is Monday')
+!!        call alert('<ERROR>', 'Woe is nigh.')
+!!        call alert('<WARNING>', 'The night is young.')
+!!        call alert('<INFO>', 'It is Monday')
 !!
 !!        ! create a custom mneumonic
 !!        call attr_update('MYERROR',attr(&
@@ -147,7 +147,7 @@ private
 public  :: attr
 public  :: attr_mode
 public  :: attr_update
-public  :: advice
+public  :: alert, advice
 
 private :: attr_matrix
 private :: attr_scalar
@@ -166,6 +166,10 @@ interface attr
    module procedure attr_scalar
    module procedure attr_matrix
    module procedure attr_scalar_width
+end interface
+
+interface advice  ! deprecated old name for alert(3f)
+   module procedure alert
 end interface
 
 ! direct use of constant strings
@@ -1101,12 +1105,12 @@ end subroutine insert
 !>
 !! !>
 !!##NAME
-!!    advice(3f) - [M_attr] print messages using a standard format including time and program name
+!!    alert(3f) - [M_attr] print messages using a standard format including time and program name
 !!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!     subroutine advice(message)
+!!     subroutine alert(message)
 !!
 !!        character(len=*),intent(in),optional :: type
 !!        character(len=*),intent(in),optional :: message
@@ -1117,7 +1121,7 @@ end subroutine insert
 !!    any of 'error','warn', or 'info'.  It also allows the keywords
 !!    <ARG0>,<TZ>,<YE>,<MO>,<DA>,<HR>,<MI>,<SE>,<MS> to be used in
 !!    the message (which is passed to ATTR(3f)). Note that time stamp
-!!    keywords will only be updated when using ADVICE(3f).
+!!    keywords will only be updated when using ALERT(3f).
 !!
 !!##OPTIONS
 !!    TYPE     if present and one of 'warn','message','info' a predefined
@@ -1133,24 +1137,25 @@ end subroutine insert
 !!
 !!    Sample program
 !!
-!!     program demo_advice
-!!     use M_attr, only : advice, attr
+!!     program demo_alert
+!!     use M_attr, only : alert, attr
 !!     implicit none
-!!        call advice("error", "Say you didn't!")
-!!        call advice("warn",  "I wouldn't if I were you, Will Robinson.")
-!!        call advice("info",  "I fixed that for you, but it was a bad idea.")
-!!        call advice("???    ",  "not today you don't")
+!!        call alert("error", "Say you didn't!")
+!!        call alert("warn",  "I wouldn't if I were you, Will Robinson.")
+!!        call alert("info",  "I fixed that for you, but it was a bad idea.")
+!!        call alert("debug", "Who knows what is happening now?.")
+!!        call alert("???    ",  "not today you don't")
 !!        ! call to just update the macros
-!!        call advice()
-!!        ! conventional call to ATTR(3f) using the ADVICE(3f)-defined macros
+!!        call alert()
+!!        ! conventional call to ATTR(3f) using the ALERT(3f)-defined macros
 !!        write(*,*)attr('<bo>The year was <g><YE></g>, the month was <g><MO></g>')
-!!     end program demo_advice
+!!     end program demo_alert
 !!   Results:
 !!
-!!    ** (demo_advice): error   **: 16:33:50.0300: Say you didn't!
-!!    ** (demo_advice): warning **: 16:33:50.0301: I wouldn't if I were you, Will Robinson.
-!!    ** (demo_advice): info    **: 16:33:50.0301: I fixed that for you, but it was a bad idea.
-!!    ** (demo_advice): ???     **: 16:33:50.0301: not today you don't
+!!    ** (demo_alert): error   **: 16:33:50.0300: Say you didn't!
+!!    ** (demo_alert): warning **: 16:33:50.0301: I wouldn't if I were you, Will Robinson.
+!!    ** (demo_alert): info    **: 16:33:50.0301: I fixed that for you, but it was a bad idea.
+!!    ** (demo_alert): ???     **: 16:33:50.0301: not today you don't
 !!        The year was 2021, the month was 7
 !!
 !!##AUTHOR
@@ -1158,7 +1163,7 @@ end subroutine insert
 !!
 !!##LICENSE
 !!    MIT
-subroutine advice(type,message)
+subroutine alert(type,message)
 ! TODO: could add a warning level to ignore info, or info|warning, or all
 implicit none
 character(len=*),intent(in),optional :: type
@@ -1187,16 +1192,19 @@ character(len=4096)  :: new_message
       select case(type)
 
       case('warn','WARN','warning','WARNING')
-       new_message= '** ('//trim(arg0)//'): <bo><y>warning</y> **:'//new_message
+       new_message= '** ('//trim(arg0)//'): <EBONY><bo><y> warning </y></EBONY> **:'//new_message
 
       case('info','INFO','information','INFORMATION')
-       new_message= '** ('//trim(arg0)//'): <bo><g>info   </g> **:'//new_message
+       new_message= '** ('//trim(arg0)//'): <EBONY><bo><g> info    </g></EBONY> **:'//new_message
 
       case('error','ERROR')
-       new_message= '** ('//trim(arg0)//'): <bo><r>error  </r> **:'//new_message
+       new_message= '** ('//trim(arg0)//'): <EBONY><bo><r> error   </r></EBONY> **:'//new_message
+
+      case('debug','DEBUG')
+       new_message= '** ('//trim(arg0)//'): <EBONY><white><bo> debug   </white></EBONY> **:'//new_message
 
       case default
-       new_message= '** ('//trim(arg0)//'): <bo><c>'//type//'</c> **:'//new_message
+       new_message= '** ('//trim(arg0)//'): <EBONY><bo><c> '//type//' </c></EBONY> **:'//new_message
 
       end select
     write(stderr,'(a)')attr(trim(new_message))
@@ -1204,6 +1212,6 @@ character(len=4096)  :: new_message
    elseif(present(message))then
     write(stderr,'(a)')attr(trim(message))
    endif
-end subroutine advice
+end subroutine alert
 
 end module M_attr

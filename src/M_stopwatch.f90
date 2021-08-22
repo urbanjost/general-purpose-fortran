@@ -77,7 +77,7 @@ use M_system, only : system_cpu_time
 implicit none
 private
 
-character(len=*),parameter::ident_1="@(#)M_stopwatch::M_stopwatch(3f): package for measuring cpu and wall clock"
+! ident_1="@(#)M_stopwatch::M_stopwatch(3f): package for measuring cpu and wall clock"
 
 public :: create_watch, destroy_watch, start_watch, stop_watch, reset_watch, &
        read_watch, print_watch, pause_watch, end_pause_watch, &

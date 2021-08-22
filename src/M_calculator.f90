@@ -288,7 +288,7 @@ recursive subroutine calculator(inline,outlin,mssg,slast,ierr)
 !#----------------------------------------------------------------------------------------------------------------------------------
 !subroutine calculator(inline,outlin,mssg,slast,ierr)
 
-character(len=*),parameter::ident_1="@(#)M_calculator::calculator(3f): The procedure CALCULATOR(3f) acts like a calculator"
+! ident_1="@(#)M_calculator::calculator(3f): The procedure CALCULATOR(3f) acts like a calculator"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)            :: inline
@@ -434,7 +434,7 @@ end subroutine calculator
 !!    Public Domain
 subroutine help_funcs_()
 
-character(len=*),parameter::ident_2="@(#)M_calculator::help_funcs_(3fp): prints help for calculator functions"
+! ident_2="@(#)M_calculator::help_funcs_(3fp): prints help for calculator functions"
 
 character(len=80),allocatable :: help_text(:)
 integer                       :: i
@@ -612,7 +612,7 @@ end subroutine help_funcs_
 !!    Public Domain
 recursive subroutine parens_(string,nchar,ier)
 
-character(len=*),parameter::ident_3="@(#)M_calculator::parens_(3fp): crack out the parenthesis and solve"
+! ident_3="@(#)M_calculator::parens_(3fp): crack out the parenthesis and solve"
 
 character(len=*)             :: string
 integer,intent(inout)        :: nchar
@@ -747,8 +747,7 @@ use M_random,  only : init_random_seed
 use M_process, only : process_readall           ! read all lines from process into single string
 use M_system,  only : set_environment_variable  ! call setenv(3c) to set environment variable
 
-character(len=*),parameter::ident_4="&
-&@(#)M_calculator::funcs_(3fp):given string of form name(p1,p2,...) (p(i) are non-parenthesized expressions) call procedure name"
+! ident_4="@(#)M_calculator::funcs_(3fp):given string of form name(p1,p2,...) (p(i) are non-parenthesized expressions) call procedure name"
 
 character(len=*)                    :: wstrng
 integer                             :: nchars
@@ -2005,7 +2004,7 @@ end subroutine funcs_
 !!    Public Domain
 subroutine stufftok_(fval,wstrng,nchars,string,iend,ier)
 
-character(len=*),parameter::ident_5="@(#)M_calculator::stufftok_(3fp): add a new token variable and assign string to it"
+! ident_5="@(#)M_calculator::stufftok_(3fp): add a new token variable and assign string to it"
 
 real(kind=dp)          :: fval
 character(len=*)       :: wstrng
@@ -2046,8 +2045,7 @@ end subroutine stufftok_
 !!    Public Domain
 subroutine args_(line,ilen,array,itype,iarray,ier,mx)
 
-character(len=*),parameter::ident_6="&
-&@(#)M_calculator::args_(3fp):given 'par1,par2,...' store non-parenthesized expression par(n) into a real or string array"
+! ident_6="@(#)M_calculator::args_(3fp):given 'par1,par2,...' store non-parenthesized expression par(n) into a real or string array"
 
 !@ (#) record type of par(n) into itype()"
 !@ (#) Commas are only legal delimiters. extra or redundant delimiters are ignored.
@@ -2132,8 +2130,7 @@ end subroutine args_
 !!    Public Domain
 subroutine expressions_(string,nchar,value,ier)
 
-character(len=*),parameter::ident_7="&
-&@(#)M_calculator::expressions_(3fp): resolve a series of terms into a single value and restring"
+! ident_7="@(#)M_calculator::expressions_(3fp): resolve a series of terms into a single value and restring"
 
 character(len=*),intent(inout) :: string
 integer,intent(inout)          :: nchar
@@ -2251,7 +2248,7 @@ end subroutine expressions_
 !!    Public Domain
 subroutine pows_(wstrng,nchar,ier)
 
-character(len=*),parameter::ident_8="@(#)M_calculator::pows_(3fp): expand power functions in a string, working from left to right"
+! ident_8="@(#)M_calculator::pows_(3fp): expand power functions in a string, working from left to right"
 
 character(len=*),intent(inout) :: wstrng    ! input string returned with power operators evaluated
 integer,intent(inout)          :: nchar     ! input length of wstrng, returned corrected for new wstrng returned.
@@ -2381,8 +2378,7 @@ end subroutine pows_
 !!    Public Domain
 subroutine factors_(wstrng,nchr,fval1,ier)
 
-character(len=*),parameter::ident_9="&
-&@(#)M_calculator::factors_(3fp):reduce unparenthesized string with only * and / operators to val"
+! ident_9="@(#)M_calculator::factors_(3fp):reduce unparenthesized string with only * and / operators to val"
 
 !
 !     The input string is unaltered. for any single pass thru the routine, the string structure is assumed to be:
@@ -2532,8 +2528,7 @@ end subroutine factors_
 !!    Public Domain
 subroutine a_to_d_(chars,rval8,ierr)
 
-character(len=*),parameter::ident_10="&
-&@(#)M_calculator::a_to_d_(3f):returns a real value rval8 from a numeric character string chars."
+! ident_10="@(#)M_calculator::a_to_d_(3f):returns a real value rval8 from a numeric character string chars."
 
 ! CAREFUL: LAST is in GLOBAL, but can be read from when passed to this routine as CHARS. DO NOT CHANGE CHARS.
 character(len=*),intent(in) :: chars
@@ -2652,8 +2647,7 @@ end subroutine a_to_d_
 !!    Public Domain
 subroutine squeeze_(string,imax,nchars,varnam,nchar2,ier)
 
-character(len=*),parameter::ident_11="&
-&@(#)M_calculator::squeeze_(3fp):change +-[] to #=(),replace strings with placeholders,delete comments"
+! ident_11="@(#)M_calculator::squeeze_(3fp):change +-[] to #=(),replace strings with placeholders,delete comments"
 
 integer, parameter                      :: ilen=(icbuf_calc)+2
 character(len=*)                        :: string
@@ -2895,7 +2889,7 @@ end subroutine squeeze_
 !!    Public Domain
 subroutine given_name_get_stringvalue_(chars,ierr)
 
-character(len=*),parameter::ident_12="@(#)M_calculator::given_name_get_stringvalue_(3fp): return associated value for variable name"
+! ident_12="@(#)M_calculator::given_name_get_stringvalue_(3fp): return associated value for variable name"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)  :: chars
@@ -2958,7 +2952,7 @@ end subroutine given_name_get_stringvalue_
 !!    Public Domain
 real(kind=dp) function getvalue(varnam)
 
-character(len=*),parameter::ident_13="@(#)M_calculator::getvalue(3f): given numeric variable name return value"
+! ident_13="@(#)M_calculator::getvalue(3f): given numeric variable name return value"
 
 character(len=*),intent(in) :: varnam
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -3142,8 +3136,7 @@ end function rgetvalue
 !!    Public Domain
 subroutine stuff(varnam,value,ioflag)
 
-character(len=*),parameter::ident_14="&
-&@(#)M_calculator::stuff(3fp): pass key value and integer|real|doubleprecision value to dictionary(3f) as doubleprecision"
+! ident_14="@(#)M_calculator::stuff(3fp): pass key value and integer|real|doubleprecision value to dictionary(3f) as doubleprecision"
 
 character(len=*),intent(in)           :: varnam        ! variable name to add or replace value of
 class(*),intent(in)                   :: value
@@ -3232,7 +3225,7 @@ end subroutine stuff
 !!    Public Domain
 subroutine stuffa(varnam,string,ioflag)
 
-character(len=*),parameter::ident_15="@(#)M_calculator::stuffa(3f): directly store a string into calculator variable name table"
+! ident_15="@(#)M_calculator::stuffa(3f): directly store a string into calculator variable name table"
 
 character(len=*),intent(in)           :: varnam    !  assuming friendly, not checking for null or too long varnam0
 character(len=:),allocatable          :: varnam_local
@@ -3337,7 +3330,7 @@ end subroutine stuffa
 integer function inum0(inline,ierr)
 use M_journal, only : journal
 
-character(len=*),parameter::ident_16="@(#)M_calculator::inum0(3f):resolve a calculator string into a whole integer number"
+! ident_16="@(#)M_calculator::inum0(3f):resolve a calculator string into a whole integer number"
 
 !  The special string '*' returns -99999, otherwise return 0 on errors
 character(len=*),intent(in)  :: inline
@@ -3432,7 +3425,7 @@ end function inum0
 !!##VERSION   1.0,19971123
 real function rnum0(inline,ierr)
 
-character(len=*),parameter::ident_17="@(#)M_calculator::rnum0(3f):resolve a calculator string into a real number"
+! ident_17="@(#)M_calculator::rnum0(3f):resolve a calculator string into a real number"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)  :: inline
@@ -3513,7 +3506,7 @@ end function rnum0
 !!##VERSION 1.0, 19971123
 doubleprecision function dnum0(inline,ierr)
 
-character(len=*),parameter::ident_18="@(#)M_calculator::dnum0(3f):resolve a calculator string into a doubleprecision number"
+! ident_18="@(#)M_calculator::dnum0(3f):resolve a calculator string into a doubleprecision number"
 
 character(len=*),intent(in) :: inline
 integer,optional,intent(out) :: ierr
@@ -3611,7 +3604,7 @@ end function dnum0
 !===================================================================================================================================
 function snum0(inline0,ierr)
 
-character(len=*),parameter::ident_19="@(#)M_calculator::snum0(3f):resolve a calculator expression into a string"
+! ident_19="@(#)M_calculator::snum0(3f):resolve a calculator expression into a string"
 
 !  a few odd things are done because some compilers did not work as expected
 character(len=:),allocatable :: snum0
@@ -3743,7 +3736,7 @@ end function snum0
 recursive subroutine expression(inlin0,outval,outlin0,ierr,ilen)
 use M_journal, only : journal
 
-character(len=*),parameter::ident_20="@(#)M_calculator::expression(3f):call CALCULATOR(3f) calculator and display messages"
+! ident_20="@(#)M_calculator::expression(3f):call CALCULATOR(3f) calculator and display messages"
 
 ! evaluate a FORTRAN-like string expression and return a numeric
 ! value and its character equivalent or a string value as appropriate
@@ -3946,7 +3939,7 @@ end subroutine expression
 SUBROUTINE strgarr(line,ivals,vals,ifound,delims0,ierr)
 USE M_JOURNAL, ONLY : journal
 
-character(len=*),parameter::ident_21="@(#)M_calculator::strgarr(3f):read numeric expressions into an real array"
+! ident_21="@(#)M_calculator::strgarr(3f):read numeric expressions into an real array"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 !     1989 John S. Urban
@@ -4170,8 +4163,7 @@ subroutine strgar2(line,iread,numbrs,inums,delims0,ierr)
 use M_journal, only : journal
 !-----------------------------------------------------------------------------------------------------------------------------------
 
-character(len=*),parameter::ident_22="&
-&@(#)M_calculator::strgar2(3f):read numeric and string calculator expressions into an array USING CALCULATOR"
+! ident_22="@(#)M_calculator::strgar2(3f):read numeric and string calculator expressions into an array USING CALCULATOR"
 
 !  1989 John S. Urban
 !  given a line of structure 'string,string,string' process each string and store into an array.

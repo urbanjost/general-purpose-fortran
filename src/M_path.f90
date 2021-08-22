@@ -302,7 +302,7 @@ contains
 ! this function is used internally in the module, but is also declared to be a constructor for creating TYPE(DATE_TYPE) structures
 !
 function construct_from_dat(dat)
-character(len=*),parameter::ident_1="@(#)M_io::construct_from_dat(3f): construct TYPE(path) with DAT date-time array"
+! ident_1="@(#)M_io::construct_from_dat(3f): construct TYPE(path) with DAT date-time array"
 character(len=*),intent(in)          :: dat
 type(path)                      :: construct_from_dat
    construct_from_dat%name=dat
@@ -427,7 +427,7 @@ logical                   :: truth
 end function path_isdir
 !===================================================================================================================================
 logical function eq(self,other)
-character(len=*),parameter::ident_2="@(#)M_io::eq(3f): compare derived type path objects (eq,lt,gt,le,ge,ne)"
+! ident_2="@(#)M_io::eq(3f): compare derived type path objects (eq,lt,gt,le,ge,ne)"
 class(path),intent(in)   :: self
 type(path),intent(in)    :: other
    eq=.true.  !! PLACEHOLDER

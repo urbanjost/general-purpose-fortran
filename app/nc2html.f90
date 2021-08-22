@@ -8,26 +8,26 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'      nc2html(1) - [NCURSES] print an ncurses(3c) window dump as HTML           ',&
-'      (LICENSE:PD)                                                              ',&
-'DESCRIPTION                                                                     ',&
-'      Given a file generated with the ncurses(3c) putwin(3c) procedure          ',&
-'      read the file and write it out an an HTML file for printing or            ',&
-'      for inclusion much like a IMG file into an HTML document.                 ',&
-'SYNOPSIS                                                                        ',&
-'          nc2html -i INPUT_FILE -o OUTPUT_FILE [ -pg]''                         ',&
-'OPTIONS                                                                         ',&
-'         -i INPUT_FILE    Name of ncurses(3c) window dump file generated        ',&
-'                          by putwin(3c).                                        ',&
-'         -o OUTPUT_FILE   Name of HTML file to generate.                        ',&
-'         -pg              Optionally display the ncurses(3c) window dump file   ',&
-'                          and pause                                             ',&
-'EXAMPLE                                                                         ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public Domain                                                                ',&
+'NAME                                                                                                                            ',&
+'      nc2html(1) - [NCURSES] print an ncurses(3c) window dump as HTML                                                           ',&
+'      (LICENSE:PD)                                                                                                              ',&
+'DESCRIPTION                                                                                                                     ',&
+'      Given a file generated with the ncurses(3c) putwin(3c) procedure                                                          ',&
+'      read the file and write it out an an HTML file for printing or                                                            ',&
+'      for inclusion much like a IMG file into an HTML document.                                                                 ',&
+'SYNOPSIS                                                                                                                        ',&
+'          nc2html -i INPUT_FILE -o OUTPUT_FILE [ -pg]''                                                                         ',&
+'OPTIONS                                                                                                                         ',&
+'         -i INPUT_FILE    Name of ncurses(3c) window dump file generated                                                        ',&
+'                          by putwin(3c).                                                                                        ',&
+'         -o OUTPUT_FILE   Name of HTML file to generate.                                                                        ',&
+'         -pg              Optionally display the ncurses(3c) window dump file                                                   ',&
+'                          and pause                                                                                             ',&
+'EXAMPLE                                                                                                                         ',&
+'AUTHOR                                                                                                                          ',&
+'   John S. Urban                                                                                                                ',&
+'LICENSE                                                                                                                         ',&
+'   Public Domain                                                                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -72,7 +72,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20150312>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-06-26 18:30:50 UTC-240>',&
+'@(#)COMPILED:       2021-08-21 22:17:43 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -83,7 +83,7 @@ use M_kracken, only : kracken, lget, sget
 use M_ncurses
 implicit none
 
-character(len=*),parameter::ident_1="@(#)print an ncurses(3c) window dump as HTML"
+! ident_1="@(#)print an ncurses(3c) window dump as HTML"
 
 integer :: ierr
 type(C_PTR) :: win
