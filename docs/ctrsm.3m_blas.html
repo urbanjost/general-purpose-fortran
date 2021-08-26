@@ -1,0 +1,340 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>ctrsm (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>ctrsm</B>(3f) - [BLAS:COMPLEX_BLAS_LEVEL3]
+<B>B:=C*INVERSE</B>(A)*C or B:=C*INVERSE(A), B, C rectangular, A triangular.
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Definition</A><BR>
+<A HREF=#3>Options</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#4>B</A><BR>
+<A HREF=#5>Authors</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#6>Further Details</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>CTRSM</B>(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+<P>
+<PRE>
+      .. Scalar Arguments ..
+      COMPLEX,intent(in)    :: ALPHA
+      INTEGER,intent(in)    :: LDA,LDB,M,N
+      CHARACTER,intent(in)  :: DIAG,SIDE,TRANSA,UPLO
+      ..
+      .. Array Arguments ..
+      COMPLEX,intent(in)    :: A(LDA,*)
+      COMPLEX,intent(inout) :: B(LDB,*)
+      ..
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DEFINITION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+CTRSM solves one of the matrix equations
+<P>
+<PRE>
+    op( A )*X = alpha*B,   or   X*op( A ) = alpha*B,
+<P>
+</PRE>
+where alpha is a scalar, X and B are m by n matrices, A is a unit, or
+non-unit, upper or lower triangular matrix and <B>op</B>( A ) is one of
+<P>
+<PRE>
+    op( A ) = A   or   op( A ) = A**T   or   op( A ) = A**H.
+<P>
+</PRE>
+The matrix X is overwritten on B.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SIDE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+SIDE is CHARACTER*1
+On entry, SIDE specifies whether <B>op</B>( A ) appears on the left
+or right of X as follows:
+<P>
+<PRE>
+              SIDE = &#146;L&#146; or &#146;l&#146;   op( A )*X = alpha*B.
+<P>
+              SIDE = &#146;R&#146; or &#146;r&#146;   X*op( A ) = alpha*B.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; UPLO</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+UPLO is CHARACTER*1
+On entry, UPLO specifies whether the matrix A is an upper or
+lower triangular matrix as follows:
+<P>
+<PRE>
+              UPLO = &#146;U&#146; or &#146;u&#146;   A is an upper triangular matrix.
+<P>
+              UPLO = &#146;L&#146; or &#146;l&#146;   A is a lower triangular matrix.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TRANSA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+TRANSA is CHARACTER*1
+On entry, TRANSA specifies the form of <B>op</B>( A ) to be used in
+the matrix multiplication as follows:
+<P>
+<PRE>
+              TRANSA = &#146;N&#146; or &#146;n&#146;   op( A ) = A.
+<P>
+              TRANSA = &#146;T&#146; or &#146;t&#146;   op( A ) = A**T.
+<P>
+              TRANSA = &#146;C&#146; or &#146;c&#146;   op( A ) = A**H.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DIAG</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+DIAG is CHARACTER*1
+On entry, DIAG specifies whether or not A is unit triangular
+as follows:
+<P>
+<PRE>
+              DIAG = &#146;U&#146; or &#146;u&#146;   A is assumed to be unit triangular.
+<P>
+              DIAG = &#146;N&#146; or &#146;n&#146;   A is not assumed to be unit
+                                  triangular.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; M</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+M is INTEGER
+On entry, M specifies the number of rows of B. M must be at
+least zero.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; N</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+N is INTEGER
+On entry, N specifies the number of columns of B. N must be
+at least zero.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ALPHA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+ALPHA is COMPLEX
+On entry, ALPHA specifies the scalar alpha. When alpha is
+zero then A is not referenced and B need not be set before
+entry.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; A</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A is COMPLEX array, dimension ( LDA, k ),
+where k is m when SIDE = &#146;L&#146; or &#146;l&#146;
+and k is n when SIDE = &#146;R&#146; or &#146;r&#146;.
+Before entry with UPLO = &#146;U&#146; or &#146;u&#146;, the leading k by k
+upper triangular part of the array A must contain the upper
+triangular matrix and the strictly lower triangular part of
+A is not referenced.
+Before entry with UPLO = &#146;L&#146; or &#146;l&#146;, the leading k by k
+lower triangular part of the array A must contain the lower
+triangular matrix and the strictly upper triangular part of
+A is not referenced.
+Note that when DIAG = &#146;U&#146; or &#146;u&#146;, the diagonal elements of
+A are not referenced either, but are assumed to be unity.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LDA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+LDA is INTEGER
+On entry, LDA specifies the first dimension of A as declared
+in the calling (sub) program. When SIDE = &#146;L&#146; or &#146;l&#146; then
+LDA must be at least <B>max</B>( 1, m ), when SIDE = &#146;R&#146; or &#146;r&#146;
+then LDA must be at least <B>max</B>( 1, n ).
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; B</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+B is COMPLEX array, dimension ( LDB, N )
+Before entry, the leading m by n part of the array B must
+contain the right-hand side matrix B, and on exit is
+overwritten by the solution matrix X.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LDB</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+LDB is INTEGER
+On entry, LDB specifies the first dimension of B as declared
+in the calling (sub) program. LDB must be at least
+<B>max</B>( 1, m ).
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHORS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Tennessee
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of California Berkeley
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Colorado Denver
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NAG Ltd.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+ date:December 2016
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+    <H4>&nbsp; &nbsp; FURTHER DETAILS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Level 3 Blas routine.
+<P>
+-- Written on 8-February-1989.
+Jack Dongarra, Argonne National Laboratory.
+Iain Duff, AERE Harwell.
+Jeremy Du Croz, Numerical Algorithms Group Ltd.
+Sven Hammarling, Numerical Algorithms Group Ltd.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+Online html documentation available at
+<A HREF="http://www.netlib.org/lapack/explore-html">http://www.netlib.org/lapack/explore-html</A>/
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>ctrsm (3)</TD> <TD align=right width=33%><I>August 24, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7a6b439a-96cf-46d4-ab81-faa788ef7e5e using man macros.</FONT>
+<br><br><center><img src="images/ctrsm.3m_blas.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

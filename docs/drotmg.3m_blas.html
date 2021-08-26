@@ -1,0 +1,233 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>drotmg (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>drotmg</B>(3f) - [BLAS:DOUBLE_BLAS_LEVEL1]
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Definition</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Authors</A><BR>
+<A HREF=#5>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>DROTMG</B>(DD1,DD2,DX1,DY1,DPARAM)
+<P>
+<PRE>
+      .. Scalar Arguments ..
+      DOUBLE PRECISION,intent(inout) :: DD1,DD2,DX1
+      DOUBLE PRECISION,intent(in)    :: DY1
+      ..
+      .. Array Arguments ..
+      DOUBLE PRECISION,intent(out)   :: DPARAM(5)
+      ..
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DEFINITION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS</H4>
+</A>
+<BLOCKQUOTE>
+THE SECOND COMPONENT OF THE 2-VECTOR (DSQRT(DD1)*DX1,DSQRT(DD2)*&gt; DY2)**T.
+WITH <B>DPARAM</B>(1)=DFLAG, H HAS ONE OF THE FOLLOWING FORMS..
+<P>
+<PRE>
+       DFLAG=-1.D0     DFLAG=0.D0        DFLAG=1.D0     DFLAG=-2.D0
+<P>
+         (DH11  DH12)    (1.D0  DH12)    (DH11  1.D0)    (1.D0  0.D0)
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:          (DH11  DH12)    (1.D0  DH12)    (DH11  1.D0)    (1.D0  0.D0)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>H=</B>( </TD><TD valign=bottom>
+)    (          )    (          )    (          )
+<TABLE width=100% cellpadding=3><!-- tsb: )    (          )    (          )    (          )
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>(DH21</B> </TD><TD valign=bottom>
+DH22),   (DH21  1.D0),   (<B>-1.D0</B> DH22),   (0.D0  1.D0).
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+LOCATIONS 2-4 OF DPARAM CONTAIN DH11, DH21, DH12, AND DH22
+RESPECTIVELY. (VALUES OF 1.D0, <B>-1.D0</B>, OR 0.D0 IMPLIED BY THE
+VALUE OF <B>DPARAM</B>(1) ARE NOT STORED IN DPARAM.)
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; THE VALUES OF GAMSQ AND RGAMSQ SET IN THE DATA STATEMENT MAY BE</H4>
+</A>
+<BLOCKQUOTE>
+INEXACT. THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
+OF DD1 AND DD2. ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+DD1
+<P>
+<PRE>
+          DD1 is DOUBLE PRECISION
+<P>
+</PRE>
+DD2
+<P>
+<PRE>
+          DD2 is DOUBLE PRECISION
+<P>
+</PRE>
+DX1
+<P>
+<PRE>
+          DX1 is DOUBLE PRECISION
+<P>
+</PRE>
+<BLOCKQUOTE>
+DY1
+<P>
+<PRE>
+          DY1 is DOUBLE PRECISION
+<P>
+</PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; DPARAM</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+DPARAM is DOUBLE PRECISION array, dimension (5)
+<B>DPARAM</B>(1)=DFLAG
+<B>DPARAM</B>(2)=DH11
+<B>DPARAM</B>(3)=DH21
+<B>DPARAM</B>(4)=DH12
+<B>DPARAM</B>(5)=DH22
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHORS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Tennessee
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of California Berkeley
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Colorado Denver
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NAG Ltd.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+ date:November 2017
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+Online html documentation available at
+<A HREF="http://www.netlib.org/lapack/explore-html">http://www.netlib.org/lapack/explore-html</A>/
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>drotmg (3)</TD> <TD align=right width=33%><I>August 24, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d0f1c818-ae37-4735-b782-208c5292e57b using man macros.</FONT>
+<br><br><center><img src="images/drotmg.3m_blas.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

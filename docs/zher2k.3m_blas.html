@@ -1,0 +1,354 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>zher2k (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>zher2k</B>(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Definition</A><BR>
+<A HREF=#3>Options</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#4>C</A><BR>
+<A HREF=#5>Authors</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#6>Further Details</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>ZHER2K</B>(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+<P>
+<PRE>
+      .. Scalar Arguments ..
+      complex(kind=real64),intent(in)    :: ALPHA
+      DOUBLE PRECISION,intent(in)        :: BETA
+      INTEGER ,intent(in)                ::K,LDA,LDB,LDC,N
+      CHARACTER,intent(in)               :: TRANS,UPLO
+      ..
+      .. Array Arguments ..
+      complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
+      complex(kind=real64),intent(inout) :: C(LDC,*)
+      ..
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DEFINITION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+ZHER2K performs one of the hermitian rank 2k operations
+<P>
+<PRE>
+    C := alpha*A*B**H + conjg( alpha )*B*A**H + beta*C,
+<P>
+</PRE>
+or
+<P>
+<PRE>
+    C := alpha*A**H*B + conjg( alpha )*B**H*A + beta*C,
+<P>
+</PRE>
+where alpha and beta are scalars with beta real, C is an n by n
+hermitian matrix and A and B are n by k matrices in the first case
+and k by n matrices in the second case.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; UPLO</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+UPLO is CHARACTER*1
+On entry, UPLO specifies whether the upper or lower
+triangular part of the array C is to be referenced as
+follows:
+<P>
+<PRE>
+              UPLO = &#146;U&#146; or &#146;u&#146;   Only the  upper triangular part of  C
+                                  is to be referenced.
+<P>
+              UPLO = &#146;L&#146; or &#146;l&#146;   Only the  lower triangular part of  C
+                                  is to be referenced.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TRANS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+TRANS is CHARACTER*1
+On entry, TRANS specifies the operation to be performed as
+follows:
+<P>
+<PRE>
+              TRANS = &#146;N&#146; or &#146;n&#146;    C := alpha*A*B**H          +
+                                         conjg( alpha )*B*A**H +
+                                         beta*C.
+<P>
+              TRANS = &#146;C&#146; or &#146;c&#146;    C := alpha*A**H*B          +
+                                         conjg( alpha )*B**H*A +
+                                         beta*C.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; N</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+N is INTEGER
+On entry, N specifies the order of the matrix C. N must be
+at least zero.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; K</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+K is INTEGER
+On entry with TRANS = &#146;N&#146; or &#146;n&#146;, K specifies the number
+of columns of the matrices A and B, and on entry with
+TRANS = &#146;C&#146; or &#146;c&#146;, K specifies the number of rows of the
+matrices A and B. K must be at least zero.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ALPHA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+ALPHA is <B>complex</B>(kind=real64) .
+On entry, ALPHA specifies the scalar alpha.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; A</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A is <B>complex</B>(kind=real64) array, dimension ( LDA, ka ), where ka is
+k when TRANS = &#146;N&#146; or &#146;n&#146;, and is n otherwise.
+Before entry with TRANS = &#146;N&#146; or &#146;n&#146;, the leading n by k
+part of the array A must contain the matrix A, otherwise
+the leading k by n part of the array A must contain the
+matrix A.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LDA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+LDA is INTEGER
+On entry, LDA specifies the first dimension of A as declared
+in the calling (sub) program. When TRANS = &#146;N&#146; or &#146;n&#146;
+then LDA must be at least <B>max</B>( 1, n ), otherwise LDA must
+be at least <B>max</B>( 1, k ).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; B</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+B is <B>complex</B>(kind=real64) array, dimension ( LDB, kb ), where kb is
+k when TRANS = &#146;N&#146; or &#146;n&#146;, and is n otherwise.
+Before entry with TRANS = &#146;N&#146; or &#146;n&#146;, the leading n by k
+part of the array B must contain the matrix B, otherwise
+the leading k by n part of the array B must contain the
+matrix B.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LDB</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+LDB is INTEGER
+On entry, LDB specifies the first dimension of B as declared
+in the calling (sub) program. When TRANS = &#146;N&#146; or &#146;n&#146;
+then LDB must be at least <B>max</B>( 1, n ), otherwise LDB must
+be at least <B>max</B>( 1, k ).
+Unchanged on exit.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BETA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+BETA is DOUBLE PRECISION .
+On entry, BETA specifies the scalar beta.
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; C</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+C is <B>complex</B>(kind=real64) array, dimension ( LDC, N )
+Before entry with UPLO = &#146;U&#146; or &#146;u&#146;, the leading n by n
+upper triangular part of the array C must contain the upper
+triangular part of the hermitian matrix and the strictly
+lower triangular part of C is not referenced. On exit, the
+upper triangular part of the array C is overwritten by the
+upper triangular part of the updated matrix.
+Before entry with UPLO = &#146;L&#146; or &#146;l&#146;, the leading n by n
+lower triangular part of the array C must contain the lower
+triangular part of the hermitian matrix and the strictly
+upper triangular part of C is not referenced. On exit, the
+lower triangular part of the array C is overwritten by the
+lower triangular part of the updated matrix.
+Note that the imaginary parts of the diagonal elements need
+not be set, they are assumed to be zero, and on exit they
+are set to zero.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LDC</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+LDC is INTEGER
+On entry, LDC specifies the first dimension of C as declared
+in the calling (sub) program. LDC must be at least
+<B>max</B>( 1, n ).
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHORS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Tennessee
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of California Berkeley
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Colorado Denver
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NAG Ltd.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+ date:December 2016
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+    <H4>&nbsp; &nbsp; FURTHER DETAILS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Level 3 Blas routine.
+<P>
+-- Written on 8-February-1989.
+Jack Dongarra, Argonne National Laboratory.
+Iain Duff, AERE Harwell.
+Jeremy Du Croz, Numerical Algorithms Group Ltd.
+Sven Hammarling, Numerical Algorithms Group Ltd.
+<P>
+-- Modified 8-Nov-93 to set <B><A HREF=#4>C</A></B>(J,J) to <B>DBLE</B>( <B><A HREF=#4>C</A></B>(J,J) ) when BETA = 1.
+Ed Anderson, Cray Research Inc.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+Online html documentation available at
+<A HREF="http://www.netlib.org/lapack/explore-html">http://www.netlib.org/lapack/explore-html</A>/
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>zher2k (3)</TD> <TD align=right width=33%><I>August 24, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e60c0747-69d9-4820-ae3f-c83d3d080335 using man macros.</FONT>
+<br><br><center><img src="images/zher2k.3m_blas.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,285 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>chpr2 (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>chpr2</B>(3f) - [BLAS:COMPLEX_BLAS_LEVEL2] performs the hermitian rank 2 operation
+A := A + alpha*CX*CONJUGATE-TRANSPOSE(CY)n + <B>CONJUGATE</B>(ALPHA)*CY*CONJUGATE-TRANSPOSE(CX),n A a (square) hermitian packed matrix.
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Definition</A><BR>
+<A HREF=#3>Options</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#4>Ap</A><BR>
+<A HREF=#5>Authors</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#6>Further Details</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>CHPR2</B>(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+<P>
+<PRE>
+      .. Scalar Arguments ..
+      COMPLEX,intent(in)    :: ALPHA
+      INTEGER,intent(in)    :: INCX,INCY,N
+      CHARACTER,intent(in)  :: UPLO
+      ..
+      .. Array Arguments ..
+      COMPLEX,intent(inout) :: AP(*)
+      COMPLEX,intent(in)    :: X(*),Y(*)
+      ..
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DEFINITION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+CHPR2 performs the hermitian rank 2 operation
+<P>
+<PRE>
+    A := alpha*x*y**H + conjg( alpha )*y*x**H + A,
+<P>
+</PRE>
+where alpha is a scalar, x and y are n element vectors and A is an
+n by n hermitian matrix, supplied in packed form.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; UPLO</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+UPLO is CHARACTER*1
+On entry, UPLO specifies whether the upper or lower
+triangular part of the matrix A is supplied in the packed
+array AP as follows:
+<P>
+<PRE>
+              UPLO = &#146;U&#146; or &#146;u&#146;   The upper triangular part of A is
+                                  supplied in AP.
+<P>
+              UPLO = &#146;L&#146; or &#146;l&#146;   The lower triangular part of A is
+                                  supplied in AP.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; N</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+N is INTEGER
+On entry, N specifies the order of the matrix A.
+N must be at least zero.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ALPHA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+ALPHA is COMPLEX
+On entry, ALPHA specifies the scalar alpha.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; X</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+X is COMPLEX array, dimension at least
+( 1 + ( n - 1 )*<B>)*abs</B>( INCX ) ).
+Before entry, the incremented array X must contain the n
+element vector x.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INCX</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+INCX is INTEGER
+On entry, INCX specifies the increment for the elements of
+X. INCX must not be zero.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; Y</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Y is COMPLEX array, dimension at least
+( 1 + ( n - 1 )*<B>)*abs</B>( INCY ) ).
+Before entry, the incremented array Y must contain the n
+element vector y.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; INCY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+INCY is INTEGER
+On entry, INCY specifies the increment for the elements of
+Y. INCY must not be zero.
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; AP</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+AP is COMPLEX array, dimension at least
+( ( n*( n + 1 ) )/2 ).
+Before entry with UPLO = &#146;U&#146; or &#146;u&#146;, the array AP must
+contain the upper triangular part of the hermitian matrix
+packed sequentially, column by column, so that <B><A HREF=#4>AP</A></B>( 1 )
+contains <B>a</B>( 1, 1 ), <B><A HREF=#4>AP</A></B>( 2 ) and <B><A HREF=#4>AP</A></B>( 3 ) contain <B>a</B>( 1, 2 )
+and <B>a</B>( 2, 2 ) respectively, and so on. On exit, the array
+AP is overwritten by the upper triangular part of the
+updated matrix.
+Before entry with UPLO = &#146;L&#146; or &#146;l&#146;, the array AP must
+contain the lower triangular part of the hermitian matrix
+packed sequentially, column by column, so that <B><A HREF=#4>AP</A></B>( 1 )
+contains <B>a</B>( 1, 1 ), <B><A HREF=#4>AP</A></B>( 2 ) and <B><A HREF=#4>AP</A></B>( 3 ) contain <B>a</B>( 2, 1 )
+and <B>a</B>( 3, 1 ) respectively, and so on. On exit, the array
+AP is overwritten by the lower triangular part of the
+updated matrix.
+Note that the imaginary parts of the diagonal elements need
+not be set, they are assumed to be zero, and on exit they
+are set to zero.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHORS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Tennessee
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of California Berkeley
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Univ. of Colorado Denver
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NAG Ltd.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+ date:December 2016
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+    <H4>&nbsp; &nbsp; FURTHER DETAILS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Level 2 Blas routine.
+<P>
+-- Written on 22-October-1986.
+Jack Dongarra, Argonne National Lab.
+Jeremy Du Croz, Nag Central Office.
+Sven Hammarling, Nag Central Office.
+Richard Hanson, Sandia National Labs.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+Online html documentation available at
+<A HREF="http://www.netlib.org/lapack/explore-html">http://www.netlib.org/lapack/explore-html</A>/
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>chpr2 (3)</TD> <TD align=right width=33%><I>August 24, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 646a7726-b9d0-43e4-9d7c-28ef9e5433b2 using man macros.</FONT>
+<br><br><center><img src="images/chpr2.3m_blas.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
