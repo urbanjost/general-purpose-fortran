@@ -6,6 +6,8 @@ append("fileclose.3m_io.html");
 append("filedelete.3m_io.html");
 append("fileopen.3m_io.html");
 append("filewrite.3m_io.html");
+append("get_env.3m_io.html");
+append("get_next_char.3m_io.html");
 append("get_tmp.3m_io.html");
 append("getline.3m_io.html");
 append("getname.3m_io.html");

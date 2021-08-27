@@ -36,6 +36,8 @@ use M_verify, only : unit_check_level
    call test_fileclose()
    call test_filewrite()
    call test_filedelete()
+   call test_get_env()
+   call test_get_next_char()
 !$IFNDEF GITHUB
 !   call test_scratch()
 !$ENDIF
@@ -248,6 +250,20 @@ subroutine test_uniq()
    !!call unit_check('uniq', 0.eq.0, 'checking',100)
    call unit_check_done('uniq',msg='')
 end subroutine test_uniq
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_get_env()
+
+   call unit_check_start('get_env',msg='')
+   !!call unit_check('get_env', 0.eq.0, 'checking',100)
+   call unit_check_done('get_env',msg='')
+end subroutine test_get_env
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_get_next_char()
+
+   call unit_check_start('get_next_char',msg='')
+   !!call unit_check('get_next_char', 0.eq.0, 'checking',100)
+   call unit_check_done('get_next_char',msg='')
+end subroutine test_get_next_char
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

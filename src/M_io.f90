@@ -24,6 +24,7 @@ public notopen
 public slurp
 public gulp,swallow
 public number_of_lines
+public get_next_char
 public dirname
 public basename
 public splitpath
@@ -1344,8 +1345,10 @@ end function notopen
 !!
 !!##SEE ALSO
 !!    dirname(3c), basename(3c), readlink(3c), realpath(3c)
+!!
 !!##AUTHOR
 !!    John S. Urban
+!!
 !!##LICENSE
 !!    Public Domain
 !>
@@ -1458,10 +1461,13 @@ end function dirname
 !!     stdio stdio.h stdio.h
 !!     $demo_basename /name.f90
 !!     name name.f90 name
+!!
 !!##SEE ALSO
 !!    basename(3c), basename(3c), readlink(3c), realpath(3c)
+!!
 !!##AUTHOR
 !!    John S. Urban
+!!
 !!##LICENSE
 !!    Public Domain
 !>
@@ -3168,6 +3174,55 @@ end function lookfor
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!     get_env(3f) - [M_io:ENVIRONMENT] a function returning the value of an environment variable
+!!     (LICENSE:PD)
+!!
+!!##SYNTAX
+!!    function get_env(NAME,DEFAULT) result(VALUE)
+!!
+!!     character(len=*),intent(in)          :: NAME
+!!     character(len=*),intent(in),optional :: DEFAULT
+!!     character(len=:),allocatable         :: VALUE
+!!
+!!
+!!##DESCRIPTION
+!!     Get the value of an environment variable or optionally return a
+!!     default value if the returned value would be a blank string.
+!!
+!!     This is a duplicate of system_getenv(3m_system) used to avoid
+!!     some interdependencies.
+!!
+!!##OPTIONS
+!!    NAME     name of environment variable
+!!    DEFAULT  value to return if environment variable is not set or set to an empty string
+!!##RETURNS
+!!    VALUE    the value of the environment variable or the default
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!       program demo_get_env
+!!       use M_io, only : get_env
+!!       character(len=:),allocatable :: HOME
+!!          HOME=get_env('HOME','UNKNOWN')
+!!          write(*,'(a)')HOME,get_env('PATH')
+!!          write(*,'(a)')get_env('HOME'),get_env('PATH')
+!!       end program demo_get_env
+!!
+!!##SEE ALSO
+!!    get_environment_variable(3fortran), system_getenv(3m_system),
+!!    set_environment_variable(3m_system), system_putenv(3m_system),
+!!    system_clearenv(3m_system), system_initenv(3m_system),
+!!    system_readenv(3m_system), system_unsetenv(3m_system)
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 function get_env(NAME,DEFAULT) result(VALUE)
 implicit none
 character(len=*),intent(in)          :: NAME
@@ -3199,6 +3254,128 @@ integer                              :: length
    endif
    if(VALUE.eq.''.and.present(DEFAULT))VALUE=DEFAULT
 end function get_env
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!     get_next_char(3f) - [M_io] read from a file one character at a time
+!!     (LICENSE:PD)
+!!
+!!##SYNTAX
+!!    subroutine get_next_char(fd,c,ios)
+!!
+!!     integer,intent(in)          :: fd
+!!     character,intent(out)       :: c
+!!     integer,intent(out)         :: ios
+!!
+!!
+!!##DESCRIPTION
+!!    This reads a file opened with stream access one character at a time,
+!!    much like ""read(fd,iostat=ios) c" but with buffering, which I have
+!!    found to be up to sixty times faster than such a plain read, although
+!!    this varies depending on how or if the programming environment implements
+!!    I/O buffering itself.
+!!
+!!##OPTIONS
+!!    FD    A Fortran unit number of a file opened for stream access
+!!    C     the next returned character if IOS=0
+!!    IOS   the error status returned by the last read. It is zero (0) if
+!!          no error occurred
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!    program demo_get_next_char
+!!    use,intrinsic :: iso_fortran_env, only : iostat_end
+!!    use M_io, only : get_next_char
+!!    implicit none
+!!    character(len=4096) :: filename ! filename to read
+!!    character(len=256)  :: message  ! returned error messages
+!!    integer             :: fd       ! file descriptor for input file
+!!    integer             :: ios,ios1 ! hold I/O error flag
+!!    character           :: c1       ! current character read
+!!       filename='test.in'
+!!       open(unit=fd,file=trim(filename),access='stream',status='old',&
+!!       & iostat=ios,action='read',form='unformatted',iomsg=message)
+!!       if(ios.ne.0)then
+!!          write(*,*)&
+!!          '*demo_get_next_char* ERROR: could not open '//&
+!!          trim(filename)
+!!          write(*,*)&
+!!          '*demo_get_next_char* ERROR: '//trim(message)
+!!          stop 5
+!!       endif
+!!       ! loop through read of file one character at a time
+!!       ONE_CHAR_AT_A_TIME: do
+!!          ! get next character from buffered read from file
+!!          call get_next_char(fd,c1,ios1)
+!!          if(ios1.eq.iostat_end)then
+!!             ! reached end of file so stop
+!!             stop
+!!          elseif(ios1.ne.0 )then
+!!             ! error on file read
+!!             write(*,*)&
+!!          '*demo_get_next_char* ERROR: before end of '//&
+!!          trim(filename)
+!!             stop 1
+!!          endif
+!!          ! do something with the characters
+!!          write(*,'(a)',advance='no')c1
+!!       enddo ONE_CHAR_AT_A_TIME
+!!    end program demo_get_next_char
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+subroutine get_next_char(fd,c,ios)
+! replace "read(fd,iostat=ios) c" because gfortran on CygWin sixty times slower with plain read (no system buffering?)
+! quick buffering read
+implicit none
+integer,intent(in)          :: fd
+character,intent(out)       :: c
+integer,intent(out)         :: ios
+integer,parameter           :: bufsize=1048576
+character(len=1),save       :: buff(bufsize)
+integer,save                :: point=0
+integer,save                :: filepoint=1
+integer,save                :: sz=bufsize
+
+ios=0
+
+do
+select case(point)
+case(0)                                            ! read a buffer
+   read(fd,iostat=ios,pos=filepoint) buff(1:sz)
+   if(is_iostat_end(ios))then                      ! this is the last buffer
+      if(sz.ne.1)then                              ! try again with a smaller buffer
+         sz=sz/2
+         sz=max(1,sz)
+         cycle
+      endif
+   elseif(ios.eq.0)then                            ! no error occurred so successfully read a buffer
+      c=buff(1)
+      filepoint=filepoint+sz
+      point=sz-1
+   endif
+case(1:)                                           ! getting a character from a previous buffer
+   point=point-1
+   c=buff(sz-point)
+case default
+   write(*,*)'*get_next_char* internal error '
+   read(fd,iostat=ios) c
+end select
+! assume if IOS is not zero, not called again until new file is started
+   if(ios.ne.0)then
+      filepoint=1
+      point=0
+      sz=bufsize
+   endif
+   exit
+enddo
+end subroutine get_next_char
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
