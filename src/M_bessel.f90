@@ -154,10 +154,10 @@ contains
 !!
 !!##EXAMPLE
 !!
-SUBROUTINE BES(X,NO,KODE,RSLT1,RSLT2,T1,T2,IERR)
+subroutine bes(x,no,kode,rslt1,rslt2,t1,t2,ierr)
 implicit none
 
-! ident_1="@(#)M_bessel::bes(3f):calculate Bessel functions J(X), Y(X), I(X), K(X) for doubleprecision arguments and integer orders"
+! ident_1="@(#)M_bessel::bes(3f):calculate Bessel functions J(x), Y(x), I(x), K(x) for doubleprecision arguments and integer orders"
 
 integer         :: i
 integer         :: i2
@@ -200,466 +200,466 @@ doubleprecision :: xnkm1
 doubleprecision :: xord
 doubleprecision :: xsqfr
 doubleprecision :: xx
-doubleprecision DX,DXX,DX2,TEMP,DCHK,PI,EULER,A0,A,B,C
-doubleprecision  SUMJIN,DXORD,DXK
-DIMENSION  T1(*),T2(*),A(18),B(21),C(19)
-DATA  PI/3.1415926535897932384626434D0/,                            &
-   &      EULER/0.57721566490153286060651209D0/
-DATA (A(I),I=1,18)/           0.15999999999999999996D+02,            &
-   & 0.96000000000000000392D+02,  0.20859259259259257733D+03,            &
-   & 0.23703703703703736105D+03,  0.16626725925925503356D+03,            &
-   & 0.79290469135839064596D+02,  0.27400431054739774751D+02,            &
-   & 0.71803471197186985165D+01,  0.14763245818980230758D+01,            &
-   & 0.24456169711179137024D+00,  0.33342447857340252160D-01,            &
-   & 0.380697152755597312D-02,    0.36933105872797696D-03,               &
-   & 0.30849206583296D-04,        0.222445483065344D-05,                 &
-   & 0.14811194720256D-06,        0.635655159808D-08,                    &
-   & 0.68719476736D-09/
-DATA (B(I),I=1,21)/           0.98813927043864915927D+00,            &
-   & -.11277407316570291310D-01,  0.5340716774420596D-03,                &
-   & -.435456758226194D-04,       0.488456084594416D-05,                 &
-   & -.68181429589264D-06,        0.11199290865952D-06,                  &
-   & -.2089895303616D-07,         0.4325898624D-08,                      &
-   & -.97628537856D-09,           0.23715879424D-09,                     &
-   & -.6140542976D-10,            0.1680852992D-10,                      &
-   & -.481501184D-11,             0.144621568D-11,                       &
-   & -.47808512D-12,              0.1572864D-12,                         &
-   & -.31457280D-13,              0.9175040D-14,                         &
-   & -.1310720D-13,               0.524288D-14/
-DATA (C(I),I=1,19)/          -0.73804295108687506715D-01,            &
-   & 0.11366785079620443739D+02, -0.65838973034256501712D+02,            &
-   & 0.14119145750221817396D+03, -0.15929975325701922684D+03,            &
-   & 0.11122328958866232246D+03, -0.52866443153661476803D+02,            &
-   & 0.18223597971689250243D+02, -0.47661469297599122637D+01,            &
-   & 0.97840283604837466112D+00, -0.16191400580768858112D+00,            &
-   & 0.2212712874183229440D-01,  -0.2606907391286968320D-02,             &
-   & 0.316831265267384320D-03,   -0.6102072906743808D-04,                &
-   & 0.1658373309202432D-04,     -0.3439710458347520D-05,                &
-   & 0.338099825541120D-06,      -0.343597383680D-09/
-   IERR=0
+doubleprecision dx,dxx,dx2,temp,dchk,pi,euler,a0,a,b,c
+doubleprecision  sumjin,dxord,dxk
+dimension  t1(*),t2(*),a(18),b(21),c(19)
+data  pi/3.1415926535897932384626434d0/,                            &
+   &      euler/0.57721566490153286060651209d0/
+data (a(i),i=1,18)/           0.15999999999999999996d+02,            &
+   & 0.96000000000000000392d+02,  0.20859259259259257733d+03,            &
+   & 0.23703703703703736105d+03,  0.16626725925925503356d+03,            &
+   & 0.79290469135839064596d+02,  0.27400431054739774751d+02,            &
+   & 0.71803471197186985165d+01,  0.14763245818980230758d+01,            &
+   & 0.24456169711179137024d+00,  0.33342447857340252160d-01,            &
+   & 0.380697152755597312d-02,    0.36933105872797696d-03,               &
+   & 0.30849206583296d-04,        0.222445483065344d-05,                 &
+   & 0.14811194720256d-06,        0.635655159808d-08,                    &
+   & 0.68719476736d-09/
+data (b(i),i=1,21)/           0.98813927043864915927d+00,            &
+   & -.11277407316570291310d-01,  0.5340716774420596d-03,                &
+   & -.435456758226194d-04,       0.488456084594416d-05,                 &
+   & -.68181429589264d-06,        0.11199290865952d-06,                  &
+   & -.2089895303616d-07,         0.4325898624d-08,                      &
+   & -.97628537856d-09,           0.23715879424d-09,                     &
+   & -.6140542976d-10,            0.1680852992d-10,                      &
+   & -.481501184d-11,             0.144621568d-11,                       &
+   & -.47808512d-12,              0.1572864d-12,                         &
+   & -.31457280d-13,              0.9175040d-14,                         &
+   & -.1310720d-13,               0.524288d-14/
+data (c(i),i=1,19)/          -0.73804295108687506715d-01,            &
+   & 0.11366785079620443739d+02, -0.65838973034256501712d+02,            &
+   & 0.14119145750221817396d+03, -0.15929975325701922684d+03,            &
+   & 0.11122328958866232246d+03, -0.52866443153661476803d+02,            &
+   & 0.18223597971689250243d+02, -0.47661469297599122637d+01,            &
+   & 0.97840283604837466112d+00, -0.16191400580768858112d+00,            &
+   & 0.2212712874183229440d-01,  -0.2606907391286968320d-02,             &
+   & 0.316831265267384320d-03,   -0.6102072906743808d-04,                &
+   & 0.1658373309202432d-04,     -0.3439710458347520d-05,                &
+   & 0.338099825541120d-06,      -0.343597383680d-09/
+   ierr=0
 !      bigval=1.0d322
    bigval=1.0d307
-   IF (KODE.LT.10) GO TO 600
-   SIGN = 1.0d0
-   KO = IABS(NO) + 1
-   XSQFR = 0.25d0*X*X
+   if (kode.lt.10) go to 600
+   sign = 1.0d0
+   ko = iabs(no) + 1
+   xsqfr = 0.25d0*x*x
 !     ---------
 !     INITIAL CHECK OF ORDER-ARGUMENT RANGE TO DETERMINE IF ORDER IS OUT
 !     OF RANGE FOR THE GIVEN ARGUMENT.
 !
 !     ---------
-   IF (X) 3,27,3
-3  XCHK = ABS(X)
-   IF (XCHK-1100.0d0) 4,18,608
-4  IF (NO.EQ.0) GO TO 25
-   IF (XCHK - 0.025d0) 5,5,6
-5  ANO = IABS(NO)
-   AX = ANO*log(2.0d0*ANO/XCHK) + 0.5d0*log(2.0d0*dble(PI)/ANO) - ANO + 1.0d0/(12.0d0*ANO) + log(XCHK)/2.0d0
-   RSLT1 = AX
-   IF (AX-679.0d0) 25,25,606
-6  IF (XCHK-0.20d0) 7,7,8
-7  LARGOR =  int(140.0d0*XCHK + 83.0d0)
-   GO TO 24
-8  IF (XCHK-1.0d0) 9,9,10
-9  LARGOR =  int(42.0d0*XCHK + 102.0d0)
-   GO TO 24
-10 IF (XCHK-20.0d0) 11,11,12
-11 LARGOR =  int(((0.02d0*XCHK-0.86d0)*XCHK+17.15d0)*XCHK+124.0d0)
-   GO TO 24
-12 IF (XCHK-100.0d0) 13,13,14
-13 LARGOR =  int(2.75d0*XCHK + 228.0d0)
-   GO TO 24
-14 IF (XCHK-400.0d0) 16,16,18
-16 LARGOR =  int(1.67d0*XCHK + 336.0d0)
-   GO TO 24
-18 LARGOR =  int(1.33d0*XCHK + 470.0d0)
-24 IF (IABS(NO)-LARGOR) 25,25,606
-25 XX=X
+   if (x) 3,27,3
+3  xchk = abs(x)
+   if (xchk-1100.0d0) 4,18,608
+4  if (no.eq.0) go to 25
+   if (xchk - 0.025d0) 5,5,6
+5  ano = iabs(no)
+   ax = ano*log(2.0d0*ano/xchk) + 0.5d0*log(2.0d0*dble(pi)/ano) - ano + 1.0d0/(12.0d0*ano) + log(xchk)/2.0d0
+   rslt1 = ax
+   if (ax-679.0d0) 25,25,606
+6  if (xchk-0.20d0) 7,7,8
+7  largor =  int(140.0d0*xchk + 83.0d0)
+   go to 24
+8  if (xchk-1.0d0) 9,9,10
+9  largor =  int(42.0d0*xchk + 102.0d0)
+   go to 24
+10 if (xchk-20.0d0) 11,11,12
+11 largor =  int(((0.02d0*xchk-0.86d0)*xchk+17.15d0)*xchk+124.0d0)
+   go to 24
+12 if (xchk-100.0d0) 13,13,14
+13 largor =  int(2.75d0*xchk + 228.0d0)
+   go to 24
+14 if (xchk-400.0d0) 16,16,18
+16 largor =  int(1.67d0*xchk + 336.0d0)
+   go to 24
+18 largor =  int(1.33d0*xchk + 470.0d0)
+24 if (iabs(no)-largor) 25,25,606
+25 xx=x
 !     ---------
 !     DETERMINE WHICH SET OF FUNCTIONS IS TO BE CALCULATED.
 !     ---------
-27 MASK1 = KODE/10
-   IF (MASK1-2) 30,31,600
-30 MASK2 = KODE-10
-   GO TO 32
-31 MASK2 = KODE-20
-32 IF (MASK2-2) 34,36,600
-34 IF (MASK2) 600,37,42
+27 mask1 = kode/10
+   if (mask1-2) 30,31,600
+30 mask2 = kode-10
+   go to 32
+31 mask2 = kode-20
+32 if (mask2-2) 34,36,600
+34 if (mask2) 600,37,42
 !     ---------
 !     CHECK FUNCTIONS J(X) AND I(X) FOR ZERO ARGUMENT.
 !     ---------
-36 IF (X) 604,38,59
-37 IF (X) 58,38,59
-38 IF (NO) 54,40,54
-40 T1(1) = 1.0d0
-   RSLT1 = 1.0d0
-   IF (MASK2.EQ.0) RETURN
+36 if (x) 604,38,59
+37 if (x) 58,38,59
+38 if (no) 54,40,54
+40 t1(1) = 1.0d0
+   rslt1 = 1.0d0
+   if (mask2.eq.0) return
 !     ---------
 !     CHECK FUNCTIONS Y(X) AND K(X) FOR ZERO ARGUMENT.
 !     The functions y0, y1, and yn have logarithmic  singularities
 !     at the origin, so they treat zero and negative arguments the
 !     way log does. Such  arguments  are unexceptional for j0, j1, and jn.
 !     ---------
-42 IF (X) 604,44,59
+42 if (x) 604,44,59
 44 continue
-   IF (MASK1.EQ.2) GO TO 50
-   DO IK=1,KO
-      T2(IK) = -bigval
+   if (mask1.eq.2) go to 50
+   do ik=1,ko
+      t2(ik) = -bigval
    enddo
-   RSLT2  = -bigval
-   RETURN
+   rslt2  = -bigval
+   return
 50 continue
-   DO IK=1,KO
-      T2(IK) = bigval
+   do ik=1,ko
+      t2(ik) = bigval
    enddo
-   RSLT2  = bigval
-   RETURN
+   rslt2  = bigval
+   return
 !     ---------
 !     FILL OUT ARRAY FOR J(X) OR I(X) WHEN (NO.NE.0).
 !     ---------
 54 continue
-   DO IK=2,KO
-      T1(IK) = 0.0d0
+   do ik=2,ko
+      t1(ik) = 0.0d0
    enddo
-   RSLT1 = 0.0d0
-   T1(1) = 1.0d0
-   IF (MASK2.EQ.0) RETURN
-   GO TO 44
+   rslt1 = 0.0d0
+   t1(1) = 1.0d0
+   if (mask2.eq.0) return
+   go to 44
 58 continue
-   X = ABS(X)
+   x = abs(x)
 59 continue
-   MO = IABS(NO)
-   IMO = MO
-   IF (X-1.0d0) 60,71,71
+   mo = iabs(no)
+   imo = mo
+   if (x-1.0d0) 60,71,71
 60 continue
-   IF (MASK1.EQ.2) GO TO 175
+   if (mask1.eq.2) go to 175
 !     ---------
 !     USE SERIES TO DETERMINE J(N) AND J(N-1) WHEN ARGUMENT IS SMALL,
 !     THEN USE RECURRENCE TO DETERMINE REMAINING FUNCTION VALUES.
 !     ---------
-   XORD = MO
-   DXORD = XORD
-   IF (MO.GT.1) GO TO 61
-   DX2 = 1.0D0
-   A0 = 1.0D0
-   ILOOP = 1
-   GO TO 63
+   xord = mo
+   dxord = xord
+   if (mo.gt.1) go to 61
+   dx2 = 1.0d0
+   a0 = 1.0d0
+   iloop = 1
+   go to 63
 61 continue
-   A0 = 1.0D0
-   IEND = MO-1
-   DO IK=1,IEND
-      XK = IK
-      DXK = XK
-      A0 = A0*DXK
+   a0 = 1.0d0
+   iend = mo-1
+   do ik=1,iend
+      xk = ik
+      dxk = xk
+      a0 = a0*dxk
    enddo
-   DX2 = 1.0D0/(A0*DXORD)
-   A0 = 1.0D0/A0
-   ILOOP = 1
+   dx2 = 1.0d0/(a0*dxord)
+   a0 = 1.0d0/a0
+   iloop = 1
 63 continue
-   SUMJIN = DX2
-   DX = X
-   DXX = 0.25D0*DX*DX
-   DO IK=1,200
-      XK = IK
-      DXK = XK
-      TEMP = -DX2*DXX/(DXK*(DXORD+DXK))
-      SUMJIN = SUMJIN + TEMP
-      IF (SUMJIN) 64,65,64
-64    DCHK = abs(TEMP/SUMJIN)
-      IF (DCHK - 1.0D0-20.0d0) 67,65,65
-65    DX2 = TEMP
+   sumjin = dx2
+   dx = x
+   dxx = 0.25d0*dx*dx
+   do ik=1,200
+      xk = ik
+      dxk = xk
+      temp = -dx2*dxx/(dxk*(dxord+dxk))
+      sumjin = sumjin + temp
+      if (sumjin) 64,65,64
+64    dchk = abs(temp/sumjin)
+      if (dchk - 1.0d0-20.0d0) 67,65,65
+65    dx2 = temp
    enddo
-67 IF (ILOOP.GT.1) GO TO 68
-   T1(KO) = dble(SUMJIN*(0.5D0*DX)**MO)
-   IF (MO.EQ.0) GO TO 83
-   ILOOP = 2
-   DX2 = A0
-   XORD = MO-1
-   DXORD = XORD
-   GO TO 63
-68 T1(KO-1) = dble(SUMJIN*(0.5D0*DX)**(MO-1))
-   IF (KO.LE.2) GO TO 83
-   IEND = KO-2
-   DO IK=1,IEND
-      NK = KO-IK
-      XNKM1 = NK-1
-      T1(NK-1) = 2.0d0*XNKM1 *T1(NK)/X - T1(NK+1)
+67 if (iloop.gt.1) go to 68
+   t1(ko) = dble(sumjin*(0.5d0*dx)**mo)
+   if (mo.eq.0) go to 83
+   iloop = 2
+   dx2 = a0
+   xord = mo-1
+   dxord = xord
+   go to 63
+68 t1(ko-1) = dble(sumjin*(0.5d0*dx)**(mo-1))
+   if (ko.le.2) go to 83
+   iend = ko-2
+   do ik=1,iend
+      nk = ko-ik
+      xnkm1 = nk-1
+      t1(nk-1) = 2.0d0*xnkm1 *t1(nk)/x - t1(nk+1)
    enddo
-   GO TO 83
-71 IF (MASK2.EQ.0) GO TO 74
+   go to 83
+71 if (mask2.eq.0) go to 74
 !     ---------
 !     DETERMINE STARTING LOCATION OF RECURRENCE IF Y(X) OR K(X)
 !     ARE TO BE FOUND.
 !     ---------
-   JO = 2* int(X)
-   IF (IMO - JO) 72,73,73
-72 IMO = JO
-73 IMO = IMO + 51
-   GO TO 78
+   jo = 2* int(x)
+   if (imo - jo) 72,73,73
+72 imo = jo
+73 imo = imo + 51
+   go to 78
 !     ---------
 !     DETERMINE STARTING LOCATION FOR RECURRENCE OF J(X).
 !     ---------
-74 JO = 2* int(X)
-   IF (IMO - JO) 75,76,76
-75 IMO = JO
-76 IMO = IMO + 51
+74 jo = 2* int(x)
+   if (imo - jo) 75,76,76
+75 imo = jo
+76 imo = imo + 51
 !     ---------
 !     INITIALIZE VALUES FOR J(X) AND Y(X)
 !     ---------
-78 T1(IMO) = 0.0d0
-   T1(IMO-1) = 1.0d0-200
-   IF (MASK1.EQ.2) GO TO 151
-   F = 2*(IMO-1)
-   IMO = IMO - 3
-   I2 = IMO
-79 F = F - 2.0d0
+78 t1(imo) = 0.0d0
+   t1(imo-1) = 1.0d0-200
+   if (mask1.eq.2) go to 151
+   f = 2*(imo-1)
+   imo = imo - 3
+   i2 = imo
+79 f = f - 2.0d0
 !     ---------
 !     RECURRENCE USED FOR FUNCTION VALUES.
 !     VARIABLE SUM IS USED TO DETERMINE ADJUSTMENT FACTOR
 !     ON RECURRED VALUES.
 !     ---------
-   T1(I2+1) = F/X*T1(I2+2) - T1(I2+3)
-   IF (I2) 80,81,80
-80 I2 = I2-1
-   GO TO 79
-81 SUM = T1(1)
-   DO J=3,IMO,2
-      SUM = SUM + 2.0d0*T1(J)
+   t1(i2+1) = f/x*t1(i2+2) - t1(i2+3)
+   if (i2) 80,81,80
+80 i2 = i2-1
+   go to 79
+81 sum = t1(1)
+   do j=3,imo,2
+      sum = sum + 2.0d0*t1(j)
    enddo
-   F = 1.0d0/SUM
-83 IF (NO) 86,84,84
-84 IF (XX) 90,32,92
-86 IF (XX) 92,32,90
-90 SIGN = -SIGN
-92 IF (MASK2.EQ.0) GO TO 93
-   GO TO 300
-93 IF (X - 1.0d0) 96,94,94
+   f = 1.0d0/sum
+83 if (no) 86,84,84
+84 if (xx) 90,32,92
+86 if (xx) 92,32,90
+90 sign = -sign
+92 if (mask2.eq.0) go to 93
+   go to 300
+93 if (x - 1.0d0) 96,94,94
 94 continue
-   DO J=1,KO
-     T1(J) = T1(J)*F
+   do j=1,ko
+     t1(j) = t1(j)*f
    enddo
-96 IF (MO.EQ.0) GO TO 98
-   DO J=2,KO,2
-      T1(J) = T1(J)*SIGN
+96 if (mo.eq.0) go to 98
+   do j=2,ko,2
+      t1(j) = t1(j)*sign
    enddo
-98 RSLT1 = T1(KO)
-   X = XX
-   RETURN
+98 rslt1 = t1(ko)
+   x = xx
+   return
 !     ---------
 !     INITIALIZE STARTING VALUES FOR I(X) AND K(X) RECURRENCE.
 !     ---------
-151 IF (X-600.0d0) 152,152,602
-152 F = 2*(IMO-1) - 2
-   IMO = IMO - 3
-   I2 = IMO
-153 T1(I2+1) = F/X*T1(I2+2) + T1(I2+3)
-   IF (I2) 154,155,154
-154 I2 = I2-1
-   F=F-2.0d0
-   GO TO 153
-155 SUM = T1(1)
-   DO J=2,IMO
-      SUM = SUM + 2.0d0*T1(J)
+151 if (x-600.0d0) 152,152,602
+152 f = 2*(imo-1) - 2
+   imo = imo - 3
+   i2 = imo
+153 t1(i2+1) = f/x*t1(i2+2) + t1(i2+3)
+   if (i2) 154,155,154
+154 i2 = i2-1
+   f=f-2.0d0
+   go to 153
+155 sum = t1(1)
+   do j=2,imo
+      sum = sum + 2.0d0*t1(j)
    enddo
-   F = 1.0d0/SUM*EXP(X)
-   IF (XX) 171,32,172
-171 SIGN = -SIGN
+   f = 1.0d0/sum*exp(x)
+   if (xx) 171,32,172
+171 sign = -sign
 172 continue
-   DO J=1,KO,2
-      T1(J) = T1(J)*F
-      T1(J+1) = T1(J+1)*F*SIGN
+   do j=1,ko,2
+      t1(j) = t1(j)*f
+      t1(j+1) = t1(j+1)*f*sign
    enddo
-   RSLT1 = T1(KO)
-   IF (MASK2.NE.0) GO TO 400
-   X = XX
-   RETURN
-175 XORD = MO
-   DXORD = XORD
-   IF (MO.GT.1) GO TO 177
-   DX2 = 1.0D0
-   A0 = 1.0D0
-   ILOOP = 1
-   GO TO 180
-177 A0 = 1.0D0
-   IEND = MO - 1
-   DO IK=1,IEND
-      XK = IK
-      DXK = XK
-      A0 = A0*DXK
+   rslt1 = t1(ko)
+   if (mask2.ne.0) go to 400
+   x = xx
+   return
+175 xord = mo
+   dxord = xord
+   if (mo.gt.1) go to 177
+   dx2 = 1.0d0
+   a0 = 1.0d0
+   iloop = 1
+   go to 180
+177 a0 = 1.0d0
+   iend = mo - 1
+   do ik=1,iend
+      xk = ik
+      dxk = xk
+      a0 = a0*dxk
    enddo
-   DX2 = 1.0D0/(A0*DXORD)
-   A0 = 1.0D0/A0
-   ILOOP = 1
-180 SUMJIN = DX2
-   DX = X
-   DXX = 0.25D0*DX*DX
-   DO IK=1,200
-      XK = IK
-      DXK = XK
-      TEMP = DX2*DXX/(DXK*(DXORD+DXK))
-      SUMJIN = SUMJIN + TEMP
-      DCHK = abs(TEMP/SUMJIN)
-      IF (DCHK - 1.0D0-20) 184,181,181
+   dx2 = 1.0d0/(a0*dxord)
+   a0 = 1.0d0/a0
+   iloop = 1
+180 sumjin = dx2
+   dx = x
+   dxx = 0.25d0*dx*dx
+   do ik=1,200
+      xk = ik
+      dxk = xk
+      temp = dx2*dxx/(dxk*(dxord+dxk))
+      sumjin = sumjin + temp
+      dchk = abs(temp/sumjin)
+      if (dchk - 1.0d0-20) 184,181,181
 181   continue
-    DX2 = TEMP
+    dx2 = temp
    enddo
 184 continue
-    IF (ILOOP.GT.1) GO TO 185
-   T1(KO) = dble(SUMJIN*(0.5D0*DX)**MO)
-   IF (MO.EQ.0) GO TO 188
-   ILOOP = 2
-   DX2 = A0
-   XORD = MO-1
-   DXORD = XORD
-   GO TO 180
+    if (iloop.gt.1) go to 185
+   t1(ko) = dble(sumjin*(0.5d0*dx)**mo)
+   if (mo.eq.0) go to 188
+   iloop = 2
+   dx2 = a0
+   xord = mo-1
+   dxord = xord
+   go to 180
 185 continue
-    T1(KO-1) = dble(SUMJIN*(0.5D0*DX)**(MO-1))
-   IF (KO.LE.2) GO TO 188
-   IEND = KO-2
-   DO IK=1,IEND
-      NK = KO-IK
-      XNKM1 = NK-1
-      T1(NK-1) = 2.0d0*XNKM1 *T1(NK)/X + T1(NK+1)
+    t1(ko-1) = dble(sumjin*(0.5d0*dx)**(mo-1))
+   if (ko.le.2) go to 188
+   iend = ko-2
+   do ik=1,iend
+      nk = ko-ik
+      xnkm1 = nk-1
+      t1(nk-1) = 2.0d0*xnkm1 *t1(nk)/x + t1(nk+1)
    enddo
-188 IF (XX) 189,32,190
-189 SIGN = -SIGN
-190 IF (MO.EQ.0) GO TO 194
-   DO J=2,KO,2
-      T1(J) = T1(J)*SIGN
+188 if (xx) 189,32,190
+189 sign = -sign
+190 if (mo.eq.0) go to 194
+   do j=2,ko,2
+      t1(j) = t1(j)*sign
    enddo
 194 continue
-    RSLT1 = T1(KO)
-   IF (MASK2.NE.0) GO TO 400
-   X = XX
-   RETURN
+    rslt1 = t1(ko)
+   if (mask2.ne.0) go to 400
+   x = xx
+   return
 !     ---------
 !     EVALUATE Y0 AND Y1 TO START RECURRENCE.
 !     ---------
-300 IF (X-1.0d0) 3001,301,301
-3001 DX = X
-   DXX = DX*DX/64.0D0
-   DX2 = 1.0D0
-   TEMP = C(1)
-   DO J=2,19
-      DX2 = DX2*DXX
-      A0 = C(J)*DX2
-      TEMP = TEMP + A0
-      IF (TEMP) 3005,3010,3005
-3005  DCHK = abs(A0/TEMP)
-      IF (DCHK - 1.0D0-20) 3015,3010,3010
-3010 CONTINUE
+300 if (x-1.0d0) 3001,301,301
+3001 dx = x
+   dxx = dx*dx/64.0d0
+   dx2 = 1.0d0
+   temp = c(1)
+   do j=2,19
+      dx2 = dx2*dxx
+      a0 = c(j)*dx2
+      temp = temp + a0
+      if (temp) 3005,3010,3005
+3005  dchk = abs(a0/temp)
+      if (dchk - 1.0d0-20) 3015,3010,3010
+3010 continue
    enddo
-3015 A0 = (2.0D0/PI)*LOG(DX)
-   T2(1) = A0*T1(1) + TEMP
-   GO TO 321
+3015 a0 = (2.0d0/pi)*log(dx)
+   t2(1) = a0*t1(1) + temp
+   go to 321
 301 continue
-   DO J=1,IMO
-      T1(J) = T1(J)*F
+   do j=1,imo
+      t1(j) = t1(j)*f
    enddo
-   SUMJ1 = 0.0d0
-   SUMJ2 = 0.0d0
-   IF (IMO.LE.80) GO TO 305
-   IF (KO - JO) 303,304,304
-303 KEND = JO/2
-   GO TO 306
-304 KEND = KO/2
-   GO TO 306
-305 KEND = IMO/2
+   sumj1 = 0.0d0
+   sumj2 = 0.0d0
+   if (imo.le.80) go to 305
+   if (ko - jo) 303,304,304
+303 kend = jo/2
+   go to 306
+304 kend = ko/2
+   go to 306
+305 kend = imo/2
 306 continue
-    DO N=1,KEND,2
-      XN = N
-      SUMJ1 = SUMJ1 + T1(2*N+1)/XN
+    do n=1,kend,2
+      xn = n
+      sumj1 = sumj1 + t1(2*n+1)/xn
    enddo
-   DO N=2,KEND,2
-      XN = N
-      SUMJ2 = SUMJ2 + T1(2*N+1)/XN
+   do n=2,kend,2
+      xn = n
+      sumj2 = sumj2 + t1(2*n+1)/xn
    enddo
-   SUMJN = 2.0d0*(SUMJ2-SUMJ1)
-   T2(1) = 2.0d0/PI*(T1(1)*(log(X/2.0d0) + EULER) - SUMJN)
+   sumjn = 2.0d0*(sumj2-sumj1)
+   t2(1) = 2.0d0/pi*(t1(1)*(log(x/2.0d0) + euler) - sumjn)
 321 continue
-    IF (MO.GT.0) GO TO 309
-   RSLT1 = T1(1)
-   RSLT2 = T2(1)
-   X = XX
-   RETURN
+    if (mo.gt.0) go to 309
+   rslt1 = t1(1)
+   rslt2 = t2(1)
+   x = xx
+   return
 309 continue
-    T2(2) = (T1(2)*T2(1) - 2.0d0/(PI*X))/T1(1)
-   IF (MO.EQ.1) GO TO 311
-   NORD = KO-1
-   DO N=2,NORD
-      XN = N-1
-      T2(N+1) = (2.0d0*XN)/X*T2(N) - T2(N-1)
+    t2(2) = (t1(2)*t2(1) - 2.0d0/(pi*x))/t1(1)
+   if (mo.eq.1) go to 311
+   nord = ko-1
+   do n=2,nord
+      xn = n-1
+      t2(n+1) = (2.0d0*xn)/x*t2(n) - t2(n-1)
     enddo
 311 continue
-    DO J=2,KO,2
-      T2(J) = T2(J)*SIGN
+    do j=2,ko,2
+      t2(j) = t2(j)*sign
    enddo
-   RSLT2 = T2(KO)
-   IF (MASK2.EQ.1) GO TO 315
-   DO J=2,KO,2
-      T1(J) = T1(J)*SIGN
+   rslt2 = t2(ko)
+   if (mask2.eq.1) go to 315
+   do j=2,ko,2
+      t1(j) = t1(j)*sign
    enddo
-   RSLT1 = T1(KO)
-315 X = XX
-   RETURN
-400 DX = X
-   DX2 = 1.0D0
-   IF (X-6.0d0)  410,410,440
-410 DXX = DX*DX/64.0D0
-   TEMP = 0.0D0
-   DO J=1,18
-      DX2 = DX2*DXX
-      A0 = A(J)*DX2
-      TEMP = TEMP + A0
-      DCHK = A0/TEMP
-      IF (DCHK - 1.0D0-20) 430,420,420
-420 CONTINUE
+   rslt1 = t1(ko)
+315 x = xx
+   return
+400 dx = x
+   dx2 = 1.0d0
+   if (x-6.0d0)  410,410,440
+410 dxx = dx*dx/64.0d0
+   temp = 0.0d0
+   do j=1,18
+      dx2 = dx2*dxx
+      a0 = a(j)*dx2
+      temp = temp + a0
+      dchk = a0/temp
+      if (dchk - 1.0d0-20) 430,420,420
+420 continue
     enddo
-430 A0 = -(EULER + LOG(0.5D0*DX))
-   T2(1) = A0*T1(1) + TEMP
-   IF (NO.EQ.0) GO TO 490
-   GO TO 480
-440 DXX = 10.0D0/DX - 1.0D0
-   TEMP = B(1)
-   DO J=2,21
-      DX2 = DX2*DXX
-      A0 = B(J)*DX2
-      TEMP = TEMP + A0
-      IF (TEMP) 450,460,450
-450   DCHK = abs(A0/TEMP)
-      IF (DCHK - 1.0D0-20) 470,460,460
-460 CONTINUE
+430 a0 = -(euler + log(0.5d0*dx))
+   t2(1) = a0*t1(1) + temp
+   if (no.eq.0) go to 490
+   go to 480
+440 dxx = 10.0d0/dx - 1.0d0
+   temp = b(1)
+   do j=2,21
+      dx2 = dx2*dxx
+      a0 = b(j)*dx2
+      temp = temp + a0
+      if (temp) 450,460,450
+450   dchk = abs(a0/temp)
+      if (dchk - 1.0d0-20) 470,460,460
+460 continue
    enddo
-470 T2(1) = SQRT(PI/(2.0d0*DX))*exp(-DX)*TEMP
-   IF (NO.EQ.0) GO TO 490
-480 T2(2) = (1.0d0/X - T2(1)*T1(2))/T1(1)
-   IF (KO.LE.2) GO TO 490
-   NORD = KO-1
-   DO N=2,NORD
-      XN = N-1
-      T2(N+1) = (2.0d0*XN)/X *T2(N) + T2(N-1)
+470 t2(1) = sqrt(pi/(2.0d0*dx))*exp(-dx)*temp
+   if (no.eq.0) go to 490
+480 t2(2) = (1.0d0/x - t2(1)*t1(2))/t1(1)
+   if (ko.le.2) go to 490
+   nord = ko-1
+   do n=2,nord
+      xn = n-1
+      t2(n+1) = (2.0d0*xn)/x *t2(n) + t2(n-1)
    enddo
 490 continue
-   RSLT2 = T2(KO)
-   X = XX
-   RETURN
+   rslt2 = t2(ko)
+   x = xx
+   return
 600 continue
-   IERR=5
-   RETURN
+   ierr=5
+   return
 602 continue
-   X=XX
-   IERR=3
-   RETURN
+   x=xx
+   ierr=3
+   return
 604 continue
-   IERR=4
-   RETURN
+   ierr=4
+   return
 606 continue
-   IERR=2
-   RETURN
+   ierr=2
+   return
 608 continue
-   IERR=1
-   RETURN
-END SUBROUTINE BES
+   ierr=1
+   return
+end subroutine bes
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1166,10 +1166,10 @@ END FUNCTION BESJ1
 !!         none
 !!##EXAMPLE
 !!
-SUBROUTINE BESK(X,N,BK,IER)
+subroutine besk(x,n,bk,ier)
 implicit none
 
-! ident_6="@(#)M_bessel::besk(3f):compute the K Bessel function for a given argument and order"
+! ident_6="@(#)M_bessel::besk(3f):compute the K bessel function for a given argument and order"
 
 integer :: ier
 integer :: j
@@ -1188,100 +1188,100 @@ doubleprecision :: rj
 doubleprecision :: t(12)
 doubleprecision :: x
 doubleprecision :: x2j
-   BK=0.0d0
-   IF(N)10,11,11
-10 IER=1
-   RETURN
-11 IF(X)12,12,20
-12 IER=2
-   RETURN
-20 IF(X-170.00d0)22,22,21
-21 IER=3
-   RETURN
-22 IER=0
-   IF(X-1.0d0)36,36,25
-25 A=EXP(-X)
-   B=1.0d0/X
-   C=SQRT(B)
-   T(1)=B
-   DO L=2,12
-      T(L)=T(L-1)*B
+   bk=0.0d0
+   if(n)10,11,11
+10 ier=1
+   return
+11 if(x)12,12,20
+12 ier=2
+   return
+20 if(x-170.00d0)22,22,21
+21 ier=3
+   return
+22 ier=0
+   if(x-1.0d0)36,36,25
+25 a=exp(-x)
+   b=1.0d0/x
+   c=sqrt(b)
+   t(1)=b
+   do l=2,12
+      t(l)=t(l-1)*b
    enddo
-   IF(N-1)27,29,27
+   if(n-1)27,29,27
 !
 !     COMPUTE KO USING POLYNOMIAL APPROXIMATION
 !
-27 G0=A*(1.25331414d0-.15666418d0*T(1)+.088111278d0*T(2)-.091390954d0*T(3)    &
-   &+.13445962d0*T(4)-.22998503d0*T(5)+.37924097d0*T(6)-.52472773d0*T(7)       &
-   &+.55753684d0*T(8)-.42626329d0*T(9)+.21845181d0*T(10)-.066809767d0*T(11)    &
-   &+.009189383d0*T(12))*C
-   IF(N)20,28,29
-28 BK=G0
-   RETURN
+27 g0=a*(1.25331414d0-.15666418d0*t(1)+.088111278d0*t(2)-.091390954d0*t(3)    &
+   &+.13445962d0*t(4)-.22998503d0*t(5)+.37924097d0*t(6)-.52472773d0*t(7)       &
+   &+.55753684d0*t(8)-.42626329d0*t(9)+.21845181d0*t(10)-.066809767d0*t(11)    &
+   &+.009189383d0*t(12))*c
+   if(n)20,28,29
+28 bk=g0
+   return
 !
 !     COMPUTE K1 USING POLYNOMIAL APPROXIMATION
 !
-29 G1=A*(1.2533141d0+.46999270d0*T(1)-.14685830d0*T(2)+.12804266d0*T(3)       &
-   &-.17364316d0*T(4)+.28476181d0*T(5)-.45943421d0*T(6)+.62833807d0*T(7)       &
-   &-.66322954d0*T(8)+.50502386d0*T(9)-.25813038d0*T(10)+.078800012d0*T(11)    &
-   &-.010824177d0*T(12))*C
-   IF(N-1)20,30,31
-30 BK=G1
-   RETURN
+29 g1=a*(1.2533141d0+.46999270d0*t(1)-.14685830d0*t(2)+.12804266d0*t(3)       &
+   &-.17364316d0*t(4)+.28476181d0*t(5)-.45943421d0*t(6)+.62833807d0*t(7)       &
+   &-.66322954d0*t(8)+.50502386d0*t(9)-.25813038d0*t(10)+.078800012d0*t(11)    &
+   &-.010824177d0*t(12))*c
+   if(n-1)20,30,31
+30 bk=g1
+   return
 !
 !     FROM KO,K1 COMPUTE KN USING RECURRENCE RELATION
 !
 31 continue
-   DO J=2,N
-      GJ=2.d0*(dble(J)-1.d0)*G1/X+G0
-      IF(GJ-1.0d70)33,33,32
-32    IER=4
-      GO TO 34
-33    G0=G1
-      G1=GJ
+   do j=2,n
+      gj=2.d0*(dble(j)-1.d0)*g1/x+g0
+      if(gj-1.0d70)33,33,32
+32    ier=4
+      go to 34
+33    g0=g1
+      g1=gj
    enddo
-34 BK=GJ
-   RETURN
-36 B=X/2.d0
-   A=.57721566d0+log(B)
-   C=B*B
-   IF(N-1)37,43,37
+34 bk=gj
+   return
+36 b=x/2.d0
+   a=.57721566d0+log(b)
+   c=b*b
+   if(n-1)37,43,37
 !
 !     COMPUTE KO USING SERIES EXPANSION
 !
-37 G0=-A
-   X2J=1.0d0
-   FACT=1.0d0
-   HJ=0.0d0
-   DO J=1,6
-      RJ=1.0d0/dble(J)
-      X2J=X2J*C
-      FACT=FACT*RJ*RJ
-      HJ=HJ+RJ
-      G0=G0+X2J*FACT*(HJ-A)
+37 g0=-a
+   x2j=1.0d0
+   fact=1.0d0
+   hj=0.0d0
+   do j=1,6
+      rj=1.0d0/dble(j)
+      x2j=x2j*c
+      fact=fact*rj*rj
+      hj=hj+rj
+      g0=g0+x2j*fact*(hj-a)
    enddo
-   IF(N)43,42,43
-42 BK=G0
-   RETURN
+   if(n)43,42,43
+42 bk=g0
+   return
 !
 !     COMPUTE K1 USING SERIES EXPANSION
 !
-43 X2J=B
-   FACT=1.0d0
-   HJ=1.0d0
-   G1=1.0d0/X+X2J*(0.5d0+A-HJ)
-   DO J=2,8
-      X2J=X2J*C
-      RJ=1.0d0/dble(J)
-      FACT=FACT*RJ*RJ
-      HJ=HJ+RJ
-      G1=G1+X2J*FACT*(0.50d0+(A-HJ)*dble(J))
+43 x2j=b
+   fact=1.0d0
+   hj=1.0d0
+   g1=1.0d0/x+x2j*(0.5d0+a-hj)
+   do j=2,8
+      x2j=x2j*c
+      rj=1.0d0/dble(j)
+      fact=fact*rj*rj
+      hj=hj+rj
+      g1=g1+x2j*fact*(0.50d0+(a-hj)*dble(j))
    enddo
-   IF(N-1)31,52,31
+   if(n-1)31,52,31
 52 continue
-   BK=G1
-   RETURN
-END SUBROUTINE BESK
+   bk=g1
+   return
+end subroutine besk
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1326,7 +1326,7 @@ END SUBROUTINE BESK
 !!
 !!##EXAMPLE
 !!
-SUBROUTINE BESY(X,N,BY,IER)
+subroutine besy(x,n,by,ier)
 implicit none
 
 ! ident_7="@(#)M_bessel::besy(3f):compute the Y Bessel function for a given argument and order"
@@ -1360,126 +1360,126 @@ doubleprecision :: yb
 doubleprecision :: yc
 !     CHECK FOR ERRORS IN N AND X
 !
-   IF(N)180,10,10
-10 IER=0
-   IF(X)190,190,20
-20 PI=3.141592653d0
+   if(n)180,10,10
+10 ier=0
+   if(x)190,190,20
+20 pi=3.141592653d0
 !
 !     BRANCH IF X LESS THAN OR EQUAL 4
 !
-   IF(X-4.0d0)40,40,30
+   if(x-4.0d0)40,40,30
 !
 !       COMPUTE Y0 AND Y1 FOR X GREATER THAN 4
 !
-30 T=4.0d0/X
-   P0=0.3989422793d0
-   Q0=-0.0124669441d0
-   P1=0.3989422819d0
-   Q1=0.0374008364d0
-   A=T*T
-   B=A
-   P0=P0-0.0017530620d0*A
-   Q0=Q0+0.0004564324d0*A
-   P1=P1+0.0029218256d0*A
-   Q1=Q1-0.00063904d0*A
-   A=A*A
-   P0=P0+.00017343d0*A
-   Q0=Q0-.0000869791d0*A
-   P1=P1-.000223203d0*A
-   Q1=Q1+.0001064741d0*A
-   A=A*B
-   P0=P0-.0000487613d0*A
-   Q0=Q0+.0000342468d0*A
-   P1=P1+.0000580759d0*A
-   Q1=Q1-.0000398708d0*A
-   A=A*B
-   P0=P0+.0000173565d0*A
-   Q0=Q0-.0000142078d0*A
-   P1=P1-.000020092d0*A
-   Q1=Q1+.00001622d0*A
-   A=A*B
-   P0=P0-.0000037043d0*A
-   Q0=Q0+.0000032312d0*A
-   P1=P1+.0000042414d0*A
-   Q1=Q1-.0000036594d0*A
-   A=SQRT(2.0d0*PI)
-   B=4.0d0*A
-   P0=A*P0
-   Q0=B*Q0/X
-   P1=A*P1
-   Q1=B*Q1/X
-   A=X-PI/4.0d0
-   B=SQRT(2.0d0/(PI*X))
-   Y0=B*(P0*SIN(A)+Q0*COS(A))
-   Y1=B*(-P1*COS(A)+Q1*SIN(A))
-   GO TO 90
+30 t=4.0d0/x
+   p0=0.3989422793d0
+   q0=-0.0124669441d0
+   p1=0.3989422819d0
+   q1=0.0374008364d0
+   a=t*t
+   b=a
+   p0=p0-0.0017530620d0*a
+   q0=q0+0.0004564324d0*a
+   p1=p1+0.0029218256d0*a
+   q1=q1-0.00063904d0*a
+   a=a*a
+   p0=p0+.00017343d0*a
+   q0=q0-.0000869791d0*a
+   p1=p1-.000223203d0*a
+   q1=q1+.0001064741d0*a
+   a=a*b
+   p0=p0-.0000487613d0*a
+   q0=q0+.0000342468d0*a
+   p1=p1+.0000580759d0*a
+   q1=q1-.0000398708d0*a
+   a=a*b
+   p0=p0+.0000173565d0*a
+   q0=q0-.0000142078d0*a
+   p1=p1-.000020092d0*a
+   q1=q1+.00001622d0*a
+   a=a*b
+   p0=p0-.0000037043d0*a
+   q0=q0+.0000032312d0*a
+   p1=p1+.0000042414d0*a
+   q1=q1-.0000036594d0*a
+   a=sqrt(2.0d0*pi)
+   b=4.0d0*a
+   p0=a*p0
+   q0=b*q0/x
+   p1=a*p1
+   q1=b*q1/x
+   a=x-pi/4.0d0
+   b=sqrt(2.0d0/(pi*x))
+   y0=b*(p0*sin(a)+q0*cos(a))
+   y1=b*(-p1*cos(a)+q1*sin(a))
+   go to 90
 !
 !       COMPUTE Y0 AND Y1 FOR X LESS THAN OR EQUAL TO 4
 !
-40 XX=X/2.0d0
-   X2=XX*XX
-   T=log(XX)+.5772156649d0
-   SUM=0.0d0
-   TERM=T
-   Y0=T
-   DO L=1,15
-      IF(L-1)50,60,50
-50    SUM=SUM+1.0d0/dble(L-1)
-60    FL=L
-      TS=T-SUM
-      TERM=(TERM*(-X2)/FL**2)*(1.0d0-1.0d0/(FL*TS))
-      Y0=Y0+TERM
+40 xx=x/2.0d0
+   x2=xx*xx
+   t=log(xx)+.5772156649d0
+   sum=0.0d0
+   term=t
+   y0=t
+   do l=1,15
+      if(l-1)50,60,50
+50    sum=sum+1.0d0/dble(l-1)
+60    fl=l
+      ts=t-sum
+      term=(term*(-x2)/fl**2)*(1.0d0-1.0d0/(fl*ts))
+      y0=y0+term
    enddo
-   TERM = XX*(T-0.5d0)
-   SUM=0.0d0
-   Y1=TERM
-   DO L=2,16
-      SUM=SUM+1.0d0/dble(L-1)
-      FL=L
-      FL1=FL-1.0d0
-      TS=T-SUM
-      TERM=(TERM*(-X2)/(FL1*FL))*((TS-0.5d0/FL)/(TS+0.5d0/FL1))
-      Y1=Y1+TERM
+   term = xx*(t-0.5d0)
+   sum=0.0d0
+   y1=term
+   do l=2,16
+      sum=sum+1.0d0/dble(l-1)
+      fl=l
+      fl1=fl-1.0d0
+      ts=t-sum
+      term=(term*(-x2)/(fl1*fl))*((ts-0.5d0/fl)/(ts+0.5d0/fl1))
+      y1=y1+term
    enddo
-   PI2=2.0d0/PI
-   Y0=PI2*Y0
-   Y1=-PI2/X+PI2*Y1
+   pi2=2.0d0/pi
+   y0=pi2*y0
+   y1=-pi2/x+pi2*y1
 !
 !     CHECK IF ONLY Y0 OR Y1 IS DESIRED
 !
 90 continue
-   IF(N-1)100,100,130
+   if(n-1)100,100,130
 !
 !     RETURN EITHER Y0 OR Y1 AS REQUIRED
 !
-100 IF(N)110,120,110
-110 BY=Y1
-   GO TO 170
-120 BY=Y0
-   GO TO 170
+100 if(n)110,120,110
+110 by=y1
+   go to 170
+120 by=y0
+   go to 170
 !
 !    PERFORM RECURRENCE OPERATIONS TO FIND YN(X)
 !
-130 YA=Y0
-   YB=Y1
-   K=1
-140 T=dble(2*K)/X
-   YC=T*YB-YA
-   IF(ABS(YC)-1.0d70)145,145,141
-141 IER=3
-   RETURN
-145 K=K+1
-   IF(K-N)150,160,150
-150 YA=YB
-   YB=YC
-   GO TO 140
-160 BY=YC
-170 RETURN
-180 IER=1
-   RETURN
-190 IER=2
-   RETURN
-END SUBROUTINE BESY
+130 ya=y0
+   yb=y1
+   k=1
+140 t=dble(2*k)/x
+   yc=t*yb-ya
+   if(abs(yc)-1.0d70)145,145,141
+141 ier=3
+   return
+145 k=k+1
+   if(k-n)150,160,150
+150 ya=yb
+   yb=yc
+   go to 140
+160 by=yc
+170 return
+180 ier=1
+   return
+190 ier=2
+   return
+end subroutine besy
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

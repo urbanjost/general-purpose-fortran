@@ -3277,6 +3277,10 @@ end function get_env
 !!    this varies depending on how or if the programming environment implements
 !!    I/O buffering itself.
 !!
+!!    IT USES SAVED VARIABLES AND CAN ONLY BE USED ON ONE FILE AT A TIME IN
+!!    THE CURRENT FORM. A user type including the saved values and the LUN
+!!    could easily resolve this.
+!!
 !!##OPTIONS
 !!    FD    A Fortran unit number of a file opened for stream access
 !!    C     the next returned character if IOS=0
