@@ -32,13 +32,13 @@ end subroutine set_xerbla
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE XERBLA_ARRAY(SRNAME_ARRAY, SRNAME_LEN, INFO)
+!!     subroutine xerbla_array(srname_array, srname_len, info)
 !!
 !!        .. Scalar Arguments ..
-!!        INTEGER SRNAME_LEN, INFO
+!!        integer srname_len, info
 !!        ..
 !!        .. Array Arguments ..
-!!        CHARACTER(*) SRNAME_ARRAY(SRNAME_LEN)
+!!        character(*) srname_array(srname_len)
 !!        ..
 !!
 !!##DEFINITION
@@ -93,7 +93,7 @@ end subroutine set_xerbla
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE XERBLA_ARRAY(SRNAME_ARRAY, SRNAME_LEN, INFO)
+       subroutine xerbla_array(srname_array, srname_len, info)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.7.0) --
@@ -102,43 +102,43 @@ end subroutine set_xerbla
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: SRNAME_LEN, INFO
+      integer,intent(in) :: srname_len, info
 !     ..
 !     .. Array Arguments ..
-      CHARACTER(len=*),intent(in) :: SRNAME_ARRAY(SRNAME_LEN)
+      character(len=*),intent(in) :: srname_array(srname_len)
 !     ..
 !
 ! =====================================================================
 !
 !     ..
 !     .. Local Scalars ..
-      INTEGER I
+      integer i
 !     ..
 !     .. Local Arrays ..
-      CHARACTER*32 SRNAME
+      character*32 srname
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MIN, LEN
+      intrinsic min, len
 !     ..
 !     .. External Functions ..
 !      EXTERNAL XERBLA
 !     ..
 !     .. Executable Statements ..
-      SRNAME = ''
-      DO I = 1, MIN( SRNAME_LEN, LEN( SRNAME ) )
-         SRNAME( I:I ) = SRNAME_ARRAY( I )
+      srname = ''
+      do i = 1, min( srname_len, len( srname ) )
+         srname( i:i ) = srname_array( i )
       enddo
 
-      CALL XERBLA( SRNAME, INFO )
+      call xerbla( srname, info )
 
-      END SUBROUTINE XERBLA_ARRAY
+      end subroutine xerbla_array
 !>
 !!##NAME
 !!    xerbla(3f) - [BLAS:AUX_BLAS] error handler routine for the BLAS/LAPACK routines
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE XERBLA( SRNAME, INFO )
+!!     subroutine xerbla( srname, info )
 !!
 !!        .. Scalar Arguments ..
 !!        character(len=*),intent(in) :: srname
@@ -585,7 +585,7 @@ end subroutine ccopy
 !!##SYNOPSIS
 !!
 !!
-!!     SUBROUTINE CGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine cgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
 !!       complex,intent(in)    :: alpha,beta
@@ -919,16 +919,16 @@ end subroutine cgbmv
 !!##SYNOPSIS
 !!
 !!
-!!     SUBROUTINE CGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine cgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: K,LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)  :: TRANSA,TRANSB
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: k,lda,ldb,ldc,m,n
+!!       character,intent(in)  :: transa,transb
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       COMPLEX,intent(inout) :: C(LDC,*)
+!!       complex,intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -1363,7 +1363,7 @@ end subroutine cgbmv
 !!##SYNOPSIS
 !!
 !!
-!!     SUBROUTINE CGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine cgemv(trans,m,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
 !!       COMPLEX,intent(in)    :: ALPHA,BETA
@@ -1678,15 +1678,15 @@ end subroutine cgbmv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine cgerc(m,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)    :: INCX,INCY,LDA,M,N
+!!       complex,intent(in)    :: alpha
+!!       integer,intent(in)    :: incx,incy,lda,m,n
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: A(LDA,*)
-!!       COMPLEX,intent(in)    :: X(*),Y(*)
+!!       complex,intent(inout) :: a(lda,*)
+!!       complex,intent(in)    :: x(*),y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -1880,15 +1880,15 @@ end subroutine cgbmv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CGERU(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine cgeru(m,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)    :: INCX,INCY,LDA,M,N
+!!       complex,intent(in)    :: alpha
+!!       integer,intent(in)    :: incx,incy,lda,m,n
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: A(LDA,*)
-!!       COMPLEX,intent(in)    :: X(*),Y(*)
+!!       complex,intent(inout) :: a(lda,*)
+!!       complex,intent(in)    :: x(*),y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -2082,16 +2082,16 @@ end subroutine cgbmv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine chbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: INCX,INCY,K,LDA,N
-!!       CHARACTER,intent(in)  :: UPLO
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: incx,incy,k,lda,n
+!!       character,intent(in)  :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*),X(*)
-!!       COMPLEX,intent(inout) :: Y(*)
+!!       complex,intent(in)    :: a(lda,*),x(*)
+!!       complex,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -2431,16 +2431,16 @@ end subroutine cgbmv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine chemm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)  :: SIDE,UPLO
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: lda,ldb,ldc,m,n
+!!       character,intent(in)  :: side,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       COMPLEX,intent(inout) :: C(LDC,*)
+!!       complex,intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -2755,16 +2755,16 @@ end subroutine cgbmv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHEMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine chemv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: INCX,INCY,LDA,N
-!!       CHARACTER,intent(in)  :: UPLO
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: incx,incy,lda,n
+!!       character,intent(in)  :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*),X(*)
-!!       COMPLEX,intent(inout) :: Y(*)
+!!       complex,intent(in)    :: a(lda,*),x(*)
+!!       complex,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -3350,17 +3350,17 @@ end subroutine cgbmv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHER2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine cher2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA
-!!       REAL,intent(in)       :: BETA
-!!       INTEGER,intent(in)    :: K,LDA,LDB,LDC,N
-!!       CHARACTER,intent(in)  :: TRANS,UPLO
+!!       complex,intent(in)    :: alpha
+!!       real,intent(in)       :: beta
+!!       integer,intent(in)    :: k,lda,ldb,ldc,n
+!!       character,intent(in)  :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       COMPLEX,intent(inout) :: C(LDC,*)
+!!       complex,intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -3743,16 +3743,16 @@ end subroutine cgbmv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHER(UPLO,N,ALPHA,X,INCX,A,LDA)
+!!     subroutine cher(uplo,n,alpha,x,incx,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)       :: ALPHA
-!!       INTEGER,intent(in)    :: INCX,LDA,N
-!!       CHARACTER,intent(in)  :: UPLO
+!!       real,intent(in)       :: alpha
+!!       integer,intent(in)    :: incx,lda,n
+!!       character,intent(in)  :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: A(LDA,*)
-!!       COMPLEX,intent(in)    :: X(*)
+!!       complex,intent(inout) :: a(lda,*)
+!!       complex,intent(in)    :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -3997,16 +3997,16 @@ end subroutine cher
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+!!     subroutine cherk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)       :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: K,LDA,LDC,N
-!!       CHARACTER,intent(in)  :: TRANS,UPLO
+!!       real,intent(in)       :: alpha,beta
+!!       integer,intent(in)    :: k,lda,ldc,n
+!!       character,intent(in)  :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: C(LDC,*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -4362,16 +4362,16 @@ end subroutine cher
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+!!     subroutine chpmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: INCX,INCY,N
-!!       CHARACTER,intent(in)  :: UPLO
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: incx,incy,n
+!!       character,intent(in)  :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: AP(*),X(*)
-!!       COMPLEX,intent(inout) :: Y(*)
+!!       complex,intent(in)    :: ap(*),x(*)
+!!       complex,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -4670,16 +4670,16 @@ end subroutine cher
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+!!     subroutine chpr2(uplo,n,alpha,x,incx,y,incy,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)    :: INCX,INCY,N
-!!       CHARACTER,intent(in)  :: UPLO
+!!       complex,intent(in)    :: alpha
+!!       integer,intent(in)    :: incx,incy,n
+!!       character,intent(in)  :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: AP(*)
-!!       COMPLEX,intent(in)    :: X(*),Y(*)
+!!       complex,intent(inout) :: ap(*)
+!!       complex,intent(in)    :: x(*),y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -4959,16 +4959,16 @@ end subroutine cher
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CHPR(UPLO,N,ALPHA,X,INCX,AP)
+!!     subroutine chpr(uplo,n,alpha,x,incx,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)       :: ALPHA
-!!       INTEGER,intent(in)    :: INCX,N
-!!       CHARACTER,intent(in)  :: UPLO
+!!       real,intent(in)       :: alpha
+!!       integer,intent(in)    :: incx,n
+!!       character,intent(in)  :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: AP(*)
-!!       COMPLEX,intent(in)    :: X(*)
+!!       complex,intent(inout) :: ap(*)
+!!       complex,intent(in)    :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -5216,7 +5216,7 @@ end subroutine cher
 !!
 !!     subroutine CROTG( a, b, c, s )
 !!
-!!      .. Scalar arguments ..
+!!      .. Scalar Arguments ..
 !!         complex(wp),intent(inout) :: a
 !!         complex(wp),intent(in)    :: b
 !!         real(wp),intent(out)      :: c
@@ -5498,14 +5498,14 @@ end subroutine crotg
 !!##SYNOPSIS
 !!
 !!
-!!     SUBROUTINE CSROT( N, CX, INCX, CY, INCY, C, S )
+!!     subroutine csrot( n, cx, incx, cy, incy, c, s )
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)       :: INCX, INCY, N
-!!       REAL,intent(in)          :: C, S
+!!       integer,intent(in)       :: incx, incy, n
+!!       real,intent(in)          :: c, s
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout)    :: CX( * ), CY( * )
+!!       complex,intent(inout)    :: cx( * ), cy( * )
 !!       ..
 !!
 !!##DEFINITION
@@ -5633,14 +5633,14 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CSSCAL(N,SA,CX,INCX)
+!!     subroutine csscal(n,sa,cx,incx)
 !!
-!!       .. Scalar Arguments ..
-!!       REAL,intent(in)       :: SA
-!!       INTEGER,intent(in)    :: INCX,N
+!!       .. scalar arguments ..
+!!       real,intent(in)       :: sa
+!!       integer,intent(in)    :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: CX(*)
+!!       complex,intent(inout) :: cx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -5736,13 +5736,13 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CSWAP(N,CX,INCX,CY,INCY)
+!!     subroutine cswap(n,cx,incx,cy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,INCY,N
+!!       integer,intent(in)    :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: CX(*),CY(*)
+!!       complex,intent(inout) :: cx(*),cy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -5848,16 +5848,16 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine csymm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)  :: SIDE,UPLO
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: lda,ldb,ldc,m,n
+!!       character,intent(in)  :: side,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       COMPLEX,intent(inout) :: C(LDC,*)
+!!       complex,intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -6171,16 +6171,16 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine csyr2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: K,LDA,LDB,LDC,N
-!!       CHARACTER,intent(in)  :: TRANS,UPLO
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: k,lda,ldb,ldc,n
+!!       character,intent(in)  :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       COMPLEX,intent(inout) :: C(LDC,*)
+!!       complex,intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -6518,16 +6518,16 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+!!     subroutine csyrk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)    :: K,LDA,LDC,N
-!!       CHARACTER,intent(in)  :: TRANS,UPLO
+!!       complex,intent(in)    :: alpha,beta
+!!       integer,intent(in)    :: k,lda,ldc,n
+!!       character,intent(in)  :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: C(LDC,*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -6836,15 +6836,15 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine ctbmv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,K,LDA,N
-!!       CHARACTER,intent(in)  :: DIAG,TRANS,UPLO
+!!       integer,intent(in)    :: incx,k,lda,n
+!!       character,intent(in)  :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: X(*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -7240,15 +7240,15 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine ctbsv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,K,LDA,N
-!!       CHARACTER,intent(in)  :: DIAG,TRANS,UPLO
+!!       integer,intent(in)    :: incx,k,lda,n
+!!       character,intent(in)  :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: X(*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -7647,15 +7647,15 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+!!     subroutine ctpmv(uplo,trans,diag,n,ap,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,N
-!!       CHARACTER,intent(in)  :: DIAG,TRANS,UPLO
+!!       integer,intent(in)    :: incx,n
+!!       character,intent(in)  :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: AP(*)
-!!       COMPLEX,intent(inout) :: X(*)
+!!       complex,intent(in)    :: ap(*)
+!!       complex,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -8012,15 +8012,15 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTPSV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+!!     subroutine ctpsv(uplo,trans,diag,n,ap,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,N
-!!       CHARACTER,intent(in)  :: DIAG,TRANS,UPLO
+!!       integer,intent(in)    :: incx,n
+!!       character,intent(in)  :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: AP(*)
-!!       COMPLEX,intent(inout) :: X(*)
+!!       complex,intent(in)    :: ap(*)
+!!       complex,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -8379,16 +8379,16 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine ctrmm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)    :: LDA,LDB,M,N
-!!       CHARACTER,intent(in)  :: DIAG,SIDE,TRANSA,UPLO
+!!       complex,intent(in)    :: alpha
+!!       integer,intent(in)    :: lda,ldb,m,n
+!!       character,intent(in)  :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: B(LDB,*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -8783,15 +8783,15 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine ctrmv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,LDA,N
-!!       CHARACTER,intent(in)  :: DIAG,TRANS,UPLO
+!!       integer,intent(in)    :: incx,lda,n
+!!       character,intent(in)  :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: X(*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -9132,16 +9132,16 @@ end subroutine crotg
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine ctrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       COMPLEX,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)    :: LDA,LDB,M,N
-!!       CHARACTER,intent(in)  :: DIAG,SIDE,TRANSA,UPLO
+!!       complex,intent(in)    :: alpha
+!!       integer,intent(in)    :: lda,ldb,m,n
+!!       character,intent(in)  :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: B(LDB,*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -9545,15 +9545,15 @@ end subroutine ctrsm
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE CTRSV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine ctrsv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,LDA,N
-!!       CHARACTER,intent(in)  :: DIAG,TRANS,UPLO
+!!       integer,intent(in)    :: incx,lda,n
+!!       character,intent(in)  :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(in)    :: A(LDA,*)
-!!       COMPLEX,intent(inout) :: X(*)
+!!       complex,intent(in)    :: a(lda,*)
+!!       complex,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -9895,13 +9895,13 @@ end subroutine ctrsm
 !!
 !!##SYNOPSIS
 !!
-!!     DOUBLE PRECISION FUNCTION DASUM(N,DX,INCX)
+!!     double precision function dasum(n,dx,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,N
+!!       integer,intent(in) :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in) :: DX(*)
+!!       double precision,intent(in) :: dx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -10008,15 +10008,15 @@ pure double precision function dasum(n,dx,incx)
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DAXPY(N,DA,DX,INCX,DY,INCY)
+!!     subroutine daxpy(n,da,dx,incx,dy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: DA
-!!       INTEGER,intent(in)             :: INCX,INCY,N
+!!       double precision,intent(in)    :: da
+!!       integer,intent(in)             :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: DX(*)
-!!       DOUBLE PRECISION,intent(inout) :: DY(*)
+!!       double precision,intent(in)    :: dx(*)
+!!       double precision,intent(inout) :: dy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -10144,7 +10144,7 @@ pure double precision function dasum(n,dx,incx)
 !!
 !!##SYNOPSIS
 !!
-!!     DOUBLE PRECISION FUNCTION DCABS1(Z)
+!!     double precision function dcabs1(z)
 !!
 !!       .. Scalar Arguments ..
 !!       complex(kind=real64),intent(in) ::  Z
@@ -10182,7 +10182,7 @@ implicit none
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in) ::  Z
+      complex(kind=real64),intent(in) ::  z
 !     ..
 !  =====================================================================
 !
@@ -10199,7 +10199,7 @@ end function dcabs1
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DCOPY(N,DX,INCX,DY,INCY)
+!!     subroutine dcopy(n,dx,incx,dy,incy)
 !!
 !!       .. Scalar Arguments ..
 !!       integer,intent(in)           :: incx,incy,n
@@ -10257,7 +10257,7 @@ end function dcabs1
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DCOPY(N,DX,INCX,DY,INCY)
+       subroutine dcopy(n,dx,incx,dy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -10329,13 +10329,13 @@ end subroutine dcopy
 !!
 !!##SYNOPSIS
 !!
-!!     DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
+!!     double precision function ddot(n,dx,incx,dy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in) :: DX(*),DY(*)
+!!       double precision,intent(in) :: dx(*),dy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -10386,7 +10386,7 @@ end subroutine dcopy
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
+pure double precision function ddot(n,dx,incx,dy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -10395,79 +10395,79 @@ pure DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in) :: DX(*),DY(*)
+      double precision,intent(in) :: dx(*),dy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      DOUBLE PRECISION DTEMP
-      INTEGER I,IX,IY,M,MP1
+      double precision dtemp
+      integer i,ix,iy,m,mp1
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      DDOT = 0.0d0
-      DTEMP = 0.0d0
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      ddot = 0.0d0
+      dtemp = 0.0d0
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
 !
 !        clean-up loop
 !
-         M = MOD(N,5)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               DTEMP = DTEMP + DX(I)*DY(I)
+         m = mod(n,5)
+         if (m.ne.0) then
+            do i = 1,m
+               dtemp = dtemp + dx(i)*dy(i)
             enddo
-            IF (N.LT.5) THEN
-               DDOT=DTEMP
-            RETURN
+            if (n.lt.5) then
+               ddot=dtemp
+            return
             endif
          endif
-         MP1 = M + 1
-         DO I = MP1,N,5
-          DTEMP = DTEMP + DX(I)*DY(I) + DX(I+1)*DY(I+1) + DX(I+2)*DY(I+2) + DX(I+3)*DY(I+3) + DX(I+4)*DY(I+4)
+         mp1 = m + 1
+         do i = mp1,n,5
+          dtemp = dtemp + dx(i)*dy(i) + dx(i+1)*dy(i+1) + dx(i+2)*dy(i+2) + dx(i+3)*dy(i+3) + dx(i+4)*dy(i+4)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            DTEMP = DTEMP + DX(IX)*DY(IY)
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            dtemp = dtemp + dx(ix)*dy(iy)
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
-      DDOT = DTEMP
+      ddot = dtemp
 
-      END FUNCTION DDOT
+      end function ddot
 !>
 !!##NAME
 !!    dgbmv(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine dgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: INCX,INCY,KL,KU,LDA,M,N
-!!       CHARACTER,intent(in)           :: TRANS
+!!       double precision,intent(in)    :: alpha,beta
+!!       integer,intent(in)             :: incx,incy,kl,ku,lda,m,n
+!!       character,intent(in)           :: trans
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-!!       DOUBLE PRECISION,intent(inout) :: Y(*)
+!!       double precision,intent(in)    :: a(lda,*),x(*)
+!!       double precision,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -10611,7 +10611,7 @@ pure DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine dgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -10620,81 +10620,81 @@ pure DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: INCX,INCY,KL,KU,LDA,M,N
-      CHARACTER,intent(in)           :: TRANS
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: incx,incy,kl,ku,lda,m,n
+      character,intent(in)           :: trans
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-      DOUBLE PRECISION,intent(inout) :: Y(*)
+      double precision,intent(in)    :: a(lda,*),x(*)
+      double precision,intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KUP1,KX,KY,LENX,LENY
+      double precision temp
+      integer i,info,ix,iy,j,jx,jy,k,kup1,kx,ky,lenx,leny
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 1
-      elseif (M.LT.0) THEN
-          INFO = 2
-      elseif (N.LT.0) THEN
-          INFO = 3
-      elseif (KL.LT.0) THEN
-          INFO = 4
-      elseif (KU.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (KL+KU+1)) THEN
-          INFO = 8
-      elseif (INCX.EQ.0) THEN
-          INFO = 10
-      elseif (INCY.EQ.0) THEN
-          INFO = 13
+      info = 0
+      if (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 1
+      elseif (m.lt.0) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (kl.lt.0) then
+          info = 4
+      elseif (ku.lt.0) then
+          info = 5
+      elseif (lda.lt. (kl+ku+1)) then
+          info = 8
+      elseif (incx.eq.0) then
+          info = 10
+      elseif (incy.eq.0) then
+          info = 13
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DGBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DGBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 !     up the start points in  X  and  Y.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          LENX = N
-          LENY = M
-      ELSE
-          LENX = M
-          LENY = N
+      if (lsame(trans,'N')) then
+          lenx = n
+          leny = m
+      else
+          lenx = m
+          leny = n
       endif
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (LENX-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (lenx-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (LENY-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (leny-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -10702,105 +10702,105 @@ pure DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:LENY) = ZERO
-              ELSE
-                  Y(1:LENY) = BETA*Y(1:LENY)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:leny) = zero
+              else
+                  y(1:leny) = beta*y(1:leny)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,LENY
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,leny
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,LENY
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,leny
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      KUP1 = KU + 1
-      IF (LSAME(TRANS,'N')) THEN
+      if (alpha.eq.zero) return
+      kup1 = ku + 1
+      if (lsame(trans,'N')) then
 !
 !        Form  y := alpha*A*x + y.
 !
-          JX = KX
-          IF (INCY.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      Y(I) = Y(I) + TEMP*A(K+I,J)
+          jx = kx
+          if (incy.eq.1) then
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      y(i) = y(i) + temp*a(k+i,j)
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  IY = KY
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      Y(IY) = Y(IY) + TEMP*A(K+I,J)
-                      IY = IY + INCY
+          else
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  iy = ky
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      y(iy) = y(iy) + temp*a(k+i,j)
+                      iy = iy + incy
                   enddo
-                  JX = JX + INCX
-                  IF (J.GT.KU) KY = KY + INCY
+                  jx = jx + incx
+                  if (j.gt.ku) ky = ky + incy
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y := alpha*A**T*x + y.
 !
-          JY = KY
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ZERO
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      TEMP = TEMP + A(K+I,J)*X(I)
+          jy = ky
+          if (incx.eq.1) then
+              do j = 1,n
+                  temp = zero
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      temp = temp + a(k+i,j)*x(i)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ZERO
-                  IX = KX
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      TEMP = TEMP + A(K+I,J)*X(IX)
-                      IX = IX + INCX
+          else
+              do j = 1,n
+                  temp = zero
+                  ix = kx
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      temp = temp + a(k+i,j)*x(ix)
+                      ix = ix + incx
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
-                  IF (J.GT.KU) KX = KX + INCX
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
+                  if (j.gt.ku) kx = kx + incx
               enddo
           endif
       endif
 !
-END SUBROUTINE DGBMV
+end subroutine dgbmv
 !>
 !!##NAME
 !!    dgemm(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine dgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
 !!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: K,LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)           :: TRANSA,TRANSB
+!!       integer,intent(in)             :: k,lda,ldb,ldc,m,n
+!!       character,intent(in)           :: transa,transb
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       DOUBLE PRECISION,intent(inout) :: C(LDC,*)
+!!       double precision,intent(in)    :: a(lda,*),b(ldb,*)
+!!       double precision,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -10946,7 +10946,7 @@ END SUBROUTINE DGBMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine dgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -10955,13 +10955,13 @@ END SUBROUTINE DGBMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: K,LDA,LDB,LDC,M,N
-      CHARACTER,intent(in)           :: TRANSA,TRANSB
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: k,lda,ldb,ldc,m,n
+      character,intent(in)           :: transa,transb
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*),B(LDB,*)
-      DOUBLE PRECISION,intent(inout) :: C(LDC,*)
+      double precision,intent(in)    :: a(lda,*),b(ldb,*)
+      double precision,intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -10971,176 +10971,176 @@ END SUBROUTINE DGBMV
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,J,L,NROWA,NROWB
-      LOGICAL NOTA,NOTB
+      double precision temp
+      integer i,info,j,l,nrowa,nrowb
+      logical nota,notb
 !     ..
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !
 !     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not
 !     transposed and set  NROWA and NROWB  as the number of rows of  A
 !     and  B  respectively.
 !
-      NOTA = LSAME(TRANSA,'N')
-      NOTB = LSAME(TRANSB,'N')
-      IF (NOTA) THEN
-          NROWA = M
-      ELSE
-          NROWA = K
+      nota = lsame(transa,'N')
+      notb = lsame(transb,'N')
+      if (nota) then
+          nrowa = m
+      else
+          nrowa = k
       endif
-      IF (NOTB) THEN
-          NROWB = K
-      ELSE
-          NROWB = N
+      if (notb) then
+          nrowb = k
+      else
+          nrowb = n
       endif
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF ((.NOT.NOTA) .AND. (.NOT.LSAME(TRANSA,'C')) .AND.  (.NOT.LSAME(TRANSA,'T'))) THEN
-          INFO = 1
-      ELSE IF ((.NOT.NOTB) .AND. (.NOT.LSAME(TRANSB,'C')) .AND.  (.NOT.LSAME(TRANSB,'T'))) THEN
-          INFO = 2
-      ELSE IF (M.LT.0) THEN
-          INFO = 3
-      ELSE IF (N.LT.0) THEN
-          INFO = 4
-      ELSE IF (K.LT.0) THEN
-          INFO = 5
-      ELSE IF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 8
-      ELSE IF (LDB.LT.MAX(1,NROWB)) THEN
-          INFO = 10
-      ELSE IF (LDC.LT.MAX(1,M)) THEN
-          INFO = 13
+      info = 0
+      if ((.not.nota) .and. (.not.lsame(transa,'C')) .and.  (.not.lsame(transa,'T'))) then
+          info = 1
+      else if ((.not.notb) .and. (.not.lsame(transb,'C')) .and.  (.not.lsame(transb,'T'))) then
+          info = 2
+      else if (m.lt.0) then
+          info = 3
+      else if (n.lt.0) then
+          info = 4
+      else if (k.lt.0) then
+          info = 5
+      else if (lda.lt.max(1,nrowa)) then
+          info = 8
+      else if (ldb.lt.max(1,nrowb)) then
+          info = 10
+      else if (ldc.lt.max(1,m)) then
+          info = 13
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DGEMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DGEMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  (((ALPHA.EQ.ZERO).OR. (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  (((alpha.eq.zero).or. (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And if  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (BETA.EQ.ZERO) THEN
-              DO J = 1,N
-                  C(1:M,J) = ZERO
+      if (alpha.eq.zero) then
+          if (beta.eq.zero) then
+              do j = 1,n
+                  c(1:m,j) = zero
               enddo
-          ELSE
-              DO J = 1,N
-                  C(1:M,J) = BETA*C(1:M,J)
+          else
+              do j = 1,n
+                  c(1:m,j) = beta*c(1:m,j)
               enddo
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (NOTB) THEN
-          IF (NOTA) THEN
+      if (notb) then
+          if (nota) then
 !
 !           Form  C := alpha*A*B + beta*C.
 !
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:M,J) = ZERO
-                  ELSE IF (BETA.NE.ONE) THEN
-                      C(1:M,J) = BETA*C(1:M,J)
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:m,j) = zero
+                  else if (beta.ne.one) then
+                      c(1:m,j) = beta*c(1:m,j)
                   endif
-                  DO L = 1,K
-                      TEMP = ALPHA*B(L,J)
-                      DO I = 1,M
-                          C(I,J) = C(I,J) + TEMP*A(I,L)
+                  do l = 1,k
+                      temp = alpha*b(l,j)
+                      do i = 1,m
+                          c(i,j) = c(i,j) + temp*a(i,l)
                       enddo
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A**T*B + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*B(L,J)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*b(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
-      ELSE
-          IF (NOTA) THEN
+      else
+          if (nota) then
 !
 !           Form  C := alpha*A*B**T + beta*C
 !
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      DO I = 1,M
-                          C(I,J) = ZERO
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      do i = 1,m
+                          c(i,j) = zero
                       enddo
-                  ELSE IF (BETA.NE.ONE) THEN
-                      DO I = 1,M
-                          C(I,J) = BETA*C(I,J)
+                  else if (beta.ne.one) then
+                      do i = 1,m
+                          c(i,j) = beta*c(i,j)
                       enddo
                   endif
-                  DO L = 1,K
-                      TEMP = ALPHA*B(J,L)
-                      DO I = 1,M
-                          C(I,J) = C(I,J) + TEMP*A(I,L)
+                  do l = 1,k
+                      temp = alpha*b(j,l)
+                      do i = 1,m
+                          c(i,j) = c(i,j) + temp*a(i,l)
                       enddo
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A**T*B**T + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*B(J,L)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*b(j,l)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
       endif
 !
-      END SUBROUTINE DGEMM
+      end subroutine dgemm
 !>
 !!##NAME
 !!    dgemv(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine dgemv(trans,m,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: INCX,INCY,LDA,M,N
-!!       CHARACTER,intent(in)           :: TRANS
+!!       double precision,intent(in)    :: alpha,beta
+!!       integer,intent(in)             :: incx,incy,lda,m,n
+!!       character,intent(in)           :: trans
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-!!       DOUBLE PRECISION,intent(inout) :: Y(*)
+!!       double precision,intent(in)    :: a(lda,*),x(*)
+!!       double precision,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -11257,7 +11257,7 @@ END SUBROUTINE DGBMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine dgemv(trans,m,n,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -11266,77 +11266,77 @@ END SUBROUTINE DGBMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: INCX,INCY,LDA,M,N
-      CHARACTER,intent(in)           :: TRANS
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: incx,incy,lda,m,n
+      character,intent(in)           :: trans
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-      DOUBLE PRECISION,intent(inout) :: Y(*)
+      double precision,intent(in)    :: a(lda,*),x(*)
+      double precision,intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY,LENX,LENY
+      double precision temp
+      integer i,info,ix,iy,j,jx,jy,kx,ky,lenx,leny
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 1
-      ELSE IF (M.LT.0) THEN
-          INFO = 2
-      ELSE IF (N.LT.0) THEN
-          INFO = 3
-      ELSE IF (LDA.LT.MAX(1,M)) THEN
-          INFO = 6
-      ELSE IF (INCX.EQ.0) THEN
-          INFO = 8
-      ELSE IF (INCY.EQ.0) THEN
-          INFO = 11
+      info = 0
+      if (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 1
+      else if (m.lt.0) then
+          info = 2
+      else if (n.lt.0) then
+          info = 3
+      else if (lda.lt.max(1,m)) then
+          info = 6
+      else if (incx.eq.0) then
+          info = 8
+      else if (incy.eq.0) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DGEMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DGEMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 !     up the start points in  X  and  Y.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          LENX = N
-          LENY = M
-      ELSE
-          LENX = M
-          LENY = N
+      if (lsame(trans,'N')) then
+          lenx = n
+          leny = m
+      else
+          lenx = m
+          leny = n
       endif
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (LENX-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (lenx-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (LENY-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (leny-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -11344,95 +11344,95 @@ END SUBROUTINE DGBMV
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:LENY) = ZERO
-              ELSE
-                  Y(1:LENY) = BETA*Y(1:LENY)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:leny) = zero
+              else
+                  y(1:leny) = beta*y(1:leny)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,LENY
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,leny
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,LENY
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,leny
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(TRANS,'N')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(trans,'N')) then
 !
 !        Form  y := alpha*A*x + y.
 !
-          JX = KX
-          IF (INCY.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  Y(1:M) = Y(1:M) + TEMP*A(1:M,J)
-                  JX = JX + INCX
+          jx = kx
+          if (incy.eq.1) then
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  y(1:m) = y(1:m) + temp*a(1:m,j)
+                  jx = jx + incx
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  IY = KY
-                  DO I = 1,M
-                      Y(IY) = Y(IY) + TEMP*A(I,J)
-                      IY = IY + INCY
+          else
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  iy = ky
+                  do i = 1,m
+                      y(iy) = y(iy) + temp*a(i,j)
+                      iy = iy + incy
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y := alpha*A**T*x + y.
 !
-          JY = KY
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ZERO
-                  DO I = 1,M
-                      TEMP = TEMP + A(I,J)*X(I)
+          jy = ky
+          if (incx.eq.1) then
+              do j = 1,n
+                  temp = zero
+                  do i = 1,m
+                      temp = temp + a(i,j)*x(i)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ZERO
-                  IX = KX
-                  DO I = 1,M
-                      TEMP = TEMP + A(I,J)*X(IX)
-                      IX = IX + INCX
+          else
+              do j = 1,n
+                  temp = zero
+                  ix = kx
+                  do i = 1,m
+                      temp = temp + a(i,j)*x(ix)
+                      ix = ix + incx
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
           endif
       endif
 !
-      END SUBROUTINE DGEMV
+      end subroutine dgemv
 !>
 !!##NAME
 !!    dger(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine dger(m,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)             :: INCX,INCY,LDA,M,N
+!!       double precision,intent(in)    :: alpha
+!!       integer,intent(in)             :: incx,incy,lda,m,n
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: X(*),Y(*)
-!!       DOUBLE PRECISION,intent(inout) :: A(LDA,*)
+!!       double precision,intent(in)    :: x(*),y(*)
+!!       double precision,intent(inout) :: a(lda,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -11526,7 +11526,7 @@ END SUBROUTINE DGBMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+       subroutine dger(m,n,alpha,x,incx,y,incy,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -11535,91 +11535,91 @@ END SUBROUTINE DGBMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA
-      INTEGER,intent(in)             :: INCX,INCY,LDA,M,N
+      double precision,intent(in)    :: alpha
+      integer,intent(in)             :: incx,incy,lda,m,n
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: X(*),Y(*)
-      DOUBLE PRECISION,intent(inout) :: A(LDA,*)
+      double precision,intent(in)    :: x(*),y(*)
+      double precision,intent(inout) :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JY,KX
+      double precision temp
+      integer i,info,ix,j,jy,kx
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (M.LT.0) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
-      elseif (LDA.LT.MAX(1,M)) THEN
-          INFO = 9
+      info = 0
+      if (m.lt.0) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
+      elseif (lda.lt.max(1,m)) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DGER  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DGER  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (INCY.GT.0) THEN
-          JY = 1
-      ELSE
-          JY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          jy = 1
+      else
+          jy = 1 - (n-1)*incy
       endif
-      IF (INCX.EQ.1) THEN
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*Y(JY)
-                  DO I = 1,M
-                      A(I,J) = A(I,J) + X(I)*TEMP
+      if (incx.eq.1) then
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*y(jy)
+                  do i = 1,m
+                      a(i,j) = a(i,j) + x(i)*temp
                   enddo
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
-      ELSE
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (M-1)*INCX
+      else
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (m-1)*incx
           endif
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*Y(JY)
-                  IX = KX
-                  DO I = 1,M
-                      A(I,J) = A(I,J) + X(IX)*TEMP
-                      IX = IX + INCX
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*y(jy)
+                  ix = kx
+                  do i = 1,m
+                      a(i,j) = a(i,j) + x(ix)*temp
+                      ix = ix + incx
                   enddo
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
       endif
 !
-      END SUBROUTINE DGER
+      end subroutine dger
 !>
 !!##NAME
 !!    dnrm2(3f) - [BLAS:SINGLE_BLAS_LEVEL1] returns the euclidean norm of
@@ -11627,7 +11627,7 @@ END SUBROUTINE DGBMV
 !!
 !!##SYNOPSIS
 !!
-!!     DOUBLE PRECISION FUNCTION DNRM2(N,X,INCX)
+!!     double precision function dnrm2(n,x,incx)
 !!
 !!       .. Scalar Arguments ..
 !!       integer,intent(in) :: incx, n
@@ -11683,9 +11683,9 @@ END SUBROUTINE DGBMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure function DNRM2( n, x, incx )
+pure function dnrm2( n, x, incx )
    integer, parameter :: wp = kind(1.d0)
-   real(wp) :: DNRM2
+   real(wp) :: dnrm2
 !
 !  -- Reference BLAS level1 routine (version 3.9.1) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -11695,7 +11695,7 @@ pure function DNRM2( n, x, incx )
 !  .. Constants ..
    real(wp), parameter :: zero = 0.0_wp
    real(wp), parameter :: one  = 1.0_wp
-   real(wp), parameter :: maxN = huge(0.0_wp)
+   real(wp), parameter :: maxn = huge(0.0_wp)
 !  ..
 !  .. Blue's ccaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( (minexponent(0._wp) - 1) * 0.5_wp)
@@ -11716,7 +11716,7 @@ pure function DNRM2( n, x, incx )
 !
 !  Quick return if possible
 !
-   DNRM2 = zero
+   dnrm2 = zero
    if( n <= 0 ) return
 !
    scl = one
@@ -11756,7 +11756,7 @@ pure function DNRM2( n, x, incx )
 !
 !     Combine abig and amed if abig > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          abig = abig + (amed*sbig)*sbig
       endif
       scl = one / sbig
@@ -11765,7 +11765,7 @@ pure function DNRM2( n, x, incx )
 !
 !     Combine amed and asml if asml > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          amed = sqrt(amed)
          asml = sqrt(asml) / ssml
          if (asml > amed) then
@@ -11788,7 +11788,7 @@ pure function DNRM2( n, x, incx )
       scl = one
       sumsq = amed
    endif
-   DNRM2 = scl*sqrt( sumsq )
+   dnrm2 = scl*sqrt( sumsq )
    return
 end function
 !>
@@ -11848,7 +11848,7 @@ end function
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DROT(N,DX,INCX,DY,INCY,C,S)
+       subroutine drot(n,dx,incx,dy,incy,c,s)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -11857,48 +11857,48 @@ end function
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: C,S
-      INTEGER,intent(in)             :: INCX,INCY,N
+      double precision,intent(in)    :: c,s
+      integer,intent(in)             :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(inout) :: DX(*),DY(*)
+      double precision,intent(inout) :: dx(*),dy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      DOUBLE PRECISION DTEMP
-      INTEGER I,IX,IY
+      double precision dtemp
+      integer i,ix,iy
 !     ..
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !       code for both increments equal to 1
 !
-         DO I = 1,N
-            DTEMP = C*DX(I) + S*DY(I)
-            DY(I) = C*DY(I) - S*DX(I)
-            DX(I) = DTEMP
+         do i = 1,n
+            dtemp = c*dx(i) + s*dy(i)
+            dy(i) = c*dy(i) - s*dx(i)
+            dx(i) = dtemp
          enddo
-      ELSE
+      else
 !
 !       code for unequal increments or equal increments not equal
 !         to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            DTEMP = C*DX(IX) + S*DY(IY)
-            DY(IY) = C*DY(IY) - S*DX(IX)
-            DX(IX) = DTEMP
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            dtemp = c*dx(ix) + s*dy(iy)
+            dy(iy) = c*dy(iy) - s*dx(ix)
+            dx(ix) = dtemp
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-      END SUBROUTINE DROT
+      end subroutine drot
 !>
 !!##NAME
 !!    drotg(3f) - [BLAS:SINGLE_BLAS_LEVEL1] constructs a plane rotation
@@ -11976,7 +11976,7 @@ end function
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-subroutine DROTG( a, b, c, s )
+subroutine drotg( a, b, c, s )
    integer, parameter :: wp = kind(1.d0)
 !
 !  -- Reference BLAS level1 routine --
@@ -12038,14 +12038,14 @@ end subroutine
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DROTM(N,DX,INCX,DY,INCY,DPARAM)
+!!     subroutine drotm(n,dx,incx,dy,incy,dparam)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,INCY,N
+!!       integer,intent(in)             :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: DPARAM(5)
-!!       DOUBLE PRECISION,intent(inout) :: DX(*),DY(*)
+!!       double precision,intent(in)    :: dparam(5)
+!!       double precision,intent(inout) :: dx(*),dy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -12105,7 +12105,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DROTM(N,DX,INCX,DY,INCY,DPARAM)
+       subroutine drotm(n,dx,incx,dy,incy,dparam)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -12114,117 +12114,117 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,INCY,N
+      integer,intent(in)             :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: DPARAM(5)
-      DOUBLE PRECISION,intent(inout) :: DX(*),DY(*)
+      double precision,intent(in)    :: dparam(5)
+      double precision,intent(inout) :: dx(*),dy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      DOUBLE PRECISION DFLAG,DH11,DH12,DH21,DH22,W,Z
-      INTEGER I,KX,KY,NSTEPS
+      double precision dflag,dh11,dh12,dh21,dh22,w,z
+      integer i,kx,ky,nsteps
 !     ..
       doubleprecision,parameter :: zero=0.0d0
       doubleprecision,parameter :: two=2.0d0
 !     ..
 !
-      DFLAG = DPARAM(1)
-      IF (N.LE.0 .OR. (DFLAG+TWO.EQ.ZERO)) RETURN
-      IF (INCX.EQ.INCY.AND.INCX.GT.0) THEN
+      dflag = dparam(1)
+      if (n.le.0 .or. (dflag+two.eq.zero)) return
+      if (incx.eq.incy.and.incx.gt.0) then
 !
-         NSTEPS = N*INCX
-         IF (DFLAG.LT.ZERO) THEN
-            DH11 = DPARAM(2)
-            DH12 = DPARAM(4)
-            DH21 = DPARAM(3)
-            DH22 = DPARAM(5)
-            DO I = 1,NSTEPS,INCX
-               W = DX(I)
-               Z = DY(I)
-               DX(I) = W*DH11 + Z*DH12
-               DY(I) = W*DH21 + Z*DH22
+         nsteps = n*incx
+         if (dflag.lt.zero) then
+            dh11 = dparam(2)
+            dh12 = dparam(4)
+            dh21 = dparam(3)
+            dh22 = dparam(5)
+            do i = 1,nsteps,incx
+               w = dx(i)
+               z = dy(i)
+               dx(i) = w*dh11 + z*dh12
+               dy(i) = w*dh21 + z*dh22
             enddo
-         elseif (DFLAG.EQ.ZERO) THEN
-            DH12 = DPARAM(4)
-            DH21 = DPARAM(3)
-            DO I = 1,NSTEPS,INCX
-               W = DX(I)
-               Z = DY(I)
-               DX(I) = W + Z*DH12
-               DY(I) = W*DH21 + Z
+         elseif (dflag.eq.zero) then
+            dh12 = dparam(4)
+            dh21 = dparam(3)
+            do i = 1,nsteps,incx
+               w = dx(i)
+               z = dy(i)
+               dx(i) = w + z*dh12
+               dy(i) = w*dh21 + z
             enddo
-         ELSE
-            DH11 = DPARAM(2)
-            DH22 = DPARAM(5)
-            DO I = 1,NSTEPS,INCX
-               W = DX(I)
-               Z = DY(I)
-               DX(I) = W*DH11 + Z
-               DY(I) = -W + DH22*Z
+         else
+            dh11 = dparam(2)
+            dh22 = dparam(5)
+            do i = 1,nsteps,incx
+               w = dx(i)
+               z = dy(i)
+               dx(i) = w*dh11 + z
+               dy(i) = -w + dh22*z
             enddo
          endif
-      ELSE
-         KX = 1
-         KY = 1
-         IF (INCX.LT.0) KX = 1 + (1-N)*INCX
-         IF (INCY.LT.0) KY = 1 + (1-N)*INCY
+      else
+         kx = 1
+         ky = 1
+         if (incx.lt.0) kx = 1 + (1-n)*incx
+         if (incy.lt.0) ky = 1 + (1-n)*incy
 !
-         IF (DFLAG.LT.ZERO) THEN
-            DH11 = DPARAM(2)
-            DH12 = DPARAM(4)
-            DH21 = DPARAM(3)
-            DH22 = DPARAM(5)
-            DO I = 1,N
-               W = DX(KX)
-               Z = DY(KY)
-               DX(KX) = W*DH11 + Z*DH12
-               DY(KY) = W*DH21 + Z*DH22
-               KX = KX + INCX
-               KY = KY + INCY
+         if (dflag.lt.zero) then
+            dh11 = dparam(2)
+            dh12 = dparam(4)
+            dh21 = dparam(3)
+            dh22 = dparam(5)
+            do i = 1,n
+               w = dx(kx)
+               z = dy(ky)
+               dx(kx) = w*dh11 + z*dh12
+               dy(ky) = w*dh21 + z*dh22
+               kx = kx + incx
+               ky = ky + incy
             enddo
-         elseif (DFLAG.EQ.ZERO) THEN
-            DH12 = DPARAM(4)
-            DH21 = DPARAM(3)
-            DO I = 1,N
-               W = DX(KX)
-               Z = DY(KY)
-               DX(KX) = W + Z*DH12
-               DY(KY) = W*DH21 + Z
-               KX = KX + INCX
-               KY = KY + INCY
+         elseif (dflag.eq.zero) then
+            dh12 = dparam(4)
+            dh21 = dparam(3)
+            do i = 1,n
+               w = dx(kx)
+               z = dy(ky)
+               dx(kx) = w + z*dh12
+               dy(ky) = w*dh21 + z
+               kx = kx + incx
+               ky = ky + incy
             enddo
-         ELSE
-             DH11 = DPARAM(2)
-             DH22 = DPARAM(5)
-             DO I = 1,N
-                W = DX(KX)
-                Z = DY(KY)
-                DX(KX) = W*DH11 + Z
-                DY(KY) = -W + DH22*Z
-                KX = KX + INCX
-                KY = KY + INCY
+         else
+             dh11 = dparam(2)
+             dh22 = dparam(5)
+             do i = 1,n
+                w = dx(kx)
+                z = dy(ky)
+                dx(kx) = w*dh11 + z
+                dy(ky) = -w + dh22*z
+                kx = kx + incx
+                ky = ky + incy
             enddo
          endif
       endif
 
-      END SUBROUTINE DROTM
+      end subroutine drotm
 !>
 !!##NAME
 !!    drotmg(3f) - [BLAS:DOUBLE_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+!!     subroutine drotmg(dd1,dd2,dx1,dy1,dparam)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(inout) :: DD1,DD2,DX1
-!!       DOUBLE PRECISION,intent(in)    :: DY1
+!!       double precision,intent(inout) :: dd1,dd2,dx1
+!!       double precision,intent(in)    :: dy1
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(out)   :: DPARAM(5)
+!!       double precision,intent(out)   :: dparam(5)
 !!       ..
 !!
 !!##DEFINITION
@@ -12287,7 +12287,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+       subroutine drotmg(dd1,dd2,dx1,dy1,dparam)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -12296,20 +12296,20 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(inout) :: DD1,DD2,DX1
-      DOUBLE PRECISION,intent(in)    :: DY1
+      double precision,intent(inout) :: dd1,dd2,dx1
+      double precision,intent(in)    :: dy1
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(out)   :: DPARAM(5)
+      double precision,intent(out)   :: dparam(5)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      DOUBLE PRECISION DFLAG,DH11,DH12,DH21,DH22,DP1,DP2,DQ1,DQ2,DTEMP, DU
+      double precision dflag,dh11,dh12,dh21,dh22,dp1,dp2,dq1,dq2,dtemp, du
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DABS
+      intrinsic dabs
 !     ..
 !     .. Data statements ..
 !
@@ -12317,168 +12317,168 @@ end subroutine
       doubleprecision,parameter :: one=1.0d0
       doubleprecision,parameter :: two=2.0d0
 
-      doubleprecision,parameter :: GAM=4096.D0
-      doubleprecision,parameter :: GAMSQ=16777216.D0
-      doubleprecision,parameter :: RGAMSQ=5.9604645D-8
+      doubleprecision,parameter :: gam=4096.d0
+      doubleprecision,parameter :: gamsq=16777216.d0
+      doubleprecision,parameter :: rgamsq=5.9604645d-8
 !     ..
 
-      IF (DD1.LT.ZERO) THEN
+      if (dd1.lt.zero) then
 !        GO ZERO-H-D-AND-DX1..
-         DFLAG = -ONE
-         DH11 = ZERO
-         DH12 = ZERO
-         DH21 = ZERO
-         DH22 = ZERO
+         dflag = -one
+         dh11 = zero
+         dh12 = zero
+         dh21 = zero
+         dh22 = zero
 !
-         DD1 = ZERO
-         DD2 = ZERO
-         DX1 = ZERO
-      ELSE
+         dd1 = zero
+         dd2 = zero
+         dx1 = zero
+      else
 !        CASE-DD1-NONNEGATIVE
-         DP2 = DD2*DY1
-         IF (DP2.EQ.ZERO) THEN
-            DFLAG = -TWO
-            DPARAM(1) = DFLAG
-            RETURN
+         dp2 = dd2*dy1
+         if (dp2.eq.zero) then
+            dflag = -two
+            dparam(1) = dflag
+            return
          endif
 !        REGULAR-CASE..
-         DP1 = DD1*DX1
-         DQ2 = DP2*DY1
-         DQ1 = DP1*DX1
+         dp1 = dd1*dx1
+         dq2 = dp2*dy1
+         dq1 = dp1*dx1
 !
-         IF (DABS(DQ1).GT.DABS(DQ2)) THEN
-            DH21 = -DY1/DX1
-            DH12 = DP2/DP1
+         if (dabs(dq1).gt.dabs(dq2)) then
+            dh21 = -dy1/dx1
+            dh12 = dp2/dp1
 !
-            DU = ONE - DH12*DH21
+            du = one - dh12*dh21
 !
-           IF (DU.GT.ZERO) THEN
-             DFLAG = ZERO
-             DD1 = DD1/DU
-             DD2 = DD2/DU
-             DX1 = DX1*DU
-           ELSE
+           if (du.gt.zero) then
+             dflag = zero
+             dd1 = dd1/du
+             dd2 = dd2/du
+             dx1 = dx1*du
+           else
 !            This code path if here for safety. We do not expect this
 !            condition to ever hold except in edge cases with rounding
 !            errors. See DOI: 10.1145/355841.355847
-             DFLAG = -ONE
-             DH11 = ZERO
-             DH12 = ZERO
-             DH21 = ZERO
-             DH22 = ZERO
+             dflag = -one
+             dh11 = zero
+             dh12 = zero
+             dh21 = zero
+             dh22 = zero
 !
-             DD1 = ZERO
-             DD2 = ZERO
-             DX1 = ZERO
+             dd1 = zero
+             dd2 = zero
+             dx1 = zero
            endif
-         ELSE
+         else
 
-            IF (DQ2.LT.ZERO) THEN
+            if (dq2.lt.zero) then
 !              GO ZERO-H-D-AND-DX1..
-               DFLAG = -ONE
-               DH11 = ZERO
-               DH12 = ZERO
-               DH21 = ZERO
-               DH22 = ZERO
+               dflag = -one
+               dh11 = zero
+               dh12 = zero
+               dh21 = zero
+               dh22 = zero
 !
-               DD1 = ZERO
-               DD2 = ZERO
-               DX1 = ZERO
-            ELSE
-               DFLAG = ONE
-               DH11 = DP1/DP2
-               DH22 = DX1/DY1
-               DU = ONE + DH11*DH22
-               DTEMP = DD2/DU
-               DD2 = DD1/DU
-               DD1 = DTEMP
-               DX1 = DY1*DU
+               dd1 = zero
+               dd2 = zero
+               dx1 = zero
+            else
+               dflag = one
+               dh11 = dp1/dp2
+               dh22 = dx1/dy1
+               du = one + dh11*dh22
+               dtemp = dd2/du
+               dd2 = dd1/du
+               dd1 = dtemp
+               dx1 = dy1*du
             endif
          endif
 
 !     PROCEDURE..SCALE-CHECK
-         IF (DD1.NE.ZERO) THEN
-            DO WHILE ((DD1.LE.RGAMSQ) .OR. (DD1.GE.GAMSQ))
-               IF (DFLAG.EQ.ZERO) THEN
-                  DH11 = ONE
-                  DH22 = ONE
-                  DFLAG = -ONE
-               ELSE
-                  DH21 = -ONE
-                  DH12 = ONE
-                  DFLAG = -ONE
+         if (dd1.ne.zero) then
+            do while ((dd1.le.rgamsq) .or. (dd1.ge.gamsq))
+               if (dflag.eq.zero) then
+                  dh11 = one
+                  dh22 = one
+                  dflag = -one
+               else
+                  dh21 = -one
+                  dh12 = one
+                  dflag = -one
                endif
-               IF (DD1.LE.RGAMSQ) THEN
-                  DD1 = DD1*GAM**2
-                  DX1 = DX1/GAM
-                  DH11 = DH11/GAM
-                  DH12 = DH12/GAM
-               ELSE
-                  DD1 = DD1/GAM**2
-                  DX1 = DX1*GAM
-                  DH11 = DH11*GAM
-                  DH12 = DH12*GAM
+               if (dd1.le.rgamsq) then
+                  dd1 = dd1*gam**2
+                  dx1 = dx1/gam
+                  dh11 = dh11/gam
+                  dh12 = dh12/gam
+               else
+                  dd1 = dd1/gam**2
+                  dx1 = dx1*gam
+                  dh11 = dh11*gam
+                  dh12 = dh12*gam
                endif
-            ENDDO
+            enddo
          endif
 
-         IF (DD2.NE.ZERO) THEN
-            DO WHILE ( (DABS(DD2).LE.RGAMSQ) .OR. (DABS(DD2).GE.GAMSQ) )
-               IF (DFLAG.EQ.ZERO) THEN
-                  DH11 = ONE
-                  DH22 = ONE
-                  DFLAG = -ONE
-               ELSE
-                  DH21 = -ONE
-                  DH12 = ONE
-                  DFLAG = -ONE
+         if (dd2.ne.zero) then
+            do while ( (dabs(dd2).le.rgamsq) .or. (dabs(dd2).ge.gamsq) )
+               if (dflag.eq.zero) then
+                  dh11 = one
+                  dh22 = one
+                  dflag = -one
+               else
+                  dh21 = -one
+                  dh12 = one
+                  dflag = -one
                endif
-               IF (DABS(DD2).LE.RGAMSQ) THEN
-                  DD2 = DD2*GAM**2
-                  DH21 = DH21/GAM
-                  DH22 = DH22/GAM
-               ELSE
-                  DD2 = DD2/GAM**2
-                  DH21 = DH21*GAM
-                  DH22 = DH22*GAM
+               if (dabs(dd2).le.rgamsq) then
+                  dd2 = dd2*gam**2
+                  dh21 = dh21/gam
+                  dh22 = dh22/gam
+               else
+                  dd2 = dd2/gam**2
+                  dh21 = dh21*gam
+                  dh22 = dh22*gam
                endif
             enddo
          endif
 
       endif
 
-      IF (DFLAG.LT.ZERO) THEN
-         DPARAM(2) = DH11
-         DPARAM(3) = DH21
-         DPARAM(4) = DH12
-         DPARAM(5) = DH22
-      elseif (DFLAG.EQ.ZERO) THEN
-         DPARAM(3) = DH21
-         DPARAM(4) = DH12
-      ELSE
-         DPARAM(2) = DH11
-         DPARAM(5) = DH22
+      if (dflag.lt.zero) then
+         dparam(2) = dh11
+         dparam(3) = dh21
+         dparam(4) = dh12
+         dparam(5) = dh22
+      elseif (dflag.eq.zero) then
+         dparam(3) = dh21
+         dparam(4) = dh12
+      else
+         dparam(2) = dh11
+         dparam(5) = dh22
       endif
 
-      DPARAM(1) = DFLAG
+      dparam(1) = dflag
 
-      END SUBROUTINE DROTMG
+      end subroutine drotmg
 !>
 !!##NAME
 !!    dsbmv(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine dsbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: INCX,INCY,K,LDA,N
-!!       CHARACTER,intent(in)           :: UPLO
+!!       double precision,intent(in)    :: alpha,beta
+!!       integer,intent(in)             :: incx,incy,k,lda,n
+!!       character,intent(in)           :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-!!       DOUBLE PRECISION,intent(inout) :: Y(*)
+!!       double precision,intent(in)    :: a(lda,*),x(*)
+!!       double precision,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -12623,7 +12623,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine dsbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -12632,69 +12632,69 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: INCX,INCY,K,LDA,N
-      CHARACTER,intent(in)           :: UPLO
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: incx,incy,k,lda,n
+      character,intent(in)           :: uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-      DOUBLE PRECISION,intent(inout) :: Y(*)
+      double precision,intent(in)    :: a(lda,*),x(*)
+      double precision,intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KPLUS1,KX,KY,L
+      double precision temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kplus1,kx,ky,l
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (K.LT.0) THEN
-          INFO = 3
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
-      elseif (INCY.EQ.0) THEN
-          INFO = 11
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (k.lt.0) then
+          info = 3
+      elseif (lda.lt. (k+1)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
+      elseif (incy.eq.0) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of the array A
@@ -12702,123 +12702,123 @@ end subroutine
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when upper triangle of A is stored.
 !
-          KPLUS1 = K + 1
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  L = KPLUS1 - J
-                  DO I = MAX(1,J-K),J - 1
-                      Y(I) = Y(I) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(I)
+          kplus1 = k + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  l = kplus1 - j
+                  do i = max(1,j-k),j - 1
+                      y(i) = y(i) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + TEMP1*A(KPLUS1,J) + ALPHA*TEMP2
+                  y(j) = y(j) + temp1*a(kplus1,j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  L = KPLUS1 - J
-                  DO I = MAX(1,J-K),J - 1
-                      Y(IY) = Y(IY) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  l = kplus1 - j
+                  do i = max(1,j-k),j - 1
+                      y(iy) = y(iy) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*A(KPLUS1,J) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  IF (J.GT.K) THEN
-                      KX = KX + INCX
-                      KY = KY + INCY
+                  y(jy) = y(jy) + temp1*a(kplus1,j) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  if (j.gt.k) then
+                      kx = kx + incx
+                      ky = ky + incy
                   endif
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when lower triangle of A is stored.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*A(1,J)
-                  L = 1 - J
-                  DO I = J + 1,MIN(N,J+K)
-                      Y(I) = Y(I) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(I)
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*a(1,j)
+                  l = 1 - j
+                  do i = j + 1,min(n,j+k)
+                      y(i) = y(i) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
+                  y(j) = y(j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*A(1,J)
-                  L = 1 - J
-                  IX = JX
-                  IY = JY
-                  DO I = J + 1,MIN(N,J+K)
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*a(1,j)
+                  l = 1 - j
+                  ix = jx
+                  iy = jy
+                  do i = j + 1,min(n,j+k)
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSBMV
+      end subroutine dsbmv
 !>
 !!##NAME
 !!    dscal(3f) - [BLAS:DOUBLE_BLAS_LEVEL1] scales a vector by a constant.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSCAL(N,DA,DX,INCX)
+!!     subroutine dscal(n,da,dx,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: DA
-!!       INTEGER,intent(in)             :: INCX,N
+!!       double precision,intent(in)    :: da
+!!       integer,intent(in)             :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(inout) :: DX(*)
+!!       double precision,intent(inout) :: dx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -12855,7 +12855,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSCAL(N,DA,DX,INCX)
+       subroutine dscal(n,da,dx,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -12864,66 +12864,66 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: DA
-      INTEGER,intent(in)             :: INCX,N
+      double precision,intent(in)    :: da
+      integer,intent(in)             :: incx,n
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(inout) :: DX(*)
+      double precision,intent(inout) :: dx(*)
 !     ..
 !  =====================================================================
 !     .. Local Scalars ..
-      INTEGER I,M,MP1,NINCX
+      integer i,m,mp1,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) THEN
+      if (n.le.0 .or. incx.le.0) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
 !
 !        clean-up loop
 !
-         M = MOD(N,5)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               DX(I) = DA*DX(I)
+         m = mod(n,5)
+         if (m.ne.0) then
+            do i = 1,m
+               dx(i) = da*dx(i)
             enddo
-            IF (N.LT.5) RETURN
+            if (n.lt.5) return
          endif
-         MP1 = M + 1
-         DO I = MP1,N,5
-            DX(I) = DA*DX(I)
-            DX(I+1) = DA*DX(I+1)
-            DX(I+2) = DA*DX(I+2)
-            DX(I+3) = DA*DX(I+3)
-            DX(I+4) = DA*DX(I+4)
+         mp1 = m + 1
+         do i = mp1,n,5
+            dx(i) = da*dx(i)
+            dx(i+1) = da*dx(i+1)
+            dx(i+2) = da*dx(i+2)
+            dx(i+3) = da*dx(i+3)
+            dx(i+4) = da*dx(i+4)
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         NINCX = N*INCX
-         DO I = 1,NINCX,INCX
-            DX(I) = DA*DX(I)
+         nincx = n*incx
+         do i = 1,nincx,incx
+            dx(i) = da*dx(i)
          enddo
       endif
 
-      END SUBROUTINE DSCAL
+      end subroutine dscal
 !>
 !!##NAME
 !!    dsdot(3f) - [BLAS:DOUBLE_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     DOUBLE PRECISION FUNCTION DSDOT(N,SX,INCX,SY,INCY)
+!!     double precision function dsdot(n,sx,incx,sy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in) :: SX(*),SY(*)
+!!       real,intent(in) :: sx(*),sy(*)
 !!       ..
 !!
 !!
@@ -12986,7 +12986,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure DOUBLE PRECISION FUNCTION DSDOT(N,SX,INCX,SY,INCY)
+pure double precision function dsdot(n,sx,incx,sy,incy)
 implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.7.0) --
@@ -12995,10 +12995,10 @@ implicit none
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in) :: SX(*),SY(*)
+      real,intent(in) :: sx(*),sy(*)
 !     ..
 !
 !  Authors:
@@ -13009,33 +13009,33 @@ implicit none
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER I,KX,KY,NS
+      integer i,kx,ky,ns
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE
+      intrinsic dble
 !     ..
-      DSDOT = 0.0D0
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.INCY .AND. INCX.GT.0) THEN
+      dsdot = 0.0d0
+      if (n.le.0) return
+      if (incx.eq.incy .and. incx.gt.0) then
 !
 !     Code for equal, positive, non-unit increments.
 !
-         NS = N*INCX
-         DO I = 1,NS,INCX
-            DSDOT = DSDOT + DBLE(SX(I))*DBLE(SY(I))
+         ns = n*incx
+         do i = 1,ns,incx
+            dsdot = dsdot + dble(sx(i))*dble(sy(i))
          enddo
-      ELSE
+      else
 !
 !     Code for unequal or nonpositive increments.
 !
-         KX = 1
-         KY = 1
-         IF (INCX.LT.0) KX = 1 + (1-N)*INCX
-         IF (INCY.LT.0) KY = 1 + (1-N)*INCY
-         DO I = 1,N
-            DSDOT = DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
-            KX = KX + INCX
-            KY = KY + INCY
+         kx = 1
+         ky = 1
+         if (incx.lt.0) kx = 1 + (1-n)*incx
+         if (incy.lt.0) ky = 1 + (1-n)*incy
+         do i = 1,n
+            dsdot = dsdot + dble(sx(kx))*dble(sy(ky))
+            kx = kx + incx
+            ky = ky + incy
          enddo
       endif
 
@@ -13046,16 +13046,16 @@ end function dsdot
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+!!     subroutine dspmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: INCX,INCY,N
-!!       CHARACTER,intent(in)           :: UPLO
+!!       double precision,intent(in)    :: alpha,beta
+!!       integer,intent(in)             :: incx,incy,n
+!!       character,intent(in)           :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: AP(*),X(*)
-!!       DOUBLE PRECISION,intent(inout) :: Y(*)
+!!       double precision,intent(in)    :: ap(*),x(*)
+!!       double precision,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -13165,7 +13165,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+       subroutine dspmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -13174,24 +13174,24 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: INCX,INCY,N
-      CHARACTER,intent(in)           :: UPLO
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: incx,incy,n
+      character,intent(in)           :: uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: AP(*),X(*)
-      DOUBLE PRECISION,intent(inout) :: Y(*)
+      double precision,intent(in)    :: ap(*),x(*)
+      double precision,intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
+      double precision temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,k,kk,kx,ky
 !     ..
 !     .. External Functions ..
 !     ..
@@ -13200,36 +13200,36 @@ end function dsdot
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 6
-      elseif (INCY.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 6
+      elseif (incy.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSPMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSPMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of the array AP
@@ -13237,125 +13237,125 @@ end function dsdot
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when AP contains the upper triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  K = KK
-                  DO I = 1,J - 1
-                      Y(I) = Y(I) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(I)
-                      K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  k = kk
+                  do i = 1,j - 1
+                      y(i) = y(i) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(i)
+                      k = k + 1
                   enddo
-                  Y(J) = Y(J) + TEMP1*AP(KK+J-1) + ALPHA*TEMP2
-                  KK = KK + J
+                  y(j) = y(j) + temp1*ap(kk+j-1) + alpha*temp2
+                  kk = kk + j
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  DO K = KK,KK + J - 2
-                      Y(IY) = Y(IY) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  do k = kk,kk + j - 2
+                      y(iy) = y(iy) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*AP(KK+J-1) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + J
+                  y(jy) = y(jy) + temp1*ap(kk+j-1) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when AP contains the lower triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*AP(KK)
-                  K = KK + 1
-                  DO I = J + 1,N
-                      Y(I) = Y(I) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(I)
-                      K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*ap(kk)
+                  k = kk + 1
+                  do i = j + 1,n
+                      y(i) = y(i) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(i)
+                      k = k + 1
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
-                  KK = KK + (N-J+1)
+                  y(j) = y(j) + alpha*temp2
+                  kk = kk + (n-j+1)
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*AP(KK)
-                  IX = JX
-                  IY = JY
-                  DO K = KK + 1,KK + N - J
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*ap(kk)
+                  ix = jx
+                  iy = jy
+                  do k = kk + 1,kk + n - j
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + (N-J+1)
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + (n-j+1)
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSPMV
+      end subroutine dspmv
 !>
 !!##NAME
 !!    dspr2(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+!!     subroutine dspr2(uplo,n,alpha,x,incx,y,incy,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)             :: INCX,INCY,N
-!!       CHARACTER,intent(in)            :: UPLO
+!!       double precision,intent(in)    :: alpha
+!!       integer,intent(in)             :: incx,incy,n
+!!       character,intent(in)            :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(inout) :: AP(*)
-!!       DOUBLE PRECISION,intent(in)    :: X(*),Y(*)
+!!       double precision,intent(inout) :: ap(*)
+!!       double precision,intent(in)    :: x(*),y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -13460,7 +13460,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+       subroutine dspr2(uplo,n,alpha,x,incx,y,incy,ap)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -13469,24 +13469,24 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA
-      INTEGER,intent(in)             :: INCX,INCY,N
-      CHARACTER,intent(in)            :: UPLO
+      double precision,intent(in)    :: alpha
+      integer,intent(in)             :: incx,incy,n
+      character,intent(in)            :: uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(inout) :: AP(*)
-      DOUBLE PRECISION,intent(in)    :: X(*),Y(*)
+      double precision,intent(inout) :: ap(*)
+      double precision,intent(in)    :: x(*),y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
+      double precision temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,k,kk,kx,ky
 !     ..
 !     .. External Functions ..
 !     ..
@@ -13495,136 +13495,136 @@ end function dsdot
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSPR2 ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSPR2 ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set up the start points in X and Y if the increments are not both
 !     unity.
 !
-      IF ((INCX.NE.1) .OR. (INCY.NE.1)) THEN
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (N-1)*INCX
+      if ((incx.ne.1) .or. (incy.ne.1)) then
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (n-1)*incx
           endif
-          IF (INCY.GT.0) THEN
-              KY = 1
-          ELSE
-              KY = 1 - (N-1)*INCY
+          if (incy.gt.0) then
+              ky = 1
+          else
+              ky = 1 - (n-1)*incy
           endif
-          JX = KX
-          JY = KY
+          jx = kx
+          jy = ky
       endif
 !
 !     Start the operations. In this version the elements of the array AP
 !     are accessed sequentially with one pass through AP.
 !
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when upper triangle is stored in AP.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      K = KK
-                      DO I = 1,J
-                          AP(K) = AP(K) + X(I)*TEMP1 + Y(I)*TEMP2
-                          K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      k = kk
+                      do i = 1,j
+                          ap(k) = ap(k) + x(i)*temp1 + y(i)*temp2
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + J
+                  kk = kk + j
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = KX
-                      IY = KY
-                      DO K = KK,KK + J - 1
-                          AP(K) = AP(K) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = kx
+                      iy = ky
+                      do k = kk,kk + j - 1
+                          ap(k) = ap(k) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + J
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when lower triangle is stored in AP.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      K = KK
-                      DO I = J,N
-                          AP(K) = AP(K) + X(I)*TEMP1 + Y(I)*TEMP2
-                          K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      k = kk
+                      do i = j,n
+                          ap(k) = ap(k) + x(i)*temp1 + y(i)*temp2
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + N - J + 1
+                  kk = kk + n - j + 1
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = JX
-                      IY = JY
-                      DO K = KK,KK + N - J
-                          AP(K) = AP(K) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = jx
+                      iy = jy
+                      do k = kk,kk + n - j
+                          ap(k) = ap(k) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + N - J + 1
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + n - j + 1
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSPR2
+      end subroutine dspr2
 !>
 !!##NAME
 !!    dspr(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSPR(UPLO,N,ALPHA,X,INCX,AP)
+!!     subroutine dspr(uplo,n,alpha,x,incx,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)             :: INCX,N
-!!       CHARACTER,intent(in)           :: UPLO
+!!       double precision,intent(in)    :: alpha
+!!       integer,intent(in)             :: incx,n
+!!       character,intent(in)           :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(inout) :: AP(*)
-!!       DOUBLE PRECISION,intent(in)    :: X(*)
+!!       double precision,intent(inout) :: ap(*)
+!!       double precision,intent(in)    :: x(*)
 !!       ..
 !!
 !!##DESCRIPTION
@@ -13717,7 +13717,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSPR(UPLO,N,ALPHA,X,INCX,AP)
+       subroutine dspr(uplo,n,alpha,x,incx,ap)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -13726,24 +13726,24 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA
-      INTEGER,intent(in)             :: INCX,N
-      CHARACTER,intent(in)           :: UPLO
+      double precision,intent(in)    :: alpha
+      integer,intent(in)             :: incx,n
+      character,intent(in)           :: uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(inout) :: AP(*)
-      DOUBLE PRECISION,intent(in)    :: X(*)
+      double precision,intent(inout) :: ap(*)
+      double precision,intent(in)    :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
+      double precision temp
+      integer i,info,ix,j,jx,k,kk,kx
 !     ..
 !     .. External Functions ..
 !     ..
@@ -13752,113 +13752,113 @@ end function dsdot
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSPR  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSPR  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set the start point in X if the increment is not unity.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of the array AP
 !     are accessed sequentially with one pass through AP.
 !
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when upper triangle is stored in AP.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      K = KK
-                      DO I = 1,J
-                          AP(K) = AP(K) + X(I)*TEMP
-                          K = K + 1
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      k = kk
+                      do i = 1,j
+                          ap(k) = ap(k) + x(i)*temp
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + J
+                  kk = kk + j
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = KX
-                      DO K = KK,KK + J - 1
-                          AP(K) = AP(K) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = kx
+                      do k = kk,kk + j - 1
+                          ap(k) = ap(k) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
-                  KK = KK + J
+                  jx = jx + incx
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when lower triangle is stored in AP.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      K = KK
-                      DO I = J,N
-                          AP(K) = AP(K) + X(I)*TEMP
-                          K = K + 1
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      k = kk
+                      do i = j,n
+                          ap(k) = ap(k) + x(i)*temp
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + N - J + 1
+                  kk = kk + n - j + 1
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = JX
-                      DO K = KK,KK + N - J
-                          AP(K) = AP(K) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = jx
+                      do k = kk,kk + n - j
+                          ap(k) = ap(k) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
-                  KK = KK + N - J + 1
+                  jx = jx + incx
+                  kk = kk + n - j + 1
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSPR
+      end subroutine dspr
 !>
 !!##NAME
 !!    dswap(3f) - [BLAS:DOUBLE_BLAS_LEVEL1] interchanges two vectors.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
+!!     subroutine dswap(n,dx,incx,dy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,INCY,N
+!!       integer,intent(in)             :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(inout) :: DX(*),DY(*)
+!!       double precision,intent(inout) :: dx(*),dy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -13909,7 +13909,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
+       subroutine dswap(n,dx,incx,dy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -13918,85 +13918,85 @@ end function dsdot
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,INCY,N
+      integer,intent(in)             :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(inout) :: DX(*),DY(*)
+      double precision,intent(inout) :: dx(*),dy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      DOUBLE PRECISION DTEMP
-      INTEGER I,IX,IY,M,MP1
+      double precision dtemp
+      integer i,ix,iy,m,mp1
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !       code for both increments equal to 1
 !
 !
 !       clean-up loop
 !
-         M = MOD(N,3)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               DTEMP = DX(I)
-               DX(I) = DY(I)
-               DY(I) = DTEMP
+         m = mod(n,3)
+         if (m.ne.0) then
+            do i = 1,m
+               dtemp = dx(i)
+               dx(i) = dy(i)
+               dy(i) = dtemp
             enddo
-            IF (N.LT.3) RETURN
+            if (n.lt.3) return
          endif
-         MP1 = M + 1
-         DO I = MP1,N,3
-            DTEMP = DX(I)
-            DX(I) = DY(I)
-            DY(I) = DTEMP
-            DTEMP = DX(I+1)
-            DX(I+1) = DY(I+1)
-            DY(I+1) = DTEMP
-            DTEMP = DX(I+2)
-            DX(I+2) = DY(I+2)
-            DY(I+2) = DTEMP
+         mp1 = m + 1
+         do i = mp1,n,3
+            dtemp = dx(i)
+            dx(i) = dy(i)
+            dy(i) = dtemp
+            dtemp = dx(i+1)
+            dx(i+1) = dy(i+1)
+            dy(i+1) = dtemp
+            dtemp = dx(i+2)
+            dx(i+2) = dy(i+2)
+            dy(i+2) = dtemp
          enddo
-      ELSE
+      else
 !
 !       code for unequal increments or equal increments not equal
 !         to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            DTEMP = DX(IX)
-            DX(IX) = DY(IY)
-            DY(IY) = DTEMP
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            dtemp = dx(ix)
+            dx(ix) = dy(iy)
+            dy(iy) = dtemp
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-      END SUBROUTINE DSWAP
+      end subroutine dswap
 !>
 !!##NAME
 !!    dsymm(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine dsymm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)           :: SIDE,UPLO
+!!       double precision,intent(in)    :: alpha,beta
+!!       integer,intent(in)             :: lda,ldb,ldc,m,n
+!!       character,intent(in)           :: side,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       DOUBLE PRECISION,intent(inout) :: C(LDC,*)
+!!       double precision,intent(in)    :: a(lda,*),b(ldb,*)
+!!       double precision,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -14146,7 +14146,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine dsymm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -14155,13 +14155,13 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: LDA,LDB,LDC,M,N
-      CHARACTER,intent(in)           :: SIDE,UPLO
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: lda,ldb,ldc,m,n
+      character,intent(in)           :: side,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*),B(LDB,*)
-      DOUBLE PRECISION,intent(inout) :: C(LDC,*)
+      double precision,intent(in)    :: a(lda,*),b(ldb,*)
+      double precision,intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -14171,151 +14171,151 @@ end function dsdot
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP1,TEMP2
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL UPPER
+      double precision temp1,temp2
+      integer i,info,j,k,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !
 !     Set NROWA as the number of rows of A.
 !
-      IF (LSAME(SIDE,'L')) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      if (lsame(side,'L')) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF ((.NOT.LSAME(SIDE,'L')) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      elseif ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      elseif (M.LT.0) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      elseif (LDB.LT.MAX(1,M)) THEN
-          INFO = 9
-      elseif (LDC.LT.MAX(1,M)) THEN
-          INFO = 12
+      info = 0
+      if ((.not.lsame(side,'L')) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif (m.lt.0) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldb.lt.max(1,m)) then
+          info = 9
+      elseif (ldc.lt.max(1,m)) then
+          info = 12
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSYMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSYMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (BETA.EQ.ZERO) THEN
-              C(1:M,1:N) = ZERO
-          ELSE
-              C(1:M,1:N) = BETA*C(1:M,1:N)
+      if (alpha.eq.zero) then
+          if (beta.eq.zero) then
+              c(1:m,1:n) = zero
+          else
+              c(1:m,1:n) = beta*c(1:m,1:n)
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(SIDE,'L')) THEN
+      if (lsame(side,'L')) then
 !
 !        Form  C := alpha*A*B + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = 1,I - 1
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*A(K,I)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,m
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = 1,i - 1
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*a(k,i)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*A(I,I) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*A(I,I) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*a(i,i) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*a(i,i) + alpha*temp2
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = M,1,-1
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = I + 1,M
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*A(K,I)
+          else
+              do j = 1,n
+                  do i = m,1,-1
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = i + 1,m
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*a(k,i)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*A(I,I) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*A(I,I) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*a(i,i) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*a(i,i) + alpha*temp2
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*B*A + beta*C.
 !
-          DO J = 1,N
-              TEMP1 = ALPHA*A(J,J)
-              IF (BETA.EQ.ZERO) THEN
-                  C(1:M,J) = TEMP1*B(1:M,J)
-              ELSE
-                  C(1:M,J) = BETA*C(1:M,J) + TEMP1*B(1:M,J)
+          do j = 1,n
+              temp1 = alpha*a(j,j)
+              if (beta.eq.zero) then
+                  c(1:m,j) = temp1*b(1:m,j)
+              else
+                  c(1:m,j) = beta*c(1:m,j) + temp1*b(1:m,j)
               endif
-              DO K = 1,J - 1
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*A(K,J)
-                  ELSE
-                      TEMP1 = ALPHA*A(J,K)
+              do k = 1,j - 1
+                  if (upper) then
+                      temp1 = alpha*a(k,j)
+                  else
+                      temp1 = alpha*a(j,k)
                   endif
-                  C(1:M,J) = C(1:M,J) + TEMP1*B(1:M,K)
+                  c(1:m,j) = c(1:m,j) + temp1*b(1:m,k)
               enddo
-              DO K = J + 1,N
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*A(J,K)
-                  ELSE
-                      TEMP1 = ALPHA*A(K,J)
+              do k = j + 1,n
+                  if (upper) then
+                      temp1 = alpha*a(j,k)
+                  else
+                      temp1 = alpha*a(k,j)
                   endif
-                  C(1:M,J) = C(1:M,J) + TEMP1*B(1:M,K)
+                  c(1:m,j) = c(1:m,j) + temp1*b(1:m,k)
               enddo
           enddo
       endif
 !
-      END SUBROUTINE DSYMM
+      end subroutine dsymm
 !>
 !!##NAME
 !!    dsymv(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSYMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine dsymv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: INCX,INCY,LDA,N
-!!       CHARACTER,intent(in)           :: UPLO
+!!       double precision,intent(in)    :: alpha,beta
+!!       integer,intent(in)             :: incx,incy,lda,n
+!!       character,intent(in)           :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-!!       DOUBLE PRECISION,intent(inout) :: Y(*)
+!!       double precision,intent(in)    :: a(lda,*),x(*)
+!!       double precision,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -14429,7 +14429,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSYMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine dsymv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -14438,67 +14438,67 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: INCX,INCY,LDA,N
-      CHARACTER,intent(in)           :: UPLO
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: incx,incy,lda,n
+      character,intent(in)           :: uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*),X(*)
-      DOUBLE PRECISION,intent(inout) :: Y(*)
+      double precision,intent(in)    :: a(lda,*),x(*)
+      double precision,intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
+      double precision temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kx,ky
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 5
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
-      elseif (INCY.EQ.0) THEN
-          INFO = 10
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (lda.lt.max(1,n)) then
+          info = 5
+      elseif (incx.eq.0) then
+          info = 7
+      elseif (incy.eq.0) then
+          info = 10
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSYMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSYMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -14507,116 +14507,116 @@ end function dsdot
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when A is stored in upper triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  DO I = 1,J - 1
-                      Y(I) = Y(I) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(I)
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  do i = 1,j - 1
+                      y(i) = y(i) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + TEMP1*A(J,J) + ALPHA*TEMP2
+                  y(j) = y(j) + temp1*a(j,j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  DO I = 1,J - 1
-                      Y(IY) = Y(IY) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  do i = 1,j - 1
+                      y(iy) = y(iy) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*A(J,J) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  y(jy) = y(jy) + temp1*a(j,j) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when A is stored in lower triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*A(J,J)
-                  DO I = J + 1,N
-                      Y(I) = Y(I) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(I)
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*a(j,j)
+                  do i = j + 1,n
+                      y(i) = y(i) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
+                  y(j) = y(j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*A(J,J)
-                  IX = JX
-                  IY = JY
-                  DO I = J + 1,N
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*a(j,j)
+                  ix = jx
+                  iy = jy
+                  do i = j + 1,n
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSYMV
+      end subroutine dsymv
 !>
 !!##NAME
 !!    dsyr2(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine dsyr2(uplo,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)             :: INCX,INCY,LDA,N
-!!       CHARACTER,intent(in)           :: UPLO
+!!       double precision,intent(in)    :: alpha
+!!       integer,intent(in)             :: incx,incy,lda,n
+!!       character,intent(in)           :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(inout) :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(in)    :: X(*),Y(*)
+!!       double precision,intent(inout) :: a(lda,*)
+!!       double precision,intent(in)    :: x(*),y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -14726,7 +14726,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+       subroutine dsyr2(uplo,n,alpha,x,incx,y,incy,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -14735,150 +14735,150 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA
-      INTEGER,intent(in)             :: INCX,INCY,LDA,N
-      CHARACTER,intent(in)           :: UPLO
+      double precision,intent(in)    :: alpha
+      integer,intent(in)             :: incx,incy,lda,n
+      character,intent(in)           :: uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(inout) :: A(LDA,*)
-      DOUBLE PRECISION,intent(in)    :: X(*),Y(*)
+      double precision,intent(inout) :: a(lda,*)
+      double precision,intent(in)    :: x(*),y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
+      double precision temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kx,ky
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
+      elseif (lda.lt.max(1,n)) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSYR2 ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSYR2 ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set up the start points in X and Y if the increments are not both
 !     unity.
 !
-      IF ((INCX.NE.1) .OR. (INCY.NE.1)) THEN
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (N-1)*INCX
+      if ((incx.ne.1) .or. (incy.ne.1)) then
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (n-1)*incx
           endif
-          IF (INCY.GT.0) THEN
-              KY = 1
-          ELSE
-              KY = 1 - (N-1)*INCY
+          if (incy.gt.0) then
+              ky = 1
+          else
+              ky = 1 - (n-1)*incy
           endif
-          JX = KX
-          JY = KY
+          jx = kx
+          jy = ky
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through the triangular part
 !     of A.
 !
-      IF (LSAME(UPLO,'U')) THEN
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when A is stored in the upper triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      DO I = 1,J
-                          A(I,J) = A(I,J) + X(I)*TEMP1 + Y(I)*TEMP2
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      do i = 1,j
+                          a(i,j) = a(i,j) + x(i)*temp1 + y(i)*temp2
                       enddo
                   endif
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = KX
-                      IY = KY
-                      DO I = 1,J
-                          A(I,J) = A(I,J) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = kx
+                      iy = ky
+                      do i = 1,j
+                          a(i,j) = a(i,j) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when A is stored in the lower triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      DO I = J,N
-                          A(I,J) = A(I,J) + X(I)*TEMP1 + Y(I)*TEMP2
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      do i = j,n
+                          a(i,j) = a(i,j) + x(i)*temp1 + y(i)*temp2
                       enddo
                   endif
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = JX
-                      IY = JY
-                      DO I = J,N
-                          A(I,J) = A(I,J) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = jx
+                      iy = jy
+                      do i = j,n
+                          a(i,j) = a(i,j) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSYR2
+      end subroutine dsyr2
 !>
 !!##NAME
 !!    dsyr2k(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine dsyr2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
 !!       double precision,intent(in)    :: alpha,beta
@@ -15135,7 +15135,7 @@ end function dsdot
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*B**T + alpha*B*A**T + C.
 !
@@ -15220,16 +15220,16 @@ end function dsdot
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
+!!     subroutine dsyr(uplo,n,alpha,x,incx,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)       :: ALPHA
-!!       INTEGER,intent(in)                :: INCX,LDA,N
-!!       CHARACTER,intent(in)              :: UPLO
+!!       double precision,intent(in)       :: alpha
+!!       integer,intent(in)                :: incx,lda,n
+!!       character,intent(in)              :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(inout)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(in)       :: X(*)
+!!       double precision,intent(inout)    :: a(lda,*)
+!!       double precision,intent(in)       :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -15328,7 +15328,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
+       subroutine dsyr(uplo,n,alpha,x,incx,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -15337,135 +15337,135 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)       :: ALPHA
-      INTEGER,intent(in)                :: INCX,LDA,N
-      CHARACTER,intent(in)              :: UPLO
+      double precision,intent(in)       :: alpha
+      integer,intent(in)                :: incx,lda,n
+      character,intent(in)              :: uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(inout)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(in)       :: X(*)
+      double precision,intent(inout)    :: a(lda,*)
+      double precision,intent(in)       :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,KX
+      double precision temp
+      integer i,info,ix,j,jx,kx
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (lda.lt.max(1,n)) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSYR  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSYR  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set the start point in X if the increment is not unity.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through the triangular part
 !     of A.
 !
-      IF (LSAME(UPLO,'U')) THEN
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when A is stored in upper triangle.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      A(1:J,J) = A(1:J,J) + X(1:J)*TEMP
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      a(1:j,j) = a(1:j,j) + x(1:j)*temp
                   endif
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = KX
-                      DO I = 1,J
-                          A(I,J) = A(I,J) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = kx
+                      do i = 1,j
+                          a(i,j) = a(i,j) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when A is stored in lower triangle.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      A(J:N,J) = A(J:N,J) + X(J:N)*TEMP
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      a(j:n,j) = a(j:n,j) + x(j:n)*temp
                   endif
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = JX
-                      DO I = J,N
-                          A(I,J) = A(I,J) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = jx
+                      do i = j,n
+                          a(i,j) = a(i,j) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSYR
+      end subroutine dsyr
 !>
 !!##NAME
 !!    dsyrk(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+!!     subroutine dsyrk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)             :: K,LDA,LDC,N
-!!       CHARACTER,intent(in)           :: TRANS,UPLO
+!!       double precision,intent(in)    :: alpha,beta
+!!       integer,intent(in)             :: k,lda,ldc,n
+!!       character,intent(in)           :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(inout) :: C(LDC,*)
+!!       double precision,intent(in)    :: a(lda,*)
+!!       double precision,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -15598,7 +15598,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+       subroutine dsyrk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -15607,13 +15607,13 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)             :: K,LDA,LDC,N
-      CHARACTER,intent(in)           :: TRANS,UPLO
+      double precision,intent(in)    :: alpha,beta
+      integer,intent(in)             :: k,lda,ldc,n
+      character,intent(in)           :: trans,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(inout) :: C(LDC,*)
+      double precision,intent(in)    :: a(lda,*)
+      double precision,intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -15623,163 +15623,163 @@ end function dsdot
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,J,L,NROWA
-      LOGICAL UPPER
+      double precision temp
+      integer i,info,j,l,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          NROWA = N
-      ELSE
-          NROWA = K
+      if (lsame(trans,'N')) then
+          nrowa = n
+      else
+          nrowa = k
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 1
-      ELSE IF ((.NOT.LSAME(TRANS,'N')) .AND.  (.NOT.LSAME(TRANS,'T')) .AND.  (.NOT.LSAME(TRANS,'C'))) THEN
-          INFO = 2
-      ELSE IF (N.LT.0) THEN
-          INFO = 3
-      ELSE IF (K.LT.0) THEN
-          INFO = 4
-      ELSE IF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSE IF (LDC.LT.MAX(1,N)) THEN
-          INFO = 10
+      info = 0
+      if ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 1
+      else if ((.not.lsame(trans,'N')) .and.  (.not.lsame(trans,'T')) .and.  (.not.lsame(trans,'C'))) then
+          info = 2
+      else if (n.lt.0) then
+          info = 3
+      else if (k.lt.0) then
+          info = 4
+      else if (lda.lt.max(1,nrowa)) then
+          info = 7
+      else if (ldc.lt.max(1,n)) then
+          info = 10
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DSYRK ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DSYRK ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (((ALPHA.EQ.ZERO).OR.  (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. (((alpha.eq.zero).or.  (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (UPPER) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(1:J,J) = ZERO
+      if (alpha.eq.zero) then
+          if (upper) then
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(1:j,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(1:J,J) = BETA*C(1:J,J)
+              else
+                  do j = 1,n
+                      c(1:j,j) = beta*c(1:j,j)
                   enddo
               endif
-          ELSE
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(J:N,J) = ZERO
+          else
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(j:n,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(J:N,J) = BETA*C(J:N,J)
+              else
+                  do j = 1,n
+                      c(j:n,j) = beta*c(j:n,j)
                   enddo
               endif
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*A**T + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:J,J) = ZERO
-                  ELSE IF (BETA.NE.ONE) THEN
-                      C(1:J,J) = BETA*C(1:J,J)
+          if (upper) then
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:j,j) = zero
+                  else if (beta.ne.one) then
+                      c(1:j,j) = beta*c(1:j,j)
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.ZERO) THEN
-                          TEMP = ALPHA*A(J,L)
-                          C(1:J,J) = C(1:J,J) + TEMP*A(1:J,L)
+                  do l = 1,k
+                      if (a(j,l).ne.zero) then
+                          temp = alpha*a(j,l)
+                          c(1:j,j) = c(1:j,j) + temp*a(1:j,l)
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J:N,J) = ZERO
-                  ELSE IF (BETA.NE.ONE) THEN
-                      C(J:N,J) = BETA*C(J:N,J)
+          else
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(j:n,j) = zero
+                  else if (beta.ne.one) then
+                      c(j:n,j) = beta*c(j:n,j)
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.ZERO) THEN
-                          TEMP = ALPHA*A(J,L)
-                          C(J:N,J) = C(J:N,J) + TEMP*A(J:N,L)
+                  do l = 1,k
+                      if (a(j,l).ne.zero) then
+                          temp = alpha*a(j,l)
+                          c(j:n,j) = c(j:n,j) + temp*a(j:n,l)
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*A**T*A + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,J
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*A(L,J)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,j
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = J,N
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*A(L,J)
+          else
+              do j = 1,n
+                  do i = j,n
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
       endif
 !
-      END SUBROUTINE DSYRK
+      end subroutine dsyrk
 !>
 !!##NAME
 !!    dtbmv(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine dtbmv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,K,LDA,N
-!!       CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+!!       integer,intent(in)             :: incx,k,lda,n
+!!       character,intent(in)           :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(inout) :: X(*)
+!!       double precision,intent(in)    :: a(lda,*)
+!!       double precision,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -15931,7 +15931,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+       subroutine dtbmv(uplo,trans,diag,n,k,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -15940,218 +15940,218 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,K,LDA,N
-      CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+      integer,intent(in)             :: incx,k,lda,n
+      character,intent(in)           :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(inout) :: X(*)
+      double precision,intent(in)    :: a(lda,*)
+      double precision,intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,KPLUS1,KX,L
-      LOGICAL NOUNIT
+      double precision temp
+      integer i,info,ix,j,jx,kplus1,kx,l
+      logical nounit
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 7
-      elseif (INCX.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt. (k+1)) then
+          info = 7
+      elseif (incx.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX   too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !         Form  x := A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = KPLUS1 - J
-                          DO I = MAX(1,J-K),J - 1
-                              X(I) = X(I) + TEMP*A(L+I,J)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          l = kplus1 - j
+                          do i = max(1,j-k),j - 1
+                              x(i) = x(i) + temp*a(l+i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(KPLUS1,J)
+                          if (nounit) x(j) = x(j)*a(kplus1,j)
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = KPLUS1 - J
-                          DO I = MAX(1,J-K),J - 1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          l = kplus1 - j
+                          do i = max(1,j-k),j - 1
+                              x(ix) = x(ix) + temp*a(l+i,j)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(KPLUS1,J)
+                          if (nounit) x(jx) = x(jx)*a(kplus1,j)
                       endif
-                      JX = JX + INCX
-                      IF (J.GT.K) KX = KX + INCX
+                      jx = jx + incx
+                      if (j.gt.k) kx = kx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = 1 - J
-                          DO I = MIN(N,J+K),J + 1,-1
-                              X(I) = X(I) + TEMP*A(L+I,J)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          l = 1 - j
+                          do i = min(n,j+k),j + 1,-1
+                              x(i) = x(i) + temp*a(l+i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(1,J)
+                          if (nounit) x(j) = x(j)*a(1,j)
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = 1 - J
-                          DO I = MIN(N,J+K),J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          l = 1 - j
+                          do i = min(n,j+k),j + 1,-1
+                              x(ix) = x(ix) + temp*a(l+i,j)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(1,J)
+                          if (nounit) x(jx) = x(jx)*a(1,j)
                       endif
-                      JX = JX - INCX
-                      IF ((N-J).GE.K) KX = KX - INCX
+                      jx = jx - incx
+                      if ((n-j).ge.k) kx = kx - incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      L = KPLUS1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(KPLUS1,J)
-                      DO I = J - 1,MAX(1,J-K),-1
-                          TEMP = TEMP + A(L+I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      l = kplus1 - j
+                      if (nounit) temp = temp*a(kplus1,j)
+                      do i = j - 1,max(1,j-k),-1
+                          temp = temp + a(l+i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      KX = KX - INCX
-                      IX = KX
-                      L = KPLUS1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(KPLUS1,J)
-                      DO I = J - 1,MAX(1,J-K),-1
-                          TEMP = TEMP + A(L+I,J)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      kx = kx - incx
+                      ix = kx
+                      l = kplus1 - j
+                      if (nounit) temp = temp*a(kplus1,j)
+                      do i = j - 1,max(1,j-k),-1
+                          temp = temp + a(l+i,j)*x(ix)
+                          ix = ix - incx
                       enddo
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      L = 1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(1,J)
-                      DO I = J + 1,MIN(N,J+K)
-                          TEMP = TEMP + A(L+I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      l = 1 - j
+                      if (nounit) temp = temp*a(1,j)
+                      do i = j + 1,min(n,j+k)
+                          temp = temp + a(l+i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      KX = KX + INCX
-                      IX = KX
-                      L = 1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(1,J)
-                      DO I = J + 1,MIN(N,J+K)
-                          TEMP = TEMP + A(L+I,J)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      kx = kx + incx
+                      ix = kx
+                      l = 1 - j
+                      if (nounit) temp = temp*a(1,j)
+                      do i = j + 1,min(n,j+k)
+                          temp = temp + a(l+i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
           endif
       endif
 !
-      END SUBROUTINE DTBMV
+      end subroutine dtbmv
 !>
 !!##NAME
 !!    dtbsv(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine dtbsv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,K,LDA,N
-!!       CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+!!       integer,intent(in)             :: incx,k,lda,n
+!!       character,intent(in)           :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(inout) :: X(*)
+!!       double precision,intent(in)    :: a(lda,*)
+!!       double precision,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -16306,7 +16306,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+       subroutine dtbsv(uplo,trans,diag,n,k,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -16315,218 +16315,218 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,K,LDA,N
-      CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+      integer,intent(in)             :: incx,k,lda,n
+      character,intent(in)           :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(inout) :: X(*)
+      double precision,intent(in)    :: a(lda,*)
+      double precision,intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,KPLUS1,KX,L
-      LOGICAL NOUNIT
+      double precision temp
+      integer i,info,ix,j,jx,kplus1,kx,l
+      logical nounit
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 7
-      elseif (INCX.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt. (k+1)) then
+          info = 7
+      elseif (incx.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTBSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTBSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed by sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(KPLUS1,J)
-                          TEMP = X(J)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              X(I) = X(I) - TEMP*A(L+I,J)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          l = kplus1 - j
+                          if (nounit) x(j) = x(j)/a(kplus1,j)
+                          temp = x(j)
+                          do i = j - 1,max(1,j-k),-1
+                              x(i) = x(i) - temp*a(l+i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      KX = KX - INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(KPLUS1,J)
-                          TEMP = X(JX)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      kx = kx - incx
+                      if (x(jx).ne.zero) then
+                          ix = kx
+                          l = kplus1 - j
+                          if (nounit) x(jx) = x(jx)/a(kplus1,j)
+                          temp = x(jx)
+                          do i = j - 1,max(1,j-k),-1
+                              x(ix) = x(ix) - temp*a(l+i,j)
+                              ix = ix - incx
                           enddo
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          L = 1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(1,J)
-                          TEMP = X(J)
-                          DO I = J + 1,MIN(N,J+K)
-                              X(I) = X(I) - TEMP*A(L+I,J)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          l = 1 - j
+                          if (nounit) x(j) = x(j)/a(1,j)
+                          temp = x(j)
+                          do i = j + 1,min(n,j+k)
+                              x(i) = x(i) - temp*a(l+i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      KX = KX + INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = 1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(1,J)
-                          TEMP = X(JX)
-                          DO I = J + 1,MIN(N,J+K)
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      kx = kx + incx
+                      if (x(jx).ne.zero) then
+                          ix = kx
+                          l = 1 - j
+                          if (nounit) x(jx) = x(jx)/a(1,j)
+                          temp = x(jx)
+                          do i = j + 1,min(n,j+k)
+                              x(ix) = x(ix) - temp*a(l+i,j)
+                              ix = ix + incx
                           enddo
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T)*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      L = KPLUS1 - J
-                      DO I = MAX(1,J-K),J - 1
-                          TEMP = TEMP - A(L+I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      l = kplus1 - j
+                      do i = max(1,j-k),j - 1
+                          temp = temp - a(l+i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(kplus1,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      L = KPLUS1 - J
-                      DO I = MAX(1,J-K),J - 1
-                          TEMP = TEMP - A(L+I,J)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      l = kplus1 - j
+                      do i = max(1,j-k),j - 1
+                          temp = temp - a(l+i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      IF (J.GT.K) KX = KX + INCX
+                      if (nounit) temp = temp/a(kplus1,j)
+                      x(jx) = temp
+                      jx = jx + incx
+                      if (j.gt.k) kx = kx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      L = 1 - J
-                      DO I = MIN(N,J+K),J + 1,-1
-                          TEMP = TEMP - A(L+I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      l = 1 - j
+                      do i = min(n,j+k),j + 1,-1
+                          temp = temp - a(l+i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(1,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(1,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      L = 1 - J
-                      DO I = MIN(N,J+K),J + 1,-1
-                          TEMP = TEMP - A(L+I,J)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      l = 1 - j
+                      do i = min(n,j+k),j + 1,-1
+                          temp = temp - a(l+i,j)*x(ix)
+                          ix = ix - incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(1,J)
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      IF ((N-J).GE.K) KX = KX - INCX
+                      if (nounit) temp = temp/a(1,j)
+                      x(jx) = temp
+                      jx = jx - incx
+                      if ((n-j).ge.k) kx = kx - incx
                   enddo
               endif
           endif
       endif
 !
-      END SUBROUTINE DTBSV
+      end subroutine dtbsv
 !>
 !!##NAME
 !!    dtpmv(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+!!     subroutine dtpmv(uplo,trans,diag,n,ap,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,N
-!!       CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+!!       integer,intent(in)             :: incx,n
+!!       character,intent(in)           :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: AP(*)
-!!       DOUBLE PRECISION,intent(inout) :: X(*)
+!!       double precision,intent(in)    :: ap(*)
+!!       double precision,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -16636,7 +16636,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+       subroutine dtpmv(uplo,trans,diag,n,ap,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -16645,24 +16645,24 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,N
-      CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+      integer,intent(in)             :: incx,n
+      character,intent(in)           :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: AP(*)
-      DOUBLE PRECISION,intent(inout) :: X(*)
+      double precision,intent(in)    :: ap(*)
+      double precision,intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
-      LOGICAL NOUNIT
+      double precision temp
+      integer i,info,ix,j,jx,k,kk,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !     ..
@@ -16671,190 +16671,190 @@ end function dsdot
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (incx.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTPMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTPMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of AP are
 !     accessed sequentially with one pass through AP.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x:= A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          K = KK
-                          DO I = 1,J - 1
-                              X(I) = X(I) + TEMP*AP(K)
-                              K = K + 1
+          if (lsame(uplo,'U')) then
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          k = kk
+                          do i = 1,j - 1
+                              x(i) = x(i) + temp*ap(k)
+                              k = k + 1
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*AP(KK+J-1)
+                          if (nounit) x(j) = x(j)*ap(kk+j-1)
                       endif
-                      KK = KK + J
+                      kk = kk + j
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO K = KK,KK + J - 2
-                              X(IX) = X(IX) + TEMP*AP(K)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do k = kk,kk + j - 2
+                              x(ix) = x(ix) + temp*ap(k)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*AP(KK+J-1)
+                          if (nounit) x(jx) = x(jx)*ap(kk+j-1)
                       endif
-                      JX = JX + INCX
-                      KK = KK + J
+                      jx = jx + incx
+                      kk = kk + j
                   enddo
               endif
-          ELSE
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          K = KK
-                          DO I = N,J + 1,-1
-                              X(I) = X(I) + TEMP*AP(K)
-                              K = K - 1
+          else
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          k = kk
+                          do i = n,j + 1,-1
+                              x(i) = x(i) + temp*ap(k)
+                              k = k - 1
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*AP(KK-N+J)
+                          if (nounit) x(j) = x(j)*ap(kk-n+j)
                       endif
-                      KK = KK - (N-J+1)
+                      kk = kk - (n-j+1)
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO K = KK,KK - (N- (J+1)),-1
-                              X(IX) = X(IX) + TEMP*AP(K)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do k = kk,kk - (n- (j+1)),-1
+                              x(ix) = x(ix) + temp*ap(k)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*AP(KK-N+J)
+                          if (nounit) x(jx) = x(jx)*ap(kk-n+j)
                       endif
-                      JX = JX - INCX
-                      KK = KK - (N-J+1)
+                      jx = jx - incx
+                      kk = kk - (n-j+1)
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      K = KK - 1
-                      DO I = J - 1,1,-1
-                          TEMP = TEMP + AP(K)*X(I)
-                          K = K - 1
+          if (lsame(uplo,'U')) then
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      if (nounit) temp = temp*ap(kk)
+                      k = kk - 1
+                      do i = j - 1,1,-1
+                          temp = temp + ap(k)*x(i)
+                          k = k - 1
                       enddo
-                      X(J) = TEMP
-                      KK = KK - J
+                      x(j) = temp
+                      kk = kk - j
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      DO K = KK - 1,KK - J + 1,-1
-                          IX = IX - INCX
-                          TEMP = TEMP + AP(K)*X(IX)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*ap(kk)
+                      do k = kk - 1,kk - j + 1,-1
+                          ix = ix - incx
+                          temp = temp + ap(k)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      KK = KK - J
+                      x(jx) = temp
+                      jx = jx - incx
+                      kk = kk - j
                   enddo
               endif
-          ELSE
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      K = KK + 1
-                      DO I = J + 1,N
-                          TEMP = TEMP + AP(K)*X(I)
-                          K = K + 1
+          else
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      if (nounit) temp = temp*ap(kk)
+                      k = kk + 1
+                      do i = j + 1,n
+                          temp = temp + ap(k)*x(i)
+                          k = k + 1
                       enddo
-                      X(J) = TEMP
-                      KK = KK + (N-J+1)
+                      x(j) = temp
+                      kk = kk + (n-j+1)
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      DO K = KK + 1,KK + N - J
-                          IX = IX + INCX
-                          TEMP = TEMP + AP(K)*X(IX)
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*ap(kk)
+                      do k = kk + 1,kk + n - j
+                          ix = ix + incx
+                          temp = temp + ap(k)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      KK = KK + (N-J+1)
+                      x(jx) = temp
+                      jx = jx + incx
+                      kk = kk + (n-j+1)
                   enddo
               endif
           endif
       endif
 !
-      END SUBROUTINE DTPMV
+      end subroutine dtpmv
 !>
 !!##NAME
 !!    dtpsv(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTPSV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+!!     subroutine dtpsv(uplo,trans,diag,n,ap,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,N
-!!       CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+!!       integer,intent(in)             :: incx,n
+!!       character,intent(in)           :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: AP(*)
-!!       DOUBLE PRECISION,intent(inout) :: X(*)
+!!       double precision,intent(in)    :: ap(*)
+!!       double precision,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -16964,7 +16964,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTPSV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+       subroutine dtpsv(uplo,trans,diag,n,ap,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -16973,24 +16973,24 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,N
-      CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+      integer,intent(in)             :: incx,n
+      character,intent(in)           :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: AP(*)
-      DOUBLE PRECISION,intent(inout) :: X(*)
+      double precision,intent(in)    :: ap(*)
+      double precision,intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
-      LOGICAL NOUNIT
+      double precision temp
+      integer i,info,ix,j,jx,k,kk,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !     ..
@@ -16999,191 +16999,191 @@ end function dsdot
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (incx.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTPSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTPSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of AP are
 !     accessed sequentially with one pass through AP.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/AP(KK)
-                          TEMP = X(J)
-                          K = KK - 1
-                          DO I = J - 1,1,-1
-                              X(I) = X(I) - TEMP*AP(K)
-                              K = K - 1
+          if (lsame(uplo,'U')) then
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/ap(kk)
+                          temp = x(j)
+                          k = kk - 1
+                          do i = j - 1,1,-1
+                              x(i) = x(i) - temp*ap(k)
+                              k = k - 1
                           enddo
                       endif
-                      KK = KK - J
+                      kk = kk - j
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/AP(KK)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO K = KK - 1,KK - J + 1,-1
-                              IX = IX - INCX
-                              X(IX) = X(IX) - TEMP*AP(K)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/ap(kk)
+                          temp = x(jx)
+                          ix = jx
+                          do k = kk - 1,kk - j + 1,-1
+                              ix = ix - incx
+                              x(ix) = x(ix) - temp*ap(k)
                           enddo
                       endif
-                      JX = JX - INCX
-                      KK = KK - J
+                      jx = jx - incx
+                      kk = kk - j
                   enddo
               endif
-          ELSE
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/AP(KK)
-                          TEMP = X(J)
-                          K = KK + 1
-                          DO I = J + 1,N
-                              X(I) = X(I) - TEMP*AP(K)
-                              K = K + 1
+          else
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/ap(kk)
+                          temp = x(j)
+                          k = kk + 1
+                          do i = j + 1,n
+                              x(i) = x(i) - temp*ap(k)
+                              k = k + 1
                           enddo
                       endif
-                      KK = KK + (N-J+1)
+                      kk = kk + (n-j+1)
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/AP(KK)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO K = KK + 1,KK + N - J
-                              IX = IX + INCX
-                              X(IX) = X(IX) - TEMP*AP(K)
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/ap(kk)
+                          temp = x(jx)
+                          ix = jx
+                          do k = kk + 1,kk + n - j
+                              ix = ix + incx
+                              x(ix) = x(ix) - temp*ap(k)
                           enddo
                       endif
-                      JX = JX + INCX
-                      KK = KK + (N-J+1)
+                      jx = jx + incx
+                      kk = kk + (n-j+1)
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      K = KK
-                      DO I = 1,J - 1
-                          TEMP = TEMP - AP(K)*X(I)
-                          K = K + 1
+          if (lsame(uplo,'U')) then
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      k = kk
+                      do i = 1,j - 1
+                          temp = temp - ap(k)*x(i)
+                          k = k + 1
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK+J-1)
-                      X(J) = TEMP
-                      KK = KK + J
+                      if (nounit) temp = temp/ap(kk+j-1)
+                      x(j) = temp
+                      kk = kk + j
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      DO K = KK,KK + J - 2
-                          TEMP = TEMP - AP(K)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      do k = kk,kk + j - 2
+                          temp = temp - ap(k)*x(ix)
+                          ix = ix + incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK+J-1)
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      KK = KK + J
+                      if (nounit) temp = temp/ap(kk+j-1)
+                      x(jx) = temp
+                      jx = jx + incx
+                      kk = kk + j
                   enddo
               endif
-          ELSE
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      K = KK
-                      DO I = N,J + 1,-1
-                          TEMP = TEMP - AP(K)*X(I)
-                          K = K - 1
+          else
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      k = kk
+                      do i = n,j + 1,-1
+                          temp = temp - ap(k)*x(i)
+                          k = k - 1
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK-N+J)
-                      X(J) = TEMP
-                      KK = KK - (N-J+1)
+                      if (nounit) temp = temp/ap(kk-n+j)
+                      x(j) = temp
+                      kk = kk - (n-j+1)
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      DO K = KK,KK - (N- (J+1)),-1
-                          TEMP = TEMP - AP(K)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      do k = kk,kk - (n- (j+1)),-1
+                          temp = temp - ap(k)*x(ix)
+                          ix = ix - incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK-N+J)
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      KK = KK - (N-J+1)
+                      if (nounit) temp = temp/ap(kk-n+j)
+                      x(jx) = temp
+                      jx = jx - incx
+                      kk = kk - (n-j+1)
                   enddo
               endif
           endif
       endif
 !
-      END SUBROUTINE DTPSV
+      end subroutine dtpsv
 !>
 !!##NAME
 !!    dtrmm(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine dtrmm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)             :: LDA,LDB,M,N
-!!       CHARACTER,intent(in)           :: DIAG,SIDE,TRANSA,UPLO
+!!       double precision,intent(in)    :: alpha
+!!       integer,intent(in)             :: lda,ldb,m,n
+!!       character,intent(in)           :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(inout) :: B(LDB,*)
+!!       double precision,intent(in)    :: a(lda,*)
+!!       double precision,intent(inout) :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -17321,7 +17321,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+       subroutine dtrmm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -17330,13 +17330,13 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA
-      INTEGER,intent(in)             :: LDA,LDB,M,N
-      CHARACTER,intent(in)           :: DIAG,SIDE,TRANSA,UPLO
+      double precision,intent(in)    :: alpha
+      integer,intent(in)             :: lda,ldb,m,n
+      character,intent(in)           :: diag,side,transa,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(inout) :: B(LDB,*)
+      double precision,intent(in)    :: a(lda,*)
+      double precision,intent(inout) :: b(ldb,*)
 !     ..
 !
 !  =====================================================================
@@ -17346,207 +17346,207 @@ end function dsdot
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL LSIDE,NOUNIT,UPPER
+      double precision temp
+      integer i,info,j,k,nrowa
+      logical lside,nounit,upper
 !     ..
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      LSIDE = LSAME(SIDE,'L')
-      IF (LSIDE) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      lside = lsame(side,'L')
+      if (lside) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      NOUNIT = LSAME(DIAG,'N')
-      UPPER = LSAME(UPLO,'U')
+      nounit = lsame(diag,'N')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.LSIDE) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      elseif ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      elseif ((.NOT.LSAME(TRANSA,'N')) .AND.  (.NOT.LSAME(TRANSA,'T')) .AND.  (.NOT.LSAME(TRANSA,'C'))) THEN
-          INFO = 3
-      elseif ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
-          INFO = 4
-      elseif (M.LT.0) THEN
-          INFO = 5
-      elseif (N.LT.0) THEN
-          INFO = 6
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      elseif (LDB.LT.MAX(1,M)) THEN
-          INFO = 11
+      info = 0
+      if ((.not.lside) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif ((.not.lsame(transa,'N')) .and.  (.not.lsame(transa,'T')) .and.  (.not.lsame(transa,'C'))) then
+          info = 3
+      elseif ((.not.lsame(diag,'U')) .and. (.not.lsame(diag,'N'))) then
+          info = 4
+      elseif (m.lt.0) then
+          info = 5
+      elseif (n.lt.0) then
+          info = 6
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldb.lt.max(1,m)) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTRMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTRMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (M.EQ.0 .OR. N.EQ.0) RETURN
+      if (m.eq.0 .or. n.eq.0) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          B(1:M,1:N) = ZERO
-          RETURN
+      if (alpha.eq.zero) then
+          b(1:m,1:n) = zero
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSIDE) THEN
-          IF (LSAME(TRANSA,'N')) THEN
+      if (lside) then
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*A*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              DO I = 1,K - 1
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
+              if (upper) then
+                  do j = 1,n
+                      do k = 1,m
+                          if (b(k,j).ne.zero) then
+                              temp = alpha*b(k,j)
+                              do i = 1,k - 1
+                                  b(i,j) = b(i,j) + temp*a(i,k)
                               enddo
-                              IF (NOUNIT) TEMP = TEMP*A(K,K)
-                              B(K,J) = TEMP
+                              if (nounit) temp = temp*a(k,k)
+                              b(k,j) = temp
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              B(K,J) = TEMP
-                              IF (NOUNIT) B(K,J) = B(K,J)*A(K,K)
-                              DO I = K + 1,M
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
+              else
+                  do j = 1,n
+                      do k = m,1,-1
+                          if (b(k,j).ne.zero) then
+                              temp = alpha*b(k,j)
+                              b(k,j) = temp
+                              if (nounit) b(k,j) = b(k,j)*a(k,k)
+                              do i = k + 1,m
+                                  b(i,j) = b(i,j) + temp*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*A**T*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO I = M,1,-1
-                          TEMP = B(I,J)
-                          IF (NOUNIT) TEMP = TEMP*A(I,I)
-                          DO K = 1,I - 1
-                              TEMP = TEMP + A(K,I)*B(K,J)
+              if (upper) then
+                  do j = 1,n
+                      do i = m,1,-1
+                          temp = b(i,j)
+                          if (nounit) temp = temp*a(i,i)
+                          do k = 1,i - 1
+                              temp = temp + a(k,i)*b(k,j)
                           enddo
-                          B(I,J) = ALPHA*TEMP
+                          b(i,j) = alpha*temp
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO I = 1,M
-                          TEMP = B(I,J)
-                          IF (NOUNIT) TEMP = TEMP*A(I,I)
-                          DO K = I + 1,M
-                              TEMP = TEMP + A(K,I)*B(K,J)
+              else
+                  do j = 1,n
+                      do i = 1,m
+                          temp = b(i,j)
+                          if (nounit) temp = temp*a(i,i)
+                          do k = i + 1,m
+                              temp = temp + a(k,i)*b(k,j)
                           enddo
-                          B(I,J) = ALPHA*TEMP
+                          b(i,j) = alpha*temp
                       enddo
                   enddo
               endif
           endif
-      ELSE
-          IF (LSAME(TRANSA,'N')) THEN
+      else
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*B*A.
 !
-              IF (UPPER) THEN
-                  DO J = N,1,-1
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      B(1:M,J) = TEMP*B(1:M,J)
-                      DO K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              if (upper) then
+                  do j = n,1,-1
+                      temp = alpha
+                      if (nounit) temp = temp*a(j,j)
+                      b(1:m,j) = temp*b(1:m,j)
+                      do k = 1,j - 1
+                          if (a(k,j).ne.zero) then
+                              temp = alpha*a(k,j)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      B(1:M,J) = TEMP*B(1:M,J)
-                      DO K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              else
+                  do j = 1,n
+                      temp = alpha
+                      if (nounit) temp = temp*a(j,j)
+                      b(1:m,j) = temp*b(1:m,j)
+                      do k = j + 1,n
+                          if (a(k,j).ne.zero) then
+                              temp = alpha*a(k,j)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*B*A**T.
 !
-              IF (UPPER) THEN
-                  DO K = 1,N
-                      DO J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = ALPHA*A(J,K)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              if (upper) then
+                  do k = 1,n
+                      do j = 1,k - 1
+                          if (a(j,k).ne.zero) then
+                              temp = alpha*a(j,k)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(K,K)
-                      IF (TEMP.NE.ONE) THEN
-                          B(1:M,K) = TEMP*B(1:M,K)
+                      temp = alpha
+                      if (nounit) temp = temp*a(k,k)
+                      if (temp.ne.one) then
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
                   enddo
-              ELSE
-                  DO K = N,1,-1
-                      DO J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = ALPHA*A(J,K)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              else
+                  do k = n,1,-1
+                      do j = k + 1,n
+                          if (a(j,k).ne.zero) then
+                              temp = alpha*a(j,k)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(K,K)
-                      IF (TEMP.NE.ONE) THEN
-                          B(1:M,K) = TEMP*B(1:M,K)
+                      temp = alpha
+                      if (nounit) temp = temp*a(k,k)
+                      if (temp.ne.one) then
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
                   enddo
               endif
           endif
       endif
 !
-      END SUBROUTINE DTRMM
+      end subroutine dtrmm
 !>
 !!##NAME
 !!    dtrmv(3f) - [BLAS:DOUBLE_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine dtrmv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,LDA,N
-!!       CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+!!       integer,intent(in)             :: incx,lda,n
+!!       character,intent(in)           :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(inout) :: X(*)
+!!       double precision,intent(in)    :: a(lda,*)
+!!       double precision,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -17658,7 +17658,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+       subroutine dtrmv(uplo,trans,diag,n,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -17667,202 +17667,202 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,LDA,N
-      CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+      integer,intent(in)             :: incx,lda,n
+      character,intent(in)           :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(inout) :: X(*)
+      double precision,intent(in)    :: a(lda,*)
+      double precision,intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,KX
-      LOGICAL NOUNIT
+      double precision temp
+      integer i,info,ix,j,jx,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      ELSEIF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      ELSEIF (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      ELSEIF (N.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,N)) THEN
-          INFO = 6
-      ELSEIF (INCX.EQ.0) THEN
-          INFO = 8
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,n)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTRMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTRMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      ELSEIF (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          DO I = 1,J - 1
-                              X(I) = X(I) + TEMP*A(I,J)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          do i = 1,j - 1
+                              x(i) = x(i) + temp*a(i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
+                          if (nounit) x(j) = x(j)*a(j,j)
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO I = 1,J - 1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do i = 1,j - 1
+                              x(ix) = x(ix) + temp*a(i,j)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
+                          if (nounit) x(jx) = x(jx)*a(j,j)
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          DO I = N,J + 1,-1
-                              X(I) = X(I) + TEMP*A(I,J)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          do i = n,j + 1,-1
+                              x(i) = x(i) + temp*a(i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
+                          if (nounit) x(j) = x(j)*a(j,j)
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO I = N,J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do i = n,j + 1,-1
+                              x(ix) = x(ix) + temp*a(i,j)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
+                          if (nounit) x(jx) = x(jx)*a(j,j)
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J - 1,1,-1
-                          TEMP = TEMP + A(I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j - 1,1,-1
+                          temp = temp + a(i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J - 1,1,-1
-                          IX = IX - INCX
-                          TEMP = TEMP + A(I,J)*X(IX)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j - 1,1,-1
+                          ix = ix - incx
+                          temp = temp + a(i,j)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J + 1,N
-                          TEMP = TEMP + A(I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j + 1,n
+                          temp = temp + a(i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J + 1,N
-                          IX = IX + INCX
-                          TEMP = TEMP + A(I,J)*X(IX)
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j + 1,n
+                          ix = ix + incx
+                          temp = temp + a(i,j)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
           endif
       endif
 !
-      END SUBROUTINE DTRMV
+      end subroutine dtrmv
 !>
 !!##NAME
 !!    dtrsm(3f) - [BLAS:DOUBLE_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine dtrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: ALPHA
-!!       INTEGER,intent(in)             :: LDA,LDB,M,N
-!!       CHARACTER,intent(in)           :: DIAG,SIDE,TRANSA,UPLO
+!!       double precision,intent(in)    :: alpha
+!!       integer,intent(in)             :: lda,ldb,m,n
+!!       character,intent(in)           :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(inout) :: B(LDB,*)
+!!       double precision,intent(in)    :: a(lda,*)
+!!       double precision,intent(inout) :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -18001,7 +18001,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+       subroutine dtrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -18010,13 +18010,13 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)    :: ALPHA
-      INTEGER,intent(in)             :: LDA,LDB,M,N
-      CHARACTER,intent(in)           :: DIAG,SIDE,TRANSA,UPLO
+      double precision,intent(in)    :: alpha
+      integer,intent(in)             :: lda,ldb,m,n
+      character,intent(in)           :: diag,side,transa,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(inout) :: B(LDB,*)
+      double precision,intent(in)    :: a(lda,*)
+      double precision,intent(inout) :: b(ldb,*)
 !     ..
 !
 !  =====================================================================
@@ -18026,219 +18026,219 @@ end function dsdot
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL LSIDE,NOUNIT,UPPER
+      double precision temp
+      integer i,info,j,k,nrowa
+      logical lside,nounit,upper
 !     ..
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      LSIDE = LSAME(SIDE,'L')
-      IF (LSIDE) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      lside = lsame(side,'L')
+      if (lside) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      NOUNIT = LSAME(DIAG,'N')
-      UPPER = LSAME(UPLO,'U')
+      nounit = lsame(diag,'N')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.LSIDE) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      ELSEIF ((.NOT.LSAME(TRANSA,'N')) .AND.  (.NOT.LSAME(TRANSA,'T')) .AND.  (.NOT.LSAME(TRANSA,'C'))) THEN
-          INFO = 3
-      ELSEIF ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
-          INFO = 4
-      ELSEIF (M.LT.0) THEN
-          INFO = 5
-      ELSEIF (N.LT.0) THEN
-          INFO = 6
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      ELSEIF (LDB.LT.MAX(1,M)) THEN
-          INFO = 11
+      info = 0
+      if ((.not.lside) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif ((.not.lsame(transa,'N')) .and.  (.not.lsame(transa,'T')) .and.  (.not.lsame(transa,'C'))) then
+          info = 3
+      elseif ((.not.lsame(diag,'U')) .and. (.not.lsame(diag,'N'))) then
+          info = 4
+      elseif (m.lt.0) then
+          info = 5
+      elseif (n.lt.0) then
+          info = 6
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldb.lt.max(1,m)) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTRSM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTRSM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (M.EQ.0 .OR. N.EQ.0) RETURN
+      if (m.eq.0 .or. n.eq.0) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-              B(1:M,1:N) = ZERO
-          RETURN
+      if (alpha.eq.zero) then
+              b(1:m,1:n) = zero
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSIDE) THEN
-          IF (LSAME(TRANSA,'N')) THEN
+      if (lside) then
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*inv( A )*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              if (upper) then
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO I = 1,K - 1
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
+                      do k = m,1,-1
+                          if (b(k,j).ne.zero) then
+                              if (nounit) b(k,j) = b(k,j)/a(k,k)
+                              do i = 1,k - 1
+                                  b(i,j) = b(i,j) - b(k,j)*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              else
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO I = K + 1,M
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
+                      do k = 1,m
+                          if (b(k,j).ne.zero) then
+                              if (nounit) b(k,j) = b(k,j)/a(k,k)
+                              do i = k + 1,m
+                                  b(i,j) = b(i,j) - b(k,j)*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*inv( A**T )*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO I = 1,M
-                          TEMP = ALPHA*B(I,J)
-                          DO K = 1,I - 1
-                              TEMP = TEMP - A(K,I)*B(K,J)
+              if (upper) then
+                  do j = 1,n
+                      do i = 1,m
+                          temp = alpha*b(i,j)
+                          do k = 1,i - 1
+                              temp = temp - a(k,i)*b(k,j)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(I,I)
-                          B(I,J) = TEMP
+                          if (nounit) temp = temp/a(i,i)
+                          b(i,j) = temp
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO I = M,1,-1
-                          TEMP = ALPHA*B(I,J)
-                          DO K = I + 1,M
-                              TEMP = TEMP - A(K,I)*B(K,J)
+              else
+                  do j = 1,n
+                      do i = m,1,-1
+                          temp = alpha*b(i,j)
+                          do k = i + 1,m
+                              temp = temp - a(k,i)*b(k,j)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(I,I)
-                          B(I,J) = TEMP
+                          if (nounit) temp = temp/a(i,i)
+                          b(i,j) = temp
                       enddo
                   enddo
               endif
           endif
-      ELSE
-          IF (LSAME(TRANSA,'N')) THEN
+      else
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*B*inv( A ).
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              if (upper) then
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              B(1:M,J) = B(1:M,J) - A(K,J)*B(1:M,K)
+                      do k = 1,j - 1
+                          if (a(k,j).ne.zero) then
+                              b(1:m,j) = b(1:m,j) - a(k,j)*b(1:m,k)
                           endif
                       enddo
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
-                          B(1:M,J) = TEMP*B(1:M,J)
+                      if (nounit) then
+                          temp = one/a(j,j)
+                          b(1:m,j) = temp*b(1:m,j)
                       endif
                   enddo
-              ELSE
-                  DO J = N,1,-1
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              else
+                  do j = n,1,-1
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              B(1:M,J) = B(1:M,J) - A(K,J)*B(1:M,K)
+                      do k = j + 1,n
+                          if (a(k,j).ne.zero) then
+                              b(1:m,j) = b(1:m,j) - a(k,j)*b(1:m,k)
                           endif
                       enddo
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
-                          B(1:M,J) = TEMP*B(1:M,J)
+                      if (nounit) then
+                          temp = one/a(j,j)
+                          b(1:m,j) = temp*b(1:m,j)
                       endif
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*B*inv( A**T ).
 !
-              IF (UPPER) THEN
-                  DO K = N,1,-1
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(K,K)
-                          B(1:M,K) = TEMP*B(1:M,K)
+              if (upper) then
+                  do k = n,1,-1
+                      if (nounit) then
+                          temp = one/a(k,k)
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
-                      DO J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = A(J,K)
-                              B(1:M,J) = B(1:M,J) - TEMP*B(1:M,K)
+                      do j = 1,k - 1
+                          if (a(j,k).ne.zero) then
+                              temp = a(j,k)
+                              b(1:m,j) = b(1:m,j) - temp*b(1:m,k)
                           endif
                       enddo
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,K) = ALPHA*B(1:M,K)
+                      if (alpha.ne.one) then
+                          b(1:m,k) = alpha*b(1:m,k)
                       endif
                   enddo
-              ELSE
-                  DO K = 1,N
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(K,K)
-                          B(1:M,K) = TEMP*B(1:M,K)
+              else
+                  do k = 1,n
+                      if (nounit) then
+                          temp = one/a(k,k)
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
-                      DO J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = A(J,K)
-                              B(1:M,J) = B(1:M,J) - TEMP*B(1:M,K)
+                      do j = k + 1,n
+                          if (a(j,k).ne.zero) then
+                              temp = a(j,k)
+                              b(1:m,j) = b(1:m,j) - temp*b(1:m,k)
                           endif
                       enddo
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,K) = ALPHA*B(1:M,K)
+                      if (alpha.ne.one) then
+                          b(1:m,k) = alpha*b(1:m,k)
                       endif
                   enddo
               endif
           endif
       endif
 !
-      END SUBROUTINE DTRSM
+      end subroutine dtrsm
 !>
 !!##NAME
 !!    dtrsv(3f) - [BLAS:DOUBLE_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE DTRSV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine dtrsv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)             :: INCX,LDA,N
-!!       CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+!!       integer,intent(in)             :: incx,lda,n
+!!       character,intent(in)           :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-!!       DOUBLE PRECISION,intent(inout) :: X(*)
+!!       double precision,intent(in)    :: a(lda,*)
+!!       double precision,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -18350,7 +18350,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE DTRSV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+       subroutine dtrsv(uplo,trans,diag,n,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.7.0) --
@@ -18359,186 +18359,186 @@ end function dsdot
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)             :: INCX,LDA,N
-      CHARACTER,intent(in)           :: DIAG,TRANS,UPLO
+      integer,intent(in)             :: incx,lda,n
+      character,intent(in)           :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in)    :: A(LDA,*)
-      DOUBLE PRECISION,intent(inout) :: X(*)
+      double precision,intent(in)    :: a(lda,*)
+      double precision,intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
+      double precision zero
+      parameter (zero=0.0d+0)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,IX,J,JX,KX
-      LOGICAL NOUNIT
+      double precision temp
+      integer i,info,ix,j,jx,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !     ..
 !     .. External Subroutines ..
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      ELSEIF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      ELSEIF (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      ELSEIF (N.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,N)) THEN
-          INFO = 6
-      ELSEIF (INCX.EQ.0) THEN
-          INFO = 8
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,n)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('DTRSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('DTRSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      ELSEIF (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/A(J,J)
-                          TEMP = X(J)
-                          DO I = J - 1,1,-1
-                              X(I) = X(I) - TEMP*A(I,J)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/a(j,j)
+                          temp = x(j)
+                          do i = j - 1,1,-1
+                              x(i) = x(i) - temp*a(i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/A(J,J)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO I = J - 1,1,-1
-                              IX = IX - INCX
-                              X(IX) = X(IX) - TEMP*A(I,J)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/a(j,j)
+                          temp = x(jx)
+                          ix = jx
+                          do i = j - 1,1,-1
+                              ix = ix - incx
+                              x(ix) = x(ix) - temp*a(i,j)
                           enddo
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/A(J,J)
-                          TEMP = X(J)
-                          DO I = J + 1,N
-                              X(I) = X(I) - TEMP*A(I,J)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/a(j,j)
+                          temp = x(j)
+                          do i = j + 1,n
+                              x(i) = x(i) - temp*a(i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/A(J,J)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO I = J + 1,N
-                              IX = IX + INCX
-                              X(IX) = X(IX) - TEMP*A(I,J)
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/a(j,j)
+                          temp = x(jx)
+                          ix = jx
+                          do i = j + 1,n
+                              ix = ix + incx
+                              x(ix) = x(ix) - temp*a(i,j)
                           enddo
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      DO I = 1,J - 1
-                          TEMP = TEMP - A(I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      do i = 1,j - 1
+                          temp = temp - a(i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(j,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      DO I = 1,J - 1
-                          TEMP = TEMP - A(I,J)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      do i = 1,j - 1
+                          temp = temp - a(i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      if (nounit) temp = temp/a(j,j)
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      DO I = N,J + 1,-1
-                          TEMP = TEMP - A(I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      do i = n,j + 1,-1
+                          temp = temp - a(i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(j,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      DO I = N,J + 1,-1
-                          TEMP = TEMP - A(I,J)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      do i = n,j + 1,-1
+                          temp = temp - a(i,j)*x(ix)
+                          ix = ix - incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      if (nounit) temp = temp/a(j,j)
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE DTRSV
+      end subroutine dtrsv
 !>
 !!##NAME
 !!    dzasum(3f) - [BLAS:DOUBLE_BLAS_LEVEL1]
@@ -18594,7 +18594,7 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       DOUBLE PRECISION FUNCTION DZASUM(N,ZX,INCX)
+       double precision function dzasum(n,zx,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -18603,48 +18603,48 @@ end function dsdot
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,N
+      integer,intent(in)                 :: incx,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(inout) :: ZX(*)
+      complex(kind=real64),intent(inout) :: zx(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      DOUBLE PRECISION STEMP
-      INTEGER I,NINCX
+      double precision stemp
+      integer i,nincx
 !     ..
 !     .. External Functions ..  DOUBLE PRECISION DCABS1
 !     ..
-      DZASUM = 0.0d0
-      STEMP = 0.0d0
-      IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) THEN
+      dzasum = 0.0d0
+      stemp = 0.0d0
+      if (n.le.0 .or. incx.le.0) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
-         DO I = 1,N
-            STEMP = STEMP + DCABS1(ZX(I))
+         do i = 1,n
+            stemp = stemp + dcabs1(zx(i))
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         NINCX = N*INCX
-         DO I = 1,NINCX,INCX
-            STEMP = STEMP + DCABS1(ZX(I))
+         nincx = n*incx
+         do i = 1,nincx,incx
+            stemp = stemp + dcabs1(zx(i))
          enddo
       endif
-      DZASUM = STEMP
-      END FUNCTION DZASUM
+      dzasum = stemp
+      end function dzasum
 !>
 !!##NAME
 !!    dznrm2(3f) - [BLAS:SINGLE_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     DOUBLE PRECISION FUNCTION DZNRM2(N,X,INCX)
+!!     double precision function dznrm2(n,x,incx)
 !!
 !!       .. Scalar Arguments ..
 !!       integer,intent(in) :: incx, n
@@ -18699,9 +18699,9 @@ end function dsdot
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure function DZNRM2( n, x, incx )
+pure function dznrm2( n, x, incx )
    integer, parameter :: wp = kind(1.d0)
-   real(wp) :: DZNRM2
+   real(wp) :: dznrm2
 !
 !  -- Reference BLAS level1 routine (version 3.9.1) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -18711,7 +18711,7 @@ pure function DZNRM2( n, x, incx )
 !  .. Constants ..
    real(wp), parameter :: zero = 0.0_wp
    real(wp), parameter :: one  = 1.0_wp
-   real(wp), parameter :: maxN = huge(0.0_wp)
+   real(wp), parameter :: maxn = huge(0.0_wp)
 !  ..
 !  .. Blue's scaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( (minexponent(0._wp) - 1) * 0.5_wp)
@@ -18732,7 +18732,7 @@ pure function DZNRM2( n, x, incx )
 !
 !  Quick return if possible
 !
-   DZNRM2 = zero
+   dznrm2 = zero
    if( n <= 0 ) return
 !
    scl = one
@@ -18781,7 +18781,7 @@ pure function DZNRM2( n, x, incx )
 !
 !     Combine abig and amed if abig > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          abig = abig + (amed*sbig)*sbig
       endif
       scl = one / sbig
@@ -18790,7 +18790,7 @@ pure function DZNRM2( n, x, incx )
 !
 !     Combine amed and asml if asml > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          amed = sqrt(amed)
          asml = sqrt(asml) / ssml
          if (asml > amed) then
@@ -18813,8 +18813,8 @@ pure function DZNRM2( n, x, incx )
       scl = one
       sumsq = amed
    endif
-   DZNRM2 = scl*sqrt( sumsq )
-end function DZNRM2
+   dznrm2 = scl*sqrt( sumsq )
+end function dznrm2
 !>
 !!##NAME
 !!    icamax(3f) -- [BLAS:AUX_BLAS] Return index of maximum "absolute value" in CX.
@@ -18869,7 +18869,7 @@ end function DZNRM2
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure INTEGER FUNCTION ICAMAX(N,CX,INCX)
+pure integer function icamax(n,cx,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -18878,46 +18878,46 @@ pure INTEGER FUNCTION ICAMAX(N,CX,INCX)
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,N
+      integer,intent(in) :: incx,n
 !     ..
 !     .. Array Arguments ..
-      COMPLEX,intent(in) :: CX(*)
+      complex,intent(in) :: cx(*)
 !     ..
 !  =====================================================================
 !     .. Local Scalars ..
-      REAL SMAX
-      INTEGER I,IX
+      real smax
+      integer i,ix
 !     ..
 !     .. External Functions ..  REAL SCABS1
 !     ..
-      ICAMAX = 0
-      IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      ICAMAX = 1
-      IF (N.EQ.1) RETURN
-      IF (INCX.EQ.1) THEN
+      icamax = 0
+      if (n.lt.1 .or. incx.le.0) return
+      icamax = 1
+      if (n.eq.1) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
-         SMAX = SCABS1(CX(1))
-         DO I = 2,N
-            IF (SCABS1(CX(I)).GT.SMAX) THEN
-               ICAMAX = I
-               SMAX = SCABS1(CX(I))
+         smax = scabs1(cx(1))
+         do i = 2,n
+            if (scabs1(cx(i)).gt.smax) then
+               icamax = i
+               smax = scabs1(cx(i))
             endif
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         IX = 1
-         SMAX = SCABS1(CX(1))
-         IX = IX + INCX
-         DO I = 2,N
-            IF (SCABS1(CX(IX)).GT.SMAX) THEN
-               ICAMAX = I
-               SMAX = SCABS1(CX(IX))
+         ix = 1
+         smax = scabs1(cx(1))
+         ix = ix + incx
+         do i = 2,n
+            if (scabs1(cx(ix)).gt.smax) then
+               icamax = i
+               smax = scabs1(cx(ix))
             endif
-            IX = IX + INCX
+            ix = ix + incx
          enddo
       endif
 end function icamax
@@ -18975,7 +18975,7 @@ end function icamax
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure INTEGER FUNCTION IDAMAX(N,DX,INCX)
+pure integer function idamax(n,dx,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -18984,47 +18984,47 @@ pure INTEGER FUNCTION IDAMAX(N,DX,INCX)
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)          :: INCX,N
+      integer,intent(in)          :: incx,n
 !     ..
 !     .. Array Arguments ..
-      DOUBLE PRECISION,intent(in) :: DX(*)
+      double precision,intent(in) :: dx(*)
 !     ..
 !  =====================================================================
 !     .. Local Scalars ..
-      DOUBLE PRECISION DMAX
-      INTEGER I,IX
+      double precision dmax
+      integer i,ix
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DABS
+      intrinsic dabs
 !     ..
-      IDAMAX = 0
-      IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      IDAMAX = 1
-      IF (N.EQ.1) RETURN
-      IF (INCX.EQ.1) THEN
+      idamax = 0
+      if (n.lt.1 .or. incx.le.0) return
+      idamax = 1
+      if (n.eq.1) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
-         DMAX = DABS(DX(1))
-         DO I = 2,N
-            IF (DABS(DX(I)).GT.DMAX) THEN
-               IDAMAX = I
-               DMAX = DABS(DX(I))
+         dmax = dabs(dx(1))
+         do i = 2,n
+            if (dabs(dx(i)).gt.dmax) then
+               idamax = i
+               dmax = dabs(dx(i))
             endif
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         IX = 1
-         DMAX = DABS(DX(1))
-         IX = IX + INCX
-         DO I = 2,N
-            IF (DABS(DX(IX)).GT.DMAX) THEN
-               IDAMAX = I
-               DMAX = DABS(DX(IX))
+         ix = 1
+         dmax = dabs(dx(1))
+         ix = ix + incx
+         do i = 2,n
+            if (dabs(dx(ix)).gt.dmax) then
+               idamax = i
+               dmax = dabs(dx(ix))
             endif
-            IX = IX + INCX
+            ix = ix + incx
          enddo
       endif
 
@@ -19185,7 +19185,7 @@ end function isamax
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure INTEGER FUNCTION IZAMAX(N,ZX,INCX)
+pure integer function izamax(n,zx,incx)
 implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -19194,59 +19194,59 @@ implicit none
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)              :: INCX,N
+      integer,intent(in)              :: incx,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in) :: ZX(*)
+      complex(kind=real64),intent(in) :: zx(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      DOUBLE PRECISION DMAX
-      INTEGER I,IX
+      double precision dmax
+      integer i,ix
 !     ..
 !     .. External Functions ..  DOUBLE PRECISION DCABS1
 !     ..
-      IZAMAX = 0
-      IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      IZAMAX = 1
-      IF (N.EQ.1) RETURN
-      IF (INCX.EQ.1) THEN
+      izamax = 0
+      if (n.lt.1 .or. incx.le.0) return
+      izamax = 1
+      if (n.eq.1) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
-         DMAX = DCABS1(ZX(1))
-         DO I = 2,N
-            IF (DCABS1(ZX(I)).GT.DMAX) THEN
-               IZAMAX = I
-               DMAX = DCABS1(ZX(I))
+         dmax = dcabs1(zx(1))
+         do i = 2,n
+            if (dcabs1(zx(i)).gt.dmax) then
+               izamax = i
+               dmax = dcabs1(zx(i))
             endif
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         IX = 1
-         DMAX = DCABS1(ZX(1))
-         IX = IX + INCX
-         DO I = 2,N
-            IF (DCABS1(ZX(IX)).GT.DMAX) THEN
-               IZAMAX = I
-               DMAX = DCABS1(ZX(IX))
+         ix = 1
+         dmax = dcabs1(zx(1))
+         ix = ix + incx
+         do i = 2,n
+            if (dcabs1(zx(ix)).gt.dmax) then
+               izamax = i
+               dmax = dcabs1(zx(ix))
             endif
-            IX = IX + INCX
+            ix = ix + incx
          enddo
       endif
 
-      END FUNCTION IZAMAX
+      end function izamax
 !>
 !!##NAME
 !!    lsame(3f) - [BLAS:AUX_BLAS] compare two letters ignoring case
 !!
 !!##SYNOPSIS
 !!
-!!     LOGICAL FUNCTION LSAME(CA,CB)
+!!     logical function lsame(ca,cb)
 !!
 !!       .. Scalar Arguments ..
 !!       character(len=1),intent(in) :: ca,cb
@@ -19321,13 +19321,13 @@ end function lsame
 !!
 !!##SYNOPSIS
 !!
-!!     REAL FUNCTION SASUM(N,SX,INCX)
+!!     real function sasum(n,sx,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,N
+!!       integer,intent(in) :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in) :: SX(*)
+!!       real,intent(in) :: sx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -19370,7 +19370,7 @@ end function lsame
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure REAL FUNCTION SASUM(N,SX,INCX)
+pure real function sasum(n,sx,incx)
 implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -19379,71 +19379,71 @@ implicit none
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,N
+      integer,intent(in) :: incx,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in) :: SX(*)
+      real,intent(in) :: sx(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      REAL STEMP
-      INTEGER I,M,MP1,NINCX
+      real stemp
+      integer i,m,mp1,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC ABS,MOD
+      intrinsic abs,mod
 !     ..
-      SASUM = 0.0e0
-      STEMP = 0.0e0
-      IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) THEN
+      sasum = 0.0e0
+      stemp = 0.0e0
+      if (n.le.0 .or. incx.le.0) return
+      if (incx.eq.1) then
 !        code for increment equal to 1
 !
 !
 !        clean-up loop
 !
-         M = MOD(N,6)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               STEMP = STEMP + ABS(SX(I))
+         m = mod(n,6)
+         if (m.ne.0) then
+            do i = 1,m
+               stemp = stemp + abs(sx(i))
             enddo
-            IF (N.LT.6) THEN
-               SASUM = STEMP
-               RETURN
+            if (n.lt.6) then
+               sasum = stemp
+               return
             endif
          endif
-         MP1 = M + 1
-         DO I = MP1,N,6
-            STEMP = STEMP + ABS(SX(I)) + ABS(SX(I+1)) + ABS(SX(I+2)) + ABS(SX(I+3)) + ABS(SX(I+4)) + ABS(SX(I+5))
+         mp1 = m + 1
+         do i = mp1,n,6
+            stemp = stemp + abs(sx(i)) + abs(sx(i+1)) + abs(sx(i+2)) + abs(sx(i+3)) + abs(sx(i+4)) + abs(sx(i+5))
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         NINCX = N*INCX
-         DO I = 1,NINCX,INCX
-            STEMP = STEMP + ABS(SX(I))
+         nincx = n*incx
+         do i = 1,nincx,incx
+            stemp = stemp + abs(sx(i))
          enddo
       endif
-      SASUM = STEMP
+      sasum = stemp
 
-END FUNCTION SASUM
+end function sasum
 !>
 !!##NAME
 !!    saxpy(3f) - [BLAS:SINGLE_BLAS_LEVEL1] SY:=SY+SA*SX (constant times a vector plus a vector)
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+!!     subroutine saxpy(n,sa,sx,incx,sy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)     :: SA
-!!       INTEGER,intent(in)  :: INCX,INCY,N
+!!       real,intent(in)     :: sa
+!!       integer,intent(in)  :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)     :: SX(*)
-!!       REAL,intent(inout)  :: SY(*)
+!!       real,intent(in)     :: sx(*)
+!!       real,intent(inout)  :: sy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -19483,7 +19483,7 @@ END FUNCTION SASUM
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+       subroutine saxpy(n,sa,sx,incx,sy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -19492,69 +19492,69 @@ END FUNCTION SASUM
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)     :: SA
-      INTEGER,intent(in)  :: INCX,INCY,N
+      real,intent(in)     :: sa
+      integer,intent(in)  :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)     :: SX(*)
-      REAL,intent(inout)  :: SY(*)
+      real,intent(in)     :: sx(*)
+      real,intent(inout)  :: sy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER I,IX,IY,M,MP1
+      integer i,ix,iy,m,mp1
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      IF (N.LE.0) RETURN
-      IF (SA.EQ.0.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (sa.eq.0.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
 !
 !        clean-up loop
 !
-         M = MOD(N,4)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               SY(I) = SY(I) + SA*SX(I)
+         m = mod(n,4)
+         if (m.ne.0) then
+            do i = 1,m
+               sy(i) = sy(i) + sa*sx(i)
             enddo
          endif
-         IF (N.LT.4) RETURN
-         MP1 = M + 1
-         DO I = MP1,N,4
-            SY(I) = SY(I) + SA*SX(I)
-            SY(I+1) = SY(I+1) + SA*SX(I+1)
-            SY(I+2) = SY(I+2) + SA*SX(I+2)
-            SY(I+3) = SY(I+3) + SA*SX(I+3)
+         if (n.lt.4) return
+         mp1 = m + 1
+         do i = mp1,n,4
+            sy(i) = sy(i) + sa*sx(i)
+            sy(i+1) = sy(i+1) + sa*sx(i+1)
+            sy(i+2) = sy(i+2) + sa*sx(i+2)
+            sy(i+3) = sy(i+3) + sa*sx(i+3)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-          SY(IY) = SY(IY) + SA*SX(IX)
-          IX = IX + INCX
-          IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+          sy(iy) = sy(iy) + sa*sx(ix)
+          ix = ix + incx
+          iy = iy + incy
          enddo
       endif
 
-      END SUBROUTINE SAXPY
+      end subroutine saxpy
 !>
 !!##NAME
 !!    scabs1(3f) - [BLAS:SINGLE_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     elemental REAL FUNCTION SCABS1(Z)
+!!     elemental real function scabs1(z)
 !!
 !!       .. Scalar Arguments ..
 !!       complex,intent(in) ::  z
@@ -19607,13 +19607,13 @@ end function scabs1
 !!
 !!##SYNOPSIS
 !!
-!!     REAL FUNCTION SCASUM(N,CX,INCX)
+!!     real function scasum(n,cx,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)    :: INCX,N
+!!       integer,intent(in)    :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       COMPLEX,intent(inout) :: CX(*)
+!!       complex,intent(inout) :: cx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -19656,7 +19656,7 @@ end function scabs1
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-REAL FUNCTION SCASUM(N,CX,INCX)
+real function scasum(n,cx,incx)
 implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -19665,48 +19665,48 @@ implicit none
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)    :: INCX,N
+      integer,intent(in)    :: incx,n
 !     ..
 !     .. Array Arguments ..
-      COMPLEX,intent(inout) :: CX(*)
+      complex,intent(inout) :: cx(*)
 !     ..
 !  =====================================================================
 !     .. Local Scalars ..
-      REAL STEMP
-      INTEGER I,NINCX
+      real stemp
+      integer i,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC ABS,AIMAG,REAL
+      intrinsic abs,aimag,real
 !     ..
-      SCASUM = 0.0e0
-      STEMP = 0.0e0
-      IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) THEN
+      scasum = 0.0e0
+      stemp = 0.0e0
+      if (n.le.0 .or. incx.le.0) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
-         DO I = 1,N
-            STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
+         do i = 1,n
+            stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         NINCX = N*INCX
-         DO I = 1,NINCX,INCX
-            STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
+         nincx = n*incx
+         do i = 1,nincx,incx
+            stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
          enddo
       endif
-      SCASUM = STEMP
+      scasum = stemp
 
-END FUNCTION SCASUM
+end function scasum
 !>
 !!##NAME
 !!    scnrm2(3f) - [BLAS:SINGLE_BLAS_LEVEL1] SCNRM2:= square root of sum of magnitudes of entries of CX.
 !!
 !!##SYNOPSIS
 !!
-!!     REAL FUNCTION SCNRM2(N,X,INCX)
+!!     real function scnrm2(n,x,incx)
 !!
 !!      ..
 !!      .. Scalar Arguments ..
@@ -19772,7 +19772,7 @@ END FUNCTION SCASUM
 !  =====================================================================
 pure function scnrm2( n, x, incx )
    integer, parameter :: wp = kind(1.e0)
-   real(wp) :: SCNRM2
+   real(wp) :: scnrm2
 !
 !  -- Reference BLAS level1 routine (version 3.9.1) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -19782,7 +19782,7 @@ pure function scnrm2( n, x, incx )
 !  .. Constants ..
    real(wp), parameter :: zero = 0.0_wp
    real(wp), parameter :: one  = 1.0_wp
-   real(wp), parameter :: maxN = huge(0.0_wp)
+   real(wp), parameter :: maxn = huge(0.0_wp)
 !  ..
 !  .. Blue's ccaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( (minexponent(0._wp) - 1) * 0.5_wp)
@@ -19803,7 +19803,7 @@ pure function scnrm2( n, x, incx )
 !
 !  Quick return if possible
 !
-   SCNRM2 = zero
+   scnrm2 = zero
    if( n <= 0 ) return
 !
    scl = one
@@ -19852,7 +19852,7 @@ pure function scnrm2( n, x, incx )
 !
 !     Combine abig and amed if abig > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          abig = abig + (amed*sbig)*sbig
       endif
       scl = one / sbig
@@ -19861,7 +19861,7 @@ pure function scnrm2( n, x, incx )
 !
 !     Combine amed and asml if asml > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          amed = sqrt(amed)
          asml = sqrt(asml) / ssml
          if (asml > amed) then
@@ -19884,7 +19884,7 @@ pure function scnrm2( n, x, incx )
       scl = one
       sumsq = amed
    endif
-   SCNRM2 = scl*sqrt( sumsq )
+   scnrm2 = scl*sqrt( sumsq )
 end function scnrm2
 !>
 !!##NAME
@@ -19892,14 +19892,14 @@ end function scnrm2
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SCOPY(N,SX,INCX,SY,INCY)
+!!     subroutine scopy(n,sx,incx,sy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)  :: SX(*)
-!!       REAL,intent(out) :: SY(*)
+!!       real,intent(in)  :: sx(*)
+!!       real,intent(out) :: sy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -19950,7 +19950,7 @@ end function scnrm2
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-SUBROUTINE SCOPY(N,SX,INCX,SY,INCY)
+subroutine scopy(n,sx,incx,sy,incy)
 implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -19959,74 +19959,74 @@ implicit none
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)  :: SX(*)
-      REAL,intent(out) :: SY(*)
+      real,intent(in)  :: sx(*)
+      real,intent(out) :: sy(*)
 !     ..
 !  =====================================================================
 !     .. Local Scalars ..
-      INTEGER I,IX,IY,M,MP1
+      integer i,ix,iy,m,mp1
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
 !
 !        clean-up loop
 !
-         M = MOD(N,7)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               SY(I) = SX(I)
+         m = mod(n,7)
+         if (m.ne.0) then
+            do i = 1,m
+               sy(i) = sx(i)
             enddo
-            IF (N.LT.7) RETURN
+            if (n.lt.7) return
          endif
-         MP1 = M + 1
-         DO I = MP1,N,7
-            SY(I) = SX(I)
-            SY(I+1) = SX(I+1)
-            SY(I+2) = SX(I+2)
-            SY(I+3) = SX(I+3)
-            SY(I+4) = SX(I+4)
-            SY(I+5) = SX(I+5)
-            SY(I+6) = SX(I+6)
+         mp1 = m + 1
+         do i = mp1,n,7
+            sy(i) = sx(i)
+            sy(i+1) = sx(i+1)
+            sy(i+2) = sx(i+2)
+            sy(i+3) = sx(i+3)
+            sy(i+4) = sx(i+4)
+            sy(i+5) = sx(i+5)
+            sy(i+6) = sx(i+6)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            SY(IY) = SX(IX)
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            sy(iy) = sx(ix)
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-END SUBROUTINE SCOPY
+end subroutine scopy
 !>
 !!##NAME
 !!    sdot(3f) - [BLAS:SINGLE_BLAS_LEVEL1] SDOT := SUM SX * SY (vector dot product)
 !!
 !!##SYNOPSIS
 !!
-!!     REAL FUNCTION SDOT(N,SX,INCX,SY,INCY)
+!!     real function sdot(n,sx,incx,sy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in) :: SX(*),SY(*)
+!!       real,intent(in) :: sx(*),sy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -20077,7 +20077,7 @@ END SUBROUTINE SCOPY
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure REAL FUNCTION SDOT(N,SX,INCX,SY,INCY)
+pure real function sdot(n,sx,incx,sy,incy)
 implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -20086,63 +20086,63 @@ implicit none
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in) :: SX(*),SY(*)
+      real,intent(in) :: sx(*),sy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      REAL STEMP
-      INTEGER I,IX,IY,M,MP1
+      real stemp
+      integer i,ix,iy,m,mp1
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      STEMP = 0.0e0
-      SDOT = 0.0e0
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      stemp = 0.0e0
+      sdot = 0.0e0
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
 !
 !        clean-up loop
 !
-         M = MOD(N,5)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               STEMP = STEMP + SX(I)*SY(I)
+         m = mod(n,5)
+         if (m.ne.0) then
+            do i = 1,m
+               stemp = stemp + sx(i)*sy(i)
             enddo
-            IF (N.LT.5) THEN
-               SDOT=STEMP
-            RETURN
+            if (n.lt.5) then
+               sdot=stemp
+            return
             endif
          endif
-         MP1 = M + 1
-         DO I = MP1,N,5
-          STEMP = STEMP + SX(I)*SY(I) + SX(I+1)*SY(I+1) + SX(I+2)*SY(I+2) + SX(I+3)*SY(I+3) + SX(I+4)*SY(I+4)
+         mp1 = m + 1
+         do i = mp1,n,5
+          stemp = stemp + sx(i)*sy(i) + sx(i+1)*sy(i+1) + sx(i+2)*sy(i+2) + sx(i+3)*sy(i+3) + sx(i+4)*sy(i+4)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            STEMP = STEMP + SX(IX)*SY(IY)
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            stemp = stemp + sx(ix)*sy(iy)
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
-      SDOT = STEMP
+      sdot = stemp
 
-END FUNCTION SDOT
+end function sdot
 !>
 !!##NAME
 !!    sdsdot(3f) - [BLAS:SINGLE_BLAS_LEVEL1] Compute the inner
@@ -20151,14 +20151,14 @@ END FUNCTION SDOT
 !!
 !!##SYNOPSIS
 !!
-!!     REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
+!!     real function sdsdot(n,sb,sx,incx,sy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in) :: SB
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       real,intent(in) :: sb
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in) :: SX(*),SY(*)
+!!       real,intent(in) :: sx(*),sy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -20239,7 +20239,7 @@ END FUNCTION SDOT
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
+pure real function sdsdot(n,sb,sx,incx,sy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -20248,49 +20248,49 @@ pure REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in) :: SB
-      INTEGER,intent(in) :: INCX,INCY,N
+      real,intent(in) :: sb
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in) :: SX(*),SY(*)
+      real,intent(in) :: sx(*),sy(*)
 !     ..
 !     .. Local Scalars ..
-      DOUBLE PRECISION DSDOT
-      INTEGER I,KX,KY,NS
+      double precision dsdot
+      integer i,kx,ky,ns
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE
+      intrinsic dble
 !     ..
-      DSDOT = SB
-      IF (N.LE.0) THEN
-         SDSDOT = real(DSDOT)
-         RETURN
+      dsdot = sb
+      if (n.le.0) then
+         sdsdot = real(dsdot)
+         return
       endif
-      IF (INCX.EQ.INCY .AND. INCX.GT.0) THEN
+      if (incx.eq.incy .and. incx.gt.0) then
 !
 !     Code for equal and positive increments.
 !
-         NS = N*INCX
-         DO I = 1,NS,INCX
-            DSDOT = DSDOT + DBLE(SX(I))*DBLE(SY(I))
+         ns = n*incx
+         do i = 1,ns,incx
+            dsdot = dsdot + dble(sx(i))*dble(sy(i))
          enddo
-      ELSE
+      else
 !
 !     Code for unequal or nonpositive increments.
 !
-         KX = 1
-         KY = 1
-         IF (INCX.LT.0) KX = 1 + (1-N)*INCX
-         IF (INCY.LT.0) KY = 1 + (1-N)*INCY
-         DO I = 1,N
-            DSDOT = DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
-            KX = KX + INCX
-            KY = KY + INCY
+         kx = 1
+         ky = 1
+         if (incx.lt.0) kx = 1 + (1-n)*incx
+         if (incy.lt.0) ky = 1 + (1-n)*incy
+         do i = 1,n
+            dsdot = dsdot + dble(sx(kx))*dble(sy(ky))
+            kx = kx + incx
+            ky = ky + incy
          enddo
       endif
-      SDSDOT = real(DSDOT)
+      sdsdot = real(dsdot)
 
-END FUNCTION SDSDOT
+end function sdsdot
 !>
 !!##NAME
 !!    sgbmv(3f) - [BLAS:SINGLE_BLAS_LEVEL2]
@@ -20298,16 +20298,16 @@ END FUNCTION SDSDOT
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine sgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)             :: ALPHA,BETA
-!!       INTEGER,intent(in)          :: INCX,INCY,KL,KU,LDA,M,N
-!!       CHARACTER(len=1),intent(in) :: TRANS
+!!       real,intent(in)             :: alpha,beta
+!!       integer,intent(in)          :: incx,incy,kl,ku,lda,m,n
+!!       character(len=1),intent(in) :: trans
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: A(LDA,*),X(*)
-!!       REAL,intent(inout) :: Y(*)
+!!       real,intent(in)    :: a(lda,*),x(*)
+!!       real,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -20451,7 +20451,7 @@ END FUNCTION SDSDOT
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine sgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -20460,81 +20460,81 @@ END FUNCTION SDSDOT
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)             :: ALPHA,BETA
-      INTEGER,intent(in)          :: INCX,INCY,KL,KU,LDA,M,N
-      CHARACTER(len=1),intent(in) :: TRANS
+      real,intent(in)             :: alpha,beta
+      integer,intent(in)          :: incx,incy,kl,ku,lda,m,n
+      character(len=1),intent(in) :: trans
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: A(LDA,*),X(*)
-      REAL,intent(inout) :: Y(*)
+      real,intent(in)    :: a(lda,*),x(*)
+      real,intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KUP1,KX,KY,LENX,LENY
+      real temp
+      integer i,info,ix,iy,j,jx,jy,k,kup1,kx,ky,lenx,leny
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 1
-      elseif (M.LT.0) THEN
-          INFO = 2
-      elseif (N.LT.0) THEN
-          INFO = 3
-      elseif (KL.LT.0) THEN
-          INFO = 4
-      elseif (KU.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (KL+KU+1)) THEN
-          INFO = 8
-      elseif (INCX.EQ.0) THEN
-          INFO = 10
-      elseif (INCY.EQ.0) THEN
-          INFO = 13
+      info = 0
+      if (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 1
+      elseif (m.lt.0) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (kl.lt.0) then
+          info = 4
+      elseif (ku.lt.0) then
+          info = 5
+      elseif (lda.lt. (kl+ku+1)) then
+          info = 8
+      elseif (incx.eq.0) then
+          info = 10
+      elseif (incy.eq.0) then
+          info = 13
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SGBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SGBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 !     up the start points in  X  and  Y.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          LENX = N
-          LENY = M
-      ELSE
-          LENX = M
-          LENY = N
+      if (lsame(trans,'N')) then
+          lenx = n
+          leny = m
+      else
+          lenx = m
+          leny = n
       endif
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (LENX-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (lenx-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (LENY-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (leny-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -20542,89 +20542,89 @@ END FUNCTION SDSDOT
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:LENY) = ZERO
-              ELSE
-                  Y(1:LENY) = BETA*Y(1:LENY)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:leny) = zero
+              else
+                  y(1:leny) = beta*y(1:leny)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,LENY
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,leny
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,LENY
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,leny
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      KUP1 = KU + 1
-      IF (LSAME(TRANS,'N')) THEN
+      if (alpha.eq.zero) return
+      kup1 = ku + 1
+      if (lsame(trans,'N')) then
 !
 !        Form  y := alpha*A*x + y.
 !
-          JX = KX
-          IF (INCY.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      Y(I) = Y(I) + TEMP*A(K+I,J)
+          jx = kx
+          if (incy.eq.1) then
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      y(i) = y(i) + temp*a(k+i,j)
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  IY = KY
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      Y(IY) = Y(IY) + TEMP*A(K+I,J)
-                      IY = IY + INCY
+          else
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  iy = ky
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      y(iy) = y(iy) + temp*a(k+i,j)
+                      iy = iy + incy
                   enddo
-                  JX = JX + INCX
-                  IF (J.GT.KU) KY = KY + INCY
+                  jx = jx + incx
+                  if (j.gt.ku) ky = ky + incy
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y := alpha*A**T*x + y.
 !
-          JY = KY
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ZERO
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      TEMP = TEMP + A(K+I,J)*X(I)
+          jy = ky
+          if (incx.eq.1) then
+              do j = 1,n
+                  temp = zero
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      temp = temp + a(k+i,j)*x(i)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ZERO
-                  IX = KX
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      TEMP = TEMP + A(K+I,J)*X(IX)
-                      IX = IX + INCX
+          else
+              do j = 1,n
+                  temp = zero
+                  ix = kx
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      temp = temp + a(k+i,j)*x(ix)
+                      ix = ix + incx
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
-                  IF (J.GT.KU) KX = KX + INCX
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
+                  if (j.gt.ku) kx = kx + incx
               enddo
           endif
       endif
 
-      END SUBROUTINE SGBMV
+      end subroutine sgbmv
 !>
 !!##NAME
 !!    sgemm(3f) - [BLAS:SINGLE_BLAS_LEVEL3]
@@ -20632,16 +20632,16 @@ END FUNCTION SDSDOT
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine sgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: K,LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in) :: TRANSA,TRANSB
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: k,lda,ldb,ldc,m,n
+!!       character,intent(in) :: transa,transb
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: A(LDA,*),B(LDB,*)
-!!       REAL,intent(inout) :: C(LDC,*)
+!!       real,intent(in)    :: a(lda,*),b(ldb,*)
+!!       real,intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -20791,7 +20791,7 @@ END FUNCTION SDSDOT
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine sgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -20800,13 +20800,13 @@ END FUNCTION SDSDOT
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: K,LDA,LDB,LDC,M,N
-      CHARACTER,intent(in) :: TRANSA,TRANSB
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: k,lda,ldb,ldc,m,n
+      character,intent(in) :: transa,transb
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: A(LDA,*),B(LDB,*)
-      REAL,intent(inout) :: C(LDC,*)
+      real,intent(in)    :: a(lda,*),b(ldb,*)
+      real,intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -20816,152 +20816,152 @@ END FUNCTION SDSDOT
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,J,L,NROWA,NROWB
-      LOGICAL NOTA,NOTB
+      real temp
+      integer i,info,j,l,nrowa,nrowb
+      logical nota,notb
 !     ..
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !
 !     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not
 !     transposed and set  NROWA and NROWB  as the number of rows of  A
 !     and  B  respectively.
 !
-      NOTA = LSAME(TRANSA,'N')
-      NOTB = LSAME(TRANSB,'N')
-      IF (NOTA) THEN
-          NROWA = M
-      ELSE
-          NROWA = K
+      nota = lsame(transa,'N')
+      notb = lsame(transb,'N')
+      if (nota) then
+          nrowa = m
+      else
+          nrowa = k
       endif
-      IF (NOTB) THEN
-          NROWB = K
-      ELSE
-          NROWB = N
+      if (notb) then
+          nrowb = k
+      else
+          nrowb = n
       endif
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF ((.NOT.NOTA) .AND. (.NOT.LSAME(TRANSA,'C')) .AND.  (.NOT.LSAME(TRANSA,'T'))) THEN
-          INFO = 1
-      elseif ((.NOT.NOTB) .AND. (.NOT.LSAME(TRANSB,'C')) .AND.  (.NOT.LSAME(TRANSB,'T'))) THEN
-          INFO = 2
-      elseif (M.LT.0) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 8
-      elseif (LDB.LT.MAX(1,NROWB)) THEN
-          INFO = 10
-      elseif (LDC.LT.MAX(1,M)) THEN
-          INFO = 13
+      info = 0
+      if ((.not.nota) .and. (.not.lsame(transa,'C')) .and.  (.not.lsame(transa,'T'))) then
+          info = 1
+      elseif ((.not.notb) .and. (.not.lsame(transb,'C')) .and.  (.not.lsame(transb,'T'))) then
+          info = 2
+      elseif (m.lt.0) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 8
+      elseif (ldb.lt.max(1,nrowb)) then
+          info = 10
+      elseif (ldc.lt.max(1,m)) then
+          info = 13
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SGEMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SGEMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  (((ALPHA.EQ.ZERO).OR. (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  (((alpha.eq.zero).or. (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And if  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (BETA.EQ.ZERO) THEN
-              DO J = 1,N
-                  C(1:M,J) = ZERO
+      if (alpha.eq.zero) then
+          if (beta.eq.zero) then
+              do j = 1,n
+                  c(1:m,j) = zero
               enddo
-          ELSE
-              DO J = 1,N
-                  C(1:M,J) = BETA*C(1:M,J)
+          else
+              do j = 1,n
+                  c(1:m,j) = beta*c(1:m,j)
               enddo
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (NOTB) THEN
-          IF (NOTA) THEN
+      if (notb) then
+          if (nota) then
 !
 !           Form  C := alpha*A*B + beta*C.
 !
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:M,J) = ZERO
-                  elseif (BETA.NE.ONE) THEN
-                      C(1:M,J) = BETA*C(1:M,J)
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:m,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:m,j) = beta*c(1:m,j)
                   endif
-                  DO L = 1,K
-                      TEMP = ALPHA*B(L,J)
-                      C(1:M,J) = C(1:M,J) + TEMP*A(1:M,L)
+                  do l = 1,k
+                      temp = alpha*b(l,j)
+                      c(1:m,j) = c(1:m,j) + temp*a(1:m,l)
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A**T*B + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*B(L,J)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*b(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
-      ELSE
-          IF (NOTA) THEN
+      else
+          if (nota) then
 !
 !           Form  C := alpha*A*B**T + beta*C
 !
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:M,J) = ZERO
-                  elseif (BETA.NE.ONE) THEN
-                      C(1:M,J) = BETA*C(1:M,J)
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:m,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:m,j) = beta*c(1:m,j)
                   endif
-                  DO L = 1,K
-                      TEMP = ALPHA*B(J,L)
-                      C(1:M,J) = C(1:M,J) + TEMP*A(1:M,L)
+                  do l = 1,k
+                      temp = alpha*b(j,l)
+                      c(1:m,j) = c(1:m,j) + temp*a(1:m,l)
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A**T*B**T + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*B(J,L)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*b(j,l)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
       endif
 !
-      END SUBROUTINE SGEMM
+      end subroutine sgemm
 !>
 !!##NAME
 !!    sgemv(3f) - [BLAS:SINGLE_BLAS_LEVEL2]
@@ -20969,16 +20969,16 @@ END FUNCTION SDSDOT
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine sgemv(trans,m,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: INCX,INCY,LDA,M,N
-!!       CHARACTER,intent(in) :: TRANS
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: incx,incy,lda,m,n
+!!       character,intent(in) :: trans
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: A(LDA,*),X(*)
-!!       REAL,intent(inout) :: Y(*)
+!!       real,intent(in)    :: a(lda,*),x(*)
+!!       real,intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -21095,7 +21095,7 @@ END FUNCTION SDSDOT
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine sgemv(trans,m,n,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -21104,77 +21104,77 @@ END FUNCTION SDSDOT
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: INCX,INCY,LDA,M,N
-      CHARACTER,intent(in) :: TRANS
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: incx,incy,lda,m,n
+      character,intent(in) :: trans
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: A(LDA,*),X(*)
-      REAL,intent(inout) :: Y(*)
+      real,intent(in)    :: a(lda,*),x(*)
+      real,intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY,LENX,LENY
+      real temp
+      integer i,info,ix,iy,j,jx,jy,kx,ky,lenx,leny
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 1
-      elseif (M.LT.0) THEN
-          INFO = 2
-      elseif (N.LT.0) THEN
-          INFO = 3
-      elseif (LDA.LT.MAX(1,M)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
-      elseif (INCY.EQ.0) THEN
-          INFO = 11
+      info = 0
+      if (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 1
+      elseif (m.lt.0) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (lda.lt.max(1,m)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
+      elseif (incy.eq.0) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SGEMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SGEMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 !     up the start points in  X  and  Y.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          LENX = N
-          LENY = M
-      ELSE
-          LENX = M
-          LENY = N
+      if (lsame(trans,'N')) then
+          lenx = n
+          leny = m
+      else
+          lenx = m
+          leny = n
       endif
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (LENX-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (lenx-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (LENY-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (leny-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -21182,82 +21182,82 @@ END FUNCTION SDSDOT
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:LENY) = ZERO
-              ELSE
-                  Y(1:LENY) = BETA*Y(1:LENY)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:leny) = zero
+              else
+                  y(1:leny) = beta*y(1:leny)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,LENY
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,leny
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,LENY
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,leny
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(TRANS,'N')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(trans,'N')) then
 !
 !        Form  y := alpha*A*x + y.
 !
-          JX = KX
-          IF (INCY.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  DO I = 1,M
-                      Y(I) = Y(I) + TEMP*A(I,J)
+          jx = kx
+          if (incy.eq.1) then
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  do i = 1,m
+                      y(i) = y(i) + temp*a(i,j)
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  IY = KY
-                  DO I = 1,M
-                      Y(IY) = Y(IY) + TEMP*A(I,J)
-                      IY = IY + INCY
+          else
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  iy = ky
+                  do i = 1,m
+                      y(iy) = y(iy) + temp*a(i,j)
+                      iy = iy + incy
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y := alpha*A**T*x + y.
 !
-          JY = KY
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ZERO
-                  DO I = 1,M
-                      TEMP = TEMP + A(I,J)*X(I)
+          jy = ky
+          if (incx.eq.1) then
+              do j = 1,n
+                  temp = zero
+                  do i = 1,m
+                      temp = temp + a(i,j)*x(i)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ZERO
-                  IX = KX
-                  DO I = 1,M
-                      TEMP = TEMP + A(I,J)*X(IX)
-                      IX = IX + INCX
+          else
+              do j = 1,n
+                  temp = zero
+                  ix = kx
+                  do i = 1,m
+                      temp = temp + a(i,j)*x(ix)
+                      ix = ix + incx
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
           endif
       endif
 
-      END SUBROUTINE SGEMV
+      end subroutine sgemv
 !>
 !!##NAME
 !!    sger(3f) - [BLAS:SINGLE_BLAS_LEVEL2]
@@ -21265,15 +21265,15 @@ END FUNCTION SDSDOT
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine sger(m,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)    :: ALPHA
-!!       INTEGER,intent(in) :: INCX,INCY,LDA,M,N
+!!       real,intent(in)    :: alpha
+!!       integer,intent(in) :: incx,incy,lda,m,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: X(*),Y(*)
-!!       REAL,intent(inout) :: A(LDA,*)
+!!       real,intent(in)    :: x(*),y(*)
+!!       real,intent(inout) :: a(lda,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -21367,7 +21367,7 @@ END FUNCTION SDSDOT
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+       subroutine sger(m,n,alpha,x,incx,y,incy,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -21376,91 +21376,91 @@ END FUNCTION SDSDOT
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)    :: ALPHA
-      INTEGER,intent(in) :: INCX,INCY,LDA,M,N
+      real,intent(in)    :: alpha
+      integer,intent(in) :: incx,incy,lda,m,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: X(*),Y(*)
-      REAL,intent(inout) :: A(LDA,*)
+      real,intent(in)    :: x(*),y(*)
+      real,intent(inout) :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JY,KX
+      real temp
+      integer i,info,ix,j,jy,kx
 !     ..
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (M.LT.0) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
-      elseif (LDA.LT.MAX(1,M)) THEN
-          INFO = 9
+      info = 0
+      if (m.lt.0) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
+      elseif (lda.lt.max(1,m)) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SGER  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SGER  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (INCY.GT.0) THEN
-          JY = 1
-      ELSE
-          JY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          jy = 1
+      else
+          jy = 1 - (n-1)*incy
       endif
-      IF (INCX.EQ.1) THEN
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*Y(JY)
-                  DO I = 1,M
-                      A(I,J) = A(I,J) + X(I)*TEMP
+      if (incx.eq.1) then
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*y(jy)
+                  do i = 1,m
+                      a(i,j) = a(i,j) + x(i)*temp
                   enddo
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
-      ELSE
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (M-1)*INCX
+      else
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (m-1)*incx
           endif
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*Y(JY)
-                  IX = KX
-                  DO I = 1,M
-                      A(I,J) = A(I,J) + X(IX)*TEMP
-                      IX = IX + INCX
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*y(jy)
+                  ix = kx
+                  do i = 1,m
+                      a(i,j) = a(i,j) + x(ix)*temp
+                      ix = ix + incx
                   enddo
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
       endif
 
-      END SUBROUTINE SGER
+      end subroutine sger
 !>
 !!##NAME
 !!    snrm2(3f) - [BLAS:SINGLE_BLAS_LEVEL1]
@@ -21468,7 +21468,7 @@ END FUNCTION SDSDOT
 !!
 !!##SYNOPSIS
 !!
-!!     REAL FUNCTION SNRM2(N,X,INCX)
+!!     real function snrm2(n,x,incx)
 !!
 !!       .. Scalar Arguments ..
 !!       integer,intent(in) :: incx, n
@@ -21530,9 +21530,9 @@ END FUNCTION SDSDOT
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-function SNRM2( n, x, incx )
+function snrm2( n, x, incx )
    integer, parameter :: wp = kind(1.e0)
-   real(wp) :: SNRM2
+   real(wp) :: snrm2
 !
 !  -- Reference BLAS level1 routine (version 3.9.1) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -21542,7 +21542,7 @@ function SNRM2( n, x, incx )
 !  .. Constants ..
    real(wp), parameter :: zero = 0.0_wp
    real(wp), parameter :: one  = 1.0_wp
-   real(wp), parameter :: maxN = huge(0.0_wp)
+   real(wp), parameter :: maxn = huge(0.0_wp)
 !  ..
 !  .. Blue's ccaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( (minexponent(0._wp) - 1) * 0.5_wp)
@@ -21563,7 +21563,7 @@ function SNRM2( n, x, incx )
 !
 !  Quick return if possible
 !
-   SNRM2 = zero
+   snrm2 = zero
    if( n <= 0 ) return
 !
    scl = one
@@ -21603,7 +21603,7 @@ function SNRM2( n, x, incx )
 !
 !     Combine abig and amed if abig > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          abig = abig + (amed*sbig)*sbig
       endif
       scl = one / sbig
@@ -21612,7 +21612,7 @@ function SNRM2( n, x, incx )
 !
 !     Combine amed and asml if asml > 0.
 !
-      if ( (amed > zero) .or. (amed > maxN) .or. (amed /= amed) ) then
+      if ( (amed > zero) .or. (amed > maxn) .or. (amed /= amed) ) then
          amed = sqrt(amed)
          asml = sqrt(asml) / ssml
          if (asml > amed) then
@@ -21635,22 +21635,22 @@ function SNRM2( n, x, incx )
       scl = one
       sumsq = amed
    endif
-   SNRM2 = scl*sqrt( sumsq )
-end function SNRM2
+   snrm2 = scl*sqrt( sumsq )
+end function snrm2
 !>
 !!##NAME
 !!    srot(3f) - [BLAS:SINGLE_BLAS_LEVEL1] Apply Given's rotation.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SROT(N,SX,INCX,SY,INCY,C,S)
+!!     subroutine srot(n,sx,incx,sy,incy,c,s)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)    :: C,S
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       real,intent(in)    :: c,s
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(inout) :: SX(*),SY(*)
+!!       real,intent(inout) :: sx(*),sy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -21708,7 +21708,7 @@ end function SNRM2
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SROT(N,SX,INCX,SY,INCY,C,S)
+       subroutine srot(n,sx,incx,sy,incy,c,s)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -21717,48 +21717,48 @@ end function SNRM2
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)    :: C,S
-      INTEGER,intent(in) :: INCX,INCY,N
+      real,intent(in)    :: c,s
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(inout) :: SX(*),SY(*)
+      real,intent(inout) :: sx(*),sy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      REAL STEMP
-      INTEGER I,IX,IY
+      real stemp
+      integer i,ix,iy
 !     ..
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !       code for both increments equal to 1
 !
-         DO I = 1,N
-            STEMP = C*SX(I) + S*SY(I)
-            SY(I) = C*SY(I) - S*SX(I)
-            SX(I) = STEMP
+         do i = 1,n
+            stemp = c*sx(i) + s*sy(i)
+            sy(i) = c*sy(i) - s*sx(i)
+            sx(i) = stemp
          enddo
-      ELSE
+      else
 !
 !       code for unequal increments or equal increments not equal
 !         to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            STEMP = C*SX(IX) + S*SY(IY)
-            SY(IY) = C*SY(IY) - S*SX(IX)
-            SX(IX) = STEMP
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            stemp = c*sx(ix) + s*sy(iy)
+            sy(iy) = c*sy(iy) - s*sx(ix)
+            sx(ix) = stemp
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-      END SUBROUTINE SROT
+      end subroutine srot
 !>
 !!##NAME
 !!    srotg(3f) - [BLAS:SINGLE_BLAS_LEVEL1] Generate Given's rotation.
@@ -21766,7 +21766,7 @@ end function SNRM2
 !!##SYNOPSIS
 !!
 !!
-!!   subroutine SROTG( a, b, c, s )
+!!   subroutine srotg( a, b, c, s )
 !!
 !!    .. Scalar Arguments ..
 !!    real(wp),intent(inout) :: a, b
@@ -21847,7 +21847,7 @@ end function SNRM2
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-subroutine SROTG( a, b, c, s )
+subroutine srotg( a, b, c, s )
    integer, parameter :: wp = kind(1.e0)
 !
 !  -- Reference BLAS level1 routine --
@@ -21910,14 +21910,14 @@ end subroutine
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SROTM(N,SX,INCX,SY,INCY,SPARAM)
+!!     subroutine srotm(n,sx,incx,sy,incy,sparam)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: SPARAM(5)
-!!       REAL,intent(inout) :: SX(*),SY(*)
+!!       real,intent(in)    :: sparam(5)
+!!       real,intent(inout) :: sx(*),sy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -21986,7 +21986,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SROTM(N,SX,INCX,SY,INCY,SPARAM)
+       subroutine srotm(n,sx,incx,sy,incy,sparam)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -21995,116 +21995,116 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: SPARAM(5)
-      REAL,intent(inout) :: SX(*),SY(*)
+      real,intent(in)    :: sparam(5)
+      real,intent(inout) :: sx(*),sy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      REAL SFLAG,SH11,SH12,SH21,SH22,W,Z
+      real sflag,sh11,sh12,sh21,sh22,w,z
       real,parameter :: zero=0.0e0
       real,parameter :: two=2.0e0
-      INTEGER I,KX,KY,NSTEPS
+      integer i,kx,ky,nsteps
 !     ..
 !
-      SFLAG = SPARAM(1)
-      IF (N.LE.0 .OR. (SFLAG+TWO.EQ.ZERO)) RETURN
-      IF (INCX.EQ.INCY.AND.INCX.GT.0) THEN
+      sflag = sparam(1)
+      if (n.le.0 .or. (sflag+two.eq.zero)) return
+      if (incx.eq.incy.and.incx.gt.0) then
 !
-         NSTEPS = N*INCX
-         IF (SFLAG.LT.ZERO) THEN
-            SH11 = SPARAM(2)
-            SH12 = SPARAM(4)
-            SH21 = SPARAM(3)
-            SH22 = SPARAM(5)
-            DO I = 1,NSTEPS,INCX
-               W = SX(I)
-               Z = SY(I)
-               SX(I) = W*SH11 + Z*SH12
-               SY(I) = W*SH21 + Z*SH22
+         nsteps = n*incx
+         if (sflag.lt.zero) then
+            sh11 = sparam(2)
+            sh12 = sparam(4)
+            sh21 = sparam(3)
+            sh22 = sparam(5)
+            do i = 1,nsteps,incx
+               w = sx(i)
+               z = sy(i)
+               sx(i) = w*sh11 + z*sh12
+               sy(i) = w*sh21 + z*sh22
             enddo
-         elseif (SFLAG.EQ.ZERO) THEN
-            SH12 = SPARAM(4)
-            SH21 = SPARAM(3)
-            DO I = 1,NSTEPS,INCX
-               W = SX(I)
-               Z = SY(I)
-               SX(I) = W + Z*SH12
-               SY(I) = W*SH21 + Z
+         elseif (sflag.eq.zero) then
+            sh12 = sparam(4)
+            sh21 = sparam(3)
+            do i = 1,nsteps,incx
+               w = sx(i)
+               z = sy(i)
+               sx(i) = w + z*sh12
+               sy(i) = w*sh21 + z
             enddo
-         ELSE
-            SH11 = SPARAM(2)
-            SH22 = SPARAM(5)
-            DO I = 1,NSTEPS,INCX
-               W = SX(I)
-               Z = SY(I)
-               SX(I) = W*SH11 + Z
-               SY(I) = -W + SH22*Z
+         else
+            sh11 = sparam(2)
+            sh22 = sparam(5)
+            do i = 1,nsteps,incx
+               w = sx(i)
+               z = sy(i)
+               sx(i) = w*sh11 + z
+               sy(i) = -w + sh22*z
             enddo
          endif
-      ELSE
-         KX = 1
-         KY = 1
-         IF (INCX.LT.0) KX = 1 + (1-N)*INCX
-         IF (INCY.LT.0) KY = 1 + (1-N)*INCY
+      else
+         kx = 1
+         ky = 1
+         if (incx.lt.0) kx = 1 + (1-n)*incx
+         if (incy.lt.0) ky = 1 + (1-n)*incy
 !
-         IF (SFLAG.LT.ZERO) THEN
-            SH11 = SPARAM(2)
-            SH12 = SPARAM(4)
-            SH21 = SPARAM(3)
-            SH22 = SPARAM(5)
-            DO I = 1,N
-               W = SX(KX)
-               Z = SY(KY)
-               SX(KX) = W*SH11 + Z*SH12
-               SY(KY) = W*SH21 + Z*SH22
-               KX = KX + INCX
-               KY = KY + INCY
+         if (sflag.lt.zero) then
+            sh11 = sparam(2)
+            sh12 = sparam(4)
+            sh21 = sparam(3)
+            sh22 = sparam(5)
+            do i = 1,n
+               w = sx(kx)
+               z = sy(ky)
+               sx(kx) = w*sh11 + z*sh12
+               sy(ky) = w*sh21 + z*sh22
+               kx = kx + incx
+               ky = ky + incy
             enddo
-         elseif (SFLAG.EQ.ZERO) THEN
-            SH12 = SPARAM(4)
-            SH21 = SPARAM(3)
-            DO I = 1,N
-               W = SX(KX)
-               Z = SY(KY)
-               SX(KX) = W + Z*SH12
-               SY(KY) = W*SH21 + Z
-               KX = KX + INCX
-               KY = KY + INCY
+         elseif (sflag.eq.zero) then
+            sh12 = sparam(4)
+            sh21 = sparam(3)
+            do i = 1,n
+               w = sx(kx)
+               z = sy(ky)
+               sx(kx) = w + z*sh12
+               sy(ky) = w*sh21 + z
+               kx = kx + incx
+               ky = ky + incy
             enddo
-         ELSE
-             SH11 = SPARAM(2)
-             SH22 = SPARAM(5)
-             DO I = 1,N
-                W = SX(KX)
-                Z = SY(KY)
-                SX(KX) = W*SH11 + Z
-                SY(KY) = -W + SH22*Z
-                KX = KX + INCX
-                KY = KY + INCY
+         else
+             sh11 = sparam(2)
+             sh22 = sparam(5)
+             do i = 1,n
+                w = sx(kx)
+                z = sy(ky)
+                sx(kx) = w*sh11 + z
+                sy(ky) = -w + sh22*z
+                kx = kx + incx
+                ky = ky + incy
             enddo
          endif
       endif
 
-      END SUBROUTINE SROTM
+      end subroutine srotm
 !>
 !!##NAME
 !!    srotmg(3f) - [BLAS:SINGLE_BLAS_LEVEL1] Generate a modified Given's rotation.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
+!!     subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(inout) :: SD1,SD2,SX1
-!!       REAL,intent(in)    :: SY1
+!!       real,intent(inout) :: sd1,sd2,sx1
+!!       real,intent(in)    :: sy1
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(out)   :: SPARAM(5)
+!!       real,intent(out)   :: sparam(5)
 !!       ..
 !!
 !!##DEFINITION
@@ -22170,7 +22170,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
+       subroutine srotmg(sd1,sd2,sx1,sy1,sparam)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -22179,187 +22179,187 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      REAL,intent(inout) :: SD1,SD2,SX1
-      REAL,intent(in)    :: SY1
+      real,intent(inout) :: sd1,sd2,sx1
+      real,intent(in)    :: sy1
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(out)   :: SPARAM(5)
+      real,intent(out)   :: sparam(5)
 !     ..
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      REAL SFLAG,SH11,SH12,SH21,SH22,SP1,SP2,SQ1, SQ2,STEMP,SU
+      real sflag,sh11,sh12,sh21,sh22,sp1,sp2,sq1, sq2,stemp,su
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC ABS
+      intrinsic abs
 !     ..
 !     .. Data statements ..
       real,parameter :: zero=0.0e0
       real,parameter :: one=1.0e0
       real,parameter :: two=2.0e0
 !
-      real,parameter :: GAM=4096.E0
-      real,parameter :: GAMSQ=1.67772E7
-      real,parameter :: RGAMSQ=5.96046E-8
+      real,parameter :: gam=4096.e0
+      real,parameter :: gamsq=1.67772e7
+      real,parameter :: rgamsq=5.96046e-8
 !     ..
 
-      IF (SD1.LT.ZERO) THEN
+      if (sd1.lt.zero) then
 !        GO ZERO-H-D-AND-SX1..
-         SFLAG = -ONE
-         SH11 = ZERO
-         SH12 = ZERO
-         SH21 = ZERO
-         SH22 = ZERO
+         sflag = -one
+         sh11 = zero
+         sh12 = zero
+         sh21 = zero
+         sh22 = zero
 !
-         SD1 = ZERO
-         SD2 = ZERO
-         SX1 = ZERO
-      ELSE
+         sd1 = zero
+         sd2 = zero
+         sx1 = zero
+      else
 !        CASE-SD1-NONNEGATIVE
-         SP2 = SD2*SY1
-         IF (SP2.EQ.ZERO) THEN
-            SFLAG = -TWO
-            SPARAM(1) = SFLAG
-            RETURN
+         sp2 = sd2*sy1
+         if (sp2.eq.zero) then
+            sflag = -two
+            sparam(1) = sflag
+            return
          endif
 !        REGULAR-CASE..
-         SP1 = SD1*SX1
-         SQ2 = SP2*SY1
-         SQ1 = SP1*SX1
+         sp1 = sd1*sx1
+         sq2 = sp2*sy1
+         sq1 = sp1*sx1
 !
-         IF (ABS(SQ1).GT.ABS(SQ2)) THEN
-            SH21 = -SY1/SX1
-            SH12 = SP2/SP1
+         if (abs(sq1).gt.abs(sq2)) then
+            sh21 = -sy1/sx1
+            sh12 = sp2/sp1
 !
-            SU = ONE - SH12*SH21
+            su = one - sh12*sh21
 !
-           IF (SU.GT.ZERO) THEN
-             SFLAG = ZERO
-             SD1 = SD1/SU
-             SD2 = SD2/SU
-             SX1 = SX1*SU
-           ELSE
+           if (su.gt.zero) then
+             sflag = zero
+             sd1 = sd1/su
+             sd2 = sd2/su
+             sx1 = sx1*su
+           else
 !            This code path if here for safety. We do not expect this
 !            condition to ever hold except in edge cases with rounding
 !            errors. See DOI: 10.1145/355841.355847
-             SFLAG = -ONE
-             SH11 = ZERO
-             SH12 = ZERO
-             SH21 = ZERO
-             SH22 = ZERO
+             sflag = -one
+             sh11 = zero
+             sh12 = zero
+             sh21 = zero
+             sh22 = zero
 !
-             SD1 = ZERO
-             SD2 = ZERO
-             SX1 = ZERO
+             sd1 = zero
+             sd2 = zero
+             sx1 = zero
            endif
-         ELSE
+         else
 
-            IF (SQ2.LT.ZERO) THEN
+            if (sq2.lt.zero) then
 !              GO ZERO-H-D-AND-SX1..
-               SFLAG = -ONE
-               SH11 = ZERO
-               SH12 = ZERO
-               SH21 = ZERO
-               SH22 = ZERO
+               sflag = -one
+               sh11 = zero
+               sh12 = zero
+               sh21 = zero
+               sh22 = zero
 !
-               SD1 = ZERO
-               SD2 = ZERO
-               SX1 = ZERO
-            ELSE
-               SFLAG = ONE
-               SH11 = SP1/SP2
-               SH22 = SX1/SY1
-               SU = ONE + SH11*SH22
-               STEMP = SD2/SU
-               SD2 = SD1/SU
-               SD1 = STEMP
-               SX1 = SY1*SU
+               sd1 = zero
+               sd2 = zero
+               sx1 = zero
+            else
+               sflag = one
+               sh11 = sp1/sp2
+               sh22 = sx1/sy1
+               su = one + sh11*sh22
+               stemp = sd2/su
+               sd2 = sd1/su
+               sd1 = stemp
+               sx1 = sy1*su
             endif
          endif
 
 !     PROCEDURE..SCALE-CHECK
-         IF (SD1.NE.ZERO) THEN
-            DO WHILE ((SD1.LE.RGAMSQ) .OR. (SD1.GE.GAMSQ))
-               IF (SFLAG.EQ.ZERO) THEN
-                  SH11 = ONE
-                  SH22 = ONE
-                  SFLAG = -ONE
-               ELSE
-                  SH21 = -ONE
-                  SH12 = ONE
-                  SFLAG = -ONE
+         if (sd1.ne.zero) then
+            do while ((sd1.le.rgamsq) .or. (sd1.ge.gamsq))
+               if (sflag.eq.zero) then
+                  sh11 = one
+                  sh22 = one
+                  sflag = -one
+               else
+                  sh21 = -one
+                  sh12 = one
+                  sflag = -one
                endif
-               IF (SD1.LE.RGAMSQ) THEN
-                  SD1 = SD1*GAM**2
-                  SX1 = SX1/GAM
-                  SH11 = SH11/GAM
-                  SH12 = SH12/GAM
-               ELSE
-                  SD1 = SD1/GAM**2
-                  SX1 = SX1*GAM
-                  SH11 = SH11*GAM
-                  SH12 = SH12*GAM
+               if (sd1.le.rgamsq) then
+                  sd1 = sd1*gam**2
+                  sx1 = sx1/gam
+                  sh11 = sh11/gam
+                  sh12 = sh12/gam
+               else
+                  sd1 = sd1/gam**2
+                  sx1 = sx1*gam
+                  sh11 = sh11*gam
+                  sh12 = sh12*gam
                endif
-            ENDDO
+            enddo
          endif
 
-         IF (SD2.NE.ZERO) THEN
-            DO WHILE ( (ABS(SD2).LE.RGAMSQ) .OR. (ABS(SD2).GE.GAMSQ) )
-               IF (SFLAG.EQ.ZERO) THEN
-                  SH11 = ONE
-                  SH22 = ONE
-                  SFLAG = -ONE
-               ELSE
-                  SH21 = -ONE
-                  SH12 = ONE
-                  SFLAG = -ONE
+         if (sd2.ne.zero) then
+            do while ( (abs(sd2).le.rgamsq) .or. (abs(sd2).ge.gamsq) )
+               if (sflag.eq.zero) then
+                  sh11 = one
+                  sh22 = one
+                  sflag = -one
+               else
+                  sh21 = -one
+                  sh12 = one
+                  sflag = -one
                endif
-               IF (ABS(SD2).LE.RGAMSQ) THEN
-                  SD2 = SD2*GAM**2
-                  SH21 = SH21/GAM
-                  SH22 = SH22/GAM
-               ELSE
-                  SD2 = SD2/GAM**2
-                  SH21 = SH21*GAM
-                  SH22 = SH22*GAM
+               if (abs(sd2).le.rgamsq) then
+                  sd2 = sd2*gam**2
+                  sh21 = sh21/gam
+                  sh22 = sh22/gam
+               else
+                  sd2 = sd2/gam**2
+                  sh21 = sh21*gam
+                  sh22 = sh22*gam
                endif
             enddo
          endif
 
       endif
 
-      IF (SFLAG.LT.ZERO) THEN
-         SPARAM(2) = SH11
-         SPARAM(3) = SH21
-         SPARAM(4) = SH12
-         SPARAM(5) = SH22
-      elseif (SFLAG.EQ.ZERO) THEN
-         SPARAM(3) = SH21
-         SPARAM(4) = SH12
-      ELSE
-         SPARAM(2) = SH11
-         SPARAM(5) = SH22
+      if (sflag.lt.zero) then
+         sparam(2) = sh11
+         sparam(3) = sh21
+         sparam(4) = sh12
+         sparam(5) = sh22
+      elseif (sflag.eq.zero) then
+         sparam(3) = sh21
+         sparam(4) = sh12
+      else
+         sparam(2) = sh11
+         sparam(5) = sh22
       endif
 
-      SPARAM(1) = SFLAG
+      sparam(1) = sflag
 
-      END SUBROUTINE SROTMG
+      end subroutine srotmg
 !>
 !!##NAME
 !!    ssbmv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a symmetric band matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine ssbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: INCX,INCY,K,LDA,N
-!!       CHARACTER,intent(in) :: UPLO
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: incx,incy,k,lda,n
+!!       character,intent(in) :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*),X(*)
-!!       REAL,intent(inout)   :: Y(*)
+!!       real,intent(in)      :: a(lda,*),x(*)
+!!       real,intent(inout)   :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -22504,7 +22504,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine ssbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -22513,69 +22513,69 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: INCX,INCY,K,LDA,N
-      CHARACTER,intent(in) :: UPLO
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: incx,incy,k,lda,n
+      character,intent(in) :: uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*),X(*)
-      REAL,intent(inout)   :: Y(*)
+      real,intent(in)      :: a(lda,*),x(*)
+      real,intent(inout)   :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KPLUS1,KX,KY,L
+      real temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kplus1,kx,ky,l
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (K.LT.0) THEN
-          INFO = 3
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
-      elseif (INCY.EQ.0) THEN
-          INFO = 11
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (k.lt.0) then
+          info = 3
+      elseif (lda.lt. (k+1)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
+      elseif (incy.eq.0) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of the array A
@@ -22583,123 +22583,123 @@ end subroutine
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when upper triangle of A is stored.
 !
-          KPLUS1 = K + 1
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  L = KPLUS1 - J
-                  DO I = MAX(1,J-K),J - 1
-                      Y(I) = Y(I) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(I)
+          kplus1 = k + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  l = kplus1 - j
+                  do i = max(1,j-k),j - 1
+                      y(i) = y(i) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + TEMP1*A(KPLUS1,J) + ALPHA*TEMP2
+                  y(j) = y(j) + temp1*a(kplus1,j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  L = KPLUS1 - J
-                  DO I = MAX(1,J-K),J - 1
-                      Y(IY) = Y(IY) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  l = kplus1 - j
+                  do i = max(1,j-k),j - 1
+                      y(iy) = y(iy) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*A(KPLUS1,J) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  IF (J.GT.K) THEN
-                      KX = KX + INCX
-                      KY = KY + INCY
+                  y(jy) = y(jy) + temp1*a(kplus1,j) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  if (j.gt.k) then
+                      kx = kx + incx
+                      ky = ky + incy
                   endif
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when lower triangle of A is stored.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*A(1,J)
-                  L = 1 - J
-                  DO I = J + 1,MIN(N,J+K)
-                      Y(I) = Y(I) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(I)
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*a(1,j)
+                  l = 1 - j
+                  do i = j + 1,min(n,j+k)
+                      y(i) = y(i) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
+                  y(j) = y(j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*A(1,J)
-                  L = 1 - J
-                  IX = JX
-                  IY = JY
-                  DO I = J + 1,MIN(N,J+K)
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + A(L+I,J)*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*a(1,j)
+                  l = 1 - j
+                  ix = jx
+                  iy = jy
+                  do i = j + 1,min(n,j+k)
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*a(l+i,j)
+                      temp2 = temp2 + a(l+i,j)*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
       endif
 
-      END SUBROUTINE SSBMV
+      end subroutine ssbmv
 !>
 !!##NAME
 !!    sscal(3f) - [BLAS:SINGLE_BLAS_LEVEL1] SX:=SA*SX.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSCAL(N,SA,SX,INCX)
+!!     subroutine sscal(n,sa,sx,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)    :: SA
-!!       INTEGER,intent(in) :: INCX,N
+!!       real,intent(in)    :: sa
+!!       integer,intent(in) :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(inout) :: SX(*)
+!!       real,intent(inout) :: sx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -22747,7 +22747,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSCAL(N,SA,SX,INCX)
+       subroutine sscal(n,sa,sx,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -22756,71 +22756,71 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)    :: SA
-      INTEGER,intent(in) :: INCX,N
+      real,intent(in)    :: sa
+      integer,intent(in) :: incx,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(inout) :: SX(*)
+      real,intent(inout) :: sx(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER I,M,MP1,NINCX
+      integer i,m,mp1,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) THEN
+      if (n.le.0 .or. incx.le.0) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
 !
 !        clean-up loop
 !
-         M = MOD(N,5)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               SX(I) = SA*SX(I)
+         m = mod(n,5)
+         if (m.ne.0) then
+            do i = 1,m
+               sx(i) = sa*sx(i)
             enddo
-            IF (N.LT.5) RETURN
+            if (n.lt.5) return
          endif
-         MP1 = M + 1
-         DO I = MP1,N,5
-            SX(I) = SA*SX(I)
-            SX(I+1) = SA*SX(I+1)
-            SX(I+2) = SA*SX(I+2)
-            SX(I+3) = SA*SX(I+3)
-            SX(I+4) = SA*SX(I+4)
+         mp1 = m + 1
+         do i = mp1,n,5
+            sx(i) = sa*sx(i)
+            sx(i+1) = sa*sx(i+1)
+            sx(i+2) = sa*sx(i+2)
+            sx(i+3) = sa*sx(i+3)
+            sx(i+4) = sa*sx(i+4)
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         NINCX = N*INCX
-         DO I = 1,NINCX,INCX
-            SX(I) = SA*SX(I)
+         nincx = n*incx
+         do i = 1,nincx,incx
+            sx(i) = sa*sx(i)
          enddo
       endif
 
-      END SUBROUTINE SSCAL
+      end subroutine sscal
 !>
 !!##NAME
 !!    sspmv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a packed symmetric matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+!!     subroutine sspmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: INCX,INCY,N
-!!       CHARACTER,intent(in) :: UPLO
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: incx,incy,n
+!!       character,intent(in) :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: AP(*),X(*)
-!!       REAL,intent(inout)   :: Y(*)
+!!       real,intent(in)      :: ap(*),x(*)
+!!       real,intent(inout)   :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -22930,7 +22930,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+       subroutine sspmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -22939,24 +22939,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: INCX,INCY,N
-      CHARACTER,intent(in) :: UPLO
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: incx,incy,n
+      character,intent(in) :: uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: AP(*),X(*)
-      REAL,intent(inout)   :: Y(*)
+      real,intent(in)      :: ap(*),x(*)
+      real,intent(inout)   :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
+      real temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,k,kk,kx,ky
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
@@ -22965,36 +22965,36 @@ end subroutine
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 6
-      elseif (INCY.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 6
+      elseif (incy.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSPMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSPMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of the array AP
@@ -23002,125 +23002,125 @@ end subroutine
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when AP contains the upper triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  K = KK
-                  DO I = 1,J - 1
-                      Y(I) = Y(I) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(I)
-                      K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  k = kk
+                  do i = 1,j - 1
+                      y(i) = y(i) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(i)
+                      k = k + 1
                   enddo
-                  Y(J) = Y(J) + TEMP1*AP(KK+J-1) + ALPHA*TEMP2
-                  KK = KK + J
+                  y(j) = y(j) + temp1*ap(kk+j-1) + alpha*temp2
+                  kk = kk + j
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  DO K = KK,KK + J - 2
-                      Y(IY) = Y(IY) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  do k = kk,kk + j - 2
+                      y(iy) = y(iy) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*AP(KK+J-1) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + J
+                  y(jy) = y(jy) + temp1*ap(kk+j-1) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when AP contains the lower triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*AP(KK)
-                  K = KK + 1
-                  DO I = J + 1,N
-                      Y(I) = Y(I) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(I)
-                      K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*ap(kk)
+                  k = kk + 1
+                  do i = j + 1,n
+                      y(i) = y(i) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(i)
+                      k = k + 1
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
-                  KK = KK + (N-J+1)
+                  y(j) = y(j) + alpha*temp2
+                  kk = kk + (n-j+1)
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*AP(KK)
-                  IX = JX
-                  IY = JY
-                  DO K = KK + 1,KK + N - J
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + AP(K)*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*ap(kk)
+                  ix = jx
+                  iy = jy
+                  do k = kk + 1,kk + n - j
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*ap(k)
+                      temp2 = temp2 + ap(k)*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + (N-J+1)
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + (n-j+1)
               enddo
           endif
       endif
 
-      END SUBROUTINE SSPMV
+      end subroutine sspmv
 !>
 !!##NAME
 !!    sspr2(3f) - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SY)+alpha*SY*TRANSPOSE(SX), A packed symmetric.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+!!     subroutine sspr2(uplo,n,alpha,x,incx,y,incy,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA
-!!       INTEGER,intent(in)   :: INCX,INCY,N
-!!       CHARACTER,intent(in) :: UPLO
+!!       real,intent(in)      :: alpha
+!!       integer,intent(in)   :: incx,incy,n
+!!       character,intent(in) :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: X(*),Y(*)
-!!       REAL,intent(inout)   :: AP(*)
+!!       real,intent(in)      :: x(*),y(*)
+!!       real,intent(inout)   :: ap(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -23226,7 +23226,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+       subroutine sspr2(uplo,n,alpha,x,incx,y,incy,ap)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -23235,24 +23235,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA
-      INTEGER,intent(in)   :: INCX,INCY,N
-      CHARACTER,intent(in) :: UPLO
+      real,intent(in)      :: alpha
+      integer,intent(in)   :: incx,incy,n
+      character,intent(in) :: uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: X(*),Y(*)
-      REAL,intent(inout)   :: AP(*)
+      real,intent(in)      :: x(*),y(*)
+      real,intent(inout)   :: ap(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
+      real temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,k,kk,kx,ky
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
@@ -23261,136 +23261,136 @@ end subroutine
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSPR2 ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSPR2 ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set up the start points in X and Y if the increments are not both
 !     unity.
 !
-      IF ((INCX.NE.1) .OR. (INCY.NE.1)) THEN
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (N-1)*INCX
+      if ((incx.ne.1) .or. (incy.ne.1)) then
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (n-1)*incx
           endif
-          IF (INCY.GT.0) THEN
-              KY = 1
-          ELSE
-              KY = 1 - (N-1)*INCY
+          if (incy.gt.0) then
+              ky = 1
+          else
+              ky = 1 - (n-1)*incy
           endif
-          JX = KX
-          JY = KY
+          jx = kx
+          jy = ky
       endif
 !
 !     Start the operations. In this version the elements of the array AP
 !     are accessed sequentially with one pass through AP.
 !
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when upper triangle is stored in AP.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      K = KK
-                      DO I = 1,J
-                          AP(K) = AP(K) + X(I)*TEMP1 + Y(I)*TEMP2
-                          K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      k = kk
+                      do i = 1,j
+                          ap(k) = ap(k) + x(i)*temp1 + y(i)*temp2
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + J
+                  kk = kk + j
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = KX
-                      IY = KY
-                      DO K = KK,KK + J - 1
-                          AP(K) = AP(K) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = kx
+                      iy = ky
+                      do k = kk,kk + j - 1
+                          ap(k) = ap(k) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + J
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when lower triangle is stored in AP.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      K = KK
-                      DO I = J,N
-                          AP(K) = AP(K) + X(I)*TEMP1 + Y(I)*TEMP2
-                          K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      k = kk
+                      do i = j,n
+                          ap(k) = ap(k) + x(i)*temp1 + y(i)*temp2
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + N - J + 1
+                  kk = kk + n - j + 1
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = JX
-                      IY = JY
-                      DO K = KK,KK + N - J
-                          AP(K) = AP(K) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = jx
+                      iy = jy
+                      do k = kk,kk + n - j
+                          ap(k) = ap(k) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + N - J + 1
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + n - j + 1
               enddo
           endif
       endif
 
-      END SUBROUTINE SSPR2
+      end subroutine sspr2
 !>
 !!##NAME
 !!    sspr(3f) - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SX), A a packed symmetric matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSPR(UPLO,N,ALPHA,X,INCX,AP)
+!!     subroutine sspr(uplo,n,alpha,x,incx,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA
-!!       INTEGER,intent(in)   :: INCX,N
-!!       CHARACTER,intent(in) :: UPLO
+!!       real,intent(in)      :: alpha
+!!       integer,intent(in)   :: incx,n
+!!       character,intent(in) :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: X(*)
-!!       REAL,intent(inout) :: AP(*)
+!!       real,intent(in)    :: x(*)
+!!       real,intent(inout) :: ap(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -23483,7 +23483,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSPR(UPLO,N,ALPHA,X,INCX,AP)
+       subroutine sspr(uplo,n,alpha,x,incx,ap)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -23492,24 +23492,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA
-      INTEGER,intent(in)   :: INCX,N
-      CHARACTER,intent(in) :: UPLO
+      real,intent(in)      :: alpha
+      integer,intent(in)   :: incx,n
+      character,intent(in) :: uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: X(*)
-      REAL,intent(inout) :: AP(*)
+      real,intent(in)    :: x(*)
+      real,intent(inout) :: ap(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
+      real temp
+      integer i,info,ix,j,jx,k,kk,kx
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
@@ -23518,113 +23518,113 @@ end subroutine
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSPR  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSPR  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set the start point in X if the increment is not unity.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of the array AP
 !     are accessed sequentially with one pass through AP.
 !
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when upper triangle is stored in AP.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      K = KK
-                      DO I = 1,J
-                          AP(K) = AP(K) + X(I)*TEMP
-                          K = K + 1
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      k = kk
+                      do i = 1,j
+                          ap(k) = ap(k) + x(i)*temp
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + J
+                  kk = kk + j
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = KX
-                      DO K = KK,KK + J - 1
-                          AP(K) = AP(K) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = kx
+                      do k = kk,kk + j - 1
+                          ap(k) = ap(k) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
-                  KK = KK + J
+                  jx = jx + incx
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when lower triangle is stored in AP.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      K = KK
-                      DO I = J,N
-                          AP(K) = AP(K) + X(I)*TEMP
-                          K = K + 1
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      k = kk
+                      do i = j,n
+                          ap(k) = ap(k) + x(i)*temp
+                          k = k + 1
                       enddo
                   endif
-                  KK = KK + N - J + 1
+                  kk = kk + n - j + 1
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = JX
-                      DO K = KK,KK + N - J
-                          AP(K) = AP(K) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = jx
+                      do k = kk,kk + n - j
+                          ap(k) = ap(k) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
-                  KK = KK + N - J + 1
+                  jx = jx + incx
+                  kk = kk + n - j + 1
               enddo
           endif
       endif
 
-      END SUBROUTINE SSPR
+      end subroutine sspr
 !>
 !!##NAME
 !!    sswap(3f) - [BLAS:SINGLE_BLAS_LEVEL1] Interchange vectors SX and SY.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSWAP(N,SX,INCX,SY,INCY)
+!!     subroutine sswap(n,sx,incx,sy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(inout) :: SX(*),SY(*)
+!!       real,intent(inout) :: sx(*),sy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -23675,7 +23675,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSWAP(N,SX,INCX,SY,INCY)
+       subroutine sswap(n,sx,incx,sy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -23684,85 +23684,85 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(inout) :: SX(*),SY(*)
+      real,intent(inout) :: sx(*),sy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      REAL STEMP
-      INTEGER I,IX,IY,M,MP1
+      real stemp
+      integer i,ix,iy,m,mp1
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MOD
+      intrinsic mod
 !     ..
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !       code for both increments equal to 1
 !
 !
 !       clean-up loop
 !
-         M = MOD(N,3)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               STEMP = SX(I)
-               SX(I) = SY(I)
-               SY(I) = STEMP
+         m = mod(n,3)
+         if (m.ne.0) then
+            do i = 1,m
+               stemp = sx(i)
+               sx(i) = sy(i)
+               sy(i) = stemp
             enddo
-            IF (N.LT.3) RETURN
+            if (n.lt.3) return
          endif
-         MP1 = M + 1
-         DO I = MP1,N,3
-            STEMP = SX(I)
-            SX(I) = SY(I)
-            SY(I) = STEMP
-            STEMP = SX(I+1)
-            SX(I+1) = SY(I+1)
-            SY(I+1) = STEMP
-            STEMP = SX(I+2)
-            SX(I+2) = SY(I+2)
-            SY(I+2) = STEMP
+         mp1 = m + 1
+         do i = mp1,n,3
+            stemp = sx(i)
+            sx(i) = sy(i)
+            sy(i) = stemp
+            stemp = sx(i+1)
+            sx(i+1) = sy(i+1)
+            sy(i+1) = stemp
+            stemp = sx(i+2)
+            sx(i+2) = sy(i+2)
+            sy(i+2) = stemp
          enddo
-      ELSE
+      else
 !
 !       code for unequal increments or equal increments not equal
 !         to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            STEMP = SX(IX)
-            SX(IX) = SY(IY)
-            SY(IY) = STEMP
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            stemp = sx(ix)
+            sx(ix) = sy(iy)
+            sy(iy) = stemp
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-      END SUBROUTINE SSWAP
+      end subroutine sswap
 !>
 !!##NAME
 !!    ssymm(3f) - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*B+beta*C, A symmetric, B, C rectangular.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine ssymm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in) :: SIDE,UPLO
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: lda,ldb,ldc,m,n
+!!       character,intent(in) :: side,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*),B(LDB,*)
-!!       REAL,intent(inout)   :: C(LDC,*)
+!!       real,intent(in)      :: a(lda,*),b(ldb,*)
+!!       real,intent(inout)   :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -23911,7 +23911,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine ssymm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -23920,13 +23920,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: LDA,LDB,LDC,M,N
-      CHARACTER,intent(in) :: SIDE,UPLO
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: lda,ldb,ldc,m,n
+      character,intent(in) :: side,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*),B(LDB,*)
-      REAL,intent(inout)   :: C(LDC,*)
+      real,intent(in)      :: a(lda,*),b(ldb,*)
+      real,intent(inout)   :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -23936,158 +23936,158 @@ end subroutine
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP1,TEMP2
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL UPPER
+      real temp1,temp2
+      integer i,info,j,k,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      REAL,PARAMETER :: ONE=1.0E+0,ZERO=0.0E+0
+      real,parameter :: one=1.0e+0,zero=0.0e+0
 !     ..
 !
 !     Set NROWA as the number of rows of A.
 !
-      IF (LSAME(SIDE,'L')) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      if (lsame(side,'L')) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF ((.NOT.LSAME(SIDE,'L')) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      elseif ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      elseif (M.LT.0) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      elseif (LDB.LT.MAX(1,M)) THEN
-          INFO = 9
-      elseif (LDC.LT.MAX(1,M)) THEN
-          INFO = 12
+      info = 0
+      if ((.not.lsame(side,'L')) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif (m.lt.0) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldb.lt.max(1,m)) then
+          info = 9
+      elseif (ldc.lt.max(1,m)) then
+          info = 12
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSYMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSYMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (BETA.EQ.ZERO) THEN
-              C(1:M,1:N) = ZERO
-          ELSE
-              C(1:M,1:N) = BETA*C(1:M,1:N)
-          ENDIF
-          RETURN
+      if (alpha.eq.zero) then
+          if (beta.eq.zero) then
+              c(1:m,1:n) = zero
+          else
+              c(1:m,1:n) = beta*c(1:m,1:n)
+          endif
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(SIDE,'L')) THEN
+      if (lsame(side,'L')) then
 !
 !        Form  C := alpha*A*B + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = 1,I - 1
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*A(K,I)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,m
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = 1,i - 1
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*a(k,i)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*A(I,I) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*A(I,I) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*a(i,i) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*a(i,i) + alpha*temp2
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = M,1,-1
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = I + 1,M
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*A(K,I)
+          else
+              do j = 1,n
+                  do i = m,1,-1
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = i + 1,m
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*a(k,i)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*A(I,I) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*A(I,I) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*a(i,i) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*a(i,i) + alpha*temp2
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*B*A + beta*C.
 !
-          DO J = 1,N
-              TEMP1 = ALPHA*A(J,J)
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,M
-                      C(I,J) = TEMP1*B(I,J)
+          do j = 1,n
+              temp1 = alpha*a(j,j)
+              if (beta.eq.zero) then
+                  do i = 1,m
+                      c(i,j) = temp1*b(i,j)
                   enddo
-              ELSE
-                  DO I = 1,M
-                      C(I,J) = BETA*C(I,J) + TEMP1*B(I,J)
+              else
+                  do i = 1,m
+                      c(i,j) = beta*c(i,j) + temp1*b(i,j)
                   enddo
               endif
-              DO K = 1,J - 1
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*A(K,J)
-                  ELSE
-                      TEMP1 = ALPHA*A(J,K)
+              do k = 1,j - 1
+                  if (upper) then
+                      temp1 = alpha*a(k,j)
+                  else
+                      temp1 = alpha*a(j,k)
                   endif
-                  DO I = 1,M
-                      C(I,J) = C(I,J) + TEMP1*B(I,K)
+                  do i = 1,m
+                      c(i,j) = c(i,j) + temp1*b(i,k)
                   enddo
               enddo
-              DO K = J + 1,N
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*A(J,K)
-                  ELSE
-                      TEMP1 = ALPHA*A(K,J)
+              do k = j + 1,n
+                  if (upper) then
+                      temp1 = alpha*a(j,k)
+                  else
+                      temp1 = alpha*a(k,j)
                   endif
-                  DO I = 1,M
-                      C(I,J) = C(I,J) + TEMP1*B(I,K)
+                  do i = 1,m
+                      c(i,j) = c(i,j) + temp1*b(i,k)
                   enddo
               enddo
           enddo
       endif
 
-      END SUBROUTINE SSYMM
+      end subroutine ssymm
 !>
 !!##NAME
 !!    ssymv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a symmetric matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSYMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine ssymv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: INCX,INCY,LDA,N
-!!       CHARACTER,intent(in) :: UPLO
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: incx,incy,lda,n
+!!       character,intent(in) :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*),X(*)
-!!       REAL,intent(inout)   :: Y(*)
+!!       real,intent(in)      :: a(lda,*),x(*)
+!!       real,intent(inout)   :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -24201,7 +24201,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSYMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine ssymv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -24210,67 +24210,67 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: INCX,INCY,LDA,N
-      CHARACTER,intent(in) :: UPLO
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: incx,incy,lda,n
+      character,intent(in) :: uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*),X(*)
-      REAL,intent(inout)   :: Y(*)
+      real,intent(in)      :: a(lda,*),x(*)
+      real,intent(inout)   :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
+      real temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kx,ky
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 5
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
-      elseif (INCY.EQ.0) THEN
-          INFO = 10
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (lda.lt.max(1,n)) then
+          info = 5
+      elseif (incx.eq.0) then
+          info = 7
+      elseif (incy.eq.0) then
+          info = 10
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSYMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSYMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -24279,116 +24279,116 @@ end subroutine
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when A is stored in upper triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  DO I = 1,J - 1
-                      Y(I) = Y(I) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(I)
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  do i = 1,j - 1
+                      y(i) = y(i) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + TEMP1*A(J,J) + ALPHA*TEMP2
+                  y(j) = y(j) + temp1*a(j,j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  DO I = 1,J - 1
-                      Y(IY) = Y(IY) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  do i = 1,j - 1
+                      y(iy) = y(iy) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*A(J,J) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  y(jy) = y(jy) + temp1*a(j,j) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when A is stored in lower triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*A(J,J)
-                  DO I = J + 1,N
-                      Y(I) = Y(I) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(I)
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*a(j,j)
+                  do i = j + 1,n
+                      y(i) = y(i) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(i)
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
+                  y(j) = y(j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*A(J,J)
-                  IX = JX
-                  IY = JY
-                  DO I = J + 1,N
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*A(I,J)
-                      TEMP2 = TEMP2 + A(I,J)*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*a(j,j)
+                  ix = jx
+                  iy = jy
+                  do i = j + 1,n
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*a(i,j)
+                      temp2 = temp2 + a(i,j)*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
       endif
 
-      END SUBROUTINE SSYMV
+      end subroutine ssymv
 !>
 !!##NAME
 !!    ssyr2(3f) - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SY)+alpha*SY*TRANSPOSE(SX), A a symmetric
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine ssyr2(uplo,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA
-!!       INTEGER,intent(in)   :: INCX,INCY,LDA,N
-!!       CHARACTER,intent(in) :: UPLO
+!!       real,intent(in)      :: alpha
+!!       integer,intent(in)   :: incx,incy,lda,n
+!!       character,intent(in) :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: X(*),Y(*)
-!!       REAL,intent(inout)   :: A(LDA,*)
+!!       real,intent(in)      :: x(*),y(*)
+!!       real,intent(inout)   :: a(lda,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -24498,7 +24498,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+       subroutine ssyr2(uplo,n,alpha,x,incx,y,incy,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -24507,159 +24507,159 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA
-      INTEGER,intent(in)   :: INCX,INCY,LDA,N
-      CHARACTER,intent(in) :: UPLO
+      real,intent(in)      :: alpha
+      integer,intent(in)   :: incx,incy,lda,n
+      character,intent(in) :: uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: X(*),Y(*)
-      REAL,intent(inout)   :: A(LDA,*)
+      real,intent(in)      :: x(*),y(*)
+      real,intent(inout)   :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
+      real temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kx,ky
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
+      elseif (lda.lt.max(1,n)) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSYR2 ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSYR2 ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set up the start points in X and Y if the increments are not both
 !     unity.
 !
-      IF ((INCX.NE.1) .OR. (INCY.NE.1)) THEN
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (N-1)*INCX
+      if ((incx.ne.1) .or. (incy.ne.1)) then
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (n-1)*incx
           endif
-          IF (INCY.GT.0) THEN
-              KY = 1
-          ELSE
-              KY = 1 - (N-1)*INCY
+          if (incy.gt.0) then
+              ky = 1
+          else
+              ky = 1 - (n-1)*incy
           endif
-          JX = KX
-          JY = KY
+          jx = kx
+          jy = ky
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through the triangular part
 !     of A.
 !
-      IF (LSAME(UPLO,'U')) THEN
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when A is stored in the upper triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      DO I = 1,J
-                          A(I,J) = A(I,J) + X(I)*TEMP1 + Y(I)*TEMP2
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      do i = 1,j
+                          a(i,j) = a(i,j) + x(i)*temp1 + y(i)*temp2
                       enddo
                   endif
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = KX
-                      IY = KY
-                      DO I = 1,J
-                          A(I,J) = A(I,J) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = kx
+                      iy = ky
+                      do i = 1,j
+                          a(i,j) = a(i,j) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when A is stored in the lower triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(J)
-                      TEMP2 = ALPHA*X(J)
-                      DO I = J,N
-                          A(I,J) = A(I,J) + X(I)*TEMP1 + Y(I)*TEMP2
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*y(j)
+                      temp2 = alpha*x(j)
+                      do i = j,n
+                          a(i,j) = a(i,j) + x(i)*temp1 + y(i)*temp2
                       enddo
                   endif
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*Y(JY)
-                      TEMP2 = ALPHA*X(JX)
-                      IX = JX
-                      IY = JY
-                      DO I = J,N
-                          A(I,J) = A(I,J) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*y(jy)
+                      temp2 = alpha*x(jx)
+                      ix = jx
+                      iy = jy
+                      do i = j,n
+                          a(i,j) = a(i,j) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
       endif
 
-      END SUBROUTINE SSYR2
+      end subroutine ssyr2
 !>
 !!##NAME
 !!    ssyr2k(3f) - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(B)+alpha*B*TRANSPOSE(A)+beta*C, C symmetric.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine ssyr2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: K,LDA,LDB,LDC,N
-!!       CHARACTER,intent(in) :: TRANS,UPLO
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: k,lda,ldb,ldc,n
+!!       character,intent(in) :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*),B(LDB,*)
-!!       REAL,intent(inout)   :: C(LDC,*)
+!!       real,intent(in)      :: a(lda,*),b(ldb,*)
+!!       real,intent(inout)   :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -24810,7 +24810,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine ssyr2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -24819,13 +24819,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: K,LDA,LDB,LDC,N
-      CHARACTER,intent(in) :: TRANS,UPLO
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: k,lda,ldb,ldc,n
+      character,intent(in) :: trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*),B(LDB,*)
-      REAL,intent(inout)   :: C(LDC,*)
+      real,intent(in)      :: a(lda,*),b(ldb,*)
+      real,intent(inout)   :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -24838,174 +24838,174 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP1,TEMP2
-      INTEGER I,INFO,J,L,NROWA
-      LOGICAL UPPER
+      real temp1,temp2
+      integer i,info,j,l,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          NROWA = N
-      ELSE
-          NROWA = K
+      if (lsame(trans,'N')) then
+          nrowa = n
+      else
+          nrowa = k
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.LSAME(TRANS,'N')) .AND.  (.NOT.LSAME(TRANS,'T')) .AND.  (.NOT.LSAME(TRANS,'C'))) THEN
-          INFO = 2
-      ELSEIF (N.LT.0) THEN
-          INFO = 3
-      ELSEIF (K.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDB.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      ELSEIF (LDC.LT.MAX(1,N)) THEN
-          INFO = 12
+      info = 0
+      if ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 1
+      elseif ((.not.lsame(trans,'N')) .and.  (.not.lsame(trans,'T')) .and.  (.not.lsame(trans,'C'))) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (k.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldb.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldc.lt.max(1,n)) then
+          info = 12
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSYR2K',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSYR2K',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (((ALPHA.EQ.ZERO).OR.  (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. (((alpha.eq.zero).or.  (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (UPPER) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(1:J,J) = ZERO
+      if (alpha.eq.zero) then
+          if (upper) then
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(1:j,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(1:J,J) = BETA*C(1:J,J)
+              else
+                  do j = 1,n
+                      c(1:j,j) = beta*c(1:j,j)
                   enddo
               endif
-          ELSE
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(J:N,J) = ZERO
+          else
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(j:n,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(J:N,J) = BETA*C(J:N,J)
+              else
+                  do j = 1,n
+                      c(j:n,j) = beta*c(j:n,j)
                   enddo
               endif
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*B**T + alpha*B*A**T + C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:J,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(1:J,J) = BETA*C(1:J,J)
+          if (upper) then
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:j,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:j,j) = beta*c(1:j,j)
                   endif
-                  DO L = 1,K
-                      IF ((A(J,L).NE.ZERO) .OR. (B(J,L).NE.ZERO)) THEN
-                          TEMP1 = ALPHA*B(J,L)
-                          TEMP2 = ALPHA*A(J,L)
-                          DO I = 1,J
-                              C(I,J) = C(I,J) + A(I,L)*TEMP1 + B(I,L)*TEMP2
+                  do l = 1,k
+                      if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
+                          temp1 = alpha*b(j,l)
+                          temp2 = alpha*a(j,l)
+                          do i = 1,j
+                              c(i,j) = c(i,j) + a(i,l)*temp1 + b(i,l)*temp2
                           enddo
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J:N,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(J:N,J) = BETA*C(J:N,J)
+          else
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(j:n,j) = zero
+                  elseif (beta.ne.one) then
+                      c(j:n,j) = beta*c(j:n,j)
                   endif
-                  DO L = 1,K
-                      IF ((A(J,L).NE.ZERO) .OR. (B(J,L).NE.ZERO)) THEN
-                          TEMP1 = ALPHA*B(J,L)
-                          TEMP2 = ALPHA*A(J,L)
-                          C(J:N,J) = C(J:N,J) + A(J:N,L)*TEMP1 + B(J:N,L)*TEMP2
+                  do l = 1,k
+                      if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
+                          temp1 = alpha*b(j,l)
+                          temp2 = alpha*a(j,l)
+                          c(j:n,j) = c(j:n,j) + a(j:n,l)*temp1 + b(j:n,l)*temp2
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*A**T*B + alpha*B**T*A + C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,J
-                      TEMP1 = ZERO
-                      TEMP2 = ZERO
-                      DO L = 1,K
-                          TEMP1 = TEMP1 + A(L,I)*B(L,J)
-                          TEMP2 = TEMP2 + B(L,I)*A(L,J)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,j
+                      temp1 = zero
+                      temp2 = zero
+                      do l = 1,k
+                          temp1 = temp1 + a(l,i)*b(l,j)
+                          temp2 = temp2 + b(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP1 + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + ALPHA*TEMP1 + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp1 + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + alpha*temp1 + alpha*temp2
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = J,N
-                      TEMP1 = ZERO
-                      TEMP2 = ZERO
-                      DO L = 1,K
-                          TEMP1 = TEMP1 + A(L,I)*B(L,J)
-                          TEMP2 = TEMP2 + B(L,I)*A(L,J)
+          else
+              do j = 1,n
+                  do i = j,n
+                      temp1 = zero
+                      temp2 = zero
+                      do l = 1,k
+                          temp1 = temp1 + a(l,i)*b(l,j)
+                          temp2 = temp2 + b(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP1 + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + ALPHA*TEMP1 + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp1 + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + alpha*temp1 + alpha*temp2
                       endif
                   enddo
               enddo
           endif
       endif
 
-      END SUBROUTINE SSYR2K
+      end subroutine ssyr2k
 !>
 !!##NAME
 !!    ssyr(3f) - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SX), A a symmetric matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
+!!     subroutine ssyr(uplo,n,alpha,x,incx,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA
-!!       INTEGER,intent(in)   :: INCX,LDA,N
-!!       CHARACTER,intent(in) :: UPLO
+!!       real,intent(in)      :: alpha
+!!       integer,intent(in)   :: incx,lda,n
+!!       character,intent(in) :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: X(*)
-!!       REAL,intent(inout)   :: A(LDA,*)
+!!       real,intent(in)      :: x(*)
+!!       real,intent(inout)   :: a(lda,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -25102,7 +25102,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
+       subroutine ssyr(uplo,n,alpha,x,incx,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -25111,135 +25111,135 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA
-      INTEGER,intent(in)   :: INCX,LDA,N
-      CHARACTER,intent(in) :: UPLO
+      real,intent(in)      :: alpha
+      integer,intent(in)   :: incx,lda,n
+      character,intent(in) :: uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: X(*)
-      REAL,intent(inout)   :: A(LDA,*)
+      real,intent(in)      :: x(*)
+      real,intent(inout)   :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,KX
+      real temp
+      integer i,info,ix,j,jx,kx
 !     ..
 !     .. External Functions ..  LOGICAL LSAME
 !     ..
 !     .. External Subroutines ..  EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (lda.lt.max(1,n)) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSYR  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSYR  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set the start point in X if the increment is not unity.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through the triangular part
 !     of A.
 !
-      IF (LSAME(UPLO,'U')) THEN
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when A is stored in upper triangle.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      A(1:J,J) = A(1:J,J) + X(1:J)*TEMP
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      a(1:j,j) = a(1:j,j) + x(1:j)*temp
                   endif
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = KX
-                      DO I = 1,J
-                          A(I,J) = A(I,J) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = kx
+                      do i = 1,j
+                          a(i,j) = a(i,j) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when A is stored in lower triangle.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*X(J)
-                      A(J:N,J) = A(J:N,J) + X(J:N)*TEMP
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*x(j)
+                      a(j:n,j) = a(j:n,j) + x(j:n)*temp
                   endif
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IX = JX
-                      DO I = J,N
-                          A(I,J) = A(I,J) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*x(jx)
+                      ix = jx
+                      do i = j,n
+                          a(i,j) = a(i,j) + x(ix)*temp
+                          ix = ix + incx
                       enddo
                   endif
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
       endif
 
-      END SUBROUTINE SSYR
+      end subroutine ssyr
 !>
 !!##NAME
 !!    ssyrk(3f) - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(A)+beta*C, C symmetric.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE SSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+!!     subroutine ssyrk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA,BETA
-!!       INTEGER,intent(in)   :: K,LDA,LDC,N
-!!       CHARACTER,intent(in) :: TRANS,UPLO
+!!       real,intent(in)      :: alpha,beta
+!!       integer,intent(in)   :: k,lda,ldc,n
+!!       character,intent(in) :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*)
-!!       REAL,intent(inout)   :: C(LDC,*)
+!!       real,intent(in)      :: a(lda,*)
+!!       real,intent(inout)   :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -25370,7 +25370,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE SSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+       subroutine ssyrk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -25379,13 +25379,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA,BETA
-      INTEGER,intent(in)   :: K,LDA,LDC,N
-      CHARACTER,intent(in) :: TRANS,UPLO
+      real,intent(in)      :: alpha,beta
+      integer,intent(in)   :: k,lda,ldc,n
+      character,intent(in) :: trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*)
-      REAL,intent(inout)   :: C(LDC,*)
+      real,intent(in)      :: a(lda,*)
+      real,intent(inout)   :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -25398,165 +25398,165 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,J,L,NROWA
-      LOGICAL UPPER
+      real temp
+      integer i,info,j,l,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          NROWA = N
-      ELSE
-          NROWA = K
+      if (lsame(trans,'N')) then
+          nrowa = n
+      else
+          nrowa = k
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.LSAME(TRANS,'N')) .AND.  (.NOT.LSAME(TRANS,'T')) .AND.  (.NOT.LSAME(TRANS,'C'))) THEN
-          INFO = 2
-      ELSEIF (N.LT.0) THEN
-          INFO = 3
-      ELSEIF (K.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDC.LT.MAX(1,N)) THEN
-          INFO = 10
+      info = 0
+      if ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 1
+      elseif ((.not.lsame(trans,'N')) .and.  (.not.lsame(trans,'T')) .and.  (.not.lsame(trans,'C'))) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (k.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldc.lt.max(1,n)) then
+          info = 10
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('SSYRK ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('SSYRK ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (((ALPHA.EQ.ZERO).OR.  (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. (((alpha.eq.zero).or.  (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (UPPER) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                     C(1:J,J) = ZERO
+      if (alpha.eq.zero) then
+          if (upper) then
+              if (beta.eq.zero) then
+                  do j = 1,n
+                     c(1:j,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(1:J,J) = BETA*C(1:J,J)
+              else
+                  do j = 1,n
+                      c(1:j,j) = beta*c(1:j,j)
                   enddo
               endif
-          ELSE
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(J:N,J) = ZERO
+          else
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(j:n,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(J:N,J) = BETA*C(J:N,J)
+              else
+                  do j = 1,n
+                      c(j:n,j) = beta*c(j:n,j)
                   enddo
               endif
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*A**T + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:J,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(1:J,J) = BETA*C(1:J,J)
+          if (upper) then
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:j,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:j,j) = beta*c(1:j,j)
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.ZERO) THEN
-                          TEMP = ALPHA*A(J,L)
-                          C(1:J,J) = C(1:J,J) + TEMP*A(1:J,L)
+                  do l = 1,k
+                      if (a(j,l).ne.zero) then
+                          temp = alpha*a(j,l)
+                          c(1:j,j) = c(1:j,j) + temp*a(1:j,l)
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J:N,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(J:N,J) = BETA*C(J:N,J)
+          else
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(j:n,j) = zero
+                  elseif (beta.ne.one) then
+                      c(j:n,j) = beta*c(j:n,j)
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.ZERO) THEN
-                          TEMP = ALPHA*A(J,L)
-                          DO I = J,N
-                              C(I,J) = C(I,J) + TEMP*A(I,L)
+                  do l = 1,k
+                      if (a(j,l).ne.zero) then
+                          temp = alpha*a(j,l)
+                          do i = j,n
+                              c(i,j) = c(i,j) + temp*a(i,l)
                           enddo
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*A**T*A + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,J
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*A(L,J)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,j
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = J,N
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*A(L,J)
+          else
+              do j = 1,n
+                  do i = j,n
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
       endif
 
-      END SUBROUTINE SSYRK
+      end subroutine ssyrk
 !>
 !!##NAME
 !!    stbmv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SX:=A*SX, A a triangular band matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE STBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine stbmv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)   :: INCX,K,LDA,N
-!!       CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+!!       integer,intent(in)   :: incx,k,lda,n
+!!       character,intent(in) :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*)
-!!       REAL,intent(inout)   :: X(*)
+!!       real,intent(in)      :: a(lda,*)
+!!       real,intent(inout)   :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -25706,7 +25706,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+       subroutine stbmv(uplo,trans,diag,n,k,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -25715,24 +25715,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)   :: INCX,K,LDA,N
-      CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+      integer,intent(in)   :: incx,k,lda,n
+      character,intent(in) :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*)
-      REAL,intent(inout)   :: X(*)
+      real,intent(in)      :: a(lda,*)
+      real,intent(inout)   :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,KPLUS1,KX,L
-      LOGICAL NOUNIT
+      real temp
+      integer i,info,ix,j,jx,kplus1,kx,l
+      logical nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -25742,194 +25742,194 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 7
-      elseif (INCX.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt. (k+1)) then
+          info = 7
+      elseif (incx.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX   too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !         Form  x := A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = KPLUS1 - J
-                          DO I = MAX(1,J-K),J - 1
-                              X(I) = X(I) + TEMP*A(L+I,J)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          l = kplus1 - j
+                          do i = max(1,j-k),j - 1
+                              x(i) = x(i) + temp*a(l+i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(KPLUS1,J)
+                          if (nounit) x(j) = x(j)*a(kplus1,j)
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = KPLUS1 - J
-                          DO I = MAX(1,J-K),J - 1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          l = kplus1 - j
+                          do i = max(1,j-k),j - 1
+                              x(ix) = x(ix) + temp*a(l+i,j)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(KPLUS1,J)
+                          if (nounit) x(jx) = x(jx)*a(kplus1,j)
                       endif
-                      JX = JX + INCX
-                      IF (J.GT.K) KX = KX + INCX
+                      jx = jx + incx
+                      if (j.gt.k) kx = kx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = 1 - J
-                          DO I = MIN(N,J+K),J + 1,-1
-                              X(I) = X(I) + TEMP*A(L+I,J)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          l = 1 - j
+                          do i = min(n,j+k),j + 1,-1
+                              x(i) = x(i) + temp*a(l+i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(1,J)
+                          if (nounit) x(j) = x(j)*a(1,j)
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = 1 - J
-                          DO I = MIN(N,J+K),J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          l = 1 - j
+                          do i = min(n,j+k),j + 1,-1
+                              x(ix) = x(ix) + temp*a(l+i,j)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(1,J)
+                          if (nounit) x(jx) = x(jx)*a(1,j)
                       endif
-                      JX = JX - INCX
-                      IF ((N-J).GE.K) KX = KX - INCX
+                      jx = jx - incx
+                      if ((n-j).ge.k) kx = kx - incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      L = KPLUS1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(KPLUS1,J)
-                      DO I = J - 1,MAX(1,J-K),-1
-                          TEMP = TEMP + A(L+I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      l = kplus1 - j
+                      if (nounit) temp = temp*a(kplus1,j)
+                      do i = j - 1,max(1,j-k),-1
+                          temp = temp + a(l+i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      KX = KX - INCX
-                      IX = KX
-                      L = KPLUS1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(KPLUS1,J)
-                      DO I = J - 1,MAX(1,J-K),-1
-                          TEMP = TEMP + A(L+I,J)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      kx = kx - incx
+                      ix = kx
+                      l = kplus1 - j
+                      if (nounit) temp = temp*a(kplus1,j)
+                      do i = j - 1,max(1,j-k),-1
+                          temp = temp + a(l+i,j)*x(ix)
+                          ix = ix - incx
                       enddo
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      L = 1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(1,J)
-                      DO I = J + 1,MIN(N,J+K)
-                          TEMP = TEMP + A(L+I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      l = 1 - j
+                      if (nounit) temp = temp*a(1,j)
+                      do i = j + 1,min(n,j+k)
+                          temp = temp + a(l+i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      KX = KX + INCX
-                      IX = KX
-                      L = 1 - J
-                      IF (NOUNIT) TEMP = TEMP*A(1,J)
-                      DO I = J + 1,MIN(N,J+K)
-                          TEMP = TEMP + A(L+I,J)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      kx = kx + incx
+                      ix = kx
+                      l = 1 - j
+                      if (nounit) temp = temp*a(1,j)
+                      do i = j + 1,min(n,j+k)
+                          temp = temp + a(l+i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STBMV
+      end subroutine stbmv
 !>
 !!##NAME
 !!    stbsv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SX:=INVERSE(A)*SX, A a triangular band matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE STBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine stbsv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)   :: INCX,K,LDA,N
-!!       CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+!!       integer,intent(in)   :: incx,k,lda,n
+!!       character,intent(in) :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*)
-!!       REAL,intent(inout)   :: X(*)
+!!       real,intent(in)      :: a(lda,*)
+!!       real,intent(inout)   :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -26082,7 +26082,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+       subroutine stbsv(uplo,trans,diag,n,k,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -26091,24 +26091,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)   :: INCX,K,LDA,N
-      CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+      integer,intent(in)   :: incx,k,lda,n
+      character,intent(in) :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*)
-      REAL,intent(inout)   :: X(*)
+      real,intent(in)      :: a(lda,*)
+      real,intent(inout)   :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,KPLUS1,KX,L
-      LOGICAL NOUNIT
+      real temp
+      integer i,info,ix,j,jx,kplus1,kx,l
+      logical nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -26118,194 +26118,194 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX,MIN
+      intrinsic max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 7
-      elseif (INCX.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt. (k+1)) then
+          info = 7
+      elseif (incx.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STBSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STBSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed by sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(KPLUS1,J)
-                          TEMP = X(J)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              X(I) = X(I) - TEMP*A(L+I,J)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          l = kplus1 - j
+                          if (nounit) x(j) = x(j)/a(kplus1,j)
+                          temp = x(j)
+                          do i = j - 1,max(1,j-k),-1
+                              x(i) = x(i) - temp*a(l+i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      KX = KX - INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(KPLUS1,J)
-                          TEMP = X(JX)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      kx = kx - incx
+                      if (x(jx).ne.zero) then
+                          ix = kx
+                          l = kplus1 - j
+                          if (nounit) x(jx) = x(jx)/a(kplus1,j)
+                          temp = x(jx)
+                          do i = j - 1,max(1,j-k),-1
+                              x(ix) = x(ix) - temp*a(l+i,j)
+                              ix = ix - incx
                           enddo
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          L = 1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(1,J)
-                          TEMP = X(J)
-                          DO I = J + 1,MIN(N,J+K)
-                              X(I) = X(I) - TEMP*A(L+I,J)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          l = 1 - j
+                          if (nounit) x(j) = x(j)/a(1,j)
+                          temp = x(j)
+                          do i = j + 1,min(n,j+k)
+                              x(i) = x(i) - temp*a(l+i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      KX = KX + INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = 1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(1,J)
-                          TEMP = X(JX)
-                          DO I = J + 1,MIN(N,J+K)
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      kx = kx + incx
+                      if (x(jx).ne.zero) then
+                          ix = kx
+                          l = 1 - j
+                          if (nounit) x(jx) = x(jx)/a(1,j)
+                          temp = x(jx)
+                          do i = j + 1,min(n,j+k)
+                              x(ix) = x(ix) - temp*a(l+i,j)
+                              ix = ix + incx
                           enddo
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T)*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      L = KPLUS1 - J
-                      DO I = MAX(1,J-K),J - 1
-                          TEMP = TEMP - A(L+I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      l = kplus1 - j
+                      do i = max(1,j-k),j - 1
+                          temp = temp - a(l+i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(kplus1,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      L = KPLUS1 - J
-                      DO I = MAX(1,J-K),J - 1
-                          TEMP = TEMP - A(L+I,J)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      l = kplus1 - j
+                      do i = max(1,j-k),j - 1
+                          temp = temp - a(l+i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      IF (J.GT.K) KX = KX + INCX
+                      if (nounit) temp = temp/a(kplus1,j)
+                      x(jx) = temp
+                      jx = jx + incx
+                      if (j.gt.k) kx = kx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      L = 1 - J
-                      DO I = MIN(N,J+K),J + 1,-1
-                          TEMP = TEMP - A(L+I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      l = 1 - j
+                      do i = min(n,j+k),j + 1,-1
+                          temp = temp - a(l+i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(1,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(1,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      L = 1 - J
-                      DO I = MIN(N,J+K),J + 1,-1
-                          TEMP = TEMP - A(L+I,J)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      l = 1 - j
+                      do i = min(n,j+k),j + 1,-1
+                          temp = temp - a(l+i,j)*x(ix)
+                          ix = ix - incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(1,J)
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      IF ((N-J).GE.K) KX = KX - INCX
+                      if (nounit) temp = temp/a(1,j)
+                      x(jx) = temp
+                      jx = jx - incx
+                      if ((n-j).ge.k) kx = kx - incx
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STBSV
+      end subroutine stbsv
 !>
 !!##NAME
 !!    stpmv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SX:=A*SX, A a packed symmetric matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE STPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+!!     subroutine stpmv(uplo,trans,diag,n,ap,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)   :: INCX,N
-!!       CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+!!       integer,intent(in)   :: incx,n
+!!       character,intent(in) :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: AP(*)
-!!       REAL,intent(inout)   :: X(*)
+!!       real,intent(in)      :: ap(*)
+!!       real,intent(inout)   :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -26413,7 +26413,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+       subroutine stpmv(uplo,trans,diag,n,ap,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -26422,23 +26422,23 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)   :: INCX,N
-      CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+      integer,intent(in)   :: incx,n
+      character,intent(in) :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: AP(*)
-      REAL,intent(inout)   :: X(*)
+      real,intent(in)      :: ap(*)
+      real,intent(inout)   :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL,PARAMETER :: ZERO=0.0E+0
+      real,parameter :: zero=0.0e+0
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
-      LOGICAL NOUNIT
+      real temp
+      integer i,info,ix,j,jx,k,kk,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -26450,175 +26450,175 @@ end subroutine
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (incx.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STPMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STPMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of AP are
 !     accessed sequentially with one pass through AP.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x:= A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          K = KK
-                          DO I = 1,J - 1
-                              X(I) = X(I) + TEMP*AP(K)
-                              K = K + 1
+          if (lsame(uplo,'U')) then
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          k = kk
+                          do i = 1,j - 1
+                              x(i) = x(i) + temp*ap(k)
+                              k = k + 1
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*AP(KK+J-1)
+                          if (nounit) x(j) = x(j)*ap(kk+j-1)
                       endif
-                      KK = KK + J
+                      kk = kk + j
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO K = KK,KK + J - 2
-                              X(IX) = X(IX) + TEMP*AP(K)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do k = kk,kk + j - 2
+                              x(ix) = x(ix) + temp*ap(k)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*AP(KK+J-1)
+                          if (nounit) x(jx) = x(jx)*ap(kk+j-1)
                       endif
-                      JX = JX + INCX
-                      KK = KK + J
+                      jx = jx + incx
+                      kk = kk + j
                   enddo
               endif
-          ELSE
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          K = KK
-                          DO I = N,J + 1,-1
-                              X(I) = X(I) + TEMP*AP(K)
-                              K = K - 1
+          else
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          k = kk
+                          do i = n,j + 1,-1
+                              x(i) = x(i) + temp*ap(k)
+                              k = k - 1
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*AP(KK-N+J)
+                          if (nounit) x(j) = x(j)*ap(kk-n+j)
                       endif
-                      KK = KK - (N-J+1)
+                      kk = kk - (n-j+1)
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO K = KK,KK - (N- (J+1)),-1
-                              X(IX) = X(IX) + TEMP*AP(K)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do k = kk,kk - (n- (j+1)),-1
+                              x(ix) = x(ix) + temp*ap(k)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*AP(KK-N+J)
+                          if (nounit) x(jx) = x(jx)*ap(kk-n+j)
                       endif
-                      JX = JX - INCX
-                      KK = KK - (N-J+1)
+                      jx = jx - incx
+                      kk = kk - (n-j+1)
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      K = KK - 1
-                      DO I = J - 1,1,-1
-                          TEMP = TEMP + AP(K)*X(I)
-                          K = K - 1
+          if (lsame(uplo,'U')) then
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      if (nounit) temp = temp*ap(kk)
+                      k = kk - 1
+                      do i = j - 1,1,-1
+                          temp = temp + ap(k)*x(i)
+                          k = k - 1
                       enddo
-                      X(J) = TEMP
-                      KK = KK - J
+                      x(j) = temp
+                      kk = kk - j
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      DO K = KK - 1,KK - J + 1,-1
-                          IX = IX - INCX
-                          TEMP = TEMP + AP(K)*X(IX)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*ap(kk)
+                      do k = kk - 1,kk - j + 1,-1
+                          ix = ix - incx
+                          temp = temp + ap(k)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      KK = KK - J
+                      x(jx) = temp
+                      jx = jx - incx
+                      kk = kk - j
                   enddo
               endif
-          ELSE
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      K = KK + 1
-                      DO I = J + 1,N
-                          TEMP = TEMP + AP(K)*X(I)
-                          K = K + 1
+          else
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      if (nounit) temp = temp*ap(kk)
+                      k = kk + 1
+                      do i = j + 1,n
+                          temp = temp + ap(k)*x(i)
+                          k = k + 1
                       enddo
-                      X(J) = TEMP
-                      KK = KK + (N-J+1)
+                      x(j) = temp
+                      kk = kk + (n-j+1)
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*AP(KK)
-                      DO K = KK + 1,KK + N - J
-                          IX = IX + INCX
-                          TEMP = TEMP + AP(K)*X(IX)
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*ap(kk)
+                      do k = kk + 1,kk + n - j
+                          ix = ix + incx
+                          temp = temp + ap(k)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      KK = KK + (N-J+1)
+                      x(jx) = temp
+                      jx = jx + incx
+                      kk = kk + (n-j+1)
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STPMV
+      end subroutine stpmv
 !>
 !!##NAME
 !!    stpsv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SX:=INVERSE(A)*SX, A a packed symmetric matrix.
@@ -26743,7 +26743,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STPSV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+       subroutine stpsv(uplo,trans,diag,n,ap,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -26752,24 +26752,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)   :: INCX,N
-      CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+      integer,intent(in)   :: incx,n
+      character,intent(in) :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: AP(*)
-      REAL,intent(inout)   :: X(*)
+      real,intent(in)      :: ap(*)
+      real,intent(inout)   :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
-      LOGICAL NOUNIT
+      real temp
+      integer i,info,ix,j,jx,k,kk,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -26781,191 +26781,191 @@ end subroutine
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (incx.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STPSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STPSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of AP are
 !     accessed sequentially with one pass through AP.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/AP(KK)
-                          TEMP = X(J)
-                          K = KK - 1
-                          DO I = J - 1,1,-1
-                              X(I) = X(I) - TEMP*AP(K)
-                              K = K - 1
+          if (lsame(uplo,'U')) then
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/ap(kk)
+                          temp = x(j)
+                          k = kk - 1
+                          do i = j - 1,1,-1
+                              x(i) = x(i) - temp*ap(k)
+                              k = k - 1
                           enddo
                       endif
-                      KK = KK - J
+                      kk = kk - j
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/AP(KK)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO K = KK - 1,KK - J + 1,-1
-                              IX = IX - INCX
-                              X(IX) = X(IX) - TEMP*AP(K)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/ap(kk)
+                          temp = x(jx)
+                          ix = jx
+                          do k = kk - 1,kk - j + 1,-1
+                              ix = ix - incx
+                              x(ix) = x(ix) - temp*ap(k)
                           enddo
                       endif
-                      JX = JX - INCX
-                      KK = KK - J
+                      jx = jx - incx
+                      kk = kk - j
                   enddo
               endif
-          ELSE
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/AP(KK)
-                          TEMP = X(J)
-                          K = KK + 1
-                          DO I = J + 1,N
-                              X(I) = X(I) - TEMP*AP(K)
-                              K = K + 1
+          else
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/ap(kk)
+                          temp = x(j)
+                          k = kk + 1
+                          do i = j + 1,n
+                              x(i) = x(i) - temp*ap(k)
+                              k = k + 1
                           enddo
                       endif
-                      KK = KK + (N-J+1)
+                      kk = kk + (n-j+1)
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/AP(KK)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO K = KK + 1,KK + N - J
-                              IX = IX + INCX
-                              X(IX) = X(IX) - TEMP*AP(K)
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/ap(kk)
+                          temp = x(jx)
+                          ix = jx
+                          do k = kk + 1,kk + n - j
+                              ix = ix + incx
+                              x(ix) = x(ix) - temp*ap(k)
                           enddo
                       endif
-                      JX = JX + INCX
-                      KK = KK + (N-J+1)
+                      jx = jx + incx
+                      kk = kk + (n-j+1)
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      K = KK
-                      DO I = 1,J - 1
-                          TEMP = TEMP - AP(K)*X(I)
-                          K = K + 1
+          if (lsame(uplo,'U')) then
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      k = kk
+                      do i = 1,j - 1
+                          temp = temp - ap(k)*x(i)
+                          k = k + 1
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK+J-1)
-                      X(J) = TEMP
-                      KK = KK + J
+                      if (nounit) temp = temp/ap(kk+j-1)
+                      x(j) = temp
+                      kk = kk + j
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      DO K = KK,KK + J - 2
-                          TEMP = TEMP - AP(K)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      do k = kk,kk + j - 2
+                          temp = temp - ap(k)*x(ix)
+                          ix = ix + incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK+J-1)
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      KK = KK + J
+                      if (nounit) temp = temp/ap(kk+j-1)
+                      x(jx) = temp
+                      jx = jx + incx
+                      kk = kk + j
                   enddo
               endif
-          ELSE
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      K = KK
-                      DO I = N,J + 1,-1
-                          TEMP = TEMP - AP(K)*X(I)
-                          K = K - 1
+          else
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      k = kk
+                      do i = n,j + 1,-1
+                          temp = temp - ap(k)*x(i)
+                          k = k - 1
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK-N+J)
-                      X(J) = TEMP
-                      KK = KK - (N-J+1)
+                      if (nounit) temp = temp/ap(kk-n+j)
+                      x(j) = temp
+                      kk = kk - (n-j+1)
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      DO K = KK,KK - (N- (J+1)),-1
-                          TEMP = TEMP - AP(K)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      do k = kk,kk - (n- (j+1)),-1
+                          temp = temp - ap(k)*x(ix)
+                          ix = ix - incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/AP(KK-N+J)
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      KK = KK - (N-J+1)
+                      if (nounit) temp = temp/ap(kk-n+j)
+                      x(jx) = temp
+                      jx = jx - incx
+                      kk = kk - (n-j+1)
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STPSV
+      end subroutine stpsv
 !>
 !!##NAME
 !!    strmm(3f) - [BLAS:SINGLE_BLAS_LEVEL3] B:=A*B or B:=B*A, A triangular, B rectangular.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE STRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine strmm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA
-!!       INTEGER,intent(in)   :: LDA,LDB,M,N
-!!       CHARACTER,intent(in) :: DIAG,SIDE,TRANSA,UPLO
+!!       real,intent(in)      :: alpha
+!!       integer,intent(in)   :: lda,ldb,m,n
+!!       character,intent(in) :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*)
-!!       REAL,intent(inout)   :: B(LDB,*)
+!!       real,intent(in)      :: a(lda,*)
+!!       real,intent(inout)   :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -27103,7 +27103,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+       subroutine strmm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -27112,13 +27112,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA
-      INTEGER,intent(in)   :: LDA,LDB,M,N
-      CHARACTER,intent(in) :: DIAG,SIDE,TRANSA,UPLO
+      real,intent(in)      :: alpha
+      integer,intent(in)   :: lda,ldb,m,n
+      character,intent(in) :: diag,side,transa,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*)
-      REAL,intent(inout)   :: B(LDB,*)
+      real,intent(in)      :: a(lda,*)
+      real,intent(inout)   :: b(ldb,*)
 !     ..
 !
 !  =====================================================================
@@ -27131,207 +27131,207 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL LSIDE,NOUNIT,UPPER
+      real temp
+      integer i,info,j,k,nrowa
+      logical lside,nounit,upper
 !     ..
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      LSIDE = LSAME(SIDE,'L')
-      IF (LSIDE) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      lside = lsame(side,'L')
+      if (lside) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      NOUNIT = LSAME(DIAG,'N')
-      UPPER = LSAME(UPLO,'U')
+      nounit = lsame(diag,'N')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.LSIDE) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      elseif ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      elseif ((.NOT.LSAME(TRANSA,'N')) .AND.  (.NOT.LSAME(TRANSA,'T')) .AND.  (.NOT.LSAME(TRANSA,'C'))) THEN
-          INFO = 3
-      elseif ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
-          INFO = 4
-      elseif (M.LT.0) THEN
-          INFO = 5
-      elseif (N.LT.0) THEN
-          INFO = 6
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      elseif (LDB.LT.MAX(1,M)) THEN
-          INFO = 11
+      info = 0
+      if ((.not.lside) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif ((.not.lsame(transa,'N')) .and.  (.not.lsame(transa,'T')) .and.  (.not.lsame(transa,'C'))) then
+          info = 3
+      elseif ((.not.lsame(diag,'U')) .and. (.not.lsame(diag,'N'))) then
+          info = 4
+      elseif (m.lt.0) then
+          info = 5
+      elseif (n.lt.0) then
+          info = 6
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldb.lt.max(1,m)) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STRMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STRMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (M.EQ.0 .OR. N.EQ.0) RETURN
+      if (m.eq.0 .or. n.eq.0) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          B(1:M,1:N) = ZERO
-          RETURN
+      if (alpha.eq.zero) then
+          b(1:m,1:n) = zero
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSIDE) THEN
-          IF (LSAME(TRANSA,'N')) THEN
+      if (lside) then
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*A*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              DO I = 1,K - 1
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
+              if (upper) then
+                  do j = 1,n
+                      do k = 1,m
+                          if (b(k,j).ne.zero) then
+                              temp = alpha*b(k,j)
+                              do i = 1,k - 1
+                                  b(i,j) = b(i,j) + temp*a(i,k)
                               enddo
-                              IF (NOUNIT) TEMP = TEMP*A(K,K)
-                              B(K,J) = TEMP
+                              if (nounit) temp = temp*a(k,k)
+                              b(k,j) = temp
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              B(K,J) = TEMP
-                              IF (NOUNIT) B(K,J) = B(K,J)*A(K,K)
-                              DO I = K + 1,M
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
+              else
+                  do j = 1,n
+                      do k = m,1,-1
+                          if (b(k,j).ne.zero) then
+                              temp = alpha*b(k,j)
+                              b(k,j) = temp
+                              if (nounit) b(k,j) = b(k,j)*a(k,k)
+                              do i = k + 1,m
+                                  b(i,j) = b(i,j) + temp*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*A**T*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO I = M,1,-1
-                          TEMP = B(I,J)
-                          IF (NOUNIT) TEMP = TEMP*A(I,I)
-                          DO K = 1,I - 1
-                              TEMP = TEMP + A(K,I)*B(K,J)
+              if (upper) then
+                  do j = 1,n
+                      do i = m,1,-1
+                          temp = b(i,j)
+                          if (nounit) temp = temp*a(i,i)
+                          do k = 1,i - 1
+                              temp = temp + a(k,i)*b(k,j)
                           enddo
-                          B(I,J) = ALPHA*TEMP
+                          b(i,j) = alpha*temp
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO I = 1,M
-                          TEMP = B(I,J)
-                          IF (NOUNIT) TEMP = TEMP*A(I,I)
-                          DO K = I + 1,M
-                              TEMP = TEMP + A(K,I)*B(K,J)
+              else
+                  do j = 1,n
+                      do i = 1,m
+                          temp = b(i,j)
+                          if (nounit) temp = temp*a(i,i)
+                          do k = i + 1,m
+                              temp = temp + a(k,i)*b(k,j)
                           enddo
-                          B(I,J) = ALPHA*TEMP
+                          b(i,j) = alpha*temp
                       enddo
                   enddo
               endif
           endif
-      ELSE
-          IF (LSAME(TRANSA,'N')) THEN
+      else
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*B*A.
 !
-              IF (UPPER) THEN
-                  DO J = N,1,-1
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      B(1:M,J) = TEMP*B(1:M,J)
-                      DO K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              if (upper) then
+                  do j = n,1,-1
+                      temp = alpha
+                      if (nounit) temp = temp*a(j,j)
+                      b(1:m,j) = temp*b(1:m,j)
+                      do k = 1,j - 1
+                          if (a(k,j).ne.zero) then
+                              temp = alpha*a(k,j)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      B(1:M,J) = TEMP*B(1:M,J)
-                      DO K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              else
+                  do j = 1,n
+                      temp = alpha
+                      if (nounit) temp = temp*a(j,j)
+                      b(1:m,j) = temp*b(1:m,j)
+                      do k = j + 1,n
+                          if (a(k,j).ne.zero) then
+                              temp = alpha*a(k,j)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*B*A**T.
 !
-              IF (UPPER) THEN
-                  DO K = 1,N
-                      DO J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = ALPHA*A(J,K)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              if (upper) then
+                  do k = 1,n
+                      do j = 1,k - 1
+                          if (a(j,k).ne.zero) then
+                              temp = alpha*a(j,k)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(K,K)
-                      IF (TEMP.NE.ONE) THEN
-                          B(1:M,K) = TEMP*B(1:M,K)
+                      temp = alpha
+                      if (nounit) temp = temp*a(k,k)
+                      if (temp.ne.one) then
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
                   enddo
-              ELSE
-                  DO K = N,1,-1
-                      DO J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = ALPHA*A(J,K)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              else
+                  do k = n,1,-1
+                      do j = k + 1,n
+                          if (a(j,k).ne.zero) then
+                              temp = alpha*a(j,k)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(K,K)
-                      IF (TEMP.NE.ONE) THEN
-                          B(1:M,K) = TEMP*B(1:M,K)
+                      temp = alpha
+                      if (nounit) temp = temp*a(k,k)
+                      if (temp.ne.one) then
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STRMM
+      end subroutine strmm
 !>
 !!##NAME
 !!    strmv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SX:=A*SX, A a triangular matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE STRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine strmv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)   :: INCX,LDA,N
-!!       CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+!!       integer,intent(in)   :: incx,lda,n
+!!       character,intent(in) :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: A(LDA,*)
-!!       REAL,intent(inout) :: X(*)
+!!       real,intent(in)    :: a(lda,*)
+!!       real,intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -27443,7 +27443,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+       subroutine strmv(uplo,trans,diag,n,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -27452,23 +27452,23 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)   :: INCX,LDA,N
-      CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+      integer,intent(in)   :: incx,lda,n
+      character,intent(in) :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: A(LDA,*)
-      REAL,intent(inout) :: X(*)
+      real,intent(in)    :: a(lda,*)
+      real,intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL,PARAMETER :: ZERO=0.0E+0
+      real,parameter :: zero=0.0e+0
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,KX
-      LOGICAL NOUNIT
+      real temp
+      integer i,info,ix,j,jx,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -27478,176 +27478,176 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,n)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STRMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STRMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          X(1:J-1) = X(1:J-1) + TEMP*A(1:J-1,J)
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          x(1:j-1) = x(1:j-1) + temp*a(1:j-1,j)
+                          if (nounit) x(j) = x(j)*a(j,j)
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO I = 1,J - 1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do i = 1,j - 1
+                              x(ix) = x(ix) + temp*a(i,j)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
+                          if (nounit) x(jx) = x(jx)*a(j,j)
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          DO I = N,J + 1,-1
-                              X(I) = X(I) + TEMP*A(I,J)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          do i = n,j + 1,-1
+                              x(i) = x(i) + temp*a(i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
+                          if (nounit) x(j) = x(j)*a(j,j)
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO I = N,J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do i = n,j + 1,-1
+                              x(ix) = x(ix) + temp*a(i,j)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
+                          if (nounit) x(jx) = x(jx)*a(j,j)
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J - 1,1,-1
-                          TEMP = TEMP + A(I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j - 1,1,-1
+                          temp = temp + a(i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J - 1,1,-1
-                          IX = IX - INCX
-                          TEMP = TEMP + A(I,J)*X(IX)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j - 1,1,-1
+                          ix = ix - incx
+                          temp = temp + a(i,j)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J + 1,N
-                          TEMP = TEMP + A(I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j + 1,n
+                          temp = temp + a(i,j)*x(i)
                       enddo
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      DO I = J + 1,N
-                          IX = IX + INCX
-                          TEMP = TEMP + A(I,J)*X(IX)
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = jx
+                      if (nounit) temp = temp*a(j,j)
+                      do i = j + 1,n
+                          ix = ix + incx
+                          temp = temp + a(i,j)*x(ix)
                       enddo
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STRMV
+      end subroutine strmv
 !>
 !!##NAME
 !!    strsm(3f) - [BLAS:SINGLE_BLAS_LEVEL3] B:=INVERSE(A)*C or B:=C*INVERSE(A), B, C rectangular, A triangular.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE STRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine strsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       REAL,intent(in)      :: ALPHA
-!!       INTEGER,intent(in)   :: LDA,LDB,M,N
-!!       CHARACTER,intent(in) :: DIAG,SIDE,TRANSA,UPLO
+!!       real,intent(in)      :: alpha
+!!       integer,intent(in)   :: lda,ldb,m,n
+!!       character,intent(in) :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)    :: A(LDA,*)
-!!       REAL,intent(inout) :: B(LDB,*)
+!!       real,intent(in)    :: a(lda,*)
+!!       real,intent(inout) :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -27788,7 +27788,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+       subroutine strsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -27797,13 +27797,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      REAL,intent(in)      :: ALPHA
-      INTEGER,intent(in)   :: LDA,LDB,M,N
-      CHARACTER,intent(in) :: DIAG,SIDE,TRANSA,UPLO
+      real,intent(in)      :: alpha
+      integer,intent(in)   :: lda,ldb,m,n
+      character,intent(in) :: diag,side,transa,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)    :: A(LDA,*)
-      REAL,intent(inout) :: B(LDB,*)
+      real,intent(in)    :: a(lda,*)
+      real,intent(inout) :: b(ldb,*)
 !     ..
 !
 !  =====================================================================
@@ -27816,221 +27816,221 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL LSIDE,NOUNIT,UPPER
+      real temp
+      integer i,info,j,k,nrowa
+      logical lside,nounit,upper
 !     ..
 !     .. Parameters ..
-      REAL ONE,ZERO
-      PARAMETER (ONE=1.0E+0,ZERO=0.0E+0)
+      real one,zero
+      parameter (one=1.0e+0,zero=0.0e+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      LSIDE = LSAME(SIDE,'L')
-      IF (LSIDE) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      lside = lsame(side,'L')
+      if (lside) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      NOUNIT = LSAME(DIAG,'N')
-      UPPER = LSAME(UPLO,'U')
+      nounit = lsame(diag,'N')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.LSIDE) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      ELSEIF ((.NOT.LSAME(TRANSA,'N')) .AND.  (.NOT.LSAME(TRANSA,'T')) .AND.  (.NOT.LSAME(TRANSA,'C'))) THEN
-          INFO = 3
-      ELSEIF ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
-          INFO = 4
-      ELSEIF (M.LT.0) THEN
-          INFO = 5
-      ELSEIF (N.LT.0) THEN
-          INFO = 6
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      ELSEIF (LDB.LT.MAX(1,M)) THEN
-          INFO = 11
+      info = 0
+      if ((.not.lside) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif ((.not.lsame(transa,'N')) .and.  (.not.lsame(transa,'T')) .and.  (.not.lsame(transa,'C'))) then
+          info = 3
+      elseif ((.not.lsame(diag,'U')) .and. (.not.lsame(diag,'N'))) then
+          info = 4
+      elseif (m.lt.0) then
+          info = 5
+      elseif (n.lt.0) then
+          info = 6
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldb.lt.max(1,m)) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STRSM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STRSM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (M.EQ.0 .OR. N.EQ.0) RETURN
+      if (m.eq.0 .or. n.eq.0) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          DO J = 1,N
-              B(1:M,J) = ZERO
+      if (alpha.eq.zero) then
+          do j = 1,n
+              b(1:m,j) = zero
           enddo
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSIDE) THEN
-          IF (LSAME(TRANSA,'N')) THEN
+      if (lside) then
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*inv( A )*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              if (upper) then
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO I = 1,K - 1
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
+                      do k = m,1,-1
+                          if (b(k,j).ne.zero) then
+                              if (nounit) b(k,j) = b(k,j)/a(k,k)
+                              do i = 1,k - 1
+                                  b(i,j) = b(i,j) - b(k,j)*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              else
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO I = K + 1,M
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
+                      do k = 1,m
+                          if (b(k,j).ne.zero) then
+                              if (nounit) b(k,j) = b(k,j)/a(k,k)
+                              do i = k + 1,m
+                                  b(i,j) = b(i,j) - b(k,j)*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*inv( A**T )*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO I = 1,M
-                          TEMP = ALPHA*B(I,J)
-                          DO K = 1,I - 1
-                              TEMP = TEMP - A(K,I)*B(K,J)
+              if (upper) then
+                  do j = 1,n
+                      do i = 1,m
+                          temp = alpha*b(i,j)
+                          do k = 1,i - 1
+                              temp = temp - a(k,i)*b(k,j)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(I,I)
-                          B(I,J) = TEMP
+                          if (nounit) temp = temp/a(i,i)
+                          b(i,j) = temp
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO I = M,1,-1
-                          TEMP = ALPHA*B(I,J)
-                          DO K = I + 1,M
-                              TEMP = TEMP - A(K,I)*B(K,J)
+              else
+                  do j = 1,n
+                      do i = m,1,-1
+                          temp = alpha*b(i,j)
+                          do k = i + 1,m
+                              temp = temp - a(k,i)*b(k,j)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(I,I)
-                          B(I,J) = TEMP
+                          if (nounit) temp = temp/a(i,i)
+                          b(i,j) = temp
                       enddo
                   enddo
               endif
           endif
-      ELSE
-          IF (LSAME(TRANSA,'N')) THEN
+      else
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*B*inv( A ).
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              if (upper) then
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              B(1:M,J) = B(1:M,J) - A(K,J)*B(1:M,K)
+                      do k = 1,j - 1
+                          if (a(k,j).ne.zero) then
+                              b(1:m,j) = b(1:m,j) - a(k,j)*b(1:m,k)
                           endif
                       enddo
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
-                          B(1:M,J) = TEMP*B(1:M,J)
+                      if (nounit) then
+                          temp = one/a(j,j)
+                          b(1:m,j) = temp*b(1:m,j)
                       endif
                   enddo
-              ELSE
-                  DO J = N,1,-1
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,J) = ALPHA*B(1:M,J)
+              else
+                  do j = n,1,-1
+                      if (alpha.ne.one) then
+                          b(1:m,j) = alpha*b(1:m,j)
                       endif
-                      DO K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              B(1:M,J) = B(1:M,J) - A(K,J)*B(1:M,K)
+                      do k = j + 1,n
+                          if (a(k,j).ne.zero) then
+                              b(1:m,j) = b(1:m,j) - a(k,j)*b(1:m,k)
                           endif
                       enddo
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
-                          B(1:M,J) = TEMP*B(1:M,J)
+                      if (nounit) then
+                          temp = one/a(j,j)
+                          b(1:m,j) = temp*b(1:m,j)
                       endif
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*B*inv( A**T ).
 !
-              IF (UPPER) THEN
-                  DO K = N,1,-1
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(K,K)
-                          B(1:M,K) = TEMP*B(1:M,K)
+              if (upper) then
+                  do k = n,1,-1
+                      if (nounit) then
+                          temp = one/a(k,k)
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
-                      DO J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = A(J,K)
-                              B(1:M,J) = B(1:M,J) - TEMP*B(1:M,K)
+                      do j = 1,k - 1
+                          if (a(j,k).ne.zero) then
+                              temp = a(j,k)
+                              b(1:m,j) = b(1:m,j) - temp*b(1:m,k)
                           endif
                       enddo
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,K) = ALPHA*B(1:M,K)
+                      if (alpha.ne.one) then
+                          b(1:m,k) = alpha*b(1:m,k)
                       endif
                   enddo
-              ELSE
-                  DO K = 1,N
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(K,K)
-                          B(1:M,K) = TEMP*B(1:M,K)
+              else
+                  do k = 1,n
+                      if (nounit) then
+                          temp = one/a(k,k)
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
-                      DO J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = A(J,K)
-                              B(1:M,J) = B(1:M,J) - TEMP*B(1:M,K)
+                      do j = k + 1,n
+                          if (a(j,k).ne.zero) then
+                              temp = a(j,k)
+                              b(1:m,j) = b(1:m,j) - temp*b(1:m,k)
                           endif
                       enddo
-                      IF (ALPHA.NE.ONE) THEN
-                          B(1:M,K) = ALPHA*B(1:M,K)
+                      if (alpha.ne.one) then
+                          b(1:m,k) = alpha*b(1:m,k)
                       endif
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STRSM
+      end subroutine strsm
 !>
 !!##NAME
 !!    strsv(3f) - [BLAS:SINGLE_BLAS_LEVEL2] SX:=INVERSE(A)*SX, A a triangular matrix.
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE STRSV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine strsv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)   :: INCX,LDA,N
-!!       CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+!!       integer,intent(in)   :: incx,lda,n
+!!       character,intent(in) :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       REAL,intent(in)      :: A(LDA,*)
-!!       REAL,intent(inout)   :: X(*)
+!!       real,intent(in)      :: a(lda,*)
+!!       real,intent(inout)   :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -28144,7 +28144,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE STRSV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+       subroutine strsv(uplo,trans,diag,n,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -28153,23 +28153,23 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)   :: INCX,LDA,N
-      CHARACTER,intent(in) :: DIAG,TRANS,UPLO
+      integer,intent(in)   :: incx,lda,n
+      character,intent(in) :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      REAL,intent(in)      :: A(LDA,*)
-      REAL,intent(inout)   :: X(*)
+      real,intent(in)      :: a(lda,*)
+      real,intent(inout)   :: x(*)
 !     ..
 !  =====================================================================
 !
 !     .. Parameters ..
-      REAL ZERO
-      PARAMETER (ZERO=0.0E+0)
+      real zero
+      parameter (zero=0.0e+0)
 !     ..
 !     .. Local Scalars ..
-      REAL TEMP
-      INTEGER I,INFO,IX,J,JX,KX
-      LOGICAL NOUNIT
+      real temp
+      integer i,info,ix,j,jx,kx
+      logical nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -28179,177 +28179,177 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,n)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('STRSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('STRSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOUNIT = LSAME(DIAG,'N')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/A(J,J)
-                          TEMP = X(J)
-                          DO I = J - 1,1,-1
-                              X(I) = X(I) - TEMP*A(I,J)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/a(j,j)
+                          temp = x(j)
+                          do i = j - 1,1,-1
+                              x(i) = x(i) - temp*a(i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/A(J,J)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO I = J - 1,1,-1
-                              IX = IX - INCX
-                              X(IX) = X(IX) - TEMP*A(I,J)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/a(j,j)
+                          temp = x(jx)
+                          ix = jx
+                          do i = j - 1,1,-1
+                              ix = ix - incx
+                              x(ix) = x(ix) - temp*a(i,j)
                           enddo
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/A(J,J)
-                          TEMP = X(J)
-                          DO I = J + 1,N
-                              X(I) = X(I) - TEMP*A(I,J)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/a(j,j)
+                          temp = x(j)
+                          do i = j + 1,n
+                              x(i) = x(i) - temp*a(i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/A(J,J)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO I = J + 1,N
-                              IX = IX + INCX
-                              X(IX) = X(IX) - TEMP*A(I,J)
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/a(j,j)
+                          temp = x(jx)
+                          ix = jx
+                          do i = j + 1,n
+                              ix = ix + incx
+                              x(ix) = x(ix) - temp*a(i,j)
                           enddo
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      DO I = 1,J - 1
-                          TEMP = TEMP - A(I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      do i = 1,j - 1
+                          temp = temp - a(i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(j,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      DO I = 1,J - 1
-                          TEMP = TEMP - A(I,J)*X(IX)
-                          IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      do i = 1,j - 1
+                          temp = temp - a(i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      if (nounit) temp = temp/a(j,j)
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      DO I = N,J + 1,-1
-                          TEMP = TEMP - A(I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      do i = n,j + 1,-1
+                          temp = temp - a(i,j)*x(i)
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(J) = TEMP
+                      if (nounit) temp = temp/a(j,j)
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      DO I = N,J + 1,-1
-                          TEMP = TEMP - A(I,J)*X(IX)
-                          IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      do i = n,j + 1,-1
+                          temp = temp - a(i,j)*x(ix)
+                          ix = ix - incx
                       enddo
-                      IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      if (nounit) temp = temp/a(j,j)
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE STRSV
+      end subroutine strsv
 !>
 !!##NAME
 !!    zaxpy(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
+!!     subroutine zaxpy(n,za,zx,incx,zy,incy)
 !!
 !! !     .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ZA
-!!       INTEGER,intent(in)                 :: INCX,INCY,N
+!!       complex(kind=real64),intent(in)    :: za
+!!       integer,intent(in)                 :: incx,incy,n
 !! !     ..
 !! !     .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: ZX(*)
-!!       complex(kind=real64),intent(inout) :: ZY(*)
+!!       complex(kind=real64),intent(in)    :: zx(*)
+!!       complex(kind=real64),intent(inout) :: zy(*)
 !! !     ..
 !!
 !!##DEFINITION
@@ -28404,7 +28404,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
+       subroutine zaxpy(n,za,zx,incx,zy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -28413,59 +28413,59 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ZA
-      INTEGER,intent(in)                 :: INCX,INCY,N
+      complex(kind=real64),intent(in)    :: za
+      integer,intent(in)                 :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: ZX(*)
-      complex(kind=real64),intent(inout) :: ZY(*)
+      complex(kind=real64),intent(in)    :: zx(*)
+      complex(kind=real64),intent(inout) :: zy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER I,IX,IY
+      integer i,ix,iy
 !     ..
 !     .. External Functions ..
-!      DOUBLE PRECISION DCABS1
-!      EXTERNAL DCABS1
+!      double precision dcabs1
+!      external dcabs1
 !     ..
-      IF (N.LE.0) RETURN
-      IF (DCABS1(ZA).EQ.0.0d0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (dcabs1(za).eq.0.0d0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
-         DO I = 1,N
-            ZY(I) = ZY(I) + ZA*ZX(I)
+         do i = 1,n
+            zy(i) = zy(i) + za*zx(i)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            ZY(IY) = ZY(IY) + ZA*ZX(IX)
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            zy(iy) = zy(iy) + za*zx(ix)
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 !
-      END SUBROUTINE ZAXPY
+      end subroutine zaxpy
 !>
 !!##NAME
 !!    zcopy(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZCOPY(N,ZX,INCX,ZY,INCY)
+!!     subroutine zcopy(n,zx,incx,zy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)               :: INCX,INCY,N
+!!       integer,intent(in)               :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
 !!       complex(kind=real64),intent(in)  :: ZX(*)
@@ -28519,7 +28519,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZCOPY(N,ZX,INCX,ZY,INCY)
+       subroutine zcopy(n,zx,incx,zy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -28528,56 +28528,56 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)               :: INCX,INCY,N
+      integer,intent(in)               :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)  :: ZX(*)
-      complex(kind=real64),intent(out) :: ZY(*)
+      complex(kind=real64),intent(in)  :: zx(*)
+      complex(kind=real64),intent(out) :: zy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER I,IX,IY
+      integer i,ix,iy
 !     ..
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
-         DO I = 1,N
-          ZY(I) = ZX(I)
+         do i = 1,n
+          zy(i) = zx(i)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            ZY(IY) = ZX(IX)
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            zy(iy) = zx(ix)
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-      END SUBROUTINE ZCOPY
+      end subroutine zcopy
 !>
 !!##NAME
 !!    zdotc(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     complex(kind=real64) FUNCTION ZDOTC(N,ZX,INCX,ZY,INCY)
+!!     complex(kind=real64) function zdotc(n,zx,incx,zy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in) :: ZX(*),ZY(*)
+!!       complex(kind=real64),intent(in) :: zx(*),zy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -28628,7 +28628,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure complex(kind=real64) FUNCTION ZDOTC(N,ZX,INCX,ZY,INCY)
+pure complex(kind=real64) function zdotc(n,zx,incx,zy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -28637,62 +28637,62 @@ pure complex(kind=real64) FUNCTION ZDOTC(N,ZX,INCX,ZY,INCY)
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in) :: ZX(*),ZY(*)
+      complex(kind=real64),intent(in) :: zx(*),zy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      complex(kind=real64) :: ZTEMP
-      INTEGER I,IX,IY
+      complex(kind=real64) :: ztemp
+      integer i,ix,iy
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG
+      intrinsic dconjg
 !     ..
-      ZTEMP = (0.0d0,0.0d0)
-      ZDOTC = (0.0d0,0.0d0)
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      ztemp = (0.0d0,0.0d0)
+      zdotc = (0.0d0,0.0d0)
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
-         DO I = 1,N
-            ZTEMP = ZTEMP + DCONJG(ZX(I))*ZY(I)
+         do i = 1,n
+            ztemp = ztemp + dconjg(zx(i))*zy(i)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            ZTEMP = ZTEMP + DCONJG(ZX(IX))*ZY(IY)
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            ztemp = ztemp + dconjg(zx(ix))*zy(iy)
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
-      ZDOTC = ZTEMP
+      zdotc = ztemp
 
-      END FUNCTION ZDOTC
+      end function zdotc
 !>
 !!##NAME
 !!    zdotu(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
+!!     complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in) :: INCX,INCY,N
+!!       integer,intent(in) :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in) :: ZX(*),ZY(*)
+!!       complex(kind=real64),intent(in) :: zx(*),zy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -28743,7 +28743,7 @@ pure complex(kind=real64) FUNCTION ZDOTC(N,ZX,INCX,ZY,INCY)
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
+pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -28752,60 +28752,60 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in) :: INCX,INCY,N
+      integer,intent(in) :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in) :: ZX(*),ZY(*)
+      complex(kind=real64),intent(in) :: zx(*),zy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      complex(kind=real64) :: ZTEMP
-      INTEGER I,IX,IY
+      complex(kind=real64) :: ztemp
+      integer i,ix,iy
 !     ..
-      ZTEMP = (0.0d0,0.0d0)
-      ZDOTU = (0.0d0,0.0d0)
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      ztemp = (0.0d0,0.0d0)
+      zdotu = (0.0d0,0.0d0)
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !        code for both increments equal to 1
 !
-         DO I = 1,N
-            ZTEMP = ZTEMP + ZX(I)*ZY(I)
+         do i = 1,n
+            ztemp = ztemp + zx(i)*zy(i)
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments
 !          not equal to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            ZTEMP = ZTEMP + ZX(IX)*ZY(IY)
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            ztemp = ztemp + zx(ix)*zy(iy)
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
-      ZDOTU = ZTEMP
+      zdotu = ztemp
 
-      END
+      end function zdotu
 !>
 !!##NAME
 !!    zdrot(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZDROT( N, ZX, INCX, ZY, INCY, C, S )
+!!     subroutine zdrot( n, zx, incx, zy, incy, c, s )
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)          :: INCX, INCY, N
-!!       DOUBLE PRECISION,intent(in) :: C, S
+!!       integer,intent(in)          :: incx, incy, n
+!!       double precision,intent(in) :: c, s
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(inout) :: ZX( * ), ZY( * )
+!!       complex(kind=real64),intent(inout) :: zx( * ), zy( * )
 !!       ..
 !!
 !!##DEFINITION
@@ -28873,7 +28873,7 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZDROT( N, ZX, INCX, ZY, INCY, C, S )
+       subroutine zdrot( n, zx, incx, zy, incy, c, s )
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.7.0) --
@@ -28882,64 +28882,64 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)          :: INCX, INCY, N
-      DOUBLE PRECISION,intent(in) :: C, S
+      integer,intent(in)          :: incx, incy, n
+      double precision,intent(in) :: c, s
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(inout) :: ZX( * ), ZY( * )
+      complex(kind=real64),intent(inout) :: zx( * ), zy( * )
 !     ..
 !
 ! =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER            I, IX, IY
-      complex(kind=real64) ::         CTEMP
+      integer            i, ix, iy
+      complex(kind=real64) ::         ctemp
 !     ..
 !     .. Executable Statements ..
 !
-      IF( N.LE.0 ) RETURN
-      IF( INCX.EQ.1 .AND. INCY.EQ.1 ) THEN
+      if( n.le.0 ) return
+      if( incx.eq.1 .and. incy.eq.1 ) then
 !
 !        code for both increments equal to 1
 !
-         DO I = 1, N
-            CTEMP = C*ZX( I ) + S*ZY( I )
-            ZY( I ) = C*ZY( I ) - S*ZX( I )
-            ZX( I ) = CTEMP
+         do i = 1, n
+            ctemp = c*zx( i ) + s*zy( i )
+            zy( i ) = c*zy( i ) - s*zx( i )
+            zx( i ) = ctemp
          enddo
-      ELSE
+      else
 !
 !        code for unequal increments or equal increments not equal
 !          to 1
 !
-         IX = 1
-         IY = 1
-         IF( INCX.LT.0 ) IX = ( -N+1 )*INCX + 1
-         IF( INCY.LT.0 ) IY = ( -N+1 )*INCY + 1
-         DO I = 1, N
-            CTEMP = C*ZX( IX ) + S*ZY( IY )
-            ZY( IY ) = C*ZY( IY ) - S*ZX( IX )
-            ZX( IX ) = CTEMP
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if( incx.lt.0 ) ix = ( -n+1 )*incx + 1
+         if( incy.lt.0 ) iy = ( -n+1 )*incy + 1
+         do i = 1, n
+            ctemp = c*zx( ix ) + s*zy( iy )
+            zy( iy ) = c*zy( iy ) - s*zx( ix )
+            zx( ix ) = ctemp
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-      END
+      end
 !>
 !!##NAME
 !!    zdscal(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZDSCAL(N,DA,ZX,INCX)
+!!     subroutine zdscal(n,da,zx,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in) :: DA
-!!       INTEGER,intent(in) :: INCX,N
+!!       double precision,intent(in) :: da
+!!       integer,intent(in) :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(inout) :: ZX(*)
+!!       complex(kind=real64),intent(inout) :: zx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -28986,7 +28986,7 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZDSCAL(N,DA,ZX,INCX)
+       subroutine zdscal(n,da,zx,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -28995,56 +28995,56 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in) :: DA
-      INTEGER,intent(in) :: INCX,N
+      double precision,intent(in) :: da
+      integer,intent(in) :: incx,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(inout) :: ZX(*)
+      complex(kind=real64),intent(inout) :: zx(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER I,NINCX
+      integer i,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCMPLX
+      intrinsic dcmplx
 !     ..
-      IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) THEN
+      if (n.le.0 .or. incx.le.0) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
-         DO I = 1,N
-            ZX(I) = DCMPLX(DA,0.0d0)*ZX(I)
+         do i = 1,n
+            zx(i) = dcmplx(da,0.0d0)*zx(i)
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         NINCX = N*INCX
-         DO I = 1,NINCX,INCX
-            ZX(I) = DCMPLX(DA,0.0d0)*ZX(I)
+         nincx = n*incx
+         do i = 1,nincx,incx
+            zx(i) = dcmplx(da,0.0d0)*zx(i)
          enddo
       endif
 
-      END SUBROUTINE ZDSCAL
+      end subroutine zdscal
 !>
 !!##NAME
 !!    zgbmv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine zgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: INCX,INCY,KL,KU,LDA,M,N
-!!       CHARACTER,intent(in)               :: TRANS
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: incx,incy,kl,ku,lda,m,n
+!!       character,intent(in)               :: trans
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),X(*)
-!!       complex(kind=real64),intent(inout) :: Y(*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),x(*)
+!!       complex(kind=real64),intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -29190,7 +29190,7 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine zgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -29199,27 +29199,27 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: INCX,INCY,KL,KU,LDA,M,N
-      CHARACTER,intent(in)               :: TRANS
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: incx,incy,kl,ku,lda,m,n
+      character,intent(in)               :: trans
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),X(*)
-      complex(kind=real64),intent(inout) :: Y(*)
+      complex(kind=real64),intent(in)    :: a(lda,*),x(*)
+      complex(kind=real64),intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KUP1,KX,KY,LENX,LENY
-      LOGICAL NOCONJ
+      complex(kind=real64) :: temp
+      integer i,info,ix,iy,j,jx,jy,k,kup1,kx,ky,lenx,leny
+      logical noconj
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -29229,59 +29229,59 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX,MIN
+      intrinsic dconjg,max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 1
-      elseif (M.LT.0) THEN
-          INFO = 2
-      elseif (N.LT.0) THEN
-          INFO = 3
-      elseif (KL.LT.0) THEN
-          INFO = 4
-      elseif (KU.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (KL+KU+1)) THEN
-          INFO = 8
-      elseif (INCX.EQ.0) THEN
-          INFO = 10
-      elseif (INCY.EQ.0) THEN
-          INFO = 13
+      info = 0
+      if (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 1
+      elseif (m.lt.0) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (kl.lt.0) then
+          info = 4
+      elseif (ku.lt.0) then
+          info = 5
+      elseif (lda.lt. (kl+ku+1)) then
+          info = 8
+      elseif (incx.eq.0) then
+          info = 10
+      elseif (incy.eq.0) then
+          info = 13
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZGBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZGBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
-      NOCONJ = LSAME(TRANS,'T')
+      noconj = lsame(trans,'T')
 !
 !     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 !     up the start points in  X  and  Y.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          LENX = N
-          LENY = M
-      ELSE
-          LENX = M
-          LENY = N
+      if (lsame(trans,'N')) then
+          lenx = n
+          leny = m
+      else
+          lenx = m
+          leny = n
       endif
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (LENX-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (lenx-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (LENY-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (leny-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -29289,102 +29289,102 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:LENY) = ZERO
-              ELSE
-                  Y(1:LENY) = BETA*Y(1:LENY)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:leny) = zero
+              else
+                  y(1:leny) = beta*y(1:leny)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,LENY
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,leny
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,LENY
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,leny
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      KUP1 = KU + 1
-      IF (LSAME(TRANS,'N')) THEN
+      if (alpha.eq.zero) return
+      kup1 = ku + 1
+      if (lsame(trans,'N')) then
 !
 !        Form  y := alpha*A*x + y.
 !
-          JX = KX
-          IF (INCY.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      Y(I) = Y(I) + TEMP*A(K+I,J)
+          jx = kx
+          if (incy.eq.1) then
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      y(i) = y(i) + temp*a(k+i,j)
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  IY = KY
-                  K = KUP1 - J
-                  DO I = MAX(1,J-KU),MIN(M,J+KL)
-                      Y(IY) = Y(IY) + TEMP*A(K+I,J)
-                      IY = IY + INCY
+          else
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  iy = ky
+                  k = kup1 - j
+                  do i = max(1,j-ku),min(m,j+kl)
+                      y(iy) = y(iy) + temp*a(k+i,j)
+                      iy = iy + incy
                   enddo
-                  JX = JX + INCX
-                  IF (J.GT.KU) KY = KY + INCY
+                  jx = jx + incx
+                  if (j.gt.ku) ky = ky + incy
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y := alpha*A**T*x + y  or  y := alpha*A**H*x + y.
 !
-          JY = KY
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ZERO
-                  K = KUP1 - J
-                  IF (NOCONJ) THEN
-                      DO I = MAX(1,J-KU),MIN(M,J+KL)
-                          TEMP = TEMP + A(K+I,J)*X(I)
+          jy = ky
+          if (incx.eq.1) then
+              do j = 1,n
+                  temp = zero
+                  k = kup1 - j
+                  if (noconj) then
+                      do i = max(1,j-ku),min(m,j+kl)
+                          temp = temp + a(k+i,j)*x(i)
                       enddo
-                  ELSE
-                      DO I = MAX(1,J-KU),MIN(M,J+KL)
-                          TEMP = TEMP + DCONJG(A(K+I,J))*X(I)
+                  else
+                      do i = max(1,j-ku),min(m,j+kl)
+                          temp = temp + dconjg(a(k+i,j))*x(i)
                       enddo
                   endif
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ZERO
-                  IX = KX
-                  K = KUP1 - J
-                  IF (NOCONJ) THEN
-                      DO I = MAX(1,J-KU),MIN(M,J+KL)
-                          TEMP = TEMP + A(K+I,J)*X(IX)
-                          IX = IX + INCX
+          else
+              do j = 1,n
+                  temp = zero
+                  ix = kx
+                  k = kup1 - j
+                  if (noconj) then
+                      do i = max(1,j-ku),min(m,j+kl)
+                          temp = temp + a(k+i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                  ELSE
-                      DO I = MAX(1,J-KU),MIN(M,J+KL)
-                          TEMP = TEMP + DCONJG(A(K+I,J))*X(IX)
-                          IX = IX + INCX
+                  else
+                      do i = max(1,j-ku),min(m,j+kl)
+                          temp = temp + dconjg(a(k+i,j))*x(ix)
+                          ix = ix + incx
                       enddo
                   endif
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
-                  IF (J.GT.KU) KX = KX + INCX
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
+                  if (j.gt.ku) kx = kx + incx
               enddo
           endif
       endif
 !
-      END SUBROUTINE ZGBMV
+      end subroutine zgbmv
 !>
 !!##NAME
 !!    zgemm(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
@@ -29394,13 +29394,13 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !!     subroutine zgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: K,LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)               :: TRANSA,TRANSB
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: k,lda,ldb,ldc,m,n
+!!       character,intent(in)               :: transa,transb
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-!!       complex(kind=real64),intent(inout) :: C(LDC,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex(kind=real64),intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -29546,7 +29546,7 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine zgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -29555,13 +29555,13 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: K,LDA,LDB,LDC,M,N
-      CHARACTER,intent(in)               :: TRANSA,TRANSB
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: k,lda,ldb,ldc,m,n
+      character,intent(in)               :: transa,transb
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-      complex(kind=real64),intent(inout) :: C(LDC,*)
+      complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+      complex(kind=real64),intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -29574,18 +29574,18 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      intrinsic dconjg,max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,J,L,NROWA,NROWB
-      LOGICAL CONJA,CONJB,NOTA,NOTB
+      complex(kind=real64) :: temp
+      integer i,info,j,l,nrowa,nrowb
+      logical conja,conjb,nota,notb
 !     ..
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not
@@ -29593,227 +29593,227 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !     B  respectively are to be  transposed but  not conjugated  and set
 !     NROWA and NROWB  as the number of rows  of  A  and  B  respectively.
 !
-      NOTA = LSAME(TRANSA,'N')
-      NOTB = LSAME(TRANSB,'N')
-      CONJA = LSAME(TRANSA,'C')
-      CONJB = LSAME(TRANSB,'C')
-      IF (NOTA) THEN
-          NROWA = M
-      ELSE
-          NROWA = K
+      nota = lsame(transa,'N')
+      notb = lsame(transb,'N')
+      conja = lsame(transa,'C')
+      conjb = lsame(transb,'C')
+      if (nota) then
+          nrowa = m
+      else
+          nrowa = k
       endif
-      IF (NOTB) THEN
-          NROWB = K
-      ELSE
-          NROWB = N
+      if (notb) then
+          nrowb = k
+      else
+          nrowb = n
       endif
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF ((.NOT.NOTA) .AND. (.NOT.CONJA) .AND.  (.NOT.LSAME(TRANSA,'T'))) THEN
-          INFO = 1
-      elseif ((.NOT.NOTB) .AND. (.NOT.CONJB) .AND.  (.NOT.LSAME(TRANSB,'T'))) THEN
-          INFO = 2
-      elseif (M.LT.0) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 8
-      elseif (LDB.LT.MAX(1,NROWB)) THEN
-          INFO = 10
-      elseif (LDC.LT.MAX(1,M)) THEN
-          INFO = 13
+      info = 0
+      if ((.not.nota) .and. (.not.conja) .and.  (.not.lsame(transa,'T'))) then
+          info = 1
+      elseif ((.not.notb) .and. (.not.conjb) .and.  (.not.lsame(transb,'T'))) then
+          info = 2
+      elseif (m.lt.0) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 8
+      elseif (ldb.lt.max(1,nrowb)) then
+          info = 10
+      elseif (ldc.lt.max(1,m)) then
+          info = 13
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZGEMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZGEMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  (((ALPHA.EQ.ZERO).OR. (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  (((alpha.eq.zero).or. (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (BETA.EQ.ZERO) THEN
-              DO J = 1,N
-                  C(1:M,J) = ZERO
+      if (alpha.eq.zero) then
+          if (beta.eq.zero) then
+              do j = 1,n
+                  c(1:m,j) = zero
               enddo
-          ELSE
-              DO J = 1,N
-                  C(1:M,J) = BETA*C(1:M,J)
+          else
+              do j = 1,n
+                  c(1:m,j) = beta*c(1:m,j)
               enddo
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (NOTB) THEN
-          IF (NOTA) THEN
+      if (notb) then
+          if (nota) then
 !
 !           Form  C := alpha*A*B + beta*C.
 !
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:M,J) = ZERO
-                  elseif (BETA.NE.ONE) THEN
-                      C(1:M,J) = BETA*C(1:M,J)
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:m,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:m,j) = beta*c(1:m,j)
                   endif
-                  DO L = 1,K
-                      TEMP = ALPHA*B(L,J)
-                      C(1:M,J) = C(1:M,J) + TEMP*A(1:M,L)
+                  do l = 1,k
+                      temp = alpha*b(l,j)
+                      c(1:m,j) = c(1:m,j) + temp*a(1:m,l)
                   enddo
               enddo
-          elseif (CONJA) THEN
+          elseif (conja) then
 !
 !           Form  C := alpha*A**H*B + beta*C.
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*B(L,J)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + dconjg(a(l,i))*b(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A**T*B + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*B(L,J)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*b(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
-      elseif (NOTA) THEN
-          IF (CONJB) THEN
+      elseif (nota) then
+          if (conjb) then
 !
 !           Form  C := alpha*A*B**H + beta*C.
 !
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:M,J) = ZERO
-                  elseif (BETA.NE.ONE) THEN
-                      C(1:M,J) = BETA*C(1:M,J)
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:m,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:m,j) = beta*c(1:m,j)
                   endif
-                  DO L = 1,K
-                      TEMP = ALPHA*DCONJG(B(J,L))
-                      DO I = 1,M
-                          C(I,J) = C(I,J) + TEMP*A(I,L)
+                  do l = 1,k
+                      temp = alpha*dconjg(b(j,l))
+                      do i = 1,m
+                          c(i,j) = c(i,j) + temp*a(i,l)
                       enddo
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A*B**T + beta*C
 !
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:M,J) = ZERO
-                  elseif (BETA.NE.ONE) THEN
-                      C(1:M,J) = BETA*C(1:M,J)
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:m,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:m,j) = beta*c(1:m,j)
                   endif
-                  DO L = 1,K
-                      TEMP = ALPHA*B(J,L)
-                      C(1:M,J) = C(1:M,J) + TEMP*A(1:M,L)
+                  do l = 1,k
+                      temp = alpha*b(j,l)
+                      c(1:m,j) = c(1:m,j) + temp*a(1:m,l)
                   enddo
               enddo
           endif
-      elseif (CONJA) THEN
-          IF (CONJB) THEN
+      elseif (conja) then
+          if (conjb) then
 !
 !           Form  C := alpha*A**H*B**H + beta*C.
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*DCONJG(B(J,L))
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + dconjg(a(l,i))*dconjg(b(j,l))
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A**H*B**T + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*B(J,L)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + dconjg(a(l,i))*b(j,l)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
-      ELSE
-          IF (CONJB) THEN
+      else
+          if (conjb) then
 !
 !           Form  C := alpha*A**T*B**H + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*DCONJG(B(J,L))
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*dconjg(b(j,l))
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
-          ELSE
+          else
 !
 !           Form  C := alpha*A**T*B**T + beta*C
 !
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*B(J,L)
+              do j = 1,n
+                  do i = 1,m
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*b(j,l)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
       endif
 !
-      END SUBROUTINE ZGEMM
+      end subroutine zgemm
 !>
 !!##NAME
 !!    zgemv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
@@ -29823,13 +29823,13 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !!     subroutine zgemv(trans,m,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: INCX,INCY,LDA,M,N
-!!       CHARACTER,intent(in)               :: TRANS
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: incx,incy,lda,m,n
+!!       character,intent(in)               :: trans
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),X(*)
-!!       complex(kind=real64),intent(inout) :: Y(*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),x(*)
+!!       complex(kind=real64),intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -29948,7 +29948,7 @@ pure complex(kind=real64) FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-SUBROUTINE ZGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+subroutine zgemv(trans,m,n,alpha,a,lda,x,incx,beta,y,incy)
 implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -29957,27 +29957,27 @@ implicit none
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: INCX,INCY,LDA,M,N
-      CHARACTER,intent(in)               :: TRANS
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: incx,incy,lda,m,n
+      character,intent(in)               :: trans
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),X(*)
-      complex(kind=real64),intent(inout) :: Y(*)
+      complex(kind=real64),intent(in)    :: a(lda,*),x(*)
+      complex(kind=real64),intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY,LENX,LENY
-      LOGICAL NOCONJ
+      complex(kind=real64) :: temp
+      integer i,info,ix,iy,j,jx,jy,kx,ky,lenx,leny
+      logical noconj
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -29987,55 +29987,55 @@ implicit none
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      intrinsic dconjg,max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 1
-      elseif (M.LT.0) THEN
-          INFO = 2
-      elseif (N.LT.0) THEN
-          INFO = 3
-      elseif (LDA.LT.MAX(1,M)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
-      elseif (INCY.EQ.0) THEN
-          INFO = 11
+      info = 0
+      if (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 1
+      elseif (m.lt.0) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (lda.lt.max(1,m)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
+      elseif (incy.eq.0) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZGEMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZGEMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
-      NOCONJ = LSAME(TRANS,'T')
+      noconj = lsame(trans,'T')
 !
 !     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 !     up the start points in  X  and  Y.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          LENX = N
-          LENY = M
-      ELSE
-          LENX = M
-          LENY = N
+      if (lsame(trans,'N')) then
+          lenx = n
+          leny = m
+      else
+          lenx = m
+          leny = n
       endif
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (LENX-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (lenx-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (LENY-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (leny-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of A are
@@ -30043,114 +30043,114 @@ implicit none
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,LENY
-                      Y(I) = ZERO
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  do i = 1,leny
+                      y(i) = zero
                   enddo
-              ELSE
-                  DO I = 1,LENY
-                      Y(I) = BETA*Y(I)
+              else
+                  do i = 1,leny
+                      y(i) = beta*y(i)
                   enddo
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,LENY
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,leny
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,LENY
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,leny
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(TRANS,'N')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(trans,'N')) then
 !
 !        Form  y := alpha*A*x + y.
 !
-          JX = KX
-          IF (INCY.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  DO I = 1,M
-                      Y(I) = Y(I) + TEMP*A(I,J)
+          jx = kx
+          if (incy.eq.1) then
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  do i = 1,m
+                      y(i) = y(i) + temp*a(i,j)
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ALPHA*X(JX)
-                  IY = KY
-                  DO I = 1,M
-                      Y(IY) = Y(IY) + TEMP*A(I,J)
-                      IY = IY + INCY
+          else
+              do j = 1,n
+                  temp = alpha*x(jx)
+                  iy = ky
+                  do i = 1,m
+                      y(iy) = y(iy) + temp*a(i,j)
+                      iy = iy + incy
                   enddo
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y := alpha*A**T*x + y  or  y := alpha*A**H*x + y.
 !
-          JY = KY
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  TEMP = ZERO
-                  IF (NOCONJ) THEN
-                      DO I = 1,M
-                          TEMP = TEMP + A(I,J)*X(I)
+          jy = ky
+          if (incx.eq.1) then
+              do j = 1,n
+                  temp = zero
+                  if (noconj) then
+                      do i = 1,m
+                          temp = temp + a(i,j)*x(i)
                       enddo
-                  ELSE
-                      DO I = 1,M
-                          TEMP = TEMP + DCONJG(A(I,J))*X(I)
+                  else
+                      do i = 1,m
+                          temp = temp + dconjg(a(i,j))*x(i)
                       enddo
                   endif
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
-          ELSE
-              DO J = 1,N
-                  TEMP = ZERO
-                  IX = KX
-                  IF (NOCONJ) THEN
-                      DO I = 1,M
-                          TEMP = TEMP + A(I,J)*X(IX)
-                          IX = IX + INCX
+          else
+              do j = 1,n
+                  temp = zero
+                  ix = kx
+                  if (noconj) then
+                      do i = 1,m
+                          temp = temp + a(i,j)*x(ix)
+                          ix = ix + incx
                       enddo
-                  ELSE
-                      DO I = 1,M
-                          TEMP = TEMP + DCONJG(A(I,J))*X(IX)
-                          IX = IX + INCX
+                  else
+                      do i = 1,m
+                          temp = temp + dconjg(a(i,j))*x(ix)
+                          ix = ix + incx
                       enddo
                   endif
-                  Y(JY) = Y(JY) + ALPHA*TEMP
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp
+                  jy = jy + incy
               enddo
           endif
       endif
 !
-END SUBROUTINE ZGEMV
+end subroutine zgemv
 !>
 !!##NAME
 !!    zgerc(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine zgerc(m,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA
-!!       INTEGER,intent(in)                 :: INCX,INCY,LDA,M,N
+!!       complex(kind=real64),intent(in)    :: alpha
+!!       integer,intent(in)                 :: incx,incy,lda,m,n
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: X(*),Y(*)
-!!       complex(kind=real64),intent(inout) :: A(LDA,*)
+!!       complex(kind=real64),intent(in)    :: x(*),y(*)
+!!       complex(kind=real64),intent(inout) :: a(lda,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -30244,7 +30244,7 @@ END SUBROUTINE ZGEMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+       subroutine zgerc(m,n,alpha,x,incx,y,incy,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -30253,90 +30253,90 @@ END SUBROUTINE ZGEMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA
-      INTEGER,intent(in)                 :: INCX,INCY,LDA,M,N
+      complex(kind=real64),intent(in)    :: alpha
+      integer,intent(in)                 :: incx,incy,lda,m,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: X(*),Y(*)
-      complex(kind=real64),intent(inout) :: A(LDA,*)
+      complex(kind=real64),intent(in)    :: x(*),y(*)
+      complex(kind=real64),intent(inout) :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JY,KX
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jy,kx
 !     ..
 !     .. External Subroutines ..
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      intrinsic dconjg,max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (M.LT.0) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
-      elseif (LDA.LT.MAX(1,M)) THEN
-          INFO = 9
+      info = 0
+      if (m.lt.0) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
+      elseif (lda.lt.max(1,m)) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZGERC ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZGERC ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (INCY.GT.0) THEN
-          JY = 1
-      ELSE
-          JY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          jy = 1
+      else
+          jy = 1 - (n-1)*incy
       endif
-      IF (INCX.EQ.1) THEN
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*DCONJG(Y(JY))
-                  A(1:M,J) = A(1:M,J) + X(1:M)*TEMP
+      if (incx.eq.1) then
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*dconjg(y(jy))
+                  a(1:m,j) = a(1:m,j) + x(1:m)*temp
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
-      ELSE
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (M-1)*INCX
+      else
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (m-1)*incx
           endif
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*DCONJG(Y(JY))
-                  IX = KX
-                  DO I = 1,M
-                      A(I,J) = A(I,J) + X(IX)*TEMP
-                      IX = IX + INCX
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*dconjg(y(jy))
+                  ix = kx
+                  do i = 1,m
+                      a(i,j) = a(i,j) + x(ix)*temp
+                      ix = ix + incx
                   enddo
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
       endif
 
-      END SUBROUTINE ZGERC
+      end subroutine zgerc
 !>
 !!##NAME
 !!    zgeru(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
@@ -30425,7 +30425,7 @@ END SUBROUTINE ZGEMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZGERU(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+       subroutine zgeru(m,n,alpha,x,incx,y,incy,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -30434,108 +30434,108 @@ END SUBROUTINE ZGEMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA
-      INTEGER,intent(in)                 :: INCX,INCY,LDA,M,N
+      complex(kind=real64),intent(in)    :: alpha
+      integer,intent(in)                 :: incx,incy,lda,m,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: X(*),Y(*)
-      complex(kind=real64),intent(inout) :: A(LDA,*)
+      complex(kind=real64),intent(in)    :: x(*),y(*)
+      complex(kind=real64),intent(inout) :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JY,KX
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jy,kx
 !     ..
 !     .. External Subroutines ..
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (M.LT.0) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
-      elseif (LDA.LT.MAX(1,M)) THEN
-          INFO = 9
+      info = 0
+      if (m.lt.0) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
+      elseif (lda.lt.max(1,m)) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZGERU ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZGERU ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (INCY.GT.0) THEN
-          JY = 1
-      ELSE
-          JY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          jy = 1
+      else
+          jy = 1 - (n-1)*incy
       endif
-      IF (INCX.EQ.1) THEN
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*Y(JY)
-                  DO I = 1,M
-                      A(I,J) = A(I,J) + X(I)*TEMP
+      if (incx.eq.1) then
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*y(jy)
+                  do i = 1,m
+                      a(i,j) = a(i,j) + x(i)*temp
                   enddo
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
-      ELSE
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (M-1)*INCX
+      else
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (m-1)*incx
           endif
-          DO J = 1,N
-              IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*Y(JY)
-                  IX = KX
-                  DO I = 1,M
-                      A(I,J) = A(I,J) + X(IX)*TEMP
-                      IX = IX + INCX
+          do j = 1,n
+              if (y(jy).ne.zero) then
+                  temp = alpha*y(jy)
+                  ix = kx
+                  do i = 1,m
+                      a(i,j) = a(i,j) + x(ix)*temp
+                      ix = ix + incx
                   enddo
               endif
-              JY = JY + INCY
+              jy = jy + incy
           enddo
       endif
 
-      END SUBROUTINE ZGERU
+      end subroutine zgeru
 !>
 !!##NAME
 !!    zhbmv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine zhbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: INCX,INCY,K,LDA,N
-!!       CHARACTER,intent(in)               :: UPLO
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: incx,incy,k,lda,n
+!!       character,intent(in)               :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),X(*)
-!!       complex(kind=real64),intent(inout) :: Y(*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),x(*)
+!!       complex(kind=real64),intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -30683,7 +30683,7 @@ END SUBROUTINE ZGEMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+       subroutine zhbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -30692,26 +30692,26 @@ END SUBROUTINE ZGEMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: INCX,INCY,K,LDA,N
-      CHARACTER,intent(in)               :: UPLO
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: incx,incy,k,lda,n
+      character,intent(in)               :: uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),X(*)
-      complex(kind=real64),intent(inout) :: Y(*)
+      complex(kind=real64),intent(in)    :: a(lda,*),x(*)
+      complex(kind=real64),intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KPLUS1,KX,KY,L
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kplus1,kx,ky,l
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -30721,45 +30721,45 @@ END SUBROUTINE ZGEMV
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG,MAX,MIN
+      intrinsic dble,dconjg,max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (K.LT.0) THEN
-          INFO = 3
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
-      elseif (INCY.EQ.0) THEN
-          INFO = 11
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (k.lt.0) then
+          info = 3
+      elseif (lda.lt. (k+1)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
+      elseif (incy.eq.0) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of the array A
@@ -30767,125 +30767,125 @@ END SUBROUTINE ZGEMV
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when upper triangle of A is stored.
 !
-          KPLUS1 = K + 1
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  L = KPLUS1 - J
-                  DO I = MAX(1,J-K),J - 1
-                      Y(I) = Y(I) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + DCONJG(A(L+I,J))*X(I)
+          kplus1 = k + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  l = kplus1 - j
+                  do i = max(1,j-k),j - 1
+                      y(i) = y(i) + temp1*a(l+i,j)
+                      temp2 = temp2 + dconjg(a(l+i,j))*x(i)
                   enddo
-                  Y(J) = Y(J) + TEMP1*DBLE(A(KPLUS1,J)) + ALPHA*TEMP2
+                  y(j) = y(j) + temp1*dble(a(kplus1,j)) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  L = KPLUS1 - J
-                  DO I = MAX(1,J-K),J - 1
-                      Y(IY) = Y(IY) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + DCONJG(A(L+I,J))*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  l = kplus1 - j
+                  do i = max(1,j-k),j - 1
+                      y(iy) = y(iy) + temp1*a(l+i,j)
+                      temp2 = temp2 + dconjg(a(l+i,j))*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*DBLE(A(KPLUS1,J)) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  IF (J.GT.K) THEN
-                      KX = KX + INCX
-                      KY = KY + INCY
+                  y(jy) = y(jy) + temp1*dble(a(kplus1,j)) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  if (j.gt.k) then
+                      kx = kx + incx
+                      ky = ky + incy
                   endif
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when lower triangle of A is stored.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*DBLE(A(1,J))
-                  L = 1 - J
-                  DO I = J + 1,MIN(N,J+K)
-                      Y(I) = Y(I) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + DCONJG(A(L+I,J))*X(I)
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*dble(a(1,j))
+                  l = 1 - j
+                  do i = j + 1,min(n,j+k)
+                      y(i) = y(i) + temp1*a(l+i,j)
+                      temp2 = temp2 + dconjg(a(l+i,j))*x(i)
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
+                  y(j) = y(j) + alpha*temp2
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*DBLE(A(1,J))
-                  L = 1 - J
-                  IX = JX
-                  IY = JY
-                  DO I = J + 1,MIN(N,J+K)
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*A(L+I,J)
-                      TEMP2 = TEMP2 + DCONJG(A(L+I,J))*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*dble(a(1,j))
+                  l = 1 - j
+                  ix = jx
+                  iy = jy
+                  do i = j + 1,min(n,j+k)
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*a(l+i,j)
+                      temp2 = temp2 + dconjg(a(l+i,j))*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
               enddo
           endif
       endif
 
-      END SUBROUTINE ZHBMV
+      end subroutine zhbmv
 !>
 !!##NAME
 !!    zhemm(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine zhemm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)               :: SIDE,UPLO
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: lda,ldb,ldc,m,n
+!!       character,intent(in)               :: side,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-!!       complex(kind=real64),intent(inout) :: C(LDC,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex(kind=real64),intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -31036,7 +31036,7 @@ END SUBROUTINE ZGEMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine zhemm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -31045,13 +31045,13 @@ END SUBROUTINE ZGEMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: LDA,LDB,LDC,M,N
-      CHARACTER,intent(in)               :: SIDE,UPLO
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: lda,ldb,ldc,m,n
+      character,intent(in)               :: side,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-      complex(kind=real64),intent(inout) :: C(LDC,*)
+      complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+      complex(kind=real64),intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -31064,144 +31064,144 @@ END SUBROUTINE ZGEMV
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG,MAX
+      intrinsic dble,dconjg,max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL UPPER
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,j,k,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Set NROWA as the number of rows of A.
 !
-      IF (LSAME(SIDE,'L')) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      if (lsame(side,'L')) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF ((.NOT.LSAME(SIDE,'L')) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      ELSEIF (M.LT.0) THEN
-          INFO = 3
-      ELSEIF (N.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDB.LT.MAX(1,M)) THEN
-          INFO = 9
-      ELSEIF (LDC.LT.MAX(1,M)) THEN
-          INFO = 12
+      info = 0
+      if ((.not.lsame(side,'L')) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif (m.lt.0) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldb.lt.max(1,m)) then
+          info = 9
+      elseif (ldc.lt.max(1,m)) then
+          info = 12
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHEMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHEMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (BETA.EQ.ZERO) THEN
-              C(1:M,1:N) = ZERO
-          ELSE
-              C(1:M,1:N) = BETA*C(1:M,1:N)
+      if (alpha.eq.zero) then
+          if (beta.eq.zero) then
+              c(1:m,1:n) = zero
+          else
+              c(1:m,1:n) = beta*c(1:m,1:n)
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(SIDE,'L')) THEN
+      if (lsame(side,'L')) then
 !
 !        Form  C := alpha*A*B + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = 1,I - 1
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*DCONJG(A(K,I))
+          if (upper) then
+              do j = 1,n
+                  do i = 1,m
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = 1,i - 1
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*dconjg(a(k,i))
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*DBLE(A(I,I)) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*DBLE(A(I,I)) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*dble(a(i,i)) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*dble(a(i,i)) + alpha*temp2
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = M,1,-1
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = I + 1,M
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*DCONJG(A(K,I))
+          else
+              do j = 1,n
+                  do i = m,1,-1
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = i + 1,m
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*dconjg(a(k,i))
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*DBLE(A(I,I)) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*DBLE(A(I,I)) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*dble(a(i,i)) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*dble(a(i,i)) + alpha*temp2
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*B*A + beta*C.
 !
-          DO J = 1,N
-              TEMP1 = ALPHA*DBLE(A(J,J))
-              IF (BETA.EQ.ZERO) THEN
-                  C(1:M,J) = TEMP1*B(1:M,J)
-              ELSE
-                  C(1:M,J) = BETA*C(1:M,J) + TEMP1*B(1:M,J)
+          do j = 1,n
+              temp1 = alpha*dble(a(j,j))
+              if (beta.eq.zero) then
+                  c(1:m,j) = temp1*b(1:m,j)
+              else
+                  c(1:m,j) = beta*c(1:m,j) + temp1*b(1:m,j)
               endif
-              DO K = 1,J - 1
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*A(K,J)
-                  ELSE
-                      TEMP1 = ALPHA*DCONJG(A(J,K))
+              do k = 1,j - 1
+                  if (upper) then
+                      temp1 = alpha*a(k,j)
+                  else
+                      temp1 = alpha*dconjg(a(j,k))
                   endif
-                  C(1:M,J) = C(1:M,J) + TEMP1*B(1:M,K)
+                  c(1:m,j) = c(1:m,j) + temp1*b(1:m,k)
               enddo
-              DO K = J + 1,N
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*DCONJG(A(J,K))
-                  ELSE
-                      TEMP1 = ALPHA*A(K,J)
+              do k = j + 1,n
+                  if (upper) then
+                      temp1 = alpha*dconjg(a(j,k))
+                  else
+                      temp1 = alpha*a(k,j)
                   endif
-                  C(1:M,J) = C(1:M,J) + TEMP1*B(1:M,K)
+                  c(1:m,j) = c(1:m,j) + temp1*b(1:m,k)
               enddo
           enddo
       endif
 
-      END SUBROUTINE ZHEMM
+      end subroutine zhemm
 !>
 !!##NAME
 !!    zhemv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHEMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+!!     subroutine zhemv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
 !!       complex(kind=real64),intent(in)    :: alpha,beta
@@ -31509,16 +31509,16 @@ end subroutine zhemv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+!!     subroutine zher2(uplo,n,alpha,x,incx,y,incy,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA
-!!       INTEGER,intent(in)                 :: INCX,INCY,LDA,N
-!!       CHARACTER,intent(in)               :: UPLO
+!!       complex(kind=real64),intent(in)    :: alpha
+!!       integer,intent(in)                 :: incx,incy,lda,n
+!!       character,intent(in)               :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: X(*),Y(*)
-!!       complex(kind=real64),intent(inout) :: A(LDA,*)
+!!       complex(kind=real64),intent(in)    :: x(*),y(*)
+!!       complex(kind=real64),intent(inout) :: a(lda,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -31631,7 +31631,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+       subroutine zher2(uplo,n,alpha,x,incx,y,incy,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -31640,24 +31640,24 @@ end subroutine zhemv
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA
-      INTEGER,intent(in)                 :: INCX,INCY,LDA,N
-      CHARACTER,intent(in)               :: UPLO
+      complex(kind=real64),intent(in)    :: alpha
+      integer,intent(in)                 :: incx,incy,lda,n
+      character,intent(in)               :: uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: X(*),Y(*)
-      complex(kind=real64),intent(inout) :: A(LDA,*)
+      complex(kind=real64),intent(in)    :: x(*),y(*)
+      complex(kind=real64),intent(inout) :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,kx,ky
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -31667,7 +31667,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG,MAX
+      intrinsic dble,dconjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -31796,17 +31796,17 @@ end subroutine zhemv
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHER2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine zher2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA
-!!       DOUBLE PRECISION,intent(in)        :: BETA
-!!       INTEGER ,intent(in)                ::K,LDA,LDB,LDC,N
-!!       CHARACTER,intent(in)               :: TRANS,UPLO
+!!       complex(kind=real64),intent(in)    :: alpha
+!!       double precision,intent(in)        :: beta
+!!       integer ,intent(in)                ::k,lda,ldb,ldc,n
+!!       character,intent(in)               :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-!!       complex(kind=real64),intent(inout) :: C(LDC,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex(kind=real64),intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -31963,7 +31963,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHER2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine zher2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -31972,14 +31972,14 @@ end subroutine zhemv
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA
-      DOUBLE PRECISION,intent(in)        :: BETA
-      INTEGER ,intent(in)                ::K,LDA,LDB,LDC,N
-      CHARACTER,intent(in)               :: TRANS,UPLO
+      complex(kind=real64),intent(in)    :: alpha
+      double precision,intent(in)        :: beta
+      integer ,intent(in)                ::k,lda,ldb,ldc,n
+      character,intent(in)               :: trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-      complex(kind=real64),intent(inout) :: C(LDC,*)
+      complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+      complex(kind=real64),intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -31992,182 +31992,182 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG,MAX
+      intrinsic dble,dconjg,max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,J,L,NROWA
-      LOGICAL UPPER
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,j,l,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      DOUBLE PRECISION ONE
-      PARAMETER (ONE=1.0D+0)
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      double precision one
+      parameter (one=1.0d+0)
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Test the input parameters.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          NROWA = N
-      ELSE
-          NROWA = K
+      if (lsame(trans,'N')) then
+          nrowa = n
+      else
+          nrowa = k
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.LSAME(TRANS,'N')) .AND.  (.NOT.LSAME(TRANS,'C'))) THEN
-          INFO = 2
-      ELSEIF (N.LT.0) THEN
-          INFO = 3
-      ELSEIF (K.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDB.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      ELSEIF (LDC.LT.MAX(1,N)) THEN
-          INFO = 12
+      info = 0
+      if ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 1
+      elseif ((.not.lsame(trans,'N')) .and.  (.not.lsame(trans,'C'))) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (k.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldb.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldc.lt.max(1,n)) then
+          info = 12
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHER2K',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHER2K',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (((ALPHA.EQ.ZERO).OR.  (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. (((alpha.eq.zero).or.  (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (UPPER) THEN
-              IF (BETA.EQ.DBLE(ZERO)) THEN
-                  DO J = 1,N
-                      C(1:J,J) = ZERO
+      if (alpha.eq.zero) then
+          if (upper) then
+              if (beta.eq.dble(zero)) then
+                  do j = 1,n
+                      c(1:j,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(1:J-1,J) = BETA*C(1:J-1,J)
-                      C(J,J) = BETA*DBLE(C(J,J))
+              else
+                  do j = 1,n
+                      c(1:j-1,j) = beta*c(1:j-1,j)
+                      c(j,j) = beta*dble(c(j,j))
                   enddo
               endif
-          ELSE
-              IF (BETA.EQ.DBLE(ZERO)) THEN
-                  DO J = 1,N
-                      C(J:N,J) = ZERO
+          else
+              if (beta.eq.dble(zero)) then
+                  do j = 1,n
+                      c(j:n,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(J,J) = BETA*DBLE(C(J,J))
-                      C(J+1:N,J) = BETA*C(J+1:N,J)
+              else
+                  do j = 1,n
+                      c(j,j) = beta*dble(c(j,j))
+                      c(j+1:n,j) = beta*c(j+1:n,j)
                   enddo
               endif
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*B**H + conjg( alpha )*B*A**H +
 !                   C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  IF (BETA.EQ.DBLE(ZERO)) THEN
-                      C(1:J,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(1:J-1,J) = BETA*C(1:J-1,J)
-                      C(J,J) = BETA*DBLE(C(J,J))
-                  ELSE
-                      C(J,J) = DBLE(C(J,J))
+          if (upper) then
+              do j = 1,n
+                  if (beta.eq.dble(zero)) then
+                      c(1:j,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:j-1,j) = beta*c(1:j-1,j)
+                      c(j,j) = beta*dble(c(j,j))
+                  else
+                      c(j,j) = dble(c(j,j))
                   endif
-                  DO L = 1,K
-                      IF ((A(J,L).NE.ZERO) .OR. (B(J,L).NE.ZERO)) THEN
-                          TEMP1 = ALPHA*DCONJG(B(J,L))
-                          TEMP2 = DCONJG(ALPHA*A(J,L))
-                          DO I = 1,J - 1
-                              C(I,J) = C(I,J) + A(I,L)*TEMP1 + B(I,L)*TEMP2
+                  do l = 1,k
+                      if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
+                          temp1 = alpha*dconjg(b(j,l))
+                          temp2 = dconjg(alpha*a(j,l))
+                          do i = 1,j - 1
+                              c(i,j) = c(i,j) + a(i,l)*temp1 + b(i,l)*temp2
                           enddo
-                          C(J,J) = DBLE(C(J,J)) + DBLE(A(J,L)*TEMP1+B(J,L)*TEMP2)
+                          c(j,j) = dble(c(j,j)) + dble(a(j,l)*temp1+b(j,l)*temp2)
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  IF (BETA.EQ.DBLE(ZERO)) THEN
-                      C(J:N,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(J+1:N,J) = BETA*C(J+1:N,J)
-                      C(J,J) = BETA*DBLE(C(J,J))
-                  ELSE
-                      C(J,J) = DBLE(C(J,J))
+          else
+              do j = 1,n
+                  if (beta.eq.dble(zero)) then
+                      c(j:n,j) = zero
+                  elseif (beta.ne.one) then
+                      c(j+1:n,j) = beta*c(j+1:n,j)
+                      c(j,j) = beta*dble(c(j,j))
+                  else
+                      c(j,j) = dble(c(j,j))
                   endif
-                  DO L = 1,K
-                      IF ((A(J,L).NE.ZERO) .OR. (B(J,L).NE.ZERO)) THEN
-                          TEMP1 = ALPHA*DCONJG(B(J,L))
-                          TEMP2 = DCONJG(ALPHA*A(J,L))
-                          DO I = J + 1,N
-                              C(I,J) = C(I,J) + A(I,L)*TEMP1 + B(I,L)*TEMP2
+                  do l = 1,k
+                      if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
+                          temp1 = alpha*dconjg(b(j,l))
+                          temp2 = dconjg(alpha*a(j,l))
+                          do i = j + 1,n
+                              c(i,j) = c(i,j) + a(i,l)*temp1 + b(i,l)*temp2
                           enddo
-                          C(J,J) = DBLE(C(J,J)) + DBLE(A(J,L)*TEMP1+B(J,L)*TEMP2)
+                          c(j,j) = dble(c(j,j)) + dble(a(j,l)*temp1+b(j,l)*temp2)
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*A**H*B + conjg( alpha )*B**H*A +
 !                   C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,J
-                      TEMP1 = ZERO
-                      TEMP2 = ZERO
-                      DO L = 1,K
-                          TEMP1 = TEMP1 + DCONJG(A(L,I))*B(L,J)
-                          TEMP2 = TEMP2 + DCONJG(B(L,I))*A(L,J)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,j
+                      temp1 = zero
+                      temp2 = zero
+                      do l = 1,k
+                          temp1 = temp1 + dconjg(a(l,i))*b(l,j)
+                          temp2 = temp2 + dconjg(b(l,i))*a(l,j)
                       enddo
-                      IF (I.EQ.J) THEN
-                          IF (BETA.EQ.DBLE(ZERO)) THEN
-                              C(J,J) = DBLE(ALPHA*TEMP1+ DCONJG(ALPHA)*TEMP2)
-                          ELSE
-                              C(J,J) = BETA*DBLE(C(J,J)) + DBLE(ALPHA*TEMP1+ DCONJG(ALPHA)*TEMP2)
+                      if (i.eq.j) then
+                          if (beta.eq.dble(zero)) then
+                              c(j,j) = dble(alpha*temp1+ dconjg(alpha)*temp2)
+                          else
+                              c(j,j) = beta*dble(c(j,j)) + dble(alpha*temp1+ dconjg(alpha)*temp2)
                           endif
-                      ELSE
-                          IF (BETA.EQ.DBLE(ZERO)) THEN
-                              C(I,J) = ALPHA*TEMP1 + DCONJG(ALPHA)*TEMP2
-                          ELSE
-                              C(I,J) = BETA*C(I,J) + ALPHA*TEMP1 + DCONJG(ALPHA)*TEMP2
+                      else
+                          if (beta.eq.dble(zero)) then
+                              c(i,j) = alpha*temp1 + dconjg(alpha)*temp2
+                          else
+                              c(i,j) = beta*c(i,j) + alpha*temp1 + dconjg(alpha)*temp2
                           endif
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = J,N
-                      TEMP1 = ZERO
-                      TEMP2 = ZERO
-                      DO L = 1,K
-                          TEMP1 = TEMP1 + DCONJG(A(L,I))*B(L,J)
-                          TEMP2 = TEMP2 + DCONJG(B(L,I))*A(L,J)
+          else
+              do j = 1,n
+                  do i = j,n
+                      temp1 = zero
+                      temp2 = zero
+                      do l = 1,k
+                          temp1 = temp1 + dconjg(a(l,i))*b(l,j)
+                          temp2 = temp2 + dconjg(b(l,i))*a(l,j)
                       enddo
-                      IF (I.EQ.J) THEN
-                          IF (BETA.EQ.DBLE(ZERO)) THEN
-                              C(J,J) = DBLE(ALPHA*TEMP1+ DCONJG(ALPHA)*TEMP2)
-                          ELSE
-                              C(J,J) = BETA*DBLE(C(J,J)) + DBLE(ALPHA*TEMP1+ DCONJG(ALPHA)*TEMP2)
+                      if (i.eq.j) then
+                          if (beta.eq.dble(zero)) then
+                              c(j,j) = dble(alpha*temp1+ dconjg(alpha)*temp2)
+                          else
+                              c(j,j) = beta*dble(c(j,j)) + dble(alpha*temp1+ dconjg(alpha)*temp2)
                           endif
-                      ELSE
-                          IF (BETA.EQ.DBLE(ZERO)) THEN
-                              C(I,J) = ALPHA*TEMP1 + DCONJG(ALPHA)*TEMP2
-                          ELSE
-                              C(I,J) = BETA*C(I,J) + ALPHA*TEMP1 + DCONJG(ALPHA)*TEMP2
+                      else
+                          if (beta.eq.dble(zero)) then
+                              c(i,j) = alpha*temp1 + dconjg(alpha)*temp2
+                          else
+                              c(i,j) = beta*c(i,j) + alpha*temp1 + dconjg(alpha)*temp2
                           endif
                       endif
                   enddo
@@ -32175,23 +32175,23 @@ end subroutine zhemv
           endif
       endif
 
-      END SUBROUTINE ZHER2K
+      end subroutine zher2k
 !>
 !!##NAME
 !!    zher(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHER(UPLO,N,ALPHA,X,INCX,A,LDA)
+!!     subroutine zher(uplo,n,alpha,x,incx,a,lda)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)        :: ALPHA
-!!       INTEGER ,intent(in)                :: INCX,LDA,N
-!!       CHARACTER,intent(in)               :: UPLO
+!!       double precision,intent(in)        :: alpha
+!!       integer ,intent(in)                :: incx,lda,n
+!!       character,intent(in)               :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: X(*)
-!!       complex(kind=real64),intent(inout) :: A(LDA,*)
+!!       complex(kind=real64),intent(in)    :: x(*)
+!!       complex(kind=real64),intent(inout) :: a(lda,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -32291,7 +32291,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHER(UPLO,N,ALPHA,X,INCX,A,LDA)
+       subroutine zher(uplo,n,alpha,x,incx,a,lda)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -32300,24 +32300,24 @@ end subroutine zhemv
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)        :: ALPHA
-      INTEGER ,intent(in)                :: INCX,LDA,N
-      CHARACTER,intent(in)               :: UPLO
+      double precision,intent(in)        :: alpha
+      integer ,intent(in)                :: incx,lda,n
+      character,intent(in)               :: uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: X(*)
-      complex(kind=real64),intent(inout) :: A(LDA,*)
+      complex(kind=real64),intent(in)    :: x(*)
+      complex(kind=real64),intent(inout) :: a(lda,*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,KX
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,kx
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -32327,127 +32327,127 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG,MAX
+      intrinsic dble,dconjg,max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (lda.lt.max(1,n)) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHER  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHER  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.DBLE(ZERO))) RETURN
+      if ((n.eq.0) .or. (alpha.eq.dble(zero))) return
 !
 !     Set the start point in X if the increment is not unity.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through the triangular part
 !     of A.
 !
-      IF (LSAME(UPLO,'U')) THEN
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when A is stored in upper triangle.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(J))
-                      DO I = 1,J - 1
-                          A(I,J) = A(I,J) + X(I)*TEMP
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*dconjg(x(j))
+                      do i = 1,j - 1
+                          a(i,j) = a(i,j) + x(i)*temp
                       enddo
-                      A(J,J) = DBLE(A(J,J)) + DBLE(X(J)*TEMP)
-                  ELSE
-                      A(J,J) = DBLE(A(J,J))
+                      a(j,j) = dble(a(j,j)) + dble(x(j)*temp)
+                  else
+                      a(j,j) = dble(a(j,j))
                   endif
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(JX))
-                      IX = KX
-                      DO I = 1,J - 1
-                          A(I,J) = A(I,J) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*dconjg(x(jx))
+                      ix = kx
+                      do i = 1,j - 1
+                          a(i,j) = a(i,j) + x(ix)*temp
+                          ix = ix + incx
                       enddo
-                      A(J,J) = DBLE(A(J,J)) + DBLE(X(JX)*TEMP)
-                  ELSE
-                      A(J,J) = DBLE(A(J,J))
+                      a(j,j) = dble(a(j,j)) + dble(x(jx)*temp)
+                  else
+                      a(j,j) = dble(a(j,j))
                   endif
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when A is stored in lower triangle.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(J))
-                      A(J,J) = DBLE(A(J,J)) + DBLE(TEMP*X(J))
-                      DO I = J + 1,N
-                          A(I,J) = A(I,J) + X(I)*TEMP
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*dconjg(x(j))
+                      a(j,j) = dble(a(j,j)) + dble(temp*x(j))
+                      do i = j + 1,n
+                          a(i,j) = a(i,j) + x(i)*temp
                       enddo
-                  ELSE
-                      A(J,J) = DBLE(A(J,J))
+                  else
+                      a(j,j) = dble(a(j,j))
                   endif
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(JX))
-                      A(J,J) = DBLE(A(J,J)) + DBLE(TEMP*X(JX))
-                      IX = JX
-                      DO I = J + 1,N
-                          IX = IX + INCX
-                          A(I,J) = A(I,J) + X(IX)*TEMP
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*dconjg(x(jx))
+                      a(j,j) = dble(a(j,j)) + dble(temp*x(jx))
+                      ix = jx
+                      do i = j + 1,n
+                          ix = ix + incx
+                          a(i,j) = a(i,j) + x(ix)*temp
                       enddo
-                  ELSE
-                      A(J,J) = DBLE(A(J,J))
+                  else
+                      a(j,j) = dble(a(j,j))
                   endif
-                  JX = JX + INCX
+                  jx = jx + incx
               enddo
           endif
       endif
 
-      END SUBROUTINE ZHER
+      end subroutine zher
 !>
 !!##NAME
 !!    zherk(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+!!     subroutine zherk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION,intent(in)        :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: K,LDA,LDC,N
-!!       CHARACTER,intent(in)               :: TRANS,UPLO
+!!       double precision,intent(in)        :: alpha,beta
+!!       integer,intent(in)                 :: k,lda,ldc,n
+!!       character,intent(in)               :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: C(LDC,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -32582,7 +32582,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+       subroutine zherk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -32591,13 +32591,13 @@ end subroutine zhemv
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION,intent(in)        :: ALPHA,BETA
-      INTEGER,intent(in)                 :: K,LDA,LDC,N
-      CHARACTER,intent(in)               :: TRANS,UPLO
+      double precision,intent(in)        :: alpha,beta
+      integer,intent(in)                 :: k,lda,ldc,n
+      character,intent(in)               :: trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: C(LDC,*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -32610,205 +32610,205 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCMPLX,DCONJG,MAX
+      intrinsic dble,dcmplx,dconjg,max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      DOUBLE PRECISION RTEMP
-      INTEGER I,INFO,J,L,NROWA
-      LOGICAL UPPER
+      complex(kind=real64) :: temp
+      double precision rtemp
+      integer i,info,j,l,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      double precision one,zero
+      parameter (one=1.0d+0,zero=0.0d+0)
 !     ..
 !
 !     Test the input parameters.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          NROWA = N
-      ELSE
-          NROWA = K
+      if (lsame(trans,'N')) then
+          nrowa = n
+      else
+          nrowa = k
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.LSAME(TRANS,'N')) .AND.  (.NOT.LSAME(TRANS,'C'))) THEN
-          INFO = 2
-      ELSEIF (N.LT.0) THEN
-          INFO = 3
-      ELSEIF (K.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDC.LT.MAX(1,N)) THEN
-          INFO = 10
+      info = 0
+      if ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 1
+      elseif ((.not.lsame(trans,'N')) .and.  (.not.lsame(trans,'C'))) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (k.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldc.lt.max(1,n)) then
+          info = 10
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHERK ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHERK ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (((ALPHA.EQ.ZERO).OR.  (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. (((alpha.eq.zero).or.  (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (UPPER) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(1:J,J) = ZERO
+      if (alpha.eq.zero) then
+          if (upper) then
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(1:j,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO I = 1,J - 1
-                          C(I,J) = BETA*C(I,J)
+              else
+                  do j = 1,n
+                      do i = 1,j - 1
+                          c(i,j) = beta*c(i,j)
                       enddo
-                      C(J,J) = BETA*DBLE(C(J,J))
+                      c(j,j) = beta*dble(c(j,j))
                   enddo
               endif
-          ELSE
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(J:N,J) = ZERO
+          else
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(j:n,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(J,J) = BETA*DBLE(C(J,J))
-                      DO I = J + 1,N
-                          C(I,J) = BETA*C(I,J)
+              else
+                  do j = 1,n
+                      c(j,j) = beta*dble(c(j,j))
+                      do i = j + 1,n
+                          c(i,j) = beta*c(i,j)
                       enddo
                   enddo
               endif
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*A**H + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                       C(1:J,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      DO I = 1,J - 1
-                          C(I,J) = BETA*C(I,J)
+          if (upper) then
+              do j = 1,n
+                  if (beta.eq.zero) then
+                       c(1:j,j) = zero
+                  elseif (beta.ne.one) then
+                      do i = 1,j - 1
+                          c(i,j) = beta*c(i,j)
                       enddo
-                      C(J,J) = BETA*DBLE(C(J,J))
-                  ELSE
-                      C(J,J) = DBLE(C(J,J))
+                      c(j,j) = beta*dble(c(j,j))
+                  else
+                      c(j,j) = dble(c(j,j))
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.DCMPLX(ZERO)) THEN
-                          TEMP = ALPHA*DCONJG(A(J,L))
-                          DO I = 1,J - 1
-                              C(I,J) = C(I,J) + TEMP*A(I,L)
+                  do l = 1,k
+                      if (a(j,l).ne.dcmplx(zero)) then
+                          temp = alpha*dconjg(a(j,l))
+                          do i = 1,j - 1
+                              c(i,j) = c(i,j) + temp*a(i,l)
                           enddo
-                          C(J,J) = DBLE(C(J,J)) + DBLE(TEMP*A(I,L))
+                          c(j,j) = dble(c(j,j)) + dble(temp*a(i,l))
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J:N,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(J,J) = BETA*DBLE(C(J,J))
-                      DO I = J + 1,N
-                          C(I,J) = BETA*C(I,J)
+          else
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(j:n,j) = zero
+                  elseif (beta.ne.one) then
+                      c(j,j) = beta*dble(c(j,j))
+                      do i = j + 1,n
+                          c(i,j) = beta*c(i,j)
                       enddo
-                  ELSE
-                      C(J,J) = DBLE(C(J,J))
+                  else
+                      c(j,j) = dble(c(j,j))
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.DCMPLX(ZERO)) THEN
-                          TEMP = ALPHA*DCONJG(A(J,L))
-                          C(J,J) = DBLE(C(J,J)) + DBLE(TEMP*A(J,L))
-                          DO I = J + 1,N
-                              C(I,J) = C(I,J) + TEMP*A(I,L)
+                  do l = 1,k
+                      if (a(j,l).ne.dcmplx(zero)) then
+                          temp = alpha*dconjg(a(j,l))
+                          c(j,j) = dble(c(j,j)) + dble(temp*a(j,l))
+                          do i = j + 1,n
+                              c(i,j) = c(i,j) + temp*a(i,l)
                           enddo
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*A**H*A + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,J - 1
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*A(L,J)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,j - 1
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + dconjg(a(l,i))*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
-                  RTEMP = ZERO
-                  DO L = 1,K
-                      RTEMP = RTEMP + DCONJG(A(L,J))*A(L,J)
+                  rtemp = zero
+                  do l = 1,k
+                      rtemp = rtemp + dconjg(a(l,j))*a(l,j)
                   enddo
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J,J) = ALPHA*RTEMP
-                  ELSE
-                      C(J,J) = ALPHA*RTEMP + BETA*DBLE(C(J,J))
+                  if (beta.eq.zero) then
+                      c(j,j) = alpha*rtemp
+                  else
+                      c(j,j) = alpha*rtemp + beta*dble(c(j,j))
                   endif
               enddo
-          ELSE
-              DO J = 1,N
-                  RTEMP = ZERO
-                  DO L = 1,K
-                      RTEMP = RTEMP + DCONJG(A(L,J))*A(L,J)
+          else
+              do j = 1,n
+                  rtemp = zero
+                  do l = 1,k
+                      rtemp = rtemp + dconjg(a(l,j))*a(l,j)
                   enddo
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J,J) = ALPHA*RTEMP
-                  ELSE
-                      C(J,J) = ALPHA*RTEMP + BETA*DBLE(C(J,J))
+                  if (beta.eq.zero) then
+                      c(j,j) = alpha*rtemp
+                  else
+                      c(j,j) = alpha*rtemp + beta*dble(c(j,j))
                   endif
-                  DO I = J + 1,N
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*A(L,J)
+                  do i = j + 1,n
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + dconjg(a(l,i))*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
       endif
 
-      END SUBROUTINE ZHERK
+      end subroutine zherk
 !>
 !!##NAME
 !!    zhpmv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+!!     subroutine zhpmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: INCX,INCY,N
-!!       CHARACTER,intent(in)               :: UPLO
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: incx,incy,n
+!!       character,intent(in)               :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: AP(*),X(*)
-!!       complex(kind=real64),intent(inout) :: Y(*)
+!!       complex(kind=real64),intent(in)    :: ap(*),x(*)
+!!       complex(kind=real64),intent(inout) :: y(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -32920,7 +32920,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+       subroutine zhpmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -32929,26 +32929,26 @@ end subroutine zhemv
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: INCX,INCY,N
-      CHARACTER,intent(in)               :: UPLO
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: incx,incy,n
+      character,intent(in)               :: uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: AP(*),X(*)
-      complex(kind=real64),intent(inout) :: Y(*)
+      complex(kind=real64),intent(in)    :: ap(*),x(*)
+      complex(kind=real64),intent(inout) :: y(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,k,kk,kx,ky
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -32958,41 +32958,41 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG
+      intrinsic dble,dconjg
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 6
-      elseif (INCY.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 6
+      elseif (incy.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHPMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHPMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     Set up the start points in  X  and  Y.
 !
-      IF (INCX.GT.0) THEN
-          KX = 1
-      ELSE
-          KX = 1 - (N-1)*INCX
+      if (incx.gt.0) then
+          kx = 1
+      else
+          kx = 1 - (n-1)*incx
       endif
-      IF (INCY.GT.0) THEN
-          KY = 1
-      ELSE
-          KY = 1 - (N-1)*INCY
+      if (incy.gt.0) then
+          ky = 1
+      else
+          ky = 1 - (n-1)*incy
       endif
 !
 !     Start the operations. In this version the elements of the array AP
@@ -33000,125 +33000,125 @@ end subroutine zhemv
 !
 !     First form  y := beta*y.
 !
-      IF (BETA.NE.ONE) THEN
-          IF (INCY.EQ.1) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  Y(1:N) = ZERO
-              ELSE
-                  Y(1:N) = BETA*Y(1:N)
+      if (beta.ne.one) then
+          if (incy.eq.1) then
+              if (beta.eq.zero) then
+                  y(1:n) = zero
+              else
+                  y(1:n) = beta*y(1:n)
               endif
-          ELSE
-              IY = KY
-              IF (BETA.EQ.ZERO) THEN
-                  DO I = 1,N
-                      Y(IY) = ZERO
-                      IY = IY + INCY
+          else
+              iy = ky
+              if (beta.eq.zero) then
+                  do i = 1,n
+                      y(iy) = zero
+                      iy = iy + incy
                   enddo
-              ELSE
-                  DO I = 1,N
-                      Y(IY) = BETA*Y(IY)
-                      IY = IY + INCY
+              else
+                  do i = 1,n
+                      y(iy) = beta*y(iy)
+                      iy = iy + incy
                   enddo
               endif
           endif
       endif
-      IF (ALPHA.EQ.ZERO) RETURN
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      if (alpha.eq.zero) return
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  y  when AP contains the upper triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  K = KK
-                  DO I = 1,J - 1
-                      Y(I) = Y(I) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + DCONJG(AP(K))*X(I)
-                      K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  k = kk
+                  do i = 1,j - 1
+                      y(i) = y(i) + temp1*ap(k)
+                      temp2 = temp2 + dconjg(ap(k))*x(i)
+                      k = k + 1
                   enddo
-                  Y(J) = Y(J) + TEMP1*DBLE(AP(KK+J-1)) + ALPHA*TEMP2
-                  KK = KK + J
+                  y(j) = y(j) + temp1*dble(ap(kk+j-1)) + alpha*temp2
+                  kk = kk + j
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  IX = KX
-                  IY = KY
-                  DO K = KK,KK + J - 2
-                      Y(IY) = Y(IY) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + DCONJG(AP(K))*X(IX)
-                      IX = IX + INCX
-                      IY = IY + INCY
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  ix = kx
+                  iy = ky
+                  do k = kk,kk + j - 2
+                      y(iy) = y(iy) + temp1*ap(k)
+                      temp2 = temp2 + dconjg(ap(k))*x(ix)
+                      ix = ix + incx
+                      iy = iy + incy
                   enddo
-                  Y(JY) = Y(JY) + TEMP1*DBLE(AP(KK+J-1)) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + J
+                  y(jy) = y(jy) + temp1*dble(ap(kk+j-1)) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  y  when AP contains the lower triangle.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(J)
-                  TEMP2 = ZERO
-                  Y(J) = Y(J) + TEMP1*DBLE(AP(KK))
-                  K = KK + 1
-                  DO I = J + 1,N
-                      Y(I) = Y(I) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + DCONJG(AP(K))*X(I)
-                      K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  temp1 = alpha*x(j)
+                  temp2 = zero
+                  y(j) = y(j) + temp1*dble(ap(kk))
+                  k = kk + 1
+                  do i = j + 1,n
+                      y(i) = y(i) + temp1*ap(k)
+                      temp2 = temp2 + dconjg(ap(k))*x(i)
+                      k = k + 1
                   enddo
-                  Y(J) = Y(J) + ALPHA*TEMP2
-                  KK = KK + (N-J+1)
+                  y(j) = y(j) + alpha*temp2
+                  kk = kk + (n-j+1)
               enddo
-          ELSE
-              JX = KX
-              JY = KY
-              DO J = 1,N
-                  TEMP1 = ALPHA*X(JX)
-                  TEMP2 = ZERO
-                  Y(JY) = Y(JY) + TEMP1*DBLE(AP(KK))
-                  IX = JX
-                  IY = JY
-                  DO K = KK + 1,KK + N - J
-                      IX = IX + INCX
-                      IY = IY + INCY
-                      Y(IY) = Y(IY) + TEMP1*AP(K)
-                      TEMP2 = TEMP2 + DCONJG(AP(K))*X(IX)
+          else
+              jx = kx
+              jy = ky
+              do j = 1,n
+                  temp1 = alpha*x(jx)
+                  temp2 = zero
+                  y(jy) = y(jy) + temp1*dble(ap(kk))
+                  ix = jx
+                  iy = jy
+                  do k = kk + 1,kk + n - j
+                      ix = ix + incx
+                      iy = iy + incy
+                      y(iy) = y(iy) + temp1*ap(k)
+                      temp2 = temp2 + dconjg(ap(k))*x(ix)
                   enddo
-                  Y(JY) = Y(JY) + ALPHA*TEMP2
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + (N-J+1)
+                  y(jy) = y(jy) + alpha*temp2
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + (n-j+1)
               enddo
           endif
       endif
 
-      END SUBROUTINE ZHPMV
+      end subroutine zhpmv
 !>
 !!##NAME
 !!    zhpr2(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+!!     subroutine zhpr2(uplo,n,alpha,x,incx,y,incy,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA
-!!       INTEGER,intent(in)                 :: INCX,INCY,N
-!!       CHARACTER,intent(in)               :: UPLO
+!!       complex(kind=real64),intent(in)    :: alpha
+!!       integer,intent(in)                 :: incx,incy,n
+!!       character,intent(in)               :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: X(*),Y(*)
-!!       complex(kind=real64),intent(inout) :: AP(*)
+!!       complex(kind=real64),intent(in)    :: x(*),y(*)
+!!       complex(kind=real64),intent(inout) :: ap(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -33227,7 +33227,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+       subroutine zhpr2(uplo,n,alpha,x,incx,y,incy,ap)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -33236,24 +33236,24 @@ end subroutine zhemv
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA
-      INTEGER,intent(in)                 :: INCX,INCY,N
-      CHARACTER,intent(in)               :: UPLO
+      complex(kind=real64),intent(in)    :: alpha
+      integer,intent(in)                 :: incx,incy,n
+      character,intent(in)               :: uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: X(*),Y(*)
-      complex(kind=real64),intent(inout) :: AP(*)
+      complex(kind=real64),intent(in)    :: x(*),y(*)
+      complex(kind=real64),intent(inout) :: ap(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,ix,iy,j,jx,jy,k,kk,kx,ky
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -33263,153 +33263,153 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG
+      intrinsic dble,dconjg
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
-      elseif (INCY.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
+      elseif (incy.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHPR2 ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHPR2 ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN
+      if ((n.eq.0) .or. (alpha.eq.zero)) return
 !
 !     Set up the start points in X and Y if the increments are not both
 !     unity.
 !
-      IF ((INCX.NE.1) .OR. (INCY.NE.1)) THEN
-          IF (INCX.GT.0) THEN
-              KX = 1
-          ELSE
-              KX = 1 - (N-1)*INCX
+      if ((incx.ne.1) .or. (incy.ne.1)) then
+          if (incx.gt.0) then
+              kx = 1
+          else
+              kx = 1 - (n-1)*incx
           endif
-          IF (INCY.GT.0) THEN
-              KY = 1
-          ELSE
-              KY = 1 - (N-1)*INCY
+          if (incy.gt.0) then
+              ky = 1
+          else
+              ky = 1 - (n-1)*incy
           endif
-          JX = KX
-          JY = KY
+          jx = kx
+          jy = ky
       endif
 !
 !     Start the operations. In this version the elements of the array AP
 !     are accessed sequentially with one pass through AP.
 !
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when upper triangle is stored in AP.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(J))
-                      TEMP2 = DCONJG(ALPHA*X(J))
-                      K = KK
-                      DO I = 1,J - 1
-                          AP(K) = AP(K) + X(I)*TEMP1 + Y(I)*TEMP2
-                          K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*dconjg(y(j))
+                      temp2 = dconjg(alpha*x(j))
+                      k = kk
+                      do i = 1,j - 1
+                          ap(k) = ap(k) + x(i)*temp1 + y(i)*temp2
+                          k = k + 1
                       enddo
-                      AP(KK+J-1) = DBLE(AP(KK+J-1)) + DBLE(X(J)*TEMP1+Y(J)*TEMP2)
-                  ELSE
-                      AP(KK+J-1) = DBLE(AP(KK+J-1))
+                      ap(kk+j-1) = dble(ap(kk+j-1)) + dble(x(j)*temp1+y(j)*temp2)
+                  else
+                      ap(kk+j-1) = dble(ap(kk+j-1))
                   endif
-                  KK = KK + J
+                  kk = kk + j
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(JY))
-                      TEMP2 = DCONJG(ALPHA*X(JX))
-                      IX = KX
-                      IY = KY
-                      DO K = KK,KK + J - 2
-                          AP(K) = AP(K) + X(IX)*TEMP1 + Y(IY)*TEMP2
-                          IX = IX + INCX
-                          IY = IY + INCY
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*dconjg(y(jy))
+                      temp2 = dconjg(alpha*x(jx))
+                      ix = kx
+                      iy = ky
+                      do k = kk,kk + j - 2
+                          ap(k) = ap(k) + x(ix)*temp1 + y(iy)*temp2
+                          ix = ix + incx
+                          iy = iy + incy
                       enddo
-                      AP(KK+J-1) = DBLE(AP(KK+J-1)) + DBLE(X(JX)*TEMP1+Y(JY)*TEMP2)
-                  ELSE
-                      AP(KK+J-1) = DBLE(AP(KK+J-1))
+                      ap(kk+j-1) = dble(ap(kk+j-1)) + dble(x(jx)*temp1+y(jy)*temp2)
+                  else
+                      ap(kk+j-1) = dble(ap(kk+j-1))
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + J
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when lower triangle is stored in AP.
 !
-          IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
-              DO J = 1,N
-                  IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(J))
-                      TEMP2 = DCONJG(ALPHA*X(J))
-                      AP(KK) = DBLE(AP(KK)) + DBLE(X(J)*TEMP1+Y(J)*TEMP2)
-                      K = KK + 1
-                      DO I = J + 1,N
-                          AP(K) = AP(K) + X(I)*TEMP1 + Y(I)*TEMP2
-                          K = K + 1
+          if ((incx.eq.1) .and. (incy.eq.1)) then
+              do j = 1,n
+                  if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
+                      temp1 = alpha*dconjg(y(j))
+                      temp2 = dconjg(alpha*x(j))
+                      ap(kk) = dble(ap(kk)) + dble(x(j)*temp1+y(j)*temp2)
+                      k = kk + 1
+                      do i = j + 1,n
+                          ap(k) = ap(k) + x(i)*temp1 + y(i)*temp2
+                          k = k + 1
                       enddo
-                  ELSE
-                      AP(KK) = DBLE(AP(KK))
+                  else
+                      ap(kk) = dble(ap(kk))
                   endif
-                  KK = KK + N - J + 1
+                  kk = kk + n - j + 1
               enddo
-          ELSE
-              DO J = 1,N
-                  IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(JY))
-                      TEMP2 = DCONJG(ALPHA*X(JX))
-                      AP(KK) = DBLE(AP(KK)) + DBLE(X(JX)*TEMP1+Y(JY)*TEMP2)
-                      IX = JX
-                      IY = JY
-                      DO K = KK + 1,KK + N - J
-                          IX = IX + INCX
-                          IY = IY + INCY
-                          AP(K) = AP(K) + X(IX)*TEMP1 + Y(IY)*TEMP2
+          else
+              do j = 1,n
+                  if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
+                      temp1 = alpha*dconjg(y(jy))
+                      temp2 = dconjg(alpha*x(jx))
+                      ap(kk) = dble(ap(kk)) + dble(x(jx)*temp1+y(jy)*temp2)
+                      ix = jx
+                      iy = jy
+                      do k = kk + 1,kk + n - j
+                          ix = ix + incx
+                          iy = iy + incy
+                          ap(k) = ap(k) + x(ix)*temp1 + y(iy)*temp2
                       enddo
-                  ELSE
-                      AP(KK) = DBLE(AP(KK))
+                  else
+                      ap(kk) = dble(ap(kk))
                   endif
-                  JX = JX + INCX
-                  JY = JY + INCY
-                  KK = KK + N - J + 1
+                  jx = jx + incx
+                  jy = jy + incy
+                  kk = kk + n - j + 1
               enddo
           endif
       endif
 
-      END SUBROUTINE ZHPR2
+      end subroutine zhpr2
 !>
 !!##NAME
 !!    zhpr(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZHPR(UPLO,N,ALPHA,X,INCX,AP)
+!!     subroutine zhpr(uplo,n,alpha,x,incx,ap)
 !!
 !!       .. Scalar Arguments ..
-!!       DOUBLE PRECISION ,intent(in)       :: ALPHA
-!!       INTEGER ,intent(in)                :: INCX,N
-!!       CHARACTER,intent(in)               :: UPLO
+!!       double precision ,intent(in)       :: alpha
+!!       integer ,intent(in)                :: incx,n
+!!       character,intent(in)               :: uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: X(*)
-!!       complex(kind=real64),intent(inout) :: AP(*)
+!!       complex(kind=real64),intent(in)    :: x(*)
+!!       complex(kind=real64),intent(inout) :: ap(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -33505,7 +33505,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZHPR(UPLO,N,ALPHA,X,INCX,AP)
+       subroutine zhpr(uplo,n,alpha,x,incx,ap)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -33514,24 +33514,24 @@ end subroutine zhemv
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      DOUBLE PRECISION ,intent(in)       :: ALPHA
-      INTEGER ,intent(in)                :: INCX,N
-      CHARACTER,intent(in)               :: UPLO
+      double precision ,intent(in)       :: alpha
+      integer ,intent(in)                :: incx,n
+      character,intent(in)               :: uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: X(*)
-      complex(kind=real64),intent(inout) :: AP(*)
+      complex(kind=real64),intent(in)    :: x(*)
+      complex(kind=real64),intent(inout) :: ap(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,k,kk,kx
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -33541,124 +33541,124 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG
+      intrinsic dble,dconjg
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (N.LT.0) THEN
-          INFO = 2
-      elseif (INCX.EQ.0) THEN
-          INFO = 5
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (n.lt.0) then
+          info = 2
+      elseif (incx.eq.0) then
+          info = 5
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHPR  ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZHPR  ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (ALPHA.EQ.DBLE(ZERO))) RETURN
+      if ((n.eq.0) .or. (alpha.eq.dble(zero))) return
 !
 !     Set the start point in X if the increment is not unity.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of the array AP
 !     are accessed sequentially with one pass through AP.
 !
-      KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      kk = 1
+      if (lsame(uplo,'U')) then
 !
 !        Form  A  when upper triangle is stored in AP.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(J))
-                      K = KK
-                      DO I = 1,J - 1
-                          AP(K) = AP(K) + X(I)*TEMP
-                          K = K + 1
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*dconjg(x(j))
+                      k = kk
+                      do i = 1,j - 1
+                          ap(k) = ap(k) + x(i)*temp
+                          k = k + 1
                       enddo
-                      AP(KK+J-1) = DBLE(AP(KK+J-1)) + DBLE(X(J)*TEMP)
-                  ELSE
-                      AP(KK+J-1) = DBLE(AP(KK+J-1))
+                      ap(kk+j-1) = dble(ap(kk+j-1)) + dble(x(j)*temp)
+                  else
+                      ap(kk+j-1) = dble(ap(kk+j-1))
                   endif
-                  KK = KK + J
+                  kk = kk + j
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(JX))
-                      IX = KX
-                      DO K = KK,KK + J - 2
-                          AP(K) = AP(K) + X(IX)*TEMP
-                          IX = IX + INCX
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*dconjg(x(jx))
+                      ix = kx
+                      do k = kk,kk + j - 2
+                          ap(k) = ap(k) + x(ix)*temp
+                          ix = ix + incx
                       enddo
-                      AP(KK+J-1) = DBLE(AP(KK+J-1)) + DBLE(X(JX)*TEMP)
-                  ELSE
-                      AP(KK+J-1) = DBLE(AP(KK+J-1))
+                      ap(kk+j-1) = dble(ap(kk+j-1)) + dble(x(jx)*temp)
+                  else
+                      ap(kk+j-1) = dble(ap(kk+j-1))
                   endif
-                  JX = JX + INCX
-                  KK = KK + J
+                  jx = jx + incx
+                  kk = kk + j
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  A  when lower triangle is stored in AP.
 !
-          IF (INCX.EQ.1) THEN
-              DO J = 1,N
-                  IF (X(J).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(J))
-                      AP(KK) = DBLE(AP(KK)) + DBLE(TEMP*X(J))
-                      K = KK + 1
-                      DO I = J + 1,N
-                          AP(K) = AP(K) + X(I)*TEMP
-                          K = K + 1
+          if (incx.eq.1) then
+              do j = 1,n
+                  if (x(j).ne.zero) then
+                      temp = alpha*dconjg(x(j))
+                      ap(kk) = dble(ap(kk)) + dble(temp*x(j))
+                      k = kk + 1
+                      do i = j + 1,n
+                          ap(k) = ap(k) + x(i)*temp
+                          k = k + 1
                       enddo
-                  ELSE
-                      AP(KK) = DBLE(AP(KK))
+                  else
+                      ap(kk) = dble(ap(kk))
                   endif
-                  KK = KK + N - J + 1
+                  kk = kk + n - j + 1
               enddo
-          ELSE
-              JX = KX
-              DO J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*DCONJG(X(JX))
-                      AP(KK) = DBLE(AP(KK)) + DBLE(TEMP*X(JX))
-                      IX = JX
-                      DO K = KK + 1,KK + N - J
-                          IX = IX + INCX
-                          AP(K) = AP(K) + X(IX)*TEMP
+          else
+              jx = kx
+              do j = 1,n
+                  if (x(jx).ne.zero) then
+                      temp = alpha*dconjg(x(jx))
+                      ap(kk) = dble(ap(kk)) + dble(temp*x(jx))
+                      ix = jx
+                      do k = kk + 1,kk + n - j
+                          ix = ix + incx
+                          ap(k) = ap(k) + x(ix)*temp
                       enddo
-                  ELSE
-                      AP(KK) = DBLE(AP(KK))
+                  else
+                      ap(kk) = dble(ap(kk))
                   endif
-                  JX = JX + INCX
-                  KK = KK + N - J + 1
+                  jx = jx + incx
+                  kk = kk + n - j + 1
               enddo
           endif
       endif
 
-      END SUBROUTINE ZHPR
+      end subroutine zhpr
 !>
 !!##NAME
 !!    zrotg(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1] constructs a plane rotation
 !!
 !!##SYNOPSIS
 !!
-!!     subroutine ZROTG( a, b, c, s )
+!!     subroutine zrotg( a, b, c, s )
 !!
 !!       .. Scalar Arguments ..
 !!       real(wp),intent(out)      :: c
@@ -33735,7 +33735,7 @@ end subroutine zhemv
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-subroutine ZROTG( a, b, c, s )
+subroutine zrotg( a, b, c, s )
    integer, parameter :: wp = kind(1.d0)
 !
 !  -- Reference BLAS level1 routine --
@@ -33767,10 +33767,10 @@ subroutine ZROTG( a, b, c, s )
    intrinsic :: abs, aimag, conjg, max, min, real, sqrt
 !  ..
 !  .. Statement Functions ..
-   real(wp) :: ABSSQ
+   real(wp) :: abssq
 !  ..
 !  .. Statement Function definitions ..
-   ABSSQ( t ) = real( t )**2 + aimag( t )**2
+   abssq( t ) = real( t )**2 + aimag( t )**2
 !  ..
 !  .. Executable Statements ..
 !
@@ -33787,7 +33787,7 @@ subroutine ZROTG( a, b, c, s )
 !
 !        Use unscaled algorithm
 !
-         g2 = ABSSQ( g )
+         g2 = abssq( g )
          d = sqrt( g2 )
          s = conjg( g ) / d
          r = d
@@ -33798,7 +33798,7 @@ subroutine ZROTG( a, b, c, s )
          u = min( safmax, max( safmin, g1 ) )
          uu = one / u
          gs = g*uu
-         g2 = ABSSQ( gs )
+         g2 = abssq( gs )
          d = sqrt( g2 )
          s = conjg( gs ) / d
          r = d*u
@@ -33811,8 +33811,8 @@ subroutine ZROTG( a, b, c, s )
 !
 !        Use unscaled algorithm
 !
-         f2 = ABSSQ( f )
-         g2 = ABSSQ( g )
+         f2 = abssq( f )
+         g2 = abssq( g )
          h2 = f2 + g2
          if( f2 > rtmin .and. h2 < rtmax ) then
             d = sqrt( f2*h2 )
@@ -33830,7 +33830,7 @@ subroutine ZROTG( a, b, c, s )
          u = min( safmax, max( safmin, f1, g1 ) )
          uu = one / u
          gs = g*uu
-         g2 = ABSSQ( gs )
+         g2 = abssq( gs )
          if( f1*uu < rtmin ) then
 !
 !           f is not well-scaled when scaled by g1.
@@ -33840,7 +33840,7 @@ subroutine ZROTG( a, b, c, s )
             vv = one / v
             w = v * uu
             fs = f*vv
-            f2 = ABSSQ( fs )
+            f2 = abssq( fs )
             h2 = f2*w**2 + g2
          else
 !
@@ -33848,7 +33848,7 @@ subroutine ZROTG( a, b, c, s )
 !
             w = one
             fs = f*uu
-            f2 = ABSSQ( fs )
+            f2 = abssq( fs )
             h2 = f2 + g2
          endif
          if( f2 > rtmin .and. h2 < rtmax ) then
@@ -33871,14 +33871,14 @@ end subroutine
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZSCAL(N,ZA,ZX,INCX)
+!!     subroutine zscal(n,za,zx,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ZA
-!!       INTEGER,intent(in)                 :: INCX,N
+!!       complex(kind=real64),intent(in)    :: za
+!!       integer,intent(in)                 :: incx,n
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(inout) :: ZX(*)
+!!       complex(kind=real64),intent(inout) :: zx(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -33925,7 +33925,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZSCAL(N,ZA,ZX,INCX)
+       subroutine zscal(n,za,zx,incx)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -33934,50 +33934,50 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ZA
-      INTEGER,intent(in)                 :: INCX,N
+      complex(kind=real64),intent(in)    :: za
+      integer,intent(in)                 :: incx,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(inout) :: ZX(*)
+      complex(kind=real64),intent(inout) :: zx(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      INTEGER I,NINCX
+      integer i,nincx
 !     ..
-      IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) THEN
+      if (n.le.0 .or. incx.le.0) return
+      if (incx.eq.1) then
 !
 !        code for increment equal to 1
 !
-         DO I = 1,N
-            ZX(I) = ZA*ZX(I)
+         do i = 1,n
+            zx(i) = za*zx(i)
          enddo
-      ELSE
+      else
 !
 !        code for increment not equal to 1
 !
-         NINCX = N*INCX
-         DO I = 1,NINCX,INCX
-            ZX(I) = ZA*ZX(I)
+         nincx = n*incx
+         do i = 1,nincx,incx
+            zx(i) = za*zx(i)
          enddo
       endif
 
-      END SUBROUTINE ZSCAL
+      end subroutine zscal
 !>
 !!##NAME
 !!    zswap(3f) - [BLAS:COMPLEX16_BLAS_LEVEL1]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZSWAP(N,ZX,INCX,ZY,INCY)
+!!     subroutine zswap(n,zx,incx,zy,incy)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)                 :: INCX,INCY,N
+!!       integer,intent(in)                 :: incx,incy,n
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(inout) :: ZX(*),ZY(*)
+!!       complex(kind=real64),intent(inout) :: zx(*),zy(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -34027,7 +34027,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZSWAP(N,ZX,INCX,ZY,INCY)
+       subroutine zswap(n,zx,incx,zy,incy)
       implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
@@ -34036,62 +34036,62 @@ end subroutine
 !     November 2017
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,INCY,N
+      integer,intent(in)                 :: incx,incy,n
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(inout) :: ZX(*),ZY(*)
+      complex(kind=real64),intent(inout) :: zx(*),zy(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Local Scalars ..
-      complex(kind=real64) :: ZTEMP
-      INTEGER I,IX,IY
+      complex(kind=real64) :: ztemp
+      integer i,ix,iy
 !     ..
-      IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+      if (n.le.0) return
+      if (incx.eq.1 .and. incy.eq.1) then
 !
 !       code for both increments equal to 1
-         DO I = 1,N
-            ZTEMP = ZX(I)
-            ZX(I) = ZY(I)
-            ZY(I) = ZTEMP
+         do i = 1,n
+            ztemp = zx(i)
+            zx(i) = zy(i)
+            zy(i) = ztemp
          enddo
-      ELSE
+      else
 !
 !       code for unequal increments or equal increments not equal
 !         to 1
 !
-         IX = 1
-         IY = 1
-         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-         DO I = 1,N
-            ZTEMP = ZX(IX)
-            ZX(IX) = ZY(IY)
-            ZY(IY) = ZTEMP
-            IX = IX + INCX
-            IY = IY + INCY
+         ix = 1
+         iy = 1
+         if (incx.lt.0) ix = (-n+1)*incx + 1
+         if (incy.lt.0) iy = (-n+1)*incy + 1
+         do i = 1,n
+            ztemp = zx(ix)
+            zx(ix) = zy(iy)
+            zy(iy) = ztemp
+            ix = ix + incx
+            iy = iy + incy
          enddo
       endif
 
-      END SUBROUTINE ZSWAP
+      end subroutine zswap
 !>
 !!##NAME
 !!    zsymm(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine zsymm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: LDA,LDB,LDC,M,N
-!!       CHARACTER,intent(in)               :: SIDE,UPLO
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: lda,ldb,ldc,m,n
+!!       character,intent(in)               :: side,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-!!       complex(kind=real64),intent(inout) :: C(LDC,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex(kind=real64),intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -34240,7 +34240,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine zsymm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -34249,13 +34249,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: LDA,LDB,LDC,M,N
-      CHARACTER,intent(in)               :: SIDE,UPLO
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: lda,ldb,ldc,m,n
+      character,intent(in)               :: side,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-      complex(kind=real64),intent(inout) :: C(LDC,*)
+      complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+      complex(kind=real64),intent(inout) :: c(ldc,*)
 !     ..
 !  =====================================================================
 !
@@ -34267,153 +34267,153 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL UPPER
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,j,k,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Set NROWA as the number of rows of A.
 !
-      IF (LSAME(SIDE,'L')) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      if (lsame(side,'L')) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF ((.NOT.LSAME(SIDE,'L')) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      ELSEIF (M.LT.0) THEN
-          INFO = 3
-      ELSEIF (N.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDB.LT.MAX(1,M)) THEN
-          INFO = 9
-      ELSEIF (LDC.LT.MAX(1,M)) THEN
-          INFO = 12
+      info = 0
+      if ((.not.lsame(side,'L')) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif (m.lt.0) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldb.lt.max(1,m)) then
+          info = 9
+      elseif (ldc.lt.max(1,m)) then
+          info = 12
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZSYMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZSYMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.  ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
+      if ((m.eq.0) .or. (n.eq.0) .or.  ((alpha.eq.zero).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (BETA.EQ.ZERO) THEN
-              C(1:M,1:N) = ZERO
-          ELSE
-              C(1:M,1:N) = BETA*C(1:M,1:N)
+      if (alpha.eq.zero) then
+          if (beta.eq.zero) then
+              c(1:m,1:n) = zero
+          else
+              c(1:m,1:n) = beta*c(1:m,1:n)
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(SIDE,'L')) THEN
+      if (lsame(side,'L')) then
 !
 !        Form  C := alpha*A*B + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,M
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = 1,I - 1
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*A(K,I)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,m
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = 1,i - 1
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*a(k,i)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*A(I,I) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*A(I,I) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*a(i,i) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*a(i,i) + alpha*temp2
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = M,1,-1
-                      TEMP1 = ALPHA*B(I,J)
-                      TEMP2 = ZERO
-                      DO K = I + 1,M
-                          C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*A(K,I)
+          else
+              do j = 1,n
+                  do i = m,1,-1
+                      temp1 = alpha*b(i,j)
+                      temp2 = zero
+                      do k = i + 1,m
+                          c(k,j) = c(k,j) + temp1*a(k,i)
+                          temp2 = temp2 + b(k,j)*a(k,i)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = TEMP1*A(I,I) + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + TEMP1*A(I,I) + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = temp1*a(i,i) + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + temp1*a(i,i) + alpha*temp2
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*B*A + beta*C.
 !
-          DO J = 1,N
-              TEMP1 = ALPHA*A(J,J)
-              IF (BETA.EQ.ZERO) THEN
-                  C(1:M,J) = TEMP1*B(1:M,J)
-              ELSE
-                  C(1:M,J) = BETA*C(1:M,J) + TEMP1*B(1:M,J)
+          do j = 1,n
+              temp1 = alpha*a(j,j)
+              if (beta.eq.zero) then
+                  c(1:m,j) = temp1*b(1:m,j)
+              else
+                  c(1:m,j) = beta*c(1:m,j) + temp1*b(1:m,j)
               endif
-              DO K = 1,J - 1
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*A(K,J)
-                  ELSE
-                      TEMP1 = ALPHA*A(J,K)
+              do k = 1,j - 1
+                  if (upper) then
+                      temp1 = alpha*a(k,j)
+                  else
+                      temp1 = alpha*a(j,k)
                   endif
-                  C(1:M,J) = C(1:M,J) + TEMP1*B(1:M,K)
+                  c(1:m,j) = c(1:m,j) + temp1*b(1:m,k)
               enddo
-              DO K = J + 1,N
-                  IF (UPPER) THEN
-                      TEMP1 = ALPHA*A(J,K)
-                  ELSE
-                      TEMP1 = ALPHA*A(K,J)
+              do k = j + 1,n
+                  if (upper) then
+                      temp1 = alpha*a(j,k)
+                  else
+                      temp1 = alpha*a(k,j)
                   endif
-                  C(1:M,J) = C(1:M,J) + TEMP1*B(1:M,K)
+                  c(1:m,j) = c(1:m,j) + temp1*b(1:m,k)
               enddo
           enddo
       endif
 
-      END SUBROUTINE ZSYMM
+      end subroutine zsymm
 !>
 !!##NAME
 !!    zsyr2k(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+!!     subroutine zsyr2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: K,LDA,LDB,LDC,N
-!!       CHARACTER,intent(in)               :: TRANS,UPLO
+!!       complex(kind=real64),intent(in)    :: alpha,beta
+!!       integer,intent(in)                 :: k,lda,ldb,ldc,n
+!!       character,intent(in)               :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-!!       complex(kind=real64),intent(inout) :: C(LDC,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+!!       complex(kind=real64),intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -34561,7 +34561,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       subroutine zsyr2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -34570,13 +34570,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA,BETA
-      INTEGER,intent(in)                 :: K,LDA,LDB,LDC,N
-      CHARACTER,intent(in)               :: TRANS,UPLO
+      complex(kind=real64),intent(in)    :: alpha,beta
+      integer,intent(in)                 :: k,lda,ldb,ldc,n
+      character,intent(in)               :: trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*),B(LDB,*)
-      complex(kind=real64),intent(inout) :: C(LDC,*)
+      complex(kind=real64),intent(in)    :: a(lda,*),b(ldb,*)
+      complex(kind=real64),intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -34589,174 +34589,174 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP1,TEMP2
-      INTEGER I,INFO,J,L,NROWA
-      LOGICAL UPPER
+      complex(kind=real64) :: temp1,temp2
+      integer i,info,j,l,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Test the input parameters.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          NROWA = N
-      ELSE
-          NROWA = K
+      if (lsame(trans,'N')) then
+          nrowa = n
+      else
+          nrowa = k
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.LSAME(TRANS,'N')) .AND.  (.NOT.LSAME(TRANS,'T'))) THEN
-          INFO = 2
-      ELSEIF (N.LT.0) THEN
-          INFO = 3
-      ELSEIF (K.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDB.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      ELSEIF (LDC.LT.MAX(1,N)) THEN
-          INFO = 12
+      info = 0
+      if ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 1
+      elseif ((.not.lsame(trans,'N')) .and.  (.not.lsame(trans,'T'))) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (k.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldb.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldc.lt.max(1,n)) then
+          info = 12
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZSYR2K',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZSYR2K',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (((ALPHA.EQ.ZERO).OR.  (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. (((alpha.eq.zero).or.  (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (UPPER) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(1:J,J) = ZERO
+      if (alpha.eq.zero) then
+          if (upper) then
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(1:j,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(1:J,J) = BETA*C(1:J,J)
+              else
+                  do j = 1,n
+                      c(1:j,j) = beta*c(1:j,j)
                   enddo
               endif
-          ELSE
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(J:N,J) = ZERO
+          else
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(j:n,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(J:N,J) = BETA*C(J:N,J)
+              else
+                  do j = 1,n
+                      c(j:n,j) = beta*c(j:n,j)
                   enddo
               endif
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*B**T + alpha*B*A**T + C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:J,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(1:J,J) = BETA*C(1:J,J)
+          if (upper) then
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:j,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:j,j) = beta*c(1:j,j)
                   endif
-                  DO L = 1,K
-                      IF ((A(J,L).NE.ZERO) .OR. (B(J,L).NE.ZERO)) THEN
-                          TEMP1 = ALPHA*B(J,L)
-                          TEMP2 = ALPHA*A(J,L)
-                          C(1:J,J) = C(1:J,J) + A(1:J,L)*TEMP1 + B(1:J,L)*TEMP2
+                  do l = 1,k
+                      if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
+                          temp1 = alpha*b(j,l)
+                          temp2 = alpha*a(j,l)
+                          c(1:j,j) = c(1:j,j) + a(1:j,l)*temp1 + b(1:j,l)*temp2
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J:N,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(J:N,J) = BETA*C(J:N,J)
+          else
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(j:n,j) = zero
+                  elseif (beta.ne.one) then
+                      c(j:n,j) = beta*c(j:n,j)
                   endif
-                  DO L = 1,K
-                      IF ((A(J,L).NE.ZERO) .OR. (B(J,L).NE.ZERO)) THEN
-                          TEMP1 = ALPHA*B(J,L)
-                          TEMP2 = ALPHA*A(J,L)
-                          C(J:N,J) = C(J:N,J) + A(J:N,L)*TEMP1 + B(J:N,L)*TEMP2
+                  do l = 1,k
+                      if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
+                          temp1 = alpha*b(j,l)
+                          temp2 = alpha*a(j,l)
+                          c(j:n,j) = c(j:n,j) + a(j:n,l)*temp1 + b(j:n,l)*temp2
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*A**T*B + alpha*B**T*A + C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,J
-                      TEMP1 = ZERO
-                      TEMP2 = ZERO
-                      DO L = 1,K
-                          TEMP1 = TEMP1 + A(L,I)*B(L,J)
-                          TEMP2 = TEMP2 + B(L,I)*A(L,J)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,j
+                      temp1 = zero
+                      temp2 = zero
+                      do l = 1,k
+                          temp1 = temp1 + a(l,i)*b(l,j)
+                          temp2 = temp2 + b(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP1 + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + ALPHA*TEMP1 + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp1 + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + alpha*temp1 + alpha*temp2
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = J,N
-                      TEMP1 = ZERO
-                      TEMP2 = ZERO
-                      DO L = 1,K
-                          TEMP1 = TEMP1 + A(L,I)*B(L,J)
-                          TEMP2 = TEMP2 + B(L,I)*A(L,J)
+          else
+              do j = 1,n
+                  do i = j,n
+                      temp1 = zero
+                      temp2 = zero
+                      do l = 1,k
+                          temp1 = temp1 + a(l,i)*b(l,j)
+                          temp2 = temp2 + b(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP1 + ALPHA*TEMP2
-                      ELSE
-                          C(I,J) = BETA*C(I,J) + ALPHA*TEMP1 + ALPHA*TEMP2
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp1 + alpha*temp2
+                      else
+                          c(i,j) = beta*c(i,j) + alpha*temp1 + alpha*temp2
                       endif
                   enddo
               enddo
           endif
       endif
 
-      END SUBROUTINE ZSYR2K
+      end subroutine zsyr2k
 !>
 !!##NAME
 !!    zsyrk(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+!!     subroutine zsyrk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(inout) :: ALPHA,BETA
-!!       INTEGER,intent(in)                 :: K,LDA,LDC,N
-!!       CHARACTER,intent(in)               :: TRANS,UPLO
+!!       complex(kind=real64),intent(inout) :: alpha,beta
+!!       integer,intent(in)                 :: k,lda,ldc,n
+!!       character,intent(in)               :: trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: C(LDC,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: c(ldc,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -34885,7 +34885,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+       subroutine zsyrk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -34894,13 +34894,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(inout) :: ALPHA,BETA
-      INTEGER,intent(in)                 :: K,LDA,LDC,N
-      CHARACTER,intent(in)               :: TRANS,UPLO
+      complex(kind=real64),intent(inout) :: alpha,beta
+      integer,intent(in)                 :: k,lda,ldc,n
+      character,intent(in)               :: trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: C(LDC,*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: c(ldc,*)
 !     ..
 !
 !  =====================================================================
@@ -34913,165 +34913,165 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      intrinsic max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,J,L,NROWA
-      LOGICAL UPPER
+      complex(kind=real64) :: temp
+      integer i,info,j,l,nrowa
+      logical upper
 !     ..
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Test the input parameters.
 !
-      IF (LSAME(TRANS,'N')) THEN
-          NROWA = N
-      ELSE
-          NROWA = K
+      if (lsame(trans,'N')) then
+          nrowa = n
+      else
+          nrowa = k
       endif
-      UPPER = LSAME(UPLO,'U')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 1
-      ELSEIF ((.NOT.LSAME(TRANS,'N')) .AND.  (.NOT.LSAME(TRANS,'T'))) THEN
-          INFO = 2
-      ELSEIF (N.LT.0) THEN
-          INFO = 3
-      ELSEIF (K.LT.0) THEN
-          INFO = 4
-      ELSEIF (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 7
-      ELSEIF (LDC.LT.MAX(1,N)) THEN
-          INFO = 10
+      info = 0
+      if ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 1
+      elseif ((.not.lsame(trans,'N')) .and.  (.not.lsame(trans,'T'))) then
+          info = 2
+      elseif (n.lt.0) then
+          info = 3
+      elseif (k.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 7
+      elseif (ldc.lt.max(1,n)) then
+          info = 10
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZSYRK ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZSYRK ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF ((N.EQ.0) .OR. (((ALPHA.EQ.ZERO).OR.  (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      if ((n.eq.0) .or. (((alpha.eq.zero).or.  (k.eq.0)).and. (beta.eq.one))) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          IF (UPPER) THEN
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                      C(1:J,J) = ZERO
+      if (alpha.eq.zero) then
+          if (upper) then
+              if (beta.eq.zero) then
+                  do j = 1,n
+                      c(1:j,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(1:J,J) = BETA*C(1:J,J)
+              else
+                  do j = 1,n
+                      c(1:j,j) = beta*c(1:j,j)
                   enddo
               endif
-          ELSE
-              IF (BETA.EQ.ZERO) THEN
-                  DO J = 1,N
-                     C(J:N,J) = ZERO
+          else
+              if (beta.eq.zero) then
+                  do j = 1,n
+                     c(j:n,j) = zero
                   enddo
-              ELSE
-                  DO J = 1,N
-                      C(J:N,J) = BETA*C(J:N,J)
+              else
+                  do j = 1,n
+                      c(j:n,j) = beta*c(j:n,j)
                   enddo
               endif
           endif
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  C := alpha*A*A**T + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(1:J,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(1:J,J) = BETA*C(1:J,J)
+          if (upper) then
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(1:j,j) = zero
+                  elseif (beta.ne.one) then
+                      c(1:j,j) = beta*c(1:j,j)
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.ZERO) THEN
-                          TEMP = ALPHA*A(J,L)
-                          C(1:J,J) = C(1:J,J) + TEMP*A(1:J,L)
+                  do l = 1,k
+                      if (a(j,l).ne.zero) then
+                          temp = alpha*a(j,l)
+                          c(1:j,j) = c(1:j,j) + temp*a(1:j,l)
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  IF (BETA.EQ.ZERO) THEN
-                      C(J:N,J) = ZERO
-                  ELSEIF (BETA.NE.ONE) THEN
-                      C(J:N,J) = BETA*C(J:N,J)
+          else
+              do j = 1,n
+                  if (beta.eq.zero) then
+                      c(j:n,j) = zero
+                  elseif (beta.ne.one) then
+                      c(j:n,j) = beta*c(j:n,j)
                   endif
-                  DO L = 1,K
-                      IF (A(J,L).NE.ZERO) THEN
-                          TEMP = ALPHA*A(J,L)
-                          C(J:N,J) = C(J:N,J) + TEMP*A(J:N,L)
+                  do l = 1,k
+                      if (a(j,l).ne.zero) then
+                          temp = alpha*a(j,l)
+                          c(j:n,j) = c(j:n,j) + temp*a(j:n,l)
                       endif
                   enddo
               enddo
           endif
-      ELSE
+      else
 !
 !        Form  C := alpha*A**T*A + beta*C.
 !
-          IF (UPPER) THEN
-              DO J = 1,N
-                  DO I = 1,J
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*A(L,J)
+          if (upper) then
+              do j = 1,n
+                  do i = 1,j
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
-          ELSE
-              DO J = 1,N
-                  DO I = J,N
-                      TEMP = ZERO
-                      DO L = 1,K
-                          TEMP = TEMP + A(L,I)*A(L,J)
+          else
+              do j = 1,n
+                  do i = j,n
+                      temp = zero
+                      do l = 1,k
+                          temp = temp + a(l,i)*a(l,j)
                       enddo
-                      IF (BETA.EQ.ZERO) THEN
-                          C(I,J) = ALPHA*TEMP
-                      ELSE
-                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      if (beta.eq.zero) then
+                          c(i,j) = alpha*temp
+                      else
+                          c(i,j) = alpha*temp + beta*c(i,j)
                       endif
                   enddo
               enddo
           endif
       endif
 
-      END SUBROUTINE ZSYRK
+      end subroutine zsyrk
 !>
 !!##NAME
 !!    ztbmv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine ztbmv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)                 :: INCX,K,LDA,N
-!!       CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+!!       integer,intent(in)                 :: incx,k,lda,n
+!!       character,intent(in)               :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: X(*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -35221,7 +35221,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+       subroutine ztbmv(uplo,trans,diag,n,k,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -35230,24 +35230,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,K,LDA,N
-      CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+      integer,intent(in)                 :: incx,k,lda,n
+      character,intent(in)               :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: X(*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,KPLUS1,KX,L
-      LOGICAL NOCONJ,NOUNIT
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,kplus1,kx,l
+      logical noconj,nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -35257,225 +35257,225 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX,MIN
+      intrinsic dconjg,max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 7
-      elseif (INCX.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt. (k+1)) then
+          info = 7
+      elseif (incx.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTBMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTBMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOCONJ = LSAME(TRANS,'T')
-      NOUNIT = LSAME(DIAG,'N')
+      noconj = lsame(trans,'T')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX   too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !         Form  x := A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = KPLUS1 - J
-                          DO I = MAX(1,J-K),J - 1
-                              X(I) = X(I) + TEMP*A(L+I,J)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          l = kplus1 - j
+                          do i = max(1,j-k),j - 1
+                              x(i) = x(i) + temp*a(l+i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(KPLUS1,J)
+                          if (nounit) x(j) = x(j)*a(kplus1,j)
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = KPLUS1 - J
-                          DO I = MAX(1,J-K),J - 1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          l = kplus1 - j
+                          do i = max(1,j-k),j - 1
+                              x(ix) = x(ix) + temp*a(l+i,j)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(KPLUS1,J)
+                          if (nounit) x(jx) = x(jx)*a(kplus1,j)
                       endif
-                      JX = JX + INCX
-                      IF (J.GT.K) KX = KX + INCX
+                      jx = jx + incx
+                      if (j.gt.k) kx = kx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = 1 - J
-                          DO I = MIN(N,J+K),J + 1,-1
-                              X(I) = X(I) + TEMP*A(L+I,J)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          l = 1 - j
+                          do i = min(n,j+k),j + 1,-1
+                              x(i) = x(i) + temp*a(l+i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(1,J)
+                          if (nounit) x(j) = x(j)*a(1,j)
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = 1 - J
-                          DO I = MIN(N,J+K),J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          l = 1 - j
+                          do i = min(n,j+k),j + 1,-1
+                              x(ix) = x(ix) + temp*a(l+i,j)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(1,J)
+                          if (nounit) x(jx) = x(jx)*a(1,j)
                       endif
-                      JX = JX - INCX
-                      IF ((N-J).GE.K) KX = KX - INCX
+                      jx = jx - incx
+                      if ((n-j).ge.k) kx = kx - incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x  or  x := A**H*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      L = KPLUS1 - J
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(KPLUS1,J)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              TEMP = TEMP + A(L+I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      l = kplus1 - j
+                      if (noconj) then
+                          if (nounit) temp = temp*a(kplus1,j)
+                          do i = j - 1,max(1,j-k),-1
+                              temp = temp + a(l+i,j)*x(i)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(KPLUS1,J))
-                          DO I = J - 1,MAX(1,J-K),-1
-                              TEMP = TEMP + DCONJG(A(L+I,J))*X(I)
+                      else
+                          if (nounit) temp = temp*dconjg(a(kplus1,j))
+                          do i = j - 1,max(1,j-k),-1
+                              temp = temp + dconjg(a(l+i,j))*x(i)
                           enddo
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      KX = KX - INCX
-                      IX = KX
-                      L = KPLUS1 - J
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(KPLUS1,J)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              TEMP = TEMP + A(L+I,J)*X(IX)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      kx = kx - incx
+                      ix = kx
+                      l = kplus1 - j
+                      if (noconj) then
+                          if (nounit) temp = temp*a(kplus1,j)
+                          do i = j - 1,max(1,j-k),-1
+                              temp = temp + a(l+i,j)*x(ix)
+                              ix = ix - incx
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(KPLUS1,J))
-                          DO I = J - 1,MAX(1,J-K),-1
-                              TEMP = TEMP + DCONJG(A(L+I,J))*X(IX)
-                              IX = IX - INCX
+                      else
+                          if (nounit) temp = temp*dconjg(a(kplus1,j))
+                          do i = j - 1,max(1,j-k),-1
+                              temp = temp + dconjg(a(l+i,j))*x(ix)
+                              ix = ix - incx
                           enddo
                       endif
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      L = 1 - J
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(1,J)
-                          DO I = J + 1,MIN(N,J+K)
-                              TEMP = TEMP + A(L+I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      l = 1 - j
+                      if (noconj) then
+                          if (nounit) temp = temp*a(1,j)
+                          do i = j + 1,min(n,j+k)
+                              temp = temp + a(l+i,j)*x(i)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(1,J))
-                          DO I = J + 1,MIN(N,J+K)
-                              TEMP = TEMP + DCONJG(A(L+I,J))*X(I)
+                      else
+                          if (nounit) temp = temp*dconjg(a(1,j))
+                          do i = j + 1,min(n,j+k)
+                              temp = temp + dconjg(a(l+i,j))*x(i)
                           enddo
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      KX = KX + INCX
-                      IX = KX
-                      L = 1 - J
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(1,J)
-                          DO I = J + 1,MIN(N,J+K)
-                              TEMP = TEMP + A(L+I,J)*X(IX)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      kx = kx + incx
+                      ix = kx
+                      l = 1 - j
+                      if (noconj) then
+                          if (nounit) temp = temp*a(1,j)
+                          do i = j + 1,min(n,j+k)
+                              temp = temp + a(l+i,j)*x(ix)
+                              ix = ix + incx
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(1,J))
-                          DO I = J + 1,MIN(N,J+K)
-                              TEMP = TEMP + DCONJG(A(L+I,J))*X(IX)
-                              IX = IX + INCX
+                      else
+                          if (nounit) temp = temp*dconjg(a(1,j))
+                          do i = j + 1,min(n,j+k)
+                              temp = temp + dconjg(a(l+i,j))*x(ix)
+                              ix = ix + incx
                           enddo
                       endif
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE ZTBMV
+      end subroutine ztbmv
 !>
 !!##NAME
 !!    ztbsv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+!!     subroutine ztbsv(uplo,trans,diag,n,k,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)                 :: INCX,K,LDA,N
-!!       CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+!!       integer,intent(in)                 :: incx,k,lda,n
+!!       character,intent(in)               :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: X(*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -35628,7 +35628,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+       subroutine ztbsv(uplo,trans,diag,n,k,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -35637,24 +35637,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,K,LDA,N
-      CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+      integer,intent(in)                 :: incx,k,lda,n
+      character,intent(in)               :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: X(*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,KPLUS1,KX,L
-      LOGICAL NOCONJ,NOUNIT
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,kplus1,kx,l
+      logical noconj,nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -35664,225 +35664,225 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX,MIN
+      intrinsic dconjg,max,min
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (K.LT.0) THEN
-          INFO = 5
-      elseif (LDA.LT. (K+1)) THEN
-          INFO = 7
-      elseif (INCX.EQ.0) THEN
-          INFO = 9
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (k.lt.0) then
+          info = 5
+      elseif (lda.lt. (k+1)) then
+          info = 7
+      elseif (incx.eq.0) then
+          info = 9
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTBSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTBSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOCONJ = LSAME(TRANS,'T')
-      NOUNIT = LSAME(DIAG,'N')
+      noconj = lsame(trans,'T')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed by sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(KPLUS1,J)
-                          TEMP = X(J)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              X(I) = X(I) - TEMP*A(L+I,J)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          l = kplus1 - j
+                          if (nounit) x(j) = x(j)/a(kplus1,j)
+                          temp = x(j)
+                          do i = j - 1,max(1,j-k),-1
+                              x(i) = x(i) - temp*a(l+i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      KX = KX - INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(KPLUS1,J)
-                          TEMP = X(JX)
-                          DO I = J - 1,MAX(1,J-K),-1
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      kx = kx - incx
+                      if (x(jx).ne.zero) then
+                          ix = kx
+                          l = kplus1 - j
+                          if (nounit) x(jx) = x(jx)/a(kplus1,j)
+                          temp = x(jx)
+                          do i = j - 1,max(1,j-k),-1
+                              x(ix) = x(ix) - temp*a(l+i,j)
+                              ix = ix - incx
                           enddo
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          L = 1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(1,J)
-                          TEMP = X(J)
-                          DO I = J + 1,MIN(N,J+K)
-                              X(I) = X(I) - TEMP*A(L+I,J)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          l = 1 - j
+                          if (nounit) x(j) = x(j)/a(1,j)
+                          temp = x(j)
+                          do i = j + 1,min(n,j+k)
+                              x(i) = x(i) - temp*a(l+i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      KX = KX + INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = 1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(1,J)
-                          TEMP = X(JX)
-                          DO I = J + 1,MIN(N,J+K)
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      kx = kx + incx
+                      if (x(jx).ne.zero) then
+                          ix = kx
+                          l = 1 - j
+                          if (nounit) x(jx) = x(jx)/a(1,j)
+                          temp = x(jx)
+                          do i = j + 1,min(n,j+k)
+                              x(ix) = x(ix) - temp*a(l+i,j)
+                              ix = ix + incx
                           enddo
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T )*x  or  x := inv( A**H )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KPLUS1 = K + 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      L = KPLUS1 - J
-                      IF (NOCONJ) THEN
-                          DO I = MAX(1,J-K),J - 1
-                              TEMP = TEMP - A(L+I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              kplus1 = k + 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      l = kplus1 - j
+                      if (noconj) then
+                          do i = max(1,j-k),j - 1
+                              temp = temp - a(l+i,j)*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
-                      ELSE
-                          DO I = MAX(1,J-K),J - 1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(I)
+                          if (nounit) temp = temp/a(kplus1,j)
+                      else
+                          do i = max(1,j-k),j - 1
+                              temp = temp - dconjg(a(l+i,j))*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(KPLUS1,J))
+                          if (nounit) temp = temp/dconjg(a(kplus1,j))
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      L = KPLUS1 - J
-                      IF (NOCONJ) THEN
-                          DO I = MAX(1,J-K),J - 1
-                              TEMP = TEMP - A(L+I,J)*X(IX)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      l = kplus1 - j
+                      if (noconj) then
+                          do i = max(1,j-k),j - 1
+                              temp = temp - a(l+i,j)*x(ix)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
-                      ELSE
-                          DO I = MAX(1,J-K),J - 1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(IX)
-                              IX = IX + INCX
+                          if (nounit) temp = temp/a(kplus1,j)
+                      else
+                          do i = max(1,j-k),j - 1
+                              temp = temp - dconjg(a(l+i,j))*x(ix)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(KPLUS1,J))
+                          if (nounit) temp = temp/dconjg(a(kplus1,j))
                       endif
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      IF (J.GT.K) KX = KX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
+                      if (j.gt.k) kx = kx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      L = 1 - J
-                      IF (NOCONJ) THEN
-                          DO I = MIN(N,J+K),J + 1,-1
-                              TEMP = TEMP - A(L+I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      l = 1 - j
+                      if (noconj) then
+                          do i = min(n,j+k),j + 1,-1
+                              temp = temp - a(l+i,j)*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(1,J)
-                      ELSE
-                          DO I = MIN(N,J+K),J + 1,-1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(I)
+                          if (nounit) temp = temp/a(1,j)
+                      else
+                          do i = min(n,j+k),j + 1,-1
+                              temp = temp - dconjg(a(l+i,j))*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(1,J))
+                          if (nounit) temp = temp/dconjg(a(1,j))
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      L = 1 - J
-                      IF (NOCONJ) THEN
-                          DO I = MIN(N,J+K),J + 1,-1
-                              TEMP = TEMP - A(L+I,J)*X(IX)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      l = 1 - j
+                      if (noconj) then
+                          do i = min(n,j+k),j + 1,-1
+                              temp = temp - a(l+i,j)*x(ix)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(1,J)
-                      ELSE
-                          DO I = MIN(N,J+K),J + 1,-1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(IX)
-                              IX = IX - INCX
+                          if (nounit) temp = temp/a(1,j)
+                      else
+                          do i = min(n,j+k),j + 1,-1
+                              temp = temp - dconjg(a(l+i,j))*x(ix)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(1,J))
+                          if (nounit) temp = temp/dconjg(a(1,j))
                       endif
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      IF ((N-J).GE.K) KX = KX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
+                      if ((n-j).ge.k) kx = kx - incx
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE ZTBSV
+      end subroutine ztbsv
 !>
 !!##NAME
 !!    ztpmv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+!!     subroutine ztpmv(uplo,trans,diag,n,ap,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)                 :: INCX,N
-!!       CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+!!       integer,intent(in)                 :: incx,n
+!!       character,intent(in)               :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: AP(*)
-!!       complex(kind=real64),intent(inout) :: X(*)
+!!       complex(kind=real64),intent(in)    :: ap(*)
+!!       complex(kind=real64),intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -35990,7 +35990,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZTPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+       subroutine ztpmv(uplo,trans,diag,n,ap,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -35999,24 +35999,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,N
-      CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+      integer,intent(in)                 :: incx,n
+      character,intent(in)               :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: AP(*)
-      complex(kind=real64),intent(inout) :: X(*)
+      complex(kind=real64),intent(in)    :: ap(*)
+      complex(kind=real64),intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
-      LOGICAL NOCONJ,NOUNIT
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,k,kk,kx
+      logical noconj,nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -36026,228 +36026,228 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG
+      intrinsic dconjg
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (incx.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTPMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTPMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOCONJ = LSAME(TRANS,'T')
-      NOUNIT = LSAME(DIAG,'N')
+      noconj = lsame(trans,'T')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of AP are
 !     accessed sequentially with one pass through AP.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x:= A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          K = KK
-                          DO I = 1,J - 1
-                              X(I) = X(I) + TEMP*AP(K)
-                              K = K + 1
+          if (lsame(uplo,'U')) then
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          k = kk
+                          do i = 1,j - 1
+                              x(i) = x(i) + temp*ap(k)
+                              k = k + 1
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*AP(KK+J-1)
+                          if (nounit) x(j) = x(j)*ap(kk+j-1)
                       endif
-                      KK = KK + J
+                      kk = kk + j
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO K = KK,KK + J - 2
-                              X(IX) = X(IX) + TEMP*AP(K)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do k = kk,kk + j - 2
+                              x(ix) = x(ix) + temp*ap(k)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*AP(KK+J-1)
+                          if (nounit) x(jx) = x(jx)*ap(kk+j-1)
                       endif
-                      JX = JX + INCX
-                      KK = KK + J
+                      jx = jx + incx
+                      kk = kk + j
                   enddo
               endif
-          ELSE
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          K = KK
-                          DO I = N,J + 1,-1
-                              X(I) = X(I) + TEMP*AP(K)
-                              K = K - 1
+          else
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          k = kk
+                          do i = n,j + 1,-1
+                              x(i) = x(i) + temp*ap(k)
+                              k = k - 1
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*AP(KK-N+J)
+                          if (nounit) x(j) = x(j)*ap(kk-n+j)
                       endif
-                      KK = KK - (N-J+1)
+                      kk = kk - (n-j+1)
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO K = KK,KK - (N- (J+1)),-1
-                              X(IX) = X(IX) + TEMP*AP(K)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do k = kk,kk - (n- (j+1)),-1
+                              x(ix) = x(ix) + temp*ap(k)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*AP(KK-N+J)
+                          if (nounit) x(jx) = x(jx)*ap(kk-n+j)
                       endif
-                      JX = JX - INCX
-                      KK = KK - (N-J+1)
+                      jx = jx - incx
+                      kk = kk - (n-j+1)
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x  or  x := A**H*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      K = KK - 1
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*AP(KK)
-                          DO I = J - 1,1,-1
-                              TEMP = TEMP + AP(K)*X(I)
-                              K = K - 1
+          if (lsame(uplo,'U')) then
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      k = kk - 1
+                      if (noconj) then
+                          if (nounit) temp = temp*ap(kk)
+                          do i = j - 1,1,-1
+                              temp = temp + ap(k)*x(i)
+                              k = k - 1
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(AP(KK))
-                          DO I = J - 1,1,-1
-                              TEMP = TEMP + DCONJG(AP(K))*X(I)
-                              K = K - 1
+                      else
+                          if (nounit) temp = temp*dconjg(ap(kk))
+                          do i = j - 1,1,-1
+                              temp = temp + dconjg(ap(k))*x(i)
+                              k = k - 1
                           enddo
                       endif
-                      X(J) = TEMP
-                      KK = KK - J
+                      x(j) = temp
+                      kk = kk - j
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*AP(KK)
-                          DO K = KK - 1,KK - J + 1,-1
-                              IX = IX - INCX
-                              TEMP = TEMP + AP(K)*X(IX)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = jx
+                      if (noconj) then
+                          if (nounit) temp = temp*ap(kk)
+                          do k = kk - 1,kk - j + 1,-1
+                              ix = ix - incx
+                              temp = temp + ap(k)*x(ix)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(AP(KK))
-                          DO K = KK - 1,KK - J + 1,-1
-                              IX = IX - INCX
-                              TEMP = TEMP + DCONJG(AP(K))*X(IX)
+                      else
+                          if (nounit) temp = temp*dconjg(ap(kk))
+                          do k = kk - 1,kk - j + 1,-1
+                              ix = ix - incx
+                              temp = temp + dconjg(ap(k))*x(ix)
                           enddo
                       endif
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      KK = KK - J
+                      x(jx) = temp
+                      jx = jx - incx
+                      kk = kk - j
                   enddo
               endif
-          ELSE
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      K = KK + 1
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*AP(KK)
-                          DO I = J + 1,N
-                              TEMP = TEMP + AP(K)*X(I)
-                              K = K + 1
+          else
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      k = kk + 1
+                      if (noconj) then
+                          if (nounit) temp = temp*ap(kk)
+                          do i = j + 1,n
+                              temp = temp + ap(k)*x(i)
+                              k = k + 1
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(AP(KK))
-                          DO I = J + 1,N
-                              TEMP = TEMP + DCONJG(AP(K))*X(I)
-                              K = K + 1
+                      else
+                          if (nounit) temp = temp*dconjg(ap(kk))
+                          do i = j + 1,n
+                              temp = temp + dconjg(ap(k))*x(i)
+                              k = k + 1
                           enddo
                       endif
-                      X(J) = TEMP
-                      KK = KK + (N-J+1)
+                      x(j) = temp
+                      kk = kk + (n-j+1)
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*AP(KK)
-                          DO K = KK + 1,KK + N - J
-                              IX = IX + INCX
-                              TEMP = TEMP + AP(K)*X(IX)
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = jx
+                      if (noconj) then
+                          if (nounit) temp = temp*ap(kk)
+                          do k = kk + 1,kk + n - j
+                              ix = ix + incx
+                              temp = temp + ap(k)*x(ix)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(AP(KK))
-                          DO K = KK + 1,KK + N - J
-                              IX = IX + INCX
-                              TEMP = TEMP + DCONJG(AP(K))*X(IX)
+                      else
+                          if (nounit) temp = temp*dconjg(ap(kk))
+                          do k = kk + 1,kk + n - j
+                              ix = ix + incx
+                              temp = temp + dconjg(ap(k))*x(ix)
                           enddo
                       endif
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      KK = KK + (N-J+1)
+                      x(jx) = temp
+                      jx = jx + incx
+                      kk = kk + (n-j+1)
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE ZTPMV
+      end subroutine ztpmv
 !>
 !!##NAME
 !!    ztpsv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTPSV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+!!     subroutine ztpsv(uplo,trans,diag,n,ap,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)                 :: INCX,N
-!!       CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+!!       integer,intent(in)                 :: incx,n
+!!       character,intent(in)               :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: AP(*)
-!!       complex(kind=real64),intent(inout) :: X(*)
+!!       complex(kind=real64),intent(in)    :: ap(*)
+!!       complex(kind=real64),intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -36357,7 +36357,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZTPSV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+       subroutine ztpsv(uplo,trans,diag,n,ap,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -36366,24 +36366,24 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,N
-      CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+      integer,intent(in)                 :: incx,n
+      character,intent(in)               :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: AP(*)
-      complex(kind=real64),intent(inout) :: X(*)
+      complex(kind=real64),intent(in)    :: ap(*)
+      complex(kind=real64),intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,K,KK,KX
-      LOGICAL NOCONJ,NOUNIT
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,k,kk,kx
+      logical noconj,nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -36393,229 +36393,229 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG
+      intrinsic dconjg
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (INCX.EQ.0) THEN
-          INFO = 7
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (incx.eq.0) then
+          info = 7
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTPSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTPSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOCONJ = LSAME(TRANS,'T')
-      NOUNIT = LSAME(DIAG,'N')
+      noconj = lsame(trans,'T')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of AP are
 !     accessed sequentially with one pass through AP.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/AP(KK)
-                          TEMP = X(J)
-                          K = KK - 1
-                          DO I = J - 1,1,-1
-                              X(I) = X(I) - TEMP*AP(K)
-                              K = K - 1
+          if (lsame(uplo,'U')) then
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/ap(kk)
+                          temp = x(j)
+                          k = kk - 1
+                          do i = j - 1,1,-1
+                              x(i) = x(i) - temp*ap(k)
+                              k = k - 1
                           enddo
                       endif
-                      KK = KK - J
+                      kk = kk - j
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/AP(KK)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO K = KK - 1,KK - J + 1,-1
-                              IX = IX - INCX
-                              X(IX) = X(IX) - TEMP*AP(K)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/ap(kk)
+                          temp = x(jx)
+                          ix = jx
+                          do k = kk - 1,kk - j + 1,-1
+                              ix = ix - incx
+                              x(ix) = x(ix) - temp*ap(k)
                           enddo
                       endif
-                      JX = JX - INCX
-                      KK = KK - J
+                      jx = jx - incx
+                      kk = kk - j
                   enddo
               endif
-          ELSE
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/AP(KK)
-                          TEMP = X(J)
-                          K = KK + 1
-                          DO I = J + 1,N
-                              X(I) = X(I) - TEMP*AP(K)
-                              K = K + 1
+          else
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/ap(kk)
+                          temp = x(j)
+                          k = kk + 1
+                          do i = j + 1,n
+                              x(i) = x(i) - temp*ap(k)
+                              k = k + 1
                           enddo
                       endif
-                      KK = KK + (N-J+1)
+                      kk = kk + (n-j+1)
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/AP(KK)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO K = KK + 1,KK + N - J
-                              IX = IX + INCX
-                              X(IX) = X(IX) - TEMP*AP(K)
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/ap(kk)
+                          temp = x(jx)
+                          ix = jx
+                          do k = kk + 1,kk + n - j
+                              ix = ix + incx
+                              x(ix) = x(ix) - temp*ap(k)
                           enddo
                       endif
-                      JX = JX + INCX
-                      KK = KK + (N-J+1)
+                      jx = jx + incx
+                      kk = kk + (n-j+1)
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T )*x  or  x := inv( A**H )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              KK = 1
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      K = KK
-                      IF (NOCONJ) THEN
-                          DO I = 1,J - 1
-                              TEMP = TEMP - AP(K)*X(I)
-                              K = K + 1
+          if (lsame(uplo,'U')) then
+              kk = 1
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      k = kk
+                      if (noconj) then
+                          do i = 1,j - 1
+                              temp = temp - ap(k)*x(i)
+                              k = k + 1
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/AP(KK+J-1)
-                      ELSE
-                          DO I = 1,J - 1
-                              TEMP = TEMP - DCONJG(AP(K))*X(I)
-                              K = K + 1
+                          if (nounit) temp = temp/ap(kk+j-1)
+                      else
+                          do i = 1,j - 1
+                              temp = temp - dconjg(ap(k))*x(i)
+                              k = k + 1
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(AP(KK+J-1))
+                          if (nounit) temp = temp/dconjg(ap(kk+j-1))
                       endif
-                      X(J) = TEMP
-                      KK = KK + J
+                      x(j) = temp
+                      kk = kk + j
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = KX
-                      IF (NOCONJ) THEN
-                          DO K = KK,KK + J - 2
-                              TEMP = TEMP - AP(K)*X(IX)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = kx
+                      if (noconj) then
+                          do k = kk,kk + j - 2
+                              temp = temp - ap(k)*x(ix)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/AP(KK+J-1)
-                      ELSE
-                          DO K = KK,KK + J - 2
-                              TEMP = TEMP - DCONJG(AP(K))*X(IX)
-                              IX = IX + INCX
+                          if (nounit) temp = temp/ap(kk+j-1)
+                      else
+                          do k = kk,kk + j - 2
+                              temp = temp - dconjg(ap(k))*x(ix)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(AP(KK+J-1))
+                          if (nounit) temp = temp/dconjg(ap(kk+j-1))
                       endif
-                      X(JX) = TEMP
-                      JX = JX + INCX
-                      KK = KK + J
+                      x(jx) = temp
+                      jx = jx + incx
+                      kk = kk + j
                   enddo
               endif
-          ELSE
-              KK = (N* (N+1))/2
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      K = KK
-                      IF (NOCONJ) THEN
-                          DO I = N,J + 1,-1
-                              TEMP = TEMP - AP(K)*X(I)
-                              K = K - 1
+          else
+              kk = (n* (n+1))/2
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      k = kk
+                      if (noconj) then
+                          do i = n,j + 1,-1
+                              temp = temp - ap(k)*x(i)
+                              k = k - 1
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/AP(KK-N+J)
-                      ELSE
-                          DO I = N,J + 1,-1
-                              TEMP = TEMP - DCONJG(AP(K))*X(I)
-                              K = K - 1
+                          if (nounit) temp = temp/ap(kk-n+j)
+                      else
+                          do i = n,j + 1,-1
+                              temp = temp - dconjg(ap(k))*x(i)
+                              k = k - 1
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(AP(KK-N+J))
+                          if (nounit) temp = temp/dconjg(ap(kk-n+j))
                       endif
-                      X(J) = TEMP
-                      KK = KK - (N-J+1)
+                      x(j) = temp
+                      kk = kk - (n-j+1)
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = KX
-                      IF (NOCONJ) THEN
-                          DO K = KK,KK - (N- (J+1)),-1
-                              TEMP = TEMP - AP(K)*X(IX)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = kx
+                      if (noconj) then
+                          do k = kk,kk - (n- (j+1)),-1
+                              temp = temp - ap(k)*x(ix)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/AP(KK-N+J)
-                      ELSE
-                          DO K = KK,KK - (N- (J+1)),-1
-                              TEMP = TEMP - DCONJG(AP(K))*X(IX)
-                              IX = IX - INCX
+                          if (nounit) temp = temp/ap(kk-n+j)
+                      else
+                          do k = kk,kk - (n- (j+1)),-1
+                              temp = temp - dconjg(ap(k))*x(ix)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(AP(KK-N+J))
+                          if (nounit) temp = temp/dconjg(ap(kk-n+j))
                       endif
-                      X(JX) = TEMP
-                      JX = JX - INCX
-                      KK = KK - (N-J+1)
+                      x(jx) = temp
+                      jx = jx - incx
+                      kk = kk - (n-j+1)
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE ZTPSV
+      end subroutine ztpsv
 !>
 !!##NAME
 !!    ztrmm(3f) - [BLAS:COMPLEX16_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine ztrmm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA
-!!       INTEGER,intent(in)                 :: LDA,LDB,M,N
-!!       CHARACTER,intent(in)               :: DIAG,SIDE,TRANSA,UPLO
+!!       complex(kind=real64),intent(in)    :: alpha
+!!       integer,intent(in)                 :: lda,ldb,m,n
+!!       character,intent(in)               :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: B(LDB,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -36753,7 +36753,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+       subroutine ztrmm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -36762,13 +36762,13 @@ end subroutine
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA
-      INTEGER,intent(in)                 :: LDA,LDB,M,N
-      CHARACTER,intent(in)               :: DIAG,SIDE,TRANSA,UPLO
+      complex(kind=real64),intent(in)    :: alpha
+      integer,intent(in)                 :: lda,ldb,m,n
+      character,intent(in)               :: diag,side,transa,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: B(LDB,*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: b(ldb,*)
 !     ..
 !
 !  =====================================================================
@@ -36781,248 +36781,248 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      intrinsic dconjg,max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL LSIDE,NOCONJ,NOUNIT,UPPER
+      complex(kind=real64) :: temp
+      integer i,info,j,k,nrowa
+      logical lside,noconj,nounit,upper
 !     ..
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Test the input parameters.
 !
-      LSIDE = LSAME(SIDE,'L')
-      IF (LSIDE) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      lside = lsame(side,'L')
+      if (lside) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      NOCONJ = LSAME(TRANSA,'T')
-      NOUNIT = LSAME(DIAG,'N')
-      UPPER = LSAME(UPLO,'U')
+      noconj = lsame(transa,'T')
+      nounit = lsame(diag,'N')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.LSIDE) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      elseif ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      elseif ((.NOT.LSAME(TRANSA,'N')) .AND.  (.NOT.LSAME(TRANSA,'T')) .AND.  (.NOT.LSAME(TRANSA,'C'))) THEN
-          INFO = 3
-      elseif ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
-          INFO = 4
-      elseif (M.LT.0) THEN
-          INFO = 5
-      elseif (N.LT.0) THEN
-          INFO = 6
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      elseif (LDB.LT.MAX(1,M)) THEN
-          INFO = 11
+      info = 0
+      if ((.not.lside) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif ((.not.lsame(transa,'N')) .and.  (.not.lsame(transa,'T')) .and.  (.not.lsame(transa,'C'))) then
+          info = 3
+      elseif ((.not.lsame(diag,'U')) .and. (.not.lsame(diag,'N'))) then
+          info = 4
+      elseif (m.lt.0) then
+          info = 5
+      elseif (n.lt.0) then
+          info = 6
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldb.lt.max(1,m)) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTRMM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTRMM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (M.EQ.0 .OR. N.EQ.0) RETURN
+      if (m.eq.0 .or. n.eq.0) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          DO J = 1,N
-              DO I = 1,M
-                  B(I,J) = ZERO
+      if (alpha.eq.zero) then
+          do j = 1,n
+              do i = 1,m
+                  b(i,j) = zero
               enddo
           enddo
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSIDE) THEN
-          IF (LSAME(TRANSA,'N')) THEN
+      if (lside) then
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*A*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              DO I = 1,K - 1
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
+              if (upper) then
+                  do j = 1,n
+                      do k = 1,m
+                          if (b(k,j).ne.zero) then
+                              temp = alpha*b(k,j)
+                              do i = 1,k - 1
+                                  b(i,j) = b(i,j) + temp*a(i,k)
                               enddo
-                              IF (NOUNIT) TEMP = TEMP*A(K,K)
-                              B(K,J) = TEMP
+                              if (nounit) temp = temp*a(k,k)
+                              b(k,j) = temp
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              B(K,J) = TEMP
-                              IF (NOUNIT) B(K,J) = B(K,J)*A(K,K)
-                              DO I = K + 1,M
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
+              else
+                  do j = 1,n
+                      do k = m,1,-1
+                          if (b(k,j).ne.zero) then
+                              temp = alpha*b(k,j)
+                              b(k,j) = temp
+                              if (nounit) b(k,j) = b(k,j)*a(k,k)
+                              do i = k + 1,m
+                                  b(i,j) = b(i,j) + temp*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*A**T*B   or   B := alpha*A**H*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO I = M,1,-1
-                          TEMP = B(I,J)
-                          IF (NOCONJ) THEN
-                              IF (NOUNIT) TEMP = TEMP*A(I,I)
-                              DO K = 1,I - 1
-                                  TEMP = TEMP + A(K,I)*B(K,J)
+              if (upper) then
+                  do j = 1,n
+                      do i = m,1,-1
+                          temp = b(i,j)
+                          if (noconj) then
+                              if (nounit) temp = temp*a(i,i)
+                              do k = 1,i - 1
+                                  temp = temp + a(k,i)*b(k,j)
                               enddo
-                          ELSE
-                              IF (NOUNIT) TEMP = TEMP*DCONJG(A(I,I))
-                              DO K = 1,I - 1
-                                  TEMP = TEMP + DCONJG(A(K,I))*B(K,J)
+                          else
+                              if (nounit) temp = temp*dconjg(a(i,i))
+                              do k = 1,i - 1
+                                  temp = temp + dconjg(a(k,i))*b(k,j)
                               enddo
                           endif
-                          B(I,J) = ALPHA*TEMP
+                          b(i,j) = alpha*temp
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO I = 1,M
-                          TEMP = B(I,J)
-                          IF (NOCONJ) THEN
-                              IF (NOUNIT) TEMP = TEMP*A(I,I)
-                              DO K = I + 1,M
-                                  TEMP = TEMP + A(K,I)*B(K,J)
+              else
+                  do j = 1,n
+                      do i = 1,m
+                          temp = b(i,j)
+                          if (noconj) then
+                              if (nounit) temp = temp*a(i,i)
+                              do k = i + 1,m
+                                  temp = temp + a(k,i)*b(k,j)
                               enddo
-                          ELSE
-                              IF (NOUNIT) TEMP = TEMP*DCONJG(A(I,I))
-                              DO K = I + 1,M
-                                  TEMP = TEMP + DCONJG(A(K,I))*B(K,J)
+                          else
+                              if (nounit) temp = temp*dconjg(a(i,i))
+                              do k = i + 1,m
+                                  temp = temp + dconjg(a(k,i))*b(k,j)
                               enddo
                           endif
-                          B(I,J) = ALPHA*TEMP
+                          b(i,j) = alpha*temp
                       enddo
                   enddo
               endif
           endif
-      ELSE
-          IF (LSAME(TRANSA,'N')) THEN
+      else
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*B*A.
 !
-              IF (UPPER) THEN
-                  DO J = N,1,-1
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      B(1:M,J) = TEMP*B(1:M,J)
-                      DO K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              if (upper) then
+                  do j = n,1,-1
+                      temp = alpha
+                      if (nounit) temp = temp*a(j,j)
+                      b(1:m,j) = temp*b(1:m,j)
+                      do k = 1,j - 1
+                          if (a(k,j).ne.zero) then
+                              temp = alpha*a(k,j)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      TEMP = ALPHA
-                      IF (NOUNIT) TEMP = TEMP*A(J,J)
-                      B(1:M,J) = TEMP*B(1:M,J)
-                      DO K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+              else
+                  do j = 1,n
+                      temp = alpha
+                      if (nounit) temp = temp*a(j,j)
+                      b(1:m,j) = temp*b(1:m,j)
+                      do k = j + 1,n
+                          if (a(k,j).ne.zero) then
+                              temp = alpha*a(k,j)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*B*A**T   or   B := alpha*B*A**H.
 !
-              IF (UPPER) THEN
-                  DO K = 1,N
-                      DO J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = ALPHA*A(J,K)
-                              ELSE
-                                  TEMP = ALPHA*DCONJG(A(J,K))
+              if (upper) then
+                  do k = 1,n
+                      do j = 1,k - 1
+                          if (a(j,k).ne.zero) then
+                              if (noconj) then
+                                  temp = alpha*a(j,k)
+                              else
+                                  temp = alpha*dconjg(a(j,k))
                               endif
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
-                      TEMP = ALPHA
-                      IF (NOUNIT) THEN
-                          IF (NOCONJ) THEN
-                              TEMP = TEMP*A(K,K)
-                          ELSE
-                              TEMP = TEMP*DCONJG(A(K,K))
+                      temp = alpha
+                      if (nounit) then
+                          if (noconj) then
+                              temp = temp*a(k,k)
+                          else
+                              temp = temp*dconjg(a(k,k))
                           endif
                       endif
-                      IF (TEMP.NE.ONE) THEN
-                          B(1:M,K) = TEMP*B(1:M,K)
+                      if (temp.ne.one) then
+                          b(1:m,k) = temp*b(1:m,k)
                       endif
                   enddo
-              ELSE
-                  DO K = N,1,-1
-                      DO J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = ALPHA*A(J,K)
-                              ELSE
-                                  TEMP = ALPHA*DCONJG(A(J,K))
+              else
+                  do k = n,1,-1
+                      do j = k + 1,n
+                          if (a(j,k).ne.zero) then
+                              if (noconj) then
+                                  temp = alpha*a(j,k)
+                              else
+                                  temp = alpha*dconjg(a(j,k))
                               endif
-                              B(1:M,J) = B(1:M,J) + TEMP*B(1:M,K)
+                              b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
                       enddo
-                      TEMP = ALPHA
-                      IF (NOUNIT) THEN
-                          IF (NOCONJ) THEN
-                              TEMP = TEMP*A(K,K)
-                          ELSE
-                              TEMP = TEMP*DCONJG(A(K,K))
+                      temp = alpha
+                      if (nounit) then
+                          if (noconj) then
+                              temp = temp*a(k,k)
+                          else
+                              temp = temp*dconjg(a(k,k))
                           endif
                       endif
-                      IF (TEMP.NE.ONE) THEN
-                         B(1:M,K) = TEMP*B(1:M,K)
+                      if (temp.ne.one) then
+                         b(1:m,k) = temp*b(1:m,k)
                       endif
                   enddo
               endif
           endif
       endif
 
-      END SUBROUTINE ZTRMM
+      end subroutine ztrmm
 !>
 !!##NAME
 !!    ztrmv(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine ztrmv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)                 :: INCX,LDA,N
-!!       CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+!!       integer,intent(in)                 :: incx,lda,n
+!!       character,intent(in)               :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: X(*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -37134,7 +37134,7 @@ end subroutine
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-SUBROUTINE ZTRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+subroutine ztrmv(uplo,trans,diag,n,a,lda,x,incx)
 implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -37143,23 +37143,23 @@ implicit none
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,LDA,N
-      CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+      integer,intent(in)                 :: incx,lda,n
+      character,intent(in)               :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: X(*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: x(*)
 !     ..
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,KX
-      LOGICAL NOCONJ,NOUNIT
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,kx
+      logical noconj,nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -37169,209 +37169,209 @@ implicit none
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      intrinsic dconjg,max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,n)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTRMV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTRMV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOCONJ = LSAME(TRANS,'T')
-      NOUNIT = LSAME(DIAG,'N')
+      noconj = lsame(trans,'T')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := A*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          DO I = 1,J - 1
-                              X(I) = X(I) + TEMP*A(I,J)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          do i = 1,j - 1
+                              x(i) = x(i) + temp*a(i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
+                          if (nounit) x(j) = x(j)*a(j,j)
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO I = 1,J - 1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do i = 1,j - 1
+                              x(ix) = x(ix) + temp*a(i,j)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
+                          if (nounit) x(jx) = x(jx)*a(j,j)
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          DO I = N,J + 1,-1
-                              X(I) = X(I) + TEMP*A(I,J)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          temp = x(j)
+                          do i = n,j + 1,-1
+                              x(i) = x(i) + temp*a(i,j)
                           enddo
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
+                          if (nounit) x(j) = x(j)*a(j,j)
                       endif
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO I = N,J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          temp = x(jx)
+                          ix = kx
+                          do i = n,j + 1,-1
+                              x(ix) = x(ix) + temp*a(i,j)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
+                          if (nounit) x(jx) = x(jx)*a(j,j)
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := A**T*x  or  x := A**H*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(J,J)
-                          DO I = J - 1,1,-1
-                              TEMP = TEMP + A(I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      if (noconj) then
+                          if (nounit) temp = temp*a(j,j)
+                          do i = j - 1,1,-1
+                              temp = temp + a(i,j)*x(i)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(J,J))
-                          DO I = J - 1,1,-1
-                              TEMP = TEMP + DCONJG(A(I,J))*X(I)
+                      else
+                          if (nounit) temp = temp*dconjg(a(j,j))
+                          do i = j - 1,1,-1
+                              temp = temp + dconjg(a(i,j))*x(i)
                           enddo
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(J,J)
-                          DO I = J - 1,1,-1
-                              IX = IX - INCX
-                              TEMP = TEMP + A(I,J)*X(IX)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      temp = x(jx)
+                      ix = jx
+                      if (noconj) then
+                          if (nounit) temp = temp*a(j,j)
+                          do i = j - 1,1,-1
+                              ix = ix - incx
+                              temp = temp + a(i,j)*x(ix)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(J,J))
-                          DO I = J - 1,1,-1
-                              IX = IX - INCX
-                              TEMP = TEMP + DCONJG(A(I,J))*X(IX)
+                      else
+                          if (nounit) temp = temp*dconjg(a(j,j))
+                          do i = j - 1,1,-1
+                              ix = ix - incx
+                              temp = temp + dconjg(a(i,j))*x(ix)
                           enddo
                       endif
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(J,J)
-                          DO I = J + 1,N
-                              TEMP = TEMP + A(I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      if (noconj) then
+                          if (nounit) temp = temp*a(j,j)
+                          do i = j + 1,n
+                              temp = temp + a(i,j)*x(i)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(J,J))
-                          DO I = J + 1,N
-                              TEMP = TEMP + DCONJG(A(I,J))*X(I)
+                      else
+                          if (nounit) temp = temp*dconjg(a(j,j))
+                          do i = j + 1,n
+                              temp = temp + dconjg(a(i,j))*x(i)
                           enddo
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      TEMP = X(JX)
-                      IX = JX
-                      IF (NOCONJ) THEN
-                          IF (NOUNIT) TEMP = TEMP*A(J,J)
-                          DO I = J + 1,N
-                              IX = IX + INCX
-                              TEMP = TEMP + A(I,J)*X(IX)
+              else
+                  jx = kx
+                  do j = 1,n
+                      temp = x(jx)
+                      ix = jx
+                      if (noconj) then
+                          if (nounit) temp = temp*a(j,j)
+                          do i = j + 1,n
+                              ix = ix + incx
+                              temp = temp + a(i,j)*x(ix)
                           enddo
-                      ELSE
-                          IF (NOUNIT) TEMP = TEMP*DCONJG(A(J,J))
-                          DO I = J + 1,N
-                              IX = IX + INCX
-                              TEMP = TEMP + DCONJG(A(I,J))*X(IX)
+                      else
+                          if (nounit) temp = temp*dconjg(a(j,j))
+                          do i = j + 1,n
+                              ix = ix + incx
+                              temp = temp + dconjg(a(i,j))*x(ix)
                           enddo
                       endif
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
           endif
       endif
 
-END SUBROUTINE ZTRMV
+end subroutine ztrmv
 !>
 !!##NAME
 !!    ztrsm(3f) - [BLAS:COMPLEX_16_BLAS_LEVEL3]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+!!     subroutine ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 !!
 !!       .. Scalar Arguments ..
-!!       complex(kind=real64),intent(in)    :: ALPHA
-!!       INTEGER,intent(in)                 :: LDA,LDB,M,N
-!!       CHARACTER,intent(in)               :: DIAG,SIDE,TRANSA,UPLO
+!!       complex(kind=real64),intent(in)    :: alpha
+!!       integer,intent(in)                 :: lda,ldb,m,n
+!!       character,intent(in)               :: diag,side,transa,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: B(LDB,*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: b(ldb,*)
 !!       ..
 !!
 !!##DEFINITION
@@ -37512,7 +37512,7 @@ END SUBROUTINE ZTRMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+       subroutine ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
       implicit none
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
@@ -37521,13 +37521,13 @@ END SUBROUTINE ZTRMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      complex(kind=real64),intent(in)    :: ALPHA
-      INTEGER,intent(in)                 :: LDA,LDB,M,N
-      CHARACTER,intent(in)               :: DIAG,SIDE,TRANSA,UPLO
+      complex(kind=real64),intent(in)    :: alpha
+      integer,intent(in)                 :: lda,ldb,m,n
+      character,intent(in)               :: diag,side,transa,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: B(LDB,*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: b(ldb,*)
 !     ..
 !
 !  =====================================================================
@@ -37540,263 +37540,263 @@ END SUBROUTINE ZTRMV
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      intrinsic dconjg,max
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,J,K,NROWA
-      LOGICAL LSIDE,NOCONJ,NOUNIT,UPPER
+      complex(kind=real64) :: temp
+      integer i,info,j,k,nrowa
+      logical lside,noconj,nounit,upper
 !     ..
 !     .. Parameters ..
-      complex(kind=real64) :: ONE
-      PARAMETER (ONE= (1.0D+0,0.0D+0))
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: one
+      parameter (one= (1.0d+0,0.0d+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !
 !     Test the input parameters.
 !
-      LSIDE = LSAME(SIDE,'L')
-      IF (LSIDE) THEN
-          NROWA = M
-      ELSE
-          NROWA = N
+      lside = lsame(side,'L')
+      if (lside) then
+          nrowa = m
+      else
+          nrowa = n
       endif
-      NOCONJ = LSAME(TRANSA,'T')
-      NOUNIT = LSAME(DIAG,'N')
-      UPPER = LSAME(UPLO,'U')
+      noconj = lsame(transa,'T')
+      nounit = lsame(diag,'N')
+      upper = lsame(uplo,'U')
 !
-      INFO = 0
-      IF ((.NOT.LSIDE) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
-          INFO = 1
-      elseif ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
-          INFO = 2
-      elseif ((.NOT.LSAME(TRANSA,'N')) .AND.  (.NOT.LSAME(TRANSA,'T')) .AND.  (.NOT.LSAME(TRANSA,'C'))) THEN
-          INFO = 3
-      elseif ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
-          INFO = 4
-      elseif (M.LT.0) THEN
-          INFO = 5
-      elseif (N.LT.0) THEN
-          INFO = 6
-      elseif (LDA.LT.MAX(1,NROWA)) THEN
-          INFO = 9
-      elseif (LDB.LT.MAX(1,M)) THEN
-          INFO = 11
+      info = 0
+      if ((.not.lside) .and. (.not.lsame(side,'R'))) then
+          info = 1
+      elseif ((.not.upper) .and. (.not.lsame(uplo,'L'))) then
+          info = 2
+      elseif ((.not.lsame(transa,'N')) .and.  (.not.lsame(transa,'T')) .and.  (.not.lsame(transa,'C'))) then
+          info = 3
+      elseif ((.not.lsame(diag,'U')) .and. (.not.lsame(diag,'N'))) then
+          info = 4
+      elseif (m.lt.0) then
+          info = 5
+      elseif (n.lt.0) then
+          info = 6
+      elseif (lda.lt.max(1,nrowa)) then
+          info = 9
+      elseif (ldb.lt.max(1,m)) then
+          info = 11
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTRSM ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTRSM ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (M.EQ.0 .OR. N.EQ.0) RETURN
+      if (m.eq.0 .or. n.eq.0) return
 !
 !     And when  alpha.eq.zero.
 !
-      IF (ALPHA.EQ.ZERO) THEN
-          DO J = 1,N
-              DO I = 1,M
-                  B(I,J) = ZERO
+      if (alpha.eq.zero) then
+          do j = 1,n
+              do i = 1,m
+                  b(i,j) = zero
               enddo
           enddo
-          RETURN
+          return
       endif
 !
 !     Start the operations.
 !
-      IF (LSIDE) THEN
-          IF (LSAME(TRANSA,'N')) THEN
+      if (lside) then
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*inv( A )*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
+              if (upper) then
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          do i = 1,m
+                              b(i,j) = alpha*b(i,j)
                           enddo
                       endif
-                      DO K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO I = 1,K - 1
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
+                      do k = m,1,-1
+                          if (b(k,j).ne.zero) then
+                              if (nounit) b(k,j) = b(k,j)/a(k,k)
+                              do i = 1,k - 1
+                                  b(i,j) = b(i,j) - b(k,j)*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
+              else
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          do i = 1,m
+                              b(i,j) = alpha*b(i,j)
                           enddo
                       endif
-                      DO K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO I = K + 1,M
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
+                      do k = 1,m
+                          if (b(k,j).ne.zero) then
+                              if (nounit) b(k,j) = b(k,j)/a(k,k)
+                              do i = k + 1,m
+                                  b(i,j) = b(i,j) - b(k,j)*a(i,k)
                               enddo
                           endif
                       enddo
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*inv( A**T )*B
 !           or    B := alpha*inv( A**H )*B.
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      DO I = 1,M
-                          TEMP = ALPHA*B(I,J)
-                          IF (NOCONJ) THEN
-                              DO K = 1,I - 1
-                                  TEMP = TEMP - A(K,I)*B(K,J)
+              if (upper) then
+                  do j = 1,n
+                      do i = 1,m
+                          temp = alpha*b(i,j)
+                          if (noconj) then
+                              do k = 1,i - 1
+                                  temp = temp - a(k,i)*b(k,j)
                               enddo
-                              IF (NOUNIT) TEMP = TEMP/A(I,I)
-                          ELSE
-                              DO K = 1,I - 1
-                                  TEMP = TEMP - DCONJG(A(K,I))*B(K,J)
+                              if (nounit) temp = temp/a(i,i)
+                          else
+                              do k = 1,i - 1
+                                  temp = temp - dconjg(a(k,i))*b(k,j)
                               enddo
-                              IF (NOUNIT) TEMP = TEMP/DCONJG(A(I,I))
+                              if (nounit) temp = temp/dconjg(a(i,i))
                           endif
-                          B(I,J) = TEMP
+                          b(i,j) = temp
                       enddo
                   enddo
-              ELSE
-                  DO J = 1,N
-                      DO I = M,1,-1
-                          TEMP = ALPHA*B(I,J)
-                          IF (NOCONJ) THEN
-                              DO K = I + 1,M
-                                  TEMP = TEMP - A(K,I)*B(K,J)
+              else
+                  do j = 1,n
+                      do i = m,1,-1
+                          temp = alpha*b(i,j)
+                          if (noconj) then
+                              do k = i + 1,m
+                                  temp = temp - a(k,i)*b(k,j)
                               enddo
-                              IF (NOUNIT) TEMP = TEMP/A(I,I)
-                          ELSE
-                              DO K = I + 1,M
-                                  TEMP = TEMP - DCONJG(A(K,I))*B(K,J)
+                              if (nounit) temp = temp/a(i,i)
+                          else
+                              do k = i + 1,m
+                                  temp = temp - dconjg(a(k,i))*b(k,j)
                               enddo
-                              IF (NOUNIT) TEMP = TEMP/DCONJG(A(I,I))
+                              if (nounit) temp = temp/dconjg(a(i,i))
                           endif
-                          B(I,J) = TEMP
+                          b(i,j) = temp
                       enddo
                   enddo
               endif
           endif
-      ELSE
-          IF (LSAME(TRANSA,'N')) THEN
+      else
+          if (lsame(transa,'N')) then
 !
 !           Form  B := alpha*B*inv( A ).
 !
-              IF (UPPER) THEN
-                  DO J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
+              if (upper) then
+                  do j = 1,n
+                      if (alpha.ne.one) then
+                          do i = 1,m
+                              b(i,j) = alpha*b(i,j)
                           enddo
                       endif
-                      DO K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              DO I = 1,M
-                                  B(I,J) = B(I,J) - A(K,J)*B(I,K)
+                      do k = 1,j - 1
+                          if (a(k,j).ne.zero) then
+                              do i = 1,m
+                                  b(i,j) = b(i,j) - a(k,j)*b(i,k)
                               enddo
                           endif
                       enddo
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
-                          DO I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                      if (nounit) then
+                          temp = one/a(j,j)
+                          do i = 1,m
+                              b(i,j) = temp*b(i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  DO J = N,1,-1
-                      IF (ALPHA.NE.ONE) THEN
-                          DO I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
+              else
+                  do j = n,1,-1
+                      if (alpha.ne.one) then
+                          do i = 1,m
+                              b(i,j) = alpha*b(i,j)
                           enddo
                       endif
-                      DO K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              DO I = 1,M
-                                  B(I,J) = B(I,J) - A(K,J)*B(I,K)
+                      do k = j + 1,n
+                          if (a(k,j).ne.zero) then
+                              do i = 1,m
+                                  b(i,j) = b(i,j) - a(k,j)*b(i,k)
                               enddo
                           endif
                       enddo
-                      IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
-                          DO I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                      if (nounit) then
+                          temp = one/a(j,j)
+                          do i = 1,m
+                              b(i,j) = temp*b(i,j)
                           enddo
                       endif
                   enddo
               endif
-          ELSE
+          else
 !
 !           Form  B := alpha*B*inv( A**T )
 !           or    B := alpha*B*inv( A**H ).
 !
-              IF (UPPER) THEN
-                  DO K = N,1,-1
-                      IF (NOUNIT) THEN
-                          IF (NOCONJ) THEN
-                              TEMP = ONE/A(K,K)
-                          ELSE
-                              TEMP = ONE/DCONJG(A(K,K))
+              if (upper) then
+                  do k = n,1,-1
+                      if (nounit) then
+                          if (noconj) then
+                              temp = one/a(k,k)
+                          else
+                              temp = one/dconjg(a(k,k))
                           endif
-                          DO I = 1,M
-                              B(I,K) = TEMP*B(I,K)
+                          do i = 1,m
+                              b(i,k) = temp*b(i,k)
                           enddo
                       endif
-                      DO J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = A(J,K)
-                              ELSE
-                                  TEMP = DCONJG(A(J,K))
+                      do j = 1,k - 1
+                          if (a(j,k).ne.zero) then
+                              if (noconj) then
+                                  temp = a(j,k)
+                              else
+                                  temp = dconjg(a(j,k))
                               endif
-                              DO I = 1,M
-                                  B(I,J) = B(I,J) - TEMP*B(I,K)
+                              do i = 1,m
+                                  b(i,j) = b(i,j) - temp*b(i,k)
                               enddo
                           endif
                       enddo
-                      IF (ALPHA.NE.ONE) THEN
-                          DO I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
+                      if (alpha.ne.one) then
+                          do i = 1,m
+                              b(i,k) = alpha*b(i,k)
                           enddo
                       endif
                   enddo
-              ELSE
-                  DO K = 1,N
-                      IF (NOUNIT) THEN
-                          IF (NOCONJ) THEN
-                              TEMP = ONE/A(K,K)
-                          ELSE
-                              TEMP = ONE/DCONJG(A(K,K))
+              else
+                  do k = 1,n
+                      if (nounit) then
+                          if (noconj) then
+                              temp = one/a(k,k)
+                          else
+                              temp = one/dconjg(a(k,k))
                           endif
-                          DO I = 1,M
-                              B(I,K) = TEMP*B(I,K)
+                          do i = 1,m
+                              b(i,k) = temp*b(i,k)
                           enddo
                       endif
-                      DO J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = A(J,K)
-                              ELSE
-                                  TEMP = DCONJG(A(J,K))
+                      do j = k + 1,n
+                          if (a(j,k).ne.zero) then
+                              if (noconj) then
+                                  temp = a(j,k)
+                              else
+                                  temp = dconjg(a(j,k))
                               endif
-                              DO I = 1,M
-                                  B(I,J) = B(I,J) - TEMP*B(I,K)
+                              do i = 1,m
+                                  b(i,j) = b(i,j) - temp*b(i,k)
                               enddo
                           endif
                       enddo
-                      IF (ALPHA.NE.ONE) THEN
-                          DO I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
+                      if (alpha.ne.one) then
+                          do i = 1,m
+                              b(i,k) = alpha*b(i,k)
                           enddo
                       endif
                   enddo
@@ -37804,22 +37804,22 @@ END SUBROUTINE ZTRMV
           endif
       endif
 
-      END SUBROUTINE ZTRSM
+      end subroutine ztrsm
 !>
 !!##NAME
 !!    ztrsv(3f) - [BLAS:COMPLEX16_BLAS_LEVEL2]
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE ZTRSV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+!!     subroutine ztrsv(uplo,trans,diag,n,a,lda,x,incx)
 !!
 !!       .. Scalar Arguments ..
-!!       INTEGER,intent(in)                 :: INCX,LDA,N
-!!       CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+!!       integer,intent(in)                 :: incx,lda,n
+!!       character,intent(in)               :: diag,trans,uplo
 !!       ..
 !!       .. Array Arguments ..
-!!       complex(kind=real64),intent(in)    :: A(LDA,*)
-!!       complex(kind=real64),intent(inout) :: X(*)
+!!       complex(kind=real64),intent(in)    :: a(lda,*)
+!!       complex(kind=real64),intent(inout) :: x(*)
 !!       ..
 !!
 !!##DEFINITION
@@ -37926,7 +37926,7 @@ END SUBROUTINE ZTRMV
 !!    Online html documentation available at
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
-       SUBROUTINE ZTRSV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+       subroutine ztrsv(uplo,trans,diag,n,a,lda,x,incx)
       implicit none
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
@@ -37935,24 +37935,24 @@ END SUBROUTINE ZTRMV
 !     December 2016
 !
 !     .. Scalar Arguments ..
-      INTEGER,intent(in)                 :: INCX,LDA,N
-      CHARACTER,intent(in)               :: DIAG,TRANS,UPLO
+      integer,intent(in)                 :: incx,lda,n
+      character,intent(in)               :: diag,trans,uplo
 !     ..
 !     .. Array Arguments ..
-      complex(kind=real64),intent(in)    :: A(LDA,*)
-      complex(kind=real64),intent(inout) :: X(*)
+      complex(kind=real64),intent(in)    :: a(lda,*)
+      complex(kind=real64),intent(inout) :: x(*)
 !     ..
 !
 !  =====================================================================
 !
 !     .. Parameters ..
-      complex(kind=real64) :: ZERO
-      PARAMETER (ZERO= (0.0D+0,0.0D+0))
+      complex(kind=real64) :: zero
+      parameter (zero= (0.0d+0,0.0d+0))
 !     ..
 !     .. Local Scalars ..
-      complex(kind=real64) :: TEMP
-      INTEGER I,INFO,IX,J,JX,KX
-      LOGICAL NOCONJ,NOUNIT
+      complex(kind=real64) :: temp
+      integer i,info,ix,j,jx,kx
+      logical noconj,nounit
 !     ..
 !     .. External Functions ..
 !      LOGICAL LSAME
@@ -37962,191 +37962,191 @@ END SUBROUTINE ZTRMV
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      intrinsic dconjg,max
 !     ..
 !
 !     Test the input parameters.
 !
-      INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
-          INFO = 1
-      elseif (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.  .NOT.LSAME(TRANS,'C')) THEN
-          INFO = 2
-      elseif (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
-          INFO = 3
-      elseif (N.LT.0) THEN
-          INFO = 4
-      elseif (LDA.LT.MAX(1,N)) THEN
-          INFO = 6
-      elseif (INCX.EQ.0) THEN
-          INFO = 8
+      info = 0
+      if (.not.lsame(uplo,'U') .and. .not.lsame(uplo,'L')) then
+          info = 1
+      elseif (.not.lsame(trans,'N') .and. .not.lsame(trans,'T') .and.  .not.lsame(trans,'C')) then
+          info = 2
+      elseif (.not.lsame(diag,'U') .and. .not.lsame(diag,'N')) then
+          info = 3
+      elseif (n.lt.0) then
+          info = 4
+      elseif (lda.lt.max(1,n)) then
+          info = 6
+      elseif (incx.eq.0) then
+          info = 8
       endif
-      IF (INFO.NE.0) THEN
-          CALL XERBLA('ZTRSV ',INFO)
-          RETURN
+      if (info.ne.0) then
+          call xerbla('ZTRSV ',info)
+          return
       endif
 !
 !     Quick return if possible.
 !
-      IF (N.EQ.0) RETURN
+      if (n.eq.0) return
 !
-      NOCONJ = LSAME(TRANS,'T')
-      NOUNIT = LSAME(DIAG,'N')
+      noconj = lsame(trans,'T')
+      nounit = lsame(diag,'N')
 !
 !     Set up the start point in X if the increment is not unity. This
 !     will be  ( N - 1 )*INCX  too small for descending loops.
 !
-      IF (INCX.LE.0) THEN
-          KX = 1 - (N-1)*INCX
-      elseif (INCX.NE.1) THEN
-          KX = 1
+      if (incx.le.0) then
+          kx = 1 - (n-1)*incx
+      elseif (incx.ne.1) then
+          kx = 1
       endif
 !
 !     Start the operations. In this version the elements of A are
 !     accessed sequentially with one pass through A.
 !
-      IF (LSAME(TRANS,'N')) THEN
+      if (lsame(trans,'N')) then
 !
 !        Form  x := inv( A )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/A(J,J)
-                          TEMP = X(J)
-                          DO I = J - 1,1,-1
-                              X(I) = X(I) - TEMP*A(I,J)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/a(j,j)
+                          temp = x(j)
+                          do i = j - 1,1,-1
+                              x(i) = x(i) - temp*a(i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX + (N-1)*INCX
-                  DO J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/A(J,J)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO I = J - 1,1,-1
-                              IX = IX - INCX
-                              X(IX) = X(IX) - TEMP*A(I,J)
+              else
+                  jx = kx + (n-1)*incx
+                  do j = n,1,-1
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/a(j,j)
+                          temp = x(jx)
+                          ix = jx
+                          do i = j - 1,1,-1
+                              ix = ix - incx
+                              x(ix) = x(ix) - temp*a(i,j)
                           enddo
                       endif
-                      JX = JX - INCX
+                      jx = jx - incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          IF (NOUNIT) X(J) = X(J)/A(J,J)
-                          TEMP = X(J)
-                          DO I = J + 1,N
-                              X(I) = X(I) - TEMP*A(I,J)
+          else
+              if (incx.eq.1) then
+                  do j = 1,n
+                      if (x(j).ne.zero) then
+                          if (nounit) x(j) = x(j)/a(j,j)
+                          temp = x(j)
+                          do i = j + 1,n
+                              x(i) = x(i) - temp*a(i,j)
                           enddo
                       endif
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          IF (NOUNIT) X(JX) = X(JX)/A(J,J)
-                          TEMP = X(JX)
-                          IX = JX
-                          DO I = J + 1,N
-                              IX = IX + INCX
-                              X(IX) = X(IX) - TEMP*A(I,J)
+              else
+                  jx = kx
+                  do j = 1,n
+                      if (x(jx).ne.zero) then
+                          if (nounit) x(jx) = x(jx)/a(j,j)
+                          temp = x(jx)
+                          ix = jx
+                          do i = j + 1,n
+                              ix = ix + incx
+                              x(ix) = x(ix) - temp*a(i,j)
                           enddo
                       endif
-                      JX = JX + INCX
+                      jx = jx + incx
                   enddo
               endif
           endif
-      ELSE
+      else
 !
 !        Form  x := inv( A**T )*x  or  x := inv( A**H )*x.
 !
-          IF (LSAME(UPLO,'U')) THEN
-              IF (INCX.EQ.1) THEN
-                  DO J = 1,N
-                      TEMP = X(J)
-                      IF (NOCONJ) THEN
-                          DO I = 1,J - 1
-                              TEMP = TEMP - A(I,J)*X(I)
+          if (lsame(uplo,'U')) then
+              if (incx.eq.1) then
+                  do j = 1,n
+                      temp = x(j)
+                      if (noconj) then
+                          do i = 1,j - 1
+                              temp = temp - a(i,j)*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      ELSE
-                          DO I = 1,J - 1
-                              TEMP = TEMP - DCONJG(A(I,J))*X(I)
+                          if (nounit) temp = temp/a(j,j)
+                      else
+                          do i = 1,j - 1
+                              temp = temp - dconjg(a(i,j))*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(J,J))
+                          if (nounit) temp = temp/dconjg(a(j,j))
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  JX = KX
-                  DO J = 1,N
-                      IX = KX
-                      TEMP = X(JX)
-                      IF (NOCONJ) THEN
-                          DO I = 1,J - 1
-                              TEMP = TEMP - A(I,J)*X(IX)
-                              IX = IX + INCX
+              else
+                  jx = kx
+                  do j = 1,n
+                      ix = kx
+                      temp = x(jx)
+                      if (noconj) then
+                          do i = 1,j - 1
+                              temp = temp - a(i,j)*x(ix)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      ELSE
-                          DO I = 1,J - 1
-                              TEMP = TEMP - DCONJG(A(I,J))*X(IX)
-                              IX = IX + INCX
+                          if (nounit) temp = temp/a(j,j)
+                      else
+                          do i = 1,j - 1
+                              temp = temp - dconjg(a(i,j))*x(ix)
+                              ix = ix + incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(J,J))
+                          if (nounit) temp = temp/dconjg(a(j,j))
                       endif
-                      X(JX) = TEMP
-                      JX = JX + INCX
+                      x(jx) = temp
+                      jx = jx + incx
                   enddo
               endif
-          ELSE
-              IF (INCX.EQ.1) THEN
-                  DO J = N,1,-1
-                      TEMP = X(J)
-                      IF (NOCONJ) THEN
-                          DO I = N,J + 1,-1
-                              TEMP = TEMP - A(I,J)*X(I)
+          else
+              if (incx.eq.1) then
+                  do j = n,1,-1
+                      temp = x(j)
+                      if (noconj) then
+                          do i = n,j + 1,-1
+                              temp = temp - a(i,j)*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      ELSE
-                          DO I = N,J + 1,-1
-                              TEMP = TEMP - DCONJG(A(I,J))*X(I)
+                          if (nounit) temp = temp/a(j,j)
+                      else
+                          do i = n,j + 1,-1
+                              temp = temp - dconjg(a(i,j))*x(i)
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(J,J))
+                          if (nounit) temp = temp/dconjg(a(j,j))
                       endif
-                      X(J) = TEMP
+                      x(j) = temp
                   enddo
-              ELSE
-                  KX = KX + (N-1)*INCX
-                  JX = KX
-                  DO J = N,1,-1
-                      IX = KX
-                      TEMP = X(JX)
-                      IF (NOCONJ) THEN
-                          DO I = N,J + 1,-1
-                              TEMP = TEMP - A(I,J)*X(IX)
-                              IX = IX - INCX
+              else
+                  kx = kx + (n-1)*incx
+                  jx = kx
+                  do j = n,1,-1
+                      ix = kx
+                      temp = x(jx)
+                      if (noconj) then
+                          do i = n,j + 1,-1
+                              temp = temp - a(i,j)*x(ix)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/A(J,J)
-                      ELSE
-                          DO I = N,J + 1,-1
-                              TEMP = TEMP - DCONJG(A(I,J))*X(IX)
-                              IX = IX - INCX
+                          if (nounit) temp = temp/a(j,j)
+                      else
+                          do i = n,j + 1,-1
+                              temp = temp - dconjg(a(i,j))*x(ix)
+                              ix = ix - incx
                           enddo
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(J,J))
+                          if (nounit) temp = temp/dconjg(a(j,j))
                       endif
-                      X(JX) = TEMP
-                      JX = JX - INCX
+                      x(jx) = temp
+                      jx = jx - incx
                   enddo
               endif
           endif
       endif
 
-END SUBROUTINE ZTRSV
+end subroutine ztrsv
 end module M_blas
