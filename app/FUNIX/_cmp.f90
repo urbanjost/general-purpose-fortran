@@ -169,7 +169,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    compare two files byte by byte>',&
 '@(#)VERSION:        1.0-20171126>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2021-08-21 22:20:03 UTC-240>',&
+'@(#)COMPILED:       2021-08-30 13:59:37 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -181,7 +181,8 @@ use,intrinsic :: iso_fortran_env, only : iostat_end
 use M_kracken, only : kracken,lget,sget,sgets
 use M_strings, only : split, substitute
 use M_strings, only : describe, visible
-use M_verify,   only : stderr
+use M_io,      only : get_next_char
+use M_verify,  only : stderr
 implicit none
 
 ! ident_1="@(#)_cmp(1f): compare two files byte by byte"
@@ -221,8 +222,8 @@ do i=1,2  ! open input files
 enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
 ONE_CHAR_AT_A_TIME: do                                                ! loop through read of files one character at a time
-   call getnextchar1(fd(1),c1,ios1)                                   ! get next character from buffered read from file 1
-   call getnextchar2(fd(2),c2,ios2)                                   ! get next character from buffered read from file 2
+   call get_next_char(fd(1),c1,ios1)                                  ! get next character from buffered read from file 1
+   call get_next_char2(fd(2),c2,ios2)                                  ! get next character from buffered read from file 2
 
    if(ios1.eq.iostat_end.and.ios2.eq.iostat_end)then                  ! reached end of both files so stop
       if(quiet)then                                                   ! no normal messages
@@ -276,52 +277,7 @@ enddo ONE_CHAR_AT_A_TIME
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
-subroutine getnextchar1(fd,c,ios)
-! replace "read(fd,iostat=ios) c" because gfortran on CygWin sixty times slower with plain read (no system buffering?)
-! quick buffering read
-implicit none
-integer,intent(in)          :: fd
-character,intent(out)       :: c
-integer,intent(out)         :: ios
-integer,parameter           :: bufsize=1048576
-character(len=1),save       :: buff(bufsize)
-integer,save                :: point=0
-integer,save                :: filepoint=1
-integer,save                :: sz=bufsize
-
-ios=0
-
-100 continue
-select case(point)
-case(0)                                            ! read a buffer
-   read(fd,iostat=ios,pos=filepoint) buff(1:sz)
-   if(is_iostat_end(ios))then                      ! this is the last buffer
-      if(sz.ne.1)then                              ! try again with a smaller buffer
-         sz=sz/2
-         sz=max(1,sz)
-         goto 100
-      endif
-   elseif(ios.eq.0)then                            ! no error occurred so successfully read a buffer
-      c=buff(1)
-      filepoint=filepoint+sz
-      point=sz-1
-   endif
-case(1:)                                           ! getting a character from a previous buffer
-   point=point-1
-   c=buff(sz-point)
-case default
-   write(*,*)'*getnextchar1* internal error '
-   read(fd,iostat=ios) c
-end select
-! assume if IOS is not zero, not called again until new file is started
-   if(ios.ne.0)then
-      filepoint=1
-      point=0
-      sz=bufsize
-   endif
-end subroutine getnextchar1
-!-----------------------------------------------------------------------------------------------------------------------------------
-subroutine getnextchar2(fd,c,ios)
+subroutine get_next_char2(fd,c,ios)
 ! replace "read(fd,iostat=ios) c" because gfortran on CygWin sixty times slower with plain read (no system buffering?)
 ! quick buffering read
 implicit none
@@ -354,7 +310,7 @@ case(1:)                                           ! getting a character from a 
    point=point-1
    c=buff(sz-point)
 case default
-   write(*,*)'*getnextchar2* internal error '
+   write(*,*)'*get_next_char2* internal error '
    read(fd,iostat=ios) c
 end select
 ! assume if IOS is not zero, not called again until new file is started
@@ -363,7 +319,7 @@ end select
       point=0
       sz=bufsize
    endif
-end subroutine getnextchar2
+end subroutine get_next_char2
 !-----------------------------------------------------------------------------------------------------------------------------------
 end program same
 !-----------------------------------------------------------------------------------------------------------------------------------

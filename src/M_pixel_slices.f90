@@ -157,10 +157,8 @@ module M_pixel_slices
 !!  Sample program:
 !!
 !!    program demo_dl_slices
-!!
 !!    !     WRITTEN BY: DGL, LAST REVISED ON  5-JAN-1994 10:31:18.86
 !!    !                 JSU,                 19-JUL-2005
-!!
 !!     use M_pixel
 !!     use M_writegif_animated, only : write_animated_gif
 !!     use :: M_pixel_slices, only : dl_slices, dl_init, dl_symbol
@@ -178,7 +176,7 @@ module M_pixel_slices
 !!       real :: xe,xh,xs
 !!       real :: ye,yh,ys
 !!       real :: ze,zh,zs
-!!
+!!    !
 !!       integer :: i
 !!       integer :: i10,i20,i40
 !!       integer :: iax
@@ -193,7 +191,7 @@ module M_pixel_slices
 !!       integer :: nx,nxt
 !!       integer :: nyt
 !!       integer :: nz,nzt
-!!
+!!    !
 !!    ! (NOTE: color array accessed only if mod(iflag,10)=1)
 !!    ! icol  (i): color list
 !!    !            icol(1) : color for axis lines
@@ -206,29 +204,28 @@ module M_pixel_slices
 !!          do i=1,255
 !!             icol(i)=mod(i,7)
 !!          enddo
-!!
 !!    !     fill some arrays with data we can plot
 !!          do j=1,ix
 !!           do i=1,iz
 !!            surfdat(j,i)=cos(tpi*real(j-1)/12.0)*cos(tpi*real(i-1)/12.0)
 !!           enddo
 !!          enddo
-!!
+!!    !
 !!          call prefsize(501,501)
 !!          call vinit()
-!!
+!!    !
 !!          call dl_init(12.5,12.5,1.5,1.5,1.0)   ! set up plotting surface scale
 !!          call linewidth(3)
 !!          call color(4)
 !!    !     now plot 3-d surface using slices with axis
 !!          nx=ix
 !!          nz=iz
-!!
+!!    !
 !!    ! length of axis in window units
 !!    xh=6.0 ! xh,yh,zh (R): length of each axis
 !!    yh=3.8
 !!    zh=5.0
-!!
+!!    !
 !!    iflag=012
 !!    iflag=000
 !!    iflag=002
@@ -237,7 +234,7 @@ module M_pixel_slices
 !!    !                           =1: do not use color array
 !!    !               (10's digit)=0: Plot sides
 !!    !                           =1: Do not plot sides
-!!
+!!    !
 !!    iax= 01
 !!    iax=-11
 !!    ! SIGN:
@@ -253,10 +250,10 @@ module M_pixel_slices
 !!    !  (10's digit) = 0 : Use default axis type
 !!    !               = 1 : Use input DL_AXISB-type axis parameters
 !!    !                      (nmx, nnx, mlx, tsx, ndx, etc.)
-!!
+!!    !
 !!    ! (NOTE: the following optional parameters are used if iax < 0 or mod(iflag,10)=1)
 !!    !        (see DL_AXISB for detailed description of axis parameters)
-!!
+!!    !
 !!    ! XAXIS:
 !!          xs=-10.0               ! xs,xe (R): starting and ending values displayed on x axis
 !!          xe=10.0
@@ -272,7 +269,7 @@ module M_pixel_slices
 !!    !-----------------------
 !!          xt='dl_slices X TITLE' ! xt    (C): title of x axis (width)
 !!          nxt=len_trim(xt)       ! nxt   (i): number of characters in xt ;nxt = 0 : no axis plotted ; nxt > 0 : normal
-!!
+!!    !
 !!    ! YAXIS:
 !!          ys=-10.0               ! ys,ye (R): starting and ending values displayed on y axis
 !!          ye=10.0
@@ -288,7 +285,7 @@ module M_pixel_slices
 !!    !-----------------------
 !!          yt='dl_slices Y TITLE' ! yt    (C): title of y axis (width)
 !!          nyt=len_trim(yt)       ! nyt   (i): number of characters in xt ;nyt = 0 : no axis plotted ; nyt > 0 : normal
-!!
+!!    !
 !!    ! ZAXIS:
 !!          zs=1.0
 !!          ze=1.0                 ! zs,ze (R): starting and ending value displayed on z axis
@@ -304,7 +301,7 @@ module M_pixel_slices
 !!    !-----------------------
 !!          zt='SLICE'             ! zt    (C): title of z axis (width)
 !!          nzt=len_trim(zt)       ! nzt   (i): number of characters in xt ;nzt = 0 : no axis plotted ; nzt > 0 : normal
-!!
+!!    !
 !!    !          (NOTE: the following optional parameters are accessed only if
 !!    !                 iax < 0 or mod(iflag,10)=1)
 !!          dm=-1.0                ! dm,dx (R): minimum and maximum values of SURFDAT array
@@ -330,7 +327,7 @@ module M_pixel_slices
 !!         & nmy,nny,mly,tsy,ndy,smy,  &
 !!         & zt,nzt,  &
 !!         & zs,ze,nmz,nnz,mlz,tsz,ndz,smz,dm,dx,icol)
-!!
+!!    !
 !!    !      add a label after master routine call
 !!           call color(1)
 !!           call linewidth(1)
@@ -338,7 +335,7 @@ module M_pixel_slices
 !!           movie(iframe,:,:)=p_pixel(:,:)
 !!           iframe=iframe+1
 !!          enddo
-!!
+!!    !
 !!          a=25
 !!          do i20=1,90   ! Animate cycling thru angle B
 !!           b=i20
@@ -355,11 +352,11 @@ module M_pixel_slices
 !!           movie(iframe,:,:)=p_pixel(:,:)
 !!           iframe=iframe+1
 !!          enddo
-!!
+!!    !
 !!    iax=01
 !!    iflag=012
 !!    ii=1
-!!
+!!    !
 !!    do i40=1,90*ii  ! Animate cycling thru angles A and B
 !!       a=real(i40)/ii/2.0 ! should get warning when this exceeds 85
 !!       b=real(i40)/ii/2.0
@@ -376,11 +373,12 @@ module M_pixel_slices
 !!       movie(iframe,:,:)=p_pixel(:,:)
 !!       iframe=iframe+1
 !!    enddo
-!!
+!!    !
 !!    call vexit()    ! close up plot package
 !!    call write_animated_gif('dl_slices.3m_pixel.gif',movie,p_colormap,delay=5)
 !!    !call execute_system_command('display dl_slices.3m_pixel.gif')
 !!    end program demo_dl_slices
+!!    !
 implicit none
 private
 !-----------------------------------------------------------------------------------------------------------------------------------
