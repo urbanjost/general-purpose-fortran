@@ -116,7 +116,7 @@
 !!        call alert('<WARNING>', 'The night is young.')
 !!        call alert('<INFO>', 'It is Monday')
 !!
-!!        ! create a custom mneumonic
+!!        ! create a custom mnemonic
 !!        call attr_update('MYERROR',attr(&
 !!        ' <R><e> E<w>-<e>R<w>-<e>R<w>-<e>O<w>-<e>R: </e></R></bo>'&
 !!        ))
@@ -310,7 +310,7 @@ contains
 !!                   turned off by setting RESET to .false. .
 !!
 !!                   Note if turning off the reset attributes may be
-!!                   continued accross lines, but if each line is not
+!!                   continued across lines, but if each line is not
 !!                   self-contained attributes may not display properly
 !!                   when filtered with commands such as grep(1).
 !!

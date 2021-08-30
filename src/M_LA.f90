@@ -484,7 +484,7 @@ subroutine mat_wset(n,xr,xi,yr,yi,incy)
 
 integer,intent(in)         :: n     ! number of Y values to set
 doubleprecision,intent(in) :: xr    ! constant to assign Y real values to
-doubleprecision,intent(in) :: xi    ! constant to assing Y imaginary values to
+doubleprecision,intent(in) :: xi    ! constant to assign Y imaginary values to
 doubleprecision            :: yr(*) ! Y real component to set to XR
 doubleprecision            :: yi(*) ! Y imaginary component to set to XI
 integer                    :: incy  ! stride to take while setting output values

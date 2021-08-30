@@ -1778,7 +1778,7 @@ integer                                  :: lines_processed
 contains
 !===================================================================================================================================
 subroutine find_and_read_response_file(rname)
-! seach for a simple file named the same as the @NAME field with one entry assumed in it
+! search for a simple file named the same as the @NAME field with one entry assumed in it
 character(len=*),intent(in)  :: rname
 character(len=:),allocatable :: paths(:)
 character(len=:),allocatable :: testpath

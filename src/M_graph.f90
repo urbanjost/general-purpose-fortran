@@ -1364,7 +1364,7 @@ real               :: ytemp1
       DATA IDECODE/1,2,3,0,-2,-3,5,10,11,999,4,-4,6,7,8,12,13/
 !
 !#######################################################################
-      ISELECT=ISELECT0             ! make mutatble copy of select option
+      ISELECT=ISELECT0             ! make mutable copy of select option
 !#######################################################################
 !     DECODE COMMAND
 !

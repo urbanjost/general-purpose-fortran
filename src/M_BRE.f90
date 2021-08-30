@@ -767,7 +767,7 @@ end function makpat_
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    amatch - look for pattern matching regular expression; returns its location
+!!    amatch(3f) - [M_BRE] look for pattern matching regular expression; returns its location
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!

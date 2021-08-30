@@ -7257,7 +7257,7 @@ real                :: zero
 !     ireg3q=number of time curves in pseudo file
       rminnew=rmin
       rmaxnew=rmax
-      if(ionend.eq.0)then                   ! adding to psuedo file
+      if(ionend.eq.0)then                   ! adding to pseudo file
          ix=ifrecsq(0)+1                    ! actual position to store header record in header file
          ix2=ireg2q+1                       ! actual position to store header record in zebra file
       else                                  ! replacing a record
@@ -7306,7 +7306,7 @@ real                :: zero
          write(idat,rec=ixe)0,'END     ',0,0,0,0,alphaq,0,ipadq,0.0,0.0,alpha2q,rpadq
       endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-      if(ionend.eq.0)then          ! adding to psuedo file
+      if(ionend.eq.0)then          ! adding to pseudo file
          write(temp1q,101)irecord,ix
 101      format('*put* ',i10,' became record ',i10,' on file 0 ')
          ifrecsq(0)=ix                  ! increment number of curves stored in pseudo file
@@ -7321,7 +7321,7 @@ real                :: zero
       if(ifile.ne.0.and.itimeq.eq.0.and.ionend.eq.0)then ! this is a time curve not from pseudo file being added, not replaced
          ireg3q=ireg3q+1
          itq(1,ireg3q)=ifile            ! file number original was on
-         itq(2,ireg3q)=ix               ! curve number on psuedo file
+         itq(2,ireg3q)=ix               ! curve number on pseudo file
          itq(3,ireg3q)=0                ! not used
          itq(4,ireg3q)=irecord          ! original file position (for matching get curves to pseudo time curves)
       endif
@@ -9125,7 +9125,7 @@ real            :: yystep
       YMAX=YMAX-txtmaxh       ! lower this down so large numbers do not go up into id strings in upper corners
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! FIND ROOM FOR BOTTOM XAXIS LABEL ASSUMING INITIAL TEXT SIZE IS USED
-      ! assuming text is not shunk to fit, find height of x-axis labels so y-axis can be drawn short and text centered
+      ! assuming text is not shrunk to fit, find height of x-axis labels so y-axis can be drawn short and text centered
       if(axlq2(1) .ne. ' ')then
          call fixedwidth(ifixedlabq2)                     ! text is fixed space or not for xlabel labels
          call xy_jufont(fontLq2)

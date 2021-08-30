@@ -916,7 +916,7 @@ public where
 public mpset
 public mset
 public setpar
-public MOVE, DRAW, END
+public move, draw, end
 integer,parameter,public :: black=0
 integer,parameter,public :: red=1
 integer,parameter,public :: green=2
@@ -943,14 +943,14 @@ private primitive__start_plotting
 private primitive__wpen
 private primitive__width
 !     FOR CONTOUR PLOTS
-INTEGER,save :: NX_Q,NY_Q,II_Q,IX_Q,IY_Q,NXM1_Q,NYM1_Q
-integer,save,target :: NTRK_Q, NN_Q
-integer,save,target :: REC_Q(2048)
-integer,save :: DIREC_Q,TRK_Q(255),TRKA_Q(255),C_Q
-REAL,save    :: RATIO_Q,CVV_Q,HX_Q(255),HY_Q(255)
-LOGICAL,save :: EDGE_Q,ALT_Q,ODDPAS_Q
-INTEGER,save :: HXSZ_Q = 255
-INTEGER,save :: HYSZ_Q = 255
+integer,save :: nx_q,ny_q,ii_q,ix_q,iy_q,nxm1_q,nym1_q
+integer,save,target :: ntrk_q, nn_q
+integer,save,target :: rec_q(2048)
+integer,save :: direc_q,trk_q(255),trka_q(255),c_q
+real,save    :: ratio_q,cvv_q,hx_q(255),hy_q(255)
+logical,save :: edge_q,alt_q,oddpas_q
+integer,save :: hxsz_q = 255
+integer,save :: hysz_q = 255
 integer,save :: limit_q = 2048
 integer,save :: ixd_q(4)=[0,-1,0,1]
 integer,save :: iyd_q(4)=[1,0,-1,0]
@@ -959,12 +959,12 @@ integer,save :: iyd_q(4)=[1,0,-1,0]
 !  THE SYMBOL ROUTINE
 !
 !  TABLE CHANGED FROM 596 TO 700 PER REQUEST OF R. LINCOLN, ORLANDO
-INTEGER TABLE_Q(700)
-CHARACTER(len=1) :: ALPHA_Q(63)
-REAL,SAVE :: XSPC_Q=7.0,YSPC_Q=7.0
+integer table_q(700)
+character(len=1) :: alpha_q(63)
+real,save :: xspc_q=7.0,yspc_q=7.0
 integer   :: idata
 
-   DATA ALPHA_Q/'A','B','C','D','E','F','G','H','I','J','K','L',           &
+   data alpha_q/'A','B','C','D','E','F','G','H','I','J','K','L',           &
    &           'M','N','O','P','Q','R','S','T','U','V','W','X',            &
    &           'Y','Z','0','1','2','3','4','5','6','7','8','9','+',        &
    &           '-','*','/','(',')','$','=',' ',',','.',' ','''','>',       &
@@ -972,7 +972,7 @@ integer   :: idata
 !
 ! ADDED > AND < IN LINES 3 AND 4 ABOVE FOR R. LINCOLN
 !
-   DATA (TABLE_Q(IDATA),IDATA=1,229)/                                    &
+   data (table_q(idata),idata=1,229)/                                    &
    & 0,5,0040,4044,4404,0400,2224,1,9,0110,1030,3041,4143,4334,          &
    & 3414,1403,0301,2224,2,4,0141,4124,2401,2224,3,2,2024,0242,          &
    & 4,2,0044,0440,5,5,0220,2042,4224,2402,2224,6,4,2024,0242,           &
@@ -991,7 +991,7 @@ integer   :: idata
    & 0747,0434,34,9,4637,3717,1706,0601,0110,1030,3041,4143,4313,        &
    & 35,3,0007,4047,0444/
 
-   DATA (TABLE_Q(IDATA),IDATA=230,448)/                                  &
+   data (table_q(idata),idata=230,448)/                                  &
    & 36,3,0040,2027,0747,37,4,0110,1030,3041,4147,38,3,0007,             &
    & 0347,0340,39,2,0700,0040,40,4,0007,0724,2447,4740,41,3,             &
    & 0007,0740,4047,42,8,1030,3041,4146,4637,3717,1706,0601,0110,        &
@@ -1010,7 +1010,7 @@ integer   :: idata
    & 1304,0406,0617,1737,3746,4641,4130,3010,1001,64,2,2325,1434,        &
    & 65,1,1434/
 
-   DATA (TABLE_Q(IDATA),IDATA=449,700)/                                  &
+   data (table_q(idata),idata=449,700)/                                  &
    & 66,4,2325,3513,1434,3315,67,1,0146,68,3,4725,2522,2240,69,          &
    & 3,0725,2522,2200,70,11,2027,0211,1131,3142,4243,4334,3414,          &
    & 1405,0516,1636,3645,71,2,0242,0444,72,0,73,5,1112,1222,             &
@@ -1028,12 +1028,12 @@ integer   :: idata
 !===================================================================================================================================
 real :: maxq ! zmax
 !===================================================================================================================================
-CHARACTER(len=4),save :: CTTYP_Q
-INTEGER,SAVE          :: KTSIZE_Q
+character(len=4),save :: cttyp_q
+integer,save          :: ktsize_q
 
-INTEGER,PARAMETER     :: END=999
-INTEGER,PARAMETER     :: MOVE=3
-INTEGER,PARAMETER     :: DRAW=2
+integer,parameter     :: end=999
+integer,parameter     :: move=3
+integer,parameter     :: draw=2
 !===================================================================================================================================
 contains
 !===================================================================================================================================
@@ -1292,15 +1292,15 @@ end subroutine circl
 !!   Sample program
 !!
 !!    program demo_dashl
-!!    use M_calcomp
+!!    use m_calcomp
 !!    character(len=28) :: ichr1
 !!    character(len=26) :: ichr2
 !!    character(len=10) :: lbcd1,lbcd2
 !!    dimension xarray(62),yarray(62)
-!!    ICHR1='PLOTTED ON A CALCOMP PLOTTER'
-!!    ICHR2='USING  Y = X -0.7*X +0.1*X'
-!!    LBCD1='X-ABSCISSA'
-!!    LBCD2='Y-ORDINATE'
+!!    ichr1='PLOTTED ON A CALCOMP PLOTTER'
+!!    ichr2='USING  Y = X -0.7*X +0.1*X'
+!!    lbcd1='X-ABSCISSA'
+!!    lbcd2='Y-ORDINATE'
 !!    ! PLOT GRAPH ILLUSTRATING SCALE, AXIS, AND LINE
 !!    deltax=0.04
 !!    ! AXIS DRAWS LABELS AS MUCH AS 0.4 INCHES TO THE NEGATIVE OF AXIS CENTER;
@@ -1308,9 +1308,9 @@ end subroutine circl
 !!    ! ORIGIN VALUE OF LESS THAN 0.4 OR CLIPPING WILL OCCUR
 !!    call plots(0.0,12.0,0.0,12.0)
 !!    call width(0)
-!!    call newpen(WHITE)
+!!    call newpen(white)
 !!    call rect(0.0,0.0,11.0,10.0,0.0,7)
-!!    call plot(0.4,0.4,-MOVE)
+!!    call plot(0.4,0.4,-move)
 !!    deltax=2.0*deltax
 !!    xarray(1)=deltax
 !!    do j=1,60
@@ -1326,7 +1326,7 @@ end subroutine circl
 !!    !!linetype=-1
 !!    !!inteq=4
 !!    !!call line(xarray(1),yarray(1),60,1,linetype,inteq)
-!!    call newpen(GREEN)
+!!    call newpen(green)
 !!    call dashl(xarray(1),yarray(1),60,1)
 !!    call newpen(1)
 !!    call symbol(1.3,10.,.14,ichr1,inteq,0.0,28)
@@ -1335,7 +1335,7 @@ end subroutine circl
 !!    call number(2.98,9.8,.1,2.0,0.,-1)
 !!    call number(3.96,9.8,.1,3.0,0.,-1)
 !!    call number(4.94,9.8,.1,4.0,0.,-1)
-!!    call plot(0.0,0.0,END)
+!!    call plot(0.0,0.0,end)
 !!    end program demo_dashl
 !!##LICENSE
 !!   Public Domain
@@ -1366,65 +1366,65 @@ real    :: xx
 real    :: yn
 real    :: yt
 !     TEST LESS THAN TWO POINTS
-      if(N-1)  90,90,80
+      if(n-1)  90,90,80
 80    continue
 !     INITIALIZE POINT, MINIMUM AND DELTA INDEXES
-      NP=(N-1)*K+1
-      NM=NP+K
-      ND = NM + K
-      NO=1
-      KK=K
+      np=(n-1)*k+1
+      nm=np+k
+      nd = nm + k
+      no=1
+      kk=k
 !     DETERMINE CURRENT PEN POSITION
-      CALL WHERE(XN,YN,XX)
+      call where(xn,yn,xx)
 !     FIND NEAREST END OF LINE
-      DX = MAX(ABS((X( 1)-X(NM))/X(ND)-XN), ABS((Y( 1)-Y(NM))/Y(ND)-YN))
-      DY = MAX(ABS((X(NP)-X(NM))/X(ND)-XN), ABS((Y(NP)-Y(NM))/Y(ND)-YN))
-      if(DX-DY) 20,20,40
+      dx = max(abs((x( 1)-x(nm))/x(nd)-xn), abs((y( 1)-y(nm))/y(nd)-yn))
+      dy = max(abs((x(np)-x(nm))/x(nd)-xn), abs((y(np)-y(nm))/y(nd)-yn))
+      if(dx-dy) 20,20,40
 !     REVERSE INCREMENT AND END TEST VALUE
-40    NO=NP
-      NP=1
-      KK=-KK
-20    I=NO
+40    no=np
+      np=1
+      kk=-kk
+20    i=no
 !     COMPUTE DELTAS OF INDEXED LINE SEGMENT
-30    J=I+KK
-      DY =(Y(J) - Y(I) )/Y(ND)
-      DX =(X(J) - X(I))/X(ND)
-      DS = SQRT(DX*DX+DY*DY+0.000001)
-      ID = 5.0 *DS
-      if(ID)10,10,11
+30    j=i+kk
+      dy =(y(j) - y(i) )/y(nd)
+      dx =(x(j) - x(i))/x(nd)
+      ds = sqrt(dx*dx+dy*dy+0.000001)
+      id = 5.0 *ds
+      if(id)10,10,11
 !     ASSURE DIVISOR NON ZERO
-10    ID = 1
+10    id = 1
 !     DERIVE DASH LENGTH.
-11    DDS = DS / FLOAT(2*ID+1)
-      DY = DDS * DY / DS * Y(ND)
-      DX = DDS * DX / DS * X(ND)
+11    dds = ds / float(2*id+1)
+      dy = dds * dy / ds * y(nd)
+      dx = dds * dx / ds * x(nd)
 !     SET XT/YT TO SEGMENT START POINT
-      XT = X(I)
-      YT = Y(I)
+      xt = x(i)
+      yt = y(i)
 !     PLOT WITH PEN UP TO XT/YT
-1     CALL PLOT((XT-X(NM))/X(ND),(YT-Y(NM))/Y(ND),3)
+1     call plot((xt-x(nm))/x(nd),(yt-y(nm))/y(nd),3)
 !     ADJUST XT/YT AND END TEST BY DASH LENGTH
-      XT = XT + DX
-      YT = YT + DY
-      DS = DS - DDS
+      xt = xt + dx
+      yt = yt + dy
+      ds = ds - dds
 !     TEST LINE SEGMENT END
-      if(DS) 3,3,2
+      if(ds) 3,3,2
 !     PLOT TO XT/YT WITH PEN DOWN
-2     CALL PLOT((XT-X(NM))/X(ND),(YT-Y(NM))/Y(ND),2)
+2     call plot((xt-x(nm))/x(nd),(yt-y(nm))/y(nd),2)
 !     ADJUST XT/YT AND END TEST BY DASH LENGTH
-      XT = XT + DX
-      YT = YT + DY
-      DS = DS - DDS
+      xt = xt + dx
+      yt = yt + dy
+      ds = ds - dds
 !     TEST LINE SEGMENT END
-      if(DS) 3,4,1
+      if(ds) 3,4,1
 !     PLOT SEGMENT FINISH POINT \PEN DOWN'
-3     CALL PLOT((X(J)-X(NM))/X(ND),(Y(J)-Y(NM))/Y(ND),2)
+3     call plot((x(j)-x(nm))/x(nd),(y(j)-y(nm))/y(nd),2)
 !     TEST LAST LINE SEGMENT
-4     IF(J-NP) 5,90,5
-5     I=J
-      GOTO 30
-90    RETURN
-END SUBROUTINE DASHL
+4     if(j-np) 5,90,5
+5     i=j
+      goto 30
+90    return
+end subroutine dashl
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1481,47 +1481,47 @@ real    :: y
 real    :: yt
 
 !     DETERMINE CURRENT PEN POSITION
-   CALL WHERE(XT,YT,ST)
+   call where(xt,yt,st)
 !     COMPUTE DELTAX AND DELTAY
-   DX = X-XT
-   DY = Y-YT
-   DS = DL
-   IC = 2
+   dx = x-xt
+   dy = y-yt
+   ds = dl
+   ic = 2
 !     DERIVE LINE LENGTH
-   S =   SQRT(DX*DX+DY*DY)
-   if(S-0.02*ST) 6,10,10
+   s =   sqrt(dx*dx+dy*dy)
+   if(s-0.02*st) 6,10,10
 10 continue
-   DS = DS/S
+   ds = ds/s
 !     TEST IF LINE LESS THAN DOUBLE DASH LENGTH
-   if(DS-0.5) 2,2,7
+   if(ds-0.5) 2,2,7
 !     HALVE DASH LENGTH
 7  continue
-   DS = 0.5
+   ds = 0.5
 !     PROPORTION THE DELTAS BY THE LENGTH/DASH RATIO
 2  continue
-   DX = DX*DS
-   DY = DY*DS
+   dx = dx*ds
+   dy = dy*ds
 !     SET UP ADJUSTMENT AND END OF LINE TEST FROM ABS GREATEST DELTA
-   S = DX
-   ST = ABS(DX)-ABS(DY)
-   if(ST) 3,4,4
+   s = dx
+   st = abs(dx)-abs(dy)
+   if(st) 3,4,4
 3  continue
-   S = DY
+   s = dy
 4  continue
-   ST = ABS( S/DS)-ABS( S)
-   DS = ABS( S)
+   st = abs( s/ds)-abs( s)
+   ds = abs( s)
 !     DASHED LINE LOOP
 5  continue
-   XT = XT+DX
-   YT = YT+DY
-   ST = ST-DS
-   CALL PLOT(XT,YT,IC)
-   IC = 5-IC
-   if(ST) 6,6,5
+   xt = xt+dx
+   yt = yt+dy
+   st = st-ds
+   call plot(xt,yt,ic)
+   ic = 5-ic
+   if(st) 6,6,5
 !     LAST SPECIFIC LINE SEGMENT CALL
 6  continue
-   CALL PLOT(X, Y, IC)
-END SUBROUTINE DASHP
+   call plot(x, y, ic)
+end subroutine dashp
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1769,25 +1769,25 @@ end subroutine elips
 !!
 !!##LICENSE
 !!   Public Domain
-SUBROUTINE FIT (XA,YA,XB,YB,XC,YC)
+subroutine fit (xa,ya,xb,yb,xc,yc)
 implicit none
 
-! ident_5="@(#)M_calcomp::fit(3f): draws a semi-hyperbolic curve through three points"
+! ident_5="@(#)m_calcomp::fit(3f): draws a semi-hyperbolic curve through three points"
 
-real      :: XA
-real      :: YA
-real      :: XB
-real      :: YB
-real      :: XC
-real      :: YC
-real      :: SS(8,9),THETA(2)
-real,save :: A=0.0
-real,save :: B=0.0
-integer   :: M
-real      :: DY
-real      :: DX
-real      :: Z3
-integer   :: I
+real      :: xa
+real      :: ya
+real      :: xb
+real      :: yb
+real      :: xc
+real      :: yc
+real      :: ss(8,9),theta(2)
+real,save :: a=0.0
+real,save :: b=0.0
+integer   :: m
+real      :: dy
+real      :: dx
+real      :: z3
+integer   :: i
 real      :: c
 real      :: d
 real      :: dz
@@ -1797,71 +1797,71 @@ real      :: x
 real      :: y
 real      :: z
 real      :: z2
-      M = 2
-      DY = YC - YA
-      DX = XC - XA
-      Z3 = SQRT( DY**2 + DX**2 )
-      if( Z3 ) 20,20,21
-21    DO I = 1,2
-         IF(ABS(DX)-ABS(DY)) 1,2,2
-1        THETA(I) = 1.5708  - ATAN(ABS(DX/DY))
-         GOTO 3
-2        THETA (I)= ATAN(ABS(DY/DX))
-3        if(DX) 25,26,26
-25       if(DY) 5,4,4
-26       if(DY) 4,5,5
-4        THETA(I) = -THETA(I)
-5        if(DX) 6,7,7
-6        THETA(I) =  THETA(I) + 3.1416
-7        DX = XB - XA
-         DY = YB - YA
+      m = 2
+      dy = yc - ya
+      dx = xc - xa
+      z3 = sqrt( dy**2 + dx**2 )
+      if( z3 ) 20,20,21
+21    do i = 1,2
+         if(abs(dx)-abs(dy)) 1,2,2
+1        theta(i) = 1.5708  - atan(abs(dx/dy))
+         goto 3
+2        theta (i)= atan(abs(dy/dx))
+3        if(dx) 25,26,26
+25       if(dy) 5,4,4
+26       if(dy) 4,5,5
+4        theta(i) = -theta(i)
+5        if(dx) 6,7,7
+6        theta(i) =  theta(i) + 3.1416
+7        dx = xb - xa
+         dy = yb - ya
       enddo
-      Z2 = SQRT(DY**2 + DX**2)  * COS(THETA(2)-THETA(1))
-      if( Z2 ) 20,20,22
+      z2 = sqrt(dy**2 + dx**2)  * cos(theta(2)-theta(1))
+      if( z2 ) 20,20,22
 22    continue
-      SS(1,3) = XA - XC
-      SS(2,3) = XA - XB
-      KTRA = 1
-      GOTO 13
+      ss(1,3) = xa - xc
+      ss(2,3) = xa - xb
+      ktra = 1
+      goto 13
 16    continue
-      A = SS(1,3)
-      B = SS(2,3)
-      SS(1,3) = YA - YC
-      SS(2,3) = YA - YB
-      KTRA = 2
-      GOTO 13
+      a = ss(1,3)
+      b = ss(2,3)
+      ss(1,3) = ya - yc
+      ss(2,3) = ya - yb
+      ktra = 2
+      goto 13
 17    continue
-      CALL WHERE(X,Y,FCTR)
-      DZ =0.01 / FCTR
-      Z = DZ
-      CALL PLOT(XA,YA,3)
-      C = SS(1,3)
-      D= SS(2,3)
+      call where(x,y,fctr)
+      dz =0.01 / fctr
+      z = dz
+      call plot(xa,ya,3)
+      c = ss(1,3)
+      d= ss(2,3)
 18    continue
-      X = (A*Z+B)*Z+XA
-      Y = (C*Z+D)*Z+YA
-      CALL PLOT(X,Y,2)
-      Z = Z + DZ
-      if(Z - Z3)18,19,19
+      x = (a*z+b)*z+xa
+      y = (c*z+d)*z+ya
+      call plot(x,y,2)
+      z = z + dz
+      if(z - z3)18,19,19
 19    continue
-      CALL PLOT (XC,YC,2)
-      RETURN
+      call plot (xc,yc,2)
+      return
 13    continue
-      SS(1,1) = Z3 * Z3
-      SS(1,2) = Z3
-      SS(2,1) = Z2 * Z2
-      SS(2,2) = Z2
-      CALL SOLUT(SS,M)
+      ss(1,1) = z3 * z3
+      ss(1,2) = z3
+      ss(2,1) = z2 * z2
+      ss(2,2) = z2
+      call solut(ss,m)
 ! EARLIER VERSION USED
 !     CALL SOLUTN(SS,M)
-      if(M)  20,20,14
+      if(m)  20,20,14
 14    continue
-      GOTO (16,17),KTRA
+      goto (16,17),ktra
 20    continue
-      CALL PLOT(XA,YA,3)
-      CALL PLOT(XB,YB,2)
-      GOTO 19
-END SUBROUTINE FIT
+      call plot(xa,ya,3)
+      call plot(xb,yb,2)
+      goto 19
+end subroutine fit
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2155,30 +2155,30 @@ real    :: xc
 real    :: xs
 real    :: y
 real    :: y1
-   THETA = TH/57.2958
-   XS = SIN(THETA)
-   XC = COS(THETA)
-   CALL PLOT(X,Y,IV)
-   X1 = X - H * XS
-   Y1 = Y + H * XC
-   CALL PLOT(X1,Y1,2)
-   X1 = X1 + W * XC
-   Y1 = Y1 + W * XS
-   CALL PLOT(X1,Y1,2)
-   X1 =  X + W * XC
-   Y1 = Y  + W * XS
-   CALL PLOT(X1,Y1,2)
-   CALL PLOT(X,Y,2)
-END SUBROUTINE RECT
+   theta = th/57.2958
+   xs = sin(theta)
+   xc = cos(theta)
+   call plot(x,y,iv)
+   x1 = x - h * xs
+   y1 = y + h * xc
+   call plot(x1,y1,2)
+   x1 = x1 + w * xc
+   y1 = y1 + w * xs
+   call plot(x1,y1,2)
+   x1 =  x + w * xc
+   y1 = y  + w * xs
+   call plot(x1,y1,2)
+   call plot(x,y,2)
+end subroutine rect
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE SOLUT  (X,N)
+subroutine solut  (x,n)
 implicit none
 
 ! EARLIER VERSION OF THIS SUBROUTINE WAS
 !     SUBROUTINE  SOLUTN (X,N)
-real    ::  X(8,9)
+real    ::  x(8,9)
 integer :: n
 integer :: i
 integer :: in
@@ -2191,41 +2191,41 @@ integer :: np1
 real    :: dx
 real    :: ratio
 real    :: xt
-      NM1 = N - 1
-      NP1 = N + 1
-      DO 10 I = 1,NM1
-         L = I + 1
-         IT = I
-         DO IN = L,N
-            if(ABS(X(IT,I))-ABS(X(IN,I))) 5,6,6
-5           IT = IN
-6        CONTINUE
+      nm1 = n - 1
+      np1 = n + 1
+      do 10 i = 1,nm1
+         l = i + 1
+         it = i
+         do in = l,n
+            if(abs(x(it,i))-abs(x(in,i))) 5,6,6
+5           it = in
+6        continue
          enddo
-         if(X(IT,I)) 8,7,8
-7        N = 0
-         RETURN
-8        if(IT - I) 17,17,16
-16       DO IN = I,NP1
-            XT = X(I,IN)
-            X(I,IN) = X(IT,IN)
-            X(IT,IN) = XT
+         if(x(it,i)) 8,7,8
+7        n = 0
+         return
+8        if(it - i) 17,17,16
+16       do in = i,np1
+            xt = x(i,in)
+            x(i,in) = x(it,in)
+            x(it,in) = xt
          enddo
-17       DO 10 J = L,N
-            RATIO = X(J,I)/X(I,I)
-            DO 10 K = L,NP1
-10    X(J,K) = X(J,K)- RATIO * X(I,K)
-      DO 40 I = 1,N
-         DX = 0.0
-         K = N - I + 1
-         if(I-1) 40,40,20
+17       do 10 j = l,n
+            ratio = x(j,i)/x(i,i)
+            do 10 k = l,np1
+10    x(j,k) = x(j,k)- ratio * x(i,k)
+      do 40 i = 1,n
+         dx = 0.0
+         k = n - i + 1
+         if(i-1) 40,40,20
 20       continue
-         DO J = 2,I
-            L = N + 2 - J
-            DX = DX + X(K,L) * X(L,NP1)
+         do j = 2,i
+            l = n + 2 - j
+            dx = dx + x(k,l) * x(l,np1)
          enddo
-40    X(K,NP1) =(-X(K,NP1) - DX) / X(K,K)
-      RETURN
-END SUBROUTINE SOLUT
+40    x(k,np1) =(-x(k,np1) - dx) / x(k,k)
+      return
+end subroutine solut
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2312,7 +2312,7 @@ END SUBROUTINE SOLUT
 !!    end program demo_curvx
 !!##LICENSE
 !!   Public Domain
-SUBROUTINE CURVX  (X0,XF,A,E,B,F,C,G,D,H)
+subroutine curvx  (x0,xf,a,e,b,f,c,g,d,h)
 implicit none
 
 ! ident_9="@(#)M_calcomp::curvx(3f): plots a function of X over a given range"
@@ -2345,33 +2345,33 @@ real    :: xfct
 real    :: y
 !     INITIALIZATION -
 !     GET LINE LENGTH
-      DX  =  XF - X0
-      I3 = 3
+      dx  =  xf - x0
+      i3 = 3
 !     DEVELOP FACTORED DELTA
-      CALL WHERE(X,Y,XFCT)
-      X = X0
-      DLT = 0.01/XFCT
+      call where(x,y,xfct)
+      x = x0
+      dlt = 0.01/xfct
 !     CHECK LINE LENGTH (IF ZERO RETURN)
-      if(DX) 10,20,15
+      if(dx) 10,20,15
 !     IF NEGATIVE MAKE DELTA LIKEWISE
 10    continue
-      DLT = -DLT
+      dlt = -dlt
 !     COMPUTE NUMBER OF LINE POINTS
 15    continue
-      N = INT(ABS(DX/DLT) + 1.0)
+      n = int(abs(dx/dlt) + 1.0)
 !     CURVE FITTING PLOT LOOP
-      DO IV= 1,N
-         Y = A*X**E + B*X**F + C*X**G + D*X**H
-         CALL PLOT(X,Y,I3)
-         X = X + DLT
-         I3 = 2
+      do iv= 1,n
+         y = a*x**e + b*x**f + c*x**g + d*x**h
+         call plot(x,y,i3)
+         x = x + dlt
+         i3 = 2
       enddo
 !     PLOT EXPLICIT FINAL POINT AND RETURN
-      Y = A*XF**E + B*XF**F + C*XF**G +D*XF**H
-      CALL PLOT(XF,Y,2)
+      y = a*xf**e + b*xf**f + c*xf**g +d*xf**h
+      call plot(xf,y,2)
 20    continue
-      RETURN
-END SUBROUTINE CURVX
+      return
+end subroutine curvx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2460,7 +2460,7 @@ END SUBROUTINE CURVX
 !!    end program demo_curvx
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE CURVY  (Y0,YF,A,E,B,F,C,G,D,H)
+subroutine curvy  (y0,yf,a,e,b,f,c,g,d,h)
 implicit none
 
 ! ident_10="@(#)M_calcomp::curvy(3f): plots a function of Y over a given range"
@@ -2496,36 +2496,36 @@ real    :: y0
 real    :: yf
 !     INITIALIZATION -
 !     GET LINE LENGTH
-      DY  =  YF - Y0
-      I3 = 3
+      dy  =  yf - y0
+      i3 = 3
 !     DEVELOP FACTORED DELTA
-      CALL WHERE(X,Y,XFCT)
-      Y = Y0
-      DLT = 0.01/XFCT
+      call where(x,y,xfct)
+      y = y0
+      dlt = 0.01/xfct
 !     CHECK LINE LENGTH (IF ZERO RETURN)
-      if(DY) 10,20,15
+      if(dy) 10,20,15
 !     IF NEGATIVE MAKE DELTA LIKEWISE
 10    continue
-      DLT = -DLT
+      dlt = -dlt
 !     COMPUTE NUMBER OF LINE POINTS
 15    continue
-      N = INT(ABS(DY/DLT) + 1.0)
+      n = int(abs(dy/dlt) + 1.0)
 !     CURVE FITTING PLOT LOOP
-      DO IV= 1,N
-         X = A*Y**E + B*Y**F + C*Y**G + D*Y**H
-         CALL PLOT(X,Y,I3)
-         Y = Y + DLT
-         I3 = 2
+      do iv= 1,n
+         x = a*y**e + b*y**f + c*y**g + d*y**h
+         call plot(x,y,i3)
+         y = y + dlt
+         i3 = 2
       enddo
 !     PLOT EXPLICIT FINAL POINT AND RETURN
-      X = A*YF**E + B*YF**F + C*YF**G +D*YF**H
-      CALL PLOT(X,YF,2)
+      x = a*yf**e + b*yf**f + c*yf**g +d*yf**h
+      call plot(x,yf,2)
 20    continue
-END SUBROUTINE CURVY
+end subroutine curvy
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE FIT4(PX1,PY1,PX2,PY2,VECX1,VECY1,VECX3,VECY3)
+subroutine fit4(px1,py1,px2,py2,vecx1,vecy1,vecx3,vecy3)
 implicit none
 
 real    :: ax
@@ -2565,60 +2565,60 @@ real,save    :: ux1 = 0.0
 real,save    :: uy1 = 0.0
 real,save    :: ux2 = 0.0
 real,save    :: uy2 = 0.0
-      X1=PX1
-      Y1=PY1
-      CALL WHERE(X,Y,D)
-      D = 0.01/D
-      if(ABS(X1-X)-D) 10,2,2
-10    if(ABS(Y1-Y)-D) 11,2,2
-11    if(VECX1-VX2)  5,12,5
-12    if(VECY1-VY2)  5,13,5
-13    if(VX3-PX2+X1) 5,14,5
-14    if(VY3-PY2+Y1) 5, 6,5
-2     CALL PLOT(PX1,PY1,3)
-5     VX3=PX2-X1
-      VY3=PY2-Y1
-      VX2=VECX1
-      VY2=VECY1
-      D2=VX2*VX2+VY2*VY2
-      T=1.0
-      GOTO 7
-6     T=0.0
-      VX2=VX3
-      VY2=VY3
-      VX3=VECX3
-      VY3=VECY3
-      D2=D3
-      UX1=UX2
-      UY1=UY2
-7     D3=VX3*VX3+VY3*VY3
-      UX2=D2*VX3+D3*VX2
-      UY2=D2*VY3+D3*VY2
-      DV = 1.0/SQRT(UX2*UX2+UY2*UY2+0.00001)
-      UX2=DV*UX2
-      UY2=DV*UY2
-      IF(T)6,8,6
-8     D=ABS(UX1*VX2+UY1*VY2)
-      D1=D
-      UUX1=D*UX1
-      UUY1=D*UY1
-      D=ABS(UX2*VX2+UY2*VY2)
-      UUX2=D*UX2
-      UUY2=D*UY2
-      D=D+D1
-      AX=UUX2+UUX1-VX2-VX2
-      BX=VX2-UUX1-AX
-      AY=UUY2+UUY1-VY2-VY2
-      BY=VY2-UUY1-AY
-      N=10.*D+1.0
-      D=1.0/FLOAT (N)
-      DO I=1,N
-         T=T+D
-         X=((AX*T+BX)*T+UUX1)*T+X1
-         Y=((AY*T+BY)*T+UUY1)*T+Y1
-         CALL PLOT(X,Y,2)
+      x1=px1
+      y1=py1
+      call where(x,y,d)
+      d = 0.01/d
+      if(abs(x1-x)-d) 10,2,2
+10    if(abs(y1-y)-d) 11,2,2
+11    if(vecx1-vx2)  5,12,5
+12    if(vecy1-vy2)  5,13,5
+13    if(vx3-px2+x1) 5,14,5
+14    if(vy3-py2+y1) 5, 6,5
+2     call plot(px1,py1,3)
+5     vx3=px2-x1
+      vy3=py2-y1
+      vx2=vecx1
+      vy2=vecy1
+      d2=vx2*vx2+vy2*vy2
+      t=1.0
+      goto 7
+6     t=0.0
+      vx2=vx3
+      vy2=vy3
+      vx3=vecx3
+      vy3=vecy3
+      d2=d3
+      ux1=ux2
+      uy1=uy2
+7     d3=vx3*vx3+vy3*vy3
+      ux2=d2*vx3+d3*vx2
+      uy2=d2*vy3+d3*vy2
+      dv = 1.0/sqrt(ux2*ux2+uy2*uy2+0.00001)
+      ux2=dv*ux2
+      uy2=dv*uy2
+      if(t)6,8,6
+8     d=abs(ux1*vx2+uy1*vy2)
+      d1=d
+      uux1=d*ux1
+      uuy1=d*uy1
+      d=abs(ux2*vx2+uy2*vy2)
+      uux2=d*ux2
+      uuy2=d*uy2
+      d=d+d1
+      ax=uux2+uux1-vx2-vx2
+      bx=vx2-uux1-ax
+      ay=uuy2+uuy1-vy2-vy2
+      by=vy2-uuy1-ay
+      n=10.*d+1.0
+      d=1.0/float (n)
+      do i=1,n
+         t=t+d
+         x=((ax*t+bx)*t+uux1)*t+x1
+         y=((ay*t+by)*t+uuy1)*t+y1
+         call plot(x,y,2)
       enddo
-END SUBROUTINE FIT4
+end subroutine fit4
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2740,7 +2740,7 @@ END SUBROUTINE FIT4
 !!    end program demo_fline
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE FLINE (X,Y,NN,K,J,L)
+subroutine fline (x,y,nn,k,j,l)
 implicit none
 
 ! ident_11="@(#)M_calcomp::fline(3f): plot a polyline with optional fit"
@@ -2815,119 +2815,119 @@ real    :: y0
 real    :: ymin
 real    :: yn
 real    :: yn1
-      CHARACTER(len=8) :: IBCD
-      INTEQ = L
-      N=ABS(NN)
-      KK=K
-      LMIN=N*KK+1
-      LDX =LMIN+KK
-      NL  =LMIN-KK
-      XMIN=X(LMIN)
-      YMIN=Y(LMIN)
-      DX=X(LDX)
-      DY=Y(LDX)
-      CALL WHERE(XN,YN,DF)
-      DF= MAX( ABS((X( 1)-XMIN)/DX-XN), ABS((Y( 1)-YMIN)/DY-YN))
-      DL= MAX( ABS((X(NL)-XMIN)/DX-XN), ABS((Y(NL)-YMIN)/DY-YN))
-      IC=3
-      IS=-1
-      NT= ABS(J)
-      if(J) 2,1,2
+      character(len=8) :: ibcd
+      inteq = l
+      n=abs(nn)
+      kk=k
+      lmin=n*kk+1
+      ldx =lmin+kk
+      nl  =lmin-kk
+      xmin=x(lmin)
+      ymin=y(lmin)
+      dx=x(ldx)
+      dy=y(ldx)
+      call where(xn,yn,df)
+      df= max( abs((x( 1)-xmin)/dx-xn), abs((y( 1)-ymin)/dy-yn))
+      dl= max( abs((x(nl)-xmin)/dx-xn), abs((y(nl)-ymin)/dy-yn))
+      ic=3
+      is=-1
+      nt= abs(j)
+      if(j) 2,1,2
 1     continue
-      NT=1
+      nt=1
 2     continue
-      if(DF-DL) 3,3,4
+      if(df-dl) 3,3,4
 3     continue
-      NF=1
-      NA=NT
-      GOTO 5
+      nf=1
+      na=nt
+      goto 5
 4     continue
-      KK=-KK
-      NF=NL
-      NL=1
-      NA=((N-1)/NT)*NT+NT-N+1
+      kk=-kk
+      nf=nl
+      nl=1
+      na=((n-1)/nt)*nt+nt-n+1
 5     continue
-      IF  (J) 6,7,8
+      if  (j) 6,7,8
 6     continue
-      ICA=3
-      ISA=-1
-      LSW=1
-      GOTO 9
+      ica=3
+      isa=-1
+      lsw=1
+      goto 9
 7     continue
-      NA=LDX
+      na=ldx
 8     continue
-      ICA=2
-      ISA=-2
-      LSW=0
+      ica=2
+      isa=-2
+      lsw=0
 9     continue
-      XN1=(X(NF)-XMIN)/DX
-      YN1=(Y(NF)-YMIN)/DY
-      NF=NF+KK
-      if(NN) 10,10,25
+      xn1=(x(nf)-xmin)/dx
+      yn1=(y(nf)-ymin)/dy
+      nf=nf+kk
+      if(nn) 10,10,25
 10    continue
-      X0=XN1
-      Y0=YN1
-      LP=NL
-      NLP=LP-KK
-      NFP = NF-KK
-      U = (X(NF)-X(NFP))/DX
-      V = (Y(NF)-Y(NFP))/DY
-      U1=(X(LP)-X(NLP))/DX
-      V1=(Y(LP)-Y(NLP))/DY
-      SU=U
-      SV=V
-      if(X(NFP)-X(LP)) 13,12,13
+      x0=xn1
+      y0=yn1
+      lp=nl
+      nlp=lp-kk
+      nfp = nf-kk
+      u = (x(nf)-x(nfp))/dx
+      v = (y(nf)-y(nfp))/dy
+      u1=(x(lp)-x(nlp))/dx
+      v1=(y(lp)-y(nlp))/dy
+      su=u
+      sv=v
+      if(x(nfp)-x(lp)) 13,12,13
 12    continue
-      if(Y(NFP)-Y(LP)) 13,25,13
+      if(y(nfp)-y(lp)) 13,25,13
 13    continue
-      NFP=NLP-KK
-      SU=(X(NLP)-X(NFP))/DX
-      SV=(Y(NLP)-Y(NFP))/DY
-      CALL REFLX(U1,V1,SU,SV)
-      NFP=NF+KK
-      U1=(X(NFP)-X(NF))/DX
-      V1=(Y(NFP)-Y(NF))/DY
-      CALL REFLX(U,V,U1,V1)
+      nfp=nlp-kk
+      su=(x(nlp)-x(nfp))/dx
+      sv=(y(nlp)-y(nfp))/dy
+      call reflx(u1,v1,su,sv)
+      nfp=nf+kk
+      u1=(x(nfp)-x(nf))/dx
+      v1=(y(nfp)-y(nf))/dy
+      call reflx(u,v,u1,v1)
 25    continue
-      DO I=1,N
-         XN=XN1
-         YN=YN1
-         if(N-I) 11,11,14
+      do i=1,n
+         xn=xn1
+         yn=yn1
+         if(n-i) 11,11,14
 14       continue
-         XN1=(X(NF)-XMIN)/DX
-         YN1=(Y(NF)-YMIN)/DY
+         xn1=(x(nf)-xmin)/dx
+         yn1=(y(nf)-ymin)/dy
 11       continue
-         NW=NA-NT
-         if(NW) 29,26,26
+         nw=na-nt
+         if(nw) 29,26,26
 29       continue
-         if(LSW) 17,26,17
+         if(lsw) 17,26,17
 26       continue
-         if(NN) 16,24,15
+         if(nn) 16,24,15
 15       continue
-         CALL PLOT(XN,YN,IC)
-         GOTO 20
+         call plot(xn,yn,ic)
+         goto 20
 16       continue
-         if(IC-2) 15,17,15
+         if(ic-2) 15,17,15
 17       continue
-         if(N-I) 27,27,18
+         if(n-i) 27,27,18
 27       continue
-         U2=SU
-         V2=SV
-         GOTO 19
+         u2=su
+         v2=sv
+         goto 19
 18       continue
-         U2=XN1-XN
-         V2=YN1-YN
+         u2=xn1-xn
+         v2=yn1-yn
 19       continue
-         CALL FIT4(X0,Y0,XN,YN,U1,V1,U2,V2)
-         U1=U
-         V1=V
-         U=U2
-         V=V2
-         X0=XN
-         Y0=YN
+         call fit4(x0,y0,xn,yn,u1,v1,u2,v2)
+         u1=u
+         v1=v
+         u=u2
+         v=v2
+         x0=xn
+         y0=yn
 20       continue
-         NA=NA+1
-         if(NW) 22,28,22
+         na=na+1
+         if(nw) 22,28,22
 !
 !  THE FOLLOWING CALL TO THE 'SYMBOL' ROUTINE HAS BEEN MODIFIED TO
 !  CONVERT THIS SUBROUTINE TO THE CRAY. ON THE CRAY, 'SYMBOL' HAS
@@ -2935,15 +2935,15 @@ real    :: yn1
 !  ARGUMENT IN THIS CALL IS 'IBCD'.
 !
 28       continue
-         CALL SYMBOL(XN,YN,0.08,IBCD,INTEQ,0.0,-1)
-         NA=1
+         call symbol(xn,yn,0.08,ibcd,inteq,0.0,-1)
+         na=1
 22       continue
-         IC=ICA
-         NF=NF+KK
+         ic=ica
+         nf=nf+kk
       enddo
 24    continue
-      RETURN
-END SUBROUTINE FLINE
+      return
+end subroutine fline
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -3106,7 +3106,7 @@ END SUBROUTINE FLINE
 !!    end program demo_lgaxs
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE LGAXS(XO,YO,IBCD,N,DIST,THETA,VORG,DELTA)
+subroutine lgaxs(xo,yo,ibcd,n,dist,theta,vorg,delta)
 implicit none
 
 ! ident_12="@(#)M_calcomp::lgaxs(3f): draw logarithmic axis"
@@ -3165,114 +3165,114 @@ real    :: xo
 real    :: y
 real    :: y0
 real    :: yo
-      CHARACTER(len=*) :: IBCD
-      SAVE INTEQ,SONT,CIST,D1,D2,D3,D4,D5,D6
-      DATA INTEQ/999/,SONT,CIST,D1,D2,D3,D4,D5,D6/8*0.0/
+      character(len=*) :: ibcd
+      save inteq,sont,cist,d1,d2,d3,d4,d5,d6
+      data inteq/999/,sont,cist,d1,d2,d3,d4,d5,d6/8*0.0/
 !
 !  SAVE ARGUMENTS IN X, Y, NC, SIZE.
-      X = XO
-      Y = YO
-      NC = N
-      SIZE = DIST
+      x = xo
+      y = yo
+      nc = n
+      size = dist
 !  CONVERT DEGREES TO RADIANS, STORING IN TH.
-      TH=0.01745329*THETA
+      th=0.01745329*theta
 !  STORE LOGS OF INTEGERS 2-10
-      ETO10 = 0.4342945
-      DO I=1,9
-         BLOG(I) = ETO10*LOG(FLOAT(I))
-      ENDDO
+      eto10 = 0.4342945
+      do i=1,9
+         blog(i) = eto10*log(float(i))
+      enddo
 !  SET FXMN TO GREATEST INTEGER POWER OF TEN LESS THAN OR EQUAL TO LOG
 !     OF XMIN.
-      FXMN = INT (ETO10*LOG(VORG)+100.0001)-100
+      fxmn = int (eto10*log(vorg)+100.0001)-100
 !  CALCULATE LENGTH FROM BEGINNING OF CYCLE CONTAINING VORG TO BEGINNING
 !     OF AXIS, PLUS FACTOR PREVENTING ROUND-OFF ERROR, STORING IN BLMN.
-      BLMN = (ETO10*LOG(VORG)-FXMN)/DELTA-0.0001
+      blmn = (eto10*log(vorg)-fxmn)/delta-0.0001
 !  STORE SIN AND COS OF TH.
-      SINT=SIN(TH)
-      COST=COS(TH)
+      sint=sin(th)
+      cost=cos(th)
 !  SET OFFSET CONSTANTS OF ANNOTATION, DEPENDING ON SIGN OF NC.
-      IF(NC) 20,40,30
-20    D1=0.24*SINT
-      D2=(-0.24)*COST
-      D3=0.12*SINT-D2
-      D4=(-0.12)*COST+D1
-      D5=0.2*SINT-0.03*COST
-      D6=(-0.2)*COST-0.03*SINT
-      NC=-NC
-      SONT=SINT
-      CIST=COST
-      BCDX= X +(SIZE-0.12*FLOAT(NC))/2.*COST + 0.48*SINT
-      BCDY= Y +(SIZE-0.12*FLOAT(NC))/2.*SINT - 0.48*COST
-      GOTO 40
-30    D1=(-0.1)*SINT
-      D2=0.1*COST
-      D3=(-0.22)*SINT+0.24*COST
-      SONT=-SINT
-      CIST=-COST
-      D4=0.22*COST+0.24*SINT
-      D5=D1-0.03*COST
-      D6=D2-0.03*SINT
-      BCDX=X +(SIZE-0.12*FLOAT(NC))/2.*COST-0.34*SINT
-      BCDY=Y +(SIZE-0.12*FLOAT(NC))/2.*SINT+0.34*COST
+      if(nc) 20,40,30
+20    d1=0.24*sint
+      d2=(-0.24)*cost
+      d3=0.12*sint-d2
+      d4=(-0.12)*cost+d1
+      d5=0.2*sint-0.03*cost
+      d6=(-0.2)*cost-0.03*sint
+      nc=-nc
+      sont=sint
+      cist=cost
+      bcdx= x +(size-0.12*float(nc))/2.*cost + 0.48*sint
+      bcdy= y +(size-0.12*float(nc))/2.*sint - 0.48*cost
+      goto 40
+30    d1=(-0.1)*sint
+      d2=0.1*cost
+      d3=(-0.22)*sint+0.24*cost
+      sont=-sint
+      cist=-cost
+      d4=0.22*cost+0.24*sint
+      d5=d1-0.03*cost
+      d6=d2-0.03*sint
+      bcdx=x +(size-0.12*float(nc))/2.*cost-0.34*sint
+      bcdy=y +(size-0.12*float(nc))/2.*sint+0.34*cost
 !  CALCULATE COORDINATES OF START OF CYCLE CONTAINING VORG,
 !     AND STORE IN X0, Y0 .
-40    X0=X -BLMN*COST
-      Y0=Y -BLMN*SINT
+40    x0=x -blmn*cost
+      y0=y -blmn*sint
 !  CALCULATE LENGTH OF AXIS PLUS LENGTH OF CYCLE PRECEDING AXIS PLUS
 !     ROUND-OFF ERROR FACTOR, AND STORE IN SIZE1 .
-      SIZE1=SIZE+BLMN+0.0002
+      size1=size+blmn+0.0002
 !  INITIALIZE CYCLE COUNTER FJ.
-      FJ = 0.0
+      fj = 0.0
 !  MOVE PEN TO START OF AXIS.
-      CALL PLOT(X,Y,3)
+      call plot(x,y,3)
 !  LOOP THRU CYCLE.
 !  AI DETERMINES HEIGHT OF TIC MARK, LARGE TIC MARK FOR 10**N AXIS VALUE
-55    AI = 0.14
-      DO 60 I=1,9
+55    ai = 0.14
+      do 60 i=1,9
 !  CALCULATE NEW BLEN, LENGTH TO NEXT TIC MARK.
-         BLEN = (BLOG(I)+FJ)/DELTA
+         blen = (blog(i)+fj)/delta
 !  IF TIC MARK IS BEFORE START OF AXIS, GO TO NEXT TIC MARK.
-         if(BLEN-BLMN) 60,56,56
+         if(blen-blmn) 60,56,56
 !  IF TIC MARK IS BEYOND END OF AXIS, GO TO DRAW LINE TO END OF AXIS.
-56       if(BLEN-SIZE1) 57,57,70
+56       if(blen-size1) 57,57,70
 !  CALCULATE COORDINATES OF TIC MARK AND PLOT IT.
-57       X=X0+BLEN*COST
-         Y=Y0+BLEN*SINT
-         CALL PLOT(X,Y,2)
-         CALL PLOT(X+     AI*SONT,Y-     AI*CIST,2)
-         CALL PLOT(X,Y,2)
-60    AI = .07
+57       x=x0+blen*cost
+         y=y0+blen*sint
+         call plot(x,y,2)
+         call plot(x+     ai*sont,y-     ai*cist,2)
+         call plot(x,y,2)
+60    ai = .07
 !  INCREMENT FJ TO NEXT CYCLE.
-      FJ = FJ+1.0
+      fj = fj+1.0
 !  RETURN FOR NEXT CYCLE.
-      GOTO 55
+      goto 55
 !  DRAW LINE TO END OF AXIS.
-70    CALL PLOT(X0+SIZE1*COST,Y0+SIZE1*SINT,2)
+70    call plot(x0+size1*cost,y0+size1*sint,2)
 !  LOOP BACKWARD THRU CYCLE FOR ANNOTATING TIC MARKS.
-85    DO 110 K=1,9
-         I=10-K
+85    do 110 k=1,9
+         i=10-k
 !  CALCULATE DISTANCE FROM START OF FIRST CYCLE TO TIC MARK.
-         BLEN = (BLOG(I)+FJ)/DELTA
+         blen = (blog(i)+fj)/delta
 !  IF TIC MARK IS LOCATED BEFORE START OF AXIS, GO TO DRAW AXIS TITLE.
-         if(BLEN-BLMN) 120,86,86
+         if(blen-blmn) 120,86,86
 !  IF TIC MARK IS BEYOND END OF AXIS, GO TO NEXT TIC MARK.
-86       if(BLEN-SIZE1) 87,87,110
+86       if(blen-size1) 87,87,110
 !  IF TIC MARK IS AT INTEGER POWER OF 10, ANNOTATE WITH 10 AND EXPONENT.
-87       IF(I-1) 100,90,100
-90       CALL NUMBER(X0+BLEN*COST+D1,Y0+BLEN*SINT+D2,0.14,10.0,THETA,-1)
-         CALL NUMBER( X0+BLEN*COST+D3,Y0+BLEN*SINT+D4,0.07,FXMN+FJ,THETA,-1)
-         GOTO 110
+87       if(i-1) 100,90,100
+90       call number(x0+blen*cost+d1,y0+blen*sint+d2,0.14,10.0,theta,-1)
+         call number( x0+blen*cost+d3,y0+blen*sint+d4,0.07,fxmn+fj,theta,-1)
+         goto 110
 !  IF CYCLE LENGTH IS LESS THAN 2 INCHES, GO TO NEXT TIC MARK.
-100      if(DELTA-0.5) 105,105,110
+100      if(delta-0.5) 105,105,110
 !  ANNOTATE INTERMEDIATE TIC MARK.
-105      CALL NUMBER(X0+BLEN*COST+D5,Y0+BLEN*SINT +D6, 0.105, FLOAT(I),THETA,-1)
-110   CONTINUE
+105      call number(x0+blen*cost+d5,y0+blen*sint +d6, 0.105, float(i),theta,-1)
+110   continue
 !  DECREMENT CYCLE COUNTER.
-      FJ = FJ-1.0
+      fj = fj-1.0
 !  GO TO LOOP THRU NEXT CYCLE.
-      GOTO 85
+      goto 85
 !  TEST FOR ANNOTATING AXIS TITLE.
-120   if(NC) 125,130,125
+120   if(nc) 125,130,125
 !  DRAW AXIS TITLE.
 !
 !  THE FOLLOWING CALL TO THE 'SYMBOL' ROUTINE HAS BEEN MODIFIED TO
@@ -3280,9 +3280,9 @@ real    :: yo
 !  7 ARGUMENTS; ON THE CDC, 'SYMBOL' HAS 6 ARGUMENTS. THE ADDITIONAL
 !  ARGUMENT IN THIS CALL IS 'INTEQ'.
 !
-125   CALL SYMBOL(BCDX,BCDY,0.14,IBCD,INTEQ,THETA,NC)
-130   CONTINUE
-END SUBROUTINE LGAXS
+125   call symbol(bcdx,bcdy,0.14,ibcd,inteq,theta,nc)
+130   continue
+end subroutine lgaxs
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -3455,7 +3455,7 @@ END SUBROUTINE LGAXS
 !!
 !!##LICENSE
 !!    Public Domain
-!     SUBROUTINE LGLINE(XARRA,YARRA,NV,K,JTYPE,NSY,LGTYP)
+!     subroutine lgline(xarra,yarra,nv,k,jtype,nsy,lgtyp)
 
 !     SUBROUTINE LGLIN (XARRAY,YARRAY,NV,K,JTYPE,NSY,LOGTYP)
 !     XARRAY  ARRAY CONTAINING VALUES TO BE PLOTTED AS THE ABSCISSAS,
@@ -3480,10 +3480,10 @@ END SUBROUTINE LGAXS
 !             LOGTYP=0 PRODUCES A LOG-LOG PLOT.
 !             LOGTYP=1 PRODUCES A SEMI-LOG PLOT LINEAR IN X.
 !             LOGTYP=-1 PRODUCES A SEMI-LOG PLOT LINEAR IN Y.
-SUBROUTINE LGLIN (XARRA,YARRA,NV,K,JTYPE,NSY,LGTYP)
+subroutine lglin (xarra,yarra,nv,k,jtype,nsy,lgtyp)
 implicit none
 
-! ident_13="@(#)M_calcomp::lglin(3f): draw polyline in log-log or semi-log mode"
+! ident_13="@(#)m_calcomp::lglin(3f): draw polyline in log-log or semi-log mode"
 
 !  THE VARIABLE IBCD HAS BEEN DECLARED AS CHARACTER TYPE FOR USE IN
 !  THE CALL TO THE 'SYMBOL' ROUTINE. SINCE 'IBCD' HAS NO MEANING IN
@@ -3502,7 +3502,7 @@ integer :: k
 integer :: jtype
 integer :: nsy
 integer :: lgtyp
-CHARACTER(len=8) :: IBCD
+character(len=8) :: ibcd
 real    :: df
 real    :: dl
 real    :: dx
@@ -3531,35 +3531,35 @@ real    :: y2
 real    :: ymin
 real    :: yn
 real    :: z
-      INTEQ = NSY
-      ETO10 = 0.4342945
-      LMN = NV*K+1
-      LDX = LMN+K
-      NL = LMN-K
+      inteq = nsy
+      eto10 = 0.4342945
+      lmn = nv*k+1
+      ldx = lmn+k
+      nl = lmn-k
 !  STORE SCALING FACTORS.
-      XMIN = XARRA (LMN)
-      DX = XARRA (LDX)
-      YMIN = YARRA (LMN)
-      DY = YARRA (LDX)
+      xmin = xarra (lmn)
+      dx = xarra (ldx)
+      ymin = yarra (lmn)
+      dy = yarra (ldx)
 !  STORE COORDINATES OF ENDS OF LINE.
-      X1 = XARRA (1)
-      X2 = XARRA (NL)
-      Y1 = YARRA (1)
-      Y2 = YARRA (NL)
+      x1 = xarra (1)
+      x2 = xarra (nl)
+      y1 = yarra (1)
+      y2 = yarra (nl)
 !  CONVERT LINEAR TO LOG, DEPENDING ON VALUE OF LOGTYP.
-      if(LGTYP) 10,10,20
-10    XMIN = ETO10*LOG(XMIN)
-      X1 = ETO10*LOG(X1)
-      X2 = ETO10*LOG(X2)
-20    if(LGTYP) 40,30,30
-30    YMIN = ETO10*LOG(YMIN)
-      Y1 = ETO10*LOG(Y1)
-      Y2 = ETO10*LOG(Y2)
+      if(lgtyp) 10,10,20
+10    xmin = eto10*log(xmin)
+      x1 = eto10*log(x1)
+      x2 = eto10*log(x2)
+20    if(lgtyp) 40,30,30
+30    ymin = eto10*log(ymin)
+      y1 = eto10*log(y1)
+      y2 = eto10*log(y2)
 !  LOCATE PEN.
-40    CALL WHERE(XN,YN,Z)
+40    call where(xn,yn,z)
 !  FIND MAXIMUM OF COORDINATES OF END POINTS OF LINE.
-      DF = MAX(ABS((X1-XMIN)/DX-XN),ABS((Y1-YMIN)/DY-YN))
-      DL = MAX(ABS((X2-XMIN)/DX-XN),ABS((Y2-YMIN)/DY-YN))
+      df = max(abs((x1-xmin)/dx-xn),abs((y1-ymin)/dy-yn))
+      dl = max(abs((x2-xmin)/dx-xn),abs((y2-ymin)/dy-yn))
 !  SET CONSTANTS FOR POINT PLOT, LINE PLOT, OR LINE AND SYMBOL PLOT.
 !        IC  PEN UP-DOWN FOR PLOT.
 !        IS  PEN UP-DOWN FOR SYMBOL.
@@ -3569,61 +3569,61 @@ real    :: z
 !        KK  STEP NF FORWARD OR BACKWARD THRU ARRAYS.
 !        ICA,ISA  VALUES OF IC AND IS AFTER FIRST POINT PLOTTED.
 !        LSW  FLAG TO SKIP PLOT CALL FOR POINT PLOT ONLY.
-      IC = 3
-      IS = -1
-      NT = ABS(JTYPE)
-      if(JTYPE) 60,50,60
-50    NT = 1
-60    if(DF-DL) 80,80,70
-70    NF = NL
-      NA = ((NV-1)/NT)*NT+NT-(NV-1)
-      KK = -K
-      GOTO 90
-80    NF = 1
-      NA = NT
-      KK = K
-90    if(JTYPE) 100,110,120
-100   ICA = 3
-      ISA = -1
-      LSW = 1
-      GOTO 130
-110   NA = LDX
-120   ICA = 2
-      ISA = -2
-      LSW = 0
+      ic = 3
+      is = -1
+      nt = abs(jtype)
+      if(jtype) 60,50,60
+50    nt = 1
+60    if(df-dl) 80,80,70
+70    nf = nl
+      na = ((nv-1)/nt)*nt+nt-(nv-1)
+      kk = -k
+      goto 90
+80    nf = 1
+      na = nt
+      kk = k
+90    if(jtype) 100,110,120
+100   ica = 3
+      isa = -1
+      lsw = 1
+      goto 130
+110   na = ldx
+120   ica = 2
+      isa = -2
+      lsw = 0
 !  BEGIN DO-LOOP FOR PLOTTING.
-130   DO 230 I=1,NV
+130   do 230 i=1,nv
 !  STORE COORDINATES.
-         XN = XARRA (NF)
-         YN = YARRA (NF)
+         xn = xarra (nf)
+         yn = yarra (nf)
 !  CONVERT LINEAR TO LOG DEPENDING ON VALUE OF LOGTYP.
-         if(LGTYP)140,140,150
-140      XN = ETO10*LOG(XN)
-150      if(LGTYP) 170,160,160
-160      YN = ETO10*LOG(YN)
+         if(lgtyp)140,140,150
+140      xn = eto10*log(xn)
+150      if(lgtyp) 170,160,160
+160      yn = eto10*log(yn)
 !  CALCULATE PAGE COORDINATES OF POINT.
-170      XN = (XN-XMIN)/DX
-         YN = (YN-YMIN)/DY
+170      xn = (xn-xmin)/dx
+         yn = (yn-ymin)/dy
 !  TEST FOR SYMBOL OR POSSIBLE PLOT CALL.
-         if(NA-NT) 180,190,200
+         if(na-nt) 180,190,200
 !  TEST FOR PLOT OR NO-PLOT.
-180      if(LSW) 210,200,210
+180      if(lsw) 210,200,210
 !
 !  THE FOLLOWING CALL TO THE 'SYMBOL' ROUTINE HAS BEEN MODIFIED TO
 !  CONVERT THIS SUBROUTINE TO THE CRAY. ON THE CRAY, 'SYMBOL' HAS
 !  7 ARGUMENTS; ON THE CDC, 'SYMBOL' HAS 6 ARGUMENTS. THE ADDITIONAL
 !  ARGUMENT IN THIS CALL IS 'IBCD'.
 !
-190      CALL SYMBOL(XN,YN,0.08,IBCD,INTEQ,0.0,IS)
-         NA = 1
-         GOTO 220
-200      CALL PLOT(XN,YN,IC)
+190      call symbol(xn,yn,0.08,ibcd,inteq,0.0,is)
+         na = 1
+         goto 220
+200      call plot(xn,yn,ic)
 !  RESET CONSTANTS.
-210      NA = NA+1
-220      NF = NF+KK
-         IS = ISA
-230   IC = ICA
-END SUBROUTINE LGLIN
+210      na = na+1
+220      nf = nf+kk
+         is = isa
+230   ic = ica
+end subroutine lglin
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -3785,7 +3785,7 @@ END SUBROUTINE LGLIN
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE POLAR(RADAR,ANGAR,NPTS,INC,LTYP,INTEQ,RMAX,DR)
+subroutine polar(radar,angar,npts,inc,ltyp,inteq,rmax,dr)
 implicit none
 
 ! ident_14="@(#)M_calcomp::polar(3f): plot radial values versus angular variables (as polar coordinates)"
@@ -3837,7 +3837,7 @@ implicit none
 !  VARIABLE AS THE CRAY VERSION OF THE 'SYMBOL' ROUTINE EXPECTS A
 !  SIMPLE INTEGER VALUE FOR THIS ARGUMENT.
 !
-character(len=8) :: IBCD
+character(len=8) :: ibcd
 real    :: angar
 real    :: df
 real    :: dl
@@ -3871,95 +3871,95 @@ real    :: t
 real    :: temp
 real    :: th1
 real    :: thn
-      INTE = INTEQ
-      K = INC
-      IND1 = NPTS*K + 1
-      IND2 = IND1 + K
-      NL = IND1 - K
-      if(RMAX) 80,80,10
-10    RMAXM = 0.0
-      RMINM = 0.0
-      DO 50 I = 1,NL,K
-         T = RADAR(I)
-         if(T-RMAXM) 30,50,20
-20       RMAXM = T
-         GOTO 50
-30       if(RMINM-T) 50,50,40
-40       RMINM = T
-50    CONTINUE
-      if(ABS(RMAXM)-ABS(RMINM)) 60,70,70
-60    RMAXM = -RMINM
-70    TEMP(1) = 0.0
-      TEMP(2) = RMAXM
-      CALL SCALE(TEMP,RMAX,2,1)
-      DR = TEMP(4)
-80    CALL WHERE(RN,THN,R1)
-      T = RADAR(1)/DR
-      TH1 = ANGAR(1)
-      R1 = T*COS(TH1)
-      TH1 = T*SIN(TH1)
-      DF = ABS(R1-RN)
-      R1 = ABS(TH1-THN)
-      if(DF-R1) 90,100,100
-90    DF = R1
-100   T = RADAR(NL)/DR
-      TH1 = ANGAR(NL)
-      R1 = T*COS(TH1)
-      TH1 = T*SIN(TH1)
-      DL = ABS(R1-RN)
-      R1 = ABS(TH1-THN)
-      if(DL-R1) 110,120,120
-110   DL = R1
-120   IC = 3
-      IS = -1
-      NT = ABS(LTYP)
-      if(NT) 140,130,140
-130   NT = 1
-140   if(DF-DL) 160,160,150
-150   NF = NL
-      NA = ((NPTS-1)/NT)*NT + NT - NPTS + 1
-      KK = -K
-      GOTO 170
-160   NF = 1
-      NA = NT
-      KK = K
-170   if(LTYP) 180,190,185
-180   ICA = 3
-      ISA = -1
-      LSW = 1
-      GOTO 210
-185   IC = 2
-      GOTO 200
-190   NA = IND2
-200   ICA = 2
-      ISA = -2
-      LSW = 0
-210   DO 260 I = 1,NPTS
-         TH1 = ANGAR(NF)
-         T = RADAR(NF)/DR
-         RN = T*COS(TH1)
-         THN = T*SIN(TH1)
-         if(NA-NT) 220,230,240
-220      if(LSW) 250,240,250
+      inte = inteq
+      k = inc
+      ind1 = npts*k + 1
+      ind2 = ind1 + k
+      nl = ind1 - k
+      if(rmax) 80,80,10
+10    rmaxm = 0.0
+      rminm = 0.0
+      do 50 i = 1,nl,k
+         t = radar(i)
+         if(t-rmaxm) 30,50,20
+20       rmaxm = t
+         goto 50
+30       if(rminm-t) 50,50,40
+40       rminm = t
+50    continue
+      if(abs(rmaxm)-abs(rminm)) 60,70,70
+60    rmaxm = -rminm
+70    temp(1) = 0.0
+      temp(2) = rmaxm
+      call scale(temp,rmax,2,1)
+      dr = temp(4)
+80    call where(rn,thn,r1)
+      t = radar(1)/dr
+      th1 = angar(1)
+      r1 = t*cos(th1)
+      th1 = t*sin(th1)
+      df = abs(r1-rn)
+      r1 = abs(th1-thn)
+      if(df-r1) 90,100,100
+90    df = r1
+100   t = radar(nl)/dr
+      th1 = angar(nl)
+      r1 = t*cos(th1)
+      th1 = t*sin(th1)
+      dl = abs(r1-rn)
+      r1 = abs(th1-thn)
+      if(dl-r1) 110,120,120
+110   dl = r1
+120   ic = 3
+      is = -1
+      nt = abs(ltyp)
+      if(nt) 140,130,140
+130   nt = 1
+140   if(df-dl) 160,160,150
+150   nf = nl
+      na = ((npts-1)/nt)*nt + nt - npts + 1
+      kk = -k
+      goto 170
+160   nf = 1
+      na = nt
+      kk = k
+170   if(ltyp) 180,190,185
+180   ica = 3
+      isa = -1
+      lsw = 1
+      goto 210
+185   ic = 2
+      goto 200
+190   na = ind2
+200   ica = 2
+      isa = -2
+      lsw = 0
+210   do 260 i = 1,npts
+         th1 = angar(nf)
+         t = radar(nf)/dr
+         rn = t*cos(th1)
+         thn = t*sin(th1)
+         if(na-nt) 220,230,240
+220      if(lsw) 250,240,250
 !
 !  THE FOLLOWING CALL TO THE 'SYMBOL' ROUTINE HAS BEEN MODIFIED TO
 !  CONVERT THIS SUBROUTINE TO THE CRAY. ON THE CRAY, 'SYMBOL' HAS
 !  7 ARGUMENTS; ON THE CDC, 'SYMBOL' HAS 6 ARGUMENTS. THE ADDITIONAL
 !  ARGUMENT IN THIS CALL IS 'IBCD'.
 !
-230      CALL SYMBOL(RN, THN, 0.08,IBCD, INTE, 0.0, IS)
-         NA = 1
-         IS = ISA
-         GOTO 260
-240      CALL PLOT(RN,THN,IC)
-         IC = ICA
-250      NA = NA + 1
-260   NF = NF + KK
-END SUBROUTINE POLAR
+230      call symbol(rn, thn, 0.08,ibcd, inte, 0.0, is)
+         na = 1
+         is = isa
+         goto 260
+240      call plot(rn,thn,ic)
+         ic = ica
+250      na = na + 1
+260   nf = nf + kk
+end subroutine polar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE REFLX  (VX1,VY1,VX2,VY2)
+subroutine reflx  (vx1,vy1,vx2,vy2)
 implicit none
 
 ! EARLIER VERSION OF THIS SUBROUTINE WAS
@@ -3972,15 +3972,15 @@ real :: vx1
 real :: vx2
 real :: vy1
 real :: vy2
-   PS=VY1*VY1
-   DS=VX1*VX1
-   SS = DS+PS+0.00001
-   DS=DS-PS
-   PS=2.0*VX1*VY1
-   TEMP=(PS*VY2+VX2*DS)/SS
-   VY2=(PS*VX2-VY2*DS)/SS
-   VX2=TEMP
-END SUBROUTINE REFLX
+   ps=vy1*vy1
+   ds=vx1*vx1
+   ss = ds+ps+0.00001
+   ds=ds-ps
+   ps=2.0*vx1*vy1
+   temp=(ps*vy2+vx2*ds)/ss
+   vy2=(ps*vx2-vy2*ds)/ss
+   vx2=temp
+end subroutine reflx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4433,165 +4433,165 @@ real    :: y3
 real    :: yn
       !!SAVE NC,ISW,JSW,IPC
       !!SAVE X2,Y2,D3,UX1,UY1,UX2,UY2,SX1,SY1,SX2,SY2,SX3,SY3
-      DATA NC,ISW,JSW,IPC/4*0/
-      DATA X2,Y2,D3,UX1,UY1,UX2,UY2,SX1,SY1,SX2,SY2,SX3,SY3/13*0.0/
+      data nc,isw,jsw,ipc/4*0/
+      data x2,y2,d3,ux1,uy1,ux2,uy2,sx1,sy1,sx2,sy2,sx3,sy3/13*0.0/
       save
-      JC=IC
-      KC=JC-JC/10*10
-      LC=NC-IPC
-      PXN=XN
-      PYN=YN
-      IREP=0
-      IF(KC)1,4,14
+      jc=ic
+      kc=jc-jc/10*10
+      lc=nc-ipc
+      pxn=xn
+      pyn=yn
+      irep=0
+      if(kc)1,4,14
 1     continue
-      IF(KC+1)2,5,4
+      if(kc+1)2,5,4
 2     continue
-      IF(IPC)3,3,14
+      if(ipc)3,3,14
 3     continue
-      IF(JC+24)10,10,17
+      if(jc+24)10,10,17
 4     continue
-      ISW=-1
-      GOTO 6
+      isw=-1
+      goto 6
 5     continue
-      ISW=1
+      isw=1
 6     continue
-      JSW=-1
-      NC=(-KC)/10*10
-      X3=PXN
-      Y3=PYN
-      MC=NC+3
+      jsw=-1
+      nc=(-kc)/10*10
+      x3=pxn
+      y3=pyn
+      mc=nc+3
 9     continue
-      IPC=KC
-      RETURN
+      ipc=kc
+      return
 10    continue
-      IF(IPC+1)11,13,13
+      if(ipc+1)11,13,13
 11    continue
-      IF(ISW-1)12,15,14
+      if(isw-1)12,15,14
 12    continue
-      IF(ISW+1)14,16,14
+      if(isw+1)14,16,14
 13    continue
-      KC=NC+2
-      IPC=1
-      CALL PLOT(X3,Y3,MC)
+      kc=nc+2
+      ipc=1
+      call plot(x3,y3,mc)
 14    continue
-      CALL PLOT(PXN,PYN,KC)
-      RETURN
+      call plot(pxn,pyn,kc)
+      return
 15    continue
-      IREP=2
+      irep=2
 16    continue
-      IREP=IREP+1
-      KC=1
+      irep=irep+1
+      kc=1
 17    continue
-      IF(ABS(JSW)-1)14,18,14
+      if(abs(jsw)-1)14,18,14
 18    continue
-      X1=X2
-      Y1=Y2
-      X2=X3
-      Y2=Y3
-      X3=PXN
-      Y3=PYN
-      IF(IPC+1)20,19,19
+      x1=x2
+      y1=y2
+      x2=x3
+      y2=y3
+      x3=pxn
+      y3=pyn
+      if(ipc+1)20,19,19
 19    continue
-      VX3=X3-X2
-      VY3=Y3-Y2
-      D3 = VX3*VX3+VY3*VY3
-      SX1=X2
-      SX2=X3
-      SY1=Y2
-      SY2=Y3
-      GOTO 40
+      vx3=x3-x2
+      vy3=y3-y2
+      d3 = vx3*vx3+vy3*vy3
+      sx1=x2
+      sx2=x3
+      sy1=y2
+      sy2=y3
+      goto 40
 20    continue
-      IF(JSW)21,14,23
+      if(jsw)21,14,23
 21    continue
-      IF(ISW)22,14,24
+      if(isw)22,14,24
 22    continue
-      VX2=X3-X2
-      VY2=Y3-Y2
-      CALL REFLX(VX3,VY3,VX2,VY2)
-      D2=VX2*VX2+VY2*VY2
-      GOTO 26
+      vx2=x3-x2
+      vy2=y3-y2
+      call reflx(vx3,vy3,vx2,vy2)
+      d2=vx2*vx2+vy2*vy2
+      goto 26
 23    continue
-      JSW=1
+      jsw=1
 24    continue
-      VX2=VX3
-      VY2=VY3
-      VX3=X3-X2
-      VY3=Y3-Y2
+      vx2=vx3
+      vy2=vy3
+      vx3=x3-x2
+      vy3=y3-y2
 25    continue
-      D2=D3
-      UX1=UX2
-      UY1=UY2
+      d2=d3
+      ux1=ux2
+      uy1=uy2
 26    continue
-      D3=VX3*VX3+VY3*VY3
-      UX2=D2*VX3+D3*VX2
-      UY2=D2*VY3+D3*VY2
-      DV = 1.0/SQRT(UX2*UX2+UY2*UY2+0.000001)
-      UX2=DV*UX2
-      UY2=DV*UY2
-      IF(ISW-JSW)27,27,45
+      d3=vx3*vx3+vy3*vy3
+      ux2=d2*vx3+d3*vx2
+      uy2=d2*vy3+d3*vy2
+      dv = 1.0/sqrt(ux2*ux2+uy2*uy2+0.000001)
+      ux2=dv*ux2
+      uy2=dv*uy2
+      if(isw-jsw)27,27,45
 27    continue
-      IF(JSW)23,14,28
+      if(jsw)23,14,28
 28    continue
-      T=0.0
-      CALL WHERE(X,Y,D)
-      if(ABS(X1-X)-0.01*D) 29,30,30
+      t=0.0
+      call where(x,y,d)
+      if(abs(x1-x)-0.01*d) 29,30,30
 29    continue
-      if(ABS(Y1-Y)-0.01*D) 31,30,30
+      if(abs(y1-y)-0.01*d) 31,30,30
 30    continue
-      CALL PLOT(X1,Y1,MC)
+      call plot(x1,y1,mc)
 31    continue
-      IF(IPC+3)32,40,32
+      if(ipc+3)32,40,32
 32    continue
-      D=ABS(UX1*VX2+UY1*VY2)
-      D1=D
-      UUX1=D*UX1
-      UUY1=D*UY1
-      D=ABS(UX2*VX2+UY2*VY2)
-      UUX2=D*UX2
-      UUY2=D*UY2
-      D=D+D1
-      AX=UUX2+UUX1-VX2-VX2
-      BX=VX2-UUX1-AX
-      AY=UUY2+UUY1-VY2-VY2
-      BY=VY2-UUY1-AY
-      N=10.0*D+1.0
-      D=1./FLOAT (N)
-      DO 33 I=1,N
-         T=T+D
-         X=((AX*T+BX)*T+UUX1)*T+X1
-         Y=((AY*T+BY)*T+UUY1)*T+Y1
+      d=abs(ux1*vx2+uy1*vy2)
+      d1=d
+      uux1=d*ux1
+      uuy1=d*uy1
+      d=abs(ux2*vx2+uy2*vy2)
+      uux2=d*ux2
+      uuy2=d*uy2
+      d=d+d1
+      ax=uux2+uux1-vx2-vx2
+      bx=vx2-uux1-ax
+      ay=uuy2+uuy1-vy2-vy2
+      by=vy2-uuy1-ay
+      n=10.0*d+1.0
+      d=1./float (n)
+      do 33 i=1,n
+         t=t+d
+         x=((ax*t+bx)*t+uux1)*t+x1
+         y=((ay*t+by)*t+uuy1)*t+y1
 33    continue
-      CALL PLOT(X,Y,LC)
+      call plot(x,y,lc)
 40    continue
-      IF(IREP)9,9,41
+      if(irep)9,9,41
 41    continue
-      IREP=IREP-1
-      IF(ISW)43,14,42
+      irep=irep-1
+      if(isw)43,14,42
 42    continue
-      PXN=SX1
-      PYN=SY1
-      SX1=SX2
-      SY1=SY2
-      SX2=SX3
-      SY2=SY3
-      GOTO 18
+      pxn=sx1
+      pyn=sy1
+      sx1=sx2
+      sy1=sy2
+      sx2=sx3
+      sy2=sy3
+      goto 18
 43    continue
-      CALL REFLX(VX3,VY3,VX2,VY2)
-      X=VX3
-      Y=VY3
-      VX3=VX2
-      VY3=VY2
-      VX2=X
-      VY2=Y
-      X1=X2
-      Y1=Y2
-      GOTO 25
+      call reflx(vx3,vy3,vx2,vy2)
+      x=vx3
+      y=vy3
+      vx3=vx2
+      vy3=vy2
+      vx2=x
+      vy2=y
+      x1=x2
+      y1=y2
+      goto 25
 45    continue
-      JSW=1
-      SX3=X3
-      SY3=Y3
-      GOTO 40
-END SUBROUTINE SMOOT
+      jsw=1
+      sx3=x3
+      sy3=y3
+      goto 40
+end subroutine smoot
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4734,7 +4734,7 @@ END SUBROUTINE SMOOT
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE AXIS(XPAGE,YPAGE,IBCD,NCHAR,AXLEN,ANGLE,FIRSTV,DELTAV)
+subroutine axis(xpage,ypage,ibcd,nchar,axlen,angle,firstv,deltav)
 implicit none
 
 ! ident_17="@(#)M_calcomp::axis(3f): Draw linear axis with numeric scale and axis label"
@@ -4746,8 +4746,8 @@ implicit none
 !          ANGLE        ANGLE OF AXIS FROM THE X-DIRECTION, IN DEGREES.
 !          FIRSTV       SCALE VALUE AT THE FIRST TIC MARK.
 !          DELTAV       CHANGE IN SCALE BETWEEN TIC MARKS ONE INCH APART
-CHARACTER(len=*)  ::  IBCD
-CHARACTER(len=3)  ::  NBCD
+character(len=*)  ::  ibcd
+character(len=3)  ::  nbcd
 real              ::  a
 real              ::  adx
 real              ::  angle
@@ -4772,76 +4772,76 @@ real              ::  yn
 real              ::  ypage
 real              ::  yt
 real              ::  z
-      NBCD ='*10'
-      KN=NCHAR
-      A=1.0
-      if(KN) 1,2,2
-1     A=-A
-      KN=-KN
+      nbcd ='*10'
+      kn=nchar
+      a=1.0
+      if(kn) 1,2,2
+1     a=-a
+      kn=-kn
 !     EX IS THE EXPONENT FOR AXIS SCALING
-2     EX=0.0
-      ADX= ABS  (DELTAV)
-      if(ADX) 3,7,3
-3     if(ADX- 99.0) 6,4,4
-4     ADX=ADX/10.0
-      EX=EX+1.0
-      GOTO 3
-5     ADX=ADX*10.0
-      EX=EX-1.0
-6     if(ADX-0.01) 5,7,7
-7     XVAL=FIRSTV*10.0**(-EX)
-      ADX= DELTAV*10.0**(-EX)
-      STH=ANGLE*0.0174533
-      CTH=COS(STH)
-      STH=SIN(STH)
-      DXB=-0.1
-      DYB=0.15*A-0.05
-      XN=XPAGE+DXB*CTH-DYB*STH
-      YN=YPAGE+DYB*CTH+DXB*STH
-      NTIC=AXLEN+1.0
-      NT=NTIC/2
+2     ex=0.0
+      adx= abs  (deltav)
+      if(adx) 3,7,3
+3     if(adx- 99.0) 6,4,4
+4     adx=adx/10.0
+      ex=ex+1.0
+      goto 3
+5     adx=adx*10.0
+      ex=ex-1.0
+6     if(adx-0.01) 5,7,7
+7     xval=firstv*10.0**(-ex)
+      adx= deltav*10.0**(-ex)
+      sth=angle*0.0174533
+      cth=cos(sth)
+      sth=sin(sth)
+      dxb=-0.1
+      dyb=0.15*a-0.05
+      xn=xpage+dxb*cth-dyb*sth
+      yn=ypage+dyb*cth+dxb*sth
+      ntic=axlen+1.0
+      nt=ntic/2
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      DO  20  I=1,NTIC
-         CALL NUMBER(XN,YN,0.105,XVAL,ANGLE,2)
-         XVAL=XVAL+ADX
-         XN=XN+CTH
-         YN=YN+STH
-         if(NT) 20,11,20
-11       Z=KN
-         if(EX.NE.0)Z=Z+7.0
-         DXB=(-.07)*Z+AXLEN*0.5
-         DYB=0.325*A-0.075
-         XT=XPAGE+DXB*CTH-DYB*STH
-         YT=YPAGE+DYB*CTH+DXB*STH
-         CALL SYMBOL(XT,YT,0.14,IBCD,999,ANGLE,KN)
+      do  20  i=1,ntic
+         call number(xn,yn,0.105,xval,angle,2)
+         xval=xval+adx
+         xn=xn+cth
+         yn=yn+sth
+         if(nt) 20,11,20
+11       z=kn
+         if(ex.ne.0)z=z+7.0
+         dxb=(-.07)*z+axlen*0.5
+         dyb=0.325*a-0.075
+         xt=xpage+dxb*cth-dyb*sth
+         yt=ypage+dyb*cth+dxb*sth
+         call symbol(xt,yt,0.14,ibcd,999,angle,kn)
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 ! PUT OUT THE SCALE MULTIPLIER LABEL (*10**EX)
-         IF(EX.NE.0)THEN
-            Z=KN+2
-            XT=XT+Z*CTH*0.14
-            YT=YT+Z*STH*0.14
-            CALL SYMBOL(XT,YT,0.14, NBCD,999,ANGLE,3)
-            XT=XT+(3.0*CTH-0.8*STH)*0.14
-            YT=YT+(3.0*STH+0.8*CTH)*0.14
-            CALL NUMBER(XT,YT,0.07,EX,ANGLE,-1)
-         ENDIF
+         if(ex.ne.0)then
+            z=kn+2
+            xt=xt+z*cth*0.14
+            yt=yt+z*sth*0.14
+            call symbol(xt,yt,0.14, nbcd,999,angle,3)
+            xt=xt+(3.0*cth-0.8*sth)*0.14
+            yt=yt+(3.0*sth+0.8*cth)*0.14
+            call number(xt,yt,0.07,ex,angle,-1)
+         endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-20    NT=NT-1
+20    nt=nt-1
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      CALL PLOT(XPAGE+AXLEN*CTH,YPAGE+AXLEN*STH,3)
-      DXB=(-0.07)*A*STH
-      DYB=(+0.07)*A*CTH
-      A=NTIC-1
-      XN=XPAGE+A*CTH
-      YN=YPAGE+A*STH
-      DO  30  I=1,NTIC
-         CALL PLOT(XN,YN,2)
-         CALL PLOT(XN+DXB,YN+DYB,2)
-         CALL PLOT(XN,YN,2)
-         XN=XN-CTH
-         YN=YN-STH
-30    CONTINUE
-END SUBROUTINE AXIS
+      call plot(xpage+axlen*cth,ypage+axlen*sth,3)
+      dxb=(-0.07)*a*sth
+      dyb=(+0.07)*a*cth
+      a=ntic-1
+      xn=xpage+a*cth
+      yn=ypage+a*sth
+      do  30  i=1,ntic
+         call plot(xn,yn,2)
+         call plot(xn+dxb,yn+dyb,2)
+         call plot(xn,yn,2)
+         xn=xn-cth
+         yn=yn-sth
+30    continue
+end subroutine axis
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4974,7 +4974,7 @@ end subroutine factor
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE mset(MODE)
+subroutine mset(mode)
 implicit none
 
 ! ident_19="@(#)M_calcomp::mset(3f): this is a general mode setting routine."
@@ -4984,28 +4984,28 @@ implicit none
 !
 ! DATE: 3/85
 !
-   CHARACTER(LEN=*),INTENT(IN) :: MODE
-   CHARACTER L_MODE*8
+   character(len=*),intent(in) :: mode
+   character l_mode*8
 !
-   L_MODE=MODE
+   l_mode=mode
 !
-   IF(L_MODE(1:4) .EQ. 'HARD')CTTYP_Q='HARD'
-   IF(L_MODE(1:4) .EQ. 'SOFT')CTTYP_Q='SOFT'
+   if(l_mode(1:4) .eq. 'HARD')cttyp_q='HARD'
+   if(l_mode(1:4) .eq. 'SOFT')cttyp_q='SOFT'
 !
 ! SET DISCRETE HARDWARE CHARACTER SIZES
 !
-   IF(L_MODE(1:4) .EQ. 'XLAR')CALL mpset('TSIZ',61.)
-   IF(L_MODE(1:4) .EQ. 'LARG')CALL mpset('TSIZ',56.)
-   IF(L_MODE(1:4) .EQ. 'MEDI')CALL mpset('TSIZ',37.)
-   IF(L_MODE(1:4) .EQ. 'SMAL')CALL mpset('TSIZ',20.)
+   if(l_mode(1:4) .eq. 'XLAR')call mpset('TSIZ',61.)
+   if(l_mode(1:4) .eq. 'LARG')call mpset('TSIZ',56.)
+   if(l_mode(1:4) .eq. 'MEDI')call mpset('TSIZ',37.)
+   if(l_mode(1:4) .eq. 'SMAL')call mpset('TSIZ',20.)
 !
 ! ROOM FOR MORE MODES IF NECESSARY
 !
-END SUBROUTINE mset
+end subroutine mset
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE mpset(MODE,VALUE)
+subroutine mpset(mode,value)
 implicit none
 !
 ! THIS ROUTINE SETS MODE SPECIFIC PARAMETER VALUES
@@ -5013,25 +5013,25 @@ implicit none
 ! FUNCTION: EXAMINE THE MODE CHARACTER STRING AND SET THE SPECIFIED
 !           VALUE IN COMMON WMODEP ACCORDINGLY.
 !
-CHARACTER(LEN=*),INTENT(IN) :: MODE
-character(len=8)            :: L_MODE
-REAL                        :: VALUE
-real                        :: V
+character(len=*),intent(in) :: mode
+character(len=8)            :: l_mode
+real                        :: value
+real                        :: v
 !
 ! SET THE CHARACTER SIZE VALUE
 !
-   L_MODE=MODE
-   IF(L_MODE(1:4) .EQ. 'TSIZ')THEN
-      V=VALUE
-      IF(VALUE .LT. 1. .OR. VALUE .GT. 64.)V=14.0
-      KTSIZE_Q=V
+   l_mode=mode
+   if(l_mode(1:4) .eq. 'TSIZ')then
+      v=value
+      if(value .lt. 1. .or. value .gt. 64.)v=14.0
+      ktsize_q=v
 !
 ! OUTPUT THE SIZES TO THE METAFILE
 !
-      CALL setpar('TSIZ',KTSIZE_Q)
-   ENDIF
+      call setpar('TSIZ',ktsize_q)
+   endif
 !
-END SUBROUTINE mpset
+end subroutine mpset
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -5124,10 +5124,10 @@ END SUBROUTINE mpset
 !!    character(len=26) :: ichr2
 !!    character(len=10) :: lbcd1,lbcd2
 !!    dimension xarray(62),yarray(62)
-!!    ICHR1='PLOTTED ON A CALCOMP PLOTTER'
-!!    ICHR2='USING  Y = X -0.7*X +0.1*X'
-!!    LBCD1='X-ABSCISSA'
-!!    LBCD2='Y-ORDINATE'
+!!    ichr1='PLOTTED ON A CALCOMP PLOTTER'
+!!    ichr2='USING  Y = X -0.7*X +0.1*X'
+!!    lbcd1='X-ABSCISSA'
+!!    lbcd2='Y-ORDINATE'
 !!    ! PLOT GRAPH ILLUSTRATING SCALE, AXIS, AND LINE
 !!    deltax=0.04
 !!    ! AXIS DRAWS LABELS AS MUCH AS 0.4 INCHES TO THE NEGATIVE OF AXIS CENTER;
@@ -5163,7 +5163,7 @@ END SUBROUTINE mpset
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE LINE(XARRAY,YARRAY,NPTS,INC,LINTYP,INTEQ)
+subroutine line(xarray,yarray,npts,inc,lintyp,inteq)
 implicit none
 
 ! ident_20="@(#)M_calcomp::line(3f): Plot a polyline with optional rescaling"
@@ -5201,52 +5201,52 @@ integer :: npts
 integer :: nt
 real    :: xn
 real    :: yn
-   LMIN = NPTS*INC+1
-   LDX  = LMIN+INC
-   NL   = LMIN-INC
-   FIRSTX = XARRAY(LMIN)
-   DELTAX = XARRAY(LDX)
-   FIRSTY = YARRAY(LMIN)
-   DELTAY = YARRAY(LDX)
-   CALL WHERE(XN,YN,DF)
-   DF=MAX(ABS((XARRAY( 1)-FIRSTX)/DELTAX-XN), ABS((YARRAY( 1)-FIRSTY)/DELTAY-YN) )
-   DL=MAX(ABS((XARRAY(NL)-FIRSTX)/DELTAX-XN), ABS((YARRAY(NL)-FIRSTY)/DELTAY-YN) )
-   IPEN = 3
-   ICODE = -1
-   NT =ABS(LINTYP)
-   if(LINTYP) 7,6,7
-6  NT = 1
-7  if(DF-DL) 9,9,8
-8  NF = NL
-   NA = ((NPTS-1)/NT)*NT+NT-(NPTS-1)
-   KK = -INC
-   GOTO 10
-9  NF = 1
-   NA = NT
-   KK = INC
-10 if(LINTYP) 11,12,13
-11 IPENA = 3
-   ICODEA = -1
-   LSW = 1
-   GOTO 15
-12 NA=LDX
-13 IPENA = 2
-   ICODEA = -2
-   LSW=0
-15 DO 30 I =1,NPTS
-      XN = (XARRAY(NF)-FIRSTX)/DELTAX
-      YN = (YARRAY(NF)-FIRSTY)/DELTAY
-      if(NA-NT) 20,21,22
-20    if(LSW) 23,22,23
-21    CALL SYMBOL(XN,YN,0.08,' ',INTEQ,0.0,ICODE)
-      NA = 1
-      GOTO 25
-22    CALL PLOT(XN,YN,IPEN)
-23    NA = NA + 1
-25    NF = NF+KK
-      ICODE = ICODEA
-30 IPEN = IPENA
-END SUBROUTINE LINE
+   lmin = npts*inc+1
+   ldx  = lmin+inc
+   nl   = lmin-inc
+   firstx = xarray(lmin)
+   deltax = xarray(ldx)
+   firsty = yarray(lmin)
+   deltay = yarray(ldx)
+   call where(xn,yn,df)
+   df=max(abs((xarray( 1)-firstx)/deltax-xn), abs((yarray( 1)-firsty)/deltay-yn) )
+   dl=max(abs((xarray(nl)-firstx)/deltax-xn), abs((yarray(nl)-firsty)/deltay-yn) )
+   ipen = 3
+   icode = -1
+   nt =abs(lintyp)
+   if(lintyp) 7,6,7
+6  nt = 1
+7  if(df-dl) 9,9,8
+8  nf = nl
+   na = ((npts-1)/nt)*nt+nt-(npts-1)
+   kk = -inc
+   goto 10
+9  nf = 1
+   na = nt
+   kk = inc
+10 if(lintyp) 11,12,13
+11 ipena = 3
+   icodea = -1
+   lsw = 1
+   goto 15
+12 na=ldx
+13 ipena = 2
+   icodea = -2
+   lsw=0
+15 do 30 i =1,npts
+      xn = (xarray(nf)-firstx)/deltax
+      yn = (yarray(nf)-firsty)/deltay
+      if(na-nt) 20,21,22
+20    if(lsw) 23,22,23
+21    call symbol(xn,yn,0.08,' ',inteq,0.0,icode)
+      na = 1
+      goto 25
+22    call plot(xn,yn,ipen)
+23    na = na + 1
+25    nf = nf+kk
+      icode = icodea
+30 ipen = ipena
+end subroutine line
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -5605,7 +5605,7 @@ end subroutine nframe
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE NUMBER(XPAGE,YPAGE,HEIGHT,FPN,ANGLE,NDEC)
+subroutine number(xpage,ypage,height,fpn,angle,ndec)
 implicit none
 
 ! ident_24="@(#)M_calcomp::number(3f): plots a floating-point number"
@@ -5617,10 +5617,10 @@ implicit none
 !     NDEC     NUMBER OF DECIMAL PLACES TO BE DRAWN.
 !     THIS VERSION OF NUMBER REQUIRES THE SYMBOL VERSION WITH
 !     999. X, Y FEATURE, AND  NC = 0 FEATURE.
-CHARACTER(len=20) :: NUM
-CHARACTER(len=1)  :: MINUS,IZERO,IPOINT
-SAVE MINUS,IZERO,IPOINT
-DATA MINUS /'-'/,IZERO/'0'/,IPOINT/'.'/
+character(len=20) :: num
+character(len=1)  :: minus,izero,ipoint
+save minus,izero,ipoint
+data minus /'-'/,izero/'0'/,ipoint/'.'/
 real    :: angle
 real    :: fpn
 real    :: fpv
@@ -5639,57 +5639,57 @@ integer :: ndec
 real    :: xpage
 real    :: ypage
 !     IZERO='0'
-      II=0
-      FPV = FPN
-      N = NDEC
-      MAXN = 9
+      ii=0
+      fpv = fpn
+      n = ndec
+      maxn = 9
 ! ESCC MOD ------------------------
-      INTEQ=999
+      inteq=999
 ! ---------------------------------------------
-      if(N - MAXN) 11, 11, 10
-10    N = MAXN
-11    if(N + MAXN) 12, 20, 20
-12    N = -MAXN
-20    if(FPV) 21, 30, 30
-21    II=II+1
-      NUM(II:II)=MINUS
-30    MN = -N
-      if(N) 31, 32, 32
-31    MN = MN - 1
-32    FPV = ABS(FPV) + (0.5 * 10. ** MN)
-      I = LOG10(FPV)+1.0
-      ILP = I
-      if(N + 1)  40, 41, 41
-40    ILP = ILP + N + 1
-41    if(ILP)  50, 50, 51
-50    II=II+1
-      NUM(II:II)=IZERO
-      GOTO 61
-51    if(ILP+N-18) 54,54,52
-52    N=-1
-      if(ILP-19) 54,54,53
-53    ILP=19
-54    DO 60 J=1,ILP
-         K = FPV * 10. ** (J - I)
-         if(K-9) 57,57,55
-55       K = 9
-57       II=II+1
-         KK = ICHAR(IZERO) + K
-         NUM(II:II)=CHAR(KK)
-         FPV = FPV - (FLOAT(K) * 10. ** (I - J))
-60    CONTINUE
-61    if(N) 99, 70, 70
-70    II=II+1
-      NUM(II:II)=IPOINT
-      if(N)  99, 99, 80
-80    DO 90 J = 1, N
-         K = FPV * 10.0
-         if(K-9) 84,84,82
-82       K = 9
-84       II=II+1
-         KK = ICHAR(IZERO) + K
-         NUM(II:II)=CHAR(KK)
-90    FPV = FPV * 10. - FLOAT(K)
+      if(n - maxn) 11, 11, 10
+10    n = maxn
+11    if(n + maxn) 12, 20, 20
+12    n = -maxn
+20    if(fpv) 21, 30, 30
+21    ii=ii+1
+      num(ii:ii)=minus
+30    mn = -n
+      if(n) 31, 32, 32
+31    mn = mn - 1
+32    fpv = abs(fpv) + (0.5 * 10. ** mn)
+      i = log10(fpv)+1.0
+      ilp = i
+      if(n + 1)  40, 41, 41
+40    ilp = ilp + n + 1
+41    if(ilp)  50, 50, 51
+50    ii=ii+1
+      num(ii:ii)=izero
+      goto 61
+51    if(ilp+n-18) 54,54,52
+52    n=-1
+      if(ilp-19) 54,54,53
+53    ilp=19
+54    do 60 j=1,ilp
+         k = fpv * 10. ** (j - i)
+         if(k-9) 57,57,55
+55       k = 9
+57       ii=ii+1
+         kk = ichar(izero) + k
+         num(ii:ii)=char(kk)
+         fpv = fpv - (float(k) * 10. ** (i - j))
+60    continue
+61    if(n) 99, 70, 70
+70    ii=ii+1
+      num(ii:ii)=ipoint
+      if(n)  99, 99, 80
+80    do 90 j = 1, n
+         k = fpv * 10.0
+         if(k-9) 84,84,82
+82       k = 9
+84       ii=ii+1
+         kk = ichar(izero) + k
+         num(ii:ii)=char(kk)
+90    fpv = fpv * 10. - float(k)
 !
 !  THE FOLLOWING CALL TO 'SYMBOL' WAS MODIFIED WHEN THIS SUBROUTINE WAS
 !  CONVERTED TO THE CRAY. THE STATEMENT ORIGINALLY READ
@@ -5702,8 +5702,8 @@ real    :: ypage
 !  'SYMBOL' CALL (THE ARGUMENT WHICH CONTAINS THE NUMBER OF CHARACTERS
 !  TO BE DRAWN).
 !
-99    CALL SYMBOL(XPAGE,YPAGE,HEIGHT,NUM,INTEQ,ANGLE,II)
-END SUBROUTINE NUMBER
+99    call symbol(xpage,ypage,height,num,inteq,angle,ii)
+end subroutine number
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -5876,7 +5876,7 @@ END SUBROUTINE NUMBER
 !!    end program demo_plot
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE PLOT(XPAG, YPAG, IPEN)
+subroutine plot(xpag, ypag, ipen)
 implicit none
 
 ! ident_25="@(#)M_calcomp::plot(3f): move with pen up or down or start new origin or terminate plotting"
@@ -6010,9 +6010,9 @@ real    :: y
 real    :: ypag
 !
 
-      if(ABS(IPEN).GE.1000) GOTO 1000
-      PENX=XPAG
-      PENY=YPAG
+      if(abs(ipen).ge.1000) goto 1000
+      penx=xpag
+      peny=ypag
 !
 !  CALCULATE THE COORDINATES TO WHICH THE PEN IS TO BE MOVED. THE X
 !  COORDINATE IS SPECIFIED WITH RELATION TO THE CURRENTLY DEFINED
@@ -6023,18 +6023,18 @@ real    :: ypag
 !  DIRECTION REMAINING FROM A PREVIOUS CALL TO 'PLOT' MUST BE
 !  FACTORED IN.
 !
-      X=PENX*DX+XORG
-      Y=(PENY+YS)*DY+YORG
+      x=penx*dx+xorg
+      y=(peny+ys)*dy+yorg
 !
 !  IF THE NEW Y COORDINATE IS BELOW THE BOTTOM EDGE OF THE PLOTTER
 !  (I.E., IF Y IS LESS THAN 0.0), SAVE THE NEW Y COORDINATE FOR
 !  APPLICATION DURING THE NEXT CALL TO 'PLOT', AND SET THE CURRENT
 !  Y COORDINATE TO 0.0 .
 !
-      if(Y.LT.0.0.and.ipen.gt.0) THEN
-         if(IPEN.EQ.3) YS=ABS(PENY)
-         Y=0.0
-      ENDIF
+      if(y.lt.0.0.and.ipen.gt.0) then
+         if(ipen.eq.3) ys=abs(peny)
+         y=0.0
+      endif
 !
 !  IF THE VALUE OF 'IPEN' IS LESS THAN 0 OR IS EQUAL TO 999, THE
 !  RELATIVE ORIGIN OF THE PLOT IS TO BE REDEFINED TO BE THE NEW
@@ -6042,34 +6042,34 @@ real    :: ypag
 !  TO THE NEW X AND Y VALUES, THEN SET ANY RESIDUAL Y ADJUSTMENT
 !  TO 0.0 .
 !
-      if((IPEN.LT.0) .OR. (IPEN.EQ.999)) THEN
-         XORG=X
-         YORG=Y
-         YS=0.0
-      ENDIF
+      if((ipen.lt.0) .or. (ipen.eq.999)) then
+         xorg=x
+         yorg=y
+         ys=0.0
+      endif
 !
 !  IF 'IPEN' IS SPECIFIED WITH A VALUE OF 999, THE PLOT IS TO BE
 !  TERMINATED. IF THE CURRENT FRAME HAS NOT BEEN ENDED, CALL THE
 !  'primitive__frend' GRAPHICS PRIMITIVE. CALL THE 'primitive__end_plotting'
 !  GRAPHICS PRIMITIVE TO TERMINATE PLOTTING.
 !
-      if(IPEN.EQ.999) THEN
-         if(NOEND) CALL primitive__frend(0)
-         CALL primitive__end_plotting
-      ENDIF
+      if(ipen.eq.999) then
+         if(noend) call primitive__frend(0)
+         call primitive__end_plotting
+      endif
 !
 !  IF THE ABSOLUTE VALUE OF 'IPEN' IS 2, THE PEN IS TO BE DOWN DURING
 !  THE MOVE TO THE NEW COORDINATES; THEREFORE, CALL THE 'primitive__draw_line'
 !  GRAPHICS PRIMITIVE TO DRAW THE DESIRED LINE.
 !
-      if(ABS(IPEN).EQ.2) CALL primitive__draw_line(XLAST+XOFF,YLAST,X+XOFF,Y)
+      if(abs(ipen).eq.2) call primitive__draw_line(xlast+xoff,ylast,x+xoff,y)
 !
 !  SAVE THE CURRENT PEN COORDINATES.
 !
-      XLAST=X
-      YLAST=Y
-      NOEND=.TRUE.
-      RETURN
+      xlast=x
+      ylast=y
+      noend=.true.
+      return
 !
 !  CHECK FOR SPECIAL USE OF THIS SUBROUTINE BY OTHER CALCOMP
 !  SUBROUTINES. ALL SPECIAL ENTRIES TO THE 'PLOT' SUBROUTINE USE
@@ -6085,55 +6085,55 @@ real    :: ypag
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1001) !  SPECIAL ENTRY FOR CALL FROM SUBROUTINE 'FACTOR'.
                  ! 'FACTOR' SETS THE RATIO OF THE DESIRED PLOT SIZE TO THE NORMAL PLOT SIZE.
-      DX=XPAG
-      DY=YPAG
+      dx=xpag
+      dy=ypag
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1002) !  SPECIAL ENTRY FOR CALL FROM SUBROUTINE 'WHERE'. 'WHERE' RETURNS
                  !  THE CURRENT PEN COORDINATES AND SCALING FACTOR FOR USE IN USER WRITTEN SUBROUTINES.
-      XPAG=PENX
-      YPAG=PENY
+      xpag=penx
+      ypag=peny
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1003) !  SPECIAL ENTRY FOR CALL FROM SUBROUTINE 'SYMBOL'. THIS CALL RETURNS THE CURRENT SCALING FACTOR FOR THE PLOT.
-      XPAG=DX
-      YPAG=DY
+      xpag=dx
+      ypag=dy
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1004) !  SPECIAL ENTRY FOR CALL FROM SUBROUTINE 'NEWPEN'. 'NEWPEN' INSURES THAT THE PEN IS MOVED TO THE ORIGIN (0.0,0.0)
-      CALL primitive__draw_line(0.0+XOFF,0.0,0.0+XOFF,0.0)
+      call primitive__draw_line(0.0+xoff,0.0,0.0+xoff,0.0)
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1005) !  SPECIAL ENTRY FOR CALL FROM SUBROUTINE 'SYMBOL'. THIS CALL RETURNS THE CURRENT ORIGIN.
-      XPAG=XORG
-      YPAG=YORG
+      xpag=xorg
+      ypag=yorg
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1006) !  SPECIAL ENTRY FOR CALL FROM CALCOMP VERSION OF SUBROUTINE 'SYMBOL'. THIS CALL ADVANCES THE PEN POSITION.
-      XLAST=XLAST+XPAG
-      YLAST=YLAST+YPAG
+      xlast=xlast+xpag
+      ylast=ylast+ypag
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1007) !  SPECIAL ENTRY FOR CALL FROM SUBROUTINE 'PLOTS'. THIS CALL INSURES THAT THE PEN IS POSITIONED AT THE
                  ! ORIGIN (0.0,0.0) WHEN THE PLOT PACKAGE IS INITIALIZED.
-      CALL primitive__draw_line(0.0+XOFF,0.0,0.0+XOFF,0.0)
+      call primitive__draw_line(0.0+xoff,0.0,0.0+xoff,0.0)
 !-----------------------------------------------------------------------------------------------------------------------------------
       case(1008) !  SPECIAL ENTRY FOR CALL FROM ESCC SUBROUTINE 'NFRAME'. THE PLOTTING
                  !  OF THE FINAL POINT OF THE GRAPH IS INSURED, THEN 'primitive__frend' IS CALLED
                  !  TO PLACE THE END-OF-FRAME MARK IN THE METALANGUAGE FILE. VARIABLES
                  !  USED BY THE 'PLOT' SUBROUTINE ARE RE-INITIALIZED, AND THE PEN IS
                  !  MOVED TO THE 0.0,0.0 POINT.
-      CALL primitive__draw_line(XLAST+XOFF,YLAST,XLAST+XOFF,YLAST)
-      CALL primitive__frend(1)
-      XORG=0.0
-      YORG=0.0
-      XLAST=0.0
-      YLAST=0.0
-      PENX=0.0
-      PENY=0.0
-      YS=0.0
-      NOEND=.FALSE.
-      CALL primitive__draw_line(0.0+XOFF,0.0,0.0+XOFF,0.0)
+      call primitive__draw_line(xlast+xoff,ylast,xlast+xoff,ylast)
+      call primitive__frend(1)
+      xorg=0.0
+      yorg=0.0
+      xlast=0.0
+      ylast=0.0
+      penx=0.0
+      peny=0.0
+      ys=0.0
+      noend=.false.
+      call primitive__draw_line(0.0+xoff,0.0,0.0+xoff,0.0)
 !-----------------------------------------------------------------------------------------------------------------------------------
       case default
       write(*,*)'*plot* ERROR: unknown action value=',ipen
 !-----------------------------------------------------------------------------------------------------------------------------------
       end select
-END SUBROUTINE PLOT
+end subroutine plot
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -6184,7 +6184,7 @@ END SUBROUTINE PLOT
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE PLOTS(xmin,xmax,ymin,ymax)
+subroutine plots(xmin,xmax,ymin,ymax)
 implicit none
 
 ! ident_26="@(#)M_calcomp::plots(3f): initialize the CALCOMP package"
@@ -6194,15 +6194,15 @@ real,intent(in) :: xmin, xmax, ymin, ymax
 ! MODIFIED 3/85 TO ADD COMMONS WMODE AND WMODEP
 ! TO INITIALIZE TEXT MODE AND SIZE
 !
-      CTTYP_Q='SOFT'
-      KTSIZE_Q=37
+      cttyp_q='SOFT'
+      ktsize_q=37
 !
 ! 'primitive__start_plotting' INITIALIZES THE METALANGUAGE ELEMENTS.
-      CALL primitive__start_plotting(xmin,xmax,ymin,ymax)
-      CALL PLOT(0.0,0.0,1007)
-      CALL mpset('TSIZ',FLOAT(KTSIZE_Q))
+      call primitive__start_plotting(xmin,xmax,ymin,ymax)
+      call plot(0.0,0.0,1007)
+      call mpset('TSIZ',float(ktsize_q))
 
-END SUBROUTINE PLOTS
+end subroutine plots
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -6361,7 +6361,7 @@ END SUBROUTINE PLOTS
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE SCALE(ARRAY,AXLEN,NPTS,INC)
+subroutine scale(array,axlen,npts,inc)
 implicit none
 
 ! ident_27="@(#)M_calcomp::scale(3f): calculate scaling factors for producing XY plots with LINE(3f) and AXIS(3f) routines"
@@ -6370,7 +6370,7 @@ implicit none
 !     AXLEN   LENGTH IN IN./CM. OVER WHICH ARRAY IS TO BE SCALED.
 !     NPTS    NUMBER OF POINTS TO BE SCALED.
 !     INC     INCREMENT OF LOCATION OF SUCCESSIVE POINTS.
-real    :: ARRAY(*),SAVE(7)
+real    :: array(*),save(7)
 real    :: axlen
 integer :: npts
 integer :: inc
@@ -6386,62 +6386,62 @@ real    :: t
 real    :: y0
 real    :: yn
 real    :: ys
-   SAVE(1)=1.0
-   SAVE(2)=2.0
-   SAVE(3)=4.0
-   SAVE(4)=5.0
-   SAVE(5)=8.0
-   SAVE(6)=10.0
-   SAVE(7)=20.0
-   FAD=0.01
-   K=ABS(INC)
-   N=NPTS*K
-   Y0=ARRAY(1)
-   YN=Y0
-   DO  25  I=1,N,K
-      YS=ARRAY(I)
-      IF  (Y0-YS)  22,22,21
-21    Y0=YS
-      GO  TO  25
-22    IF  (YS-YN)  25,25,24
-24    YN=YS
-25 CONTINUE
-   FIRSTV=Y0
-   IF  (Y0)  34,35,35
-34 FAD=FAD-1.0
-35 DELTAV=(YN-FIRSTV)/AXLEN
-   if(DELTAV) 70,70,40
-40 I=LOG10(DELTAV)+1000.0
-   P=10.0**(I-1000)
-   DELTAV=DELTAV/P-0.01
-   DO  45  I=1,6
-      IS=I
-      IF  (SAVE(I)-DELTAV)  45,50,50
-45 CONTINUE
-50 DELTAV=SAVE(IS)*P
-   FIRSTV=DELTAV*AINT(Y0/DELTAV+FAD)
-   T=FIRSTV+(AXLEN+0.01)*DELTAV
-   if(T-YN)  55,57,57
-55 FIRSTV=P*AINT(Y0/P+FAD)
-   T=FIRSTV+(AXLEN+.01)*DELTAV
-   if(T-YN) 56,57,57
-56 IS=IS+1
-   GO  TO  50
-57 FIRSTV=FIRSTV-AINT((AXLEN+(FIRSTV-YN)/DELTAV)/2.0)*DELTAV
-   if(Y0*FIRSTV) 58,58,59
-58 FIRSTV=0.0
-59 IF  (INC) 61,61,65
-61 FIRSTV=FIRSTV+AINT(AXLEN+.5)*DELTAV
-   DELTAV=-DELTAV
-65 N=N+1
-   ARRAY(N)=FIRSTV
-   N=N+K
-   ARRAY(N)=DELTAV
-   RETURN
-70 DELTAV=2.0*FIRSTV
-   DELTAV=ABS(DELTAV/AXLEN)+1.0
-   GOTO 40
-END SUBROUTINE SCALE
+   save(1)=1.0
+   save(2)=2.0
+   save(3)=4.0
+   save(4)=5.0
+   save(5)=8.0
+   save(6)=10.0
+   save(7)=20.0
+   fad=0.01
+   k=abs(inc)
+   n=npts*k
+   y0=array(1)
+   yn=y0
+   do  25  i=1,n,k
+      ys=array(i)
+      if  (y0-ys)  22,22,21
+21    y0=ys
+      go  to  25
+22    if  (ys-yn)  25,25,24
+24    yn=ys
+25 continue
+   firstv=y0
+   if  (y0)  34,35,35
+34 fad=fad-1.0
+35 deltav=(yn-firstv)/axlen
+   if(deltav) 70,70,40
+40 i=log10(deltav)+1000.0
+   p=10.0**(i-1000)
+   deltav=deltav/p-0.01
+   do  45  i=1,6
+      is=i
+      if  (save(i)-deltav)  45,50,50
+45 continue
+50 deltav=save(is)*p
+   firstv=deltav*aint(y0/deltav+fad)
+   t=firstv+(axlen+0.01)*deltav
+   if(t-yn)  55,57,57
+55 firstv=p*aint(y0/p+fad)
+   t=firstv+(axlen+.01)*deltav
+   if(t-yn) 56,57,57
+56 is=is+1
+   go  to  50
+57 firstv=firstv-aint((axlen+(firstv-yn)/deltav)/2.0)*deltav
+   if(y0*firstv) 58,58,59
+58 firstv=0.0
+59 if  (inc) 61,61,65
+61 firstv=firstv+aint(axlen+.5)*deltav
+   deltav=-deltav
+65 n=n+1
+   array(n)=firstv
+   n=n+k
+   array(n)=deltav
+   return
+70 deltav=2.0*firstv
+   deltav=abs(deltav/axlen)+1.0
+   goto 40
+end subroutine scale
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -6639,8 +6639,7 @@ END SUBROUTINE SCALE
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE SYMBOL(XPAGE,YPAGE,HEIGHT,STRING,INTEQ,ANGLE,NCHAR)
-use M_strings, only : upper
+subroutine symbol(xpage,ypage,height,string,inteq,angle,nchar)
 implicit none
 
 ! ident_28="@(#)M_calcomp::symbol(3f): draw text string or marker"
@@ -6925,12 +6924,12 @@ real    :: yfac
 real    :: yorg
 real    :: ypage
 real,save    :: yrlorg = 0.0
-      IBCD=upper(STRING)
-      ICNT=0
-      ISYM=-1
-      NUMCHR=NCHAR
-      CALL PLOT(XFAC,YFAC,1003)
-      if(NCHAR.EQ.0) NUMCHR=1
+      ibcd=upper(string)
+      icnt=0
+      isym=-1
+      numchr=nchar
+      call plot(xfac,yfac,1003)
+      if(nchar.eq.0) numchr=1
 !
 !  IF EITHER OF THE CALLING ARGUMENT 'XPAGE' OR 'YPAGE' HAS A
 !  VALUE OF 999, THE NEXT SYMBOL IS TO BE APPENDED IN THE SPECIFIED
@@ -6942,16 +6941,16 @@ real,save    :: yrlorg = 0.0
 !  NOT, REDEFINE THE APPROPRIATE RELATIVE ORIGIN FOR THE SYMBOL
 !  TO THE VALUE SPECIFIED.
 !
-      if(ABS(XPAGE-999.0).GT.0.0001) XRLORG=XPAGE*XFAC
-      if(ABS(YPAGE-999.0).GT.0.0001) YRLORG=YPAGE*YFAC
+      if(abs(xpage-999.0).gt.0.0001) xrlorg=xpage*xfac
+      if(abs(ypage-999.0).gt.0.0001) yrlorg=ypage*yfac
 !
 ! ADDED FUNCTION TO SUPPORT HARDWARE CHARACTERS
 !
-      IF( CTTYP_Q .EQ. 'HARD' .AND. NCHAR .GE. 1)THEN
-         CALL PLOT(XORG,YORG,1005)
-         CALL primitive__draw_text(XORG+XRLORG,YORG+YRLORG,IBCD,ANGLE)
-         RETURN
-      ENDIF
+      if( cttyp_q .eq. 'HARD' .and. nchar .ge. 1)then
+         call plot(xorg,yorg,1005)
+         call primitive__draw_text(xorg+xrlorg,yorg+yrlorg,ibcd,angle)
+         return
+      endif
 !
 !  CALCULATE THE SCALING FACTORS (IN THE X AND Y DIRECTIONS) FOR
 !  THE SYMBOL TO BE DRAWN. THE SCALING FACTOR IS BASED ON THE
@@ -6961,8 +6960,8 @@ real,save    :: yrlorg = 0.0
 !  7.0 TO ACCOUNT FOR THE FACT THAT THE SPECIFIED HEIGHT APPLIES
 !  TO THE ENTIRE 7 X 7 GRID FOR WHICH EACH SYMBOL IS DEFINED.
 !
-      XFAC=HEIGHT/7.0*XFAC
-      YFAC=HEIGHT/7.0*YFAC
+      xfac=height/7.0*xfac
+      yfac=height/7.0*yfac
 !
 !  MOVE THE PEN TO THE STARTING POINT FOR THE NEXT SYMBOL. IF THE
 !  NUMBER OF CHARACTERS TO BE DRAWN IS LESS THAN OR EQUAL TO -2, A
@@ -6975,11 +6974,11 @@ real,save    :: yrlorg = 0.0
 !  SYMBOL. (THE 'PLOT' SUBROUTINE APPLIES ANY REQUIRED
 !  SCALING FACTORS.)
 !
-      if(NCHAR.LE.-2) THEN
-         CALL PLOT(XPAGE,YPAGE,2)
-      ELSE
-         CALL PLOT(XPAGE,YPAGE,3)
-      ENDIF
+      if(nchar.le.-2) then
+         call plot(xpage,ypage,2)
+      else
+         call plot(xpage,ypage,3)
+      endif
 !
 !  DETERMINE THE ANGLE AT WHICH THE SYMBOL IS TO BE DRAWN. IF THE
 !  ABSOLUTE VALUE OF THE ANGLE IS LESS THAN OR EQUAL TO 1800.0 DEGREES,
@@ -6991,27 +6990,27 @@ real,save    :: yrlorg = 0.0
 !  NUMBERS SINCE DIFFERENT OPERATING SYSTEMS EMPLOY VARYING
 !  METHODS TO INITIALIZE CENTRAL MEMORY.
 !
-      if(ABS(ANGLE).LE.1800.0) THEN
-         THETA=ANGLE*PI/180.0
-      ELSE
-         THETA=0.0
-      ENDIF
+      if(abs(angle).le.1800.0) then
+         theta=angle*pi/180.0
+      else
+         theta=0.0
+      endif
 !
 !  EACH SYMBOL IN THE SYMBOL TABLE HAS BEEN ASSIGNED A UNIQUE
 !  INTEGER VALUE BY WHICH THAT SYMBOL MAY BE IDENTIFIED.
 !
 !  IF NCHAR IS .LT. 0 A SYMBOL IS TO BE PRINTED
 !  IF NCHAR IS .GE. 0 THEN PRINT A STRING
-      IF(NCHAR.LT.0)THEN
+      if(nchar.lt.0)then
 !     INTEGER EQUIVALENT ARGUMENT ('INTEQ') MUST LIE BETWEEN 0 AND 91 .
 !   ? DETERMINE IF THE INTEGER EQUIVALENT ARGUMENT INTEQ HAS A LEGITIMATE VALUE
 !
 !        SET THE SYMBOL INDICATOR (ISYM) TO THE SYMBOL INTEGER EQUIVALENT
-         ISYM=INTEQ
+         isym=inteq
 !        TRANSFER CONTROL TO THE PORTION OF THE SUBROUTINE WHICH EXTRACTS THE
 !        INSTRUCTIONS FOR DRAWING THE SYMBOL
-         GOTO 20
-      ENDIF
+         goto 20
+      endif
 !
 !  IF THIS PORTION OF THE SUBROUTINE IS REACHED, THE SYMBOL TO BE
 !  DRAWN HAS BEEN SPECIFIED AS A CHARACTER STRING. INCREMENT THE
@@ -7024,19 +7023,19 @@ real,save    :: yrlorg = 0.0
 !  SYMBOLS. HENCE, THE INTEGER EQUIVALENT OF ANY CHARACTER IS
 !  OFFSET FROM ITS POSITION IN 'ALPHA_Q' BY 27.)
 !
-5     ICNT=ICNT+1
-      if(ICNT.GT.NUMCHR) GOTO 100
+5     icnt=icnt+1
+      if(icnt.gt.numchr) goto 100
 ! MODIFIED MAX DO INDEX FROM 96 FOR ORLANDO
-      DO 10 I=1,63
-         if(IBCD(ICNT:ICNT).EQ.ALPHA_Q(I)) THEN
-            ISYM=I+27
-            GOTO 20
-         ENDIF
-10    CONTINUE
-      WRITE (6,15)IBCD(ICNT:ICNT)
-      WRITE (6,'(63A1)')(ALPHA_Q(II),II=1,63)
-15    FORMAT(' A MATCH COULD NOT BE FOUND FOR CHARACTER ',A1)
-      GOTO 60
+      do 10 i=1,63
+         if(ibcd(icnt:icnt).eq.alpha_q(i)) then
+            isym=i+27
+            goto 20
+         endif
+10    continue
+      write (6,15)ibcd(icnt:icnt)
+      write (6,'(63A1)')(alpha_q(ii),ii=1,63)
+15    format(' A MATCH COULD NOT BE FOUND FOR CHARACTER ',a1)
+      goto 60
 !
 !  SEARCH THE 'TABLE' ARRAY FOR THE INTEGER EQUIVALENT OF THE SYMBOL
 !  TO BE DRAWN. 'TABLE' IS ARRANGED SUCH THAT THE ENTRY FOLLOWING
@@ -7054,47 +7053,47 @@ real,save    :: yrlorg = 0.0
 !  FOUND, IDENTIFY THE NUMBER OF STRAIGHT LINE SEGMENTS USED TO
 !  DRAW THE SYMBOL.
 !
-20    I=1
-30    CONTINUE
-      if(ISYM.NE.TABLE_Q(I)) THEN
-         I=I+TABLE_Q(I+1)+2
+20    i=1
+30    continue
+      if(isym.ne.table_q(i)) then
+         i=i+table_q(i+1)+2
 ! CHANGED 782 TO 699
-         if(I.LE.699) GOTO 30
-         WRITE(6, '('' HAVE EXHAUSTED SYMBOL TABLE- PROCEEDING TO NEXT SYMBOL'')')
-         GOTO 60
-      ENDIF
-      NUMSEG=TABLE_Q(I+1)
-      IF(NUMSEG .EQ. 0)GOTO 60
-      DO 50 J=1,NUMSEG
+         if(i.le.699) goto 30
+         write(6, '('' HAVE EXHAUSTED SYMBOL TABLE- PROCEEDING TO NEXT SYMBOL'')')
+         goto 60
+      endif
+      numseg=table_q(i+1)
+      if(numseg .eq. 0)goto 60
+      do 50 j=1,numseg
 !
 !  DECODE THE NEXT 'TABLE' ENTRY TO DETERMINE THE RELATIVE CARTESIAN
 !  COORDINATES (THE END POINTS) FOR THE NEXT LINE OF THE SYMBOL.
 !
-         ISEG=TABLE_Q(I+1+J)
-         X1=ISEG/1000
-         Y1=(ISEG-ISEG/1000*1000)/100
-         X2=(ISEG-ISEG/100*100)/10
-         Y2=ISEG-ISEG/10*10
+         iseg=table_q(i+1+j)
+         x1=iseg/1000
+         y1=(iseg-iseg/1000*1000)/100
+         x2=(iseg-iseg/100*100)/10
+         y2=iseg-iseg/10*10
 !
 !  TRANSLATE THE RELATIVE CARTESIAN COORDINATES FOR THE SEGMENT INTO
 !  RELATIVE POLAR COORDINATES.
 !
-         if(ABS(X1).LT.0.0001) THEN
-            ANGL1=PI/2.00
-         ELSE
-            ANGL1=ATAN(Y1/X1)
-         ENDIF
-         if(ABS(X2).LT.0.0001) THEN
-            ANGL2=PI/2.0
-         ELSE
-            ANGL2=ATAN(Y2/X2)
-         ENDIF
-         RAD=SQRT(X1*X1+Y1*Y1)
-         X1=RAD*XFAC*COS(ANGL1+THETA)
-         Y1=RAD*YFAC*SIN(ANGL1+THETA)
-         RAD=SQRT(X2*X2+Y2*Y2)
-         X2=RAD*XFAC*COS(ANGL2+THETA)
-         Y2=RAD*YFAC*SIN(ANGL2+THETA)
+         if(abs(x1).lt.0.0001) then
+            angl1=pi/2.00
+         else
+            angl1=atan(y1/x1)
+         endif
+         if(abs(x2).lt.0.0001) then
+            angl2=pi/2.0
+         else
+            angl2=atan(y2/x2)
+         endif
+         rad=sqrt(x1*x1+y1*y1)
+         x1=rad*xfac*cos(angl1+theta)
+         y1=rad*yfac*sin(angl1+theta)
+         rad=sqrt(x2*x2+y2*y2)
+         x2=rad*xfac*cos(angl2+theta)
+         y2=rad*yfac*sin(angl2+theta)
 !
 !  SET THE X AND Y FACTORS FOR SYMBOL CENTERING TO 0.0. DETERMINE
 !  IF THE SYMBOL IS TO BE CENTERED. (ONLY SYMBOLS WITH NUMERICAL
@@ -7103,18 +7102,18 @@ real,save    :: yrlorg = 0.0
 !  ORIGIN OF THE SYMBOL DEFINITION GRID WITH RESPECT TO THE DEFINED
 !  CENTER OF THE SYMBOL.
 !
-         if((INTEQ.GE.0) .AND. (INTEQ.LE.14)) THEN
-            IF(NCHAR.LT.0)THEN
-               CENTRX=(-2.0)*XFAC
-               CENTRY=(-2.0)*YFAC
-            ELSE
-               CENTRX=0.0
-               CENTRY=0.0
-            ENDIF
-         ELSE
-            CENTRX=0.0
-            CENTRY=0.0
-         ENDIF
+         if((inteq.ge.0) .and. (inteq.le.14)) then
+            if(nchar.lt.0)then
+               centrx=(-2.0)*xfac
+               centry=(-2.0)*yfac
+            else
+               centrx=0.0
+               centry=0.0
+            endif
+         else
+            centrx=0.0
+            centry=0.0
+         endif
 !
 !  CALL THE 'PLOT' SUBROUTINE TO FIND THE CURRENTLY DEFINED ORIGIN
 !  FOR THE ENTIRE FRAME. THEN, CALL THE 'primitive__draw_line' GRAPHICS PRIMITIVE
@@ -7123,9 +7122,9 @@ real,save    :: yrlorg = 0.0
 !  (XORG,YORG), THE ORIGIN POINT FOR THE SYMBOL DEFINITION GRID
 !  (XRLORG,YRLORG) AND THE SYMBOL CENTERING FACTOR (CENTRX,CENTRY).
 !
-         CALL PLOT(XORG,YORG,1005)
-         CALL primitive__draw_line(X1+XORG+XRLORG+CENTRX,Y1+YORG+YRLORG+CENTRY, X2+XORG+XRLORG+CENTRX,Y2+YORG+YRLORG+CENTRY)
-50    CONTINUE
+         call plot(xorg,yorg,1005)
+         call primitive__draw_line(x1+xorg+xrlorg+centrx,y1+yorg+yrlorg+centry, x2+xorg+xrlorg+centrx,y2+yorg+yrlorg+centry)
+50    continue
 !
 !  CALCULATE THE STARTING POINT FOR THE NEXT SYMBOL. THE VALUE OF XSPC_Q
 !   AND YSPC_Q IN THESE EQUATIONS IS THE WIDTH OF THE GRID ON WHICH EACH
@@ -7144,25 +7143,58 @@ real,save    :: yrlorg = 0.0
 ! CHARACTERS. MODIFICATION FROM ORLANDO
 !
 !
-60    XRLORG=XRLORG+(XSPC_Q*XFAC*COS(0.00+THETA))
-      YRLORG=YRLORG+(YSPC_Q*YFAC*SIN(0.00+THETA))
+60    xrlorg=xrlorg+(xspc_q*xfac*cos(0.00+theta))
+      yrlorg=yrlorg+(yspc_q*yfac*sin(0.00+theta))
 !
 !  IF 'INTEQ' DOES NOT CONTAIN A VALUE CORRESPONDING TO ONE OF
 !  THE DEFINED SYMBOLS, ASSUME THAT A CHARACTER STRING IS BEING
 !  DRAWN, AND TRANSFER CONTROL TO INTERPRET THE NEXT ELEMENT OF
 !  THE STRING.
 !
-      if(NCHAR.GT.0) GOTO 5
+      if(nchar.gt.0) goto 5
 !
 !  RESET THE SYMBOL SIZE FACTORS TO UNITY PRIOR TO LEAVING THE
 !  SUBROUTINE, AND RETURNS THE PEN TO THE ORIGIN OF THE
 !  CHARACTER. (THE 'PLOT' SUBROUTINE APPLIES ANY REQUIRED
 !  SCALING FACTORS.)
 !
-100   XFAC=1.0
-      YFAC=1.0
-      CALL PLOT(XPAGE,YPAGE,3)
-END SUBROUTINE SYMBOL
+100   xfac=1.0
+      yfac=1.0
+      call plot(xpage,ypage,3)
+end subroutine symbol
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+function upper(str,begin,end) result (string)
+
+! ident_29="@(#)M_strings::upper(3f): Changes a string to uppercase"
+
+character(*), intent(in)      :: str                 ! inpout string to convert to all uppercase
+integer, intent(in), optional :: begin,end
+character(len(str))           :: string              ! output string that contains no miniscule letters
+integer                       :: i                   ! loop counter
+integer                       :: ibegin,iend
+integer,parameter             :: diff = iachar('A')-iachar('a')
+   string = str                                      ! initialize output string to input string
+   ibegin=1
+   iend=len_trim(str)
+
+   if (present(begin))then
+      ibegin = min(max(ibegin,begin),iend)
+   endif
+
+   if (present(end))then
+      iend= max(1,min(iend,end))
+   endif
+
+   do concurrent (i = ibegin:iend)                   ! step thru each letter in the string in specified range
+       select case (str(i:i))
+       case ('a':'z')                                ! located miniscule letter
+          string(i:i) = char(iachar(str(i:i))+diff)  ! change miniscule letter to uppercase
+       end select
+   enddo
+
+end function upper
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -7211,7 +7243,7 @@ END SUBROUTINE SYMBOL
 subroutine where(xpag,ypag,fct)
 implicit none
 
-! ident_29="@(#)M_calcomp::where(3f): return current position and current plot-scaling factor"
+! ident_30="@(#)M_calcomp::where(3f): return current position and current plot-scaling factor"
 
 real,intent(out) :: xpag
 real,intent(out) :: ypag
@@ -7230,352 +7262,352 @@ end subroutine where
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-LOGICAL FUNCTION primitive__NEWONE (VAL)
+logical function primitive__newone (val)
 implicit none
-INTEGER :: VAL
+integer :: val
 ! CONCOM
-INTEGER L,M,U,D
-   if(NN_Q.EQ.0) GOTO 70
-   primitive__NEWONE=.FALSE.
-   if(ALT_Q) GOTO 10
-   L=1
-   U=NN_Q
-   GOTO 20
-10 L=NN_Q
-   U=LIMIT_Q
-20 D=U-L
-   if(VAL.EQ.REC_Q(L)) RETURN
-   if(D.EQ.0) GOTO 70
-   if(VAL.EQ.REC_Q(U)) RETURN
-   if(D.EQ.1) GOTO 70
-30 M=L+D/2
-   if(VAL-REC_Q(M)) 40,80,50
-40 U=M
-   GOTO 60
-50 L=M
-60 D=U-L
-   if(D.NE.1) GOTO 30
-70 primitive__NEWONE=.TRUE.
+integer l,m,u,d
+   if(nn_q.eq.0) goto 70
+   primitive__newone=.false.
+   if(alt_q) goto 10
+   l=1
+   u=nn_q
+   goto 20
+10 l=nn_q
+   u=limit_q
+20 d=u-l
+   if(val.eq.rec_q(l)) return
+   if(d.eq.0) goto 70
+   if(val.eq.rec_q(u)) return
+   if(d.eq.1) goto 70
+30 m=l+d/2
+   if(val-rec_q(m)) 40,80,50
+40 u=m
+   goto 60
+50 l=m
+60 d=u-l
+   if(d.ne.1) goto 30
+70 primitive__newone=.true.
 80 continue
-END FUNCTION primitive__NEWONE
+end function primitive__newone
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE primitive__PASS (X,Z)
-implicit none !! jsujsu
+subroutine primitive__pass (x,z)
+implicit none
 !           MERGE PAIRS OF STRINGS OF LENGTH C_Q FROM X INTO Z
 !           WHERE X HAS NTRK_Q ELEMENTS
 !           X AND Z ARE PARAMS FOR SWITCHING ARRAYS
    ! CONCOM
-INTEGER X(*),Z(*)
-INTEGER K,P,Q,R,S,T
+integer x(*),z(*)
+integer k,p,q,r,s,t
 !           K IS INDEX INTO Z
 !           S, T ARE INDICES INTO X@  P.LE.S.LT.Q.LE.T.LT.R
 !           WITH C_Q.EQ.Q-P AND C_Q.EQ.R-Q
-   K=0
-   R=1
+   k=0
+   r=1
 ! STEP THRU X PICKING OFF PAIRS OF C_Q-LENGTH STRINGS
-10 P=R
-   if(P.GT.ntrk_q) GOTO 70
+10 p=r
+   if(p.gt.ntrk_q) goto 70
 !                            ALL DONE
-   S=P
-   Q=P+C_Q
-   if(Q.GT.ntrk_q) GOTO 60
+   s=p
+   q=p+c_q
+   if(q.gt.ntrk_q) goto 60
 !                            NO MERGE, JUST TRANSFER THE STRING
-   R=Q+C_Q
-   if(R.GT.ntrk_q) R=ntrk_q+1
+   r=q+c_q
+   if(r.gt.ntrk_q) r=ntrk_q+1
 !                            SHORT STRING TO MERGE
-   T=Q
+   t=q
 ! SELECT ELEMENT TO PASS TO Z
-20 K=K+1
-   if(X(S).GT.X(T)) GOTO 30
-   Z(K)=X(S)
-   S=S+1
-   if(S-Q) 20,40,40
-30 Z(K)=X(T)
-   T=T+1
-   if(T-R) 20,50,50
+20 k=k+1
+   if(x(s).gt.x(t)) goto 30
+   z(k)=x(s)
+   s=s+1
+   if(s-q) 20,40,40
+30 z(k)=x(t)
+   t=t+1
+   if(t-r) 20,50,50
 ! FIRST STRING EMPTY, FLUSH THE SECOND
-40 K=K+1
-   Z(K)=X(T)
-   T=T+1
-   if(T-R) 40,10,10
+40 k=k+1
+   z(k)=x(t)
+   t=t+1
+   if(t-r) 40,10,10
 ! SECOND STRING EMPTY, FLUSH THE FIRST
-50 K=K+1
-   Z(K)=X(S)
-   S=S+1
-   if(S-Q) 50,10,10
+50 k=k+1
+   z(k)=x(s)
+   s=s+1
+   if(s-q) 50,10,10
 ! FLUSH END OF X, NO MERGE NEEDED
-60 K=K+1
-   Z(K)=X(S)
-   S=S+1
-   if(S-ntrk_q) 60,60,70
+60 k=k+1
+   z(k)=x(s)
+   s=s+1
+   if(s-ntrk_q) 60,60,70
 ! ALL DONE
-70 RETURN
+70 return
 !
-END SUBROUTINE primitive__PASS
+end subroutine primitive__pass
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE primitive__RECORX
+subroutine primitive__recorx
 implicit none
    ! CONCOM
-   ODDPAS_Q=.FALSE.
-   C_Q=1
-10 if(C_Q.GE.NTRK_Q) GOTO 20
-   CALL primitive__PASS(TRK_Q,TRKA_Q)
-   ODDPAS_Q=.TRUE.
-   C_Q=C_Q+C_Q
-   if(C_Q.GE.NTRK_Q) GOTO 20
-   CALL primitive__PASS(TRKA_Q,TRK_Q)
-   ODDPAS_Q=.FALSE.
-   C_Q=C_Q+C_Q
-   GOTO 10
-20 if(ODDPAS_Q) GOTO 30
-   CALL primitive__MERGER(TRK_Q)
-   RETURN
-30 CALL primitive__MERGER(TRKA_Q)
+   oddpas_q=.false.
+   c_q=1
+10 if(c_q.ge.ntrk_q) goto 20
+   call primitive__pass(trk_q,trka_q)
+   oddpas_q=.true.
+   c_q=c_q+c_q
+   if(c_q.ge.ntrk_q) goto 20
+   call primitive__pass(trka_q,trk_q)
+   oddpas_q=.false.
+   c_q=c_q+c_q
+   goto 10
+20 if(oddpas_q) goto 30
+   call primitive__merger(trk_q)
+   return
+30 call primitive__merger(trka_q)
 !
-END SUBROUTINE primitive__RECORX
+end subroutine primitive__recorx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE primitive__SCAN (AM,TOTX,TOTY,NYDIM)
+subroutine primitive__scan (am,totx,toty,nydim)
 implicit none
 integer :: nydim
-REAL    :: AM(NYDIM,*),TOTX(*),TOTY(*)
+real    :: am(nydim,*),totx(*),toty(*)
 ! CONCOM
-REAL    :: OP
+real    :: op
 integer :: jx
 integer :: jy
-   ALT_Q=.FALSE.
-   EDGE_Q=.TRUE.
-   NN_Q=0
-   IX_Q=1
-   OP=AM(1,1)
-   DO 10 IY_Q=2,NY_Q
-      if(AM(1,IY_Q).LT.CVV_Q.OR.OP.GE.CVV_Q) GOTO 10
-      DIREC_Q=3
-      CALL primitive__TRACER(AM,TOTX,TOTY,NYDIM)
-10 OP=AM(1,IY_Q)
-   IX_Q=NX_Q
-   OP=AM(NX_Q,NY_Q)
-   DIREC_Q=1
-   IY_Q=NY_Q
-   DO 20 JY=1,NYM1_Q
-      IY_Q=IY_Q-1
-      if(AM(NX_Q,IY_Q).LT.CVV_Q.OR.OP.GE.CVV_Q) GOTO 20
-      CALL primitive__TRACER(AM,TOTX,TOTY,NYDIM)
-20 OP=AM(NX_Q,IY_Q)
-   IY_Q=1
-   OP=AM(NX_Q,1)
-   DIREC_Q=4
-   IX_Q=NX_Q
-   DO 30 JX=1,NXM1_Q
-      IX_Q=IX_Q-1
-      if(AM(IX_Q,1).LT.CVV_Q.OR.OP.GE.CVV_Q) GOTO 30
-      CALL primitive__TRACER(AM,TOTX,TOTY,NYDIM)
-30 OP=AM(IX_Q,1)
-   IY_Q=NY_Q
-   OP=AM(1,NY_Q)
-   DIREC_Q=2
-   DO 40 IX_Q=2,NX_Q
-      if(AM(IX_Q,NY_Q).LT.CVV_Q.OR.OP.GE.CVV_Q) GOTO 40
-      CALL primitive__TRACER(AM,TOTX,TOTY,NYDIM)
-40 OP=AM(IX_Q,NY_Q)
-   EDGE_Q=.FALSE.
-   IY_Q=NY_Q
-   DO 50 JY=2,NYM1_Q
-      IY_Q=IY_Q-1
-      OP=AM(1,IY_Q)
-      DO 50 IX_Q=2,NX_Q
-         if(AM(IX_Q,IY_Q).LT.CVV_Q.OR.OP.GE.CVV_Q) GOTO 50
-         if(primitive__NEWONE(IX_Q+(IY_Q-1)*NX_Q))THEN
-            CALL primitive__TRACER(AM,TOTX,TOTY,NYDIM)
-         ENDIF
-50 OP=AM(IX_Q,IY_Q)
+   alt_q=.false.
+   edge_q=.true.
+   nn_q=0
+   ix_q=1
+   op=am(1,1)
+   do 10 iy_q=2,ny_q
+      if(am(1,iy_q).lt.cvv_q.or.op.ge.cvv_q) goto 10
+      direc_q=3
+      call primitive__tracer(am,totx,toty,nydim)
+10 op=am(1,iy_q)
+   ix_q=nx_q
+   op=am(nx_q,ny_q)
+   direc_q=1
+   iy_q=ny_q
+   do 20 jy=1,nym1_q
+      iy_q=iy_q-1
+      if(am(nx_q,iy_q).lt.cvv_q.or.op.ge.cvv_q) goto 20
+      call primitive__tracer(am,totx,toty,nydim)
+20 op=am(nx_q,iy_q)
+   iy_q=1
+   op=am(nx_q,1)
+   direc_q=4
+   ix_q=nx_q
+   do 30 jx=1,nxm1_q
+      ix_q=ix_q-1
+      if(am(ix_q,1).lt.cvv_q.or.op.ge.cvv_q) goto 30
+      call primitive__tracer(am,totx,toty,nydim)
+30 op=am(ix_q,1)
+   iy_q=ny_q
+   op=am(1,ny_q)
+   direc_q=2
+   do 40 ix_q=2,nx_q
+      if(am(ix_q,ny_q).lt.cvv_q.or.op.ge.cvv_q) goto 40
+      call primitive__tracer(am,totx,toty,nydim)
+40 op=am(ix_q,ny_q)
+   edge_q=.false.
+   iy_q=ny_q
+   do 50 jy=2,nym1_q
+      iy_q=iy_q-1
+      op=am(1,iy_q)
+      do 50 ix_q=2,nx_q
+         if(am(ix_q,iy_q).lt.cvv_q.or.op.ge.cvv_q) goto 50
+         if(primitive__newone(ix_q+(iy_q-1)*nx_q))then
+            call primitive__tracer(am,totx,toty,nydim)
+         endif
+50 op=am(ix_q,iy_q)
 !
-END SUBROUTINE primitive__SCAN
+end subroutine primitive__scan
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE primitive__TRACER (AM,TOTX,TOTY,NYDIM)
+subroutine primitive__tracer (am,totx,toty,nydim)
 implicit none
 integer :: nydim
-REAL    :: AM(NYDIM,*),TOTX(*),TOTY(*)
+real    :: am(nydim,*),totx(*),toty(*)
 ! CONCOM
-INTEGER :: Z
-REAL    :: TEM,PLOTX,PLOTY,FPLOTX,FPLOTY,AMC,AMW,AMZ,AMQ,AMS,AMD,AMP
-LOGICAL :: FIRST
-INTEGER :: S,TIX,TIY,CIX,CIY,DIX,DIY,SUB,PIX,PIY,SWSD,SWMQ
+integer :: z
+real    :: tem,plotx,ploty,fplotx,fploty,amc,amw,amz,amq,ams,amd,amp
+logical :: first
+integer :: s,tix,tiy,cix,ciy,dix,diy,sub,pix,piy,swsd,swmq
 real    :: amm
-   FIRST=.TRUE.
-   NTRK_Q=0
-   TIX=IX_Q
-   TIY=IY_Q
-   S=DIREC_Q
-   DIX=IXD_Q(S)
-   DIY=IYD_Q(S)
-   CIX=TIX+DIX
-   CIY=TIY+DIY
+   first=.true.
+   ntrk_q=0
+   tix=ix_q
+   tiy=iy_q
+   s=direc_q
+   dix=ixd_q(s)
+   diy=iyd_q(s)
+   cix=tix+dix
+   ciy=tiy+diy
 10 continue
-   TEM=AM(TIX,TIY)
-   AMC=AM(CIX,CIY)
-   if(DIX.NE.0) GOTO 20
-   SUB=TIY
-   if(DIY.LT.0) SUB=SUB-1
-   PLOTX=TOTX(TIX)
-   PLOTY=TOTY(TIY)+DIY*(TEM-CVV_Q)*HY_Q(SUB)/(TEM-AMC)
-   GOTO 30
+   tem=am(tix,tiy)
+   amc=am(cix,ciy)
+   if(dix.ne.0) goto 20
+   sub=tiy
+   if(diy.lt.0) sub=sub-1
+   plotx=totx(tix)
+   ploty=toty(tiy)+diy*(tem-cvv_q)*hy_q(sub)/(tem-amc)
+   goto 30
 20 continue
-   SUB=TIX
-   if(DIX.LT.0) SUB=SUB-1
-   PLOTY=TOTY(TIY)
-   PLOTX=TOTX(TIX)+DIX*(TEM-CVV_Q)*HX_Q(SUB)/(TEM-AMC)
+   sub=tix
+   if(dix.lt.0) sub=sub-1
+   ploty=toty(tiy)
+   plotx=totx(tix)+dix*(tem-cvv_q)*hx_q(sub)/(tem-amc)
 30 continue
-   if(FIRST) GOTO 40
-   CALL PLOT(PLOTX*RATIO_Q,PLOTY*RATIO_Q,2)
-   GOTO 50
+   if(first) goto 40
+   call plot(plotx*ratio_q,ploty*ratio_q,2)
+   goto 50
 40 continue
-   FPLOTX=PLOTX*RATIO_Q
-   FPLOTY=PLOTY*RATIO_Q
-   CALL NUMBER(FPLOTX+.02, FPLOTY-.15, 0.14, FLOAT(II_Q), 0.0, -1)
-   CALL PLOT(FPLOTX,FPLOTY,3)
-   FIRST=.FALSE.
+   fplotx=plotx*ratio_q
+   fploty=ploty*ratio_q
+   call number(fplotx+.02, fploty-.15, 0.14, float(ii_q), 0.0, -1)
+   call plot(fplotx,fploty,3)
+   first=.false.
 50 continue
-   if(.NOT.(EDGE_Q)) GOTO 60
-   if(TIY.EQ.NY_Q.AND.S.EQ.4.OR.TIX.EQ.1.AND.S.EQ.1.OR.TIX.EQ.NX_Q.AND.S .EQ.3.OR.TIY.EQ.1.AND.S.EQ.2) GOTO 260
+   if(.not.(edge_q)) goto 60
+   if(tiy.eq.ny_q.and.s.eq.4.or.tix.eq.1.and.s.eq.1.or.tix.eq.nx_q.and.s .eq.3.or.tiy.eq.1.and.s.eq.2) goto 260
 60 continue
-   AMM=(TEM+AMC)/2.0
-   Z=S+1
-   if(Z.GT.4) Z=Z-4
-   PIX=IXD_Q(Z)
-   PIY=IYD_Q(Z)
-   AMW=AM(TIX+PIX,TIY+PIY)
-   AMZ=AM(CIX+PIX,CIY+PIY)
-   AMQ=(AMW+AMZ)/2.0
-   AMS=(TEM+AMW)/2.0
-   AMD=(AMC+AMZ)/2.0
-   AMP=(AMM+AMQ)/2.0
-   if(AMM.GE.CVV_Q) GOTO 110
-   if(AMS.LT.CVV_Q) GOTO 260
-   if(AMP.GE.CVV_Q) GOTO 90
-   ASSIGN 70 TO SWSD
-   GOTO 190
+   amm=(tem+amc)/2.0
+   z=s+1
+   if(z.gt.4) z=z-4
+   pix=ixd_q(z)
+   piy=iyd_q(z)
+   amw=am(tix+pix,tiy+piy)
+   amz=am(cix+pix,ciy+piy)
+   amq=(amw+amz)/2.0
+   ams=(tem+amw)/2.0
+   amd=(amc+amz)/2.0
+   amp=(amm+amq)/2.0
+   if(amm.ge.cvv_q) goto 110
+   if(ams.lt.cvv_q) goto 260
+   if(amp.ge.cvv_q) goto 90
+   assign 70 to swsd
+   goto 190
 70 continue
-   if(AMW.LT.CVV_Q) GOTO 260
-   if(AMQ.LT.CVV_Q) GOTO 220
-   ASSIGN 80 TO SWMQ
-   GOTO 160
+   if(amw.lt.cvv_q) goto 260
+   if(amq.lt.cvv_q) goto 220
+   assign 80 to swmq
+   goto 160
 80 continue
-   if(AMZ.LT.CVV_Q) GOTO 220
-   GOTO 240
+   if(amz.lt.cvv_q) goto 220
+   goto 240
 90 continue
-   ASSIGN 100 TO SWMQ
-   GOTO 160
+   assign 100 to swmq
+   goto 160
 100 continue
-   if(AMD.GE.CVV_Q) GOTO 240
-   ASSIGN 80 TO SWSD
-   GOTO 190
+   if(amd.ge.cvv_q) goto 240
+   assign 80 to swsd
+   goto 190
 110 continue
-   if(AMP.GE.CVV_Q) GOTO 140
-   ASSIGN 120 TO SWMQ
-   GOTO 160
+   if(amp.ge.cvv_q) goto 140
+   assign 120 to swmq
+   goto 160
 120 continue
-   if(AMS.LT.CVV_Q) GOTO 260
-   ASSIGN 130 TO SWSD
-   GOTO 190
+   if(ams.lt.cvv_q) goto 260
+   assign 130 to swsd
+   goto 190
 130 continue
-   if(AMW.LT.CVV_Q) GOTO 260
-   GOTO 220
+   if(amw.lt.cvv_q) goto 260
+   goto 220
 140 continue
-   if(AMD.GE.CVV_Q) GOTO 240
-   ASSIGN 150 TO SWSD
-   GOTO 190
+   if(amd.ge.cvv_q) goto 240
+   assign 150 to swsd
+   goto 190
 150 continue
-   if(AMQ.GE.CVV_Q) GOTO 80
-   ASSIGN 130 TO SWMQ
+   if(amq.ge.cvv_q) goto 80
+   assign 130 to swmq
 !      INTERPOLATE MQ
 160 continue
-   if(PIX.NE.0) GOTO 170
-   SUB=TIY
-   if(PIY.LT.0) SUB=SUB-1
-   PLOTX=(TOTX(TIX)+TOTX(CIX))/2.0
-   PLOTY=TOTY(TIY)+PIY*(AMM-CVV_Q)*HY_Q(SUB)/(AMM-AMQ)
-   GOTO 180
+   if(pix.ne.0) goto 170
+   sub=tiy
+   if(piy.lt.0) sub=sub-1
+   plotx=(totx(tix)+totx(cix))/2.0
+   ploty=toty(tiy)+piy*(amm-cvv_q)*hy_q(sub)/(amm-amq)
+   goto 180
 170 continue
-   SUB=TIX
-   if(PIX.LT.0) SUB=SUB-1
-   PLOTY=(TOTY(TIY)+TOTY(CIY))/2.0
-   PLOTX=TOTX(TIX)+PIX*(AMM-CVV_Q)*HX_Q(SUB)/(AMM-AMQ)
+   sub=tix
+   if(pix.lt.0) sub=sub-1
+   ploty=(toty(tiy)+toty(ciy))/2.0
+   plotx=totx(tix)+pix*(amm-cvv_q)*hx_q(sub)/(amm-amq)
 180 continue
-   CALL PLOT(PLOTX*RATIO_Q,PLOTY*RATIO_Q,2)
-   GOTO SWMQ, (80,100,120,130)
+   call plot(plotx*ratio_q,ploty*ratio_q,2)
+   goto swmq, (80,100,120,130)
 !      INTERPOLATE SD
 190 continue
-   if(DIX.NE.0) GOTO 200
-   SUB=TIY
-   if(DIY.LT.0) SUB=SUB-1
-   PLOTX=(TOTX(TIX)+TOTX(TIX+PIX))/2.0
-   PLOTY=TOTY(TIY)+DIY*(AMS-CVV_Q)*HY_Q(SUB)/(AMS-AMD)
-   GOTO 210
+   if(dix.ne.0) goto 200
+   sub=tiy
+   if(diy.lt.0) sub=sub-1
+   plotx=(totx(tix)+totx(tix+pix))/2.0
+   ploty=toty(tiy)+diy*(ams-cvv_q)*hy_q(sub)/(ams-amd)
+   goto 210
 200 continue
-   SUB=TIX
-   if(DIX.LT.0) SUB=SUB-1
-   PLOTY=(TOTY(TIY)+TOTY(TIY+PIY))/2.0
-   PLOTX=TOTX(TIX)+DIX*(AMS-CVV_Q)*HX_Q(SUB)/(AMS-AMD)
+   sub=tix
+   if(dix.lt.0) sub=sub-1
+   ploty=(toty(tiy)+toty(tiy+piy))/2.0
+   plotx=totx(tix)+dix*(ams-cvv_q)*hx_q(sub)/(ams-amd)
 210 continue
-   CALL PLOT(PLOTX*RATIO_Q,PLOTY*RATIO_Q,2)
-   GOTO SWSD (70,80,130,150)
+   call plot(plotx*ratio_q,ploty*ratio_q,2)
+   goto swsd (70,80,130,150)
 !      TRANSFER TO W
 220 continue
-   if(TIX.EQ.1) GOTO 230
-   if(AM(TIX-1,TIY).LT.CVV_Q) CALL primitive__ADDREC(TIX+(TIY-1)*NX_Q)
+   if(tix.eq.1) goto 230
+   if(am(tix-1,tiy).lt.cvv_q) call primitive__addrec(tix+(tiy-1)*nx_q)
 230 continue
-   TIX=TIX+PIX
-   TIY=TIY+PIY
-   GOTO 280
+   tix=tix+pix
+   tiy=tiy+piy
+   goto 280
 !      TRANSFER TO Z
 240 continue
-   if(TIX.EQ.1) GOTO 250
-   if(AM(TIX-1,TIY).LT.CVV_Q) CALL primitive__ADDREC(TIX+(TIY-1)*NX_Q)
+   if(tix.eq.1) goto 250
+   if(am(tix-1,tiy).lt.cvv_q) call primitive__addrec(tix+(tiy-1)*nx_q)
 250 continue
-   S=S+3
-   TIX=CIX+PIX
-   TIY=CIY+PIY
-   GOTO 270
+   s=s+3
+   tix=cix+pix
+   tiy=ciy+piy
+   goto 270
 !      ROTATE
 260 continue
-   S=S+1
+   s=s+1
 270 continue
-   if(S.GT.4) S=S-4
-   DIX=IXD_Q(S)
-   DIY=IYD_Q(S)
+   if(s.gt.4) s=s-4
+   dix=ixd_q(s)
+   diy=iyd_q(s)
 280 continue
-   CIX=TIX+DIX
-   CIY=TIY+DIY
-   if(EDGE_Q) GOTO 290
-   if((TIX.NE.IX_Q).OR.(TIY.NE.IY_Q).OR.(DIREC_Q.NE.S)) GOTO 300
-   CALL PLOT(FPLOTX,FPLOTY,2)
-   GOTO 330
+   cix=tix+dix
+   ciy=tiy+diy
+   if(edge_q) goto 290
+   if((tix.ne.ix_q).or.(tiy.ne.iy_q).or.(direc_q.ne.s)) goto 300
+   call plot(fplotx,fploty,2)
+   goto 330
 290 continue
-   if((CIX.LT.1).OR.(CIY.LT.1).OR.(CIX.GT.NX_Q).OR.(CIY.GT.NY_Q)) GOTO 320
+   if((cix.lt.1).or.(ciy.lt.1).or.(cix.gt.nx_q).or.(ciy.gt.ny_q)) goto 320
 300 continue
-   if(AM(CIX,CIY).LT.CVV_Q) GOTO 10
-   if(TIX.EQ.1) GOTO 310
-   if(AM(TIX-1,TIY).LT.CVV_Q) CALL primitive__ADDREC(TIX+(TIY-1)*NX_Q)
+   if(am(cix,ciy).lt.cvv_q) goto 10
+   if(tix.eq.1) goto 310
+   if(am(tix-1,tiy).lt.cvv_q) call primitive__addrec(tix+(tiy-1)*nx_q)
 310 continue
-   S=S+3
-   TIX=CIX
-   TIY=CIY
-   GOTO 270
+   s=s+3
+   tix=cix
+   tiy=ciy
+   goto 270
 320 continue
-   if(TIX.EQ.1) GOTO 330
-   if(AM(TIX-1,TIY).LT.CVV_Q) CALL primitive__ADDREC(TIX+(TIY-1)*NX_Q)
+   if(tix.eq.1) goto 330
+   if(am(tix-1,tiy).lt.cvv_q) call primitive__addrec(tix+(tiy-1)*nx_q)
 330 continue
-   CALL primitive__RECORX
+   call primitive__recorx
 !
-END SUBROUTINE primitive__TRACER
+end subroutine primitive__tracer
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -7645,19 +7677,19 @@ END SUBROUTINE primitive__TRACER
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE CNTOUR (AM,XX,YY,TOTX,TOTY,HGT,CV,CVN,TAB,NDIMYY)
+subroutine cntour (am,xx,yy,totx,toty,hgt,cv,cvn,tab,ndimyy)
 implicit none
 
-! ident_30="@(#)M_calcomp::cntour(3f): draw a contour plot"
+! ident_31="@(#)m_calcomp::cntour(3f): draw a contour plot"
 
-INTEGER XX,YY,CVN
-CHARACTER ENCXDE*9
+integer xx,yy,cvn
+character encxde*9
 integer :: ndimyy
-REAL AM(NDIMYY,*),TOTX(*),TOTY(*),CV(*),HGT
-LOGICAL TAB
+real am(ndimyy,*),totx(*),toty(*),cv(*),hgt
+logical tab
 ! CONCOM
-INTEGER I,IT
-REAL RT,TEM,DIS,SCALE
+integer i,it
+real rt,tem,dis,scale
 real :: bjklx
 real :: bjkly
 real :: dissav
@@ -7670,75 +7702,75 @@ real :: xdisp
 !           REC_Q. VALUE IS USED IN SUBROUTINE primitive__NEWONE.
 !         HXSZ_Q IS THE VALUE OF THE SIZE OF VECTORS HX_Q, HY_Q, TRK_Q AND TRKA_Q.
 !           SIZE EXCEEDED TEST USING HXSZ_Q IS MADE IN SUBROUTINE primitive__ADDREC.
-   NX_Q=XX
-   NXM1_Q=NX_Q-1
-   NY_Q=YY
-   NYM1_Q=NY_Q-1
-   DO I=1,NXM1_Q
-      HX_Q(I)=TOTX(I+1)-TOTX(I)
+   nx_q=xx
+   nxm1_q=nx_q-1
+   ny_q=yy
+   nym1_q=ny_q-1
+   do i=1,nxm1_q
+      hx_q(i)=totx(i+1)-totx(i)
    enddo
-   DO I=1,NYM1_Q
-      HY_Q(I)=TOTY(I+1)-TOTY(I)
+   do i=1,nym1_q
+      hy_q(i)=toty(i+1)-toty(i)
    enddo
-   RT=TOTX(1)
-   RTX=RT
-   if(RT.EQ.0.0) GOTO 40
-   DO I=1,NX_Q
-      TOTX(I)=TOTX(I)-RT
+   rt=totx(1)
+   rtx=rt
+   if(rt.eq.0.0) goto 40
+   do i=1,nx_q
+      totx(i)=totx(i)-rt
    enddo
-40 RT=TOTY(1)
-   RTY=RT
-   if(RT.EQ.0.0) GOTO 60
-   DO I=1,NY_Q
-      TOTY(I)=TOTY(I)-RT
+40 rt=toty(1)
+   rty=rt
+   if(rt.eq.0.0) goto 60
+   do i=1,ny_q
+      toty(i)=toty(i)-rt
    enddo
-60 if(HGT.GT. 6.5) HGT= 6.5
-   if(TAB) GOTO 150
-70 RATIO_Q=HGT/TOTY(NY_Q)
-   DO II_Q=1,CVN
-      CVV_Q=CV(II_Q)
-      CALL primitive__SCAN(AM,TOTX,TOTY,NDIMYY)
+60 if(hgt.gt. 6.5) hgt= 6.5
+   if(tab) goto 150
+70 ratio_q=hgt/toty(ny_q)
+   do ii_q=1,cvn
+      cvv_q=cv(ii_q)
+      call primitive__scan(am,totx,toty,ndimyy)
    enddo
-   CALL PLOT(0.0,0.0,-3)
-   DO I=2,NXM1_Q
-      BJKLX=TOTX(I)*RATIO_Q
-      CALL PLOT(BJKLX,0.0,2)
-      CALL PLOT(BJKLX,-0.1,2)
-      CALL PLOT(BJKLX,0.0,2)
+   call plot(0.0,0.0,-3)
+   do i=2,nxm1_q
+      bjklx=totx(i)*ratio_q
+      call plot(bjklx,0.0,2)
+      call plot(bjklx,-0.1,2)
+      call plot(bjklx,0.0,2)
    enddo
-   BJKLX=TOTX(NX_Q)*RATIO_Q
-   CALL PLOT(BJKLX,0.0,2)
-   DO I=2,NYM1_Q
-      BJKLY=TOTY(I)*RATIO_Q
-      CALL PLOT(BJKLX,BJKLY,2)
-      CALL PLOT(BJKLX+0.1,BJKLY,2)
-      CALL PLOT(BJKLX,BJKLY,2)
+   bjklx=totx(nx_q)*ratio_q
+   call plot(bjklx,0.0,2)
+   do i=2,nym1_q
+      bjkly=toty(i)*ratio_q
+      call plot(bjklx,bjkly,2)
+      call plot(bjklx+0.1,bjkly,2)
+      call plot(bjklx,bjkly,2)
    enddo
-   BJKLY=TOTY(NY_Q)*RATIO_Q
-   CALL PLOT(BJKLX,BJKLY,2)
-   DO IPJB=2,NXM1_Q
-      I=NXM1_Q+2-IPJB
-      BJKLX=TOTX(I)*RATIO_Q
-      CALL PLOT(BJKLX,BJKLY,2)
-      CALL PLOT(BJKLX,BJKLY+0.1,2)
-      CALL PLOT(BJKLX,BJKLY,2)
+   bjkly=toty(ny_q)*ratio_q
+   call plot(bjklx,bjkly,2)
+   do ipjb=2,nxm1_q
+      i=nxm1_q+2-ipjb
+      bjklx=totx(i)*ratio_q
+      call plot(bjklx,bjkly,2)
+      call plot(bjklx,bjkly+0.1,2)
+      call plot(bjklx,bjkly,2)
    enddo
-   CALL PLOT(0.0,BJKLY,2)
-   DO IPJB=2,NYM1_Q
-      I=NYM1_Q+2-IPJB
-      BJKLY=TOTY(I)*RATIO_Q
-      CALL PLOT(0.0,BJKLY,2)
-      CALL PLOT(-0.1,BJKLY,2)
-      CALL PLOT(0.0,BJKLY,2)
+   call plot(0.0,bjkly,2)
+   do ipjb=2,nym1_q
+      i=nym1_q+2-ipjb
+      bjkly=toty(i)*ratio_q
+      call plot(0.0,bjkly,2)
+      call plot(-0.1,bjkly,2)
+      call plot(0.0,bjkly,2)
    enddo
-   CALL PLOT(0.0,0.0,2)
-   DO I=1,NX_Q
-      TOTX(I)=TOTX(I)+RTX
+   call plot(0.0,0.0,2)
+   do i=1,nx_q
+      totx(i)=totx(i)+rtx
    enddo
-   DO I=1,NY_Q
-      TOTY(I)=TOTY(I)+RTY
+   do i=1,ny_q
+      toty(i)=toty(i)+rty
    enddo
-   RETURN
+   return
 !
 !  THE FOLLOWING STATEMENT WAS MODIFIED WHEN THIS SUBROUTINE WAS
 !  CONVERTED TO THE CRAY. THE STATEMENT ORIGINALLY READ
@@ -7748,19 +7780,19 @@ real :: xdisp
 !  'DIS' WAS SET TO A VALUE OF 8.5 TO FORCE THE LEGEND OF THE
 !  PLOT TO THE UPPER LEFT CORNER OF THE DISPLAY AREA.
 !
-150 DIS=8.5
-   RT=CV(1)
-   DO I=2,CVN
-      if(ABS(RT).LT.ABS(CV(I))) RT=CV(I)
+150 dis=8.5
+   rt=cv(1)
+   do i=2,cvn
+      if(abs(rt).lt.abs(cv(i))) rt=cv(i)
    enddo
-   IT=0
-   SCALE=1.0
-170 if(ABS(RT).LT.999999.95) GOTO 180
-   SCALE=SCALE/10.0
-   RT=RT/10.0
-   IT=IT-1
-   GOTO 170
-180 if(IT.EQ.0) GOTO 190
+   it=0
+   scale=1.0
+170 if(abs(rt).lt.999999.95) goto 180
+   scale=scale/10.0
+   rt=rt/10.0
+   it=it-1
+   goto 170
+180 if(it.eq.0) goto 190
 !
 !  THE FOLLOWING CALL TO THE 'SYMBOL' ROUTINE HAS BEEN MODIFIED TO
 !  CONVERT THIS SUBROUTINE TO THE CRAY. ON THE CRAY, 'SYMBOL' HAS
@@ -7773,10 +7805,10 @@ real :: xdisp
 !  IN THIS SUBROUTINE, 'INTEQ' IS SET TO THE VALUE 999 (WHICH HAS NO
 !  SIGNIFICANCE FOR 'SYMBOL').
 !
-   INTEQ=999
-   CALL SYMBOL(0.26,DIS,0.14,'SCALE = 10',INTEQ,0.0,10)
-   CALL NUMBER(1.66,DIS+0.07,0.07,FLOAT(IT),0.0,-1)
-   DIS=DIS-0.25
+   inteq=999
+   call symbol(0.26,dis,0.14,'SCALE = 10',inteq,0.0,10)
+   call number(1.66,dis+0.07,0.07,float(it),0.0,-1)
+   dis=dis-0.25
 !
 !  THE FOLLOWING CALL TO THE 'SYMBOL' ROUTINE HAS BEEN MODIFIED TO
 !  CONVERT THIS SUBROUTINE TO THE CRAY. ON THE CRAY, 'SYMBOL' HAS
@@ -7793,29 +7825,29 @@ real :: xdisp
 !  COLUMN OF CONTOUR IDENTIFIERS IN THE PLOT LEGEND IF MORE
 !  THAN 10 CONTOUR LINES ARE REQUESTED.
 !
-190 INTEQ=999
-   CALL SYMBOL(0.0,DIS,0.14,'DIGIT      CONTOUR',INTEQ,0.0,18)
-   if(CVN.GT.10) CALL SYMBOL(2.0,DIS,0.14,'DIGIT      CONTOUR',INTEQ,0.0,18)
-   DIS = DIS - 0.25
+190 inteq=999
+   call symbol(0.0,dis,0.14,'DIGIT      CONTOUR',inteq,0.0,18)
+   if(cvn.gt.10) call symbol(2.0,dis,0.14,'DIGIT      CONTOUR',inteq,0.0,18)
+   dis = dis - 0.25
 !
 !  SAVE THE Y COORDINATE OF THE TITLE LINE OF THE LEGEND; IT WILL
 !  BE USED TO POSITION THE SECOND COLUMN OF THE LEGENDIF MORE
 !  THAN 10 CONTOUR LINES ARE REQUESTED.
 !
-   DISSAV=DIS
-   DO 220 I=1,CVN
-      RT=1.0
-      if(I/10.NE.0) RT=2.0
+   dissav=dis
+   do 220 i=1,cvn
+      rt=1.0
+      if(i/10.ne.0) rt=2.0
 !
 !  SET THE DISPLACEMENT IN THE X DIRECTION FOR THE CONTOUR
 !  IDENTIFIERS. BY DEFAULT, THE DISPLACEMENT IS SET FOR
 !  THE LEFT COLUMN OF THE LEGEND.
 !
-      XDISP=1.0
-      if(CVN.GT.10) THEN
-         XDISP=3.0
-         DIS=DISSAV
-      ENDIF
+      xdisp=1.0
+      if(cvn.gt.10) then
+         xdisp=3.0
+         dis=dissav
+      endif
 !
 !  THE SCALING OF THE FOLLOWING STATEMENT WAS MODIFIED WHEN THIS
 !  SUBROUTINE WAS CONVERTED TO THE CRAY. THE STATEMENT ORIGINALLY
@@ -7827,15 +7859,15 @@ real :: xdisp
 !  TO APPEAR IN THE LEGEND. THE INFLUENCE OF THE DISPLACEMENT
 !  FACTOR HAS ALSO BEEN INCLUDED.
 !
-      CALL NUMBER(0.42-RT+XDISP, DIS, 0.09, FLOAT(I), 0.0, -1)
-      TEM=CV(I)*SCALE
-      IT=TEM+00.5
-      RT=3.0
-200   IT=IT/10
-      if(IT.EQ.0) GOTO 210
-      RT=RT+1.0
-      GOTO 200
-210   CONTINUE
+      call number(0.42-rt+xdisp, dis, 0.09, float(i), 0.0, -1)
+      tem=cv(i)*scale
+      it=tem+00.5
+      rt=3.0
+200   it=it/10
+      if(it.eq.0) goto 210
+      rt=rt+1.0
+      goto 200
+210   continue
 !
 !  THE FOLLOWING CALL TO THE 'SYMBOL' ROUTINE HAS BEEN MODIFIED TO
 !  CONVERT THIS SUBROUTINE TO THE CRAY. ON THE CRAY, 'SYMBOL' HAS
@@ -7860,10 +7892,10 @@ real :: xdisp
 !  THE SIZE WAS ADJUSTED TO PERMIT 10 LINES OF INFORMATION TO APPEAR
 !  IN THE LEGEND.
 !
-      INTEQ=999
-      WRITE(ENCXDE,'(E9.3)')CV(I)
-      CALL SYMBOL(0.7+XDISP, DIS, 0.09, ENCXDE,INTEQ, 0.0, 9)
-220 DIS = DIS - 0.20
+      inteq=999
+      write(encxde,'(E9.3)')cv(i)
+      call symbol(0.7+xdisp, dis, 0.09, encxde,inteq, 0.0, 9)
+220 dis = dis - 0.20
 !
 !  THE FOLLOWING STATEMENT WAS ORIGINALLY USED TO POSITION THE
 !  CONTOUR PLOT BESIDE THE LEGEND. IT HAS BEEN "COMMENTED OUT"
@@ -7871,95 +7903,95 @@ real :: xdisp
 !  THIS ARRANGEMENTS PERMITS LARGER CONTOUR PLOTS.
 !
 !     CALL PLOT(3.5,0.0,-3)
-   GOTO 70
+   goto 70
 !
-END SUBROUTINE CNTOUR
+end subroutine cntour
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE primitive__ADDREC (VAL)
+subroutine primitive__addrec (val)
 implicit none
-INTEGER,INTENT(IN) ::  VAL
+integer,intent(in) ::  val
 ! CONCOM
-   NTRK_Q=NTRK_Q+1
-   if(NTRK_Q.GT.HXSZ_Q) STOP 7117
-   TRK_Q(NTRK_Q)=VAL
+   ntrk_q=ntrk_q+1
+   if(ntrk_q.gt.hxsz_q) stop 7117
+   trk_q(ntrk_q)=val
 !
-END SUBROUTINE primitive__ADDREC
+end subroutine primitive__addrec
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-SUBROUTINE primitive__MERGER (X)
-implicit none !! jsujsu
-INTEGER X(*)
+subroutine primitive__merger (x)
+implicit none
+integer x(*)
 ! CONCOM
-INTEGER :: K,I,J
-INTEGER DUP
-   if(ntrk_q.EQ.0) GOTO 180
-   if(ALT_Q) GOTO 80
-   I=ntrk_q
-   K=LIMIT_Q+1
-   if(NN_Q.EQ.0) GOTO 60
-   J=NN_Q
-10 if(X(I)-rec_q(J)) 20,15,30
-15 CONTINUE
-   I=I-1
-   if(I) 50,50,20
-20 K=K-1
-   rec_q(K)=rec_q(J)
-   J=J-1
-   if(J) 60,60,10
-30 K=K-1
-   if(K.LE.J) STOP 7227
-   DUP=X(I)
-   rec_q(K)=DUP
-40 I=I-1
-   if(I.LE.0) GOTO 50
-   if(X(I)-DUP) 10,40,10
-50 K=K-1
-   rec_q(K)=rec_q(J)
-   J=J-1
-   if(J) 170,170,50
-60 K=K-1
-   if(K.LT.1) STOP 7227
-   DUP=X(I)
-   rec_q(K)=DUP
-70 I=I-1
-   if(I.LE.0) GOTO 170
-   if(X(I)-DUP) 60,70,60
-80 I=1
-   K=0
-   J=NN_Q
-90 if(X(I)-rec_q(J)) 120,100,110
-100 I=I+1
-    if(I-ntrk_q) 110,110,140
-110 K=K+1
-    rec_q(K)=rec_q(J)
-    J=J+1
-    if(J-LIMIT_Q) 90,90,150
-120 K=K+1
-    if(K.GE.J) STOP 7227
-    DUP=X(I)
-    rec_q(K)=DUP
-130 I=I+1
-    if(I.GT.ntrk_q) GOTO 140
-    if(X(I)-DUP) 90,130,90
-140 K=K+1
-    rec_q(K)=rec_q(J)
-    J=J+1
-    if(J-LIMIT_Q) 140,140,170
-150 K=K+1
-    if(K.GT.LIMIT_Q) STOP 7227
-    DUP=X(I)
-    rec_q(K)=DUP
-160 I=I+1
-    if(I.GT.ntrk_q) GOTO 170
-    if(X(I)-DUP) 150,160,150
-170 ALT_Q=.NOT.ALT_Q
-    NN_Q=K
+integer :: k,i,j
+integer dup
+   if(ntrk_q.eq.0) goto 180
+   if(alt_q) goto 80
+   i=ntrk_q
+   k=limit_q+1
+   if(nn_q.eq.0) goto 60
+   j=nn_q
+10 if(x(i)-rec_q(j)) 20,15,30
+15 continue
+   i=i-1
+   if(i) 50,50,20
+20 k=k-1
+   rec_q(k)=rec_q(j)
+   j=j-1
+   if(j) 60,60,10
+30 k=k-1
+   if(k.le.j) stop 7227
+   dup=x(i)
+   rec_q(k)=dup
+40 i=i-1
+   if(i.le.0) goto 50
+   if(x(i)-dup) 10,40,10
+50 k=k-1
+   rec_q(k)=rec_q(j)
+   j=j-1
+   if(j) 170,170,50
+60 k=k-1
+   if(k.lt.1) stop 7227
+   dup=x(i)
+   rec_q(k)=dup
+70 i=i-1
+   if(i.le.0) goto 170
+   if(x(i)-dup) 60,70,60
+80 i=1
+   k=0
+   j=nn_q
+90 if(x(i)-rec_q(j)) 120,100,110
+100 i=i+1
+    if(i-ntrk_q) 110,110,140
+110 k=k+1
+    rec_q(k)=rec_q(j)
+    j=j+1
+    if(j-limit_q) 90,90,150
+120 k=k+1
+    if(k.ge.j) stop 7227
+    dup=x(i)
+    rec_q(k)=dup
+130 i=i+1
+    if(i.gt.ntrk_q) goto 140
+    if(x(i)-dup) 90,130,90
+140 k=k+1
+    rec_q(k)=rec_q(j)
+    j=j+1
+    if(j-limit_q) 140,140,170
+150 k=k+1
+    if(k.gt.limit_q) stop 7227
+    dup=x(i)
+    rec_q(k)=dup
+160 i=i+1
+    if(i.gt.ntrk_q) goto 170
+    if(x(i)-dup) 150,160,150
+170 alt_q=.not.alt_q
+    nn_q=k
 180 continue
 !
-END SUBROUTINE primitive__MERGER
+end subroutine primitive__merger
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

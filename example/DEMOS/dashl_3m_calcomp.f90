@@ -1,13 +1,13 @@
           program demo_dashl
-          use M_calcomp
+          use m_calcomp
           character(len=28) :: ichr1
           character(len=26) :: ichr2
           character(len=10) :: lbcd1,lbcd2
           dimension xarray(62),yarray(62)
-          ICHR1='PLOTTED ON A CALCOMP PLOTTER'
-          ICHR2='USING  Y = X -0.7*X +0.1*X'
-          LBCD1='X-ABSCISSA'
-          LBCD2='Y-ORDINATE'
+          ichr1='PLOTTED ON A CALCOMP PLOTTER'
+          ichr2='USING  Y = X -0.7*X +0.1*X'
+          lbcd1='X-ABSCISSA'
+          lbcd2='Y-ORDINATE'
           ! PLOT GRAPH ILLUSTRATING SCALE, AXIS, AND LINE
           deltax=0.04
           ! AXIS DRAWS LABELS AS MUCH AS 0.4 INCHES TO THE NEGATIVE OF AXIS CENTER;
@@ -15,9 +15,9 @@
           ! ORIGIN VALUE OF LESS THAN 0.4 OR CLIPPING WILL OCCUR
           call plots(0.0,12.0,0.0,12.0)
           call width(0)
-          call newpen(WHITE)
+          call newpen(white)
           call rect(0.0,0.0,11.0,10.0,0.0,7)
-          call plot(0.4,0.4,-MOVE)
+          call plot(0.4,0.4,-move)
           deltax=2.0*deltax
           xarray(1)=deltax
           do j=1,60
@@ -33,7 +33,7 @@
           !!linetype=-1
           !!inteq=4
           !!call line(xarray(1),yarray(1),60,1,linetype,inteq)
-          call newpen(GREEN)
+          call newpen(green)
           call dashl(xarray(1),yarray(1),60,1)
           call newpen(1)
           call symbol(1.3,10.,.14,ichr1,inteq,0.0,28)
@@ -42,5 +42,5 @@
           call number(2.98,9.8,.1,2.0,0.,-1)
           call number(3.96,9.8,.1,3.0,0.,-1)
           call number(4.94,9.8,.1,4.0,0.,-1)
-          call plot(0.0,0.0,END)
+          call plot(0.0,0.0,end)
           end program demo_dashl

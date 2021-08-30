@@ -877,7 +877,7 @@ end subroutine ellipse
 !!    MIT License
 subroutine uconic(x,y,p,e,th1,th2,rangle)
 !    procedure draws all or part of a generalized conic section having a
-!    given focus, directorix, and eccentricity and an angular span from
+!    given focus, directrix, and eccentricity and an angular span from
 !    th1 to th2
 !
 !    basis for uconic is general conic equation  r=ep/1-e*cos(theta)
@@ -890,9 +890,9 @@ subroutine uconic(x,y,p,e,th1,th2,rangle)
 !       call uconic(x,y,p,e,th1,th2)
 !    where
 !    x,y are the coordinates of the focus of the conic section
-!    p is the distance from the focus to the directorix
-!             p>0       focus to the right(below) the directorix
-!             p<0       focus to the left(above) the directorix
+!    p is the distance from the focus to the directrix
+!             p>0       focus to the right(below) the directrix
+!             p<0       focus to the left(above) the directrix
 !             p=0       the conic will be a point at x,y
 !    e is the eccentricity
 !             e=0       the conic is a circular arc with center at x,y and
@@ -908,7 +908,7 @@ subroutine uconic(x,y,p,e,th1,th2,rangle)
 !
 !    local variables
 !        ep   the product of the eccentricity(e) and the distance from the focus
-!             to the directorix
+!             to the directrix
 !        g    the denominator in the general conic equation
 !        r    the radius
 !        deg  the number of three degree line segments required to draw figure
@@ -951,7 +951,7 @@ real :: xx
 real :: y
 real :: yy
 !-----------------------------------------------------------------------------------------------------------------------------------
-! if distance between focus and directorix is zero plot a point
+! if distance between focus and directrix is zero plot a point
    if(p.eq.0.)then
       call point2(x,y)
       return

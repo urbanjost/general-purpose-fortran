@@ -2861,7 +2861,7 @@ integer  :: n, nk, nt
    ! unconditionally add name to end of list
    call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1),id)
 
-   ! did variable already exist (knowning name is there at least once)
+   ! did variable already exist (knowing name is there at least once)
    do k=GG_MAX_NUMBER_OF_NAMES,1,-1
       if (mat_eqid(G_VAR_IDS(1:,k),id)) exit
    enddo

@@ -490,8 +490,8 @@ do
          else
             expanded=expanded//get(name)
          endif
-         if(name.eq.'debug')debug=.true.   !! developement version
-         if(name.eq.'/debug')debug=.false. !! developement version
+         if(name.eq.'debug')debug=.true.   !! development version
+         if(name.eq.'/debug')debug=.false. !! development version
          i=ii+i+1
       endif
    case default

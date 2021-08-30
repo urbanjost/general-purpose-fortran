@@ -13,10 +13,10 @@
           character(len=26) :: ichr2
           character(len=10) :: lbcd1,lbcd2
           dimension xarray(62),yarray(62)
-          ICHR1='PLOTTED ON A CALCOMP PLOTTER'
-          ICHR2='USING  Y = X -0.7*X +0.1*X'
-          LBCD1='X-ABSCISSA'
-          LBCD2='Y-ORDINATE'
+          ichr1='PLOTTED ON A CALCOMP PLOTTER'
+          ichr2='USING  Y = X -0.7*X +0.1*X'
+          lbcd1='X-ABSCISSA'
+          lbcd2='Y-ORDINATE'
           ! PLOT GRAPH ILLUSTRATING SCALE, AXIS, AND LINE
           deltax=0.04
           ! AXIS DRAWS LABELS AS MUCH AS 0.4 INCHES TO THE NEGATIVE OF AXIS CENTER;

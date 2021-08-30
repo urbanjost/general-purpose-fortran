@@ -279,81 +279,81 @@ implicit none    ! change default for every procedure contained in the module
 ! ident_1="@(#)M_strings(3f): Fortran module containing routines that deal with character strings"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-PRIVATE
+private
 
 !----------------------# TOKENS
-PUBLIC split           !  subroutine parses a string using specified delimiter characters and store tokens into an allocatable array
-PUBLIC sep             !  function interface to split
-PUBLIC chomp           !  function consumes input line as it returns next token in a string using specified delimiters
-PUBLIC delim           !  subroutine parses a string using specified delimiter characters and store tokens into an array
-PUBLIC strtok          !  gets next token. Used by change(3f)
-PUBLIC fmt             !  convert a long string into a paragraph
+public split           !  subroutine parses a string using specified delimiter characters and store tokens into an allocatable array
+public sep             !  function interface to split
+public chomp           !  function consumes input line as it returns next token in a string using specified delimiters
+public delim           !  subroutine parses a string using specified delimiter characters and store tokens into an array
+public strtok          !  gets next token. Used by change(3f)
+public fmt             !  convert a long string into a paragraph
 !----------------------# EDITING
-PUBLIC substitute      !  subroutine non-recursively globally replaces old substring with new substring in string
-PUBLIC replace         !  function non-recursively globally replaces old substring with new substring in string
-PUBLIC change          !  replaces old substring with new substring in string with a directive like a line editor
-PUBLIC modif           !  change string using a directive using rules similar to XEDIT line editor MODIFY command
-PUBLIC transliterate   !  when characters in set one are found replace them with characters from set two
-PUBLIC reverse         !  elemental function reverses character order in a string
-PUBLIC join            !  append an array of character variables with specified separator into a single CHARACTER variable
-PUBLIC rotate13        !  apply trivial encryption algorithm ROT13 to string
+public substitute      !  subroutine non-recursively globally replaces old substring with new substring in string
+public replace         !  function non-recursively globally replaces old substring with new substring in string
+public change          !  replaces old substring with new substring in string with a directive like a line editor
+public modif           !  change string using a directive using rules similar to XEDIT line editor MODIFY command
+public transliterate   !  when characters in set one are found replace them with characters from set two
+public reverse         !  elemental function reverses character order in a string
+public join            !  append an array of character variables with specified separator into a single CHARACTER variable
+public rotate13        !  apply trivial encryption algorithm ROT13 to string
 !----------------------# CHARACTER ARRAY VERSUS STRING
-PUBLIC switch          !  generic switch between a string and an array of single characters (a2s,s2a)
-PRIVATE a2s            !  function to copy char array to string
-PRIVATE s2a            !  function to copy string(1:Clen(string)) to char array
-PUBLIC s2c             !  convert character variable to array of character(len=1) with null terminator for C compatibility
-PUBLIC c2s             !  convert null-terminated array of character(len=1) to string for strings returned by C
+public switch          !  generic switch between a string and an array of single characters (a2s,s2a)
+private a2s            !  function to copy char array to string
+private s2a            !  function to copy string(1:Clen(string)) to char array
+public s2c             !  convert character variable to array of character(len=1) with null terminator for C compatibility
+public c2s             !  convert null-terminated array of character(len=1) to string for strings returned by C
 !----------------------# CASE
-PUBLIC upper           !  elemental function converts string to uppercase
-PUBLIC lower           !  elemental function converts string to miniscule
-PUBLIC upper_quoted          !  elemental function converts string to miniscule skipping strings quoted per Fortran syntax rules
+public upper           !  elemental function converts string to uppercase
+public lower           !  elemental function converts string to miniscule
+public upper_quoted          !  elemental function converts string to miniscule skipping strings quoted per Fortran syntax rules
 !----------------------# WHITE SPACE
-PUBLIC adjustc         !  elemental function centers string within the length of the input string
-PUBLIC compact         !  left justify string and replace duplicate whitespace with single characters or nothing
-PUBLIC nospace         !  function replaces whitespace with nothing
-PUBLIC indent          !  count number of leading spaces
-PUBLIC crop            !  function trims leading and trailing spaces
+public adjustc         !  elemental function centers string within the length of the input string
+public compact         !  left justify string and replace duplicate whitespace with single characters or nothing
+public nospace         !  function replaces whitespace with nothing
+public indent          !  count number of leading spaces
+public crop            !  function trims leading and trailing spaces
 !----------------------# QUOTES
-PUBLIC unquote         !  remove quotes from string as if read with list-directed input
-PUBLIC quote           !  add quotes to string as if written with list-directed input
+public unquote         !  remove quotes from string as if read with list-directed input
+public quote           !  add quotes to string as if written with list-directed input
 !----------------------# STRING LENGTH
-PUBLIC lenset          !  return a string as specified length
-PUBLIC atleast         !  return a string of at least specified length
-PUBLIC stretch         !  return a string of at least specified length with suffix
-PUBLIC merge_str       !  make strings of equal length and then call MERGE(3f) intrinsic
-PUBLIC len_white       !  find location of last non-whitespace character
+public lenset          !  return a string as specified length
+public atleast         !  return a string of at least specified length
+public stretch         !  return a string of at least specified length with suffix
+public merge_str       !  make strings of equal length and then call MERGE(3f) intrinsic
+public len_white       !  find location of last non-whitespace character
 !----------------------# NONALPHA
-PUBLIC noesc           !  elemental function converts non-printable ASCII8 characters to a space
-PUBLIC notabs          !  convert tabs to spaces in output while maintaining columns, assuming a tab is set every 8 characters
-PUBLIC dilate          !  convert tabs to spaces in output while maintaining columns, assuming a tab is set every 8 characters
-PUBLIC expand          !  expand escape sequences in a string
-PUBLIC visible         !  expand escape sequences in a string to control and meta-control representations
+public noesc           !  elemental function converts non-printable ASCII8 characters to a space
+public notabs          !  convert tabs to spaces in output while maintaining columns, assuming a tab is set every 8 characters
+public dilate          !  convert tabs to spaces in output while maintaining columns, assuming a tab is set every 8 characters
+public expand          !  expand escape sequences in a string
+public visible         !  expand escape sequences in a string to control and meta-control representations
 !----------------------# NUMERIC STRINGS
-PUBLIC string_to_value !  generic subroutine returns REAL|DOUBLEPRECISION|INTEGER value from string (a2d,a2r,a2i)
- PRIVATE a2d           !  subroutine returns double value from string
- PRIVATE a2r           !  subroutine returns real value from string
- PRIVATE a2i           !  subroutine returns integer value from string
-PUBLIC string_to_values!  subroutine returns values from a string
-PUBLIC getvals         !  subroutine returns values from a string
-PUBLIC s2v             !  function returns doubleprecision value from string
-PUBLIC s2vs            !  function returns a doubleprecision array of numbers from a string
+public string_to_value !  generic subroutine returns REAL|DOUBLEPRECISION|INTEGER value from string (a2d,a2r,a2i)
+ private a2d           !  subroutine returns double value from string
+ private a2r           !  subroutine returns real value from string
+ private a2i           !  subroutine returns integer value from string
+public string_to_values!  subroutine returns values from a string
+public getvals         !  subroutine returns values from a string
+public s2v             !  function returns doubleprecision value from string
+public s2vs            !  function returns a doubleprecision array of numbers from a string
                        !------------------------------------------------------------------------------------------------------------
-PUBLIC msg             !  function returns a string representing up to nine scalar intrinsic values
-PUBLIC value_to_string !  generic subroutine returns string given numeric REAL|DOUBLEPRECISION|INTEGER|LOGICAL value
-PUBLIC v2s             !  generic function returns string given numeric REAL|DOUBLEPRECISION|INTEGER|LOGICAL value
- PRIVATE d2s           !  function returns string from doubleprecision value
- PRIVATE r2s           !  function returns string from real value
- PRIVATE i2s           !  function returns string from integer value
- PRIVATE l2s           !  function returns string from logical value
-PUBLIC v2s_bug         !  generic function returns string given numeric REAL|DOUBLEPRECISION|INTEGER value
-PUBLIC isnumber        !  determine if string represents a number
- PRIVATE trimzeros_    !  Delete trailing zeros from numeric decimal string
-PUBLIC listout         !  expand a list of numbers where  negative numbers denote range ends (1 -10 means 1 thru 10)
+public msg             !  function returns a string representing up to nine scalar intrinsic values
+public value_to_string !  generic subroutine returns string given numeric REAL|DOUBLEPRECISION|INTEGER|LOGICAL value
+public v2s             !  generic function returns string given numeric REAL|DOUBLEPRECISION|INTEGER|LOGICAL value
+ private d2s           !  function returns string from doubleprecision value
+ private r2s           !  function returns string from real value
+ private i2s           !  function returns string from integer value
+ private l2s           !  function returns string from logical value
+public v2s_bug         !  generic function returns string given numeric REAL|DOUBLEPRECISION|INTEGER value
+public isnumber        !  determine if string represents a number
+ private trimzeros_    !  Delete trailing zeros from numeric decimal string
+public listout         !  expand a list of numbers where  negative numbers denote range ends (1 -10 means 1 thru 10)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !
 ! extend intrinsics to accept CHARACTER values
 !
-PUBLIC int, real, dble
+public int, real, dble
 
 interface int;     module procedure int_s2v;           end interface
 interface real;    module procedure real_s2v;          end interface
@@ -365,36 +365,36 @@ interface dble;    module procedure dbles_s2v;         end interface
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 !----------------------# BIT ROUTINES
-PUBLIC setbits8        !  use a string representing a positive binary value to fill the bits of an INTEGER value
-PUBLIC setbits16       !  use a string representing a positive binary value to fill the bits of an INTEGER value
-PUBLIC setbits32       !  use a string representing a positive binary value to fill the bits of an INTEGER value
-PUBLIC setbits64       !  use a string representing a positive binary value to fill the bits of an INTEGER value
+public setbits8        !  use a string representing a positive binary value to fill the bits of an INTEGER value
+public setbits16       !  use a string representing a positive binary value to fill the bits of an INTEGER value
+public setbits32       !  use a string representing a positive binary value to fill the bits of an INTEGER value
+public setbits64       !  use a string representing a positive binary value to fill the bits of an INTEGER value
 !----------------------# BASE CONVERSION
-PUBLIC base            !  convert whole number string in base [2-36] to string in alternate base [2-36]
-PUBLIC codebase        !  convert whole number string in base [2-36] to base 10 number
-PUBLIC decodebase      !  convert whole number in base 10 to string in base [2-36]
-PUBLIC base2           !  convert INTEGER to a string representing a binary value
+public base            !  convert whole number string in base [2-36] to string in alternate base [2-36]
+public codebase        !  convert whole number string in base [2-36] to base 10 number
+public decodebase      !  convert whole number in base 10 to string in base [2-36]
+public base2           !  convert INTEGER to a string representing a binary value
 !----------------------# LOGICAL TESTS
-PUBLIC glob            !  compares given string for match to pattern which may contain wildcard characters
-PUBLIC matchw          !  clone of glob -- for backward compatibiity
-PUBLIC ends_with       !  test whether strings ends with one of the specified suffix
-PUBLIC isalnum         !  elemental function returns .true. if CHR is a letter or digit
-PUBLIC isalpha         !  elemental function returns .true. if CHR is a letter and .false. otherwise
-PUBLIC isascii         !  elemental function returns .true. if the low order byte of c is in the range char(0) to char(127)
-PUBLIC isblank         !  elemental function returns .true. if CHR is a blank character (space or horizontal tab.
-PUBLIC iscntrl         !  elemental function returns .true. if CHR is a delete character or ordinary control character
-PUBLIC isdigit         !  elemental function returns .true. if CHR is a digit (0,1,...,9) and .false. otherwise
-PUBLIC isgraph         !  elemental function true if CHR is an ASCII printable character except considers a space non-printable
-PUBLIC islower         !  elemental function returns .true. if CHR is a miniscule letter (a-z)
-PUBLIC isprint         !  elemental function determines if CHR is an ASCII printable character
-PUBLIC ispunct         !  elemental function returns .true. if CHR is a printable punctuation character
-PUBLIC isspace         !  elemental function true if CHR is a null, space, tab, carriage return, new line, vertical tab, or formfeed
-PUBLIC isupper         !  elemental function returns .true. if CHR is an uppercase letter (A-Z)
-PUBLIC isxdigit        !  elemental function returns .true. if CHR is a hexadecimal digit (0-9, a-f, or A-F).
+public glob            !  compares given string for match to pattern which may contain wildcard characters
+public matchw          !  clone of glob -- for backward compatibiity
+public ends_with       !  test whether strings ends with one of the specified suffix
+public isalnum         !  elemental function returns .true. if CHR is a letter or digit
+public isalpha         !  elemental function returns .true. if CHR is a letter and .false. otherwise
+public isascii         !  elemental function returns .true. if the low order byte of c is in the range char(0) to char(127)
+public isblank         !  elemental function returns .true. if CHR is a blank character (space or horizontal tab.
+public iscntrl         !  elemental function returns .true. if CHR is a delete character or ordinary control character
+public isdigit         !  elemental function returns .true. if CHR is a digit (0,1,...,9) and .false. otherwise
+public isgraph         !  elemental function true if CHR is an ASCII printable character except considers a space non-printable
+public islower         !  elemental function returns .true. if CHR is a miniscule letter (a-z)
+public isprint         !  elemental function determines if CHR is an ASCII printable character
+public ispunct         !  elemental function returns .true. if CHR is a printable punctuation character
+public isspace         !  elemental function true if CHR is a null, space, tab, carriage return, new line, vertical tab, or formfeed
+public isupper         !  elemental function returns .true. if CHR is an uppercase letter (A-Z)
+public isxdigit        !  elemental function returns .true. if CHR is a hexadecimal digit (0-9, a-f, or A-F).
 !----------------------#
-PUBLIC fortran_name    !  elemental function returns .true. if LINE is a valid Fortran name
+public fortran_name    !  elemental function returns .true. if LINE is a valid Fortran name
 !----------------------#
-PUBLIC describe        !  returns a string describing character
+public describe        !  returns a string describing character
 !----------------------#
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1047,32 +1047,32 @@ end function sep
 !!    character(len=*),parameter     :: line=&
 !!    '  aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|333 a B cc    '
 !!    character(len=:),allocatable :: array(:) ! output array of tokens
-!!       write(*,*)'INPUT LINE:['//LINE//']'
+!!       write(*,*)'INPUT LINE:['//line//']'
 !!       write(*,'(70("="))')
 !!       write(*,*)'typical call:'
-!!       CALL split(line,array)
+!!       call split(line,array)
 !!       write(*,'(i0," ==> ",a)')(i,trim(array(i)),i=1,size(array))
-!!       write(*,*)'SIZE:',SIZE(array)
+!!       write(*,*)'SIZE:',size(array)
 !!       write(*,'(70("-"))')
 !!       write(*,*)'custom list of delimiters (colon and vertical line):'
-!!       CALL split(line,array,delimiters=':|',&
+!!       call split(line,array,delimiters=':|',&
 !!       & order='sequential',nulls='ignore')
 !!       write(*,'(i0," ==> ",a)')(i,trim(array(i)),i=1,size(array))
-!!       write(*,*)'SIZE:',SIZE(array)
+!!       write(*,*)'SIZE:',size(array)
 !!       write(*,'(70("-"))')
 !!       write(*,*) 'custom list of delimiters, &
 !!       &reverse array order and count null fields:'
-!!       CALL split(line,array,delimiters=':|',&
+!!       call split(line,array,delimiters=':|',&
 !!       &order='reverse',nulls='return')
 !!       write(*,'(i0," ==> ",a)')(i,trim(array(i)),i=1,size(array))
-!!       write(*,*)'SIZE:',SIZE(array)
+!!       write(*,*)'SIZE:',size(array)
 !!       write(*,'(70("-"))')
-!!       write(*,*)'INPUT LINE:['//LINE//']'
+!!       write(*,*)'INPUT LINE:['//line//']'
 !!       write(*,*) 'default delimiters and reverse array order &
 !!       &and return null fields:'
-!!       CALL split(line,array,delimiters='',order='reverse',nulls='return')
+!!       call split(line,array,delimiters='',order='reverse',nulls='return')
 !!       write(*,'(i0," ==> ",a)')(i,trim(array(i)),i=1,size(array))
-!!       write(*,*)'SIZE:',SIZE(array)
+!!       write(*,*)'SIZE:',size(array)
 !!    end program demo_split
 !!
 !!  Output
@@ -2470,7 +2470,7 @@ end function strtok
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE MODIF(CLINE,MOD)
+subroutine modif(cline,mod)
 
 !$@(#) M_strings::modif(3f): Emulate the MODIFY command from the line editor XEDIT
 
@@ -2517,60 +2517,60 @@ character(len=len(cline))   :: dum2         !SCRATCH CHARACTER BUFFER
 logical                     :: linsrt       !FLAG FOR INSERTING DATA ON LINE
 integer :: i, j, ic, ichr, iend, lmax, lmx1
 maxscra=len(cline)
-   CMOD=TRIM(MOD)
-   LMAX=MIN0(LEN(CLINE),MAXSCRA)         !DETERMINE MAXIMUM LINE LENGTH
-   LMX1=LMAX-1                           !MAX LINE LENGTH -1
-   DUM2=' '                              !INITIALIZE NEW LINE
-   LINSRT=.FALSE.                        !INITIALIZE INSERT MODE
-   IEND=len_trim(CMOD)                   !DETERMINE END OF MODS
-   I=0                                   !CHAR COUNTER FOR MOD LINE CMOD
-   IC=0                                  !CHAR COUNTER FOR CURRENT LINE CLINE
-   ICHR=0                                !CHAR COUNTER NEW LINE DUM2
-11 CONTINUE
-   I=I+1                                 !NEXT CHAR IN MOD LINE
-   IF(ICHR.GT.LMX1)GOTO 999              !IF TOO MANY CHARS IN NEW LINE
-   IF(LINSRT) THEN                       !IF INSERTING NEW CHARS
-      IF(I.GT.IEND) CMOD(I:I)=C(1:1)     !FORCE END OF INSERT MODE
-      IF(CMOD(I:I).EQ.C(1:1))THEN        !IF END OF INSERT MODE
-         LINSRT=.FALSE.                  !RESET INSERT MODE FLAG
-         IF(IC+1.EQ.I)THEN               !NULL INSERT STRING
-            ICHR=ICHR+1                  !INCREMENT COUNTER FOR NEW LINE
-            DUM2(ICHR:ICHR)=C(1:1)       !INSERT INSERT MODE TERMINATOR
-         ENDIF
-         DO J=IC,I                       !LOOP OF NUMBER OF CHARS INSERTED
-            ICHR=ICHR+1                  !INCREMENT COUNTER FOR NEW LINE
-            IF(ICHR.GT.LMAX)GOTO 999     !IF AT BUFFER LIMIT, QUIT
-            DUM2(ICHR:ICHR)=CLINE(J:J)   !APPEND CHARS FROM ORIG LINE
-         ENDDO                           !...WHICH ALIGN WITH INSERTED CHARS
-         IC=I                            !RESET CHAR COUNT TO END OF INSERT
-         GOTO 1                          !CHECK NEW LINE LENGTH AND CYCLE
-      ENDIF                              !END OF TERMINATED INSERT LOGIC
-      ICHR=ICHR+1                        !INCREMENT NEW LINE COUNT
-      DUM2(ICHR:ICHR)=CMOD(I:I)          !SET NEWLINE CHAR TO INSERTED CHAR
-   ELSE                                  !IF NOT INSERTING CHARACTERS
-      IC=IC+1                            !INCREMENT ORIGINAL LINE COUNTER
-      IF(CMOD(I:I).EQ.C(1:1))GOTO 1      !IF DELETE CHAR. NO COPY AND CYCLE
-      IF(CMOD(I:I).EQ.C(3:3))THEN        !IF BEGIN INSERT MODE
-         LINSRT=.TRUE.                   !SET INSERT FLAG TRUE
-         GOTO 1                          !CHECK LINE LENGTH AND CONTINUE
-      ENDIF                              !IF NOT BEGINNING INSERT MODE
-      ICHR=ICHR+1                        !INCREMENT NEW LINE COUNTER
-      IF(CMOD(I:I).EQ.C(2:2))THEN        !IF REPLACE WITH BLANK
-         DUM2(ICHR:ICHR)=' '             !SET NEWLINE CHAR TO BLANK
-         GOTO 1                          !CHECK LINE LENGTH AND CYCLE
-      ENDIF                              !IF NOT REPLACE WITH BLANK
-      IF(CMOD(I:I).EQ.' ')THEN           !IF BLANK, KEEP ORIGINAL CHARACTER
-         DUM2(ICHR:ICHR)=CLINE(IC:IC)    !SET NEW CHAR TO ORIGINAL CHAR
-      ELSE                               !IF NOT KEEPING OLD CHAR
-         DUM2(ICHR:ICHR)=CMOD(I:I)       !REPLACE ORIGINAL CHAR WITH NEW
-      ENDIF                              !END CHAR KEEP OR REPLACE
-   ENDIF                                 !END INSERT OR NO-INSERT
-1  CONTINUE
-   IF(I.LT.LMAX)GOTO 11                  !CHECK FOR END OF LINE REACHED
+   cmod=trim(mod)
+   lmax=min0(len(cline),maxscra)         !DETERMINE MAXIMUM LINE LENGTH
+   lmx1=lmax-1                           !MAX LINE LENGTH -1
+   dum2=' '                              !INITIALIZE NEW LINE
+   linsrt=.false.                        !INITIALIZE INSERT MODE
+   iend=len_trim(cmod)                   !DETERMINE END OF MODS
+   i=0                                   !CHAR COUNTER FOR MOD LINE CMOD
+   ic=0                                  !CHAR COUNTER FOR CURRENT LINE CLINE
+   ichr=0                                !CHAR COUNTER NEW LINE DUM2
+11 continue
+   i=i+1                                 !NEXT CHAR IN MOD LINE
+   if(ichr.gt.lmx1)goto 999              !IF TOO MANY CHARS IN NEW LINE
+   if(linsrt) then                       !IF INSERTING NEW CHARS
+      if(i.gt.iend) cmod(i:i)=c(1:1)     !FORCE END OF INSERT MODE
+      if(cmod(i:i).eq.c(1:1))then        !IF END OF INSERT MODE
+         linsrt=.false.                  !RESET INSERT MODE FLAG
+         if(ic+1.eq.i)then               !NULL INSERT STRING
+            ichr=ichr+1                  !INCREMENT COUNTER FOR NEW LINE
+            dum2(ichr:ichr)=c(1:1)       !INSERT INSERT MODE TERMINATOR
+         endif
+         do j=ic,i                       !LOOP OF NUMBER OF CHARS INSERTED
+            ichr=ichr+1                  !INCREMENT COUNTER FOR NEW LINE
+            if(ichr.gt.lmax)goto 999     !IF AT BUFFER LIMIT, QUIT
+            dum2(ichr:ichr)=cline(j:j)   !APPEND CHARS FROM ORIG LINE
+         enddo                           !...WHICH ALIGN WITH INSERTED CHARS
+         ic=i                            !RESET CHAR COUNT TO END OF INSERT
+         goto 1                          !CHECK NEW LINE LENGTH AND CYCLE
+      endif                              !END OF TERMINATED INSERT LOGIC
+      ichr=ichr+1                        !INCREMENT NEW LINE COUNT
+      dum2(ichr:ichr)=cmod(i:i)          !SET NEWLINE CHAR TO INSERTED CHAR
+   else                                  !IF NOT INSERTING CHARACTERS
+      ic=ic+1                            !INCREMENT ORIGINAL LINE COUNTER
+      if(cmod(i:i).eq.c(1:1))goto 1      !IF DELETE CHAR. NO COPY AND CYCLE
+      if(cmod(i:i).eq.c(3:3))then        !IF BEGIN INSERT MODE
+         linsrt=.true.                   !SET INSERT FLAG TRUE
+         goto 1                          !CHECK LINE LENGTH AND CONTINUE
+      endif                              !IF NOT BEGINNING INSERT MODE
+      ichr=ichr+1                        !INCREMENT NEW LINE COUNTER
+      if(cmod(i:i).eq.c(2:2))then        !IF REPLACE WITH BLANK
+         dum2(ichr:ichr)=' '             !SET NEWLINE CHAR TO BLANK
+         goto 1                          !CHECK LINE LENGTH AND CYCLE
+      endif                              !IF NOT REPLACE WITH BLANK
+      if(cmod(i:i).eq.' ')then           !IF BLANK, KEEP ORIGINAL CHARACTER
+         dum2(ichr:ichr)=cline(ic:ic)    !SET NEW CHAR TO ORIGINAL CHAR
+      else                               !IF NOT KEEPING OLD CHAR
+         dum2(ichr:ichr)=cmod(i:i)       !REPLACE ORIGINAL CHAR WITH NEW
+      endif                              !END CHAR KEEP OR REPLACE
+   endif                                 !END INSERT OR NO-INSERT
+1  continue
+   if(i.lt.lmax)goto 11                  !CHECK FOR END OF LINE REACHED
                                          !AND CYCLE IF OK
-999   CONTINUE
-   CLINE=DUM2                            !SET ORIGINAL CHARS TO NEW CHARS
-END SUBROUTINE MODIF                     !RETURN
+999   continue
+   cline=dum2                            !SET ORIGINAL CHARS TO NEW CHARS
+end subroutine modif                     !RETURN
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

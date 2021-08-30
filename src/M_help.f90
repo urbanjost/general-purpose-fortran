@@ -41,14 +41,14 @@ contains
 !!
 !!    A line beginning with a non-blank character in column one is a topic
 !!
-!!    A topic with the preceeding line beginning with "===" is a special
+!!    A topic with the preceding line beginning with "===" is a special
 !!    topic that will be displayed up to the next line beginning with "==="
 !!
 !!    The special topic "manual" displays the entire help text
 !!
 !!    The help text is paged based on the values in the position()
 !!    array. The first value is the current line count on the current page,
-!!    and the seond value is how many lines should be displayed as a page
+!!    and the second value is how many lines should be displayed as a page
 !!    before a paging prompt is produced. POSITION(2) is typically set to
 !!    23. POSITION(1) can be set to zero, especially if the calling page
 !!    is not tracking paging itself.

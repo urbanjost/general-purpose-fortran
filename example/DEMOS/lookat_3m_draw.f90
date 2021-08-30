@@ -57,7 +57,7 @@
              stop
           endif
           !
-          ! we loop back here ad-naseum until someone hits a non-interpreted key
+          ! we loop back here ad-nauseam until someone hits a non-interpreted key
           !
           INFINITE: do
           !

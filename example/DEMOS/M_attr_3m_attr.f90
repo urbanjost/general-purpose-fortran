@@ -31,7 +31,7 @@
               call alert('<WARNING>', 'The night is young.')
               call alert('<INFO>', 'It is Monday')
 
-              ! create a custom mneumonic
+              ! create a custom mnemonic
               call attr_update('MYERROR',attr(&
               ' <R><e> E<w>-<e>R<w>-<e>R<w>-<e>O<w>-<e>R: </e></R></bo>'&
               ))
