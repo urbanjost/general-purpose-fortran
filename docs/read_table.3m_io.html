@@ -75,15 +75,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 subroutine <B>read_table</B>(filename,array,ierr)
 <P>
 <PRE>
-   character(len=*),intent(in)              :: filename
-   integer,allocatable,intent(out)          :: array(:,:)
-      or
-   real,allocatable,intent(out)             :: array(:,:)
-      or
-   doubleprecision,allocatable,intent(out)  :: array(:,:)
-   integer,intent(out)                      :: ierr
+   character(len=*),intent(in)    :: filename
+   TYPE,allocatable,intent(out)   :: array(:,:)
+   integer,intent(out)            :: ierr
 <P>
 </PRE>
+where TYPE may be <I>REAL</I>, <I>INTEGER</I>, or DOUBLEPRECISION
 </BLOCKQUOTE>
 <A name=2>
 
@@ -91,9 +88,12 @@ subroutine <B>read_table</B>(filename,array,ierr)
 
 </A>
 <BLOCKQUOTE>
-Read a table from a file that is assumed to be columns of
-space-delimited numbers, with each row containing the same
-number of values
+Read a table from a file that is assumed to be columns of numbers,
+ignoring characters not in the set [0-9edED+-.] and requiring each
+row contain the same number of values.
+<P>
+The input file is assumed to be of a small enough size that it can
+be copied into memory.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -108,7 +108,7 @@ filename to read
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>array</B> </TD><TD valign=bottom>
-array to create. May be INTEGER, REAL, or DOUBLEPRECISION
+array to create. May be <I>INTEGER</I>, <I>REAL</I>, or DOUBLEPRECISION
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>ierr</B> </TD><TD valign=bottom>
@@ -132,16 +132,24 @@ Sample program, assuming the input file "inputfile" exists:
 <P>
     ! create test file
     open(file=&#146;inputfile&#146;,unit=10)
-    write(10,&#146;(a)&#146;) &#146;1 10  45&#146;
-    write(10,&#146;(a)&#146;) &#146;10 10  45&#146;
-    write(10,&#146;(a)&#146;) &#146;  2 20  15&#146;
-    write(10,&#146;(a)&#146;) &#146; 20.345 20  15&#146;
-    write(10,&#146;(a)&#146;) &#146;  3 30.111   0&#146;
-    write(10,&#146;(a)&#146;) &#146;30 30e3   0&#146;
-    write(10,&#146;(a)&#146;) &#146;  4 300.444e-1 -10&#146;
-    write(10,&#146;(a)&#146;) &#146;40 30.5555d0 -10&#146;
-    write(10,&#146;(a)&#146;) &#146;  4 300.444E-1 -10&#146;
-    write(10,&#146;(a)&#146;) &#146;40 30.5555D0 -10&#146;
+    write(10,&#146;(a)&#146;) [character(len=80):: &
+     &#146;#---#---#---#                          &#146;, &
+     &#146;| 1 | 5 | 3 |                          &#146;, &
+     &#146;#---#---#---#                          &#146;, &
+     &#146;| 4 | 2 | 6 |                          &#146;, &
+     &#146;#---#---#---#                          &#146;, &
+     &#146;                                       &#146;, &
+     &#146;1;10;45                                &#146;, &
+     &#146;10, ,, ,,20    45                      &#146;, &
+     &#146;  2 20  15                             &#146;, &
+     &#146; big=20.345 medium=20  small=15        &#146;, &
+     &#146;                                       &#146;, &
+     &#146;30 30e3   0                            &#146;, &
+     &#146;  4 300.444e-1 -10                     &#146;, &
+     &#146;40 30.5555d0 -10                       &#146;, &
+     &#146;  4 300.444E-1 -10                     &#146;, &
+     &#146;40 30.5555D0 -10                       &#146;, &
+     &#146;                                       &#146;]
     close(unit=10)
 <P>
     ! read file as a table
@@ -166,19 +174,20 @@ Sample program, assuming the input file "inputfile" exists:
 Results:
 <P>
 <PRE>
-    size=          30
-    size(dim=1)=   10
-    size(dim=2)=    3
-      1.0000000000000000        10.000000000000000        45.000000000000000
-      10.000000000000000        10.000000000000000        45.000000000000000
-      2.0000000000000000        20.000000000000000        15.000000000000000
-      20.344999999999999        20.000000000000000        15.000000000000000
-      3.0000000000000000        30.111000000000001        0.0000000000000000
-      30.000000000000000        30000.000000000000        0.0000000000000000
-      4.0000000000000000        30.044400000000000       -10.000000000000000
-      40.000000000000000        30.555499999999999       -10.000000000000000
-      4.0000000000000000        30.044400000000000       -10.000000000000000
-      40.000000000000000        30.555499999999999       -10.000000000000000
+    size=                 33
+    size(dim=1)=          11
+    size=(dim=2)           3
+      1.00000000000000        5.00000000000000        3.00000000000000
+      4.00000000000000        2.00000000000000        6.00000000000000
+      1.00000000000000        10.0000000000000        45.0000000000000
+      10.0000000000000        20.0000000000000        45.0000000000000
+      2.00000000000000        20.0000000000000        15.0000000000000
+      20.3450000000000        20.0000000000000        15.0000000000000
+      30.0000000000000        30000.0000000000       0.000000000000000E+000
+      4.00000000000000        30.0444000000000       -10.0000000000000
+      40.0000000000000        30.5555000000000       -10.0000000000000
+      4.00000000000000        30.0444000000000       -10.0000000000000
+      40.0000000000000        30.5555000000000       -10.0000000000000
 <P>
 </PRE>
 <A name=5>
@@ -198,7 +207,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>read_table (3)</TD> <TD align=right width=33%><I>August 30, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6f0ba2ac-84b1-4905-8294-df4ed829b5ba using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>read_table (3)</TD> <TD align=right width=33%><I>September 01, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e371f91c-3bef-4ca1-a789-b2935b823a9a using man macros.</FONT>
 <br><br><center><img src="images/read_table.3m_io.gif"></center>
 </div>
 </div>

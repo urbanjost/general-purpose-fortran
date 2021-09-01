@@ -554,18 +554,19 @@ end function separator
 !!
 !!   subroutine read_table(filename,array,ierr)
 !!
-!!    character(len=*),intent(in)              :: filename
-!!    integer,allocatable,intent(out)          :: array(:,:)
-!!       or
-!!    real,allocatable,intent(out)             :: array(:,:)
-!!       or
-!!    doubleprecision,allocatable,intent(out)  :: array(:,:)
-!!    integer,intent(out)                      :: ierr
+!!    character(len=*),intent(in)    :: filename
+!!    TYPE,allocatable,intent(out)   :: array(:,:)
+!!    integer,intent(out)            :: ierr
+!!
+!!   where TYPE may be REAL, INTEGER, or DOUBLEPRECISION
 !!
 !!##DESCRIPTION
-!!    Read a table from a file that is assumed to be columns of
-!!    space-delimited numbers, with each row containing the same
-!!    number of values
+!!    Read a table from a file that is assumed to be columns of numbers,
+!!    ignoring characters not in the set [0-9edED+-.] and requiring each
+!!    row contain the same number of values.
+!!
+!!    The input file is assumed to be of a small enough size that it can
+!!    be copied into memory.
 !!
 !!##OPTIONS
 !!    filename   filename to read
@@ -583,16 +584,24 @@ end function separator
 !!
 !!     ! create test file
 !!     open(file='inputfile',unit=10)
-!!     write(10,'(a)') '1 10  45'
-!!     write(10,'(a)') '10 10  45'
-!!     write(10,'(a)') '  2 20  15'
-!!     write(10,'(a)') ' 20.345 20  15'
-!!     write(10,'(a)') '  3 30.111   0'
-!!     write(10,'(a)') '30 30e3   0'
-!!     write(10,'(a)') '  4 300.444e-1 -10'
-!!     write(10,'(a)') '40 30.5555d0 -10'
-!!     write(10,'(a)') '  4 300.444E-1 -10'
-!!     write(10,'(a)') '40 30.5555D0 -10'
+!!     write(10,'(a)') [character(len=80):: &
+!!      '#---#---#---#                          ', &
+!!      '| 1 | 5 | 3 |                          ', &
+!!      '#---#---#---#                          ', &
+!!      '| 4 | 2 | 6 |                          ', &
+!!      '#---#---#---#                          ', &
+!!      '                                       ', &
+!!      '1;10;45                                ', &
+!!      '10, ,, ,,20    45                      ', &
+!!      '  2 20  15                             ', &
+!!      ' big=20.345 medium=20  small=15        ', &
+!!      '                                       ', &
+!!      '30 30e3   0                            ', &
+!!      '  4 300.444e-1 -10                     ', &
+!!      '40 30.5555d0 -10                       ', &
+!!      '  4 300.444E-1 -10                     ', &
+!!      '40 30.5555D0 -10                       ', &
+!!      '                                       ']
 !!     close(unit=10)
 !!
 !!     ! read file as a table
@@ -614,19 +623,20 @@ end function separator
 !!
 !!   Results:
 !!
-!!     size=          30
-!!     size(dim=1)=   10
-!!     size(dim=2)=    3
-!!       1.0000000000000000        10.000000000000000        45.000000000000000
-!!       10.000000000000000        10.000000000000000        45.000000000000000
-!!       2.0000000000000000        20.000000000000000        15.000000000000000
-!!       20.344999999999999        20.000000000000000        15.000000000000000
-!!       3.0000000000000000        30.111000000000001        0.0000000000000000
-!!       30.000000000000000        30000.000000000000        0.0000000000000000
-!!       4.0000000000000000        30.044400000000000       -10.000000000000000
-!!       40.000000000000000        30.555499999999999       -10.000000000000000
-!!       4.0000000000000000        30.044400000000000       -10.000000000000000
-!!       40.000000000000000        30.555499999999999       -10.000000000000000
+!!     size=                 33
+!!     size(dim=1)=          11
+!!     size=(dim=2)           3
+!!       1.00000000000000        5.00000000000000        3.00000000000000
+!!       4.00000000000000        2.00000000000000        6.00000000000000
+!!       1.00000000000000        10.0000000000000        45.0000000000000
+!!       10.0000000000000        20.0000000000000        45.0000000000000
+!!       2.00000000000000        20.0000000000000        15.0000000000000
+!!       20.3450000000000        20.0000000000000        15.0000000000000
+!!       30.0000000000000        30000.0000000000       0.000000000000000E+000
+!!       4.00000000000000        30.0444000000000       -10.0000000000000
+!!       40.0000000000000        30.5555000000000       -10.0000000000000
+!!       4.00000000000000        30.0444000000000       -10.0000000000000
+!!       40.0000000000000        30.5555000000000       -10.0000000000000
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -641,66 +651,78 @@ implicit none
 character(len=*),intent(in)             :: FILENAME
 doubleprecision,allocatable,intent(out) :: darray(:,:)
 integer,intent(out)                     :: ierr
-
-character(len=1),allocatable :: text(:) ! array to hold file in memory
-integer                      :: length
+character(len=:),allocatable :: page(:) ! array to hold file in memory
 integer                      :: irows
 integer                      :: icols
-integer                      :: nchars
 integer                      :: i
-integer                      :: j
-integer                      :: k
-integer                      :: istart
-character(len=:),allocatable :: line
-
-    call slurp(FILENAME,text,lines=irows,length=length) ! allocate character array and copy file into it
-    nchars=size(text)
-    ierr=0
-
-    if(.not.allocated(text))then
-       write(*,*)'*read_table* failed to load file '//FILENAME
-       ierr=-1
-    else
-       if(allocated(line))deallocate(line)
-       allocate(character(len=length) :: line)
-       ! find number of values on first line and assume this is constant
-       line(:)=''
-       do i=1,nchars
-          if(text(i).eq.NEW_LINE('A'))then
-             exit
-          endif
-          if(text(i).eq.char(9))then
-             line(i:i)=' '
-          else
-             line(i:i)=text(i)
+doubleprecision,allocatable  :: dline(:)
+   ierr=0
+   ! allocate character array and copy file into it
+   call gulp(FILENAME,page)
+   if(.not.allocated(page))then
+      write(*,*)'*demo_gulp* failed to load file '//FILENAME
+      if(allocated(darray))deallocate(darray)
+      allocate(darray(0,0))
+      ierr=-1
+   else
+      call cleanse()
+      if(allocated(darray))deallocate(darray)
+      if(size(page,dim=1).eq.0)then
+         allocate(darray(0,0))
+      else
+         irows=size(page,dim=1)
+         icols=size(s2vs(page(1)))
+         allocate(darray(irows,icols))
+         darray=0.0d0
+         do i=1,irows
+            dline=s2vs(page(i))
+            if(size(dline).ne.icols)then
+                  write(*,*)page(i),' does not contain ',icols,' values'
+               ierr=ierr+1
+               darray(i,:min(size(dline),icols))=dline
+            else
+               darray(i,:)=dline
+            endif
+         enddo
+         deallocate(page)  ! release memory
+      endif
+   endif
+contains
+    subroutine cleanse()
+    integer :: i,j,k
+    integer :: ios
+    integer :: ikeep
+    character(len=:),allocatable :: words(:), line
+    doubleprecision :: value
+    ikeep=0
+    do i=1,size(page,dim=1)
+       ! do this more rigourously
+       ! [+-]NNNNNN[.NNNN][ED][+-]NN
+       line=''
+       ! get rid of all characters not in a number and
+       ! then split the remaining line and keep only
+       ! tokens that can be read as a number
+       do j=1,len(page)
+          select case(page(i)(j:j))
+          case('e','E','d','D','+','-','.','0':'9')
+          case default
+             page(i)(j:j)=' '
+          end select
+       enddo
+       call split(page(i),words)
+       do k=1,size(words)
+          read(words(k),*,iostat=ios)value
+          if(ios.eq.0)then
+             line=line//words(k)//' '
           endif
        enddo
-       icols=size(s2vs(line))
-       if(allocated(darray))deallocate(darray)
-       allocate(darray(irows,icols))
-
-       darray=0.0d0
-       istart=1
-       do j=1,irows
-          k=0
-          line(:)=''
-          do i=istart,nchars
-             if(text(i).eq.NEW_LINE('A').or.i.eq.nchars)then
-                exit
-             endif
-             k=k+1
-             if(text(i).eq.char(9))then
-                line(k:k)=' '
-             else
-                line(k:k)=text(i)
-             endif
-          enddo
-          istart=i+1
-          darray(j,:)=s2vs(line)
-       enddo
-       deallocate(text)  ! release memory
-    endif
-
+       if(line.ne.'')then
+          ikeep=ikeep+1
+          page(ikeep)(:)=line
+       endif
+    enddo
+    page=page(:ikeep)
+    end subroutine cleanse
 end subroutine read_table_d
 !===================================================================================================================================
 subroutine read_table_i(filename,array,ierr)
