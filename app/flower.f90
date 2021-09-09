@@ -29,6 +29,7 @@ integer                         :: ilines  = 0       ! number of newline charact
 integer                         :: atleast
 integer                         :: i
 integer                         :: io
+integer                         :: istart
 logical                         :: incomment
 logical                         :: insingle
 logical                         :: indouble
@@ -180,10 +181,7 @@ FILES: do i=1,size(filenames)
          if(nocomment.and.nocode)then
             continue
          else
-            if(nocode) then
-               outline=outline//' '
-               outline=trim(outline(max(1,verify(outline,'!')):)) ! trim leading exclamations
-            endif
+            if(nocode) outline=outline(max(1,verify(outline,'!')):) ! trim leading exclamations
             if(outline.eq.''.or.adjustl(outline).eq.achar(10))then  ! if a blank line output if previous line not a blank line
                if(ifblank)then
                   continue
@@ -255,7 +253,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 'EXAMPLES                                                                                                                        ',&
 '   Typical usage                                                                                                                ',&
 '                                                                                                                                ',&
-'     # convert all code to lowercase                                                                                            ',&
+'     # convert old code to lowercase                                                                                            ',&
 '     flower sample.f90 > sample_new.f90                                                                                         ',&
 '                                                                                                                                ',&
 '     # extract all code comments and do a spell check                                                                           ',&
@@ -294,7 +292,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0-20171126>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)COMPILED:       2021-08-29 21:27:02 UTC-240>',&
-'@(#)COMPILED:       2021-08-30 13:06:09 UTC-240>',&
+'@(#)COMPILED:       2021-08-30 10:30:16 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -658,7 +658,7 @@ CONTAINS
 !!    ! or to compare the timings of two (or more) different wildcard
 !!    ! matching routines.
 !!    !
-!!    function test(tame, wild, bExpectedResult) result(bpassed)
+!!    function test(tame, wild, bExpectedResult) result(bPassed)
 !!    use M_strings, only : glob
 !!       character(len=*) :: tame
 !!       character(len=*) :: wild

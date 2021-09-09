@@ -3406,7 +3406,7 @@ end function days2sec
 !!    o waxing gibbous
 !!    o full
 !!    o waning gibbous
-!!    o laster quarter
+!!    o last quarter
 !!    o waning crescent
 !!
 !!   To calculate the phase of the moon simply divide the days since the
