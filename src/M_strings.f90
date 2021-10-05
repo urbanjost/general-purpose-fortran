@@ -37,7 +37,7 @@
 !!      use M_strings, only : len_white,atleast,stretch,lenset,merge_str
 !!      use M_strings, only : switch,s2c,c2s
 !!      use M_strings, only : noesc,notabs,dilate,expand,visible
-!!      !*!use M_strings, only : uc
+!!      !x!use M_strings, only : uc
 !!      use M_strings, only : string_to_value,string_to_values,s2v,s2vs
 !!      use M_strings, only : value_to_string,v2s,msg
 !!      use M_strings, only : listout,getvals
@@ -52,6 +52,7 @@
 !!      use M_strings, only : describe
 !!
 !!   TOKENS
+!!
 !!       split  subroutine parses string using specified delimiter characters
 !!              and stores tokens into an array
 !!       sep    function interface to split(3f)
@@ -63,6 +64,7 @@
 !!       strtok tokenize a string like C strtok(3c) routine
 !!
 !!   EDITING
+!!
 !!       substitute     subroutine non-recursively globally replaces old
 !!                      substring with new substring
 !!       replace        function non-recursively globally replaces old
@@ -82,12 +84,14 @@
 !!       rotate13       apply trivial encryption algorithm ROT13 to a string
 !!
 !!   CASE
+!!
 !!       upper          function converts string to uppercase
 !!       lower          function converts string to miniscule
 !!       upper_quoted   function converts string to uppercase skipping strings
 !!                      quoted per Fortran rules
 !!
 !!   WHITE SPACE
+!!
 !!       adjustc  elemental function centers text within the length of the
 !!                input string
 !!       compact  left justify string and replace duplicate whitespace with
@@ -97,10 +101,12 @@
 !!       crop     function trims leading and trailing spaces
 !!
 !!   QUOTES
+!!
 !!       unquote  remove quotes from string as if read with list-directed input
 !!       quote    add quotes to string as if written with list-directed input
 !!
 !!   STRING LENGTH
+!!
 !!       len_white  find location of last non-whitespace character
 !!       lenset     return a string of specified length
 !!       atleast    return a string of at least specified length
@@ -109,6 +115,7 @@
 !!                  intrinsic
 !!
 !!   CHARACTER ARRAY VERSUS STRING
+!!
 !!       switch  switch between a string and an array of single characters
 !!       s2c     convert string to array of single characters and add null
 !!               terminator for passing to C
@@ -116,6 +123,7 @@
 !!               string for converting strings returned from C
 !!
 !!   NONALPHA
+!!
 !!       noesc    convert non-printable ASCII8 characters to a space
 !!       notabs   convert tabs to spaces while maintaining columns,
 !!                assuming tabs are set every 8 characters
@@ -126,6 +134,7 @@
 !!                meta-control representations
 !!
 !!   NUMERIC STRINGS
+!!
 !!       string_to_value   generic subroutine returns numeric value (REAL,
 !!                         DOUBLEPRECISION, INTEGER) from string
 !!       string_to_values  subroutine reads an array of numbers from a string
@@ -146,6 +155,7 @@
 !!       isnumber          determine if string represents a number
 !!
 !!   CHARACTER TESTS
+!!
 !!       glob        compares given string for match to pattern which may
 !!                   contain wildcard characters
 !!       ends_with   test whether strings ends with one of the specified suffixs
@@ -177,6 +187,7 @@
 !!       fortran_name   returns .true. if input string is a valid Fortran name
 !!
 !!   BASE CONVERSION
+!!
 !!       base       convert whole number string in base [2-36] to string
 !!                  in alternate base [2-36]
 !!       base2      convert INTEGER to a string representing a binary value
@@ -185,9 +196,11 @@
 !!       decodebase convert whole number in base 10 to string in base [2-36]
 !!
 !!   MISCELLANEOUS
+!!
 !!       describe   returns a string describing the name of a single character
 !!
 !!   INTRINSICS
+!!
 !!    The M_strings(3fm) module supplements and works in combination with
 !!    the Fortran built-in intrinsics. Stand-alone Fortran lets you access
 !!    the characters in a string using ranges much like they are character
@@ -247,7 +260,7 @@
 !!     use M_strings, only : len_white, atleast, stretch, lenset, merge_str
 !!     use M_strings, only : switch, s2c, c2s
 !!     use M_strings, only : noesc, notabs, dilate, expand, visible
-!!     !*!use M_strings, only : uc
+!!     !x!use M_strings, only : uc
 !!     use M_strings, only : string_to_value, string_to_values, s2v, s2vs
 !!     use M_strings, only : value_to_string, v2s, msg
 !!     use M_strings, only : listout, getvals
@@ -658,7 +671,7 @@ CONTAINS
 !!    ! or to compare the timings of two (or more) different wildcard
 !!    ! matching routines.
 !!    !
-!!    function test(tame, wild, bExpectedResult) result(bpassed)
+!!    function test(tame, wild, bExpectedResult) result(bPassed)
 !!    use M_strings, only : glob
 !!       character(len=*) :: tame
 !!       character(len=*) :: wild
@@ -1187,8 +1200,8 @@ integer                       :: imax                   ! length of longest toke
    if(present(nulls))then; nlls=lower(adjustl(nulls)); else; nlls='ignore'    ; endif ! optional parameter
 !-----------------------------------------------------------------------------------------------------------------------------------
    n=len(input_line)+1                        ! max number of strings INPUT_LINE could split into if all delimiter
-   if(allocated(ibegin))deallocate(ibegin)    !*! intel compiler says allocated already ?
-   if(allocated(iterm))deallocate(iterm)      !*! intel compiler says allocated already ?
+   if(allocated(ibegin))deallocate(ibegin)    !x! intel compiler says allocated already ?
+   if(allocated(iterm))deallocate(iterm)      !x! intel compiler says allocated already ?
    allocate(ibegin(n))                        ! allocate enough space to hold starting location of tokens if string all tokens
    allocate(iterm(n))                         ! allocate enough space to hold ending location of tokens if string all tokens
    ibegin(:)=1
@@ -1645,18 +1658,18 @@ end subroutine delim
 !!     new         new substring
 !!     cmd         alternate way to specify old and new string, in
 !!                 the form c/old/new/; where "/" can be any character
-!!                 not in "old" or "new"
+!!                 not in "old" or "new".
 !!     occurrence  if present, start changing at the Nth occurrence of the
 !!                 OLD string. If negative start replacing from the left
 !!                 end of the string.
 !!     repeat      number of replacements to perform. Defaults to a global
 !!                 replacement.
 !!     ignorecase  whether to ignore ASCII case or not. Defaults
-!!                 to .false.
+!!                 to .false. .
 !!##RETURNS
 !!     newline     allocatable string returned
 !!     ierr        error code. iF ier = -1 bad directive, >= 0 then
-!!                 count of changes made
+!!                 count of changes made.
 !!
 !!##EXAMPLES
 !!
@@ -3939,7 +3952,7 @@ end function visible
 !!##LICENSE
 !!    Public Domain
 function expand(line,escape) result(lineout)
-!*!USE ISO_C_BINDING ,ONLY: c_horizontal_tab
+!x!USE ISO_C_BINDING ,ONLY: c_horizontal_tab
 implicit none
 
 ! ident_30="@(#)M_strings::expand(3f): return string with escape sequences expanded"
@@ -8951,7 +8964,7 @@ class(*),intent(in) :: generic
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
-      !*!type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+      !x!type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
       type is (logical);                write(line(istart:),'(l1)') generic
       type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
@@ -9011,7 +9024,7 @@ integer :: i
       type is (integer(kind=int64));    write(line(istart:),'("[",*(i0,1x))') generic
       type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
-      !*!type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
+      !x!type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
       type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic

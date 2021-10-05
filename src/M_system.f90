@@ -38,7 +38,7 @@
 !!    system_dir,                                            &
 !!    system_memcpy
 !!
-!!    !*!use M_system, only : system_getc, system_putc
+!!    !x!use M_system, only : system_getc, system_putc
 !!    ! ERROR PROCESSING
 !!    use M_system, only : system_errno, system_perror
 !!    ! INFO
@@ -161,7 +161,7 @@ module M_system
 use,intrinsic     :: iso_c_binding,   only : c_float, c_int, c_char
 use,intrinsic     :: iso_c_binding,   only : c_ptr, c_f_pointer, c_null_char, c_null_ptr
 use,intrinsic     :: iso_c_binding
-use,intrinsic     :: iso_fortran_env, only : int8, int16, int32, int64 !*!, real32, real64, real128, dp=>real128
+use,intrinsic     :: iso_fortran_env, only : int8, int16, int32, int64 !x!, real32, real64, real128, dp=>real128
 
 implicit none
 private
@@ -786,7 +786,7 @@ end interface
 !!
 !!##RETURN VALUE
 !!        Upon successful completion, setsid() shall return the value of the new process group ID of the calling process. Otherwise,
-!!        it shall return â-1 and set errno to indicate the error.
+!!        it shall return -1 and set errno to indicate the error.
 !!##ERRORS
 !!        The setsid() function shall fail if:
 !!
@@ -1246,7 +1246,7 @@ end interface
 if(present(handler_routine))then
     handler_ptr_array(signum)%sub => handler_routine
 else
-    !*!handler_ptr_array(signum)%sub => null(handler_ptr_array(signum)%sub)
+    !x!handler_ptr_array(signum)%sub => null(handler_ptr_array(signum)%sub)
     handler_ptr_array(signum)%sub => null()
 endif
 c_handler=c_funloc(f_handler)
@@ -1335,9 +1335,9 @@ end interface
       system_access=.true.
    else
       system_access=.false.
-    !*!if(system_errno().ne.0)then
-    !*!   call perror('*system_access*')
-    !*!endif
+    !x!if(system_errno().ne.0)then
+    !x!   call perror('*system_access*')
+    !x!endif
    endif
 
 end function system_access
@@ -1470,9 +1470,9 @@ end interface
       system_utime=.true.
    else
       system_utime=.false.
-      !*!if(system_errno().ne.0)then
-      !*!   call perror('*system_utime*')
-      !*!endif
+      !x!if(system_errno().ne.0)then
+      !x!   call perror('*system_utime*')
+      !x!endif
    endif
 
 end function system_utime
@@ -4066,17 +4066,17 @@ end function system_getenv
 !!    use iso_c_binding
 !!    implicit none
 !!    integer :: ierr
-!!       !*!
+!!       !x!
 !!       write(*,'(a)')'no environment variables containing "GRU":'
 !!       call execute_command_line('env|grep GRU')
-!!       !*!
+!!       !x!
 !!       call set_environment_variable('GRU','this is the value',ierr)
 !!       write(*,'(a,i0)')'now "GRU" should be defined, status=',ierr
 !!       call execute_command_line('env|grep GRU')
-!!       !*!
+!!       !x!
 !!       call set_environment_variable('GRU2','this is the second value',ierr)
 !!       write(*,'(a,i0)')'now "GRU" and "GRU2" should be defined, status =',ierr
-!!       !*!
+!!       !x!
 !!       call execute_command_line('env|grep GRU')
 !!    end program demo_set_environment_variable
 !!
@@ -4651,9 +4651,9 @@ end interface
 
    username = c_getlogin()
    if(.not.c_associated(username)) then
-      !*! in windows 10 subsystem running Ubunto does not work
-      !*!write(*,'(a)')'*system_getlogin* Error getting username. not associated'
-      !*!fname=c_null_char
+      !x! in windows 10 subsystem running Ubunto does not work
+      !x!write(*,'(a)')'*system_getlogin* Error getting username. not associated'
+      !x!fname=c_null_char
       fname=system_getpwuid(system_geteuid())
    else
       fname=c2f_string(username)
@@ -5515,10 +5515,10 @@ end function lower
 !!   Public Domain
 !@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 pure elemental function anyinteger_to_64bit(intin) result(ii38)
-use, intrinsic :: iso_fortran_env, only : error_unit !*! ,input_unit,output_unit
+use, intrinsic :: iso_fortran_env, only : error_unit !x! ,input_unit,output_unit
 implicit none
 
-!*!@(#) M_anything::anyinteger_to_64(3f): convert integer parameter of any kind to 64-bit integer
+!x!@(#) M_anything::anyinteger_to_64(3f): convert integer parameter of any kind to 64-bit integer
 
 class(*),intent(in)     :: intin
    integer(kind=int64) :: ii38

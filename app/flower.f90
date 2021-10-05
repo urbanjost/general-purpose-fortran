@@ -1,20 +1,23 @@
+! always reducing multiple blank lines to one; maybe only do that if other lines were comments not if originally blank
 program flower
 ! [dependencies]
-! M_kracken      = { git = "https://github.com/urbanjost/M_kracken.git" }
+! M_CLI2         = { git = "https://github.com/urbanjost/M_CLI2.git" }
 ! M_strings      = { git = "https://github.com/urbanjost/M_strings.git" }
 ! M_io           = { git = "https://github.com/urbanjost/M_io.git" }
 
 use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 use,intrinsic :: iso_fortran_env, only : iostat_end
 use M_io,                         only : get_next_char
-use M_kracken,                    only : kracken,lget,sget,sgets
+use M_CLI2,                       only : set_args,lget,sget,sgets, filenames=>unnamed
 implicit none
 
 ! ident_1="@(#)flower(1f): convert basic free-format Fortran file to lowercase"
 
-character(len=4096),allocatable :: filenames(:)      ! array of filenames to read
-character(len=:),allocatable    :: filename          ! array of filenames to read
+character(len=:),allocatable    :: filename
+character(len=:),allocatable    :: help_text(:)
+character(len=:),allocatable    :: version_text(:)
 character(len=:),allocatable    :: outline
+character(len=:),allocatable    :: outlinel
 character(len=256)              :: message           ! message field for returned messages
 integer,parameter               :: fd=10             ! file descriptor for file currently being read
 integer                         :: ios               ! hold I/O error flag
@@ -26,6 +29,7 @@ integer                         :: icount  = 0       ! number of characters read
 integer                         :: icount_comm  = 0  ! number of characters read from file that are comments
 integer                         :: idiff   = 0       ! number of characters different in files
 integer                         :: ilines  = 0       ! number of newline characters encountered in first file
+integer                         :: iposition  = 0    ! number of characters read from current line
 integer                         :: atleast
 integer                         :: i
 integer                         :: io
@@ -37,20 +41,26 @@ logical                         :: ifblank
 logical                         :: verbose
 logical                         :: nocomment
 logical                         :: nocode
+logical                         :: nocont
+logical                         :: stat
+character(len=3)                :: advance
+integer                         :: ilen
 
-! define command arguments and parse command line
-call kracken('flower',' --version .F. --help .F. --toupper .F. --verbose .F. --nocomment .F. --nocode .F.')
-call help_usage(lget('flower_help'))
-call help_version(lget('flower_version'))
-
-verbose=lget('flower_verbose')
-nocomment=lget('flower_nocomment')
-nocode=lget('flower_nocode')
-tolower=.not.lget('flower_toupper')
+call setup()
+call set_args('--toupper F --nocomment F --nocode F --nocont F --stat F',help_text,version_text)
+verbose=lget('verbose')
+nocomment=lget('nocomment')
+nocode=lget('nocode')
+tolower=.not.lget('toupper')
+nocont=lget('nocont')
+if(lget('stat'))then
+  verbose=.true.
+  nocomment=.true.
+  nocode=.true.
+endif
 if(nocomment.and.nocode)verbose=.true.
 ifblank=.false.
 
-filenames=sgets('flower_oo')                     ! get filenames to scan from command line
 if(size(filenames).lt.1)then
    write(stderr,'(a)')'*flower* ERROR: missing filename.'
    stop 4
@@ -84,10 +94,12 @@ FILES: do i=1,size(filenames)
    ! reading one character at a time is much more limiting than reading lines or tokens
    ! but is sufficient for the vast majority of cases
    !
+   iposition=0
    previous=achar(0)
    incomment=.false.
    insingle=.false.
    indouble=.false.
+   advance='yes'
    ONE_CHAR_AT_A_TIME: do                                                ! loop through read of file one character at a time
       call get_next_char(fd,c1,ios1)                                     ! get next character from buffered read from file
       if(ios1.eq.iostat_end)then                                         ! reached end of file so stop
@@ -98,7 +110,7 @@ FILES: do i=1,size(filenames)
                io=stderr
             endif
             if(size(filenames).gt.1)then
-               atleast=max(len(filename),32)
+               atleast=max(len(filenames),4)
                write(io,'(g0:,1x)',advance='no')[character(len=atleast) :: filename]
                write(io,'(g0:,1x,i8)',advance='no')' lines', ilines
                write(io,'(g0:,1x,i8,"b")',advance='no')' total ', icount
@@ -121,8 +133,13 @@ FILES: do i=1,size(filenames)
          write(stderr,*)'*flower* ERROR: EOF or error on '//filename//' before end of '//filename
          cycle FILES
       endif
+      iposition=iposition+1
       icount=icount+1                                                    ! increment count of characters read
       select case(c1)
+      case('#','$')
+         if(iposition.eq.1)then  ! will still not save macros, but as a kluge treat these lines as comments (?)
+            incomment=.true.
+         endif
       case('!')
          if(any([insingle,indouble]))then
             continue
@@ -147,6 +164,7 @@ FILES: do i=1,size(filenames)
             insingle=.true.
          endif
       case(nl)
+         iposition=0
          ilines=ilines+1                             ! increment count of newline characters in file
          if(previous.ne.'&')then
             incomment=.false.
@@ -178,21 +196,37 @@ FILES: do i=1,size(filenames)
 
       if (c1.eq.nl)then                     ! remove adjacent blank lines
          if(nocomment.and.nocode)then
-            continue
+    continue
          else
             if(nocode) then
-               outline=outline//' '
+       outline=outline//' '
                outline=trim(outline(max(1,verify(outline,'!')):)) ! trim leading exclamations
+            endif
+            if(incomment)then
+               continue
+            elseif(previous.eq.'&'.and.nocont)then
+               advance='no'
+               outline=trim(outline)
+               ilen=len(outline)
+               if(outline(ilen:ilen).eq.'&')then
+                  outline=outline(:ilen-1)
+               endif
+            else
+               advance='yes'
             endif
             if(outline.eq.''.or.adjustl(outline).eq.achar(10))then  ! if a blank line output if previous line not a blank line
                if(ifblank)then
                   continue
                else
-                  write(*,'(a)')outline
+                  write(*,'(a)',advance=advance)
                endif
                ifblank=.true.
             else                                                    ! print a non-blank line
-               write(*,'(a)')outline
+               outlinel=adjustl(outline)
+               if(index(outlinel,'&').eq.1.and.nocont)then
+                 outline='#'//outlinel(2:)
+               endif
+               write(*,'(a)',advance=advance)outline
                ifblank=.false.
             endif
          endif
@@ -200,6 +234,10 @@ FILES: do i=1,size(filenames)
       elseif(nocomment.and.incomment)then
          continue
       elseif(nocode.and..not.incomment)then
+         continue
+      elseif(incomment.or.insingle.or.indouble)then
+         outline=outline//c1
+      elseif(c1.eq.'&'.and.nocont)then
          continue
       else
          outline=outline//c1
@@ -212,92 +250,131 @@ FILES: do i=1,size(filenames)
       endif
 
    enddo ONE_CHAR_AT_A_TIME
+
+   if(idiff.ne.0)then
+      stop 1
+   else
+      stop 0
+   endif
+
 enddo FILES
 
 contains
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
+subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'flower(1f) - [DEVELOPER] change case of free-format Fortran file                                                                ',&
-'     (LICENSE:PD)                                                                                                               ',&
-'SYNOPSIS                                                                                                                        ',&
-'     flower FILENAME [--verbose] [--nocomment|--nocode]                                                                         ',&
-'            [--toupper]|[--help|--version]                                                                                      ',&
-'DESCRIPTION                                                                                                                     ',&
-'     Convert the free-format Fortran source file to lowercase or uppercase                                                      ',&
-'     leaving comments and quoted text as-is. This is a basic program                                                            ',&
-'     that writes its results to stdout and does not recognize Hollerith                                                         ',&
-'     strings and preprocessor directives as special cases.                                                                      ',&
-'                                                                                                                                ',&
-'     Tabs should be expanded before processing the file                                                                         ',&
-'                                                                                                                                ',&
-'     This is a very simplistic approach so the output should be carefully                                                       ',&
-'     checked.                                                                                                                   ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'     FILENAME     Fortran source file which is to be converted to lowercase                                                     ',&
-'     --nocomment  remove comment characters                                                                                     ',&
-'     --nocode     remove code characters                                                                                        ',&
-'     --toupper    convert code characters to uppercase instead of lowercase                                                     ',&
-'     --verbose    turn on verbose mode. Note that if --nocomment and                                                            ',&
-'                  --nocode are selected --verbose is implied.                                                                   ',&
-'     --help       display help text and exit                                                                                    ',&
-'     --version    display version text and exit                                                                                 ',&
-'                                                                                                                                ',&
-'EXAMPLES                                                                                                                        ',&
-'   Typical usage                                                                                                                ',&
-'                                                                                                                                ',&
-'     # convert all code to lowercase                                                                                            ',&
-'     flower sample.f90 > sample_new.f90                                                                                         ',&
-'                                                                                                                                ',&
-'     # extract all code comments and do a spell check                                                                           ',&
-'     flower *.f90 -nocode|spell                                                                                                 ',&
-'                                                                                                                                ',&
-'     # show stats for files measuring percent of comments                                                                       ',&
-'     flower *.f90 --nocode --nocomment --verbose                                                                                ',&
-'                                                                                                                                ',&
-'EXIT STATUS                                                                                                                     ',&
-'     The following exit values are returned:                                                                                    ',&
-'                                                                                                                                ',&
-'      0     no differences were found                                                                                           ',&
-'      1     differences were found                                                                                              ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME',&
+'flower(1f) - [DEVELOPER] change case of free-format Fortran file',&
+'             (LICENSE:PD)',&
+'SYNOPSIS',&
+'   flower [ --stat|[ [--nocomment|--nocode] [--toupper]|[--verbose] ]',&
+'          FILENAMES(s) ]|[--help|--version|--usage]',&
+'DESCRIPTION',&
+'   Convert the free-format Fortran source file to lowercase or uppercase',&
+'   leaving comments and quoted text as-is. This is a basic program',&
+'   that writes its results to stdout and does not recognize Hollerith',&
+'   strings and preprocessor directives as special cases.',&
+'',&
+'   Tabs should be expanded before processing the file',&
+'',&
+'   This is a very simplistic approach so the output should be carefully',&
+'   checked.',&
+'',&
+'OPTIONS',&
+'     FILENAME     Fortran source file which is to be converted to lowercase',&
+'     --nocomment  remove comment characters',&
+'     --nocode     remove code characters',&
+'     --toupper    convert code characters to uppercase instead of lowercase',&
+'     --verbose    turn on verbose mode including file statistics. Note',&
+'                  that if --nocomment and --nocode are selected --verbose',&
+'                  is implied.',&
+'     --stat       is the same as --nocomment --nocode --verbose, meaning',&
+'                  no other output than file statistics will be produced.',&
+'                  If present, --nocomment, --nocode, and --verbose are',&
+'                  ignored.',&
+'',&
+'     --help       display help text and exit',&
+'     --version    display version text and exit',&
+'',&
+'EXAMPLES',&
+'   Typical usage',&
+'',&
+'     # convert all code to lowercase',&
+'     flower sample.f90 > sample_new.f90',&
+'',&
+'     # extract all code comments and do a spell check',&
+'     flower *.f90 -nocode|spell',&
+'',&
+'     # show stats for files measuring percent of comments',&
+'     flower *.f90 --nocode --nocomment --verbose',&
+'',&
+'EXIT STATUS',&
+'   The following exit values are returned:',&
+'',&
+'      0     no differences were found',&
+'      1     differences were found',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
+! NAME
+! flower(1f) - [DEVELOPER] change case of free-format Fortran file
+!              (LICENSE:PD)
+! SYNOPSIS
+!    flower [ --stat|[ [--nocomment|--nocode] [--toupper]|[--verbose] ]
+!           FILENAMES(s) ]|[--help|--version|--usage]
+! DESCRIPTION
+!    Convert the free-format Fortran source file to lowercase or uppercase
+!    leaving comments and quoted text as-is. This is a basic program
+!    that writes its results to stdout and does not recognize Hollerith
+!    strings and preprocessor directives as special cases.
+! 
+!    Tabs should be expanded before processing the file
+! 
+!    This is a very simplistic approach so the output should be carefully
+!    checked.
+! 
+! OPTIONS
+!      FILENAME     Fortran source file which is to be converted to lowercase
+!      --nocomment  remove comment characters
+!      --nocode     remove code characters
+!      --toupper    convert code characters to uppercase instead of lowercase
+!      --verbose    turn on verbose mode including file statistics. Note
+!                   that if --nocomment and --nocode are selected --verbose
+!                   is implied.
+!      --stat       is the same as --nocomment --nocode --verbose, meaning
+!                   no other output than file statistics will be produced.
+!                   If present, --nocomment, --nocode, and --verbose are
+!                   ignored.
+! 
+!      --help       display help text and exit
+!      --version    display version text and exit
+! 
+! EXAMPLES
+!    Typical usage
+! 
+!      # convert all code to lowercase
+!      flower sample.f90 > sample_new.f90
+! 
+!      # extract all code comments and do a spell check
+!      flower *.f90 -nocode|spell
+! 
+!      # show stats for files measuring percent of comments
+!      flower *.f90 --nocode --nocomment --verbose
+! 
+! EXIT STATUS
+!    The following exit values are returned:
+! 
+!       0     no differences were found
+!       1     differences were found
+version_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF library utilities and examples>',&
 '@(#)PROGRAM:        flower(1)>',&
 '@(#)DESCRIPTION:    convert free-format Fortran source to lowercase>',&
 '@(#)VERSION:        1.0-20171126>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2021-08-29 21:27:02 UTC-240>',&
-'@(#)COMPILED:       2021-08-30 13:06:09 UTC-240>',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
+! @(#)PRODUCT:        GPF library utilities and examples>
+! @(#)PROGRAM:        flower(1)>
+! @(#)DESCRIPTION:    convert free-format Fortran source to lowercase>
+! @(#)VERSION:        1.0-20171126>
+! @(#)AUTHOR:         John S. Urban>
+end subroutine setup
+
 end program flower

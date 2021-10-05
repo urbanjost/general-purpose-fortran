@@ -1,10 +1,11 @@
 program runtest
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
+use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
 implicit none
    unit_check_command=''
    unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite_M_system_tests()
+   call unit_check_stop()
 end program runtest
 
 subroutine test_suite_M_system_tests()

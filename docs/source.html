@@ -5,6 +5,7 @@
 <meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
 <meta name="keywords" content="Fortran Repository" />
 <meta name="keywords" content="Fortran Collection" />
+<link  rel="stylesheet"            href="StyleSheets/man.css"          type="text/css"  title="man"          />
 <style>
 body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
 
@@ -19,6 +20,9 @@ h2 { font-size:173%; }
 h3 { font-size:144%; }
 h4 { font-size:120%; }
 h5,h6 { font-size:100% }
+
+dt { font-size:108%; color:#00F;line-height: 2em;font-width:boldest;}
+
 table { border:double #000; border-collapse:collapse; }
 td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
 td { padding-left: 1em; padding-right: 1em;}
@@ -1459,6 +1463,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_verify::fstop(3f): calls 'STOP VALUE' passing in a value (1-32), with optional message<br/>
 	M_verify::unit_check(3f):if .not.expression call 'goodbad NAME bad' & stop program<br/>
 	M_verify::unit_check_start(3f): call 'goodbad NAME start'<br/>
+	M_verify::unit_check_stop(3f):  stop program with report on calls to unit_check(3f)<br/>
 	M_verify::unit_check_done(3f): call 'goodbad NAME bad'<br/>
 	M_verify::unit_check_bad(3f): call 'goodbad NAME bad'<br/>
 	M_verify::unit_check_good(3f): call 'goodbad NAME good'<br/>

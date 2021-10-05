@@ -5,6 +5,7 @@
 <meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
 <meta name="keywords" content="Fortran Repository" />
 <meta name="keywords" content="Fortran Collection" />
+<link  rel="stylesheet"            href="StyleSheets/man.css"          type="text/css"  title="man"          />
 <style>
 body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
 
@@ -19,6 +20,9 @@ h2 { font-size:173%; }
 h3 { font-size:144%; }
 h4 { font-size:120%; }
 h5,h6 { font-size:100% }
+
+dt { font-size:108%; color:#00F;line-height: 2em;font-width:boldest;}
+
 table { border:double #000; border-collapse:collapse; }
 td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
 td { padding-left: 1em; padding-right: 1em;}
@@ -42,13 +46,25 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <html><head><title></title></head><body><table border="1">
+<tr><td><a href="../app/rmdir-.f90">../app/rmdir-.f90</a></td>
+<td>    remove empty directories by calling rmdir(3c)<br/></td>
 <tr><td><a href="../app/table2html.f90">../app/table2html.f90</a></td>
 <td>    filter to format simple columnar table into an HTML table form<br/></td>
 <tr><td><a href="../app/M_verify.inc">../app/M_verify.inc</a></td>
+<tr><td><a href="../app/logname-.f90">../app/logname-.f90</a></td>
+<td>    print login name using system_getlogin(3f)/getlogin(3c)<br/></td>
+<tr><td><a href="../app/hostname-.f90">../app/hostname-.f90</a></td>
+<td>    print hostname<br/></td>
 <tr><td><a href="../app/rep.f90">../app/rep.f90</a></td>
 <td>    replace fixed strings in files<br/></td>
+<tr><td><a href="../app/dirname-.f90">../app/dirname-.f90</a></td>
+<td>    strip last component from file name<br/></td>
+<tr><td><a href="../app/rm-.f90">../app/rm-.f90</a></td>
+<td>    remove file<br/></td>
 <tr><td><a href="../app/cprint.f90">../app/cprint.f90</a></td>
 <td>    filter that prints specified columns<br/></td>
+<tr><td><a href="../app/showumask-.f90">../app/showumask-.f90</a></td>
+<td>    show umask in decimal, octal, hex, and binary<br/></td>
 <tr><td><a href="../app/slice.f90">../app/slice.f90</a></td>
 <td>    display a set of curves as slices with a 3D view<br/></td>
 <tr><td><a href="../app/ttee.f90">../app/ttee.f90</a></td>
@@ -65,12 +81,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>    select an item from a screen menu<br/></td>
 <tr><td><a href="../app/cn.f90">../app/cn.f90</a></td>
 <td>    create a basic contour plot<br/></td>
+<tr><td><a href="../app/basename-.f90">../app/basename-.f90</a></td>
 <tr><td><a href="../app/esc.f90">../app/esc.f90</a></td>
 <td>    set xterm(1) window attributes using a screen or line mode.<br/></td>
 <tr><td><a href="../app/f90split.f90">../app/f90split.f90</a></td>
 <td>    fsplit a Fortran 90 source file into component files<br/></td>
 <tr><td><a href="../app/topic.f90">../app/topic.f90</a></td>
 <td>    create a simple help utility that reads a simply formatted help file<br/></td>
+<tr><td><a href="../app/yes-.f90">../app/yes-.f90</a></td>
+<td>    output a string repeatedly until killed or limit is reached<br/></td>
 <tr><td><a href="../app/ufpp.f90">../app/ufpp.f90</a></td>
 <td>    convert multiple values between Celsius and Fahrenheit<br/></td>
 <td>    Fortran Pre-processor<br/></td>
@@ -92,14 +111,22 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../app/fpm-time.f90">../app/fpm-time.f90</a></td>
 <td>     Run gprof(1) in an fpm(1) package',&<br/></td>
 <tr><td><a href="../app/anagrams.f90">../app/anagrams.f90</a></td>
+<tr><td><a href="../app/ln-.f90">../app/ln-.f90</a></td>
+<td>    create links to a target file<br/></td>
 <tr><td><a href="../app/lala.f90">../app/lala.f90</a></td>
+<tr><td><a href="../app/unlink-.f90">../app/unlink-.f90</a></td>
+<td>    remove file by unlinking it<br/></td>
 <tr><td><a href="../app/note.f90">../app/note.f90</a></td>
 <td>    print alphabet in big block letters using blocks(3f) and signs(3f)<br/></td>
 <tr><td><a href="../app/makeout.f90">../app/makeout.f90</a></td>
 <td>    create Makefile for current directory<br/></td>
+<tr><td><a href="../app/mv-.f90">../app/mv-.f90</a></td>
+<td>    rename file<br/></td>
 <tr><td><a href="../app/unicode_example1.f90">../app/unicode_example1.f90</a></td>
 <tr><td><a href="../app/sec2days.f90">../app/sec2days.f90</a></td>
 <td>    convert seconds to string of form dd-hh:mm:ss<br/></td>
+<tr><td><a href="../app/mkdir-.f90">../app/mkdir-.f90</a></td>
+<td>    Create the specified directories if they do not already exist.<br/></td>
 <tr><td><a href="../app/tabulate.f90">../app/tabulate.f90</a></td>
 <td>    print values alongside a text graph of the values<br/></td>
 <tr><td><a href="../app/minefield.f90">../app/minefield.f90</a></td>
@@ -115,36 +142,51 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../app/numdiff.f90">../app/numdiff.f90</a></td>
 <td>    compare otherwise essentially identical files for numeric differences.<br/></td>
 <tr><td><a href="../app/sqlite3_version.f90">../app/sqlite3_version.f90</a></td>
+<tr><td><a href="../app/shuf-.f90">../app/shuf-.f90</a></td>
+<td>    random shuffle of lines in a file or strings or a range of whole numbers<br/></td>
 <tr><td><a href="../app/now.f90">../app/now.f90</a></td>
 <td>    Report a date in a variety of formats<br/></td>
+<tr><td><a href="../app/echo-.f90">../app/echo-.f90</a></td>
+<td>    display a line of text<br/></td>
 <tr><td><a href="../app/today.f90">../app/today.f90</a></td>
 <td>    output current time for uses such as file suffixes.<br/></td>
 <tr><td><a href="../app/change.f90">../app/change.f90</a></td>
 <td>    rename files by changing old fixed string to new string<br/></td>
 <tr><td><a href="../app/compute.f90">../app/compute.f90</a></td>
 <td>    line mode calculator program (that calls CALCULATOR(3f))<br/></td>
+<tr><td><a href="../app/fmt-.f90">../app/fmt-.f90</a></td>
+<td>    simple reformatting of paragraphs<br/></td>
 <tr><td><a href="../app/xy.f90">../app/xy.f90</a></td>
 <td>    create a basic XY plot<br/></td>
 <tr><td><a href="../app/kolor.f90">../app/kolor.f90</a></td>
+<tr><td><a href="../app/paste-.f90">../app/paste-.f90</a></td>
 <tr><td><a href="../app/magic_square.f90">../app/magic_square.f90</a></td>
 <tr><td><a href="../app/fpm-dict.f90">../app/fpm-dict.f90</a></td>
 <td>     Get definition of a word using DICT Protocol and libcurl(3c)<br/></td>
 <tr><td><a href="../app/digest.f90">../app/digest.f90</a></td>
+<tr><td><a href="../app/which-.f90">../app/which-.f90</a></td>
+<td>    list pathnames of leaf names that are executable and can be found using the $PATH variable<br/></td>
 <tr><td><a href="../app/planets.f90">../app/planets.f90</a></td>
 <td>    ephemeris position of planets for adjusting an equitorial telescope<br/></td>
 <tr><td><a href="../app/lsup.f90">../app/lsup.f90</a></td>
 <td>    show permits of a pathname and all directory components of the pathname<br/></td>
+<tr><td><a href="../app/seq-.f90">../app/seq-.f90</a></td>
+<td>    print a sequence of numbers<br/></td>
 <tr><td><a href="../app/base.f90">../app/base.f90</a></td>
 <td>    convert numbers between bases<br/></td>
 <tr><td><a href="../app/xauth_key.f90">../app/xauth_key.f90</a></td>
 <td>    generate random strings such as magic cookies for xauth<br/></td>
+<tr><td><a href="../app/grep-.f90">../app/grep-.f90</a></td>
+<td>    search a file for a pattern<br/></td>
 <tr><td><a href="../app/huegif.f90">../app/huegif.f90</a></td>
 <td>    generate GIF pixel files with color wheels at different lightness<br/></td>
 <tr><td><a href="../app/fixedform.f90">../app/fixedform.f90</a></td>
 <td>    display a TUI definition and return values<br/></td>
+<tr><td><a href="../app/tac-.f90">../app/tac-.f90</a></td>
 <tr><td><a href="../app/penv.f90">../app/penv.f90</a></td>
 <td>    Print values from the environment table<br/></td>
 <tr><td><a href="../app/M_msg.inc">../app/M_msg.inc</a></td>
+<tr><td><a href="../app/realpath-.f90">../app/realpath-.f90</a></td>
 <tr><td><a href="../app/shell.f90">../app/shell.f90</a></td>
 <td>    shell for demonstrating major modules in libGPF.a<br/></td>
 <tr><td><a href="../app/days2sec.f90">../app/days2sec.f90</a></td>
@@ -163,29 +205,50 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>    generate a sequence of numbers, optionally concatenated to a file<br/></td>
 <tr><td><a href="../app/pendulum.f90">../app/pendulum.f90</a></td>
 <td>    calculate simple pendulum period<br/></td>
+<tr><td><a href="../app/expand-.f90">../app/expand-.f90</a></td>
+<td>    convert tabs to spaces<br/></td>
 <tr><td><a href="../app/paranoid.f90">../app/paranoid.f90</a></td>
 <td>    call doubleprecision and real versions of paranoia(3f)<br/></td>
 <tr><td><a href="../app/unique.f90">../app/unique.f90</a></td>
 <td>    output a UUID (Universally Unique ID)<br/></td>
+<tr><td><a href="../app/printenv-.f90">../app/printenv-.f90</a></td>
+<td>    Print values from the environment table<br/></td>
 <tr><td><a href="../app/ufpp_template.f90">../app/ufpp_template.f90</a></td>
 <td>    output a model of a prep(1) input file<br/></td>
+<tr><td><a href="../app/mkfifo-.f90">../app/mkfifo-.f90</a></td>
+<td>    make FIFO pipe file<br/></td>
 <tr><td><a href="../app/target.f90">../app/target.f90</a></td>
 <td>    create printable targets<br/></td>
+<tr><td><a href="../app/time-.f90">../app/time-.f90</a></td>
 <tr><td><a href="../app/sig.f90">../app/sig.f90</a></td>
 <tr><td><a href="../app/clock.f90">../app/clock.f90</a></td>
 <td>    draw a clock<br/></td>
+<tr><td><a href="../app/stat-.f90">../app/stat-.f90</a></td>
+<td>    list pathname properties<br/></td>
+<tr><td><a href="../app/tr-.f90">../app/tr-.f90</a></td>
+<td>    translate one set of characters to another<br/></td>
 <tr><td><a href="../app/alphabet.f90">../app/alphabet.f90</a></td>
 <td>    print a value as a decimal, hexadecimal, octal and binary value<br/></td>
 <tr><td><a href="../app/ffmt.f90">../app/ffmt.f90</a></td>
 <td>    simple reformatting of paragraphs of Fortran comments<br/></td>
+<tr><td><a href="../app/ls-.f90">../app/ls-.f90</a></td>
+<td>    list files in a directory<br/></td>
+<tr><td><a href="../app/banner-.f90">../app/banner-.f90</a></td>
+<td>    print text in big block letters<br/></td>
 <tr><td><a href="../app/seefont.f90">../app/seefont.f90</a></td>
 <td>    display font samples<br/></td>
 <tr><td><a href="../app/colors.f90">../app/colors.f90</a></td>
 <td>    display color names and values<br/></td>
 <tr><td><a href="../app/spoiler.f90">../app/spoiler.f90</a></td>
+<tr><td><a href="../app/kill-.f90">../app/kill-.f90</a></td>
+<td>    send signals to processes<br/></td>
 <tr><td><a href="../app/fpm-man.f90">../app/fpm-man.f90</a></td>
 <tr><td><a href="../app/triangle.f90">../app/triangle.f90</a></td>
 <td>    resolution of a triangle<br/></td>
+<tr><td><a href="../app/uname-.f90">../app/uname-.f90</a></td>
+<td>    print system information<br/></td>
+<tr><td><a href="../app/pwd-.f90">../app/pwd-.f90</a></td>
+<td>    print full pathname of current directory<br/></td>
 <tr><td><a href="../app/model.f90">../app/model.f90</a></td>
 <tr><td><a href="../app/factors.f90">../app/factors.f90</a></td>
 <td>    Determine prime factors of numbers<br/></td>
@@ -193,12 +256,17 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>    Determine least common multiple of a list of integers<br/></td>
 <tr><td><a href="../app/splitname.f90">../app/splitname.f90</a></td>
 <td>    split file name into components (dir,name,basename,extension)<br/></td>
+<tr><td><a href="../app/link-.f90">../app/link-.f90</a></td>
+<td>    link to file<br/></td>
 <tr><td><a href="../app/eta.f90">../app/eta.f90</a></td>
 <tr><td><a href="../app/flower.f90">../app/flower.f90</a></td>
+<td>    convert free-format Fortran source to lowercase<br/></td>
 <td>    convert free-format Fortran source to lowercase<br/></td>
 <tr><td><a href="../app/draw.f90">../app/draw.f90</a></td>
 <td>    simple interpreter for M_draw(3fm) routines<br/></td>
 <tr><td><a href="../app/redo.f90">../app/redo.f90</a></td>
+<tr><td><a href="../app/rev-.f90">../app/rev-.f90</a></td>
+<td>    reverse lnes in a file<br/></td>
 <tr><td><a href="../app/phone.f90">../app/phone.f90</a></td>
 <td>    phone number utility<br/></td>
 <tr><td><a href="../app/month.f90">../app/month.f90</a></td>

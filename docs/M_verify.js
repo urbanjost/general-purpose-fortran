@@ -14,4 +14,5 @@ append("unit_check_done.3m_verify.html");
 append("unit_check_good.3m_verify.html");
 append("unit_check_msg.3m_verify.html");
 append("unit_check_start.3m_verify.html");
+append("unit_check_stop.3m_verify.html");
 }

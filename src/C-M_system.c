@@ -1,3 +1,15 @@
+#ifdef __APPLE__
+    /*
+      MacOS
+        while looking inside "posix1_lim.h" I found out that some
+        stuff has been changed HOST_NAME_MAX now is _POSIX_HOST_NAME_MAX
+        LOGIN_NAME_MAX now is _POSIX_LOGIN_NAME_MAX
+
+         _POSIX_C_SOURCE should be #defined instead of __USE_POSIX according
+         to standard, but __USE_POSIX appears to need to be declared
+   */
+#   define _POSIX_C_SOURCE
+#endif
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -18,7 +30,17 @@
  extern char **environ;
 
  extern int FHOST_NAME_MAX;
+
+#ifdef __APPLE__
+ int FHOST_NAME_MAX=POSIX_HOST_NAME_MAX;
+#   ifdef CLK_TCK
+#      ifndef HZ
+#         define HZ CLK_TCK
+#      endif
+#   endif
+#else
  int FHOST_NAME_MAX=HOST_NAME_MAX;
+#endif
 
  extern mode_t FS_IRGRP;
  extern mode_t FS_IROTH;

@@ -323,28 +323,28 @@ SUBROUTINE graph(X,Y,NDP,NDL,F,C,NC)
 ! ident_1="@(#)M_graph::graph(3f): routine for plotting lines"
 
 !
-!     X  (R) X INPUT ARRAY DIMENSIONED X(NDP,NDL)
-!            NOTE: DEPENDING ON OPTIONS SELECTED, X
-!            ACTUALLY MAY BE DIMENSIONED X(NDP)
-!     Y  (R) Y INPUT ARRAY DIMENSIONED Y(NDP,NDL)
-!     NDP   (I) NUMBER OF POINTS PER LINE DIMENSION
-!     NDL   (I) NUMBER OF LINES DIMENSION
-!     F  (R) OPTIONS ARRAY (DESCRIBED BELOW)
-!     C  (C) TITLES ARRAY
-!             C(1) X AXIS TITLE
-!             C(2) Y AXIS TITLE
-!             C(3) CHART TITLE
-!             C(4) LEGEND TEXT FOR LINE 1 (IF LEGEND ENABLED)
-!             C(5) LEGEND TEXT FOR LINE 2 (IF LEGEND ENABLED)
+!     X  (R) X input array dimensioned X(NDP,NDL)
+!            NOTE: depending on options selected, X
+!            actually may be dimensioned X(NDP)
+!     Y  (R) Y Input array dimensioned Y(NDP,NDL)
+!     NDP   (I) number of points per line dimension
+!     NDL   (I) number of lines dimension
+!     F  (R) options array (described below)
+!     C  (C) titles array
+!             C(1) X axis title
+!             C(2) Y axis title
+!             C(3) chart title
+!             C(4) legend text for line 1 (if legend enabled)
+!             C(5) legend text for line 2 (if legend enabled)
 !             ...   ...
-!     NC (I) NUMBER OF CHARACTERS IN TITLE ARRAY
-!            NC(1) NUMBER OF CHARACTERS IN C(1)
-!            NC(2) NUMBER OF CHARACTERS IN C(2)
+!     NC (I) number of characters in title array
+!            NC(1) number of characters in C(1)
+!            NC(2) number of characters in C(2)
 !            ...    ...
-!            ETC.  NOTE: IF NC(I) IS ZERO C(I) IS NOT PLOTTED
+!            ETC.  NOTE: if NC(I) is zero C(I) is not plotted
 !
-!     THE ELEMENTS OF F ARE INTERPRETED ACCORDING TO THE FOLLOWING:
-!     DEFAULT VALUES ARE SHOWN IN SQUARE BRACKETS
+!     the elements of F are interpreted according to the following:
+!     default values are shown in square brackets
 !
 !   INDEX OF F VALUE    ACTION
 !  ____________ _____   ___________________
@@ -531,52 +531,52 @@ real     :: zval
 !
 !     ESTABLISH DEFAULTS
 !
-   NP=NDP            ! NUMBER OF POINTS/LINE
-   NL=NDL            ! NUMBER OF LINES
-   XM=X(1,1)         ! MIN X VALUE
-   XX=XM             ! MAX X VALUE
-   YM=Y(1,1)         ! MIN Y VALUE
-   YX=YM             ! MAX Y VALUE
-   FX=5.01           ! X AXIS NUMBER FORMAT
-   FY=5.01           ! Y AXIS NUMBER FORMAT
-   XLEN=7.0          ! X AXIS LENGTH
-   YLEN=5.0          ! Y AXIS LENGTH
-   XTICK=7.0         ! X AXIS TICK PATTERN
-   YTICK=6.0         ! Y AXIS TICK PATTERN
-   XCS=0.15          ! X AXIS TITLE SIZE
-   YCS=0.15          ! Y AXIS TITLE SIZE
-   TCS=0.18          ! OVERALL TITLE SIZE
-   EBAR=0.1          ! ERROR BAR SIZE
-   SYMSIZ=0.1        ! SYMBOL SIZE
-   CSLEG=0.12        ! LEGEND CHARACTER SIZE
-   GLEN=0.5          ! LEGEND LINE LENGTH
-   XLEG=XLEN+0.3     ! DEFAULT LEGEND LOCATION
-   YLEG=0.5
+   np=ndp            ! NUMBER OF POINTS/LINE
+   nl=ndl            ! NUMBER OF LINES
+   xm=x(1,1)         ! MIN X VALUE
+   xx=xm             ! MAX X VALUE
+   ym=y(1,1)         ! MIN Y VALUE
+   yx=ym             ! MAX Y VALUE
+   fx=5.01           ! X AXIS NUMBER FORMAT
+   fy=5.01           ! Y AXIS NUMBER FORMAT
+   xlen=7.0          ! X AXIS LENGTH
+   ylen=5.0          ! Y AXIS LENGTH
+   xtick=7.0         ! X AXIS TICK PATTERN
+   ytick=6.0         ! Y AXIS TICK PATTERN
+   xcs=0.15          ! X AXIS TITLE SIZE
+   ycs=0.15          ! Y AXIS TITLE SIZE
+   tcs=0.18          ! OVERALL TITLE SIZE
+   ebar=0.1          ! ERROR BAR SIZE
+   symsiz=0.1        ! SYMBOL SIZE
+   csleg=0.12        ! LEGEND CHARACTER SIZE
+   glen=0.5          ! LEGEND LINE LENGTH
+   xleg=xlen+0.3     ! DEFAULT LEGEND LOCATION
+   yleg=0.5
 !
 !     READ OPTIONS ARRAY
 !
-   IF (F(1).GT.0.0) NP=F(1) ! NUMBER OF POINT/LINE
-   IF (NP.GT.NDP) NP=NDP
-   IF (F(2).GT.0.0) NL=F(2) ! NUMBER OF LINES
-   IF (NL.GT.NDL) NL=NDL
-   JXAUTO=F(3)         ! AUTO SCALE X, 0=YES/SMOOTH,-1=NO/USER
+   if (f(1).gt.0.0) np=f(1) ! NUMBER OF POINT/LINE
+   if (np.gt.ndp) np=ndp
+   if (f(2).gt.0.0) nl=f(2) ! NUMBER OF LINES
+   if (nl.gt.ndl) nl=ndl
+   jxauto=f(3)         ! AUTO SCALE X, 0=YES/SMOOTH,-1=NO/USER
 !                   1=YES/NO SMOOTH
-   IF (JXAUTO.LT.0) THEN  ! INPUT X AXIS SCALE FACTORS
-      XM=F(4)          ! MIN X (OTHERWISE RETURNED)
-      XX=F(5)          ! MAX X
-   ENDIF
-   JYAUTO=F(6)         ! AUTO SCALE Y, 0=YES/SMOOTH,-1=NO/USER
+   if (jxauto.lt.0) then  ! INPUT X AXIS SCALE FACTORS
+      xm=f(4)          ! MIN X (OTHERWISE RETURNED)
+      xx=f(5)          ! MAX X
+   endif
+   jyauto=f(6)         ! AUTO SCALE Y, 0=YES/SMOOTH,-1=NO/USER
 !                   1=YES/NO SMOOTH
-   IF (JYAUTO.LT.0) THEN  ! INPUT Y AXIS SCALE FACTORS
-      YM=F(7)          ! MIN Y (OTHERWISE RETURNED)
-      YX=F(8)          ! MAX Y
-   ENDIF
-   JXUSE=ABS(F(9))     ! USE X LINES WITH Y LINES,0=NO,1=YES
-   JCONN=ABS(F(10))    ! CONNECT POINTS WITH LINES,0=YES,1=NO
-   JSYM=ABS(F(11))     ! PLOT SYMBOL EVERY JSYM PT,0=NO SYMS
-   IF (F(12).GT.0.0) SYMSIZ=F(12) ! SYMBOL SIZE
-   JSYMST=ABS(F(13))   ! STARTING PLOT SYMBOL NUMBER
-   JEBAR=F(14)         ! TYPE OF ERROR BAR,0=NOT USED
+   if (jyauto.lt.0) then  ! INPUT Y AXIS SCALE FACTORS
+      ym=f(7)          ! MIN Y (OTHERWISE RETURNED)
+      yx=f(8)          ! MAX Y
+   endif
+   jxuse=abs(f(9))     ! USE X LINES WITH Y LINES,0=NO,1=YES
+   jconn=abs(f(10))    ! CONNECT POINTS WITH LINES,0=YES,1=NO
+   jsym=abs(f(11))     ! PLOT SYMBOL EVERY JSYM PT,0=NO SYMS
+   if (f(12).gt.0.0) symsiz=f(12) ! SYMBOL SIZE
+   jsymst=abs(f(13))   ! STARTING PLOT SYMBOL NUMBER
+   jebar=f(14)         ! TYPE OF ERROR BAR,0=NOT USED
 !
 !        |JEBAR|  ERROR BAR (CLINE IS LINE CONNECT 2ND/3RD REL. ERR)
 !        -------  ---------------------------------------------------
@@ -590,63 +590,63 @@ real     :: zval
 !
 !        NOTE: IF JBAR < 0 AN X (SIZE EBAR) IS USED TO MARK 1ST LINE
 !
-   KEBAR=IABS(JEBAR)
-   NBAR=1
-   IF (JEBAR.NE.0) NBAR=3
-   IF (F(16).GT.0.0) EBAR=F(16) ! ERROR BAR SIZE
+   kebar=iabs(jebar)
+   nbar=1
+   if (jebar.ne.0) nbar=3
+   if (f(16).gt.0.0) ebar=f(16) ! ERROR BAR SIZE
 !                   1ST LINE DEFINES CENTER
 !                   2ND IS LOWER REL. ERROR
 !                   3RD IS UPPER REL. ERROR
-   JVLINE=F(17)       ! VERTICAL LINE TO ZVAL,0=NO,1=YES
-   ZVAL=F(18)        ! ZERO REFERENCE VALUE
-   JXLGAX=F(19)       ! X AXIS, LINEAR=0/LOG=1/NONE=-1
-   JYLGAX=F(20)       ! Y AXIS, LINEAR=0/LOG=1/NONE=-1
-   IF (F(21).GT.0.0) XLEN=F(21) ! X AXIS LENGTH
-   IF (F(22).GT.0.0) YLEN=F(22) ! Y AXIS LENGTH
-   IF (F(23).GT.0.0) XTICK=F(23) ! X AXIS TICK PATTERN
-   IF (F(24).GT.0.0) YTICK=F(24) ! Y AXIS TICK PATTERN
-   JXTITLE=ABS(F(25))  ! X AXIS TITLE SIDE,0=CW,1=CCW
-   IF (JXTITLE.EQ.0) THEN
-      JXTITLE=-1
-   ELSE
-      JXTITLE=1
-   ENDIF
-   JYTITLE=ABS(F(26))  ! Y AXIS TITLE SIDE,0=CCW,1=CW
-   IF (JYTITLE.EQ.0) THEN
-      JYTITLE=1
-   ELSE
-      JYTITLE=-1
-   ENDIF
-   JXEXPSC=ABS(F(27))  ! X AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
-   JYEXPSC=ABS(F(28))  ! Y AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
-   JXTICKS=ABS(F(29))  ! X AXIS TICKS TITLE SIDE,0=YES,1=NO
-   JYTICKS=ABS(F(30))  ! Y AXIS TICKS TITLE SIDE,0=YES,1=NO
-   JXNUMS=ABS(F(31))  ! X AXIS NUMS PARA AXIS, 0=YES,1=NO
-   JYNUMS=ABS(F(32))  ! Y AXIS NUMS PARA AXIS, 0=YES,1=NO
-   JXNUM=ABS(F(33))   ! X AXIS NUMS SHOWN, 0=YES,1=NO
-   JYNUM=ABS(F(34))   ! Y AXIS NUMS SHOWN, 0=YES,1=NO
-   JXLOG=ABS(F(35))   ! TAKE LOG OF X VALUES, 0=NO,1=YES
-   JYLOG=ABS(F(36))   ! TAKE LOG OF Y VALUES, 0=NO,1=YES
-   JXRAX=F(37)    ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
-   JYRAX=F(38)    ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
-   IF (F(39).GT.0.0) XCS=F(39) ! X AXIS TITLE SIZE
-   IF (F(40).GT.0.0) YCS=F(40) ! Y AXIS TITLE SIZE
-   IF (F(41).GT.0.0) TCS=F(41) ! OVERALL TITLE SIZE
-   JGRID=F(42)       ! GRID OPTION, 0=NONE,1=SOLID,2=DOTTED
-   JLEGND=F(43)       ! ADD LEGEND, 0=NONE,1=AUTO,-1=USER
-   XLEG=XLEN+0.3      ! DEFAULT LEGEND LOCATION
-   YLEG=0.5
-   IF (JLEGND.LT.0) XLEG=F(44) ! X LEGEND LOCATION
-   IF (JLEGND.LT.0) YLEG=F(45) ! Y LEGEND LOCATION
-   JLEGSY=F(46)       ! USE SYMBOL ON LEGEND,0=NO,1=YES
-   JLEGLI=F(47)       ! USE LINETYPE ON LEGEND,0=NO,1=YES
-   IF (F(48).GT.0.0) CSLEG=F(48) ! LEGEND CHARACTER SIZE
-   IF (F(49).GT.0.0) GLEN=F(49) ! LEGEND LINE LENGTH
-   JTCNTR=F(50)       ! CENTER TITLE,0=YES,-1=LEFT,1=RIGHT
-   JSZREF=F(51)       ! SHOW ZERO REFERENCE,0=NO,1=YES
+   jvline=f(17)       ! VERTICAL LINE TO ZVAL,0=NO,1=YES
+   zval=f(18)        ! ZERO REFERENCE VALUE
+   jxlgax=f(19)       ! X AXIS, LINEAR=0/LOG=1/NONE=-1
+   jylgax=f(20)       ! Y AXIS, LINEAR=0/LOG=1/NONE=-1
+   if (f(21).gt.0.0) xlen=f(21) ! X AXIS LENGTH
+   if (f(22).gt.0.0) ylen=f(22) ! Y AXIS LENGTH
+   if (f(23).gt.0.0) xtick=f(23) ! X AXIS TICK PATTERN
+   if (f(24).gt.0.0) ytick=f(24) ! Y AXIS TICK PATTERN
+   jxtitle=abs(f(25))  ! X AXIS TITLE SIDE,0=CW,1=CCW
+   if (jxtitle.eq.0) then
+      jxtitle=-1
+   else
+      jxtitle=1
+   endif
+   jytitle=abs(f(26))  ! Y AXIS TITLE SIDE,0=CCW,1=CW
+   if (jytitle.eq.0) then
+      jytitle=1
+   else
+      jytitle=-1
+   endif
+   jxexpsc=abs(f(27))  ! X AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
+   jyexpsc=abs(f(28))  ! Y AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
+   jxticks=abs(f(29))  ! X AXIS TICKS TITLE SIDE,0=YES,1=NO
+   jyticks=abs(f(30))  ! Y AXIS TICKS TITLE SIDE,0=YES,1=NO
+   jxnums=abs(f(31))  ! X AXIS NUMS PARA AXIS, 0=YES,1=NO
+   jynums=abs(f(32))  ! Y AXIS NUMS PARA AXIS, 0=YES,1=NO
+   jxnum=abs(f(33))   ! X AXIS NUMS SHOWN, 0=YES,1=NO
+   jynum=abs(f(34))   ! Y AXIS NUMS SHOWN, 0=YES,1=NO
+   jxlog=abs(f(35))   ! TAKE LOG OF X VALUES, 0=NO,1=YES
+   jylog=abs(f(36))   ! TAKE LOG OF Y VALUES, 0=NO,1=YES
+   jxrax=f(37)    ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
+   jyrax=f(38)    ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
+   if (f(39).gt.0.0) xcs=f(39) ! X AXIS TITLE SIZE
+   if (f(40).gt.0.0) ycs=f(40) ! Y AXIS TITLE SIZE
+   if (f(41).gt.0.0) tcs=f(41) ! OVERALL TITLE SIZE
+   jgrid=f(42)       ! GRID OPTION, 0=NONE,1=SOLID,2=DOTTED
+   jlegnd=f(43)       ! ADD LEGEND, 0=NONE,1=AUTO,-1=USER
+   xleg=xlen+0.3      ! DEFAULT LEGEND LOCATION
+   yleg=0.5
+   if (jlegnd.lt.0) xleg=f(44) ! X LEGEND LOCATION
+   if (jlegnd.lt.0) yleg=f(45) ! Y LEGEND LOCATION
+   jlegsy=f(46)       ! USE SYMBOL ON LEGEND,0=NO,1=YES
+   jlegli=f(47)       ! USE LINETYPE ON LEGEND,0=NO,1=YES
+   if (f(48).gt.0.0) csleg=f(48) ! LEGEND CHARACTER SIZE
+   if (f(49).gt.0.0) glen=f(49) ! LEGEND LINE LENGTH
+   jtcntr=f(50)       ! CENTER TITLE,0=YES,-1=LEFT,1=RIGHT
+   jszref=f(51)       ! SHOW ZERO REFERENCE,0=NO,1=YES
 !
-   JLINE=F(52)       ! USE LINE TYPES,0=NO,1=YES
-   JCOL=F(53)        ! USE COLORS,0=NO,1=YES
+   jline=f(52)       ! USE LINE TYPES,0=NO,1=YES
+   jcol=f(53)        ! USE COLORS,0=NO,1=YES
 !
 !     F(54)=FIRST COLOR
 !     F(55)=FIRST LINETYPE
@@ -654,493 +654,493 @@ real     :: zval
 !     F(57)=SECOND LINETYPE
 !     ...
 !
-   ICOFF=54
-   ILOFF=55
+   icoff=54
+   iloff=55
 !
 !     COMPUTE SCALING
 !
-   IF (JXAUTO.GE.0) THEN  ! AUTO SCALE X
-      X1=ABS(XM)
-      X2=X1
-      DO 5 I=1,NP
-         K=1
-         IF (JXUSE.NE.0) K=NL
-         DO 5 J=1,K,NBAR
-            XM=MIN(XM,X(I,J))
-            X1=MIN(X1,ABS(X(I,J)))
-            XX=MAX(XX,X(I,J))
-            X2=MAX(XX,ABS(X(I,J)))
-            IF (JEBAR.NE.0.AND.JXUSE.NE.0) THEN
-               XM=MIN(XM,X(I,J)+X(I+1,J))
-               X1=MIN(X1,ABS(X(I,J)+X(I+1,J)))
-               XX=MAX(XX,X(I,J)+X(I+1,J))
-               X2=MAX(X2,ABS(X(I,J)+X(I+1,J)))
-               XM=MIN(XM,X(I,J)+X(I+2,J))
-               X1=MIN(X1,ABS(X(I,J)+X(I+1,J)))
-               XX=MAX(XX,X(I,J)+X(I+2,J))
-               X2=MAX(X2,ABS(X(I,J)+X(I+1,J)))
-            ENDIF
-5     CONTINUE
-      IF (JXLOG.NE.0) THEN
-         XM=ALOG10(X1+1.E-34)
-         XX=ALOG10(X2+1.E-34)
-      ENDIF
-      IF (JXAUTO.GT.0.AND.JXLGAX.EQ.0) THEN ! SMOOTH SCALING
-         SMO(1)=XM
-         SMO(2)=XX
-         CALL range_(SMO,XLEN,2,1,1,XM,DX)
-         XX=XM+XLEN*DX
-      ENDIF
-      IF (JXLGAX.NE.0) THEN   ! LOG AXIS SCALING
-         IF (XM.LE.0.AND.XM.NE.INT(XM)) XM=XM-1.0
-         XM=INT(XM)
-         IF (XX.GT.0.AND.XX.NE.INT(XX)) XX=XX+1.0
-         XX=INT(XX)
-      ENDIF
-      IF (XX.EQ.XM) XX=XM+1.0
+   if (jxauto.ge.0) then  ! AUTO SCALE X
+      x1=abs(xm)
+      x2=x1
+      do 5 i=1,np
+         k=1
+         if (jxuse.ne.0) k=nl
+         do 5 j=1,k,nbar
+            xm=min(xm,x(i,j))
+            x1=min(x1,abs(x(i,j)))
+            xx=max(xx,x(i,j))
+            x2=max(xx,abs(x(i,j)))
+            if (jebar.ne.0.and.jxuse.ne.0) then
+               xm=min(xm,x(i,j)+x(i+1,j))
+               x1=min(x1,abs(x(i,j)+x(i+1,j)))
+               xx=max(xx,x(i,j)+x(i+1,j))
+               x2=max(x2,abs(x(i,j)+x(i+1,j)))
+               xm=min(xm,x(i,j)+x(i+2,j))
+               x1=min(x1,abs(x(i,j)+x(i+1,j)))
+               xx=max(xx,x(i,j)+x(i+2,j))
+               x2=max(x2,abs(x(i,j)+x(i+1,j)))
+            endif
+5     continue
+      if (jxlog.ne.0) then
+         xm=alog10(x1+1.e-34)
+         xx=alog10(x2+1.e-34)
+      endif
+      if (jxauto.gt.0.and.jxlgax.eq.0) then ! SMOOTH SCALING
+         smo(1)=xm
+         smo(2)=xx
+         call range_(smo,xlen,2,1,1,xm,dx)
+         xx=xm+xlen*dx
+      endif
+      if (jxlgax.ne.0) then   ! LOG AXIS SCALING
+         if (xm.le.0.and.xm.ne.int(xm)) xm=xm-1.0
+         xm=int(xm)
+         if (xx.gt.0.and.xx.ne.int(xx)) xx=xx+1.0
+         xx=int(xx)
+      endif
+      if (xx.eq.xm) xx=xm+1.0
 !     RETURN SCALE FACTORS USED
-      F(4)=XM
-      F(5)=XX
-   ENDIF
-   IF (JYAUTO.GE.0) THEN  ! AUTO SCALE Y
-      Y1=ABS(YM)
-      Y2=Y1
-      DO 6 I=1,NP
-         DO 6 J=1,NL,NBAR
-            YM=MIN(YM,Y(I,J))
-            Y1=MIN(Y1,ABS(Y(I,J)))
-            YX=MAX(YX,Y(I,J))
-            Y2=MAX(YX,ABS(Y(I,J)))
-            IF (JEBAR.NE.0) THEN
-               YM=MIN(YM,Y(I,J)+Y(I+1,J))
-               Y1=MIN(Y1,ABS(Y(I,J)+Y(I+1,J)))
-               YX=MAX(YX,Y(I,J)+Y(I+1,J))
-               Y2=MAX(Y2,ABS(Y(I,J)+Y(I+1,J)))
-               YM=MIN(YM,Y(I,J)+Y(I+2,J))
-               Y1=MIN(Y1,ABS(Y(I,J)+Y(I+1,J)))
-               YX=MAX(YX,Y(I,J)+Y(I+2,J))
-               Y2=MAX(Y2,ABS(Y(I,J)+Y(I+1,J)))
-            ENDIF
-6     CONTINUE
-      IF (JYLOG.NE.0) THEN
-         YM=ALOG10(Y1+1.E-34)
-         YX=ALOG10(Y2+1.E-34)
-      ENDIF
-      IF (JYAUTO.GT.0.AND.JYLGAX.EQ.0) THEN ! SMOOTH SCALING
-         SMO(1)=YM
-         SMO(2)=YX
-         CALL range_(SMO,YLEN,2,1,1,YM,DY)
-         YX=YM+YLEN*DY
-      ENDIF
-      IF (JYLGAX.NE.0) THEN   ! LOG AXIS SCALING
-         IF (YM.LE.0.AND.YM.NE.INT(YM)) YM=YM-1.0
-         YM=INT(YM)
-         IF (YX.GT.0.AND.YX.NE.INT(YX)) YX=YX+1.0
-         YX=INT(YX)
-      ENDIF
-      IF (YX.EQ.YM) YX=YM+1.0
+      f(4)=xm
+      f(5)=xx
+   endif
+   if (jyauto.ge.0) then  ! AUTO SCALE Y
+      y1=abs(ym)
+      y2=y1
+      do 6 i=1,np
+         do 6 j=1,nl,nbar
+            ym=min(ym,y(i,j))
+            y1=min(y1,abs(y(i,j)))
+            yx=max(yx,y(i,j))
+            y2=max(yx,abs(y(i,j)))
+            if (jebar.ne.0) then
+               ym=min(ym,y(i,j)+y(i+1,j))
+               y1=min(y1,abs(y(i,j)+y(i+1,j)))
+               yx=max(yx,y(i,j)+y(i+1,j))
+               y2=max(y2,abs(y(i,j)+y(i+1,j)))
+               ym=min(ym,y(i,j)+y(i+2,j))
+               y1=min(y1,abs(y(i,j)+y(i+1,j)))
+               yx=max(yx,y(i,j)+y(i+2,j))
+               y2=max(y2,abs(y(i,j)+y(i+1,j)))
+            endif
+6     continue
+      if (jylog.ne.0) then
+         ym=alog10(y1+1.e-34)
+         yx=alog10(y2+1.e-34)
+      endif
+      if (jyauto.gt.0.and.jylgax.eq.0) then ! SMOOTH SCALING
+         smo(1)=ym
+         smo(2)=yx
+         call range_(smo,ylen,2,1,1,ym,dy)
+         yx=ym+ylen*dy
+      endif
+      if (jylgax.ne.0) then   ! LOG AXIS SCALING
+         if (ym.le.0.and.ym.ne.int(ym)) ym=ym-1.0
+         ym=int(ym)
+         if (yx.gt.0.and.yx.ne.int(yx)) yx=yx+1.0
+         yx=int(yx)
+      endif
+      if (yx.eq.ym) yx=ym+1.0
 !     RETURN SCALE FACTORS USED
-      F(7)=YM
-      F(8)=YX
-   ENDIF
-   DX=(XX-XM)/XLEN
-   DY=(YX-YM)/YLEN
+      f(7)=ym
+      f(8)=yx
+   endif
+   dx=(xx-xm)/xlen
+   dy=(yx-ym)/ylen
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
    if(debug)write(*,*)'PRODUCE PLOT'
 !
 !     PRODUCE PLOT X AXIS
 !
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-   IF (JCOL.NE.0) THEN  ! INITIALIZE COLOR AXIS ARRAY
-      DO 10 I=1,4
-         IC(I)=ABS(F(2*I+ICOFF-2))
-         IF (IC(I).EQ.0) IC(I)=1
-10    CONTINUE
-   ENDIF
+   if (jcol.ne.0) then  ! INITIALIZE COLOR AXIS ARRAY
+      do 10 i=1,4
+         ic(i)=abs(f(2*i+icoff-2))
+         if (ic(i).eq.0) ic(i)=1
+10    continue
+   endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-   IF (JLINE.NE.0) CALL newpen_(INT(F(ILOFF)))
+   if (jline.ne.0) call newpen_(int(f(iloff)))
 !
-   IF (JXEXPSC.NE.0) XCS=-XCS
+   if (jxexpsc.ne.0) xcs=-xcs
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-   IF (JXLGAX.EQ.0) THEN  ! LINEAR X AXIS
-      X1=XLEN
-      IF (JXTICKS.NE.0) X1=-XLEN
-      NA=1000
-      IF (JXNUM.NE.0) NA=NA+100
-      IF (JCOL.NE.0) NA=NA+100000
-      IF (JXNUMS.EQ.0) NA=NA-1000
-      IF (NC(1).GT.0) THEN ! USE INPUT X AXIS TITLE
-         NA=(NA+NC(1))*JXTITLE
+   if (jxlgax.eq.0) then  ! LINEAR X AXIS
+      x1=xlen
+      if (jxticks.ne.0) x1=-xlen
+      na=1000
+      if (jxnum.ne.0) na=na+100
+      if (jcol.ne.0) na=na+100000
+      if (jxnums.eq.0) na=na-1000
+      if (nc(1).gt.0) then ! USE INPUT X AXIS TITLE
+         na=(na+nc(1))*jxtitle
          if(debug)write(*,*)'1) axisc_'
-         CALL axisc_(0.,0.,C(1),NA,X1, 0.0,XM,XX,XTICK,XCS,FX,IC)
-      ELSE        ! NO X AXIS TITLE
-         NA=(NA+1)*JXTITLE
+         call axisc_(0.,0.,c(1),na,x1, 0.0,xm,xx,xtick,xcs,fx,ic)
+      else        ! NO X AXIS TITLE
+         na=(na+1)*jxtitle
          if(debug)write(*,*)'2) axisc_'
-         CALL axisc_(0.,0.,' ',NA,X1, 0.0,XM,XX,XTICK,XCS,FX,IC)
-      ENDIF
-      IF (JXRAX.NE.0) THEN
-         NA=1000
-         IF (JXRAX.GT.0) NA=NA+100
-         IF (JCOL.NE.0) NA=NA+100000
-         IF (JXNUMS.EQ.0) NA=NA-1000
-         IF (NC(1).GT.0) THEN! USE INPUT X AXIS TITLE
-            NA=(-(NA+NC(1)))*JXTITLE
+         call axisc_(0.,0.,' ',na,x1, 0.0,xm,xx,xtick,xcs,fx,ic)
+      endif
+      if (jxrax.ne.0) then
+         na=1000
+         if (jxrax.gt.0) na=na+100
+         if (jcol.ne.0) na=na+100000
+         if (jxnums.eq.0) na=na-1000
+         if (nc(1).gt.0) then! USE INPUT X AXIS TITLE
+            na=(-(na+nc(1)))*jxtitle
             if(debug)write(*,*)'3) axisc_'
-            CALL axisc_(0.,YLEN,C(1),NA,X1, 0.0,XM,XX,XTICK,XCS,FX,IC)
-         ELSE        ! NO X AXIS TITLE
-            NA=(NA+1)*JXTITLE
+            call axisc_(0.,ylen,c(1),na,x1, 0.0,xm,xx,xtick,xcs,fx,ic)
+         else        ! NO X AXIS TITLE
+            na=(na+1)*jxtitle
             if(debug)write(*,*)'4) axisc_'
-            CALL axisc_(0.,YLEN,' ',NA,X1, 0.0,XM,XX,XTICK,XCS,FX,IC)
-         ENDIF
-      ENDIF
+            call axisc_(0.,ylen,' ',na,x1, 0.0,xm,xx,xtick,xcs,fx,ic)
+         endif
+      endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-   ELSE IF (JXLGAX.EQ.1) THEN ! LOG X AXIS
-      X1=XLEN
-      IF (JXTICKS.NE.0) X1=-XLEN
-      NA=1000
-      IF (JXNUM.NE.0) NA=NA+100
-      IF (JCOL.NE.0) NA=NA+10000
-      IF (JXNUMS.EQ.0) NA=NA-1000
-      IF (NC(1).GT.0) THEN ! USE INPUT X AXIS TITLE
-         NA=(NA+NC(1))*JXTITLE
+   else if (jxlgax.eq.1) then ! LOG X AXIS
+      x1=xlen
+      if (jxticks.ne.0) x1=-xlen
+      na=1000
+      if (jxnum.ne.0) na=na+100
+      if (jcol.ne.0) na=na+10000
+      if (jxnums.eq.0) na=na-1000
+      if (nc(1).gt.0) then ! USE INPUT X AXIS TITLE
+         na=(na+nc(1))*jxtitle
          if(debug)write(*,*)'5) axislg_'
-         CALL axislg_(0.,0.,C(1),NA,X1, 0.0,XM,DX,IC)
-      ELSE        ! NO X AXIS TITLE
-         NA=(NA+1)*JXTITLE
+         call axislg_(0.,0.,c(1),na,x1, 0.0,xm,dx,ic)
+      else        ! NO X AXIS TITLE
+         na=(na+1)*jxtitle
          if(debug)write(*,*)'6) axislg_'
-         CALL axislg_(0.,0.,' ',NA,X1, 0.0,XM,DX,IC)
-      ENDIF
-      IF (JXRAX.NE.0) THEN
-         NA=1000
-         IF (JXRAX.GT.0) NA=NA+100
-         IF (JCOL.NE.0) NA=NA+10000
-         IF (JXNUMS.EQ.0) NA=NA-1000
-         IF (NC(1).GT.0) THEN! USE INPUT X AXIS TITLE
-            NA=(-(NA+NC(1)))*JXTITLE
+         call axislg_(0.,0.,' ',na,x1, 0.0,xm,dx,ic)
+      endif
+      if (jxrax.ne.0) then
+         na=1000
+         if (jxrax.gt.0) na=na+100
+         if (jcol.ne.0) na=na+10000
+         if (jxnums.eq.0) na=na-1000
+         if (nc(1).gt.0) then! USE INPUT X AXIS TITLE
+            na=(-(na+nc(1)))*jxtitle
             if(debug)write(*,*)'7) axislg_'
-            CALL axislg_(0.,YLEN,C(1),NA,X1, 0.0,XM,DX,IC)
-         ELSE    ! NO X AXIS TITLE
-            NA=(-(NA+1))*JXTITLE
+            call axislg_(0.,ylen,c(1),na,x1, 0.0,xm,dx,ic)
+         else    ! NO X AXIS TITLE
+            na=(-(na+1))*jxtitle
             if(debug)write(*,*)'8) axislg_'
-            CALL axislg_(0.,YLEN,' ',NA,X1, 0.0,XM,DX,IC)
-         ENDIF
-      ENDIF
-   ENDIF
+            call axislg_(0.,ylen,' ',na,x1, 0.0,xm,dx,ic)
+         endif
+      endif
+   endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     PRODUCE PLOT Y AXIS
 !
-   IF (JCOL.NE.0) THEN  ! INITIALIZE COLOR AXIS ARRAY
-      DO 20 I=1,4
-         IC(I)=ABS(F(2*I+ICOFF+6))
-         IF (IC(I).EQ.0) IC(I)=1
-20    CONTINUE
-   ENDIF
+   if (jcol.ne.0) then  ! INITIALIZE COLOR AXIS ARRAY
+      do 20 i=1,4
+         ic(i)=abs(f(2*i+icoff+6))
+         if (ic(i).eq.0) ic(i)=1
+20    continue
+   endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     PRODUCE PLOT Y AXIS
-   IF (JLINE.NE.0) CALL newpen_(INT(F(ILOFF+2)))
+   if (jline.ne.0) call newpen_(int(f(iloff+2)))
 !
-   IF (JYEXPSC.NE.0) YCS=-YCS
+   if (jyexpsc.ne.0) ycs=-ycs
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     PRODUCE PLOT Y AXIS
-   IF (JYLGAX.EQ.0) THEN  ! LINEAR Y AXIS
-      X1=YLEN
-      IF (JYTICKS.NE.0) X1=-YLEN
-      NA=1000
-      IF (JYNUM.NE.0) NA=NA+100
-      IF (JCOL.NE.0) NA=NA+100000
-      IF (JYNUMS.EQ.0) NA=NA-1000
-      IF (NC(2).GT.0) THEN ! USE INPUT Y AXIS TITLE
-         NA=(NA+NC(2))*JYTITLE
+   if (jylgax.eq.0) then  ! LINEAR Y AXIS
+      x1=ylen
+      if (jyticks.ne.0) x1=-ylen
+      na=1000
+      if (jynum.ne.0) na=na+100
+      if (jcol.ne.0) na=na+100000
+      if (jynums.eq.0) na=na-1000
+      if (nc(2).gt.0) then ! USE INPUT Y AXIS TITLE
+         na=(na+nc(2))*jytitle
          if(debug)write(*,*)'9) axisc_'
-         CALL axisc_(0.,0.,C(2),NA,X1, 90.0,YM,YX,YTICK,YCS,FY,IC)
-      ELSE        ! NO Y AXIS TITLE
-         NA=(NA+1)*JYTITLE
+         call axisc_(0.,0.,c(2),na,x1, 90.0,ym,yx,ytick,ycs,fy,ic)
+      else        ! NO Y AXIS TITLE
+         na=(na+1)*jytitle
          if(debug)write(*,*)'10) axisc_'
-         CALL axisc_(0.,0.,' ',NA,X1, 90.0,YM,YX,YTICK,YCS,FY,IC)
-      ENDIF
-      IF (JYRAX.NE.0) THEN
-         NA=1000
-         IF (JYRAX.GT.0) NA=NA+100
-         IF (JCOL.NE.0) NA=NA+100000
-         IF (JYNUMS.EQ.0) NA=NA-1000
-         IF (NC(2).GT.0) THEN! USE INPUT Y AXIS TITLE
-            NA=(-(NA+NC(2)))*JYTITLE
+         call axisc_(0.,0.,' ',na,x1, 90.0,ym,yx,ytick,ycs,fy,ic)
+      endif
+      if (jyrax.ne.0) then
+         na=1000
+         if (jyrax.gt.0) na=na+100
+         if (jcol.ne.0) na=na+100000
+         if (jynums.eq.0) na=na-1000
+         if (nc(2).gt.0) then! USE INPUT Y AXIS TITLE
+            na=(-(na+nc(2)))*jytitle
             if(debug)write(*,*)'11) axisc_'
-            CALL axisc_(XLEN,0.,C(2),NA,X1, 90.0,YM,YX,YTICK,YCS,FY,IC)
-         ELSE        ! NO Y AXIS TITLE
-            NA=(NA+1)*JYTITLE
+            call axisc_(xlen,0.,c(2),na,x1, 90.0,ym,yx,ytick,ycs,fy,ic)
+         else        ! NO Y AXIS TITLE
+            na=(na+1)*jytitle
             if(debug)write(*,*)'12) axisc_'
-            CALL axisc_(XLEN,0.,' ',NA,X1, 90.0,YM,YX,YTICK,YCS,FY,IC)
-         ENDIF
-      ENDIF
-   ELSE IF (JYLGAX.EQ.1) THEN ! LOG Y AXIS
-      X1=YLEN
-      IF (JYTICKS.NE.0) X1=-YLEN
-      NA=1000
-      IF (JYNUM.NE.0) NA=NA+100
-      IF (JCOL.NE.0) NA=NA+10000
-      IF (JYNUMS.EQ.0) NA=NA-1000
-      IF (NC(2).GT.0) THEN ! USE INPUT Y AXIS TITLE
-         NA=(NA+NC(2))*JYTITLE
+            call axisc_(xlen,0.,' ',na,x1, 90.0,ym,yx,ytick,ycs,fy,ic)
+         endif
+      endif
+   else if (jylgax.eq.1) then ! LOG Y AXIS
+      x1=ylen
+      if (jyticks.ne.0) x1=-ylen
+      na=1000
+      if (jynum.ne.0) na=na+100
+      if (jcol.ne.0) na=na+10000
+      if (jynums.eq.0) na=na-1000
+      if (nc(2).gt.0) then ! USE INPUT Y AXIS TITLE
+         na=(na+nc(2))*jytitle
          if(debug)write(*,*)'13) axislg_'
-         CALL axislg_(0.,0.,C(2),NA,X1, 90.0,XY,DY,IC)
-      ELSE        ! NO X AXIS TITLE
-         NA=(NA+1)*JYTITLE
+         call axislg_(0.,0.,c(2),na,x1, 90.0,xy,dy,ic)
+      else        ! NO X AXIS TITLE
+         na=(na+1)*jytitle
          if(debug)write(*,*)'14) axislg_'
-         CALL axislg_(0.,0.,' ',NA,X1, 90.0,YM,DY,IC)
-      ENDIF
-      IF (JYRAX.NE.0) THEN
-         NA=1000
-         IF (JYRAX.GT.0) NA=NA+100
-         IF (JCOL.NE.0) NA=NA+10000
-         IF (JYNUMS.EQ.0) NA=NA-1000
-         IF (NC(2).GT.0) THEN! USE INPUT Y AXIS TITLE
-            NA=(-(NA+NC(2)))*JYTITLE
+         call axislg_(0.,0.,' ',na,x1, 90.0,ym,dy,ic)
+      endif
+      if (jyrax.ne.0) then
+         na=1000
+         if (jyrax.gt.0) na=na+100
+         if (jcol.ne.0) na=na+10000
+         if (jynums.eq.0) na=na-1000
+         if (nc(2).gt.0) then! USE INPUT Y AXIS TITLE
+            na=(-(na+nc(2)))*jytitle
             if(debug)write(*,*)'15) axislg_'
-            CALL axislg_(XLEN,0.,C(2),NA,X1, 90.0,YM,DY,IC)
-         ELSE    ! NO Y AXIS TITLE
-            NA=(-(NA+1))*JYTITLE
+            call axislg_(xlen,0.,c(2),na,x1, 90.0,ym,dy,ic)
+         else    ! NO Y AXIS TITLE
+            na=(-(na+1))*jytitle
             if(debug)write(*,*)'16) axislg_'
-            CALL axislg_(XLEN,0.,' ',NA,X1, 90.0,YM,DY,IC)
-         ENDIF
-      ENDIF
-   ENDIF
+            call axislg_(xlen,0.,' ',na,x1, 90.0,ym,dy,ic)
+         endif
+      endif
+   endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     PLOT GRID
 !
-   IF (JGRID.NE.0) THEN
-      IF (JCOL.NE.0) THEN
-         ICC=INT(ABS(F(ICOFF+22)))
-         IF (ICC.LT.1) ICC=1
-         CALL color_(ICC)
-      ENDIF
-      NG=JGRID-1
-      I=INT(XTICK)-1
-      IF (I.LT.1) I=1
-      X1=XLEN/FLOAT(I)
-      IF (JXLGAX.GT.0) THEN
-         I=1-INT(XLEN*DX-XM+0.001)
-         X1=(-XLEN)/FLOAT(I)
-      ENDIF
-      J=INT(YTICK)-1
-      IF (J.LT.1) J=1
-      Y1=YLEN/FLOAT(J)
-      IF (JYLGAX.GT.0) THEN
-         J=1-INT(YLEN*DY-YM+0.001)
-         Y1=(-YLEN)/FLOAT(J)
-      ENDIF
+   if (jgrid.ne.0) then
+      if (jcol.ne.0) then
+         icc=int(abs(f(icoff+22)))
+         if (icc.lt.1) icc=1
+         call color_(icc)
+      endif
+      ng=jgrid-1
+      i=int(xtick)-1
+      if (i.lt.1) i=1
+      x1=xlen/float(i)
+      if (jxlgax.gt.0) then
+         i=1-int(xlen*dx-xm+0.001)
+         x1=(-xlen)/float(i)
+      endif
+      j=int(ytick)-1
+      if (j.lt.1) j=1
+      y1=ylen/float(j)
+      if (jylgax.gt.0) then
+         j=1-int(ylen*dy-ym+0.001)
+         y1=(-ylen)/float(j)
+      endif
       if(debug)write(*,*)'17) gridll_'
-      CALL gridll_(0.,0.,X1,Y1,I,J,NG)
-   ENDIF
+      call gridll_(0.,0.,x1,y1,i,j,ng)
+   endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     ADD TITLE
 !
-   IF (NC(3).GT.0) THEN
-      IF (JLINE.NE.0) CALL newpen_(INT(F(ILOFF+4)))
-      IF (JCOL.NE.0) THEN
-         ICC=INT(ABS(F(ICOFF+16)))
-         IF (ICC.LT.1) ICC=1
-         CALL color_(ICC)
-      ENDIF
-      ICC=0
-      X1=0.5*XLEN
-      Y1=YLEN+0.1+TCS*0.2
-      IF (JTCNTR.LT.0) THEN
-         ICC=-1
-         X1=0.0
-         Y1=Y1-TCS*0.2
-      ENDIF
-      IF (JTCNTR.GT.0) THEN
-         ICC=1
-         X1=XLEN
-         Y1=Y1-TCS*0.2
-      ENDIF
-      IF (JXRAX.LT.0) Y1=Y1+2.5*XCS
+   if (nc(3).gt.0) then
+      if (jline.ne.0) call newpen_(int(f(iloff+4)))
+      if (jcol.ne.0) then
+         icc=int(abs(f(icoff+16)))
+         if (icc.lt.1) icc=1
+         call color_(icc)
+      endif
+      icc=0
+      x1=0.5*xlen
+      y1=ylen+0.1+tcs*0.2
+      if (jtcntr.lt.0) then
+         icc=-1
+         x1=0.0
+         y1=y1-tcs*0.2
+      endif
+      if (jtcntr.gt.0) then
+         icc=1
+         x1=xlen
+         y1=y1-tcs*0.2
+      endif
+      if (jxrax.lt.0) y1=y1+2.5*xcs
       if(debug)write(*,*)'18) TITLE'
-      call symbol_(X1,Y1,TCS,C(3), 0.0,NC(3),ICC)
-   ENDIF
+      call symbol_(x1,y1,tcs,c(3), 0.0,nc(3),icc)
+   endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     PLOT DATA IN DESIRED FORM
 !
-   DX=1.0
-   DY=1.0
-   IF (XX-XM.NE.0.0) DX=XLEN/(XX-XM)
-   IF (YX-YM.NE.0.0) DY=YLEN/(YX-YM)
-   ZREF=(ZREF-YM)*DY
-   IF (JSZREF.NE.0) THEN ! SHOW ZERO REFERENCE LINE
-      IF (JLINE.NE.0) CALL newpen_(INT(F(ILOFF+8)))
-      IF (JCOL.NE.0) THEN
-         ICC=INT(ABS(F(ICOFF+20)))
-         IF (ICC.LT.1) ICC=1
-         CALL color_(ICC)
-      ENDIF
+   dx=1.0
+   dy=1.0
+   if (xx-xm.ne.0.0) dx=xlen/(xx-xm)
+   if (yx-ym.ne.0.0) dy=ylen/(yx-ym)
+   zref=(zref-ym)*dy
+   if (jszref.ne.0) then ! SHOW ZERO REFERENCE LINE
+      if (jline.ne.0) call newpen_(int(f(iloff+8)))
+      if (jcol.ne.0) then
+         icc=int(abs(f(icoff+20)))
+         if (icc.lt.1) icc=1
+         call color_(icc)
+      endif
       if(debug)write(*,*)'19) ZERO REFERENCE LINE'
-      CALL move_(0.0,ZREF)
-      CALL draw_(XLEN,ZREF)
-   ENDIF
+      call move_(0.0,zref)
+      call draw_(xlen,zref)
+   endif
 !
-   DO 100 I=1,NL,NBAR
-      IF (JLINE.NE.0) CALL newpen_(INT(F(2*(I-1)+ILOFF+12)))
-      IF (JCOL.NE.0) THEN
-         ICC=INT(ABS(F(ICOFF+24+2*(I-1))))
-         IF (ICC.LT.1) ICC=1
-         CALL color_(ICC)
-      ENDIF
-      KSYM=MOD(I+JSYMST-1,17)
+   do 100 i=1,nl,nbar
+      if (jline.ne.0) call newpen_(int(f(2*(i-1)+iloff+12)))
+      if (jcol.ne.0) then
+         icc=int(abs(f(icoff+24+2*(i-1))))
+         if (icc.lt.1) icc=1
+         call color_(icc)
+      endif
+      ksym=mod(i+jsymst-1,17)
 !
 !     IF WE NEED CONNECTING LINES MAKE A CONNECT PASS
 !
-      IPEN=3
-      IF (JCONN.EQ.0) THEN
-         DO 50 J=1,NP
-            IF (JXUSE.NE.0) THEN
-               X1=X(J,I)
-            ELSE
-               X1=X(J,1)
-            ENDIF
-            IF (JXLOG.NE.0) X1=ALOG10(ABS(X1)+1.E-34)
-            X1=(X1-XM)*DX
-            Y1=Y(J,I)
-            IF (JYLOG.NE.0) Y1=ALOG10(ABS(Y1)+1.E-34)
-            Y1=(Y1-YM)*DY
-            CALL plot_(X1,Y1,IPEN)
-            IPEN=2
-50       CONTINUE
-      ENDIF
+      ipen=3
+      if (jconn.eq.0) then
+         do 50 j=1,np
+            if (jxuse.ne.0) then
+               x1=x(j,i)
+            else
+               x1=x(j,1)
+            endif
+            if (jxlog.ne.0) x1=alog10(abs(x1)+1.e-34)
+            x1=(x1-xm)*dx
+            y1=y(j,i)
+            if (jylog.ne.0) y1=alog10(abs(y1)+1.e-34)
+            y1=(y1-ym)*dy
+            call plot_(x1,y1,ipen)
+            ipen=2
+50       continue
+      endif
 !
 !     ANOTHER PASS FOR SYMBOLS, ETC.
 !
-      IF (JCONN.NE.0.AND.JEBAR.EQ.0.AND.JVLINE.EQ.0 .AND.JSYM.EQ.0) GOTO 100
-      ISYM=0
-      DO 60 J=1,NP
-         IF (JXUSE.NE.0) THEN
-            X1=X(J,I)
-         ELSE
-            X1=X(J,1)
-         ENDIF
-         IF (JXLOG.NE.0) X1=ALOG10(ABS(X1)+1.E-34)
-         X1=(X1-XM)*DX
-         Y1=Y(J,I)
-         IF (JYLOG.NE.0) Y1=ALOG10(ABS(Y1)+1.E-34)
-         Y1=(Y1-YM)*DY
-         IF (JSYM.NE.0) THEN  ! SYMBOLS
-            IF (MOD(ISYM,JSYM).EQ.0) CALL symbol_(X1,Y1,SYMSIZ,CHAR(KSYM),0.,-1,-1)
-         ENDIF
-         IF (JVLINE.NE.0) THEN  ! VERTICAL LINE
-            CALL move_(X1,Y1)
-            CALL draw_(X1,ZREF)
-         ENDIF
-         IF (JEBAR.NE.0) THEN  ! ERROR BAR
-            IF (JLINE.NE.0) CALL newpen_(INT(F(ILOFF+10)))
-            IF (JXUSE.NE.0) THEN
-               X2=X(J,I+1)+X(J,I)
-               X3=X(J,I+2)+X(J,I)
-               IF (JXLOG.NE.0) THEN
-                  X2=ALOG10(ABS(X2)+1.E-34)
-                  X3=ALOG10(ABS(X3)+1.E-34)
-               ENDIF
-               X2=(X2-XM)*DX
-               X3=(X3-XM)*DX
-            ELSE
-               X2=X1
-               X3=X1
-            ENDIF
-            Y2=Y(J,I+1)+Y(J,I)
-            Y3=Y(J,I+2)+Y(J,I)
-            IF (JYLOG.NE.0) THEN
-               Y2=ALOG10(ABS(Y2)+1.E-34)
-               Y3=ALOG10(ABS(Y3)+1.E-34)
-            ENDIF
-            Y2=(Y2-YM)*DY
-            Y3=(Y3-YM)*DY
-            IF (KEBAR.EQ.2.OR.KEBAR.EQ.5) THEN ! ERROR BAR TOP
-               CALL move_(X2,Y2-EBAR)
-               CALL draw_(X2,Y2+EBAR)
-            ELSE IF (KEBAR.EQ.3.OR.KEBAR.EQ.4) THEN
-               CALL move_(X2-EBAR,Y2)
-               CALL draw_(X2+EBAR,Y2)
-            ENDIF
-            IF (KEBAR.LT.4) THEN ! CONNECT LINE
-               CALL move_(X2,Y2)
-               CALL draw_(X3,Y3)
-            ELSE IF (KEBAR.EQ.4) THEN ! DOUBLE CONN V LINE
-               CALL move_(X2-EBAR*0.5,Y2)
-               CALL draw_(X3-EBAR*0.5,Y3)
-               CALL move_(X3+EBAR*0.5,Y3)
-               CALL draw_(X2+EBAR*0.5,Y2)
-            ELSE IF (KEBAR.EQ.5) THEN ! DOUBLE CONN HLINE
-               CALL move_(X2,Y2-EBAR*0.5)
-               CALL draw_(X3,Y3-EBAR*0.5)
-               CALL move_(X3,Y3+EBAR*0.5)
-               CALL draw_(X2,Y2+EBAR*0.5)
-            ELSE IF (KEBAR.EQ.6) THEN ! VERTICAL RECT
-               CALL rect_(X1-EBAR,Y2,X1+EBAR,Y3)
-            ELSE IF (KEBAR.EQ.7) THEN ! RECT
-               CALL rect_(X2,Y2,X3,Y3)
-            ENDIF
-            IF (JEBAR.LT.0) THEN ! X MARK
-               CALL move_(X1-EBAR,Y1-EBAR)
-               CALL draw_(X1+EBAR,Y1+EBAR)
-               CALL move_(X1-EBAR,Y1+EBAR)
-               CALL draw_(X1+EBAR,Y1-EBAR)
-            ENDIF
-            IF (KEBAR.EQ.2.OR.KEBAR.EQ.5) THEN ! BAR BOTTOM
-               CALL move_(X3,Y3-EBAR)
-               CALL draw_(X3,Y3+EBAR)
-            ELSE IF (KEBAR.EQ.3.OR.KEBAR.EQ.4) THEN
-               CALL move_(X3-EBAR,Y3)
-               CALL draw_(X3+EBAR,Y3)
-            ENDIF
-         ENDIF
-         IF (JSYM.EQ.0.AND.JCONN.EQ.0.AND.  JEBAR.EQ.0.AND.JVLINE.EQ.0) THEN
-            CALL move_(X1,Y1) ! DOTS ONLY
-            CALL draw_(X1,Y1)
-         ENDIF
-         ISYM=ISYM+1
-60    CONTINUE
-100 CONTINUE
+      if (jconn.ne.0.and.jebar.eq.0.and.jvline.eq.0 .and.jsym.eq.0) goto 100
+      isym=0
+      do 60 j=1,np
+         if (jxuse.ne.0) then
+            x1=x(j,i)
+         else
+            x1=x(j,1)
+         endif
+         if (jxlog.ne.0) x1=alog10(abs(x1)+1.e-34)
+         x1=(x1-xm)*dx
+         y1=y(j,i)
+         if (jylog.ne.0) y1=alog10(abs(y1)+1.e-34)
+         y1=(y1-ym)*dy
+         if (jsym.ne.0) then  ! SYMBOLS
+            if (mod(isym,jsym).eq.0) call symbol_(x1,y1,symsiz,char(ksym),0.,-1,-1)
+         endif
+         if (jvline.ne.0) then  ! VERTICAL LINE
+            call move_(x1,y1)
+            call draw_(x1,zref)
+         endif
+         if (jebar.ne.0) then  ! ERROR BAR
+            if (jline.ne.0) call newpen_(int(f(iloff+10)))
+            if (jxuse.ne.0) then
+               x2=x(j,i+1)+x(j,i)
+               x3=x(j,i+2)+x(j,i)
+               if (jxlog.ne.0) then
+                  x2=alog10(abs(x2)+1.e-34)
+                  x3=alog10(abs(x3)+1.e-34)
+               endif
+               x2=(x2-xm)*dx
+               x3=(x3-xm)*dx
+            else
+               x2=x1
+               x3=x1
+            endif
+            y2=y(j,i+1)+y(j,i)
+            y3=y(j,i+2)+y(j,i)
+            if (jylog.ne.0) then
+               y2=alog10(abs(y2)+1.e-34)
+               y3=alog10(abs(y3)+1.e-34)
+            endif
+            y2=(y2-ym)*dy
+            y3=(y3-ym)*dy
+            if (kebar.eq.2.or.kebar.eq.5) then ! ERROR BAR TOP
+               call move_(x2,y2-ebar)
+               call draw_(x2,y2+ebar)
+            else if (kebar.eq.3.or.kebar.eq.4) then
+               call move_(x2-ebar,y2)
+               call draw_(x2+ebar,y2)
+            endif
+            if (kebar.lt.4) then ! CONNECT LINE
+               call move_(x2,y2)
+               call draw_(x3,y3)
+            else if (kebar.eq.4) then ! DOUBLE CONN V LINE
+               call move_(x2-ebar*0.5,y2)
+               call draw_(x3-ebar*0.5,y3)
+               call move_(x3+ebar*0.5,y3)
+               call draw_(x2+ebar*0.5,y2)
+            else if (kebar.eq.5) then ! DOUBLE CONN HLINE
+               call move_(x2,y2-ebar*0.5)
+               call draw_(x3,y3-ebar*0.5)
+               call move_(x3,y3+ebar*0.5)
+               call draw_(x2,y2+ebar*0.5)
+            else if (kebar.eq.6) then ! VERTICAL RECT
+               call rect_(x1-ebar,y2,x1+ebar,y3)
+            else if (kebar.eq.7) then ! RECT
+               call rect_(x2,y2,x3,y3)
+            endif
+            if (jebar.lt.0) then ! X MARK
+               call move_(x1-ebar,y1-ebar)
+               call draw_(x1+ebar,y1+ebar)
+               call move_(x1-ebar,y1+ebar)
+               call draw_(x1+ebar,y1-ebar)
+            endif
+            if (kebar.eq.2.or.kebar.eq.5) then ! BAR BOTTOM
+               call move_(x3,y3-ebar)
+               call draw_(x3,y3+ebar)
+            else if (kebar.eq.3.or.kebar.eq.4) then
+               call move_(x3-ebar,y3)
+               call draw_(x3+ebar,y3)
+            endif
+         endif
+         if (jsym.eq.0.and.jconn.eq.0.and.  jebar.eq.0.and.jvline.eq.0) then
+            call move_(x1,y1) ! DOTS ONLY
+            call draw_(x1,y1)
+         endif
+         isym=isym+1
+60    continue
+100 continue
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     ADD LEGEND
 !
-   IF (JLEGND.NE.0) THEN
-      if(debug)WRITE(*,*)'20) ADD LEGEND'
-      DO 200 I=1,NL
-         X1=XLEG+CSLEG*1.5
-         Y1=YLEG+(I-1)*CSLEG*1.5+CSLEG*0.5
-         IF (JCOL.NE.0) THEN
-            ICC=INT(ABS(F(ICOFF+24+2*(I-1))))
-            IF (ICC.LT.1) ICC=1
-            CALL color_(ICC)
-         ENDIF
-         IF (JLEGLI.NE.0) THEN
-            IF (JLINE.NE.0) CALL newpen_(INT(F(2*(I-1)+ILOFF+12)))
-            CALL move_(X1,Y1)
-            CALL draw_(X1+GLEN,Y1)
-            X1=X1+GLEN*0.5
-         ENDIF
-         IF (JLEGSY.NE.0) THEN
-            ICC=I-1+JSYMST
-            call symbol_(X1,Y1,SYMSIZ, CHAR(ICC),0.,-1,-1)
-         ENDIF
-         IF (JLEGLI.NE.0) X1=X1+GLEN*0.5
-         X1=X1+CSLEG*0.7
-         Y1=Y1-CSLEG*0.5
-         IF (NC(I+3).GT.0) THEN
-            IF (JLINE.NE.0) CALL newpen_(INT(F(ILOFF+6)))
-            IF (JCOL.NE.0) THEN
-               ICC=INT(ABS(F(ICOFF+18)))
-               IF (ICC.LT.1) ICC=1
-               CALL color_(ICC)
-            ENDIF
-            call symbol_(X1,Y1,CSLEG, C(I+3),0.,NC(I+3),-1)
-         ENDIF
-200   CONTINUE
-   ENDIF
+   if (jlegnd.ne.0) then
+      if(debug)write(*,*)'20) ADD LEGEND'
+      do 200 i=1,nl
+         x1=xleg+csleg*1.5
+         y1=yleg+(i-1)*csleg*1.5+csleg*0.5
+         if (jcol.ne.0) then
+            icc=int(abs(f(icoff+24+2*(i-1))))
+            if (icc.lt.1) icc=1
+            call color_(icc)
+         endif
+         if (jlegli.ne.0) then
+            if (jline.ne.0) call newpen_(int(f(2*(i-1)+iloff+12)))
+            call move_(x1,y1)
+            call draw_(x1+glen,y1)
+            x1=x1+glen*0.5
+         endif
+         if (jlegsy.ne.0) then
+            icc=i-1+jsymst
+            call symbol_(x1,y1,symsiz, char(icc),0.,-1,-1)
+         endif
+         if (jlegli.ne.0) x1=x1+glen*0.5
+         x1=x1+csleg*0.7
+         y1=y1-csleg*0.5
+         if (nc(i+3).gt.0) then
+            if (jline.ne.0) call newpen_(int(f(iloff+6)))
+            if (jcol.ne.0) then
+               icc=int(abs(f(icoff+18)))
+               if (icc.lt.1) icc=1
+               call color_(icc)
+            endif
+            call symbol_(x1,y1,csleg, c(i+3),0.,nc(i+3),-1)
+         endif
+200   continue
+   endif
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     FINISH UP
-   CALL move_(0.,0.)   !PEN UP
-   RETURN
-END SUBROUTINE graph
+   call move_(0.,0.)   !PEN UP
+   return
+end subroutine graph
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!

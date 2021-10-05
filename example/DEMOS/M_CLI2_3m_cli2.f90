@@ -28,8 +28,8 @@
                    & --title "my title" -l F -L F  &
                    & --logicals  F F F F F         &
                    & -logi F T F                   &
-                   ! note space between quotes is required
                    & --label " " &
+                   ! note space between quotes is required
                    & ')
            ! ASSIGN VALUES TO ELEMENTS
            call get_args('x',x)         ! SCALARS

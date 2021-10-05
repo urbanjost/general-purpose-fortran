@@ -85,7 +85,7 @@
 !!        ! DIFFERENT INITIALIZATION STYLES
 !!        ! (Still debating on how best to do this)
 !!        write(*,*)
-!!        write(*,'(a)')'Various initialization styes'
+!!        write(*,'(a)')'Various initialization styles'
 !!
 !!        ! DEFINE type(date_time) WITH CONSTRUCTOR
 !!        otherdate=date_time()
@@ -200,8 +200,8 @@
 !!        ! keywords with no percent (%) characters
 !!        write(*,303)'Calendar Time ......... ',&
 !!        & event%format('"year-month-day &
+!!        & hour:minute:second.millisecond timezone"')
 !!        !
-!!        &hour:minute:second.millisecond timezone"')
 !!        write(*,*)event%format('Longer format.......... &
 !!        &"%W, %L %d, %Y %H:%m:%s %N"') ! a nice friendly format
 !!        !

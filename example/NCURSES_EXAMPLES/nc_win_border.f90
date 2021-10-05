@@ -29,7 +29,7 @@ program win_border ! @(#) draw box that can be moved around screen with ncurses(
       if(ch.eq.KEY_F(1))then
          exit INFINITE
       endif
-       !CASE (:‐1)
+       !CASE (:   1)
        !CASE (0)
        !CASE (1, 3:5, 8)
        !CASE (1:)

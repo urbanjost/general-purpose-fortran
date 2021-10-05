@@ -9,7 +9,7 @@
 !!
 !!  Module procedures
 !!
-!!    use M_verify, only : unit_check, unit_check_start, unit_check_done
+!!    use M_verify, only : unit_check, unit_check_start, unit_check_done, unit_check_stop
 !!    use M_verify, only : unit_check_good, unit_check_bad
 !!    use M_verify, only : unit_check_msg
 !!    use M_verify, only : debug
@@ -35,6 +35,7 @@
 !!     o supports easily composing a message from up to nine scalar
 !!       intrinsic values and different message levels
 !!     o allows stopping on first failure or continuing
+!!     o provides for a non-zero exit code if any tests fail
 !!
 !!    SET MODES
 !!    unit_check_keep_going  logical variable that can be used to turn off
@@ -60,6 +61,8 @@
 !!                           if no failures; else call
 !!
 !!                              command NAME bad
+!!   unit_check_stop(3f)     stop program with exit value of 0 if no failures
+!!                           else with an exit value of 1
 !!
 !!    unit_check_good(3f)    call command
 !!
@@ -126,7 +129,7 @@
 !!     subroutine test_suite_M_demo
 !!     use M_verify, only: unit_check_start, unit_check
 !!     use M_verify, only: unit_check_good, unit_check_bad, unit_check_done
-!!     use M_verify, only: unit_check_msg
+!!     use M_verify, only: unit_check_msg, unit_check_stop
 !!     implicit none
 !!     integer :: i, j, k
 !!     integer,allocatable :: array(:)
@@ -235,12 +238,17 @@ integer,parameter,public   :: realtime=kind(0.0d0)            ! type for julian 
 integer,parameter,public   :: EXIT_SUCCESS=0
 integer,parameter,public   :: EXIT_FAILURE=1
 real(kind=realtime),save   :: duration=0.0d0
+real(kind=realtime),save   :: duration_all=0.0d0
 integer,save               :: clicks=0.0d0
+integer,save               :: clicks_all=0.0d0
 
 logical,save ::  STOP_G=.true.                       ! global value indicating whether failed unit checks should stop program or not
 integer,save :: IPASSED_G=0                          ! counter of successes initialized by unit_check_start(3f)
 integer,save :: IFAILED_G=0                          ! counter of failures  initialized by unit_check_start(3f)
 integer,save :: IUNTESTED=0                          ! counter of untested  initialized by unit_check_start(3f)
+integer,save :: IPASSED_ALL_G=0                      ! counter of successes initialized at program start
+integer,save :: IFAILED_ALL_G=0                      ! counter of failures  initialized at program start
+integer,save :: IUNTESTED_ALL=0                      ! counter of untested  initialized at program start
 logical,save :: no_news_is_good_news=.false.         ! flag on whether to display SUCCESS: messages
 
 public stderr
@@ -252,6 +260,7 @@ public unit_check
 public unit_check_good
 public unit_check_bad
 public unit_check_done
+public unit_check_stop
 public unit_check_msg
 ! COMPARING AND ROUNDING FLOATING POINT VALUES
 public accdig         ! compare two real numbers only up to a specified number of digits
@@ -650,11 +659,13 @@ msg_local=str(msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
          call fstop(1)
       endif
       IFAILED_G=IFAILED_G+1
+      IFAILED_ALL_G=IFAILED_ALL_G+1
    else
       if(.not.no_news_is_good_news)then
          call stderr('unit_check:       '//atleast(name,20)//' SUCCESS : '//trim(msg_local))  ! write message to standard error
       endif
       IPASSED_G=IPASSED_G+1
+      IPASSED_ALL_G=IPASSED_ALL_G+1
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine unit_check
@@ -687,8 +698,8 @@ end subroutine unit_check
 !!    By default if a unit_check(3f) logical expression is false or the
 !!    unit_check_bad(3f) procedure is called the program will be stopped.
 !!
-!!    This has the same effect as setting the environment
-!!    variable M_verify_STOP to "FALSE" or the global module variable
+!!    This has the same effect as setting the environment variable
+!!    M_verify_STOP to "FALSE" or the global module variable
 !!    UNIT_CHECK_KEEP_GOING to .FALSE. . Set the value to .true. and the
 !!    program will continue even when tests fail.
 !!
@@ -743,6 +754,7 @@ character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: options
 character(len=*),intent(in),optional :: msg
 character(len=4096)                  :: var
+logical,save                         :: called=.false.
 !-----------------------------------------------------------------------------------------------------------------------------------
    call get_environment_variable('UNIT_CHECK_COMMAND',var)
    if(var.ne.'')unit_check_command=var
@@ -759,6 +771,11 @@ character(len=4096)                  :: var
 !-----------------------------------------------------------------------------------------------------------------------------------
    call system_clock(clicks)
    duration=julian()
+   if(.not.called)then
+      call system_clock(clicks_all)
+      duration_all=julian()
+      called=.true.
+   endif
    if(present(msg))then
      if(msg.ne.'')then
         call stderr('unit_check_start: '//atleast(name,20)//' START   : '//trim(msg)) ! write message to standard error
@@ -766,11 +783,7 @@ character(len=4096)                  :: var
    endif
    call get_environment_variable('M_verify_STOP',var)
    select case(var)
-   case('FALSE','false')
-         unit_check_keep_going=.false.
-   case('1')
-         unit_check_keep_going=.false.
-   case('no','NO')
+   case('FALSE','false','1','no','NO')
          unit_check_keep_going=.false.
    end select
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -779,6 +792,107 @@ character(len=4096)                  :: var
    IUNTESTED=0
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine unit_check_start
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!
+!!##NAME
+!!    unit_check_stop(3f) - [M_verify] call command "goodbad NAME good" or "goodbad NAME bad" depending on whether failures were found
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    subroutine unit_check_stop(name,opts,msg)
+!!
+!!     character(len=*),intent(in) :: name
+!!     character(len=*),intent(in),optional :: opts
+!!     character(len=*),intent(in),optional :: msg
+!!
+!!##DESCRIPTION
+!!
+!!     give a tally of all calls to unit_check(3f)
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!     program demo_unit_check_stop
+!!     use M_verify, only: unit_check_start, unit_check_done
+!!     use M_verify, only: unit_check
+!!     use M_verify, only: unit_check_good, unit_check_stop, unit_check_bad
+!!     use M_verify, only: unit_check_command, unit_check_keep_going, unit_check_level
+!!
+!!     implicit none
+!!     integer :: x
+!!
+!!     unit_check_command=''
+!!     unit_check_keep_going=.true.
+!!     unit_check_level=0
+!!
+!!     x=10
+!!     call unit_check_start('myroutine')
+!!
+!!     call unit_check('myroutine', x.gt.3 ,'test if big enough')
+!!     call unit_check('myroutine', x.lt.100 ,'test if small enough')
+!!
+!!     if(x.ne.0)then
+!!        call unit_check_bad  ('myroutine',msg='x.ne.0' )
+!!     endif
+!!     call unit_check_done  ('myroutine',msg='checks on "myroutine"' )
+!!
+!!     call unit_check_stop()
+!!     end program demo_unit_check_stop
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+subroutine unit_check_stop(msg)
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+
+! ident_6="@(#)M_verify::unit_check_stop(3f):  stop program with report on calls to unit_check(3f)"
+
+character(len=*),intent(in),optional :: msg
+character(len=:),allocatable         :: msg_local
+character(len=4096)                  :: out
+character(len=:),allocatable         :: PF
+integer(kind=int64)                  :: milliseconds
+integer                              :: clicks_now
+   if(present(msg))then
+      msg_local=msg
+   else
+      msg_local=''
+   endif
+   call system_clock(clicks_now)
+   milliseconds=(julian()-duration_all)*1000
+   milliseconds=clicks_now-clicks_all
+   PF=merge('PASSED  :','FAILED  :',ifailed_all_G.eq.0)
+   if(PF.eq.'PASSED  :'.and.ipassed_all_G.eq.0)then
+      PF='UNTESTED:'
+   endif
+   write(out,'("unit_check_stop:  ", &
+       & "TALLY:              ",          &
+       & 1x,a,                            &
+       & " DURATION:",i14.14,             &
+       & " GOOD:",i0,                     &
+       & 1x," BAD:",i0                    &
+       & )')                              &
+       & PF,                              &
+       & milliseconds,                    &
+       & IPASSED_ALL_G,                   &
+       & IFAILED_ALL_G
+   if(present(msg))then
+      call stderr(trim(out)//': '//trim(msg))
+   else
+      call stderr(trim(out))
+   endif
+   if(IFAILED_ALL_G.eq.0)then
+      stop EXIT_SUCCESS
+   else
+      stop EXIT_FAILURE
+   endif
+end subroutine unit_check_stop
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -838,7 +952,7 @@ end subroutine unit_check_start
 subroutine unit_check_done(name,opts,msg)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-! ident_6="@(#)M_verify::unit_check_done(3f): call 'goodbad NAME bad'"
+! ident_7="@(#)M_verify::unit_check_done(3f): call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -960,7 +1074,7 @@ end subroutine unit_check_done
 !!    Public Domain
 subroutine unit_check_bad(name,opts,msg)
 
-! ident_7="@(#)M_verify::unit_check_bad(3f): call 'goodbad NAME bad'"
+! ident_8="@(#)M_verify::unit_check_bad(3f): call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -1030,7 +1144,7 @@ end subroutine unit_check_bad
 !!    Public Domain
 subroutine unit_check_good(name,opts,msg)
 
-! ident_8="@(#)M_verify::unit_check_good(3f): call 'goodbad NAME good'"
+! ident_9="@(#)M_verify::unit_check_good(3f): call 'goodbad NAME good'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -1108,7 +1222,7 @@ end subroutine unit_check_good
 !!    Public Domain
 subroutine pdec(string)
 
-! ident_9="@(#)M_verify::pdec(3f): write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
+! ident_10="@(#)M_verify::pdec(3f): write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
 
 character(len=*),intent(in) :: string   ! the string to print
 integer                     :: ilen     ! number of characters in string to print
@@ -1130,7 +1244,7 @@ end subroutine pdec
 !===================================================================================================================================
 function atleast(line,length) result(strout)
 
-! ident_10="@(#)M_verify::atleast(3fp): return string padded to at least specified length"
+! ident_11="@(#)M_verify::atleast(3fp): return string padded to at least specified length"
 
 character(len=*),intent(in)  ::  line
 integer,intent(in)           ::  length
@@ -1189,7 +1303,7 @@ end function atleast
 subroutine assert(filename,linen,expr,g1, g2, g3, g4, g5, g6, g7, g8, g9)
 implicit none
 
-! ident_11="@(#)M_verify::assert(3f): writes a message to a string composed of any standard scalar types"
+! ident_12="@(#)M_verify::assert(3f): writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: filename
 integer,intent(in)            :: linen
@@ -1210,7 +1324,7 @@ end subroutine assert
 function julian()
 ! REFERENCE: From Wikipedia, the free encyclopedia 2015-12-19
 
-! ident_12="@(#)M_verify::julian(3f): Converts proleptic Gregorian DAT date-time array to Julian Date"
+! ident_13="@(#)M_verify::julian(3f): Converts proleptic Gregorian DAT date-time array to Julian Date"
 
 real(kind=realtime)              :: julian   ! Julian Date (non-negative, but may be non-integer)
 integer                          :: dat(8)   ! array like returned by DATE_AND_TIME(3f)
@@ -1311,7 +1425,7 @@ end function julian
 function almost(x,y,digits,verbose)
 use M_journal,  only : journal
 
-! ident_13="@(#)M_verify::almost(3f): function to compare two real numbers only up to a specified number of digits by calling DP_ACCDIG(3f)"
+! ident_14="@(#)M_verify::almost(3f): function to compare two real numbers only up to a specified number of digits by calling DP_ACCDIG(3f)"
 
 class(*),intent(in)         :: x,y
 class(*),intent(in)         :: digits
@@ -1504,7 +1618,7 @@ SUBROUTINE accdig(X,Y,digi0,ACURCY,IND)
 use M_journal, only : journal
 implicit none
 
-! ident_14="@(#)M_verify::accdig(3f): compare two real numbers only up to a specified number of digits"
+! ident_15="@(#)M_verify::accdig(3f): compare two real numbers only up to a specified number of digits"
 
 !     INPUT ...
 real,intent(in) :: x           ! First  of two real numbers to be compared.
@@ -1693,7 +1807,7 @@ use,intrinsic :: iso_fortran_env, only : real128
 use M_journal,  only : journal
 implicit none
 
-! ident_15="@(#)M_verify::dp_accdig(3f): compare two values only up to a specified number of digits"
+! ident_16="@(#)M_verify::dp_accdig(3f): compare two values only up to a specified number of digits"
 
 !  INPUT ...
 class(*),intent(in)  :: x           ! FIRST  OF TWO NUMBERS TO BE COMPARED.
@@ -1805,7 +1919,7 @@ end subroutine dp_accdig
 elemental pure function in_margin(expected_value, measured_value, allowed_margin)
 implicit none
 
-! ident_16="@(#)M_verify::in_margin(3f): check if two reals are approximately equal using a relative margin"
+! ident_17="@(#)M_verify::in_margin(3f): check if two reals are approximately equal using a relative margin"
 
 class(*),intent(in) :: expected_value, measured_value, allowed_margin
 logical             :: in_margin
@@ -1826,7 +1940,7 @@ end function in_margin
 function round(val,idigits0)
 implicit none
 
-! ident_17="@(#)M_verify::round(3f): round val to specified number of significant digits"
+! ident_18="@(#)M_verify::round(3f): round val to specified number of significant digits"
 
 integer,parameter          :: dp=kind(0.0d0)
 real(kind=dp),intent(in)   :: val
@@ -1860,7 +1974,7 @@ pure elemental function anyscalar_to_real128(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_18="@(#)M_verify::anyscalar_to_real128(3f): convert integer or real parameter of any kind to real128"
+! ident_19="@(#)M_verify::anyscalar_to_real128(3f): convert integer or real parameter of any kind to real128"
 
 class(*),intent(in)          :: valuein
 real(kind=real128)           :: d_out
@@ -1889,7 +2003,7 @@ pure elemental function anyscalar_to_double(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_19="@(#)M_verify::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
+! ident_20="@(#)M_verify::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out

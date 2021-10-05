@@ -32,9 +32,9 @@ contains
 !!      function help_command(text_array,topic,position)
 !!
 !!##DESCRIPTION
-!!    This routine, when given a CHARACTER array displays the
-!!    text interactively. The special topics "manual","topics", and
-!!    "search" are reserved. "manual" causes the entire array to be displayed.
+!!    This routine, when given a CHARACTER array displays the text
+!!    interactively. The special topics "manual","topics", and "search"
+!!    are reserved. "manual" causes the entire array to be displayed.
 !!    "topics" displays all lines not beginning with a space or three or
 !!    more equal signs, and "search" must be followed by a string to search
 !!    for in the manual.
@@ -46,12 +46,12 @@ contains
 !!
 !!    The special topic "manual" displays the entire help text
 !!
-!!    The help text is paged based on the values in the position()
-!!    array. The first value is the current line count on the current page,
-!!    and the second value is how many lines should be displayed as a page
-!!    before a paging prompt is produced. POSITION(2) is typically set to
-!!    23. POSITION(1) can be set to zero, especially if the calling page
-!!    is not tracking paging itself.
+!!    The help text is paged based on the values in the position() array. The
+!!    first value is the current line count on the current page, and the
+!!    second value is how many lines should be displayed as a page before
+!!    a paging prompt is produced. POSITION(2) is typically set to 23.
+!!    POSITION(1) can be set to zero, especially if the calling page is
+!!    not tracking paging itself.
 !!
 !!    Entering a "q" at the prompt exits the help text. To see other options
 !!    enter an "h" at the prompt.
@@ -323,7 +323,7 @@ integer                                :: old_position
                   end_of_first_word=index(help_text(i),' ')-1
                   if(end_of_first_word.eq.0)end_of_first_word=len(help_text) ! if line is filled and does not have a blank
                   end_of_first_word=end_of_first_word-j+1
-               if(end_of_first_word.le.0)cycle
+                  if(end_of_first_word.le.0)cycle
                   !x!write(*,*)'['//topic(:end_of_first_word)//']['//help_text(i)(:end_of_first_word)//']'
                   if(topic.eq.help_text(i)(:end_of_first_word))then      ! find a line that matches topic
                      exit FINDIT

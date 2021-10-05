@@ -1,0 +1,211 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>paste- (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>paste</B>(1f) - [FILE FILTER] merge lines of files
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>paste</B> [OPTIONS] [filenames] |<B>--version</B>|<B>--help</B>
+(<B>(LICENSE:PD)</B>)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>paste</B>(1f) writes to standard output lines consisting of sequentially
+corresponding lines of each given file, separated by a TAB character.
+Standard input is used for a file name of &#146;-&#146; or if no input files are
+given.
+<P>
+An exit status of zero indicates success, and a nonzero value
+indicates failure.
+<P>
+UNLIKE C VERSION the delimiter list cannot be a null set. A zero-length
+list will be treated as a blank; and if a blank is a member of the set
+it cannot be at the end of the delimiters list.
+<P>
+Fortran does not allow the same file to be opened simultaneously more
+than once so <I>filenames</I> cannot be repeated
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>-d</B>, <B>--delimiters</B>=LIST </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Consecutively use the characters in LIST
+to separate merged lines. When LIST is
+exhausted, start again at its beginning.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-s</B>, <B>--serial</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>paste</B> one file at a time instead of in parallel
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-z</B>, <B>--zero-terminated</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+line delimiter is NUL, not newline
+Delimit items with a zero byte rather than
+a newline (ASCII LF). I.E., treat input as
+items separated by ASCII NUL and terminate
+output items with ASCII NUL. This option can
+be useful in conjunction with &#146;perl <B>-0</B>&#146; or
+same in order to reliably handle arbitrary
+file names (even those containing blanks
+or other special characters).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--help</B> </TD><TD valign=bottom>
+Display a help message and exit.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Display version information and exit.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--usage</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Display table of commandline parameters
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+For example, with:
+<P>
+<PRE>
+     $ cat two_numbers
+     1
+     2
+     $ cat three_letters
+     a
+     b
+     c
+<P>
+</PRE>
+Take lines sequentially from each file:
+<P>
+<PRE>
+     $ paste two_numbers three_letters
+     1       a
+     2       b
+             c
+<P>
+</PRE>
+Duplicate lines from a file:
+<P>
+<PRE>
+     # Fortran does not allow a file to be open twice
+     # so the C program could do this:
+     $ paste two_numbers three_letters two_numbers
+     1       a      1
+     2       b      2
+             c
+     # but you have to make a copy of two_numbers to
+     # do that with this program
+<P>
+</PRE>
+Intermix lines from stdin:
+<P>
+<PRE>
+     $ paste - three_letters - &lt; two_numbers
+     1       a      2
+             b
+             c
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I></I></TD> <TD width=33% align=center>paste- (1)</TD> <TD align=right width=33%><I>October 04, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 70a030f7-d6bc-4d0d-8fff-54cb916d55dc using man macros.</FONT>
+<br><br><center><img src="images/paste-.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
