@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -16,8 +5,6 @@ module M_hashkeys
 use,intrinsic :: ISO_FORTRAN_ENV, only : int8,int16,int32,int64,real32,real64,real128
 use,intrinsic :: iso_c_binding
 !!use,intrinsic :: iso_c_binding,   only : c_int32_t
-use M_anything,                   only : anything_to_bytes
-use M_verify,                      only : debug
 implicit none
 integer,parameter :: int128 = selected_real_kind(1*precision(1.0_int64))
 ! THIS WAS BUILT ASSUMING NO REAL INT128 VARIABLE IS SUPPORTED
@@ -55,6 +42,14 @@ interface sdbm_hash
    module procedure sdbm_hash_arr
    module procedure sdbm_hash_scalar
 end interface sdbm_hash
+
+interface anything_to_bytes
+   module procedure anything_to_bytes_arr
+   module procedure anything_to_bytes_scalar
+end interface anything_to_bytes
+
+logical,save             :: debug=.false.
+integer,parameter        :: dp=kind(0.0d0)
 
 ! WARNING: because there is currently no unsigned INTEGER in standard Fortran, use 128-bit INTEGER, which is not always available
 ! WARNING: not tested, but almost certainly get different results with different Endians
@@ -1368,33 +1363,37 @@ end subroutine test_suite_sha256
 !!
 !!  Sample program
 !!
-!!    program demo_luhn_checksum
-!!    use M_hashkeys, only : luhn_checksum
-!!    implicit none
-!!    character(len=:),allocatable :: ccards(:), string
-!!    integer :: i, j
-!!    write(*,*)'GOOD VALUES'
-!!    ccards=[ character(len=20) :: '79927398713', '49927398716', '1234567812345670' ]
-!!    call checkem()
-!!    write(*,*)'BAD VALUES'
-!!    ccards=[ character(len=20) :: &
-!!       '79927398710','79927398711','79927398712','79927398714', &
-!!       '79927398715','79927398716','79927398717','79927398718','79927398719', &
-!!       '49927398717', '1234567812345678' ]
-!!    call checkem()
-!!    contains
-!!    subroutine checkem
-!!       ! validate these numbers
-!!       do i=1,size(ccards)
-!!          j=len(trim(ccards(i)))
-!!          string=luhn_checksum(ccards(i)(:j-1))
-!!          write(*,'(a,1x,a,1x,l1)')ccards(i),string,ccards(i).eq.string
-!!       enddo
+!!      program demo_luhn_checksum
+!!      use M_hashkeys, only : luhn_checksum
+!!      implicit none
+!!      character(len=:),allocatable :: ccards(:), string
+!!      integer :: i, j
+!!      write(*,*)'GOOD VALUES'
+!!      ccards=[ character(len=20) :: '79927398713', &
+!!                                  & '49927398716',&
+!!                                  & '1234567812345670' ]
+!!      call checkem()
+!!      write(*,*)'BAD VALUES'
+!!      ccards=[ character(len=20) :: &
+!!        & '79927398710', '79927398711', '79927398712', '79927398714',  &
+!!        & '79927398715', '79927398716', '79927398717', '79927398718',  &
+!!        & '79927398719',  &
+!!         '49927398717', '1234567812345678' ]
+!!      call checkem()
+!!      contains
+!!      subroutine checkem
+!!         ! validate these numbers
+!!         do i=1,size(ccards)
+!!            j=len(trim(ccards(i)))
+!!            string=luhn_checksum(ccards(i)(:j-1))
+!!            write(*,'(a,1x,a,1x,l1)')ccards(i),string,ccards(i).eq.string
+!!         enddo
 !!
-!!       string='123456 781-234-567'
-!!       write(*,*)'from ',string,' got ',luhn_checksum(string),' which should be 1234567812345670'
-!!    end subroutine checkem
-!!    end program demo_luhn_checksum
+!!         string='123456 781-234-567'
+!!         write(*,*)'from ',string,' got ',luhn_checksum(string), &
+!!         & ' which should be 1234567812345670'
+!!      end subroutine checkem
+!!      end program demo_luhn_checksum
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2129,6 +2128,60 @@ end function b3hs_hash_key_jenkins
 subroutine test_suite_M_hashkeys
 call test_luhn_checksum()
 end subroutine test_suite_M_hashkeys
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function anything_to_bytes_arr(anything) result(chars)
+implicit none
+
+! ident_11="@(#)M_anything::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+
+class(*),intent(in)          :: anything(:)
+character(len=1),allocatable :: chars(:)
+   select type(anything)
+
+    type is (character(len=*));     chars=transfer(anything,chars)
+    type is (complex);              chars=transfer(anything,chars)
+    type is (complex(kind=dp));     chars=transfer(anything,chars)
+    type is (integer(kind=int8));   chars=transfer(anything,chars)
+    type is (integer(kind=int16));  chars=transfer(anything,chars)
+    type is (integer(kind=int32));  chars=transfer(anything,chars)
+    type is (integer(kind=int64));  chars=transfer(anything,chars)
+    type is (real(kind=real32));    chars=transfer(anything,chars)
+    type is (real(kind=real64));    chars=transfer(anything,chars)
+    type is (real(kind=real128));   chars=transfer(anything,chars)
+    type is (logical);              chars=transfer(anything,chars)
+    class default
+      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+
+   end select
+end function anything_to_bytes_arr
+!-----------------------------------------------------------------------------------------------------------------------------------
+function  anything_to_bytes_scalar(anything) result(chars)
+implicit none
+
+! ident_12="@(#)M_anything::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
+
+class(*),intent(in)          :: anything
+character(len=1),allocatable :: chars(:)
+   select type(anything)
+
+    type is (character(len=*));     chars=transfer(anything,chars)
+    type is (complex);              chars=transfer(anything,chars)
+    type is (complex(kind=dp));     chars=transfer(anything,chars)
+    type is (integer(kind=int8));   chars=transfer(anything,chars)
+    type is (integer(kind=int16));  chars=transfer(anything,chars)
+    type is (integer(kind=int32));  chars=transfer(anything,chars)
+    type is (integer(kind=int64));  chars=transfer(anything,chars)
+    type is (real(kind=real32));    chars=transfer(anything,chars)
+    type is (real(kind=real64));    chars=transfer(anything,chars)
+    type is (real(kind=real128));   chars=transfer(anything,chars)
+    type is (logical);              chars=transfer(anything,chars)
+    class default
+      stop 'crud. anything_to_bytes_scalar(1) does not know about this type'
+
+   end select
+end function  anything_to_bytes_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

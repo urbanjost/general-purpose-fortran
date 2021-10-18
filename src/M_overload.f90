@@ -678,7 +678,7 @@ end subroutine test_suite_M_overload
 function ffmt(generic,format) result (line)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-! ident_5="@(#)M_msg::ffmt(3f): convert any intrinsic to a string using specified format"
+! ident_5="@(#)M_overload::ffmt(3f): convert any intrinsic to a string using specified format"
 
 class(*),intent(in)          :: generic
 character(len=*),intent(in)  :: format

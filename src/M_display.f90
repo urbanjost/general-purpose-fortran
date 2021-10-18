@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!
 !!   M_display, A FORTRAN 95 MODULE FOR PRETTY-PRINTING MATRICES.
@@ -107,37 +96,43 @@ END MODULE PUTSTRMODULE
 !!
 !!##INTRODUCTION
 !!
-!! M_display is a standard Fortran 95 module for quick and easy displaying of numbers, vectors or
-!! matrices using default or specified format. It can be useful for debugging purposes, for
-!! preliminary display of numerical results, and even for final display of such results in cases when
-!! carefully formatted tables are not needed. It is comparable to the automatic matrix printing of
-!! Matlab, S and R, but offers substantially more control over the format used.
+!! M_display is a standard Fortran 95 module for quick and easy displaying
+!! of numbers, vectors or matrices using default or specified format. It
+!! can be useful for debugging purposes, for preliminary display of
+!! numerical results, and even for final display of such results in cases
+!! when carefully formatted tables are not needed. It is comparable to the
+!! automatic matrix printing of Matlab, S and R, but offers substantially
+!! more control over the format used.
 !!
-!! The module can handle the standard Fortran data types integer, single precision, double precision,
-!! complex, logical and character. Integer, real, complex and logical data of other than default kind
-!! are supported with add-on modules. The module contains the following public procedures:
+!! The module can handle the standard Fortran data types integer, single
+!! precision, double precision, complex, logical and character. Integer,
+!! real, complex and logical data of other than default kind are supported
+!! with add-on modules. The module contains the following public procedures:
 !!
-!!       Subroutine DISP                  The main procedure used for displaying items
-!!       Subroutine DISP_SET              Used to change default settings for DISP
-!!       Subroutine DISP_SET_FACTORY      Restores DISP-settings to original (factory) default
-!!       Function DISP_GET                Returns a structure with current DISP-settings
-!!       Function TOSTRING                Returns a string representation of a scalar or vector
-!!       Subroutine TOSTRING_SET          Used to change default settings for TOSTRING
-!!       Subroutine TOSTRING_SET_FACTORY  Restores TOSTRING-settings to original default
+!!     Subroutine DISP                  The main procedure used for displaying items
+!!     Subroutine DISP_SET              Used to change default settings for DISP
+!!     Subroutine DISP_SET_FACTORY      Restores DISP-settings to original (factory) default
+!!     Function DISP_GET                Returns a structure with current DISP-settings
+!!     Function TOSTRING                Returns a string representation of a scalar or vector
+!!     Subroutine TOSTRING_SET          Used to change default settings for TOSTRING
+!!     Subroutine TOSTRING_SET_FACTORY  Restores TOSTRING-settings to original default
 !!
-!! In addition the module defines a public derived type, DISP_SETTINGS, used for saving and restoring
-!! settings for DISP. The procedures DISP and TOSTRING have a generic interface and optional
-!! arguments, so the same subroutine / function name, is used to display items of different data
-!! types and ranks, with or without labels, and using default or specified format. Similarly DISP_SET
-!! is generic and can be used both to change individual settings and to restore previously saved
-!! settings.
+!! In addition the module defines a public derived type, DISP_SETTINGS,
+!! used for saving and restoring settings for DISP. The procedures DISP and
+!! TOSTRING have a generic interface and optional arguments, so the same
+!! subroutine / function name, is used to display items of different data
+!! types and ranks, with or without labels, and using default or specified
+!! format. Similarly DISP_SET is generic and can be used both to change
+!! individual settings and to restore previously saved settings.
 !!
-!! The most basic calling syntax for displaying is CALL DISP(expression) which will display the
-!! expression with default format. The format may be specified with CALL DISP(expression, edit-
-!! descriptor), and CALL DISP(title, expression) will label the displayed item with a title. Examples
-!! are CALL DISP(A), CALL DISP(A,'F9.3'), CALL DISP('A=',A) and CALL DISP('A=',A,'F9.3'), the last
-!! one specifying both title and format. If aij = exp(i + j - 1), i, j = 1,...,4, then
-!! CALL DISP('A = ', A) writes out:
+!! The most basic calling syntax for displaying is CALL DISP(expression)
+!! which will display the expression with default format. The format
+!! may be specified with CALL DISP(expression, edit- descriptor), and
+!! CALL DISP(title, expression) will label the displayed item with a
+!! title. Examples are CALL DISP(A), CALL DISP(A,'F9.3'), CALL DISP('A=',A)
+!! and CALL DISP('A=',A,'F9.3'), the last one specifying both title and
+!! format. If aij = exp(i + j - 1), i, j = 1,...,4, then CALL DISP('A =
+!! ', A) writes out:
 !!
 !!      > A =  2.72    7.39   20.09    54.60
 !!      >      7.39   20.09   54.60   148.41
@@ -151,7 +146,8 @@ END MODULE PUTSTRMODULE
 !!      > 2.00855E+1  4.03429E+2  8.10308E+3  1.62755E+5
 !!      > 5.45981E+1  2.98096E+3  1.62755E+5  8.88611E+6.
 !!
-!! It is also possible to number the rows and columns: CALL DISP(A, STYLE='NUMBER') will give:
+!! It is also possible to number the rows and columns: CALL DISP(A,
+!! STYLE='NUMBER') will give:
 !!
 !!      >      1       2       3        4
 !!      > 1   2.72    7.39   20.09    54.60
@@ -159,10 +155,12 @@ END MODULE PUTSTRMODULE
 !!      > 3  20.09   54.60  148.41   403.43
 !!      > 4  54.60  148.41  403.43  1096.63.
 !!
-!! The selection between F and E editing depends on the size of the largest displayed element as
-!! discussed in section 3.2 below. Among the settings that may be controlled is the spacing between
-!! columns, the number of significant digits, the placement of the label, and the file unit where the
-!! output goes. Items can in addition be displayed side by side, for example:
+!! The selection between F and E editing depends on the size of the largest
+!! displayed element as discussed in section 3.2 below. Among the settings
+!! that may be controlled is the spacing between columns, the number
+!! of significant digits, the placement of the label, and the file unit
+!! where the output goes. Items can in addition be displayed side by side,
+!! for example:
 !!
 !!      > CALL DISP('X = ', X, ADVANCE='NO')
 !!      > CALL DISP('Y = ', Y)
@@ -185,28 +183,34 @@ END MODULE PUTSTRMODULE
 !!      >     0.693 + 3.142i   -7.948 +  8.710i   -47.300 -  0.749i
 !!      >     1.099 + 3.142i   -6.659 + 11.258i   -54.449 + 14.495i
 !!
-!! infinite and not-a-number real values are supported and displayed as nan, +inf or -inf.
+!! infinite and not-a-number real values are supported and displayed as nan,
+!! +inf or -inf.
 !!
-!! the remaining sections in this user manual contain detailed information on using the module.
-!! section 2 discusses the basics of using the module, including use statements, compiling and
-!! linking, and add-on modules supporting non-default kinds of data. section 3 gives a detailed
-!! description of the generic subroutine disp. all the possible arguments are listed and the purpose
-!! of each one described. section 4 describes how to change various settings that control how items
-!! are displayed with disp. section 5 describes the function tostring which may be used to change
-!! numbers to strings. finally testing of the module is discussed in section 6.
+!! the remaining sections in this user manual contain detailed information
+!! on using the module.  section 2 discusses the basics of using the
+!! module, including use statements, compiling and linking, and add-on
+!! modules supporting non-default kinds of data. section 3 gives a detailed
+!! description of the generic subroutine disp. all the possible arguments
+!! are listed and the purpose of each one described. section 4 describes
+!! how to change various settings that control how items are displayed with
+!! disp. section 5 describes the function tostring which may be used to
+!! change numbers to strings. finally testing of the module is discussed
+!! in section 6.
 !!
 !!##OVERVIEW OF MODULES
 !!
-!! The file M_display.f90 actually begins with two auxiliary
-!! modules, PUTSTRMODULE and M_display_UTIL. The first one contains two dummy subroutines, PUTSTR
-!! and PUTNL, which do nothing, but must be incorporated to avoid an "undefined symbol" link error.
-!! In addition it defines the named constant (parameter) DEFAULT_UNIT = -3, which makes the asterisk
+!! The file M_display.f90 actually begins with two auxiliary modules,
+!! PUTSTRMODULE and M_display_UTIL. The first one contains two dummy
+!! subroutines, PUTSTR and PUTNL, which do nothing, but must be incorporated
+!! to avoid an "undefined symbol" link error.  In addition it defines the
+!! named constant (parameter) DEFAULT_UNIT = -3, which makes the asterisk
 !! unit (usually the screen) the default to display on.
 !!
-!! Alternatively the user can write his own PUTSTRMODULE as described below. An
-!! example is near the beginning of M_display.f90 (commented out) and also in the file
-!! putstrmodule_mex.f90, enclosed with the package. It may be used (commented in instead of the
-!! default one) to allow Matlab mex files to display in the Matlab command window.
+!! Alternatively the user can write his own PUTSTRMODULE as described
+!! below. An example is near the beginning of M_display.f90 (commented out)
+!! and also in the file putstrmodule_mex.f90, enclosed with the package. It
+!! may be used (commented in instead of the default one) to allow Matlab
+!! mex files to display in the Matlab command window.
 !!
 !!##AN EXAMPLE PROGRAM
 !!
@@ -249,37 +253,40 @@ END MODULE PUTSTRMODULE
 !!
 !! Expected results:
 !!
-!!    A =  2.718   7.389   20.086
-!!         7.389  20.086   54.598
-!!        20.086  54.598  148.413
-!!
-!!    2.71828E+00  2.71828E+00  2.71828E+00
-!!    7.38906E+00  5.45982E+01  2.98096E+03
-!!    2.00855E+01  8.10308E+03  5.32048E+11
-!!
-!!    2.71828   7.38906  20.08554
-!!    7.38906  20.08554  54.59815
-!!
-!!           MATRIX
-!!    --------------------
-!!         1     2      3
-!!    1   2.7   7.4   20.1
-!!    2   7.4  20.1   54.6
-!!    3  20.1  54.6  148.4
-!!
-!!    ------K-----
-!!    -3 . 12 14 .
-!!
-!!    The square of 1.5 is 2.25
-!!
-!!    11 | T | A
-!!    12 | F | B
-!!    13 | T | C
+!!     > A =  2.718   7.389   20.086
+!!     >      7.389  20.086   54.598
+!!     >     20.086  54.598  148.413
+!!     >
+!!     > 2.71828E+00  2.71828E+00  2.71828E+00
+!!     > 7.38906E+00  5.45982E+01  2.98096E+03
+!!     > 2.00855E+01  8.10308E+03  5.32048E+11
+!!     >
+!!     > 2.71828   7.38906  20.08554
+!!     > 7.38906  20.08554  54.59815
+!!     >
+!!     >        MATRIX
+!!     > --------------------
+!!     >      1     2      3
+!!     > 1   2.7   7.4   20.1
+!!     > 2   7.4  20.1   54.6
+!!     > 3  20.1  54.6  148.4
+!!     >
+!!     > ------K-----
+!!     > -3 . 12 14 .
+!!     >
+!!     > The square of 1.5 is 2.25
+!!     >
+!!     > 11 | T | A
+!!     > 12 | F | B
+!!     > 13 | T | C
 !!
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!     Based on dispmodule(3f),
+!!     "A Fortran 95 module for pretty-printing matrices".
+!!     Version number 1.02 6-Sept-2008,
+!!     Kristjan Jonasson,
+!!     Dept. of Computer Science,
+!!     University of Iceland (jonasson@hi.is).
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -1300,8 +1307,6 @@ MODULE M_display
   PUBLIC PUTSTR_UNIT          ! Constant to specify the use of subroutines putstr and putnl to display
   PUBLIC NULL_UNIT            ! Constant to specify discarding of all displayed output
 
-  public test_suite_M_display
-
   ! ********************************** INTERFACE DECLARATIONS *************************************
   interface disp_set
     module procedure disp_set, disp_set_ds
@@ -1315,12 +1320,14 @@ MODULE M_display
 !!
 !!##DESCRIPTION
 !!
-!! This is the principal subroutine of the package. It has various control arguments that specify the
-!! exact format of the output. Most of these may also be used as arguments of the subroutine
-!! DISP_SET. When used with DISP, a control argument affects only the item being displayed with the
-!! current call, but when used with DISP_SET, the default settings for subsequent DISP calls are
-!! affected. The default values for individual arguments given below are used unless they have been
-!! changed by a call to DISP_SET. All character arguments should be of type default character.
+!! This is the principal subroutine of the package. It has various control
+!! arguments that specify the exact format of the output. Most of these
+!! may also be used as arguments of the subroutine DISP_SET. When used
+!! with DISP, a control argument affects only the item being displayed with
+!! the current call, but when used with DISP_SET, the default settings for
+!! subsequent DISP calls are affected. The default values for individual
+!! arguments given below are used unless they have been changed by a call
+!! to DISP_SET. All character arguments should be of type default character.
 !!
 !! Simple Calls:
 !!
@@ -1330,13 +1337,13 @@ MODULE M_display
 !!       call disp(x, fmt)
 !!       call disp(title, x, fmt)
 !!
-!! The first call advances to the next line, and the other calls display X on the default unit (the
-!! unit may be changed with the UNIT argument). The default putstrmodule (see section 2) sets the
-!! asterisk unit (usually the screen) to be default. The purpose of individual arguments is as
-!! follows:
+!! The first call advances to the next line, and the other calls display X
+!! on the default unit (the unit may be changed with the UNIT argument). The
+!! default putstrmodule (see section 2) sets the asterisk unit (usually the
+!! screen) to be default. The purpose of individual arguments is as follows:
 !!
-!! X      The item to be displayed. X may be scalar, vector or matrix (i.e. of rank <= 2) and the
-!!        following kinds of data are supported:
+!! X      The item to be displayed. X may be scalar, vector or matrix
+!!        (i.e. of rank <= 2) and the following kinds of data are supported:
 !!
 !!           default integer
 !!           default real (or single precision, real(kind(1.0)))
@@ -1346,19 +1353,22 @@ MODULE M_display
 !!           default logical
 !!           default character
 !!
-!!        With the add-on modules described in section 2.3 other kinds may be displayed. Matrices are
-!!        displayed in traditional mathematical order, so the rows displayed are X(1,:), X(2,:) etc.
-!!        Vectors are by default displayed as column vectors (but a row orientation may be specified
-!!        with the ORIENT argument). An SS edit descriptor is applied automatically so positive
-!!        elements are not prefixed with a + sign (the Fortran standard makes outputting a + sign
-!!        optional).
+!!        With the add-on modules described in section 2.3 other kinds may
+!!        be displayed. Matrices are displayed in traditional mathematical
+!!        order, so the rows displayed are X(1,:), X(2,:) etc.  Vectors are
+!!        by default displayed as column vectors (but a row orientation may
+!!        be specified with the ORIENT argument). An SS edit descriptor is
+!!        applied automatically so positive elements are not prefixed with
+!!        a + sign (the Fortran standard makes outputting a + sign optional).
 !!
-!! TITLE  Provides a label for X. The label prefixes X by default but this may be changed with the
-!!        STYLE argument (see examples in section 3.2). When X is absent TITLE must also be absent.
+!! TITLE  Provides a label for X. The label prefixes X by default but this
+!!        may be changed with the STYLE argument (see examples in section
+!!        3.2). When X is absent TITLE must also be absent.
 !!
-!! FMT    When present, FMT should contain an edit descriptor that will be used to format each
-!!        element of X (or the real parts of X in case X is complex and FMT_IMAG is present; see
-!!        below). The possible edit descriptors are:
+!! FMT    When present, FMT should contain an edit descriptor that will be
+!!        used to format each element of X (or the real parts of X in case
+!!        X is complex and FMT_IMAG is present; see below). The possible
+!!        edit descriptors are:
 !!
 !!           Fw.d, Dw.d, Ew.dEe, ENw.dEe, ESw.dEe: real data (the Ee suffixes are optional)
 !!           Iw, Bw, Ow, Zw: integer data (all may be suffixed with .m)
@@ -1366,65 +1376,80 @@ MODULE M_display
 !!           A, Aw: character data
 !!           Gw.d, Gw.dEe: any data
 !!
-!!        Example calls for numeric X are CALL DISP(X,'ES11.4') and CALL DISP('X=',X,'F8.4'). If X is
-!!        a scalar string (i.e. of rank 0) and TITLE is absent FMT must be specified with a keyword
-!!        (otherwise the call is taken to have TITLE and X): CALL DISP('str',FMT='A4') displays
-!!        "str" but CALL DISP('str','A4') displays "strA4").
+!!        Example calls for numeric X are CALL DISP(X,'ES11.4') and CALL
+!!        DISP('X=',X,'F8.4'). If X is a scalar string (i.e. of rank 0) and
+!!        TITLE is absent FMT must be specified with a keyword (otherwise
+!!        the call is taken to have TITLE and X): CALL DISP('str',FMT='A4')
+!!        displays "str" but CALL DISP('str','A4') displays "strA4").
 !!
-!!        If FMT is absent, each element of X is formatted with a default edit descriptor. When X is
-!!        of type logical the default is L1 and when it is of type character the default is A (which
-!!        is equivalent to Aw where w = LEN(X)). For integer data the default is Iw where w is
-!!        exactly big enough to accommodate both the largest positive and the largest negative values
-!!        in X. For real and complex data the default also depends on the largest absolute values in
-!!        X, as detailed in the DIGMAX-paragraph in section 3.2. The format used for complex numbers
-!!        is demonstrated in the introduction above.
-!!
+!!        If FMT is absent, each element of X is formatted with a default
+!!        edit descriptor. When X is of type logical the default is L1 and
+!!        when it is of type character the default is A (which is equivalent
+!!        to Aw where w = LEN(X)). For integer data the default is Iw where
+!!        w is exactly big enough to accommodate both the largest positive
+!!        and the largest negative values in X. For real and complex data
+!!        the default also depends on the largest absolute values in X,
+!!        as detailed in the DIGMAX-paragraph in section 3.2. The format
+!!        used for complex numbers is demonstrated in the introduction above.
 !!
 !!##CALL WITH COMPLETE LIST OF ARGUMENTS
 !!
 !!       CALL DISP(TITLE, X, FMT, FMT_IMAG, ADVANCE, DIGMAX, LBOUND, ORIENT,
 !!       SEP, STYLE, TRIM, UNIT, ZEROAS)
 !!
-!! All dummy arguments are optional and some of them are incompatible with some data types of X.
-!! The arguments control how X is displayed, as described in section 3.1 and below. For the character
-!! arguments ADVANCE and ORIENT the case of letters is ignored (so e.g. ADVANCE = 'yes' and ADVANCE =
-!! 'YES' are equivalent). Normally argument association for arguments after FMT (or FMT_IMAG) will be
-!! realized with argument keywords, e.g. CALL DISP('X=', X, DIGMAX=3, ORIENT='ROW'). When X is a
-!! scalar string FMT must also be associated with keyword, as mentioned in section 3.1. The most
-!! useful application of calling DISP with X absent is to advance to the next line or display an
-!! empty line. For this purpose, the only relevant arguments are UNIT, and ADVANCE with the value
-!! 'YES' or 'DOUBLE'.
+!! All dummy arguments are optional and some of them are incompatible
+!! with some data types of X.  The arguments control how X is displayed,
+!! as described in section 3.1 and below. For the character arguments
+!! ADVANCE and ORIENT the case of letters is ignored (so e.g. ADVANCE =
+!! 'yes' and ADVANCE = 'YES' are equivalent). Normally argument association
+!! for arguments after FMT (or FMT_IMAG) will be realized with argument
+!! keywords, e.g. CALL DISP('X=', X, DIGMAX=3, ORIENT='ROW'). When X is a
+!! scalar string FMT must also be associated with keyword, as mentioned in
+!! section 3.1. The most useful application of calling DISP with X absent is
+!! to advance to the next line or display an empty line. For this purpose,
+!! the only relevant arguments are UNIT, and ADVANCE with the value 'YES'
+!! or 'DOUBLE'.
 !!
-!! FMT_IMAG = edit-descriptor-imag  An edit descriptor for imaginary parts of complex X. The
-!!        statement CALL DISP((1.31,2.47),'F0.1','F0.2') will display "1.3 + 2.47i". If FMT_IMAG
-!!        is absent and FMT is present then both real and imaginary parts are edited with FMT. If
-!!        both are absent, separate defaults are used, as explained in the DIGMAX-paragraph below.
-!!        FMT_IMAG must be absent if X is not complex.
+!! FMT_IMAG = edit-descriptor-imag  An edit descriptor for imaginary parts
+!!        of complex X. The statement CALL DISP((1.31,2.47),'F0.1','F0.2')
+!!        will display "1.3 + 2.47i". If FMT_IMAG is absent and FMT
+!!        is present then both real and imaginary parts are edited with
+!!        FMT. If both are absent, separate defaults are used, as explained
+!!        in the DIGMAX-paragraph below.  FMT_IMAG must be absent if X is
+!!        not complex.
 !!
-!! ADVANCE = adv  The value for ADVANCE may be 'yes', 'no' or 'double'. If the value is 'yes' then X
-!!       is written out immediately, if it is 'double' then X is written out followed by an empty
-!!       line (thus giving double spacing), and if it is 'no' then X is not written out until the
-!!       next DISP call on the same unit with advancing turned on (either by default, via a call to
-!!       DISP_SET, or via the ADVANCE keyword). When this occurs, all the items displayed with DISP
-!!       since the last output occurred on the unit are written out side by side, separated by three
-!!       spaces unless a different separation has been specified via the MATSEP argument of DISP_SET.
-!!       Default value of ADVANCE is 'yes'.
+!! ADVANCE = adv  The value for ADVANCE may be 'yes', 'no' or 'double'. If
+!!       the value is 'yes' then X is written out immediately, if it is
+!!       'double' then X is written out followed by an empty line (thus
+!!       giving double spacing), and if it is 'no' then X is not written
+!!       out until the next DISP call on the same unit with advancing turned
+!!       on (either by default, via a call to DISP_SET, or via the ADVANCE
+!!       keyword). When this occurs, all the items displayed with DISP since
+!!       the last output occurred on the unit are written out side by side,
+!!       separated by three spaces unless a different separation has been
+!!       specified via the MATSEP argument of DISP_SET.  Default value of
+!!       ADVANCE is 'yes'.
 !!
-!! DIGMAX = n  Controls the format used for real and complex data in the absence of FMT. For real
-!!       items the format is chosen so that the displayed number of largest absolute magnitude (say
-!!       xmax) has n significant decimal digits. If 0.1 <= |xmax| < 10**n an F edit descriptor is
-!!       used, otherwise an E edit descriptor. For complex items these rules are applied separately
-!!       to the real parts and imaginary parts, and thus two different formats are used. When X is
-!!       not of real or complex type the argument DIGMAX is ignored. When DIGMAX is present FMT
-!!       should be absent. The default is n = 6.
+!! DIGMAX = n  Controls the format used for real and complex data in the
+!!       absence of FMT. For real items the format is chosen so that the
+!!       displayed number of largest absolute magnitude (say xmax) has n
+!!       significant decimal digits. If 0.1 <= |xmax| < 10**n an F edit
+!!       descriptor is used, otherwise an E edit descriptor. For complex
+!!       items these rules are applied separately to the real parts and
+!!       imaginary parts, and thus two different formats are used. When X
+!!       is not of real or complex type the argument DIGMAX is ignored. When
+!!       DIGMAX is present FMT should be absent. The default is n = 6.
 !!
-!! LBOUND = lbound  This argument is a default integer vector with the numbers of the first row
-!!       / column to show when displaying with numbered style. When calling subroutines in Fortran,
-!!       only the shape of matrix arguments is passed with the arguments, but matrix lower bounds are
-!!       assumed to be 1 unless declared explicitly in the routine. To compensate for this deficiency
-!!       LBOUND may be set to the declared lower bound(s) of X. To take an example, let
-!!       aij = exp(i + j - 1) as in section 1, but let A be declared with REAL::A(0:3,0:3). Then
-!!       CALL DISP(A, STYLE = 'NUMBER', LBOUND = LBOUND(A)) will display:
+!! LBOUND = lbound  This argument is a default integer vector with the
+!!       numbers of the first row / column to show when displaying with
+!!       numbered style. When calling subroutines in Fortran, only the
+!!       shape of matrix arguments is passed with the arguments, but matrix
+!!       lower bounds are assumed to be 1 unless declared explicitly in
+!!       the routine. To compensate for this deficiency LBOUND may be
+!!       set to the declared lower bound(s) of X. To take an example, let
+!!       aij = exp(i + j - 1) as in section 1, but let A be declared with
+!!       REAL::A(0:3,0:3). Then CALL DISP(A, STYLE = 'NUMBER', LBOUND =
+!!       LBOUND(A)) will display:
 !!
 !!         >        0       1        2        3
 !!         >  0   1.000   2.718    7.389   20.086
@@ -1432,131 +1457,154 @@ MODULE M_display
 !!         >  2   7.389  20.086   54.598  148.413
 !!         >  3  20.086  54.598  148.413  403.429.
 !!
-!!       In fact the call may be shortened to CALL DISP(A, LBOUND = LBOUND(A)) because numbering is
-!!       default when LBOUND is present.
+!!       In fact the call may be shortened to CALL DISP(A, LBOUND =
+!!       LBOUND(A)) because numbering is default when LBOUND is present.
 !!
-!! ORIENT = ori  This argument can only be used when X is a vector (i.e. has rank 1). If ORIENT is
-!!       'col' (the default) a column vector is displayed, and if ORIENT is 'row' a row vector
-!!       results.
+!! ORIENT = ori  This argument can only be used when X is a vector (i.e. has
+!!       rank 1). If ORIENT is 'col' (the default) a column vector is
+!!       displayed, and if ORIENT is 'row' a row vector results.
 !!
-!! SEP = sep  Specifies a string which is written out between columns of displayed matrices. If X has
-!!       rows (-1, 3) and (5, 10) and SEP is ', ' then the output will be:
+!! SEP = sep  Specifies a string which is written out between columns of
+!!       displayed matrices. If X has rows (-1, 3) and (5, 10) and SEP is ',
+!!       ' then the output will be:
 !!
 !!         >  -1,  5
 !!         >   5, 10
 !!
-!!       The length of the string must be at most 9. Default is '  ' (character string with two
-!!       spaces).
+!!       The length of the string must be at most 9. Default is '  '
+!!       (character string with two spaces).
 !!
 !! STYLE = style  There are five possible styles:
 !!
-!!           'left'       Title is immediately to the left of the first line of the displayed item.
-!!           'above'      Title is centered immediately above the item.
-!!           'pad'        Title is centered above the item, padded with hyphens (-).
-!!           'underline'  Title is centered above the item, underlined with hyphens.
-!!           'number'     Each matrix or vector row and / or column is numbered.
+!!       'left'       Title is immediately to the left of the first line
+!!                    of the displayed item.
+!!       'above'      Title is centered immediately above the item.
+!!       'pad'        Title is centered above the item, padded with hyphens (-).
+!!       'underline'  Title is centered above the item, underlined with hyphens.
+!!       'number'     Each matrix or vector row and / or column is numbered.
 !!
-!!       Any of the four title position styles can also be combined with the number style by
-!!       specifying for example STYLE = 'pad & number'. Any character except space may be used
-!!       instead of hyphen by prefixing it to the style. STYLE = '*underline' will thus underline the
-!!       title with asterisks. Both row and column numbers appear for numbered matrices, but for
-!!       vectors only row numbers appear (or column numbers when ORIENT is 'col'). The five styles
-!!       are illustrated below, accompanied by an example of combined padded title and numbering.
+!!       Any of the four title position styles can also be combined with the
+!!       number style by specifying for example STYLE = 'pad & number'. Any
+!!       character except space may be used instead of hyphen by prefixing
+!!       it to the style. STYLE = '*underline' will thus underline the title
+!!       with asterisks. Both row and column numbers appear for numbered
+!!       matrices, but for vectors only row numbers appear (or column numbers
+!!       when ORIENT is 'col'). The five styles are illustrated below,
+!!       accompanied by an example of combined padded title and numbering.
 !!
 !!         > Matr = 1.2   4.2       Matr      ---Matr--       Matr          1     2     ____Matr____
 !!         >        5.6  18.3    1.2   4.2    1.2   4.2    ---------    1  1.2   4.2        1     2
 !!         >                     5.6  18.3    5.6  18.3    1.2   4.2    2  5.6  18.3    1  1.2   4.2
 !!         >                                               5.6  18.3                    2  5.6  18.3
 !!
-!!       The default value of STYLE is 'left' if LBOUND is absent, 'number' if it is present, and
-!!       'left & number' if both TITLE and LBOUND are present.
+!!       The default value of STYLE is 'left' if LBOUND is absent, 'number'
+!!       if it is present, and 'left & number' if both TITLE and LBOUND
+!!       are present.
 !!
-!! TRIM = trim  This argument can take three values, 'YES', 'NO' and 'AUTO'. When YES is specified,
-!!       each column of displayed items is trimmed from the left, with 'NO' the items are not trimmed
-!!       and if TRIM is 'AUTO' the items are trimmed when FMT is absent but not when it is present.
-!!       In the following example, X and U are displayed with TRIM = 'yes', but Y and V with TRIM =
-!!       'no'. In all cases the edit descriptor is the default (I4). The default is TRIM = 'AUTO'.
+!! TRIM = trim  This argument can take three values, 'YES', 'NO' and
+!!       'AUTO'. When YES is specified, each column of displayed items is
+!!       trimmed from the left, with 'NO' the items are not trimmed and if
+!!       TRIM is 'AUTO' the items are trimmed when FMT is absent but not when
+!!       it is present.  In the following example, X and U are displayed
+!!       with TRIM = 'yes', but Y and V with TRIM = 'no'. In all cases the
+!!       edit descriptor is the default (I4). The default is TRIM = 'AUTO'.
 !!
 !!         > ----X----   -------Y------   -----U-----   -------V------
 !!         > 1  2    4      1    2    3   333 22 4444    333   22 4444
 !!         > 2 22   34      2   22   34
 !!         > 3 32 1234      3   32 1234
 !!
-!!       One application of trimming is to display matrices with a fixed number of fractional digits
-!!       but variable effective field width. Then Fw.d editing with w big enough is accompanied by
-!!       TRIM = 'yes'. An example is the following display of a matrix with (i, k) element exp(k**i)
-!!       using F20.2 and 'yes':
+!!       One application of trimming is to display matrices with a fixed
+!!       number of fractional digits but variable effective field width. Then
+!!       Fw.d editing with w big enough is accompanied by TRIM = 'yes'. An
+!!       example is the following display of a matrix with (i, k) element
+!!       exp(k**i) using F20.2 and 'yes':
 !!
 !!            power exponentials
 !!           2.72   7.39    20.09
 !!           2.72  54.60  8103.08
 !!
-!!       Similar output may be obtained using I and F edit descriptors with w = 0 as discussed in
-!!       section 3.5. Apart from I and F edited displays, it is possible to trim A-edited displays as
-!!       well as E-edited displays with some negative elements, but the first column all positive:
+!!       Similar output may be obtained using I and F edit descriptors
+!!       with w = 0 as discussed in section 3.5. Apart from I and F edited
+!!       displays, it is possible to trim A-edited displays as well as
+!!       E-edited displays with some negative elements, but the first column
+!!       all positive:
 !!
 !!           With TRIM='yes':X=1.2e+5 -4.1e-2   With TRIM='no':X= 1.2e+5 -4.1e-2
 !!                             2.3e-3  8.6e+1                     2.3e-3  8.6e+1
 !!
-!! UNIT = external-file-unit  The unit which the output is sent to. There are three special units,
-!!       which may be referred to either with constants or parameters (named constants) as follows:
+!! UNIT = external-file-unit  The unit which the output is sent to. There
+!!       are three special units, which may be referred to either with
+!!       constants or parameters (named constants) as follows:
 !!
 !!           Constant  Parameter      Preconnected unit
 !!             -3      ASTERISK_UNIT  The asterisk unit (often the screen)
 !!             -2      PUTSTR_UNIT    The subroutines PUTSTR and PUTNL
 !!             -1      NULL_UNIT      Null device (all output to this is discarded)
 !!
-!!       These units are further described in sections 3.3 and 3.4. Other unit numbers correspond to
-!!       external files that should have been connected with open-statements. The default unit depends
-!!       on the named constant DEFAULT_UNIT, defined in PUTSTRMODULE. The default PUTSTRMODULE sets
-!!       it to -3 (see sections 2 and 3.4).
+!!       These units are further described in sections 3.3 and 3.4. Other
+!!       unit numbers correspond to external files that should have been
+!!       connected with open-statements. The default unit depends on the
+!!       named constant DEFAULT_UNIT, defined in PUTSTRMODULE. The default
+!!       PUTSTRMODULE sets it to -3 (see sections 2 and 3.4).
 !!
-!! ZEROAS = zerostring  Supported for integer and real X (not complex) Any element that compares equal
-!!       to 0 will be displayed as zerostring. If, for example, A is a 4 by 4 upper triangular matrix
-!!       with aij = 1/max(0,j - i + 1) then CALL DISP('A = ', A, 'F0.3', ZEROAS = '0', ADVANCE = 'NO')
-!!       and CALL DISP('B = ', A, 'F0.3', ZEROAS = '.') will display:
+!! ZEROAS = zerostring  Supported for integer and real X (not complex)
+!!       Any element that compares equal to 0 will be displayed as
+!!       zerostring. If, for example, A is a 4 by 4 upper triangular
+!!       matrix with aij = 1/max(0,j - i + 1) then CALL DISP('A = ', A,
+!!       'F0.3', ZEROAS = '0', ADVANCE = 'NO') and CALL DISP('B = ', A,
+!!       'F0.3', ZEROAS = '.') will display:
 !!
 !!           A = 1.000  0.500  0.333  0.250   B = 1.000  0.500  0.333  0.250
 !!                   0  1.000  0.500  0.333        .     1.000  0.500  0.333
 !!                   0      0  1.000  0.500        .      .     1.000  0.500
 !!                   0      0      0  1.000        .      .      .     1.000
 !!
-!!       Notice that when zerostring contains a decimal point it is lined up with other decimal
-!!       points in the column. If zerostring has length 0, the default behavior of not treating zeros
-!!       specially is re-established, in case an earlier DISP_SET call has been used to set ZEROAS.
+!!       Notice that when zerostring contains a decimal point it is lined
+!!       up with other decimal points in the column. If zerostring has
+!!       length 0, the default behavior of not treating zeros specially is
+!!       re-established, in case an earlier DISP_SET call has been used to
+!!       set ZEROAS.
 !!
 !!
 !!##ASTERISK_UNIT AND NULL_UNIT
 !!
-!! As already mentioned in section 3.2 there are three special units, ASTERISK_UNIT = -3, PUTSTR_UNIT
-!! = -2 and NULL_UNIT = -1. These public named constants (parameters) are defined by M_display.
+!! As already mentioned in section 3.2 there are three special units,
+!! ASTERISK_UNIT = -3, PUTSTR_UNIT = -2 and NULL_UNIT = -1. These public
+!! named constants (parameters) are defined by M_display.
 !!
-!! Selecting ASTERISK_UNIT channels all output to the unit that WRITE(*,...) statements use. The
-!! ISO_FORTRAN_ENV intrinsic module of Fortran 2003 defines the named constant OUTPUT_UNIT and this
-!! may be used instead, unless its value is set to -2 by the compiler (which would clash with
-!!##PUTSTR_UNIT).
+!! Selecting ASTERISK_UNIT channels all output to the unit that
+!! WRITE(*,...) statements use. The ISO_FORTRAN_ENV intrinsic module of
+!! Fortran 2003 defines the named constant OUTPUT_UNIT and this may be
+!! used instead, unless its value is set to -2 by the compiler (which would
+!! clash with PUTSTR_UNIT).
 !!
-!! Selecting NULL_UNIT causes all output via DISP to be discarded. This feature makes it simple to
-!! turn the output on and off, which may be useful for debugging and testing purposes. If UNIT = U is
-!! specified in all DISP-calls, it is enough to change the value of U to -1 to turn off output.
+!! Selecting NULL_UNIT causes all output via DISP to be discarded. This
+!! feature makes it simple to turn the output on and off, which may be
+!! useful for debugging and testing purposes. If UNIT = U is specified
+!! in all DISP-calls, it is enough to change the value of U to -1 to turn
+!! off output.
 !!
 !!
 !! PUTSTR_UNIT: Output with user written subroutines
 !!
-!! One of the purposes of the PUTSTR_UNIT is to make displaying possible in situations where ordinary
-!! print- and write-statements do not work. This is for example the case in Matlab mex-files (in fact
-!! the execution of a write statement on the asterisk unit crashes Matlab). To use the PUTSTR_UNIT it
-!! is necessary to write two subroutines with interfaces:
+!! One of the purposes of the PUTSTR_UNIT is to make displaying possible in
+!! situations where ordinary print- and write-statements do not work. This
+!! is for example the case in Matlab mex-files (in fact the execution
+!! of a write statement on the asterisk unit crashes Matlab). To use the
+!! PUTSTR_UNIT it is necessary to write two subroutines with interfaces:
 !!
 !!       SUBROUTINE PUTSTR(S)
 !!       CHARACTER(*), INTENT(IN) :: S
 !!
 !!       SUBROUTINE PUTNL()
 !!
-!! The first of these should output the string S, and the second one should advance output to the
-!! next line. These subroutines should be placed in a module PUTSTRMODULE as explained in section 2.
-!! The module should also define a named constant DEFAULT_UNIT, which could be set to -2 to make the
-!! PUTSTR_UNIT default. An example that works with g95 and Matlab mex-files is:
+!! The first of these should output the string S, and the second one should
+!! advance output to the next line. These subroutines should be placed
+!! in a module PUTSTRMODULE as explained in section 2.  The module should
+!! also define a named constant DEFAULT_UNIT, which could be set to -2 to
+!! make the PUTSTR_UNIT default. An example that works with g95 and Matlab
+!! mex-files is:
 !!
 !!       module putstrmodule
 !!         integer, parameter :: default_unit = -2
@@ -1573,19 +1621,21 @@ MODULE M_display
 !!
 !!       end module putstrmodule
 !!
-!! At the beginning of the file M_display.f90 there is a slightly longer version which works with
-!! both g95 and gfortran. Testing this module is discussed in section 6.2 below.
-!!
+!! At the beginning of the file M_display.f90 there is a slightly longer
+!! version which works with both g95 and gfortran. Testing this module is
+!! discussed in section 6.2 below.
 !!
 !!##USING W=0 EDITING
 !!
-!! The Fortran standard stipulates that writing a single element with I0 editing results in the
-!! smallest field width that accommodates the value, and the same applies to B0, O0, Z0 and F0.d
-!! editing. With DISP, the width of a displayed column will be the width of the widest field in the
-!! column, and each element is right-adjusted in the column. This gives exactly the same output as
-!! using TRIM='yes' and a specified field width bigger than the largest occurring. Note that with
-!! F0.d editing, there is no limit on the width of a column, but with Fw.d and TRIM='yes' any element
-!! wider than w will be displayed as w asterisks:
+!! The Fortran standard stipulates that writing a single element with
+!! I0 editing results in the smallest field width that accommodates the
+!! value, and the same applies to B0, O0, Z0 and F0.d editing. With DISP,
+!! the width of a displayed column will be the width of the widest field
+!! in the column, and each element is right-adjusted in the column. This
+!! gives exactly the same output as using TRIM='yes' and a specified field
+!! width bigger than the largest occurring. Note that with F0.d editing,
+!! there is no limit on the width of a column, but with Fw.d and TRIM='yes'
+!! any element wider than w will be displayed as w asterisks:
 !!
 !!       ------------------F0.2------------------    -----F13.2, TRIM='yes'----
 !!       14.28  142857142857142857142857.14  0.47    14.28  *************  0.47
@@ -1594,11 +1644,12 @@ MODULE M_display
 !!
 !!##NOT-A-NUMBER AND INFINITE VALUES
 !!
-!! If the compiler supports not-a-number and infinite values as defined by the IEEE exceptional values
-!! of Fortran 2003, these are displayed as NaN, +Inf or Inf. A not-a-number value X is identified as
-!! being not equal to itself, and an infinite value is either greater than HUGE(X) or smaller than
-!! -HUGE(X). On all the compilers tried the sequence BIG=1E20; CALL DISP(EXP(BIG)) displays +Inf, and
-!! the program segment:
+!! If the compiler supports not-a-number and infinite values as defined by
+!! the IEEE exceptional values of Fortran 2003, these are displayed as NaN,
+!! +Inf or Inf. A not-a-number value X is identified as being not equal to
+!! itself, and an infinite value is either greater than HUGE(X) or smaller
+!! than -HUGE(X). On all the compilers tried the sequence BIG=1E20; CALL
+!! DISP(EXP(BIG)) displays +Inf, and the program segment:
 !!
 !!     > real :: z = 0, big = 1e20
 !!     > call disp([z, z/z, big, -exp(big)])
@@ -1610,9 +1661,12 @@ MODULE M_display
 !!     >         -Inf
 !!
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!   Based on dispmodule(3f),
+!!   "A Fortran 95 module for pretty-printing matrices".
+!!   Version number 1.02 6-Sept-2008,
+!!   Kristjan Jonasson,
+!!   Dept. of Computer Science,
+!!   University of Iceland (jonasson@hi.is).
   interface disp
     module procedure disp_scalar_int, disp_title_scalar_int,   &
                      disp_vector_int, disp_title_vector_int,   &
@@ -1660,16 +1714,17 @@ CONTAINS
 !!
 !!##DESCRIPTION
 !!
-!! The subroutine DISP_SET may be used to change default values of all the arguments of DISP except
-!! TITLE, X, FMT and LBOUND. In addition the default separator between items that are displayed
-!! side-by-side (using ADVANCE='no') may be changed with the MATSEP argument.
-!!
+!! The subroutine DISP_SET may be used to change default values of all
+!! the arguments of DISP except TITLE, X, FMT and LBOUND. In addition the
+!! default separator between items that are displayed side-by-side (using
+!! ADVANCE='no') may be changed with the MATSEP argument.
 !!
 !!##THE DERIVED TYPE DISP_SETTINGS
 !!
-!! M_display contains the following definition of the data type DISP_SETTINGS.
+!! M_display contains the following definition of the data type
+!!##DISP_SETTINGS.
 !!
-!!       TYPE DISP_SETTINGS
+!!       type disp_settings
 !!         character(3)  :: advance   = 'YES'
 !!         character(9)  :: matsep    = '   '
 !!         character(3)  :: orient    = 'COL'
@@ -1682,38 +1737,40 @@ CONTAINS
 !!         integer       :: seplen    = 2
 !!         integer       :: unit      = -3
 !!         integer       :: zaslen    = 0
-!!       END TYPE DISP_SETTINGS
+!!       end type disp_settings
 !!
-!! Structures of type DISP_SETTINGS may be used to save and later restore format control settings of
-!! DISP. As shown, new variables of this type will automatically have default values for all
-!! components.
+!! Structures of type DISP_SETTINGS may be used to save and later restore
+!! format control settings of DISP. As shown, new variables of this type
+!! will automatically have default values for all components.
 !!
 !!
 !!##CALLING SYNTAX FOR DISP_SET
 !!
 !! There are two ways to call DISP_SET:
 !!
-!!       CALL DISP_SET(SETTINGS)
-!!       CALL DISP_SET(ADVANCE, DIGMAX, MATSEP, ORIENT, SEP, STYLE, UNIT, ZEROAS)
+!!       call disp_set(settings)
+!!       call disp_set(advance, digmax, matsep, orient, sep, style, unit, zeroas)
 !!
-!! Both calls change the default format control used in subsequent calls to DISP. In the first call,
-!! SETTINGS is of type DISP_SETTINGS and the default values for all arguments is changed. In the
-!! second call all the arguments are optional. If an argument is absent the corresponding default
-!! setting is not changed. An example call is
+!! Both calls change the default format control used in subsequent calls
+!! to DISP. In the first call, SETTINGS is of type DISP_SETTINGS and the
+!! default values for all arguments is changed. In the second call all
+!! the arguments are optional. If an argument is absent the corresponding
+!! default setting is not changed. An example call is
 !!
-!!       CALL DISP_SET(STYLE = 'PAD', SEP = ' ').
+!!       call disp_set(style = 'pad', sep = ' ').
 !!
-!! The effect is that titles will be written padded above matrices, and matrix column will be
-!! separated by one blank. The type and purpose of all the arguments except MATSEP has been
-!! described in section 3.2.
+!! The effect is that titles will be written padded above matrices, and
+!! matrix column will be separated by one blank. The type and purpose of
+!! all the arguments except MATSEP has been described in section 3.2.
 !!
-!! MATSEP = ms  Specifies a character string of length <= 9 that is written out between items
-!!              (matrices) when they are displayed side-by-side. An example is:
+!! MATSEP = ms  Specifies a character string of length <= 9 that is written
+!!              out between items (matrices) when they are displayed
+!!              side-by-side. An example is:
 !!
-!!                   CALL DISP(X, ADVANCE='NO')
-!!                   CALL DISP(Y, ADVANCE='NO')
-!!                   CALL DISP_SET(MATSEP=' | ')
-!!                   CALL DISP(Z, ADVANCE='YES')
+!!                   call disp(x, advance='no')
+!!                   call disp(y, advance='no')
+!!                   call disp_set(matsep=' | ')
+!!                   call disp(z, advance='yes')
 !!
 !!              The output from these calls might be:
 !!
@@ -1721,12 +1778,15 @@ CONTAINS
 !!                    9.6 | 13.0 | 3
 !!                   -2.0 |  4.0 | 4
 !!
-!!              Note that MATSEP affects the separation of all items that have been placed in the
-!!              output queue of the unit being displayed on.
+!!              Note that MATSEP affects the separation of all items that
+!!              have been placed in the output queue of the unit being
+!!              displayed on.
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!   Based on dispmodule(3f),
+!!   "A Fortran 95 module for pretty-printing matrices".
+!!   Version number 1.02 6-Sept-2008,
+!!   Kristjan Jonasson, Dept. of Computer Science,
+!!   University of Iceland (jonasson@hi.is).
   subroutine disp_set(advance, digmax, matsep, orient, sep, style, unit, zeroas)
     ! Change display settings according to individual parameters
     character(*), optional, intent(in) :: advance, sep, matsep, orient, style, zeroas
@@ -1749,13 +1809,15 @@ CONTAINS
 !!    disp_set_factory(3f) - [M_display] set DISP(3f) output back to original defaults
 !!
 !!##DESCRIPTION
-!! The subroutine disp_set_factory (which has no arguments) may be called to restore all
-!! settings of DISP(3f) to the original default values.
+!!    The subroutine disp_set_factory (which has no arguments) may be called
+!!    to restore all settings of DISP(3f) to the original default values.
 !!
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!   Based on dispmodule(3f),
+!!   "A Fortran 95 module for pretty-printing matrices".
+!!   Version number 1.02 6-Sept-2008,
+!!   Kristjan Jonasson,
+!!   Dept. of Computer Science, University of Iceland (jonasson@hi.is).
   subroutine disp_set_factory()
     ! Change display settings to the original default
     DEFSET = FACTORY_SETTINGS
@@ -1779,71 +1841,77 @@ CONTAINS
 !!
 !!##DESCRIPTION
 !!
-!! The subroutine TOSTRING_SET has five arguments, all of which are optional. Argument
-!! association will normally be realized using argument keywords, e.g. CALL
-!! TOSTRING_SET(SEP='; '). The examples in section 5.4 clarify how to use this subroutine. The five
-!! arguments are:
+!! The subroutine TOSTRING_SET has five arguments, all of which are
+!! optional. Argument association will normally be realized using argument
+!! keywords, e.g. CALL TOSTRING_SET(SEP='; '). The examples in section 5.4
+!! clarify how to use this subroutine. The five arguments are:
 !!
-!! SEP     Character string used to separate elements of displayed vectors. Original default value is
-!!         ', '.
+!! SEP     Character string used to separate elements of displayed
+!!         vectors. Original default value is ', '.
 !!
-!! RFMT    Character string containing default edit descriptor to use to display real items. The
-!!         original default value is '1PG12.5'
+!! RFMT    Character string containing default edit descriptor to use to
+!!         display real items. The original default value is '1PG12.5'
 !!
-!! IFMT    Character string containing default edit descriptor to use to display integer items. The
-!!         original default value is 'I0'.
+!! IFMT    Character string containing default edit descriptor to use to
+!!         display integer items. The original default value is 'I0'.
 !!
-!! TRIMB   Controls whether leading and trailing blanks are trimmed from individual displayed
-!!         elements. Possible values are 'YES' (to trim blanks) and 'NO' (for no trimming). Default
-!!         is 'YES'.
+!! TRIMB   Controls whether leading and trailing blanks are trimmed from
+!!         individual displayed elements. Possible values are 'YES'
+!!         (to trim blanks) and 'NO' (for no trimming). Default is 'YES'.
 !!
-!! TRIMZ   Controls whether trailing zeros are trimmed from the fractional part of displayed items.
-!!         Possible values are 'NONE' (for no zero trimming), 'G' (to trim fractional trailing zeros
-!!         only when G editing is used), and 'ALL' (to trim zeros with all types of editing). Trailing
-!!         decimal points are also removed when zero-trimming is active. Default value is 'G'.
+!! TRIMZ   Controls whether trailing zeros are trimmed from the fractional
+!!         part of displayed items.  Possible values are 'NONE' (for no
+!!         zero trimming), 'G' (to trim fractional trailing zeros only when
+!!         G editing is used), and 'ALL' (to trim zeros with all types
+!!         of editing). Trailing decimal points are also removed when
+!!         zero-trimming is active. Default value is 'G'.
 !!
 !!##EXAMPLES
 !!
 !!
-!! When the original (factory) defaults are in effect, the result of invoking TOSTRING will usually
-!! be as follows.
+!! When the original (factory) defaults are in effect, the result of invoking
+!! TOSTRING will usually be as follows.
 !!
-!!       Invocation                             Returned String
-!!       ----------                             ---------------
-!!       tostring(atan(1.0))                    '0.785398'
-!!       tostring(exp([-3.,-1.,0.,1.]))         '4.97871E-02, 0.36788, 1, 2.7183'
-!!       tostring(real([(i,i=1,5)])**8)         '1, 256, 6561, 65536, 3.90625E+05'
-!!       tostring([1.23456,1.2300,1.23456e6])   '1.2346, 1.23, 1.23456E+06'
-!!       tostring(real([(i,i=1,5)])**8,'f0.1')  '1.0, 256.0, 6561.0, 65536.0, 390625.0'
-!!       tostring(real([(i,i=1,5)])**8,'f6.1')  '1.0, 256.0, 6561.0, ******, ******'
-!!       tostring([1200000.,-1.2e-9])           '1.2E+06, -1.2E-09'
-!!       !
-!!       tostring(1.200d103)                    '1.2+103'
-!!       tostring([1.1d0,2.2d10,3.3d20])        '1.1E+00, 2.2E+10, 3.3E+20'
-!!       !
-!!       tostring(-77)                          '-77'
-!!       tostring([(i,i=-3,3)]**11)             '-177147, -2048, -1, 0, 1, 2048, 177147'
-!!       tostring([(i,i=-3,3)]**11, 'i7')       '-177147, -2048, -1, 0, 1, 2048, 177147'
-!!       tostring([(i,i=-3,3)]**11, 'i4')       '****, ****, -1, 0, 1, 2048, ****'
-!!       !
-!!       tostring((1,3)/(4,2))                  '0.5 + 0.5i'
-!!       tostring(cmplx([-1,-2])**0.25)       '0.70711 + 0.70711i, 0.8409 + 0.8409i'
-!!       !
-!!       tostring([.true., .false., .false.])   'T, F, F'
-!!       tostring(.true., 'L2')                 'T'
+!!     Invocation                             Returned String
+!!     ----------                             ---------------
+!!     tostring(atan(1.0))                    '0.785398'
+!!     tostring(exp([-3.,-1.,0.,1.]))         '4.97871E-02, 0.36788, 1, 2.7183'
+!!     tostring(real([(i,i=1,5)])**8)         '1, 256, 6561, 65536, 3.90625E+05'
+!!     tostring([1.23456,1.2300,1.23456e6])   '1.2346, 1.23, 1.23456E+06'
+!!     tostring(real([(i,i=1,5)])**8,'f0.1')  '1.0, 256.0, 6561.0, 65536.0, 390625.0'
+!!     tostring(real([(i,i=1,5)])**8,'f6.1')  '1.0, 256.0, 6561.0, ******, ******'
+!!     tostring([1200000.,-1.2e-9])           '1.2E+06, -1.2E-09'
+!!     !
+!!     tostring(1.200d103)                    '1.2+103'
+!!     tostring([1.1d0,2.2d10,3.3d20])        '1.1E+00, 2.2E+10, 3.3E+20'
+!!     !
+!!     tostring(-77)                          '-77'
+!!     tostring([(i,i=-3,3)]**11)             '-177147, -2048, -1, 0, 1, 2048, 177147'
+!!     tostring([(i,i=-3,3)]**11, 'i7')       '-177147, -2048, -1, 0, 1, 2048, 177147'
+!!     tostring([(i,i=-3,3)]**11, 'i4')       '****, ****, -1, 0, 1, 2048, ****'
+!!     !
+!!     tostring((1,3)/(4,2))                  '0.5 + 0.5i'
+!!     tostring(cmplx([-1,-2])**0.25)       '0.70711 + 0.70711i, 0.8409 + 0.8409i'
+!!     !
+!!     tostring([.true., .false., .false.])   'T, F, F'
+!!     tostring(.true., 'L2')                 'T'
 !!
-!! The returned strings may be slightly different from the ones shown, because some compilers (at
-!! least some versions of g95) will produce one more decimal place in a few cases, and because the
-!! Fortran standard allows G editing to give exponent fields in the form 0dd instead of Edd. The
-!! examples make use of brackets to construct vector constants (a Fortran 2003 feature). If the
-!! compiler being used does not support this, [ and ] must be used instead. Notice that trimming is
-!! on by default so there is not much purpose in specifying the format for integers and logicals.
-!! Notice also that (usually) 5 significant digits are displayed when the default G editing results
-!! in F edited output, but 6 digits for the numbers of small or large magnitude, displayed with E
-!! editing. This discrepancy is present in the Fortran standard; the presence of the scale factor 1P
-!! in the edit descriptor increases the number of displayed significant digits.
+!! The returned strings may be slightly different from the ones shown,
+!! because some compilers (at least some versions of g95) will produce one
+!! more decimal place in a few cases, and because the Fortran standard allows
+!! G editing to give exponent fields in the form 0dd instead of Edd. The
+!! examples make use of brackets to construct vector constants (a Fortran
+!! 2003 feature). If the compiler being used does not support this, [ and
+!! ] must be used instead. Notice that trimming is on by default so there
+!! is not much purpose in specifying the format for integers and logicals.
+!! Notice also that (usually) 5 significant digits are displayed when the
+!! default G editing results in F edited output, but 6 digits for the numbers
+!! of small or large magnitude, displayed with E editing. This discrepancy
+!! is present in the Fortran standard; the presence of the scale factor 1P in
+!! the edit descriptor increases the number of displayed significant digits.
 !!
-!! Examples of using TOSTRING_SET follow (again the returned string may be slightly different).
+!! Examples of using TOSTRING_SET follow (again the returned string may be
+!! slightly different).
 !!
 !!       Invocation                              Returned String
 !!       ----------                              ---------------
@@ -1872,9 +1940,11 @@ CONTAINS
 !!       call tostring_set_factory()
 !!
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!   Based on dispmodule(3f),
+!!   "A Fortran 95 module for pretty-printing matrices".
+!!   Version number 1.02 6-Sept-2008,
+!!   Kristjan Jonasson, Dept. of Computer Science,
+!!   University of Iceland (jonasson@hi.is).
   subroutine tostring_set(sep, rfmt, ifmt, trimb, trimz)
     character(*), optional, intent(in) :: sep, rfmt, ifmt, trimb, trimz
     if (present(sep))    tosset % sep    = upper(sep)
@@ -1890,17 +1960,21 @@ CONTAINS
 !===================================================================================================================================
 !>
 !!##NAME
-!!    tostring_set_factory(3f) - [M_display] set TOSTRING(3f) output back to original defaults
+!!    tostring_set_factory(3f) - [M_display] set TOSTRING(3f) output back
+!!    to original defaults
 !!
 !!##DESCRIPTION
-!! The subroutine TOSTRING_SET_FACTORY (which has no arguments) may be called to restore all
-!! settings of TOSTRING(3f) to the original default values (the factory defaults): SEP=',', RFMT =
-!! '1PG12.5', IFMT= 'I0', TRIMB='YES' and TRIMZ='G'.
+!! The subroutine TOSTRING_SET_FACTORY (which has no arguments) may be
+!! called to restore all settings of TOSTRING(3f) to the original default
+!! values (the factory defaults): SEP=',', RFMT = '1PG12.5', IFMT= 'I0',
+!! TRIMB='YES' and TRIMZ='G'.
 !!
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!   Based on dispmodule(3f),
+!!   "A Fortran 95 module for pretty-printing matrices".
+!!   Version number 1.02 6-Sept-2008,
+!!   Kristjan Jonasson, Dept. of Computer Science,
+!!   University of Iceland (jonasson@hi.is).
   subroutine tostring_set_factory()
     logical dummy
     dummy = .false.
@@ -1920,13 +1994,15 @@ CONTAINS
 !>
 !!##NAME
 !!
-!! disp_get(3f) - [M_display] return default settings in a structure of DISP(3f) settings
+!! disp_get(3f) - [M_display] return default settings in a structure of
+!!                DISP(3f) settings
 !!
 !!##DESCRIPTION
 !!
-!! The argumentless function DISP_GET returns the current default settings in a structure of type
-!! DISP_SETTINGS. If a subroutine changes the default settings with DISP_SET it is possible to save
-!! the settings that are in effect when the routine is entered, and restore these settings before
+!! The argumentless function DISP_GET returns the current default settings
+!! in a structure of type DISP_SETTINGS. If a subroutine changes the default
+!! settings with DISP_SET it is possible to save the settings that are in
+!! effect when the routine is entered, and restore these settings before
 !! returning from the routine.
 !!
 !!##EXAMPLE
@@ -1966,9 +2042,12 @@ CONTAINS
 !!      7.000,4.000,8.220
 !!
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!     Based on dispmodule(3f),
+!!     "A Fortran 95 module for pretty-printing matrices".
+!!     Version number 1.02 6-Sept-2008,
+!!     Kristjan Jonasson,
+!!     Dept. of Computer Science,
+!!     University of Iceland (jonasson@hi.is).
 function disp_get() result(defs)
 ! Return current display settings
 type(disp_settings) :: defs
@@ -2206,51 +2285,58 @@ end subroutine getwid_dint
 !!       write(s, *) 'The square of', x, 'is', x*x
 !!       print *, trim(s)
 !!
-!! but this is cumbersome, and also there is the disadvantage that the result is compiler-dependent.
-!! M_display has a function, TOSTRING, which overcomes this disadvantage and offers additional
-!! flexibility. With x = 1.5 the following statement will produce the same output as Matlab and Java
-!! give:
+!! but this is cumbersome, and also there is the disadvantage that the
+!! result is compiler-dependent.  M_display has a function, TOSTRING, which
+!! overcomes this disadvantage and offers additional flexibility. With x =
+!! 1.5 the following statement will produce the same output as Matlab and
+!! Java give:
 !!
 !!       CALL DISP('The square of '//TOSTRING(X)//' is '//TOSTRING(X*X))
 !!
-!! TOSTRING accepts integer, logical or real scalars or vectors. The subroutine TOSTRING_SET may be
-!! used to change settings for TOSTRING.
-!!
+!! TOSTRING accepts integer, logical or real scalars or vectors. The
+!! subroutine TOSTRING_SET may be used to change settings for TOSTRING.
 !!
 !!##THE FUNCTION TOSTRING
 !!
-!! Apart from the item to be turned into a string, an edit descriptor to use can optionally be
-!! supplied as the second argument to TOSTRING. The two ways to invoke TOSTRING are:
+!! Apart from the item to be turned into a string, an edit descriptor to
+!! use can optionally be supplied as the second argument to TOSTRING. The
+!! two ways to invoke TOSTRING are:
 !!
 !!       TOSTRING(X)
 !!       TOSTRING(X, FMT)
 !!
-!! These invocations return a character string representing the value of the argument X. When X is a
-!! vector individual elements are separated by a string, with the original (or factory) default value
-!! ", ". By (original) default G editing is used to convert real numbers, I editing integers, and
-!! blanks are trimmed from (each element of) X, both from the left and the right. In addition
-!! trailing zeroes are trimmed from the fractional part of real X-elements, as well as a trailing
-!! decimal point. The separating string, trimming behavior, and default editing may be changed by
-!! calling TOSTRING_SET
+!! These invocations return a character string representing the value of
+!! the argument X. When X is a vector individual elements are separated
+!! by a string, with the original (or factory) default value ", ". By
+!! (original) default G editing is used to convert real numbers, I editing
+!! integers, and blanks are trimmed from (each element of) X, both from
+!! the left and the right. In addition trailing zeroes are trimmed from
+!! the fractional part of real X-elements, as well as a trailing decimal
+!! point. The separating string, trimming behavior, and default editing
+!! may be changed by calling TOSTRING_SET
 !!
-!! X     The item to be changed to a string. X may be a scalar or a vector (i.e. of rank 0 or 1) and
-!!       of one of the following kinds:
+!! X     The item to be changed to a string. X may be a scalar or a vector
+!!       (i.e. of rank 0 or 1) and of one of the following kinds:
 !!
 !!         default integer
 !!         default real (i.e. real(1.0), single precision)
 !!         double precision real (i.e. real(1d0))
 !!         default logical
 !!
-!! FMT   Character string with an edit descriptor used to format each element of X. The possible edit
-!!       descriptors are given in section 3.1, except that A and Aw can of course not be used. When
-!!       FMT is absent, a default edit descriptor is used. The default may be set by calling
-!!       TOSTRING_SET but the original (or factory) defaults are I0 for integers, L1 for logicals and
-!!       1PG12.5 for reals.
+!! FMT   Character string with an edit descriptor used to format each
+!!       element of X. The possible edit descriptors are given in section
+!!       3.1, except that A and Aw can of course not be used. When FMT is
+!!       absent, a default edit descriptor is used. The default may be set
+!!       by calling TOSTRING_SET but the original (or factory) defaults
+!!       are I0 for integers, L1 for logicals and 1PG12.5 for reals.
 !!
 !!##AUTHOR
-!!   Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-!!   Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-!!   Iceland (jonasson@hi.is).
+!!     Based on dispmodule(3f),
+!!     "A Fortran 95 module for pretty-printing matrices".
+!!     Version number 1.02 6-Sept-2008,
+!!     Kristjan Jonasson,
+!!     Dept. of Computer Science,
+!!     University of Iceland (jonasson@hi.is).
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3691,812 +3777,6 @@ end subroutine getwid_dint
 
   ! output negative values as (val) instead of -val, which is common in financial tables
 
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_display()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-!! setup
-   call test_disp_get()
-   call test_disp_m_cpld()
-   call test_disp_m_cplx()
-   call test_disp_m_dble()
-   call test_disp_m_dchr()
-   call test_disp_m_dlog()
-   call test_disp_m_sngl()
-   call test_disp_matrix_int()
-   call test_disp_s_cpld()
-   call test_disp_s_cplx()
-   call test_disp_s_dble()
-   call test_disp_s_dlog()
-   call test_disp_s_sngl()
-   call test_disp_scalar_int()
-   call test_disp_set()
-   call test_disp_set_ds()
-   call test_disp_set_factory()
-   call test_disp_title_matrix_int()
-   call test_disp_title_scalar_int()
-   call test_disp_title_vector_int()
-   call test_disp_tm_cpld()
-   call test_disp_tm_cplx()
-   call test_disp_tm_dble()
-   call test_disp_tm_dchr()
-   call test_disp_tm_dlog()
-   call test_disp_tm_sngl()
-   call test_disp_ts_cpld()
-   call test_disp_ts_cplx()
-   call test_disp_ts_dble()
-   call test_disp_ts_dchr()
-   call test_disp_ts_dlog()
-   call test_disp_ts_sngl()
-   call test_disp_tv_cpld()
-   call test_disp_tv_cplx()
-   call test_disp_tv_dble()
-   call test_disp_tv_dchr()
-   call test_disp_tv_dlog()
-   call test_disp_tv_sngl()
-   call test_disp_v_cpld()
-   call test_disp_v_cplx()
-   call test_disp_v_dble()
-   call test_disp_v_dchr()
-   call test_disp_v_dlog()
-   call test_disp_v_sngl()
-   call test_disp_vector_int()
-   call test_len_f_cpld()
-   call test_len_f_cplx()
-   call test_len_f_dble()
-   call test_len_f_dint()
-   call test_len_f_dlog()
-   call test_len_f_sngl()
-   call test_len_s_cpld()
-   call test_len_s_cplx()
-   call test_tostring_cpld()
-   call test_tostring_cplx()
-   call test_tostring_dble()
-   call test_tostring_dint()
-   call test_tostring_dlog()
-   call test_tostring_f_cpld()
-   call test_tostring_f_cplx()
-   call test_tostring_f_dble()
-   call test_tostring_f_dint()
-   call test_tostring_f_dlog()
-   call test_tostring_f_sngl()
-   call test_tostring_s_cpld()
-   call test_tostring_s_cplx()
-   call test_tostring_s_dble()
-   call test_tostring_s_dint()
-   call test_tostring_s_dlog()
-   call test_tostring_s_sngl()
-   call test_tostring_set()
-   call test_tostring_set_factory()
-   call test_tostring_sf_cpld()
-   call test_tostring_sf_cplx()
-   call test_tostring_sf_dble()
-   call test_tostring_sf_dint()
-   call test_tostring_sf_dlog()
-   call test_tostring_sf_sngl()
-   call test_tostring_sngl()
-   call test_check_settings()
-   call test_copyseptobox()
-   call test_copytobox()
-   call test_disp_errmsg()
-   call test_find_editdesc_real()
-   call test_finishbox()
-   call test_get_se()
-   call test_nnblk()
-   call test_preparebox()
-   call test_readfmt()
-   call test_replace_w()
-   call test_replace_zeronaninf()
-   call test_tostring_check_settings()
-   call test_tostring_get()
-   call test_tostring_get_complex()
-   call test_trim_real()
-   call test_trim_s_real()
-   call test_upper()
-   call test_putnl()
-   call test_putstr()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_get()
-
-   call unit_check_start('disp_get',msg='')
-   !!call unit_check('disp_get', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_get',msg='')
-end subroutine test_disp_get
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_m_cpld()
-
-   call unit_check_start('disp_m_cpld',msg='')
-   !!call unit_check('disp_m_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_m_cpld',msg='')
-end subroutine test_disp_m_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_m_cplx()
-
-   call unit_check_start('disp_m_cplx',msg='')
-   !!call unit_check('disp_m_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_m_cplx',msg='')
-end subroutine test_disp_m_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_m_dble()
-
-   call unit_check_start('disp_m_dble',msg='')
-   !!call unit_check('disp_m_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_m_dble',msg='')
-end subroutine test_disp_m_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_m_dchr()
-
-   call unit_check_start('disp_m_dchr',msg='')
-   !!call unit_check('disp_m_dchr', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_m_dchr',msg='')
-end subroutine test_disp_m_dchr
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_m_dlog()
-
-   call unit_check_start('disp_m_dlog',msg='')
-   !!call unit_check('disp_m_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_m_dlog',msg='')
-end subroutine test_disp_m_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_m_sngl()
-
-   call unit_check_start('disp_m_sngl',msg='')
-   !!call unit_check('disp_m_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_m_sngl',msg='')
-end subroutine test_disp_m_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_matrix_int()
-
-   call unit_check_start('disp_matrix_int',msg='')
-   !!call unit_check('disp_matrix_int', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_matrix_int',msg='')
-end subroutine test_disp_matrix_int
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_s_cpld()
-
-   call unit_check_start('disp_s_cpld',msg='')
-   !!call unit_check('disp_s_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_s_cpld',msg='')
-end subroutine test_disp_s_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_s_cplx()
-
-   call unit_check_start('disp_s_cplx',msg='')
-   !!call unit_check('disp_s_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_s_cplx',msg='')
-end subroutine test_disp_s_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_s_dble()
-
-   call unit_check_start('disp_s_dble',msg='')
-   !!call unit_check('disp_s_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_s_dble',msg='')
-end subroutine test_disp_s_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_s_dlog()
-
-   call unit_check_start('disp_s_dlog',msg='')
-   !!call unit_check('disp_s_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_s_dlog',msg='')
-end subroutine test_disp_s_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_s_sngl()
-
-   call unit_check_start('disp_s_sngl',msg='')
-   !!call unit_check('disp_s_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_s_sngl',msg='')
-end subroutine test_disp_s_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_scalar_int()
-
-   call unit_check_start('disp_scalar_int',msg='')
-   !!call unit_check('disp_scalar_int', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_scalar_int',msg='')
-end subroutine test_disp_scalar_int
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_set()
-
-   call unit_check_start('disp_set',msg='')
-   !!call unit_check('disp_set', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_set',msg='')
-end subroutine test_disp_set
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_set_ds()
-
-   call unit_check_start('disp_set_ds',msg='')
-   !!call unit_check('disp_set_ds', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_set_ds',msg='')
-end subroutine test_disp_set_ds
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_set_factory()
-
-   call unit_check_start('disp_set_factory',msg='')
-   !!call unit_check('disp_set_factory', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_set_factory',msg='')
-end subroutine test_disp_set_factory
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_title_matrix_int()
-
-   call unit_check_start('disp_title_matrix_int',msg='')
-   !!call unit_check('disp_title_matrix_int', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_title_matrix_int',msg='')
-end subroutine test_disp_title_matrix_int
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_title_scalar_int()
-
-   call unit_check_start('disp_title_scalar_int',msg='')
-   !!call unit_check('disp_title_scalar_int', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_title_scalar_int',msg='')
-end subroutine test_disp_title_scalar_int
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_title_vector_int()
-
-   call unit_check_start('disp_title_vector_int',msg='')
-   !!call unit_check('disp_title_vector_int', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_title_vector_int',msg='')
-end subroutine test_disp_title_vector_int
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tm_cpld()
-
-   call unit_check_start('disp_tm_cpld',msg='')
-   !!call unit_check('disp_tm_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tm_cpld',msg='')
-end subroutine test_disp_tm_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tm_cplx()
-
-   call unit_check_start('disp_tm_cplx',msg='')
-   !!call unit_check('disp_tm_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tm_cplx',msg='')
-end subroutine test_disp_tm_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tm_dble()
-
-   call unit_check_start('disp_tm_dble',msg='')
-   !!call unit_check('disp_tm_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tm_dble',msg='')
-end subroutine test_disp_tm_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tm_dchr()
-
-   call unit_check_start('disp_tm_dchr',msg='')
-   !!call unit_check('disp_tm_dchr', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tm_dchr',msg='')
-end subroutine test_disp_tm_dchr
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tm_dlog()
-
-   call unit_check_start('disp_tm_dlog',msg='')
-   !!call unit_check('disp_tm_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tm_dlog',msg='')
-end subroutine test_disp_tm_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tm_sngl()
-
-   call unit_check_start('disp_tm_sngl',msg='')
-   !!call unit_check('disp_tm_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tm_sngl',msg='')
-end subroutine test_disp_tm_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_ts_cpld()
-
-   call unit_check_start('disp_ts_cpld',msg='')
-   !!call unit_check('disp_ts_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_ts_cpld',msg='')
-end subroutine test_disp_ts_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_ts_cplx()
-
-   call unit_check_start('disp_ts_cplx',msg='')
-   !!call unit_check('disp_ts_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_ts_cplx',msg='')
-end subroutine test_disp_ts_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_ts_dble()
-
-   call unit_check_start('disp_ts_dble',msg='')
-   !!call unit_check('disp_ts_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_ts_dble',msg='')
-end subroutine test_disp_ts_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_ts_dchr()
-
-   call unit_check_start('disp_ts_dchr',msg='')
-   !!call unit_check('disp_ts_dchr', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_ts_dchr',msg='')
-end subroutine test_disp_ts_dchr
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_ts_dlog()
-
-   call unit_check_start('disp_ts_dlog',msg='')
-   !!call unit_check('disp_ts_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_ts_dlog',msg='')
-end subroutine test_disp_ts_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_ts_sngl()
-
-   call unit_check_start('disp_ts_sngl',msg='')
-   !!call unit_check('disp_ts_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_ts_sngl',msg='')
-end subroutine test_disp_ts_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tv_cpld()
-
-   call unit_check_start('disp_tv_cpld',msg='')
-   !!call unit_check('disp_tv_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tv_cpld',msg='')
-end subroutine test_disp_tv_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tv_cplx()
-
-   call unit_check_start('disp_tv_cplx',msg='')
-   !!call unit_check('disp_tv_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tv_cplx',msg='')
-end subroutine test_disp_tv_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tv_dble()
-
-   call unit_check_start('disp_tv_dble',msg='')
-   !!call unit_check('disp_tv_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tv_dble',msg='')
-end subroutine test_disp_tv_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tv_dchr()
-
-   call unit_check_start('disp_tv_dchr',msg='')
-   !!call unit_check('disp_tv_dchr', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tv_dchr',msg='')
-end subroutine test_disp_tv_dchr
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tv_dlog()
-
-   call unit_check_start('disp_tv_dlog',msg='')
-   !!call unit_check('disp_tv_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tv_dlog',msg='')
-end subroutine test_disp_tv_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_tv_sngl()
-
-   call unit_check_start('disp_tv_sngl',msg='')
-   !!call unit_check('disp_tv_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_tv_sngl',msg='')
-end subroutine test_disp_tv_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_v_cpld()
-
-   call unit_check_start('disp_v_cpld',msg='')
-   !!call unit_check('disp_v_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_v_cpld',msg='')
-end subroutine test_disp_v_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_v_cplx()
-
-   call unit_check_start('disp_v_cplx',msg='')
-   !!call unit_check('disp_v_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_v_cplx',msg='')
-end subroutine test_disp_v_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_v_dble()
-
-   call unit_check_start('disp_v_dble',msg='')
-   !!call unit_check('disp_v_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_v_dble',msg='')
-end subroutine test_disp_v_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_v_dchr()
-
-   call unit_check_start('disp_v_dchr',msg='')
-   !!call unit_check('disp_v_dchr', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_v_dchr',msg='')
-end subroutine test_disp_v_dchr
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_v_dlog()
-
-   call unit_check_start('disp_v_dlog',msg='')
-   !!call unit_check('disp_v_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_v_dlog',msg='')
-end subroutine test_disp_v_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_v_sngl()
-
-   call unit_check_start('disp_v_sngl',msg='')
-   !!call unit_check('disp_v_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_v_sngl',msg='')
-end subroutine test_disp_v_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_vector_int()
-
-   call unit_check_start('disp_vector_int',msg='')
-   !!call unit_check('disp_vector_int', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_vector_int',msg='')
-end subroutine test_disp_vector_int
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_f_cpld()
-
-   call unit_check_start('len_f_cpld',msg='')
-   !!call unit_check('len_f_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('len_f_cpld',msg='')
-end subroutine test_len_f_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_f_cplx()
-
-   call unit_check_start('len_f_cplx',msg='')
-   !!call unit_check('len_f_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('len_f_cplx',msg='')
-end subroutine test_len_f_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_f_dble()
-
-   call unit_check_start('len_f_dble',msg='')
-   !!call unit_check('len_f_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('len_f_dble',msg='')
-end subroutine test_len_f_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_f_dint()
-
-   call unit_check_start('len_f_dint',msg='')
-   !!call unit_check('len_f_dint', 0.eq.0, 'checking',100)
-   call unit_check_done('len_f_dint',msg='')
-end subroutine test_len_f_dint
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_f_dlog()
-
-   call unit_check_start('len_f_dlog',msg='')
-   !!call unit_check('len_f_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('len_f_dlog',msg='')
-end subroutine test_len_f_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_f_sngl()
-
-   call unit_check_start('len_f_sngl',msg='')
-   !!call unit_check('len_f_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('len_f_sngl',msg='')
-end subroutine test_len_f_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_s_cpld()
-
-   call unit_check_start('len_s_cpld',msg='')
-   !!call unit_check('len_s_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('len_s_cpld',msg='')
-end subroutine test_len_s_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_len_s_cplx()
-
-   call unit_check_start('len_s_cplx',msg='')
-   !!call unit_check('len_s_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('len_s_cplx',msg='')
-end subroutine test_len_s_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_cpld()
-
-   call unit_check_start('tostring_cpld',msg='')
-   !!call unit_check('tostring_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_cpld',msg='')
-end subroutine test_tostring_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_cplx()
-
-   call unit_check_start('tostring_cplx',msg='')
-   !!call unit_check('tostring_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_cplx',msg='')
-end subroutine test_tostring_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_dble()
-
-   call unit_check_start('tostring_dble',msg='')
-   !!call unit_check('tostring_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_dble',msg='')
-end subroutine test_tostring_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_dint()
-
-   call unit_check_start('tostring_dint',msg='')
-   !!call unit_check('tostring_dint', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_dint',msg='')
-end subroutine test_tostring_dint
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_dlog()
-
-   call unit_check_start('tostring_dlog',msg='')
-   !!call unit_check('tostring_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_dlog',msg='')
-end subroutine test_tostring_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_f_cpld()
-
-   call unit_check_start('tostring_f_cpld',msg='')
-   !!call unit_check('tostring_f_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_f_cpld',msg='')
-end subroutine test_tostring_f_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_f_cplx()
-
-   call unit_check_start('tostring_f_cplx',msg='')
-   !!call unit_check('tostring_f_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_f_cplx',msg='')
-end subroutine test_tostring_f_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_f_dble()
-
-   call unit_check_start('tostring_f_dble',msg='')
-   !!call unit_check('tostring_f_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_f_dble',msg='')
-end subroutine test_tostring_f_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_f_dint()
-
-   call unit_check_start('tostring_f_dint',msg='')
-   !!call unit_check('tostring_f_dint', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_f_dint',msg='')
-end subroutine test_tostring_f_dint
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_f_dlog()
-
-   call unit_check_start('tostring_f_dlog',msg='')
-   !!call unit_check('tostring_f_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_f_dlog',msg='')
-end subroutine test_tostring_f_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_f_sngl()
-
-   call unit_check_start('tostring_f_sngl',msg='')
-   !!call unit_check('tostring_f_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_f_sngl',msg='')
-end subroutine test_tostring_f_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_s_cpld()
-
-   call unit_check_start('tostring_s_cpld',msg='')
-   !!call unit_check('tostring_s_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_s_cpld',msg='')
-end subroutine test_tostring_s_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_s_cplx()
-
-   call unit_check_start('tostring_s_cplx',msg='')
-   !!call unit_check('tostring_s_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_s_cplx',msg='')
-end subroutine test_tostring_s_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_s_dble()
-
-   call unit_check_start('tostring_s_dble',msg='')
-   !!call unit_check('tostring_s_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_s_dble',msg='')
-end subroutine test_tostring_s_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_s_dint()
-
-   call unit_check_start('tostring_s_dint',msg='')
-   !!call unit_check('tostring_s_dint', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_s_dint',msg='')
-end subroutine test_tostring_s_dint
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_s_dlog()
-
-   call unit_check_start('tostring_s_dlog',msg='')
-   !!call unit_check('tostring_s_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_s_dlog',msg='')
-end subroutine test_tostring_s_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_s_sngl()
-
-   call unit_check_start('tostring_s_sngl',msg='')
-   !!call unit_check('tostring_s_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_s_sngl',msg='')
-end subroutine test_tostring_s_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_set()
-
-   call unit_check_start('tostring_set',msg='')
-   !!call unit_check('tostring_set', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_set',msg='')
-end subroutine test_tostring_set
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_set_factory()
-
-   call unit_check_start('tostring_set_factory',msg='')
-   !!call unit_check('tostring_set_factory', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_set_factory',msg='')
-end subroutine test_tostring_set_factory
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_sf_cpld()
-
-   call unit_check_start('tostring_sf_cpld',msg='')
-   !!call unit_check('tostring_sf_cpld', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_sf_cpld',msg='')
-end subroutine test_tostring_sf_cpld
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_sf_cplx()
-
-   call unit_check_start('tostring_sf_cplx',msg='')
-   !!call unit_check('tostring_sf_cplx', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_sf_cplx',msg='')
-end subroutine test_tostring_sf_cplx
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_sf_dble()
-
-   call unit_check_start('tostring_sf_dble',msg='')
-   !!call unit_check('tostring_sf_dble', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_sf_dble',msg='')
-end subroutine test_tostring_sf_dble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_sf_dint()
-
-   call unit_check_start('tostring_sf_dint',msg='')
-   !!call unit_check('tostring_sf_dint', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_sf_dint',msg='')
-end subroutine test_tostring_sf_dint
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_sf_dlog()
-
-   call unit_check_start('tostring_sf_dlog',msg='')
-   !!call unit_check('tostring_sf_dlog', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_sf_dlog',msg='')
-end subroutine test_tostring_sf_dlog
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_sf_sngl()
-
-   call unit_check_start('tostring_sf_sngl',msg='')
-   !!call unit_check('tostring_sf_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_sf_sngl',msg='')
-end subroutine test_tostring_sf_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_sngl()
-
-   call unit_check_start('tostring_sngl',msg='')
-   !!call unit_check('tostring_sngl', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_sngl',msg='')
-end subroutine test_tostring_sngl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_check_settings()
-
-   call unit_check_start('check_settings',msg='')
-   !!call unit_check('check_settings', 0.eq.0, 'checking',100)
-   call unit_check_done('check_settings',msg='')
-end subroutine test_check_settings
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_copyseptobox()
-
-   call unit_check_start('copyseptobox',msg='')
-   !!call unit_check('copyseptobox', 0.eq.0, 'checking',100)
-   call unit_check_done('copyseptobox',msg='')
-end subroutine test_copyseptobox
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_copytobox()
-
-   call unit_check_start('copytobox',msg='')
-   !!call unit_check('copytobox', 0.eq.0, 'checking',100)
-   call unit_check_done('copytobox',msg='')
-end subroutine test_copytobox
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_disp_errmsg()
-
-   call unit_check_start('disp_errmsg',msg='')
-   !!call unit_check('disp_errmsg', 0.eq.0, 'checking',100)
-   call unit_check_done('disp_errmsg',msg='')
-end subroutine test_disp_errmsg
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_find_editdesc_real()
-
-   call unit_check_start('find_editdesc_real',msg='')
-   !!call unit_check('find_editdesc_real', 0.eq.0, 'checking',100)
-   call unit_check_done('find_editdesc_real',msg='')
-end subroutine test_find_editdesc_real
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_finishbox()
-
-   call unit_check_start('finishbox',msg='')
-   !!call unit_check('finishbox', 0.eq.0, 'checking',100)
-   call unit_check_done('finishbox',msg='')
-end subroutine test_finishbox
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_get_se()
-
-   call unit_check_start('get_se',msg='')
-   !!call unit_check('get_se', 0.eq.0, 'checking',100)
-   call unit_check_done('get_se',msg='')
-end subroutine test_get_se
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_nnblk()
-
-   call unit_check_start('nnblk',msg='')
-   !!call unit_check('nnblk', 0.eq.0, 'checking',100)
-   call unit_check_done('nnblk',msg='')
-end subroutine test_nnblk
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_preparebox()
-
-   call unit_check_start('preparebox',msg='')
-   !!call unit_check('preparebox', 0.eq.0, 'checking',100)
-   call unit_check_done('preparebox',msg='')
-end subroutine test_preparebox
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_readfmt()
-
-   call unit_check_start('readfmt',msg='')
-   !!call unit_check('readfmt', 0.eq.0, 'checking',100)
-   call unit_check_done('readfmt',msg='')
-end subroutine test_readfmt
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_replace_w()
-
-   call unit_check_start('replace_w',msg='')
-   !!call unit_check('replace_w', 0.eq.0, 'checking',100)
-   call unit_check_done('replace_w',msg='')
-end subroutine test_replace_w
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_replace_zeronaninf()
-
-   call unit_check_start('replace_zeronaninf',msg='')
-   !!call unit_check('replace_zeronaninf', 0.eq.0, 'checking',100)
-   call unit_check_done('replace_zeronaninf',msg='')
-end subroutine test_replace_zeronaninf
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_check_settings()
-
-   call unit_check_start('tostring_check_settings',msg='')
-   !!call unit_check('tostring_check_settings', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_check_settings',msg='')
-end subroutine test_tostring_check_settings
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_get()
-
-   call unit_check_start('tostring_get',msg='')
-   !!call unit_check('tostring_get', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_get',msg='')
-end subroutine test_tostring_get
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tostring_get_complex()
-
-   call unit_check_start('tostring_get_complex',msg='')
-   !!call unit_check('tostring_get_complex', 0.eq.0, 'checking',100)
-   call unit_check_done('tostring_get_complex',msg='')
-end subroutine test_tostring_get_complex
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_trim_real()
-
-   call unit_check_start('trim_real',msg='')
-   !!call unit_check('trim_real', 0.eq.0, 'checking',100)
-   call unit_check_done('trim_real',msg='')
-end subroutine test_trim_real
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_trim_s_real()
-
-   call unit_check_start('trim_s_real',msg='')
-   !!call unit_check('trim_s_real', 0.eq.0, 'checking',100)
-   call unit_check_done('trim_s_real',msg='')
-end subroutine test_trim_s_real
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_upper()
-
-   call unit_check_start('upper',msg='')
-   !!call unit_check('upper', 0.eq.0, 'checking',100)
-   call unit_check_done('upper',msg='')
-end subroutine test_upper
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_putnl()
-
-   call unit_check_start('putnl',msg='')
-   !!call unit_check('putnl', 0.eq.0, 'checking',100)
-   call unit_check_done('putnl',msg='')
-end subroutine test_putnl
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_putstr()
-
-   call unit_check_start('putstr',msg='')
-   !!call unit_check('putstr', 0.eq.0, 'checking',100)
-   call unit_check_done('putstr',msg='')
-end subroutine test_putstr
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-end subroutine test_suite_M_display
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

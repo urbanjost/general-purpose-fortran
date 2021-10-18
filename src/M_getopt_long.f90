@@ -11,15 +11,19 @@
 
 !>
 !!##NAME
-!!    M_getopt_long(3fm) - [ARGUMENTS:M_getopt_long] parse command line options like Sun getopt_long, including the Sun CLIP specification
+!!    M_getopt_long(3fm) - [ARGUMENTS:M_getopt_long] parse command line
+!!                         options like Sun getopt_long, including the Sun
+!!                         CLIP specification
 !!    (LICENSE:PD)
 !!##SYNTAX
-!!    use M_getopt_long, only : getopt_new, getopt
-!!    use M_getopt_long, only : getopt_type, getopt_option_type
-!!    use M_getopt_long, only : getopt_argv
+!!   Usage:
+!!
+!!     use M_getopt_long, only : getopt_new, getopt
+!!     use M_getopt_long, only : getopt_type, getopt_option_type
+!!     use M_getopt_long, only : getopt_argv
 !!
 !!##DESCRIPTION
-!!    This is based on SunOS getopt_long(3), and includes the Sun CLIP
+!!    This is modeled on SunOS getopt_long(3), and includes the Sun CLIP
 !!    specification, which requires matching short and long versions of
 !!    all options.
 !!
@@ -181,12 +185,12 @@ type getopt_option_type
 end type getopt_option_type
 
 type getopt_string_type
-  character(len=1), allocatable :: string(:)
+  character(len=:), allocatable :: string
 end type getopt_string_type
 
 type getopt_type
 ! private:
-  character(len=1), pointer :: place(:) ! => empty_string_array
+  character(len=:), pointer :: place ! => empty_string_array
   integer :: nonopt_start != -1; ! first non option argument (for permute)
   integer :: nonopt_end != -1;   ! first option after non optstring (for permute)
   logical :: posixly_correct ! = .false.
@@ -200,21 +204,20 @@ type getopt_type
   type(getopt_string_type), allocatable :: argv(:)
   integer :: index ! = 0
   logical :: error ! = .false.
-  character(len=1), pointer :: optarg(:) ! => NULL()
+  character(len=:), pointer :: optarg ! => NULL()
   character(len=1) :: opt ! = char(0) == GETOPT_STATUS_NIL
 end type getopt_type
 
-character(len=1), target :: empty_string_array(0)
+character(len=0), target :: empty_string_array
 !-----------------------------------------------------------------------------------------------------------------------------------
 interface warn
-  module procedure warn_string, warn_char_array
+  module procedure warn_string
 end interface warn
 
-private :: warn, warn_string, warn_char_array
+private :: warn, warn_string
 
 private :: permute_args, parse_longopts
 
-public test_suite_M_getopt_long
 !================================================================================
 contains
 
@@ -294,8 +297,8 @@ subroutine getopt_new(self, optstring, long_opts, flags, status)
   allocate(self%argv(0:self%argc))
   do i=0,self%argc
     call get_command_argument(i,length=arglen)
-    allocate(self%argv(i)%string(arglen))
-    call get_command_argument(i,self%argv(i)%string(1)(1:arglen))
+    allocate(character(len=arglen) :: self%argv(i)%string)
+    call get_command_argument(i,self%argv(i)%string(1:arglen))
   end do
   if (present(status))then
      status=.true.
@@ -380,15 +383,14 @@ type(getopt_type), pointer                :: self
 integer, intent(in)                       :: argn
 character(len=getopt_argv_len(self,argn)) :: argv
 
-  argv = self%argv(argn)%string(1)(1:len(argv))
+  argv = self%argv(argn)%string(1:len(argv))
 
 end function getopt_argv
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! getopt() --
 !  Parse argc/argv argument vector.  Called by user level routines.
 ! This implements all of the getopt variants, depending on flag bits.
-character(len=1) &
-function getopt(self, longindex) result(retval)
+character(len=1) function getopt(self, longindex) result(retval)
   implicit none
   type(getopt_type), pointer :: self
   integer, intent(out), optional :: longindex
@@ -406,7 +408,7 @@ function getopt(self, longindex) result(retval)
   self%opt = GETOPT_STATUS_NIL
 write(*,*)'index=',self%index
 NEXT_ARG: do
-    if (self%index==0 .or. size(self%place)==0) then    ! update scanning pointer
+    if (self%index==0 .or. len(self%place)==0) then    ! update scanning pointer
       if (self%index > ubound(self%argv,1)) then    ! end of argument vector
         self%place => empty_string_array
         if (self%nonopt_end /= -1) then
@@ -424,7 +426,7 @@ NEXT_ARG: do
         return
       end if
       self%place => self%argv(self%index)%string
-      if (self%place(1) /= '-' .or. size(self%place,1)<2 ) then
+      if (self%place(1:1) /= '-' .or. len(self%place)<2 ) then
         self%place => empty_string_array  ! found non-option
         write(*,*) 'found non-option at ',self%index
         if (iand(self%flags,GETOPT_FLAG_ALLARGS)/=0) then
@@ -457,10 +459,10 @@ NEXT_ARG: do
 
 ! Check for "--" or "--foo" with no long optstring
 ! but if self%place is simply "-" leave it unmolested.
-      if (size(self%place)>1) then
+      if (len(self%place)>1) then
         self%place=>self%place(2:)
-        if (self%place(1) == '-' .and. &
-           (size(self%place)==1 .or. .not. associated(self%long_opts))) then
+        if (self%place(1:1) == '-' .and. &
+           (len(self%place)==1 .or. .not. associated(self%long_opts))) then
           self%index = self%index + 1
           self%place => empty_string_array
 ! We found an option (--), so if we skipped
@@ -486,11 +488,11 @@ NEXT_ARG: do
 
   if (associated(self%long_opts) .and. &
       (.not. associated(self%place,self%argv(self%index)%string)) .and. &
-      (self%place(1) == '-' .or. iand(self%flags,GETOPT_FLAG_LONGONLY)/=0)) then
+      (self%place(1:1) == '-' .or. iand(self%flags,GETOPT_FLAG_LONGONLY)/=0)) then
     short_too = .false.
-    if (self%place(1) == '-') then
+    if (self%place(1:1) == '-') then
       self%place => self%place(2:)  ! --foo long option
-    else if (self%place(1) /= ':' .and. index(self%optstring, self%place(1)) > 0) then
+    else if (self%place(1:1) /= ':' .and. index(self%optstring, self%place(:11)) > 0) then
       short_too = .true.    ! could be short option too
     end if
 
@@ -502,7 +504,7 @@ NEXT_ARG: do
     end if
   end if
 
-  optchar = self%place(1)
+  optchar = self%place(1:1)
   self%place => self%place(2:)
   option_letter_index = index(self%optstring(1:self%optstring_len), optchar)
   if (optchar == ':' .or. option_letter_index==0) then
@@ -513,7 +515,7 @@ NEXT_ARG: do
       return
     end if
 ! option letter unknown or ':'
-    if (size(self%place)==0) self%index=self%index+1
+    if (len(self%place)==0) self%index=self%index+1
     if ((self%error) .and. self%optstring(1:1) /= ':') then
     end if
     self%opt = optchar
@@ -526,7 +528,7 @@ NEXT_ARG: do
       .and. associated(self%long_opts) &
       .and. optchar == 'W' &
       .and. self%optstring(option_letter_index:option_letter_index) == ';') then
-    if (size(self%place)>0) then
+    if (len(self%place)>0) then
       self%index=self%index+1
       if (self%index > ubound(self%argv,1)) then  ! no long-option after -W
         self%place => empty_string_array
@@ -553,10 +555,10 @@ NEXT_ARG: do
 
   option_letter_index=option_letter_index+1
   if (self%optstring(option_letter_index:option_letter_index) /= ':') then ! no ':' suffix: doesn't take argument
-    if (size(self%place)==0) self%index=self%index+1
+    if (len(self%place)==0) self%index=self%index+1
   else        ! ':' or '::' suffix: takes (optional) argument
     self%optarg => NULL()
-    if (size(self%place)>0) then  ! arg value joined (no white space)
+    if (len(self%place)>0) then  ! arg value joined (no white space)
       self%optarg => self%place
 ! XXX: disable test for :: if PC? (GNU doesn't)
     else if (iand(self%flags,GETOPT_FLAG_OPTIONAL_ARGS)==0 .and. &
@@ -584,16 +586,16 @@ NEXT_ARG: do
 end function getopt
 !-----------------------------------------------------------------------------------------------------------------------------------
 pure integer &
-function getopt_argv_len(self,argn) result(len)
+function getopt_argv_len(self,argn) result(length)
   implicit none
   type(getopt_type), pointer :: self
   integer, intent(in) :: argn
   if (.not. allocated(self%argv)) then
-    len = 0
+    length = 0
   else if ( (argn < 0) .or. (argn > ubound(self%argv,1)) ) then
-    len = 0
+    length = 0
   else
-    len = size(self%argv(argn)%string)
+    length = len(self%argv(argn)%string)
   end if
 end function getopt_argv_len
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -605,29 +607,16 @@ subroutine warn_string(self, msg, arg)
   character(len=*), intent(in) :: msg, arg
   if (self%error .and. self%optstring(1:1) /= ':') then
     write(0,"(A,': ',A,' -- ',A)") &
-        self%argv(0)%string(1)(1:ubound(self%argv(0)%string,1)), &
-        msg, trim(arg)
+        self%argv(0)%string(1:len(self%argv(0)%string)), msg, trim(arg)
   end if
 end subroutine warn_string
-!-----------------------------------------------------------------------------------------------------------------------------------
-subroutine warn_char_array(self, msg, arg)
-  implicit none
-  type(getopt_type), pointer :: self
-  character(len=*), intent(in) :: msg
-  character(len=1), intent(in) :: arg(:)
-  if (self%error .and. self%optstring(1:1) /= ':') then
-    write(0,"(A,': ',A,' -- ',100A1)") &
-        self%argv(0)%string(1)(1:ubound(self%argv(0)%string,1)), &
-        msg, arg
-  end if
-end subroutine warn_char_array
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine permute_args(self)
   implicit none
   type(getopt_type), pointer :: self
 
   integer :: cstart, cyclelen, i, j, ncycle, nnonopts, nopts, pos
-  character(len=1), allocatable :: swap(:)
+  character(len=:), allocatable :: swap
 
   if (.not. allocated(self%argv)) return
 
@@ -647,15 +636,16 @@ subroutine permute_args(self)
         pos = pos + nopts
       end if
 
-      allocate(swap(size(self%argv(pos)%string)))
+      ALLOCATE(CHARACTER(LEN=(len(SELF%ARGV(POS)%STRING))) :: SWAP)
 
       swap = self%argv(pos)%string
       deallocate(self%argv(pos)%string)
-      allocate(self%argv(pos)%string(size(self%argv(cstart)%string)))
+      ALLOCATE(CHARACTER(LEN=(len(SELF%ARGV(CSTART)%STRING))) :: SELF%ARGV(POS)%STRING )
       self%argv(pos)%string = self%argv(cstart)%string
 
       deallocate(self%argv(cstart)%string)
-      allocate(self%argv(cstart)%string(size(swap)))
+      ALLOCATE(CHARACTER(LEN=len(SWAP)) :: SELF%ARGV(CSTART)%STRING)
+      ALLOCATE(CHARACTER(LEN=len(SWAP)) :: SELF%ARGV(CSTART)%STRING )
       self%argv(cstart)%string = swap
 
       deallocate(swap)
@@ -681,15 +671,14 @@ end subroutine permute_args
 ! parse_longopts --
 !  Parse long optstring in argc/argv argument vector.
 ! Returns -1 if short_too is set and the option does not match self%long_opts.
-character(len=1) &
-function parse_longopts(self, longindex, short_too) result(retval)
+character(len=1) function parse_longopts(self, longindex, short_too) result(retval)
   implicit none
   type(getopt_type), pointer :: self
   integer, intent(inout), optional :: longindex
   logical, intent(in) :: short_too
 
-  character(len=1), pointer :: current_argv(:)
-  character(len=1), pointer :: argv_equal_ptr(:)
+  character(len=:), pointer :: current_argv
+  character(len=:), pointer :: argv_equal_ptr
   integer :: current_argv_len
   integer :: long_option_len
   integer :: i
@@ -707,13 +696,13 @@ function parse_longopts(self, longindex, short_too) result(retval)
 
   self%index=self%index+1
 
-  argv_equal_index = index(current_argv(1)(1:size(current_argv)), '=')
+  argv_equal_index = index(current_argv, '=')
   if (argv_equal_index>0) then
 ! argument found (--option=arg)
     current_argv_len = argv_equal_index - 1
     argv_equal_ptr => current_argv(argv_equal_index+1:)
   else
-    current_argv_len = size(current_argv)
+    current_argv_len = len(current_argv)
     argv_equal_ptr => NULL()
   end if
 
@@ -721,7 +710,7 @@ function parse_longopts(self, longindex, short_too) result(retval)
   do i=1,size(self%long_opts)
     long_option_len = len_trim(self%long_opts(i)%name)
     if (long_option_len < current_argv_len) cycle
-    if (current_argv(1)(1:current_argv_len) /= self%long_opts(i)%name(1:current_argv_len)) cycle
+    if (current_argv(1:current_argv_len) /= self%long_opts(i)%name(1:current_argv_len)) cycle
 
     if (iand(self%flags,GETOPT_FLAG_ABBREV)==0 .and. &
         long_option_len > current_argv_len) then
@@ -821,54 +810,4 @@ function parse_longopts(self, longindex, short_too) result(retval)
     retval = self%opt
   end if
 end function parse_longopts
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_getopt_long()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-
-!! setup
-   call test_getopt()
-   call test_getopt_argv()
-   call test_getopt_argv_len()
-   call test_getopt_new()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_getopt()
-
-   call unit_check_start('getopt',msg='')
-   !!call unit_check('getopt', 0.eq.0, 'checking',100)
-   call unit_check_done('getopt',msg='')
-end subroutine test_getopt
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_getopt_argv()
-
-   call unit_check_start('getopt_argv',msg='')
-   !!call unit_check('getopt_argv', 0.eq.0, 'checking',100)
-   call unit_check_done('getopt_argv',msg='')
-end subroutine test_getopt_argv
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_getopt_argv_len()
-
-   call unit_check_start('getopt_argv_len',msg='')
-   !!call unit_check('getopt_argv_len', 0.eq.0, 'checking',100)
-   call unit_check_done('getopt_argv_len',msg='')
-end subroutine test_getopt_argv_len
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_getopt_new()
-
-   call unit_check_start('getopt_new',msg='')
-   !!call unit_check('getopt_new', 0.eq.0, 'checking',100)
-   call unit_check_done('getopt_new',msg='')
-end subroutine test_getopt_new
-!===================================================================================================================================
-end subroutine test_suite_M_getopt_long
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
 end module M_getopt_long
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================

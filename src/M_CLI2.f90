@@ -26,9 +26,9 @@
 !!    parsing using a simple prototype.
 !!
 !!    Typically one call to SET_ARGS(3f) is made to define the command
-!!    arguments, set default values and parse the command line. Then a
-!!    call is made to GET_ARGS(3f) for each command keyword to obtain the
-!!    argument values.
+!!    arguments, set default values and parse the command line. Then a call
+!!    is made to the convenience commands based on GET_ARGS(3f) for each
+!!    command keyword to obtain the argument values.
 !!
 !!    The documentation for SET_ARGS(3f) and GET_ARGS(3f) provides further
 !!    details.
@@ -67,8 +67,8 @@
 !!             & --title "my title" -l F -L F  &
 !!             & --logicals  F F F F F         &
 !!             & -logi F T F                   &
-!!             ! note space between quotes is required
 !!             & --label " " &
+!!             ! note space between quotes is required
 !!             & ')
 !!     ! ASSIGN VALUES TO ELEMENTS
 !!     call get_args('x',x)         ! SCALARS
@@ -114,13 +114,14 @@
 !!     Public Domain
 !===================================================================================================================================
 module M_CLI2
-!use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT
-!use, intrinsic :: iso_fortran_env, only : stdin=>INPUT_UNIT
-use, intrinsic :: iso_fortran_env, only : warn=>OUTPUT_UNIT ! ERROR_UNIT
+use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT, warn=>OUTPUT_UNIT
+
+! copied to M_CLI2 for a stand-alone version
 !use M_strings,                     only : upper, lower, quote, replace_str=>replace, unquote, split, string_to_value, atleast
 !use M_list,                        only : insert, locate, remove, replace
 !use M_args,                        only : longest_command_argument
 !use M_journal,                     only : journal
+
 implicit none
 integer,parameter,private :: dp=kind(0.0d0)
 integer,parameter,private :: sp=kind(0.0)

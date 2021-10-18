@@ -24,7 +24,6 @@ append("scratch.3m_io.html");
 append("separator.3m_io.html");
 append("slurp.3m_io.html");
 append("splitpath.3m_io.html");
-append("swallow.3m_io.html");
 append("system_dir.3m_io.html");
 append("uniq.3m_io.html");
 append("which.3m_io.html");

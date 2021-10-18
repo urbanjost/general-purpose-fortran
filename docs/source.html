@@ -639,6 +639,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_attr.f90">../src/M_attr.f90</a></td>
 <td>
+	M_attr::fmt(3f): convert any intrinsic to a string using specified format<br/>
 </td>
 <tr><td><a href="../src/M_bessel.f90">../src/M_bessel.f90</a></td>
 <td>
@@ -950,7 +951,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_match::f2r(3f): convert Fortran character variable to Ratfor integer array with Ratfor terminator<br/>
 	M_match::r2f(3f): convert Ratfor integer array to Fortran character variable<br/>
 	M_match::getpat_ convert argument into pattern<br/>
-	M_match::getpat__ convert argument into pattern<br/>
 	M_match::addset put C in SET(J) if it fits, increment J<br/>
 	M_match::locate look for c in char class at pat(offset)<br/>
 	M_match::match find match anywhere on line<br/>
@@ -962,8 +962,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_match::esc map  array(i)  into escaped character if appropriate<br/>
 	M_match::omatch_ try to match a single pattern at pat(j)<br/>
 	M_match::amatch_  (non-recursive) look for match starting at lin(from)<br/>
-	M_match::amatch <br/>
+	M_match::amatch<br/>
 	M_match::makpat_ make pattern from arg(from), terminate at delim<br/>
+	M_match::error(3f): print message and stop program execution<br/>
 </td>
 <tr><td><a href="../src/M_math.f90">../src/M_math.f90</a></td>
 <td>
@@ -1051,7 +1052,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings::strmerge(3f): pads first and second arguments to MERGE(3f) to same length<br/>
 	M_strings::adjustl_atleast(3f): return string padded on right to at least specified length<br/>
 	M_overload::adjustr_atleast(3f): return string padded on left to at least specified length<br/>
-	M_msg::ffmt(3f): convert any intrinsic to a string using specified format<br/>
+	M_overload::ffmt(3f): convert any intrinsic to a string using specified format<br/>
 </td>
 <tr><td><a href="../src/M_path.f90">../src/M_path.f90</a></td>
 <td>

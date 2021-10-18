@@ -269,6 +269,17 @@ character(len=*),parameter,public :: ununderline =  CODE_START//OFF//AT_UNDERLIN
 character(len=*),parameter,public :: reset       =  CODE_RESET
 character(len=*),parameter,public :: clear       =  HOME_DISPLAY//CLEAR_DISPLAY
 
+public fmt
+integer,save :: alert_unit=stdout
+logical,save :: alert_debug=.true.
+logical,save :: alert_warn=.true.
+logical,save :: alert_info=.true.
+logical,save :: alert_error=.true.
+logical,save :: alert_other=.true.
+
+interface str
+   module procedure msg_scalar, msg_one
+end interface str
 
 contains
 !>
@@ -640,8 +651,8 @@ subroutine vt102()
    call attr_update('clear',clear)
    call attr_update('reset',reset)
 
-   call attr_update('gt','>')
-   call attr_update('lt','<')
+   call attr_update('gt','>','>')
+   call attr_update('lt','<','<')
 
    ! foreground colors
    call attr_update('r',fg_red)
@@ -1106,26 +1117,36 @@ end subroutine insert
 !!
 !!##SYNOPSIS
 !!
-!!     subroutine alert(message)
+!!     subroutine alert(message,g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 !!
 !!        character(len=*),intent(in),optional :: type
 !!        character(len=*),intent(in),optional :: message
+!!        class(*),intent(in),optional :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9, &
+!!                                      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!
 !!##DESCRIPTION
-!!    Display a message to stderr prefixed with the name of the
-!!    calling program and a timestamp when the TYPE is specified as
-!!    any of 'error','warn', or 'info'.  It also allows the keywords
-!!    <ARG0>,<TZ>,<YE>,<MO>,<DA>,<HR>,<MI>,<SE>,<MS> to be used in
-!!    the message (which is passed to ATTR(3f)). Note that time stamp
-!!    keywords will only be updated when using ALERT(3f).
+!!    Display a message prefixed with a timestamp and the name
+!!    of the calling program when the TYPE is specified as any
+!!    of 'error','warn', or 'info'.
+!!
+!!    It also allows the keywords
+!!    <ARG0>,<TZ>,<YE>,<MO>,<DA>,<HR>,<MI>,<SE>,<MS> to be used in the
+!!    message (which is passed to ATTR(3f)).
+!!
+!!    Note that time stamp keywords will only be updated when using ALERT(3f)
+!!    and will only be displayed in color mode!
 !!
 !!##OPTIONS
-!!    TYPE     if present and one of 'warn','message','info' a predefined
+!!    TYPE     if present and one of 'warn','message','info', or 'debug'  a predefined
 !!             message is written to stderr of the form
 !!
-!!              ** (<ARG0>): type **: <HR>:<MI>:<SE>.<MS>: message
+!!              : <HR>:<MI>:<SE>.<MS> : (<ARG0>) : TYPE -> message
 !!
 !!    MESSAGE  the user-supplied message to display via a call to ATTR(3f)
+!!
+!!    g[0-9a-j]   optional values to print after the message. May
+!!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
+!!                COMPLEX, or CHARACTER.
 !!
 !!    if no parameters are supplied the macros are updated but no output is generated.
 !!
@@ -1133,81 +1154,433 @@ end subroutine insert
 !!
 !!    Sample program
 !!
-!!     program demo_alert
-!!     use M_attr, only : alert, attr
-!!     implicit none
-!!        call alert("error", "Say you didn't!")
-!!        call alert("warn",  "I wouldn't if I were you, Will Robinson.")
-!!        call alert("info",  "I fixed that for you, but it was a bad idea.")
-!!        call alert("debug", "Who knows what is happening now?.")
-!!        call alert("???    ",  "not today you don't")
-!!        ! call to just update the macros
-!!        call alert()
-!!        ! conventional call to ATTR(3f) using the ALERT(3f)-defined macros
-!!        write(*,*)attr('<bo>The year was <g><YE></g>, the month was <g><MO></g>')
-!!     end program demo_alert
+!!       program demo_alert
+!!       use M_attr, only : alert, attr, attr_mode
+!!       implicit none
+!!       real X
+!!          call attr_mode(manner='plain')
+!!          call attr_mode(manner='color')
+!!          call alert("error", "Say you didn't!")
+!!          call alert("warn",  "I wouldn't if I were you, Will Robinson.")
+!!          call alert("info",  "I fixed that for you, but it was a bad idea.")
+!!          call alert("debug", "Who knows what is happening now?.")
+!!          call alert("???    ",  "not today you don't")
+!!          ! call to just update the macros
+!!          call alert()
+!!          ! conventional call to ATTR(3f) using the ALERT(3f)-defined macros
+!!          write(*,*)attr('<bo>The year was <g><YE></g>, the month was <g><MO></g>')
+!!          ! optional arguments
+!!          X=211.3
+!!          call alert('error','allowed range of X is 0 <lt> X <lt> 100, X=<r>',X)
+!!          ! up to twenty values are allowed of intrinsic type
+!!          call alert('info','values are<g>',10,234.567,cmplx(11.0,22.0),123.456d0,'</g>today')
+!!       end program demo_alert
+!!
 !!   Results:
 !!
-!!    ** (demo_alert): error   **: 16:33:50.0300: Say you didn't!
-!!    ** (demo_alert): warning **: 16:33:50.0301: I wouldn't if I were you, Will Robinson.
-!!    ** (demo_alert): info    **: 16:33:50.0301: I fixed that for you, but it was a bad idea.
-!!    ** (demo_alert): ???     **: 16:33:50.0301: not today you don't
-!!        The year was 2021, the month was 7
+!!     00:38:30.566 : (demo_alert) : error    -> Say you didn't!
+!!     00:38:30.567 : (demo_alert) : warning  -> I wouldn't if I were you, Will Robinson.
+!!     00:38:30.567 : (demo_alert) : info     -> I fixed that for you, but it was a bad idea.
+!!     00:38:30.567 : (demo_alert) : debug    -> Who knows what is happening now?.
+!!     00:38:30.567 : (demo_alert) : ???      -> not today you don't
+!!     00:38:30.567 : (demo_alert) : error    -> allowed range of X is 0  X  100, X= 211.300003
+!!     00:38:30.567 : (demo_alert) : info     -> values are 10 234.567001 (11.0000000,22.0000000) 123.45600000000000 today
+!!
+!!
 !!
 !!##AUTHOR
 !!    John S. Urban, 2021
 !!
 !!##LICENSE
 !!    MIT
-subroutine alert(type,message)
+subroutine alert(type,message,g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 ! TODO: could add a warning level to ignore info, or info|warning, or all
 implicit none
 character(len=*),intent(in),optional :: type
 character(len=*),intent(in),optional :: message
-character(len=8)     :: dt
-character(len=10)    :: tm
-character(len=5)     :: zone
-integer,dimension(8) :: values
-character(len=4096)  :: arg0
-character(len=4096)  :: new_message
+class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
+class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+character(len=8)      :: dt
+character(len=10)     :: tm
+character(len=5)      :: zone
+integer,dimension(8)  :: values
+character(len=4096)   :: arg0
+character(len=:),allocatable :: new_message
+character(len=:),allocatable :: other
+logical :: printme
    call date_and_time(dt,tm,zone,values)
-   call attr_update('YE',dt(1:4))
-   call attr_update('MO',dt(5:6))
-   call attr_update('DA',dt(7:8))
-   call attr_update('HR',tm(1:2))
-   call attr_update('MI',tm(3:4))
-   call attr_update('SE',tm(5:6))
-   call attr_update('MS',tm(8:10))
-   call attr_update('TZ',zone)
+   call attr_update('YE',dt(1:4),dt(1:4))
+   call attr_update('MO',dt(5:6),dt(5:6))
+   call attr_update('DA',dt(7:8),dt(7:8))
+   call attr_update('HR',tm(1:2),tm(1:2))
+   call attr_update('MI',tm(3:4),tm(3:4))
+   call attr_update('SE',tm(5:6),tm(5:6))
+   call attr_update('MS',tm(8:10),tm(8:10))
+   call attr_update('TZ',zone,zone)
    call get_command_argument(0,arg0)
    if(index(arg0,'/').ne.0) arg0=arg0(index(arg0,'/',back=.true.)+1:)
    if(index(arg0,'\').ne.0) arg0=arg0(index(arg0,'\',back=.true.)+1:)
-   call attr_update('ARG0',arg0)
+   call attr_update('ARG0',arg0,arg0)
+   printme=.true.
    if(present(type))then
-      new_message= ' <b>'//tm(1:2)//':'//tm(3:4)//':'//tm(5:6)//'.'//tm(8:10)//'</b>: '//message
+      new_message= ' <b>'//tm(1:2)//':'//tm(3:4)//':'//tm(5:6)//'.'//tm(8:10)//'</b> : ('//trim(arg0)//') : '
+      other=message//' '//str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
       select case(type)
 
       case('warn','WARN','warning','WARNING')
-       new_message= '** ('//trim(arg0)//'): <EBONY><bo><y> warning </y></EBONY> **:'//new_message
+       new_message= new_message//'<EBONY><bo><y>warning </y></EBONY> -<gt> '
+       printme=alert_warn
 
       case('info','INFO','information','INFORMATION')
-       new_message= '** ('//trim(arg0)//'): <EBONY><bo><g> info    </g></EBONY> **:'//new_message
+       new_message= new_message//'<EBONY><bo><g>info    </g></EBONY> -<gt> '
+       printme=alert_info
 
       case('error','ERROR')
-       new_message= '** ('//trim(arg0)//'): <EBONY><bo><r> error   </r></EBONY> **:'//new_message
+       new_message= new_message//'<EBONY><bo><r>error   </r></EBONY> -<gt> '
+       printme=alert_error
 
       case('debug','DEBUG')
-       new_message= '** ('//trim(arg0)//'): <EBONY><white><bo> debug   </white></EBONY> **:'//new_message
+       new_message= new_message//'<EBONY><white><bo>debug   </white></EBONY> -<gt> '
+       printme=alert_debug
 
       case default
-       new_message= '** ('//trim(arg0)//'): <EBONY><bo><c> '//type//' </c></EBONY> **:'//new_message
+       new_message= new_message//'<EBONY><bo><c>'//type//' </c></EBONY> -<gt> '
+       printme=alert_other
 
       end select
-    write(stderr,'(a)')attr(trim(new_message))
+    if(printme)then
+       write(alert_unit,'(a)')attr(trim(new_message//other))
+    endif
 
    elseif(present(message))then
-    write(stderr,'(a)')attr(trim(message))
+    write(alert_unit,'(a)')attr(trim(other))
    endif
 end subroutine alert
+
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    str(3f) - [M_attr] converts any standard scalar type to a string
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    Syntax:
+!!
+!!      function str(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+!!      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
+!!      class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!      class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+!!      character(len=*),intent(in),optional :: sep
+!!      character,len=(:),allocatable :: str
+!!
+!!##DESCRIPTION
+!!    str(3f) builds a space-separated string from up to twenty scalar values.
+!!
+!!##OPTIONS
+!!    g[0-9a-j]   optional value to print the value of after the message. May
+!!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
+!!                COMPLEX, or CHARACTER.
+!!
+!!                Optionally, all the generic values can be
+!!                single-dimensioned arrays. Currently, mixing scalar
+!!                arguments and array arguments is not supported.
+!!
+!!    sep         separator string used between values. Defaults to a space.
+!!
+!!##RETURNS
+!!    str     description to print
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!    program demo_msg
+!!    use M_attr, only : alert
+!!    end program demo_msg
+!!
+!!   Output
+!!
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
+                  & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
+                  & sep)
+implicit none
+
+! ident_1="@(#)M_attr::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
+
+class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
+class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
+class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
+class(*),intent(in),optional  :: genericf, genericg, generich, generici, genericj
+character(len=:),allocatable  :: msg_scalar
+character(len=4096)           :: line
+integer                       :: istart
+integer                       :: increment
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
+   if(present(sep))then
+      increment=len(sep)+1
+      sep_local=sep
+   else
+      increment=2
+      sep_local=' '
+   endif
+
+   istart=1
+   line=''
+   if(present(generic0))call print_generic(generic0)
+   if(present(generic1))call print_generic(generic1)
+   if(present(generic2))call print_generic(generic2)
+   if(present(generic3))call print_generic(generic3)
+   if(present(generic4))call print_generic(generic4)
+   if(present(generic5))call print_generic(generic5)
+   if(present(generic6))call print_generic(generic6)
+   if(present(generic7))call print_generic(generic7)
+   if(present(generic8))call print_generic(generic8)
+   if(present(generic9))call print_generic(generic9)
+   if(present(generica))call print_generic(generica)
+   if(present(genericb))call print_generic(genericb)
+   if(present(genericc))call print_generic(genericc)
+   if(present(genericd))call print_generic(genericd)
+   if(present(generice))call print_generic(generice)
+   if(present(genericf))call print_generic(genericf)
+   if(present(genericg))call print_generic(genericg)
+   if(present(generich))call print_generic(generich)
+   if(present(generici))call print_generic(generici)
+   if(present(genericj))call print_generic(genericj)
+   msg_scalar=trim(line)
+contains
+!===================================================================================================================================
+subroutine print_generic(generic)
+!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+class(*),intent(in) :: generic
+   select type(generic)
+      type is (integer(kind=int8));     write(line(istart:),'(i0)') generic
+      type is (integer(kind=int16));    write(line(istart:),'(i0)') generic
+      type is (integer(kind=int32));    write(line(istart:),'(i0)') generic
+      type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
+      type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
+      type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
+      type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+      type is (logical);                write(line(istart:),'(l1)') generic
+      type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
+      type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
+   end select
+   istart=len_trim(line)+increment
+   line=trim(line)//sep_local
+end subroutine print_generic
+!===================================================================================================================================
+end function msg_scalar
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,&
+               & generica,genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj,&
+               & sep)
+implicit none
+
+! ident_2="@(#)M_attr::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
+
+class(*),intent(in)           :: generic0(:)
+class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)
+class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
+class(*),intent(in),optional  :: generica(:), genericb(:), genericc(:), genericd(:), generice(:)
+class(*),intent(in),optional  :: genericf(:), genericg(:), generich(:), generici(:), genericj(:)
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
+character(len=:), allocatable :: msg_one
+character(len=4096)           :: line
+integer                       :: istart
+integer                       :: increment
+   if(present(sep))then
+      increment=1+len(sep)
+      sep_local=sep
+   else
+      sep_local=' '
+      increment=2
+   endif
+
+   istart=1
+   line=' '
+   call print_generic(generic0)
+   if(present(generic1))call print_generic(generic1)
+   if(present(generic2))call print_generic(generic2)
+   if(present(generic3))call print_generic(generic3)
+   if(present(generic4))call print_generic(generic4)
+   if(present(generic5))call print_generic(generic5)
+   if(present(generic6))call print_generic(generic6)
+   if(present(generic7))call print_generic(generic7)
+   if(present(generic8))call print_generic(generic8)
+   if(present(generic9))call print_generic(generic9)
+   if(present(generica))call print_generic(generica)
+   if(present(genericb))call print_generic(genericb)
+   if(present(genericc))call print_generic(genericc)
+   if(present(genericd))call print_generic(genericd)
+   if(present(generice))call print_generic(generice)
+   if(present(genericf))call print_generic(genericf)
+   if(present(genericg))call print_generic(genericg)
+   if(present(generich))call print_generic(generich)
+   if(present(generici))call print_generic(generici)
+   if(present(genericj))call print_generic(genericj)
+   msg_one=trim(line)
+contains
+!===================================================================================================================================
+subroutine print_generic(generic)
+!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+class(*),intent(in),optional :: generic(:)
+integer :: i
+   select type(generic)
+      type is (integer(kind=int8));     write(line(istart:),'("[",*(i0,1x))') generic
+      type is (integer(kind=int16));    write(line(istart:),'("[",*(i0,1x))') generic
+      type is (integer(kind=int32));    write(line(istart:),'("[",*(i0,1x))') generic
+      type is (integer(kind=int64));    write(line(istart:),'("[",*(i0,1x))') generic
+      type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
+      type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
+      type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
+      !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
+      type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
+      type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
+      type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic
+      class default
+         stop 'unknown type in *print_generic*'
+   end select
+   istart=len_trim(line)+increment+1
+   line=trim(line)//']'//sep_local
+end subroutine print_generic
+!===================================================================================================================================
+end function msg_one
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    fmt(3f) - [M_attr] convert any intrinsic to a string using specified format
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    function fmt(value,format) result(string)
+!!
+!!     class(*),intent(in),optional :: value
+!!     character(len=*),intent(in),optional  :: format
+!!     character(len=:),allocatable :: string
+!!##DESCRIPTION
+!!    FMT(3f) converts any standard intrinsic value to a string using the specified
+!!    format.
+!!##OPTIONS
+!!    value    value to print the value of. May be of type INTEGER, LOGICAL,
+!!             REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
+!!    format   format to use to print value. It is up to the user to use an
+!!             appropriate format. The format does not require being
+!!             surrounded by parenthesis. If not present a default is selected
+!!             similar to what would be produced with free format.
+!!##RETURNS
+!!    string   A string value
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!     program demo_fmt
+!!     use :: M_attr, only : fmt
+!!     implicit none
+!!     character(len=:),allocatable :: output
+!!
+!!        output=fmt(10,"'[',i0,']'")
+!!        write(*,*)'result is ',output
+!!
+!!        output=fmt(10.0/3.0,"'[',g0.5,']'")
+!!        write(*,*)'result is ',output
+!!
+!!        output=fmt(.true.,"'The final answer is [',g0,']'")
+!!        write(*,*)'result is ',output
+!!
+!!     end program demo_fmt
+!!
+!!   Results:
+!!
+!!     result is [10]
+!!     result is [3.3333]
+!!     result is The final answer is [T]
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+recursive function fmt(generic,format) result (line)
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+
+! ident_3="@(#)M_attr::fmt(3f): convert any intrinsic to a string using specified format"
+
+class(*),intent(in)          :: generic
+character(len=*),intent(in),optional  :: format
+character(len=:),allocatable :: line
+character(len=:),allocatable :: fmt_local
+integer                      :: ios
+character(len=255)           :: msg
+character(len=1),parameter   :: null=char(0)
+integer                      :: ilen
+   if(present(format))then
+      fmt_local=format
+   else
+      fmt_local=''
+   endif
+   ! add ",a" and print null and use position of null to find length of output
+   ! add cannot use SIZE= or POS= or ADVANCE='NO' on WRITE() on INTERNAL READ,
+   ! and do not want to trim as trailing spaces can be significant
+   if(fmt_local.eq.'')then
+      select type(generic)
+         type is (integer(kind=int8));     fmt_local='(i0,a)'
+         type is (integer(kind=int16));    fmt_local='(i0,a)'
+         type is (integer(kind=int32));    fmt_local='(i0,a)'
+         type is (integer(kind=int64));    fmt_local='(i0,a)'
+         type is (real(kind=real32));      fmt_local='(1pg0,a)'
+         type is (real(kind=real64));      fmt_local='(1pg0,a)'
+         type is (real(kind=real128));     fmt_local='(1pg0,a)'
+         type is (logical);                fmt_local='(l1,a)'
+         type is (character(len=*));       fmt_local='(a,a)'
+         type is (complex);                fmt_local='("(",1pg0,",",1pg0,")",a)'
+      end select
+   else
+      if(format(1:1).eq.'(')then
+         fmt_local=format(:len_trim(format)-1)//',a)'
+      else
+         fmt_local='('//fmt_local//',a)'
+      endif
+   endif
+   allocate(character(len=256) :: line) ! cannot currently write into allocatable variable
+   ios=0
+   select type(generic)
+      type is (integer(kind=int8));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (integer(kind=int16));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (integer(kind=int32));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (integer(kind=int64));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (real(kind=real32));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (real(kind=real64));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (real(kind=real128));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (logical);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (character(len=*));       write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+      type is (complex);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
+   end select
+   if(ios.ne.0)then
+      line='<ERROR>'//trim(msg)
+   else
+      ilen=index(line,null,back=.true.)
+      if(ilen.eq.0)ilen=len(line)
+      line=line(:ilen-1)
+   endif
+end function fmt
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
 
 end module M_attr

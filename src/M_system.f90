@@ -5547,15 +5547,16 @@ end function anyinteger_to_64bit
 !!     character(len=*),intent(in) :: command
 !!
 !!##DESCRIPTION
-!!    The system_system(3f) function
-!!
+!!    If a function that calls execute_command_line(3f). That is,
+!!    system_system(3f) executes a string as a system command after
+!!    trimming the string.
 !!
 !!##OPTIONS
 !!
 !!##RETURN VALUE
 !!    Upon successful completion .TRUE. is returned. Otherwise,
-!!    .FALSE. is returned and errno shall be set to indicate the error,
-!!    and the file times remain unaffected.
+!!    .FALSE. is returned.
+!!    If an error occurs an error message is written to stdout.
 !!
 !!##ERRORS
 !!##EXAMPLES
@@ -5578,7 +5579,7 @@ integer                     :: system_system
 character(len=256)          :: cmdmsg
 
    cmdmsg=' '
-   call execute_command_line(command, wait=.true., exitstat=exitstat, cmdstat=cmdstat, cmdmsg=cmdmsg)
+   call execute_command_line(trim(command), wait=.true., exitstat=exitstat, cmdstat=cmdstat, cmdmsg=cmdmsg)
    if(cmdstat.ne.0)then
       write(*,*)trim(cmdmsg)
    endif

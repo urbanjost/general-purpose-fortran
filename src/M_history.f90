@@ -348,7 +348,7 @@ integer                        :: iread
 integer                        :: istart
 integer                        :: ios
 integer                        :: ii
-integer                        :: ilen
+integer                        :: ilong
 integer                        :: icall
 integer                        :: iup
 integer                        :: ix
@@ -403,8 +403,8 @@ data numbers/'123456789012345678901234567890123456789012345678901234567890&
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    READLINE: do                                             ! display buffer and decide on command on first call or read command
-      ilen=max(1,len_trim(redoline(1:ibuf)))                ! find length of command to redo
-      write(*,'(a,a)')'!',redoline(:ilen)                   ! show old command
+      ilong=max(1,len_trim(redoline(1:ibuf)))               ! find length of command to redo
+      write(*,'(a,a)')'!',redoline(:ilong)                  ! show old command
       if(icall.ne.0)then                                    ! if not first call read the directive
          read(lun_local,'(a)',iostat=ios)cinbuf
          if(ios.ne.0)then                                   ! if there was an I/O error reread line

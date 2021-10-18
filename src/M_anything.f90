@@ -11,7 +11,7 @@
 
 !===================================================================================================================================
 ! This module and the example function squarei() that uses it shows how you
-! can use polymorphism to allow arguments of different types generically
+! can use polymorphism to allow arguments of different types generically by casting
 !===================================================================================================================================
 !>
 !!##NAME
