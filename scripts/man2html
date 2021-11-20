@@ -14,6 +14,9 @@ then
 elif inpath roff2html
 then
    COMMAND='roff2html'
+elif inpath pandoc
+then
+   COMMAND='pandoc -f man '
 else
    COMMAND='troff -a -man'
    COMMAND='nroff  -man'
@@ -45,7 +48,7 @@ h4 { font-size:120%;color:gray; }\
 img { max-width: 55em}\
 p{ padding: 0;margin:0; }\
 p{ padding-right:1.4em; }\
-p{ padding-bottom:1em; }\
+p{ padding-bottom:0.1em; }\
 p{ padding-top:1em; }\
 p{ whitespace: pre-wrap; }\
 h5,h6 { font-size:100% }\
@@ -55,7 +58,7 @@ XXtable { border-collapse:collapse; }\
 XXtd { border:thin solid #888; }\
 XXtd { border:none; }\
 li { margin-bottom:0.5em; }\
-blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 1.5em; padding:0 2.5em; }\
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }\
 pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }\
 a,li span { color:#000; }\
 a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }\

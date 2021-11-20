@@ -21,6 +21,7 @@ integer,parameter :: cd=kind(0.0d0)
 private                             ! the PRIVATE declaration requires use of a module, and changes the default from PUBLIC
 public sort_quick_rx
 public sort_shell
+public sort_indexed
 
 public :: swap
 !-public :: exchange
@@ -87,7 +88,16 @@ interface anything_to_bytes
    module procedure anything_to_bytes_arr
    module procedure anything_to_bytes_scalar
 end interface anything_to_bytes
-
+!===================================================================================================================================
+interface sort_indexed
+   module procedure sort_int8
+   module procedure sort_int16
+   module procedure sort_int32
+   module procedure sort_int64
+   module procedure sort_real32
+   module procedure sort_real64
+   module procedure sort_character
+end interface sort_indexed
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -102,7 +112,7 @@ contains
 !!
 !!##SYNOPSIS
 !!
-!!    use M_sort, only : sort_shell, sort_quick_rx, unique
+!!    use M_sort, only : sort_shell, sort_quick_rx, unique, sort_index
 !!
 !!##DESCRIPTION
 !!    Under development. Currently only provides a few common routines, but it is intended that
@@ -901,8 +911,8 @@ end subroutine sort_shell_complex_double
 !!    A rank hybrid quicksort. The data is not moved. An integer array is
 !!    generated instead with values that are indices to the sorted order of
 !!    the data. This requires a second array the size of the input array,
-!!    which for large arrays could require a significant amount of order. One
-!!    major advantage of this method is that any element of a user-defined
+!!    which for large arrays could require a significant amount of memory. One
+!!    major advantage of this method is that any element of a user-defined type
 !!    that is a scalar intrinsic can be used to provide the sort data and
 !!    subsequently the indices can be used to access the entire user-defined
 !!    type in sorted order. This makes this seemingly simple sort procedure
@@ -3163,6 +3173,109 @@ subroutine bytes_to_anything(chars,anything)
       stop 'crud. bytes_to_anything(1) does not know about this type'
    end select
 end subroutine bytes_to_anything
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
+!!    sort_indexed(3f) - [M_sort] indexed sort of an array
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!      subroutine sort_indexed(data,index)
+!!
+!!       TYPE,intent(in) :: data
+!!       integer,intent(out) :: indx(size(data))
+!!
+!!##DESCRIPTION
+!!    This routine is very slow on large arrays but I liked writing a sort
+!!    routine with one executable line!
+!!
+!!    An indexed sort of an array. The data is not moved. An integer array is
+!!    generated instead with values that are indices to the sorted order of
+!!    the data. This requires a second array the size of the input array,
+!!    which for large arrays could require a significant amount of memory. One
+!!    major advantage of this method is that any element of a user-defined type
+!!    that is a scalar intrinsic can be used to provide the sort data and
+!!    subsequently the indices can be used to access the entire user-defined
+!!    type in sorted order. This makes this seemingly simple sort procedure
+!!    usuable with the vast majority of user-defined types.
+!!
+!!##OPTIONS
+!!     DATA   an array of type REAL, INTEGER, or CHARACTER to be sorted
+!!##RETURNS
+!!     INDEX  an INTEGER array of default kind that contains the sorted
+!!            indices.
+!!
+!!##EXAMPLE
+!!
+!!  Sample usage:
+!!
+!!    program demo_sort_indexed
+!!    use M_sort, only : sort_indexed
+!!    implicit none
+!!    integer,parameter            :: isz=10000
+!!    real                         :: rr(isz)
+!!    integer                      :: i
+!!    write(*,*)'initializing array with ',isz,' random numbers'
+!!    CALL RANDOM_NUMBER(RR)
+!!    rr=rr*450000.0
+!!    ! use the index array to actually move the input array into a sorted order
+!!    rr=rr(sort_index(rr))
+!!    ! or
+!!    !rr(sort_indexed(rr))=rr
+!!    write(*,*)'checking if values are sorted(3f)'
+!!    do i=1,isz-1
+!!       if(rr(i).gt.rr(i+1))then
+!!          write(*,*)'Error in sorting reals small to large ',i,rr(i),rr(i+1)
+!!       endif
+!!    enddo
+!!    write(*,*)'test of sort_indexed(3f) complete'
+!!    end program demo_sort_indexed
+!!
+!!   Results:
+function sort_int8(ints) result(counts)
+integer(kind=int8),intent(in) :: ints(:)
+integer :: counts(size(ints)), i
+   counts=[(count(ints(i) > ints)+count(ints(i) == ints(:i)), i=1,size(ints) )]
+end function sort_int8
+
+function sort_int16(ints) result(counts)
+integer(kind=int16),intent(in) :: ints(:)
+integer :: counts(size(ints)), i
+   counts=[(count(ints(i) > ints)+count(ints(i) == ints(:i)), i=1,size(ints) )]
+end function sort_int16
+
+function sort_int32(ints) result(counts)
+integer(kind=int32),intent(in) :: ints(:)
+integer :: counts(size(ints)), i
+   counts=[(count(ints(i) > ints)+count(ints(i) == ints(:i)), i=1,size(ints) )]
+end function sort_int32
+
+function sort_int64(ints) result(counts)
+integer(kind=int64),intent(in) :: ints(:)
+integer :: counts(size(ints)), i
+   counts=[(count(ints(i) > ints)+count(ints(i) == ints(:i)), i=1,size(ints) )]
+end function sort_int64
+
+function sort_real32(flts) result(counts)
+real(kind=real32),intent(in) :: flts(:)
+integer :: counts(size(flts)), i
+   counts=[(count(flts(i) > flts)+count(flts(i) == flts(:i)), i=1,size(flts) )]
+end function sort_real32
+
+function sort_real64(flts) result(counts)
+real(kind=real64),intent(in) :: flts(:)
+integer :: counts(size(flts)), i
+   counts=[(count(flts(i) > flts)+count(flts(i) == flts(:i)), i=1,size(flts) )]
+end function sort_real64
+
+function sort_character(chrs) result(counts)
+character(len=*),intent(in) :: chrs(:)
+integer :: counts(size(chrs)), i
+   counts=[(count(chrs(i) > chrs)+count(chrs(i) == chrs(:i)),i=1, size(chrs) )]
+end function sort_character
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

@@ -5,7 +5,7 @@
            integer :: i, ierr
 
            ! create test file
-           open(file='inputfile',unit=10)
+           open(file='inputfile',unit=10,action='write')
            write(10,'(a)') [character(len=80):: &
             '#---#---#---#                          ', &
             '| 1 | 5 | 3 |                          ', &

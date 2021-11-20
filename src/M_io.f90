@@ -554,9 +554,10 @@ end function separator
 !!
 !!   subroutine read_table(filename,array,ierr)
 !!
-!!    character(len=*),intent(in)    :: filename
-!!    TYPE,allocatable,intent(out)   :: array(:,:)
-!!    integer,intent(out)            :: ierr
+!!    character(len=*),intent(in)          :: filename
+!!    TYPE,allocatable,intent(out)         :: array(:,:)
+!!    character(len=1,intent(in),optional  :: comment
+!!    integer,intent(out)                  :: ierr
 !!
 !!   where TYPE may be REAL, INTEGER, or DOUBLEPRECISION
 !!
@@ -571,6 +572,8 @@ end function separator
 !!##OPTIONS
 !!    filename   filename to read
 !!    array      array to create. May be INTEGER, REAL, or DOUBLEPRECISION
+!!    comment    ignore lines which contain this as the first non-blank
+!!               character. Ignore it and subsequent characters on any line.
 !!    ierr       zero if no error occurred.
 !!##EXAMPLES
 !!
@@ -583,7 +586,7 @@ end function separator
 !!     integer :: i, ierr
 !!
 !!     ! create test file
-!!     open(file='inputfile',unit=10)
+!!     open(file='inputfile',unit=10,action='write')
 !!     write(10,'(a)') [character(len=80):: &
 !!      '#---#---#---#                          ', &
 !!      '| 1 | 5 | 3 |                          ', &
@@ -642,7 +645,7 @@ end function separator
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine read_table_d(filename,darray,ierr)
+subroutine read_table_d(filename,darray,ierr,comment)
 implicit none
 ! note the array is allocated as text, and then doubleprecision, and then placed in the output array.
 ! for large files it would be worth it to just determine the file size and allocate and fill the output
@@ -650,9 +653,10 @@ implicit none
 
 character(len=*),intent(in)             :: FILENAME
 doubleprecision,allocatable,intent(out) :: darray(:,:)
+character(len=1),intent(in),optional    :: comment
 integer,intent(out)                     :: ierr
 character(len=:),allocatable :: page(:) ! array to hold file in memory
-integer                      :: irows
+integer                      :: irows,irowsmax
 integer                      :: icols
 integer                      :: i
 doubleprecision,allocatable  :: dline(:)
@@ -670,20 +674,25 @@ doubleprecision,allocatable  :: dline(:)
       if(size(page,dim=1).eq.0)then
          allocate(darray(0,0))
       else
-         irows=size(page,dim=1)
+         irowsmax=size(page,dim=1)
          icols=size(s2vs(page(1)))
-         allocate(darray(irows,icols))
+         allocate(darray(irowsmax,icols))
          darray=0.0d0
-         do i=1,irows
+         irows=0
+         do i=1,irowsmax
             dline=s2vs(page(i))
+            irows=irows+1
             if(size(dline).ne.icols)then
                   write(*,*)page(i),' does not contain ',icols,' values'
                ierr=ierr+1
-               darray(i,:min(size(dline),icols))=dline
+               darray(irows,:min(size(dline),icols))=dline
             else
-               darray(i,:)=dline
+               darray(irows,:)=dline
             endif
          enddo
+         if(irows.ne.irowsmax)then
+            darray=darray(:irows,:icols)
+         endif
          deallocate(page)  ! release memory
       endif
    endif
@@ -703,6 +712,11 @@ contains
        ! then split the remaining line and keep only
        ! tokens that can be read as a number
        do j=1,len(page)
+          if(present(comment))then
+             if(page(i)(j:j).eq.comment)then
+                page(i)(j:j)=' '
+             endif
+          endif
           select case(page(i)(j:j))
           case('e','E','d','D','+','-','.','0':'9')
           case default
@@ -960,7 +974,7 @@ end subroutine gulp
 !!     character(len=*),parameter :: FILENAME='inputfile' ! file to read
 !!
 !!     ! create test file
-!!     open(file=FILENAME,unit=10)
+!!     open(file=FILENAME,unit=10,action='write')
 !!     write(10,'(a)') new_line('A')//'esrever lliw'
 !!     write(10,'(a)') 'margorp elpmas eht taht'
 !!     write(10,'(a)') 'elif elpmas a si sihT'

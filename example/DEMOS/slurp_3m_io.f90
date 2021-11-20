@@ -5,7 +5,7 @@
            character(len=*),parameter :: FILENAME='inputfile' ! file to read
 
            ! create test file
-           open(file=FILENAME,unit=10)
+           open(file=FILENAME,unit=10,action='write')
            write(10,'(a)') new_line('A')//'esrever lliw'
            write(10,'(a)') 'margorp elpmas eht taht'
            write(10,'(a)') 'elif elpmas a si sihT'

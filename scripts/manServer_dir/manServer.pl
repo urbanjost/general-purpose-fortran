@@ -2471,6 +2471,7 @@ sub initialise
 		open(MACRO, "/usr/lib/groff/tmac/tmac.an") ||
 		open(MACRO, "/usr/share/tmac/an.tmac") ||
 		open(MACRO, "/usr/share/groff/1.22.3/tmac/an.tmac") ||
+		open(MACRO, "/home/urbanjs/venus/V600/LIBRARY/CYGWIN/scripts_convert/manServer_dir/tmac.an") ||
 		open(MACRO, "/usr/share/groff/tmac/tmac.an") )
 	{
 		while (<MACRO>)

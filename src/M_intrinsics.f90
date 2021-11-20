@@ -206,6 +206,8 @@ textblock=[character(len=256) :: &
 'SYNTAX', &
 '   result = ABS(A)', &
 '', &
+'    [real|integer|complex](kind=*),elemental :: a', &
+'', &
 'DESCRIPTION', &
 '   abs(A) computes the absolute value of numeric argument A.', &
 '', &
@@ -406,6 +408,8 @@ textblock=[character(len=256) :: &
 'SYNTAX', &
 '   result = ACOS(X)', &
 '', &
+'    real(kind=*),elemental :: x', &
+'', &
 'DESCRIPTION', &
 '   acos(X) computes the arccosine of X (inverse of cos(x)).', &
 '', &
@@ -486,6 +490,8 @@ textblock=[character(len=256) :: &
 '', &
 'SYNTAX', &
 '   result = acosh(x)', &
+'', &
+'    [real|complex](kind=*),elemental :: x', &
 '', &
 'DESCRIPTION', &
 '   ACOSH(X) computes the inverse hyperbolic cosine of X.', &
@@ -5231,7 +5237,7 @@ textblock=[character(len=256) :: &
 '', &
 'So lines can be broken within a string constant or lexical word or', &
 'constant, in which case the initiating ampersand on the second line is', &
-'mandatory and inside of split strings spaces preceeding the ampersand at', &
+'mandatory and inside of split strings spaces preceding the ampersand at', &
 'the end of the first line and after the second ampersand are significant', &
 '(and retained if part of a split string).', &
 '', &
@@ -7361,7 +7367,7 @@ textblock=[character(len=256) :: &
 '               synchronously.', &
 '', &
 '   EXITSTAT    (Optional) an INTEGER of the default kind with', &
-'               intent(INOUT).  If the command is executed synchronously,', &
+'               intent(INOUT). If the command is executed synchronously,', &
 '               it is assigned the value of the processor-dependent exit', &
 '               status. Otherwise, the value of EXITSTAT is unchanged.', &
 '', &
@@ -7374,7 +7380,7 @@ textblock=[character(len=256) :: &
 '               positive value if an error condition occurs, or the', &
 '               value -2 if no error condition occurs but WAIT is present', &
 '               with the value false and the processor does not support', &
-'               asynchronous execution.Otherwise it is assigned the', &
+'               asynchronous execution. Otherwise it is assigned the', &
 '               value 0.', &
 '', &
 '   CMDMSG      (Optional) a CHARACTER scalar of the default kind.', &
@@ -9541,7 +9547,77 @@ if(present(m_help))then
 endif
 
 
-case('112','include')
+case('112','implied_do')
+
+textblock=[character(len=256) :: &
+'', &
+'NAME', &
+'   implied_do(7f) - [FORTRAN] documentation on usage of implied do in Fortran', &
+'', &
+'SYNOPSIS', &
+'     (values,i=start,end,increment)', &
+'', &
+'DESCRIPTION', &
+'', &
+'   Examples using implied DO loops in Fortran code.', &
+'', &
+'EXAMPLES', &
+'', &
+' Sample Programs:', &
+'', &
+'   program demo_implied_do', &
+'   implicit none', &
+'      integer :: i', &
+'      ! [A-Z] [a-z] alphabet', &
+'      character(len=1),parameter :: a2z(26*2)=[(char(i),i=65,90),(char(i),i=97,122)]', &
+'      write(*,*)''Alphabet='',a2z', &
+'   end program demo_implied_do', &
+'', &
+' Expected output:', &
+'', &
+'   Alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', &
+'', &
+' Examples of array constructors containing an implied DO are:', &
+'', &
+'   [ (I, I = 1, 1075) ]', &
+'', &
+' and', &
+'', &
+'   N=20', &
+'   [ 3.6, (3.6 / I, I = 1, N) ]', &
+'', &
+' For an io-implied-do, the loop initialization and execution are the same as for a DO construct.', &
+' An example of an output list with an implied DO is:', &
+'', &
+'   WRITE (LP, FMT = ''(10F8.2)'') (LOG (A (I)), I = 1, N + 9, K), G', &
+'']
+
+shortname="implied_do"
+
+if(present(topic))then
+   if(topic)then
+      textblock=[shortname]
+   endif
+endif
+
+if(present(prefix))then
+   if(prefix)then
+      do i=1,size(textblock)
+         textblock(i)= shortname//':'//trim(textblock(i))
+      enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
+
+case('113','include')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9684,7 +9760,7 @@ if(present(m_help))then
 endif
 
 
-case('113','index')
+case('114','index')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9777,7 +9853,7 @@ if(present(m_help))then
 endif
 
 
-case('114','int')
+case('115','int')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9852,7 +9928,7 @@ if(present(m_help))then
 endif
 
 
-case('115','ior')
+case('116','ior')
 
 textblock=[character(len=256) :: &
 '', &
@@ -9930,7 +10006,7 @@ if(present(m_help))then
 endif
 
 
-case('116','iparity')
+case('117','iparity')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10012,7 +10088,7 @@ if(present(m_help))then
 endif
 
 
-case('117','is_contiguous')
+case('118','is_contiguous')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10115,7 +10191,7 @@ if(present(m_help))then
 endif
 
 
-case('118','ishft')
+case('119','ishft')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10176,7 +10252,7 @@ if(present(m_help))then
 endif
 
 
-case('119','ishftc')
+case('120','ishftc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10242,7 +10318,7 @@ if(present(m_help))then
 endif
 
 
-case('120','is_iostat_end')
+case('121','is_iostat_end')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10312,7 +10388,7 @@ if(present(m_help))then
 endif
 
 
-case('121','is_iostat_eor')
+case('122','is_iostat_eor')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10379,7 +10455,7 @@ if(present(m_help))then
 endif
 
 
-case('122','kind')
+case('123','kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10444,7 +10520,7 @@ if(present(m_help))then
 endif
 
 
-case('123','lbound')
+case('124','lbound')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10568,7 +10644,7 @@ if(present(m_help))then
 endif
 
 
-case('124','leadz')
+case('125','leadz')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10712,7 +10788,7 @@ if(present(m_help))then
 endif
 
 
-case('125','len')
+case('126','len')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10789,7 +10865,7 @@ if(present(m_help))then
 endif
 
 
-case('126','len_trim')
+case('127','len_trim')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10885,7 +10961,7 @@ if(present(m_help))then
 endif
 
 
-case('127','lge')
+case('128','lge')
 
 textblock=[character(len=256) :: &
 '', &
@@ -10958,7 +11034,7 @@ if(present(m_help))then
 endif
 
 
-case('128','lgt')
+case('129','lgt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11032,7 +11108,7 @@ if(present(m_help))then
 endif
 
 
-case('129','lle')
+case('130','lle')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11145,7 +11221,7 @@ if(present(m_help))then
 endif
 
 
-case('130','llt')
+case('131','llt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11219,7 +11295,7 @@ if(present(m_help))then
 endif
 
 
-case('131','log10')
+case('132','log10')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11282,7 +11358,7 @@ if(present(m_help))then
 endif
 
 
-case('132','log')
+case('133','log')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11350,7 +11426,7 @@ if(present(m_help))then
 endif
 
 
-case('133','log_gamma')
+case('134','log_gamma')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11415,7 +11491,7 @@ if(present(m_help))then
 endif
 
 
-case('134','logical')
+case('135','logical')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11474,7 +11550,7 @@ if(present(m_help))then
 endif
 
 
-case('135','maskl')
+case('136','maskl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11534,7 +11610,7 @@ if(present(m_help))then
 endif
 
 
-case('136','maskr')
+case('137','maskr')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11593,7 +11669,7 @@ if(present(m_help))then
 endif
 
 
-case('137','matmul')
+case('138','matmul')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11653,7 +11729,7 @@ if(present(m_help))then
 endif
 
 
-case('138','max')
+case('139','max')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11787,7 +11863,7 @@ if(present(m_help))then
 endif
 
 
-case('139','maxexponent')
+case('140','maxexponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11853,7 +11929,7 @@ if(present(m_help))then
 endif
 
 
-case('140','maxloc')
+case('141','maxloc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -11866,17 +11942,16 @@ textblock=[character(len=256) :: &
 '   result = maxloc(array [, mask])', &
 '', &
 'DESCRIPTION', &
-'   Determines the location of the element in the array with the maximum', &
-'   value, or, if the DIM argument is supplied, determines the', &
+'   Determines the location of the element in the array with the', &
+'   maximum value, or, if the DIM argument is supplied, determines the', &
 '   locations of the maximum element along each row of the array in the', &
-'   DIM direction. If MASK is present, only the elements for', &
-'   which MASK is .true. are considered. If more than one', &
-'   element in the array has the maximum value, the location returned is', &
-'   that of the first such element in array element order. If the array has', &
-'   zero size, or all of the elements of MASK are .false., then', &
-'   the result is an array of zeroes. Similarly, if DIM is supplied', &
-'   and all of the elements of MASK along a given row are zero, the', &
-'   result value for that row is zero.', &
+'   DIM direction. If MASK is present, only the elements for which MASK', &
+'   is .true. are considered. If more than one element in the array has', &
+'   the maximum value, the location returned is that of the first such', &
+'   element in array element order. If the array has zero size, or all', &
+'   of the elements of MASK are .false., then the result is an array of', &
+'   zeroes. Similarly, if DIM is supplied and all of the elements of MASK', &
+'   along a given row are zero, the result value for that row is zero.', &
 '', &
 'ARGUMENTS', &
 '   ARRAY    Shall be an array of type INTEGER, REAL, or CHARACTER.', &
@@ -11886,19 +11961,24 @@ textblock=[character(len=256) :: &
 '   MASK     Shall be an array of type LOGICAL, and conformable with ARRAY.', &
 '', &
 'RETURN VALUE', &
-'   If DIM is absent, the result is a rank-one array with a length', &
-'   equal to the rank of ARRAY. If DIM is present, the result', &
-'   is an array with a rank one less than the rank of ARRAY, and a', &
-'   size corresponding to the size of ARRAY with the DIM', &
-'   dimension removed. If DIM is present and ARRAY has a rank', &
-'   of one, the result is a scalar. In all cases, the result is of default', &
-'   INTEGER type.', &
+'   If DIM is absent, the result is a rank-one array with a length equal', &
+'   to the rank of ARRAY. If DIM is present, the result is an array with', &
+'   a rank one less than the rank of ARRAY, and a size corresponding to', &
+'   the size of ARRAY with the DIM dimension removed. If DIM is present', &
+'   and ARRAY has a rank of one, the result is a scalar. In all cases,', &
+'   the result is of default INTEGER type.', &
+'', &
+'   The value returned is reference to the offset from the beginning of', &
+'   the array, not neccessarily the subscript value if the array subscripts', &
+'   do not start with one.', &
 '', &
 'EXAMPLE', &
 '  sample program:', &
 '', &
 '    program demo_maxloc', &
 '    implicit none', &
+'    integer      :: ii', &
+'    integer,save :: i(-3:3)=[(abs(abs(ii)-50),ii=-3,3)]', &
 '    integer,save :: ints(3,5)= reshape([&', &
 '       1,  2,  3,  4,  5, &', &
 '      10, 20, 30, 40, 50, &', &
@@ -11907,7 +11987,31 @@ textblock=[character(len=256) :: &
 '    write(*,*) maxloc(ints)', &
 '    write(*,*) maxloc(ints,dim=1)', &
 '    write(*,*) maxloc(ints,dim=2)', &
+'    ! when array bounds do not start with one remember MAXLOC(3f) returns the', &
+'    ! offset relative to the lower bound-1 of the location of the maximum', &
+'    ! value, not the subscript of the maximum value. When the lower bound of ', &
+'    ! the array is one, these values are the same. In other words, MAXLOC(3f)', &
+'    ! returns the subscript of the value assuming the first subscript of the', &
+'    ! array is one no matter what the lower bound of the subscript actually', &
+'    ! is.', &
+'    write(*,''(g0,1x,g0)'') (ii,i(ii),ii=lbound(i,dim=1),ubound(i,dim=1))', &
+'    write(*,*)maxloc(i)', &
+'', &
 '    end program demo_maxloc', &
+'', &
+'  expected output:', &
+'', &
+'     3   5', &
+'     3   3   3   3   3', &
+'     5   5   5', &
+'   -3 47', &
+'   -2 48', &
+'   -1 49', &
+'   0 50', &
+'   1 49', &
+'   2 48', &
+'   3 47', &
+'    4', &
 '', &
 'STANDARD', &
 '   [[Fortran 95]] and later', &
@@ -11944,7 +12048,7 @@ if(present(m_help))then
 endif
 
 
-case('141','maxval')
+case('142','maxval')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12045,7 +12149,7 @@ if(present(m_help))then
 endif
 
 
-case('142','merge')
+case('143','merge')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12059,6 +12163,8 @@ textblock=[character(len=256) :: &
 '   Select values from two arrays or scalars according to a logical', &
 '   mask. The result is equal to TSOURCE if MASK is .true., or equal to', &
 '   FSOURCE if it is .false. .', &
+'', &
+'   Multi-dimensional arrays are supported.', &
 '', &
 'ARGUMENTS', &
 '   TSOURCE    May be of any type.', &
@@ -12074,27 +12180,50 @@ textblock=[character(len=256) :: &
 '', &
 '   merge (1.0, 0.0, k > 0)', &
 '', &
-'  is 1.0 for K=5 and 0.0 for K=2.', &
+'  is 1.0 for K=5 and 0.0 for K=-2.', &
 '', &
 '  Note that (currently) CHARACTER values must be of the same length.', &
 '', &
 '   program demo_merge', &
 '   implicit none', &
-'   integer :: tsrc(2,3), fsrc(2,3), answer(2,3)', &
+'   integer :: tvals(2,3), fvals(2,3), answer(2,3)', &
 '   logical :: mask(2,3)', &
 '   integer :: i', &
-'      tsrc(1,:)=[ 1,6,5 ]; fsrc(1,:)=[ 0,3,2 ]; &', &
-'      & mask(1,:)=[.true., .false.,.true.]', &
-'      tsrc(2,:)=[ 2,4,6 ]; fsrc(2,:)=[ 7,4,8 ]; &', &
-'      & mask(2,:)=[.false.,.false.,.true.]', &
-'      answer=merge(tsrc,fsrc,mask)', &
-'      write(*,''(3i2)'')(answer(i,:),i=1,size(answer,dim=1))', &
+'', &
+'      tvals(1,:)=[  10, -60,  50 ]', &
+'      tvals(2,:)=[ -20,  40, -60 ]', &
+'', &
+'      fvals(1,:)=[ 0, 3, 2 ]', &
+'      fvals(2,:)=[ 7, 4, 8 ]', &
+'', &
+'      mask(1,:)=[ .true.,  .false., .true. ]', &
+'      mask(2,:)=[ .false., .false., .true. ]', &
+'', &
+'      write(*,*)''mask of logicals''', &
+'      answer=merge( tvals, fvals, mask )', &
+'      write(*, ''(3i4)'')(answer(i, :), i=1, size(answer, dim=1))', &
+'', &
+'      write(*, *)''highest values''', &
+'      answer=merge( tvals, fvals, tvals > fvals )', &
+'      write(*, ''(3i4)'')(answer(i, :), i=1, size(answer, dim=1))', &
+'', &
+'      write(*, *)''lowest values''', &
+'      answer=merge( tvals, fvals, tvals < fvals )', &
+'      write(*, ''(3i4)'')(answer(i, :), i=1, size(answer, dim=1))', &
+'', &
 '   end program demo_merge', &
 '', &
-'  Expected result', &
+'  Expected values:', &
 '', &
-'    > 1 3 5', &
-'    > 7 4 6', &
+'    mask of logicals', &
+'     10   3  50', &
+'      7   4 -60', &
+'    highest values', &
+'     10   3  50', &
+'      7  40   8', &
+'    lowest values', &
+'      0 -60   2', &
+'    -20   4 -60', &
 '', &
 'STANDARD', &
 '   [[Fortran 95]] and later', &
@@ -12127,7 +12256,7 @@ if(present(m_help))then
 endif
 
 
-case('143','merge_bits')
+case('144','merge_bits')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12184,7 +12313,7 @@ if(present(m_help))then
 endif
 
 
-case('144','min')
+case('145','min')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12252,7 +12381,7 @@ if(present(m_help))then
 endif
 
 
-case('145','minexponent')
+case('146','minexponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12319,7 +12448,7 @@ if(present(m_help))then
 endif
 
 
-case('146','minloc')
+case('147','minloc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12421,7 +12550,7 @@ if(present(m_help))then
 endif
 
 
-case('147','minval')
+case('148','minval')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12514,7 +12643,7 @@ if(present(m_help))then
 endif
 
 
-case('148','mod')
+case('149','mod')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12593,7 +12722,7 @@ if(present(m_help))then
 endif
 
 
-case('149','modulo')
+case('150','modulo')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12672,7 +12801,7 @@ if(present(m_help))then
 endif
 
 
-case('150','move_alloc')
+case('151','move_alloc')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12759,7 +12888,7 @@ if(present(m_help))then
 endif
 
 
-case('151','mvbits')
+case('152','mvbits')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12822,7 +12951,7 @@ if(present(m_help))then
 endif
 
 
-case('152','nearest')
+case('153','nearest')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12890,7 +13019,7 @@ if(present(m_help))then
 endif
 
 
-case('153','new_line')
+case('154','new_line')
 
 textblock=[character(len=256) :: &
 '', &
@@ -12950,7 +13079,7 @@ if(present(m_help))then
 endif
 
 
-case('154','nint')
+case('155','nint')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13073,7 +13202,7 @@ if(present(m_help))then
 endif
 
 
-case('155','norm2')
+case('156','norm2')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13143,7 +13272,7 @@ if(present(m_help))then
 endif
 
 
-case('156','not')
+case('157','not')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13214,7 +13343,7 @@ if(present(m_help))then
 endif
 
 
-case('157','null')
+case('158','null')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13281,7 +13410,7 @@ if(present(m_help))then
 endif
 
 
-case('158','num_images')
+case('159','num_images')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13362,7 +13491,7 @@ if(present(m_help))then
 endif
 
 
-case('159','pack')
+case('160','pack')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13472,7 +13601,7 @@ if(present(m_help))then
 endif
 
 
-case('160','parity')
+case('161','parity')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13542,7 +13671,7 @@ if(present(m_help))then
 endif
 
 
-case('161','popcnt')
+case('162','popcnt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13620,7 +13749,7 @@ if(present(m_help))then
 endif
 
 
-case('162','poppar')
+case('163','poppar')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13692,7 +13821,7 @@ if(present(m_help))then
 endif
 
 
-case('163','precision')
+case('164','precision')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13761,7 +13890,7 @@ if(present(m_help))then
 endif
 
 
-case('164','present')
+case('165','present')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13830,7 +13959,7 @@ if(present(m_help))then
 endif
 
 
-case('165','product')
+case('166','product')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13906,7 +14035,7 @@ if(present(m_help))then
 endif
 
 
-case('166','radix')
+case('167','radix')
 
 textblock=[character(len=256) :: &
 '', &
@@ -13970,7 +14099,7 @@ if(present(m_help))then
 endif
 
 
-case('167','random_number')
+case('168','random_number')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14079,7 +14208,7 @@ if(present(m_help))then
 endif
 
 
-case('168','random_seed')
+case('169','random_seed')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14159,7 +14288,7 @@ if(present(m_help))then
 endif
 
 
-case('169','range')
+case('170','range')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14228,7 +14357,7 @@ if(present(m_help))then
 endif
 
 
-case('170','rank')
+case('171','rank')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14292,7 +14421,7 @@ if(present(m_help))then
 endif
 
 
-case('171','real')
+case('172','real')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14380,7 +14509,67 @@ if(present(m_help))then
 endif
 
 
-case('172','repeat')
+case('173','references')
+
+textblock=[character(len=256) :: &
+'', &
+'NAME', &
+'   references(5f - FORTRAN:SUPPLEMENT] www references for Fortran', &
+'', &
+'SYNTAX', &
+'   browser URL', &
+'', &
+'DESCRIPTION', &
+'   Some popular WWW reference sites for Fortran', &
+'', &
+'   DOCUMENTATION', &
+'     o Fortran 2018 Standard  https://j3-fortran.org/doc/year/18/18-007r1.pdf', &
+'     o Modern Fortran  http://cyber.dabamos.de/programming/modernfortran', &
+'   STANDARDS', &
+'     o J3  https://j3-fortran.org', &
+'   COMPILERS', &
+'     o GNU gcc  http://gcc.gnu.org', &
+'   REPOSITORIES', &
+'     o netlib  http://www.netlib.org', &
+'     o Fortran Standard Library project  https://github.com/fortran-lang/stdlib/issues/229', &
+'   EXAMPLES', &
+'     o Rosetta Code  https://rosettacode.org', &
+'     o Fortran Package Manager ', &
+'       o fpm  https://github.com/fortran-lang/fpm', &
+'       o repository  https://github.com/fortran-lang/fpm-registry', &
+'       o package listing  https://fortran-lang.org/packages.', &
+'   DISCUSSION', &
+'    o Fortran Discourse  https://fortran-lang.discourse.group', &
+'    o Google Fortran newsgroup  https://groups.google.com/forum/#!forum/comp.lang.fortran', &
+'    o Fortran Wiki  http://fortranwiki.org', &
+'']
+
+shortname="references"
+
+if(present(topic))then
+   if(topic)then
+      textblock=[shortname]
+   endif
+endif
+
+if(present(prefix))then
+   if(prefix)then
+      do i=1,size(textblock)
+         textblock(i)= shortname//':'//trim(textblock(i))
+      enddo
+   endif
+endif
+
+if(present(m_help))then
+   if(m_help)then
+      textblock=[character(len=len(textblock)+1) :: ' ',textblock] ! add blank line to put shortname into
+      textblock=' '//textblock                                     ! shift to right by one character
+      textblock(1)=shortname
+   endif
+endif
+
+
+case('174','repeat')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14449,7 +14638,7 @@ if(present(m_help))then
 endif
 
 
-case('173','reshape')
+case('175','reshape')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14528,7 +14717,7 @@ if(present(m_help))then
 endif
 
 
-case('174','return')
+case('176','return')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14663,7 +14852,7 @@ if(present(m_help))then
 endif
 
 
-case('175','rewind')
+case('177','rewind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14770,7 +14959,7 @@ if(present(m_help))then
 endif
 
 
-case('176','rrspacing')
+case('178','rrspacing')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14828,7 +15017,7 @@ if(present(m_help))then
 endif
 
 
-case('177','same_type_as')
+case('179','same_type_as')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14885,7 +15074,7 @@ if(present(m_help))then
 endif
 
 
-case('178','scale')
+case('180','scale')
 
 textblock=[character(len=256) :: &
 '', &
@@ -14955,7 +15144,7 @@ if(present(m_help))then
 endif
 
 
-case('179','scan')
+case('181','scan')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15037,7 +15226,7 @@ if(present(m_help))then
 endif
 
 
-case('180','selected_char_kind')
+case('182','selected_char_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15113,7 +15302,7 @@ if(present(m_help))then
 endif
 
 
-case('181','selected_int_kind')
+case('183','selected_int_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15181,7 +15370,7 @@ if(present(m_help))then
 endif
 
 
-case('182','selected_real_kind')
+case('184','selected_real_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15276,7 +15465,7 @@ if(present(m_help))then
 endif
 
 
-case('183','set_exponent')
+case('185','set_exponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15343,7 +15532,7 @@ if(present(m_help))then
 endif
 
 
-case('184','shape')
+case('186','shape')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15417,7 +15606,7 @@ if(present(m_help))then
 endif
 
 
-case('185','shifta')
+case('187','shifta')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15477,7 +15666,7 @@ if(present(m_help))then
 endif
 
 
-case('186','shiftl')
+case('188','shiftl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15535,7 +15724,7 @@ if(present(m_help))then
 endif
 
 
-case('187','shiftr')
+case('189','shiftr')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15593,7 +15782,7 @@ if(present(m_help))then
 endif
 
 
-case('188','sign')
+case('190','sign')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15661,7 +15850,7 @@ if(present(m_help))then
 endif
 
 
-case('189','sin')
+case('191','sin')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15788,7 +15977,7 @@ if(present(m_help))then
 endif
 
 
-case('190','sinh')
+case('192','sinh')
 
 textblock=[character(len=256) :: &
 '', &
@@ -15853,7 +16042,7 @@ if(present(m_help))then
 endif
 
 
-case('191','size')
+case('193','size')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16057,7 +16246,7 @@ if(present(m_help))then
 endif
 
 
-case('192','sngl')
+case('194','sngl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16114,7 +16303,7 @@ if(present(m_help))then
 endif
 
 
-case('193','spacing')
+case('195','spacing')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16182,7 +16371,7 @@ if(present(m_help))then
 endif
 
 
-case('194','spread')
+case('196','spread')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16310,7 +16499,7 @@ if(present(m_help))then
 endif
 
 
-case('195','sqrt')
+case('197','sqrt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16375,7 +16564,7 @@ if(present(m_help))then
 endif
 
 
-case('196','stop')
+case('198','stop')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16485,7 +16674,7 @@ if(present(m_help))then
 endif
 
 
-case('197','storage_size')
+case('199','storage_size')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16555,7 +16744,7 @@ if(present(m_help))then
 endif
 
 
-case('198','sum')
+case('200','sum')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16657,7 +16846,7 @@ if(present(m_help))then
 endif
 
 
-case('199','system_clock')
+case('201','system_clock')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16768,7 +16957,7 @@ if(present(m_help))then
 endif
 
 
-case('200','tan')
+case('202','tan')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16834,7 +17023,7 @@ if(present(m_help))then
 endif
 
 
-case('201','tanh')
+case('203','tanh')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16903,7 +17092,7 @@ if(present(m_help))then
 endif
 
 
-case('202','this_image')
+case('204','this_image')
 
 textblock=[character(len=256) :: &
 '', &
@@ -16997,7 +17186,7 @@ if(present(m_help))then
 endif
 
 
-case('203','tiny')
+case('205','tiny')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17059,7 +17248,7 @@ if(present(m_help))then
 endif
 
 
-case('204','trailz')
+case('206','trailz')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17191,7 +17380,7 @@ if(present(m_help))then
 endif
 
 
-case('205','transfer')
+case('207','transfer')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17294,7 +17483,7 @@ if(present(m_help))then
 endif
 
 
-case('206','transpose')
+case('208','transpose')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17395,7 +17584,7 @@ if(present(m_help))then
 endif
 
 
-case('207','trim')
+case('209','trim')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17465,7 +17654,7 @@ if(present(m_help))then
 endif
 
 
-case('208','ubound')
+case('210','ubound')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17587,7 +17776,7 @@ if(present(m_help))then
 endif
 
 
-case('209','unpack')
+case('211','unpack')
 
 textblock=[character(len=256) :: &
 '', &
@@ -17660,7 +17849,7 @@ if(present(m_help))then
 endif
 
 
-case('210','verify')
+case('212','verify')
 
 textblock=[character(len=256) :: &
 '', &

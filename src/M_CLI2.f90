@@ -175,7 +175,7 @@ character(len=:),allocatable,save :: G_remaining
 character(len=:),allocatable,save :: G_subcommand              ! possible candidate for a subcommand
 character(len=:),allocatable,save :: G_STOP_MESSAGE
 integer,save                      :: G_STOP
-logical,save                      :: G_STOPON
+logical,save                      :: G_QUIET
 logical,save                      :: G_STRICT                  ! strict short and long rules or allow -longname and --shortname
 !----------------------------------------------
 ! try out response files
@@ -376,7 +376,12 @@ integer                                          :: iback
          return
       endif
    elseif(get('version').eq.'T')then
-      call journal('sc','*check_commandline* no version text')
+
+      if(G_QUIET)then
+         G_STOP_MESSAGE = 'no version text'
+      else
+         call journal('sc','*check_commandline* no version text')
+      endif
       call mystop(4,'displayed default version text')
       return
    endif
@@ -390,7 +395,9 @@ integer :: ilength
    call get_command_argument(number=0,value=cmd_name)
    G_passed_in=G_passed_in//repeat(' ',len(G_passed_in))
    call substitute(G_passed_in,' --',NEW_LINE('A')//' --')
-   call journal('sc',cmd_name,G_passed_in) ! no help text, echo command and default options
+   if(.not.G_QUIET)then
+      call journal('sc',cmd_name,G_passed_in) ! no help text, echo command and default options
+   endif
    deallocate(cmd_name)
 end subroutine default_help
 end subroutine check_commandline
@@ -861,9 +868,9 @@ integer                                           :: ibig
    G_STOP=0
    G_STOP_MESSAGE=''
    if(present(ierr))then
-      G_STOPON=.false.
+      G_QUIET=.true.
    else
-      G_STOPON=.true.
+      G_QUIET=.false.
    endif
    ibig=longest_command_argument() ! bug in gfortran. len=0 should be fine
    if(allocated(unnamed)) deallocate(unnamed)
@@ -1698,7 +1705,7 @@ integer                               :: iused
       call prototype_to_dictionary(string)          ! build dictionary from prototype
    else
       if(debug_m_cli2)write(*,gen)'<DEBUG>CMD_ARGS_TO_NLIST:CALL CMD_ARGS_TO_DICTIONARY:CHECK=',.true.
-      call cmd_args_to_dictionary(check=.true.)
+      call cmd_args_to_dictionary()
    endif
 
    if(len(G_remaining).gt.1)then                    ! if -- was in prototype then after -- on input return rest in this string
@@ -2157,10 +2164,8 @@ end function separator
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine cmd_args_to_dictionary(check)
+subroutine cmd_args_to_dictionary()
 ! convert command line arguments to dictionary entries
-logical,intent(in),optional  :: check
-logical                      :: check_local
 !x!logical                      :: guess_if_value
 integer                      :: pointer
 character(len=:),allocatable :: lastkeyword
@@ -2175,11 +2180,6 @@ logical                      :: nomore
 logical                      :: next_mandatory
    if(debug_m_cli2)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:START'
    next_mandatory=.false.
-   if(present(check))then
-      check_local=check
-   else
-      check_local=.false.
-   endif
    nomore=.false.
    pointer=0
    lastkeyword=' '
@@ -2198,7 +2198,7 @@ logical                      :: next_mandatory
          if(G_remaining_option_allowed)then
             G_remaining_on=.true.
          endif
-         cycle
+         cycle GET_ARGS
       endif
 
       dummy=current_argument//'   '
@@ -2212,7 +2212,12 @@ logical                      :: next_mandatory
             call ifnull()
          endif
          call locate_key(current_argument_padded(3:),pointer)
-         if(pointer.le.0.and.check_local)then
+         if(pointer.le.0)then
+            if(G_QUIET)then
+               lastkeyword="UNKNOWN"
+               pointer=0
+               cycle GET_ARGS
+            endif
             call print_dictionary('UNKNOWN LONG KEYWORD: '//current_argument)
             call mystop(1)
             return
@@ -2229,7 +2234,7 @@ logical                      :: next_mandatory
             call ifnull()
          endif
          call locate_key(current_argument_padded(2:),pointer)
-         if(pointer.le.0.and.check_local)then
+         if(pointer.le.0)then
             jj=len(current_argument)
             if(G_STRICT.and.jj.gt.2)then  ! in strict mode this might be multiple single-character values
               do kk=2,jj
@@ -2239,6 +2244,11 @@ logical                      :: next_mandatory
                     call update(keywords(pointer),'T')
                  else
                     call print_dictionary('UNKNOWN COMPOUND SHORT KEYWORD:'//letter//' in '//current_argument)
+                    if(G_QUIET)then
+                       lastkeyword="UNKNOWN"
+                       pointer=0
+                       cycle GET_ARGS
+                    endif
                     call mystop(2)
                     return
                  endif
@@ -2246,6 +2256,11 @@ logical                      :: next_mandatory
               enddo
             else
                call print_dictionary('UNKNOWN SHORT KEYWORD: '//current_argument)
+               if(G_QUIET)then
+                  lastkeyword="UNKNOWN"
+                  pointer=0
+                  cycle GET_ARGS
+               endif
                call mystop(2)
                return
             endif
@@ -2493,6 +2508,7 @@ subroutine print_dictionary(header,stop)
 character(len=*),intent(in),optional :: header
 logical,intent(in),optional          :: stop
 integer          :: i
+   if(G_QUIET)return
    if(present(header))then
       if(header.ne.'')then
          write(warn,'(a)')header
@@ -6046,9 +6062,9 @@ end function sg
 !===================================================================================================================================
 subroutine mystop(sig,msg)
 ! negative signal means always stop program
-! else do not stop and set G_STOP_MESSAGE if G_STOPON is false
+! else do not stop and set G_STOP_MESSAGE if G_QUIET is true
 ! or
-! print message and stop if G_STOPON is true
+! print message and stop if G_QUIET is false
 ! the MSG is NOT for displaying except for internal errors when the program will be stopped.
 ! It is for returning a value when the stop is being ignored
 !
@@ -6059,7 +6075,7 @@ character(len=*),intent(in),optional :: msg
       if(present(msg))call journal('sc',msg)
       !x!stop abs(sig)
       stop 1
-   elseif(G_STOPON)then
+   elseif(.not.G_QUIET)then
       stop
    else
       if(present(msg)) then
