@@ -48,6 +48,27 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!        pwd-(1f) - [FUNIX:FILESYSTEM] list full pathname of current directory
+!!        (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!        pwd- [ --version|--help]
+!!##DESCRIPTION
+!!        list full pathname of current directory
+!!##OPTIONS
+!!        --help      display command help and exit
+!!        --version   output version information and exit
+!!##EXAMPLES
+!!
+!!  Sample command lines ...
+!!
+!!         pwd-
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -67,7 +88,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-09-09 17:58:12 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 17:18:31 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

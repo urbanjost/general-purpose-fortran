@@ -56,7 +56,7 @@ module M_uuid
 !!
 !!##SYNOPSIS
 !!
-!!    use m_uuid, only : generate_uuid
+!!    use M_uuid, only : generate_uuid
 !!
 !!##QUOTE
 !!    Remember you are unique, just like everyone else.

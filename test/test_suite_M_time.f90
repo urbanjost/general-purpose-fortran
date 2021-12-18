@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 program runtest
 use M_msg
 use M_verify
@@ -14,6 +25,7 @@ end program runtest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_suite_M_time
 use M_verify, only : unit_check,unit_check_good,unit_check_bad,unit_check_done,unit_check_start,unit_check_msg,unit_check_level
+use M_verify, only : unit_check_stop
 use,intrinsic :: iso_c_binding, only: c_int, c_char, c_null_char
 use M_time
 implicit none
@@ -86,8 +98,11 @@ call test_v2mo()
 call unit_check_start('w2d            ',SAME//' "Given iso-8601 Week-numbering year date yyyy-Www-d calculate date" ')
 call test_w2d()
 
+call unit_check_stop('M_time tests completed')
+
 contains
 !===================================================================================================================================
+
 subroutine put_environment_variable(name,value,status)
 
 !  This is an private copy of the set_environment_variable routine(3f) routine from
@@ -111,6 +126,7 @@ end interface
    loc_err =  c_setenv(str2arr(trim(NAME)),str2arr(VALUE))
    if (present(STATUS)) STATUS = loc_err
 end subroutine put_environment_variable
+
 !===================================================================================================================================
 pure function str2arr(string) result (array)
 
@@ -411,7 +427,7 @@ do i=1,size(line)-1
    endif
 
    call guessdate(date1,dat)                                         ! convert date string to DAT
-   call unit_check('fmtdate',fmtdate(dat,'year-month-day').eq.trim(date2),fmtdate(dat,'year-month-day'))
+   call unit_check('fmtdate',fmtdate(dat,'year-month-day').eq.trim(date2),'GOT',fmtdate(dat,'year-month-day'),'expected',date2)
 
    ! convert DAT to ISO week date, all generated dates should match ISO week date
    call unit_check('fmtdate',fmtdate(dat,"%I").eq.iso_week_date, msg=iso_week_date)
@@ -462,10 +478,12 @@ line=[ character(len=372) :: &
 
 &' ' ]
 do i=1,size(line)-1
-   read(line(i),*)date1,date2,iso_week_date,comment
-   call guessdate(date1,dat)                                         ! convert date string to DAT
-   call unit_check('guessdate',fmtdate(dat,"%I").eq.iso_week_date,msg=date1)
-   call unit_check('guessdate',fmtdate(dat,"year-month-day").eq.date2,msg=date2)
+ read(line(i),*)date1,date2,iso_week_date,comment
+ call guessdate(date1,dat)                                         ! convert date string to DAT
+ call unit_check('guessdate',&
+ &fmtdate(dat,"%I").eq.iso_week_date,'input',date1,'produced',fmtdate(dat,"%I"),'expected',iso_week_date)
+ call unit_check('guessdate',&
+ &fmtdate(dat,"year-month-day").eq.date2,'input',date1,'produced',fmtdate(dat,"year-month-day"),'expected',date2)
 enddo
 
 call unit_check_done('guessdate')
@@ -657,20 +675,29 @@ implicit none
 
    call unit_check_start('days2sec')
 
-   call unit_check('days2sec',nint(days2sec('1')).eq.             1, msg='1')
-   call unit_check('days2sec',nint(days2sec('1:00')).eq.         60, msg='1:00')
-   call unit_check('days2sec',nint(days2sec('1:00:00')).eq.    3600, msg='1:00:00')
-   call unit_check('days2sec',nint(days2sec('1-00:00:00')).eq.86400, msg='1-00:00:00')
-   call unit_check('days2sec',nint(days2sec('1d2h 3.0 minutes 4sec')).eq.93784,msg='1d2h 3.0 minutes 4sec')
+   call unit_check('days2sec',nint(days2sec('1')).eq.             1, 'expected',1,'got',nint(days2sec('1')))
+   call unit_check('days2sec',nint(days2sec('1:00')).eq.         60,'expected',60,'got',nint(days2sec('1:00')))
+   call unit_check('days2sec',nint(days2sec('1:00:00')).eq.    3600, 'expected',3600,'got',nint(days2sec('1:00:00')))
+   call unit_check('days2sec',nint(days2sec('1-00:00:00')).eq.86400, 'expected',86400,'got',nint(days2sec('1-00:00:00')))
+   call unit_check('days2sec',&
+   &nint(days2sec('1d2h 3.0 minutes 4sec')).eq.93784,'expected',1,'got',nint(days2sec('1d2h 3.0 minutes 4sec')))
 
-   call unit_check('days2sec',nint(days2sec(' 1-12:04:20              ')) .eq. 129860,msg='1-12:04:20')
-   call unit_check('days2sec',nint(days2sec(' 1.5 days                ')) .eq. 129600,msg='1.5 days')
-   call unit_check('days2sec',nint(days2sec(' 1.5 days 4hrs 30minutes ')) .eq. 145800,msg='1.5 days 4 hrs 30 minutes')
-   call unit_check('days2sec',nint(days2sec(' 1.5d                    ')) .eq. 129600,msg='1.5d')
-   call unit_check('days2sec',nint(days2sec(' 1d2h3m4s                ')) .eq. 93784,msg='1d2h3m4s')
-   call unit_check('days2sec',nint(days2sec(' 1d1d1d                  ')) .eq. 259200,msg='DUPLICATES: 1d1d1d')
-   call unit_check('days2sec',nint(days2sec(' 4d-12h                  ')) .eq. 302400,msg='NEGATIVE VALUES: 4d-12h')
-   call unit_check('days2sec',nint(days2sec(' 3  d  1 2   h           ')) .eq. 302400,msg='WHITESPACE: 3 d 1 2 h')
+   call unit_check('days2sec',nint(days2sec(' 1-12:04:20              ')) .eq. 129860, &
+   & 'expected',129860,'got',nint(days2sec('1.12:03:20')))
+   call unit_check('days2sec',nint(days2sec(' 1.5 days                ')) .eq. 129600, &
+   & 'expected',129600,'got',nint(days2sec('1.5 days')))
+   call unit_check('days2sec',nint(days2sec(' 1.5 days 4hrs 30minutes ')) .eq. 145800, &
+   & 'expected',145800,'got',nint(days2sec('1.5 days 4hrs 30minutes')))
+   call unit_check('days2sec',nint(days2sec(' 1.5d                    ')) .eq. 129600, &
+   & 'expected',129600,'got',nint(days2sec('1.5d')))
+   call unit_check('days2sec',nint(days2sec(' 1d2h3m4s                ')) .eq. 93784, &
+   & 'expected',93784,'got',nint(days2sec('1d2h3m4s')))
+   call unit_check('days2sec',nint(days2sec(' 1d1d1d                  ')) .eq. 259200, &
+   & 'expected',259200,'got',nint(days2sec('1d1d1d')))
+   call unit_check('days2sec',nint(days2sec(' 4d-12h                  ')) .eq. 302400, &
+   & 'expected',302400,'got',nint(days2sec('4d-12h')))
+   call unit_check('days2sec',nint(days2sec(' 3  d  1 2   h           ')) .eq. 302400, &
+   & 'expected',302400,'got',nint(days2sec('3 d 1 s  h')))
 
    call unit_check_done('days2sec')
 

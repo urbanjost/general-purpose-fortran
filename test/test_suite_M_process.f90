@@ -1,12 +1,14 @@
 program runtest
 use M_msg
-use M_verify, only : unit_check_command,unit_check_keep_going,unit_check_level
+use :: M_verify,  only : unit_check_command, unit_check_keep_going, unit_check_level
+use :: M_verify,  only : unit_check_stop
 implicit none
 external test_suite_M_process
    unit_check_command=''
    unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite_M_process()
+   call unit_check_stop()
 contains
 
 end program runtest
@@ -66,7 +68,7 @@ character(len=4096) :: line                                                ! lon
   enddo
   call unit_check('process_open_read', string.eq.'a+b+c+', string)
   call process_open_read('echo a;echo b;echo c',fp,ierr)                   ! open process to read from
-  call unit_check('process_open_read', string.eq.'a+b+c+', 'openn already open process,ierr=',ierr)
+  call unit_check('process_open_read', string.eq.'a+b+c+', 'open already open process,ierr=',ierr)
   call process_close(fp,ierr)                                              ! Wrap up
   !!call unit_check('process_open_read', ierr.eq.0, 'close ierr=',ierr)
   call unit_check_done('process_open_read',msg='')

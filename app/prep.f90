@@ -19,7 +19,7 @@ use M_list,      only : insert, locate, replace, remove                      ! B
 
    integer,parameter                    :: num=2048                       ! number of named values allowed
    integer,public,parameter             :: G_line_length=4096             ! allowed length of input lines
-   integer,public,parameter             :: G_var_len=31                   ! allowed length of variable names
+   integer,public,parameter             :: G_var_len=63                   ! allowed length of variable names
 
    integer,public                       :: G_numdef=0                     ! number of defined variables in dictionary
    logical,public                       :: G_ident=.false.                ! whether to write IDENT as a comment or CHARACTER
@@ -164,7 +164,7 @@ subroutine cond()       !@(#)cond(3f): process conditional directive assumed to 
    case('PARCEL','POST','SET')
    case(' ')
 
-   case('ELSE','ELSEIF');  call else(verb,upopts,noelse,eb)
+   case('ELSE','ELSEIF','ELIF');  call else(verb,upopts,noelse,eb)
    case('ENDIF');          call endif(noelse,eb)
    case('IF');             call if(upopts,noelse,eb)
    case('IFDEF','IFNDEF'); call def(verb,upopts,noelse,eb)
@@ -349,6 +349,7 @@ integer,intent(in)             :: ireset                    ! 0= can redefine va
    if(istore.eq.0)then                                      ! new variable name
       G_numdef=G_numdef+1                                   ! increment number of defined variables
       istore=G_numdef
+      temp=''
    endif
    if (iequ.eq.0) then                                      ! if no = then variable assumes value of 1
       G_defvar(istore)=opts                                 ! store variable name from line with no =value string
@@ -358,15 +359,24 @@ integer,intent(in)             :: ireset                    ! 0= can redefine va
       temp=opts(iequ+1:)                                       ! get expression
    endif
 
+   temp=str_replace(temp,'==','.EQ.')
+   temp=str_replace(temp,'/=','.NE.')
+   temp=str_replace(temp,'!=','.NE.')
+   temp=str_replace(temp,'>=','.GE.')
+   temp=str_replace(temp,'<=','.LE.')
+   temp=str_replace(temp,'>','.GT.')
+   temp=str_replace(temp,'<','.LT.')
+   temp=str_replace(temp,'&&','.AND.')
+   temp=str_replace(temp,'||','.OR.')
    call parens(temp)                                        !
    if (iequ.ne.0) then
       temp=opts(:iequ)//temp
    endif
 
-   call math(temp,iequ+1,len_trim(opts))
-   call doop(temp,iequ+1,len_trim(opts))
-   call logic(temp,iequ+1,len_trim(opts))
-   call getval(temp,iequ+1,len_trim(opts),G_defval(istore))
+   call math(temp,iequ+1,len_trim(temp))
+   call doop(temp,iequ+1,len_trim(temp))
+   call logic(temp,iequ+1,len_trim(temp))
+   call getval(temp,iequ+1,len_trim(temp),G_defval(istore))
 
 end subroutine define
 !===================================================================================================================================
@@ -512,12 +522,13 @@ end subroutine undef
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine if(opts,noelse,eb)                              !@(#)if(3f): process IF and ELSEIF directives
-character(len=*)                :: opts
+character(len=*),intent(in)     :: opts
 integer,intent(out)             :: noelse
 logical                         :: eb
    character(len=G_var_len)     :: value
    integer                      :: ios
    integer                      :: i
+   character(len=G_line_length) :: expression       ! line        -
 
    noelse=0
    G_write=.false.
@@ -526,21 +537,32 @@ logical                         :: eb
    if (G_nestl.gt.G_nestl_max) then
       call stop_prep('*prep* ABORT(bh) - "IF" BLOCK NESTING TOO DEEP, LIMITED TO '//v2s(G_nestl_max)//' LEVELS:'//trim(G_source))
    endif
+   expression=opts
 
    FIND_DEFINED: do                                        ! find and reduce all DEFINED() functions to ".TRUE." or ".FALSE."
-      if (index(opts,'DEFINED(').ne.0) then                ! find a DEFINED() function
-         call ifdef(opts,index(opts,'DEFINED('))           ! reduce DEFINED() function that was found
-         opts=nospace(opts)                                ! remove any spaces from rewritten expression
+      if (index(expression,'DEFINED(').ne.0) then                ! find a DEFINED() function
+         call ifdef(expression,index(expression,'DEFINED('))           ! reduce DEFINED() function that was found
+         expression=nospace(expression)                          ! remove any spaces from rewritten expression
          cycle                                             ! look for another DEFINED() function
       endif
       exit                                                 ! no remaining DEFINED() functions so exit loop
    enddo FIND_DEFINED
 
-   call parens(opts)
-   if (index(opts,'.').eq.0) then                          ! if line should be a variable only
-      if (opts(1:1).ge.'A'.and.opts(1:1).le.'Z') then      ! check that variable name starts with a valid character
-         call name(opts)                                   ! check that opts contains only a legitimate variable name
-         value=opts(:G_var_len)                            ! set VALUE to variable name
+   expression=str_replace(expression,'==','.EQ.')
+   expression=str_replace(expression,'/=','.NE.')
+   expression=str_replace(expression,'!=','.NE.')
+   expression=str_replace(expression,'>=','.GE.')
+   expression=str_replace(expression,'<=','.LE.')
+   expression=str_replace(expression,'>','.GT.')
+   expression=str_replace(expression,'<','.LT.')
+   expression=str_replace(expression,'&&','.AND.')
+   expression=str_replace(expression,'||','.OR.')
+
+   call parens(expression)
+   if (index(expression,'.').eq.0) then                            ! if line should be a variable only
+      if (expression(1:1).ge.'A'.and.expression(1:1).le.'Z') then  ! check that variable name starts with a valid character
+         call name(expression)                             ! check that expression contains only a legitimate variable name
+         value=expression(:G_var_len)                      ! set VALUE to variable name
          do i=1,G_numdef                                   ! find variable in variable dictionary
             if (G_defvar(i).eq.value) exit
          enddo
@@ -555,7 +577,7 @@ logical                         :: eb
          call stop_prep('*prep* ERROR(026) - CONSTANT LOGICAL EXPRESSION REQUIRED:'//trim(G_source))
       endif
    else                                                    ! a period is present in the expression so it needs evaluated
-      call eval(opts)                                      ! evaluate line
+      call eval(expression)                                ! evaluate line
    endif
    if (.not.G_dc.or..not.G_condop(G_nestl-1).or.eb)then
       return                                               ! check to make sure previous IF was true
@@ -1003,7 +1025,7 @@ character(len=G_line_length)       :: line
 integer                            :: ipos1
 integer                            :: ipos2
 
-   character(len=4),parameter      :: ops(6) = (/'.EQ.','.NE.','.GE.','.GT.','.LE.','.LT.'/)
+   character(len=4),parameter      :: ops(6) = ['.EQ.','.NE.','.GE.','.GT.','.LE.','.LT.']
    character(len=G_var_len)        :: val1
    character(len=G_var_len)        :: val2
    character(len=7)                :: temp
@@ -1213,7 +1235,7 @@ end subroutine logic
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine eval(line)                                   !@(#)eval(3f): evaluate math expression to .TRUE. or .FALSE.
-character(len=G_line_length)        :: line
+character(len=G_line_length)      :: line
    character(len=7)               :: value
 
    call parens(line)
@@ -1985,11 +2007,11 @@ help_text=[ CHARACTER(LEN=128) :: &
 '         [--help]                                                               ',&
 'DESCRIPTION                                                                     ',&
 '                                                                                ',&
-'   By default the pre-processor prep(1) will interpret lines with "$" in column ',&
-'   one, and will output no such lines. Other input is conditionally written to  ',&
-'   the output file based on the directives encountered in the input. It does    ',&
-'   not support parameterized macros but does support string substitution and    ',&
-'   the inclusion of free-format text blocks that may be converted to Fortran    ',&
+'   The pre-processor prep(1) will interpret lines with "$" (by default) in      ',&
+'   column one, and will output no such lines. Other input is conditionally      ',&
+'   written to the output file based on the directives encountered in the input. ',&
+'   It does not support parameterized macros but does support string substitution',&
+'   and the inclusion of free-format text blocks that may be converted to Fortran',&
 '   comments or CHARACTER variable definitions while simultaneously being used   ',&
 '   to generate documentation files. INTEGER or LOGICAL expressions may be used  ',&
 '   to select output lines.                                                      ',&
@@ -2005,9 +2027,14 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   An expression is composed of INTEGER and LOGICAL constants, parameters       ',&
 '   and operators. Operators are                                                 ',&
 '                                                                                ',&
-'     .NOT.  .AND.  .OR.  .EQV.  .NEQV.  .EQ.  .NE.  .GE.                        ',&
-'     .GT.   .LE.   .LT.  +      -       *     /     (                           ',&
-'     )      **                                                                  ',&
+'     .NOT.  .AND.  .OR.  .EQV.  .NEQV.                                          ',&
+'     .EQ.   .NE.   .GE.  .GT.   .LE.    .LT.                                    ',&
+'     ==     /=     >=    >      <=      <                                       ',&
+'     +      -       *     /     **                                              ',&
+'     (      )                                                                   ',&
+'    C-style:                                                                    ',&
+'     !=     &&     ||                                                           ',&
+!NOT SUPPORTED:   %,  <<,  >>, &,  ~, |
 '                                                                                ',&
 '   The syntax for the directive lines is as follows:                            ',&
 '                                                                                ',&
@@ -2016,7 +2043,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '     $UNDEFINE variable_name                              [! comment ]          ',&
 '     $IF       expression| [$IFDEF|$IFNDEF variable_name] [! comment ]          ',&
 '               { sequence of source statements}                                 ',&
-'     [$ELSEIF  {LOGICAL or INTEGER expression}            [! comment ]          ',&
+'     [$ELSEIF|$ELIF  {LOGICAL or INTEGER expression}      [! comment ]          ',&
 '               { sequence of source statements}]                                ',&
 '     [$ELSE                                               [! comment ]          ',&
 '               { sequence of source statements}]                                ',&
@@ -2127,8 +2154,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Example:                                                                     ',&
 '                                                                                ',&
 '    $define A=1                                                                 ',&
-'    $define B=1                                                                 ',&
-'    $define C=2                                                                 ',&
+'    $define B= 10 - 1                                                           ',&
+'    $define C=1+1                                                               ',&
 '    $if ( A + B ) / C .eq. 1                                                    ',&
 '       (a+b)/c is one                                                           ',&
 '    $endif                                                                      ',&

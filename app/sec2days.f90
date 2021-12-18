@@ -1,6 +1,6 @@
 program demo_sec2days
 use M_kracken95, only : kracken, lget, sget, IPvalue
-use M_time,    only : sec2days, realtime
+use M_time,    only : sec2days
 use M_strings, only : substitute
 implicit none
 character(len=*),parameter     :: ident="@(#)sec2days(1f): convert seconds to string of form dd-hh:mm:ss"
@@ -148,7 +148,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-08-21 22:17:32 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:27:06 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

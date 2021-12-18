@@ -23,7 +23,7 @@ integer,parameter               :: fd=10             ! file descriptor for file 
 integer                         :: ios               ! hold I/O error flag
 character                       :: c1                ! current character read
 character                       :: previous          ! previous significant character
-character,parameter             :: nl=NEW_LINE('A')
+character,parameter             :: nl=new_line('A')
 integer                         :: ios1              ! hold I/O error flag
 integer                         :: icount  = 0       ! number of characters read from file
 integer                         :: icount_comm  = 0  ! number of characters read from file that are comments
@@ -264,20 +264,39 @@ subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
 'flower(1f) - [DEVELOPER] change case of free-format Fortran file',&
+'             or remove code or remove comments',&
 '             (LICENSE:PD)',&
 'SYNOPSIS',&
 '   flower [ --stat|[ [--nocomment|--nocode] [--toupper]|[--verbose] ]',&
 '          FILENAMES(s) ]|[--help|--version|--usage]',&
 'DESCRIPTION',&
-'   Convert the free-format Fortran source file to lowercase or uppercase',&
-'   leaving comments and quoted text as-is. This is a basic program',&
-'   that writes its results to stdout and does not recognize Hollerith',&
-'   strings and preprocessor directives as special cases.',&
 '',&
-'   Tabs should be expanded before processing the file',&
+'',&
+'',&
+'1. Primarily to allow for a preference of lowercase characters when',&
+'   working with older uppercase-only FORTRAN this program will convert',&
+'   the code to lowercase once the code has been previously converted',&
+'   to free-format Fortran source file format.',&
+'',&
+'   It can also convert the code to uppercase. In each case comments and',&
+'   quoted text are left as-is.',&
+'',&
+'   This is a basic program that writes its results to stdout and does',&
+'   not recognize Hollerith strings and preprocessor directives as',&
+'   special cases.',&
+'',&
+'   Tabs should be expanded before processing the file.',&
 '',&
 '   This is a very simplistic approach so the output should be carefully',&
 '   checked.',&
+'',&
+'2. It may also be used to generate simple statistics about what percentage',&
+'   of the code is comments.',&
+'',&
+'3. flower(1) can also be used to strip the comments from the code.',&
+'',&
+'4. Lastly, the code can be removed so the comments can be used for documentation',&
+'   or run through utilities like spell checkers.',&
 '',&
 'OPTIONS',&
 '     FILENAME     Fortran source file which is to be converted to lowercase',&
@@ -305,7 +324,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '     flower *.f90 -nocode|spell',&
 '',&
 '     # show stats for files measuring percent of comments',&
-'     flower *.f90 --nocode --nocomment --verbose',&
+'     flower --stat *.f90 *.F90',&
+'',&
+'     # check spelling on comments',&
+'     flower --nocode *.f90 *.F90|spell',&
 '',&
 'EXIT STATUS',&
 '   The following exit values are returned:',&
@@ -313,56 +335,81 @@ help_text=[ CHARACTER(LEN=128) :: &
 '      0     no differences were found',&
 '      1     differences were found',&
 '']
-! NAME
-! flower(1f) - [DEVELOPER] change case of free-format Fortran file
-!              (LICENSE:PD)
-! SYNOPSIS
-!    flower [ --stat|[ [--nocomment|--nocode] [--toupper]|[--verbose] ]
-!           FILENAMES(s) ]|[--help|--version|--usage]
-! DESCRIPTION
-!    Convert the free-format Fortran source file to lowercase or uppercase
-!    leaving comments and quoted text as-is. This is a basic program
-!    that writes its results to stdout and does not recognize Hollerith
-!    strings and preprocessor directives as special cases.
-! 
-!    Tabs should be expanded before processing the file
-! 
-!    This is a very simplistic approach so the output should be carefully
-!    checked.
-! 
-! OPTIONS
-!      FILENAME     Fortran source file which is to be converted to lowercase
-!      --nocomment  remove comment characters
-!      --nocode     remove code characters
-!      --toupper    convert code characters to uppercase instead of lowercase
-!      --verbose    turn on verbose mode including file statistics. Note
-!                   that if --nocomment and --nocode are selected --verbose
-!                   is implied.
-!      --stat       is the same as --nocomment --nocode --verbose, meaning
-!                   no other output than file statistics will be produced.
-!                   If present, --nocomment, --nocode, and --verbose are
-!                   ignored.
-! 
-!      --help       display help text and exit
-!      --version    display version text and exit
-! 
-! EXAMPLES
-!    Typical usage
-! 
-!      # convert all code to lowercase
-!      flower sample.f90 > sample_new.f90
-! 
-!      # extract all code comments and do a spell check
-!      flower *.f90 -nocode|spell
-! 
-!      # show stats for files measuring percent of comments
-!      flower *.f90 --nocode --nocomment --verbose
-! 
-! EXIT STATUS
-!    The following exit values are returned:
-! 
-!       0     no differences were found
-!       1     differences were found
+!>
+!!##NAME
+!! flower(1f) - [DEVELOPER] change case of free-format Fortran file
+!!              or remove code or remove comments
+!!              (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    flower [ --stat|[ [--nocomment|--nocode] [--toupper]|[--verbose] ]
+!!           FILENAMES(s) ]|[--help|--version|--usage]
+!!##DESCRIPTION
+!!
+!!
+!!
+!! 1. Primarily to allow for a preference of lowercase characters when
+!!    working with older uppercase-only FORTRAN this program will convert
+!!    the code to lowercase once the code has been previously converted
+!!    to free-format Fortran source file format.
+!!
+!!    It can also convert the code to uppercase. In each case comments and
+!!    quoted text are left as-is.
+!!
+!!    This is a basic program that writes its results to stdout and does
+!!    not recognize Hollerith strings and preprocessor directives as
+!!    special cases.
+!!
+!!    Tabs should be expanded before processing the file.
+!!
+!!    This is a very simplistic approach so the output should be carefully
+!!    checked.
+!!
+!! 2. It may also be used to generate simple statistics about what percentage
+!!    of the code is comments.
+!!
+!! 3. flower(1) can also be used to strip the comments from the code.
+!!
+!! 4. Lastly, the code can be removed so the comments can be used for documentation
+!!    or run through utilities like spell checkers.
+!!
+!!##OPTIONS
+!!      FILENAME     Fortran source file which is to be converted to lowercase
+!!      --nocomment  remove comment characters
+!!      --nocode     remove code characters
+!!      --toupper    convert code characters to uppercase instead of lowercase
+!!      --verbose    turn on verbose mode including file statistics. Note
+!!                   that if --nocomment and --nocode are selected --verbose
+!!                   is implied.
+!!      --stat       is the same as --nocomment --nocode --verbose, meaning
+!!                   no other output than file statistics will be produced.
+!!                   If present, --nocomment, --nocode, and --verbose are
+!!                   ignored.
+!!
+!!      --help       display help text and exit
+!!      --version    display version text and exit
+!!
+!!##EXAMPLES
+!!
+!!    Typical usage
+!!
+!!      # convert all code to lowercase
+!!      flower sample.f90 > sample_new.f90
+!!
+!!      # extract all code comments and do a spell check
+!!      flower *.f90 -nocode|spell
+!!
+!!      # show stats for files measuring percent of comments
+!!      flower --stat *.f90 *.F90
+!!
+!!      # check spelling on comments
+!!      flower --nocode *.f90 *.F90|spell
+!!
+!!##EXIT STATUS
+!!    The following exit values are returned:
+!!
+!!       0     no differences were found
+!!       1     differences were found
 version_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF library utilities and examples>',&
 '@(#)PROGRAM:        flower(1)>',&
@@ -370,11 +417,6 @@ version_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0-20171126>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '']
-! @(#)PRODUCT:        GPF library utilities and examples>
-! @(#)PROGRAM:        flower(1)>
-! @(#)DESCRIPTION:    convert free-format Fortran source to lowercase>
-! @(#)VERSION:        1.0-20171126>
-! @(#)AUTHOR:         John S. Urban>
 end subroutine setup
 
 end program flower

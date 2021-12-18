@@ -2,11 +2,12 @@ program runtest
 use M_msg
 use M_verify
 use M_verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
-use M_verify, only : unit_check_level
+use M_verify, only : unit_check_level, unit_check_stop
    unit_check_command=''
    unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite_M_list()
+   call unit_check_stop()
 end program runtest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_suite_M_list  

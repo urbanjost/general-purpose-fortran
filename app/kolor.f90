@@ -26,7 +26,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '',&
 'SYNOPSIS',&
 '',&
-'     color [background foreground cursorcolor] [-bg background][-fg foreground][-cr cursorcolor]',&
+'     kolor [background foreground cursorcolor] [-bg background][-fg foreground][-cr cursorcolor]',&
 '',&
 'DESCRIPTION',&
 '    Set the background, foreground, and cursor color for terminals and',&
@@ -80,7 +80,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 !!##SYNOPSIS
 !!
 !!
-!!      color [background foreground cursorcolor] [-bg background][-fg foreground][-cr cursorcolor]
+!!      kolor [background foreground cursorcolor] [-bg background][-fg foreground][-cr cursorcolor]
 !!
 !!##DESCRIPTION
 !!     Set the background, foreground, and cursor color for terminals and

@@ -5,6 +5,7 @@ program test_suite_M_args
 use, intrinsic :: iso_fortran_env, only : ERROR_UNIT
 use :: M_verify,   only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start, unit_check_level
 use :: M_verify,   only : unit_check_command, unit_check_keep_going, unit_check_level
+use :: M_verify,   only : unit_check_stop
 use :: M_args
 implicit none
 integer,parameter :: HT=9
@@ -19,6 +20,7 @@ call unit_check_start('M_args')
    call test_get_namelist()
    call test_longest_command_argument()
    call test_print_dictionary()
+   call unit_check_stop()
 !! teardown
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

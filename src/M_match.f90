@@ -901,12 +901,11 @@ end function omatch_
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    loc = amatch(line, from, pat, tagbeg, tagend)
+!!    loc = amatch(line, from, pat)
 !!
 !!     character(len=*),intent(in) :: line
 !!     integer,intent(in)          :: from
 !!     character                   :: pat(MAXPAT)
-!!     integer                     :: tagbeg(MAXTAGS), tagend(MAXTAGS)
 !!     integer                     :: loc
 !!##DESCRIPTION
 !!    AMATCH scans LINE starting at location FROM, looking
@@ -925,7 +924,6 @@ end function omatch_
 !!    LINE           input line to scan
 !!    FROM           beginning location to start scan from
 !!    PAT            coded regular expression encoded by GETPAT(3f) or MAKPAT(3f)
-!!    TAGBEG,TAGEND  element "i + 1" returns start or end, respectively, of "i"th tagged subpattern
 !!##RETURNS
 !!    LOC   returns location match was found or zero (0) if no match remains
 !!##EXAMPLE
@@ -945,7 +943,6 @@ end function omatch_
 !!     integer                      :: loc
 !!     integer                      :: ii
 !!     character(len=MAXLINE-2)     :: line
-!!     integer                      :: tagbeg(MAXTAGS),tagend(MAXTAGS)
 !!     call get_command_argument(1, argument,status=stat,length=len_arg)
 !!     if(stat.ne.0.or.argument.eq.'')then
 !!        write(*,*)"usage: find pattern."
@@ -954,13 +951,10 @@ end function omatch_
 !!     else
 !!        INFINITE: do
 !!           read(*,'(a)',iostat=ios)line
-!!           tagbeg=-9999;tagend=-9999
 !!           if(ios.ne.0)exit
-!!           loc = amatch(trim(line), 1, pat, tagbeg, tagend) ! returns location/0
+!!           loc = amatch(trim(line), 1, pat) ! returns location/0
 !!           if(loc.gt.0)then ! matched; if no match, loc is returned as 0
 !!              write(*,'(*(a))')trim(line)
-!!              ! (element "i + 1" returns start or end, respectively, of "i"th tagged subpattern)
-!!              write(*,'(*(i0,1x,i0,1x,i0,/))')(ii,tagbeg(ii),tagend(ii),ii=1,size(tagbeg))
 !!           endif
 !!        enddo INFINITE
 !!     endif

@@ -140,7 +140,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2021-08-21 22:18:13 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:27:51 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -186,12 +186,12 @@ end program testit
 !***********************************************************************************************************************************
 !===============================================================================
 ! message
-! Current state of prep(1):(22:18 21 Aug 2021)
+! Current state of prep(1):(15:27 18 Dec 2021)
 ! Total lines read ............... 107
 ! Conditional nesting level....... 0
 ! G_WRITE (general processing).... T
 ! G_LLWRITE (write input lines)... T
-! Arguments ...................... TESTPRG90 -D Linux -D Linux_gfortran -D ENDCON=ENDCON -I /tmp/USH.3009203/CCALL_Linux_gfortran_3107937 -I /home/urbanjs/venus/V600/LIBRARY/libDL/inc -I /home/urbanjs/venus/V600/LIBRARY/libGCS/inc -I /home/urbanjs/venus/V600/LIBRARY/libgdi/inc -I /home/urbanjs/venus/V600/LIBRARY/libgks2/inc -I /home/urbanjs/venus/V600/LIBRARY/libmachine/inc -I /home/urbanjs/venus/V600/LIBRARY/libMULTI/inc -I /home/urbanjs/venus/V600/LIBRARY/libncar/inc -I /home/urbanjs/venus/V600/LIBRARY/libnswc/inc -I /home/urbanjs/venus/V600/LIBRARY/libObsolete/inc -I /home/urbanjs/venus/V600/LIBRARY/librandlib/inc -I /home/urbanjs/venus/V600/LIBRARY/libslatec/inc -I /home/urbanjs/venus/V600/LIBRARY/libSTUG/inc -I /home/urbanjs/venus/V600/LIBRARY/libtemplate/inc -I /home/urbanjs/venus/V600/LIBRARY/libvg320/inc -I /home/urbanjs/venus/V600/LIBRARY/libvogle/inc -I /home/urbanjs/venus/V600/LIBRARY/libvopl/inc -I /home/urbanjs/venus/V600/LIBRARY/EXE/BLINK/inc -I /home/urbanjs/venus/V600/LIBRARY/EXE/FLECS90/inc -I /home/urbanjs/venus/V600/LIBRARY/FROZEN/libvogle/inc -I /home/urbanjs/venus/V600/LIBRARY/libGPF/draw/inc -I /home/urbanjs/venus/V600/LIBRARY/libGPF/messages/inc -I EXE/EXCHANGE -verbose -system .true. -i EXE/EXCHANGE/exchange.ff -o /tmp/USH.3009203/CCALL_Linux_gfortran_3107937/exchange.3107937.f90 
+! Arguments ...................... TESTPRG90 -D Linux -D Linux_gfortran -D ENDCON=ENDCON -I /tmp/USH.3536808/CCALL_Linux_gfortran_3560505 -I /home/urbanjs/venus/V600/LIBRARY/libDL/inc -I /home/urbanjs/venus/V600/LIBRARY/libGCS/inc -I /home/urbanjs/venus/V600/LIBRARY/libgdi/inc -I /home/urbanjs/venus/V600/LIBRARY/libgks2/inc -I /home/urbanjs/venus/V600/LIBRARY/libmachine/inc -I /home/urbanjs/venus/V600/LIBRARY/libMULTI/inc -I /home/urbanjs/venus/V600/LIBRARY/libncar/inc -I /home/urbanjs/venus/V600/LIBRARY/libnswc/inc -I /home/urbanjs/venus/V600/LIBRARY/libObsolete/inc -I /home/urbanjs/venus/V600/LIBRARY/librandlib/inc -I /home/urbanjs/venus/V600/LIBRARY/libslatec/inc -I /home/urbanjs/venus/V600/LIBRARY/libSTUG/inc -I /home/urbanjs/venus/V600/LIBRARY/libtemplate/inc -I /home/urbanjs/venus/V600/LIBRARY/libvg320/inc -I /home/urbanjs/venus/V600/LIBRARY/libvogle/inc -I /home/urbanjs/venus/V600/LIBRARY/libvopl/inc -I /home/urbanjs/venus/V600/LIBRARY/EXE/BLINK/inc -I /home/urbanjs/venus/V600/LIBRARY/EXE/FLECS90/inc -I /home/urbanjs/venus/V600/LIBRARY/FROZEN/libvogle/inc -I /home/urbanjs/venus/V600/LIBRARY/libGPF/draw/inc -I /home/urbanjs/venus/V600/LIBRARY/libGPF/messages/inc -I EXE/EXCHANGE -verbose -system .true. -i EXE/EXCHANGE/exchange.ff -o /tmp/USH.3536808/CCALL_Linux_gfortran_3560505/exchange.3560505.f90 
 
 ! Open files:
 !    unit ! line number ! filename
@@ -199,15 +199,15 @@ end program testit
 ! INCLUDE directories:
 !    EXE/EXCHANGE
 ! Variables:
-!    $DEFINE UNKNOWN  =  0                              
-!    $DEFINE LINUX  =  1                              
-!    $DEFINE MACOS  =  2                              
-!    $DEFINE WINDOWS  =  3                              
-!    $DEFINE CYGWIN  =  4                              
-!    $DEFINE SOLARIS  =  5                              
-!    $DEFINE FREEBSD  =  6                              
-!    $DEFINE OPENBSD  =  7                              
-!    $DEFINE OS  =  1                              
-!    $DEFINE TESTPRG90  =  1                              
-!    $DEFINE ENDCON  =  ENDCON                         
+!    $DEFINE UNKNOWN  =  0                                                              
+!    $DEFINE LINUX  =  1                                                              
+!    $DEFINE MACOS  =  2                                                              
+!    $DEFINE WINDOWS  =  3                                                              
+!    $DEFINE CYGWIN  =  4                                                              
+!    $DEFINE SOLARIS  =  5                                                              
+!    $DEFINE FREEBSD  =  6                                                              
+!    $DEFINE OPENBSD  =  7                                                              
+!    $DEFINE OS  =  1                                                              
+!    $DEFINE TESTPRG90  =  1                                                              
+!    $DEFINE ENDCON  =  ENDCON                                                         
 !-------------------------------------------------------------------------------

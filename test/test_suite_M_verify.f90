@@ -10,6 +10,7 @@ use M_journal
    call test_dp_accdig()      ! compare two double numbers only up to a specified number of digits
    call test_in_margin()      ! check if two reals are approximately equal using a relative margin
    call test_round()          ! round val to specified number of significant digits
+   call unit_check_stop()
    contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_in_margin()

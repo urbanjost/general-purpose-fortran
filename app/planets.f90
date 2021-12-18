@@ -292,6 +292,52 @@ call unit_check_done('ephemeris')
 
 end subroutine test_ephemeris
 end module M_ephemeris
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+program planets
+use M_kracken, only   : kracken, lget, sget, iget, igets
+use M_time, only      : guessdate, fmtdate!, ephemeris
+use M_ephemeris, only : ephemeris
+implicit none
+integer                      :: declination_d,declination_m
+integer                      :: ascent_hours, ascent_minutes
+character(len=1)             :: declination_compass
+integer                      :: itime(8)
+integer,allocatable          :: gettime(:)
+integer,allocatable          :: planet_numbers(:)
+character(len=:),allocatable :: datetime
+integer                      :: i
+integer                      :: ier
+!-----------------------------------------------------------------------------------------------------------------------------------
+call kracken('planets',' -date -planet -version .F. -help .F.')
+call help_usage(lget('planets_help'))                    ! if -help option is present, display help text and exit
+call help_version(lget('planets_version'))               ! if -version option is present, display version text and exit
+
+call date_and_time(values=itime)
+datetime=sget('planets_date')
+if(datetime.ne.'')then
+   call guessdate(datetime,itime)
+else
+   gettime=igets('planets_oo')
+   itime(:size(gettime))=gettime
+endif
+write(*,'(1x,"For: ",a)')fmtdate(itime)
+!-----------------------------------------------------------------------------------------------------------------------------------
+planet_numbers=igets('planets_planet',ier)     ! planet number : Mercury:1 Venus:2 Mars:4 Jupiter:5 Saturn:6 Uranus:7 Neptune:8
+if(ier.ne.0)stop 1
+if ( size(planet_numbers).eq.0)then
+   planet_numbers=[1,2,4,5,6,7,8]
+endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+do i=1,size(planet_numbers)
+   call ephemeris(itime,planet_numbers(i),declination_d,declination_m,declination_compass,ascent_hours,ascent_minutes)
+   write(*, "(' Planet: ',I1,1X)",advance='no')                       planet_numbers(i)
+   write(*, "(' Ascent: ',I2,' H ',I2,' MN',1X)",advance='no')        ascent_hours, ascent_minutes
+   write(*, "(' Declination: ',I2,' D ',I2,' MN ',A1)",advance='yes') declination_d, declination_m, declination_compass
+enddo
+!-----------------------------------------------------------------------------------------------------------------------------------
+contains
 subroutine help_usage(l_help)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
@@ -436,56 +482,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    ephemeris position of planets for adjusting an equitorial telescope>',&
 '@(#)VERSION:        1.0, 20170910>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2021-08-21 22:18:47 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:27:30 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
-program planets
-use M_kracken, only   : kracken, lget, sget, iget, igets
-use M_time, only      : guessdate, fmtdate!, ephemeris
-use M_ephemeris, only : ephemeris
-implicit none
-integer                      :: declination_d,declination_m
-integer                      :: ascent_hours, ascent_minutes
-character(len=1)             :: declination_compass
-integer                      :: itime(8)
-integer,allocatable          :: gettime(:)
-integer,allocatable          :: planet_numbers(:)
-character(len=:),allocatable :: datetime
-integer                      :: i
-integer                      :: ier
-!-----------------------------------------------------------------------------------------------------------------------------------
-call kracken('planets',' -date -planet -version .F. -help .F.')
-call help_usage(lget('planets_help'))                    ! if -help option is present, display help text and exit
-call help_version(lget('planets_version'))               ! if -version option is present, display version text and exit
-
-call date_and_time(values=itime)
-datetime=sget('planets_date')
-if(datetime.ne.'')then
-   call guessdate(datetime,itime)
-else
-   gettime=igets('planets_oo')
-   itime(:size(gettime))=gettime
-endif
-write(*,'(1x,"For: ",a)')fmtdate(itime)
-!-----------------------------------------------------------------------------------------------------------------------------------
-planet_numbers=igets('planets_planet',ier)     ! planet number : Mercury:1 Venus:2 Mars:4 Jupiter:5 Saturn:6 Uranus:7 Neptune:8
-if(ier.ne.0)stop 1
-if ( size(planet_numbers).eq.0)then
-   planet_numbers=[1,2,4,5,6,7,8]
-endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-do i=1,size(planet_numbers)
-   call ephemeris(itime,planet_numbers(i),declination_d,declination_m,declination_compass,ascent_hours,ascent_minutes)
-   write(*, "(' Planet: ',I1,1X)",advance='no')                       planet_numbers(i)
-   write(*, "(' Ascent: ',I2,' H ',I2,' MN',1X)",advance='no')        ascent_hours, ascent_minutes
-   write(*, "(' Declination: ',I2,' D ',I2,' MN ',A1)",advance='yes') declination_d, declination_m, declination_compass
-enddo
-!-----------------------------------------------------------------------------------------------------------------------------------
-contains
 end program planets

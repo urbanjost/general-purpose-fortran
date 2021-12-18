@@ -12,7 +12,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '       rep(1f) - [FILE FILTER] replace fixed strings in files                                                                   ',&
 '       (LICENSE:PD)                                                                                                             ',&
 'SYNOPSIS                                                                                                                        ',&
-'       rep filenames -c /from/to/ [ -verbose][ -dryrun]|[ -help| -version]                                                      ',&
+'       rep filenames -c /from/to/ [-i][ -verbose][ -dryrun]|[ -help| -version]                                                  ',&
 '       (LICENSE:PD)                                                                                                             ',&
 '                                                                                                                                ',&
 'DESCRIPTION                                                                                                                     ',&
@@ -31,11 +31,13 @@ help_text=[ CHARACTER(LEN=128) :: &
 'OPTIONS                                                                                                                         ',&
 '       -c /from/to/  "from" represents a string to look for and "to" represents                                                 ',&
 '                     its replacement.                                                                                           ',&
+'       filenames     name of files to change                                                                                    ',&
+'       -i            ignore case of input                                                                                       ',&
 '       -verbose      Print information about what the program does.                                                             ',&
 '       --help        Display a help message and exit.                                                                           ',&
 '       --version     Display version information and exit.                                                                      ',&
 '       --dryrun      Does all file operations except for moving the                                                             ',&
-'                     changed file back to the original. Implies --version.                                                      ',&
+'                     changed file back to the original. Implies --verbose.                                                      ',&
 'AUTHOR                                                                                                                          ',&
 '   John S. Urban                                                                                                                ',&
 'LICENSE                                                                                                                         ',&
@@ -51,7 +53,7 @@ end subroutine help_usage
 !!        (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!        rep filenames -c /from/to/ [ -verbose][ -dryrun]|[ -help| -version]
+!!        rep filenames -c /from/to/ [-i][ -verbose][ -dryrun]|[ -help| -version]
 !!        (LICENSE:PD)
 !!
 !!##DESCRIPTION
@@ -70,11 +72,13 @@ end subroutine help_usage
 !!##OPTIONS
 !!        -c /from/to/  "from" represents a string to look for and "to" represents
 !!                      its replacement.
+!!        filenames     name of files to change
+!!        -i            ignore case of input
 !!        -verbose      Print information about what the program does.
 !!        --help        Display a help message and exit.
 !!        --version     Display version information and exit.
 !!        --dryrun      Does all file operations except for moving the
-!!                      changed file back to the original. Implies --version.
+!!                      changed file back to the original. Implies --verbose.
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -98,7 +102,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-08-21 22:18:11 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:27:49 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -116,13 +120,14 @@ use M_io,      only : scratch
 implicit none
 logical                            :: verbose
 logical                            :: dryrun
+logical                            :: case
 character(len=IPvalue),allocatable :: filenames(:)
 character(len=:),allocatable       :: chng
 integer                 :: i
 !-----------------------------------------------------------------------------------------------------------------------------------
    kracken_comment=char(0)
    ! define command arguments,default values and crack command line
-   call kracken('rep','-help .false. -version .false. -c -verbose .false. -dryrun .false.')
+   call kracken('rep','-i .false. -help .false. -version .false. -c -verbose .false. -dryrun .false.')
 !-----------------------------------------------------------------------------------------------------------------------------------
    call help_usage(lget('rep_help'))                                ! if -help option is present, display help text and exit
    call help_version(lget('rep_version'))                           ! if -version option is present, display version text and exit
@@ -130,11 +135,15 @@ integer                 :: i
    chng=trim(sget('rep_c'))
    verbose=lget('rep_verbose')
    dryrun=lget('rep_dryrun')
+   case=lget('rep_i')
    if(dryrun)verbose=.true.
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(filenames)
       call dofile()
    enddo
+   if(size(filenames).eq.0)then
+      write(*,*)'missing filenames, which come FIRST'
+   endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -190,7 +199,7 @@ logical                      :: exists, open
    ilines=0
    INFINITE: do while (read_line(line,lun_in)==0)
       ilines=ilines+1
-      line=replace(line,ierr=ierr,cmd='c'//chng)
+      line=replace(line,ierr=ierr,cmd='c'//chng,ignorecase=case)
       if(ierr.gt.0)then !
          if(icount.eq.0)write(*,'(a)')'==>'//trim(filenames(i))
          if(verbose)then

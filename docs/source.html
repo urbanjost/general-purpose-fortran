@@ -526,29 +526,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>
 	M_DRAW:yobbarays - Turns on (or off) yobba rays, as described by Larry Dart's friend.<br/>
 </td>
-<tr><td><a href="../src/M_BRE.f90">../src/M_BRE.f90</a></td>
-<td>
-	M_BRE::M_BRE(3fm): module for Basic Regular Expressions, inspired by Ratfor version<br/>
-	M_BRE::locate(3f): look for c in char class at pat(offset)<br/>
-	M_BRE::getpat(3f): convert str into pattern<br/>
-	M_BRE::getpat(3f): convert str into pattern<br/>
-	M_BRE::addset(3f): put c in string(j) if it fits, increment<br/>
-	M_BRE::stclos(3f): insert CLOSURE entry at pat(j)<br/>
-	M_BRE::dodash(3f): expand array(i-1)-array(i+1) into set(j)... from valid<br/>
-	M_BRE::getccl(3f): expand char class at arg(i) into pat(j)<br/>
-	M_BRE::filset(3f): expand set at array(i) into set(j), stop at delim<br/>
-	M_BRE::indx(3f): returns position of character in string<br/>
-	M_BRE::match(3f): find match anywhere on line<br/>
-	M_BRE::error(3f): print message and stop program execution<br/>
-	M_BRE::patsiz(3f): returns size of pattern entry at pat(n)<br/>
-	M_BRE::makpat(3f): make pattern from arg(from), terminate on delim<br/>
-	M_BRE::amatch(3f): (non-recursive) look for match starting at lin(from)<br/>
-	M_BRE::amatch(3f): (non-recursive) look for match starting at lin(from)<br/>
-	M_BRE::omatch(3f): try to match a single pattern at pat(j)<br/>
-	M_BRE::esc(3f): map array(i) into escaped character if appropriate<br/>
-	M_BRE::f2r(3f): convert Fortran character variable to Ratfor integer array with Ratfor terminator<br/>
-	M_BRE::r2f(3f): convert Ratfor integer array to Fortran character variable<br/>
-</td>
 <tr><td><a href="../src/M_CLI.f90">../src/M_CLI.f90</a></td>
 <td>
 	PROGRAM:     demo5            <br/>
@@ -1196,6 +1173,33 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_steam67.f90">../src/M_steam67.f90</a></td>
 <td>
+	M_steam67::steam67(3f): 1967 ASME Steam Table Library<br/>
+	M_steam67::condv67(3f): compute thermal conductivity of water at pressure P and temperature T<br/>
+	M_steam67::condl67(3f): return thermal conductivity given P,T<br/>
+	M_steam67::do67(3f)L summation of a polynomial<br/>
+	M_steam67::cpl67(3f):  calculates specific isobaric head capacity of water at pressure P and temperature T<br/>
+	M_steam67::cpv67(3f): calculates specific isobaric heat capacity and specific volume of water at pressure P and temperature T<br/>
+	M_steam67::crflo67(3f): critical flow and degrees superheat of wet/superheated steam at PRES,ENTH<br/>
+	M_steam67::function critvs67(press, enth, gamma)<br/>
+	M_steam67::entry critvw67(press, enth, gamma)<br/>
+	M_steam67::critical flow(3f): velocity and isentropic exponent of wet/superheated steam<br/>
+	M_steam67::hcsl67(3f): calculate specific enthalpy/volume and entropy of liquid(P,T)<br/>
+	M_steam67::hcslvl67(3f): calculate V,S,specific enthalpy for liquid given (P,T)<br/>
+	M_steam67::hcslv267(3f): calculate specific enthalpy, specific volume, and entropy of the liquid at P and T<br/>
+	M_steam67::hss67(3f): specific enthalpy = HSS67(P,T,s,v)<br/>
+	M_steam67::hsl67(3f): specific enthalpy = HSS67(P,T,s,v)<br/>
+	M_steam67::psl67(3f): calculate saturation pressure of the saturated liquid at temperature T<br/>
+	M_steam67::psl167(3f): calculate saturation pressure of the saturated liquid at temperature T.<br/>
+	M_steam67::psv67(3f):  calculate saturation pressure of the saturated liquid at entropy SS in psia<br/>
+	M_steam67::psv167(3f): calculate saturation pressure of the saturated liquid at entropy SS in psia<br/>
+	M_steam67::psv267(3f): calculate saturation pressure in psia of the saturated liquid at entropy SS.<br/>
+	M_steam67::pls67(3f):  saturation pressure of the saturated liquid at entropy SS.<br/>
+	M_steam67::sssiss67(3f): specific entropy, temperature, specific volume, steam quality of liquid at pressure P and enthalpy H<br/>
+	M_steam67::hssiss67(3f):  specific enthalpy, temperature, specific volume, steam quality of water at pressure P and entropy S<br/>
+	M_steam67::hcl67(3f): calculate specific enthalpy and entropy of water at pressure P and temp T<br/>
+	M_steam67::p23t67(3f)<br/>
+	M_steam67::zsrh67(3f) calculate remaining variables at extremities of isentropic process in compressed liquid region.<br/>
+	M_steam67::steam67(3f):print pedigree of library and return version value<br/>
 </td>
 <tr><td><a href="../src/M_stopwatch.f90">../src/M_stopwatch.f90</a></td>
 <td>
@@ -1225,7 +1229,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_strings::join(3f): merge string array into a single CHARACTER value adding specified separators, caps, prefix and suffix<br/>
 	M_strings::reverse(3f): Return a string reversed<br/>
 	M_strings::upper_quoted(3f): elemental function converts string to miniscule skipping strings quoted per Fortran syntax rules<br/>
-	M_strings::upper(3f): Changes a string to uppercase<br/>
+	M_strings::upper(3f): returns a trimmed uppercase string<br/>
 	M_strings::lower(3f): Changes a string to lowercase over specified range<br/>
 	M_strings::s2c(3f): copy string(1:Clen(string)) to char array with null terminator<br/>
 	M_strings::c2s(3f): copy pointer to C char array till a null is encountered to a Fortran string up to 4096 characters<br/>

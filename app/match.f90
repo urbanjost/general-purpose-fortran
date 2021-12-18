@@ -4,7 +4,7 @@
 program match_exe
 use M_kracken, only : kracken, sget, lget, UNNAMED
 use M_io,      only : read_line
-use M_bre,     only : getpat, match, regex_pattern, yes, no, err
+use M_match,   only : getpat, match, regex_pattern, yes, no, err
 use M_strings, only : upper
 implicit none
 character(len=:),allocatable :: argument, line, prefix
@@ -171,7 +171,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
 '@(#)COMPILED:       Fri, Apr 24th, 2020 3:14:50 PM>',&
-'@(#)COMPILED:       2021-08-21 22:18:42 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:27:25 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

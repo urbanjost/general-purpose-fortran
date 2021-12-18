@@ -114,25 +114,25 @@ integer                      :: start_keep, end_keep
 contains
 subroutine find_demo()
 character(len=256),allocatable :: newsection(:)
-integer :: i,j,k
+integer :: ii,jj,kk
    if(allocated(newsection)) deallocate(newsection)
    allocate(newsection(0))
    if(demo)then
       start_keep=0
       end_keep=0
-      j=0
-      do i=1,size(section)
-         j=j+1
-         if(j.gt.size(section))exit
-         if(index(lower(section(j)),'program demo_').ne.0)then
-            start_keep=j
-            do k=start_keep+1,size(section)
-               if(k.gt.size(section))exit
-               if(index(lower(section(k)),'end program demo_').ne.0)then
-                  end_keep=k
+      jj=0
+      do ii=1,size(section)
+         jj=jj+1
+         if(jj.gt.size(section))exit
+         if(index(lower(section(jj)),'program demo_').ne.0)then
+            start_keep=jj
+            do kk=start_keep+1,size(section)
+               if(kk.gt.size(section))exit
+               if(index(lower(section(kk)),'end program demo_').ne.0)then
+                  end_keep=kk
                   if(start_keep.ne.0 .and. end_keep.ne.0)then
                      newsection=[character(len=max(len(newsection),len(section))) :: newsection,section(start_keep:end_keep)]
-                     j=k+1
+                     jj=kk+1
                   endif
                   exit
                endif

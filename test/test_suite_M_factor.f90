@@ -5,6 +5,7 @@ program test_suite_M_factor
 use, intrinsic :: iso_fortran_env, only : ERROR_UNIT
 use :: M_verify,   only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start, unit_check_level
 use :: M_verify,   only : unit_check_command, unit_check_keep_going, unit_check_level
+use M_verify, only : unit_check_stop
 use :: M_factor
 implicit none
 integer,parameter :: HT=9
@@ -16,8 +17,9 @@ call unit_check_start('M_BRE')
    call test_i_is_prime
    call test_least_common_multiple
    call test_prime_factors
-   !*!call test_gcd
-   !*!call test_gcd_2
+   !x!call test_gcd
+   !x!call test_gcd_2
+   call unit_check_stop()
 end program test_suite_M_factor
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_least_common_multiple

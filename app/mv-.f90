@@ -64,6 +64,23 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!      mv-(1f) - [FUNIX:FILESYSTEM] rename file
+!!      (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!      mv- SOURCE DEST
+!!##DESCRIPTION
+!!        Rename file SOURCE to DEST
+!!
+!!##EXAMPLE
+!!
+!!      mv- file.text /tmp/file.txt
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 
 subroutine help_version(l_version)
 implicit none
@@ -85,7 +102,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
 '@(#)COMPILED:       Sun, Nov 27th, 2016 10:47:13 PM>',&
-'@(#)COMPILED:       2021-09-09 17:58:08 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:29:11 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

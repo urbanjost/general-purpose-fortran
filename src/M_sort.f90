@@ -112,7 +112,7 @@ contains
 !!
 !!##SYNOPSIS
 !!
-!!    use M_sort, only : sort_shell, sort_quick_rx, unique, sort_index
+!!    use M_sort, only : sort_shell, sort_quick_rx, unique, sort_indexed
 !!
 !!##DESCRIPTION
 !!    Under development. Currently only provides a few common routines, but it is intended that
@@ -3222,7 +3222,7 @@ end subroutine bytes_to_anything
 !!    CALL RANDOM_NUMBER(RR)
 !!    rr=rr*450000.0
 !!    ! use the index array to actually move the input array into a sorted order
-!!    rr=rr(sort_index(rr))
+!!    rr=rr(sort_indexed(rr))
 !!    ! or
 !!    !rr(sort_indexed(rr))=rr
 !!    write(*,*)'checking if values are sorted(3f)'

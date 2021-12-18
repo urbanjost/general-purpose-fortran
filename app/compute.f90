@@ -29,9 +29,6 @@ help_text=[ CHARACTER(LEN=128) :: &
 '       --help            display this help and exit                                                                             ',&
 '       --version         output version information and exit                                                                    ',&
 '       --trail FILENAME  record actions on a trail file.                                                                        ',&
-'SEE  ALSO                                                                                                                       ',&
-'       See the man(1) page for M_calculator(3fm) for a more detailed                                                            ',&
-'       description of the CALCULATOR(3f) routine.                                                                               ',&
 'EXAMPLES                                                                                                                        ',&
 '       Sample commands:                                                                                                         ',&
 '                                                                                                                                ',&
@@ -64,8 +61,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '        funcs # list available functions                                                                                        ',&
 '        dump  # list current variables                                                                                          ',&
 '                                                                                                                                ',&
-'SEE ALSO                                                                                                                        ',&
-'       M_calculator(3fm)                                                                                                        ',&
+'SEE  ALSO                                                                                                                       ',&
+'       See the man(1) page for M_calculator(3fm) for a more detailed                                                            ',&
+'       description of the CALCULATOR(3f) routine.                                                                               ',&
 'AUTHOR                                                                                                                          ',&
 '   John S. Urban                                                                                                                ',&
 'LICENSE                                                                                                                         ',&
@@ -98,9 +96,6 @@ end subroutine help_usage
 !!        --help            display this help and exit
 !!        --version         output version information and exit
 !!        --trail FILENAME  record actions on a trail file.
-!!##SEE  ALSO
-!!        See the man(1) page for M_calculator(3fm) for a more detailed
-!!        description of the CALCULATOR(3f) routine.
 !!##EXAMPLES
 !!
 !!        Sample commands:
@@ -134,8 +129,9 @@ end subroutine help_usage
 !!         funcs # list available functions
 !!         dump  # list current variables
 !!
-!!##SEE ALSO
-!!        M_calculator(3fm)
+!!##SEE  ALSO
+!!        See the man(1) page for M_calculator(3fm) for a more detailed
+!!        description of the CALCULATOR(3f) routine.
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -156,7 +152,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        23.1 20160618>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-08-21 22:18:10 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:27:47 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

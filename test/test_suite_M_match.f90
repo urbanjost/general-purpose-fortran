@@ -107,7 +107,6 @@ call mymatch(".",                "\",             .true.   )
 !!call mymatch("F[qpo", "FooBar", .false.) ! intentional bad regex 
 call mymatch("F[qpo", "FooBar", .true.) ! intentional bad regex 
 
-
 ! write up total results and if anything failed exit with a non-zero status
 write(*,'(*(g0))')'TALLY;',tally
 if(all(tally))then

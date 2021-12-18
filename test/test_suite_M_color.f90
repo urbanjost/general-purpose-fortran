@@ -253,13 +253,14 @@ end module M_testsuite_M_color
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 program runtest
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
+use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
 use M_testsuite_M_color
 implicit none
    unit_check_command=''
    unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite_M_color()
+   call unit_check_stop()
 contains
 
 end program runtest

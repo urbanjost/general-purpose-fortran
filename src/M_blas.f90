@@ -11697,7 +11697,7 @@ pure function dnrm2( n, x, incx )
    real(wp), parameter :: one  = 1.0_wp
    real(wp), parameter :: maxn = huge(0.0_wp)
 !  ..
-!  .. Blue's ccaling constants ..
+!  .. Blue's scaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( (minexponent(0._wp) - 1) * 0.5_wp)
    real(wp), parameter :: tbig = real(radix(0._wp), wp)**floor( (maxexponent(0._wp) - digits(0._wp) + 1) * 0.5_wp)
    real(wp), parameter :: ssml = real(radix(0._wp), wp)**( - floor( (minexponent(0._wp) - 1) * 0.5_wp))
@@ -19784,7 +19784,7 @@ pure function scnrm2( n, x, incx )
    real(wp), parameter :: one  = 1.0_wp
    real(wp), parameter :: maxn = huge(0.0_wp)
 !  ..
-!  .. Blue's ccaling constants ..
+!  .. Blue's scaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( (minexponent(0._wp) - 1) * 0.5_wp)
    real(wp), parameter :: tbig = real(radix(0._wp), wp)**floor( (maxexponent(0._wp) - digits(0._wp) + 1) * 0.5_wp)
    real(wp), parameter :: ssml = real(radix(0._wp), wp)**( - floor( (minexponent(0._wp) - 1) * 0.5_wp))
@@ -21544,7 +21544,7 @@ function snrm2( n, x, incx )
    real(wp), parameter :: one  = 1.0_wp
    real(wp), parameter :: maxn = huge(0.0_wp)
 !  ..
-!  .. Blue's ccaling constants ..
+!  .. Blue's scaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( (minexponent(0._wp) - 1) * 0.5_wp)
    real(wp), parameter :: tbig = real(radix(0._wp), wp)**floor( (maxexponent(0._wp) - digits(0._wp) + 1) * 0.5_wp)
    real(wp), parameter :: ssml = real(radix(0._wp), wp)**( - floor( (minexponent(0._wp) - 1) * 0.5_wp))
@@ -34779,7 +34779,7 @@ end subroutine
 !!
 !!           UPLO is CHARACTER*1
 !!            On entry, UPLO specifies whether the upper or lower
-!!            triangular part of the array C is to be referencedas
+!!            triangular part of the array C is to be referenced as
 !!            follows:
 !!
 !!               UPLO = 'U' or 'u'   Only the  upper triangular part of  C

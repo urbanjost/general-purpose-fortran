@@ -51,6 +51,47 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!        false-(1f) - [FUNIX] do nothing, unsuccessfully
+!!        (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!        false- value [ --verbose][ --help| --version]
+!!
+!!##DESCRIPTION
+!!        Exit with a status code indicating failure.
+!!##OPTIONS
+!!        number     optional number of 1 to 32, which
+!!                   will be used to generate the exit
+!!                   status code if supported.
+!!        --help     display this help and exit
+!!        --version  output version information and exit
+!!        --verbose  display ASCII graphic of cockroach
+!!
+!!##EXAMPLE
+!!
+!!       Bash example:
+!!
+!!          false- || echo Should print this
+!!
+!!          if false-
+!!          then
+!!             echo command got zero exit $?
+!!          else
+!!             echo command got non-zero exit $?
+!!          fi
+!!
+!!       Expected output::
+!!
+!!          ERROR STOP
+!!          Should print this
+!!          ERROR STOP
+!!          command got non-zero exit 1
+!!
+!!##SEE ALSO
+!!        _true(1f)
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -67,7 +108,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20170125>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2021-11-20 15:29:15 UTC-300>',&
+'@(#)COMPILED:       2021-12-18 15:29:03 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

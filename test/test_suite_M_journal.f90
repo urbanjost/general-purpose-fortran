@@ -12,6 +12,7 @@ implicit none
    call test_set_stdout_lun()
    call test_where_write_message_all()
    call test_write_message_only()
+   call unit_check_stop()
 !! teardown
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 contains

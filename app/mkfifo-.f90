@@ -53,6 +53,25 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    mkfifo-(1f) - [FUNIX:FILESYSTEM] make a FIFO pipe by calling mkfifo(3c)
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    mkfifo- file(s)
+!!##DESCRIPTION
+!!    Create named pipes (FIFOs) with the given NAMEs.
+!!##OPTIONS
+!!    files      pathnames of named pipes to create
+!!    --help     display this help and exit
+!!    --version  output version information and exit
+!!##EXAMPLE
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -70,7 +89,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-09-09 17:58:07 UTC-240>',&
+'@(#)COMPILED:       2021-12-18 15:29:10 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

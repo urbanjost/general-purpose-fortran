@@ -3,6 +3,7 @@ use M_msg
 use M_system,  only : system_getcwd
 use M_verify,  only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
 use M_verify,  only : unit_check_level, unit_check_command, unit_check_keep_going
+use M_verify, only : unit_check_stop
 use M_path,    only : path
 implicit none
    unit_check_command=''
@@ -25,6 +26,7 @@ implicit none
    call test_path_executable()
    call test_path_realpath()
    call test_path_stat()
+   call unit_check_stop()
 !! teardown
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

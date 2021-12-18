@@ -1,112 +1,3 @@
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
-help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   findll(1f) - [FILE FILTER] find long lines                                                                                   ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'SYNOPSIS                                                                                                                        ',&
-'   findll [ -l LENGTH] [ -wrap] | [ -help| -version] [FILENAMES]                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   find lines in files over a specified length and print                                                                        ',&
-'   them; or wrap each input line to fit in specified width.                                                                     ',&
-'                                                                                                                                ',&
-'   Non-printable characters are not treated specially (eg. a                                                                    ',&
-'   tab character is treated as a single character).                                                                             ',&
-'OPTIONS                                                                                                                         ',&
-'   FILENAMES  the files to scan for long lines                                                                                  ',&
-'   -l NUMBER  maximum line length of lines to ignore.                                                                           ',&
-'              The default is 132.                                                                                               ',&
-'   --wrap     instead of locating and displaying long                                                                           ',&
-'              lines, fold the lines at the specified                                                                            ',&
-'              line length                                                                                                       ',&
-'                                                                                                                                ',&
-'   --help     display this help and exit                                                                                        ',&
-'   --version  output version information and exit                                                                               ',&
-'EXAMPLES                                                                                                                        ',&
-'  Sample commands:                                                                                                              ',&
-'                                                                                                                                ',&
-'   $ findll <filename                                                                                                           ',&
-'                                                                                                                                ',&
-'   # show lines over 72 characters in length                                                                                    ',&
-'   $ findll *.f *.F -l 72                                                                                                       ',&
-'   # show length of all lines on stdin                                                                                          ',&
-'   $ findll -l -1                                                                                                               ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-!>
-!!##NAME
-!!    findll(1f) - [FILE FILTER] find long lines
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    findll [ -l LENGTH] [ -wrap] | [ -help| -version] [FILENAMES]
-!!##DESCRIPTION
-!!    find lines in files over a specified length and print
-!!    them; or wrap each input line to fit in specified width.
-!!
-!!    Non-printable characters are not treated specially (eg. a
-!!    tab character is treated as a single character).
-!!##OPTIONS
-!!    FILENAMES  the files to scan for long lines
-!!    -l NUMBER  maximum line length of lines to ignore.
-!!               The default is 132.
-!!    --wrap     instead of locating and displaying long
-!!               lines, fold the lines at the specified
-!!               line length
-!!
-!!    --help     display this help and exit
-!!    --version  output version information and exit
-!!##EXAMPLES
-!!
-!!   Sample commands:
-!!
-!!    $ findll <filename
-!!
-!!    # show lines over 72 characters in length
-!!    $ findll *.f *.F -l 72
-!!    # show length of all lines on stdin
-!!    $ findll -l -1
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
-'@(#)PROGRAM:        findll(1f)>',&
-'@(#)DESCRIPTION:    find long lines>',&
-'@(#)VERSION:        23.1 20160618>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2021-08-21 22:05:18 UTC-240>',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
 program findll
 use M_CLI2, only    : set_args, sgets, lget, iget, filenames=>unnamed
 use M_io, only      : read_line
@@ -126,10 +17,11 @@ integer                      :: ilength
 integer                      :: isize
 logical                      :: wrap
 character(len=:),allocatable :: fmt
+character(len=:),allocatable :: help_text(:)
+character(len=:),allocatable :: version_text(:)
 
-   call set_args(' -l 132 -wrap F')                        ! define and crack command line arguments
-   call help_usage(lget('help'))                           ! process -help switch
-   call help_version(lget('version'))                      ! process -version switch
+   call setup()
+   call set_args(' -l 132 -wrap F',help_text,version_text) ! define and crack command line arguments
    wrap=lget('wrap')                                       ! test if -wrap    switch is present on command line
    ilength=max(0,iget('l'))
    isize=size(filenames)                                   ! number of words in default list
@@ -181,9 +73,95 @@ character(len=:),allocatable :: fmt
          close(unit=10,iostat=ios)
       enddo FILES
    end select SELECT_DATA
-
+contains
+subroutine setup()
+help_text=[ CHARACTER(LEN=128) :: &
+'NAME',&
+'   findll(1f) - [FILE FILTER] find long lines',&
+'   (LICENSE:PD)',&
+'SYNOPSIS',&
+'   findll [ -l LENGTH] [ -wrap] | [ -help| -version] [FILENAMES]',&
+'DESCRIPTION',&
+'   find lines in files over a specified length and print',&
+'   them; or wrap each input line to fit in specified width.',&
+'',&
+'   Lines ending in a backslash ("\") are concatenated with the',&
+'   next line.',&
+'',&
+'   Non-printable characters are not treated specially (eg. a',&
+'   tab character is treated as a single character).',&
+'OPTIONS',&
+'   FILENAMES  the files to scan for long lines',&
+'   -l NUMBER  maximum line length of lines to ignore.',&
+'              The default is 132.',&
+'   --wrap     instead of locating and displaying long',&
+'              lines, fold the lines at the specified',&
+'              line length',&
+'',&
+'   --help     display this help and exit',&
+'   --version  output version information and exit',&
+'EXAMPLES',&
+'  Sample commands:',&
+'',&
+'   $ findll <filename',&
+'',&
+'   # show lines over 72 characters in length',&
+'   $ findll *.f *.F -l 72',&
+'   # show length of all lines on stdin',&
+'   $ findll -l -1',&
+'',&
+'AUTHOR',&
+'   John S. Urban',&
+'LICENSE',&
+'   Public Domain',&
+'']
+!>
+!!##NAME
+!!    findll(1f) - [FILE FILTER] find long lines
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    findll [ -l LENGTH] [ -wrap] | [ -help| -version] [FILENAMES]
+!!##DESCRIPTION
+!!    find lines in files over a specified length and print
+!!    them; or wrap each input line to fit in specified width.
+!!
+!!    Lines ending in a backslash ("\") are concatenated with the
+!!    next line.
+!!
+!!    Non-printable characters are not treated specially (eg. a
+!!    tab character is treated as a single character).
+!!##OPTIONS
+!!    FILENAMES  the files to scan for long lines
+!!    -l NUMBER  maximum line length of lines to ignore.
+!!               The default is 132.
+!!    --wrap     instead of locating and displaying long
+!!               lines, fold the lines at the specified
+!!               line length
+!!
+!!    --help     display this help and exit
+!!    --version  output version information and exit
+!!##EXAMPLES
+!!
+!!   Sample commands:
+!!
+!!    $ findll <filename
+!!
+!!    # show lines over 72 characters in length
+!!    $ findll *.f *.F -l 72
+!!    # show length of all lines on stdin
+!!    $ findll -l -1
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+version_text=[ CHARACTER(LEN=128) :: &
+'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
+'@(#)PROGRAM:        findll(1f)',&
+'@(#)DESCRIPTION:    find long lines',&
+'@(#)VERSION:        23.1 20160618',&
+'@(#)AUTHOR:         John S. Urban',&
+'']
+end subroutine setup
 end program findll
-! status="scratch|new|old|unknown|replace"
-! form="unformatted|formatted"
-! ACTION='read|write'
-! ACCESS='stream|sequential|direct',recl=READLENGTH,position=FILE_POSITION)
