@@ -3,7 +3,7 @@
 ## Shortcut
 
 The majority of the documentation is in HTML at the 
-[Documentation](https://urbanjost.github.io/general-purpose-fortran/index.html)
+[Documentation](https://urbanjost.github.io/general-purpose-fortran/docs.html)
 page.
 
 ## Intro
