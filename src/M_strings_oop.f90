@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!    M_strings_oop(3f) - [M_strings:INTRO] OOP Fortran string module
+!!    M_strings_oop(3f) - [M_strings::INTRO] OOP Fortran string module
 !!
 !!##SYNOPSIS
 !!

@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!    M_strings(3f) - [M_strings:INTRO] Fortran string module
+!!    M_strings(3f) - [M_strings::INTRO] Fortran string module
 !!
 !!##DESCRIPTION
 !!    The M_strings(3fm) module is a collection of Fortran procedures

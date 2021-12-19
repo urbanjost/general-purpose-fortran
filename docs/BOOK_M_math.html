@@ -4,7 +4,7 @@
 <meta name="generator" content="vi(1)/vim(1)" />
 <meta name="description" content="@(#)M_math::BOOK_M_math: BOOK composed of pages for man(1) topic M_math"/>
 <meta name="author"      content="urbanjs" />
-<meta name="date"        content="2021-12-18" />
+<meta name="date"        content="2021-12-19" />
 <meta name="keywords"    content="Fortran, Fortran code, source code repository, Fortran library, Fortran archive, source code" />
 <!--
    Pick your favorite style sheet from among the eight offerings:
@@ -26,7 +26,9 @@
 <link  rel="alternate stylesheet"  href="StyleSheets/Swiss.css"        type="text/css"  title="Swiss"        />
 <link  rel="alternate stylesheet"  href="StyleSheets/Traditional.css"  type="text/css"  title="Traditional"  />
 <link  rel="alternate stylesheet"  href="StyleSheets/Ultramarine.css"  type="text/css"  title="Ultramarine"  />
+<!--
 <link  rel="alternate stylesheet"  href="StyleSheets/fortran.css"      type="text/css"  title="fortran"      />
+-->
 <style type="text/css">
 /*<![CDATA[*/
 /* ======================================================== */
@@ -45,9 +47,11 @@ pX {
 }
 /* ======================================================== */
 div {
-   background-color: black80;
+   background-color: black;
+   /*
    border-style: solid;
    border-color: blue;
+   */
 }
 tbody {
    background-color: white;
@@ -94,7 +98,7 @@ p{ padding-bottom:1em; }
 p{ padding-top:1em; }
 p{ whitespace: pre-wrap; }
 h5,h6 { font-size:100% }
-a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#F00; }
 XXtable { border:double #000; border-collapse:collapse; }
 XXtable { border-collapse:collapse; }
 XXtd { border:thin solid #888; }
@@ -268,7 +272,9 @@ function copyIframe(iframeId, divId ) {
 Themes:
 <input  type="submit"  onclick="switch_style('man');return          false;"  name="theme"  value="man"          id="man">
 <input  type="submit"  onclick="switch_style('Simple');return       false;"  name="theme"  value="Simple"       id="Simple">
+<!--
 <input  type="submit"  onclick="switch_style('fortran');return      false;"  name="theme"  value="fortran"      id="fortran">
+-->
 <input  type="submit"  onclick="switch_style('Local');return        false;"  name="theme"  value="Local"        id="Local">
 <input  type="submit"  onclick="switch_style('Chocolate');return    false;"  name="theme"  value="Chocolate"    id="Chocolate">
 <input  type="submit"  onclick="switch_style('Midnight');return     false;"  name="theme"  value="Midnight"     id="Midnight">
