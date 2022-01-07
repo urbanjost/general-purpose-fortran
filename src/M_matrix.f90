@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!    M_matrix(3f) - [M_matrix] The Los Alamos-inspired Linear Algebra Fortran Facility (LALA)
+!!    M_matrix(3f) - [M_matrix::INTRO] The Los Alamos-inspired Linear Algebra Fortran Facility (LALA)
 !!    LICENSE(MIT)
 !!
 !!##DESCRIPTION

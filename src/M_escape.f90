@@ -1,6 +1,6 @@
 !>
 !!##NAME
-!!    M_escape(3f) - [M_escape] substitute escape sequences for HTML-like
+!!    M_escape(3f) - [M_escape::INTRO] substitute escape sequences for HTML-like
 !!                   syntax in strings
 !!
 !!##SYNOPSIS

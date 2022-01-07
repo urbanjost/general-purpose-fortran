@@ -3502,81 +3502,81 @@ subroutine ml_wqrdc(xr,xi,ldx,n,p,qrauxr,qrauxi,jpvt,workr,worki, job)
       integer jpvt(*)
       doubleprecision xr(ldx,*),xi(ldx,*),qrauxr(*),qrauxi(*), workr(*),worki(*)
 !
-!     WQRDC USES HOUSEHOLDER TRANSFORMATIONS TO COMPUTE THE QR
-!     FACTORIZATION OF AN N BY P MATRIX X. COLUMN PIVOTING
-!     BASED ON THE 2-NORMS OF THE REDUCED COLUMNS MAY BE
-!     PERFORMED AT THE USERS OPTION.
+!     WQRDC uses Householder transformations to compute the QR
+!     factorization of an N by P matrix X. column pivoting
+!     based on the 2-norms of the reduced columns may be
+!     performed at the users option.
 !
 !     ON ENTRY
 !
-!        X       DOUBLE-COMPLEX(LDX,P), WHERE LDX .GE. N.
-!                X CONTAINS THE MATRIX WHOSE DECOMPOSITION IS TO BE
-!                COMPUTED.
+!        X       DOUBLE-COMPLEX(LDX,P), where LDX .ge. N.
+!                X contains the matrix whose decomposition is to be
+!                computed.
 !
 !        LDX     INTEGER.
-!                LDX IS THE LEADING DIMENSION OF THE ARRAY X.
+!                LDX is the leading dimension of the array X.
 !
 !        N       INTEGER.
-!                N IS THE NUMBER OF ROWS OF THE MATRIX X.
+!                N is the number of rows of the matrix X.
 !
 !        P       INTEGER.
-!                P IS THE NUMBER OF COLUMNS OF THE MATRIX X.
+!                P is the number of columns of the matrix X.
 !
 !        JPVT    INTEGER(P).
-!                JPVT CONTAINS INTEGERS THAT CONTROL THE SELECTION
-!                OF THE PIVOT COLUMNS. THE K-TH COLUMN X(K) OF X
-!                IS PLACED IN ONE OF THREE CLASSES ACCORDING TO THE
-!                VALUE OF JPVT(K).
+!                JPVT contains integers that control the selection
+!                of the pivot columns. The K-th column X(K) of X
+!                is placed in one of three classes according to the
+!                value of JPVT(K).
 !
-!                   IF JPVT(K) .GT. 0, THEN X(K) IS AN INITIAL
-!                   COLUMN.
+!                   If JPVT(K) .gt. 0, then X(K) is an initial
+!                   column.
 !
-!                   IF JPVT(K) .EQ. 0, THEN X(K) IS A FREE COLUMN.
+!                   If JPVT(K) .eq. 0, then X(K) is a free column.
 !
-!                   IF JPVT(K) .LT. 0, THEN X(K) IS A FINAL COLUMN.
+!                   If JPVT(K) .lt. 0, then X(K) is a final column.
 !
-!                BEFORE THE DECOMPOSITION IS COMPUTED, INITIAL COLUMNS
-!                ARE MOVED TO THE BEGINNING OF THE ARRAY X AND FINAL
-!                COLUMNS TO THE END. BOTH INITIAL AND FINAL COLUMNS
-!                ARE FROZEN IN PLACE DURING THE COMPUTATION AND ONLY
-!                FREE COLUMNS ARE MOVED. AT THE K-TH STAGE OF THE
-!                REDUCTION, IF X(K) IS OCCUPIED BY A FREE COLUMN
-!                IT IS INTERCHANGED WITH THE FREE COLUMN OF LARGEST
-!                REDUCED NORM. JPVT IS NOT REFERENCED IF
-!                JOB .EQ. 0.
+!                Before the decomposition is computed, initial columns
+!                are moved to the beginning of the array X and final
+!                columns to the end. Both initial and final columns
+!                are frozen in place during the computation and only
+!                free columns are moved. At the K-th stage of the
+!                reduction, if X(K) is occupied by a free column
+!                it is interchanged with the free column of largest
+!                reduced norm. JPVT is not referenced if
+!                JOB .eq. 0.
 !
-!        WORK    DOUBLE-COMPLEX(P).
-!                WORK IS A WORK ARRAY. WORK IS NOT REFERENCED IF
-!                JOB .EQ. 0.
+!        WORK    double-complex(P).
+!                Work is a work array. work is not referenced if
+!                JOB .eq. 0.
 !
-!        JOB     INTEGER.
-!                JOB IS AN INTEGER THAT INITIATES COLUMN PIVOTING.
-!                IF JOB .EQ. 0, NO PIVOTING IS DONE.
-!                IF JOB .NE. 0, PIVOTING IS DONE.
+!        JOB     integer.
+!                Job is an integer that initiates column pivoting.
+!                If JOB .eq. 0, no pivoting is done.
+!                If JOB .ne. 0, pivoting is done.
 !
 !     ON RETURN
 !
-!        X       X CONTAINS IN ITS UPPER TRIANGLE THE UPPER
-!                TRIANGULAR MATRIX R OF THE QR FACTORIZATION.
-!                BELOW ITS DIAGONAL X CONTAINS INFORMATION FROM
-!                WHICH THE UNITARY PART OF THE DECOMPOSITION
-!                CAN BE RECOVERED. NOTE THAT IF PIVOTING HAS
-!                BEEN REQUESTED, THE DECOMPOSITION IS NOT THAT
-!                OF THE ORIGINAL MATRIX X BUT THAT OF X
-!                WITH ITS COLUMNS PERMUTED AS DESCRIBED BY JPVT.
+!        X       X contains in its upper triangle the upper
+!                triangular matrix R of the QR factorization.
+!                below its diagonal X contains information from
+!                which the unitary part of the decomposition
+!                can be recovered. Note that if pivoting has
+!                been requested, the decomposition is not that
+!                of the original matrix X but that of X
+!                with its columns permuted as described by JPVT.
 !
 !        QRAUX   DOUBLE-COMPLEX(P).
-!                QRAUX CONTAINS FURTHER INFORMATION REQUIRED TO RECOVER
-!                THE UNITARY PART OF THE DECOMPOSITION.
+!                QRAUX contains further information required to recover
+!                the unitary part of the decomposition.
 !
-!        JPVT    JPVT(K) CONTAINS THE INDEX OF THE COLUMN OF THE
-!                ORIGINAL MATRIX THAT HAS BEEN INTERCHANGED INTO
-!                THE K-TH COLUMN, IF PIVOTING WAS REQUESTED.
+!        JPVT    JPVT(K) contains the index of the column of the
+!                original matrix that has been interchanged into
+!                the K-th column, if pivoting was requested.
 !
-!     LINPACK. THIS VERSION DATED 07/03/79 .
-!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 07/03/79 .
+!     G.W. Stewart, University of Maryland, Argonne National Lab.
 !
-!     WQRDC USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
+!     WQRDC uses the following functions and subprograms.
 !
 !     BLAS matX_waxpy,mat_pythag,mat_wdotcr,mat_wdotci,mat_wscal
 !     blas mat_wswap ,mat_wnrm2

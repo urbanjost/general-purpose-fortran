@@ -1370,9 +1370,7 @@ character(len=8)  :: fb1 ! WORKING BUFFERS
       endif
       write(b,fb1,err=90) z
       if (iff.eq.1) then  ! REMOVE LEADING SPACES
-         do i=1,18
-            if (b(1:1).eq.' ') b=b(2:18)
-         enddo
+         b=adjustl(b)
       endif
    endif
 50 continue

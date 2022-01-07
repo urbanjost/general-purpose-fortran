@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!      M_readline(3fm) - [M_readline] Calling readline(3c) from Fortran
+!!      M_readline(3fm) - [M_readline::INTRO] Calling readline(3c) from Fortran
 !!      (LICENSE:PD)
 !!##SYNOPSIS
 !!

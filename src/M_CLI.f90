@@ -4,7 +4,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_CLI(3fm) - [ARGUMENTS::M_CLI] command line argument parsing using
+!!    M_CLI(3fm) - [ARGUMENTS::M_CLI::INTRO] command line argument parsing using
 !!    a prototype command and NAMELIST
 !!    (LICENSE:PD)
 !!##SYNOPSIS

@@ -15,7 +15,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_anything(3fm) - [M_anything] procedures that use polymorphism to allow arguments of different types generically
+!!    M_anything(3fm) - [M_anything::INTRO] procedures that use polymorphism to allow arguments of different types generically
 !!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS

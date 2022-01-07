@@ -7,6 +7,7 @@ implicit none
 private
 public   graph_init
 public   graph
+public   plot
 
 private  axisc_
 private  axislg_
@@ -43,6 +44,135 @@ integer,save :: IWIDTHQ                    ! CURRENT LINE WIDTH
 integer,save :: ICOLORQ                    ! CURRENT LINE COLOR
 integer,save :: IDASHSCALEQ                ! DEFAULT LINE SCALING FACTOR
 real,save    :: XSCALEQ,YSCALEQ,ZSCALEQ,AMINQ,ALPHQ,BETQ
+!-----------------------------------------------------------------------------------------------------------------------------------
+type :: grid
+   real :: xmin, xmax, ymin, ymax
+end type grid
+!-----------------------------------------------------------------------------------------------------------------------------------
+type :: plot
+!     1  0<.<=NDP NUMBER OF POINTS PLOTTED [NDP]
+!     2  0<.<=NDL NUMBER OF LINES PLOTTED [NDL]
+
+!     3  -1/0/1   X AUTO SCALING: 0=AUTO,SMOOTH; 1=AUTO,NOSMOOTH; -1=USER
+!     4  XMIN     USER SUPPLIED SCALE VALUE (USED IF F(3)<0)
+!     5  XMAX     USER SUPPLIED SCALE VALUE (USED IF F(3)<0)
+
+!     6  -1/0/1   Y AUTO SCALING: 0=AUTO,SMOOTH; 1=AUTO,NOSMOOTH; -1=USER
+!     7  YMIN     USER SUPPLIED SCALE VALUE (USED IF F(6)<0)
+!     8  YMAX     USER SUPPLIED SCALE VALUE (USED IF F(6)<0)
+
+!     9  0/1      USE X VALUES WITH Y VALUES: 0=ONLY FIRST LINE OF
+!                 X DATA USED FOR ALL Y LINES; 1=LINES OF X/Y USED
+
+!     10 0/1      CONNECT PLOTTED POINTS: 0=YES; 1=NO
+!     11 >=0      SYMBOL PLOTTED EVERY ()TH POINT: 0=NO SYMBOLS
+!     12 >=0      SYMBOL SIZE [0.1]: 0=USE DEFAULT
+!     13 >=0      SYMBOL NUMBER FOR FIRST DATA LINE
+
+!     14 -8<.<8   SHOW ERROR BARS: 0=NO ERROR BARS
+!                 WHEN NON-ZERO, CHANGES INTERPRETATION OF LINES
+!                 POINTS EVERY THIRD LINE ARE PLOTTED.  RELATIVE
+!                 ERROR (UPPER,LOWER) ARE THE FOLLOWING TWO LINES.
+!                 PLOTTED RELATIVE ERROR COMPUTED AS SUM OF FIRST
+!                 LINE PLUS SECOND/THIRD.
+!          <0     AN X IS MADE AT THE CENTER POINT
+!
+!        ABS(.)  TYPE OF ERROR BAR
+!        ------  ---------------------------------------------------
+!          1   LINE CONNECTING 2ND/3RD RELATIVE ERRORS
+!          2   1+HORIZONTAL BARS OF WIDTH EBAR AT 2ND/3RD REL ERR
+!          3   1+VERTICAL BARS OF WIDTH EBAR AT 2ND/3RD REL ERR
+!          4   2 LINES SPACED EBAR/2+HORIZONTAL BARS WIDTH=EBAR
+!          5   2 LINES SPACED EBAR/2+VERTICAL BARS WIDTH=EBAR
+!          6   VERTICAL RECTANGLE FROM 2ND/3RD WITH WIDTH=EBAR
+!          7     RECTANGLE WITH CORNER AT 2ND/3RD REL ERROR
+!
+!     16 >=0   ERROR BAR SIZE [0.1]: 0=DEFAULT USED
+
+!     17 0/1   VERTICAL DRAWN LINE FROM POINT TO REFERENCE VALUE:
+!           0=NO; 1=YES
+!     18    REFERENCE VALUE
+
+!     19 -1/0/1   X AXIS TYPE: 0=LINEAR; 1=LOG AXIS, -1=NO AXIS
+!     20 -1/0/1   Y AXIS TYPE: 0=LINEAR; 1=LOG AXIS, -1=NO AXIS
+!     21 >=0      X AXIS LENGTH [7.0]: 0=DEFAULT USED
+!     22 >=0      Y AXIS LENGTH [5.0]: 0=DEFAULT USED
+
+!     23 >=0      X AXIS TICK PATTERN (SEE axisc_) [7.00]: 0=DEFAULT
+!     24 >=0      Y AXIS TICK PATTERN (SEE axisc_) [5.00]: 0=DEFAULT
+
+!     25 0/1      X AXIS TITLE SIDE OF AXIS: 0=BELOW; 1=ABOVE
+!     26 0/1      Y AXIS TITLE SIDE OF AXIS: 0=LEFT; 1=RIGHT
+
+!     27 0/1      X AXIS AUTO EXPONENT ENABLE: 0=ENABLE; 1=DISABLE
+!     28 0/1      Y AXIS AUTO EXPONENT ENABLE: 0=ENABLE; 1=DISABLE
+
+!     29 0/1      X AXIS TICK SIDE: 0=BELOW; 1=ABOVE
+!     30 0/1      Y AXIS TICK SIDE: 0=LEFT; 1=RIGHT
+
+!     31 0/1      X AXIS NUMBERS ORIENTATION: 0=HORIZONTAL; 1=VERTICAL
+!     32 0/1      Y AXIS NUMBERS ORIENTATION: 0=VERTICAL; 1=HORIZONTAL
+
+!     33 0/1      X AXIS NUMBERS/TITLE SHOWN: 0=SHOWN; 1=NOT SHOWN
+!     34 0/1      Y AXIS NUMBERS/TITLE SHOWN: 0=SHOWN; 1=NOT SHOWN
+
+!     35 0/1      TAKE LOG10(ABS(X VALUES)+1.E-34): 0=NO; 1=YES
+!     36 0/1      TAKE LOG10(ABS(Y VALUES)+1.E-34): 0=NO; 1=YES
+
+!     37 -1/0/1   ADD MIRROR X AXIS: 0=NO; 1=WITH LABELS; -1:W/O LABELS
+!     38 -1/0/1   ADD MIRROR Y AXIS: 0=NO; 1=WITH LABELS; -1:W/O LABELS
+
+!     39 >=0      X AXIS LABEL SIZE [0.15]: 0=USE DEFAULT
+!     40 >=0      Y AXIS LABEL SIZE [0.15]: 0=USE DEFAULT
+
+!     41 >=0      TOP TITLE CHARACTER SIZE [0.18]: 0=USE DEFAULT
+
+!     42 0/1/2/3  GRID OPTION: 0=NO GRID; 1=SOLID; 2=DOTTED; 3=TICKED
+
+!     43 -1/0/1   LINE/SYMBOL LEGEND: 0=NO LEGEND; 1=AUTO PLACE; -1=USER
+!     44 X        USER SPECIFIED LOWER-LEFT CORNER OF LEGEND
+!     45 Y        USER SPECIFIED LOWER-LEFT CORNER OF LEGEND
+!     46 0/1      SHOW PLOT SYMBOL WITH LEGEND: 0=NO; 1=YES
+!     47 0/1      SHOW LINE SEGMENT ON LEGEND: 0=NO; 1=YES
+!     48 >=0      LEGEND CHARACTER HEIGHT [0.12]: 0=USE DEFAULT
+!     49 >=0      LEGEND SEGMENT LENGTH [0.5]: 0=USE DEFAULT
+
+!     50 -1/0/1   TOP TITLE JUSTIFY: 0=CENTER; -1:LEFT; 1:RIGHT
+
+!     51 0/1      PLOT HORIZONTAL REFERENCE LINE: 0=NO; 1=YES
+
+!     52 0/1      USE LINE TYPE ARRAY VALUES: 0=NO; 1=YES
+
+!     53 0/1      USE COLOR ARRAY VALUES: 0=NO; 1=YES
+!     54 >=0      COLOR INDEX 1: 0=COLOR 1 USED
+!     55 >=0      LINETYPE INDEX 1
+!     56 >=0      COLOR INDEX 2: 0=COLOR 1 USED
+!     57 >=0      LINETYPE INDEX 2
+!     ...         ... ETC ...
+!
+!     INDEX    COLOR USAGE        LINETYPE USAGE
+!     -------  ------------       --------------
+! 54    1      X AXIS              X AXIS
+! 56    2      X AXIS NUMBERS      Y AXIS
+! 58    3      X AXIS TITLE        TITLE
+! 60    4      X AXIS EXPONENT     LEGEND TITLES
+! 62    5      Y AXIS              ZERO REF LINETYPE
+! 64    6      Y AXIS NUMBERS      ERROR BAR LINETYPES
+! 66    7      Y AXIS TITLE LINE   1 LINETYPE
+! 68    8      Y AXIS EXPONENT     ETC.
+! 70    9      TITLE               ...
+! 72   10      LEGEND TITLES       ...
+! 74   11      ZERO REF LINE       ...
+! 76   12      GRID COLOR          ...
+! 78   13      LINE 1 COLOR        ...
+!     ...      ... ETC.   ...      ...
+!
+contains
+
+procedure :: graph => graph_one
+procedure :: table => graph_table
+
+end type plot
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -50,9 +180,94 @@ contains
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
+subroutine graph_one(this,x,y)
+class(plot), intent(inout) :: this
+real,intent(in) :: x(*)
+real,intent(in) :: y(*)
+!   call graph(x,y,ndp,ndl,f,c,nc)
+end subroutine graph_one
+!==================================================================================================================================!
+subroutine graph_table(this,xx,yy)
+class(plot), intent(inout) :: this
+real,intent(in) :: xx(:)
+real,intent(in) :: yy(:,:)
+integer             :: ndp
+integer             :: ndl ! number of data lines
+character(len=80)   :: c(size(yy,dim=2)+3)
+integer             :: nc(size(yy,dim=2)+3)
+integer,parameter   :: nf=255
+real                :: f(nf)
+integer             :: i
+integer             :: ii
+   ndp=size(xx)
+   ndl=size(yy,dim=2)
+   call default()
+   call graph(xx,yy,ndp,ndl,f,c,nc)
+contains
+subroutine default()
+   f=0.0 !     zero out option array
+   ! set up color and linetype in option array arbitrarily
+   do i=55,nf,2
+      f(i)=mod(i,7)
+      f(i-1)=mod(i,7)
+   enddo
+
+    f(54)=7  ! X AXIS
+    f(62)=7  ! Y AXIS
+   f(56)=7  ! X AXIS NUMBERS
+   f(64)=7  ! Y AXIS NUMBERS
+   f(60)=7  ! X AXIS EXPONENT
+   f(68)=7  ! Y AXIS EXPONENT
+
+   f(58)=2  ! X AXIS TITLE
+   f(66)=2  ! Y AXIS TITLE
+   f(70)=2  ! TITLE
+
+   f(72)=7  ! LEGEND TITLES
+
+   f(74)=7  ! ZERO REF LINE
+   f(76)=3  ! GRID COLOR
+
+   f(3)=1
+   f(6)=1
+   f(52)=1
+   f(53)=1
+   f(32)=1 ! 0/1    Y AXIS NUMBERS ORIENTATION: 0=VERTICAL; 1=HORIZONTAL
+   f(11)=1 !        SYMBOL PLOTTED EVERY ()TH POINT: 0=NO SYMBOLS
+
+   f(42)=2 ! 0/1/2/3  GRID OPTION: 0=NO GRID; 1=SOLID; 2=DOTTED; 3=TICKED
+   f(43)=1 ! -1/0/1   LINE/SYMBOL LEGEND: 0=NO LEGEND; 1=AUTO PLACE; -1=USER
+   f(46)=1 ! 0/1      SHOW PLOT SYMBOL WITH LEGEND: 0=NO; 1=YES
+   f(47)=1 ! 0/1      SHOW LINE SEGMENT ON LEGEND: 0=NO; 1=YES
+
+   f(39)=0.12      !  >=0      X AXIS LABEL SIZE [0.15]: 0=USE DEFAULT
+   f(40)=0.12      !  >=0      Y AXIS LABEL SIZE [0.15]: 0=USE DEFAULT
+   f(41)=0.16      !  >=0      TOP TITLE CHARACTER SIZE [0.18]: 0=USE DEFAULT
+
+   ! array of strings dimensioned c(3+ndp)
+   c(1)='X-axis'   !   x axis title
+   c(2)='Y-axis'   !   y axis title
+   c(3)='Title'    !   top title
+
+   ! default labels for curves (optionally used)
+   do i=1,ndl
+      write(c(i+3),'("curve ",i0)')i
+   enddo
+
+   ! array of string lengths in c() dimensioned nc(3+ndl)
+   do i=1,3+ndl
+      nc(i)=len_trim(c(i))
+   enddo
+
+end subroutine default
+
+end subroutine graph_table
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
 !>
 !!##NAME
-!!    graph(3) - [M_graph] Draw an XY graph
+!!    graph(3) - [M_graph::INTRO] Draw an XY graph
 !!##SYNOPSIS
 !!
 !!    subroutine graph(x,y,ndp,ndl,f,c,nc)
@@ -397,7 +612,7 @@ SUBROUTINE graph(X,Y,NDP,NDL,F,C,NC)
 !     29 0/1      X AXIS TICK SIDE: 0=BELOW; 1=ABOVE
 !     30 0/1      Y AXIS TICK SIDE: 0=LEFT; 1=RIGHT
 !     31 0/1      X AXIS NUMBERS ORIENTATION: 0=HORIZONTAL; 1=VERTICAL
-!     32 0/1      Y AXIS NUMBERS ORIENTATION: 0=VERTICAL; 0=HORIZONTAL
+!     32 0/1      Y AXIS NUMBERS ORIENTATION: 0=VERTICAL; 1=HORIZONTAL
 !     33 0/1      X AXIS NUMBERS/TITLE SHWON: 0=SHOWN; 1=NOT SHOWN
 !     34 0/1      Y AXIS NUMBERS/TITLE SHWON: 0=SHOWN; 1=NOT SHOWN
 !     35 0/1      TAKE LOG10(ABS(X VALUES)+1.E-34): 0=NO; 1=YES
@@ -593,60 +808,60 @@ real     :: zval
    kebar=iabs(jebar)
    nbar=1
    if (jebar.ne.0) nbar=3
-   if (f(16).gt.0.0) ebar=f(16) ! ERROR BAR SIZE
+   if (f(16).gt.0.0) ebar=f(16)  ! ERROR BAR SIZE
 !                   1ST LINE DEFINES CENTER
 !                   2ND IS LOWER REL. ERROR
 !                   3RD IS UPPER REL. ERROR
-   jvline=f(17)       ! VERTICAL LINE TO ZVAL,0=NO,1=YES
-   zval=f(18)        ! ZERO REFERENCE VALUE
-   jxlgax=f(19)       ! X AXIS, LINEAR=0/LOG=1/NONE=-1
-   jylgax=f(20)       ! Y AXIS, LINEAR=0/LOG=1/NONE=-1
-   if (f(21).gt.0.0) xlen=f(21) ! X AXIS LENGTH
-   if (f(22).gt.0.0) ylen=f(22) ! Y AXIS LENGTH
+   jvline=f(17)                  ! VERTICAL LINE TO ZVAL,0=NO,1=YES
+   zval=f(18)                    ! ZERO REFERENCE VALUE
+   jxlgax=f(19)                  ! X AXIS, LINEAR=0/LOG=1/NONE=-1
+   jylgax=f(20)                  ! Y AXIS, LINEAR=0/LOG=1/NONE=-1
+   if (f(21).gt.0.0) xlen=f(21)  ! X AXIS LENGTH
+   if (f(22).gt.0.0) ylen=f(22)  ! Y AXIS LENGTH
    if (f(23).gt.0.0) xtick=f(23) ! X AXIS TICK PATTERN
    if (f(24).gt.0.0) ytick=f(24) ! Y AXIS TICK PATTERN
-   jxtitle=abs(f(25))  ! X AXIS TITLE SIDE,0=CW,1=CCW
+   jxtitle=abs(f(25))            ! X AXIS TITLE SIDE,0=CW,1=CCW
    if (jxtitle.eq.0) then
       jxtitle=-1
    else
       jxtitle=1
    endif
-   jytitle=abs(f(26))  ! Y AXIS TITLE SIDE,0=CCW,1=CW
+   jytitle=abs(f(26))            ! Y AXIS TITLE SIDE,0=CCW,1=CW
    if (jytitle.eq.0) then
       jytitle=1
    else
       jytitle=-1
    endif
-   jxexpsc=abs(f(27))  ! X AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
-   jyexpsc=abs(f(28))  ! Y AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
-   jxticks=abs(f(29))  ! X AXIS TICKS TITLE SIDE,0=YES,1=NO
-   jyticks=abs(f(30))  ! Y AXIS TICKS TITLE SIDE,0=YES,1=NO
-   jxnums=abs(f(31))  ! X AXIS NUMS PARA AXIS, 0=YES,1=NO
-   jynums=abs(f(32))  ! Y AXIS NUMS PARA AXIS, 0=YES,1=NO
-   jxnum=abs(f(33))   ! X AXIS NUMS SHOWN, 0=YES,1=NO
-   jynum=abs(f(34))   ! Y AXIS NUMS SHOWN, 0=YES,1=NO
-   jxlog=abs(f(35))   ! TAKE LOG OF X VALUES, 0=NO,1=YES
-   jylog=abs(f(36))   ! TAKE LOG OF Y VALUES, 0=NO,1=YES
-   jxrax=f(37)    ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
-   jyrax=f(38)    ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
-   if (f(39).gt.0.0) xcs=f(39) ! X AXIS TITLE SIZE
-   if (f(40).gt.0.0) ycs=f(40) ! Y AXIS TITLE SIZE
-   if (f(41).gt.0.0) tcs=f(41) ! OVERALL TITLE SIZE
-   jgrid=f(42)       ! GRID OPTION, 0=NONE,1=SOLID,2=DOTTED
-   jlegnd=f(43)       ! ADD LEGEND, 0=NONE,1=AUTO,-1=USER
-   xleg=xlen+0.3      ! DEFAULT LEGEND LOCATION
+   jxexpsc=abs(f(27))            ! X AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
+   jyexpsc=abs(f(28))            ! Y AXIS ENABLE AUTO EXPONENT,0=YES,1=NO
+   jxticks=abs(f(29))            ! X AXIS TICKS TITLE SIDE,0=YES,1=NO
+   jyticks=abs(f(30))            ! Y AXIS TICKS TITLE SIDE,0=YES,1=NO
+   jxnums=abs(f(31))             ! X AXIS NUMS PARA AXIS, 0=YES,1=NO
+   jynums=abs(f(32))             ! Y AXIS NUMS PARA AXIS, 0=YES,1=NO
+   jxnum=abs(f(33))              ! X AXIS NUMS SHOWN, 0=YES,1=NO
+   jynum=abs(f(34))              ! Y AXIS NUMS SHOWN, 0=YES,1=NO
+   jxlog=abs(f(35))              ! TAKE LOG OF X VALUES, 0=NO,1=YES
+   jylog=abs(f(36))              ! TAKE LOG OF Y VALUES, 0=NO,1=YES
+   jxrax=f(37)                   ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
+   jyrax=f(38)                   ! ADD AXIS OPPOSITE, 0=YES,-1=W/L,1=NO LABELS
+   if (f(39).gt.0.0) xcs=f(39)   ! X AXIS TITLE SIZE
+   if (f(40).gt.0.0) ycs=f(40)   ! Y AXIS TITLE SIZE
+   if (f(41).gt.0.0) tcs=f(41)   ! OVERALL TITLE SIZE
+   jgrid=f(42)                   ! GRID OPTION, 0=NONE,1=SOLID,2=DOTTED
+   jlegnd=f(43)                  ! ADD LEGEND, 0=NONE,1=AUTO,-1=USER
+   xleg=xlen+0.3                 ! DEFAULT LEGEND LOCATION
    yleg=0.5
-   if (jlegnd.lt.0) xleg=f(44) ! X LEGEND LOCATION
-   if (jlegnd.lt.0) yleg=f(45) ! Y LEGEND LOCATION
-   jlegsy=f(46)       ! USE SYMBOL ON LEGEND,0=NO,1=YES
-   jlegli=f(47)       ! USE LINETYPE ON LEGEND,0=NO,1=YES
+   if (jlegnd.lt.0) xleg=f(44)   ! X LEGEND LOCATION
+   if (jlegnd.lt.0) yleg=f(45)   ! Y LEGEND LOCATION
+   jlegsy=f(46)                  ! USE SYMBOL ON LEGEND,0=NO,1=YES
+   jlegli=f(47)                  ! USE LINETYPE ON LEGEND,0=NO,1=YES
    if (f(48).gt.0.0) csleg=f(48) ! LEGEND CHARACTER SIZE
-   if (f(49).gt.0.0) glen=f(49) ! LEGEND LINE LENGTH
-   jtcntr=f(50)       ! CENTER TITLE,0=YES,-1=LEFT,1=RIGHT
-   jszref=f(51)       ! SHOW ZERO REFERENCE,0=NO,1=YES
+   if (f(49).gt.0.0) glen=f(49)  ! LEGEND LINE LENGTH
+   jtcntr=f(50)                  ! CENTER TITLE,0=YES,-1=LEFT,1=RIGHT
+   jszref=f(51)                  ! SHOW ZERO REFERENCE,0=NO,1=YES
 !
-   jline=f(52)       ! USE LINE TYPES,0=NO,1=YES
-   jcol=f(53)        ! USE COLORS,0=NO,1=YES
+   jline=f(52)                   ! USE LINE TYPES,0=NO,1=YES
+   jcol=f(53)                    ! USE COLORS,0=NO,1=YES
 !
 !     F(54)=FIRST COLOR
 !     F(55)=FIRST LINETYPE

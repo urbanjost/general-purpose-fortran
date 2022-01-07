@@ -92,7 +92,7 @@ END MODULE PUTSTRMODULE
 !===================================================================================================================================
 !>
 !!##NAME
-!!      M_display(3f) - [M_display] module for pretty-printing matrices
+!!      M_display(3f) - [M_display::INTRO] module for pretty-printing matrices
 !!
 !!##INTRODUCTION
 !!

@@ -1,6 +1,6 @@
 !>
 !!##NAME
-!!    M_attr(3f) - [M_attr] control text attributes on terminals
+!!    M_attr(3f) - [M_attr::INTRO] control text attributes on terminals
 !!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS

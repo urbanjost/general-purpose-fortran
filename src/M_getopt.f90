@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!   M_getopt(3fm) - [ARGUMENTS:M_getopt] parse command line arguments. similar to those in standard C library.
+!!   M_getopt(3fm) - [ARGUMENTS:M_getopt::INTRO] parse command line arguments. similar to those in standard C library.
 !!   (LICENSE:GPL)
 !!
 !!##SYNOPSIS

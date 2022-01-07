@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!     M_journal(3fm) - [M_journal] write program messages to stdout and/or
+!!     M_journal(3fm) - [M_journal::INTRO] write program messages to stdout and/or
 !!     a log file
 !!     (LICENSE:PD)
 !!##SYNOPSIS

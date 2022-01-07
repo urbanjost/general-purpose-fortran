@@ -22,7 +22,7 @@ contains
 !===================================================================================================================================
 !>
 !!##NAME
-!! bes(3f) - [M_bessel] calculate Bessel functions J(X), Y(X), I(X), K(X) for doubleprecision arguments and integer orders
+!! bes(3f) - [M_bessel::INTRO] calculate Bessel functions J(X), Y(X), I(X), K(X) for doubleprecision arguments and integer orders
 !!
 !!##SYNOPSIS
 !!

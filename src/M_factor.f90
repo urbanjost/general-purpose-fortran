@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!      M_factor(3fm) - [M_factor] module for least common multiple, greatest common divisor, and prime factors
+!!      M_factor(3fm) - [M_factor::INTRO] module for least common multiple, greatest common divisor, and prime factors
 !!##SYNOPSIS
 !!
 !!

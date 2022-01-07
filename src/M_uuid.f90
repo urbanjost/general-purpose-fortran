@@ -51,7 +51,7 @@
 module M_uuid
 !>
 !!##NAME
-!!    M_uuid(3f) - [M_uuid] a module of UUID (Universally Unique IDentifier) procedures
+!!    M_uuid(3f) - [M_uuid::INTRO] a module of UUID (Universally Unique IDentifier) procedures
 !!    (LICENSE:BSD-4-Clause)
 !!
 !!##SYNOPSIS

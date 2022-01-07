@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!    M_list(3f) - [M_list] maintain simple lists
+!!    M_list(3f) - [M_list::INTRO] maintain simple lists
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS

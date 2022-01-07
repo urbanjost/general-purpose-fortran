@@ -7,7 +7,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!     M_CLI2(3fm) - [ARGUMENTS::M_CLI2] - command line argument parsing
+!!     M_CLI2(3fm) - [ARGUMENTS::M_CLI2::INTRO] - command line argument parsing
 !!     using a prototype command
 !!     (LICENSE:PD)
 !!##SYNOPSIS
@@ -6053,9 +6053,16 @@ real(kind=dp)       :: rc, ic
    enddo
 end function cg
 !===================================================================================================================================
+! Does not work with gcc 5.3
+!function sg()
+!character(len=:),allocatable :: sg(:)
+!   sg=unnamed
+!end function sg
+
 function sg()
 character(len=:),allocatable :: sg(:)
-   sg=unnamed
+   if(allocated(sg))deallocate(sg)
+   allocate(sg,source=unnamed)
 end function sg
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

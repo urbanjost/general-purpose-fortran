@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!    M_html(3fm) - [M_html] a module of routines to help write output as HTML documents
+!!    M_html(3fm) - [M_html::INTRO] a module of routines to help write output as HTML documents
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS

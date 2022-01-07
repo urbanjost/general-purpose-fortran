@@ -4,7 +4,7 @@
 module M_sha3
 !>
 !!##NAME
-!!    M_sha3(3fm) - [M_sha3] a module implementing the SHA-3 hash function
+!!    M_sha3(3fm) - [M_sha3::INTRO] a module implementing the SHA-3 hash function
 !!##SYNOPSIS
 !!
 !!    use M_sha3, only : sha3

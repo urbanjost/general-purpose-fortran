@@ -3,7 +3,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_args(3fm) - [ARGUMENTS::M_args] - define a NAMELIST in a module template to provide command line argument parsing
+!!    M_args(3fm) - [ARGUMENTS::M_args::INTRO] - define a NAMELIST in a module template to provide command line argument parsing
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!

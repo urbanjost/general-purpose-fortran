@@ -1,6 +1,6 @@
 !>
 !!##NAME
-!!    M_verify(3fm) - [M_verify] a collection of Fortran routines for
+!!    M_verify(3fm) - [M_verify::INTRO] a collection of Fortran routines for
 !!                    supporting code development by providing error
 !!                    processing, debugging procedures and unit testing.
 !!                    (LICENSE:PD)
