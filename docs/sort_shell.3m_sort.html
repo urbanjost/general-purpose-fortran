@@ -53,8 +53,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>sort_shell</B>(3f) - [M_sort] Generic subroutine sorts the array X using Shell&#146;s method
+<B>sort_shell</B>(3f) - [M_sort] Generic subroutine sorts the array X using Shell&#146;s Method
 (LICENSE:PD)
+<P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -99,7 +100,6 @@ subroutine <B>sort_shell</B>(complexs,order,type)
     character(len=*),intent(inout) :: lines(:)
     character(len=*),intent(in)    :: order
     character(len=*),intent(in)    :: type
-<P>
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -149,17 +149,20 @@ F90 NOTES:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-procedure names are declared private in this module so they are not accessible except by their generic name
+procedure names are declared private in this module so they are
+not accessible except by their generic name
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-procedures must include a "use M_sort" to access the generic name SORT_SHELL
+procedures must include a "use M_sort" to access the generic
+name SORT_SHELL
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-if these routines are recompiled, routines with the use statement should then be recompiled and reloaded.
+if these routines are recompiled, routines with the use statement
+should then be recompiled and reloaded.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -208,39 +211,39 @@ FOR COMPLEX AND <B>COMPLEX</B>(KIND=KIND(0.0D0)) DATA:
 Sample program
 <P>
 <PRE>
-      program demo_sort_shell
-      use M_sort, only : sort_shell
-      character(len=:),allocatable :: array(:)
+   program demo_sort_shell
+   use M_sort, only : sort_shell
+   character(len=:),allocatable :: array(:)
 <P>
-      array= [ character(len=20) ::                               &
-      & &#146;red&#146;,    &#146;green&#146;, &#146;blue&#146;, &#146;yellow&#146;, &#146;orange&#146;,   &#146;black&#146;, &
-      & &#146;white&#146;,  &#146;brown&#146;, &#146;gray&#146;, &#146;cyan&#146;,   &#146;magenta&#146;,           &
-      & &#146;purple&#146;]
+   array= [ character(len=20) ::                               &
+   & &#146;red&#146;,    &#146;green&#146;, &#146;blue&#146;, &#146;yellow&#146;, &#146;orange&#146;,   &#146;black&#146;, &
+   & &#146;white&#146;,  &#146;brown&#146;, &#146;gray&#146;, &#146;cyan&#146;,   &#146;magenta&#146;,           &
+   & &#146;purple&#146;]
 <P>
-      write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
-      call sort_shell(array,order=&#146;a&#146;)
-      write(*,&#146;(a,*(a:,","))&#146;)&#146;A-Z    &#146;,(trim(array(i)),i=1,size(array))
-      do i=1,size(array)-1
-         if(array(i).gt.array(i+1))then
-            write(*,*)&#146;Error in sorting strings a-z&#146;
-         endif
-      enddo
+   write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
+   call sort_shell(array,order=&#146;a&#146;)
+   write(*,&#146;(a,*(a:,","))&#146;)&#146;A-Z    &#146;,(trim(array(i)),i=1,size(array))
+   do i=1,size(array)-1
+      if(array(i).gt.array(i+1))then
+         write(*,*)&#146;Error in sorting strings a-z&#146;
+      endif
+   enddo
 <P>
-      array= [ character(len=20) ::                               &
-      & &#146;RED&#146;,    &#146;GREEN&#146;, &#146;BLUE&#146;, &#146;YELLOW&#146;, &#146;ORANGE&#146;,   &#146;BLACK&#146;, &
-      & &#146;WHITE&#146;,  &#146;BROWN&#146;, &#146;GRAY&#146;, &#146;CYAN&#146;,   &#146;MAGENTA&#146;,           &
-      & &#146;PURPLE&#146;]
+   array= [ character(len=20) ::                               &
+   & &#146;RED&#146;,    &#146;GREEN&#146;, &#146;BLUE&#146;, &#146;YELLOW&#146;, &#146;ORANGE&#146;,   &#146;BLACK&#146;, &
+   & &#146;WHITE&#146;,  &#146;BROWN&#146;, &#146;GRAY&#146;, &#146;CYAN&#146;,   &#146;MAGENTA&#146;,           &
+   & &#146;PURPLE&#146;]
 <P>
-      write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
-      call sort_shell(array,order=&#146;d&#146;)
-      write(*,&#146;(a,*(a:,","))&#146;)&#146;Z-A    &#146;,(trim(array(i)),i=1,size(array))
-      do i=1,size(array)-1
-         if(array(i).lt.array(i+1))then
-            write(*,*)&#146;Error in sorting strings z-a&#146;
-         endif
-      enddo
+   write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
+   call sort_shell(array,order=&#146;d&#146;)
+   write(*,&#146;(a,*(a:,","))&#146;)&#146;Z-A    &#146;,(trim(array(i)),i=1,size(array))
+   do i=1,size(array)-1
+      if(array(i).lt.array(i+1))then
+         write(*,*)&#146;Error in sorting strings z-a&#146;
+      endif
+   enddo
 <P>
-      end program demo_sort_shell
+   end program demo_sort_shell
 <P>
 </PRE>
 Expected output
@@ -280,7 +283,7 @@ D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
 John S. Urban, 19970201
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sort_shell (3)</TD> <TD align=right width=33%><I>December 19, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 351fa49d-425d-4d15-b8d4-8218d8aba062 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sort_shell (3)</TD> <TD align=right width=33%><I>January 07, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9fd234e6-f05b-4ece-95a0-5a73aa4b2d9a using man macros.</FONT>
 <br><br><center><img src="images/sort_shell.3m_sort.gif"></center>
 </div>
 </div>

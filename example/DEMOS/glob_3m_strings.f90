@@ -17,12 +17,12 @@
 
       do i=1,nReps
        ! Cases with repeating character sequences.
-       allpassed= test("a*abab", "a*b", .true.) .and. allpassed
-       allpassed= test("ab", "*?", .true.) .and. allpassed
-       allpassed= test("abc", "*?", .true.) .and. allpassed
-       allpassed= test("abcccd", "*ccd", .true.) .and. allpassed
-       allpassed= test("bLah", "bLaH", .false.) .and. allpassed
-       allpassed= test("mississippi", "*sip*", .true.) .and. allpassed
+       allpassed=  test("a*abab",       "a*b",    .true.)   .and.  allpassed
+       allpassed=  test("ab",           "*?",     .true.)   .and.  allpassed
+       allpassed=  test("abc",          "*?",     .true.)   .and.  allpassed
+       allpassed=  test("abcccd",       "*ccd",   .true.)   .and.  allpassed
+       allpassed=  test("bLah",         "bLaH",   .false.)  .and.  allpassed
+       allpassed=  test("mississippi",  "*sip*",  .true.)   .and.  allpassed
        allpassed= &
         & test("xxxx*zzzzzzzzy*f", "xxx*zzy*f", .true.) .and. allpassed
        allpassed= &
@@ -33,32 +33,32 @@
         & test("xxxxzzzzzzzzyf", "xxxx*zzy*fffff", .false.) .and. allpassed
        allpassed= &
         & test("xxxxzzzzzzzzyf", "xxxx*zzy*f", .true.) .and. allpassed
-       allpassed= test("xyxyxyzyxyz", "xy*z*xyz", .true.) .and. allpassed
-       allpassed= test("xyxyxyxyz", "xy*xyz", .true.) .and. allpassed
-       allpassed= test("mississippi", "mi*sip*", .true.) .and. allpassed
-       allpassed= test("ababac", "*abac*", .true.) .and. allpassed
-       allpassed= test("aaazz", "a*zz*", .true.) .and. allpassed
-       allpassed= test("a12b12", "*12*23", .false.) .and. allpassed
-       allpassed= test("a12b12", "a12b", .false.) .and. allpassed
-       allpassed= test("a12b12", "*12*12*", .true.) .and. allpassed
+       allpassed=  test("xyxyxyzyxyz",  "xy*z*xyz",  .true.)   .and.  allpassed
+       allpassed=  test("xyxyxyxyz",    "xy*xyz",    .true.)   .and.  allpassed
+       allpassed=  test("mississippi",  "mi*sip*",   .true.)   .and.  allpassed
+       allpassed=  test("ababac",       "*abac*",    .true.)   .and.  allpassed
+       allpassed=  test("aaazz",        "a*zz*",     .true.)   .and.  allpassed
+       allpassed=  test("a12b12",       "*12*23",    .false.)  .and.  allpassed
+       allpassed=  test("a12b12",       "a12b",      .false.)  .and.  allpassed
+       allpassed=  test("a12b12",       "*12*12*",   .true.)   .and.  allpassed
 
        ! Additional cases where the '*' char appears in the tame string.
-       allpassed= test("*", "*", .true.) .and. allpassed
-       allpassed= test("a*r", "a*", .true.) .and. allpassed
-       allpassed= test("a*ar", "a*aar", .false.) .and. allpassed
+       allpassed=  test("*",     "*",      .true.)   .and.  allpassed
+       allpassed=  test("a*r",   "a*",     .true.)   .and.  allpassed
+       allpassed=  test("a*ar",  "a*aar",  .false.)  .and.  allpassed
 
        ! More double wildcard scenarios.
-       allpassed= test("XYXYXYZYXYz", "XY*Z*XYz", .true.) .and. allpassed
-       allpassed= test("missisSIPpi", "*SIP*", .true.) .and. allpassed
-       allpassed= test("mississipPI", "*issip*PI", .true.) .and. allpassed
-       allpassed= test("xyxyxyxyz", "xy*xyz", .true.) .and. allpassed
-       allpassed= test("miSsissippi", "mi*sip*", .true.) .and. allpassed
-       allpassed= test("miSsissippi", "mi*Sip*", .false.) .and. allpassed
-       allpassed= test("abAbac", "*Abac*", .true.) .and. allpassed
-       allpassed= test("aAazz", "a*zz*", .true.) .and. allpassed
-       allpassed= test("A12b12", "*12*23", .false.) .and. allpassed
-       allpassed= test("a12B12", "*12*12*", .true.) .and. allpassed
-       allpassed= test("oWn", "*oWn*", .true.) .and. allpassed
+       allpassed=  test("XYXYXYZYXYz",  "XY*Z*XYz",   .true.)   .and.  allpassed
+       allpassed=  test("missisSIPpi",  "*SIP*",      .true.)   .and.  allpassed
+       allpassed=  test("mississipPI",  "*issip*PI",  .true.)   .and.  allpassed
+       allpassed=  test("xyxyxyxyz",    "xy*xyz",     .true.)   .and.  allpassed
+       allpassed=  test("miSsissippi",  "mi*sip*",    .true.)   .and.  allpassed
+       allpassed=  test("miSsissippi",  "mi*Sip*",    .false.)  .and.  allpassed
+       allpassed=  test("abAbac",       "*Abac*",     .true.)   .and.  allpassed
+       allpassed=  test("aAazz",        "a*zz*",      .true.)   .and.  allpassed
+       allpassed=  test("A12b12",       "*12*23",     .false.)  .and.  allpassed
+       allpassed=  test("a12B12",       "*12*12*",    .true.)   .and.  allpassed
+       allpassed=  test("oWn",          "*oWn*",      .true.)   .and.  allpassed
 
        ! Completely tame (no wildcards) cases.
        allpassed= test("bLah", "bLah", .true.) .and. allpassed
@@ -67,23 +67,23 @@
        allpassed= test("a", "*?", .true.) .and. allpassed
 
        ! More mixed wildcard tests including coverage for false positives.
-       allpassed= test("a", "??", .false.) .and. allpassed
-       allpassed= test("ab", "?*?", .true.) .and. allpassed
-       allpassed= test("ab", "*?*?*", .true.) .and. allpassed
-       allpassed= test("abc", "?**?*?", .true.) .and. allpassed
-       allpassed= test("abc", "?**?*&?", .false.) .and. allpassed
-       allpassed= test("abcd", "?b*??", .true.) .and. allpassed
-       allpassed= test("abcd", "?a*??", .false.) .and. allpassed
-       allpassed= test("abcd", "?**?c?", .true.) .and. allpassed
-       allpassed= test("abcd", "?**?d?", .false.) .and. allpassed
-       allpassed= test("abcde", "?*b*?*d*?", .true.) .and. allpassed
+       allpassed=  test("a",      "??",         .false.)  .and.  allpassed
+       allpassed=  test("ab",     "?*?",        .true.)   .and.  allpassed
+       allpassed=  test("ab",     "*?*?*",      .true.)   .and.  allpassed
+       allpassed=  test("abc",    "?**?*?",     .true.)   .and.  allpassed
+       allpassed=  test("abc",    "?**?*&?",    .false.)  .and.  allpassed
+       allpassed=  test("abcd",   "?b*??",      .true.)   .and.  allpassed
+       allpassed=  test("abcd",   "?a*??",      .false.)  .and.  allpassed
+       allpassed=  test("abcd",   "?**?c?",     .true.)   .and.  allpassed
+       allpassed=  test("abcd",   "?**?d?",     .false.)  .and.  allpassed
+       allpassed=  test("abcde",  "?*b*?*d*?",  .true.)   .and.  allpassed
 
        ! Single-character-match cases.
-       allpassed= test("bLah", "bL?h", .true.) .and. allpassed
-       allpassed= test("bLaaa", "bLa?", .false.) .and. allpassed
-       allpassed= test("bLah", "bLa?", .true.) .and. allpassed
-       allpassed= test("bLaH", "?Lah", .false.) .and. allpassed
-       allpassed= test("bLaH", "?LaH", .true.) .and. allpassed
+       allpassed=  test("bLah",   "bL?h",  .true.)   .and.  allpassed
+       allpassed=  test("bLaaa",  "bLa?",  .false.)  .and.  allpassed
+       allpassed=  test("bLah",   "bLa?",  .true.)   .and.  allpassed
+       allpassed=  test("bLaH",   "?Lah",  .false.)  .and.  allpassed
+       allpassed=  test("bLaH",   "?LaH",  .true.)   .and.  allpassed
 
        ! Many-wildcard scenarios.
        allpassed= test(&

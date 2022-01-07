@@ -3,6 +3,7 @@
 !===================================================================================================================================
 module M_bessel
 use M_journal, only : journal
+implicit none
 private
 public bes
 public besi
@@ -12,7 +13,6 @@ public besj1
 public besk
 public besy
 public besy0
-public test_suite_M_bessel
 integer,parameter :: dp=kind(0.0d0)
 contains
 !*!implicit doubleprecision (a-h, o-z)
@@ -155,7 +155,6 @@ contains
 !!##EXAMPLE
 !!
 subroutine bes(x,no,kode,rslt1,rslt2,t1,t2,ierr)
-implicit none
 
 ! ident_1="@(#)M_bessel::bes(3f):calculate Bessel functions J(x), Y(x), I(x), K(x) for doubleprecision arguments and integer orders"
 
@@ -702,8 +701,7 @@ end subroutine bes
 !!               IER=4 overflow, X .GT. 170 where X .GT. N
 !!##EXAMPLE
 !!
-SUBROUTINE BESI(X,N, BI,IER)
-implicit none
+subroutine besi(x,n, bi,ier)
 
 ! ident_2="@(#)M_bessel::besi(3f):compute the I Bessel function for a given argument and order"
 
@@ -721,92 +719,92 @@ doubleprecision :: pi
 doubleprecision :: term
 doubleprecision :: tol
 doubleprecision :: xx
-   IER=0
-   BI=1.0d0
+   ier=0
+   bi=1.0d0
 !  Checks for errors IN N and X and exits if any are present
-   IF(N)150,15,10
-10 IF(X)160,20,20
-15 IF(X)160,17,20
+   if(n)150,15,10
+10 if(x)160,20,20
+15 if(x)160,17,20
 17 continue
-   RETURN
+   return
 !
 !     DEFINE TOLERANCE
 !
 20 continue
-   TOL=1.d-6
+   tol=1.d-6
 !
 !     IF ARGUMENT GT 12 AND GT N, USE ASYMPTOTIC FORM
 !
-   IF(X-12.0d0)40,40,30
+   if(x-12.0d0)40,40,30
 30 continue
-   IF(X-dble(N))40,40,110
+   if(x-dble(n))40,40,110
 !
 !     COMPUTE FIRST TERM OF SERIES AND SET INITIAL VALUE OF THE SUM
 !
 40 continue
-   XX=X/2.0d0
-   TERM=1.00d0
-   IF(N) 70,70,55
+   xx=x/2.0d0
+   term=1.00d0
+   if(n) 70,70,55
 55 continue
-   DO I=1,N
-      FI=I
-      IF(ABS(TERM)-1.0d-68)56,60,60
+   do i=1,n
+      fi=i
+      if(abs(term)-1.0d-68)56,60,60
 56    continue
-      IER=3
-      BI=0.0d0
-      RETURN
+      ier=3
+      bi=0.0d0
+      return
 60    continue
-      TERM=TERM*XX/FI
+      term=term*xx/fi
    enddo
 70 continue
-   BI=TERM
-   XX=XX*XX
+   bi=term
+   xx=xx*xx
 !
 !     COMPUTE TERMS, STOPPING WHEN ABS(TERM) LE ABS(SUM OF TERMS)
 !     TIMES TOLERANCE
 !
-   DO K=1,1000
-      IF(ABS(TERM)-ABS(BI*TOL))100,100,80
+   do k=1,1000
+      if(abs(term)-abs(bi*tol))100,100,80
 80    continue
-      FK=K*(N+K)
-      TERM=TERM*(XX/FK)
-      BI=BI+TERM
+      fk=k*(n+k)
+      term=term*(xx/fk)
+      bi=bi+term
    enddo
 !
 !     RETURN BI AS ANSWER
 !
-100 RETURN
+100 return
 !
 !     X GT 12 AND X GT N, SO USE ASYMPTOTIC APPROXIMATION
 !
 110 continue
-   FN=4*N*N
-   IF(X-170.0d0)115,111,111
+   fn=4*n*n
+   if(x-170.0d0)115,111,111
 111 continue
-   IER=4
-   RETURN
-115 XX=1.0d0/(8.0d0*X)
-   TERM=1.0d0
-   BI=1.0d0
-   DO K=1,30
-      IF(ABS(TERM)-ABS(TOL*BI))140,140,120
+   ier=4
+   return
+115 xx=1.0d0/(8.0d0*x)
+   term=1.0d0
+   bi=1.0d0
+   do k=1,30
+      if(abs(term)-abs(tol*bi))140,140,120
 120   continue
-      FK=(2*K-1)**2
-      TERM=TERM*XX*(FK-FN)/dble(K)
-      BI=BI+TERM
+      fk=(2*k-1)**2
+      term=term*xx*(fk-fn)/dble(k)
+      bi=bi+term
    enddo
 !
 !     SIGNIFICANCE LOST AFTER 30 TERMS, TRY SERIES
 !
-   GO TO 40
-140 PI=3.141592653d0
-   BI=BI*EXP(X)/SQRT(2.0d0*PI*X)
-   GO TO 100
-150 IER=1
-   GO TO 100
-160 IER=2
-   GO TO 100
-END SUBROUTINE BESI
+   go to 40
+140 pi=3.141592653d0
+   bi=bi*exp(x)/sqrt(2.0d0*pi*x)
+   go to 100
+150 ier=1
+   go to 100
+160 ier=2
+   go to 100
+end subroutine besi
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -853,8 +851,7 @@ END SUBROUTINE BESI
 !!                  IER=4  Range of N compared to X not correct (see remarks)
 !!##EXAMPLE
 !!
-SUBROUTINE BESJ(X,N,BJ,D,IER)
-implicit none
+subroutine besj(x,n,bj,d,ier)
 
 ! ident_3="@(#)M_bessel::besj(3f):compute the J Bessel function for a given argument and order"
 
@@ -880,71 +877,71 @@ doubleprecision :: fm
 doubleprecision :: fm1
 doubleprecision :: s
 doubleprecision :: x
-   BJ=0.0d0
-   IF(N)10,20,20
-10 IER=1
-   RETURN
-20 IF(X)30,30,31
-30 IER=2
-   RETURN
-31 IF(X-15.0d0)32,32,34
-32 NTEST=20.0d0+10.0d0*X-X**2/3
-   GO TO 36
-34 NTEST=90.0d0+X/2.0d0
-36 IF(N-NTEST)40,38,38
-38 IER=4
-   RETURN
-40 IER=0
-   N1=N+1
-   BPREV=0.0d0
+   bj=0.0d0
+   if(n)10,20,20
+10 ier=1
+   return
+20 if(x)30,30,31
+30 ier=2
+   return
+31 if(x-15.0d0)32,32,34
+32 ntest=20.0d0+10.0d0*x-x**2/3
+   go to 36
+34 ntest=90.0d0+x/2.0d0
+36 if(n-ntest)40,38,38
+38 ier=4
+   return
+40 ier=0
+   n1=n+1
+   bprev=0.0d0
 !
 !     COMPUTE STARTING VALUE OF M
 !
-   IF(X-5.0d0)50,60,60
-50 MA=X+6.0d0
-   GO TO 70
-60 MA=1.4d0*X+60.0d0/X
-70 MB=N+int(X)/4+2
-   MZERO=MAX0(MA,MB)
+   if(x-5.0d0)50,60,60
+50 ma=x+6.0d0
+   go to 70
+60 ma=1.4d0*x+60.0d0/x
+70 mb=n+int(x)/4+2
+   mzero=max0(ma,mb)
 !
 !     SET UPPER LIMIT OF M
 !
-   MMAX=NTEST
-   DO M=MZERO,MMAX,3
+   mmax=ntest
+   do m=mzero,mmax,3
 !
 !     SET F(M),F(M-1)
 !
-      FM1=1.0d0-28.0d0
-      FM=0.0d0
-      ALPHA=0.0d0
-      IF(M-(M/2)*2)120,110,120
-110   JT=-1
-      GO TO 130
-120   JT=1
-130   M2=M-2
-      DO K=1,M2
-         MK=M-K
-         BMK=2.0d0*dble(MK)*FM1/X-FM
-         FM=FM1
-         FM1=BMK
-         IF(MK-N-1)150,140,150
-140      BJ=BMK
-150      JT=-JT
-         S=1.0d0+JT
-         ALPHA=ALPHA+BMK*S
+      fm1=1.0d0-28.0d0
+      fm=0.0d0
+      alpha=0.0d0
+      if(m-(m/2)*2)120,110,120
+110   jt=-1
+      go to 130
+120   jt=1
+130   m2=m-2
+      do k=1,m2
+         mk=m-k
+         bmk=2.0d0*dble(mk)*fm1/x-fm
+         fm=fm1
+         fm1=bmk
+         if(mk-n-1)150,140,150
+140      bj=bmk
+150      jt=-jt
+         s=1.0d0+jt
+         alpha=alpha+bmk*s
       enddo
-      BMK=2.0d0*FM1/X-FM
-      IF(N)180,170,180
-170   BJ=BMK
-180   ALPHA=ALPHA+BMK
-      BJ=BJ/ALPHA
-      IF(ABS(BJ-BPREV)-ABS(D*BJ))200,200,190
+      bmk=2.0d0*fm1/x-fm
+      if(n)180,170,180
+170   bj=bmk
+180   alpha=alpha+bmk
+      bj=bj/alpha
+      if(abs(bj-bprev)-abs(d*bj))200,200,190
 190 continue
-    BPREV=BJ
+    bprev=bj
     enddo
-   IER=3
-200 RETURN
-END SUBROUTINE BESJ
+   ier=3
+200 return
+end subroutine besj
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -984,8 +981,7 @@ END SUBROUTINE BESJ
 !!
 !!##EXAMPLE
 !!
-FUNCTION BESJ0(XX)
-implicit none
+function besj0(xx)
 
 ! ident_4="@(#)M_bessel::besj0(3f):calculates the Bessel function J(X) of order zero."
 
@@ -1012,26 +1008,26 @@ doubleprecision :: t2
 doubleprecision :: twovpi
 doubleprecision :: x
 doubleprecision :: xx
-DIMENSION T1(101)
-DIMENSION T2(101) ! for bug in Intel 11.1.046 compiler Sun Aug 23 15:27:46 EDT 2009
-DATA TWOVPI/0.63661977236758d0/,PIOV4/0.78539816339745d0/
-DATA P1/4.5d0/,P2/4.59375d02/,P3/1.500778125d05/
-DATA Q1/37.5d0/,Q2/7.441875d03/,Q3/3.623307187d06/
-   X = ABS(XX)
-   IF (X - 25.0d0) 20,20,40
-20 CALL BES(XX,0,10,BESJ0,R2,T1,T2,IERR)
-   RETURN
-40 CHI = X - PIOV4
-   FACTOR = SQRT(TWOVPI/X)
-   EIGHTX = 0.125d0/X
-   EXSQ = EIGHTX*EIGHTX
-   EXFOUR = EXSQ*EXSQ
-   EXSIX = EXFOUR*EXSQ
-   P = 1.0d0 - P1*EXSQ + P2*EXFOUR - P3*EXSIX
-   Q = EIGHTX*(-1.0d0 + Q1*EXSQ - Q2*EXFOUR + Q3*EXSIX)
-   BESJ0 = FACTOR*(P*COS(CHI) - Q*SIN(CHI))
-   RETURN
-END FUNCTION BESJ0
+dimension t1(101)
+dimension t2(101) ! for bug in Intel 11.1.046 compiler Sun Aug 23 15:27:46 EDT 2009
+data twovpi/0.63661977236758d0/,piov4/0.78539816339745d0/
+data p1/4.5d0/,p2/4.59375d02/,p3/1.500778125d05/
+data q1/37.5d0/,q2/7.441875d03/,q3/3.623307187d06/
+   x = abs(xx)
+   if (x - 25.0d0) 20,20,40
+20 call bes(xx,0,10,besj0,r2,t1,t2,ierr)
+   return
+40 chi = x - piov4
+   factor = sqrt(twovpi/x)
+   eightx = 0.125d0/x
+   exsq = eightx*eightx
+   exfour = exsq*exsq
+   exsix = exfour*exsq
+   p = 1.0d0 - p1*exsq + p2*exfour - p3*exsix
+   q = eightx*(-1.0d0 + q1*exsq - q2*exfour + q3*exsix)
+   besj0 = factor*(p*cos(chi) - q*sin(chi))
+   return
+end function besj0
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1073,8 +1069,7 @@ END FUNCTION BESJ0
 !!        newer Fortran standards.
 !!##EXAMPLE
 !!
-FUNCTION BESJ1(XX)
-implicit none
+function besj1(xx)
 
 ! ident_5="@(#)M_bessel::besj1(3f): calculates the Bessel function J(X) of order one."
 
@@ -1101,28 +1096,28 @@ doubleprecision :: t2
 doubleprecision :: twovpi
 doubleprecision :: x
 doubleprecision :: xx
-DIMENSION T1(101)
-DIMENSION T2(101) ! for Intel compiler bug 11.1.046 Sun Aug 23 2009
-DATA  PI/3.1415926535898d0/,TWOVPI/0.63661977236758d0/
-DATA P1/7.5d0/,P2/5.90625d02/,P3/1.773646875d05/
-DATA Q1/5.25d01/,Q2/9.095625d03/,Q3/4.180739062d06/
-   X = ABS(XX)
-   IF (X - 25.0d0) 20,20,40
-20 CALL BES(XX,1,10,BESJ1,R2,T1,T2,IERR)
-   RETURN
-40 CHI = X - 0.75d0*PI
-   FACTOR = SQRT(TWOVPI/X)
-   EIGHTX = 0.125d0/X
-   EXSQ = EIGHTX*EIGHTX
-   EXFOUR = EXSQ*EXSQ
-   EXSIX = EXFOUR*EXSQ
-   P = 1.0d0 + P1*EXSQ - P2*EXFOUR + P3*EXSIX
-   Q = EIGHTX*(3.0d0 - Q1*EXSQ + Q2*EXFOUR - Q3*EXSIX)
-   BESJ1 = FACTOR*(P*COS(CHI) - Q*SIN(CHI))
-   IF (XX) 60,80,80
-60 BESJ1 = -BESJ1
-80 RETURN
-END FUNCTION BESJ1
+dimension t1(101)
+dimension t2(101) ! for Intel compiler bug 11.1.046 Sun Aug 23 2009
+data  pi/3.1415926535898d0/,twovpi/0.63661977236758d0/
+data p1/7.5d0/,p2/5.90625d02/,p3/1.773646875d05/
+data q1/5.25d01/,q2/9.095625d03/,q3/4.180739062d06/
+   x = abs(xx)
+   if (x - 25.0d0) 20,20,40
+20 call bes(xx,1,10,besj1,r2,t1,t2,ierr)
+   return
+40 chi = x - 0.75d0*pi
+   factor = sqrt(twovpi/x)
+   eightx = 0.125d0/x
+   exsq = eightx*eightx
+   exfour = exsq*exsq
+   exsix = exfour*exsq
+   p = 1.0d0 + p1*exsq - p2*exfour + p3*exsix
+   q = eightx*(3.0d0 - q1*exsq + q2*exfour - q3*exsix)
+   besj1 = factor*(p*cos(chi) - q*sin(chi))
+   if (xx) 60,80,80
+60 besj1 = -besj1
+80 return
+end function besj1
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1167,7 +1162,6 @@ END FUNCTION BESJ1
 !!##EXAMPLE
 !!
 subroutine besk(x,n,bk,ier)
-implicit none
 
 ! ident_6="@(#)M_bessel::besk(3f):compute the K bessel function for a given argument and order"
 
@@ -1327,7 +1321,6 @@ end subroutine besk
 !!##EXAMPLE
 !!
 subroutine besy(x,n,by,ier)
-implicit none
 
 ! ident_7="@(#)M_bessel::besy(3f):compute the Y Bessel function for a given argument and order"
 
@@ -1519,8 +1512,7 @@ end subroutine besy
 !!
 !!##EXAMPLE
 !!
-FUNCTION BESY0(X)
-implicit none
+function besy0(x)
 
 ! ident_8="@(#)M_bessel::besy0(3f): calculates the Bessel function Y(X) of order zero."
 
@@ -1543,108 +1535,32 @@ real(kind=dp)     :: x
 !  DATA  TWOVPI/0.63661977236758/, PIOV4/0.78539816339745/
 !  DATA  P1/4.5/, P2/4.59375E02/, P3/1.500778125E05/
 !  DATA  Q1/37.5/, Q2/7.441875E03/, Q3/3.623307187E06/
-real(kind=dp),parameter :: TWOVPI=  0.63661977236758d0
-real(kind=dp),parameter :: PIOV4 =  0.78539816339745d0
-real(kind=dp),parameter :: P1    =  4.5d0
-real(kind=dp),parameter :: P2    =  4.59375d02
-real(kind=dp),parameter :: P3    =  1.500778125d05
-real(kind=dp),parameter :: Q1    = 37.5d0
-real(kind=dp),parameter :: Q2    =  7.441875d03
-real(kind=dp),parameter :: Q3    =  3.623307187d06
+real(kind=dp),parameter :: twovpi=  0.63661977236758d0
+real(kind=dp),parameter :: piov4 =  0.78539816339745d0
+real(kind=dp),parameter :: p1    =  4.5d0
+real(kind=dp),parameter :: p2    =  4.59375d02
+real(kind=dp),parameter :: p3    =  1.500778125d05
+real(kind=dp),parameter :: q1    = 37.5d0
+real(kind=dp),parameter :: q2    =  7.441875d03
+real(kind=dp),parameter :: q3    =  3.623307187d06
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(x.lt.0.0d0)then
       besy0=-10.0d0-32.0d0   ! bad value assigned so compiler does not complain unassigned
       call journal('*besy0* ERROR: negative input value')
    elseif ((x - 25.0_dp) .lt. 0_dp)then
-      CALL BES(X,0,11,R1,BESY0,T1,T2,IERR)
+      call bes(x,0,11,r1,besy0,t1,t2,ierr)
    else
-      CHI    = X - PIOV4
-      FACTOR = SQRT( TWOVPI / X )
-      EIGHTX = 0.125_dp / X
-      EXSQ   = EIGHTX * EIGHTX
-      EXFOUR = EXSQ * EXSQ
-      EXSIX  = EXFOUR * EXSQ
-      P      = 1.0_dp - P1*EXSQ + P2*EXFOUR - P3*EXSIX
-      Q      = EIGHTX * ( -1.0_dp + Q1*EXSQ - Q2*EXFOUR + Q3*EXSIX )
-      BESY0  = FACTOR * ( P*SIN(CHI) + Q*COS(CHI) )
+      chi    = x - piov4
+      factor = sqrt( twovpi / x )
+      eightx = 0.125_dp / x
+      exsq   = eightx * eightx
+      exfour = exsq * exsq
+      exsix  = exfour * exsq
+      p      = 1.0_dp - p1*exsq + p2*exfour - p3*exsix
+      q      = eightx * ( -1.0_dp + q1*exsq - q2*exfour + q3*exsix )
+      besy0  = factor * ( p*sin(chi) + q*cos(chi) )
    endif
-END FUNCTION BESY0
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_bessel()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-!*! setup
-   call test_bes()
-   call test_besi()
-   call test_besj()
-   call test_besj0()
-   call test_besj1()
-   call test_besk()
-   call test_besy()
-   call test_besy0()
-!*! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_bes()
-
-   call unit_check_start('bes',msg='')
-   !*!call unit_check('bes', 0.eq.0, 'checking',100)
-   call unit_check_done('bes',msg='')
-end subroutine test_bes
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_besi()
-
-   call unit_check_start('besi',msg='')
-   !*!call unit_check('besi', 0.eq.0, 'checking',100)
-   call unit_check_done('besi',msg='')
-end subroutine test_besi
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_besj()
-
-   call unit_check_start('besj',msg='')
-   !*!call unit_check('besj', 0.eq.0, 'checking',100)
-   call unit_check_done('besj',msg='')
-end subroutine test_besj
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_besj0()
-
-   call unit_check_start('besj0',msg='')
-   !*!call unit_check('besj0', 0.eq.0, 'checking',100)
-   call unit_check_done('besj0',msg='')
-end subroutine test_besj0
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_besj1()
-
-   call unit_check_start('besj1',msg='')
-   !*!call unit_check('besj1', 0.eq.0, 'checking',100)
-   call unit_check_done('besj1',msg='')
-end subroutine test_besj1
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_besk()
-
-   call unit_check_start('besk',msg='')
-   !*!call unit_check('besk', 0.eq.0, 'checking',100)
-   call unit_check_done('besk',msg='')
-end subroutine test_besk
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_besy()
-
-   call unit_check_start('besy',msg='')
-   !*!call unit_check('besy', 0.eq.0, 'checking',100)
-   call unit_check_done('besy',msg='')
-end subroutine test_besy
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_besy0()
-
-   call unit_check_start('besy0',msg='')
-   !*!call unit_check('besy0', 0.eq.0, 'checking',100)
-   call unit_check_done('besy0',msg='')
-end subroutine test_besy0
-!===================================================================================================================================
-end subroutine test_suite_M_bessel
+end function besy0
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

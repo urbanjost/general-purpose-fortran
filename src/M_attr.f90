@@ -5,44 +5,44 @@
 !!
 !!##SYNOPSIS
 !!
-!!   core functions
 !!
-!!      ! Add text attributes like color with an HTML-like syntax
-!!      use M_attr, only : attr
-!!      ! suppress the escape sequence output
-!!      use M_attr, only : attr_mode
-!!      ! customize what output strings are produced
-!!      use M_attr, only : attr_update
+!!      use M_attr, only : attr, attr_mode, attr_update
 !!
-!!   for generating standard messages
-!!
-!!      use M_attr, only : alert
+!!      use M_attr, only : alert ! generate standard messages
 !!
 !!##DESCRIPTION
-!!    M_attr(3f) is a Fortran module that writes common ANSI escape sequences
-!!    which control terminal text attributes. It is designed to allow the
-!!    sequences to be suppressed when desired and for the user program to
-!!    completely customize the keywords -- the user can add, delete and
-!!    replace the sequences associated with a keyword without changing
-!!    the code.
+!!    M_attr(3f) is a Fortran module that uses common ANSI escape sequences
+!!    to control terminal text attributes.
 !!
-!!    Attributes are specified by writing lines with HTML-like structure.
+!!         use M_attr
+!!         write(*,*)attr('<red>Red Text!</red> <green>Green Text!</green>')
+!!         end
 !!
-!!    The advantage of the approach of replacing in-band escape sequences
-!!    with formatting directives contained on each line is that it is easy
-!!    to turn off when running batch, but more importantly your program can
-!!    be run in "raw" mode and write a clean text file with the directives in
-!!    it that can then be read back in by a simple filter program that strips
+!!    It is designed to use three simple procedures to
+!!
+!!     + Specify attributes using simple HTML-like syntax
+!!     + allow the sequences to be suppressed when desired
+!!     + permit the  user program to completely customize the keywords.
+!!       The user can add, delete and replace the sequences associated with
+!!       a keyword without changing the code.
+!!
+!!    One advantage of the approach of using formatting directives which
+!!    are replaced with in-band escape sequences is that it is easy to turn
+!!    off when running batch.
+!!
+!!    Another important capability is that programs can be run in "raw" mode
+!!    and create a simple text file with the formatting directives in it
+!!    that can then be read back in by a simple filter program that strips
 !!    it back to plain text( see app/plain.f90), or displays it to a screen
 !!    in color(see app/light.f90) or perhaps converts it to another format.
 !!
-!!    By making each line self-contained (by default) this can still be done
-!!    with any arbitrarily selected group of lines from the file.
-!!
-!!    So this module makes it trivial to read specially-formatted data
+!!    So this approach makes it trivial to read specially-formatted data
 !!    from a file like a message catalog (perhaps with various versions
 !!    in different languages) and colorize it or display it as plain text
-!!    using the attr(3f) procedure.
+!!
+!!    By making each line self-contained (by default) lines can be filtered
+!!    by external utilities and still display correctly.
+!!
 !!##ACCESS
 !!    Via git(1):
 !!
@@ -55,7 +55,7 @@
 !!
 !!    This will compile the M_attr module and example programs.
 !!
-!!    Via fpm ( described at https://github.com/fortran-lang/fpm):
+!!    Alternatively, via fpm ( described at https://github.com/fortran-lang/fpm):
 !!
 !!         git clone https://github.com/urbanjost/M_attr.git
 !!
@@ -269,7 +269,9 @@ character(len=*),parameter,public :: ununderline =  CODE_START//OFF//AT_UNDERLIN
 character(len=*),parameter,public :: reset       =  CODE_RESET
 character(len=*),parameter,public :: clear       =  HOME_DISPLAY//CLEAR_DISPLAY
 
-public fmt
+!private fmt
+private str
+
 integer,save :: alert_unit=stdout
 logical,save :: alert_debug=.true.
 logical,save :: alert_warn=.true.
@@ -404,7 +406,7 @@ contains
 !!
 !!    Sample program
 !!
-!!     program demo_esc
+!!     program demo_attr
 !!     use M_attr, only : attr, attr_mode, attr_update
 !!        call printstuff('defaults')
 !!
@@ -461,7 +463,7 @@ contains
 !!       write(*,'(a)') attr(&
 !!        &'<in><bo><ul><it><w>WHITE</w> and <e>EBONY</e></ul></bo></in>')
 !!     end subroutine printstuff
-!!     end program demo_esc
+!!     end program demo_attr
 !!
 !!##AUTHOR
 !!    John S. Urban, 2021
@@ -659,76 +661,111 @@ subroutine vt102()
        call attr_update('/r',fg_default)
        call attr_update('red',fg_red)
        call attr_update('/red',fg_default)
+       call attr_update('fg_red',fg_red)
+       call attr_update('/fg_red',fg_default)
    call attr_update('c',fg_cyan)
        call attr_update('/c',fg_default)
        call attr_update('cyan',fg_cyan)
        call attr_update('/cyan',fg_default)
+       call attr_update('fg_cyan',fg_cyan)
+       call attr_update('/fg_cyan',fg_default)
    call attr_update('m',fg_magenta)
        call attr_update('/m',fg_default)
        call attr_update('magenta',fg_magenta)
        call attr_update('/magenta',fg_default)
+       call attr_update('fg_magenta',fg_magenta)
+       call attr_update('/fg_magenta',fg_default)
    call attr_update('b',fg_blue)
        call attr_update('/b',fg_default)
        call attr_update('blue',fg_blue)
-       call attr_update('/blue',fg_default)
+       call attr_update('fg_blue',fg_blue)
+       call attr_update('/fg_blue',fg_default)
    call attr_update('g',fg_green)
        call attr_update('/g',fg_default)
        call attr_update('green',fg_green)
        call attr_update('/green',fg_default)
+       call attr_update('fg_green',fg_green)
+       call attr_update('/fg_green',fg_default)
    call attr_update('y',fg_yellow)
        call attr_update('/y',fg_default)
        call attr_update('yellow',fg_yellow)
        call attr_update('/yellow',fg_default)
+       call attr_update('fg_yellow',fg_yellow)
+       call attr_update('/fg_yellow',fg_default)
    call attr_update('w',fg_white)
        call attr_update('/w',fg_default)
        call attr_update('white',fg_white)
        call attr_update('/white',fg_default)
+       call attr_update('fg_white',fg_white)
+       call attr_update('/fg_white',fg_default)
    call attr_update('e',fg_ebony)
        call attr_update('/e',fg_default)
        call attr_update('ebony',fg_ebony)
        call attr_update('/ebony',fg_default)
+       call attr_update('fg_ebony',fg_ebony)
+       call attr_update('/fg_ebony',fg_default)
    call attr_update('x',fg_ebony)
        call attr_update('/x',fg_default)
        call attr_update('black',fg_ebony)
        call attr_update('/black',fg_default)
+       call attr_update('fg_black',fg_ebony)
+       call attr_update('/fg_black',fg_default)
 
    ! background colors
    call attr_update('R',bg_red)
        call attr_update('/R',bg_default)
        call attr_update('RED',bg_red)
        call attr_update('/RED',bg_default)
+       call attr_update('bg_red',bg_red)
+       call attr_update('/bg_red',bg_default)
    call attr_update('C',bg_cyan)
        call attr_update('/C',bg_default)
        call attr_update('CYAN',bg_cyan)
        call attr_update('/CYAN',bg_default)
+       call attr_update('bg_cyan',bg_cyan)
+       call attr_update('/bg_cyan',bg_default)
    call attr_update('M',bg_magenta)
        call attr_update('/M',bg_default)
        call attr_update('MAGENTA',bg_magenta)
        call attr_update('/MAGENTA',bg_default)
+       call attr_update('bg_magenta',bg_magenta)
+       call attr_update('/bg_magenta',bg_default)
    call attr_update('B',bg_blue)
        call attr_update('/B',bg_default)
        call attr_update('BLUE',bg_blue)
        call attr_update('/BLUE',bg_default)
+       call attr_update('bg_blue',bg_blue)
+       call attr_update('/bg_blue',bg_default)
    call attr_update('G',bg_green)
        call attr_update('/G',bg_default)
        call attr_update('GREEN',bg_green)
        call attr_update('/GREEN',bg_default)
+       call attr_update('bg_green',bg_green)
+       call attr_update('/bg_green',bg_default)
    call attr_update('Y',bg_yellow)
        call attr_update('/Y',bg_default)
        call attr_update('YELLOW',bg_yellow)
        call attr_update('/YELLOW',bg_default)
+       call attr_update('bg_yellow',bg_yellow)
+       call attr_update('/bg_yellow',bg_default)
    call attr_update('W',bg_white)
        call attr_update('/W',bg_default)
        call attr_update('WHITE',bg_white)
        call attr_update('/WHITE',bg_default)
+       call attr_update('bg_white',bg_white)
+       call attr_update('/bg_white',bg_default)
    call attr_update('E',bg_ebony)
        call attr_update('/E',bg_default)
        call attr_update('EBONY',bg_ebony)
        call attr_update('/EBONY',bg_default)
+       call attr_update('bg_ebony',bg_ebony)
+       call attr_update('/bg_ebony',bg_default)
    call attr_update('X',bg_ebony)
        call attr_update('/X',bg_default)
        call attr_update('BLACK',bg_ebony)
        call attr_update('/BLACK',bg_default)
+       call attr_update('bg_black',bg_ebony)
+       call attr_update('/bg_black',bg_default)
 
    ! compound
    call attr_update('ERROR',fg_red//bold//bg_ebony     //':error:  '//bg_default//fg_default,':error:')
@@ -1256,10 +1293,6 @@ logical :: printme
     write(alert_unit,'(a)')attr(trim(other))
    endif
 end subroutine alert
-
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 !>
 !!##NAME
 !!    str(3f) - [M_attr] converts any standard scalar type to a string
@@ -1358,7 +1391,7 @@ character(len=:),allocatable  :: sep_local
    if(present(genericj))call print_generic(genericj)
    msg_scalar=trim(line)
 contains
-!===================================================================================================================================
+
 subroutine print_generic(generic)
 !use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
@@ -1378,11 +1411,8 @@ class(*),intent(in) :: generic
    istart=len_trim(line)+increment
    line=trim(line)//sep_local
 end subroutine print_generic
-!===================================================================================================================================
+
 end function msg_scalar
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,&
                & generica,genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj,&
                & sep)
@@ -1433,7 +1463,7 @@ integer                       :: increment
    if(present(genericj))call print_generic(genericj)
    msg_one=trim(line)
 contains
-!===================================================================================================================================
+
 subroutine print_generic(generic)
 !use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
@@ -1457,130 +1487,6 @@ integer :: i
    istart=len_trim(line)+increment+1
    line=trim(line)//']'//sep_local
 end subroutine print_generic
-!===================================================================================================================================
+
 end function msg_one
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!>
-!!##NAME
-!!    fmt(3f) - [M_attr] convert any intrinsic to a string using specified format
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    function fmt(value,format) result(string)
-!!
-!!     class(*),intent(in),optional :: value
-!!     character(len=*),intent(in),optional  :: format
-!!     character(len=:),allocatable :: string
-!!##DESCRIPTION
-!!    FMT(3f) converts any standard intrinsic value to a string using the specified
-!!    format.
-!!##OPTIONS
-!!    value    value to print the value of. May be of type INTEGER, LOGICAL,
-!!             REAL, DOUBLEPRECISION, COMPLEX, or CHARACTER.
-!!    format   format to use to print value. It is up to the user to use an
-!!             appropriate format. The format does not require being
-!!             surrounded by parenthesis. If not present a default is selected
-!!             similar to what would be produced with free format.
-!!##RETURNS
-!!    string   A string value
-!!##EXAMPLES
-!!
-!!   Sample program:
-!!
-!!     program demo_fmt
-!!     use :: M_attr, only : fmt
-!!     implicit none
-!!     character(len=:),allocatable :: output
-!!
-!!        output=fmt(10,"'[',i0,']'")
-!!        write(*,*)'result is ',output
-!!
-!!        output=fmt(10.0/3.0,"'[',g0.5,']'")
-!!        write(*,*)'result is ',output
-!!
-!!        output=fmt(.true.,"'The final answer is [',g0,']'")
-!!        write(*,*)'result is ',output
-!!
-!!     end program demo_fmt
-!!
-!!   Results:
-!!
-!!     result is [10]
-!!     result is [3.3333]
-!!     result is The final answer is [T]
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!
-!!##LICENSE
-!!    Public Domain
-recursive function fmt(generic,format) result (line)
-use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
-
-! ident_3="@(#)M_attr::fmt(3f): convert any intrinsic to a string using specified format"
-
-class(*),intent(in)          :: generic
-character(len=*),intent(in),optional  :: format
-character(len=:),allocatable :: line
-character(len=:),allocatable :: fmt_local
-integer                      :: ios
-character(len=255)           :: msg
-character(len=1),parameter   :: null=char(0)
-integer                      :: ilen
-   if(present(format))then
-      fmt_local=format
-   else
-      fmt_local=''
-   endif
-   ! add ",a" and print null and use position of null to find length of output
-   ! add cannot use SIZE= or POS= or ADVANCE='NO' on WRITE() on INTERNAL READ,
-   ! and do not want to trim as trailing spaces can be significant
-   if(fmt_local.eq.'')then
-      select type(generic)
-         type is (integer(kind=int8));     fmt_local='(i0,a)'
-         type is (integer(kind=int16));    fmt_local='(i0,a)'
-         type is (integer(kind=int32));    fmt_local='(i0,a)'
-         type is (integer(kind=int64));    fmt_local='(i0,a)'
-         type is (real(kind=real32));      fmt_local='(1pg0,a)'
-         type is (real(kind=real64));      fmt_local='(1pg0,a)'
-         type is (real(kind=real128));     fmt_local='(1pg0,a)'
-         type is (logical);                fmt_local='(l1,a)'
-         type is (character(len=*));       fmt_local='(a,a)'
-         type is (complex);                fmt_local='("(",1pg0,",",1pg0,")",a)'
-      end select
-   else
-      if(format(1:1).eq.'(')then
-         fmt_local=format(:len_trim(format)-1)//',a)'
-      else
-         fmt_local='('//fmt_local//',a)'
-      endif
-   endif
-   allocate(character(len=256) :: line) ! cannot currently write into allocatable variable
-   ios=0
-   select type(generic)
-      type is (integer(kind=int8));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int16));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int32));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (integer(kind=int64));    write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real32));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real64));      write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (real(kind=real128));     write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (logical);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (character(len=*));       write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-      type is (complex);                write(line,fmt_local,iostat=ios,iomsg=msg) generic,null
-   end select
-   if(ios.ne.0)then
-      line='<ERROR>'//trim(msg)
-   else
-      ilen=index(line,null,back=.true.)
-      if(ilen.eq.0)ilen=len(line)
-      line=line(:ilen-1)
-   endif
-end function fmt
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-
 end module M_attr

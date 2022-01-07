@@ -581,6 +581,8 @@ real,parameter :: tpi= 3.141592654
          maxsize_local=204800
       endif
 
+      if(allocated(h))deallocate(h)
+      if(allocated(p))deallocate(p)
       allocate(h(maxsize_local,2))
       allocate(p(maxsize_local,2))
 !
@@ -1699,9 +1701,7 @@ real     :: z
          endif
          write(b,fb1,err=90) z
          if (iff.eq.1) then  ! REMOVE LEADING SPACES
-            do i=1,18
-               if (b(1:1).eq.' ') b=b(2:18)
-            enddo
+            b=adjustl(b)
          endif
       endif
  50   continue

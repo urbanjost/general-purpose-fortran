@@ -31,22 +31,21 @@ use M_list,      only : insert, locate, replace, remove                      ! B
    character(len=G_var_len),public      :: G_defvar(num)                  ! variables in variable dictionary
 
    type file_stack
-      integer                              ::  unit_number
-      integer                              ::  line_number=0
-      character(len=G_line_length)         ::  filename
+      integer                           ::  unit_number
+      integer                           ::  line_number=0
+      character(len=G_line_length)      ::  filename
    end type
    type(file_stack),public              ::  G_file_dictionary(50)
 
    type parcel_stack
-      integer                              ::  unit_number
-      integer                              ::  line_number=0
-      character(len=G_line_length)         ::  name
+      integer                           ::  unit_number
+      integer                           ::  line_number=0
+      character(len=G_line_length)      ::  name
    end type
-   type(parcel_stack),public            ::  G_parcel_dictionary(500)
+   type(parcel_stack),public            :: G_parcel_dictionary(500)
 
    integer,save                         :: G_line_number=0
-   logical,save,public                  :: G_asis=.false.
-   logical,save,public                  :: G_expand=.false.
+   logical,save,public                  :: G_inparcel=.false.
    integer,public                       :: G_iocount=0
    integer,public                       :: G_parcelcount=0
    integer,public                       :: G_io_total_lines=0
@@ -85,10 +84,9 @@ use M_list,      only : insert, locate, replace, remove                      ! B
    character(len=:),allocatable,save    :: G_scratch_file
    integer,save                         :: G_scratch_lun=-1
 
-   character(len=:),allocatable   :: keywords(:)
-   character(len=:),allocatable   :: values(:)
-   integer,allocatable            :: counts(:)
-
+   character(len=:),allocatable         :: keywords(:)
+   character(len=:),allocatable         :: values(:)
+   integer,allocatable                  :: counts(:)
 
    contains
 !===================================================================================================================================
@@ -128,13 +126,11 @@ subroutine cond()       !@(#)cond(3f): process conditional directive assumed to 
    !write(*,*)'OPTIONS='//trim(options)
    !write(*,*)'UPOPTS='//trim(upopts)
 
-   if(G_asis.and.VERB.eq.'PARCEL')then
-      call parcel_case(options)                                       ! end parcel ignoring options
-      return
-   elseif(G_asis)then
-      call write_out(trim(G_source))                                  ! write data line
-      return
-   elseif(G_write)then                                                ! if processing lines in a logically selected region
+   if(G_write)then                                                    ! if processing lines in a logically selected region
+      if(G_inparcel.and.VERB.ne.'PARCEL')then
+         call write_out(trim(G_source))                                  ! write data line
+         return
+      endif
                                                                       ! process the directive
       select case(VERB)
       case('  ')                                                      ! entire line is a comment
@@ -248,7 +244,7 @@ character(len=256)            :: message
    call dissect2('parcel','-oo ',opts)  ! parse options and inline comment on input line
    name=sget('parcel_oo')
    if(name.eq.'')then
-      G_asis=.false.
+      G_inparcel=.false.
       G_iout=G_iout_init
    else
       open(newunit=lun,iostat=ios,action='readwrite',status='scratch',iomsg=message)
@@ -258,7 +254,7 @@ character(len=256)            :: message
          G_parcelcount=G_parcelcount+1
          G_parcel_dictionary(G_parcelcount)%name=name
          G_parcel_dictionary(G_parcelcount)%unit_number=lun
-         G_asis=.true.
+         G_inparcel=.true.
          G_iout=lun
       endif
    endif
@@ -1705,6 +1701,11 @@ character(len=*),parameter  :: fmt='(*(g0,1x))'
       write(G_iout,fmt)"!    $DEFINE",trim(G_defvar(i)),' = ',adjustl(G_defval(i)) ! write variable and corresponding value
    enddo
 
+   write(G_iout,'(a)')'! Parcels:'
+   do i=1,G_parcelcount
+      write(G_iout,fmt) '!   ',trim(G_parcel_dictionary(i)%name)
+   enddo
+
    if(size(keywords).gt.0)then
       write(G_iout,fmt)'! SET strings:(There are',size(keywords),'keywords defined)'
       write(G_iout,'(3(g0,1x))')('!    $SET',keywords(i),values(i)(:counts(i)),i=1,size(keywords))
@@ -1794,12 +1795,14 @@ integer                      :: i
          call stop_prep('*prep* ERROR(060) - ERROR REWINDING PARCEL:'//trim(G_source)//':'//trim(message))
       endif
 
-      !d!do
-      !d!   read(ifound,'(a)',iostat=ios)message
-      !d!   if(ios.ne.0)exit
-      !d!   write(*,*)'>>>'//trim(message)
-      !d!enddo
-      !d!rewind(unit=ifound,iostat=ios,iomsg=message)
+      if(debug)then
+         do
+            read(ifound,'(a)',iostat=ios)message
+            if(ios.ne.0)exit
+            write(*,*)'>>>'//trim(message)
+         enddo
+         rewind(unit=ifound,iostat=ios,iomsg=message)
+      endif
 
       G_iocount=G_iocount+1
       if(G_iocount.gt.size(G_file_dictionary))then
@@ -2010,20 +2013,16 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   The pre-processor prep(1) will interpret lines with "$" (by default) in      ',&
 '   column one, and will output no such lines. Other input is conditionally      ',&
 '   written to the output file based on the directives encountered in the input. ',&
+'                                                                                ',&
 '   It does not support parameterized macros but does support string substitution',&
 '   and the inclusion of free-format text blocks that may be converted to Fortran',&
 '   comments or CHARACTER variable definitions while simultaneously being used   ',&
-'   to generate documentation files. INTEGER or LOGICAL expressions may be used  ',&
-'   to select output lines.                                                      ',&
-'                                                                                ',&
-'   The suggested suffix for Fortran input files is ".ff" for code files unless  ',&
-'   they contain $SYSTEM directives in which case ".FF" is preferred. $INCLUDE   ',&
-'   files should use ".ffinc" and ".FFINC" if they include prep(1) directives.   ',&
-'   This naming convention is not required.                                      ',&
+'   to generate documentation files.                                             ',&
 '                                                                                ',&
 '   An exclamation character on a valid directive begins an in-line comment      ',&
 '   that is terminated by an end-of-line.                                        ',&
 '                                                                                ',&
+'   INTEGER or LOGICAL expressions may be used to select output lines.           ',&
 '   An expression is composed of INTEGER and LOGICAL constants, parameters       ',&
 '   and operators. Operators are                                                 ',&
 '                                                                                ',&
@@ -2035,6 +2034,11 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    C-style:                                                                    ',&
 '     !=     &&     ||                                                           ',&
 !NOT SUPPORTED:   %,  <<,  >>, &,  ~, |
+'                                                                                ',&
+'   The suggested suffix for Fortran input files is ".ff" for code files unless  ',&
+'   they contain $SYSTEM directives in which case ".FF" is preferred. $INCLUDE   ',&
+'   files should use ".ffinc" and ".FFINC" if they include prep(1) directives.   ',&
+'   This naming convention is not required.                                      ',&
 '                                                                                ',&
 '   The syntax for the directive lines is as follows:                            ',&
 '                                                                                ',&
@@ -2083,11 +2087,15 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   define_list, -D define_list  An optional space-delimited list of expressions ',&
 '                                used to define variables before file processing ',&
 '                                commences.                                      ',&
+'                                                                                ',&
 '   -i input_files               The default input file is stdin. Filenames are  ',&
 '                                space-delimited. In a list, @ represents stdin. ',&
+'                                                                                ',&
 '   -o output_file               The default output file is stdout.              ',&
+'                                                                                ',&
 '   -I include_directories       The directories to search for files specified on',&
 '                                $INCLUDE directives.                            ',&
+'                                                                                ',&
 '   --prefix ADE|letter  The default directive prefix character is "$".          ',&
 '                        Alternatives may be specified by providing an           ',&
 '                        ASCII Decimal Equivalent (Common values are 37=%        ',&
@@ -2095,6 +2103,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                        it is assumed to be a literal character.                ',&
 '                                                                                ',&
 '   --help           Display documentation and exit.                             ',&
+'                                                                                ',&
 '   --verbose        All commands on a $SYSTEM directive are echoed              ',&
 '                    to stderr with a + prefix. Text following the               ',&
 '                    string "@(#)" is printed to stderr similar to               ',&
@@ -2105,18 +2114,22 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                    internal prep(1) variable and then an                       ',&
 '                    environment variable by default. This option                ',&
 '                    turns off testing for environment variables.                ',&
+'                                                                                ',&
 '   --system         Allow system commands on $SYSTEM directives to              ',&
 '                    be executed.                                                ',&
+'                                                                                ',&
 '   --keeptabs       By default tab characters are expanded assuming             ',&
 '                    a stop has been set every eight columns; and                ',&
 '                    trailing carriage-return characters are removed.            ',&
 '                    Use this flag to prevent this processing from               ',&
 '                    occurring.                                                  ',&
+'                                                                                ',&
 '   --comment        try to style comments generated in $BLOCK blocks            ',&
 '                    for other utilities such as doxygen. Default is to          ',&
 '                    prefix lines with ''! ''. Allowed keywords are              ',&
 '                    currently "default", "doxygen","none","ford".               ',&
 '                    THIS IS AN ALPHA FEATURE AND NOT FULLY IMPLEMENTED.         ',&
+'                                                                                ',&
 '   --ident          The output of the $IDENT directive is in the form of a      ',&
 '                    comment by default. If this flag is set the output is       ',&
 '                    of the form described in the $IDENT documentation           ',&
@@ -2124,6 +2137,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                    for use with the what(1) command. Note this generates an    ',&
 '                    unused variable which some compilers might optimize         ',&
 '                    away depending on what compilation options are used.        ',&
+'                                                                                ',&
 '   -d ignore|remove|blank  Enable special treatment for lines beginning         ',&
 '                           with "d" or "D" The letter will be left as-is        ',&
 '                           (the default); removed; or replaced with a blank     ',&
@@ -2131,7 +2145,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                           used to support the optional compilation of          ',&
 '                           "debug" code by many Fortran compilers when          ',&
 '                           compiling fixed-format Fortran source.               ',&
+'                                                                                ',&
 '   --version        Display version and exit                                    ',&
+'                                                                                ',&
 '   --width n        Maximum line length of the output file. The default is 1024.',&
 '                    Typically used to trim fixed-format FORTRAN code that       ',&
 '                    contains comments or "ident" labels past column 72          ',&
@@ -2200,7 +2216,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   optimization level used when compiling, these strings may or may not         ',&
 '   remain in the object files and executables created.                          ',&
 '                                                                                ',&
-'   Do not use the characters double-quote, greater-than, backslash (">\)        ',&
+'   Do not use the characters double-quote, greater-than, backslash (ie. ">\)    ',&
 '   in the metadata to remain compatible with SCCS metadata syntax.              ',&
 '   Do not use strings starting with " -" either.                                ',&
 '                                                                                ',&
@@ -2212,12 +2228,12 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      -append [.true.|.false]                                                   ',&
 '                                                                                ',&
-'   Named files open at the beginning by default. Use the -append switch to      ',&
+'   Files open at the beginning by default. Use the -append switch to            ',&
 '   append to the end of an existing file instead of overwriting it.             ',&
 '                                                                                ',&
 '   $INCLUDE filename                                                            ',&
 '                                                                                ',&
-'   Nested read of specified input file. Fifty (50) nesting levels are allowed.  ',&
+'   Read in specified input file. Fifty (50) nesting levels are allowed.         ',&
 '                                                                                ',&
 '   $PARCEL [name]                                                               ',&
 '                                                                                ',&
@@ -2241,8 +2257,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   IF A $SET DIRECTIVE HAS BEEN DEFINED the "standard" preprocessor values      ',&
 '   ${FILE}, ${LINE}, ${DATE}, and ${TIME} are also available. The time          ',&
-'   data refers to the time of processing, not the current time nor the time     ',&
-'   of compilation or loading.                                                   ',&
+'   refers to the time of processing, not the time of compilation or loading.    ',&
 '                                                                                ',&
 '   $IMPORT names(s)                                                             ',&
 '                                                                                ',&
@@ -2393,7 +2408,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   $MESSAGE WARNING message                                                     ',&
 '                                                                                ',&
-'   Write message to stderr                                                      ',&
+'   Write message to stderr.                                                     ',&
+'                                                                                ',&
+'   Messages for $MESSAGE do not treat an exclamation as starting a comment      ',&
 '                                                                                ',&
 'LIMITATIONS                                                                     ',&
 '                                                                                ',&
@@ -2403,8 +2420,6 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   $BLOCK is required after a $BLOCK or --file FILENAME is not written.         ',&
 '                                                                                ',&
 '   Nesting of $BLOCK sections not allowed.                                      ',&
-'                                                                                ',&
-'   Messages for $MESSAGE do not treat an exclamation as starting a comment      ',&
 '                                                                                ',&
 '  Input files                                                                   ',&
 '                                                                                ',&
@@ -2705,8 +2720,6 @@ integer                      :: i
 ! create a dictionary with character keywords, values, and value lengths
 ! using the routines for maintaining a list
 
-  G_expand=.true.
-
   call dissect2('set','-oo' ,line) ! parse options on input line
   iend=index(line//' ',' ')
   name=upper(line(:iend))
@@ -2717,7 +2730,7 @@ integer                      :: i
        write(G_iout,'(*("!",a,"==>","[",a,"]",/))')(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
     endif
   else
-     val=line(min(iend+1,len(line)):)
+    val=line(min(iend+1,len(line)):)
     ! insert and replace entries
     call update(name,val)
     ! remove some entries
@@ -3058,8 +3071,9 @@ logical                       :: isscratch
          call notabs(line,G_source,ilast)                  ! expand tab characters and trim trailing ctrl-M from DOS files
       endif
 
-      if(G_expand)then
-         call expand_variables(G_source)
+      if(G_inparcel)then                                   ! do not expand lines stored in a parcel
+      elseif(size(keywords).ne.0)then                      ! expand variables if any variable is defined, else skip for efficieny
+         call expand_variables(G_source)                   ! expand ${NAME} strings
       endif
 
       select case (line(1:1))                              ! special processing for lines starting with 'd' or 'D'

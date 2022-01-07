@@ -45,7 +45,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sort_indexed (3)</NOBR><HR></H1>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sort_heap (3)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -53,7 +53,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>sort_indexed</B>(3f) - [M_sort] indexed sort of an array
+<B>sort_heap</B>(3f) - [M_sort] indexed sort of an array
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -71,11 +71,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-subroutine <B>sort_indexed</B>(data,index)
+subroutine <B>sort_heap</B>(dat,indx)
 <P>
 <PRE>
-      TYPE,intent(in) :: data
-      integer,intent(out) :: indx(size(data))
+      TYPE,intent(in) :: dat
+      integer,intent(out) :: indx(size(dat))
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -85,9 +85,6 @@ subroutine <B>sort_indexed</B>(data,index)
 
 </A>
 <BLOCKQUOTE>
-This routine is very slow on large arrays but I liked writing a sort
-routine with one executable line!
-<P>
 An indexed sort of an array. The data is not moved. An integer array is
 generated instead with values that are indices to the sorted order of
 the data. This requires a second array the size of the input array,
@@ -106,8 +103,8 @@ usuable with the vast majority of user-defined types.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B>DATA</B> </TD><TD valign=bottom>
-an array of type REAL, INTEGER, or CHARACTER to be sorted
+<B>DAT</B> </TD><TD valign=bottom>
+an array of type REAL, INTEGER, or <B>CHARACTER</B>(KIND=kind(&#146;A&#146;) to be sorted
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -118,7 +115,7 @@ an array of type REAL, INTEGER, or CHARACTER to be sorted
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B>INDEX</B> </TD><TD valign=bottom>
+<B>INDX</B> </TD><TD valign=bottom>
 an INTEGER array of default kind that contains the sorted
 indices.
 </TD></TR>
@@ -132,36 +129,101 @@ indices.
 Sample usage:
 <P>
 <PRE>
-   program demo_sort_indexed
-   use M_sort, only : sort_indexed
+   program demo_sort_heap
+   use M_sort, only : sort_heap
    implicit none
    integer,parameter            :: isz=10000
    real                         :: rr(isz)
+   integer                      :: ii(isz)
+   character(len=63)            :: cc(isz)
+   integer                      :: indx(isz)
    integer                      :: i
    write(*,*)&#146;initializing array with &#146;,isz,&#146; random numbers&#146;
    CALL RANDOM_NUMBER(RR)
    rr=rr*450000.0
+   ii=rr
+   do i=1,size(cc)
+      cc(i)=random_string(&#146;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 &#146;,len(cc))
+   enddo
+<P>
+   write(*,*)&#146;checking if real values are sorted(3f)&#146;
+   call sort_heap(rr,indx)
    ! use the index array to actually move the input array into a sorted order
-   rr=rr(sort_indexed(rr))
-   ! or
-   !rr(sort_indexed(rr))=rr
-   write(*,*)&#146;checking if values are sorted(3f)&#146;
+   rr=rr(indx)
    do i=1,isz-1
       if(rr(i).gt.rr(i+1))then
          write(*,*)&#146;Error in sorting reals small to large &#146;,i,rr(i),rr(i+1)
       endif
    enddo
-   write(*,*)&#146;test of sort_indexed(3f) complete&#146;
-   end program demo_sort_indexed
+   write(*,*)&#146;test of real sort_heap(3f) complete&#146;
+<P>
+   write(*,*)&#146;checking if integer values are sorted(3f)&#146;
+   call sort_heap(ii,indx)
+   ! use the index array to actually move the input array into a sorted order
+   ii=ii(indx)
+   do i=1,isz-1
+      if(ii(i).gt.ii(i+1))then
+         write(*,*)&#146;Error in sorting integer small to large &#146;,i,ii(i),ii(i+1)
+      endif
+   enddo
+   write(*,*)&#146;test of integer sort_heap(3f) complete&#146;
+<P>
+   write(*,*)&#146;checking if character values are sorted(3f)&#146;
+   call sort_heap(cc,indx)
+   ! use the index array to actually move the input array into a sorted order
+   cc=cc(indx)
+   do i=1,isz-1
+      if(cc(i).gt.cc(i+1))then
+         write(*,*)&#146;Error in sorting character small to large &#146;,i,cc(i),cc(i+1)
+      endif
+   enddo
+   write(*,*)&#146;test of character sort_heap(3f) complete&#146;
+<P>
+   contains
+<P>
+   function random_string(chars,length) result(out)
+<P>
+   !$@(#) M_random::random_string(3f): create random string composed of provided characters of specified length
+<P>
+   character(len=*),intent(in)     :: chars
+   integer,intent(in)              :: length
+   character(len=:),allocatable    :: out
+      real                         :: x
+      integer                      :: ilen   ! length of list of characters
+      integer                      :: which
+      integer                      :: i
+      ilen=len(chars)
+      out=&#146;&#146;
+      if(ilen.gt.0)then
+         do i=1,length
+            call random_number(x)
+            which=nint(real(ilen-1)*x)+1
+            out=out//chars(which:which)
+         enddo
+      endif
+   end function random_string
+<P>
+   end program demo_sort_heap
 <P>
 </PRE>
 <BLOCKQUOTE>
 Results:
+<P>
+<PRE>
+    initializing array with        10000  random numbers
+    checking if real values are sorted(3f)
+    test of real sort_heap(3f) complete
+    checking if integer values are sorted(3f)
+    test of integer sort_heap(3f) complete
+    checking if character values are sorted(3f)
+    test of character sort_heap(3f) complete
+<P>
+</PRE>
 </BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sort_indexed (3)</TD> <TD align=right width=33%><I>December 19, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d03c8cdd-c08c-4702-b478-b3d31033ad20 using man macros.</FONT>
-<br><br><center><img src="images/sort_indexed.3m_sort.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sort_heap (3)</TD> <TD align=right width=33%><I>January 07, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 797bef9a-25d3-40bb-872e-73fe63855b20 using man macros.</FONT>
+<br><br><center><img src="images/sort_heap.3m_sort.gif"></center>
 </div>
 </div>
 </body>

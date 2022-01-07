@@ -616,7 +616,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_attr.f90">../src/M_attr.f90</a></td>
 <td>
-	M_attr::fmt(3f): convert any intrinsic to a string using specified format<br/>
 </td>
 <tr><td><a href="../src/M_bessel.f90">../src/M_bessel.f90</a></td>
 <td>
@@ -964,7 +963,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	find the index of the data point in the <X,Y<br/>
 	M_math::extremum(3f):Find the minimum and maximum value in a REAL array<br/>
 	M_math::bds(3f): Basic Descriptive Statistics (based on a routine from the IBM collection)<br/>
-	M_math::skekur1(3f): variant on calculating skewness and kurtosis of an array<br/>
+	m_math::skekur1(3f): variant on calculating skewness and kurtosis of an array<br/>
 	M_math::skekurx(3f): COMPUTE UNBIASED ESTIMATOR OF THE POPULATION SKEWNESS AND KURTOSIS<br/>
 	M_math::stddev(3f): find standard deviation of a real array<br/>
 	M_math::scale1(3f):given xmin,xmax,n, find new range xminp xmaxp divisible into approximately n linear intervals of size dist<br/>
@@ -1030,6 +1029,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_strings::adjustl_atleast(3f): return string padded on right to at least specified length<br/>
 	M_overload::adjustr_atleast(3f): return string padded on left to at least specified length<br/>
 	M_overload::ffmt(3f): convert any intrinsic to a string using specified format<br/>
+	 M_overload::atleast(3f): return string padded to at least specified length<br/>
+	M_anything::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision<br/>
+	M_anything::anyscalar_to_int64(3f): convert integer parameter of any kind to 64-bit integer<br/>
+	M_anything::anyscalar_to_real(3f): convert integer or real parameter of any kind to real<br/>
 </td>
 <tr><td><a href="../src/M_path.f90">../src/M_path.f90</a></td>
 <td>
@@ -1156,15 +1159,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_sort.f90">../src/M_sort.f90</a></td>
 <td>
 	M_sort::sort_shell(3f): Generic subroutine sorts the array X using a shell sort<br/>
+	M_sort::sort_heap(3f): Generic subroutine sorts the array X using a heap sort<br/>
 	M_sort::unique(3f): assuming an array is sorted, return array with duplicate values removed<br/>
 	M_sort::swap(3f): swap two variables of like type (real,integer,complex,character,double)<br/>
-	M_sort::sort_quick_rx_character(3f): indexed hybrid quicksort of a real array<br/>
-	M_sort::sort_quick_rx_integer(3f): indexed hybrid quicksort of a real array<br/>
+	M_sort::sort_quick_rx_integer_int8(3f): indexed hybrid quicksort of a integer(kind=int8) array<br/>
+	M_sort::sort_quick_rx_integer_int16(3f): indexed hybrid quicksort of a integer(kind=int16) array<br/>
+	M_sort::sort_quick_rx_integer_int32(3f): indexed hybrid quicksort of a integer(kind=int32) array<br/>
+	M_sort::sort_quick_rx_integer_int64(3f): indexed hybrid quicksort of a integer(kind=int64) array<br/>
+	M_sort::sort_quick_rx_real_real32(3f): indexed hybrid quicksort of a real(kind=real32) array<br/>
+	M_sort::sort_quick_rx_real_real64(3f): indexed hybrid quicksort of a real(kind=real64) array<br/>
+	M_sort::sort_quick_rx_character_ascii(3f): indexed hybrid quicksort of a character(kind=ascii) array<br/>
 	M_sort::sort_quick_rx_complex(3f): indexed hybrid quicksort of a real array<br/>
-	M_sort::sort_quick_rx_doubleprecision(3f): indexed hybrid quicksort of a real array<br/>
-	M_sort::sort_quick_rx_real(3f): indexed hybrid quicksort of a real array<br/>
 	M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order<br/>
 	M_sort::tree_print(3f):<br/>
+	 M_random::random_string(3f): create random string composed of provided characters of specified length<br/>
 </td>
 <tr><td><a href="../src/M_sqlite.f90">../src/M_sqlite.f90</a></td>
 <td>

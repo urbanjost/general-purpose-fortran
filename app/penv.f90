@@ -9,29 +9,34 @@ stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                                                                            ',&
-'       penv(1f) - [M_system:ENVIRONMENT] print all or part of environment in formats readable by various shells                 ',&
+'       penv(1f) - [M_system:ENVIRONMENT] print all or part of environment                                                       ',&
+'                  in formats readable by various shells                                                                         ',&
 '       (LICENSE:PD)                                                                                                             ',&
 'SYNOPSIS                                                                                                                        ',&
-'       penv [variable...] [ -C| -B| -v] [ -p PREFIX]                                                                            ',&
-'       penv [ --help| --version]                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'       If no arguments are given, penv(1f) prints the entire environment.                                                       ',&
-'       If one or more variable names are given, it prints the value of                                                          ',&
-'       each one that is set, and nothing for each one that is not set.                                                          ',&
+'    penv [variable...] [ -C| -B| -v]                                                                                            ',&
 '                                                                                                                                ',&
-'       If the -p switch is used variables beginning with that prefix will be                                                    ',&
-'       displayed.                                                                                                               ',&
+'    penv [ --help| --version]                                                                                                   ',&
+'DESCRIPTION                                                                                                                     ',&
+'    If no arguments are given, penv(1f) prints the entire environment.                                                          ',&
+'    If one or more variable names are given, it prints the value of                                                             ',&
+'    each one that is set, and nothing for each one that is not set.                                                             ',&
+'                                                                                                                                ',&
 'OPTIONS                                                                                                                         ',&
 '    OUTPUT FORMAT                                                                                                               ',&
 '       -C           print output in a form that can be sourced into a                                                           ',&
 '                    C shell (eg. as a setenv(1) command).                                                                       ',&
+'                                                                                                                                ',&
 '       -B           print output in a form that can be sourced into a                                                           ',&
 '                    Bourne shell.                                                                                               ',&
+'                                                                                                                                ',&
 '       -v           values only. Do not print variable names                                                                    ',&
-'    VARIABLE SELECTION                                                                                                          ',&
-'       -p           print only variables with the given prefix                                                                  ',&
+'                                                                                                                                ',&
 '       variable(s)  if variable names are given, print the value for                                                            ',&
-'                    each one that is set.                                                                                       ',&
+'                    each one that is set. If quoted may include basic                                                           ',&
+'                    globbing where "*" represents any string and "?"                                                            ',&
+'                    represents any single character. The expression must                                                        ',&
+'                    must represent the entire string.                                                                           ',&
+'                                                                                                                                ',&
 '    INFORMATION                                                                                                                 ',&
 '       --help       display this help and exit                                                                                  ',&
 '       --version    output version information and exit                                                                         ',&
@@ -40,7 +45,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '     Example commands:                                                                                                          ',&
 '                                                                                                                                ',&
 '      penv           # print entire environment                                                                                 ',&
-'      penv -p PREFIX # print environment variables beginning with PREFIX                                                        ',&
+'      penv ''PREFIX*'' # print environment variables beginning with PREFIX                                                      ',&
 '      penv HOME TMP LOGNAME USER # print selected variables                                                                     ',&
 '                                                                                                                                ',&
 '      # csh(1)/tcsh(1) example:                                                                                                 ',&
@@ -52,7 +57,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '      # print specified variable names                                                                                          ',&
 '        % penv TMP TEMPDIR TMPDIR TEMP                                                                                          ',&
 '      # print variables starting with A or H                                                                                    ',&
-'        % penv -p A H                                                                                                           ',&
+'        % penv ''A*'' ''H*''                                                                                                    ',&
+'      # print variables containing LIBRARY                                                                                      ',&
+'        % penv ''*LIBRARY*''                                                                                                    ',&
 '                                                                                                                                ',&
 'EXIT STATUS                                                                                                                     ',&
 '       The exit status is:                                                                                                      ',&
@@ -70,65 +77,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!        penv(1f) - [M_system:ENVIRONMENT] print all or part of environment in formats readable by various shells
-!!        (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!        penv [variable...] [ -C| -B| -v] [ -p PREFIX]
-!!        penv [ --help| --version]
-!!##DESCRIPTION
-!!        If no arguments are given, penv(1f) prints the entire environment.
-!!        If one or more variable names are given, it prints the value of
-!!        each one that is set, and nothing for each one that is not set.
-!!
-!!        If the -p switch is used variables beginning with that prefix will be
-!!        displayed.
-!!##OPTIONS
-!!     OUTPUT FORMAT
-!!        -C           print output in a form that can be sourced into a
-!!                     C shell (eg. as a setenv(1) command).
-!!        -B           print output in a form that can be sourced into a
-!!                     Bourne shell.
-!!        -v           values only. Do not print variable names
-!!     VARIABLE SELECTION
-!!        -p           print only variables with the given prefix
-!!        variable(s)  if variable names are given, print the value for
-!!                     each one that is set.
-!!     INFORMATION
-!!        --help       display this help and exit
-!!        --version    output version information and exit
-!!
-!!##USAGE
-!!      Example commands:
-!!
-!!       penv           # print entire environment
-!!       penv -p PREFIX # print environment variables beginning with PREFIX
-!!       penv HOME TMP LOGNAME USER # print selected variables
-!!
-!!       # csh(1)/tcsh(1) example:
-!!         % penv -C > readme.csh
-!!         % source readme.csh
-!!       # sh(1)/bash(1)/zsh(1) ... example:
-!!         $ penv -B > readme.sh
-!!         $ . readme.sh
-!!       # print specified variable names
-!!         % penv TMP TEMPDIR TMPDIR TEMP
-!!       # print variables starting with A or H
-!!         % penv -p A H
-!!
-!!##EXIT STATUS
-!!        The exit status is:
-!!
-!!         0  if all variables specified were found
-!!         1  otherwise
-!!##SEE ALSO
-!!        env(1), printenv(1)
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -147,7 +95,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)COPYRIGHT:      Copyright (C) 2016 John S. Urban. Public Domain>',&
-'@(#)COMPILED:       2021-12-18 15:27:56 UTC-300>',&
+'@(#)COMPILED:       2022-01-04 00:10:42 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -157,25 +105,23 @@ program penv
 use M_kracken, only : kracken, lget, sget, sgets, IPvalue
 use M_system, only : system_initenv, system_readenv, system_unsetenv, system_putenv
 use M_system, only : system_clearenv
-use M_strings, only : matchw
+use M_strings, only : glob
 implicit none
 character(len=:),allocatable       :: string
 logical                            :: Csyntax, Bsyntax, printedsome, valuesonly, missing=.false.
 integer                            :: i, ii, ilength, istatus, ierr
-character(len=IPvalue),allocatable :: prefixes(:) ! assuming prefixes not greater than this length
 character(len=IPvalue),allocatable :: names(:)    ! assuming names not greater than this length
 character(len=:),allocatable       :: avalue
 integer                            :: cstat
 character(len=256)                 :: sstat
 !-----------------------------------------------------------------------------------------------------------------------------------
-   call kracken('penv',' -p -v .F. -C .F. -B .F. -help .F. -version .F. &
+   call kracken('penv',' -v .F. -C .F. -B .F. -help .F. -version .F. &
    & -unset -clear .F. -cmd                                            ')    ! crack command line arguments
    call help_usage(lget('penv_help'))                                        ! display help if -help specified and stop
    call help_version(lget('penv_version'))                                   ! display version if -version specified and stop
    Csyntax=lget('penv_C')                                                    ! if -C specified write output for csh(1)
    Bsyntax=lget('penv_B')                                                    ! if -B specified write output for sh(1)
    valuesonly=lget('penv_v')                                                 ! if -v set flag to print values only
-   prefixes=sgets('penv_p')                                                  ! get list of prefixes of names to print
 
    printedsome=.false.                                                       ! flag if nothing else printed to print all values
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -185,8 +131,20 @@ character(len=256)                 :: sstat
 !-----------------------------------------------------------------------------------------------------------------------------------
    names=sgets('penv_oo')                                                    ! get list of individual names (assumed no spaces)
    if(size(names).ne.0)then                                                  ! print variables specified by name
+      printedsome=.true.                                                     ! flag tried to print something
       do i=1,size(names)                                                     ! step thru names
-         if(index(names(i),'=').eq.0)then
+         if((index(names(i),'*').ne.0 .or. index(names(i),'?').ne.0) .and. index(names(i),'=').eq.0 )then
+            ! print variable names with wildcards
+            call system_initenv()
+            do
+               string=system_readenv()
+               if(string.eq.'') exit
+               if(glob(string,trim(names(i))))then
+                  call printformatted()
+               endif
+            enddo
+         elseif(index(names(i),'=').eq.0)then
+            ! print variable names without wildcards
             call get_environment_variable(name=trim(names(i)),length=ilength,status=istatus)
             select case(istatus)
              case(0)                                                         ! variable is defined
@@ -209,8 +167,8 @@ character(len=256)                 :: sstat
             string=trim(names(i))//'='//avalue(:ilength)                     ! build string to same format system_readenv(3f) gets
             deallocate(avalue)                                               ! release scratch space
             call printformatted()                                            ! print input of form 'NAME=VALUE' as specified
-            printedsome=.true.
          else                                                                ! if contains = assumes this is an assignment
+            ! has equal sign so assume setting a value
             call system_putenv(trim(names(i)))
          endif
       enddo
@@ -221,34 +179,19 @@ character(len=256)                 :: sstat
       call system_unsetenv(names(i),ierr)
    enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(size(prefixes).ne.0)then                                               ! print variables with specified prefixes
-      printedsome=.true.
-      do i=1,size(prefixes)
-         call system_initenv()
-         do
-            string=system_readenv()
-            if(string.eq.'') exit
-            if(matchw(string,trim(prefixes(i))//'*'))then
-               call printformatted()
-            endif
-         enddo
-      enddo
-   endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-   if(.not.printedsome)then                                                  ! did not print specific values so print entire table
-      call system_initenv()                                                  ! set to beginning of table
-      do                                                                     ! iterate through environment table
-         string=system_readenv()
-         if(string.eq.'')exit                                                ! if a blank line is returned assume end reached
-         call printformatted()                                               ! print variable
-      enddo
-   endif
-!-----------------------------------------------------------------------------------------------------------------------------------
    string=sget('penv_cmd')
-   if(string.ne.'')then
+   if(string.eq.' ')then
+      if(.not.printedsome)then                                               ! did not print specific values so print entire table
+         call system_initenv()                                               ! set to beginning of table
+         do                                                                  ! iterate through environment table
+            string=system_readenv()
+            if(string.eq.'')exit                                             ! if a blank line is returned assume end reached
+            call printformatted()                                            ! print variable
+         enddo
+      endif
+   else
       call execute_command_line(trim(string),cmdstat=cstat,cmdmsg=sstat)
    endif
-!-----------------------------------------------------------------------------------------------------------------------------------
    if(missing)then                                                           ! a specifically named variable was not found
       stop 1                                                                 ! return non-zero system exit status if supported
    endif

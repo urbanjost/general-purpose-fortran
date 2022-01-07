@@ -1551,10 +1551,10 @@ end subroutine gcsgau1
 !!   subroutine glstsq(ideg,x,y,n0,d)
 !!
 !!    integer             :: ideg
-!!    real                   x(*)
-!!    real                   y(*)
+!!    real                :: x(*)
+!!    real                :: y(*)
 !!    integer             :: n0
-!!    doubleprecision        d(*)
+!!    doubleprecision     :: d(*)
 !!
 !!##DESCRIPTION
 !!    least squares fit to a polynomial expression
@@ -1583,12 +1583,13 @@ use M_journal, only : journal
 implicit doubleprecision(a-h,o-z)
 
 integer             :: ideg       !* ideg is  desired degree of least square fit and test
-real                   x(*)
-real                   y(*)
+real                :: x(*)
+real                :: y(*)
 integer             :: n0         !* n0   is  number of points in curve arrays (x, y)
-doubleprecision        d(*)       !* d    is  returned coefficient array
+doubleprecision     :: d(*)       !* d    is  returned coefficient array
+doubleprecision     :: add
 
-doubleprecision        a(11,11)
+doubleprecision     :: a(11,11)
 integer             :: i, j, k
 integer             :: n
 integer             :: nppl1
@@ -1596,21 +1597,21 @@ integer             :: nppl2
 integer             :: jm1
 integer             :: iz
 integer             :: iexp
-!-----------------------------------------------------------------------------------------------------------------------------------
+
    n=n0
-!-----------------------------------------------------------------------------------------------------------------------------------
+
    if((ideg.lt.1).or.(ideg.gt.10))then
       call journal('*fit* invalid polynomial degree for polynomial fit')
    elseif(n.le.ideg)then ! test if enough points to do desired fit
       call journal('*fit* insufficient points for desired fit')
    else
-!-----------------------------------------------------------------------------------------------------------------------------------
+
       nppl1=ideg+1
       nppl2=ideg+2
       do j=1,nppl1
 !          calculate  (d)  matrix.
          jm1=j-1
-!-----------------------------------------------------------------------------------------------------------------------------------
+
          if (jm1 .le. 0)then
             iz=1
             add=0.0d0
@@ -1618,38 +1619,38 @@ integer             :: iexp
                add=y(i)+add
             enddo
          else
-!-----------------------------------------------------------------------------------------------------------------------------------
+
             add=0.0d0
             do i=1,n
                add=x(i)**jm1*y(i)+add
             enddo
          endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+
          d(j)=add
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 !     calculate ((a)) matrix.
          do k=j,nppl1
             iexp=jm1+k-1
-!-----------------------------------------------------------------------------------------------------------------------------------
+
             if(iz.ne.2)then
                add=n
                iz=2
             else
-!-----------------------------------------------------------------------------------------------------------------------------------
-               add=0.
+
+               add=0.0d0
                do i=1,n
                   add=x(i)**iexp+add
                enddo
             endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+
             a(j,k)=add
             a(k,j)=add
          enddo
       enddo
-!-----------------------------------------------------------------------------------------------------------------------------------
-!          solve system of equations
-!              ((a)) * (c) = (d)
-!          for (c).
+
+!     solve system of equations
+!        ((a)) * (c) = (d)
+!      for (c).
 !      coefficients will be in array d
       n = nppl1
       call gcsgau1(n,a,d) ! note that d is doubleprecision, a is doubleprecision
@@ -1704,7 +1705,7 @@ end subroutine glstsq
 !!    F. T. Tracy, Computer Analysis Branch USAEWES, Vicksburg, MS. 39180
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE GCSGAU2(N,A,B)
+subroutine gcsgau2(n,a,b)
 use M_journal, only : journal
 implicit doubleprecision(a-h,o-z)
 integer      :: n
@@ -1727,87 +1728,87 @@ real         :: fm
 real         :: sum
 real         :: x(11)
 !-----------------------------------------------------------------------
-   EPS = 1.0d-30
+   eps = 1.0d-30
 !     OBTAIN UPPER TRIANGULAR MATRIX AND MODIFIED B MATRIX.
-   NM1=N-1
-   DO 110 K=1,NM1
+   nm1=n-1
+   do 110 k=1,nm1
 !     PERFORM K "TH" STEP OF GAUSS ELIMINATION.462C
-      KPL1=K+1
+      kpl1=k+1
 !     PERFORM PARTIAL PIVOTING.
 !     FIND MAXIMUM ELEMENT IN ABSOLUTE VALUE OF THE ELEMENTS, A(K,K),
 !     A(K+1,K), ... A(N,K).
-      AMX=0.0d0
-      DO 50 I=K,N
-         FA=ABS(A(I,K))
-         IF (FA-AMX) 50,50,45
-45       AMX=FA
-         NCQ=I
-50    CONTINUE
+      amx=0.0d0
+      do 50 i=k,n
+         fa=abs(a(i,k))
+         if (fa-amx) 50,50,45
+45       amx=fa
+         ncq=i
+50    continue
 !
 !     CHECK FOR NO SOLUTION.
-      IF (AMX-EPS) 60,75,75
+      if (amx-eps) 60,75,75
 !
 !     THE GAUSS ELIMINATION PROCESS HAS BROKEN DOWN BECAUSE NO PIVOT
 !     GREATER THAN THE INPUT TOLERANCE COULD BE FOUND FOR !K! STEP
 !
 60    continue
       call journal('*gauss* elimination process has broken down')
-      RETURN
+      return
 !
 !     INTERCHANGE ROWS K AND NCQ.
 75    continue
-      DO J=K,N
-         D=A(K,J)
-         A(K,J)=A(NCQ,J)
-         A(NCQ,J)=D
-      ENDDO
-      D=B(K)
-      B(K)=B(NCQ)
-      B(NCQ)=D
+      do j=k,n
+         d=a(k,j)
+         a(k,j)=a(ncq,j)
+         a(ncq,j)=d
+      enddo
+      d=b(k)
+      b(k)=b(ncq)
+      b(ncq)=d
 !
 !     PERFORM ELIMINATION PROCESS.
-      DO I=KPL1,N
+      do i=kpl1,n
 !
 !     CALCULATE MULTIPLIERS.
-         FM=-A(I,K)/A(K,K)
+         fm=-a(i,k)/a(k,k)
 !
-         DO J=KPL1,N
-            A(I,J)=A(K,J)*FM+A(I,J)
-         ENDDO
-         B(I)=B(K)*FM+B(I)
-      ENDDO
-110 CONTINUE
+         do j=kpl1,n
+            a(i,j)=a(k,j)*fm+a(i,j)
+         enddo
+         b(i)=b(k)*fm+b(i)
+      enddo
+110 continue
 !
 !     CHECK FOR NO SOLUTION.
-   IF (ABS(A(N,N))-EPS) 112,115,115
+   if (abs(a(n,n))-eps) 112,115,115
 !
 !      A(N,N) IS SMALLER THAN THE ALLOWABLE
 !      TOLERANCE FOR A PIVOT
 !
-112 CONTINUE
+112 continue
    call journal('*gauss* elimination process has broken down')
-   RETURN
+   return
 !
 !     CALCULATE MATRIX X.
 !
 !     PERFORM BACK SUBSTITUTION.
-115 CONTINUE
-   X(N)=B(N)/A(N,N)
-   DO K=2,N
-      M=N-K+1
-      MPL1=M+1
-      SUM=0.
-      DO J=MPL1,N
-         SUM=A(M,J)*X(J)+SUM
-      ENDDO
-      X(M)=(B(M)-SUM)/A(M,M)
-   ENDDO
+115 continue
+   x(n)=b(n)/a(n,n)
+   do k=2,n
+      m=n-k+1
+      mpl1=m+1
+      sum=0.0
+      do j=mpl1,n
+         sum=a(m,j)*x(j)+sum
+      enddo
+      x(m)=(b(m)-sum)/a(m,m)
+   enddo
 !
-   DO I=1,N
-      B(I)=X(I)
-   ENDDO
+   do i=1,n
+      b(i)=x(i)
+   enddo
 !
-END SUBROUTINE GCSGAU2
+end subroutine gcsgau2
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1941,7 +1942,7 @@ END SUBROUTINE GCSGAU2
 !!    L. F. Shampine, S. M. Davenport and R. E. Huddleston,
 !!    Curve fitting by polynomials in one variable, Report
 !!    SLA-74-0270, Sandia Laboratories, June 1974.
-   SUBROUTINE JU_POLFIT (N, X, Y, W, MAXDEG, NDEG, EPS, R, IERR, A)
+subroutine ju_polfit (n, x, y, w, maxdeg, ndeg, eps, r, ierr, a)
 integer      :: i100
 integer      :: i20
 integer      :: i200
@@ -2001,168 +2002,168 @@ real         :: x
 real         :: xm
 real         :: y
 real         :: yp(0)
-DOUBLE PRECISION TEMD1,TEMD2
-DIMENSION X(*), Y(*), W(*), R(*), A(*)
-DIMENSION CO(4,3)
-SAVE CO
-DATA  CO(1,1), CO(2,1), CO(3,1), CO(4,1), CO(1,2), CO(2,2),   &
-&      CO(3,2), CO(4,2), CO(1,3), CO(2,3), CO(3,3),           &
-&  CO(4,3)/-13.086850,-2.4648165,-3.3846535,-1.2973162,       &
+double precision temd1,temd2
+dimension x(*), y(*), w(*), r(*), a(*)
+dimension co(4,3)
+save co
+data  co(1,1), co(2,1), co(3,1), co(4,1), co(1,2), co(2,2),   &
+&      co(3,2), co(4,2), co(1,3), co(2,3), co(3,3),           &
+&  co(4,3)/-13.086850,-2.4648165,-3.3846535,-1.2973162,       &
 &          -3.3381146,-1.7812271,-3.2578406,-1.6589279,       &
 &          -1.6282703,-1.3152745,-3.2640179,-1.9829776/
 !***FIRST EXECUTABLE STATEMENT  JU_POLFIT
-      write(*,*)'JU_POLFIT N=',N
+      write(*,*)'JU_POLFIT N=',n
 
-      do i90=1,N
+      do i90=1,n
          write(*,*)i90,x(i90),y(i90),w(i90),r(i90)
       enddo
 
-      write(*,*)'MAXDEG=',MAXDEG
-      write(*,*)'eps=',EPS
+      write(*,*)'MAXDEG=',maxdeg
+      write(*,*)'eps=',eps
 !***FIRST EXECUTABLE STATEMENT  JU_POLFIT
-      M = ABS(N)
-      IF (M .EQ. 0) GOTO 888
-      IF (MAXDEG .LT. 0) GOTO 888
-      A(1) = MAXDEG
-      MOP1 = MAXDEG + 1
-      IF (M .LT. MOP1) GOTO 888
-      IF (EPS .LT. 0.0  .AND.  M .EQ. MOP1) GOTO 888
-      XM = M
-      ETST = EPS*EPS*XM
-      IF (W(1) .GE. 0.0)then
-         DO I20 = 1,M
-            IF (W(I20) .LE. 0.0) GOTO 888
-         ENDDO
+      m = abs(n)
+      if (m .eq. 0) goto 888
+      if (maxdeg .lt. 0) goto 888
+      a(1) = maxdeg
+      mop1 = maxdeg + 1
+      if (m .lt. mop1) goto 888
+      if (eps .lt. 0.0  .and.  m .eq. mop1) goto 888
+      xm = m
+      etst = eps*eps*xm
+      if (w(1) .ge. 0.0)then
+         do i20 = 1,m
+            if (w(i20) .le. 0.0) goto 888
+         enddo
       else
-         DO I30 = 1,M
-            W(I30) = 1.0
-         ENDDO
+         do i30 = 1,m
+            w(i30) = 1.0
+         enddo
       endif
 
-      IF (EPS .GE. 0.0) GOTO 8
+      if (eps .ge. 0.0) goto 8
 !
 ! DETERMINE SIGNIFICANCE LEVEL INDEX TO BE USED IN STATISTICAL TEST FOR
 ! CHOOSING DEGREE OF POLYNOMIAL FIT
 !
-      IF (EPS .GT. (-.55)) GOTO 5
-      IDEGF = M - MAXDEG - 1
-      KSIG = 1
-      IF (IDEGF .LT. 10) KSIG = 2
-      IF (IDEGF .LT. 5) KSIG = 3
-      GOTO 8
-5     CONTINUE
-      KSIG = 1
-      IF (EPS .LT. (-.03)) KSIG = 2
-      IF (EPS .LT. (-.07)) KSIG = 3
+      if (eps .gt. (-.55)) goto 5
+      idegf = m - maxdeg - 1
+      ksig = 1
+      if (idegf .lt. 10) ksig = 2
+      if (idegf .lt. 5) ksig = 3
+      goto 8
+5     continue
+      ksig = 1
+      if (eps .lt. (-.03)) ksig = 2
+      if (eps .lt. (-.07)) ksig = 3
 !
 ! INITIALIZE INDEXES AND COEFFICIENTS FOR FITTING
 !
-8     CONTINUE
-      K1 = MAXDEG + 1
-      K2 = K1 + MAXDEG
-      K3 = K2 + MAXDEG + 2
-      K4 = K3 + M
-      K5 = K4 + M
+8     continue
+      k1 = maxdeg + 1
+      k2 = k1 + maxdeg
+      k3 = k2 + maxdeg + 2
+      k4 = k3 + m
+      k5 = k4 + m
 
-      DO I40 = 2,K4
-         A(I40) = 0.0
-      ENDDO
+      do i40 = 2,k4
+         a(i40) = 0.0
+      enddo
 
-      W11 = 0.0
-      IF (N .LT. 0) GOTO 11
+      w11 = 0.0
+      if (n .lt. 0) goto 11
 !
 ! UNCONSTRAINED CASE
 !
-      DO I50 = 1,M
-         K4PI = K4 + I50
-         A(K4PI) = 1.0
-         W11 = W11 + W(I50)
-      ENDDO
+      do i50 = 1,m
+         k4pi = k4 + i50
+         a(k4pi) = 1.0
+         w11 = w11 + w(i50)
+      enddo
 
-      GOTO 13
+      goto 13
 !
 ! CONSTRAINED CASE
 !
-11    CONTINUE
-      DO I60 = 1,M
-         K4PI = K4 + I60
-         W11 = W11 + W(I60)*A(K4PI)**2
-      ENDDO
+11    continue
+      do i60 = 1,m
+         k4pi = k4 + i60
+         w11 = w11 + w(i60)*a(k4pi)**2
+      enddo
 !
 ! COMPUTE FIT OF DEGREE ZERO
 !
-13    CONTINUE
-      TEMD1 = 0.0D0
-      DO I70 = 1,M
-         K4PI = K4 + I70
-         TEMD1 = TEMD1 + DBLE(W(I70))*DBLE(Y(I70))*DBLE(A(K4PI))
-      ENDDO
-      TEMD1 = TEMD1/DBLE(W11)
-      A(K2+1) = TEMD1
-      SIGJ = 0.0
-      DO I80 = 1,M
-         K4PI = K4 + I80
-         K5PI = K5 + I80
-         TEMD2 = TEMD1*DBLE(A(K4PI))
-         R(I80) = TEMD2
-         A(K5PI) = TEMD2 - DBLE(R(I80))
-         SIGJ = SIGJ + W(I80)*((Y(I80)-R(I80)) - A(K5PI))**2
-      ENDDO
-      J = 0
+13    continue
+      temd1 = 0.0d0
+      do i70 = 1,m
+         k4pi = k4 + i70
+         temd1 = temd1 + dble(w(i70))*dble(y(i70))*dble(a(k4pi))
+      enddo
+      temd1 = temd1/dble(w11)
+      a(k2+1) = temd1
+      sigj = 0.0
+      do i80 = 1,m
+         k4pi = k4 + i80
+         k5pi = k5 + i80
+         temd2 = temd1*dble(a(k4pi))
+         r(i80) = temd2
+         a(k5pi) = temd2 - dble(r(i80))
+         sigj = sigj + w(i80)*((y(i80)-r(i80)) - a(k5pi))**2
+      enddo
+      j = 0
 !
 ! SEE IF POLYNOMIAL OF DEGREE 0 SATISFIES THE DEGREE SELECTION CRITERION
 !
-      IF (EPS) 24,26,27
+      if (eps) 24,26,27
 !=======================================================================
 !
 ! INCREMENT DEGREE
 !
-16    CONTINUE
-      J = J + 1
-      JP1 = J + 1
-      K1PJ = K1 + J
-      K2PJ = K2 + J
-      SIGJM1 = SIGJ
+16    continue
+      j = j + 1
+      jp1 = j + 1
+      k1pj = k1 + j
+      k2pj = k2 + j
+      sigjm1 = sigj
 !
 ! COMPUTE NEW B COEFFICIENT EXCEPT WHEN J = 1
 !
-      IF (J .GT. 1) A(K1PJ) = W11/W1
+      if (j .gt. 1) a(k1pj) = w11/w1
 !
 ! COMPUTE NEW A COEFFICIENT
 !
-      TEMD1 = 0.0D0
-      DO I100 = 1,M
-         K4PI = K4 + I100
-         TEMD2 = A(K4PI)
-         TEMD1 = TEMD1 + DBLE(X(I100))*DBLE(W(I100))*TEMD2*TEMD2
+      temd1 = 0.0d0
+      do i100 = 1,m
+         k4pi = k4 + i100
+         temd2 = a(k4pi)
+         temd1 = temd1 + dble(x(i100))*dble(w(i100))*temd2*temd2
       enddo
-      A(JP1) = TEMD1/DBLE(W11)
+      a(jp1) = temd1/dble(w11)
 !
 ! EVALUATE ORTHOGONAL POLYNOMIAL AT DATA POINTS
 !
-      W1 = W11
-      W11 = 0.0
-      DO I200 = 1,M
-         K3PI = K3 + I200
-         K4PI = K4 + I200
-         TEMP = A(K3PI)
-         A(K3PI) = A(K4PI)
-         A(K4PI) = (X(I200)-A(JP1))*A(K3PI) - A(K1PJ)*TEMP
-         W11 = W11 + W(I200)*A(K4PI)**2
+      w1 = w11
+      w11 = 0.0
+      do i200 = 1,m
+         k3pi = k3 + i200
+         k4pi = k4 + i200
+         temp = a(k3pi)
+         a(k3pi) = a(k4pi)
+         a(k4pi) = (x(i200)-a(jp1))*a(k3pi) - a(k1pj)*temp
+         w11 = w11 + w(i200)*a(k4pi)**2
       enddo
 !
 ! GET NEW ORTHOGONAL POLYNOMIAL COEFFICIENT USING PARTIAL DOUBLE
 ! PRECISION
 !
-      TEMD1 = 0.0D0
-      DO I300 = 1,M
-         K4PI = K4 + I300
-         K5PI = K5 + I300
-         TEMD2=DBLE(W(I300))*DBLE((Y(I300)-R(I300))-A(K5PI))*DBLE(A(K4PI))
-         TEMD1=TEMD1 + TEMD2
+      temd1 = 0.0d0
+      do i300 = 1,m
+         k4pi = k4 + i300
+         k5pi = k5 + i300
+         temd2=dble(w(i300))*dble((y(i300)-r(i300))-a(k5pi))*dble(a(k4pi))
+         temd1=temd1 + temd2
       enddo
-      TEMD1 = TEMD1/DBLE(W11)
-      A(K2PJ+1) = TEMD1
+      temd1 = temd1/dble(w11)
+      a(k2pj+1) = temd1
 !
 ! UPDATE POLYNOMIAL EVALUATIONS AT EACH OF THE DATA POINTS, AND
 ! ACCUMULATE SUM OF SQUARES OF ERRORS.  THE POLYNOMIAL EVALUATIONS ARE
@@ -2170,120 +2171,120 @@ DATA  CO(1,1), CO(2,1), CO(3,1), CO(4,1), CO(1,2), CO(2,2),   &
 ! THE MOST SIGNIFICANT BITS ARE STORED IN  R(I) , AND THE LEAST
 ! SIGNIFICANT BITS ARE IN  A(K5PI) .
 !
-      SIGJ = 0.0
-      DO I400 = 1,M
-         K4PI = K4 + I400
-         K5PI = K5 + I400
-         TEMD2 = DBLE(R(I400)) + DBLE(A(K5PI)) + TEMD1*DBLE(A(K4PI))
-         R(I400) = TEMD2
-         A(K5PI) = TEMD2 - DBLE(R(I400))
-         SIGJ = SIGJ + W(I400)*((Y(I400)-R(I400)) - A(K5PI))**2
+      sigj = 0.0
+      do i400 = 1,m
+         k4pi = k4 + i400
+         k5pi = k5 + i400
+         temd2 = dble(r(i400)) + dble(a(k5pi)) + temd1*dble(a(k4pi))
+         r(i400) = temd2
+         a(k5pi) = temd2 - dble(r(i400))
+         sigj = sigj + w(i400)*((y(i400)-r(i400)) - a(k5pi))**2
       enddo
 !
 ! SEE IF DEGREE SELECTION CRITERION HAS BEEN SATISFIED OR IF DEGREE
 ! MAXDEG  HAS BEEN REACHED
 !
 !=======================================================================
-      IF (EPS) 23,26,27
+      if (eps) 23,26,27
 !
 ! COMPUTE F STATISTICS  (INPUT EPS .LT. 0.)
 !
-23    CONTINUE
-      IF (SIGJ .EQ. 0.0) GOTO 29
-      DEGF = M - J - 1
-      DEN = (CO(4,KSIG)*DEGF + 1.0)*DEGF
-      FCRIT = (((CO(3,KSIG)*DEGF) + CO(2,KSIG))*DEGF + CO(1,KSIG))/DEN
-      FCRIT = FCRIT*FCRIT
-      F = (SIGJM1 - SIGJ)*DEGF/SIGJ
-      IF (F .LT. FCRIT) GOTO 25
+23    continue
+      if (sigj .eq. 0.0) goto 29
+      degf = m - j - 1
+      den = (co(4,ksig)*degf + 1.0)*degf
+      fcrit = (((co(3,ksig)*degf) + co(2,ksig))*degf + co(1,ksig))/den
+      fcrit = fcrit*fcrit
+      f = (sigjm1 - sigj)*degf/sigj
+      if (f .lt. fcrit) goto 25
 !
 ! POLYNOMIAL OF DEGREE J SATISFIES F TEST
 !
-24    CONTINUE
-      SIGPAS = SIGJ
-      JPAS = J
-      NFAIL = 0
-      IF (MAXDEG .EQ. J) GOTO 32
+24    continue
+      sigpas = sigj
+      jpas = j
+      nfail = 0
+      if (maxdeg .eq. j) goto 32
       iii=24
-      GOTO 16
+      goto 16
 !=======================================================================
 !
 ! POLYNOMIAL OF DEGREE J FAILS F TEST.  IF THERE HAVE BEEN THREE
 ! SUCCESSIVE FAILURES, A STATISTICALLY BEST DEGREE HAS BEEN FOUND.
 !
-25    CONTINUE
-      NFAIL = NFAIL + 1
-      IF (NFAIL .GE. 3) GOTO 29
-      IF (MAXDEG .EQ. J) GOTO 32
+25    continue
+      nfail = nfail + 1
+      if (nfail .ge. 3) goto 29
+      if (maxdeg .eq. j) goto 32
       iii=25
-      GOTO 16
+      goto 16
 !=======================================================================
 !
 ! RAISE THE DEGREE IF DEGREE  MAXDEG  HAS NOT YET BEEN REACHED  (INPUT
 ! EPS = 0.)
 !
-26    CONTINUE
-      IF (MAXDEG .EQ. J) GOTO 28
+26    continue
+      if (maxdeg .eq. j) goto 28
       iii=26
-      GOTO 16
+      goto 16
 !=======================================================================
 !
 ! SEE IF RMS ERROR CRITERION IS SATISFIED  (INPUT EPS .GT. 0.)
 !
-27    CONTINUE
-      IF (SIGJ .LE. ETST) GOTO 28
-      IF (MAXDEG .EQ. J) GOTO 31
+27    continue
+      if (sigj .le. etst) goto 28
+      if (maxdeg .eq. j) goto 31
       iii=27
-      GOTO 16
+      goto 16
 !=======================================================================
 ! RETURNS
-28    CONTINUE
-      IERR = 1
-      NDEG = J
-      SIG = SIGJ
-      GOTO 777
+28    continue
+      ierr = 1
+      ndeg = j
+      sig = sigj
+      goto 777
 !=======================================================================
-29    CONTINUE
-      IERR = 1
-      NDEG = JPAS
-      SIG = SIGPAS
-      GOTO 777
+29    continue
+      ierr = 1
+      ndeg = jpas
+      sig = sigpas
+      goto 777
 !=======================================================================
-888   CONTINUE
-      IERR = 2
-      CALL JU_XERMSG ('SLATEC', 'JU_POLFIT', 'INVALID INPUT PARAMETER.', &
+888   continue
+      ierr = 2
+      call ju_xermsg ('SLATEC', 'JU_POLFIT', 'INVALID INPUT PARAMETER.', &
       &2, 1)
-      GOTO 999
+      goto 999
 !=======================================================================
-31    CONTINUE
-      IERR = 3
-      NDEG = MAXDEG
-      SIG = SIGJ
-      GOTO 777
+31    continue
+      ierr = 3
+      ndeg = maxdeg
+      sig = sigj
+      goto 777
 !=======================================================================
-32    CONTINUE
-      IERR = 4
-      NDEG = JPAS
-      SIG = SIGPAS
-      GOTO 777
+32    continue
+      ierr = 4
+      ndeg = jpas
+      sig = sigpas
+      goto 777
 !=======================================================================
-777   CONTINUE
-      A(K3) = NDEG
+777   continue
+      a(k3) = ndeg
 !
 ! WHEN STATISTICAL TEST HAS BEEN USED, EVALUATE THE BEST POLYNOMIAL AT
 ! ALL THE DATA POINTS IF  R  DOES NOT ALREADY CONTAIN THESE VALUES
 !
-      IF(EPS .GE. 0.0  .OR.  NDEG .EQ. MAXDEG)then
-         EPS = SQRT(SIG/XM)
-         GOTO 999
+      if(eps .ge. 0.0  .or.  ndeg .eq. maxdeg)then
+         eps = sqrt(sig/xm)
+         goto 999
       endif
-      NDER = 0
-      DO I500 = 1,M
-         CALL JU_PVALUE (NDEG,NDER,X(I500),R(I500),YP,A)
-      ENDDO
-      EPS = SQRT(SIG/XM)
+      nder = 0
+      do i500 = 1,m
+         call ju_pvalue (ndeg,nder,x(i500),r(i500),yp,a)
+      enddo
+      eps = sqrt(sig/xm)
 !=======================================================================
-999   CONTINUE
+999   continue
       !----------------------------------------------
       write(*,*)'exiting ju_polfit'
       write(*,*)'ndeg=',ndeg
@@ -2293,7 +2294,7 @@ DATA  CO(1,1), CO(2,1), CO(3,1), CO(4,1), CO(1,2), CO(2,2),   &
       enddo
       write(*,*)'ierr=',ierr
       !----------------------------------------------
-   END SUBROUTINE JU_POLFIT
+   end subroutine ju_polfit
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2371,12 +2372,12 @@ DATA  CO(1,1), CO(2,1), CO(3,1), CO(4,1), CO(1,2), CO(2,2),   &
 !                input.  In this case, it is reasonable to declare the
 !                error to be fatal.
 !
-SUBROUTINE JU_XERMSG (LIBRAR, SUBROU, MESSG, NERR, LEVEL)
+subroutine ju_xermsg (librar, subrou, messg, nerr, level)
 !***PURPOSE  Process error messages for SLATEC and other libraries.
-use M_journal, only : journal
-CHARACTER(len=*),intent(in)  :: LIBRAR
-CHARACTER(len=*),intent(in)  :: SUBROU
-CHARACTER(len=*),intent(in)  :: MESSG
+use m_journal, only : journal
+character(len=*),intent(in)  :: librar
+character(len=*),intent(in)  :: subrou
+character(len=*),intent(in)  :: messg
 integer,intent(in)           :: nerr
 integer,intent(in)           :: level
 character(len=255)           :: line
@@ -2406,12 +2407,12 @@ character(len=255)           :: lineold=''
       !*!call abort()
       stop
    end select
-end SUBROUTINE JU_XERMSG
+end subroutine ju_xermsg
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 !*DECK JU_PVALUE
-   SUBROUTINE JU_PVALUE (L, NDER, X, YFIT, YP, A)
+   subroutine ju_pvalue (l, nder, x, yfit, yp, a)
 !***BEGIN PROLOGUE  JU_PVALUE
 !***PURPOSE  Use the coefficients generated by POLFIT to evaluate the
 !            polynomial fit of degree L, along with the first NDER of
@@ -2467,8 +2468,8 @@ end SUBROUTINE JU_XERMSG
 !   900510  Convert XERRWV calls to XERMSG calls.  (RWC)
 !   920501  Reformatted the REFERENCES section.  (WRB)
 !***END PROLOGUE  JU_PVALUE
-      DIMENSION YP(*),A(*)
-      CHARACTER*8 XERN1, XERN2
+      dimension yp(*),a(*)
+      character*8 xern1, xern2
 integer      :: i10
 integer      :: i20
 integer      :: i30
@@ -2505,113 +2506,113 @@ real         :: x
 real         :: yfit
 real         :: yp
 !***FIRST EXECUTABLE STATEMENT  JU_PVALUE
-      IF (L .LT. 0) GOTO 12
-      NDO = MAX(NDER,0)
-      NDO = MIN(NDO,L)
-      MAXORD = A(1) + 0.5
-      K1 = MAXORD + 1
-      K2 = K1 + MAXORD
-      K3 = K2 + MAXORD + 2
-      NORD = A(K3) + 0.5
-      IF (L .GT. NORD) GOTO 888
-      K4 = K3 + L + 1
-      IF (NDER .LT. 1) GOTO 2
+      if (l .lt. 0) goto 12
+      ndo = max(nder,0)
+      ndo = min(ndo,l)
+      maxord = a(1) + 0.5
+      k1 = maxord + 1
+      k2 = k1 + maxord
+      k3 = k2 + maxord + 2
+      nord = a(k3) + 0.5
+      if (l .gt. nord) goto 888
+      k4 = k3 + l + 1
+      if (nder .lt. 1) goto 2
 
-      DO I10= 1,NDER
-         YP(I10) = 0.0
-      ENDDO
+      do i10= 1,nder
+         yp(i10) = 0.0
+      enddo
 
-2     CONTINUE
-      IF (L .GE. 2) GOTO 4
-      IF (L .EQ. 1) GOTO 3
+2     continue
+      if (l .ge. 2) goto 4
+      if (l .eq. 1) goto 3
 !
 ! L IS 0
 !
-      VAL = A(K2+1)
-      GOTO 999
+      val = a(k2+1)
+      goto 999
 !
 ! L IS 1
 !
-3     CONTINUE
-      CC = A(K2+2)
-      VAL = A(K2+1) + (X-A(2))*CC
-      IF (NDER .GE. 1) YP(1) = CC
-      GOTO 999
+3     continue
+      cc = a(k2+2)
+      val = a(k2+1) + (x-a(2))*cc
+      if (nder .ge. 1) yp(1) = cc
+      goto 999
 !
 ! L IS GREATER THAN 1
 !
-4     CONTINUE
-      NDP1 = NDO + 1
-      K3P1 = K3 + 1
-      K4P1 = K4 + 1
-      LP1 = L + 1
-      LM1 = L - 1
-      ILO = K3 + 3
-      IUP = K4 + NDP1
+4     continue
+      ndp1 = ndo + 1
+      k3p1 = k3 + 1
+      k4p1 = k4 + 1
+      lp1 = l + 1
+      lm1 = l - 1
+      ilo = k3 + 3
+      iup = k4 + ndp1
 
-      DO I20 = ILO,IUP
-         A(I20) = 0.0
-      ENDDO
+      do i20 = ilo,iup
+         a(i20) = 0.0
+      enddo
 
-      DIF = X - A(LP1)
-      KC = K2 + LP1
-      A(K4P1) = A(KC)
-      A(K3P1) = A(KC-1) + DIF*A(K4P1)
-      A(K3+2) = A(K4P1)
+      dif = x - a(lp1)
+      kc = k2 + lp1
+      a(k4p1) = a(kc)
+      a(k3p1) = a(kc-1) + dif*a(k4p1)
+      a(k3+2) = a(k4p1)
 !
 ! EVALUATE RECURRENCE RELATIONS FOR FUNCTION VALUE AND DERIVATIVES
 !
-      DO 30 I30 = 1,LM1
-         IN = L - I30
-         INP1 = IN + 1
-         K1I = K1 + INP1
-         IC = K2 + IN
-         DIF = X - A(INP1)
-         VAL = A(IC) + DIF*A(K3P1) - A(K1I)*A(K4P1)
-         IF (NDO .LE. 0) GOTO 8
+      do 30 i30 = 1,lm1
+         in = l - i30
+         inp1 = in + 1
+         k1i = k1 + inp1
+         ic = k2 + in
+         dif = x - a(inp1)
+         val = a(ic) + dif*a(k3p1) - a(k1i)*a(k4p1)
+         if (ndo .le. 0) goto 8
 
-         DO I50 = 1,NDO
-            K3PN = K3P1 + I50
-            K4PN = K4P1 + I50
-            YP(I50) = DIF*A(K3PN) + I50*A(K3PN-1) - A(K1I)*A(K4PN)
-         ENDDO
+         do i50 = 1,ndo
+            k3pn = k3p1 + i50
+            k4pn = k4p1 + i50
+            yp(i50) = dif*a(k3pn) + i50*a(k3pn-1) - a(k1i)*a(k4pn)
+         enddo
 
 !
 ! SAVE VALUES NEEDED FOR NEXT EVALUATION OF RECURRENCE RELATIONS
 !
-         DO I40 = 1,NDO
-            K3PN = K3P1 + I40
-            K4PN = K4P1 + I40
-            A(K4PN) = A(K3PN)
-            A(K3PN) = YP(I40)
-         ENDDO
+         do i40 = 1,ndo
+            k3pn = k3p1 + i40
+            k4pn = k4p1 + i40
+            a(k4pn) = a(k3pn)
+            a(k3pn) = yp(i40)
+         enddo
 
-8        CONTINUE
-         A(K4P1) = A(K3P1)
-         A(K3P1) = VAL
-30    CONTINUE
+8        continue
+         a(k4p1) = a(k3p1)
+         a(k3p1) = val
+30    continue
 !=======================================================================
 !
 ! NORMAL RETURN OR ABORT DUE TO ERROR
 !
-999   YFIT = VAL
-      RETURN
+999   yfit = val
+      return
 !=======================================================================
-888   CONTINUE
-      WRITE (XERN1, '(I8)') L
-      WRITE (XERN2, '(I8)') NORD
-      CALL JU_XERMSG ('SLATEC', 'JU_PVALUE',                             &
-      &   'THE ORDER OF POLYNOMIAL EVALUATION, L = ' // XERN1 //          &
-      &   ' REQUESTED EXCEEDS THE HIGHEST ORDER FIT, NORD = ' // XERN2 // &
+888   continue
+      write (xern1, '(I8)') l
+      write (xern2, '(I8)') nord
+      call ju_xermsg ('SLATEC', 'JU_PVALUE',                             &
+      &   'THE ORDER OF POLYNOMIAL EVALUATION, L = ' // xern1 //          &
+      &   ' REQUESTED EXCEEDS THE HIGHEST ORDER FIT, NORD = ' // xern2 // &
       &   ', COMPUTED BY POLFIT -- EXECUTION TERMINATED.', 8, 2)
-      RETURN
+      return
 !=======================================================================
 !
-12    CALL JU_XERMSG ('SLATEC', 'JU_PVALUE',                             &
+12    call ju_xermsg ('SLATEC', 'JU_PVALUE',                             &
       &   'INVALID INPUT PARAMETER.  ORDER OF POLYNOMIAL EVALUATION ' //  &
       &   'REQUESTED IS NEGATIVE -- EXECUTION TERMINATED.', 2, 2)
 !=======================================================================
-   END SUBROUTINE JU_PVALUE
+   end subroutine ju_pvalue
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2910,25 +2911,25 @@ end subroutine trapezoidal_integral
 !!      >     ___\|/_______________ *
 !!      >
 !-----------------------------------------------------------------------------------------------------------------------------------
-SUBROUTINE CITER(A,R,H,S,C,DADH)
-use M_journal, only : journal
+subroutine citer(a,r,h,s,c,dadh)
+use m_journal, only : journal
 ! ident_9="@(#)M_math::citer(3f): determine various geometric properties of circle segment given radius and area of the segment."
 !
 ! COPYRIGHT (C) John S. Urban, 08/31/1995
 !
 !     Input and Output Variable Declarations
 !
-      DOUBLE PRECISION A,R,H,S,C,DADH
+      double precision a,r,h,s,c,dadh
 !
 !     Internal Variable Declarations
 !
-      DOUBLEPRECISION AORS
-      DOUBLEPRECISION THETAHI,THETALO,THETA
-      DOUBLEPRECISION FLO,FHI,F
-      DOUBLEPRECISION PI,TOL,X
-      DOUBLEPRECISION FUNCT
-      INTEGER ICOUNT
-      DATA PI/3.14159265358979D0/,TOL/1.D-10/
+      doubleprecision aors
+      doubleprecision thetahi,thetalo,theta
+      doubleprecision flo,fhi,f
+      doubleprecision pi,tol,x
+      doubleprecision funct
+      integer icount
+      data pi/3.14159265358979d0/,tol/1.d-10/
 !
 !-----------------------------------------------------------------------
 !
@@ -2939,7 +2940,7 @@ use M_journal, only : journal
 !     the segment's area divided by the radius squared; it equals pi
 !     when the input angle is 2*pi.
 !
-      FUNCT(X)=(X-SIN(X))/2.D0
+      funct(x)=(x-sin(x))/2.d0
 !
 !-----------------------------------------------------------------------
 !
@@ -2947,31 +2948,31 @@ use M_journal, only : journal
 !          = Scaled area of segment
 !          = pi when it represents the entire circle.
 !
-      AORS=A/R**2
+      aors=a/r**2
 !
 !     The following IF-THEN-ELSEIF block insures the input area is reasonable.
 !
-      IF(AORS.LT.TOL) THEN
+      if(aors.lt.tol) then
 !
 !       The input area is so low that the segment is virtually non-existent.
 !
-        THETA=0.d0
-        H=0.D0
-        S=0.D0
-        C=0.D0
-        DADH=0.D0
-        RETURN
-      ELSEIF(AORS.GE.PI) THEN
+        theta=0.d0
+        h=0.d0
+        s=0.d0
+        c=0.d0
+        dadh=0.d0
+        return
+      elseif(aors.ge.pi) then
 !
 !       The input area is so high that the segment is virtually the entire circle
 !
-        THETA=2.D0*PI
-        H=2.D0*R
-        S=2.D0*PI*R
-        C=0.D0
-        DADH=0.D0
-        RETURN
-      ENDIF
+        theta=2.d0*pi
+        h=2.d0*r
+        s=2.d0*pi*r
+        c=0.d0
+        dadh=0.d0
+        return
+      endif
 !
 !     The following DO-WHILE loop solves for the value of THETA which
 !     corresponds to the input segment area.  The loop employs an
@@ -2980,72 +2981,72 @@ use M_journal, only : journal
 !     scaled segment area corresponding to THETALO, and FHI is the
 !     scaled segment area corresponding to THETAHI.
 !
-      THETALO=0.D0
-      FLO=0.D0
-      THETAHI=2.D0*PI
-      FHI=PI
+      thetalo=0.d0
+      flo=0.d0
+      thetahi=2.d0*pi
+      fhi=pi
 !
 !     The very first estimate of THETA has to be done outside of the
 !     loop.  The secant method is used to make the first estimate of
 !     THETA.
 !
-      THETA=THETALO+(THETAHI-THETALO)*(AORS-FLO)/(FHI-FLO)
-      F=FUNCT(THETA)
-      ICOUNT=1
+      theta=thetalo+(thetahi-thetalo)*(aors-flo)/(fhi-flo)
+      f=funct(theta)
+      icount=1
 10    continue
       if (abs(f-aors).gt.tol)then
-        ICOUNT=ICOUNT+2
-        IF(ICOUNT.GT.100) THEN
+        icount=icount+2
+        if(icount.gt.100) then
 !
 !         The iteration has not converged in 100 steps.  Write a
 !         message to the user and abort the run.
 !
-          CALL journal('*citer* did not convergence in 100 iterations')
-          CALL journal('run aborted')
-          CALL journal(' ')
+          call journal('*citer* did not convergence in 100 iterations')
+          call journal('run aborted')
+          call journal(' ')
           stop 1
-        ENDIF
+        endif
 !
 !       Replace one of the bounds on THETA with the latest guess.
 !
-        IF(F.GT.AORS) THEN
-          THETAHI=THETA
-          FHI=F
-        ELSE
-          THETALO=THETA
-          FLO=F
-        ENDIF
+        if(f.gt.aors) then
+          thetahi=theta
+          fhi=f
+        else
+          thetalo=theta
+          flo=f
+        endif
 !
 !       Use the bisection method for the next guess of THETA.
 !
-        THETA=(THETALO+THETAHI)/2.0D0
-        F=FUNCT(THETA)
+        theta=(thetalo+thetahi)/2.0d0
+        f=funct(theta)
 !
 !       Replace one of the bounds on THETA with the latest guess.
 !
-        IF(F.GT.AORS) THEN
-          THETAHI=THETA
-          FHI=F
-        ELSE
-          THETALO=THETA
-          FLO=F
-        ENDIF
+        if(f.gt.aors) then
+          thetahi=theta
+          fhi=f
+        else
+          thetalo=theta
+          flo=f
+        endif
 !
 !       Use the secant method for the next guess of THETA.
 !
-        THETA=THETALO+(THETAHI-THETALO)*(AORS-FLO)/(FHI-FLO)
-        F=FUNCT(THETA)
+        theta=thetalo+(thetahi-thetalo)*(aors-flo)/(fhi-flo)
+        f=funct(theta)
         goto 10
       endif
 !
 !     The iteration on THETA has converged.
 !
-      H=R*(1.0D0-COS(THETA/2.0D0))
-      S=R*THETA
-      C=2.D0*R*SIN(THETA/2.D0)
-      DADH=2.0D0*SQRT(2.0D0*R*H-H**2)
+      h=r*(1.0d0-cos(theta/2.0d0))
+      s=r*theta
+      c=2.d0*r*sin(theta/2.d0)
+      dadh=2.0d0*sqrt(2.0d0*r*h-h**2)
 !
-END SUBROUTINE CITER
+end subroutine citer
 !>
 !!##NAME
 !!   envelope(3f) - [M_math:geometry] Find vertices (in clockwise order) of a polygon enclosing the points (x(i), y(i), i=1, ..., n.
@@ -3155,82 +3156,81 @@ END SUBROUTINE CITER
 !! Programmer: Alan Miller
 !! VERSION:    Latest revision - 12 September 1987
 !! VERSION:    Fortran 90 version - 8 August 1996
-SUBROUTINE envelope(x, y, n, vertex, nvert) !-- saved from url=(0048)http://users.bigpond.net.au/amiller/envelope.f90
-IMPLICIT NONE
+subroutine envelope(x, y, n, vertex, nvert) !-- saved from url=(0048)http://users.bigpond.net.au/amiller/envelope.f90
+implicit none
 
 ! ident_10="@(#)M_math::envelope(3f):Find the vertices (in clockwise order) of a polygon enclosing the points (x(i), y(i), i=1, ..., n."
 
-INTEGER,INTENT(IN) :: n
-REAL,INTENT(IN)    :: x(n), y(n)
-INTEGER :: vertex(n), nvert
-INTEGER :: iwk(n)                  ! iwk() is an integer work array which must have dimension at least n
+integer,intent(in) :: n
+real,intent(in)    :: x(n), y(n)
+integer :: vertex(n), nvert
+integer :: iwk(n)                  ! iwk() is an integer work array which must have dimension at least n
 
 !  On output, vertex(i), i=1, ..., nvert contains the numbers of the vertices.
 
-
 !       Local variables
 
-INTEGER :: next(n), i, i1, i2, j, jp1, jp2, i2save, i3, i2next
-REAL    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
+integer :: next(n), i, i1, i2, j, jp1, jp2, i2save, i3, i2next
+real    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
 &  dx1, dx2, dmax1, dmax2, dy1, dy2, temp, zero = 0.0
 
-   IF (n < 2) RETURN
+   if (n < 2) return
 
 !  Choose the points with smallest & largest x- values as the
 !  first two vertices of the polygon.
 
-   IF (x(1) > x(n)) THEN
+   if (x(1) > x(n)) then
       vertex(1) = n
       vertex(2) = 1
       xmin = x(n)
       xmax = x(1)
-   ELSE
+   else
       vertex(1) = 1
       vertex(2) = n
       xmin = x(1)
       xmax = x(n)
    endif
 
-   DO i = 2, n-1
+   do i = 2, n-1
       temp = x(i)
-      IF (temp < xmin) THEN
+      if (temp < xmin) then
          vertex(1) = i
          xmin = temp
-      ELSE IF (temp > xmax) THEN
+      else if (temp > xmax) then
          vertex(2) = i
          xmax = temp
       endif
-   END DO
+   end do
 
 !       Special case, xmax = xmin.
 
-   IF (xmax == xmin) THEN
-      IF (y(1) > y(n)) THEN
+   if (xmax == xmin) then
+      if (y(1) > y(n)) then
          vertex(1) = n
          vertex(2) = 1
          ymin = y(n)
          ymax = y(1)
-      ELSE
+      else
          vertex(1) = 1
          vertex(2) = n
          ymin = y(1)
          ymax = y(n)
       endif
 
-      DO i = 2, n-1
+      do i = 2, n-1
          temp = y(i)
-         IF (temp < ymin) THEN
+         if (temp < ymin) then
             vertex(1) = i
             ymin = temp
-         ELSE IF (temp > ymax) THEN
+         else if (temp > ymax) then
             vertex(2) = i
             ymax = temp
          endif
-      END DO
+      end do
 
       nvert = 2
-      IF (ymax == ymin) nvert = 1
-      RETURN
+      if (ymax == ymin) nvert = 1
+      return
    endif
 
 !  Set up two initial lists of points; those points above & those below the
@@ -3250,25 +3250,25 @@ REAL    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
    next(1) = -1
    next(2) = -1
 
-   DO i = 1, n
-      IF (i == vertex(1) .OR. i == vertex(2)) CYCLE
+   do i = 1, n
+      if (i == vertex(1) .or. i == vertex(2)) cycle
       dist = (y(i) - y1)*dx - (x(i) - xmin)*dy
-      IF (dist > zero) THEN
+      if (dist > zero) then
          iwk(i1) = i
          i1 = i
-         IF (dist > dmax) THEN
+         if (dist > dmax) then
             next(1) = i
             dmax = dist
          endif
-      ELSE IF (dist < zero) THEN
+      else if (dist < zero) then
          iwk(i2) = i
          i2 = i
-         IF (dist < dmin) THEN
+         if (dist < dmin) then
             next(2) = i
             dmin = dist
          endif
       endif
-   END DO
+   end do
 
 !  Ends of lists are indicated by pointers to -ve positions.
 
@@ -3284,20 +3284,20 @@ REAL    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
 !  Otherwise increase j.   Exit if no more vertices.
 
 40 continue
-   IF (next(j) < 0) THEN
-      IF (j == nvert) RETURN
+   if (next(j) < 0) then
+      if (j == nvert) return
       j = j + 1
-      GOTO 40
+      goto 40
    endif
 
    jp1 = j + 1
-   DO i = nvert, jp1, -1
+   do i = nvert, jp1, -1
       vertex(i+1) = vertex(i)
       next(i+1) = next(i)
-   END DO
+   end do
    jp2 = jp1 + 1
    nvert = nvert + 1
-   IF (jp2 > nvert) jp2 = 1
+   if (jp2 > nvert) jp2 = 1
    i1 = vertex(j)
    i2 = next(j)
    i3 = vertex(jp2)
@@ -3316,7 +3316,7 @@ REAL    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
    dx2 = x(i3) - x2
    dy1 = y2 - y1
    dy2 = y(i3) - y2
-   DMAX1 = zero
+   dmax1 = zero
    dmax2 = zero
    next(j) = -1
    next(jp1) = -1
@@ -3327,42 +3327,42 @@ REAL    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
    iwk(i2) = -1
 
 60 continue
-   IF (i /= i2save) THEN
+   if (i /= i2save) then
       dist = (y(i) - y1)*dx1 - (x(i) - x1)*dy1
-      IF (dist > zero) THEN
+      if (dist > zero) then
          iwk(i1) = i
          i1 = i
-         IF (dist > DMAX1) THEN
+         if (dist > dmax1) then
             next(j) = i
-            DMAX1 = dist
+            dmax1 = dist
          endif
-      ELSE
+      else
          dist = (y(i) - y2)*dx2 - (x(i) - x2)*dy2
-         IF (dist > zero) THEN
+         if (dist > zero) then
             iwk(i2) = i
             i2 = i
-            IF (dist > dmax2) THEN
+            if (dist > dmax2) then
                next(jp1) = i
                dmax2 = dist
             endif
          endif
       endif
       i = iwk(i)
-   ELSE
+   else
       i = i2next
    endif
 
 !  Get next point from old list at vertex j.
 
-   IF (i > 0) GOTO 60
+   if (i > 0) goto 60
 
 !  End lists with -ve values.
 
    iwk(i1) = -1
    iwk(i2) = -1
 
-   GOTO 40
-END SUBROUTINE envelope
+   goto 40
+end subroutine envelope
 !>
 !!##NAME
 !!    inpolygon(3f) - [M_math:geometry] determine whether or not an integer point is in an integer polygon
@@ -3465,61 +3465,61 @@ END SUBROUTINE envelope
 !!       call circle(pointx,pointy,0.2)
 !!    end subroutine pickrandom
 !!    end program demo_inpolygon
-LOGICAL FUNCTION INPOLYGON(XIN, YIN, XCONV, YCONV, NCONV)
+logical function inpolygon(xin, yin, xconv, yconv, nconv)
 
 ! ident_11="@(#)M_math::inpolygon(3f):Subroutine to determine whether or not an integer point is in a polygon of integer points"
 
 integer,intent(in)  :: xin,yin                       ! coordinates of the point to be checked
 integer,intent(in)  :: nconv                         !
-INTEGER             :: XCONV(NCONV), YCONV(NCONV)
-REAL                :: X,Y                           ! real copy of input point
-integer             :: Z(4)= [-32701,-32701,32701,32701]
+integer             :: xconv(nconv), yconv(nconv)
+real                :: x,y                           ! real copy of input point
+integer             :: z(4)= [-32701,-32701,32701,32701]
 integer             :: i, j, m
 
-      X=XIN
-      Y=YIN
-      IF (Z(1).eq.-32701) then
-         DO I = 1,NCONV
-            Z(1)=MAX(Z(1),XCONV(I))
-            Z(2)=MAX(Z(2),YCONV(I))
-            Z(3)=MIN(Z(3),XCONV(I))
-            Z(4)=MIN(Z(4),YCONV(I))
+      x=xin
+      y=yin
+      if (z(1).eq.-32701) then
+         do i = 1,nconv
+            z(1)=max(z(1),xconv(i))
+            z(2)=max(z(2),yconv(i))
+            z(3)=min(z(3),xconv(i))
+            z(4)=min(z(4),yconv(i))
          enddo
       endif
-      INPOLYGON=.TRUE.
-      IF(X .LT. Z(3) .OR. X .GT. Z(1)) INPOLYGON=.FALSE.
-      IF(Y .LT. Z(4) .OR. Y .GT. Z(2)) INPOLYGON=.FALSE.
-      IF(.NOT. INPOLYGON) RETURN
+      inpolygon=.true.
+      if(x .lt. z(3) .or. x .gt. z(1)) inpolygon=.false.
+      if(y .lt. z(4) .or. y .gt. z(2)) inpolygon=.false.
+      if(.not. inpolygon) return
 
-      J=0
-      DO 90 I = 2,NCONV
-         M=0
+      j=0
+      do 90 i = 2,nconv
+         m=0
    !-----------------------------------------------------
-         select case ((YCONV(I-1)-YIN)*(YIN-YCONV(I)))
-         case(:-1); CYCLE
+         select case ((yconv(i-1)-yin)*(yin-yconv(i)))
+         case(:-1); cycle
          case(0)  ;
          case(1:) ;
          end select
    !-----------------------------------------------------
-         select case (YCONV(I-1)-YCONV(I))
-         case(:-1); M=M-1; GOTO 70
+         select case (yconv(i-1)-yconv(i))
+         case(:-1); m=m-1; goto 70
          case(0)  ;
-         case(1:) ; M=M-2 ;M=M-1;GOTO 70
+         case(1:) ; m=m-2 ;m=m-1;goto 70
          end select
    !-----------------------------------------------------
-         IF ((XCONV(I-1)-X)*(X-XCONV(I))) 90,100,100
+         if ((xconv(i-1)-x)*(x-xconv(i))) 90,100,100
    !-----------------------------------------------------
    70 continue
-         M=M+2
-         IF ((Y-YCONV(I-1))*(FLOAT(XCONV(I))-XCONV(I-1))/(YCONV(I)-FLOAT(YCONV(I-1)))+XCONV(I-1)-X) 90,100,80
+         m=m+2
+         if ((y-yconv(i-1))*(float(xconv(i))-xconv(i-1))/(yconv(i)-float(yconv(i-1)))+xconv(i-1)-x) 90,100,80
    80 continue
-         J=J+M
+         j=j+m
    90 continue
 
-      INPOLYGON=.FALSE.
-      IF(J/4*4 .NE. J) INPOLYGON=.TRUE.
-  100 CONTINUE
-      END FUNCTION INPOLYGON
+      inpolygon=.false.
+      if(j/4*4 .ne. j) inpolygon=.true.
+  100 continue
+      end function inpolygon
 !>
 !!##NAME
 !!   locpt(3f) - [M_math:geometry] find if a point is inside a polygonal path
@@ -3633,24 +3633,24 @@ integer             :: i, j, m
 !!    end subroutine pickrandom
 !!    end program demo_envelope
 !-----------------------------------------------------------------------------------------------------------------------------------
-SUBROUTINE locpt (x0, y0, x, y, n, l, m)
-IMPLICIT NONE
+subroutine locpt (x0, y0, x, y, n, l, m)
+implicit none
 ! ident_12="@(#)M_math::locpt(3f): find if a point is inside a polygonal path"
 !-----------------------------------------------------------------------------------------------------------------------------------
-   REAL, INTENT(IN)     :: x0, y0, x(:), y(:)
-   INTEGER, INTENT(IN)  :: n
-   INTEGER, INTENT(OUT) :: l, m
+   real, intent(in)     :: x0, y0, x(:), y(:)
+   integer, intent(in)  :: n
+   integer, intent(out) :: l, m
 
    !     Local variables
-   INTEGER :: i, n0
-   REAL    :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
+   integer :: i, n0
+   real    :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
 !-----------------------------------------------------------------------------------------------------------------------------------
-   eps = EPSILON(1.0)   ! EPS is a machine dependent constant. EPS is the smallest number such that 1.0 + EPS > 1.0
+   eps = epsilon(1.0)   ! EPS is a machine dependent constant. EPS is the smallest number such that 1.0 + EPS > 1.0
    n0 = n
-   IF (x(1) == x(n) .AND. y(1) == y(n))then
+   if (x(1) == x(n) .and. y(1) == y(n))then
       n0 = n - 1
    endif
-   pi = ATAN2(0.0, -1.0)
+   pi = atan2(0.0, -1.0)
    pi2 = 2.0*pi
    tol = 4.0*eps*pi
    l = -1
@@ -3658,61 +3658,61 @@ IMPLICIT NONE
 
    u = x(1) - x0
    v = y(1) - y0
-   IF (u == 0.0 .AND. v == 0.0)then
-      GOTO 20
+   if (u == 0.0 .and. v == 0.0)then
+      goto 20
    endif
-   IF (n0 < 2)then
-      RETURN
+   if (n0 < 2)then
+      return
    endif
-   theta1 = ATAN2(v, u)
+   theta1 = atan2(v, u)
 
    sum = 0.0
    theta = theta1
-   DO i = 2, n0
+   do i = 2, n0
       u = x(i) - x0
       v = y(i) - y0
-      IF (u == 0.0 .AND. v == 0.0) then
-         GOTO 20
+      if (u == 0.0 .and. v == 0.0) then
+         goto 20
       endif
-      thetai = ATAN2(v, u)
+      thetai = atan2(v, u)
 
-      angle = ABS(thetai - theta)
-      IF (ABS(angle - pi) < tol)then
-         GOTO 20
+      angle = abs(thetai - theta)
+      if (abs(angle - pi) < tol)then
+         goto 20
       endif
-      IF (angle > pi)then
+      if (angle > pi)then
          angle = angle - pi2
       endif
-      IF (theta > thetai)then
+      if (theta > thetai)then
          angle = -angle
       endif
       sum = sum + angle
       theta = thetai
-   ENDDO
-   angle = ABS(theta1 - theta)
-   IF (ABS(angle - pi) < tol)then
-      GOTO 20
+   enddo
+   angle = abs(theta1 - theta)
+   if (abs(angle - pi) < tol)then
+      goto 20
    endif
-   IF (angle > pi)then
+   if (angle > pi)then
       angle = angle - pi2
    endif
-   IF (theta > theta1)then
+   if (theta > theta1)then
       angle = -angle
    endif
    sum = sum + angle            ! SUM = 2*PI*M WHERE M IS THE WINDING NUMBER
-   m = int(ABS(sum)/pi2 + 0.2)
-   IF (m == 0) then
-      RETURN
+   m = int(abs(sum)/pi2 + 0.2)
+   if (m == 0) then
+      return
    endif
    l = 1
-   IF (sum < 0.0)then
+   if (sum < 0.0)then
       m = -m
    endif
-   RETURN
+   return
 
 20 continue                     ! (X0, Y0) IS ON THE BOUNDARY OF THE PATH
    l = 0
-END SUBROUTINE locpt
+end subroutine locpt
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
@@ -3769,34 +3769,34 @@ END SUBROUTINE locpt
 !! DESCRIPTION:  intersections of a straight line and polygonal path
 !! AUTHOR:       Code converted using TO_F90 by Alan Miller
 !! VERSION:      Date: 2000-07-04  Time: 12:24:01
-SUBROUTINE Poly_Intercept (a, b, x, y, n, u, v, m, num, ierr)
-IMPLICIT NONE
+subroutine poly_intercept (a, b, x, y, n, u, v, m, num, ierr)
+implicit none
 ! ident_13="@(#)M_math::poly_intercept(3f): Calculates the points at which a line <A,B> crosses a polygon"
 
-REAL, INTENT(IN)      :: a(2)
-REAL, INTENT(IN)      :: b(2)
-REAL, INTENT(IN)      :: x(:)
-REAL, INTENT(IN)      :: y(:)
-INTEGER, INTENT(IN)   :: n
-REAL, INTENT(OUT)     :: u(:)
-REAL, INTENT(OUT)     :: v(:)
-INTEGER, INTENT(IN)   :: m
-INTEGER, INTENT(OUT)  :: num
-INTEGER, INTENT(OUT)  :: ierr
+real, intent(in)      :: a(2)
+real, intent(in)      :: b(2)
+real, intent(in)      :: x(:)
+real, intent(in)      :: y(:)
+integer, intent(in)   :: n
+real, intent(out)     :: u(:)
+real, intent(out)     :: v(:)
+integer, intent(in)   :: m
+integer, intent(out)  :: num
+integer, intent(out)  :: ierr
 
 ! Local variables
 
-INTEGER  :: i, ind, nm1
-REAL     :: d, diff, diff1, eps, h, hi, k, ki, onem, onep, p, q, s, t, tmax, tmin, tol, tol0
+integer  :: i, ind, nm1
+real     :: d, diff, diff1, eps, h, hi, k, ki, onem, onep, p, q, s, t, tmax, tmin, tol, tol0
 
-eps = EPSILON(1.0)  ! EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
+eps = epsilon(1.0)  ! EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
 num = 0
 
-IF (n < 2) GO TO 200
+if (n < 2) go to 200
    h = b(1) - a(1)
    k = b(2) - a(2)
 
-IF (h == 0.0 .AND. k == 0.0) GO TO 200
+if (h == 0.0 .and. k == 0.0) go to 200
 
    ierr = 0
    nm1 = n - 1
@@ -3807,10 +3807,10 @@ IF (h == 0.0 .AND. k == 0.0) GO TO 200
 
 ind = 0
 
-DO i = 1, nm1
+do i = 1, nm1
    hi = x(i + 1) - x(i)
    ki = y(i + 1) - y(i)
-   IF (hi == 0.0 .AND. ki == 0.0) CYCLE
+   if (hi == 0.0 .and. ki == 0.0) cycle
    ind = 1
 
 ! Check if the line from a to b and the i-th line in the path are parallel
@@ -3819,7 +3819,7 @@ DO i = 1, nm1
   t = h*ki
   d = s - t
 
-  IF (ABS(d) <= tol*MAX(ABS(s), ABS(t))) GO TO 40
+  if (abs(d) <= tol*max(abs(s), abs(t))) go to 40
 !-----------------------------------------------------------------------
 !                   THE LINES ARE NOT PARALLEL
 !-----------------------------------------------------------------------
@@ -3828,123 +3828,123 @@ DO i = 1, nm1
   s = hi*q
   t = ki*p
   diff = s - t
-  IF (ABS(diff) <= tol*MAX(ABS(s),ABS(t))) diff = 0.0
+  if (abs(diff) <= tol*max(abs(s),abs(t))) diff = 0.0
   s = h*q
   t = k*p
   diff1 = s - t
-  IF (ABS(diff1) <= tol*MAX(ABS(s),ABS(t))) diff1 = 0.0
+  if (abs(diff1) <= tol*max(abs(s),abs(t))) diff1 = 0.0
 
   s = diff/d
   t = diff1/d
 
-  IF (s < 0.0 .OR. s > onep) CYCLE
-  IF (t < 0.0 .OR. t > onep) CYCLE
-  IF (num > 0 .AND. t == 0.0) CYCLE
-  IF (s > 0.0) GO TO 20
+  if (s < 0.0 .or. s > onep) cycle
+  if (t < 0.0 .or. t > onep) cycle
+  if (num > 0 .and. t == 0.0) cycle
+  if (s > 0.0) go to 20
 
 !                   POINT A IS ON THE I-TH LINE
 
 10 continue
   num = num + 1
 
-  IF (num > m) GO TO 210
+  if (num > m) go to 210
      u(num) = a(1)
      v(num) = a(2)
-     CYCLE
+     cycle
 
 !                   POINT B IS ON THE I-TH LINE
 
 20 continue
-   IF (s < onem) GO TO 30
+   if (s < onem) go to 30
 21 continue
    num = num + 1
-   IF (num > m) GO TO 210
+   if (num > m) go to 210
       u(num) = b(1)
       v(num) = b(2)
-   CYCLE
+   cycle
 
 !              THE INTERIOR OF THE LINE FROM A TO B INTERSECTS WITH THE I-TH LINE
 
 30 continue
    num = num + 1
-   IF (num > m) GO TO 210
+   if (num > m) go to 210
       u(num) = a(1) + s*h
       v(num) = a(2) + s*k
-   CYCLE
+   cycle
 !-----------------------------------------------------------------------
 !                     THE LINES ARE PARALLEL
 !-----------------------------------------------------------------------
 40 continue
-  IF (ABS(hi) > ABS(ki)) GO TO 50
+  if (abs(hi) > abs(ki)) go to 50
 
   d = a(2) - y(i)
-  IF (ABS(d) <= tol0*MAX(ABS(a(2)),ABS(y(i)))) d = 0.0
+  if (abs(d) <= tol0*max(abs(a(2)),abs(y(i)))) d = 0.0
   s = d/ki
 
   p = x(i) + s*hi
-  IF (ABS(a(1) - p) > tol*MAX(ABS(a(1)),ABS(p))) CYCLE
+  if (abs(a(1) - p) > tol*max(abs(a(1)),abs(p))) cycle
 
   d = b(2) - y(i)
-  IF (ABS(d) <= tol0*MAX(ABS(b(2)),ABS(y(i)))) d = 0.0
+  if (abs(d) <= tol0*max(abs(b(2)),abs(y(i)))) d = 0.0
   t = d/ki
-  GO TO 60
+  go to 60
 
 50 d = a(1) - x(i)
-  IF (ABS(d) <= tol0*MAX(ABS(a(1)),ABS(x(i)))) d = 0.0
+  if (abs(d) <= tol0*max(abs(a(1)),abs(x(i)))) d = 0.0
   s = d/hi
 
   p = y(i) + s*ki
-  IF (ABS(p - a(2)) > tol*MAX(ABS(p),ABS(a(2)))) CYCLE
+  if (abs(p - a(2)) > tol*max(abs(p),abs(a(2)))) cycle
 
   d = b(1) - x(i)
-  IF (ABS(d) <= tol0*MAX(ABS(b(1)),ABS(x(i)))) d = 0.0
+  if (abs(d) <= tol0*max(abs(b(1)),abs(x(i)))) d = 0.0
   t = d/hi
 
 !              THE 2 LINES ARE PORTIONS OF THE SAME STRAIGHT INFINITE LINE
 
 60 continue
-  IF (s > 0.0 .AND. s < onem) GO TO 220
-  IF (t > 0.0 .AND. t < onem) GO TO 220
-  tmin = MIN(s,t)
-  tmax = MAX(s,t)
-  IF (tmax <= 0.0) GO TO 70
-  IF (tmin >= onem) GO TO 80
-  GO TO 220
+  if (s > 0.0 .and. s < onem) go to 220
+  if (t > 0.0 .and. t < onem) go to 220
+  tmin = min(s,t)
+  tmax = max(s,t)
+  if (tmax <= 0.0) go to 70
+  if (tmin >= onem) go to 80
+  go to 220
 
 70 continue
-  IF (tmax < 0.0) CYCLE
-  IF (num > 0) CYCLE
-  IF (tmax == s) GO TO 10
-  GO TO 21
+  if (tmax < 0.0) cycle
+  if (num > 0) cycle
+  if (tmax == s) go to 10
+  go to 21
 
 80 continue
-  IF (tmin > 1.0) CYCLE
-  IF (tmin == s) GO TO 10
-  GO TO 21
+  if (tmin > 1.0) cycle
+  if (tmin == s) go to 10
+  go to 21
 
-ENDDO
+enddo
 
-   IF (ind == 0) GO TO 200
+   if (ind == 0) go to 200
 
-   IF (num < 2) RETURN
-   IF (u(num) == x(1) .AND. v(num) == y(1)) num = num - 1
-RETURN
+   if (num < 2) return
+   if (u(num) == x(1) .and. v(num) == y(1)) num = num - 1
+return
 
 ! ERROR RETURN
 
 200 continue
    ierr = 1
-   RETURN
+   return
 
 210 continue
    ierr = 2
    num = num - 1
-RETURN
+return
 
 220 continue
    ierr = -i
 
-END SUBROUTINE Poly_Intercept
+end subroutine poly_intercept
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4067,7 +4067,7 @@ end function polyarea
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-doubleprecision function polyarea_mid_point(N,P)     !Calculates the area enclosed by the polygon P.
+doubleprecision function polyarea_mid_point(n,p)     !Calculates the area enclosed by the polygon P.
 
 ! from rosetta code Sunday, December 30th, 2018 7:07:10 PM UTC-05:00
 
@@ -4081,24 +4081,24 @@ doubleprecision function polyarea_mid_point(N,P)     !Calculates the area enclos
 ! as would be done in a figure 8 drawn with a crossover instead of a meeting.
 ! A clockwise traversal (as for an island) gives a positive area; use anti-clockwise for a lake.
 integer, parameter :: dc = kind(0d0)    ! double precision
-INTEGER            :: N                 ! The number of points.
-COMPLEX(kind=dc)   :: P(N)              ! The points.
-COMPLEX(kind=dc)   :: PP,PC             ! Point Previous and Point Current.
-COMPLEX(kind=dc)   :: W                 ! Polygon centre. Map coordinates usually have large offsets.
-DOUBLEPRECISION    :: A                 ! The area accumulator.
-INTEGER            :: I                 ! A stepper.
-   IF (N.LT.3) STOP "*polyarea_mid_point* ERROR: at least three points are needed! "        !Good grief.
-   W = (P(1) + P(N/3) + P(2*N/3))/3     ! An initial working average.
-   W = SUM(P(1:N) - W)/N + W            ! A good working average is the average itself.
-   A = 0                                ! The area enclosed by the point sequence.
-   PC = P(N) - W                        ! The last point is implicitly joined to the first.
-   DO I = 1,N                           ! Step through the positions.
-      PP = PC                           ! Previous position.
-      PC = P(I) - W                     ! Current position.
-      A = (AIMAG(PC) + AIMAG(PP))*(DBLE(PC) - DBLE(PP)) + A  ! Area integral component.
-   ENDDO                                ! On to the next position.
-   polyarea_mid_point = A/2             ! Divide by two once.
-END FUNCTION polyarea_mid_point         ! The units are those of the points.
+integer            :: n                 ! The number of points.
+complex(kind=dc)   :: p(n)              ! The points.
+complex(kind=dc)   :: pp,pc             ! Point Previous and Point Current.
+complex(kind=dc)   :: w                 ! Polygon centre. Map coordinates usually have large offsets.
+doubleprecision    :: a                 ! The area accumulator.
+integer            :: i                 ! A stepper.
+   if (n.lt.3) stop "*polyarea_mid_point* ERROR: at least three points are needed! "        !Good grief.
+   w = (p(1) + p(n/3) + p(2*n/3))/3     ! An initial working average.
+   w = sum(p(1:n) - w)/n + w            ! A good working average is the average itself.
+   a = 0                                ! The area enclosed by the point sequence.
+   pc = p(n) - w                        ! The last point is implicitly joined to the first.
+   do i = 1,n                           ! Step through the positions.
+      pp = pc                           ! Previous position.
+      pc = p(i) - w                     ! Current position.
+      a = (aimag(pc) + aimag(pp))*(dble(pc) - dble(pp)) + a  ! Area integral component.
+   enddo                                ! On to the next position.
+   polyarea_mid_point = a/2             ! Divide by two once.
+end function polyarea_mid_point         ! The units are those of the points.
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4213,7 +4213,7 @@ doubleprecision              :: area     !
    area = sum(px(1:n - 1)*py(2:n)) + px(n)*py(1) - sum(px(2:n)*py(1:n - 1)) - px(1)*py(n)
    polyarea_shoelace = area/2        ! The midpoint formula requires area halving.
 
-END FUNCTION polyarea_shoelace       ! Negative for clockwise, positive for counter-clockwise.
+end function polyarea_shoelace       ! Negative for clockwise, positive for counter-clockwise.
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4560,81 +4560,81 @@ end subroutine extremum
 !!              the chemical industry. NY: Wiley, 1954, at p. 81.
 !!##EXAMPLES
 !!
-SUBROUTINE BDS (X,N,STAT)
+subroutine bds (x,n,stat)
 ! ident_18="@(#)M_math::bds(3f): Basic Descriptive Statistics (based on a routine from the IBM collection)"
 !  RETURN WITH M,U2,U3,U4,V,S,G1,G2,BIG,SMALL,IB,IS IN THAT ORDER IN LOCATIONS STAT(1) THROUGH STAT(13)
 !-----------------------------------------------------------------------
 !  nobody likes equivalences any more
-   integer,parameter :: MEAN   =1  ! mean
-   integer,parameter :: U2     =2  ! second moment about the mean
-   integer,parameter :: U3     =3  ! third  moment about the mean
-   integer,parameter :: U4     =4  ! fourth moment about the mean
+   integer,parameter :: mean   =1  ! mean
+   integer,parameter :: u2     =2  ! second moment about the mean
+   integer,parameter :: u3     =3  ! third  moment about the mean
+   integer,parameter :: u4     =4  ! fourth moment about the mean
    integer,parameter :: varnce =5  ! variance
-   integer,parameter :: Sd     =6  ! standard deviation
+   integer,parameter :: sd     =6  ! standard deviation
    integer,parameter :: skew   =7  ! skewness
    integer,parameter :: kurto  =8  ! kurtosis
-   integer,parameter :: SUM    =9  ! sum
+   integer,parameter :: sum    =9  ! sum
 
-   integer,parameter :: BIG    =10 ! highest value
-   integer,parameter :: SMALL  =11 ! lowest value
-   integer,parameter :: IB     =12 ! location of highest value
-   integer,parameter :: IS     =13 ! location of lowest value
+   integer,parameter :: big    =10 ! highest value
+   integer,parameter :: small  =11 ! lowest value
+   integer,parameter :: ib     =12 ! location of highest value
+   integer,parameter :: is     =13 ! location of lowest value
 
    integer,intent(in) :: n
    real,intent(in)    :: x(n)
-   real,intent(out)   :: STAT(13)
+   real,intent(out)   :: stat(13)
    real               :: deltafixed
    real               :: deltasum
    real               :: fln
    integer            :: i, i20, i30
 !-----------------------------------------------------------------------
-      FLN=N
+      fln=n
 !-----------------------------------------------------------------------
 !  SUM AND MEAN AND LARGEST AND SMALLEST AND LOCATION OF EXTREMES
-      STAT(BIG)=X(1)                   ! biggest value
-      STAT(SMALL)=X(1)                 ! smallest value
-      STAT(IS)=1                       ! location of smallest
-      STAT(IB)=1                       ! location of biggest
-      STAT(SUM) =0.0                   ! sum of all values
-      DO I=1,N
-         STAT(SUM)= STAT(SUM) +X(I)    ! add all values into SUM
-         IF(X(I).LT.STAT(SMALL))THEN   ! find smallest value
-            STAT(SMALL)=X(I)
-            STAT(IS)=I
-         ENDIF
-         if(X(I).GT.STAT(BIG))THEN     ! find biggest value
-            STAT(BIG)=X(I)
-            STAT(IB)=I
-         ENDIF
+      stat(big)=x(1)                   ! biggest value
+      stat(small)=x(1)                 ! smallest value
+      stat(is)=1                       ! location of smallest
+      stat(ib)=1                       ! location of biggest
+      stat(sum) =0.0                   ! sum of all values
+      do i=1,n
+         stat(sum)= stat(sum) +x(i)    ! add all values into SUM
+         if(x(i).lt.stat(small))then   ! find smallest value
+            stat(small)=x(i)
+            stat(is)=i
+         endif
+         if(x(i).gt.stat(big))then     ! find biggest value
+            stat(big)=x(i)
+            stat(ib)=i
+         endif
       enddo
-      STAT(MEAN)= STAT(SUM)/FLN
+      stat(mean)= stat(sum)/fln
 !-----------------------------------------------------------------------
 !  SECOND, THIRD, FOURTH MOMENTS ABOUT THE MEAN
-      STAT(u2) = 0.0
-      STAT(u3) = 0.0
-      STAT(u4) = 0.0
-      DO I20=1,N
-         deltafixed = (X(I20) - STAT(mean))
+      stat(u2) = 0.0
+      stat(u3) = 0.0
+      stat(u4) = 0.0
+      do i20=1,n
+         deltafixed = (x(i20) - stat(mean))
          deltasum = deltafixed
-         DO I30=2,4
+         do i30=2,4
             deltasum = deltasum * deltafixed
-            STAT(I30) = STAT(I30) + deltasum
+            stat(i30) = stat(i30) + deltasum
          enddo
       enddo
 !-----------------------------------------------------------------------
-      STAT(u2) = STAT(u2) / FLN
-      STAT(u3) = STAT(u3) / FLN
-      STAT(u4) = STAT(u4) / FLN
+      stat(u2) = stat(u2) / fln
+      stat(u3) = stat(u3) / fln
+      stat(u4) = stat(u4) / fln
 !-----------------------------------------------------------------------
 !  VARIANCE, STANDARD DEVIATION
-      STAT(varnce) = FLN * STAT(u2) / (FLN-1.0)
-      STAT(sd) = SQRT(STAT(varnce))
+      stat(varnce) = fln * stat(u2) / (fln-1.0)
+      stat(sd) = sqrt(stat(varnce))
 !-----------------------------------------------------------------------
 !  SKEWNESS, KURTOSIS
-      STAT(skew) = STAT(u3) /(STAT(u2) * SQRT(STAT(u2)))
-      STAT(kurto) = STAT(u4) / (STAT(u2) * STAT(u2)) - 3.0
+      stat(skew) = stat(u3) /(stat(u2) * sqrt(stat(u2)))
+      stat(kurto) = stat(u4) / (stat(u2) * stat(u2)) - 3.0
 !-----------------------------------------------------------------------
-END SUBROUTINE BDS
+end subroutine bds
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4666,40 +4666,40 @@ END SUBROUTINE BDS
 !!
 !!##AUTHOR
 !!    Written by Charles P. Reeve
-SUBROUTINE SKEKUR1(Y,NHI,YSKEW,YKURT,IOPT)
-! ident_19="@(#)M_math::skekur1(3f): variant on calculating skewness and kurtosis of an array"
-REAL,INTENT(IN)    ::  Y(*)
-INTEGER,INTENT(IN) :: NHI
-REAL,INTENT(OUT)   :: YSKEW
-REAL,INTENT(OUT)   :: YKURT
-INTEGER,INTENT(IN) :: IOPT
-   REAL            :: RN
-   REAL            :: S
-   INTEGER         :: I
-   REAL            :: T2, T3, T4
-   REAL            :: D
-      RN = REAL(NHI)
-      IF (IOPT.EQ.0) THEN
-         S = 0.0
-      ELSE
-         S = 0.0
-         DO I = 1, NHI
-            S = S+Y(I)
+subroutine skekur1(y,nhi,yskew,ykurt,iopt)
+! ident_19="@(#)m_math::skekur1(3f): variant on calculating skewness and kurtosis of an array"
+real,intent(in)    ::  y(*)
+integer,intent(in) :: nhi
+real,intent(out)   :: yskew
+real,intent(out)   :: ykurt
+integer,intent(in) :: iopt
+   real            :: rn
+   real            :: s
+   integer         :: i
+   real            :: t2, t3, t4
+   real            :: d
+      rn = real(nhi)
+      if (iopt.eq.0) then
+         s = 0.0
+      else
+         s = 0.0
+         do i = 1, nhi
+            s = s+y(i)
          enddo
-         S = S/RN
-      ENDIF
-      T2 = 0.0
-      T3 = 0.0
-      T4 = 0.0
-      DO I = 1, NHI
-         D = Y(I)-S
-         T2 = T2+D**2
-         T3 = T3+D**3
-         T4 = T4+D**4
+         s = s/rn
+      endif
+      t2 = 0.0
+      t3 = 0.0
+      t4 = 0.0
+      do i = 1, nhi
+         d = y(i)-s
+         t2 = t2+d**2
+         t3 = t3+d**3
+         t4 = t4+d**4
       enddo
-      YSKEW=SQRT(RN)*T3/T2**1.5
-      YKURT=RN*T4/T2**2
-END SUBROUTINE SKEKUR1
+      yskew=sqrt(rn)*t3/t2**1.5
+      ykurt=rn*t4/t2**2
+end subroutine skekur1
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4739,12 +4739,12 @@ END SUBROUTINE SKEKUR1
 !!##AUTHOR
 !!      John S. Urban
 !!
-SUBROUTINE SKEKURX(Y,N,YSKEW,YKURT)
+subroutine skekurx(y,n,yskew,ykurt)
 ! ident_20="@(#)M_math::skekurx(3f): COMPUTE UNBIASED ESTIMATOR OF THE POPULATION SKEWNESS AND KURTOSIS"
       integer,intent(in) :: n
-      REAL,intent(in)    :: Y(*)
-      REAL,intent(out)   :: YSKEW
-      REAL,intent(out)   :: YKURT
+      real,intent(in)    :: y(*)
+      real,intent(out)   :: yskew
+      real,intent(out)   :: ykurt
       doubleprecision    :: xbar
       doubleprecision    :: rn
       doubleprecision    :: sum
@@ -4753,33 +4753,33 @@ SUBROUTINE SKEKURX(Y,N,YSKEW,YKURT)
       doubleprecision    :: stddev
       integer            :: i10,i20,i30
 !-----------------------------------------------------------------------
-      RN = N
+      rn = n
 !-----------------------------------------------------------------------
       ! GET AVERAGE
-      XBAR = 0.0d0
-      DO I10 = 1, N
-         XBAR = XBAR+Y(I10)
+      xbar = 0.0d0
+      do i10 = 1, n
+         xbar = xbar+y(i10)
       enddo
-      XBAR = XBAR/RN
+      xbar = xbar/rn
 !-----------------------------------------------------------------------
       ! GET STANDARD DEVIATION
-      SUM=0.0
-      DO I30=1,N
-         SUM=SUM+(Y(I30)-XBAR)**2
+      sum=0.0
+      do i30=1,n
+         sum=sum+(y(i30)-xbar)**2
       enddo
-      STDDEV=SQRT(SUM/(RN-1.0d0))
+      stddev=sqrt(sum/(rn-1.0d0))
 !-----------------------------------------------------------------------
-      SUM3=0.0
-      SUM4=0.0
-      DO I20=1,N
-         SUM3=SUM3+((Y(I20)-XBAR)/STDDEV)**3
-         SUM4=SUM4+((Y(I20)-XBAR)/STDDEV)**4
+      sum3=0.0
+      sum4=0.0
+      do i20=1,n
+         sum3=sum3+((y(i20)-xbar)/stddev)**3
+         sum4=sum4+((y(i20)-xbar)/stddev)**4
       enddo
 !-----------------------------------------------------------------------
-      YSKEW=RN/((RN-1.0d0)*(RN-2.0d0))*SUM3
-      YKURT= RN*(RN+1.0d0) / ((RN-1.0d0)*(RN-2.0d0)*(RN-3.0d0)) * SUM4 - 3.0d0*(RN-1.0d0)**2/((RN-2.0d0)*(RN-3.0d0))
+      yskew=rn/((rn-1.0d0)*(rn-2.0d0))*sum3
+      ykurt= rn*(rn+1.0d0) / ((rn-1.0d0)*(rn-2.0d0)*(rn-3.0d0)) * sum4 - 3.0d0*(rn-1.0d0)**2/((rn-2.0d0)*(rn-3.0d0))
 !-----------------------------------------------------------------------
-END SUBROUTINE SKEKURX
+end subroutine skekurx
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4837,68 +4837,68 @@ END SUBROUTINE SKEKURX
 !!
 !!##AUTHOR
 !!    Alan Miller
-SUBROUTINE ncr(n, r, ncomb, ier)
+subroutine ncr(n, r, ncomb, ier)
 ! Programmer: Alan.Miller @ cmis.csiro.au
 ! Latest revision - 28 July 1988 (Fortran 77 version)
 ! Code converted using TO_F90 by Alan Miller
 ! Date: 2000-01-20  Time: 18:08:52
 
-IMPLICIT NONE
+implicit none
 !*!INTEGER, PARAMETER      :: dp = SELECTED_REAL_KIND(12, 60)
 integer, parameter      :: dp = kind(0.0d0)
 
-INTEGER, INTENT(IN)     :: n
-INTEGER, INTENT(IN)     :: r
-REAL (dp), INTENT(OUT)  :: ncomb
-INTEGER, INTENT(OUT)    :: ier
-INTEGER :: rr, i, nn
-   IF (n < 1) THEN
+integer, intent(in)     :: n
+integer, intent(in)     :: r
+real (dp), intent(out)  :: ncomb
+integer, intent(out)    :: ier
+integer :: rr, i, nn
+   if (n < 1) then
       ier = 1
-   ELSEIF (r < 0) THEN
+   elseif (r < 0) then
       ier = 2
-   ELSEIF (r > n) THEN
+   elseif (r > n) then
       ier = 3
-   ELSE
+   else
       ier = 0
-   ENDIF
-   IF (ier /= 0) RETURN
+   endif
+   if (ier /= 0) return
 
-   IF (r <= n-r) THEN
+   if (r <= n-r) then
       rr = r
-   ELSE
+   else
       rr = n - r
-   ENDIF
+   endif
 
-   IF (rr == 0) THEN
+   if (rr == 0) then
       ncomb = 1.0_dp
-      RETURN
-   ENDIF
+      return
+   endif
 
-   IF (rr > 25) THEN
-      ncomb = lngamma(DBLE(n+1)) - lngamma(DBLE(r+1)) - lngamma(DBLE(n-r+1))
-      IF (ncomb > 709._dp) THEN
+   if (rr > 25) then
+      ncomb = lngamma(dble(n+1)) - lngamma(dble(r+1)) - lngamma(dble(n-r+1))
+      if (ncomb > 709._dp) then
          ier = 4
-      ELSE
-         ncomb = EXP(ncomb)
-      ENDIF
-      RETURN
-   ENDIF
+      else
+         ncomb = exp(ncomb)
+      endif
+      return
+   endif
 
    ncomb = n
    i = 1
    nn = n
-   DO
-      IF (i == rr) RETURN
+   do
+      if (i == rr) return
       nn = nn - 1
       i = i + 1
-      ncomb = (ncomb * nn) / REAL(i)
-   ENDDO
+      ncomb = (ncomb * nn) / real(i)
+   enddo
 
-END SUBROUTINE nCr
+end subroutine ncr
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-FUNCTION lngamma(z) RESULT(lanczos)
+function lngamma(z) result(lanczos)
 
 !  Uses Lanczos-type approximation to ln(gamma) for z > 0.
 !  Reference:
@@ -4911,37 +4911,37 @@ FUNCTION lngamma(z) RESULT(lanczos)
 !              1 Creswick Street, Brighton, Vic. 3187, Australia
 !  Latest revision - 14 October 1996
 
-   IMPLICIT NONE
+   implicit none
    !*!INTEGER, PARAMETER    :: dp = SELECTED_REAL_KIND(12, 60)
     integer, parameter      :: dp = kind(0.0d0)
-   REAL(dp), INTENT(IN)  :: z
-   REAL(dp)              :: lanczos
+   real(dp), intent(in)  :: z
+   real(dp)              :: lanczos
 
 ! Local variables
 
-REAL(dp)  :: a(9) = (/ 0.9999999999995183D0, 676.5203681218835D0, &
-   -1259.139216722289D0, 771.3234287757674D0, &
-   -176.6150291498386D0, 12.50734324009056D0, &
-   -0.1385710331296526D0, 0.9934937113930748D-05, &
-   0.1659470187408462D-06 /), zero = 0.D0,   &
-   one = 1.d0, lnsqrt2pi = 0.9189385332046727D0, &
+real(dp)  :: a(9) = (/ 0.9999999999995183d0, 676.5203681218835d0, &
+   -1259.139216722289d0, 771.3234287757674d0, &
+   -176.6150291498386d0, 12.50734324009056d0, &
+   -0.1385710331296526d0, 0.9934937113930748d-05, &
+   0.1659470187408462d-06 /), zero = 0.d0,   &
+   one = 1.d0, lnsqrt2pi = 0.9189385332046727d0, &
    half = 0.5d0, sixpt5 = 6.5d0, seven = 7.d0, tmp
-INTEGER          :: j
+integer          :: j
 
-   IF (z <= zero) THEN
-      WRITE(*, *) 'Error: zero or -ve argument for lngamma'
-      RETURN
-   END IF
+   if (z <= zero) then
+      write(*, *) 'Error: zero or -ve argument for lngamma'
+      return
+   end if
 
    lanczos = zero
    tmp = z + seven
-   DO j = 9, 2, -1
+   do j = 9, 2, -1
       lanczos = lanczos + a(j)/tmp
       tmp = tmp - one
-   END DO
+   end do
    lanczos = lanczos + a(1)
-   lanczos = LOG(lanczos) + lnsqrt2pi - (z + sixpt5) + (z - half)*LOG(z + sixpt5)
-END FUNCTION lngamma
+   lanczos = log(lanczos) + lnsqrt2pi - (z + sixpt5) + (z - half)*log(z + sixpt5)
+end function lngamma
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -5644,322 +5644,322 @@ end subroutine iswap
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function double_invert_2x2(A) result(B)
+pure function double_invert_2x2(a) result(b)
 ! ident_27="@(#)M_math::invert_2x2(3f): performs a direct calculation of the inverse of a 2x2 matrix"
    integer,parameter         :: wp=kind(0.0d0)
-   real(kind=wp), intent(in) :: A(2,2)   !! Matrix
-   real(kind=wp)             :: B(2,2)   !! Inverse matrix
+   real(kind=wp), intent(in) :: a(2,2)   !! Matrix
+   real(kind=wp)             :: b(2,2)   !! Inverse matrix
    real(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   detinv = 1/(a(1,1)*a(2,2) - a(1,2)*a(2,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * A(2,2)
-   B(2,1) = -detinv * A(2,1)
-   B(1,2) = -detinv * A(1,2)
-   B(2,2) = +detinv * A(1,1)
+   b(1,1) = +detinv * a(2,2)
+   b(2,1) = -detinv * a(2,1)
+   b(1,2) = -detinv * a(1,2)
+   b(2,2) = +detinv * a(1,1)
 end function double_invert_2x2
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function double_invert_3x3(A) result(B)
+pure function double_invert_3x3(a) result(b)
 ! ident_28="@(#)M_math::invert_3x3(3f): performs a direct calculation of the inverse of a 3x3 matrix"
    integer,parameter         :: wp=kind(0.0d0)
-   real(kind=wp), intent(in) :: A(3,3)   !! Matrix
-   real(kind=wp)             :: B(3,3)   !! Inverse matrix
+   real(kind=wp), intent(in) :: a(3,3)   !! Matrix
+   real(kind=wp)             :: b(3,3)   !! Inverse matrix
    real(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2)*A(3,3) - A(1,1)*A(2,3)*A(3,2)&
-             - A(1,2)*A(2,1)*A(3,3) + A(1,2)*A(2,3)*A(3,1)&
-             + A(1,3)*A(2,1)*A(3,2) - A(1,3)*A(2,2)*A(3,1))
+   detinv = 1/(a(1,1)*a(2,2)*a(3,3) - a(1,1)*a(2,3)*a(3,2)&
+             - a(1,2)*a(2,1)*a(3,3) + a(1,2)*a(2,3)*a(3,1)&
+             + a(1,3)*a(2,1)*a(3,2) - a(1,3)*a(2,2)*a(3,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * (A(2,2)*A(3,3) - A(2,3)*A(3,2))
-   B(2,1) = -detinv * (A(2,1)*A(3,3) - A(2,3)*A(3,1))
-   B(3,1) = +detinv * (A(2,1)*A(3,2) - A(2,2)*A(3,1))
-   B(1,2) = -detinv * (A(1,2)*A(3,3) - A(1,3)*A(3,2))
-   B(2,2) = +detinv * (A(1,1)*A(3,3) - A(1,3)*A(3,1))
-   B(3,2) = -detinv * (A(1,1)*A(3,2) - A(1,2)*A(3,1))
-   B(1,3) = +detinv * (A(1,2)*A(2,3) - A(1,3)*A(2,2))
-   B(2,3) = -detinv * (A(1,1)*A(2,3) - A(1,3)*A(2,1))
-   B(3,3) = +detinv * (A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   b(1,1) = +detinv * (a(2,2)*a(3,3) - a(2,3)*a(3,2))
+   b(2,1) = -detinv * (a(2,1)*a(3,3) - a(2,3)*a(3,1))
+   b(3,1) = +detinv * (a(2,1)*a(3,2) - a(2,2)*a(3,1))
+   b(1,2) = -detinv * (a(1,2)*a(3,3) - a(1,3)*a(3,2))
+   b(2,2) = +detinv * (a(1,1)*a(3,3) - a(1,3)*a(3,1))
+   b(3,2) = -detinv * (a(1,1)*a(3,2) - a(1,2)*a(3,1))
+   b(1,3) = +detinv * (a(1,2)*a(2,3) - a(1,3)*a(2,2))
+   b(2,3) = -detinv * (a(1,1)*a(2,3) - a(1,3)*a(2,1))
+   b(3,3) = +detinv * (a(1,1)*a(2,2) - a(1,2)*a(2,1))
 end function double_invert_3x3
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function double_invert_4x4(A) result(B)
+pure function double_invert_4x4(a) result(b)
 ! ident_29="@(#)M_math::invert_4x4(3f): performs a direct calculation of the inverse of a 4x4 matrix"
    integer,parameter            :: wp=kind(0.0d0)
-   real(kind=wp), intent(in) :: A(4,4)   !! Matrix
-   real(kind=wp)             :: B(4,4)   !! Inverse matrix
+   real(kind=wp), intent(in) :: a(4,4)   !! Matrix
+   real(kind=wp)             :: b(4,4)   !! Inverse matrix
    real(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
    detinv = &
-     1/(A(1,1)*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))&
-      - A(1,2)*(A(2,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))&
-      + A(1,3)*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))&
-      - A(1,4)*(A(2,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(2,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(2,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1))))
+     1/(a(1,1)*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))&
+      - a(1,2)*(a(2,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))&
+      + a(1,3)*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))&
+      - a(1,4)*(a(2,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(2,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(2,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1))))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = detinv*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))
-   B(2,1) = detinv*(A(2,1)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(2,3)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(2,4)*(A(3,3)*A(4,1)-A(3,1)*A(4,3)))
-   B(3,1) = detinv*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(4,1) = detinv*(A(2,1)*(A(3,3)*A(4,2)-A(3,2)*A(4,3))+A(2,2)*(A(3,1)*A(4,3)-A(3,3)*A(4,1))+A(2,3)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(1,2) = detinv*(A(1,2)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(1,3)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(1,4)*(A(3,3)*A(4,2)-A(3,2)*A(4,3)))
-   B(2,2) = detinv*(A(1,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(1,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(1,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))
-   B(3,2) = detinv*(A(1,1)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(1,2)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(1,4)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(4,2) = detinv*(A(1,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(1,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(1,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(1,3) = detinv*(A(1,2)*(A(2,3)*A(4,4)-A(2,4)*A(4,3))+A(1,3)*(A(2,4)*A(4,2)-A(2,2)*A(4,4))+A(1,4)*(A(2,2)*A(4,3)-A(2,3)*A(4,2)))
-   B(2,3) = detinv*(A(1,1)*(A(2,4)*A(4,3)-A(2,3)*A(4,4))+A(1,3)*(A(2,1)*A(4,4)-A(2,4)*A(4,1))+A(1,4)*(A(2,3)*A(4,1)-A(2,1)*A(4,3)))
-   B(3,3) = detinv*(A(1,1)*(A(2,2)*A(4,4)-A(2,4)*A(4,2))+A(1,2)*(A(2,4)*A(4,1)-A(2,1)*A(4,4))+A(1,4)*(A(2,1)*A(4,2)-A(2,2)*A(4,1)))
-   B(4,3) = detinv*(A(1,1)*(A(2,3)*A(4,2)-A(2,2)*A(4,3))+A(1,2)*(A(2,1)*A(4,3)-A(2,3)*A(4,1))+A(1,3)*(A(2,2)*A(4,1)-A(2,1)*A(4,2)))
-   B(1,4) = detinv*(A(1,2)*(A(2,4)*A(3,3)-A(2,3)*A(3,4))+A(1,3)*(A(2,2)*A(3,4)-A(2,4)*A(3,2))+A(1,4)*(A(2,3)*A(3,2)-A(2,2)*A(3,3)))
-   B(2,4) = detinv*(A(1,1)*(A(2,3)*A(3,4)-A(2,4)*A(3,3))+A(1,3)*(A(2,4)*A(3,1)-A(2,1)*A(3,4))+A(1,4)*(A(2,1)*A(3,3)-A(2,3)*A(3,1)))
-   B(3,4) = detinv*(A(1,1)*(A(2,4)*A(3,2)-A(2,2)*A(3,4))+A(1,2)*(A(2,1)*A(3,4)-A(2,4)*A(3,1))+A(1,4)*(A(2,2)*A(3,1)-A(2,1)*A(3,2)))
-   B(4,4) = detinv*(A(1,1)*(A(2,2)*A(3,3)-A(2,3)*A(3,2))+A(1,2)*(A(2,3)*A(3,1)-A(2,1)*A(3,3))+A(1,3)*(A(2,1)*A(3,2)-A(2,2)*A(3,1)))
+   b(1,1) = detinv*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))
+   b(2,1) = detinv*(a(2,1)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(2,3)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(2,4)*(a(3,3)*a(4,1)-a(3,1)*a(4,3)))
+   b(3,1) = detinv*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(4,1) = detinv*(a(2,1)*(a(3,3)*a(4,2)-a(3,2)*a(4,3))+a(2,2)*(a(3,1)*a(4,3)-a(3,3)*a(4,1))+a(2,3)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(1,2) = detinv*(a(1,2)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(1,3)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(1,4)*(a(3,3)*a(4,2)-a(3,2)*a(4,3)))
+   b(2,2) = detinv*(a(1,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(1,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(1,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))
+   b(3,2) = detinv*(a(1,1)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(1,2)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(1,4)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(4,2) = detinv*(a(1,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(1,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(1,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(1,3) = detinv*(a(1,2)*(a(2,3)*a(4,4)-a(2,4)*a(4,3))+a(1,3)*(a(2,4)*a(4,2)-a(2,2)*a(4,4))+a(1,4)*(a(2,2)*a(4,3)-a(2,3)*a(4,2)))
+   b(2,3) = detinv*(a(1,1)*(a(2,4)*a(4,3)-a(2,3)*a(4,4))+a(1,3)*(a(2,1)*a(4,4)-a(2,4)*a(4,1))+a(1,4)*(a(2,3)*a(4,1)-a(2,1)*a(4,3)))
+   b(3,3) = detinv*(a(1,1)*(a(2,2)*a(4,4)-a(2,4)*a(4,2))+a(1,2)*(a(2,4)*a(4,1)-a(2,1)*a(4,4))+a(1,4)*(a(2,1)*a(4,2)-a(2,2)*a(4,1)))
+   b(4,3) = detinv*(a(1,1)*(a(2,3)*a(4,2)-a(2,2)*a(4,3))+a(1,2)*(a(2,1)*a(4,3)-a(2,3)*a(4,1))+a(1,3)*(a(2,2)*a(4,1)-a(2,1)*a(4,2)))
+   b(1,4) = detinv*(a(1,2)*(a(2,4)*a(3,3)-a(2,3)*a(3,4))+a(1,3)*(a(2,2)*a(3,4)-a(2,4)*a(3,2))+a(1,4)*(a(2,3)*a(3,2)-a(2,2)*a(3,3)))
+   b(2,4) = detinv*(a(1,1)*(a(2,3)*a(3,4)-a(2,4)*a(3,3))+a(1,3)*(a(2,4)*a(3,1)-a(2,1)*a(3,4))+a(1,4)*(a(2,1)*a(3,3)-a(2,3)*a(3,1)))
+   b(3,4) = detinv*(a(1,1)*(a(2,4)*a(3,2)-a(2,2)*a(3,4))+a(1,2)*(a(2,1)*a(3,4)-a(2,4)*a(3,1))+a(1,4)*(a(2,2)*a(3,1)-a(2,1)*a(3,2)))
+   b(4,4) = detinv*(a(1,1)*(a(2,2)*a(3,3)-a(2,3)*a(3,2))+a(1,2)*(a(2,3)*a(3,1)-a(2,1)*a(3,3))+a(1,3)*(a(2,1)*a(3,2)-a(2,2)*a(3,1)))
 end function double_invert_4x4
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function integer_invert_2x2(A) result(B)
+pure function integer_invert_2x2(a) result(b)
    !! Performs a direct calculation of the inverse of a 2 x 2 matrix.
    integer,parameter         :: wp=kind(0)
-   integer(kind=wp), intent(in) :: A(2,2)   !! Matrix
-   integer(kind=wp)             :: B(2,2)   !! Inverse matrix
+   integer(kind=wp), intent(in) :: a(2,2)   !! Matrix
+   integer(kind=wp)             :: b(2,2)   !! Inverse matrix
    integer(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   detinv = 1/(a(1,1)*a(2,2) - a(1,2)*a(2,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * A(2,2)
-   B(2,1) = -detinv * A(2,1)
-   B(1,2) = -detinv * A(1,2)
-   B(2,2) = +detinv * A(1,1)
+   b(1,1) = +detinv * a(2,2)
+   b(2,1) = -detinv * a(2,1)
+   b(1,2) = -detinv * a(1,2)
+   b(2,2) = +detinv * a(1,1)
 end function integer_invert_2x2
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function integer_invert_3x3(A) result(B)
+pure function integer_invert_3x3(a) result(b)
    !! Performs a direct calculation of the inverse of a 3 x 3 matrix.
    integer,parameter         :: wp=kind(0)
-   integer(kind=wp), intent(in) :: A(3,3)   !! Matrix
-   integer(kind=wp)             :: B(3,3)   !! Inverse matrix
+   integer(kind=wp), intent(in) :: a(3,3)   !! Matrix
+   integer(kind=wp)             :: b(3,3)   !! Inverse matrix
    integer(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2)*A(3,3) - A(1,1)*A(2,3)*A(3,2)&
-             - A(1,2)*A(2,1)*A(3,3) + A(1,2)*A(2,3)*A(3,1)&
-             + A(1,3)*A(2,1)*A(3,2) - A(1,3)*A(2,2)*A(3,1))
+   detinv = 1/(a(1,1)*a(2,2)*a(3,3) - a(1,1)*a(2,3)*a(3,2)&
+             - a(1,2)*a(2,1)*a(3,3) + a(1,2)*a(2,3)*a(3,1)&
+             + a(1,3)*a(2,1)*a(3,2) - a(1,3)*a(2,2)*a(3,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * (A(2,2)*A(3,3) - A(2,3)*A(3,2))
-   B(2,1) = -detinv * (A(2,1)*A(3,3) - A(2,3)*A(3,1))
-   B(3,1) = +detinv * (A(2,1)*A(3,2) - A(2,2)*A(3,1))
-   B(1,2) = -detinv * (A(1,2)*A(3,3) - A(1,3)*A(3,2))
-   B(2,2) = +detinv * (A(1,1)*A(3,3) - A(1,3)*A(3,1))
-   B(3,2) = -detinv * (A(1,1)*A(3,2) - A(1,2)*A(3,1))
-   B(1,3) = +detinv * (A(1,2)*A(2,3) - A(1,3)*A(2,2))
-   B(2,3) = -detinv * (A(1,1)*A(2,3) - A(1,3)*A(2,1))
-   B(3,3) = +detinv * (A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   b(1,1) = +detinv * (a(2,2)*a(3,3) - a(2,3)*a(3,2))
+   b(2,1) = -detinv * (a(2,1)*a(3,3) - a(2,3)*a(3,1))
+   b(3,1) = +detinv * (a(2,1)*a(3,2) - a(2,2)*a(3,1))
+   b(1,2) = -detinv * (a(1,2)*a(3,3) - a(1,3)*a(3,2))
+   b(2,2) = +detinv * (a(1,1)*a(3,3) - a(1,3)*a(3,1))
+   b(3,2) = -detinv * (a(1,1)*a(3,2) - a(1,2)*a(3,1))
+   b(1,3) = +detinv * (a(1,2)*a(2,3) - a(1,3)*a(2,2))
+   b(2,3) = -detinv * (a(1,1)*a(2,3) - a(1,3)*a(2,1))
+   b(3,3) = +detinv * (a(1,1)*a(2,2) - a(1,2)*a(2,1))
 end function integer_invert_3x3
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function integer_invert_4x4(A) result(B)
+pure function integer_invert_4x4(a) result(b)
    !! Performs a direct calculation of the inverse of a 4 x 4 matrix.
    integer,parameter            :: wp=kind(0)
-   integer(kind=wp), intent(in) :: A(4,4)   !! Matrix
-   integer(kind=wp)             :: B(4,4)   !! Inverse matrix
+   integer(kind=wp), intent(in) :: a(4,4)   !! Matrix
+   integer(kind=wp)             :: b(4,4)   !! Inverse matrix
    integer(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
    detinv = &
-     1/(A(1,1)*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))&
-      - A(1,2)*(A(2,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))&
-      + A(1,3)*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))&
-      - A(1,4)*(A(2,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(2,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(2,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1))))
+     1/(a(1,1)*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))&
+      - a(1,2)*(a(2,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))&
+      + a(1,3)*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))&
+      - a(1,4)*(a(2,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(2,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(2,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1))))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = detinv*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))
-   B(2,1) = detinv*(A(2,1)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(2,3)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(2,4)*(A(3,3)*A(4,1)-A(3,1)*A(4,3)))
-   B(3,1) = detinv*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(4,1) = detinv*(A(2,1)*(A(3,3)*A(4,2)-A(3,2)*A(4,3))+A(2,2)*(A(3,1)*A(4,3)-A(3,3)*A(4,1))+A(2,3)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(1,2) = detinv*(A(1,2)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(1,3)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(1,4)*(A(3,3)*A(4,2)-A(3,2)*A(4,3)))
-   B(2,2) = detinv*(A(1,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(1,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(1,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))
-   B(3,2) = detinv*(A(1,1)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(1,2)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(1,4)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(4,2) = detinv*(A(1,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(1,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(1,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(1,3) = detinv*(A(1,2)*(A(2,3)*A(4,4)-A(2,4)*A(4,3))+A(1,3)*(A(2,4)*A(4,2)-A(2,2)*A(4,4))+A(1,4)*(A(2,2)*A(4,3)-A(2,3)*A(4,2)))
-   B(2,3) = detinv*(A(1,1)*(A(2,4)*A(4,3)-A(2,3)*A(4,4))+A(1,3)*(A(2,1)*A(4,4)-A(2,4)*A(4,1))+A(1,4)*(A(2,3)*A(4,1)-A(2,1)*A(4,3)))
-   B(3,3) = detinv*(A(1,1)*(A(2,2)*A(4,4)-A(2,4)*A(4,2))+A(1,2)*(A(2,4)*A(4,1)-A(2,1)*A(4,4))+A(1,4)*(A(2,1)*A(4,2)-A(2,2)*A(4,1)))
-   B(4,3) = detinv*(A(1,1)*(A(2,3)*A(4,2)-A(2,2)*A(4,3))+A(1,2)*(A(2,1)*A(4,3)-A(2,3)*A(4,1))+A(1,3)*(A(2,2)*A(4,1)-A(2,1)*A(4,2)))
-   B(1,4) = detinv*(A(1,2)*(A(2,4)*A(3,3)-A(2,3)*A(3,4))+A(1,3)*(A(2,2)*A(3,4)-A(2,4)*A(3,2))+A(1,4)*(A(2,3)*A(3,2)-A(2,2)*A(3,3)))
-   B(2,4) = detinv*(A(1,1)*(A(2,3)*A(3,4)-A(2,4)*A(3,3))+A(1,3)*(A(2,4)*A(3,1)-A(2,1)*A(3,4))+A(1,4)*(A(2,1)*A(3,3)-A(2,3)*A(3,1)))
-   B(3,4) = detinv*(A(1,1)*(A(2,4)*A(3,2)-A(2,2)*A(3,4))+A(1,2)*(A(2,1)*A(3,4)-A(2,4)*A(3,1))+A(1,4)*(A(2,2)*A(3,1)-A(2,1)*A(3,2)))
-   B(4,4) = detinv*(A(1,1)*(A(2,2)*A(3,3)-A(2,3)*A(3,2))+A(1,2)*(A(2,3)*A(3,1)-A(2,1)*A(3,3))+A(1,3)*(A(2,1)*A(3,2)-A(2,2)*A(3,1)))
+   b(1,1) = detinv*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))
+   b(2,1) = detinv*(a(2,1)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(2,3)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(2,4)*(a(3,3)*a(4,1)-a(3,1)*a(4,3)))
+   b(3,1) = detinv*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(4,1) = detinv*(a(2,1)*(a(3,3)*a(4,2)-a(3,2)*a(4,3))+a(2,2)*(a(3,1)*a(4,3)-a(3,3)*a(4,1))+a(2,3)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(1,2) = detinv*(a(1,2)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(1,3)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(1,4)*(a(3,3)*a(4,2)-a(3,2)*a(4,3)))
+   b(2,2) = detinv*(a(1,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(1,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(1,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))
+   b(3,2) = detinv*(a(1,1)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(1,2)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(1,4)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(4,2) = detinv*(a(1,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(1,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(1,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(1,3) = detinv*(a(1,2)*(a(2,3)*a(4,4)-a(2,4)*a(4,3))+a(1,3)*(a(2,4)*a(4,2)-a(2,2)*a(4,4))+a(1,4)*(a(2,2)*a(4,3)-a(2,3)*a(4,2)))
+   b(2,3) = detinv*(a(1,1)*(a(2,4)*a(4,3)-a(2,3)*a(4,4))+a(1,3)*(a(2,1)*a(4,4)-a(2,4)*a(4,1))+a(1,4)*(a(2,3)*a(4,1)-a(2,1)*a(4,3)))
+   b(3,3) = detinv*(a(1,1)*(a(2,2)*a(4,4)-a(2,4)*a(4,2))+a(1,2)*(a(2,4)*a(4,1)-a(2,1)*a(4,4))+a(1,4)*(a(2,1)*a(4,2)-a(2,2)*a(4,1)))
+   b(4,3) = detinv*(a(1,1)*(a(2,3)*a(4,2)-a(2,2)*a(4,3))+a(1,2)*(a(2,1)*a(4,3)-a(2,3)*a(4,1))+a(1,3)*(a(2,2)*a(4,1)-a(2,1)*a(4,2)))
+   b(1,4) = detinv*(a(1,2)*(a(2,4)*a(3,3)-a(2,3)*a(3,4))+a(1,3)*(a(2,2)*a(3,4)-a(2,4)*a(3,2))+a(1,4)*(a(2,3)*a(3,2)-a(2,2)*a(3,3)))
+   b(2,4) = detinv*(a(1,1)*(a(2,3)*a(3,4)-a(2,4)*a(3,3))+a(1,3)*(a(2,4)*a(3,1)-a(2,1)*a(3,4))+a(1,4)*(a(2,1)*a(3,3)-a(2,3)*a(3,1)))
+   b(3,4) = detinv*(a(1,1)*(a(2,4)*a(3,2)-a(2,2)*a(3,4))+a(1,2)*(a(2,1)*a(3,4)-a(2,4)*a(3,1))+a(1,4)*(a(2,2)*a(3,1)-a(2,1)*a(3,2)))
+   b(4,4) = detinv*(a(1,1)*(a(2,2)*a(3,3)-a(2,3)*a(3,2))+a(1,2)*(a(2,3)*a(3,1)-a(2,1)*a(3,3))+a(1,3)*(a(2,1)*a(3,2)-a(2,2)*a(3,1)))
 end function integer_invert_4x4
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function real_invert_2x2(A) result(B)
+pure function real_invert_2x2(a) result(b)
    !! Performs a direct calculation of the inverse of a 2 x 2 matrix.
    integer,parameter         :: wp=kind(0.0)
-   real(kind=wp), intent(in) :: A(2,2)   !! Matrix
-   real(kind=wp)             :: B(2,2)   !! Inverse matrix
+   real(kind=wp), intent(in) :: a(2,2)   !! Matrix
+   real(kind=wp)             :: b(2,2)   !! Inverse matrix
    real(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   detinv = 1/(a(1,1)*a(2,2) - a(1,2)*a(2,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * A(2,2)
-   B(2,1) = -detinv * A(2,1)
-   B(1,2) = -detinv * A(1,2)
-   B(2,2) = +detinv * A(1,1)
+   b(1,1) = +detinv * a(2,2)
+   b(2,1) = -detinv * a(2,1)
+   b(1,2) = -detinv * a(1,2)
+   b(2,2) = +detinv * a(1,1)
 end function real_invert_2x2
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function real_invert_3x3(A) result(B)
+pure function real_invert_3x3(a) result(b)
    !! Performs a direct calculation of the inverse of a 3 x 3 matrix.
    integer,parameter         :: wp=kind(0.0)
-   real(kind=wp), intent(in) :: A(3,3)   !! Matrix
-   real(kind=wp)             :: B(3,3)   !! Inverse matrix
+   real(kind=wp), intent(in) :: a(3,3)   !! Matrix
+   real(kind=wp)             :: b(3,3)   !! Inverse matrix
    real(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2)*A(3,3) - A(1,1)*A(2,3)*A(3,2)&
-             - A(1,2)*A(2,1)*A(3,3) + A(1,2)*A(2,3)*A(3,1)&
-             + A(1,3)*A(2,1)*A(3,2) - A(1,3)*A(2,2)*A(3,1))
+   detinv = 1/(a(1,1)*a(2,2)*a(3,3) - a(1,1)*a(2,3)*a(3,2)&
+             - a(1,2)*a(2,1)*a(3,3) + a(1,2)*a(2,3)*a(3,1)&
+             + a(1,3)*a(2,1)*a(3,2) - a(1,3)*a(2,2)*a(3,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * (A(2,2)*A(3,3) - A(2,3)*A(3,2))
-   B(2,1) = -detinv * (A(2,1)*A(3,3) - A(2,3)*A(3,1))
-   B(3,1) = +detinv * (A(2,1)*A(3,2) - A(2,2)*A(3,1))
-   B(1,2) = -detinv * (A(1,2)*A(3,3) - A(1,3)*A(3,2))
-   B(2,2) = +detinv * (A(1,1)*A(3,3) - A(1,3)*A(3,1))
-   B(3,2) = -detinv * (A(1,1)*A(3,2) - A(1,2)*A(3,1))
-   B(1,3) = +detinv * (A(1,2)*A(2,3) - A(1,3)*A(2,2))
-   B(2,3) = -detinv * (A(1,1)*A(2,3) - A(1,3)*A(2,1))
-   B(3,3) = +detinv * (A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   b(1,1) = +detinv * (a(2,2)*a(3,3) - a(2,3)*a(3,2))
+   b(2,1) = -detinv * (a(2,1)*a(3,3) - a(2,3)*a(3,1))
+   b(3,1) = +detinv * (a(2,1)*a(3,2) - a(2,2)*a(3,1))
+   b(1,2) = -detinv * (a(1,2)*a(3,3) - a(1,3)*a(3,2))
+   b(2,2) = +detinv * (a(1,1)*a(3,3) - a(1,3)*a(3,1))
+   b(3,2) = -detinv * (a(1,1)*a(3,2) - a(1,2)*a(3,1))
+   b(1,3) = +detinv * (a(1,2)*a(2,3) - a(1,3)*a(2,2))
+   b(2,3) = -detinv * (a(1,1)*a(2,3) - a(1,3)*a(2,1))
+   b(3,3) = +detinv * (a(1,1)*a(2,2) - a(1,2)*a(2,1))
 end function real_invert_3x3
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function real_invert_4x4(A) result(B)
+pure function real_invert_4x4(a) result(b)
    !! Performs a direct calculation of the inverse of a 4 x 4 matrix.
    integer,parameter            :: wp=kind(0.0)
-   real(kind=wp), intent(in) :: A(4,4)   !! Matrix
-   real(kind=wp)             :: B(4,4)   !! Inverse matrix
+   real(kind=wp), intent(in) :: a(4,4)   !! Matrix
+   real(kind=wp)             :: b(4,4)   !! Inverse matrix
    real(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
    detinv = &
-     1/(A(1,1)*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))&
-      - A(1,2)*(A(2,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))&
-      + A(1,3)*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))&
-      - A(1,4)*(A(2,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(2,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(2,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1))))
+     1/(a(1,1)*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))&
+      - a(1,2)*(a(2,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))&
+      + a(1,3)*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))&
+      - a(1,4)*(a(2,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(2,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(2,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1))))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = detinv*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))
-   B(2,1) = detinv*(A(2,1)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(2,3)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(2,4)*(A(3,3)*A(4,1)-A(3,1)*A(4,3)))
-   B(3,1) = detinv*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(4,1) = detinv*(A(2,1)*(A(3,3)*A(4,2)-A(3,2)*A(4,3))+A(2,2)*(A(3,1)*A(4,3)-A(3,3)*A(4,1))+A(2,3)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(1,2) = detinv*(A(1,2)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(1,3)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(1,4)*(A(3,3)*A(4,2)-A(3,2)*A(4,3)))
-   B(2,2) = detinv*(A(1,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(1,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(1,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))
-   B(3,2) = detinv*(A(1,1)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(1,2)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(1,4)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(4,2) = detinv*(A(1,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(1,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(1,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(1,3) = detinv*(A(1,2)*(A(2,3)*A(4,4)-A(2,4)*A(4,3))+A(1,3)*(A(2,4)*A(4,2)-A(2,2)*A(4,4))+A(1,4)*(A(2,2)*A(4,3)-A(2,3)*A(4,2)))
-   B(2,3) = detinv*(A(1,1)*(A(2,4)*A(4,3)-A(2,3)*A(4,4))+A(1,3)*(A(2,1)*A(4,4)-A(2,4)*A(4,1))+A(1,4)*(A(2,3)*A(4,1)-A(2,1)*A(4,3)))
-   B(3,3) = detinv*(A(1,1)*(A(2,2)*A(4,4)-A(2,4)*A(4,2))+A(1,2)*(A(2,4)*A(4,1)-A(2,1)*A(4,4))+A(1,4)*(A(2,1)*A(4,2)-A(2,2)*A(4,1)))
-   B(4,3) = detinv*(A(1,1)*(A(2,3)*A(4,2)-A(2,2)*A(4,3))+A(1,2)*(A(2,1)*A(4,3)-A(2,3)*A(4,1))+A(1,3)*(A(2,2)*A(4,1)-A(2,1)*A(4,2)))
-   B(1,4) = detinv*(A(1,2)*(A(2,4)*A(3,3)-A(2,3)*A(3,4))+A(1,3)*(A(2,2)*A(3,4)-A(2,4)*A(3,2))+A(1,4)*(A(2,3)*A(3,2)-A(2,2)*A(3,3)))
-   B(2,4) = detinv*(A(1,1)*(A(2,3)*A(3,4)-A(2,4)*A(3,3))+A(1,3)*(A(2,4)*A(3,1)-A(2,1)*A(3,4))+A(1,4)*(A(2,1)*A(3,3)-A(2,3)*A(3,1)))
-   B(3,4) = detinv*(A(1,1)*(A(2,4)*A(3,2)-A(2,2)*A(3,4))+A(1,2)*(A(2,1)*A(3,4)-A(2,4)*A(3,1))+A(1,4)*(A(2,2)*A(3,1)-A(2,1)*A(3,2)))
-   B(4,4) = detinv*(A(1,1)*(A(2,2)*A(3,3)-A(2,3)*A(3,2))+A(1,2)*(A(2,3)*A(3,1)-A(2,1)*A(3,3))+A(1,3)*(A(2,1)*A(3,2)-A(2,2)*A(3,1)))
+   b(1,1) = detinv*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))
+   b(2,1) = detinv*(a(2,1)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(2,3)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(2,4)*(a(3,3)*a(4,1)-a(3,1)*a(4,3)))
+   b(3,1) = detinv*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(4,1) = detinv*(a(2,1)*(a(3,3)*a(4,2)-a(3,2)*a(4,3))+a(2,2)*(a(3,1)*a(4,3)-a(3,3)*a(4,1))+a(2,3)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(1,2) = detinv*(a(1,2)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(1,3)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(1,4)*(a(3,3)*a(4,2)-a(3,2)*a(4,3)))
+   b(2,2) = detinv*(a(1,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(1,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(1,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))
+   b(3,2) = detinv*(a(1,1)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(1,2)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(1,4)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(4,2) = detinv*(a(1,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(1,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(1,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(1,3) = detinv*(a(1,2)*(a(2,3)*a(4,4)-a(2,4)*a(4,3))+a(1,3)*(a(2,4)*a(4,2)-a(2,2)*a(4,4))+a(1,4)*(a(2,2)*a(4,3)-a(2,3)*a(4,2)))
+   b(2,3) = detinv*(a(1,1)*(a(2,4)*a(4,3)-a(2,3)*a(4,4))+a(1,3)*(a(2,1)*a(4,4)-a(2,4)*a(4,1))+a(1,4)*(a(2,3)*a(4,1)-a(2,1)*a(4,3)))
+   b(3,3) = detinv*(a(1,1)*(a(2,2)*a(4,4)-a(2,4)*a(4,2))+a(1,2)*(a(2,4)*a(4,1)-a(2,1)*a(4,4))+a(1,4)*(a(2,1)*a(4,2)-a(2,2)*a(4,1)))
+   b(4,3) = detinv*(a(1,1)*(a(2,3)*a(4,2)-a(2,2)*a(4,3))+a(1,2)*(a(2,1)*a(4,3)-a(2,3)*a(4,1))+a(1,3)*(a(2,2)*a(4,1)-a(2,1)*a(4,2)))
+   b(1,4) = detinv*(a(1,2)*(a(2,4)*a(3,3)-a(2,3)*a(3,4))+a(1,3)*(a(2,2)*a(3,4)-a(2,4)*a(3,2))+a(1,4)*(a(2,3)*a(3,2)-a(2,2)*a(3,3)))
+   b(2,4) = detinv*(a(1,1)*(a(2,3)*a(3,4)-a(2,4)*a(3,3))+a(1,3)*(a(2,4)*a(3,1)-a(2,1)*a(3,4))+a(1,4)*(a(2,1)*a(3,3)-a(2,3)*a(3,1)))
+   b(3,4) = detinv*(a(1,1)*(a(2,4)*a(3,2)-a(2,2)*a(3,4))+a(1,2)*(a(2,1)*a(3,4)-a(2,4)*a(3,1))+a(1,4)*(a(2,2)*a(3,1)-a(2,1)*a(3,2)))
+   b(4,4) = detinv*(a(1,1)*(a(2,2)*a(3,3)-a(2,3)*a(3,2))+a(1,2)*(a(2,3)*a(3,1)-a(2,1)*a(3,3))+a(1,3)*(a(2,1)*a(3,2)-a(2,2)*a(3,1)))
 end function real_invert_4x4
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function complex_invert_2x2(A) result(B)
+pure function complex_invert_2x2(a) result(b)
    !! Performs a direct calculation of the inverse of a 2 x 2 matrix.
    integer,parameter            :: wp=kind((0.0,0.0))
-   complex(kind=wp), intent(in) :: A(2,2)   !! Matrix
-   complex(kind=wp)             :: B(2,2)   !! Inverse matrix
+   complex(kind=wp), intent(in) :: a(2,2)   !! Matrix
+   complex(kind=wp)             :: b(2,2)   !! Inverse matrix
    complex(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   detinv = 1/(a(1,1)*a(2,2) - a(1,2)*a(2,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * A(2,2)
-   B(2,1) = -detinv * A(2,1)
-   B(1,2) = -detinv * A(1,2)
-   B(2,2) = +detinv * A(1,1)
+   b(1,1) = +detinv * a(2,2)
+   b(2,1) = -detinv * a(2,1)
+   b(1,2) = -detinv * a(1,2)
+   b(2,2) = +detinv * a(1,1)
 end function complex_invert_2x2
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function complex_invert_3x3(A) result(B)
+pure function complex_invert_3x3(a) result(b)
    !! Performs a direct calculation of the inverse of a 3 x 3 matrix.
    integer,parameter            :: wp=kind((0.0,0.0))
-   complex(kind=wp), intent(in) :: A(3,3)   !! Matrix
-   complex(kind=wp)             :: B(3,3)   !! Inverse matrix
+   complex(kind=wp), intent(in) :: a(3,3)   !! Matrix
+   complex(kind=wp)             :: b(3,3)   !! Inverse matrix
    complex(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
-   detinv = 1/(A(1,1)*A(2,2)*A(3,3) - A(1,1)*A(2,3)*A(3,2)&
-             - A(1,2)*A(2,1)*A(3,3) + A(1,2)*A(2,3)*A(3,1)&
-             + A(1,3)*A(2,1)*A(3,2) - A(1,3)*A(2,2)*A(3,1))
+   detinv = 1/(a(1,1)*a(2,2)*a(3,3) - a(1,1)*a(2,3)*a(3,2)&
+             - a(1,2)*a(2,1)*a(3,3) + a(1,2)*a(2,3)*a(3,1)&
+             + a(1,3)*a(2,1)*a(3,2) - a(1,3)*a(2,2)*a(3,1))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = +detinv * (A(2,2)*A(3,3) - A(2,3)*A(3,2))
-   B(2,1) = -detinv * (A(2,1)*A(3,3) - A(2,3)*A(3,1))
-   B(3,1) = +detinv * (A(2,1)*A(3,2) - A(2,2)*A(3,1))
-   B(1,2) = -detinv * (A(1,2)*A(3,3) - A(1,3)*A(3,2))
-   B(2,2) = +detinv * (A(1,1)*A(3,3) - A(1,3)*A(3,1))
-   B(3,2) = -detinv * (A(1,1)*A(3,2) - A(1,2)*A(3,1))
-   B(1,3) = +detinv * (A(1,2)*A(2,3) - A(1,3)*A(2,2))
-   B(2,3) = -detinv * (A(1,1)*A(2,3) - A(1,3)*A(2,1))
-   B(3,3) = +detinv * (A(1,1)*A(2,2) - A(1,2)*A(2,1))
+   b(1,1) = +detinv * (a(2,2)*a(3,3) - a(2,3)*a(3,2))
+   b(2,1) = -detinv * (a(2,1)*a(3,3) - a(2,3)*a(3,1))
+   b(3,1) = +detinv * (a(2,1)*a(3,2) - a(2,2)*a(3,1))
+   b(1,2) = -detinv * (a(1,2)*a(3,3) - a(1,3)*a(3,2))
+   b(2,2) = +detinv * (a(1,1)*a(3,3) - a(1,3)*a(3,1))
+   b(3,2) = -detinv * (a(1,1)*a(3,2) - a(1,2)*a(3,1))
+   b(1,3) = +detinv * (a(1,2)*a(2,3) - a(1,3)*a(2,2))
+   b(2,3) = -detinv * (a(1,1)*a(2,3) - a(1,3)*a(2,1))
+   b(3,3) = +detinv * (a(1,1)*a(2,2) - a(1,2)*a(2,1))
 end function complex_invert_3x3
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-pure function complex_invert_4x4(A) result(B)
+pure function complex_invert_4x4(a) result(b)
    !! Performs a direct calculation of the inverse of a 4 x 4 matrix.
    integer,parameter            :: wp=kind((0.0,0.0))
-   complex(kind=wp), intent(in) :: A(4,4)   !! Matrix
-   complex(kind=wp)             :: B(4,4)   !! Inverse matrix
+   complex(kind=wp), intent(in) :: a(4,4)   !! Matrix
+   complex(kind=wp)             :: b(4,4)   !! Inverse matrix
    complex(kind=wp)             :: detinv
 
    ! Calculate the inverse determinant of the matrix
    detinv = &
-     1/(A(1,1)*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))&
-      - A(1,2)*(A(2,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))&
-      + A(1,3)*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))&
-      - A(1,4)*(A(2,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(2,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(2,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1))))
+     1/(a(1,1)*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))&
+      - a(1,2)*(a(2,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))&
+      + a(1,3)*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))&
+      - a(1,4)*(a(2,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(2,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(2,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1))))
 
    ! Calculate the inverse of the matrix
-   B(1,1) = detinv*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))
-   B(2,1) = detinv*(A(2,1)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(2,3)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(2,4)*(A(3,3)*A(4,1)-A(3,1)*A(4,3)))
-   B(3,1) = detinv*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(4,1) = detinv*(A(2,1)*(A(3,3)*A(4,2)-A(3,2)*A(4,3))+A(2,2)*(A(3,1)*A(4,3)-A(3,3)*A(4,1))+A(2,3)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(1,2) = detinv*(A(1,2)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(1,3)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(1,4)*(A(3,3)*A(4,2)-A(3,2)*A(4,3)))
-   B(2,2) = detinv*(A(1,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(1,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(1,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))
-   B(3,2) = detinv*(A(1,1)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(1,2)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(1,4)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
-   B(4,2) = detinv*(A(1,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(1,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(1,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
-   B(1,3) = detinv*(A(1,2)*(A(2,3)*A(4,4)-A(2,4)*A(4,3))+A(1,3)*(A(2,4)*A(4,2)-A(2,2)*A(4,4))+A(1,4)*(A(2,2)*A(4,3)-A(2,3)*A(4,2)))
-   B(2,3) = detinv*(A(1,1)*(A(2,4)*A(4,3)-A(2,3)*A(4,4))+A(1,3)*(A(2,1)*A(4,4)-A(2,4)*A(4,1))+A(1,4)*(A(2,3)*A(4,1)-A(2,1)*A(4,3)))
-   B(3,3) = detinv*(A(1,1)*(A(2,2)*A(4,4)-A(2,4)*A(4,2))+A(1,2)*(A(2,4)*A(4,1)-A(2,1)*A(4,4))+A(1,4)*(A(2,1)*A(4,2)-A(2,2)*A(4,1)))
-   B(4,3) = detinv*(A(1,1)*(A(2,3)*A(4,2)-A(2,2)*A(4,3))+A(1,2)*(A(2,1)*A(4,3)-A(2,3)*A(4,1))+A(1,3)*(A(2,2)*A(4,1)-A(2,1)*A(4,2)))
-   B(1,4) = detinv*(A(1,2)*(A(2,4)*A(3,3)-A(2,3)*A(3,4))+A(1,3)*(A(2,2)*A(3,4)-A(2,4)*A(3,2))+A(1,4)*(A(2,3)*A(3,2)-A(2,2)*A(3,3)))
-   B(2,4) = detinv*(A(1,1)*(A(2,3)*A(3,4)-A(2,4)*A(3,3))+A(1,3)*(A(2,4)*A(3,1)-A(2,1)*A(3,4))+A(1,4)*(A(2,1)*A(3,3)-A(2,3)*A(3,1)))
-   B(3,4) = detinv*(A(1,1)*(A(2,4)*A(3,2)-A(2,2)*A(3,4))+A(1,2)*(A(2,1)*A(3,4)-A(2,4)*A(3,1))+A(1,4)*(A(2,2)*A(3,1)-A(2,1)*A(3,2)))
-   B(4,4) = detinv*(A(1,1)*(A(2,2)*A(3,3)-A(2,3)*A(3,2))+A(1,2)*(A(2,3)*A(3,1)-A(2,1)*A(3,3))+A(1,3)*(A(2,1)*A(3,2)-A(2,2)*A(3,1)))
+   b(1,1) = detinv*(a(2,2)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(2,3)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(2,4)*(a(3,2)*a(4,3)-a(3,3)*a(4,2)))
+   b(2,1) = detinv*(a(2,1)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(2,3)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(2,4)*(a(3,3)*a(4,1)-a(3,1)*a(4,3)))
+   b(3,1) = detinv*(a(2,1)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(2,2)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(2,4)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(4,1) = detinv*(a(2,1)*(a(3,3)*a(4,2)-a(3,2)*a(4,3))+a(2,2)*(a(3,1)*a(4,3)-a(3,3)*a(4,1))+a(2,3)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(1,2) = detinv*(a(1,2)*(a(3,4)*a(4,3)-a(3,3)*a(4,4))+a(1,3)*(a(3,2)*a(4,4)-a(3,4)*a(4,2))+a(1,4)*(a(3,3)*a(4,2)-a(3,2)*a(4,3)))
+   b(2,2) = detinv*(a(1,1)*(a(3,3)*a(4,4)-a(3,4)*a(4,3))+a(1,3)*(a(3,4)*a(4,1)-a(3,1)*a(4,4))+a(1,4)*(a(3,1)*a(4,3)-a(3,3)*a(4,1)))
+   b(3,2) = detinv*(a(1,1)*(a(3,4)*a(4,2)-a(3,2)*a(4,4))+a(1,2)*(a(3,1)*a(4,4)-a(3,4)*a(4,1))+a(1,4)*(a(3,2)*a(4,1)-a(3,1)*a(4,2)))
+   b(4,2) = detinv*(a(1,1)*(a(3,2)*a(4,3)-a(3,3)*a(4,2))+a(1,2)*(a(3,3)*a(4,1)-a(3,1)*a(4,3))+a(1,3)*(a(3,1)*a(4,2)-a(3,2)*a(4,1)))
+   b(1,3) = detinv*(a(1,2)*(a(2,3)*a(4,4)-a(2,4)*a(4,3))+a(1,3)*(a(2,4)*a(4,2)-a(2,2)*a(4,4))+a(1,4)*(a(2,2)*a(4,3)-a(2,3)*a(4,2)))
+   b(2,3) = detinv*(a(1,1)*(a(2,4)*a(4,3)-a(2,3)*a(4,4))+a(1,3)*(a(2,1)*a(4,4)-a(2,4)*a(4,1))+a(1,4)*(a(2,3)*a(4,1)-a(2,1)*a(4,3)))
+   b(3,3) = detinv*(a(1,1)*(a(2,2)*a(4,4)-a(2,4)*a(4,2))+a(1,2)*(a(2,4)*a(4,1)-a(2,1)*a(4,4))+a(1,4)*(a(2,1)*a(4,2)-a(2,2)*a(4,1)))
+   b(4,3) = detinv*(a(1,1)*(a(2,3)*a(4,2)-a(2,2)*a(4,3))+a(1,2)*(a(2,1)*a(4,3)-a(2,3)*a(4,1))+a(1,3)*(a(2,2)*a(4,1)-a(2,1)*a(4,2)))
+   b(1,4) = detinv*(a(1,2)*(a(2,4)*a(3,3)-a(2,3)*a(3,4))+a(1,3)*(a(2,2)*a(3,4)-a(2,4)*a(3,2))+a(1,4)*(a(2,3)*a(3,2)-a(2,2)*a(3,3)))
+   b(2,4) = detinv*(a(1,1)*(a(2,3)*a(3,4)-a(2,4)*a(3,3))+a(1,3)*(a(2,4)*a(3,1)-a(2,1)*a(3,4))+a(1,4)*(a(2,1)*a(3,3)-a(2,3)*a(3,1)))
+   b(3,4) = detinv*(a(1,1)*(a(2,4)*a(3,2)-a(2,2)*a(3,4))+a(1,2)*(a(2,1)*a(3,4)-a(2,4)*a(3,1))+a(1,4)*(a(2,2)*a(3,1)-a(2,1)*a(3,2)))
+   b(4,4) = detinv*(a(1,1)*(a(2,2)*a(3,3)-a(2,3)*a(3,2))+a(1,2)*(a(2,3)*a(3,1)-a(2,1)*a(3,3))+a(1,3)*(a(2,1)*a(3,2)-a(2,2)*a(3,1)))
 end function complex_invert_4x4
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

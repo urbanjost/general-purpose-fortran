@@ -31,6 +31,7 @@
         ! readgif  uses real values 0.0 to 1.0
         ii=size(color_map,dim=1)
         jj=size(color_map,dim=2)
+        if(allocated(color_map2))deallocate(color_map2)
         allocate(color_map2(ii,0:jj-1))
         color_map2=255*color_map
 

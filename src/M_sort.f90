@@ -151,6 +151,19 @@ contains
 !!
 !!    In the mean time those keywords can be useful in locating materials on the WWW, especially in Wikipedia.
 !!
+!!##RANKING
+!!
+!!    Sorting generally refers to rearranging data in a specific order.
+!!    Ranking consists in finding, for each element of a set, its rank in
+!!    the sorted set, without changing the initial order of the set. In many
+!!    instances ranking is more flexible in that the order may be based
+!!    on one value of a user-defined type, and the indices can be used to
+!!    reorder virtually any type or related set; but it requires creating
+!!    an array of indices as well as the data being sorted.
+!!
+!!    Ranking is also useful when the sizes of the elements being sorted
+!!    are large, and therefore moving them around is resource-consuming.
+!!
 !!##QUICKSORT
 !!
 !!    Quicksort, also known as partition-exchange sort, uses these steps
@@ -176,8 +189,9 @@ contains
 !!    quicksort are common features of many languages and libraries.
 !>
 !!##NAME
-!!    sort_shell(3f) - [M_sort] Generic subroutine sorts the array X using Shell's method
+!!    sort_shell(3f) - [M_sort] Generic subroutine sorts the array X using Shell's Method
 !!    (LICENSE:PD)
+!!
 !!##SYNOPSIS
 !!
 !!    subroutine sort_shell(lines,order[,startcol,endcol])
@@ -236,9 +250,12 @@ contains
 !!
 !!     F90 NOTES:
 !!
-!!      o  procedure names are declared private in this module so they are not accessible except by their generic name
-!!      o  procedures must include a "use M_sort" to access the generic name SORT_SHELL
-!!      o  if these routines are recompiled, routines with the use statement should then be recompiled and reloaded.
+!!      o  procedure names are declared private in this module so they are
+!!         not accessible except by their generic name
+!!      o  procedures must include a "use M_sort" to access the generic
+!!         name SORT_SHELL
+!!      o  if these routines are recompiled, routines with the use statement
+!!         should then be recompiled and reloaded.
 !!
 !!##OPTIONS
 !!    Usage:
@@ -267,43 +284,43 @@ contains
 !!
 !!##EXAMPLE
 !!
-!!    Sample program
+!!   Sample program
 !!
-!!       program demo_sort_shell
-!!       use M_sort, only : sort_shell
-!!       character(len=:),allocatable :: array(:)
+!!    program demo_sort_shell
+!!    use M_sort, only : sort_shell
+!!    character(len=:),allocatable :: array(:)
 !!
-!!       array= [ character(len=20) ::                               &
-!!       & 'red',    'green', 'blue', 'yellow', 'orange',   'black', &
-!!       & 'white',  'brown', 'gray', 'cyan',   'magenta',           &
-!!       & 'purple']
+!!    array= [ character(len=20) ::                               &
+!!    & 'red',    'green', 'blue', 'yellow', 'orange',   'black', &
+!!    & 'white',  'brown', 'gray', 'cyan',   'magenta',           &
+!!    & 'purple']
 !!
-!!       write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
-!!       call sort_shell(array,order='a')
-!!       write(*,'(a,*(a:,","))')'A-Z    ',(trim(array(i)),i=1,size(array))
-!!       do i=1,size(array)-1
-!!          if(array(i).gt.array(i+1))then
-!!             write(*,*)'Error in sorting strings a-z'
-!!          endif
-!!       enddo
+!!    write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
+!!    call sort_shell(array,order='a')
+!!    write(*,'(a,*(a:,","))')'A-Z    ',(trim(array(i)),i=1,size(array))
+!!    do i=1,size(array)-1
+!!       if(array(i).gt.array(i+1))then
+!!          write(*,*)'Error in sorting strings a-z'
+!!       endif
+!!    enddo
 !!
-!!       array= [ character(len=20) ::                               &
-!!       & 'RED',    'GREEN', 'BLUE', 'YELLOW', 'ORANGE',   'BLACK', &
-!!       & 'WHITE',  'BROWN', 'GRAY', 'CYAN',   'MAGENTA',           &
-!!       & 'PURPLE']
+!!    array= [ character(len=20) ::                               &
+!!    & 'RED',    'GREEN', 'BLUE', 'YELLOW', 'ORANGE',   'BLACK', &
+!!    & 'WHITE',  'BROWN', 'GRAY', 'CYAN',   'MAGENTA',           &
+!!    & 'PURPLE']
 !!
-!!       write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
-!!       call sort_shell(array,order='d')
-!!       write(*,'(a,*(a:,","))')'Z-A    ',(trim(array(i)),i=1,size(array))
-!!       do i=1,size(array)-1
-!!          if(array(i).lt.array(i+1))then
-!!             write(*,*)'Error in sorting strings z-a'
-!!          endif
-!!       enddo
+!!    write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
+!!    call sort_shell(array,order='d')
+!!    write(*,'(a,*(a:,","))')'Z-A    ',(trim(array(i)),i=1,size(array))
+!!    do i=1,size(array)-1
+!!       if(array(i).lt.array(i+1))then
+!!          write(*,*)'Error in sorting strings z-a'
+!!       endif
+!!    enddo
 !!
-!!       end program demo_sort_shell
+!!    end program demo_sort_shell
 !!
-!!    Expected output
+!!   Expected output
 !!
 !!       BEFORE red,green,blue,yellow,orange,black,white,brown,gray,cyan,magenta,purple
 !!       A-Z    black,blue,brown,cyan,gray,green,magenta,orange,purple,red,white,yellow
@@ -311,8 +328,8 @@ contains
 !!       Z-A    YELLOW,WHITE,RED,PURPLE,ORANGE,MAGENTA,GREEN,GRAY,CYAN,BROWN,BLUE,BLACK
 !!
 !!##REFERENCE
-!!       1.  ALGORITHM 201, SHELLSORT, J. BOOTHROYD, CACM VOL. 6, NO. 8, P 445, (1963)
-!!       2.  D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
+!!    1.  ALGORITHM 201, SHELLSORT, J. BOOTHROYD, CACM VOL. 6, NO. 8, P 445, (1963)
+!!    2.  D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
 !!
 !!##AUTHOR
 !!      John S. Urban, 19970201

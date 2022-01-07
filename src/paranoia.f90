@@ -2,6 +2,7 @@
 
 subroutine paranoia(precis)
 use M_journal, only : journal
+implicit none
 character(len=*),parameter :: ident="@(#)paranoia(3f): call doublprecision or real versions of paranoia"
 character(len=*),intent(in) :: precis
 

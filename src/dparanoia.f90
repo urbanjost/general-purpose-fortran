@@ -15,21 +15,21 @@ implicit none
 character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions operations in programming environment"
 
 !!!!!   COMMON /STDIO/ IN, OUT
-        INTEGER IN, OUT
+        integer in, out
 !!!!!   COMMON /PGNUM/PGNUMB
-        INTEGER       PGNUMB
+        integer       pgnumb
 !!!!!   COMMON /ROUNDN/  R1, R2, R3, R4, STICKY
-        DOUBLE PRECISION R1, R2, R3, R4, STICKY
+        double precision r1, r2, r3, r4, sticky
 !
 !!!!!   COMMON /I3TYPE/ IEEE
-        INTEGER         IEEE
+        integer         ieee
 !        IEEE   ... FLAG WHETHER GRADUAL UNDERFLOWS ARE DOUBLY ROUNDED
 !
 !!!!!   COMMON /GLOBAL/ FAILS, SDEFCT, DEFECT, FLAWS, RADIX, ULPPLS,
 !!!!!~        ULPMIN, PRECIS, W, MULGRD, DIVGRD, SUBGRD, A1, ONEMIN
-        INTEGER         FAILS, SDEFCT, DEFECT, FLAWS
-        DOUBLE PRECISION RADIX, ULPPLS, ULPMIN, PRECIS, W, MULGRD, DIVGRD, SUBGRD, A1, ONEMIN
-        LOGICAL FLAGF
+        integer         fails, sdefct, defect, flaws
+        double precision radix, ulppls, ulpmin, precis, w, mulgrd, divgrd, subgrd, a1, onemin
+        logical flagf
 !
 !        FAILS  ... NUMBER OF FAILURES
 !        SDEFCT ... NUMBER OF SERIOUS DEFECTS
@@ -49,7 +49,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
 !!!!!   COMMON /CONST/   FP0, FP1, FP2, FP3, FP4, FP8, FP9, FP27, FP32,
 !!!!!~                   HALF, MINUS1
-        DOUBLE PRECISION FP0, FP1, FP2, FP3, FP4, FP8, FP9, FP27, FP32, HALF, MINUS1
+        double precision fp0, fp1, fp2, fp3, fp4, fp8, fp9, fp27, fp32, half, minus1
 !
 !!!!!   COMMON /ERRDAT/ OVRFLW, UNDFLW, DIVZER, ERRFLG
 !       INTEGER         OVRFLW, UNDFLW, DIVZER, ERRFLG
@@ -60,7 +60,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
 !
 !!!!!   COMMON /OVUNFL/  C1, H1, MINPOS, NULPS, UFLTHR, PHONY0
-        DOUBLE PRECISION C1, H1, MINPOS, NULPS, UFLTHR, PHONY0
+        double precision c1, h1, minpos, nulps, uflthr, phony0
 !        C1     ... 1/C ~= RADIX^LARGE_INTEGER
 !        H1     ... MAX (2,RADIX)
 !        MINPOS ... MINIMUM POSITIVE NUMBER FOUND BY MULT./DIVISION
@@ -81,11 +81,11 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !       CHECK FOR RESTART
 !
 !#######################################################################
-        INTEGER START
+        integer start
 !        ... FLAG TO TELL WHETHER WE ARE RESTARTING OR
 !        ... STARTING FROM SCRATCH
-        INTEGER TEMP
-        INTEGER MILES, NUMTRY, FROM
+        integer temp
+        integer miles, numtry, from
 !        MILES  ... NUMBER OF MILESTONE REACHED SO FAR IN TESTING
 !        NUMTRY ... NUMBER OF TIMES TO TRY RANDOM TRIALS
 !        FROM   ... NUMBER OF MILESTONE TO RETURN TO ON RESTART
@@ -105,519 +105,519 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !       CALL TRAPS(100,100,100,100,100)
 ! NO SPECIAL CALL IS REQUIRED FOR FORTVS.
 !
-        FROM = 0
+        from = 0
 !
 ! IN = INPUT UNIT, OUT = OUTPUT UNIT -- YOU MAY HAVE TO CHANGE THESE.
-        IN = 5
-        OUT = 6
+        in = 5
+        out = 6
 ! THE FOLLOWING OPENS MAY BE NEEDED FOR SOME VERSIONS.
 !       OPEN(IN,FILE='CON')
 !       OPEN(OUT,FILE='CON')
-        WRITE(OUT,100)
-        WRITE(OUT,110)
-100     FORMAT(' Is this a program restart after failure (1)')
-110     FORMAT(' or a start from scratch (0) ?')
-        READ(IN,120) START
-120     FORMAT(I1)
-        FLAGF = START .NE. 0
+        write(out,100)
+        write(out,110)
+100     format(' Is this a program restart after failure (1)')
+110     format(' or a start from scratch (0) ?')
+        read(in,120) start
+120     format(i1)
+        flagf = start .ne. 0
 !  ***  FOR FORTRAN 66 AND FORTRAN 77 SUBSET, COMMENT OUT THE INQUIRE:
-        INQUIRE(FILE='TST',EXIST=FLAGF)
-        IF(FLAGF) THEN
-            OPEN(3,FILE='TST',FORM='UNFORMATTED',STATUS='OLD')
-            REWIND 3
-            OPEN(4,FILE='LOG',FORM='UNFORMATTED',STATUS='OLD')
-            REWIND 4
-        ELSE
-            OPEN(3,FILE='TST',FORM='UNFORMATTED',STATUS='NEW')
-            OPEN(4,FILE='LOG',FORM='UNFORMATTED',STATUS='NEW')
-        ENDIF
-        IF (START .EQ. 0) GO TO 10000
-        READ(4) FP0,FP1,FP2,FP3,FP4,FP8,FP9,FP27,FP32,HALF,MINUS1
-        READ(4) FAILS,SDEFCT,DEFECT,FLAWS,RADIX,ULPPLS,ULPMIN,PRECIS
-        READ(4) W, MULGRD,DIVGRD, SUBGRD,A1,ONEMIN
-        READ(4) C1, H1, MINPOS, NULPS, UFLTHR, PHONY0,IEEE
-        READ(4) R1,R2,R3,R4,STICKY
-        READ(4) PGNUMB,MILES
-        REWIND 4
-        FROM = MILES
-        WRITE(OUT,10001)FROM
-10001   FORMAT(' Restarting from milestone ',I5,'.')
-        IF (FROM .EQ.   7) GO TO   881
-        IF (FROM .EQ.  79) GO TO  3959
-        IF (FROM .EQ.  90) GO TO  3960
-        IF (FROM .GE. 105 .AND. FROM .LE. 109) GO TO 10100
-        IF (FROM .EQ. 115) GO TO 10100
-        IF (FROM .GE. 120 .AND. FROM .LE. 125) GO TO 10100
-        IF (FROM .EQ. 131) GO TO 10100
-        IF (FROM .EQ. 161) GO TO 10200
-        IF (FROM .GE. 201 .AND. FROM .LE. 205) GO TO 10200
-        IF (FROM .EQ. 211) GO TO 10300
-        IF (FROM .EQ. 212) GO TO 10300
-        CALL BADMIL
+        inquire(file='TST',exist=flagf)
+        if(flagf) then
+            open(3,file='TST',form='UNFORMATTED',status='OLD')
+            rewind 3
+            open(4,file='LOG',form='UNFORMATTED',status='OLD')
+            rewind 4
+        else
+            open(3,file='TST',form='UNFORMATTED',status='NEW')
+            open(4,file='LOG',form='UNFORMATTED',status='NEW')
+        endif
+        if (start .eq. 0) go to 10000
+        read(4) fp0,fp1,fp2,fp3,fp4,fp8,fp9,fp27,fp32,half,minus1
+        read(4) fails,sdefct,defect,flaws,radix,ulppls,ulpmin,precis
+        read(4) w, mulgrd,divgrd, subgrd,a1,onemin
+        read(4) c1, h1, minpos, nulps, uflthr, phony0,ieee
+        read(4) r1,r2,r3,r4,sticky
+        read(4) pgnumb,miles
+        rewind 4
+        from = miles
+        write(out,10001)from
+10001   format(' Restarting from milestone ',i5,'.')
+        if (from .eq.   7) go to   881
+        if (from .eq.  79) go to  3959
+        if (from .eq.  90) go to  3960
+        if (from .ge. 105 .and. from .le. 109) go to 10100
+        if (from .eq. 115) go to 10100
+        if (from .ge. 120 .and. from .le. 125) go to 10100
+        if (from .eq. 131) go to 10100
+        if (from .eq. 161) go to 10200
+        if (from .ge. 201 .and. from .le. 205) go to 10200
+        if (from .eq. 211) go to 10300
+        if (from .eq. 212) go to 10300
+        call badmil
 !
 !             FIRST TWO ASSIGNMENTS USE INTEGERS ON RIGHT HAND SIDE
 !
 10000   continue
-        FP0 = 0
-        FP1 = 1
-        FP2 = FP1 + FP1
-        FP3 = FP2 + FP1
-        FP4 = FP3 + FP1
-        MINUS1 = -FP1
-        HALF = FP1 / FP2
-        FP8 = FP4 + FP4
-        FP9 = FP3 * FP3
-        FP27 = FP9 * FP3
-        FP32 = FP8 * FP4
+        fp0 = 0
+        fp1 = 1
+        fp2 = fp1 + fp1
+        fp3 = fp2 + fp1
+        fp4 = fp3 + fp1
+        minus1 = -fp1
+        half = fp1 / fp2
+        fp8 = fp4 + fp4
+        fp9 = fp3 * fp3
+        fp27 = fp9 * fp3
+        fp32 = fp8 * fp4
 !
-        WRITE(OUT, 10)
-        WRITE(OUT, 40)
-10      FORMAT(' A  Paranoid  Program  to  Diagnose  Floating-point',' Arithmetic')
-40      FORMAT('          ... Double-Precision Version  ...')
+        write(out, 10)
+        write(out, 40)
+10      format(' A  Paranoid  Program  to  Diagnose  Floating-point',' Arithmetic')
+40      format('          ... Double-Precision Version  ...')
 !
 !#######################################################################
 !
-        NUMTRY = 20
+        numtry = 20
 !        ...  NUMTRY = #( RANDOM TRIALS OF X*Y=Y*X , ETC.)
-        PGNUMB=0
+        pgnumb=0
 !        ... PGNUMB = #( PAGE OF DIAGNOSIS ); MILES=MILESTONE IN PROGRAM
-        MILES=0
+        miles=0
 !        ... COUNT FAILURES, SERIOUS DEFECTS, DEFECTS, FLAWS
-        FAILS = 0
-        SDEFCT = 0
-        DEFECT = 0
-        FLAWS = 0
+        fails = 0
+        sdefct = 0
+        defect = 0
+        flaws = 0
 !#######################################################################
 !
 !       PRINT BIG INTRO MESSAGES
 !
 !#######################################################################
-        CALL INTRO (MILES)
+        call intro (miles)
 !#######################################################################
 !
 !       SMALL INTEGER TESTING
 !
 !#######################################################################
-        MILES = 7
-        CALL PAGE (MILES)
+        miles = 7
+        call page (miles)
 881     continue
-        CALL SMLINT (MILES,FROM)
-        FROM = 0
+        call smlint (miles,from)
+        from = 0
 !#######################################################################
 !
 !       FIND RADIX B AND PRECISION P
 !
 !#######################################################################
-        CALL RADX (MILES)
+        call radx (miles)
 !#######################################################################
 !
 !       TEST FOR EXTRA PRECISION IN SUBEXPRESSIONS
 !
 !#######################################################################
-        MILES = 30
-        CALL EXTRA
-        CALL PAGE (MILES)
+        miles = 30
+        call extra
+        call page (miles)
 !#######################################################################
 !
 !       CHECK FOR GUARD DIGITS AND NORMALIZATION IN SUBTRACTION
 !
 !#######################################################################
-        MILES = 35
-        CALL GUARD
-        MILES = 40
-        CALL PAGE (MILES)
+        miles = 35
+        call guard
+        miles = 40
+        call page (miles)
 !#######################################################################
 !
 !       TEST ROUNDING IN MULTIPLY, DIVIDE, AND ADD/SUBTRACT.
 !
 !#######################################################################
-        CALL ROUND (MILES)
-        MILES = 60
+        call round (miles)
+        miles = 60
 !#######################################################################
 !
 !       TEST FOR COMMUTATIVE MULTIPLICATION
 !
 !#######################################################################
-        CALL COMMUT (NUMTRY)
-        MILES = 70
+        call commut (numtry)
+        miles = 70
 !#######################################################################
 !
 !       TEST SQUARE ROOT
 !
 !#######################################################################
 3959    continue
-        CALL SQUARE (FROM, MILES, NUMTRY)
-        FROM = 0
+        call square (from, miles, numtry)
+        from = 0
 3960    continue
-        MILES = 90
-        CALL PAGE (MILES)
+        miles = 90
+        call page (miles)
 !#######################################################################
 !
 !       TEST Y TO POWER X
 !
 !#######################################################################
-        CALL POWER (MILES,FROM)
-        FROM = 0
+        call power (miles,from)
+        from = 0
 !#######################################################################
 !
 !       TEST UNDERFLOW THRESHOLDS
 !
 !#######################################################################
 10100   continue
-        CALL UNDERF (MILES,NUMTRY,FROM)
-        FROM = 0
-        CALL PAGE (MILES)
+        call underf (miles,numtry,from)
+        from = 0
+        call page (miles)
 !#######################################################################
 !
 !       TEST OVERFLOW THRESHOLDS
 !
 !#######################################################################
 10200   continue
-        CALL OVERF (MILES, FROM)
-        FROM = 0
-        MILES = 210
+        call overf (miles, from)
+        from = 0
+        miles = 210
 !
 10300   continue
-        CALL ZEROS(MILES,FROM)
-        FROM = 0
-        CALL PAGE (MILES)
-        IF (FAILS .GT. 0) WRITE(OUT, 6151) FAILS
-6151    FORMAT (' The number of  FAILUREs  encountered =       ',I4)
-        IF (SDEFCT .GT. 0) WRITE(OUT, 6161) SDEFCT
-6161    FORMAT (' The number of  SERIOUS DEFECTs  discovered = ',I4)
-        IF (DEFECT .GT. 0) WRITE(OUT, 6171) DEFECT
-6171    FORMAT (' The number of  DEFECTs  discovered =         ',I4)
-        IF (FLAWS .GT. 0) WRITE(OUT, 6181) FLAWS
-6181    FORMAT (' The number of  FLAWs  discovered =           ',I4)
-        IF (FAILS+SDEFCT+DEFECT+FLAWS .GT. 0) GOTO 6270
-        WRITE(OUT, 6200)
-6200    FORMAT(' No failures, defects nor flaws have been discovered.')
-        IF (R1+R2+R3+R4 .LT. FP4) GOTO 6260
-        IF (STICKY .LT. FP1 .OR. (RADIX-FP2)*(RADIX-FP9-FP1) .NE. FP0) GOTO 6250
-        TEMP = 854
-        IF (RADIX .EQ. FP2 .AND.  (PRECIS - FP4*FP3*FP2) * (PRECIS - FP27-FP27+FP1) .EQ. FP0) TEMP = 754
-        WRITE(OUT,6240) TEMP
-6240    FORMAT (' Rounding appears to conform to the proposed', ' IEEE standard  P', I3)
-        IF (IEEE .EQ. 0) WRITE(OUT, 6241)
-6241    FORMAT (' except possibly for Double Rounding during Gradual', ' Underflow.')
+        call zeros(miles,from)
+        from = 0
+        call page (miles)
+        if (fails .gt. 0) write(out, 6151) fails
+6151    format (' The number of  FAILUREs  encountered =       ',i4)
+        if (sdefct .gt. 0) write(out, 6161) sdefct
+6161    format (' The number of  SERIOUS DEFECTs  discovered = ',i4)
+        if (defect .gt. 0) write(out, 6171) defect
+6171    format (' The number of  DEFECTs  discovered =         ',i4)
+        if (flaws .gt. 0) write(out, 6181) flaws
+6181    format (' The number of  FLAWs  discovered =           ',i4)
+        if (fails+sdefct+defect+flaws .gt. 0) goto 6270
+        write(out, 6200)
+6200    format(' No failures, defects nor flaws have been discovered.')
+        if (r1+r2+r3+r4 .lt. fp4) goto 6260
+        if (sticky .lt. fp1 .or. (radix-fp2)*(radix-fp9-fp1) .ne. fp0) goto 6250
+        temp = 854
+        if (radix .eq. fp2 .and.  (precis - fp4*fp3*fp2) * (precis - fp27-fp27+fp1) .eq. fp0) temp = 754
+        write(out,6240) temp
+6240    format (' Rounding appears to conform to the proposed', ' IEEE standard  P', i3)
+        if (ieee .eq. 0) write(out, 6241)
+6241    format (' except possibly for Double Rounding during Gradual', ' Underflow.')
 6250    continue
-        WRITE(OUT, 6251)
-6251    FORMAT(' The arithmetic diagnosed appears to be Excellent!')
-        GOTO 6310
+        write(out, 6251)
+6251    format(' The arithmetic diagnosed appears to be Excellent!')
+        goto 6310
 6260    continue
-        WRITE(OUT, 6261)
-6261    FORMAT(' The arithmetic diagnosed seems Satisfactory.')
-        GOTO 6310
+        write(out, 6261)
+6261    format(' The arithmetic diagnosed seems Satisfactory.')
+        goto 6310
 6270    continue
-        IF (FAILS+SDEFCT+DEFECT .EQ. 0 .AND. FLAWS .GT. 0) WRITE(OUT, 6271)
-6271    FORMAT(' The arithmetic diagnosed seems Satisfactory though', ' flawed.')
-        IF (FAILS+SDEFCT .EQ. 0 .AND. DEFECT .GT. 0) WRITE(OUT, 6281)
-6281    FORMAT(' The arithmetic diagnosed may be Acceptable despite', ' inconvenient Defects.')
-        IF (FAILS+SDEFCT .GT. 0) WRITE(OUT, 6291)
-6291    FORMAT(' The arithmetic diagnosed has unacceptable Serious', ' Defects.')
-        IF (FAILS .GT. 0) WRITE(OUT, 6301)
-6301    FORMAT(' Potentially fatal FAILURE may have spoiled this', ' program''s subsequent diagnoses.')
+        if (fails+sdefct+defect .eq. 0 .and. flaws .gt. 0) write(out, 6271)
+6271    format(' The arithmetic diagnosed seems Satisfactory though', ' flawed.')
+        if (fails+sdefct .eq. 0 .and. defect .gt. 0) write(out, 6281)
+6281    format(' The arithmetic diagnosed may be Acceptable despite', ' inconvenient Defects.')
+        if (fails+sdefct .gt. 0) write(out, 6291)
+6291    format(' The arithmetic diagnosed has unacceptable Serious', ' Defects.')
+        if (fails .gt. 0) write(out, 6301)
+6301    format(' Potentially fatal FAILURE may have spoiled this', ' program''s subsequent diagnoses.')
 6310    continue
-        WRITE(OUT, 6311)
-6311    FORMAT(' End of Test.')
+        write(out, 6311)
+6311    format(' End of Test.')
         return
         end subroutine runtests
 !-------------------------------------------------------------------------------
-        SUBROUTINE COMMUT( NUMTRY)
+        subroutine commut( numtry)
       implicit none
 !
 !!!!!!
-        INTEGER NUMTRY
-        DOUBLE PRECISION R9, X, X9, Y, Y9, Z, Z9
-        INTEGER I, NN
+        integer numtry
+        double precision r9, x, x9, y, y9, z, z9
+        integer i, nn
 !
-        WRITE(OUT,2921) NUMTRY
-2921    FORMAT(/' Does multiplication commute?', ' Testing if  x*y = y*x  for', I4,' random pairs:')
-        R9 = DSQRT(FP3)
-        I = NUMTRY + 1
-        X9 = FP0 / FP3
+        write(out,2921) numtry
+2921    format(/' Does multiplication commute?', ' Testing if  x*y = y*x  for', i4,' random pairs:')
+        r9 = dsqrt(fp3)
+        i = numtry + 1
+        x9 = fp0 / fp3
 2960    continue
-        CALL RANDOM (X, Y, X9, R9)
-        Y9=X9
-        CALL RANDOM (X, Y, X9, R9)
-        Z=X9*Y9
-        Y=Y9*X9
-        Z9=Z-Y
-        I=I-1
-        IF (I .GT. 0 .AND. Z9 .EQ. FP0) GOTO 2960
-        IF (I .GT. 0) GOTO 3000
-        X9=FP0+HALF/FP3
-        Y9=(ULPPLS+ULPMIN)+FP0
-        Z=X9*Y9
-        Y=Y9*X9
-        Z9=(FP0+HALF/FP3)*((ULPPLS+ULPMIN)+FP0) -((ULPPLS+ULPMIN)+FP0)*(FP0+HALF/FP3)
-        IF (Z9 .NE. FP0) GOTO 3000
-        WRITE(OUT,2990) NUMTRY
-2990    FORMAT(' No failure found in ',I4,' randomly chosen pairs.')
-        RETURN
+        call random (x, y, x9, r9)
+        y9=x9
+        call random (x, y, x9, r9)
+        z=x9*y9
+        y=y9*x9
+        z9=z-y
+        i=i-1
+        if (i .gt. 0 .and. z9 .eq. fp0) goto 2960
+        if (i .gt. 0) goto 3000
+        x9=fp0+half/fp3
+        y9=(ulppls+ulpmin)+fp0
+        z=x9*y9
+        y=y9*x9
+        z9=(fp0+half/fp3)*((ulppls+ulpmin)+fp0) -((ulppls+ulpmin)+fp0)*(fp0+half/fp3)
+        if (z9 .ne. fp0) goto 3000
+        write(out,2990) numtry
+2990    format(' No failure found in ',i4,' randomly chosen pairs.')
+        return
 3000    continue
-        DEFECT=DEFECT+1
-        WRITE(OUT, 3001) X9, Y9
-        WRITE(OUT, 3002) Z, Y, Z9
-        NN=NUMTRY-I+1
-        WRITE(OUT, 3003) NN
-3001    FORMAT(' DEFECT:  x*y = y*x  violated at  x = ',E15.7,', y = ', E15.7)
-3002    FORMAT('  x*y =',E15.7,',  y*x =',E15.7,',  x*y-y*x =',E15.7)
-3003    FORMAT('    ... pair no.', I4)
-        RETURN
-        END SUBROUTINE COMMUT
+        defect=defect+1
+        write(out, 3001) x9, y9
+        write(out, 3002) z, y, z9
+        nn=numtry-i+1
+        write(out, 3003) nn
+3001    format(' DEFECT:  x*y = y*x  violated at  x = ',e15.7,', y = ', e15.7)
+3002    format('  x*y =',e15.7,',  y*x =',e15.7,',  x*y-y*x =',e15.7)
+3003    format('    ... pair no.', i4)
+        return
+        end subroutine commut
 !-------------------------------------------------------------------------------
-        SUBROUTINE RANDOM (X, Y, X9, R9)
+        subroutine random (x, y, x9, r9)
       implicit none
-        DOUBLE PRECISION X, Y, X9, R9
-        X=X9+R9
-        Y=X*X
-        Y=Y*Y
-        X=X*Y
-        Y=X-DINT(X)
-        X9=Y+X*.000005
-        RETURN
-        END SUBROUTINE RANDOM
+        double precision x, y, x9, r9
+        x=x9+r9
+        y=x*x
+        y=y*y
+        x=x*y
+        y=x-dint(x)
+        x9=y+x*.000005
+        return
+        end subroutine random
 !-------------------------------------------------------------------------------
-        SUBROUTINE EXTRA
+        subroutine extra
       implicit none
 !!!!!
-        DOUBLE PRECISION Q, X, X1, Y, Y1, Z, Z1, Z2, XX
+        double precision q, x, x1, y, y1, z, z1, z2, xx
 !
-        WRITE(OUT,1681)
-1681    FORMAT (' Test for extra-precise subexpressions:')
+        write(out,1681)
+1681    format (' Test for extra-precise subexpressions:')
 !
-        X = DABS( ((FP4 / FP3 - FP1) - FP1 / FP4) * FP3 - FP1 / FP4)
+        x = dabs( ((fp4 / fp3 - fp1) - fp1 / fp4) * fp3 - fp1 / fp4)
 1700    continue
-        Z2 = X
-        X = (FP1 + (HALF * Z2 + FP32 * Z2 * Z2)) - FP1
-        IF (Z2 .GT. X .AND. X .GT. FP0) GOTO 1700
-        Y = DABS( (FP3/FP4 - FP2/FP3) * FP3 - FP1/FP4)
-        Z=Y
-        X=Y
+        z2 = x
+        x = (fp1 + (half * z2 + fp32 * z2 * z2)) - fp1
+        if (z2 .gt. x .and. x .gt. fp0) goto 1700
+        y = dabs( (fp3/fp4 - fp2/fp3) * fp3 - fp1/fp4)
+        z=y
+        x=y
 1720    continue
-        Z1=Z
-        Z=(FP1/FP2 - ((FP1/FP2-(HALF*Z1 + FP32*Z1*Z1))+FP1/FP2)) + FP1/ FP2
-        IF (Z1 .GT. Z .AND. Z .GT. FP0) GOTO 1720
+        z1=z
+        z=(fp1/fp2 - ((fp1/fp2-(half*z1 + fp32*z1*z1))+fp1/fp2)) + fp1/ fp2
+        if (z1 .gt. z .and. z .gt. fp0) goto 1720
 1730    continue
-        Y1=Y
-        Y=(HALF - ((HALF-(HALF*Y1 + FP32*Y1*Y1))+HALF)) + HALF
-        IF (Y1 .GT. Y .AND. Y .GT. FP0) GOTO 1730
-        X1=X
-        X=((HALF*X1+FP32*X1*X1)-ONEMIN)+ONEMIN
-        IF (X1 .GT. X  .AND. X  .GT. FP0) GOTO 1730
-        IF (X1 .EQ. Y1 .AND. X1 .EQ. Z1)  GOTO 1780
-        SDEFCT=SDEFCT+1
-        WRITE(OUT, 1761)
-        WRITE(OUT, 1762) X1, Y1, Z1
-        WRITE(OUT, 1763)
-        WRITE(OUT, 1770)
-        WRITE(OUT, 1771)
-        WRITE(OUT, 1772)
-1761    FORMAT(' SERIOUS DEFECT: disagreements among the values  X1, Y1, Z1')
-1762    FORMAT(' respectively ',E15.7,',    ',E15.7,',    ',E15.7)
-1763    FORMAT(' are symptoms of inconsistencies introduced by extra-precise')
-1770    FORMAT(' evaluation of allegedly  "optimized"  arithmetic')
-1771    FORMAT(' subexpressions.  Possibly some part of this')
-1772    FORMAT(' test is inconsistent; PLEASE NOTIFY KARPINSKI !')
-        IF (X1 .EQ. ULPMIN .OR. Y1 .EQ. ULPMIN .OR. Z1 .EQ. ULPMIN) GOTO 1850
+        y1=y
+        y=(half - ((half-(half*y1 + fp32*y1*y1))+half)) + half
+        if (y1 .gt. y .and. y .gt. fp0) goto 1730
+        x1=x
+        x=((half*x1+fp32*x1*x1)-onemin)+onemin
+        if (x1 .gt. x  .and. x  .gt. fp0) goto 1730
+        if (x1 .eq. y1 .and. x1 .eq. z1)  goto 1780
+        sdefct=sdefct+1
+        write(out, 1761)
+        write(out, 1762) x1, y1, z1
+        write(out, 1763)
+        write(out, 1770)
+        write(out, 1771)
+        write(out, 1772)
+1761    format(' SERIOUS DEFECT: disagreements among the values  X1, Y1, Z1')
+1762    format(' respectively ',e15.7,',    ',e15.7,',    ',e15.7)
+1763    format(' are symptoms of inconsistencies introduced by extra-precise')
+1770    format(' evaluation of allegedly  "optimized"  arithmetic')
+1771    format(' subexpressions.  Possibly some part of this')
+1772    format(' test is inconsistent; PLEASE NOTIFY KARPINSKI !')
+        if (x1 .eq. ulpmin .or. y1 .eq. ulpmin .or. z1 .eq. ulpmin) goto 1850
 1780    continue
-        IF (Z1 .NE. ULPMIN .OR. Z2 .NE. ULPPLS) GOTO 1790
-        WRITE(OUT, 1781)
-1781    FORMAT(' Subexpressions do not appear to be calculated with extra precision.')
-        RETURN
+        if (z1 .ne. ulpmin .or. z2 .ne. ulppls) goto 1790
+        write(out, 1781)
+1781    format(' Subexpressions do not appear to be calculated with extra precision.')
+        return
 1790    continue
-        IF (Z1 .LT. ULPMIN .AND. Z2 .LT. ULPPLS) GOTO 1810
-        FAILS=FAILS+1
-        WRITE(OUT, 1801)
-        WRITE(OUT, 1802)
-        XX=Z1-ULPMIN
-        WRITE(OUT, 1803) ULPMIN, XX
-        XX=Z2-ULPPLS
-        WRITE(OUT, 1804) ULPPLS, XX
-1801    FORMAT(' FAILURE: precision test is inconsistent.')
-1802    FORMAT(' PLEASE NOTIFY KARPINSKI !')
-1803    FORMAT(' ulpmin =  ', E15.7, '    z1 - ulpmin = ', E15.7)
-1804    FORMAT(' ulppls =  ', E15.7, '    z1 - ulppls = ', E15.7)
-        RETURN
+        if (z1 .lt. ulpmin .and. z2 .lt. ulppls) goto 1810
+        fails=fails+1
+        write(out, 1801)
+        write(out, 1802)
+        xx=z1-ulpmin
+        write(out, 1803) ulpmin, xx
+        xx=z2-ulppls
+        write(out, 1804) ulppls, xx
+1801    format(' FAILURE: precision test is inconsistent.')
+1802    format(' PLEASE NOTIFY KARPINSKI !')
+1803    format(' ulpmin =  ', e15.7, '    z1 - ulpmin = ', e15.7)
+1804    format(' ulppls =  ', e15.7, '    z1 - ulppls = ', e15.7)
+        return
 1810    continue
-        IF (Z1 .GT. FP0 .AND. Z2 .GT. FP0) GOTO 1830
-        WRITE(OUT, 1821)     RADIX
-        WRITE(OUT, 1822)
-        WRITE(OUT, 1823) Z1, Z2
-        WRITE(OUT, 1824)
-        WRITE(OUT, 1825)
-1821    FORMAT(' Because of an unusual radix  b =', F4.0,',')
-1822    FORMAT(' or exact rational arithmetic,')
-1823    FORMAT(' a result  z1 =',E15.7,'  or  z2 =',E15.7)
-1824    FORMAT(' of an extra-precision test is inconsistent.')
-1825    FORMAT(' PLEASE NOTIFY KARPINSKI !')
-        IF (Z1 .EQ. Z2) GOTO 1850
+        if (z1 .gt. fp0 .and. z2 .gt. fp0) goto 1830
+        write(out, 1821)     radix
+        write(out, 1822)
+        write(out, 1823) z1, z2
+        write(out, 1824)
+        write(out, 1825)
+1821    format(' Because of an unusual radix  b =', f4.0,',')
+1822    format(' or exact rational arithmetic,')
+1823    format(' a result  z1 =',e15.7,'  or  z2 =',e15.7)
+1824    format(' of an extra-precision test is inconsistent.')
+1825    format(' PLEASE NOTIFY KARPINSKI !')
+        if (z1 .eq. z2) goto 1850
 1830    continue
-        X = Z1/ULPMIN
-        Y = Z2/ULPPLS
-        IF (Y .GT. X) X=Y
-        Q = -DLOG(X)
-        WRITE(OUT, 1841)
-        XX=Q/DLOG(RADIX)
-        WRITE(OUT, 1842) XX
-        XX=Q/DLOG(FP8+FP2)
-        WRITE(OUT, 1843) XX
-1841    FORMAT(' Some subexpressions appear to be calculated extra-precisely')
-1842    FORMAT(' with about   ',E15.7,' extra base b digits, i.e.')
-1843    FORMAT(' roughly ',E15.7,' extra significant decimals.')
+        x = z1/ulpmin
+        y = z2/ulppls
+        if (y .gt. x) x=y
+        q = -dlog(x)
+        write(out, 1841)
+        xx=q/dlog(radix)
+        write(out, 1842) xx
+        xx=q/dlog(fp8+fp2)
+        write(out, 1843) xx
+1841    format(' Some subexpressions appear to be calculated extra-precisely')
+1842    format(' with about   ',e15.7,' extra base b digits, i.e.')
+1843    format(' roughly ',e15.7,' extra significant decimals.')
 1850    continue
-        WRITE(OUT, 1851)
-1851    FORMAT(' That feature is not tested further by this program.')
-        RETURN
-        END SUBROUTINE EXTRA
+        write(out, 1851)
+1851    format(' That feature is not tested further by this program.')
+        return
+        end subroutine extra
 !-------------------------------------------------------------------------------
-        SUBROUTINE GUARD
+        subroutine guard
       implicit none
 !!!!!
 !        ... LOCAL VARIABLES
-        DOUBLE PRECISION R, S, T, X, Y, Z
+        double precision r, s, t, x, y, z
 !        ... CONSTANTS
-        DOUBLE PRECISION B9
+        double precision b9
 !
-        B9 = RADIX - ULPPLS
+        b9 = radix - ulppls
 !
-        MULGRD = 1.0
-        DIVGRD = 1.0
-        SUBGRD = 1.0
+        mulgrd = 1.0
+        divgrd = 1.0
+        subgrd = 1.0
 !
-        IF (RADIX .LT. FP2) GOTO 1920
-        X = W / (RADIX * RADIX)
-        Y = X + FP1
-        Z = Y - X
-        T = Z + ULPPLS
-        X = T - Z
-        IF (X .EQ. ULPPLS) GOTO 1910
-        FAILS = FAILS + 1
-        WRITE(OUT, 1905)
-1905    FORMAT(' FAILURE: subtraction is not normalized',' so  x=y  does not imply  x+z=y+z !')
-        GOTO 1920
+        if (radix .lt. fp2) goto 1920
+        x = w / (radix * radix)
+        y = x + fp1
+        z = y - x
+        t = z + ulppls
+        x = t - z
+        if (x .eq. ulppls) goto 1910
+        fails = fails + 1
+        write(out, 1905)
+1905    format(' FAILURE: subtraction is not normalized',' so  x=y  does not imply  x+z=y+z !')
+        goto 1920
 1910    continue
-        WRITE(OUT,1911)
-1911    FORMAT(' Subtraction appears to be normalized', ' as it should.')
+        write(out,1911)
+1911    format(' Subtraction appears to be normalized', ' as it should.')
 1920    continue
-        WRITE(OUT,1930)
-1930    FORMAT(' Checking for guard digits in multiply', ' divide and subtract.')
-        Y=ONEMIN*FP1
-        Z=FP1*ONEMIN
-        X=ONEMIN-HALF
-        Y=(Y-HALF)-X
-        Z=(Z-HALF)-X
-        X=FP1+ULPPLS
-        T = X * RADIX
-        R = RADIX * X
-        X=T-RADIX
-        X=X-RADIX*ULPPLS
-        T=R-RADIX
-        T=T-RADIX*ULPPLS
-        X=X*(RADIX-FP1)
-        T=T*(RADIX-FP1)
-        IF (X .EQ. FP0 .AND. Y .EQ. FP0 .AND. Z .EQ. FP0 .AND.  T .EQ. FP0) GOTO 1980
-        SDEFCT=SDEFCT+1
-        MULGRD=FP0
-        WRITE(OUT, 1971)
-1971    FORMAT(' SERIOUS DEFECT: multiplication lacks a guard digit',' violating  1*x = x .')
+        write(out,1930)
+1930    format(' Checking for guard digits in multiply', ' divide and subtract.')
+        y=onemin*fp1
+        z=fp1*onemin
+        x=onemin-half
+        y=(y-half)-x
+        z=(z-half)-x
+        x=fp1+ulppls
+        t = x * radix
+        r = radix * x
+        x=t-radix
+        x=x-radix*ulppls
+        t=r-radix
+        t=t-radix*ulppls
+        x=x*(radix-fp1)
+        t=t*(radix-fp1)
+        if (x .eq. fp0 .and. y .eq. fp0 .and. z .eq. fp0 .and.  t .eq. fp0) goto 1980
+        sdefct=sdefct+1
+        mulgrd=fp0
+        write(out, 1971)
+1971    format(' SERIOUS DEFECT: multiplication lacks a guard digit',' violating  1*x = x .')
 1980    continue
-        Z = RADIX * ULPPLS
-        X=FP1+Z
-        Y=DABS((X+Z)-X*X)-ULPPLS
-        X=FP1-ULPPLS
-        Z=DABS((X-ULPPLS)-X*X)-ULPMIN
-        IF (Y .LE. FP0 .AND. Z .LE. FP0) GOTO 2000
-        FAILS=FAILS+1
-        WRITE(OUT, 1991)
-1991    FORMAT(' FAILURE: multiplication  gets too many last digits',' wrong.')
+        z = radix * ulppls
+        x=fp1+z
+        y=dabs((x+z)-x*x)-ulppls
+        x=fp1-ulppls
+        z=dabs((x-ulppls)-x*x)-ulpmin
+        if (y .le. fp0 .and. z .le. fp0) goto 2000
+        fails=fails+1
+        write(out, 1991)
+1991    format(' FAILURE: multiplication  gets too many last digits',' wrong.')
 2000    continue
-        Y=FP1-ULPPLS
-        X=FP1+ULPPLS
-        Z=FP1/Y
-        Y=Z-X
-        X = FP1/FP3
-        Z = FP3/FP9
-        X=X-Z
-        T = FP9/FP27
-        Z=Z-T
-        IF (X .EQ. FP0 .AND. Y .EQ. FP0 .AND. Z .EQ. FP0) GOTO 2040
-        DEFECT=DEFECT+1
-        DIVGRD=FP0
-        WRITE(OUT,2031)
-        WRITE(OUT,2032)
-2031    FORMAT(' DEFECT: division lacks a guard digit',' so error can exceed 1 ulp')
-2032    FORMAT(' or  1/3  and  3/9  and  9/27  may disagree.')
+        y=fp1-ulppls
+        x=fp1+ulppls
+        z=fp1/y
+        y=z-x
+        x = fp1/fp3
+        z = fp3/fp9
+        x=x-z
+        t = fp9/fp27
+        z=z-t
+        if (x .eq. fp0 .and. y .eq. fp0 .and. z .eq. fp0) goto 2040
+        defect=defect+1
+        divgrd=fp0
+        write(out,2031)
+        write(out,2032)
+2031    format(' DEFECT: division lacks a guard digit',' so error can exceed 1 ulp')
+2032    format(' or  1/3  and  3/9  and  9/27  may disagree.')
 2040    continue
-        Y=ONEMIN/FP1
-        X=ONEMIN-HALF
-        Y=(Y-HALF)-X
-        X=FP1+ULPPLS
-        T=X/FP1
-        X=T-X
-        IF (X .EQ. FP0 .AND. Y .EQ. FP0) GOTO 2070
-        SDEFCT = SDEFCT + 1
-        DEFECT = DEFECT - 1 + DIVGRD
-        DIVGRD=FP0
-        WRITE(OUT, 2061)
-2061    FORMAT(' SERIOUS DEFECT:  division lacks a guard digit',' violating  x/1 = x .')
+        y=onemin/fp1
+        x=onemin-half
+        y=(y-half)-x
+        x=fp1+ulppls
+        t=x/fp1
+        x=t-x
+        if (x .eq. fp0 .and. y .eq. fp0) goto 2070
+        sdefct = sdefct + 1
+        defect = defect - 1 + divgrd
+        divgrd=fp0
+        write(out, 2061)
+2061    format(' SERIOUS DEFECT:  division lacks a guard digit',' violating  x/1 = x .')
 2070    continue
-        X=FP1/(FP1+ULPPLS)
-        Y=X-HALF-HALF
-        IF (Y .LT. FP0) GOTO 2100
-        SDEFCT=SDEFCT+1
-        WRITE(OUT, 2091)
-        WRITE(OUT, 2092)
-2091    FORMAT(' VERY SERIOUS DEFECT:  computed value of  1/1.00...001')
-2092    FORMAT(' is not less than  1 .')
+        x=fp1/(fp1+ulppls)
+        y=x-half-half
+        if (y .lt. fp0) goto 2100
+        sdefct=sdefct+1
+        write(out, 2091)
+        write(out, 2092)
+2091    format(' VERY SERIOUS DEFECT:  computed value of  1/1.00...001')
+2092    format(' is not less than  1 .')
 2100    continue
-        X=FP1-ULPPLS
-        Y = FP1 + RADIX * ULPPLS
-        Z = X * RADIX
-        T = Y * RADIX
-        R = Z / RADIX
-        S = T / RADIX
-        X = R - X
-        Y = S - Y
-        IF (X .EQ. FP0 .AND. Y .EQ. FP0) GOTO 2130
-        FAILS = FAILS + 1
-        WRITE(OUT, 2120)
-        WRITE(OUT, 2121)
-2120    FORMAT(' FAILURE: multiplication  and/or  division')
-2121    FORMAT(' gets too many last digits wrong.')
+        x=fp1-ulppls
+        y = fp1 + radix * ulppls
+        z = x * radix
+        t = y * radix
+        r = z / radix
+        s = t / radix
+        x = r - x
+        y = s - y
+        if (x .eq. fp0 .and. y .eq. fp0) goto 2130
+        fails = fails + 1
+        write(out, 2120)
+        write(out, 2121)
+2120    format(' FAILURE: multiplication  and/or  division')
+2121    format(' gets too many last digits wrong.')
 2130    continue
-        Y = FP1-ULPMIN
-        X = FP1-ONEMIN
-        Y = FP1-Y
-        T = RADIX - ULPPLS
-        Z = RADIX - B9
-        T = RADIX - T
-        IF (X .EQ. ULPMIN .AND. Y .EQ. ULPMIN .AND. Z .EQ. ULPPLS .AND. T .EQ. ULPPLS) GOTO 2230
-        SDEFCT=SDEFCT+1
-        SUBGRD=FP0
-        WRITE(OUT, 2161)
-2161    FORMAT(' SERIOUS DEFECT: subtraction lacks a guard digit', ' so cancellation is obscured.')
-        IF (ONEMIN .EQ. FP1 .OR. ONEMIN-FP1 .LT. FP0) RETURN
-        SDEFCT=SDEFCT+1
-        WRITE(OUT, 2190)
-        WRITE(OUT, 2191)
-        WRITE(OUT, 2200)
-        WRITE(OUT, 2210)
-        WRITE(OUT, 2220)
-2190    FORMAT(' VERY SERIOUS DEFECT:')
-2191    FORMAT('   comparison alleges  (1-ulpmin) < 1  although')
-2200    FORMAT('   subtraction yields  (1-ulpmin) - 1 = 0  , thereby vitiating')
-2210    FORMAT('   such precautions against division by zero as')
-2220    FORMAT('   ...  if (x=1.0) then ..... else .../(x-1.0)...')
+        y = fp1-ulpmin
+        x = fp1-onemin
+        y = fp1-y
+        t = radix - ulppls
+        z = radix - b9
+        t = radix - t
+        if (x .eq. ulpmin .and. y .eq. ulpmin .and. z .eq. ulppls .and. t .eq. ulppls) goto 2230
+        sdefct=sdefct+1
+        subgrd=fp0
+        write(out, 2161)
+2161    format(' SERIOUS DEFECT: subtraction lacks a guard digit', ' so cancellation is obscured.')
+        if (onemin .eq. fp1 .or. onemin-fp1 .lt. fp0) return
+        sdefct=sdefct+1
+        write(out, 2190)
+        write(out, 2191)
+        write(out, 2200)
+        write(out, 2210)
+        write(out, 2220)
+2190    format(' VERY SERIOUS DEFECT:')
+2191    format('   comparison alleges  (1-ulpmin) < 1  although')
+2200    format('   subtraction yields  (1-ulpmin) - 1 = 0  , thereby vitiating')
+2210    format('   such precautions against division by zero as')
+2220    format('   ...  if (x=1.0) then ..... else .../(x-1.0)...')
 !
 2230    continue
-        IF (MULGRD * DIVGRD * SUBGRD .EQ. FP1) WRITE(OUT, 2231)
-2231    FORMAT(' These operations appear to have guard digits',' as they should.')
-        RETURN
-        END SUBROUTINE GUARD
+        if (mulgrd * divgrd * subgrd .eq. fp1) write(out, 2231)
+2231    format(' These operations appear to have guard digits',' as they should.')
+        return
+        end subroutine guard
 !-------------------------------------------------------------------------------
-        SUBROUTINE INTRO(MILES)
+        subroutine intro(miles)
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
 !
@@ -626,16 +626,16 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       implicit none
-        INTEGER MILES
+        integer miles
 !!!!!
 !        ... NUMBER OF MILESTONE TO PRINTOUT AS WE GO ALONG
-        WRITE(OUT,170)
-        WRITE(OUT,180)
-        CALL PAGE(MILES)
-        WRITE(OUT,190)
-        CALL PAGE(MILES)
-        WRITE(OUT,200)
-170     FORMAT(                                                         &
+        write(out,170)
+        write(out,180)
+        call page(miles)
+        write(out,190)
+        call page(miles)
+        write(out,200)
+170     format(                                                         &
      &    ' Lest this program stop prematurely, i.e. before displaying' &
      &   /'   "End of Test"   '                                         &
      &   /' try to persuade the computer NOT to terminate execution'    &
@@ -643,25 +643,25 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
      &   /' Zero occurs, but rather to persevere with a surrogate value'&
      &   /' after, perhaps, displaying some warning.  If persuasion'    &
      &   /' avails naught, don''t despair but run this program anyway')
-180     FORMAT(                                                         &
+180     format(                                                         &
      &    ' to see how many milestones it passes, and then run it'      &
      &   /' again.  It should pick up just beyond the error and'        &
      &   /' continue.  If it does not, it needs further debugging.'     &
      &  //' Users are invited to help debug and augment this program'   &
      &   /' so that it will cope with unanticipated and newly found'    &
      &   /' compilers and arithmetic pathologies.')
-190     FORMAT(                                                         &
+190     format(                                                         &
      &   /' Please send suggestions and interesting results to'         &
-     &        /9X,'Richard Karpinski'                                   &
-     &        /9X,'Computer Center U-76'                                &
-     &        /9X,'University of California'                            &
-     &        /9X,'San Francisco, CA 94143-0704'                        &
-     &        /9X,'USA'/                                                &
+     &        /9x,'Richard Karpinski'                                   &
+     &        /9x,'Computer Center U-76'                                &
+     &        /9x,'University of California'                            &
+     &        /9x,'San Francisco, CA 94143-0704'                        &
+     &        /9x,'USA'/                                                &
      &        /' In doing so, please include the following information:'&
-     &        /9X,'Precision:   Double;'/9X,'Version: 31 July 1986;'    &
-     &        /9X,'Computer:'//9X,'Compiler:'//9X,'Optimization level:'/&
-     &        /9X,'Other relevant compiler options:'/)
-200     FORMAT(                                                         &
+     &        /9x,'Precision:   Double;'/9x,'Version: 31 July 1986;'    &
+     &        /9x,'Computer:'//9x,'Compiler:'//9x,'Optimization level:'/&
+     &        /9x,'Other relevant compiler options:'/)
+200     format(                                                         &
      &        /' BASIC version (C) 1983 by Prof. W. M. Kahan.'          &
      &        /' Translated to FORTRAN by T. Quarles and G. Taylor.'    &
      &        /' Modified to ANSI 66/ANSI 77 compatible subset by'      &
@@ -669,201 +669,201 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
      &        /' You may redistribute this program freely if you'       &
      &        /' acknowledge the source.')
 !#####################################################################
-        WRITE(OUT,480)
-        CALL PAGE (MILES)
-        WRITE(OUT,530)
-        WRITE(OUT,590)
-        WRITE(OUT,640)
-480     FORMAT(//                                                       &
+        write(out,480)
+        call page (miles)
+        write(out,530)
+        write(out,590)
+        write(out,640)
+480     format(//                                                       &
      &  ' Running this program should reveal these characteristics:'//  &
      &  ' b = radix ( 1, 2, 4, 8, 10, 16, 100, 256, or ... ) .'/        &
      &  ' p = precision, the number of significant  b-digits carried.'/ &
      &  ' u2 = b/b^p = one ulp (unit in the last place) of 1.000xxx..'/ &
      &  ' u1 = 1/b^p = one ulp of numbers a little less than 1.0.')
-530     FORMAT(' g1, g2, g3 tell whether adequate guard digits are carried;'/  &
+530     format(' g1, g2, g3 tell whether adequate guard digits are carried;'/  &
      &  ' 1 = yes, 0 = no;  g1 for mult.,  g2 for div., g3 for subt.'/  &
      &  ' r1,r2,r3,r4  tell whether arithmetic is rounded or chopped;'/ &
      &  ' 0=chopped, 1=correctly rounded, -1=some other rounding;'/     &
      &  ' r1 for mult., r2 for div., r3 for add/subt., r4 for sqrt.'/   &
      &  ' s=1 when a sticky bit is used correctly in rounding; else s=0 &
      &.')
-590     FORMAT(' u0 = an underflow threshold.'/                         &
+590     format(' u0 = an underflow threshold.'/                         &
      & ' e0 and z0 tell whether underflow is abrupt, gradual or fuzzy'/ &
      & ' v = an overflow threshold, roughly.'/                          &
      & ' v0  tells, roughly, whether  infinity  is represented.'/       &
      & ' Comparisons are checked for consistency with subtraction')
-640     FORMAT('        and for contamination by pseudo-zeros.'/        &
+640     format('        and for contamination by pseudo-zeros.'/        &
      & ' Sqrt is tested. so is  y^x  for (mostly) integers  x .'/       &
      & ' Extra-precise subexpressions are revealed but not yet tested.' &
      & /' Decimal-binary conversion is not yet tested for accuracy.')
 !#####################################################################
-        CALL PAGE (MILES)
-        WRITE(OUT,690)
-        WRITE(OUT,760)
-        WRITE(OUT,780)
-        WRITE(OUT,820)
-690     FORMAT(' The program attempts to discriminate among:'/          &
+        call page (miles)
+        write(out,690)
+        write(out,760)
+        write(out,780)
+        write(out,820)
+690     format(' The program attempts to discriminate among:'/          &
      &         '     >FLAWs, like lack of a sticky bit, '/              &
      &         '     >SERIOUS DEFECTs, like lack of a guard digit, and'/&
      &         '     >FAILUREs, like  2+2 = 5 .'/                       &
      &         ' Failures may confound subsequent diagnoses.')
-760     FORMAT(/                                                        &
+760     format(/                                                        &
      &  ' The diagnostic capabilities of this program go beyond an'/    &
      &  ' earlier program called  "Machar", which can be found at the'/ &
      &' end of the book "Software Manual for the Elementary Functions"')
-780     FORMAT(                                                         &
+780     format(                                                         &
      &  ' (1980) by W. J. Cody and W. Waite. Although both programs'/   &
      &  ' try to discover the radix (b), precision (p) and         '/   &
      &  ' range (over/underflow thresholds) of the arithmetic, this'/   &
      &  ' program tries to cope with a wider variety of pathologies')
-820     FORMAT(                                                         &
+820     format(                                                         &
      &  ' and to say how well the arithmetic is implemented.'/          &
      &  ' The program is based upon a conventional radix'/              &
      &  ' representation for floating-point numbers,'/                  &
      &  ' but also allows for logarithmic encoding (b = 1)'/            &
      &  ' as used by certain early wang machines.'/)
-        RETURN
-        END SUBROUTINE INTRO
+        return
+        end subroutine intro
 !-------------------------------------------------------------------------------
-        SUBROUTINE LOGIT (MILE)
+        subroutine logit (mile)
       implicit none
 !
-        INTEGER MILE
+        integer mile
 !        ... MILESTONE REACHED - PASSED THROUGH BY THE SUCCESSFUL CODE
 !!!!!
 !        THIS ROUTINE FORCES A CHECKPOINT BY  WRITING ALL GLOBAL
 !        INFORMATION TO A FILE FOR LATER RESTARTING.
 !
-        WRITE(4) FP0,FP1,FP2,FP3,FP4,FP8,FP9,FP27,FP32,HALF,MINUS1
-        WRITE(4) FAILS,SDEFCT,DEFECT,FLAWS,RADIX,ULPPLS,ULPMIN,PRECIS
-        WRITE(4) W, MULGRD,DIVGRD, SUBGRD,A1,ONEMIN
-        WRITE(4) C1, H1, MINPOS, NULPS, UFLTHR, PHONY0, IEEE
-        WRITE(4) R1, R2, R3, R4, STICKY
-        WRITE(4) PGNUMB,MILE
-        REWIND 4
-        RETURN
-        END SUBROUTINE LOGIT
+        write(4) fp0,fp1,fp2,fp3,fp4,fp8,fp9,fp27,fp32,half,minus1
+        write(4) fails,sdefct,defect,flaws,radix,ulppls,ulpmin,precis
+        write(4) w, mulgrd,divgrd, subgrd,a1,onemin
+        write(4) c1, h1, minpos, nulps, uflthr, phony0, ieee
+        write(4) r1, r2, r3, r4, sticky
+        write(4) pgnumb,mile
+        rewind 4
+        return
+        end subroutine logit
 !-------------------------------------------------------------------------------
 !       SUBROUTINE TO TEST IF  Y = X
 !
-        SUBROUTINE CMPXY (X, Y, Z, Q, N)
+        subroutine cmpxy (x, y, z, q, n)
       implicit none
 !!!!!
-        DOUBLE PRECISION FP0, X, XX, Y, Z
-        INTEGER Q, N
-        DATA FP0/0.D0/
-        Y=Z**Q
-        IF (Y .EQ. X) GOTO 4080
-        IF (Z .GT. FP0) GO TO 4050
-        IF (Q .GT. FP0) GO TO 4050
-        WRITE(OUT, 40401) Z, Q, Y
-40401   FORMAT(' WARNING: computed  (',E16.8,')^(',I3,') = ',E16.8)
-        GO TO 40601
+        double precision fp0, x, xx, y, z
+        integer q, n
+        data fp0/0.d0/
+        y=z**q
+        if (y .eq. x) goto 4080
+        if (z .gt. fp0) go to 4050
+        if (q .gt. fp0) go to 4050
+        write(out, 40401) z, q, y
+40401   format(' WARNING: computed  (',e16.8,')^(',i3,') = ',e16.8)
+        go to 40601
 4050    continue
-        IF (N .GT. 0) GOTO 4070
-        DEFECT = DEFECT + 1
-        WRITE(OUT, 4061) Z, Q, Y
+        if (n .gt. 0) goto 4070
+        defect = defect + 1
+        write(out, 4061) z, q, y
 40601   continue
-        WRITE(OUT, 4062) X
-        XX=Y-X
-        WRITE(OUT, 4063) XX
-4061    FORMAT(' DEFECT: computed  (',E16.8,')^(',I3,') = ',E16.8)
-4062    FORMAT('    compares unequal to correct ',E16.8)
-4063    FORMAT('    they differ by  ',E16.8)
+        write(out, 4062) x
+        xx=y-x
+        write(out, 4063) xx
+4061    format(' DEFECT: computed  (',e16.8,')^(',i3,') = ',e16.8)
+4062    format('    compares unequal to correct ',e16.8)
+4063    format('    they differ by  ',e16.8)
 !                       INCREMENT COUNT OF DISCREPANCIES
 4070    continue
-        N = N + 1
+        n = n + 1
 4080    continue
-        RETURN
-        END SUBROUTINE CMPXY
+        return
+        end subroutine cmpxy
 !-------------------------------------------------------------------------------
 !       SUBROUTINE TO PRINT N AND PAUSE IF N > 0.
 !
-        SUBROUTINE PRT2 (N, MILES)
+        subroutine prt2 (n, miles)
       implicit none
-        INTEGER N, MILES
+        integer n, miles
 !!!!!
-        IF (N .EQ. 0) WRITE(OUT, 4291)
-4291    FORMAT(' No discrepancies found.'/)
-        IF (N .GT. 0) CALL PAGE(MILES)
+        if (n .eq. 0) write(out, 4291)
+4291    format(' No discrepancies found.'/)
+        if (n .gt. 0) call page(miles)
 !       ---- PAUSE ----
-        RETURN
-        END SUBROUTINE PRT2
+        return
+        end subroutine prt2
 !-------------------------------------------------------------------------------
 !       SUBROUTINE TO COMPARE  Z^I  WITH  X = Z*Z*...*Z  ( I TIMES )
 !
-        SUBROUTINE PWRCMP (X, Z, I, M, N)
+        subroutine pwrcmp (x, z, i, m, n)
       implicit none
 !!!!!
-        DOUBLE PRECISION X, Z
-        INTEGER I, M, N
-        DOUBLE PRECISION Y
-        INTEGER Q
+        double precision x, z
+        integer i, m, n
+        double precision y
+        integer q
 3990    continue
-        Y = Z ** I
-        Q = I
+        y = z ** i
+        q = i
 !                               TEST WHETHER  Y=X
-        CALL CMPXY (X, Y, Z, Q, N)
-        I = I + 1
+        call cmpxy (x, y, z, q, n)
+        i = i + 1
 !                               WITH  X = Z^M
-        IF (I .GT. M) RETURN
-        X = Z * X
-        IF (X .LT. W) GOTO 3990
-        RETURN
-        END SUBROUTINE
+        if (i .gt. m) return
+        x = z * x
+        if (x .lt. w) goto 3990
+        return
+        end subroutine
 !-------------------------------------------------------------------------------
 !       SUBROUTINE TO PRINT COUNT  N  OF DISCREPANCIES
 !
-        SUBROUTINE PRTCNT (N)
+        subroutine prtcnt (n)
       implicit none
-        INTEGER N
+        integer n
 !!!!!
-        IF (N .GT. 0) WRITE(OUT, 4101) N
-4101    FORMAT(' Similar discrepancies have occurred ',I4,' times.')
-        RETURN
-        END SUBROUTINE PRTCNT
+        if (n .gt. 0) write(out, 4101) n
+4101    format(' Similar discrepancies have occurred ',i4,' times.')
+        return
+        end subroutine prtcnt
 !-------------------------------------------------------------------------------
-        SUBROUTINE BADSQR(SFLAG,Z,Y)
+        subroutine badsqr(sflag,z,y)
       implicit none
-        INTEGER SFLAG
+        integer sflag
 !        ... INTEGER FLAG TO INDICATE NEED TO USE PREFIX "SERIOUS"
-        DOUBLE PRECISION Z
+        double precision z
 !        ... SQUARE OF SQUARE ROOT OF Z (WRONG)
-        DOUBLE PRECISION Y
+        double precision y
 !        ... DOUBLE PRECISION NUMBER WHOSE SQUARE ROOT SQUARED IS WRONG
 !!!!!
-        IF(SFLAG .EQ. 1) GO TO 5745
-        WRITE(OUT,5740) Z
-5740    FORMAT(' DEFECT:  comparison alleges that what prints as  z = ', E16.8)
-        GO TO 5748
+        if(sflag .eq. 1) go to 5745
+        write(out,5740) z
+5740    format(' DEFECT:  comparison alleges that what prints as  z = ', e16.8)
+        go to 5748
 5745    continue
-        WRITE(OUT,5747) Z
-5747    FORMAT(' SERIOUS DEFECT:  comparison alleges that what prints as z = ',E16.8)
+        write(out,5747) z
+5747    format(' SERIOUS DEFECT:  comparison alleges that what prints as z = ',e16.8)
 5748    continue
-        WRITE(OUT,5749) Y
-5749    FORMAT(17X,'is too far from  sqrt(z)^2 = ',E16.8,'.')
-        RETURN
-        END SUBROUTINE BADSQR
+        write(out,5749) y
+5749    format(17x,'is too far from  sqrt(z)^2 = ',e16.8,'.')
+        return
+        end subroutine badsqr
 !-------------------------------------------------------------------------------
-        SUBROUTINE OVERF (MILES, FROM)
+        subroutine overf (miles, from)
       implicit none
 !!!!!
 !        ... NUMBER OF MILESTONES PASSED
-        INTEGER MILES
+        integer miles
 !        ... COUNTER OF MILESTONES PREVIOUSLY REACHED
-        INTEGER FROM
+        integer from
 !
 !        ... LOCAL VARIABLES
-        INTEGER I
-        DOUBLE PRECISION V9, X, Y, Z, TEMP
+        integer i
+        double precision v9, x, y, z, temp
 !        ... SATURATION VALUE AFTER FLOATING POINT OVERFLOW
-        DOUBLE PRECISION SAT
+        double precision sat
 !        ... OVERFLOW THRESHOLD
-        DOUBLE PRECISION V
+        double precision v
 !        ... FLAG TO INDICATE WHETHER DEFECT IS SERIOUS OR NOT
-        INTEGER ZFLAG
+        integer zflag
 !
-        INTEGER I0
+        integer i0
 !
 !       IBM        SIGN-MAGNITUDE, SATURATION VALUE, NO TRAP
 !       PRIME      TWOS-COMPLEMENT, SATURATION VALUE, NO TRAP
@@ -874,38 +874,38 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !           CALL TO UNIX TO ENABLE TRAPS (FAULTS)
 !           ON FP UNDERFLOW AND FIXED POINT OVERFLOW
 !
-        IF (FROM .EQ. 0) GOTO 5500
+        if (from .eq. 0) goto 5500
 !
 !           REASSIGN VALUES TO VARIABLES USING THE LOG FILE,
 !           THEN GO TO RESTART POINT
 !
-        READ(3) I,V,SAT,V9,X,Y,Z,ZFLAG
-        REWIND 3
-        IF (FROM .EQ. 161) GOTO 5582
-        IF (FROM .EQ. 170) GOTO 5680
-        IF (FROM .EQ. 175) GOTO 5810
-        IF (FROM .GE. 201 .AND. FROM .LE. 205) GO TO 5999
-        CALL BADMIL
+        read(3) i,v,sat,v9,x,y,z,zflag
+        rewind 3
+        if (from .eq. 161) goto 5582
+        if (from .eq. 170) goto 5680
+        if (from .eq. 175) goto 5810
+        if (from .ge. 201 .and. from .le. 205) go to 5999
+        call badmil
 !
 5500    continue
-        WRITE(OUT,5510)
-5510    FORMAT(' Searching for overflow threshold:')
-        MILES = 161
-        CALL LOGIT (MILES)
+        write(out,5510)
+5510    format(' Searching for overflow threshold:')
+        miles = 161
+        call logit (miles)
 !
 !                  SET Y TO -1 * A LARGE POWER OF THE RADIX
-        Y = -C1
-        V9 = H1 * Y
+        y = -c1
+        v9 = h1 * y
 !
 !                  MULTIPLY BY RADIX (H1) UNTIL OVERFLOW OCCURS
 !
 5530    continue
-        V = Y
-        Y = V9
-        WRITE(3) I,V,SAT,V9,X,Y,Z,ZFLAG
-        REWIND 3
-        V9 = H1 * Y
-        IF (V9 .LT. Y) GOTO 5530
+        v = y
+        y = v9
+        write(3) i,v,sat,v9,x,y,z,zflag
+        rewind 3
+        v9 = h1 * y
+        if (v9 .lt. y) goto 5530
 !
 !       SYSTEM DOES NOT TRAP ON OVERFLOW
 !
@@ -922,10 +922,10 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
 !       TEST 1: VALUE RETURNED AFTER OVERFLOW SHRINKS IN MAGNITUDE
 !
-        IF (V9 .EQ. Y) GOTO 5545
-        SDEFCT = SDEFCT + 1
-        WRITE(OUT, 5541) Y, V9
-5541    FORMAT(' SERIOUS DEFECT: overflow past  ', 1PE16.8, '  shrinks to ', 1PE16.8)
+        if (v9 .eq. y) goto 5545
+        sdefct = sdefct + 1
+        write(out, 5541) y, v9
+5541    format(' SERIOUS DEFECT: overflow past  ', 1pe16.8, '  shrinks to ', 1pe16.8)
 !
 !       TEST 2: TWO'S COMPLEMENT MACHINE SATURATES AT NEGATIVE
 !               LARGEST POWER OF THE RADIX
@@ -933,18 +933,18 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !               FROM ONE WITHOUT THEM
 !
 5545    continue
-        WRITE(OUT,5546) Y
-5546    FORMAT(' Can " z = -y " overflow?  trying it on  y = ',1PE16.8)
-        SAT = -Y
-        IF (V - Y .EQ. V + SAT) GOTO 5560
-        FLAWS = FLAWS + 1
-        WRITE(OUT, 5551)
-5551    FORMAT(' Finds a FLAW:  -(-y) differs from y.')
-        GOTO 5590
+        write(out,5546) y
+5546    format(' Can " z = -y " overflow?  trying it on  y = ',1pe16.8)
+        sat = -y
+        if (v - y .eq. v + sat) goto 5560
+        flaws = flaws + 1
+        write(out, 5551)
+5551    format(' Finds a FLAW:  -(-y) differs from y.')
+        goto 5590
 5560    continue
-        WRITE(OUT, 5561)
-5561    FORMAT(' Seems O.K.')
-        GOTO 5590
+        write(out, 5561)
+5561    format(' Seems O.K.')
+        goto 5590
 !
 !       RESTART POINT FOR SYSTEMS THAT TRAP ON OVERFLOW
 !
@@ -954,41 +954,41 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !       TEST 2: TWO'S COMPLEMENT MACHINE
 !
 5582    continue
-        WRITE(OUT,5583) Y
-5583    FORMAT(' Can " z = -y " overflow?  trying it on  y = ',1PE16.8)
+        write(out,5583) y
+5583    format(' Can " z = -y " overflow?  trying it on  y = ',1pe16.8)
 !
 !           PUT SOMETHING HERE TO HANDLE THE TRAP
 !
-        SAT = -Y
-        IF (V - Y .EQ. V + SAT) GOTO 5585
-        FLAWS = FLAWS + 1
-        WRITE(OUT, 5584)
-5584    FORMAT('  Finds a FLAW:  -(-y) differs from y.')
-        GOTO 5587
+        sat = -y
+        if (v - y .eq. v + sat) goto 5585
+        flaws = flaws + 1
+        write(out, 5584)
+5584    format('  Finds a FLAW:  -(-y) differs from y.')
+        goto 5587
 5585    continue
-        WRITE(OUT, 5586)
-5586    FORMAT(' Seems O.K.')
+        write(out, 5586)
+5586    format(' Seems O.K.')
 !
 !           THIS CODE WORKS FOR A SIGN-MAGNITUDE MACHINE,
 !           BUT FAILS FOR A TWOS-COMPLEMENT ONE
 !
 5587    continue
-        V = Y * (H1 * ULPPLS - H1)
-        V = V + Y * ((FP1 - H1) * ULPPLS)
+        v = y * (h1 * ulppls - h1)
+        v = v + y * ((fp1 - h1) * ulppls)
 !
-        WRITE(OUT, 5588) V
-5588    FORMAT(' Overflow threshold is  v = ',1PE16.8)
-        WRITE(OUT, 5589)
-5589    FORMAT(' There is no saturation value because'/ ' the system traps on overflow.')
-        GOTO 5640
+        write(out, 5588) v
+5588    format(' Overflow threshold is  v = ',1pe16.8)
+        write(out, 5589)
+5589    format(' There is no saturation value because'/ ' the system traps on overflow.')
+        goto 5640
 !
 !       NON-TRAPPING SYSTEMS (CONTINUED)
 !
 5590    continue
-        Y = V * (H1 * ULPPLS - H1)
-        Z = Y + V * ((FP1 - H1) * ULPPLS)
-        IF (Z .LT. SAT) Y = Z
-        IF (Y .LT. SAT) V = Y
+        y = v * (h1 * ulppls - h1)
+        z = y + v * ((fp1 - h1) * ulppls)
+        if (z .lt. sat) y = z
+        if (y .lt. sat) v = y
 !
 !                  THE OVERFLOW THRESHOLD EQUALS THE SATURATION VALUE
 !                  IF THE LATTER BEHAVES AS A NUMBER RATHER THAN AN
@@ -996,784 +996,784 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !                  CHANGED WHEN ANY NUMBER IS ADDED TO OR SUBTRACTED
 !                  FROM IT.
 !
-        IF (SAT - V .LT. SAT) V = SAT
+        if (sat - v .lt. sat) v = sat
 !
-        WRITE(OUT, 5620) V
-5620    FORMAT(' Overflow threshold is  v = ',1PE16.8)
-        WRITE(OUT, 5630) SAT
-5630    FORMAT(' Overflow saturates at  sat = ',1PE16.8)
+        write(out, 5620) v
+5620    format(' Overflow threshold is  v = ',1pe16.8)
+        write(out, 5630) sat
+5630    format(' Overflow saturates at  sat = ',1pe16.8)
 !
 !
 !
 5640    continue
-        MILES = 163
-        WRITE(OUT, 5641)
-5641    FORMAT(' No overflow should be signaled for  v*1 = ')
-        TEMP = V * FP1
-        WRITE(OUT, 5642) TEMP
-5642    FORMAT('                                           ',1PE16.8)
-        WRITE(OUT, 5643)
-5643    FORMAT('                            nor for  v/1 = ')
-        TEMP = V / FP1
-        WRITE(OUT, 5644) TEMP
-5644    FORMAT('                                           ',1PE16.8)
-        WRITE(OUT,5649)
-5649    FORMAT(' Any overflow signal separating this  *  from one above is a DEFECT.')
+        miles = 163
+        write(out, 5641)
+5641    format(' No overflow should be signaled for  v*1 = ')
+        temp = v * fp1
+        write(out, 5642) temp
+5642    format('                                           ',1pe16.8)
+        write(out, 5643)
+5643    format('                            nor for  v/1 = ')
+        temp = v / fp1
+        write(out, 5644) temp
+5644    format('                                           ',1pe16.8)
+        write(out,5649)
+5649    format(' Any overflow signal separating this  *  from one above is a DEFECT.')
 !
 !       NEED TO ADD CODE HERE TO HANDLE OVERFLOWS JUST ABOVE
 !
 !
-        MILES=170
+        miles=170
 !
 !       PROBLEM: SAT NOT DEFINED IF WE TRAPPED ON OVERFLOW ABOVE
 !
-        IF (-V .LT. V .AND. -SAT .LT. SAT .AND. -UFLTHR .LT. V .AND.  UFLTHR .LT. V) GOTO 5680
-        FAILS = FAILS + 1
-        WRITE(OUT,5672)
-5672    FORMAT(' FAILURE: comparisons are confused by overflow.')
+        if (-v .lt. v .and. -sat .lt. sat .and. -uflthr .lt. v .and.  uflthr .lt. v) goto 5680
+        fails = fails + 1
+        write(out,5672)
+5672    format(' FAILURE: comparisons are confused by overflow.')
 !
 5680    continue
-        MILES = 175
-        I = 0
-        Z = UFLTHR
+        miles = 175
+        i = 0
+        z = uflthr
 5700    continue
-        I = I + 1
-        IF (Z .EQ. FP0) GO TO 5770
-        V9=DSQRT(Z)
-        Y=V9*V9
-        IF (.NOT. (Y/(FP1-RADIX * NULPS) .LT. Z .OR. Y .GT. (FP1+RADIX*NULPS)*Z))GOTO 5770
-        IF (V9 .GT. ULPMIN) GOTO 5750
-        ZFLAG=0
-        DEFECT=1+DEFECT
-        GOTO 5760
+        i = i + 1
+        if (z .eq. fp0) go to 5770
+        v9=dsqrt(z)
+        y=v9*v9
+        if (.not. (y/(fp1-radix * nulps) .lt. z .or. y .gt. (fp1+radix*nulps)*z))goto 5770
+        if (v9 .gt. ulpmin) goto 5750
+        zflag=0
+        defect=1+defect
+        goto 5760
 5750    continue
-        ZFLAG=1
-        SDEFCT=1+SDEFCT
+        zflag=1
+        sdefct=1+sdefct
 5760    continue
-        CALL BADSQR(ZFLAG,Z,Y)
+        call badsqr(zflag,z,y)
 5770    continue
-        GOTO (5780, 5790, 5800),I
+        goto (5780, 5790, 5800),i
 5780    continue
-        Z = MINPOS
-        GOTO 5700
+        z = minpos
+        goto 5700
 5790    continue
-        Z = PHONY0
-        GOTO 5700
+        z = phony0
+        goto 5700
 !
 5800    continue
-        I=0
-        Z=V
+        i=0
+        z=v
 5810    continue
-        MILES=180
-        IF (RADIX .NE. 2. .OR. PRECIS .NE. 56. .OR. PHONY0 .EQ. 0. .OR. -FP0 .EQ. FP0) GOTO 5850
-        FAILS=1+FAILS
+        miles=180
+        if (radix .ne. 2. .or. precis .ne. 56. .or. phony0 .eq. 0. .or. -fp0 .eq. fp0) goto 5850
+        fails=1+fails
 ! FAILURE: ATTEMPTS TO EVALUATE  SQR(OVERFLOW THRESHOLD V)  IN DOUBLE
 ! PRECISION IN  BASIC  ON THE  IBM PC  DISPLAY THE WORD  " OVERFLOW "
 ! AND THEN DISABLE THE KEYBOARD !  THIS IS DISASTROUS.
-        GOTO 5920
+        goto 5920
 !
 5850    continue
-        V9 = DSQRT(Z)
-        X = (FP1 - RADIX * NULPS) * V9
-        V9 = V9 * X
-        IF (.NOT. (V9 .LT. (FP1-FP2*RADIX*NULPS)*Z .OR. V9 .GT. Z)) GOTO 5900
-        Y=V9
-        IF (X .LT. W) GO TO 5880
-        ZFLAG = 0
-        DEFECT = DEFECT + 1
-        GOTO 5890
+        v9 = dsqrt(z)
+        x = (fp1 - radix * nulps) * v9
+        v9 = v9 * x
+        if (.not. (v9 .lt. (fp1-fp2*radix*nulps)*z .or. v9 .gt. z)) goto 5900
+        y=v9
+        if (x .lt. w) go to 5880
+        zflag = 0
+        defect = defect + 1
+        goto 5890
 5880    continue
-        ZFLAG = 1
-        SDEFCT = SDEFCT + 1
+        zflag = 1
+        sdefct = sdefct + 1
 5890    continue
-        I = 1
-        CALL BADSQR(ZFLAG,Z,Y)
+        i = 1
+        call badsqr(zflag,z,y)
 5900    continue
-        IF (I .EQ. 1) GO TO 5920
-        I = 1
-        Z = SAT
-        GOTO 5850
+        if (i .eq. 1) go to 5920
+        i = 1
+        z = sat
+        goto 5850
 !
 5920    continue
-        MILES = 190
-        CALL PAGE (MILES)
-        X = UFLTHR * V
-        Y = RADIX * RADIX
-        IF (X * Y .GE. FP1 .AND. X .LE. Y) GOTO 5990
-        IF (X * Y .GE. ULPMIN .AND. X .LE. Y / ULPMIN) GOTO 5970
-        DEFECT = DEFECT + 1
-        WRITE(OUT, 5961) X
-5961    FORMAT(' DEFECT: badly unbalanced range;','  UFLTHR * V  =', E13.5,' IS TOO FAR FROM 1.')
-        GOTO 5990
+        miles = 190
+        call page (miles)
+        x = uflthr * v
+        y = radix * radix
+        if (x * y .ge. fp1 .and. x .le. y) goto 5990
+        if (x * y .ge. ulpmin .and. x .le. y / ulpmin) goto 5970
+        defect = defect + 1
+        write(out, 5961) x
+5961    format(' DEFECT: badly unbalanced range;','  UFLTHR * V  =', e13.5,' IS TOO FAR FROM 1.')
+        goto 5990
 5970    continue
-        FLAWS = FLAWS + 1
-        WRITE(OUT, 5971) X
-5971    FORMAT(' FLAW: unbalanced range;', '  UFLTHR * V  =', E13.5,' IS TOO FAR FROM 1.')
+        flaws = flaws + 1
+        write(out, 5971) x
+5971    format(' FLAW: unbalanced range;', '  UFLTHR * V  =', e13.5,' IS TOO FAR FROM 1.')
 !
 !                               TEST  X/X   VS.  1
 5990    continue
-        I0 = 1
-        GO TO 6000
+        i0 = 1
+        go to 6000
 5999    continue
-        I0 = FROM - 200
+        i0 = from - 200
 !
 6000    continue
-        DO 6100 I = I0, 5
-           X = ONEMIN
-           IF (I .EQ. 2) X = FP1 + ULPPLS
-           IF (I .EQ. 3) X = V
-           IF (I .EQ. 4) X = UFLTHR
-           IF (I .EQ. 5) X = RADIX
-           MILES = 200 + I
-           IF (FROM .NE. MILES) GO TO 6050
-           SDEFCT = SDEFCT + 1
-           WRITE(OUT,6011) X
-6011       FORMAT(' SERIOUS DEFECT: x/x traps when x = ',E13.5)
-           GO TO 6100
+        do 6100 i = i0, 5
+           x = onemin
+           if (i .eq. 2) x = fp1 + ulppls
+           if (i .eq. 3) x = v
+           if (i .eq. 4) x = uflthr
+           if (i .eq. 5) x = radix
+           miles = 200 + i
+           if (from .ne. miles) go to 6050
+           sdefct = sdefct + 1
+           write(out,6011) x
+6011       format(' SERIOUS DEFECT: x/x traps when x = ',e13.5)
+           go to 6100
 6050    continue
-        Y = X
-        CALL LOGIT(MILES)
-        V9 = (Y / X - HALF) - HALF
-        IF (V9 .EQ. FP0) GOTO 6100
-        IF (V9 .EQ. -ULPMIN .AND. I .LT. 5) GOTO 6080
-        FAILS = FAILS + 1
-        WRITE(OUT, 6071) X
-6071    FORMAT(' FAILURE:  x/x differs from 1 when x = ',E13.5)
-        GOTO 6090
+        y = x
+        call logit(miles)
+        v9 = (y / x - half) - half
+        if (v9 .eq. fp0) goto 6100
+        if (v9 .eq. -ulpmin .and. i .lt. 5) goto 6080
+        fails = fails + 1
+        write(out, 6071) x
+6071    format(' FAILURE:  x/x differs from 1 when x = ',e13.5)
+        goto 6090
 6080    continue
-        SDEFCT = SDEFCT + 1
-        WRITE(OUT, 6081) X
-6081    FORMAT(' SERIOUS DEFECT:  x/x differs from 1 when x = ',E13.5)
+        sdefct = sdefct + 1
+        write(out, 6081) x
+6081    format(' SERIOUS DEFECT:  x/x differs from 1 when x = ',e13.5)
 6090    continue
-        WRITE(OUT, 6091) V9
-6091    FORMAT('           instead,  x/x - 1/2 - 1/2 = ',E13.5)
+        write(out, 6091) v9
+6091    format('           instead,  x/x - 1/2 - 1/2 = ',e13.5)
 6100    continue
-        CONTINUE
-        RETURN
-        END SUBROUTINE OVERF
+        continue
+        return
+        end subroutine overf
 !-------------------------------------------------------------------------------
-        SUBROUTINE PAGE(MILE)
+        subroutine page(mile)
       implicit none
 !!!!!
-        INTEGER MILE
+        integer mile
 !        ... MILESTONE REACHED - PASSED THROUGH BY THE SUCCESSFUL CODE
 !
 !        THIS PROGRAM RUNS INTERACTIVELY PUTTING ALL OUTPUT TO A SCREEN.
 !        THE NEXT SUBPROGRAM PAUSES, ALLOWING YOU TO READ THE SCREEN OR
 !        COPY IT.
-        WRITE(OUT,110)
-110     FORMAT(/' To continue diagnosis, press return.')
-        READ(IN,111)
-111     FORMAT (A4)
-        PGNUMB=PGNUMB+1
-        WRITE(OUT,112) MILE, PGNUMB
-112     FORMAT(' Diagnosis resumes after milestone  #',I5,',    ... page ',I5/)
-        WRITE(4) FP0,FP1,FP2,FP3,FP4,FP8,FP9,FP27,FP32,HALF,MINUS1
-        WRITE(4) FAILS,SDEFCT,DEFECT,FLAWS,RADIX,ULPPLS,ULPMIN,PRECIS
-        WRITE(4) W, MULGRD,DIVGRD, SUBGRD,A1,ONEMIN
-        WRITE(4) C1, H1, MINPOS, NULPS, UFLTHR, PHONY0, IEEE
-        WRITE(4) R1, R2, R3, R4, STICKY
-        WRITE(4) PGNUMB,MILE
-        REWIND 4
-        MILE=MILE+1
-        RETURN
-        END SUBROUTINE PAGE
+        write(out,110)
+110     format(/' To continue diagnosis, press return.')
+        read(in,111)
+111     format (a4)
+        pgnumb=pgnumb+1
+        write(out,112) mile, pgnumb
+112     format(' Diagnosis resumes after milestone  #',i5,',    ... page ',i5/)
+        write(4) fp0,fp1,fp2,fp3,fp4,fp8,fp9,fp27,fp32,half,minus1
+        write(4) fails,sdefct,defect,flaws,radix,ulppls,ulpmin,precis
+        write(4) w, mulgrd,divgrd, subgrd,a1,onemin
+        write(4) c1, h1, minpos, nulps, uflthr, phony0, ieee
+        write(4) r1, r2, r3, r4, sticky
+        write(4) pgnumb,mile
+        rewind 4
+        mile=mile+1
+        return
+        end subroutine page
 !-------------------------------------------------------------------------------
-        SUBROUTINE PARTUF (Z, ZNAME, MILES, PARTU, RESTRT)
+        subroutine partuf (z, zname, miles, partu, restrt)
       implicit none
-        LOGICAL RESTRT
+        logical restrt
 !!!!!
-        INTEGER PARTU
+        integer partu
 !        ... FLAG TO INDICATE THE PRESENCE OF PARTIAL UNDERFLOW
-        DOUBLE PRECISION Z
+        double precision z
 !        ... VALUE TO TEST FOR PARTIAL UNDERFLOW
-        character(len=8) :: ZNAME
+        character(len=8) :: zname
 !        ... NAME OF THE VARIABLE Z (IN A8 FORMAT) FOR OUTPUT
-        INTEGER MILES
+        integer miles
 !        ... NUMBER OF MILESTONE REACHED SO FAR FOR OUTPUT
-        DOUBLE PRECISION DUMMY
+        double precision dummy
 !        ... TEMPORARY VARIABLE TO HOLD A RESULT THAT MAY ACTUALLY
 !        ... UNDERFLOW
-        DOUBLE PRECISION MULTP1
+        double precision multp1
 !        ... TEMP. VARIABLE TO HOLD RESULT OF TEST FOR UNDERFLOW ON
 !        ... MULT BY 1
-        DOUBLE PRECISION MULTP2
+        double precision multp2
 !        ... TEMP. VARIABLE TO HOLD RESULT OF TEST FOR UNDERFLOW ON
 !        ... 1 * SMALL
-        DOUBLE PRECISION DIVTMP
+        double precision divtmp
 !        ... TEMP. VARIABLE TO HOLD RESULT OF TEST FOR UNDERFLOW ON
 !        ... DIV BY 1
 !       ___ SUBROUTINE TO TEST  Z  FOR PARTIAL UNDERFLOW ___
-        PARTU=0
-        IF (RESTRT) GO TO 4740
-        CALL LOGIT(MILES)
-        IF (Z .EQ. FP0) GOTO 4850
-        WRITE(OUT, 4660) ZNAME, ZNAME, ZNAME, ZNAME
-4660    FORMAT(' Since comparison denies  ',A8,' = 0, evaluating  (',A8,' + ',A8,') / ',A8,'  should be safe;')
-        DUMMY = (Z + Z) / Z
-        WRITE(OUT, 4665) ZNAME, ZNAME, ZNAME, DUMMY
-4665    FORMAT(' what the machine gets for  (',A8,' + ',A8,') / ',A8,'  is'/10X, E15.7)
-        IF (DABS(DUMMY-FP2) .LT. RADIX*ULPPLS) GO TO 4750
-        IF (DUMMY .LT. FP1 .OR. DUMMY .GT. FP2) GOTO 4740
-        PARTU=1
-        DEFECT=DEFECT+1
-        WRITE(OUT,4675)
-4675    FORMAT(' This is a DEFECT.'/)
-        GOTO 4760
+        partu=0
+        if (restrt) go to 4740
+        call logit(miles)
+        if (z .eq. fp0) goto 4850
+        write(out, 4660) zname, zname, zname, zname
+4660    format(' Since comparison denies  ',a8,' = 0, evaluating  (',a8,' + ',a8,') / ',a8,'  should be safe;')
+        dummy = (z + z) / z
+        write(out, 4665) zname, zname, zname, dummy
+4665    format(' what the machine gets for  (',a8,' + ',a8,') / ',a8,'  is'/10x, e15.7)
+        if (dabs(dummy-fp2) .lt. radix*ulppls) go to 4750
+        if (dummy .lt. fp1 .or. dummy .gt. fp2) goto 4740
+        partu=1
+        defect=defect+1
+        write(out,4675)
+4675    format(' This is a DEFECT.'/)
+        goto 4760
 4740    continue
-        PARTU=1
-        SDEFCT=SDEFCT+1
-        WRITE(OUT,4745)
-4745    FORMAT(' This is a VERY SERIOUS DEFECT.')
-        GOTO 4760
+        partu=1
+        sdefct=sdefct+1
+        write(out,4745)
+4745    format(' This is a VERY SERIOUS DEFECT.')
+        goto 4760
 4750    continue
-        WRITE(OUT,4751)
-4751    FORMAT(' This is O.K. provided over/underflow has not just been signaled.')
+        write(out,4751)
+4751    format(' This is O.K. provided over/underflow has not just been signaled.')
 4760    continue
-        MULTP1=Z*FP1
-        MULTP2=FP1*Z
-        DIVTMP=Z/FP1
-        IF (Z .EQ. MULTP1 .AND. Z .EQ. MULTP2 .AND. Z .EQ. DIVTMP)GO TO 4840
-        PARTU=1
-        DEFECT=DEFECT+1
-        WRITE(OUT,4780)ZNAME,Z
-4780    FORMAT(' DEFECT:  what prints as  ',A8,' =',E16.8,' compares different from')
-        IF (.NOT. (Z .EQ. MULTP1)) WRITE(OUT,4795)ZNAME,MULTP1
-4795    FORMAT('           ',A8,'*1 = ',E16.8)
-        IF (.NOT. (Z .EQ. MULTP2 .OR. MULTP2 .EQ. MULTP1)) WRITE(OUT,4805) ZNAME,MULTP2
-4805    FORMAT('           1*',A8,' = ',E16.8)
-        IF (.NOT. (Z .EQ. DIVTMP)) WRITE(OUT,4815)ZNAME,DIVTMP
-4815    FORMAT('           ',A8,'/1 = ',E16.8)
-        IF (MULTP2 .EQ. MULTP1) GO TO 4840
-        DEFECT=DEFECT+1
-        WRITE(OUT,4831)
-4831    FORMAT(' DEFECT: multiplication does not commute; comparison alleges that')
-        WRITE(OUT,4833)ZNAME,MULTP2,ZNAME,MULTP1
-4833    FORMAT('         1*',A8,' =',E16.8,'  differs from  ',A8,'*1 =',E16.8)
+        multp1=z*fp1
+        multp2=fp1*z
+        divtmp=z/fp1
+        if (z .eq. multp1 .and. z .eq. multp2 .and. z .eq. divtmp)go to 4840
+        partu=1
+        defect=defect+1
+        write(out,4780)zname,z
+4780    format(' DEFECT:  what prints as  ',a8,' =',e16.8,' compares different from')
+        if (.not. (z .eq. multp1)) write(out,4795)zname,multp1
+4795    format('           ',a8,'*1 = ',e16.8)
+        if (.not. (z .eq. multp2 .or. multp2 .eq. multp1)) write(out,4805) zname,multp2
+4805    format('           1*',a8,' = ',e16.8)
+        if (.not. (z .eq. divtmp)) write(out,4815)zname,divtmp
+4815    format('           ',a8,'/1 = ',e16.8)
+        if (multp2 .eq. multp1) go to 4840
+        defect=defect+1
+        write(out,4831)
+4831    format(' DEFECT: multiplication does not commute; comparison alleges that')
+        write(out,4833)zname,multp2,zname,multp1
+4833    format('         1*',a8,' =',e16.8,'  differs from  ',a8,'*1 =',e16.8)
 4840    continue
-        IF (PARTU .GT. 0) CALL PAGE(MILES)
+        if (partu .gt. 0) call page(miles)
 !       ---- PAUSE ----
 4850    continue
-        RETURN
-        END SUBROUTINE PARTUF
+        return
+        end subroutine partuf
 !-------------------------------------------------------------------------------
-        SUBROUTINE POWER(MILES,FROM)
+        subroutine power(miles,from)
       implicit none
 !!!!!
-        INTEGER MILES,FROM
+        integer miles,from
 !       ... LOCAL VARIABLES
-        INTEGER I, M, N, N1
-        INTEGER NUMTRY
-        DOUBLE PRECISION X, Z, A
+        integer i, m, n, n1
+        integer numtry
+        double precision x, z, a
 !       ... CONSTANTS
-        DOUBLE PRECISION FP0, FP1, FP2, FP3, FP4, FP8, MINUS1
+        double precision fp0, fp1, fp2, fp3, fp4, fp8, minus1
 !
-        FP0 = 0.0
-        FP1 = 1.0
-        FP2 = FP1 + FP1
-        FP3 = FP2 + FP1
-        FP4 = FP3 + FP1
-        FP8 = FP4 + FP4
-        MINUS1 = -FP1
-        A = FP1 / A1
-        NUMTRY = 20
+        fp0 = 0.0
+        fp1 = 1.0
+        fp2 = fp1 + fp1
+        fp3 = fp2 + fp1
+        fp4 = fp3 + fp1
+        fp8 = fp4 + fp4
+        minus1 = -fp1
+        a = fp1 / a1
+        numtry = 20
 !
-        WRITE(OUT,3971)
-3971    FORMAT(' Testing powers  z^i  for small integers  z  and  i :')
-        IF(FROM .NE. 90) WRITE(OUT,3972)
-3972    FORMAT(' Start with 0.**0 .')
-        N = 0
-        I = 0
-        Z = -FP0
-        M = 3
-        IF(FROM.EQ.90) GOTO 4160
-        IF (FROM .NE. 0) CALL BADMIL
+        write(out,3971)
+3971    format(' Testing powers  z^i  for small integers  z  and  i :')
+        if(from .ne. 90) write(out,3972)
+3972    format(' Start with 0.**0 .')
+        n = 0
+        i = 0
+        z = -fp0
+        m = 3
+        if(from.eq.90) goto 4160
+        if (from .ne. 0) call badmil
 !                       TEST POWERS OF ZERO
 4130    continue
-        X = FP1
-        CALL PWRCMP (X, Z, I, M, N)
-        IF (I .GT. 10) GOTO 4150
-        I = 1023
-        CALL PWRCMP (X, Z, I, M, N)
+        x = fp1
+        call pwrcmp (x, z, i, m, n)
+        if (i .gt. 10) goto 4150
+        i = 1023
+        call pwrcmp (x, z, i, m, n)
 4150    continue
-        IF (Z .EQ. MINUS1) GOTO  4170
+        if (z .eq. minus1) goto  4170
 !                       IF (-1)^N IS INVALID, REPLACE 'MINUS1' BY 'FP1'
 4160    continue
-        Z = MINUS1
-        I = -4
-        GOTO 4130
+        z = minus1
+        i = -4
+        goto 4130
 !                       PRINT  N  IF  N > 0.
 4170    continue
-        CALL PRTCNT (N)
-        N1 = N
-        N = 0
-        Z = A1
-        M = IDINT(FP2 * DLOG(W) / DLOG(A1) )
+        call prtcnt (n)
+        n1 = n
+        n = 0
+        z = a1
+        m = idint(fp2 * dlog(w) / dlog(a1) )
 !
 !                       LOOP
 !
 4190    continue
-        X = Z
-        I = 1
-        CALL PWRCMP (X, Z, I, M, N)
-        IF (Z .EQ. A) GOTO 4210
-        Z = A
-        GOTO 4190
+        x = z
+        i = 1
+        call pwrcmp (x, z, i, m, n)
+        if (z .eq. a) goto 4210
+        z = a
+        goto 4190
 !
 !       POWERS OF RADIX  B  HAVE BEEN TESTED; NEXT TRY A FEW PRIMES.
 !
 4210    continue
-        MILES=100
-        M = NUMTRY
-        Z = FP3
+        miles=100
+        m = numtry
+        z = fp3
 4230    continue
-        X = Z
-        I = 1
-        CALL PWRCMP (X, Z, I, M, N)
+        x = z
+        i = 1
+        call pwrcmp (x, z, i, m, n)
 4240    continue
-        Z = Z + FP2
-        IF (FP3 * DINT (Z / FP3) .EQ. Z) GOTO 4240
-        IF (Z .LT. FP8 * FP3) GOTO 4230
-        IF (N .GT. 0) WRITE(OUT,4261)
-4261    FORMAT(' Error like this may invalidate financial calculations involving interest rates.')
-        CALL PRTCNT (N)
-        N = N + N1
-        CALL PRT2 (N, MILES)
-        RETURN
-        END SUBROUTINE POWER
+        z = z + fp2
+        if (fp3 * dint (z / fp3) .eq. z) goto 4240
+        if (z .lt. fp8 * fp3) goto 4230
+        if (n .gt. 0) write(out,4261)
+4261    format(' Error like this may invalidate financial calculations involving interest rates.')
+        call prtcnt (n)
+        n = n + n1
+        call prt2 (n, miles)
+        return
+        end subroutine power
 !-------------------------------------------------------------------------------
-        SUBROUTINE RADX(MILES)
+        subroutine radx(miles)
       implicit none
 !!!!!
-        INTEGER MILES
+        integer miles
 !        ... COUNT OF MILESTONES PASSED
-        DOUBLE PRECISION X,Y,Z
+        double precision x,y,z
 !        ... SCRATCH VARIABLES
-        DOUBLE PRECISION ULPMSV,RADSAV
+        double precision ulpmsv,radsav
 !        ... TEMPS TO SAVE ULPMIN, ULPPLS, RADIX, PRECIS IN WHILE
 !        ... RECOMPUTING
-        DOUBLE PRECISION THIRD,SIXTH
+        double precision third,sixth
 !        ... TEMPS TO HOLD APPROX VALUES OF 1/3 AND 1/6 IN WHILE
 !        ... ACCUMULATING ERROR FOR RADIX COMPUTATIONS.
-        DOUBLE PRECISION B9, T8
-        INTEGER I
+        double precision b9, t8
+        integer i
 !
-        T8 = 240.0
+        t8 = 240.0
 !
-        WRITE(OUT,1160)
-1160    FORMAT(/' Searching for radix and precision...')
+        write(out,1160)
+1160    format(/' Searching for radix and precision...')
 !       LOOKING FOR W TO BE BIG ENOUGH TO MAKE 1 INSIGNIFICANT AT THE
 !       PRECISION AVAILABLE.  INCREASE BY POWERS OF 2 UNTIL WE FIND IT.
-        W=FP1
+        w=fp1
 1180    continue
-        W=W+W
-        Y=W+FP1
-        Z=Y-W
-        Y=Z-FP1
-        IF ((-FP1+DABS(Y)) .LT. FP0) GOTO 1180
+        w=w+w
+        y=w+fp1
+        z=y-w
+        y=z-fp1
+        if ((-fp1+dabs(y)) .lt. fp0) goto 1180
 !       ... NOW  W  IS JUST BIG ENOUGH THAT  |((W+1)-W)-1| >= 1 ...
 !        I.E. 1 IS INSIGNIFICANT RELATIVE TO W.
-        PRECIS=FP0
-        Y=FP1
+        precis=fp0
+        y=fp1
 1210    continue
-        RADIX=W+Y
-        Y=Y+Y
-        RADIX=RADIX-W
-        IF (RADIX .EQ. FP0) GOTO 1210
+        radix=w+y
+        y=y+y
+        radix=radix-w
+        if (radix .eq. fp0) goto 1210
 !
-        IF (RADIX .GE. FP2) GOTO 1235
-        RADIX = FP1
-        WRITE(OUT,1230)     RADIX
-1230    FORMAT(' Radix = ',F7.0)
-        GOTO 1270
+        if (radix .ge. fp2) goto 1235
+        radix = fp1
+        write(out,1230)     radix
+1230    format(' Radix = ',f7.0)
+        goto 1270
 !          BASE IS 1, SO IT IS NOT CHARACTERIZED BY A PRECISION, SO
 !          DON'T BOTHER TO HUNT FOR IT..
 !
 !               ... RADIX >= 2 ...
 !        NOW TRY TO FIND THE PRECISION (# SIG. DIGITS)
 1235    continue
-        WRITE(OUT,1236) RADIX
-1236    FORMAT(' Radix = ',F4.0)
-        W=FP1
+        write(out,1236) radix
+1236    format(' Radix = ',f4.0)
+        w=fp1
 1250    continue
-        PRECIS=PRECIS+FP1
-        W=W*RADIX
-        Y=W+FP1
-        Z=Y-W
-        IF (Z .EQ. FP1) GOTO 1250
+        precis=precis+fp1
+        w=w*radix
+        y=w+fp1
+        z=y-w
+        if (z .eq. fp1) goto 1250
 !        ... NOW  W = RADIX^PRECIS  IS BARELY TOO BIG TO SATISFY
 !        ... (W+1)-W = 1  .
 1270    continue
-        ULPMIN=FP1/W
-        ULPPLS=RADIX*ULPMIN
-        WRITE(OUT,1271) ULPMIN
-        WRITE(OUT,1280)
-1271    FORMAT(' Closest relative separation found is ',1PE16.8)
-1280    FORMAT(' Recalculating radix and precision ')
-        RADSAV=RADIX
-        ULPMSV=ULPMIN
+        ulpmin=fp1/w
+        ulppls=radix*ulpmin
+        write(out,1271) ulpmin
+        write(out,1280)
+1271    format(' Closest relative separation found is ',1pe16.8)
+1280    format(' Recalculating radix and precision ')
+        radsav=radix
+        ulpmsv=ulpmin
 !                                               ...  SAVE OLD VALUES
-        X=FP4/3.0E0
-        THIRD=X-FP1
-        SIXTH=(FP1/FP2)-THIRD
-        X=SIXTH+SIXTH
-        X=DABS(X-THIRD)
-        IF (X .LT. ULPPLS) X=ULPPLS
+        x=fp4/3.0e0
+        third=x-fp1
+        sixth=(fp1/fp2)-third
+        x=sixth+sixth
+        x=dabs(x-third)
+        if (x .lt. ulppls) x=ulppls
 !       ... NOW  X = (UNKNOWN NO.) ULPS OF  1 + ...
 1320    continue
-        ULPPLS=X
-        Y=(FP1/FP2)*ULPPLS+3.2E1*ULPPLS*ULPPLS
-        Y=FP1+Y
-        X=Y-FP1
+        ulppls=x
+        y=(fp1/fp2)*ulppls+3.2e1*ulppls*ulppls
+        y=fp1+y
+        x=y-fp1
 !       X=> ((X/2) + EPSILON) MOD (1 ULP OF 1+)
-        IF (ULPPLS .GT. X .AND. X .GT. FP0) GOTO 1320
+        if (ulppls .gt. x .and. x .gt. fp0) goto 1320
 !        IF X DOES NOT UNDERFLOW TO 0, THEN IT IS STILL (UNKNOWN) * ULP
 !        SO TRY AGAIN....  OTHERWISE, PREVIOUS VALUE (ULPPLS) IS 1 ULP
 !       ... NOW  ULPPLS = 1 ULP OF  1 + ...
-        X=FP2/3.0E0
-        SIXTH=X-(FP1/FP2)
-        THIRD=SIXTH+SIXTH
-        X=THIRD-(FP1/FP2)
-        X=DABS(X+SIXTH)
-        IF (X .LT. ULPMIN) X=ULPMIN
+        x=fp2/3.0e0
+        sixth=x-(fp1/fp2)
+        third=sixth+sixth
+        x=third-(fp1/fp2)
+        x=dabs(x+sixth)
+        if (x .lt. ulpmin) x=ulpmin
 !       ... NOW  X = (UNKNOWN NO.) ULPS OF  1 - ...
 1360    continue
-        ULPMIN=X
-        Y=(FP1/FP2)*ULPMIN+3.2E1*ULPMIN*ULPMIN
-        Y=(FP1/FP2)-Y
-        X=(FP1/FP2)+Y
-        Y=(FP1/FP2)-X
-        X=(FP1/FP2)+Y
+        ulpmin=x
+        y=(fp1/fp2)*ulpmin+3.2e1*ulpmin*ulpmin
+        y=(fp1/fp2)-y
+        x=(fp1/fp2)+y
+        y=(fp1/fp2)-x
+        x=(fp1/fp2)+y
 !        X => (X/2 = EPSILON) MOD (1 ULP OF 1-)
-        IF (ULPMIN .GT. X .AND. X .GT. FP0) GOTO 1360
+        if (ulpmin .gt. x .and. x .gt. fp0) goto 1360
 !       ... NOW  ULPMIN = 1 ULP OF  1 - ...
 !
 !       NOW TO SUMMARIZE THE RESULTS
 !
-        IF (ULPMIN .EQ. ULPMSV) WRITE(OUT,1381)
-1381    FORMAT(' confirms closest relative separation .')
-        IF (ULPMIN .NE. ULPMSV) WRITE(OUT,1391) ULPMIN
-1391    FORMAT(' gets better closest relative separation = ', E13.5)
-        W=FP1/ULPMIN
-        ONEMIN = (HALF - ULPMIN) + HALF
+        if (ulpmin .eq. ulpmsv) write(out,1381)
+1381    format(' confirms closest relative separation .')
+        if (ulpmin .ne. ulpmsv) write(out,1391) ulpmin
+1391    format(' gets better closest relative separation = ', e13.5)
+        w=fp1/ulpmin
+        onemin = (half - ulpmin) + half
 !       ... = 1 - ULPMIN = NEXTAFTER(1.0, 0)
-        RADIX=DINT(.01 + ULPPLS/ULPMIN)
-        IF (RADIX .EQ. RADSAV) WRITE(OUT,1411)
-1411    FORMAT(' Radix confirmed.')
-        IF (RADIX .NE. RADSAV) WRITE(OUT,1421) RADIX
-1421    FORMAT(' mystery: recalculated radix = ', E13.5)
+        radix=dint(.01 + ulppls/ulpmin)
+        if (radix .eq. radsav) write(out,1411)
+1411    format(' Radix confirmed.')
+        if (radix .ne. radsav) write(out,1421) radix
+1421    format(' mystery: recalculated radix = ', e13.5)
 !
 !       ... RADICES 1, 2 AND 10 PASS MUSTER
 !
-        IF (RADIX .EQ. FP2 .OR. RADIX .EQ. 1.0E1 .OR. RADIX .EQ. FP1)GOTO 1470
-        IF (RADIX .GT. 1.6E1) GOTO 1460
-        FLAWS=FLAWS+1
-        WRITE(OUT,1451) RADIX
-1451    FORMAT(' FLAW: radix =',F4.0,' is not so good as 2 or 10.')
-        GOTO 1470
+        if (radix .eq. fp2 .or. radix .eq. 1.0e1 .or. radix .eq. fp1)goto 1470
+        if (radix .gt. 1.6e1) goto 1460
+        flaws=flaws+1
+        write(out,1451) radix
+1451    format(' FLAW: radix =',f4.0,' is not so good as 2 or 10.')
+        goto 1470
 1460    continue
-        DEFECT=DEFECT+1
-        WRITE(OUT,1461) RADIX
-1461    FORMAT(' DEFECT: radix =',F4.0,' is so big that roundoff propagates capriciously.')
+        defect=defect+1
+        write(out,1461) radix
+1461    format(' DEFECT: radix =',f4.0,' is so big that roundoff propagates capriciously.')
 1470    continue
-        MILES=20
+        miles=20
 !       TEST FOR FUZZY COMPARISON ... ==================================
-        IF (ONEMIN-HALF .LT. HALF) GOTO 1510
-        FAILS=FAILS+1
-        WRITE(OUT,1500)
-1500    FORMAT(' FAILURE: (1-u1)-1/2 < 1/2  is false, so this program may malfunction.')
+        if (onemin-half .lt. half) goto 1510
+        fails=fails+1
+        write(out,1500)
+1500    format(' FAILURE: (1-u1)-1/2 < 1/2  is false, so this program may malfunction.')
 1510    continue
-        X=ONEMIN
-        I=1
+        x=onemin
+        i=1
 1520    continue
-        Y=X-HALF
-        Z=Y-HALF
-        IF (X .NE. FP1 .OR. Z .EQ. FP0) GOTO 1540
-        FAILS=FAILS+1
-        WRITE(OUT,1535)
-1535    FORMAT(' FAILURE: comparison is fuzzy; it alleges x=1 although')
-        WRITE(OUT,1537)Z
-1537    FORMAT('         subtraction yields  (x - 1/2) - 1/2 = ',D16.8)
+        y=x-half
+        z=y-half
+        if (x .ne. fp1 .or. z .eq. fp0) goto 1540
+        fails=fails+1
+        write(out,1535)
+1535    format(' FAILURE: comparison is fuzzy; it alleges x=1 although')
+        write(out,1537)z
+1537    format('         subtraction yields  (x - 1/2) - 1/2 = ',d16.8)
 1540    continue
-        IF (I .EQ. 0) GOTO 1560
-        X=FP1+ULPPLS
-        I=0
-        GOTO 1520
+        if (i .eq. 0) goto 1560
+        x=fp1+ulppls
+        i=0
+        goto 1520
 1560    continue
-        MILES=25
+        miles=25
 !       END OF TEST FOR FUZZY COMPARISON.===============================
-        B9 = RADIX - FP1
-        B9=(B9-ULPPLS)+FP1
-        IF (RADIX .EQ. FP1) GO TO 1610
+        b9 = radix - fp1
+        b9=(b9-ulppls)+fp1
+        if (radix .eq. fp1) go to 1610
 !       ... B9 = NEXTAFTER(RADIX, 0)
-        X=-T8*DLOG(ULPMIN)/DLOG(RADIX)
-        Y=DINT(HALF+X)
-        IF ( DABS(X-Y)*FP4 .LT. FP1 ) X=Y
-        PRECIS = X/T8
-        Y=DINT(HALF + PRECIS)
-        IF ( DABS(PRECIS-Y)*T8 .LT. HALF ) PRECIS=Y
+        x=-t8*dlog(ulpmin)/dlog(radix)
+        y=dint(half+x)
+        if ( dabs(x-y)*fp4 .lt. fp1 ) x=y
+        precis = x/t8
+        y=dint(half + precis)
+        if ( dabs(precis-y)*t8 .lt. half ) precis=y
 !       PURIFY INTEGERS.
-        IF (PRECIS .EQ. DINT(PRECIS)) GOTO 1640
+        if (precis .eq. dint(precis)) goto 1640
 1610    continue
-        WRITE(OUT,1611)
-1611    FORMAT(' Precision cannot be characterized by an integer number of sig. digits;')
-        IF (RADIX .GT. FP1) GOTO 1625
-        WRITE(OUT,1620)
-1620    FORMAT(' Logarithmic encoding (radix=1) has precision characterized solely by  u1 .')
-        GOTO 1650
+        write(out,1611)
+1611    format(' Precision cannot be characterized by an integer number of sig. digits;')
+        if (radix .gt. fp1) goto 1625
+        write(out,1620)
+1620    format(' Logarithmic encoding (radix=1) has precision characterized solely by  u1 .')
+        goto 1650
 1625    continue
-        WRITE(OUT,1630)
-1630    FORMAT(' but, by itself, this is a minor flaw.')
+        write(out,1630)
+1630    format(' but, by itself, this is a minor flaw.')
 1640    continue
-        WRITE(OUT,1641) RADIX,PRECIS
-1641    FORMAT(' The number of significant digits of radix ',F4.0,' is ' , F6.2)
+        write(out,1641) radix,precis
+1641    format(' The number of significant digits of radix ',f4.0,' is ' , f6.2)
 1650    continue
-        IF (ULPPLS*FP9*FP9*T8 .LT. FP1) GO TO 1670
-        SDEFCT=SDEFCT+1
-        WRITE(OUT,1665)
-1665    FORMAT(' SERIOUS DEFECT: precision worse than  5 sig. dec. is usually inadequate.')
+        if (ulppls*fp9*fp9*t8 .lt. fp1) go to 1670
+        sdefct=sdefct+1
+        write(out,1665)
+1665    format(' SERIOUS DEFECT: precision worse than  5 sig. dec. is usually inadequate.')
 1670    continue
-        RETURN
-        END SUBROUTINE RADX
+        return
+        end subroutine radx
 !-------------------------------------------------------------------------------
-        SUBROUTINE ROUND (MILES)
+        subroutine round (miles)
       implicit none
-        INTEGER MILES
+        integer miles
 !!!!!
 !       ... LOCAL VARIABLES
-        DOUBLE PRECISION A, B1, Q, S1, T, X, Y, Y1, Y2, Z
+        double precision a, b1, q, s1, t, x, y, y1, y2, z
 !       ... CONSTANTS
-        DOUBLE PRECISION B2, T5, B9
+        double precision b2, t5, b9
 !
-        B2 = RADIX / FP2
-        T5 = FP1 + HALF
-        B9 = ((RADIX - FP1) - ULPPLS) + FP1
+        b2 = radix / fp2
+        t5 = fp1 + half
+        b9 = ((radix - fp1) - ulppls) + fp1
 !
-        WRITE(OUT,2250)
-2250    FORMAT(' Checking for rounding in multiply,',' divide and add/subtract:')
-        R1 = MINUS1
-        R2 = MINUS1
-        R3 = MINUS1
+        write(out,2250)
+2250    format(' Checking for rounding in multiply,',' divide and add/subtract:')
+        r1 = minus1
+        r2 = minus1
+        r3 = minus1
 !               IS  RADIX  A POWER OF  2  OR  10 ?
-        A1 = FP2
+        a1 = fp2
 2280    continue
-        A = RADIX
+        a = radix
 2290    continue
-        X = A
-        A = A / A1
-        IF (DINT(A) .EQ. A) GOTO 2290
-        IF (X .EQ. FP1) GOTO 2340
+        x = a
+        a = a / a1
+        if (dint(a) .eq. a) goto 2290
+        if (x .eq. fp1) goto 2340
 !               RADIX  IS A POWER OF  A1; IF RADIX=1 THEN  A1=2.
-        IF (A1 .GT. FP3) GOTO 2330
-        A1 = FP9 + FP1
-        GOTO 2280
+        if (a1 .gt. fp3) goto 2330
+        a1 = fp9 + fp1
+        goto 2280
 !               IS  RADIX  A POWER OF  10 ?
 2330    continue
-        A1 = RADIX
+        a1 = radix
 !               UNLESS  B  IS A POWER OF  A1  AND  A1 = 2 OR 10.
 2340    continue
-        A=FP1/A1
-        X=A1
-        Y=A
+        a=fp1/a1
+        x=a1
+        y=a
 2350    continue
-        Z=X*Y-HALF
-        IF (Z .EQ. HALF) GOTO 2370
-        FAILS=FAILS+1
-        WRITE(OUT,2361) X, Y, X, X
-2361    FORMAT(' FAILURE:  1/',E13.5,' = ',E13.5,', and  ',E13.5,'*(1/',E13.5,') differs from  1.')
+        z=x*y-half
+        if (z .eq. half) goto 2370
+        fails=fails+1
+        write(out,2361) x, y, x, x
+2361    format(' FAILURE:  1/',e13.5,' = ',e13.5,', and  ',e13.5,'*(1/',e13.5,') differs from  1.')
 2370    continue
-        IF (X .EQ. RADIX) GOTO 2390
-        X = RADIX
-        Y = FP1 / X
-        GOTO 2350
+        if (x .eq. radix) goto 2390
+        x = radix
+        y = fp1 / x
+        goto 2350
 2390    continue
-        Y2=FP1+ULPPLS
-        Y1=FP1-ULPPLS
-        X=T5-ULPPLS
-        Y=T5+ULPPLS
-        Z=(X-ULPPLS)*Y2
-        T=Y*Y1
-        Z=Z-X
-        T=T-X
-        X=X*Y2
-        Y=(Y+ULPPLS)*Y1
-        X=X-T5
-        Y=Y-T5
-        IF (.NOT. ( X .EQ. FP0 .AND. Y .EQ. FP0 .AND. Z .EQ. FP0 .AND. T .LE. FP0 )) GOTO 2460
-        X=(T5+ULPPLS)*Y2
-        Y=T5-ULPPLS-ULPPLS
-        Z=T5+ULPPLS+ULPPLS
-        T=(T5-ULPPLS)*Y1
-        X=X-(Z+ULPPLS)
-        STICKY = Y * Y1
-        S1 = Z * Y2
-        T = T - Y
-        Y = (ULPPLS-Y) + STICKY
-        Z = S1 - (Z+ULPPLS+ULPPLS)
-        STICKY = (Y2+ULPPLS) * Y1
-        Y1 = Y2 * Y1
-        STICKY = STICKY - Y2
-        Y1 = Y1 - HALF
-        IF ( X .EQ. FP0 .AND. Y .EQ. FP0 .AND. Z  .EQ. FP0 .AND. T .EQ. FP0 .AND. STICKY .EQ. FP0 .AND. Y1 .EQ. HALF ) R1 = FP1
-        IF (X+ULPPLS.EQ.FP0.AND.Y.LT.FP0.AND.Z+ULPPLS.EQ.FP0.AND.T.LT.FP0.AND.STICKY+ULPPLS.EQ.FP0.AND.Y1.LT.HALF) R1 = FP0
-        IF (R1 .EQ. FP0) WRITE(OUT,2431)
-2431    FORMAT(' Multiplication appears to be chopped.')
-        IF (R1 .EQ. FP1) WRITE(OUT,2441)
-2441    FORMAT (' Multiplication appears to be correctly rounded.')
-        IF (R1-MULGRD .EQ. FP1) WRITE(OUT,2451)
-2451    FORMAT(' FAILURE: multiplication test is inconsistent; PLEASE NOTIFY KARPINSKI !')
+        y2=fp1+ulppls
+        y1=fp1-ulppls
+        x=t5-ulppls
+        y=t5+ulppls
+        z=(x-ulppls)*y2
+        t=y*y1
+        z=z-x
+        t=t-x
+        x=x*y2
+        y=(y+ulppls)*y1
+        x=x-t5
+        y=y-t5
+        if (.not. ( x .eq. fp0 .and. y .eq. fp0 .and. z .eq. fp0 .and. t .le. fp0 )) goto 2460
+        x=(t5+ulppls)*y2
+        y=t5-ulppls-ulppls
+        z=t5+ulppls+ulppls
+        t=(t5-ulppls)*y1
+        x=x-(z+ulppls)
+        sticky = y * y1
+        s1 = z * y2
+        t = t - y
+        y = (ulppls-y) + sticky
+        z = s1 - (z+ulppls+ulppls)
+        sticky = (y2+ulppls) * y1
+        y1 = y2 * y1
+        sticky = sticky - y2
+        y1 = y1 - half
+        if ( x .eq. fp0 .and. y .eq. fp0 .and. z  .eq. fp0 .and. t .eq. fp0 .and. sticky .eq. fp0 .and. y1 .eq. half ) r1 = fp1
+        if (x+ulppls.eq.fp0.and.y.lt.fp0.and.z+ulppls.eq.fp0.and.t.lt.fp0.and.sticky+ulppls.eq.fp0.and.y1.lt.half) r1 = fp0
+        if (r1 .eq. fp0) write(out,2431)
+2431    format(' Multiplication appears to be chopped.')
+        if (r1 .eq. fp1) write(out,2441)
+2441    format (' Multiplication appears to be correctly rounded.')
+        if (r1-mulgrd .eq. fp1) write(out,2451)
+2451    format(' FAILURE: multiplication test is inconsistent; PLEASE NOTIFY KARPINSKI !')
 2460    continue
-        IF (R1 .EQ. MINUS1) WRITE(OUT,2461)
-2461    FORMAT(' Multiplication is neither chopped nor correctly rounded.')
-        MILES=45
+        if (r1 .eq. minus1) write(out,2461)
+2461    format(' Multiplication is neither chopped nor correctly rounded.')
+        miles=45
 !       ================================================================
-        Y2=FP1+ULPPLS
-        Y1=FP1-ULPPLS
-        Z=T5+ULPPLS+ULPPLS
-        X=Z/Y2
-        T=T5-ULPPLS-ULPPLS
-        Y=(T-ULPPLS)/Y1
-        Z=(Z+ULPPLS)/Y2
-        X=X-T5
-        Y=Y-T
-        T=T/Y1
-        Z=Z-(T5+ULPPLS)
-        T=(ULPPLS-T5)+T
-        IF ( X .GT. FP0 .OR. Y .GT. FP0 .OR. Z .GT. FP0 .OR. T .GT. FP0) GOTO 2540
-        X=T5/Y2
-        Y=T5-ULPPLS
-        Z=T5+ULPPLS
-        X=X-Y
-        T=T5/Y1
-        Y=Y/Y1
-        T=T-(Z+ULPPLS)
-        Y=Y-Z
-        Z=Z/Y2
-        Y1=(Y2+ULPPLS)/Y2
-        Z=Z-T5
-        Y2=Y1-Y2
-        Y1=(ONEMIN-ULPMIN)/ONEMIN
-        IF(X.EQ.FP0.AND.Y.EQ.FP0.AND.Z.EQ.FP0.AND.T.EQ.FP0.AND.Y2.EQ.FP0.AND.Y1-HALF.EQ.ONEMIN-HALF) R2=FP1
-        IF(X.LT.FP0.AND.Y.LT.FP0.AND.Z.LT.FP0.AND.T.LT.FP0.AND.Y2.LT.FP0.AND.Y1-HALF.LT.ONEMIN-HALF) R2=FP0
-        IF (R2 .EQ. FP0) WRITE(OUT,2511)
-2511    FORMAT (' Division appears to be chopped.')
-        IF (R2 .EQ. FP1) WRITE(OUT,2521)
-2521    FORMAT (' Division appears to be correctly rounded.')
-        IF (R2-DIVGRD .EQ. FP1) WRITE(OUT,2531)
-2531    FORMAT(' FAILURE:  division test is inconsistent; PLEASE NOTIFY KARPINSKI !')
+        y2=fp1+ulppls
+        y1=fp1-ulppls
+        z=t5+ulppls+ulppls
+        x=z/y2
+        t=t5-ulppls-ulppls
+        y=(t-ulppls)/y1
+        z=(z+ulppls)/y2
+        x=x-t5
+        y=y-t
+        t=t/y1
+        z=z-(t5+ulppls)
+        t=(ulppls-t5)+t
+        if ( x .gt. fp0 .or. y .gt. fp0 .or. z .gt. fp0 .or. t .gt. fp0) goto 2540
+        x=t5/y2
+        y=t5-ulppls
+        z=t5+ulppls
+        x=x-y
+        t=t5/y1
+        y=y/y1
+        t=t-(z+ulppls)
+        y=y-z
+        z=z/y2
+        y1=(y2+ulppls)/y2
+        z=z-t5
+        y2=y1-y2
+        y1=(onemin-ulpmin)/onemin
+        if(x.eq.fp0.and.y.eq.fp0.and.z.eq.fp0.and.t.eq.fp0.and.y2.eq.fp0.and.y1-half.eq.onemin-half) r2=fp1
+        if(x.lt.fp0.and.y.lt.fp0.and.z.lt.fp0.and.t.lt.fp0.and.y2.lt.fp0.and.y1-half.lt.onemin-half) r2=fp0
+        if (r2 .eq. fp0) write(out,2511)
+2511    format (' Division appears to be chopped.')
+        if (r2 .eq. fp1) write(out,2521)
+2521    format (' Division appears to be correctly rounded.')
+        if (r2-divgrd .eq. fp1) write(out,2531)
+2531    format(' FAILURE:  division test is inconsistent; PLEASE NOTIFY KARPINSKI !')
 2540    continue
-        IF (R2 .EQ. MINUS1) WRITE(OUT,2541)
-2541    FORMAT (' Division is neither chopped nor correctly rounded.')
+        if (r2 .eq. minus1) write(out,2541)
+2541    format (' Division is neither chopped nor correctly rounded.')
 !       ================================================================
-        B1 = FP1 / RADIX
-        IF (B1 * RADIX - HALF .EQ. HALF) GOTO 2580
-        FAILS=FAILS+1
-        WRITE(OUT,2570)
-2570    FORMAT(' FAILURE:  radix * (1 / radix)  differs from  1.')
+        b1 = fp1 / radix
+        if (b1 * radix - half .eq. half) goto 2580
+        fails=fails+1
+        write(out,2570)
+2570    format(' FAILURE:  radix * (1 / radix)  differs from  1.')
 2580    continue
-        MILES=50
+        miles=50
 !       ================================================================
-        IF ( (ONEMIN + ULPMIN) - HALF .EQ. HALF         .AND.  (B9 + ULPPLS) - FP1  .EQ. RADIX - FP1 ) GOTO 2610
-        FAILS=FAILS+1
-        WRITE(OUT,2601)
-2601    FORMAT(' FAILURE: incomplete carry-propagation in addition.')
+        if ( (onemin + ulpmin) - half .eq. half         .and.  (b9 + ulppls) - fp1  .eq. radix - fp1 ) goto 2610
+        fails=fails+1
+        write(out,2601)
+2601    format(' FAILURE: incomplete carry-propagation in addition.')
 2610    continue
-        X = FP1 - ULPMIN * ULPMIN
-        Y = FP1 + ULPPLS * (FP1 - ULPPLS)
-        Z = ONEMIN - HALF
-        X = (X - HALF) - Z
-        Y = Y - FP1
-        IF (X .NE. FP0 .OR. Y .NE. FP0) GOTO 2640
-        R3 = FP0
-        WRITE(OUT,2631)
-2631    FORMAT (' Add/subtract appears to be chopped.')
+        x = fp1 - ulpmin * ulpmin
+        y = fp1 + ulppls * (fp1 - ulppls)
+        z = onemin - half
+        x = (x - half) - z
+        y = y - fp1
+        if (x .ne. fp0 .or. y .ne. fp0) goto 2640
+        r3 = fp0
+        write(out,2631)
+2631    format (' Add/subtract appears to be chopped.')
 2640    continue
-        IF (SUBGRD .EQ. FP0) GOTO 2710
-        X = (HALF + ULPPLS) * ULPPLS
-        Y = (HALF - ULPPLS) * ULPPLS
-        X = FP1 + X
-        Y = FP1 + Y
-        X = (FP1 + ULPPLS) - X
-        Y = FP1 - Y
-        IF (X .NE. FP0 .OR. Y .NE. FP0) GOTO 2710
-        X = (HALF + ULPPLS) * ULPMIN
-        Y = (HALF - ULPPLS) * ULPMIN
-        X = FP1 - X
-        Y = FP1 - Y
-        X = ONEMIN - X
-        Y = FP1 - Y
-        IF (X .NE. FP0 .OR. Y .NE. FP0) GOTO 2710
-        R3 = MINUS1 - FP2 * R3
-        WRITE(OUT,2691)
-2691    FORMAT (' Add/subtract appears to be correctly rounded.')
-        IF (R3 - SUBGRD .EQ. FP1) WRITE(OUT,2701)
-2701    FORMAT(' FAILURE:  add/subtract test is inconsistent; PLEASE NOTIFY KARPINSKI !')
+        if (subgrd .eq. fp0) goto 2710
+        x = (half + ulppls) * ulppls
+        y = (half - ulppls) * ulppls
+        x = fp1 + x
+        y = fp1 + y
+        x = (fp1 + ulppls) - x
+        y = fp1 - y
+        if (x .ne. fp0 .or. y .ne. fp0) goto 2710
+        x = (half + ulppls) * ulpmin
+        y = (half - ulppls) * ulpmin
+        x = fp1 - x
+        y = fp1 - y
+        x = onemin - x
+        y = fp1 - y
+        if (x .ne. fp0 .or. y .ne. fp0) goto 2710
+        r3 = minus1 - fp2 * r3
+        write(out,2691)
+2691    format (' Add/subtract appears to be correctly rounded.')
+        if (r3 - subgrd .eq. fp1) write(out,2701)
+2701    format(' FAILURE:  add/subtract test is inconsistent; PLEASE NOTIFY KARPINSKI !')
 2710    continue
-        IF (R3 .EQ. MINUS1) WRITE(OUT,2711)
-2711    FORMAT(' Add/subtract neither chopped nor correctly rounded.')
-        S1 = FP1
-        X = FP1+HALF*(FP1+HALF)
-        Y = (FP1+ULPPLS)*HALF
-        Z = X-Y
-        T = Y-X
-        STICKY = Z+T
-        IF (STICKY .EQ. FP0) GOTO 2770
-        S1=FP0
-        FLAWS=FLAWS+1
-        WRITE(OUT,2750) STICKY
-        WRITE(OUT,2760) X, Y
-2750    FORMAT(' FLAW: nonzero  (x-y)+(y-x) = ',E16.8,' when')
-2760    FORMAT('      x = ',E16.8,'  and  y = ',E16.8)
+        if (r3 .eq. minus1) write(out,2711)
+2711    format(' Add/subtract neither chopped nor correctly rounded.')
+        s1 = fp1
+        x = fp1+half*(fp1+half)
+        y = (fp1+ulppls)*half
+        z = x-y
+        t = y-x
+        sticky = z+t
+        if (sticky .eq. fp0) goto 2770
+        s1=fp0
+        flaws=flaws+1
+        write(out,2750) sticky
+        write(out,2760) x, y
+2750    format(' FLAW: nonzero  (x-y)+(y-x) = ',e16.8,' when')
+2760    format('      x = ',e16.8,'  and  y = ',e16.8)
 !       ================================================================
 2770    continue
-        STICKY = FP0
-        IF (MULGRD*DIVGRD*SUBGRD .LT. FP1 .OR.R1 .LT. FP1.OR.R2 .LT. FP1.OR.R3 .LT. FP1.OR.DINT(B2) .NE. B2) GOTO 2890
-        WRITE(OUT,2780)
-2780    FORMAT(' checking for sticky bit:')
-        X=(HALF+ULPMIN)*ULPPLS
-        Y=HALF*ULPPLS
-        Z=FP1+Y
-        T=FP1+X
-        IF (Z-FP1 .GT. FP0 .OR. T-FP1 .LT. ULPPLS) GOTO 2890
-        Z=T+Y
-        Y=Z-X
-        IF (Z-T .LT. ULPPLS .OR. Y-T .NE. FP0) GOTO 2890
-        X=(HALF+ULPMIN)*ULPMIN
-        Y=HALF*ULPMIN
-        Z=FP1-Y
-        T=FP1-X
-        IF (Z-FP1 .NE. FP0 .OR. T-ONEMIN .NE. FP0) GOTO 2890
-        Z=(HALF-ULPMIN)*ULPMIN
-        T=ONEMIN-Z
-        Q=ONEMIN-Y
-        IF (T-ONEMIN .NE. FP0 .OR. (ONEMIN-ULPMIN)-Q .NE. FP0) GOTO 2890
-        Z = (FP1 + ULPPLS) * T5
-        T = (T5 + ULPPLS) - Z + ULPPLS
-        X = FP1 + HALF / RADIX
-        Y = FP1 + RADIX * ULPPLS
-        Z = X * Y
-        IF (T .NE. FP0 .OR. (X + RADIX * ULPPLS) - Z .NE. FP0) GOTO 2890
-        IF (RADIX .EQ. FP2) GOTO 2870
-        X = FP2 + ULPPLS
-        Y = X / FP2
-        IF (Y - FP1 .NE. FP0) GOTO 2890
+        sticky = fp0
+        if (mulgrd*divgrd*subgrd .lt. fp1 .or.r1 .lt. fp1.or.r2 .lt. fp1.or.r3 .lt. fp1.or.dint(b2) .ne. b2) goto 2890
+        write(out,2780)
+2780    format(' checking for sticky bit:')
+        x=(half+ulpmin)*ulppls
+        y=half*ulppls
+        z=fp1+y
+        t=fp1+x
+        if (z-fp1 .gt. fp0 .or. t-fp1 .lt. ulppls) goto 2890
+        z=t+y
+        y=z-x
+        if (z-t .lt. ulppls .or. y-t .ne. fp0) goto 2890
+        x=(half+ulpmin)*ulpmin
+        y=half*ulpmin
+        z=fp1-y
+        t=fp1-x
+        if (z-fp1 .ne. fp0 .or. t-onemin .ne. fp0) goto 2890
+        z=(half-ulpmin)*ulpmin
+        t=onemin-z
+        q=onemin-y
+        if (t-onemin .ne. fp0 .or. (onemin-ulpmin)-q .ne. fp0) goto 2890
+        z = (fp1 + ulppls) * t5
+        t = (t5 + ulppls) - z + ulppls
+        x = fp1 + half / radix
+        y = fp1 + radix * ulppls
+        z = x * y
+        if (t .ne. fp0 .or. (x + radix * ulppls) - z .ne. fp0) goto 2890
+        if (radix .eq. fp2) goto 2870
+        x = fp2 + ulppls
+        y = x / fp2
+        if (y - fp1 .ne. fp0) goto 2890
 2870    continue
-        STICKY = S1
-        IF (STICKY .EQ. FP1) WRITE(OUT,2881)
-2881    FORMAT (' Sticky bit appears to be used correctly.')
+        sticky = s1
+        if (sticky .eq. fp1) write(out,2881)
+2881    format (' Sticky bit appears to be used correctly.')
 2890    continue
-        IF (STICKY .EQ. FP0)  WRITE(OUT,2891)
-2891    FORMAT (' Sticky bit used incorrectly or not at all.')
-        IF(MULGRD*DIVGRD*SUBGRD.EQ.FP0.OR.R1.LT.FP0.OR.R2.LT.FP0.OR.R3.LT.FP0) THEN
-           FLAWS=FLAWS+1
-           WRITE(OUT,29001)
-29001      FORMAT(' FLAW: lack(s) of guard digits or failure(s) to correctly round or chop',/, &
+        if (sticky .eq. fp0)  write(out,2891)
+2891    format (' Sticky bit used incorrectly or not at all.')
+        if(mulgrd*divgrd*subgrd.eq.fp0.or.r1.lt.fp0.or.r2.lt.fp0.or.r3.lt.fp0) then
+           flaws=flaws+1
+           write(out,29001)
+29001      format(' FLAW: lack(s) of guard digits or failure(s) to correctly round or chop',/, &
          &  ' (noted above) count as one flaw in the final tally below.')
-           END IF
-        RETURN
-        END SUBROUTINE ROUND
+           end if
+        return
+        end subroutine round
 !-------------------------------------------------------------------------------
-        SUBROUTINE SMLINT(MILES,FROM)
+        subroutine smlint(miles,from)
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
 !       TESTS ON SMALL INTEGERS
@@ -1781,510 +1781,510 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       implicit none
 !
-        INTEGER FROM
+        integer from
 !!!!!
-        INTEGER IPARTU
-        INTEGER MILES
+        integer ipartu
+        integer miles
 !        ... INTEGER NUMBER IF MILESTONES REACHED
-        character(len=8) :: CHARZ          !        ... CHARACTER CONSTANT 'Z'
-        DOUBLE PRECISION MINONE    !        ... TEMPORARY TO HOLD MINUS ONE
-        DOUBLE PRECISION HALF      !        ... TEMPORARY TO HOLD ONE HALF
-        DOUBLE PRECISION FIVE      !        ... TEMPORARY TO HOLD FIVE
-        DOUBLE PRECISION EIGHT     !        ... TEMPORARY TO HOLD EIGHT
-        DOUBLE PRECISION NINE      !        ... TEMPORARY TO HOLD NINE
-        DOUBLE PRECISION TEMP12    !        ... TEMPORARY TO HOLD 12
-        DOUBLE PRECISION TEMP20    !        ... TEMPORARY TO HOLD 20
-        DOUBLE PRECISION TEMP27    !        ... TEMPORARY TO HOLD 27
-        DOUBLE PRECISION TEMP32    !        ... TEMPORARY TO HOLD 32
-        DOUBLE PRECISION TEMP48    !        ... TEMPORARY TO HOLD 48
-        DOUBLE PRECISION TEMP60    !        ... TEMPORARY TO HOLD 60
-        DOUBLE PRECISION TEMP80    !        ... TEMPORARY TO HOLD 80
-        DOUBLE PRECISION TMP240    !        ... TEMPORARY TO HOLD 240
-        DOUBLE PRECISION TEMP
+        character(len=8) :: charz          !        ... CHARACTER CONSTANT 'Z'
+        double precision minone    !        ... TEMPORARY TO HOLD MINUS ONE
+        double precision half      !        ... TEMPORARY TO HOLD ONE HALF
+        double precision five      !        ... TEMPORARY TO HOLD FIVE
+        double precision eight     !        ... TEMPORARY TO HOLD EIGHT
+        double precision nine      !        ... TEMPORARY TO HOLD NINE
+        double precision temp12    !        ... TEMPORARY TO HOLD 12
+        double precision temp20    !        ... TEMPORARY TO HOLD 20
+        double precision temp27    !        ... TEMPORARY TO HOLD 27
+        double precision temp32    !        ... TEMPORARY TO HOLD 32
+        double precision temp48    !        ... TEMPORARY TO HOLD 48
+        double precision temp60    !        ... TEMPORARY TO HOLD 60
+        double precision temp80    !        ... TEMPORARY TO HOLD 80
+        double precision tmp240    !        ... TEMPORARY TO HOLD 240
+        double precision temp
 !        ... TEMPORARY VARIABLE TO HOLD VARIOUS VERY SHORT TERM VALUES
-        DOUBLE PRECISION TEMPZ
+        double precision tempz
 !        ... TEMPORARY VARIABLE TO HOLD A TEMP. PREVIOUSLY KNOWN AS Z
 
 !        ... INITIALIZE SOME CONSTANTS
-        DATA CHARZ/'Z'/
-        IF (FROM .EQ. 7) GO TO 951
-        IF (FROM .NE. 0) CALL BADMIL
-        WRITE(OUT,891)
-891     FORMAT(' Program is now RUNNING tests on small integers:')
+        data charz/'Z'/
+        if (from .eq. 7) go to 951
+        if (from .ne. 0) call badmil
+        write(out,891)
+891     format(' Program is now RUNNING tests on small integers:')
 !
 !       ... LOOK FOR SOME OBVIOUS MISTAKES
-        IF(0.0E0+0.0E0.EQ.0.0E0.AND.1.0E0-1.0E0.EQ.0.0E0.AND.1.0E0.GT.0.0E0.AND.1.0E0+1.0E0.EQ.2.0E0) GOTO 930
-        FAILS=FAILS+1
-        WRITE(OUT,920)
-920     FORMAT(' FAILURE: violation of  0+0=0  or  1-1=0  or  1>0  or 1+1 = 2.')
+        if(0.0e0+0.0e0.eq.0.0e0.and.1.0e0-1.0e0.eq.0.0e0.and.1.0e0.gt.0.0e0.and.1.0e0+1.0e0.eq.2.0e0) goto 930
+        fails=fails+1
+        write(out,920)
+920     format(' FAILURE: violation of  0+0=0  or  1-1=0  or  1>0  or 1+1 = 2.')
 930     continue
-        TEMP=0.0E0
-        TEMPZ=-TEMP
-        IF (TEMPZ .EQ. 0.0E0) GOTO 960
-        FAILS=FAILS+1
-        WRITE(OUT,940)
-        WRITE(OUT,941)
-940     FORMAT(' FAILURE: comparison alleges that minus zero, obtained by')
-941     FORMAT(' setting  x = 0.  and then  z = -x ,  is nonzero!')
+        temp=0.0e0
+        tempz=-temp
+        if (tempz .eq. 0.0e0) goto 960
+        fails=fails+1
+        write(out,940)
+        write(out,941)
+940     format(' FAILURE: comparison alleges that minus zero, obtained by')
+941     format(' setting  x = 0.  and then  z = -x ,  is nonzero!')
 !        ... CALL TO ROUTINE TO CHECK FOR PARTIAL UNDERFLOW USING MINUS
 !        ... ZERO DON'T REALLY HAVE INFO ON WHAT A UNIT IN THE LAST
 !        ... PLACE IS OR WHAT THE RADIX IS SINCE WE HAVEN'T GOTTEN TO
 !        ... SUCH SOPHISTICATED STUFF YET, SO PICK SOME ARBITRARY VALUES
 !        ... FOR NOW TO GET US THROUGH THIS NEXT TEST.
-        ULPPLS=.001
-        RADIX=1
+        ulppls=.001
+        radix=1
 951     continue
-        CALL PARTUF(TEMPZ, CHARZ, MILES, IPARTU, FROM .EQ. 7)
+        call partuf(tempz, charz, miles, ipartu, from .eq. 7)
 !
 !
 960     continue
-        IF (4.0E0+2.0E0*(-2.0E0) .EQ. 0.0E0 .AND. (4.0E0-3.0E0)-1.0E0.EQ. 0.0E0) GOTO 980
-        FAILS=FAILS+1
-        WRITE(OUT,971)
-971     FORMAT(' FAILURE: violation of   3+1 = 2*2 .')
+        if (4.0e0+2.0e0*(-2.0e0) .eq. 0.0e0 .and. (4.0e0-3.0e0)-1.0e0.eq. 0.0e0) goto 980
+        fails=fails+1
+        write(out,971)
+971     format(' FAILURE: violation of   3+1 = 2*2 .')
 !
 980     continue
-        MINONE=-1.0E0
-        IF(MINONE+1.0E0.EQ.0.0E0.AND.1.0E0+MINONE.EQ.0.0E0.AND.MINONE+DABS(MINONE).EQ.0.0E0.AND.MINONE+MINONE*MINONE.EQ.0.0E0) &
-       & GOTO 1000
-        FAILS=FAILS+1
-        WRITE(OUT,991)
-991     FORMAT(' FAILURE: violation of   -1 + 1 = 0 .')
+        minone=-1.0e0
+        if(minone+1.0e0.eq.0.0e0.and.1.0e0+minone.eq.0.0e0.and.minone+dabs(minone).eq.0.0e0.and.minone+minone*minone.eq.0.0e0) &
+       & goto 1000
+        fails=fails+1
+        write(out,991)
+991     format(' FAILURE: violation of   -1 + 1 = 0 .')
 !
 1000    continue
-        HALF=1.0E0/2.0E0
-        IF (HALF+MINONE+HALF .EQ. 0.0E0) GOTO 1020
-        FAILS=FAILS+1
-        WRITE(OUT,1011)
-1011    FORMAT(' FAILURE: violation of   1/2 - 1 + 1/2 = 0 .')
+        half=1.0e0/2.0e0
+        if (half+minone+half .eq. 0.0e0) goto 1020
+        fails=fails+1
+        write(out,1011)
+1011    format(' FAILURE: violation of   1/2 - 1 + 1/2 = 0 .')
 1020    continue
-        MILES=10
-        NINE=3.0E0*3.0E0
-        TEMP27=NINE*3.0E0
-        EIGHT=4.0E0+4.0E0
-        TEMP32=4.0E0*EIGHT
-        IF (TEMP32-TEMP27-4.0E0-1.0E0 .EQ. 0.0E0) GOTO 1120
-        FAILS=FAILS+1
-        WRITE(OUT,1111)
-1111    FORMAT(' FAILURE: violation of   32 - 27 - 4 - 1 = 0 .')
+        miles=10
+        nine=3.0e0*3.0e0
+        temp27=nine*3.0e0
+        eight=4.0e0+4.0e0
+        temp32=4.0e0*eight
+        if (temp32-temp27-4.0e0-1.0e0 .eq. 0.0e0) goto 1120
+        fails=fails+1
+        write(out,1111)
+1111    format(' FAILURE: violation of   32 - 27 - 4 - 1 = 0 .')
 !
 1120    continue
-        FIVE=4.0E0+1.0E0
-        TEMP20=4.0E0*FIVE
-        TEMP12=3.0E0*4.0E0
-        TMP240=TEMP20*TEMP12
-        TEMP80=TMP240/3.0E0
-        TEMP60=TMP240/4.0E0
-        TEMP48=TMP240/FIVE
-        TEMP80=TEMP80-4.0E0*TEMP20
-        TEMP60=TEMP60-FIVE*TEMP12
-        TEMP48=TEMP48-4.0E0*TEMP12
-        IF ( TEMP80 .EQ. 0.0E0 .AND. TEMP60 .EQ. 0.0E0 .AND. TEMP48 .EQ. 0.0E0 ) GOTO 1150
-        FAILS=FAILS+1
-        WRITE(OUT,1141)
-1141    FORMAT(' FAILURE: violation of 240/3 = 80 or 240/4 = 60 or 240/5 = 48 .')
+        five=4.0e0+1.0e0
+        temp20=4.0e0*five
+        temp12=3.0e0*4.0e0
+        tmp240=temp20*temp12
+        temp80=tmp240/3.0e0
+        temp60=tmp240/4.0e0
+        temp48=tmp240/five
+        temp80=temp80-4.0e0*temp20
+        temp60=temp60-five*temp12
+        temp48=temp48-4.0e0*temp12
+        if ( temp80 .eq. 0.0e0 .and. temp60 .eq. 0.0e0 .and. temp48 .eq. 0.0e0 ) goto 1150
+        fails=fails+1
+        write(out,1141)
+1141    format(' FAILURE: violation of 240/3 = 80 or 240/4 = 60 or 240/5 = 48 .')
 1150    continue
-        IF (FAILS .NE. 0) GOTO 1160
-        WRITE(OUT,1151)
-1151    FORMAT (' -1, 0, 1/2 , 1, 2, 3, 4, 5, 9, 27, 32 & 240 are O.K.')
+        if (fails .ne. 0) goto 1160
+        write(out,1151)
+1151    format (' -1, 0, 1/2 , 1, 2, 3, 4, 5, 9, 27, 32 & 240 are O.K.')
 1160    continue
-        RETURN
+        return
 
-        END SUBROUTINE SMLINT
+        end subroutine smlint
 !-------------------------------------------------------------------------------
-        SUBROUTINE SQUARE (FROM, MILES, NUMTRY)
+        subroutine square (from, miles, numtry)
       implicit none
 !
-        INTEGER FROM, MILES, NUMTRY
+        integer from, miles, numtry
 !       ... LOCAL VARIABLES
-        DOUBLE PRECISION D, D4, E5, E6, E7, Q, U, X, X1, X8, Y, Y1, Y2, Z, Z1, Z2
-        DOUBLE PRECISION TEMP,TEMP1,TEMP2
-        INTEGER I, J
+        double precision d, d4, e5, e6, e7, q, u, x, x1, x8, y, y1, y2, z, z1, z2
+        double precision temp,temp1,temp2
+        integer i, j
 !       ... CONSTANTS
-        DOUBLE PRECISION B2
-        DOUBLE PRECISION B9, B1
+        double precision b2
+        double precision b9, b1
 !
 !                       TRAP INTEGER OVERFLOWS
 !                       OTHER EXCEPTIONS ARE TRAPPED BY DEFAULT
-        B2 = RADIX / FP2
-        B9 = ((RADIX - FP1) - ULPPLS) + FP1
-        B1 = FP1 / RADIX
-        IF (FROM .EQ. 79) GO TO 3058
-        IF (FROM .NE. 0) CALL BADMIL
+        b2 = radix / fp2
+        b9 = ((radix - fp1) - ulppls) + fp1
+        b1 = fp1 / radix
+        if (from .eq. 79) go to 3058
+        if (from .ne. 0) call badmil
 !
-        WRITE(OUT,3021)
-3021    FORMAT(/' Running tests of square root...')
-        MILES = 79
-        CALL LOGIT(MILES)
-        X = FP0
-        I = 0
+        write(out,3021)
+3021    format(/' Running tests of square root...')
+        miles = 79
+        call logit(miles)
+        x = fp0
+        i = 0
 3030    continue
-        Y = DSQRT(X)
-        IF (Y .EQ. X .AND. Y - HALF .EQ. X - HALF) GOTO 3050
-        FAILS = FAILS + 1
-        WRITE(OUT,3041) X, Y
-3041    FORMAT(' FAILURE:  sqrt(',E9.1,'), miscalculated as ',E15.7)
+        y = dsqrt(x)
+        if (y .eq. x .and. y - half .eq. x - half) goto 3050
+        fails = fails + 1
+        write(out,3041) x, y
+3041    format(' FAILURE:  sqrt(',e9.1,'), miscalculated as ',e15.7)
 3050    continue
-        X = -X
-        I = I + 1
-        IF (I .EQ. 1) GOTO 3030
-        GO TO 3060
+        x = -x
+        i = i + 1
+        if (i .eq. 1) goto 3030
+        go to 3060
 3058    continue
-        WRITE(OUT,3059)
-3059    FORMAT(' FAILURE:  sqrt(-0.0) stops the machine.')
-        FAILS = FAILS + 1
-        I = 2
+        write(out,3059)
+3059    format(' FAILURE:  sqrt(-0.0) stops the machine.')
+        fails = fails + 1
+        i = 2
 3060    continue
-        X = FP1
-        I = I + 1
-        IF (I .EQ. 3) GOTO 3030
+        x = fp1
+        i = i + 1
+        if (i .eq. 3) goto 3030
 !       ... RECORD MIN AND MAX ERRORS.
-        E5 = FP0
-        E7 = FP0
+        e5 = fp0
+        e7 = fp0
 !       ... TEST WHETHER DSQRT(X*X)  =  X
-        J = 0
-        X = RADIX
-        U = ULPPLS
-        CALL SQRERR (X, U, J, E5, E7, .TRUE.)
-        X = B1
-        U = B1 * ULPMIN
-        CALL SQRERR (X, U, J, E5, E7, .TRUE.)
-        X = W
-        U = FP1
-        CALL SQRERR (X, U, J, E5, E7, .TRUE.)
-        X = ULPMIN
-        U = ULPMIN * ULPMIN
-        CALL SQRERR (X, U, J, E5, E7, .TRUE.)
+        j = 0
+        x = radix
+        u = ulppls
+        call sqrerr (x, u, j, e5, e7, .true.)
+        x = b1
+        u = b1 * ulpmin
+        call sqrerr (x, u, j, e5, e7, .true.)
+        x = w
+        u = fp1
+        call sqrerr (x, u, j, e5, e7, .true.)
+        x = ulpmin
+        u = ulpmin * ulpmin
+        call sqrerr (x, u, j, e5, e7, .true.)
 !                       IF SQRT HAS SERIOUS DEFECTS, THEN PAUSE
-        IF (J .EQ. 0) GOTO 3210
-        SDEFCT = SDEFCT + J
-        CALL PAGE(MILES)
+        if (j .eq. 0) goto 3210
+        sdefct = sdefct + j
+        call page(miles)
 !
 !
 3210    continue
-        WRITE(OUT,3211) NUMTRY
-3211    FORMAT(' Testing if  sqrt(x*x)  =  x  for  ',I4,' integers  x.')
-        J = 0
-        X = FP2
-        Y = RADIX
-        IF (RADIX .EQ. FP1) GOTO 3240
+        write(out,3211) numtry
+3211    format(' Testing if  sqrt(x*x)  =  x  for  ',i4,' integers  x.')
+        j = 0
+        x = fp2
+        y = radix
+        if (radix .eq. fp1) goto 3240
 !                       LOOP TO DETERMINE ??
 3230    continue
-        X = Y
-        Y = RADIX * X
-        IF (Y - X .LT. NUMTRY) GOTO 3230
+        x = y
+        y = radix * x
+        if (y - x .lt. numtry) goto 3230
 3240    continue
-        U = X*ULPPLS
+        u = x*ulppls
 !
-        DO 3260 I = 1,NUMTRY
-        X = X + FP1
-        CALL SQRERR (X, U, J, E5, E7, .FALSE.)
-        IF (J .GT. 0) GOTO 3280
-3260    CONTINUE
+        do 3260 i = 1,numtry
+        x = x + fp1
+        call sqrerr (x, u, j, e5, e7, .false.)
+        if (j .gt. 0) goto 3280
+3260    continue
 !
-        WRITE(OUT,3270)
-3270    FORMAT(' Found no discrepancies.')
-        GOTO 3300
+        write(out,3270)
+3270    format(' Found no discrepancies.')
+        goto 3300
 3280    continue
-        DEFECT = DEFECT + J
+        defect = defect + j
 !
 !                       TEST SQRT FOR MONOTONICITY.
 !
 3300    continue
-        I = -1
-        X = B9
-        Y = RADIX
-        Z = RADIX + RADIX * ULPPLS
+        i = -1
+        x = b9
+        y = radix
+        z = radix + radix * ulppls
 !
 !                       LOOP
 !
 3310    continue
-        I = I + 1
-        X = DSQRT(X)
-        Q = DSQRT(Y)
-        Z = DSQRT(Z)
-        IF (.NOT. (X .GT. Q .OR. Q .GT. Z)) GOTO 3330
-        DEFECT = DEFECT + 1
-        WRITE(OUT,3321) Y
-3321    FORMAT(' DEFECT:  sqrt(x) is non - monotonic for  x  near ',E15.7)
-        GOTO 3390
+        i = i + 1
+        x = dsqrt(x)
+        q = dsqrt(y)
+        z = dsqrt(z)
+        if (.not. (x .gt. q .or. q .gt. z)) goto 3330
+        defect = defect + 1
+        write(out,3321) y
+3321    format(' DEFECT:  sqrt(x) is non - monotonic for  x  near ',e15.7)
+        goto 3390
 3330    continue
-        Q = DINT(Q + HALF)
-        IF (.NOT. (I .GT. 0 .OR. Q*Q .EQ. RADIX)) GOTO 3380
-        IF (I .GT. 0) GOTO 3360
-        Y = Q
-        X = Y - ULPPLS
-        Z = Y + ULPPLS
-        GOTO 3310
+        q = dint(q + half)
+        if (.not. (i .gt. 0 .or. q*q .eq. radix)) goto 3380
+        if (i .gt. 0) goto 3360
+        y = q
+        x = y - ulppls
+        z = y + ulppls
+        goto 3310
 !
 3360    continue
-        IF (I .GT. 1) GOTO 3380
-        Y = Y * B1
-        X = Y - ULPMIN
-        Z = Y + ULPMIN
-        GOTO 3310
+        if (i .gt. 1) goto 3380
+        y = y * b1
+        x = y - ulpmin
+        z = y + ulpmin
+        goto 3310
 3380    continue
-        WRITE(OUT,3381)
-3381    FORMAT(' Sqrt has passed a test for monotonicity.')
+        write(out,3381)
+3381    format(' Sqrt has passed a test for monotonicity.')
 3390    continue
-        MILES = 80
+        miles = 80
 !
 !       TEST SQRT FOR ACCURACY  =====================================
 !               E5 = MIN{ERROR + 1/2}
 !               E7 = MAX{ERROR - 1/2}
 !
-        E5 = E5 + HALF
-        E7 = E7 - HALF
-        Y = (DSQRT(FP1 + ULPPLS) - FP1)/ULPPLS
-        E6 = (Y - FP1) + ULPPLS/FP8
-        IF (E6 .GT. E7) E7 = E6
-        E6 = Y + ULPPLS/FP8
-        IF (E6 .LT. E5) E5 = E6
-        Y = ((DSQRT(ONEMIN) - ULPPLS) - (FP1 - ULPPLS))/ULPMIN
-        E6 = Y + ULPMIN/FP8
-        IF (E6 .GT. E7) E7 = E6
-        E6 = (Y + FP1) + ULPMIN/FP8
-        IF (E6 .LT. E5) E5 = E6
-        I = 0
-        U = ULPPLS
-        X = U
+        e5 = e5 + half
+        e7 = e7 - half
+        y = (dsqrt(fp1 + ulppls) - fp1)/ulppls
+        e6 = (y - fp1) + ulppls/fp8
+        if (e6 .gt. e7) e7 = e6
+        e6 = y + ulppls/fp8
+        if (e6 .lt. e5) e5 = e6
+        y = ((dsqrt(onemin) - ulppls) - (fp1 - ulppls))/ulpmin
+        e6 = y + ulpmin/fp8
+        if (e6 .gt. e7) e7 = e6
+        e6 = (y + fp1) + ulpmin/fp8
+        if (e6 .lt. e5) e5 = e6
+        i = 0
+        u = ulppls
+        x = u
 !
 !                       LOOP
 !
         do
-           I = I + 1
-           Y = DSQRT((X + ULPMIN + X) + ONEMIN)
-           Y = ((Y - ULPPLS) - ((FP1 - ULPPLS) + X))/U
-           Z = ((ULPMIN - X) + ONEMIN)*HALF*X*X/U
-           E6 = (Y + HALF) + Z
-           IF (E6 .LT. E5) E5 = E6
-           E6 = (Y - HALF) + Z
-           IF (E6 .GT. E7) E7 = E6
-           IF (I .EQ. 4) GOTO 3530
-           IF (I .EQ. 2) GOTO 3520
-           X = U * DSIGN(FP1,X) * DINT( FP8 / (FP9 * DSQRT(U)) )
+           i = i + 1
+           y = dsqrt((x + ulpmin + x) + onemin)
+           y = ((y - ulppls) - ((fp1 - ulppls) + x))/u
+           z = ((ulpmin - x) + onemin)*half*x*x/u
+           e6 = (y + half) + z
+           if (e6 .lt. e5) e5 = e6
+           e6 = (y - half) + z
+           if (e6 .gt. e7) e7 = e6
+           if (i .eq. 4) goto 3530
+           if (i .eq. 2) goto 3520
+           x = u * dsign(fp1,x) * dint( fp8 / (fp9 * dsqrt(u)) )
         cycle
 !
 3520       continue
-           U = ULPMIN
-           X = -U
+           u = ulpmin
+           x = -u
         enddo
 !
 3530    continue
-        MILES = 85
-        R4 = MINUS1
-        IF (RADIX .EQ. FP1) GOTO 3900
-        WRITE(OUT,3551)
-3551    FORMAT(' Testing whether  sqrt  is rounded or chopped:')
-        D = DINT(HALF + RADIX ** (FP1 + PRECIS - DINT(PRECIS)))
+        miles = 85
+        r4 = minus1
+        if (radix .eq. fp1) goto 3900
+        write(out,3551)
+3551    format(' Testing whether  sqrt  is rounded or chopped:')
+        d = dint(half + radix ** (fp1 + precis - dint(precis)))
 !
 !       ...  =  B^(1 + FRACT)  IF  P  =  INTEGER  +  FRACT.
 !
-        X = D / RADIX
-        Y = D / A1
-        IF (X .NE. DINT(X) .OR. Y .NE. DINT(Y)) GOTO 3700
-        X = FP0
-        Z2 = X
-        Y = FP1
-        Y2 = Y
-        Z1 = RADIX - FP1
-        D4 = FP4 * D
+        x = d / radix
+        y = d / a1
+        if (x .ne. dint(x) .or. y .ne. dint(y)) goto 3700
+        x = fp0
+        z2 = x
+        y = fp1
+        y2 = y
+        z1 = radix - fp1
+        d4 = fp4 * d
 !
 !       LOOP: FOR  Y  =  1, 3, 5, ...  MAXIMIZE  Y2  =  Y*Y MOD 4D .
 !
 3600    continue
-        IF (.NOT. (Y2 .GT. Z2)) GOTO 3650
-        Q = RADIX
-        Y1 = Y
+        if (.not. (y2 .gt. z2)) goto 3650
+        q = radix
+        y1 = y
 !                       IF NEW Y2 > OLD, CHECK THAT  GCD(Y,B)  =  1
 3620    continue
-        TEMP = HALF - Q / Y1
-        TEMP1 = DINT(TEMP)
-        IF (TEMP1 .GT. TEMP) TEMP1 = TEMP1 - FP1
-        X1 = DABS(Q + TEMP1 * Y1)
-        Q = Y1
-        Y1 = X1
-        IF (X1 .GT. FP0) GOTO 3620
+        temp = half - q / y1
+        temp1 = dint(temp)
+        if (temp1 .gt. temp) temp1 = temp1 - fp1
+        x1 = dabs(q + temp1 * y1)
+        q = y1
+        y1 = x1
+        if (x1 .gt. fp0) goto 3620
 !
-        IF (Q .GT. FP1) GOTO 3650
+        if (q .gt. fp1) goto 3650
 !                       IF GCD(Y,B)  .GT.  1 THEN SKIP OVER Y ;  ELSE
-        Z2 = Y2
-        Z = Y
+        z2 = y2
+        z = y
 !                       AND GCD(Z, RADIX)  = 1
 3650    continue
-        Y = Y + FP2
-        X = X + FP8
-        Y2 = Y2 + X
-        IF (.NOT. (Y2 .LT. D4)) Y2 = Y2 - D4
+        y = y + fp2
+        x = x + fp8
+        y2 = y2 + x
+        if (.not. (y2 .lt. d4)) y2 = y2 - d4
 !                       =  Y*Y MOD 4D
-        IF (Y .LT. D) GOTO 3600
+        if (y .lt. d) goto 3600
 !                       ELSE  0 < Z < D  &  Z2 = Z^2 MOD 4D  IS MAXIMAL
-        X8 = D4 - Z2
-        Q = (X8 + Z * Z) / D4
-        X8 = X8 / FP8
-        IF (Q .NE. DINT(Q)) GOTO 3700
+        x8 = d4 - z2
+        q = (x8 + z * z) / d4
+        x8 = x8 / fp8
+        if (q .ne. dint(q)) goto 3700
 3680    continue
-        X = Z1 * Z
-        X = X - DINT(X / RADIX) * RADIX
-        IF (X .EQ. FP1) GOTO 3800
+        x = z1 * z
+        x = x - dint(x / radix) * radix
+        if (x .eq. fp1) goto 3800
 !                       WITH  1  =  Z*Z1 MOD B
-        Z1 = Z1 - FP1
-        IF (Z1 .GT. FP0) GOTO 3680
+        z1 = z1 - fp1
+        if (z1 .gt. fp0) goto 3680
 !                       ELSE FAILURE!
 3700    continue
-        FAILS = FAILS + 1
-        WRITE(OUT,3701) W
-        WRITE(OUT,3702)
-3701    FORMAT(' FAILURE: anomalous arithmetic with integers < b^p  = ', E15.7)
-3702    FORMAT ('         foils test whether  sqrt  rounds or chops.')
-        GOTO 3940
+        fails = fails + 1
+        write(out,3701) w
+        write(out,3702)
+3701    format(' FAILURE: anomalous arithmetic with integers < b^p  = ', e15.7)
+3702    format ('         foils test whether  sqrt  rounds or chops.')
+        goto 3940
 !
 !                       - B/2   <=   Z1 == 1/Z MOD B   <=   B/2
 !
 3800    continue
-        IF (Z1 .GT. B2) Z1 = Z1 - RADIX
+        if (z1 .gt. b2) z1 = z1 - radix
 !
 !                       LOOP UNTIL  D  =  B^(P - 1) .
 !
 3810    continue
-        CALL NEWD (X, Z1, Q, Z, D)
-        IF (ULPPLS * D .LT. ONEMIN) GOTO 3810
+        call newd (x, z1, q, z, d)
+        if (ulppls * d .lt. onemin) goto 3810
 !
-        IF (D * RADIX - D .NE. W - D) GOTO 3700
-        Z2 = D
-        I = 0
+        if (d * radix - d .ne. w - d) goto 3700
+        z2 = d
+        i = 0
 !               COUNT HOW MANY TESTS OF DSQRT(D*X) = Y YIELD RESULTS.
-        Y = D + (FP1 + Z) * HALF
-        X = D + Z + Q
-        CALL SQRTDX (X, Z2, I, D, Y2, Y, X8, E5, E7)
-        Y = D + (FP1 - Z) * HALF + D
-        X = D - Z + D
-        X = X + Q + X
-        CALL SQRTDX (X, Z2, I, D, Y2, Y, X8, E5, E7)
-        CALL NEWD (X, Z1, Q, Z, D)
-        IF (D - Z2 .NE. W - Z2) GOTO 3700
-        Y = (D - Z2) + (Z2 + (FP1 - Z) * HALF)
-        X = (D - Z2) + (Z2 - Z + Q)
-        CALL SQRTDX (X, Z2, I, D, Y2, Y, X8, E5, E7)
-        Y = (FP1 + Z) * HALF
-        X = Q
-        CALL SQRTDX (X, Z2, I, D, Y2, Y, X8, E5, E7)
-        IF (I .EQ. 0) GOTO 3700
+        y = d + (fp1 + z) * half
+        x = d + z + q
+        call sqrtdx (x, z2, i, d, y2, y, x8, e5, e7)
+        y = d + (fp1 - z) * half + d
+        x = d - z + d
+        x = x + q + x
+        call sqrtdx (x, z2, i, d, y2, y, x8, e5, e7)
+        call newd (x, z1, q, z, d)
+        if (d - z2 .ne. w - z2) goto 3700
+        y = (d - z2) + (z2 + (fp1 - z) * half)
+        x = (d - z2) + (z2 - z + q)
+        call sqrtdx (x, z2, i, d, y2, y, x8, e5, e7)
+        y = (fp1 + z) * half
+        x = q
+        call sqrtdx (x, z2, i, d, y2, y, x8, e5, e7)
+        if (i .eq. 0) goto 3700
 3900    continue
-        IF (E5 .LT. 0 .OR. E7 .GT. 0) GOTO 3920
-        R4 = FP1
-        WRITE(OUT,3911)
-3911    FORMAT (' Square root appears to be correctly rounded.')
-        RETURN
+        if (e5 .lt. 0 .or. e7 .gt. 0) goto 3920
+        r4 = fp1
+        write(out,3911)
+3911    format (' Square root appears to be correctly rounded.')
+        return
 !
 3920    continue
-        IF (E7 + ULPPLS .GT. ULPPLS - HALF .OR.  E5          .GT. HALF          .OR.  E5 + RADIX  .LT. HALF) GOTO 3940
-        R4 = FP0
-        WRITE(OUT,3931)
-3931    FORMAT (' Square root appears to be chopped.')
-        RETURN
+        if (e7 + ulppls .gt. ulppls - half .or.  e5          .gt. half          .or.  e5 + radix  .lt. half) goto 3940
+        r4 = fp0
+        write(out,3931)
+3931    format (' Square root appears to be chopped.')
+        return
 3940    continue
-        WRITE(OUT,3941)
-        TEMP=E5-HALF
-        TEMP2=HALF+E7
-        WRITE(OUT,3942) TEMP, TEMP2
-3941    FORMAT (' Square root is neither chopped nor correctly',' rounded.')
-3942    FORMAT(' Observed errors run from  ',E15.7,'  to  ',E15.7,' ulps.')
-        IF (E7 - E5 .LT. RADIX * RADIX) RETURN
-        SDEFCT = SDEFCT + 1
-        WRITE(OUT,3951)
-3951    FORMAT(' SERIOUS DEFECT: sqrt gets too many last digits wrong.')
-        RETURN
-        END SUBROUTINE SQUARE
+        write(out,3941)
+        temp=e5-half
+        temp2=half+e7
+        write(out,3942) temp, temp2
+3941    format (' Square root is neither chopped nor correctly',' rounded.')
+3942    format(' Observed errors run from  ',e15.7,'  to  ',e15.7,' ulps.')
+        if (e7 - e5 .lt. radix * radix) return
+        sdefct = sdefct + 1
+        write(out,3951)
+3951    format(' SERIOUS DEFECT: sqrt gets too many last digits wrong.')
+        return
+        end subroutine square
 !-------------------------------------------------------------------------------
 !       ____ SUBROUTINE TO ASSESS ERROR  DSQRT(X*X) - X  IN ULPS. ____
 !
-        SUBROUTINE SQRERR (X, U, J, E5, E7, SEROUS)
+        subroutine sqrerr (x, u, j, e5, e7, serous)
       implicit none
 !!!!!
-        INTEGER J
-        DOUBLE PRECISION X, U,    E5, E7
-        LOGICAL SEROUS
-        DOUBLE PRECISION E6, B1
-        B1 = 1.0 / RADIX
-        E6 = ((DSQRT(X * X) - X * B1) - (X - X * B1)) / U
-        IF (E6 .EQ. 0.0) RETURN
-        IF (E6 .LT. E5) E5 = E6
-        IF (E6 .GT. E7) E7 = E6
-        J = J + 1
-        IF (.NOT. SEROUS) WRITE(OUT,31210) X*X, X, U*E6
-        IF (SEROUS) WRITE(OUT,31211) X*X, X, U*E6
-31210   FORMAT (' DEFECT: sqrt(', E15.7,') - ',E15.7,'  =  ', E15.7)
-31211   FORMAT (' SERIOUS DEFECT: sqrt(', E15.7,') - ',E15.7,'  =  ',E15.7)
-        WRITE(OUT,3122)
-3122    FORMAT(' instead of correct value  0 .')
-        RETURN
-        END SUBROUTINE SQRERR
+        integer j
+        double precision x, u,    e5, e7
+        logical serous
+        double precision e6, b1
+        b1 = 1.0 / radix
+        e6 = ((dsqrt(x * x) - x * b1) - (x - x * b1)) / u
+        if (e6 .eq. 0.0) return
+        if (e6 .lt. e5) e5 = e6
+        if (e6 .gt. e7) e7 = e6
+        j = j + 1
+        if (.not. serous) write(out,31210) x*x, x, u*e6
+        if (serous) write(out,31211) x*x, x, u*e6
+31210   format (' DEFECT: sqrt(', e15.7,') - ',e15.7,'  =  ', e15.7)
+31211   format (' SERIOUS DEFECT: sqrt(', e15.7,') - ',e15.7,'  =  ',e15.7)
+        write(out,3122)
+3122    format(' instead of correct value  0 .')
+        return
+        end subroutine sqrerr
 !-------------------------------------------------------------------------------
 !       THIS SUBROUTINE PUTS  NEWD = B*D  AND
 !                             NEWZ^2 MOD NEWD = Z^2 MOD D
 !
-        SUBROUTINE NEWD (X, Z1, Q, Z, D)
+        subroutine newd (x, z1, q, z, d)
       implicit none
 !!!!!
-        DOUBLE PRECISION X, Z1, Q, Z, D
-        DOUBLE PRECISION TEMP, TEMP1
+        double precision x, z1, q, z, d
+        double precision temp, temp1
 !
-        X = Z1 * Q
-        TEMP = HALF - X / RADIX
-        TEMP1 = DINT(TEMP)
-        IF (TEMP1 .GT. TEMP) TEMP1 = TEMP1 - FP1
-        X = TEMP1 * RADIX + X
-        Q = (Q - X*Z) / RADIX + X * X * (D / RADIX)
-        Z = Z - FP2 * X * D
-        IF (Z .GT. FP0) GOTO 3740
-        Z = -Z
-        Z1 = -Z1
+        x = z1 * q
+        temp = half - x / radix
+        temp1 = dint(temp)
+        if (temp1 .gt. temp) temp1 = temp1 - fp1
+        x = temp1 * radix + x
+        q = (q - x*z) / radix + x * x * (d / radix)
+        z = z - fp2 * x * d
+        if (z .gt. fp0) goto 3740
+        z = -z
+        z1 = -z1
 3740    continue
-        D = RADIX * D
-        RETURN
-        END SUBROUTINE NEWD
+        d = radix * d
+        return
+        end subroutine newd
 !-------------------------------------------------------------------------------
 !       THIS SUBROUTINE TESTS IF
 !               DSQRT(D*X) = DSQRT((Y - 1/2)^2 + X8/2) ROUNDS TO  Y
 !
-        SUBROUTINE SQRTDX (X, Z2, I, D, Y2, Y, X8, E5, E7)
+        subroutine sqrtdx (x, z2, i, d, y2, y, x8, e5, e7)
       implicit none
 !
 !!!!!
 !
-        DOUBLE PRECISION X, Z2, X2, D, Y2, Y, X8, E5, E7
-        INTEGER I
-        DOUBLE PRECISION E6
+        double precision x, z2, x2, d, y2, y, x8, e5, e7
+        integer i
+        double precision e6
 !
-        IF (X - RADIX .LT. Z2 - RADIX .OR. X - Z2 .GT. W - Z2) RETURN
-        I = I + 1
-        X2 = DSQRT(X * D)
-        Y2 = (X2 - Z2) - (Y - Z2)
-        X2 = X8/(Y - HALF)
-        X2 = X2 - HALF * X2 * X2
-        E6 = (Y2 + HALF) + (HALF - X2)
-        IF (E6 .LT. E5) E5 = E6
-        E6 = Y2 - X2
-        IF (E6 .GT. E7) E7 = E6
-        RETURN
-        END SUBROUTINE SQRTDX
+        if (x - radix .lt. z2 - radix .or. x - z2 .gt. w - z2) return
+        i = i + 1
+        x2 = dsqrt(x * d)
+        y2 = (x2 - z2) - (y - z2)
+        x2 = x8/(y - half)
+        x2 = x2 - half * x2 * x2
+        e6 = (y2 + half) + (half - x2)
+        if (e6 .lt. e5) e5 = e6
+        e6 = y2 - x2
+        if (e6 .gt. e7) e7 = e6
+        return
+        end subroutine sqrtdx
 !-------------------------------------------------------------------------------
-        SUBROUTINE UNDERF(MILES, NUMTRY, FROM)
+        subroutine underf(miles, numtry, from)
       implicit none
-        INTEGER           MILES, NUMTRY, FROM
+        integer           miles, numtry, from
 !        MILES  ... NUMBER OF MILESTONE REACHED SO FAR IN TESTING
 !        NUMTRY ... NUMBER OF TIMES TO TRY RANDOM TRIALS
 !        FROM   ... NUMBER OF MILESTONE TO RETURN TO ON RESTART
 !!!!!
-        INTEGER ACCUR, ERROR, I, IQ, PARTU
+        integer accur, error, i, iq, partu
 !        ACCUR  ... FLAG TO INDICATE SUCCESS/FAILURE OF ACCURACY TESTS
 !        ERROR  ... COUNT OF ERRORS DETECTED TESTING POWERS.
 !        I      ... SCRATCH FOR ENUMERATING CASES
 !        IQ     ... TEMPORARY FOR HOLDING INTEGER EXPONENTS
 !        PARTU  ... FLAG TO INDICATE THE DETECTION OF PARTIAL UNDERFLOW
 !
-        DOUBLE PRECISION C, EPSP1, EXP2, H, MINDIF
+        double precision c, epsp1, exp2, h, mindif
 !        C      ... 1/(RADIX^LARGE_INTEGER)
 !        EPSP1  ... EPSILON + 1 (1 + (SMALL INTEGER)* 1 ULP OF 1+...)
 !        EXP2   ... VALUE OF E ^ 2
@@ -2292,147 +2292,147 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !        MINDIF ... MINIMUM POSITIVE NUMBER FOUND BY ADDITION/SUBTR.
 !
 !        ... LOCAL VARIABLES
-        DOUBLE PRECISION D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9,TEMP
-        character(len=8) :: CHARZ0, CHARE0
+        double precision d, q, r, t0, v9, x, y, y1, y2, z, z9,temp
+        character(len=8) :: charz0, chare0
 !        CHARZ0 ... CHARACTER CONSTANT 'Z0'
 !        CHARE0 ... CHARACTER CONSTANT 'E0'
-        DATA CHARZ0/ ' PHONY0'/,CHARE0/ ' MINPOS'/
+        data charz0/ ' PHONY0'/,chare0/ ' MINPOS'/
 !
-        IF(FROM .EQ. 0 ) GO TO 4330
+        if(from .eq. 0 ) go to 4330
 !          WE MUST BE DOING A RESTART.  FIGURE OUT WHERE, AND GO DO IT
 !       MUST READ THE LOG FILE BACK IN.
-        READ(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        READ(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        IF (FROM .EQ. 105) GO TO 4390
-        IF (FROM .EQ. 106) GO TO 4410
-        IF (FROM .EQ. 107) GO TO 4450
-        IF (FROM .EQ. 108) PHONY0 = 0
-        IF (FROM .EQ. 108) GO TO 4522
-        IF (FROM .EQ. 109) GO TO 4860
-        IF (FROM .EQ. 115) GO TO 4631
-        IF (FROM .EQ. 120) GO TO 4890
-        IF (FROM .EQ. 121) GO TO 4941
-        IF (FROM .EQ. 122) GO TO 5011
-        IF (FROM .EQ. 123) GO TO 5160
-        IF (FROM .EQ. 124) GO TO 5190
-        IF (FROM .EQ. 125) GO TO 5175
-        IF (FROM .EQ. 131) GO TO 53021
+        read(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        read(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        if (from .eq. 105) go to 4390
+        if (from .eq. 106) go to 4410
+        if (from .eq. 107) go to 4450
+        if (from .eq. 108) phony0 = 0
+        if (from .eq. 108) go to 4522
+        if (from .eq. 109) go to 4860
+        if (from .eq. 115) go to 4631
+        if (from .eq. 120) go to 4890
+        if (from .eq. 121) go to 4941
+        if (from .eq. 122) go to 5011
+        if (from .eq. 123) go to 5160
+        if (from .eq. 124) go to 5190
+        if (from .eq. 125) go to 5175
+        if (from .eq. 131) go to 53021
 !               MAKES NO SENSE TO TALK ABOUT UNDERFLOW STICKING, SINCE
 !               UNDERFLOW ABORTS THE PROGRAM....
-        CALL BADMIL
+        call badmil
 4330    continue
-        WRITE(OUT,4335)
-4335    FORMAT(' Seeking underflow threshold and min positive number:')
-        MILES = 105
-        CALL LOGIT(MILES)
-        D = ULPMIN
-        IF (PRECIS .EQ. DINT(PRECIS)) GOTO 4370
-        D = FP1 / RADIX
-        X = PRECIS
+        write(out,4335)
+4335    format(' Seeking underflow threshold and min positive number:')
+        miles = 105
+        call logit(miles)
+        d = ulpmin
+        if (precis .eq. dint(precis)) goto 4370
+        d = fp1 / radix
+        x = precis
 4360    continue
-        D = D / RADIX
-        X = X - FP1
-        IF (X .GT. FP0) GO TO 4360
+        d = d / radix
+        x = x - fp1
+        if (x .gt. fp0) go to 4360
 !       IF NON-INTEGRAL PRECISION NOW HAVE D = 1 RIGHT SHIFTED BY PRECIS
 !       DIGITS (IN BASE "RADIX")
 !       IF INTEGRAL PRECISION, ULPMIN IS THIS NUMBER - PRE-COMPUTED.
 4370    continue
-        Y = FP1
-        Z = D
+        y = fp1
+        z = d
 !       ... D = A POWER OF  1/RADIX < 1
 4380    continue
-        C=Y
-        Y=Z
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
-        Z=Y*Y
-        IF (Y .GT. Z .AND. Z+Z .GT. Z) GO TO 4380
+        c=y
+        y=z
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
+        z=y*y
+        if (y .gt. z .and. z+z .gt. z) go to 4380
 !          MILESTONE 106
 4390    continue
-        MILES = 106
-        CALL LOGIT(MILES)
-        Y=C
-        Z=Y*D
+        miles = 106
+        call logit(miles)
+        y=c
+        z=y*d
 4400    continue
-        C=Y
-        Y=Z
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
-        Z=Y*D
-        IF (Y .GT. Z .AND. Z+Z .GT. Z) GO TO 4400
+        c=y
+        y=z
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
+        z=y*d
+        if (y .gt. z .and. z+z .gt. z) go to 4400
 !       MILESTONE 107
 4410    continue
-        MILES = 107
-        CALL LOGIT(MILES)
-        H1=RADIX
-        IF (H1 .LT. FP2) H1=FP2
-        H=FP1/H1
+        miles = 107
+        call logit(miles)
+        h1=radix
+        if (h1 .lt. fp2) h1=fp2
+        h=fp1/h1
 !        ... 1/H1 = H = MIN{ 1/RADIX, 1/2 }
-        C1=FP1/C
-        MINPOS=C
-        Z=MINPOS*H
+        c1=fp1/c
+        minpos=c
+        z=minpos*h
 !       ... C = 1/RADIX^(BIG INTEGER) << 1 << C1 = 1/C
 4440    continue
-        Y=MINPOS
-        MINPOS=Z
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
-        Z=MINPOS*H
-        IF (MINPOS .GT. Z .AND. Z+Z .GT. Z) GO TO 4440
+        y=minpos
+        minpos=z
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
+        z=minpos*h
+        if (minpos .gt. z .and. z+z .gt. z) go to 4440
 !       MILESTONE 108
 4450    continue
-        MILES = 108
-        CALL LOGIT(MILES)
-        UFLTHR = MINPOS
-        MINDIF=FP0
-        Q=FP0
-        NULPS=ULPPLS
-        EPSP1=FP1+NULPS
-        D=C*EPSP1
-        IF (D .GT. C) GO TO 4490
-        NULPS=RADIX*ULPPLS
-        EPSP1=FP1+NULPS
-        D=C*EPSP1
-        IF (D .GT. C) GO TO 4490
-        WRITE(OUT,4470)
-4470    FORMAT(' FAILURE: multiplication  gets too many last digits wrong.')
+        miles = 108
+        call logit(miles)
+        uflthr = minpos
+        mindif=fp0
+        q=fp0
+        nulps=ulppls
+        epsp1=fp1+nulps
+        d=c*epsp1
+        if (d .gt. c) go to 4490
+        nulps=radix*ulppls
+        epsp1=fp1+nulps
+        d=c*epsp1
+        if (d .gt. c) go to 4490
+        write(out,4470)
+4470    format(' FAILURE: multiplication  gets too many last digits wrong.')
 !       ... MULTIPLICATION IS TOO CRUDE
-        FAILS=FAILS+1
-        T0 = MINPOS
-        Y1=FP0
-        PHONY0 = Z
-        CALL PAGE(MILES)
-        GOTO 4570
+        fails=fails+1
+        t0 = minpos
+        y1=fp0
+        phony0 = z
+        call page(miles)
+        goto 4570
 4490   continue
-        T0=D
-        PHONY0=T0*H
-        UFLTHR=FP0
+        t0=d
+        phony0=t0*h
+        uflthr=fp0
 4500    continue
-        Y1=T0
-        T0=PHONY0
-        IF (MINDIF+MINDIF .GT. MINDIF) GO TO 4520
-        Y2 = T0 * H1
-        MINDIF=DABS(Y1-Y2)
-        Q=Y1
-        IF (UFLTHR .EQ. FP0 .AND. Y1 .NE. Y2) UFLTHR=Y1
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        MILES = 108
-        CALL LOGIT(MILES)
+        y1=t0
+        t0=phony0
+        if (mindif+mindif .gt. mindif) go to 4520
+        y2 = t0 * h1
+        mindif=dabs(y1-y2)
+        q=y1
+        if (uflthr .eq. fp0 .and. y1 .ne. y2) uflthr=y1
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        miles = 108
+        call logit(miles)
 4520    continue
-        PHONY0=T0*H
-        IF (T0 .GT. PHONY0 .AND. PHONY0+PHONY0 .GT. PHONY0) GO TO 4500
+        phony0=t0*h
+        if (t0 .gt. phony0 .and. phony0+phony0 .gt. phony0) go to 4500
 4522    continue
-        MILES = 109
-        CALL LOGIT(MILES)
+        miles = 109
+        call logit(miles)
 !        ... NOW  1 >> C=1/RADIX^(INTEGER)  >=   Y    >   MINPOS=Y*H
 !                  >~ Z:=MINPOS*H >~ 0 ,
 !        ... AND  1 >> D=(1+NULPS)*C >= UFLTHR >= Q >= Y1 > T0:=Y1*H
@@ -2442,372 +2442,372 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !        ... AND  Q:=UFLTHR/RADIX^INTEGER  IS FIRST WITH  MINDIF :=
 !                  |(Q*H)/H - Q| > 0, ELSE Q=Y1.
 4570    continue
-        IF (PHONY0 .EQ. FP0) GO TO 4860
+        if (phony0 .eq. fp0) go to 4860
 !        ... TEST  PHONY0  FOR 'PHONEY-ZERO' VIOLATING  PHONY0<T0 OR
 !                  PHONY0<PHONY0+PHONY0  ...
-        WRITE(OUT,4590)
-4590    FORMAT(/)
-        Z=PHONY0
-        IF (PHONY0 .GT. FP0) GOTO 4620
-        FAILS=FAILS+1
-        WRITE(OUT,4601)
-4601    FORMAT(' FAILURE:  positive expressions can underflow to an allegedly')
-        WRITE(OUT,4602)PHONY0
-4602    FORMAT('          negative value z0 that prints out as ',E16.8)
-        X=-PHONY0
-        IF (X .GT. 0) GO TO 4630
-        WRITE(OUT,4610)X
-4610    FORMAT('          but  -z0, which should then be positive, isn''t; it prints out as', E16.8)
-        GOTO 4630
+        write(out,4590)
+4590    format(/)
+        z=phony0
+        if (phony0 .gt. fp0) goto 4620
+        fails=fails+1
+        write(out,4601)
+4601    format(' FAILURE:  positive expressions can underflow to an allegedly')
+        write(out,4602)phony0
+4602    format('          negative value z0 that prints out as ',e16.8)
+        x=-phony0
+        if (x .gt. 0) go to 4630
+        write(out,4610)x
+4610    format('          but  -z0, which should then be positive, isn''t; it prints out as', e16.8)
+        goto 4630
 4620    continue
-        FLAWS=FLAWS+1
-        WRITE(OUT,4623)
-4623    FORMAT(' FLAW: underflow can stick at an allegedly positive value  z0')
-        WRITE(OUT,4626)PHONY0
-4626    FORMAT( '       that prints out as ', E16.8)
+        flaws=flaws+1
+        write(out,4623)
+4623    format(' FLAW: underflow can stick at an allegedly positive value  z0')
+        write(out,4626)phony0
+4626    format( '       that prints out as ', e16.8)
 4630    continue
-        MILES=115
+        miles=115
 !       PARTUF INCLUDES CALL LOGIT(MILES)
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
 4631    continue
-        CALL PARTUF (Z, CHARZ0, MILES, PARTU, FROM .EQ. 115)
+        call partuf (z, charz0, miles, partu, from .eq. 115)
 !       ... END OF TEST FOR 'PHONEY-ZERO'.
 4860    continue
-        MILES=120
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
+        miles=120
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
 !       ==============================================================
-        IF (C1*Y .LE. C1*Y1) GO TO 4890
+        if (c1*y .le. c1*y1) go to 4890
 !       ... AS HAPPENS ON MOST MACHINES.
-        EPSP1=H*EPSP1
-        MINPOS=T0
+        epsp1=h*epsp1
+        minpos=t0
 !       = LEAST POSITIVE NO. ON HP 3000
 4890    continue
-        IF (MINDIF .EQ. 0 .OR. MINDIF .EQ. MINPOS) GO TO 4930
-        IF (MINDIF .LT. MINPOS) GO TO 4920
-        DEFECT=DEFECT+1
-        WRITE(OUT,4912)
-4912    FORMAT(' DEFECT: differences underflow at a higher threshold than products.')
-        GOTO 4930
+        if (mindif .eq. 0 .or. mindif .eq. minpos) go to 4930
+        if (mindif .lt. minpos) go to 4920
+        defect=defect+1
+        write(out,4912)
+4912    format(' DEFECT: differences underflow at a higher threshold than products.')
+        goto 4930
 4920    continue
-        DEFECT=DEFECT+1
-        WRITE(OUT,4922)
-4922    FORMAT(' DEFECT: products underflow at a higher threshold than differences.')
-        IF (PHONY0 .EQ. FP0) MINPOS=MINDIF
+        defect=defect+1
+        write(out,4922)
+4922    format(' DEFECT: products underflow at a higher threshold than differences.')
+        if (phony0 .eq. fp0) minpos=mindif
 !       ... BUT NOT IF PSEUDO-ZEROS EXIST.
 4930    continue
-        WRITE(OUT,4935) MINPOS
-4935    FORMAT(' Smallest strictly positive number found is  minpos  =',1PE16.8)
-        Z = MINPOS
-        MILES = 121
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
+        write(out,4935) minpos
+4935    format(' Smallest strictly positive number found is  minpos  =',1pe16.8)
+        z = minpos
+        miles = 121
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
 4941    continue
-        CALL PARTUF (Z, CHARE0, MILES, PARTU, FROM .EQ. 121)
-        T0=MINPOS
-        IF (PARTU .EQ. 1) T0=Y
+        call partuf (z, chare0, miles, partu, from .eq. 121)
+        t0=minpos
+        if (partu .eq. 1) t0=y
 !       FOR CDC 7600
-        I=4
-        IF (MINDIF .EQ. FP0) I=3
+        i=4
+        if (mindif .eq. fp0) i=3
 !       ...  I=1 IF MINDIF=0=UFLTHR  ,   I=2 IF MINDIF>0=UFLTHR  ,
-        IF (UFLTHR .EQ. FP0) I=I-2
+        if (uflthr .eq. fp0) i=i-2
 !           ...  I=3 IF MINDIF=0<UFLTHR  ,   I=4 IF MINDIF>0 & UFLTHR>0
-        GOTO (4980, 5090, 5010, 5130),I
+        goto (4980, 5090, 5010, 5130),i
 !       ... CASE STATEMENT
 4980    continue
-        UFLTHR=T0
-        IF (C1*Q .EQ. (C1*Y)*EPSP1) GO TO 5010
-        FAILS=FAILS+1
-        UFLTHR=Y
-        WRITE(OUT,4993)
-4993    FORMAT(' FAILURE: either accuracy deteriorates as numbers approach a threshold')
-        WRITE(OUT,4996)UFLTHR,C
-4996    FORMAT(' of ',E16.8,' coming down from  ',E16.8,',')
-        WRITE(OUT,4997)
-4997    FORMAT(' or else  multiplication  gets too many last digits wrong.')
-        CALL PAGE(MILES)
+        uflthr=t0
+        if (c1*q .eq. (c1*y)*epsp1) go to 5010
+        fails=fails+1
+        uflthr=y
+        write(out,4993)
+4993    format(' FAILURE: either accuracy deteriorates as numbers approach a threshold')
+        write(out,4996)uflthr,c
+4996    format(' of ',e16.8,' coming down from  ',e16.8,',')
+        write(out,4997)
+4997    format(' or else  multiplication  gets too many last digits wrong.')
+        call page(miles)
 !
 !        ___ TEST FOR  X-Z = 0  ALTHOUGH  X  .NE.  Z ___
 !
 5010    continue
-        MILES = 122
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
-        R = DSQRT(T0 / UFLTHR)
-        GO TO 5012
+        miles = 122
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
+        r = dsqrt(t0 / uflthr)
+        go to 5012
 5011    continue
-        R = FP1
+        r = fp1
 5012    continue
-        IF (R .GT. H) GOTO 5030
-        Z=R*UFLTHR
-        X=Z*(FP1+R*H*(FP1+H))
-        GOTO 5040
+        if (r .gt. h) goto 5030
+        z=r*uflthr
+        x=z*(fp1+r*h*(fp1+h))
+        goto 5040
 5030    continue
-        Z=UFLTHR
-        X=Z*(FP1+H*H*(FP1+H))
+        z=uflthr
+        x=z*(fp1+h*h*(fp1+h))
 5040    continue
-        MILES = 123
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
-        IF (X .EQ. Z .OR. X-Z .NE. FP0) GO TO 5160
-        FLAWS=FLAWS+1
-        WRITE(OUT,5055)X,Z
-5055    FORMAT(' FLAW:  x =',E16.8,' is unequal to  z =',E16.8,' ,')
-        Z9 = X - Z
-        WRITE(OUT,5057) Z9
-5057    FORMAT(' yet  x-z  yields ', E15.7)
-        WRITE(OUT,5060)
-5060    FORMAT(' Should this not signal underflow, this is a SERIOUS DEFECT that causes confusion when innocent statements like')
-        WRITE(OUT,5063)
-5063    FORMAT(' if (x.eq.z) then ... else ... ( f(x)-f(z) )/(x-z) ...')
-        WRITE(OUT,5070)+(X/Z-HALF)-HALF
-5070    FORMAT(' encounter division by zero although actually  x/z = 1 +',E16.8)
-        GO TO 5160
+        miles = 123
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
+        if (x .eq. z .or. x-z .ne. fp0) go to 5160
+        flaws=flaws+1
+        write(out,5055)x,z
+5055    format(' FLAW:  x =',e16.8,' is unequal to  z =',e16.8,' ,')
+        z9 = x - z
+        write(out,5057) z9
+5057    format(' yet  x-z  yields ', e15.7)
+        write(out,5060)
+5060    format(' Should this not signal underflow, this is a SERIOUS DEFECT that causes confusion when innocent statements like')
+        write(out,5063)
+5063    format(' if (x.eq.z) then ... else ... ( f(x)-f(z) )/(x-z) ...')
+        write(out,5070)+(x/z-half)-half
+5070    format(' encounter division by zero although actually  x/z = 1 +',e16.8)
+        go to 5160
 !       ... END OF TEST FOR  X-Z = 0  &  X  .NE.  Z
-5090    CONTINUE
+5090    continue
 !        CASE I=2
 !       UFLTHR = 0 < MINDIF  !
-        FAILS=FAILS+1
-        WRITE(OUT,5102)
-5102    FORMAT(' FAILURE: underflow confuses comparison, which alleges that  q = y ')
-        WRITE(OUT,5104)
-5104    FORMAT('         while denying that  |q-y| = 0 ; these values print out as')
-        TEMP=DABS(Q-Y2)
-        WRITE(OUT,5106)Q,Y2,TEMP
-5106    FORMAT(' q =',E16.8,',  y =',E16.8,',  |q-y| =',E16.8,' ,')
-        TEMP = Q/Y2 - HALF
-        WRITE(OUT,5110) TEMP - HALF
-5110    FORMAT(' and  q/y = 1 + ',E16.8)
-        UFLTHR=Q
-        GOTO 5010
+        fails=fails+1
+        write(out,5102)
+5102    format(' FAILURE: underflow confuses comparison, which alleges that  q = y ')
+        write(out,5104)
+5104    format('         while denying that  |q-y| = 0 ; these values print out as')
+        temp=dabs(q-y2)
+        write(out,5106)q,y2,temp
+5106    format(' q =',e16.8,',  y =',e16.8,',  |q-y| =',e16.8,' ,')
+        temp = q/y2 - half
+        write(out,5110) temp - half
+5110    format(' and  q/y = 1 + ',e16.8)
+        uflthr=q
+        goto 5010
 !        CASE I=4 ;  UFLTHR > 0  &  MINDIF > 0
-5130    CONTINUE
-        IF (.NOT. (Q .EQ. UFLTHR .AND. MINDIF .EQ. MINPOS .AND. DABS(UFLTHR-MINDIF/NULPS) .LE. MINDIF)) GO TO 5010
-        WRITE(OUT,5150)
-        WRITE(OUT,5155)
-5150    FORMAT(' Underflow is gradual; it incurs  absolute error = ')
-5155    FORMAT(' (roundoff in underflow threshold) < minpos.')
-        Y=MINPOS*C1
-        Y=Y*(1.5E0+ULPPLS)
-        X=C1*(FP1+ULPPLS)
-        Y=Y/X
-        IEEE=0
-        IF (Y .EQ. MINPOS) IEEE=1
+5130    continue
+        if (.not. (q .eq. uflthr .and. mindif .eq. minpos .and. dabs(uflthr-mindif/nulps) .le. mindif)) go to 5010
+        write(out,5150)
+        write(out,5155)
+5150    format(' Underflow is gradual; it incurs  absolute error = ')
+5155    format(' (roundoff in underflow threshold) < minpos.')
+        y=minpos*c1
+        y=y*(1.5e0+ulppls)
+        x=c1*(fp1+ulppls)
+        y=y/x
+        ieee=0
+        if (y .eq. minpos) ieee=1
 !       ... IEEE=1 UNLESS GRADUAL UNDERFLOWS ARE DOUBLY ROUNDED.)
 5160    continue
-        WRITE(OUT,5163)UFLTHR
-5163    FORMAT(' The  underflow threshold is ',E16.8,' , below which')
-        WRITE(OUT,5165)
-5165    FORMAT(' calculation may suffer larger relative error than merely roundoff.')
-        MILES = 124
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
-        Y2=ULPMIN*ULPMIN
-        Y=Y2*Y2
-        MILES = 125
-        WRITE(3) ACCUR, C, EPSP1, ERROR, EXP2, H, I, IQ, MINDIF, PARTU
-        WRITE(3) D, Q, R, T0, V9, X, Y, Y1, Y2, Z, Z9
-        REWIND 3
-        CALL LOGIT(MILES)
-        Y2=Y*ULPMIN
+        write(out,5163)uflthr
+5163    format(' The  underflow threshold is ',e16.8,' , below which')
+        write(out,5165)
+5165    format(' calculation may suffer larger relative error than merely roundoff.')
+        miles = 124
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
+        y2=ulpmin*ulpmin
+        y=y2*y2
+        miles = 125
+        write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
+        write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
+        rewind 3
+        call logit(miles)
+        y2=y*ulpmin
 5175    continue
-        IF (Y2 .GT. UFLTHR) GO TO 5220
-        IF (Y .GT. MINPOS) GO TO 5200
+        if (y2 .gt. uflthr) go to 5220
+        if (y .gt. minpos) go to 5200
 5190    continue
-        SDEFCT=SDEFCT+1
-        I=4
-        WRITE(OUT,5195)
-5195    FORMAT(' SERIOUS ')
-        GOTO 5210
+        sdefct=sdefct+1
+        i=4
+        write(out,5195)
+5195    format(' SERIOUS ')
+        goto 5210
 5200    continue
-        DEFECT=DEFECT+1
-        I=5
+        defect=defect+1
+        i=5
 5210    continue
-        WRITE(OUT,5212)I
-5212    FORMAT(' DEFECT:  range is too narrow;   ulpmin^',I5,'  underflows.')
+        write(out,5212)i
+5212    format(' DEFECT:  range is too narrow;   ulpmin^',i5,'  underflows.')
 5220    continue
-        MILES=130
-        CALL PAGE(MILES)
+        miles=130
+        call page(miles)
 !       ---- PAUSE ---- ==================================
-        Y = -DINT(HALF - 240.0 * DLOG(UFLTHR) / DLOG(H1)) / 240
-        Y2=Y+Y
-        WRITE(OUT,5240)H1,Y
-5240    FORMAT(' since underflow occurs below the threshold  ='/10X,'(',1PE16.8,')^(',1PE16.8,') ,')
-        WRITE(OUT,5245)H1,Y2
-5245    FORMAT(' only underflow should afflict the expression'/10X,'(',1PE16.8,')^(',1PE16.8,') ;')
-        WRITE(OUT,5247)
-5247    FORMAT(' actually calculating it yields   ')
-        MILES = 131
-        CALL LOGIT(MILES)
-        V9 = H1 ** (Y2)
-        WRITE(OUT,5255) V9
-5255    FORMAT(1X,E16.8)
-        IF (V9 .GE. FP0 .AND. V9 .LE. (RADIX+RADIX*NULPS)*UFLTHR)GO TO 5270
-        SDEFCT=SDEFCT+1
-        WRITE(OUT,5263)
-5263    FORMAT(' SERIOUS')
-        GOTO 5300
+        y = -dint(half - 240.0 * dlog(uflthr) / dlog(h1)) / 240
+        y2=y+y
+        write(out,5240)h1,y
+5240    format(' since underflow occurs below the threshold  ='/10x,'(',1pe16.8,')^(',1pe16.8,') ,')
+        write(out,5245)h1,y2
+5245    format(' only underflow should afflict the expression'/10x,'(',1pe16.8,')^(',1pe16.8,') ;')
+        write(out,5247)
+5247    format(' actually calculating it yields   ')
+        miles = 131
+        call logit(miles)
+        v9 = h1 ** (y2)
+        write(out,5255) v9
+5255    format(1x,e16.8)
+        if (v9 .ge. fp0 .and. v9 .le. (radix+radix*nulps)*uflthr)go to 5270
+        sdefct=sdefct+1
+        write(out,5263)
+5263    format(' SERIOUS')
+        goto 5300
 5270    continue
-        IF (V9 .GT. UFLTHR*(FP1+NULPS)) GO TO 5290
-        WRITE(OUT,5280)
-5280    FORMAT(' This computed value is O.K.')
-        GOTO 5310
+        if (v9 .gt. uflthr*(fp1+nulps)) go to 5290
+        write(out,5280)
+5280    format(' This computed value is O.K.')
+        goto 5310
 5290    continue
-        DEFECT=DEFECT+1
+        defect=defect+1
 5300    continue
-        WRITE(OUT,5302)UFLTHR
-5302    FORMAT(' DEFECT: this is not between 0 and  underflow threshold=',E16.8)
-        GO TO 5310
+        write(out,5302)uflthr
+5302    format(' DEFECT: this is not between 0 and  underflow threshold=',e16.8)
+        go to 5310
 53021   continue
-        FLAWS = FLAWS + 1
-        WRITE(OUT,53022)
-53022   FORMAT(' FLAW: underflow trap from ** .')
+        flaws = flaws + 1
+        write(out,53022)
+53022   format(' FLAW: underflow trap from ** .')
 5310    continue
-        MILES=140
+        miles=140
 !       ======================================================
 !       CALCULATE  EXP2 = EXP(2) = 7.389056099...
-        X=FP0
-        I=2
-        Y=FP2*FP3
-        Q=FP0
-        ACCUR=0
+        x=fp0
+        i=2
+        y=fp2*fp3
+        q=fp0
+        accur=0
 5340    continue
-        Z=X
-        I=I+1
-        Y=Y/(I+I)
-        R=Y+Q
-        X=Z+R
-        Q=(Z-X)+R
-        IF (X .GT. Z) GO TO 5340
-        Z=(1.5E0+FP1/FP8)+X/(1.5E0 * FP32)
-        X=Z*Z
-        EXP2=X*X
-        X=ONEMIN
-        Y=X-ULPMIN
-        WRITE(OUT,5360) EXP2
-5360    FORMAT(' Testing  x^((x+1)/(x-1)) vs. exp(2) = ',E16.8,'  as  x-> 1.')
+        z=x
+        i=i+1
+        y=y/(i+i)
+        r=y+q
+        x=z+r
+        q=(z-x)+r
+        if (x .gt. z) go to 5340
+        z=(1.5e0+fp1/fp8)+x/(1.5e0 * fp32)
+        x=z*z
+        exp2=x*x
+        x=onemin
+        y=x-ulpmin
+        write(out,5360) exp2
+5360    format(' Testing  x^((x+1)/(x-1)) vs. exp(2) = ',e16.8,'  as  x-> 1.')
 5370    continue
-        DO 5415 I=1 , NUMTRY
-        Z=X-(1/RADIX)
-        Z=(X+FP1)/(Z-(FP1-(1/RADIX)))
-        Q=X**Z-EXP2
-        IF (DABS(Q) .GT. 240. * ULPPLS) GO TO 5420
-        Z=(Y-X)*FP2+Y
-        X=Y
-        Y=Z
-        Z = FP1+(X-ONEMIN)*(X-ONEMIN)
-        IF (Z .LE. FP1) GOTO 5400
-5415    CONTINUE
+        do 5415 i=1 , numtry
+        z=x-(1/radix)
+        z=(x+fp1)/(z-(fp1-(1/radix)))
+        q=x**z-exp2
+        if (dabs(q) .gt. 240. * ulppls) go to 5420
+        z=(y-x)*fp2+y
+        x=y
+        y=z
+        z = fp1+(x-onemin)*(x-onemin)
+        if (z .le. fp1) goto 5400
+5415    continue
 5400    continue
-        IF (X .GT. FP1) GO TO 5440
-        X=FP1+ULPPLS
-        Y=ULPPLS+ULPPLS+X
-        GOTO 5370
+        if (x .gt. fp1) go to 5440
+        x=fp1+ulppls
+        y=ulppls+ulppls+x
+        goto 5370
 5420    continue
-        ACCUR=1
-        DEFECT=DEFECT+1
-        TEMP=+(X-(1/RADIX))-(FP1-(1/RADIX))
-        WRITE(OUT,5425)TEMP,Z
-5425    FORMAT(' DEFECT:  calculated  (1 + (',E16.8,'))^(',E16.8,')')
-        WRITE(OUT,5427)Q
-5427    FORMAT('         differs from correct value by  ',E16.8)
-        WRITE(OUT,5430)
-5430    FORMAT(' This much error may spoil financial calculations involving tiny interest rates.')
-        GOTO 5450
+        accur=1
+        defect=defect+1
+        temp=+(x-(1/radix))-(fp1-(1/radix))
+        write(out,5425)temp,z
+5425    format(' DEFECT:  calculated  (1 + (',e16.8,'))^(',e16.8,')')
+        write(out,5427)q
+5427    format('         differs from correct value by  ',e16.8)
+        write(out,5430)
+5430    format(' This much error may spoil financial calculations involving tiny interest rates.')
+        goto 5450
 5440    continue
-        IF (ACCUR .EQ. 0) WRITE(OUT,5445)
-5445    FORMAT(' Accuracy seems adequate.')
+        if (accur .eq. 0) write(out,5445)
+5445    format(' Accuracy seems adequate.')
 5450    continue
-        MILES=150
+        miles=150
 !       =======================================================
-        WRITE(OUT,5460)
-5460    FORMAT(' Testing powers  z^q  at four nearly extreme values:')
-        ERROR=0
-        Z=A1
-        IQ =IDINT(HALF-DLOG(C) / DLOG(A1))
+        write(out,5460)
+5460    format(' Testing powers  z^q  at four nearly extreme values:')
+        error=0
+        z=a1
+        iq =idint(half-dlog(c) / dlog(a1))
 5470    continue
-        X=C1
-        CALL CMPXY(X,Y,Z,IQ,ERROR)
-        IQ=-IQ
-        X=C
-        CALL CMPXY(X,Y,Z,IQ,ERROR)
-        IF (Z .LT. FP1) GO TO 5490
+        x=c1
+        call cmpxy(x,y,z,iq,error)
+        iq=-iq
+        x=c
+        call cmpxy(x,y,z,iq,error)
+        if (z .lt. fp1) go to 5490
         continue
-        Z=1/A1
-        GOTO 5470
+        z=1/a1
+        goto 5470
 5490    continue
-        CALL PRTCNT (ERROR)
-        CALL PRT2(ERROR,MILES)
+        call prtcnt (error)
+        call prt2(error,miles)
 !       ... PRINT COUNT OF DISCREPANCIES.
         continue
-        MILES=160
-        RETURN
-        END SUBROUTINE UNDERF
+        miles=160
+        return
+        end subroutine underf
 !-------------------------------------------------------------------------------
-        SUBROUTINE ZEROS(MILES,FROM)
+        subroutine zeros(miles,from)
       implicit none
-        INTEGER MILES
+        integer miles
 !!!!!
 !       MILESTONE REACHED SO FAR
-        INTEGER FROM
+        integer from
 !       MILESTONE TO RESTART AT
-        DOUBLE PRECISION Q9
+        double precision q9
 !       TEMPORARY TO THROW RANDOM STUFF INTO.
-        IF(FROM .EQ. 0) GO TO 6110
+        if(from .eq. 0) go to 6110
 !       MUST BE DOING A RESTART.  FIGURE OUT WHERE, AND GO DO IT.
 !       DON'T NEED A LOG FILE FOR THIS ROUTINE.
-        IF (FROM .EQ. 211) GO TO 7000
-        IF (FROM .EQ. 212) GO TO 6130
-        CALL BADMIL
+        if (from .eq. 211) go to 7000
+        if (from .eq. 212) go to 6130
+        call badmil
 6110    continue
-        WRITE(OUT,6120)
-6120    FORMAT (/' What messages and/or values does',' division by zero produce?')
-        WRITE(OUT,6123)
-6123    FORMAT(' About to compute 1/0...')
-        MILES = 211
-        CALL LOGIT(MILES)
-        Q9 = FP1 / FP0
-        WRITE(OUT,6121) Q9
-6121    FORMAT(' Trying to compute  1/0  produces ', 1PE15.7)
+        write(out,6120)
+6120    format (/' What messages and/or values does',' division by zero produce?')
+        write(out,6123)
+6123    format(' About to compute 1/0...')
+        miles = 211
+        call logit(miles)
+        q9 = fp1 / fp0
+        write(out,6121) q9
+6121    format(' Trying to compute  1/0  produces ', 1pe15.7)
 7000    continue
-        MILES = 212
-        WRITE(OUT,6124)
-6124    FORMAT(' About to compute 0/0...')
-        CALL LOGIT(MILES)
-        Q9 = FP0 / FP0
-        WRITE(OUT,6122) Q9
-6122    FORMAT (' Trying to compute  0/0  produces ', 1PE15.7/)
+        miles = 212
+        write(out,6124)
+6124    format(' About to compute 0/0...')
+        call logit(miles)
+        q9 = fp0 / fp0
+        write(out,6122) q9
+6122    format (' Trying to compute  0/0  produces ', 1pe15.7/)
 6130    continue
-        MILES = 220
-        RETURN
-        END SUBROUTINE ZEROS
+        miles = 220
+        return
+        end subroutine zeros
 !-------------------------------------------------------------------------------
-      SUBROUTINE BADMIL
+      subroutine badmil
       implicit none
-      WRITE(OUT,11110)
-11110 FORMAT(' Unrecognized restart milestone - PLEASE NOTIFY ','KARPINSKI !')
-      STOP
-      END SUBROUTINE BADMIL
+      write(out,11110)
+11110 format(' Unrecognized restart milestone - PLEASE NOTIFY ','KARPINSKI !')
+      stop
+      end subroutine badmil
 !-------------------------------------------------------------------------------
-      INTEGER FUNCTION IDINT(X)
+      integer function idint(x)
         implicit none
-        DOUBLE PRECISION X
-        REAL Y
-        Y=X
-        IDINT=INT(Y)
-        RETURN
-      END FUNCTION IDINT
+        double precision x
+        real y
+        y=x
+        idint=int(y)
+        return
+      end function idint
 !-------------------------------------------------------------------------------
 end subroutine dparanoia
 !-------------------------------------------------------------------------------

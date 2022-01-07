@@ -53,7 +53,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_attr</B>(3f) - [M_attr] control text attributes on terminals
+<B>M_attr</B>(3f) - [M_attr::INTRO] control text attributes on terminals
 (LICENSE:MIT)
 <P>
 </BLOCKQUOTE>
@@ -74,23 +74,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-core functions
 <P>
-<PRE>
-     ! Add text attributes like color with an HTML-like syntax
-     use M_attr, only : attr
-     ! suppress the escape sequence output
-     use M_attr, only : attr_mode
-     ! customize what output strings are produced
-     use M_attr, only : attr_update
+<B>use</B> M_attr, <I>only</I> : attr, attr_mode, <I>attr_update</I>
 <P>
-</PRE>
-for generating standard messages
-<P>
-<PRE>
-     use M_attr, only : alert
-<P>
-</PRE>
+<B>use</B> M_attr, <I>only</I> : <I>alert</I> ! <I>generate</I> <I>standard</I> <I>messages</I>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -98,30 +85,41 @@ for generating standard messages
 
 </A>
 <BLOCKQUOTE>
-<B>M_attr</B>(3f) is a Fortran module that writes common ANSI escape sequences
-which control terminal text attributes. It is designed to allow the
-sequences to be suppressed when desired and for the user program to
-completely customize the keywords -- the user can add, delete and
-replace the sequences associated with a keyword without changing
-the code.
+<B>M_attr</B>(3f) is a Fortran module that uses common ANSI escape sequences
+to control terminal text attributes.
 <P>
-Attributes are specified by writing lines with HTML-like structure.
+<PRE>
+        use M_attr
+        write(*,*)attr(&#146;&lt;red&gt;Red Text!&lt;/red&gt; &lt;green&gt;Green Text!&lt;/green&gt;&#146;)
+        end
 <P>
-The advantage of the approach of replacing in-band escape sequences
-with formatting directives contained on each line is that it is easy
-to turn off when running batch, but more importantly your program can
-be run in "raw" mode and write a clean text file with the directives in
-it that can then be read back in by a simple filter program that strips
+</PRE>
+It is designed to <B>use</B> three simple procedures to
+<P>
+<PRE>
+    + Specify attributes using simple HTML-like syntax
+    + allow the sequences to be suppressed when desired
+    + permit the  user program to completely customize the keywords.
+      The user can add, delete and replace the sequences associated with
+      a keyword without changing the code.
+<P>
+</PRE>
+One advantage of the approach of using formatting directives which
+are replaced with in-band escape sequences is that it is easy to turn
+off when running batch.
+<P>
+Another important capability is that programs can be run in "raw" mode
+and create a simple text file with the formatting directives in it
+that can then be read back in by a simple filter program that strips
 it back to plain <B>text</B>( see app/plain.f90), or displays it to a screen
 in <B>color</B>(see app/light.f90) or perhaps converts it to another format.
 <P>
-By making each line self-contained (by default) this can still be done
-with any arbitrarily selected group of lines from the file.
-<P>
-So this module makes it trivial to read specially-formatted data
+So this approach makes it trivial to read specially-formatted data
 from a file like a message catalog (perhaps with various versions
 in different languages) and colorize it or display it as plain text
-using the <B>attr</B>(3f) procedure.
+<P>
+By making each line self-contained (by default) lines can be filtered
+by external utilities and still display correctly.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -142,7 +140,7 @@ Via <B>git</B>(1):
 </PRE>
 This will compile the M_attr module and example programs.
 <P>
-Via fpm ( described at https://github.com/fortran-lang/fpm):
+Alternatively, via fpm ( described at https://github.com/fortran-lang/fpm):
 <P>
 <PRE>
         git clone https://github.com/urbanjost/M_attr.git
@@ -178,11 +176,11 @@ o
 </TD><TD>
 ANSI escape sequences are not universally supported by
 all terminal emulators; and normally should be suppressed
-when not going to a tty device. Therefore, you should use
+when not going to a tty device. Therefore, you should <B>use</B>
 <B>M_system::system_istty</B>(3f) or the common Fortran extension
 <B>ISATTY</B>() to set the default to "plain" instead of "color"
 when the output file is not a conforming terminal. On basic
-MSWindows console windows, it is best to use Windows 10+ and/or
+MSWindows console windows, it is best to <B>use</B> Windows 10+ and/or
 the Linux mode; you may have to enable ANSI escape sequence
 mode on MSWindows. It does work as-is with CygWin and MinGW and
 Putty windows and <B>mintty</B>(1) as tested.
@@ -270,7 +268,7 @@ John S. Urban, 2021
 
 </A>
 <BLOCKQUOTE>
-<B>attr</B>(3f), <B>attr_mode</B>(3f), <B>attr_update</B>(3f)
+<B>attr</B>(3f), <B>attr_mode</B>(3f), <I>attr_update</I>(3f)
 <P>
 Related information:
 <P>
@@ -281,7 +279,7 @@ Related information:
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_attr (3)</TD> <TD align=right width=33%><I>December 19, 2021</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1121b3af-8b8a-4ed0-b44e-4ec8dfd0ce11 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_attr (3)</TD> <TD align=right width=33%><I>January 07, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fe911044-eb49-4a5e-8fa4-47805b9e0634 using man macros.</FONT>
 <br><br><center><img src="images/M_attr.3m_attr.gif"></center>
 </div>
 </div>

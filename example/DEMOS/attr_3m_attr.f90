@@ -1,4 +1,4 @@
-      program demo_esc
+      program demo_attr
       use M_attr, only : attr, attr_mode, attr_update
          call printstuff('defaults')
 
@@ -55,4 +55,4 @@
         write(*,'(a)') attr(&
          &'<in><bo><ul><it><w>WHITE</w> and <e>EBONY</e></ul></bo></in>')
       end subroutine printstuff
-      end program demo_esc
+      end program demo_attr

@@ -786,8 +786,7 @@ end function list_next
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_generic_list()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg,unit_check_level
 
 !! setup
    call test_list_free()

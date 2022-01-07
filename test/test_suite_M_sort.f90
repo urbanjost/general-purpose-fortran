@@ -22,6 +22,8 @@ subroutine test_suite_m_sort()
    call test_tree_insert()
    call test_tree_print()
 
+   call test_sort_heap()
+
 end subroutine test_suite_m_sort
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tree_insert()
@@ -168,7 +170,7 @@ logical                      :: gb
 call unit_check_start('sort_quick_rx', '-library libGPF') ! start tests
 
 CALL RANDOM_NUMBER(RR)
-do i=1,isz 
+do i=1,isz
    jj(i) = random_string('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',10)
 enddo
 
@@ -219,7 +221,7 @@ last=huge(0)
 call unit_check_start('sort_quick_rx', '-library libGPF') ! start tests
 
 CALL RANDOM_NUMBER(RR)
-jj = first + floor((last+1-first)*rr)  
+jj = first + floor((last+1-first)*rr)
 gb=.true.
 call sort_quick_rx(jj,ii)
 do i=1,isz-1
@@ -322,6 +324,92 @@ character(len=16)   :: string2(2)=["The other string","First string    "],string
    call unit_check_done('swap')
 
 end subroutine test_swap
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_sort_heap()
+implicit none
+integer,parameter            :: isz=10000
+real                         :: rr(isz)
+integer                      :: ii(isz)
+character(len=63)            :: cc(isz)
+integer                      :: indx(isz)
+integer                      :: i
+integer                      :: errorcount
+   call unit_check_start('sort_heap',' -library libGPF') ! start tests
+   ! initializing array with random numbers
+   CALL RANDOM_NUMBER(RR)
+   rr=rr*450000.0
+   ii=rr
+   do i=1,size(cc)
+      cc(i)=random_string('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',len(cc))
+   enddo
+
+
+   ! checking if real values are sorted(3f)
+   call sort_heap(rr,indx)
+   ! use the index array to actually move the input array into a sorted order
+   rr=rr(indx)
+   errorcount=0
+   do i=1,isz-1
+      if(rr(i).gt.rr(i+1))then
+         call unit_check_msg('sort_heap','Error in sorting reals small to large ',i,rr(i),rr(i+1))
+         errorcount=errorcount+1
+      endif
+   enddo
+   call unit_check('sort_heap',errorcount.eq.0,'real errors is ',errorcount,'out of',isz,'values')
+
+   ! checking if integer values are sorted(3f)
+   call sort_heap(ii,indx)
+   ! use the index array to actually move the input array into a sorted order
+   ii=ii(indx)
+   errorcount=0
+   do i=1,isz-1
+      if(ii(i).gt.ii(i+1))then
+         call unit_check_msg('sort_heap','Error in sorting integers small to large ',i,rr(i),rr(i+1))
+         errorcount=errorcount+1
+      endif
+   enddo
+   call unit_check('sort_heap',errorcount.eq.0,'integer errors is ',errorcount,'out of',isz,'values')
+
+   ! checking if character values are sorted(3f)
+   call sort_heap(cc,indx)
+   ! use the index array to actually move the input array into a sorted order
+   cc=cc(indx)
+   errorcount=0
+   do i=1,isz-1
+      if(cc(i).gt.cc(i+1))then
+         call unit_check_msg('sort_heap','Error in sorting characters small to large ',i,rr(i),rr(i+1))
+         errorcount=errorcount+1
+      endif
+   enddo
+   call unit_check('sort_heap',errorcount.eq.0,'character errors is ',errorcount,'out of',isz,'values')
+
+   call unit_check_done('sort_heap')
+
+contains
+
+function random_string(chars,length) result(out)
+
+!$@(#) M_random::random_string(3f): create random string composed of provided characters of specified length
+
+character(len=*),intent(in)  :: chars
+integer,intent(in)           :: length
+character(len=:),allocatable :: out
+real                         :: x
+integer                      :: ilen   ! length of list of characters
+integer                      :: which
+integer                      :: i
+   ilen=len(chars)
+   out=''
+   if(ilen.gt.0)then
+      do i=1,length
+         call random_number(x)
+         which=nint(real(ilen-1)*x)+1
+         out=out//chars(which:which)
+      enddo
+   endif
+end function random_string
+
+end subroutine test_sort_heap
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end module M_testsuite_M_sort
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

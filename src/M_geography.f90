@@ -10,6 +10,7 @@
 
 
 module M_geography
+implicit none
 private
 public geographical_distance
 public test_suite_M_geography
@@ -67,7 +68,6 @@ contains
 !!    along with this code. If not, see <http://www.gnu.org/licenses/>.
 !***********************************************************************************************************************************
 function geographical_distance(ll1,bb1, ll2,bb2, miles)
-implicit none
 doubleprecision,intent(in) :: ll1,bb1, ll2,bb2
 logical,intent(in)         :: miles
    doubleprecision,parameter :: pi=4*atan(1.0d0)
@@ -106,8 +106,7 @@ end function geographical_distance
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_geography()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg,unit_check_level
 
 !! setup
    call test_geographical_distance()

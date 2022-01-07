@@ -73,6 +73,7 @@
 !!       ! readgif  uses real values 0.0 to 1.0
 !!       ii=size(color_map,dim=1)
 !!       jj=size(color_map,dim=2)
+!!       if(allocated(color_map2))deallocate(color_map2)
 !!       allocate(color_map2(ii,0:jj-1))
 !!       color_map2=255*color_map
 !!
@@ -107,8 +108,8 @@ type, public :: gif_screen_type
     integer :: bit_pixel                 ! size of colormap
     integer :: color_resolution
     integer :: height, width             ! shape(image) = (/width,height/)
-    integer :: color_map_size           ! size of local_colormap
-    logical :: use_local_colormap       ! .true. if local color map, else global
+    integer :: color_map_size            ! size of local_colormap
+    logical :: use_local_colormap        ! .true. if local color map, else global
 end type gif_screen_type
 
 type(gif_screen_type), public :: gif_screen
@@ -189,6 +190,7 @@ logical :: my_verbose
         gif_screen%color_map_size = 2**(modulo(ichar(buf(9:9)),8)+1)
         if(my_verbose) write(*,*)'readgif error in local colour map, size=', &
                         gif_screen%color_map_size
+        if(allocated(color_map))deallocate(color_map)
         allocate(color_map(3,gif_screen%color_map_size))
         call read_colormap(color_map, iostat )
         if (iostat /= 0) then
@@ -592,6 +594,7 @@ else
     if ( btest(ichar(buf(5:5)), use_local_colormap) ) then
         if(verbose) write(*,*) &
            'readgif error in global colour map size', gif_screen%bit_pixel
+        if(allocated(color_map))deallocate(color_map)
         allocate(color_map(3,gif_screen%bit_pixel))
         call read_colormap(color_map, iostat )
         if (iostat /= 0) then
@@ -682,7 +685,8 @@ integer :: rslt
     end if
  !
     if(verbose) write(unit=*,fmt=*) "Image size:",length,height
-    allocate ( image(length,height), stat=iostat )
+    if(allocated(image))deallocate(image)
+    allocate( image(length,height), stat=iostat )
  !
     if (iostat /= 0) then
       call io_error ( "while allocating image", iostat, filename )
