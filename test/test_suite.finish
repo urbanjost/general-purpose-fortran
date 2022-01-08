@@ -1,0 +1,489 @@
+subroutine test_suite_M_stopwatch()
+use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_verify, only : unit_check_level
+
+!! setup
+   call test_create_watch_aa()
+   call test_create_watch_as()
+   call test_create_watch_sa()
+   call test_create_watch_ss()
+   call test_create_watchgroup_a()
+   call test_create_watchgroup_s()
+   call test_destroy_watch_aa()
+   call test_destroy_watch_as()
+   call test_destroy_watch_sa()
+   call test_destroy_watch_ss()
+   call test_destroy_watchgroup()
+   call test_end_pause_watch_aa()
+   call test_end_pause_watch_as()
+   call test_end_pause_watch_ga()
+   call test_end_pause_watch_gs()
+   call test_end_pause_watch_sa()
+   call test_end_pause_watch_ss()
+   call test_inquiry_stopwatch()
+   call test_join_watchgroup_a()
+   call test_join_watchgroup_s()
+   call test_leave_watchgroup_a()
+   call test_leave_watchgroup_s()
+   call test_option_stopwatch_a()
+   call test_option_stopwatch_s()
+   call test_pause_watch_aa()
+   call test_pause_watch_as()
+   call test_pause_watch_ga()
+   call test_pause_watch_gs()
+   call test_pause_watch_sa()
+   call test_pause_watch_ss()
+   call test_print_watch_aa()
+   call test_print_watch_as()
+   call test_print_watch_ga()
+   call test_print_watch_gs()
+   call test_print_watch_sa()
+   call test_print_watch_ss()
+   call test_read_watch_aa()
+   call test_read_watch_as()
+   call test_read_watch_ax()
+   call test_read_watch_sa()
+   call test_read_watch_ss()
+   call test_read_watch_sx()
+   call test_reset_watch_aa()
+   call test_reset_watch_as()
+   call test_reset_watch_ga()
+   call test_reset_watch_gs()
+   call test_reset_watch_sa()
+   call test_reset_watch_ss()
+   call test_start_watch_aa()
+   call test_start_watch_as()
+   call test_start_watch_ga()
+   call test_start_watch_gs()
+   call test_start_watch_sa()
+   call test_start_watch_ss()
+   call test_stop_watch_aa()
+   call test_stop_watch_as()
+   call test_stop_watch_ga()
+   call test_stop_watch_gs()
+   call test_stop_watch_sa()
+   call test_stop_watch_ss()
+!! teardown
+contains
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_create_watch_aa()
+
+   call unit_check_start('create_watch_aa',msg='')
+   !!call unit_check('create_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('create_watch_aa',msg='')
+end subroutine test_create_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_create_watch_as()
+
+   call unit_check_start('create_watch_as',msg='')
+   !!call unit_check('create_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('create_watch_as',msg='')
+end subroutine test_create_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_create_watch_sa()
+
+   call unit_check_start('create_watch_sa',msg='')
+   !!call unit_check('create_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('create_watch_sa',msg='')
+end subroutine test_create_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_create_watch_ss()
+
+   call unit_check_start('create_watch_ss',msg='')
+   !!call unit_check('create_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('create_watch_ss',msg='')
+end subroutine test_create_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_create_watchgroup_a()
+
+   call unit_check_start('create_watchgroup_a',msg='')
+   !!call unit_check('create_watchgroup_a', 0.eq.0, 'checking', 100)
+   call unit_check_done('create_watchgroup_a',msg='')
+end subroutine test_create_watchgroup_a
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_create_watchgroup_s()
+
+   call unit_check_start('create_watchgroup_s',msg='')
+   !!call unit_check('create_watchgroup_s', 0.eq.0, 'checking', 100)
+   call unit_check_done('create_watchgroup_s',msg='')
+end subroutine test_create_watchgroup_s
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_destroy_watch_aa()
+
+   call unit_check_start('destroy_watch_aa',msg='')
+   !!call unit_check('destroy_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('destroy_watch_aa',msg='')
+end subroutine test_destroy_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_destroy_watch_as()
+
+   call unit_check_start('destroy_watch_as',msg='')
+   !!call unit_check('destroy_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('destroy_watch_as',msg='')
+end subroutine test_destroy_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_destroy_watch_sa()
+
+   call unit_check_start('destroy_watch_sa',msg='')
+   !!call unit_check('destroy_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('destroy_watch_sa',msg='')
+end subroutine test_destroy_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_destroy_watch_ss()
+
+   call unit_check_start('destroy_watch_ss',msg='')
+   !!call unit_check('destroy_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('destroy_watch_ss',msg='')
+end subroutine test_destroy_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_destroy_watchgroup()
+
+   call unit_check_start('destroy_watchgroup',msg='')
+   !!call unit_check('destroy_watchgroup', 0.eq.0, 'checking', 100)
+   call unit_check_done('destroy_watchgroup',msg='')
+end subroutine test_destroy_watchgroup
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_end_pause_watch_aa()
+
+   call unit_check_start('end_pause_watch_aa',msg='')
+   !!call unit_check('end_pause_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('end_pause_watch_aa',msg='')
+end subroutine test_end_pause_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_end_pause_watch_as()
+
+   call unit_check_start('end_pause_watch_as',msg='')
+   !!call unit_check('end_pause_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('end_pause_watch_as',msg='')
+end subroutine test_end_pause_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_end_pause_watch_ga()
+
+   call unit_check_start('end_pause_watch_ga',msg='')
+   !!call unit_check('end_pause_watch_ga', 0.eq.0, 'checking', 100)
+   call unit_check_done('end_pause_watch_ga',msg='')
+end subroutine test_end_pause_watch_ga
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_end_pause_watch_gs()
+
+   call unit_check_start('end_pause_watch_gs',msg='')
+   !!call unit_check('end_pause_watch_gs', 0.eq.0, 'checking', 100)
+   call unit_check_done('end_pause_watch_gs',msg='')
+end subroutine test_end_pause_watch_gs
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_end_pause_watch_sa()
+
+   call unit_check_start('end_pause_watch_sa',msg='')
+   !!call unit_check('end_pause_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('end_pause_watch_sa',msg='')
+end subroutine test_end_pause_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_end_pause_watch_ss()
+
+   call unit_check_start('end_pause_watch_ss',msg='')
+   !!call unit_check('end_pause_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('end_pause_watch_ss',msg='')
+end subroutine test_end_pause_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_inquiry_stopwatch()
+
+   call unit_check_start('inquiry_stopwatch',msg='')
+   !!call unit_check('inquiry_stopwatch', 0.eq.0, 'checking', 100)
+   call unit_check_done('inquiry_stopwatch',msg='')
+end subroutine test_inquiry_stopwatch
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_join_watchgroup_a()
+
+   call unit_check_start('join_watchgroup_a',msg='')
+   !!call unit_check('join_watchgroup_a', 0.eq.0, 'checking', 100)
+   call unit_check_done('join_watchgroup_a',msg='')
+end subroutine test_join_watchgroup_a
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_join_watchgroup_s()
+
+   call unit_check_start('join_watchgroup_s',msg='')
+   !!call unit_check('join_watchgroup_s', 0.eq.0, 'checking', 100)
+   call unit_check_done('join_watchgroup_s',msg='')
+end subroutine test_join_watchgroup_s
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_leave_watchgroup_a()
+
+   call unit_check_start('leave_watchgroup_a',msg='')
+   !!call unit_check('leave_watchgroup_a', 0.eq.0, 'checking', 100)
+   call unit_check_done('leave_watchgroup_a',msg='')
+end subroutine test_leave_watchgroup_a
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_leave_watchgroup_s()
+
+   call unit_check_start('leave_watchgroup_s',msg='')
+   !!call unit_check('leave_watchgroup_s', 0.eq.0, 'checking', 100)
+   call unit_check_done('leave_watchgroup_s',msg='')
+end subroutine test_leave_watchgroup_s
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_option_stopwatch_a()
+
+   call unit_check_start('option_stopwatch_a',msg='')
+   !!call unit_check('option_stopwatch_a', 0.eq.0, 'checking', 100)
+   call unit_check_done('option_stopwatch_a',msg='')
+end subroutine test_option_stopwatch_a
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_option_stopwatch_s()
+
+   call unit_check_start('option_stopwatch_s',msg='')
+   !!call unit_check('option_stopwatch_s', 0.eq.0, 'checking', 100)
+   call unit_check_done('option_stopwatch_s',msg='')
+end subroutine test_option_stopwatch_s
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_pause_watch_aa()
+
+   call unit_check_start('pause_watch_aa',msg='')
+   !!call unit_check('pause_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('pause_watch_aa',msg='')
+end subroutine test_pause_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_pause_watch_as()
+
+   call unit_check_start('pause_watch_as',msg='')
+   !!call unit_check('pause_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('pause_watch_as',msg='')
+end subroutine test_pause_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_pause_watch_ga()
+
+   call unit_check_start('pause_watch_ga',msg='')
+   !!call unit_check('pause_watch_ga', 0.eq.0, 'checking', 100)
+   call unit_check_done('pause_watch_ga',msg='')
+end subroutine test_pause_watch_ga
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_pause_watch_gs()
+
+   call unit_check_start('pause_watch_gs',msg='')
+   !!call unit_check('pause_watch_gs', 0.eq.0, 'checking', 100)
+   call unit_check_done('pause_watch_gs',msg='')
+end subroutine test_pause_watch_gs
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_pause_watch_sa()
+
+   call unit_check_start('pause_watch_sa',msg='')
+   !!call unit_check('pause_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('pause_watch_sa',msg='')
+end subroutine test_pause_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_pause_watch_ss()
+
+   call unit_check_start('pause_watch_ss',msg='')
+   !!call unit_check('pause_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('pause_watch_ss',msg='')
+end subroutine test_pause_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_print_watch_aa()
+
+   call unit_check_start('print_watch_aa',msg='')
+   !!call unit_check('print_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('print_watch_aa',msg='')
+end subroutine test_print_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_print_watch_as()
+
+   call unit_check_start('print_watch_as',msg='')
+   !!call unit_check('print_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('print_watch_as',msg='')
+end subroutine test_print_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_print_watch_ga()
+
+   call unit_check_start('print_watch_ga',msg='')
+   !!call unit_check('print_watch_ga', 0.eq.0, 'checking', 100)
+   call unit_check_done('print_watch_ga',msg='')
+end subroutine test_print_watch_ga
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_print_watch_gs()
+
+   call unit_check_start('print_watch_gs',msg='')
+   !!call unit_check('print_watch_gs', 0.eq.0, 'checking', 100)
+   call unit_check_done('print_watch_gs',msg='')
+end subroutine test_print_watch_gs
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_print_watch_sa()
+
+   call unit_check_start('print_watch_sa',msg='')
+   !!call unit_check('print_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('print_watch_sa',msg='')
+end subroutine test_print_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_print_watch_ss()
+
+   call unit_check_start('print_watch_ss',msg='')
+   !!call unit_check('print_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('print_watch_ss',msg='')
+end subroutine test_print_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_read_watch_aa()
+
+   call unit_check_start('read_watch_aa',msg='')
+   !!call unit_check('read_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('read_watch_aa',msg='')
+end subroutine test_read_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_read_watch_as()
+
+   call unit_check_start('read_watch_as',msg='')
+   !!call unit_check('read_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('read_watch_as',msg='')
+end subroutine test_read_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_read_watch_ax()
+
+   call unit_check_start('read_watch_ax',msg='')
+   !!call unit_check('read_watch_ax', 0.eq.0, 'checking', 100)
+   call unit_check_done('read_watch_ax',msg='')
+end subroutine test_read_watch_ax
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_read_watch_sa()
+
+   call unit_check_start('read_watch_sa',msg='')
+   !!call unit_check('read_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('read_watch_sa',msg='')
+end subroutine test_read_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_read_watch_ss()
+
+   call unit_check_start('read_watch_ss',msg='')
+   !!call unit_check('read_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('read_watch_ss',msg='')
+end subroutine test_read_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_read_watch_sx()
+
+   call unit_check_start('read_watch_sx',msg='')
+   !!call unit_check('read_watch_sx', 0.eq.0, 'checking', 100)
+   call unit_check_done('read_watch_sx',msg='')
+end subroutine test_read_watch_sx
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_reset_watch_aa()
+
+   call unit_check_start('reset_watch_aa',msg='')
+   !!call unit_check('reset_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('reset_watch_aa',msg='')
+end subroutine test_reset_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_reset_watch_as()
+
+   call unit_check_start('reset_watch_as',msg='')
+   !!call unit_check('reset_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('reset_watch_as',msg='')
+end subroutine test_reset_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_reset_watch_ga()
+
+   call unit_check_start('reset_watch_ga',msg='')
+   !!call unit_check('reset_watch_ga', 0.eq.0, 'checking', 100)
+   call unit_check_done('reset_watch_ga',msg='')
+end subroutine test_reset_watch_ga
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_reset_watch_gs()
+
+   call unit_check_start('reset_watch_gs',msg='')
+   !!call unit_check('reset_watch_gs', 0.eq.0, 'checking', 100)
+   call unit_check_done('reset_watch_gs',msg='')
+end subroutine test_reset_watch_gs
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_reset_watch_sa()
+
+   call unit_check_start('reset_watch_sa',msg='')
+   !!call unit_check('reset_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('reset_watch_sa',msg='')
+end subroutine test_reset_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_reset_watch_ss()
+
+   call unit_check_start('reset_watch_ss',msg='')
+   !!call unit_check('reset_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('reset_watch_ss',msg='')
+end subroutine test_reset_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_start_watch_aa()
+
+   call unit_check_start('start_watch_aa',msg='')
+   !!call unit_check('start_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('start_watch_aa',msg='')
+end subroutine test_start_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_start_watch_as()
+
+   call unit_check_start('start_watch_as',msg='')
+   !!call unit_check('start_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('start_watch_as',msg='')
+end subroutine test_start_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_start_watch_ga()
+
+   call unit_check_start('start_watch_ga',msg='')
+   !!call unit_check('start_watch_ga', 0.eq.0, 'checking', 100)
+   call unit_check_done('start_watch_ga',msg='')
+end subroutine test_start_watch_ga
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_start_watch_gs()
+
+   call unit_check_start('start_watch_gs',msg='')
+   !!call unit_check('start_watch_gs', 0.eq.0, 'checking', 100)
+   call unit_check_done('start_watch_gs',msg='')
+end subroutine test_start_watch_gs
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_start_watch_sa()
+
+   call unit_check_start('start_watch_sa',msg='')
+   !!call unit_check('start_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('start_watch_sa',msg='')
+end subroutine test_start_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_start_watch_ss()
+
+   call unit_check_start('start_watch_ss',msg='')
+   !!call unit_check('start_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('start_watch_ss',msg='')
+end subroutine test_start_watch_ss
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_stop_watch_aa()
+
+   call unit_check_start('stop_watch_aa',msg='')
+   !!call unit_check('stop_watch_aa', 0.eq.0, 'checking', 100)
+   call unit_check_done('stop_watch_aa',msg='')
+end subroutine test_stop_watch_aa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_stop_watch_as()
+
+   call unit_check_start('stop_watch_as',msg='')
+   !!call unit_check('stop_watch_as', 0.eq.0, 'checking', 100)
+   call unit_check_done('stop_watch_as',msg='')
+end subroutine test_stop_watch_as
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_stop_watch_ga()
+
+   call unit_check_start('stop_watch_ga',msg='')
+   !!call unit_check('stop_watch_ga', 0.eq.0, 'checking', 100)
+   call unit_check_done('stop_watch_ga',msg='')
+end subroutine test_stop_watch_ga
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_stop_watch_gs()
+
+   call unit_check_start('stop_watch_gs',msg='')
+   !!call unit_check('stop_watch_gs', 0.eq.0, 'checking', 100)
+   call unit_check_done('stop_watch_gs',msg='')
+end subroutine test_stop_watch_gs
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_stop_watch_sa()
+
+   call unit_check_start('stop_watch_sa',msg='')
+   !!call unit_check('stop_watch_sa', 0.eq.0, 'checking', 100)
+   call unit_check_done('stop_watch_sa',msg='')
+end subroutine test_stop_watch_sa
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_stop_watch_ss()
+
+   call unit_check_start('stop_watch_ss',msg='')
+   !!call unit_check('stop_watch_ss', 0.eq.0, 'checking', 100)
+   call unit_check_done('stop_watch_ss',msg='')
+end subroutine test_stop_watch_ss
+!===================================================================================================================================
+end subroutine test_suite_M_stopwatch
