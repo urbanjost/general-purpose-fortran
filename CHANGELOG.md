@@ -7,25 +7,23 @@ new features, changes, and relevant notifications.
 
 ---
 **2022-01-09**  John S. Urban<https://github.com/urbanjost>
-   - removed creation of temporary arrays from CALL statements to 
-     assignment to a TEMP variable to work around ifort 11 segfault
-
-   - production version of prep(1) with $PARCEL/$POST working with
-     string substitution; marked with "kludge for bug ...".
-
-   - Mersenne twister routine in M_random.f90 was undersubscripting the
-     init_key array creating a working (it was passing tests) but potentially non-repeatable
-     initialization
-
 ### :green_circle: ADD:
-Added the new routine `system_signal` to module `M_system`.
+   - production version of prep(1) with $PARCEL/$POST working with
+     string substitution
 
-     system_signal(3f) - [M_system:SIGNALS] install a signal handler (LICENSE:PD)
+### :red_circle: FIX:
+   - Mersenne twister routine in M_random.f90 was undersubscripting the
+     init_key array creating a working (it was passing tests) but
+     potentially non-repeatable initialization
 
-   - [x] manpage
-   - [x] demo program
-   - [ ] unit test
----
+   - set_environment_variable(3f) failed to reset set environment
+     variables because it did not specify a (non-zero) flag value when
+     calling setenv(3c).
+
+   - removed creation of temporary arrays from CALL statements to
+     assignment to a TEMP variable to work around ifort 11 segfault;
+     marked with "kludge for bug ...".
+
 ---
 **2021-03-01**  Somajit Dey  <https://github.com/SomajitDey>
 
