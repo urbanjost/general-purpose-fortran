@@ -20,23 +20,28 @@
 !!
 !!   See the routines:
 !!
-!!    use M_random, only : init_random_seed_by_system_clock, init_random_seed_by_dat, init_random_seed
+!!    use M_random, only : init_random_seed_by_system_clock, &
+!!    & init_random_seed_by_dat, init_random_seed
 !!    use M_random, only : random_string, random_hex, random_int
 !!    use M_random, only : random_kiss64
-!!    use M_random, only : mtprng_state, mtprng_init_array, mtprng_rand64, mtprng_rand_real1
+!!    use M_random, only : mtprng_state, mtprng_init_array, mtprng_rand64, &
+!!    & mtprng_rand_real1
 !!    use M_random, only : mtprng_int, mtprng_int_by_array
 !!    use M_random, only : mtprng_rand64, mtprng_rand, mtprng_rand_range
-!!    use M_random, only : mtprng_rand_real3, mtprng_rand_real2, mtprng_rand_real1
+!!    use M_random, only : mtprng_rand_real3, mtprng_rand_real2, &
+!!    & mtprng_rand_real1
 !!    use M_random, only : scramble
 !!
 !!##QUOTE
 !!
-!!   The generation of random numbers is too important to be left to chance -- Robert R. Coveyou
+!!   The generation of random numbers is too important to be left to chance
+!!   -- Robert R. Coveyou
 !!
 !!##DESCRIPTION
 !!
-!!    The M_random(3fm) module contains routines to support random number generation. This includes
-!!    supplements for the Fortran intrinsic random_seed(3f).
+!!    The M_random(3fm) module contains routines to support random number
+!!    generation. This includes supplements for the Fortran intrinsic
+!!    random_seed(3f).
 !!
 !!   SUPPLEMENTING INTRINSIC RANDOM_SEED
 !!    o init_random_seed_by_system_clock(3f): initialize random_number(3f) to return a single value with system clock
@@ -81,7 +86,6 @@ public scramble
 public :: mtprng_state, mtprng_init, mtprng_init_by_array, mtprng_rand64, mtprng_rand
 public :: mtprng_rand_range, mtprng_rand_real1, mtprng_rand_real2, mtprng_rand_real3
 
-public test_suite_M_random
 !==================================================================================================================================!
 ! Kind types for IEEE 754/IEC 60559 single- and double-precision reals
 integer, parameter :: IEEE32 = selected_real_kind(  6,  37 )
@@ -162,6 +166,7 @@ character(len=:),allocatable    :: out
    integer                      :: i
    ilen=len(chars)
    out=''
+   call init_random_seed_by_dat()
    if(ilen.gt.0)then
       do i=1,length
          call random_number(x)
@@ -255,7 +260,8 @@ end function random_hex
 !!   Sample program
 !!
 !!    program demo_random_int
-!!    use M_random, only : random_int
+!!    use M_random, only : random_int, init_random_seed_by_system_clock
+!!    call init_random_seed_by_system_clock()
 !!    write(*,'(*(i0:,1x))')(random_int(1,10),i=1,20)
 !!    write(*,'(*(i0:,1x))')(random_int(-5,5),i=1,20)
 !!    end program demo_random_int
@@ -337,7 +343,7 @@ end function random_int
 !!   Sample program
 !!
 !!     program demo_scramble
-!!     use M_random, only : scramble
+!!     use M_random, only : scramble, init_random_seed_by_system_clock
 !!     implicit none
 !!     character(len=*),parameter :: list(*)=[character(len=5) :: &
 !!     & 'one','two','three','four','five',&
@@ -345,6 +351,7 @@ end function random_int
 !!     integer                    :: i
 !!     integer                    :: n=size(list)
 !!     character(len=len(list))   :: newlist(size(list))
+!!     call init_random_seed_by_system_clock()
 !!     do i = 1,8
 !!        ! use random values as indices to randomize array
 !!        newlist=list(scramble(n))
@@ -743,6 +750,11 @@ end subroutine init_random_seed
 !  If you modify this file, you may insert additional notices
 !  immediately following this sentence.
 !
+!  Copyright 2019, John S. Urban
+!  corrected subscript causing undersubscripting the seed array and
+!  reformatted to conform to more recent Fortran structures and added
+!  man pages.
+!
 !  Copyright 2001, 2002, 2004 Scott Robert Ladd.
 !  All rights reserved, except as noted herein.
 !
@@ -913,7 +925,7 @@ type(mtprng_state), intent(out) :: state
    key_length = size(init_key)
 
    do k = max(N,key_length), 0, -1
-      state%mt(i) = ieor(state%mt(i),(ieor(state%mt(i-1),ishft(state%mt(i-1),-30_INT64) * 1664525_INT64))) + init_key(j) + j
+      state%mt(i) = ieor(state%mt(i),(ieor(state%mt(i-1),ishft(state%mt(i-1),-30_INT64) * 1664525_INT64))) + init_key(j+1) + j
 
       i = i + 1
       j = j + 1
@@ -1328,276 +1340,6 @@ real(IEEE64) :: r
    r = (real(mtprng_rand64(state),IEEE64) + 0.5_IEEE64) * factor
 
 end function mtprng_rand_real3
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_random()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-
-!*! setup
-
-   call test_init_random_seed()
-   call test_init_random_seed_by_dat()
-   call test_init_random_seed_by_system_clock()
-
-   call test_random_kiss64()
-
-   call test_random_hex()
-   call test_random_string()
-   call test_random_int()
-
-   call test_scramble()
-
-   call test_mtprng_init()
-   call test_mtprng_init_by_array()
-   call test_mtprng_rand()
-   call test_mtprng_rand64()
-   call test_mtprng_rand_range()
-   call test_mtprng_rand_real1()
-   call test_mtprng_rand_real2()
-   call test_mtprng_rand_real3()
-
-!*! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_init_random_seed()
-
-integer :: i
-real    :: x
-intrinsic random_number
-   call unit_check_start('init_random_seed',msg='')
-   call init_random_seed_by_dat()
-   do i=1,10
-      ! assigned pseudo-random numbers from the uniform distribution in the interval 0 <= x < 1.
-      call random_number(x)
-      if(unit_check_level.gt.0)then
-         write(*,'(g0,1x)',advance='no')x
-      endif
-   enddo
-   !*!call unit_check('init_random_seed', 0.eq.0, 'checking',100)
-   call unit_check_done('init_random_seed',msg='')
-end subroutine test_init_random_seed
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_init_random_seed_by_dat()
-
-integer :: i
-real    :: x
-intrinsic random_number
-   call unit_check_start('init_random_seed_by_dat',msg='')
-   call init_random_seed_by_dat()
-   do i=1,10
-      ! assigned pseudo-random numbers from the uniform distribution in the interval 0 <= x < 1.
-      call random_number(x)
-      if(unit_check_level.gt.0)then
-         write(*,'(g0,1x)',advance='no')x
-      endif
-   enddo
-   !*!call unit_check('init_random_seed_by_dat', 0.eq.0, 'checking',100)
-   call unit_check_done('init_random_seed_by_dat',msg='')
-end subroutine test_init_random_seed_by_dat
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_init_random_seed_by_system_clock()
-
-integer :: i
-real    :: x
-intrinsic random_number
-   call unit_check_start('init_random_seed_by_system_clock',msg='')
-   call init_random_seed_by_system_clock()
-   do i=1,10
-      ! assigned pseudo-random numbers from the uniform distribution in the interval 0 <= x < 1.
-      call random_number(x)
-      if(unit_check_level.gt.0)then
-         write(*,'(g0,1x)',advance='no')x
-      endif
-   enddo
-   !*!call unit_check('init_random_seed_by_system_clock', 0.eq.0, 'checking',100)
-   call unit_check_done('init_random_seed_by_system_clock',msg='')
-end subroutine test_init_random_seed_by_system_clock
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_init()
-
-   call unit_check_start('mtprng_init',msg='')
-   !*!call unit_check('mtprng_init', 0.eq.0, 'checking',100)
-   call unit_check_done('mtprng_init',msg='')
-end subroutine test_mtprng_init
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_init_by_array()
-
-   call unit_check_start('mtprng_init_by_array',msg='')
-   !*!call unit_check('mtprng_init_by_array', 0.eq.0, 'checking',100)
-   call unit_check_done('mtprng_init_by_array',msg='')
-end subroutine test_mtprng_init_by_array
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_rand()
-
-   call unit_check_start('mtprng_rand',msg='')
-   !*!call unit_check('mtprng_rand', 0.eq.0, 'checking',100)
-   call unit_check_done('mtprng_rand',msg='')
-end subroutine test_mtprng_rand
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_rand64()
-
-!use M_random, only : mtprng_state, mtprng_init, mtprng_rand64, mtprng_rand_real1
-use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64  !  1 2 4 8
-implicit none
-
-integer(INT32)     :: seed
-type(mtprng_state) :: state
-integer            :: i, misses
-integer(INT64)     :: known(100), hop
-double precision   :: known_double
-logical            :: success, success_double
-
-known = (/ &
-   1062284148_INT64  ,  1840134109_INT64  ,  3636226446_INT64  ,   887288380_INT64  ,  3889928508_INT64  ,  &
-    631642018_INT64  ,   914101460_INT64  ,  3162600344_INT64  ,  4279173875_INT64  ,  3888840898_INT64  ,  &
-   2663878183_INT64  ,  2252856790_INT64  ,  3463027370_INT64  ,  1097057726_INT64  ,  3184139039_INT64  ,  &
-   1434652676_INT64  ,  3403152620_INT64  ,   833869435_INT64  ,   612581734_INT64  ,   576299959_INT64  ,  &
-   1474687423_INT64  ,  3466262180_INT64  ,  3133945242_INT64  ,  2677293441_INT64  ,  3505646298_INT64  ,  &
-   1339531483_INT64  ,  3669763788_INT64  ,   510452911_INT64  ,   559989931_INT64  ,  2308431220_INT64  ,  &
-   3603446463_INT64  ,   667203617_INT64  ,  1127428958_INT64  ,  1290717533_INT64  ,  3513405708_INT64  ,  &
-    927031876_INT64  ,  4032539667_INT64  ,  3825851657_INT64  ,  2014122148_INT64  ,  3946341433_INT64  ,  &
-   2489727744_INT64  ,  3391425033_INT64  ,  1283015508_INT64  ,   913542342_INT64  ,   764165363_INT64  ,  &
-   3945892851_INT64  ,  2442690715_INT64  ,  1067765245_INT64  ,  2537181202_INT64  ,  3064480631_INT64  ,  &
-   3101723380_INT64  ,   802526031_INT64  ,  3157511722_INT64  ,  3269291235_INT64  ,  4215855479_INT64  ,  &
-    181260300_INT64  ,  3744061959_INT64  ,  1143883471_INT64  ,    53781702_INT64  ,   882249490_INT64  ,  &
-    321985400_INT64  ,   577208133_INT64  ,   885895688_INT64  ,  2725767908_INT64  ,  2231810848_INT64  ,  &
-   1980748708_INT64  ,  3886306640_INT64  ,   202325230_INT64  ,  3043114780_INT64  ,  2021505937_INT64  ,  &
-   1074135674_INT64  ,   753749191_INT64  ,  3155169167_INT64  ,  2997245061_INT64  ,  1203929572_INT64  ,  &
-   2247630318_INT64  ,  1571401504_INT64  ,  4114645852_INT64  ,  3048726454_INT64  ,  3912566191_INT64  ,  &
-    546592897_INT64  ,  3352654755_INT64  ,  3632644786_INT64  ,  3691031383_INT64  ,  1267283456_INT64  ,  &
-    900236841_INT64  ,    47733538_INT64  ,  2049551875_INT64  ,   668453652_INT64  ,  2379406100_INT64  ,  &
-    689049113_INT64  ,   759943852_INT64  ,   623176051_INT64  ,  1348915232_INT64  ,  1345348561_INT64  ,  &
-   2055844659_INT64  ,  3678167085_INT64  ,  1856143658_INT64  ,  2464849813_INT64  ,    28304277_INT64    /)
-
-  known_double = 0.96673825731657869742d0
-  seed = 6928
-
-  call unit_check_start('mtprng_rand64',msg='')
-  call mtprng_init(seed, state)
-
-  misses = 0
-  success=.true.
-  do i=1,100
-     hop = mtprng_rand64(state)
-     if (hop.ne.known(i)) misses=misses+1
-  enddo
-  if (misses>0) success=.false.
-
-! retourne un reel IEEE64, peut  tre utilis  en double precision
-  if ( abs(mtprng_rand_real1(state)-known_double) > 5d-16 ) then
-     success_double = .false.
-  else
-     success_double = .true.
-  endif
-
-  call unit_check('mtprng_rand64', success,        'integer misses',misses)
-  call unit_check('mtprng_rand64', success_double, 'double precision')
-
-  call unit_check_done('mtprng_rand64',msg='')
-end subroutine test_mtprng_rand64
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_rand_range()
-
-   call unit_check_start('mtprng_rand_range',msg='')
-   !*!call unit_check('mtprng_rand_range', 0.eq.0, 'checking',100)
-   call unit_check_done('mtprng_rand_range',msg='')
-end subroutine test_mtprng_rand_range
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_rand_real1()
-
-   call unit_check_start('mtprng_rand_real1',msg='')
-   !*!call unit_check('mtprng_rand_real1', 0.eq.0, 'checking',100)
-   call unit_check_done('mtprng_rand_real1',msg='')
-end subroutine test_mtprng_rand_real1
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_rand_real2()
-
-   call unit_check_start('mtprng_rand_real2',msg='')
-   !*!call unit_check('mtprng_rand_real2', 0.eq.0, 'checking',100)
-   call unit_check_done('mtprng_rand_real2',msg='')
-end subroutine test_mtprng_rand_real2
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_mtprng_rand_real3()
-
-   call unit_check_start('mtprng_rand_real3',msg='')
-   !*!call unit_check('mtprng_rand_real3', 0.eq.0, 'checking',100)
-   call unit_check_done('mtprng_rand_real3',msg='')
-end subroutine test_mtprng_rand_real3
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_random_int()
-
-   call unit_check_start('random_int',msg='')
-   !*!call unit_check('random_int', 0.eq.0, 'checking',100)
-   call unit_check_done('random_int',msg='')
-end subroutine test_random_int
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_random_hex()
-
-integer :: i
-real    :: x
-intrinsic random_number
-   call unit_check_start('random_hex',msg='')
-   call init_random_seed(218595421)
-   do i=1,2
-      write(*,*)random_hex(32)
-      write(*,*)random_hex(64)
-      write(*,*)random_hex(128)
-      write(*,*)random_hex(256)
-      write(*,*)random_hex(512)
-   enddo
-   !*!call unit_check('random_hex', 0.eq.0, 'checking',100)
-   call unit_check_done('random_hex',msg='')
-end subroutine test_random_hex
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_random_kiss64()
-
-integer, parameter    :: i8b = selected_int_kind(18)  ! eight-byte integer
-integer(i8b)          :: i, t
-   call unit_check_start('random_kiss64',msg='')
-   do i = 1, 100000000
-      t = random_kiss64()
-      if(unit_check_level.gt.0)then
-         if(mod(i,1000000_i8b+1_i8b)==1000000_i8b)write(*,*)i,' T=',T
-      endif
-   enddo
- !*!call unit_check('random_kiss64',t.eq.1666297717051644203_i8b,'100 million calls to KILL',t,16662977170511644203_i8b)
-   call unit_check('random_kiss64',t.eq.1666297717051644203_i8b,msg='100 million calls to KILL')
-   call unit_check_done('random_kiss64',msg='')
-end subroutine test_random_kiss64
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_scramble()
-
-   call unit_check_start('scramble',msg='')
-   !*!call unit_check('scramble', 0.eq.0, 'checking',100)
-   call unit_check_done('scramble',msg='')
-end subroutine test_scramble
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_random_string()
-
-intrinsic random_number
-integer           :: i
-real              :: x
-integer,parameter :: tests=100
-character(len=8)  :: alpha(tests)
-integer           :: repeats
-   repeats=0
-   call unit_check_start('random_string',msg='')
-   call init_random_seed(218595421)
-   do i=1,tests
-      alpha(i)=random_string('ABCDEFGHIJKLMNOPQRSTUVWXYZ',8)
-   enddo
-   do i=1,tests
-   if(.not.random_string('ABCDEFGHIJKLMNOPQRSTUVWXYZ',8).eq.alpha(i))then
-      repeats=repeats+1
-   endif
-   enddo
-   call unit_check('random_string', repeats.eq.tests,'test if repeats with same seed',tests)
-   call unit_check_done('random_string',msg='')
-end subroutine test_random_string
-!===================================================================================================================================
-end subroutine test_suite_M_random
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

@@ -130,7 +130,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2021-12-18 15:27:45 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 11:46:46 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -150,12 +150,12 @@ real                          :: valo1,valo2,valo3
 integer                       :: status
 integer                       :: token_count
 character(len=20)             :: echoname
-character(len=:),allocatable  :: fmt
 real                          :: red,green,blue
 real                          :: hu,li,sa,cc,mm,vv,yy,ii,qq,hh,rr,gg,bb
 integer                       :: i
 real                          :: denominator
 real                          :: multiplier
+character(len=*),parameter    :: fmt='(a,3(i3,"%",1x),"#",3(z2.2),1x,3(i3,1x))'
    ! define command arguments, default values and crack command line
    call kracken('color','-oo -m 1.0 -d 1.0 -help .f. -version .f.')
    call help_usage(lget('color_help'))
@@ -168,7 +168,6 @@ real                          :: multiplier
          ! weird little thing where the color names have aliases that are numeric strings
          call color_name2rgb(v2s(i),red,green,blue,echoname) ! get the RGB values and English name of the color
          if(echoname.eq.'Unknown')exit TRYALL                ! the last color name is "Unknown" so the loop should exit
-         fmt='(a,3(i3,"%",1x),"#",3(z2.2),1x,3(i3,1x))'
          ! display the English name and RGB values for the name
          write(*,fmt)echoname,int([red,green,blue]/1.00), int([red,green,blue]*2.55+0.5) ,int([red,green,blue]*2.55+0.5)
       enddo TRYALL

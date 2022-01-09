@@ -1453,7 +1453,7 @@ end subroutine setprompts
 !!    Public Domain
 subroutine dissect(verb,init,pars,error_return)
 
-! ident_15="@(#)M_kracken::dissect(3f): convenient call to parse()"
+! ident_15="@(#)M_kracken::dissect(3f): convenient call to parse() will define defaults, then process"
 
 character(len=*),intent(in)  :: verb                     ! the name of the command to be reset/defined  and then set
 character(len=*),intent(in)  :: init                     ! used to define or reset command options; usually hard-set in the program.
@@ -2034,8 +2034,8 @@ integer                            :: inew
    if(.not.allocated(dict_verbs)) call initd()
    call locate(dict_verbs,name,indx,ier,mssge)       ! determine storage placement of the variable and whether it is new
    if(ier  ==  -1)then                               ! an error occurred in determining the storage location
-      call journal("error occurred in *store*")
-      call journal(mssge)
+      call journal('sc', "error occurred in *store* name=", name, "indx=", indx)
+      call journal('sc', "ier=", ier, "message=", mssge)
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------

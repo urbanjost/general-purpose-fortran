@@ -12,7 +12,8 @@ stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                                                                            ',&
-'   shuf- - [FUNIX] generate random permutations                                                                                 ',&
+'   shuf- - [FUNIX] generate random permutations of file lines, whole                                                            ',&
+'   numbers, or strings                                                                                                          ',&
 '   (LICENSE:PD)                                                                                                                 ',&
 'SYNOPSIS                                                                                                                        ',&
 '  syntax:                                                                                                                       ',&
@@ -48,7 +49,8 @@ endif
 end subroutine help_usage
 !>
 !!##NAME
-!!    shuf- - [FUNIX] generate random permutations
+!!    shuf- - [FUNIX] generate random permutations of file lines, whole
+!!    numbers, or strings
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -92,11 +94,11 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
 '@(#)PROGRAM:        shuf-(1)>',&
 '@(#)DESCRIPTION:    random shuffle of lines in a file or strings or a range of whole numbers>',&
-'@(#)VERSION:        1.0, 2019-09-06>',&
+'@(#)VERSION:        2.0, 2022-01-08>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-12-18 15:29:18 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 10:18:40 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -105,7 +107,7 @@ end subroutine help_version
 program shuf
 use M_io,      only : swallow
 use M_strings, only : notabs
-use M_random,  only : scramble
+use M_random,  only : scramble, init_random_seed_by_system_clock
 use M_verify,   only : stderr
 use M_kracken, only : kracken, lget, sgets, iget, igets             ! add command-line parser module
 implicit none
@@ -121,6 +123,7 @@ integer,allocatable              :: vals(:)
    FILENAMES=sgets('shuf_oo')
    k=iget('shuf_n')
    vals=igets('shuf_i')
+   call init_random_seed_by_system_clock()
 !-----------------------------------------------------------------------------------------------------------------------------------
 DONE : block
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -133,7 +136,7 @@ DONE : block
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(size(vals).eq.2)then
-      indx=scramble(abs(vals(2)-vals(1))+1)
+      indx=scramble(abs(vals(2)-vals(1))+1)+min(vals(1),vals(2))-1
       n=merge(min(k,size(indx)),size(indx),k.ge.0)
       write(*,'(i0)')(indx(i),i=1,n)
       exit DONE

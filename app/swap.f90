@@ -160,82 +160,86 @@ version_text=[ CHARACTER(LEN=128) :: &
 '']
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
-'       swap(1f) - [FILE FILTER] replace fixed strings in files',&
-'       (LICENSE:PD)',&
+'   swap(1f) - [FILE FILTER] replace fixed strings in files',&
+'   (LICENSE:PD)',&
 'SYNOPSIS',&
-'       swap  [ -i][ -verbose][ -dryrun]|[ -help| -version] old new filename(s)',&
-'       (LICENSE:PD)',&
+'   swap  [ -i][ -verbose][ -dryrun]|[ -help| -version] old new filename(s)',&
+'   (LICENSE:PD)',&
 '',&
 'DESCRIPTION',&
-'       ** This is an example program for the REPLACE(3f) function. It',&
-'          still has some flaws.',&
+'   ** This is an example program for the REPLACE(3f) function. It',&
+'   still has some flaws.',&
 '',&
-'       The swap(1) utility changes strings in-place in files.',&
+'   The swap(1) utility changes strings in-place in files.',&
 '',&
-'       trailing spaces on OLD and NEW are ignored.',&
-'       TABS are expanded.',&
+'   trailing spaces on OLD and NEW are ignored.',&
+'   TABS are expanded.',&
 '',&
-'       files named on the command are modified in-place, so you may want',&
-'       to make a copy of the original before converting it. swap(1) prints',&
-'       a message indicating any of the input files it actually modifies.',&
+'   files named on the command are modified in-place, so you may want',&
+'   to make a copy of the original before converting it. swap(1) prints',&
+'   a message indicating any of the input files it actually modifies.',&
 '',&
-'       Do not change binary files with this program, which uses sequential',&
-'       access to read and write the files. It can corrupt binary files.',&
+'   Do not change binary files with this program, which uses sequential',&
+'   access to read and write the files. It can corrupt binary files.',&
 '',&
 'OPTIONS',&
-'       old           string to look for',&
-'       new           the replacement string',&
-'       filenames     list of files to replace strings in',&
-'       -i            ignore case of input',&
-'       -ask          interactively confirm each change',&
-'       --dryrun      Does all file operations except for moving the',&
-'                     changed file back to the original. Implies --verbose.',&
-'       -verbose      Print information about what the program changes.',&
-'       --help        Display a help message and exit.',&
-'       --version     Display version information and exit.',&
+'   old           string to look for',&
+'   new           the replacement string',&
+'   filenames     list of files to replace strings in',&
+'   -i            ignore case of input',&
+'   -ask          interactively confirm each change',&
+'   --dryrun      Does all file operations except for moving the',&
+'                 changed file back to the original. Implies --verbose.',&
+'   -verbose      Print information about what the program changes.',&
+'   --help        Display a help message and exit.',&
+'   --version     Display version information and exit.',&
+'',&
 'AUTHOR',&
 '   John S. Urban',&
+'',&
 'LICENSE',&
 '   Public Domain',&
 '']
 !>
 !!##NAME
-!!        swap(1f) - [FILE FILTER] replace fixed strings in files
-!!        (LICENSE:PD)
+!!    swap(1f) - [FILE FILTER] replace fixed strings in files
+!!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!        swap  [ -i][ -verbose][ -dryrun]|[ -help| -version] old new filename(s)
-!!        (LICENSE:PD)
+!!    swap  [ -i][ -verbose][ -dryrun]|[ -help| -version] old new filename(s)
+!!    (LICENSE:PD)
 !!
 !!##DESCRIPTION
-!!        ** This is an example program for the REPLACE(3f) function. It
-!!           still has some flaws.
+!!    ** This is an example program for the REPLACE(3f) function. It
+!!    still has some flaws.
 !!
-!!        The swap(1) utility changes strings in-place in files.
+!!    The swap(1) utility changes strings in-place in files.
 !!
-!!        trailing spaces on OLD and NEW are ignored.
-!!        TABS are expanded.
+!!    trailing spaces on OLD and NEW are ignored.
+!!    TABS are expanded.
 !!
-!!        files named on the command are modified in-place, so you may want
-!!        to make a copy of the original before converting it. swap(1) prints
-!!        a message indicating any of the input files it actually modifies.
+!!    files named on the command are modified in-place, so you may want
+!!    to make a copy of the original before converting it. swap(1) prints
+!!    a message indicating any of the input files it actually modifies.
 !!
-!!        Do not change binary files with this program, which uses sequential
-!!        access to read and write the files. It can corrupt binary files.
+!!    Do not change binary files with this program, which uses sequential
+!!    access to read and write the files. It can corrupt binary files.
 !!
 !!##OPTIONS
-!!        old           string to look for
-!!        new           the replacement string
-!!        filenames     list of files to replace strings in
-!!        -i            ignore case of input
-!!        -ask          interactively confirm each change
-!!        --dryrun      Does all file operations except for moving the
-!!                      changed file back to the original. Implies --verbose.
-!!        -verbose      Print information about what the program changes.
-!!        --help        Display a help message and exit.
-!!        --version     Display version information and exit.
+!!    old           string to look for
+!!    new           the replacement string
+!!    filenames     list of files to replace strings in
+!!    -i            ignore case of input
+!!    -ask          interactively confirm each change
+!!    --dryrun      Does all file operations except for moving the
+!!                  changed file back to the original. Implies --verbose.
+!!    -verbose      Print information about what the program changes.
+!!    --help        Display a help message and exit.
+!!    --version     Display version information and exit.
+!!
 !!##AUTHOR
 !!    John S. Urban
+!!
 !!##LICENSE
 !!    Public Domain
 end subroutine setup

@@ -177,7 +177,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    create Makefile for current directory>',&
 '@(#)VERSION:        1.0, 2017-12-09>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2021-12-18 15:28:03 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 10:17:38 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -287,6 +287,7 @@ character(len=:),allocatable    :: COMMAND_LINE
       endif
    enddo
 
+   write(io,'(/,"NULL = ")')
    if(size(programs).ne.0)then
       write(io,'(/,"PROGFILES = ",*(5(a:,1x),"\",/,"        "))')(trim(f_programs(i)),i=1,size(f_programs))
    else
@@ -299,8 +300,12 @@ character(len=:),allocatable    :: COMMAND_LINE
    endif
    write(io,'(/,a)')'PROG = ${PROGFILES:.f90=}'
    write(io,'(/,a)')'CPROG = ${CPROGFILES:.c=}'
+   write(io,'(/,a)')&
+   & 'TESTFILES = $(wildcard ../test/*.f90) $(wildcard ../test/*.F90) $(wildcard ../test/*/*.f) $(wildcard ../test/*/*.F)'
+   write(io,'(/,a)')'TPROG = ${TESTFILES:.f90=}'
 !----------------------------------------------------------------------------------------------------------------------------------
    directory='.'                                                  ! pathname of current directory
+   ierr=-999
    call system_opendir(directory,dir,ierr)                        ! open directory stream to read from
    if(ierr.ne.0)stop 1
    do                                                             ! read directory
@@ -412,12 +417,9 @@ character(len=:),allocatable    :: COMMAND_LINE
       write(io,'(a)')'#all: $(PROG) $(CPROG)'
       write(io,'(a)')'all: $(OBJS)'
    else
-      write(io,'(a)')'all: $(PROG) $(CPROG)'
+      write(io,'(a)')'all: $(PROG) $(CPROG) $(TPROG)'
    endif
-   write(io,'(a)')expand('\t@test -e scripts/test_suite && chmod u+xr scripts/test_suite||echo "test_suite not found"')
-   write(io,'(a)')expand('\tPATH="`pwd`/scripts:$$PATH"; which test_suite && env F90=$(F90) test_suite -l test_suite_log.txt')
-   write(io,'(a)')expand("\t(exec 2>&1;ls ../test/test_suite*|grep -v '\.f90'|xargs -iXX bash -c XX )|tee -a test_suite_log.txt")
-
+   write(io,'(a)')expand("\t@echo ""That's all folks!""")
 !----------------------------------------------------------------------------------------------------------------------------------
    if(libname.eq.'')then
    fixed=[character(len=132) :: &
@@ -426,8 +428,12 @@ character(len=:),allocatable    :: COMMAND_LINE
       &'                                                   ',&
       &'\t-$(F90) $(LDFLAGS) $@.f90 -o $@ $(OBJS) $(LIBS)||echo "ouch: $@.f90 " ',&
       &'                                                   ',&
+      &'$(TPROG): $(LIBRARIES)                                   ',&
+      &'                                                   ',&
+      &'\t-$(F90) $(LDFLAGS) $@.f90 -o $@ $(OBJS) $(LIBS)||echo "ouch: $@.f90 " ',&
+      &'                                                   ',&
       &'clean:                                             ',&
-      &'\trm -f $(PROG) $(CPROG) $(OBJS) *.mod             ',&
+      &'\trm -f $(PROG) $(CPROG) $(TPROG) $(OBJS) *.mod             ',&
       &'                                                   ',&
       &'.SUFFIXES: $(SUFFIXES) .f90 .F90 .ff .FF .shf      ',&
       &'# .shf -- assumed to write Fortran code to stdout when executed  ',&
@@ -476,6 +482,10 @@ character(len=:),allocatable    :: COMMAND_LINE
       &'                                                   ',&
       &'\t-$(F90) $(LDFLAGS) $@.f90 -L. -l$(LIB) -o $@ $(LIBS)',&
       &'                                                   ',&
+      &'$(TPROG): $(LIBRARY)                                   ',&
+      &'                                                   ',&
+      &'\t-$(F90) $(LDFLAGS) $@.f90 -L. -l$(LIB) -o $@ $(LIBS)',&
+      &'                                                   ',&
       &'$(LIBRARY): $(OBJS)                                ',&
       &'\t$(AR) $(ARFLAGS) $@ $^                           ',&
       &'                                                   ',&
@@ -521,6 +531,11 @@ character(len=:),allocatable    :: COMMAND_LINE
       &'\tprep -D F90 `uname -o` -verbose -i $(<) -o $(*F).F90                            ',&
       &'\t@[ -s $(*F).F90 ] || echo "error: $(*F).F90 is empty"                           ',&
       &'#=================================================================================',&
+      &'.PHONY: test',&
+      &'test: # $(TPROG)',&
+      &'\t@test -e scripts/test_suite && chmod u+xr scripts/test_suite||echo "test_suite not found"',&
+      &'\t-PATH="`pwd`/scripts:$$PATH"; which test_suite && env F90=$(F90) test_suite -l test_suite_log.txt',&
+      &'\t-(exec 2>&1;-$?)|tee -a test_suite_log.txt',&
       &'']
    endif
    do i=1,size(fixed)
@@ -623,11 +638,14 @@ character(len=*),intent(in) :: filename
       return
    endif
 
+   ! making a lot of assumptions about simple file syntax, use statements not continued, ...
    INFINITE: do while (read_line(line,lun)==0)
       ifound=index(line,'!')  ! remove Fortran comments
       if(ifound.ne.0)then
          line=line(:ifound-1)
       endif
+      line=adjustl(line)//' ' ! ensure at least one character as well
+      if(index('"''',line(1:1)).ne.0)cycle
       call split(line,array_split,delimiters=' :"'',',order='sequential',nulls='ignore')
       if(allocated(array))then
          deallocate(array)

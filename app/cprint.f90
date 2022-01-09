@@ -28,12 +28,16 @@ help_text=[ CHARACTER(LEN=128) :: &
 'EXAMPLES                                                                                                                        ',&
 '  Sample usage:                                                                                                                 ',&
 '                                                                                                                                ',&
-'      $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1                                                                            ',&
-'      h e l l o w o r l d                                                                                                       ',&
+'      $echo a b c d|cprint 1000 -1 # reverse column order of a table                                                            ',&
+'      d c b a                                                                                                                   ',&
 '                                                                                                                                ',&
 '      $: switch first and second column and skip third column                                                                   ',&
 '      $: and print up to column 1000                                                                                            ',&
 '      $ls -l |cprint 2 1 4 -1000                                                                                                ',&
+'                                                                                                                                ',&
+'      $: column numbers may be reused                                                                                           ',&
+'      $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1                                                                            ',&
+'      h e l l o w o r l d                                                                                                       ',&
 '                                                                                                                                ',&
 'AUTHOR                                                                                                                          ',&
 '   John S. Urban                                                                                                                ',&
@@ -67,12 +71,16 @@ end subroutine help_usage
 !!
 !!   Sample usage:
 !!
-!!       $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1
-!!       h e l l o w o r l d
+!!       $echo a b c d|cprint 1000 -1 # reverse column order of a table
+!!       d c b a
 !!
 !!       $: switch first and second column and skip third column
 !!       $: and print up to column 1000
 !!       $ls -l |cprint 2 1 4 -1000
+!!
+!!       $: column numbers may be reused
+!!       $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1
+!!       h e l l o w o r l d
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -95,7 +103,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        2.0, 20200526>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2021-12-18 15:27:18 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 09:35:24 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -158,9 +158,9 @@
 !!          o flib.a platform/files and directories,
 !!          o fortranposix.
 module M_system
-use,intrinsic     :: iso_c_binding,   only : c_float, c_int, c_char
-use,intrinsic     :: iso_c_binding,   only : c_ptr, c_f_pointer, c_null_char, c_null_ptr
-use,intrinsic     :: iso_c_binding
+use,intrinsic     :: iso_c_binding,   only : c_float, c_int, c_char, c_ptr, c_f_pointer, c_null_char, c_null_ptr
+use,intrinsic     :: iso_c_binding,   only : c_long, c_short, c_size_t, c_intptr_t, c_funptr
+use,intrinsic     :: iso_c_binding,   only : c_long_long, c_funloc, c_associated
 use,intrinsic     :: iso_fortran_env, only : int8, int16, int32, int64 !x!, real32, real64, real128, dp=>real128
 
 implicit none
@@ -1321,6 +1321,7 @@ implicit none
 character(len=*),intent(in) :: pathname
 integer,intent(in)          :: amode
 logical                     :: system_access
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_access(c_pathname,c_amode) bind (C,name="my_access") result (c_ierr)
@@ -1331,7 +1332,9 @@ interface
   end function c_access
 end interface
 
-   if(c_access(str2_carr(trim(pathname)),int(amode,kind=c_int)).eq.0)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+
+   if(c_access(temp,int(amode,kind=c_int)).eq.0)then
       system_access=.true.
    else
       system_access=.false.
@@ -1451,6 +1454,7 @@ character(len=*),intent(in) :: pathname
 integer,intent(in),optional :: times(2)
 integer                     :: times_local(2)
 logical                     :: system_utime
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 !-! int my_utime(const char *path, int times[2])
 interface
@@ -1466,7 +1470,8 @@ end interface
    else
       times_local=timestamp()
    endif
-   if(c_utime(str2_carr(trim(pathname)),int(times_local,kind=c_int)).eq.0)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_utime(temp,int(times_local,kind=c_int)).eq.0)then
       system_utime=.true.
    else
       system_utime=.false.
@@ -1480,9 +1485,9 @@ end function system_utime
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function timestamp() result(epoch)
-    use, intrinsic :: iso_c_binding, only: c_long
-    implicit none
-    integer(kind=8) :: epoch
+use, intrinsic :: iso_c_binding, only: c_long
+implicit none
+integer(kind=8) :: epoch
     interface
         ! time_t time(time_t *tloc)
         function c_time(tloc) bind(c, name='time')
@@ -1571,6 +1576,7 @@ function system_realpath(input) result(string)
 character(len=*),intent(in)    :: input
 type(c_ptr)                    :: c_output
 character(len=:),allocatable   :: string
+character(kind=c_char,len=1),allocatable :: temp(:)
 interface
    function c_realpath(c_input) bind(c,name="my_realpath") result(c_buffer)
       import c_char, c_size_t, c_ptr, c_int
@@ -1579,7 +1585,8 @@ interface
    end function
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-   c_output=c_realpath(str2_carr(trim(input)))
+   temp = str2_carr(trim(input)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   c_output=c_realpath(temp)
    if(.not.c_associated(c_output))then
       string=char(0)
    else
@@ -1643,6 +1650,7 @@ implicit none
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_issock
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_issock(pathname) bind (C,name="my_issock") result (c_ierr)
@@ -1652,7 +1660,8 @@ interface
   end function c_issock
 end interface
 
-   if(c_issock(str2_carr(trim(pathname))).eq.1)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_issock(temp).eq.1)then
       system_issock=.true.
    else
       system_issock=.false.
@@ -1716,6 +1725,7 @@ implicit none
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_isfifo
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_isfifo(pathname) bind (C,name="my_isfifo") result (c_ierr)
@@ -1725,7 +1735,8 @@ interface
   end function c_isfifo
 end interface
 
-   if(c_isfifo(str2_carr(trim(pathname))).eq.1)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_isfifo(temp).eq.1)then
       system_isfifo=.true.
    else
       system_isfifo=.false.
@@ -1791,6 +1802,7 @@ implicit none
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_ischr
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_ischr(pathname) bind (C,name="my_ischr") result (c_ierr)
@@ -1800,7 +1812,8 @@ interface
   end function c_ischr
 end interface
 
-   if(c_ischr(str2_carr(trim(pathname))).eq.1)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_ischr(temp).eq.1)then
       system_ischr=.true.
    else
       system_ischr=.false.
@@ -1883,6 +1896,7 @@ implicit none
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_isreg
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_isreg(pathname) bind (C,name="my_isreg") result (c_ierr)
@@ -1892,7 +1906,8 @@ interface
   end function c_isreg
 end interface
 
-   if(c_isreg(str2_carr(trim(pathname))).eq.1)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_isreg(temp).eq.1)then
       system_isreg=.true.
    else
       system_isreg=.false.
@@ -1961,6 +1976,7 @@ implicit none
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_islnk
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_islnk(pathname) bind (C,name="my_islnk") result (c_ierr)
@@ -1970,7 +1986,8 @@ interface
   end function c_islnk
 end interface
 
-   if(c_islnk(str2_carr(trim(pathname))).eq.1)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_islnk(temp).eq.1)then
       system_islnk=.true.
    else
       system_islnk=.false.
@@ -2036,6 +2053,7 @@ implicit none
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_isblk
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_isblk(pathname) bind (C,name="my_isblk") result (c_ierr)
@@ -2045,7 +2063,8 @@ interface
   end function c_isblk
 end interface
 
-   if(c_isblk(str2_carr(trim(pathname))).eq.1)then
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_isblk(temp).eq.1)then
       system_isblk=.true.
    else
       system_isblk=.false.
@@ -2135,6 +2154,7 @@ implicit none
 
 character(len=*),intent(in) :: dirname
 logical                     :: system_isdir
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_isdir(dirname) bind (C,name="my_isdir") result (c_ierr)
@@ -2144,7 +2164,8 @@ interface
   end function c_isdir
 end interface
 
-   if(c_isdir(str2_carr(trim(dirname))).eq.1)then
+   temp = str2_carr(trim(dirname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_isdir(temp).eq.1)then
       system_isdir=.true.
    else
       system_isdir=.false.
@@ -2222,6 +2243,7 @@ character(len=*),intent(in) :: dirname
 integer,intent(in)          :: owner
 integer,intent(in)          :: group
 logical                     :: system_chown
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 ! int chown(const char *path, uid_t owner, gid_t group);
 interface
@@ -2234,7 +2256,8 @@ interface
   end function c_chown
 end interface
 
-   if(c_chown(str2_carr(trim(dirname)),int(owner,kind=c_int),int(group,kind=c_int)).eq.1)then
+   temp = str2_carr(trim(dirname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   if(c_chown(temp,int(owner,kind=c_int),int(group,kind=c_int)).eq.1)then
       system_chown=.true.
    else
       system_chown=.false.
@@ -2431,6 +2454,8 @@ character(len=*),intent(in) :: oldname
 character(len=*),intent(in) :: newname
 integer                     :: ierr
 integer(kind=c_int)         :: c_ierr
+character(kind=c_char,len=1),allocatable :: temp1(:)
+character(kind=c_char,len=1),allocatable :: temp2(:)
 
 interface
   function c_link(c_oldname,c_newname) bind (C,name="link") result (c_ierr)
@@ -2441,7 +2466,9 @@ interface
   end function c_link
 end interface
 
-   c_ierr=c_link(str2_carr(trim(oldname)),str2_carr(trim(newname)))
+   temp1 = str2_carr(trim(oldname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   temp2 = str2_carr(trim(newname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   c_ierr=c_link(temp1,temp2)
    ierr=c_ierr
 
 end function system_link
@@ -2516,6 +2543,7 @@ elemental impure function system_unlink(fname) result (ierr)
 
 character(len=*),intent(in) :: fname
 integer                     :: ierr
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   function c_unlink(c_fname) bind (C,name="unlink") result (c_ierr)
@@ -2524,7 +2552,10 @@ interface
   integer(kind=c_int)          :: c_ierr
   end function c_unlink
 end interface
-   ierr=c_unlink(str2_carr(trim(fname)))
+
+   temp = str2_carr(trim(fname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   ierr=c_unlink(temp)
+
 end function system_unlink
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2687,7 +2718,8 @@ use, intrinsic :: iso_fortran_env, only : ERROR_UNIT, INPUT_UNIT, OUTPUT_UNIT   
 ! ident_14="@(#)M_system::system_perror(3f): call perror(3c) to display error message"
 
 character(len=*),intent(in) :: prefix
-   integer                  :: ios
+integer                     :: ios
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
   subroutine c_perror(c_prefix) bind (C,name="perror")
@@ -2699,7 +2731,8 @@ end interface
    flush(unit=ERROR_UNIT,iostat=ios)
    flush(unit=OUTPUT_UNIT,iostat=ios)
    flush(unit=INPUT_UNIT,iostat=ios)
-   call c_perror(str2_carr((trim(prefix))))
+   temp = str2_carr(trim(prefix)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   call c_perror(temp)
    call c_flush()
 
 end subroutine system_perror
@@ -2776,6 +2809,7 @@ subroutine system_chdir(path, err)
 
 character(len=*)               :: path
 integer, optional, intent(out) :: err
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
    integer(kind=c_int)  function c_chdir(c_path) bind(C,name="chdir")
@@ -2785,7 +2819,8 @@ interface
 end interface
    integer                     :: loc_err
 !-----------------------------------------------------------------------------------------------------------------------------------
-   loc_err=c_chdir(str2_carr(trim(path)))
+   temp = str2_carr(trim(path)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   loc_err=c_chdir(temp)
    if(present(err))then
       err=loc_err
    endif
@@ -2865,6 +2900,7 @@ elemental impure function system_remove(path) result(err)
 
 character(*),intent(in) :: path
 integer(c_int)          :: err
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
    function c_remove(c_path) bind(c,name="remove") result(c_err)
@@ -2874,7 +2910,8 @@ interface
    end function
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-   err= c_remove(str2_carr(trim(path)))
+   temp = str2_carr(trim(path)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   err= c_remove(temp)
 end function system_remove
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2971,6 +3008,9 @@ function system_rename(input,output) result(ierr)
 
 character(*),intent(in)    :: input,output
 integer                    :: ierr
+character(kind=c_char,len=1),allocatable :: temp1(:)
+character(kind=c_char,len=1),allocatable :: temp2(:)
+
 interface
    function c_rename(c_input,c_output) bind(c,name="rename") result(c_err)
       import c_char, c_int
@@ -2980,7 +3020,9 @@ interface
    end function
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-   ierr= c_rename(str2_carr(trim(input)),str2_carr(trim(output)))
+   temp1 = str2_carr(trim(input)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   temp2 = str2_carr(trim(output)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   ierr= c_rename(temp1,temp2)
 end function system_rename
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3092,9 +3134,11 @@ end function system_rename
 !!##LICENSE
 !!    Public Domain
 function system_chmod(filename,mode) result(ierr)
-   character(len=*),intent(in)  :: filename
-   integer,value,intent(in)     :: mode
-   integer                      :: ierr
+character(len=*),intent(in)  :: filename
+integer,value,intent(in)     :: mode
+integer                      :: ierr
+character(kind=c_char,len=1),allocatable :: temp(:)
+
    interface
       function c_chmod(c_filename,c_mode) bind(c,name="chmod") result(c_err)
          import c_char,c_int
@@ -3104,7 +3148,8 @@ function system_chmod(filename,mode) result(ierr)
       end function
    end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-   ierr=c_chmod(str2_carr(trim(filename)),int(mode,kind(0_c_int)))
+   temp = str2_carr(trim(filename)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   ierr=c_chmod(temp,int(mode,kind(0_c_int)))
 end function system_chmod
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3239,6 +3284,7 @@ function system_rmdir(dirname) result(err)
 
 character(*),intent(in) :: dirname
 integer(c_int) :: err
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
    function c_rmdir(c_path) bind(c,name="rmdir") result(c_err)
@@ -3248,7 +3294,8 @@ interface
    end function
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-   err= c_rmdir(str2_carr(trim(dirname)))
+   temp = str2_carr(trim(dirname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   err= c_rmdir(temp)
    if(err.ne.0) err=system_errno()
 end function system_rmdir
 !===================================================================================================================================
@@ -3376,8 +3423,9 @@ function system_mkfifo(pathname,mode) result(err)
 
 character(len=*),intent(in)       :: pathname
 integer,intent(in)                :: mode
-   integer                        :: c_mode
-   integer                        :: err
+integer                        :: c_mode
+integer                        :: err
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
    function c_mkfifo(c_path,c_mode) bind(c,name="mkfifo") result(c_err)
@@ -3389,7 +3437,8 @@ interface
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
    c_mode=mode
-   err= c_mkfifo(str2_carr(trim(pathname)),c_mode)
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   err= c_mkfifo(temp,c_mode)
 end function system_mkfifo
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3453,11 +3502,12 @@ function system_mkdir(dirname,mode) result(ierr)
 
 ! ident_21="@(#)M_system::system_mkdir(3f): call mkdir(3c) to create empty directory"
 
-character(len=*),intent(in)       :: dirname
-integer,intent(in)                :: mode
-   integer                        :: c_mode
-   integer(kind=c_int)            :: err
-   integer                        :: ierr
+character(len=*),intent(in)    :: dirname
+integer,intent(in)             :: mode
+integer                        :: c_mode
+integer(kind=c_int)            :: err
+integer                        :: ierr
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
    function c_mkdir(c_path,c_mode) bind(c,name="mkdir") result(c_err)
@@ -3477,10 +3527,11 @@ interface
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
    c_mode=mode
+   temp = str2_carr(trim(dirname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
    if(index(dirname,'/').ne.0)then
-      call my_mkdir(str2_carr(trim(dirname)),c_mode,err)
+      call my_mkdir(temp,c_mode,err)
    else
-      err= c_mkdir(str2_carr(trim(dirname)),c_mode)
+      err= c_mkdir(temp,c_mode)
    endif
    ierr=err                                          ! c_int to default integer kind
 end function system_mkdir
@@ -3582,6 +3633,7 @@ character(len=*), intent(in) :: dirname
 type(c_ptr)                  :: dir
 integer,intent(out),optional :: ierr
 integer                      :: ierr_local
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
    function c_opendir(c_dirname) bind(c,name="opendir") result(c_dir)
@@ -3591,7 +3643,8 @@ interface
    end function c_opendir
 end interface
 
-   dir = c_opendir(str2_carr(trim(dirname)))
+   temp = str2_carr(trim(dirname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   dir = c_opendir(temp)
    if(.not.c_associated(dir)) then
       ierr_local=-1
    else
@@ -4107,10 +4160,12 @@ subroutine set_environment_variable(NAME, VALUE, STATUS)
 
 ! ident_24="@(#)M_system::set_environment_variable(3f): call setenv(3c) to set environment variable"
 
-   character(len=*)               :: NAME
-   character(len=*)               :: VALUE
-   integer, optional, intent(out) :: STATUS
-   integer                        :: loc_err
+character(len=*)               :: NAME
+character(len=*)               :: VALUE
+integer, optional, intent(out) :: STATUS
+integer                        :: loc_err
+character(kind=c_char,len=1),allocatable :: temp1(:)
+character(kind=c_char,len=1),allocatable :: temp2(:)
 
 interface
    integer(kind=c_int) function c_setenv(c_name,c_VALUE) bind(C,NAME="setenv")
@@ -4120,7 +4175,9 @@ interface
    end function
 end interface
 
-   loc_err =  c_setenv(str2_carr(trim(NAME)),str2_carr(VALUE))
+   temp1 = str2_carr(trim(NAME)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   temp2 = str2_carr(trim(VALUE)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   loc_err =  c_setenv(temp1,temp2)
    if (present(STATUS)) STATUS = loc_err
 end subroutine set_environment_variable
 !===================================================================================================================================
@@ -4270,7 +4327,8 @@ subroutine system_unsetenv(name,ierr)
 
 character(len=*),intent(in)  :: name
 integer,intent(out),optional :: ierr
-   integer                   :: ierr_local
+integer                      :: ierr_local
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 ! int unsetenv(void)
 interface
@@ -4280,7 +4338,8 @@ interface
    end function
 end interface
 
-   ierr_local =  c_unsetenv(str2_carr(trim(NAME)))
+   temp = str2_carr(trim(name)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   ierr_local =  c_unsetenv(temp)
 
    if(present(ierr))then
       ierr=ierr_local
@@ -4926,7 +4985,7 @@ end function arr2str
 !===================================================================================================================================
 pure function str2_carr(string) result (array)
 
-! ident_32="@(#)M_system::str2_carr(3fp): function copies string to null terminated char array"
+! ident_32="@(#)M_system::str2_carr(3fp): function copies trimmed string to null terminated char array"
 
 character(len=*),intent(in)     :: string
 character(len=1,kind=c_char)    :: array(len(string)+1)
@@ -5124,6 +5183,7 @@ integer(kind=c_long)                 :: cvalues(13)
 
 integer,optional,intent(out)         :: ierr
 integer(kind=c_int)                  :: cierr
+character(kind=c_char,len=1),allocatable :: temp(:)
 
 interface
    subroutine c_stat(buffer,cvalues,cierr,cdebug) bind(c,name="my_stat")
@@ -5135,7 +5195,8 @@ interface
    end subroutine c_stat
 end interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-   call c_stat(str2_carr(trim(pathname)),cvalues,cierr,0_c_int)
+   temp = str2_carr(trim(pathname)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
+   call c_stat(temp,cvalues,cierr,0_c_int)
    values=cvalues
    if(present(ierr))then
       ierr=cierr

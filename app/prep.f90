@@ -2042,9 +2042,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   The syntax for the directive lines is as follows:                            ',&
 '                                                                                ',&
-'    :CONDITIONAL CODE SELECTION                                                 ',&
+'    :VARIABLE DEFINITION FOR CONDITIONALS                                       ',&
 '     $DEFINE   variable_name[=expression]                 [! comment ]          ',&
 '     $UNDEFINE variable_name                              [! comment ]          ',&
+'    :CONDITIONAL CODE SELECTION                                                 ',&
 '     $IF       expression| [$IFDEF|$IFNDEF variable_name] [! comment ]          ',&
 '               { sequence of source statements}                                 ',&
 '     [$ELSEIF|$ELIF  {LOGICAL or INTEGER expression}      [! comment ]          ',&

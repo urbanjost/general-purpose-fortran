@@ -4,7 +4,7 @@
 program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an optional timestamp prefix
    use iso_fortran_env, only : iostat_end
    use m_kracken,only        : kracken,lget,sget,retrev,IPvalue   ! command line parameter cracking module
-   use m_verify, only         : stderr
+   use m_verify, only        : stderr
    use m_time, only          : now,fmtdate_usage
    use m_strings, only       : v2s, chomp
    implicit none
@@ -66,7 +66,7 @@ program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an opti
    if(len3.ne.0)then
       outfile=9                                         ! initialize value used to get unit numbers for output files
                                                         ! get list of filename separators
-      do while ( chomp(file,token,delimiters).ge. 0)  ! open each filename
+      do while ( chomp(file,token,delimiters).ge. 0)    ! open each filename
          outfile=outfile+1
          open(unit=outfile,file=token,access=access,iostat=ios)
          if(ios.ne.0)then
@@ -241,7 +241,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      Copyright (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-12-18 15:27:59 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 10:17:34 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

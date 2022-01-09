@@ -211,8 +211,9 @@ LEFTOVER="$*"
 ################################################################################
 if [ -e "$LOG_FILE" -a "$LOG_FILE" != '/dev/null' ] 
 then
-   echo "$0 ERROR: $LOG_FILE already exists" 1>&2
-   exit
+   :
+   #echo "$0 ERROR: $LOG_FILE already exists" 1>&2
+   #exit
 fi
 ################################################################################
 if [ "$test_suite_w" != '' ]

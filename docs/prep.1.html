@@ -64,12 +64,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <A HREF=#3>Options</A><BR>
 <A HREF=#4>Limitations</A><BR>
 <A HREF=#5>Examples</A><BR>
-&nbsp; &nbsp; &nbsp;<A HREF=#6>Mixing Block And Printenv</A><BR>
-&nbsp; &nbsp; &nbsp;<A HREF=#7>Set Usage</A><BR>
-<A HREF=#8>Author</A><BR>
-<A HREF=#9>License</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#6>Set Usage</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>License</A><BR>
 </BLOCKQUOTE>
-<A name=10>
+<A name=9>
 
      <H3>SYNOPSIS</H3>
 
@@ -90,6 +89,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 [-<B>-width</B> <I>n</I>]
 [-d ignore|remove|blank]
 [-<B>-comment</B> default|doxygen|ford|none]
+[-<B>-ident</B>]
 [-<B>-version</B>]
 [-<B>-help</B>]
 </TD></TR>
@@ -101,14 +101,39 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-By default the stand-alone pre-processor <B>prep</B>(1) will interpret lines with
-"$" in column one, and will output no such lines. Other input is
-conditionally written to the output file based on the directives encountered
-in the input. It does not support macros but does support string
-substitution and the inclusion of free-format text blocks that may be
-converted to Fortran comments or CHARACTER variable definitions which may
-also be used for generating documentation files. INTEGER or LOGICAL
-expressions may be used to select output lines.
+The pre-processor <B>prep</B>(1) will interpret lines with "$" (by default) in
+column one, and will output no such lines. Other input is conditionally
+written to the output file based on the directives encountered in the input.
+<P>
+It does not support parameterized macros but does support string substitution
+and the inclusion of free-format text blocks that may be converted to Fortran
+comments or CHARACTER variable definitions while simultaneously being used
+to generate documentation files.
+<P>
+An exclamation character on a valid directive begins an in-line comment
+that is terminated by an end-of-line.
+<P>
+INTEGER or LOGICAL expressions may be used to select output lines.
+An expression is composed of INTEGER and LOGICAL constants, parameters
+and operators. Operators are
+<P>
+<PRE>
+     .NOT.  .AND.  .OR.  .EQV.  .NEQV.
+     .EQ.   .NE.   .GE.  .GT.   .LE.    .LT.
+     ==     /=     &gt;=    &gt;      &lt;=      &lt;
+     +      -       *     /     **
+     (      )
+</PRE>
+C-style:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:      .NOT.  .AND.  .OR.  .EQV.  .NEQV.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>!=</B> </TD><TD valign=bottom>
+&&     ||
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <P>
 The suggested suffix for Fortran input files is ".ff" for code files unless
 they contain $SYSTEM directives in which case ".FF" is preferred. $INCLUDE
@@ -118,52 +143,40 @@ This naming convention is not required.
 The syntax for the directive lines is as follows:
 <P>
 <PRE>
+    :VARIABLE DEFINITION FOR CONDITIONALS
      $DEFINE   variable_name[=expression]                 [! comment ]
      $UNDEFINE variable_name                              [! comment ]
-<P>
-     $IF       {LOGICAL or INTEGER expression}            [! comment ]
-      or
-     $IFDEF    {variable_name}                            [! comment ]
-      or
-     $IFNDEF   {variable_name}                            [! comment ]
+    :CONDITIONAL CODE SELECTION
+     $IF       expression| [$IFDEF|$IFNDEF variable_name] [! comment ]
                { sequence of source statements}
-     [$ELSEIF  {LOGICAL or INTEGER expression}            [! comment ]
+     [$ELSEIF|$ELIF  {LOGICAL or INTEGER expression}      [! comment ]
                { sequence of source statements}]
      [$ELSE                                               [! comment ]
                { sequence of source statements}]
      $ENDIF                                               [! comment ]
+     $STOP     [stop_value]                               [! comment ]
 <P>
-     $PARCEL   [name]                                     [! comment ]
-     $POST     name                                       [! comment ]
-     $SET      name  string
-     $INCLUDE  filename                                   [! comment ]
+    :MACRO STRING EXPANSION AND TEXT REPLAY
+     $SET      varname  string
+     $IMPORT   envname(s)
+     $PARCEL   blockname                                  [! comment ]
+     $POST     blockname                                  [! comment ]
+<P>
+    :FILE AND TEXT BLOCK USAGE
      $OUTPUT   filename  [-append]                        [! comment ]
-     $BLOCK    [comment|null|write|help|version]|
-               [variable [-varname NAME]]
+     $INCLUDE  filename                                   [! comment ]
+     $BLOCK    [comment|null|write|help|version|variable [-varname NAME]]
                [-file NAME [-append]]                     [! comment ]
 <P>
-     $PRINTENV predefined_name|environment_variable_name  [! comment ]
-     $SYSTEM system_command                               [! comment ]
-     $IDENT    metadata                                   [! comment ]
-     $@(#)     metadata                                   [! comment ]
+    :IDENTIFIERS
+     $IDENT | $@(#)    metadata                           [! comment ]
+<P>
+    :INFORMATION
      $MESSAGE  message_to_stderr
      $SHOW                                                [! comment ]
-     $STOP {stop_value}                                   [! comment ]
 <P>
-</PRE>
-Compiler directives are specified by a "$" in column one, followed by a
-keyword.
-<P>
-An exclamation character on a valid directive begins an in-line comment
-that is terminated by an end-of-line.
-<P>
-Any LOGICAL expression composed of integer constants, parameters
-and operators, is valid. Operators are
-<P>
-<PRE>
-     .NOT.  .AND.  .OR.  .EQV.  .NEQV.  .EQ.  .NE.  .GE.
-     .GT.   .LE.   .LT.  +      -       *     /     (
-     )      **
+    :SYSTEM COMMANDS
+     $SYSTEM   system_command                             [! comment ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -243,6 +256,16 @@ currently "default", "doxygen","none","ford".
 THIS IS AN ALPHA FEATURE AND NOT FULLY IMPLEMENTED.
 </TD></TR>
 <TR valign=top><TD colspan=2>
+<B></B><B>--ident</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The output of the $IDENT directive is in the form of a
+comment by default. If this flag is set the output is
+of the form described in the $IDENT documentation
+so executables and object code can contain the metadata
+for use with the <B>what</B>(1) command. Note this generates an
+unused variable which some compilers might optimize
+away depending on what compilation options are used.
+</TD></TR>
+<TR valign=top><TD colspan=2>
 <B></B><B>-d</B> ignore|remove|blank </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Enable special treatment for lines beginning
 with "d" or "D" The letter will be left as-is
@@ -258,11 +281,10 @@ Display version and exit
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>--width</B> <I>n</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Maximum line length of the output file. Default
-is 1024. Typically used to trim fixed-format
-FORTRAN code that contains comments or "ident"
-labels past column 72 when compiling
-fixed-format Fortran code.
+Maximum line length of the output file. The default is 1024.
+Typically used to trim fixed-format FORTRAN code that
+contains comments or "ident" labels past column 72
+when compiling fixed-format Fortran code.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -287,8 +309,8 @@ Example:
 <P>
 <PRE>
     $define A=1
-    $define B=1
-    $define C=2
+    $define B= 10 - 1
+    $define C=1+1
     $if ( A + B ) / C .eq. 1
        (a+b)/c is one
     $endif
@@ -319,7 +341,8 @@ is not specified.
 <P>
 $IDENT metadata [-language fortran|c|shell]
 <P>
-Writes a line using SCCS-metadata format of the following forms:
+When the command line option "<B>-ident</B>" is specified this directive
+writes a line using SCCS-metadata format of one of the following forms:
 <P>
 <PRE>
      language:
@@ -330,11 +353,14 @@ Writes a line using SCCS-metadata format of the following forms:
 </PRE>
 This string is generally included for use with the <B>what</B>(1) command.
 <P>
-The default language is fortran. Depending on your compiler and the
+"$@(#)" is an alias for "$IDENT" so the source file itself will contain
+SCCS-metadata so the metadata can be displayed with <B>what</B>(1).
+<P>
+The default language is "fortran". Depending on your compiler and the
 optimization level used when compiling, these strings may or may not
 remain in the object files and executables created.
 <P>
-Do not use the characters double-quote, greater-than, backslash ("&gt;\)
+Do not use the characters double-quote, greater-than, backslash (ie. "&gt;\)
 in the metadata to remain compatible with SCCS metadata syntax.
 Do not use strings starting with " -" either.
 <P>
@@ -348,12 +374,12 @@ revert back to initial output file. @ is a synonym for stdout.
       -append [.true.|.false]
 <P>
 </PRE>
-Named files open at the beginning by default. Use the <B>-append</B> switch to
+Files open at the beginning by default. Use the <B>-append</B> switch to
 append to the end of an existing file instead of overwriting it.
 <P>
 $INCLUDE filename
 <P>
-Nested read of specified input file. Fifty (50) nesting levels are allowed.
+Read in specified input file. Fifty (50) nesting levels are allowed.
 <P>
 $PARCEL [name]
 <P>
@@ -377,49 +403,15 @@ compilers. Automatic breaking into continuation lines does not occur.
 <P>
 IF A $SET DIRECTIVE HAS BEEN DEFINED the "standard" preprocessor values
 ${FILE}, ${LINE}, ${DATE}, and ${TIME} are also available. The time
-data refers to the time of processing, not the current time nor the time
-of compilation or loading.
+refers to the time of processing, not the time of compilation or loading.
 <P>
-$PRINTENV name
+$IMPORT <B>names</B>(s)
 <P>
-If the name of an uppercase environment variable is given the value
-of the variable will be placed in the output file. If the value is a
-null string or if the variable is undefined output will be stopped.
-This allows the system shell to generate code lines. This is usually
-used to pass in information about the compiler environment. For
-example:
-<P>
-<PRE>
-     # If the following command were executed in the bash(1) shell&#46;&#46;&#46;
-<P>
-      export STAMP="      write(*,*)&#146;&#146;COMPILED ON:&#145;uname -s&#145;;AT &#145;date&#145;&#146;&#146;"
-<P>
-</PRE>
-the environment variable STAMP would be set to something like
-<P>
-<PRE>
-     write(*,*)&#146;&#146;COMPILED ON:Eureka;AT Wed, Jun 12, 2013  8:12:06 PM&#146;&#146;
-<P>
-</PRE>
-A version number would be another possibility
-<P>
-<PRE>
-     export VERSION="      program_version=2.2"
-<P>
-</PRE>
-Special predefined variable names are:
-<P>
-<PRE>
-     Variable Name      Output
-     PREP_DATE  &#46;&#46;&#46;...  PREP_DATE="12:58 14Jun2013"
-     Where code is assumed to have defined PREP_DATE as CHARACTER(LEN=15)
-     PREP_FILE  &#46;&#46;&#46;...  PREP_FILE="current filename"
-     Where code is assumed to have defined PREP_FILE as CHARACTER(LEN=1024)
-     PREP_LINE  &#46;&#46;&#46;...  PREP_LINE=    nnnnnn
-     Where code is assumed to have defined PREP_LINE as INTEGER
-<P>
-</PRE>
-<TABLE cellpadding=3>
+The values of environment variables may be imported such that their names
+and values will be set as if a $SET command had been done on them.
+<TABLE cellpadding=3><!-- tsb: The values of environment variables may be imported such that their names
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
 <B>$BLOCK [comment|null|write|help|version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 [-file NAME [-append]]
@@ -436,11 +428,11 @@ or
                  The Fortran generated is free-format. It is assumed the
                  output will not generate lines over 132 columns.
       HELP:      write text as a subroutine called HELP_USAGE
-      VERSION:   write text as a subroutine called HELP_VERSION
-                 prefixing lines with @(#) for use with the what(1) command.
+      VERSION:   write text as a subroutine called HELP_VERSION prefixing
+                 lines with @(#) for use with the what(1) command.
       NULL:      Do not write into current output file
-      VARIABLE:  write as a text variable. The name may be defined using the
-                 --varname switch. Default name is "textblock".
+      VARIABLE:  write as a text variable. The name may be defined using
+                 the --varname switch. Default name is "textblock".
       END:       End block of specially processed text
 <P>
 </PRE>
@@ -470,22 +462,35 @@ Example:
     $show
     $stop 0
 <P>
-    !======================================================================
-    !  CURRENT STATE
-    !     TOTAL LINES READ &#46;&#46;&#46;......... 2
-    !     CONDITIONAL_NESTING_LEVEL&#46;&#46;&#46;. 0
-    !     DATE&#46;&#46;&#46;...................... 11:18 21Jun2013
-    !     ARGUMENTS &#46;&#46;&#46;................ A=10 B C D -o paper
-    !  VARIABLES:
-    !     ! A                               !          10
-    !     ! B                               !           1
-    !     ! C                               !           1
-    !     ! D                               !           1
-    !     ! Z                               !          22
-    !  OPEN FILES:
-    !     ! ---- ! UNIT ! LINE NUMBER ! FILENAME
-    !     !    1 !    5 !           2 !
-    !======================================================================
+     &gt; !================================================================
+     &gt; !
+     &gt; ! Current state of prep(1):(18:39 20 Jun 2021)
+     &gt; ! Total lines read &#46;&#46;&#46;............ 2
+     &gt; ! Conditional nesting level&#46;&#46;&#46;.... 0
+     &gt; ! G_WRITE (general processing)&#46;&#46;&#46;. T
+     &gt; ! G_LLWRITE (write input lines)&#46;&#46;&#46; T
+     &gt; ! Arguments &#46;&#46;&#46;................... A=10 B C D -o paper
+     &gt; ! Open files:
+     &gt; !    unit ! line number ! filename
+     &gt; !       5 !           2 ! @
+     &gt; ! INCLUDE directories:
+     &gt; !    .
+     &gt; ! Variables:
+     &gt; !    $DEFINE UNKNOWN  =  0
+     &gt; !    $DEFINE LINUX  =  1
+     &gt; !    $DEFINE MACOS  =  2
+     &gt; !    $DEFINE WINDOWS  =  3
+     &gt; !    $DEFINE CYGWIN  =  4
+     &gt; !    $DEFINE SOLARIS  =  5
+     &gt; !    $DEFINE FREEBSD  =  6
+     &gt; !    $DEFINE OPENBSD  =  7
+     &gt; !    $DEFINE OS  =  1
+     &gt; !    $DEFINE A  =  10
+     &gt; !    $DEFINE B  =  1
+     &gt; !    $DEFINE C  =  1
+     &gt; !    $DEFINE D  =  1
+     &gt; !    $DEFINE Z  =  22
+     &gt; !================================================================
 <P>
 </PRE>
 $STOP stop_value
@@ -564,7 +569,9 @@ Predefined values are
 </PRE>
 $MESSAGE WARNING message
 <P>
-Write message to stderr
+Write message to stderr.
+<P>
+Messages for $MESSAGE do not treat an exclamation as starting a comment
 </BLOCKQUOTE>
 <A name=4>
 
@@ -576,11 +583,9 @@ Write message to stderr
 $IF constructs can be nested up to 20 levels deep. Note that using
 more than two levels typically makes input files less readable.
 <P>
-$BLOCK END is required after a $BLOCK or <B>--file</B> FILENAME is not written.
+$BLOCK is required after a $BLOCK or <B>--file</B> FILENAME is not written.
 <P>
 Nesting of $BLOCK sections not allowed.
-<P>
-Messages for $MESSAGE do not treat an exclamation as starting a comment
 </BLOCKQUOTE>
 <P>
 Input files
@@ -651,25 +656,25 @@ o
 Define variables on command line:
 <P>
 <PRE>
-   Typically, variables are defined on the command line when prep(1) is invoked
-   but can be grouped together into small files that are included with a
-   $INCLUDE or as input files.
+   Typically, variables are defined on the command line when prep(1) is
+   invoked but can be grouped together into small files that are included
+   with a $INCLUDE or as input files.
 <P>
      prep HP size=64 -i hp_directives.dirs test.F90 -o test_out.f90
 <P>
 </PRE>
 <BLOCKQUOTE>
-defines variables HP and SIZE as if the expressions had been on a $DEFINE
-and reads file "hp_directives.dirs" and then test.F90. Output is directed
-to test_out.f90
+defines variables HP and SIZE as if the expressions had been on a
+$DEFINE and reads file "hp_directives.dirs" and then test.F90.
+Output is directed to test_out.f90
 </BLOCKQUOTE>
 <P>
 Basic conditionals:
 <P>
 <PRE>
-   &gt; $! set value of variable "a" if it is not specified on the prep(1) command.
+   &gt; $! set variable "a" if not specified on the prep(1) command.
    &gt; $IF .NOT.DEFINED(A)
-   &gt; $   DEFINE a=1  ! so only define the following first version of SUB(3f)
+   &gt; $   DEFINE a=1  ! so only define the first version of SUB(3f) below
    &gt; $ENDIF
    &gt;    program conditional_compile
    &gt;       call sub()
@@ -695,56 +700,54 @@ Common use of $BLOCK
 <PRE>
    &gt; $!
    &gt; $BLOCK NULL --file manual.tex
-   &gt; This is a block of text that will be ignored on output but optionally
-   &gt; written to a doc/ file when $PREP_DOCUMENT_DIR is set.
-   &gt; $BLOCK END
+   &gt; This is a block of text that will be ignored on output but
+   &gt; optionally written to a doc/ file when $PREP_DOCUMENT_DIR is set.
+   &gt; $BLOCK
    &gt; $!
    &gt; $BLOCK COMMENT --file manual.tex --append
-   &gt; This is a block of text that will be converted to comments and optionally
-   &gt; appended to a doc/ file when $PREP_DOCUMENT_DIR is set.
-   &gt; $BLOCK END
+   &gt; This is a block of text that will be converted to comments and
+   &gt; optionally appended to a doc/ file when $PREP_DOCUMENT_DIR is set.
+   &gt; $BLOCK
    &gt; $!
 <P>
 </PRE>
-Creating a <B>help_usage</B>(3f) subroutine and writing the same documentation to
-a doc file (if the environment variable $PREP_DOCUMENT_DIR is set).
+Creating a <B>help_usage</B>(3f) subroutine and writing the same documentation
+to a doc file (if the environment variable $PREP_DOCUMENT_DIR is set).
 <P>
 <PRE>
-   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-   &gt; $! generate help_usage() procedure and file to run thru txt2man(1) or other
-   &gt; $! filters to make man(1) page if $PREP_DOCUMENT_DIR is set.
-   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt; $! generate help_usage() procedure and file to run thru txt2man(1)
+   &gt; $! to make man(1) page if $PREP_DOCUMENT_DIR is set.
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    &gt; $BLOCK HELP --file conditional_compile.man
    &gt; NAME
-   &gt;     conditional_compile - basic example for prep(1) pre-processor.
+   &gt;    conditional_compile - basic example for prep(1) pre-processor.
    &gt; SYNOPSIS
-   &gt;     conditional_example [--help] [--version]
+   &gt;    conditional_example [--help] [--version]
    &gt; DESCRIPTION
-   &gt;     This is a basic example program showing how documentation can be used
-   &gt;     to generate program help text
+   &gt;    This is a basic example program showing how documentation can be
+   &gt;    used to generate program help text
    &gt; OPTIONS
-   &gt;        --help
-   &gt;               display this help and exit
-   &gt;        --version
-   &gt;               output version information and exit
-   &gt; $BLOCK END
+   &gt;    --help     display this help and exit
+   &gt;    --version  output version information and exit
+   &gt; $BLOCK
 <P>
 </PRE>
 Creating a <B>help_version</B>(3f) subroutine
 <P>
 <PRE>
-   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    &gt; $! generate help_version() procedure
    &gt; $BLOCK VERSION
-   &gt; DESCRIPTION: example program showing conditional compilation with prep(1)
+   &gt; DESCRIPTION: example program showing conditional compilation
    &gt; PROGRAM:     conditional_compile
    &gt; VERSION:     1.0.0, 20160703
    &gt; AUTHOR:      John S. Urban
-   &gt; $BLOCK END
-   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   &gt; $BLOCK
+   &gt; $!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 <P>
 </PRE>
-Sample program using <B>help_usage</B>(3f) and <B>help_version</B>(3f) and <B>M_kracken95</B>(3f):
+Sample program using <B>help_usage</B>(f), <B>help_version</B>(3f) and <B>M_kracken95</B>(3f):
 <P>
 <PRE>
    &gt; program conditional_compile
@@ -761,49 +764,27 @@ Sample program using <B>help_usage</B>(3f) and <B>help_version</B>(3f) and <B>M_
 </BLOCKQUOTE>
 <A name=6>
 
-    <H4>&nbsp; &nbsp; MIXING BLOCK AND PRINTENV</H4>
-</A>
-<BLOCKQUOTE>
-<P>
-This example shows one way how an environment variable can be turned
-into a write statement
-<P>
-<PRE>
-   &gt; $block write
-   &gt; $ifdef HOME
-   &gt; $printenv HOME
-   &gt; $else
-   &gt;    HOME not defined
-   &gt; $endif
-   &gt; $block end
-<P>
-   Sample output
-<P>
-     write(io,&#146;(a)&#146;)&#146;/home/urbanjs/V600&#146;
-<P>
-</PRE>
-</BLOCKQUOTE>
-<A name=7>
-
     <H4>&nbsp; &nbsp; SET USAGE</H4>
 </A>
 <BLOCKQUOTE>
-Note values are case-sensitive by variable names are not, and there are
+Note values are case-sensitive but variable names are not, and there are
 pre-defined values for input file, line in input file, date and time that
-are NOT ACTIVE until at least one $SET directive is processed. That is,
-unset a $SET directive is processed no ${NAME} expansion occurs.
+are NOT ACTIVE until at least one $SET or $IMPORT directive is processed.
+That is, unless a variable name is defined no ${NAME} expansion occurs.
 <P>
 <PRE>
    &gt; $set author  William Shakespeare
+   &gt; $import HOME
    &gt; write(*,*)&#146;By ${AUTHOR}&#146;
    &gt; write(*,*)&#146;File ${FILE}&#146;
    &gt; write(*,*)&#146;Line ${LINE}&#146;
    &gt; write(*,*)&#146;Date ${DATE}&#146;
    &gt; write(*,*)&#146;Time ${TIME}&#146;
+   &gt; write(*,*)&#146;HOME ${HOME}&#146;
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=7>
 
      <H3>AUTHOR</H3>
 
@@ -811,7 +792,7 @@ unset a $SET directive is processed no ${NAME} expansion occurs.
 <BLOCKQUOTE>
 John S. Urban
 </BLOCKQUOTE>
-<A name=9>
+<A name=8>
 
      <H3>LICENSE</H3>
 
@@ -826,7 +807,7 @@ John S. Urban
 <P>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>prep (1)</TD> <TD align=right width=33%><I>January 08, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3115fc5f-d2b9-4ce7-909d-bc1ba7609af7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>prep (1)</TD> <TD align=right width=33%><I>January 09, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b997e38f-8bc8-4402-b226-77977c258054 using man macros.</FONT>
 <br><br><center><img src="images/prep.1.gif"></center>
 </div>
 </div>

@@ -23,7 +23,7 @@ character(len=21)       :: cscr
    elseif(sget('month_oo').ne.' ')then
          dat_values(1)=iget('month_oo')                              ! check -oo option for a year value if did not find -year VALUE
    endif
-   write(*,*)'YEAR=',dat_values(1)
+   !write(*,*)'YEAR=',dat_values(1)
 !-----------------------------------------------------------------------------------------------------------------------------------
    cscr=sget('month_month')                                          ! get month as string so can see if name or number or blank
    if(cscr.ne.'')then
@@ -165,7 +165,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2021-12-18 15:27:11 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 09:35:19 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
