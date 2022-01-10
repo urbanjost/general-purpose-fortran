@@ -643,8 +643,8 @@ end interface
    maxlen=len(string)
    if(present(matches))then
       matches=0
-      char_temp1(:) = s2c( trim(string) )
-      char_temp2(:) = s2c( trim(flags_) )
+      char_temp1 = s2c( trim(string) )
+      char_temp2 = s2c( trim(flags_) )
       call C_regexec(this%preg, char_temp1, size(matches,dim=2),matches, char_temp2, status_)
       !write(*,'("<",a,*(sp,i0.4:,","))')'MATCHES(1,:)=',matches(1,:)
       !write(*,'("<",a,*(sp,i0.4:,","))')'MATCHES(2,:)=',matches(2,:)
@@ -653,8 +653,8 @@ end interface
       !write(*,'(">",a,*(sp,i0.4:,","))')'MATCHES(1,:)=',matches(1,:)
       !write(*,'(">",a,*(sp,i0.4:,","))')'MATCHES(2,:)=',matches(2,:)
    else
-      char_temp1(:) = s2c( trim(string) )
-      char_temp2(:) = s2c( trim(flags_) )
+      char_temp1 = s2c( trim(string) )
+      char_temp2 = s2c( trim(flags_) )
       call C_regexec(this%preg, char_temp1, int(0,C_int), matches_, char_temp2, status_)
    endif
 

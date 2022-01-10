@@ -101,7 +101,7 @@ $(LIBRARY): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
 clean:
-	rm -f $(PROG) $(CPROG) $(OBJS) *.mod
+	rm -f $(PROG) $(CPROG) $(TPROG) $(OBJS) *.mod
 
 .SUFFIXES: $(SUFFIXES) .f90 .F90 .ff .FF .shf
 # .shf -- assumed to write Fortran code to stdout when executed
