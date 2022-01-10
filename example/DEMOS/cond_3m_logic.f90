@@ -1,4 +1,4 @@
-     program demo_M_logic
+     program demo_cond
      use M_journal, only : journal  ! for logging messages
      use M_strings, only : lower, delim,v2s ! convert character case; split string
      use M_logic, only : cond
@@ -13,6 +13,7 @@
      integer             :: ibegin(max_words), iterm(max_words)
      !----------------------------------------------------------------------------
      PREFIX='#'              ! for the example, assume direct lines use a # prefix
+     write(*,*)'find conditional lines #if #else #elseif #endif #define'
      !----------------------------------------------------------------------------
      READLINE: do                                   ! read loop to read input file
         read(*,'(a)',iostat=ios) line
@@ -46,4 +47,4 @@
            endif
         end select
      enddo READLINE
-     end program demo_M_logic
+     end program demo_cond

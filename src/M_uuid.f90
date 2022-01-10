@@ -315,7 +315,8 @@ integer             :: clicks,maxclicks
 real                :: rate
 real(kind=dp)       :: rate8,frac8
 integer(kind=i8b)   :: frac
-   call date_to_unix([1582,10,15,0,0,0,0,0,0],starttime,ierr)                  ! seconds from 1582-10-15-00-00-00 to Unix Epoch Time
+integer,parameter   :: ref(8)=[1582,10,15,0,0,0,0,0]
+   call date_to_unix(ref,starttime,ierr)                                       ! seconds from 1582-10-15-00-00-00 to Unix Epoch Time
    call date_to_unix(values,unixtime,ierr)                                     ! seconds from given date to Unix Epoch Time
    ! if system clock is higher resolution use it even though that makes fractional second wrong
    call system_clock(count=clicks,count_rate=rate,count_max=maxclicks)

@@ -498,14 +498,16 @@ subroutine regcomp(this,pattern,flags,nmatch,status)
 
 ! ident_1="@(#)M_exec::regcomp(3f): compile regular expression"
 
-type(regex_type), intent(out)          :: this
-character(len=*), intent(in)           :: pattern
-character(len=*), intent(in), optional :: flags
-integer, intent(out), optional         :: nmatch
-integer, intent(out), optional         :: status
-   character(len=10,kind=C_char)       :: flags_
-   integer(C_int)                      :: nmatch_
-   integer(C_int)                      :: status_
+type(regex_type), intent(out)            :: this
+character(len=*), intent(in)             :: pattern
+character(len=*), intent(in), optional   :: flags
+integer, intent(out), optional           :: nmatch
+integer, intent(out), optional           :: status
+character(len=10,kind=C_char)            :: flags_
+integer(C_int)                           :: nmatch_
+integer(C_int)                           :: status_
+character(kind=c_char,len=1),allocatable :: char_temp1(:)
+character(kind=c_char,len=1),allocatable :: char_temp2(:)
 
    interface
      subroutine C_regcomp(preg,pattern,flags,nmatch,status) bind(C,name="C_regcomp")
@@ -527,7 +529,9 @@ integer, intent(out), optional         :: status
    if (present(flags)) flags_=flags
    this%preg = C_NULL_ptr
    call C_regalloc(this%preg)
-   call C_regcomp(this%preg, s2c(trim(pattern)), s2c(trim(flags)), nmatch_, status_)
+   char_temp1 = s2c( trim(pattern) )
+   char_temp2 = s2c( trim(flags) )
+   call C_regcomp(this%preg, char_temp1, char_temp2, nmatch_, status_)
    if (present(nmatch)) then
      nmatch=nmatch_
    endif
@@ -607,25 +611,27 @@ logical function regexec(this,string,matches,flags,status) result(match)
 
 ! ident_2="@(#)M_exec::regexec(3f): Execute a compiled RE(regular expression) against a string"
 
-type(regex_type), intent(in)           :: this
-character(len=*), intent(in)           :: string
-character(len=*), intent(in), optional :: flags
-integer, intent(out), optional         :: matches(:,:)
-integer, intent(out), optional         :: status
-   integer(C_int)                      :: status_, matches_(2,1)
-   character(len=10,kind=C_char)       :: flags_
-   integer                             :: maxlen
-   interface
-      subroutine C_regexec(preg,string,nmatch,matches,flags,status) bind(C,name="C_regexec")
-        import
-        type(C_ptr), intent(in), value           :: preg
-        character(len=1,kind=C_char), intent(in) :: string(*)
-        integer(C_int), intent(in), value        :: nmatch
-        integer(C_int), intent(out)              :: matches(2,nmatch)
-        character(len=1,kind=C_char), intent(in) :: flags(*)
-        integer(C_int), intent(out)              :: status
-      end subroutine C_regexec
-   end interface
+type(regex_type), intent(in)             :: this
+character(len=*), intent(in)             :: string
+character(len=*), intent(in), optional   :: flags
+integer, intent(out), optional           :: matches(:,:)
+integer, intent(out), optional           :: status
+integer(C_int)                           :: status_, matches_(2,1)
+character(len=10,kind=C_char)            :: flags_
+integer                                  :: maxlen
+character(kind=c_char,len=1),allocatable :: char_temp1(:)
+character(kind=c_char,len=1),allocatable :: char_temp2(:)
+interface
+   subroutine C_regexec(preg,string,nmatch,matches,flags,status) bind(C,name="C_regexec")
+     import
+     type(C_ptr), intent(in), value           :: preg
+     character(len=1,kind=C_char), intent(in) :: string(*)
+     integer(C_int), intent(in), value        :: nmatch
+     integer(C_int), intent(out)              :: matches(2,nmatch)
+     character(len=1,kind=C_char), intent(in) :: flags(*)
+     integer(C_int), intent(out)              :: status
+   end subroutine C_regexec
+end interface
 
    if(present(flags))then
       flags_=flags
@@ -637,7 +643,9 @@ integer, intent(out), optional         :: status
    maxlen=len(string)
    if(present(matches))then
       matches=0
-      call C_regexec(this%preg, s2c(trim(string)), size(matches,dim=2),matches, s2c(trim(flags_)), status_)
+      char_temp1(:) = s2c( trim(string) )
+      char_temp2(:) = s2c( trim(flags_) )
+      call C_regexec(this%preg, char_temp1, size(matches,dim=2),matches, char_temp2, status_)
       !write(*,'("<",a,*(sp,i0.4:,","))')'MATCHES(1,:)=',matches(1,:)
       !write(*,'("<",a,*(sp,i0.4:,","))')'MATCHES(2,:)=',matches(2,:)
       where(matches(1,:).ge.0)matches(1,:)=matches(1,:)+1
@@ -645,7 +653,9 @@ integer, intent(out), optional         :: status
       !write(*,'(">",a,*(sp,i0.4:,","))')'MATCHES(1,:)=',matches(1,:)
       !write(*,'(">",a,*(sp,i0.4:,","))')'MATCHES(2,:)=',matches(2,:)
    else
-      call C_regexec(this%preg, s2c(trim(string)), int(0,C_int), matches_, s2c(trim(flags_)), status_)
+      char_temp1(:) = s2c( trim(string) )
+      char_temp2(:) = s2c( trim(flags_) )
+      call C_regexec(this%preg, char_temp1, int(0,C_int), matches_, char_temp2, status_)
    endif
 
    match = status_==0

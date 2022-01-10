@@ -15,7 +15,7 @@ integer,intent(in) :: i
       call trimit('@(#)Compiler Version .... '//trim(compiler_version())//'>')
       call trimit('@(#)Compiler Options .... '//trim(compiler_options())//'>')
       call trimit('@(#)Compile Date ........ '//&
-     &'Sun 09 Jan 2022 03:07:27 AM EST>')
+     &'Sun 09 Jan 2022 10:50:36 PM EST>')
      call trimit('@(#)Compiled on node:>')
       call trimit('@(#) Nodename ........... '// &
      &'venus>')

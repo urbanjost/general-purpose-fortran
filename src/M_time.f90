@@ -409,9 +409,10 @@ integer,intent(out)             :: ierr         ! return 0 on success, otherwise
 real(kind=realtime)             :: julian
 real(kind=realtime),save        :: julian_at_epoch
 logical,save                    :: first=.true.
+integer,parameter               :: ref(8)=[1970,1,1,0,0,0,0,0]
 !-----------------------------------------------------------------------------------------------------------------------------------
 if(first) then                                        ! Convert zero of Unix Epoch Time to Julian Date and save
-   call date_to_julian([1970,1,1,0,0,0,0,0],julian_at_epoch,ierr)
+   call date_to_julian(ref,julian_at_epoch,ierr)
    if(ierr.ne.0) return                               ! Error
    first=.false.
 endif
@@ -504,6 +505,7 @@ real(kind=realtime)              :: julian                              ! Unix t
 real(kind=realtime)              :: local_unixtime
 real(kind=realtime),save         :: Unix_Origin_as_Julian               ! start of Unix Time as Julian Date
 logical,save                     :: first=.TRUE.
+integer,parameter               :: ref(8)=[1970,1,1,0,0,0,0,0]
 !  Notice that the value UNIXTIME can be any of several types ( INTEGER,REAL,REAL(KIND=REALTIME))
    select type(unixtime)
    type is (integer);             local_unixtime=dble(unixtime)
@@ -512,7 +514,7 @@ logical,save                     :: first=.TRUE.
    end select
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(first)then                                                             ! Initialize calculated constants on first call
-      call date_to_julian([1970,1,1,0,0,0,0,0],Unix_Origin_as_Julian,ierr)   ! Compute start of Unix Time as a Julian Date
+      call date_to_julian(ref,Unix_Origin_as_Julian,ierr)                    ! Compute start of Unix Time as a Julian Date
       if(ierr.ne.0) return                                                   ! Error
       first=.FALSE.
    endif
@@ -605,6 +607,7 @@ integer                     :: ordinal                ! the returned number of d
 real(kind=realtime)         :: unixtime               ! Unix time (seconds)
 real(kind=realtime)         :: unix_first_day
 integer                     :: ierr                   ! return 0 on success, otherwise 1 from date_to_unix(3f)
+integer                     :: temp_dat(8)
    if(present(dat))then
      dat_local=dat
    else
@@ -615,7 +618,8 @@ integer                     :: ierr                   ! return 0 on success, oth
       call stderr('*d2o* bad date array')
       ordinal=-1                                      ! initialize to bad value
    else
-      call date_to_unix([dat_local(1),1,1,dat_local(4),0,0,0,0],unix_first_day,ierr)
+      temp_dat=[dat_local(1),1,1,dat_local(4),0,0,0,0]
+      call date_to_unix(temp_dat,unix_first_day,ierr)
       ordinal=int((unixtime-unix_first_day)/secday)+1
    endif
 end function d2o
@@ -733,9 +737,11 @@ subroutine ordinal_to_date(yyyy,ddd,dat)
 integer :: yyyy
 integer :: ddd
 integer :: dat(8)
+integer :: temp_dat(8)
    !dat=[year,month,day,timezone,hour,minutes,seconds,milliseconds]
    ! find Julian day for first day of given year and add ordinal day -1 and convert back to a DAT
-   dat=j2d(d2j( [yyyy,1,1,0,12,0,0,0])+real(ddd-1,kind=realtime))
+   temp_dat=[yyyy,1,1,0,12,0,0,0]
+   dat=j2d( d2j(temp_dat) + real(ddd-1,kind=realtime) )
 end subroutine ordinal_to_date
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2556,7 +2562,9 @@ integer                         :: jan4weekday
 integer                         :: correction
 integer                         :: ordinal
 integer                         :: ierr
-   call dow( [iso_year,1,4,0,12,0,0,0], jan4weekday, ierr=ierr) ! get day of week for January 4th where Sun=1
+integer                         :: temp_dat(8)
+   temp_dat=[iso_year,1,4,0,12,0,0,0]
+   call dow( temp_dat, jan4weekday, ierr=ierr) ! get day of week for January 4th where Sun=1
    correction=jan4weekday+3                      ! calculate correction
    ordinal=iso_week*7+iso_weekday-correction     ! calculate ordinal day
    dat=o2d(ordinal,iso_year)                     ! convert ordinal to DAT (routine works with negative values or days past year end)
