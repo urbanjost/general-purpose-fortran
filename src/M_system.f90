@@ -4164,9 +4164,9 @@ character(len=*)               :: NAME
 character(len=*)               :: VALUE
 integer, optional, intent(out) :: STATUS
 integer                        :: loc_err
-integer,parameter              :: flag=1
 character(kind=c_char,len=1),allocatable :: temp1(:)
 character(kind=c_char,len=1),allocatable :: temp2(:)
+integer,parameter              :: flag=1
 
 interface
    integer(kind=c_int) function c_setenv(c_name,c_VALUE,flag) bind(C,NAME="setenv")
@@ -4235,7 +4235,7 @@ end subroutine set_environment_variable
 subroutine system_clearenv(ierr)
 !  emulating because not available on some platforms
 
-! ident_25="@(#)M_system::system_clearenv(3f): emulate clearenv(3c) to clear environment"
+! ident_24="@(#)M_system::system_clearenv(3f): emulate clearenv(3c) to clear environment"
 
 integer,intent(out),optional    :: ierr
    character(len=:),allocatable :: string
@@ -4326,7 +4326,7 @@ end subroutine system_clearenv
 !!    Public Domain
 subroutine system_unsetenv(name,ierr)
 
-! ident_26="@(#)M_system::system_unsetenv(3f): call unsetenv(3c) to remove variable from environment"
+! ident_25="@(#)M_system::system_unsetenv(3f): call unsetenv(3c) to remove variable from environment"
 
 character(len=*),intent(in)  :: name
 integer,intent(out),optional :: ierr
@@ -4411,7 +4411,7 @@ end subroutine system_unsetenv
 !!    Public Domain
 function system_readenv() result(string)
 
-! ident_27="@(#)M_system::system_readenv(3f): read next entry from environment table"
+! ident_26="@(#)M_system::system_readenv(3f): read next entry from environment table"
 
 character(len=:),allocatable  :: string
 character(kind=c_char)        :: c_buff(longest_env_variable+1)
@@ -4482,7 +4482,7 @@ subroutine fileglob(glob, list) ! NON-PORTABLE AT THIS POINT. REQUIRES ls(1) com
 !  The list can be zero names long, it is still allocated.
 implicit none
 
-! ident_28="@(#)M_system::fileglob(3f): Returns list of files using a file globbing pattern"
+! ident_27="@(#)M_system::fileglob(3f): Returns list of files using a file globbing pattern"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)   :: glob                   ! Pattern for the filenames (like: *.txt)
@@ -4560,7 +4560,7 @@ end subroutine fileglob
 subroutine system_uname(WHICH,NAMEOUT)
 implicit none
 
-! ident_29="@(#)M_system::system_uname(3f): call my_uname(3c) which calls uname(3c)"
+! ident_28="@(#)M_system::system_uname(3f): call my_uname(3c) which calls uname(3c)"
 
 character(KIND=C_CHAR),intent(in) :: WHICH
 character(len=*),intent(out)      :: NAMEOUT
@@ -4626,7 +4626,7 @@ end subroutine system_uname
 subroutine system_gethostname(NAME,IERR)
 implicit none
 
-! ident_30="@(#)M_system::system_gethostname(3f): get name of current host by calling gethostname(3c)"
+! ident_29="@(#)M_system::system_gethostname(3f): get name of current host by calling gethostname(3c)"
 
 character(len=:),allocatable,intent(out) :: NAME
 integer,intent(out)                      :: IERR
@@ -4967,7 +4967,7 @@ end function system_getpwuid
 !===================================================================================================================================
 pure function arr2str(array)  result (string)
 
-! ident_31="@(#)M_system::arr2str(3fp): function copies null-terminated char array to string"
+! ident_30="@(#)M_system::arr2str(3fp): function copies null-terminated char array to string"
 
 character(len=1),intent(in)  :: array(:)
 character(len=size(array))   :: string
@@ -4988,7 +4988,7 @@ end function arr2str
 !===================================================================================================================================
 pure function str2_carr(string) result (array)
 
-! ident_32="@(#)M_system::str2_carr(3fp): function copies trimmed string to null terminated char array"
+! ident_31="@(#)M_system::str2_carr(3fp): function copies trimmed string to null terminated char array"
 
 character(len=*),intent(in)     :: string
 character(len=1,kind=c_char)    :: array(len(string)+1)
@@ -5177,7 +5177,7 @@ end function C2F_string
 subroutine system_stat(pathname,values,ierr)
 implicit none
 
-! ident_33="@(#)M_system::system_stat(3f): call stat(3c) to get pathname information"
+! ident_32="@(#)M_system::system_stat(3f): call stat(3c) to get pathname information"
 
 character(len=*),intent(in)          :: pathname
 
@@ -5402,7 +5402,7 @@ end function system_dir
 ! copied from M_strings.ff to make stand-alone github version
 function matchw(tame,wild,ignorecase)
 
-! ident_34="@(#)M_strings::matchw(3f): function compares text strings, one of which can have wildcards ('*' or '?')."
+! ident_33="@(#)M_strings::matchw(3f): function compares text strings, one of which can have wildcards ('*' or '?')."
 
 logical                      :: matchw
 character(len=*)             :: tame       ! A string without wildcards
@@ -5504,7 +5504,7 @@ end function matchw
 !===================================================================================================================================
 elemental pure function lower(str) result (string)
 
-! ident_35="@(#)M_system::lower(3f): Changes a string to lowercase"
+! ident_34="@(#)M_system::lower(3f): Changes a string to lowercase"
 
 character(*), intent(in)     :: str
 character(len(str))          :: string
@@ -5645,7 +5645,7 @@ end function anyinteger_to_64bit
 function system_system(command)
 implicit none
 
-! ident_36="@(#)M_system::system_system(3f): call execute_command_line as a function"
+! ident_35="@(#)M_system::system_system(3f): call execute_command_line as a function"
 
 character(len=*),intent(in) :: command
 integer                     :: exitstat
