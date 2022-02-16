@@ -1,6 +1,7 @@
      program demo_poly2
      use M_draw
      integer :: i,j
+     integer :: ipaws, icolor
      real    :: xx,yy
         call prefsize(512,512)
         call vinit(' ') ! start graphics using device $M_DRAW_DEVICE

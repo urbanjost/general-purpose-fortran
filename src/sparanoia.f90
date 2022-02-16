@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-!-------------------------------------------------------------------------------
 subroutine sparanoia()
 implicit none
 character(len=*),parameter :: ident="@(#)sparanoia(3f): test real value operations in programming environment"

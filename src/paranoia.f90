@@ -1,5 +1,3 @@
-
-
 subroutine paranoia(precis)
 use M_journal, only : journal
 implicit none

@@ -326,7 +326,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '     flower --nocode *.f90 *.F90|spell',&
 '',&
 '     # grep code ignoring comments',&
-'     flower --nocomments *.f90 *.F90|grep -iw contains',&
+'     flower --nocomment *.f90 *.F90|grep -iw contains',&
 '',&
 'EXIT STATUS',&
 '   The following exit values are returned:',&
@@ -402,7 +402,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 !!      flower --nocode *.f90 *.F90|spell
 !!
 !!      # grep code ignoring comments
-!!      flower --nocomments *.f90 *.F90|grep -iw contains
+!!      flower --nocomment *.f90 *.F90|grep -iw contains
 !!
 !!##EXIT STATUS
 !!    The following exit values are returned:

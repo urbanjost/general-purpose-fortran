@@ -8,7 +8,7 @@
 
        ! assuming you have the NetPBM package installed
        ! set up output to create a GIF file called one.gif
-       call voutput('|ppmtogif >images/vexit.3m_draw.gif')
+       call voutput('|ppmtogif >vexit.3m_draw.gif')
 
        call vinit('p6') ! start graphics
        ! default window is -1 <= x <= 1, -1 <= y <= 1
@@ -29,7 +29,7 @@
 
        ! start second graphics session with new output
        ! device and output file
-       call voutput('|ppmtogif >images/vexit2.3m_draw.gif')
+       call voutput('|ppmtogif >vexit2.3m_draw.gif')
        call vinit('p6')
 
        do i=10,1,-1

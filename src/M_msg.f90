@@ -24,7 +24,7 @@ contains
 !===================================================================================================================================
 !>
 !!##NAME
-!!    str(3f) - [M_msg] converts any standard scalar type to a string
+!!    str(3f) - [M_msg] converts up to twenty standard scalar type values to a string
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS

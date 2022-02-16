@@ -6,10 +6,10 @@ use M_calcomp, only : MOVE, DRAW
 !     THIS ROUTINE PRODUCES A SYMBOL TABLE, WHICH SHOWS THE CHARACTERS
 !     AVAILABLE IN THE SYMBOL ROUTINE.
 !
-   character * 38 ichr1,ichr2
-   character * 60 ichr3
-   character * 28 ichr4
-   character * 1 ibcd
+   character*38 ichr1,ichr2
+   character*60 ichr3
+   character*28 ichr4
+   character*1 ibcd
    dimension znum(4)
    data znum /10293.84756,193.75,-204.86,-12345.6789/
    ichr1='CHARACTERS AVAILABLE IN SYMBOL ROUTINE'

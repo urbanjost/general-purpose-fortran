@@ -1,6 +1,7 @@
      program demo_textang
      use :: M_draw
      use :: M_units, only : cosd, sind
+     integer :: ipaws
 
      !! set up drawing environment
      call prefsize(600,600)

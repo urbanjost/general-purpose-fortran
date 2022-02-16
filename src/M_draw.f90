@@ -992,7 +992,7 @@
 !!
 !!      ! assuming you have the NetPBM package installed
 !!      ! set up output to create a GIF file called one.gif
-!!      call voutput('|ppmtogif >images/vexit.3m_draw.gif')
+!!      call voutput('|ppmtogif >vexit.3m_draw.gif')
 !!
 !!      call vinit('p6') ! start graphics
 !!      ! default window is -1 <= x <= 1, -1 <= y <= 1
@@ -1013,7 +1013,7 @@
 !!
 !!      ! start second graphics session with new output
 !!      ! device and output file
-!!      call voutput('|ppmtogif >images/vexit2.3m_draw.gif')
+!!      call voutput('|ppmtogif >vexit2.3m_draw.gif')
 !!      call vinit('p6')
 !!
 !!      do i=10,1,-1
@@ -1041,9 +1041,9 @@
 !!
 !!       The special file names are
 !!
-!!         -  is standard output
-!!         +  is standard error
-!!         |  command will create a pipe to "command"
+!!         * -  is standard output
+!!         * +  is standard error
+!!         * |  command will create a pipe to "command"
 !!
 !!       If the open of the file fails, an attempt is made to append to file
 !!       "M_DRAW_OUTPUT". If this fails, standard output is used.
@@ -1066,7 +1066,7 @@
 !!    ! want a 400x400 raster output
 !!    call prefsize(400,400)
 !!    ! convert PPM to a GIF file using ppmtogif(1)
-!!    call voutput('|ppmtogif >images/voutput.3m_draw.gif')
+!!    call voutput('|ppmtogif >voutput.3m_draw.gif')
 !!    ! start graphics using PPM device
 !!    call vinit('p6')
 !!    ! draw a filled circle
@@ -1240,6 +1240,9 @@
 !!      use M_draw, only: prefsize, vinit, ortho2, clear, getkey
 !!      use M_draw, only: move2, rmove2, rdraw2, vexit
 !!      use M_draw, only: linewidth
+!!      implicit none
+!!      integer :: ipaws
+!!      integer :: i
 !!      call prefsize(500,500)
 !!      call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
 !!      call ortho2(-110.0,110.0,-110.0,110.0)
@@ -1768,6 +1771,7 @@
 !!    program demo_poly2
 !!    use M_draw
 !!    integer :: i,j
+!!    integer :: ipaws, icolor
 !!    real    :: xx,yy
 !!       call prefsize(512,512)
 !!       call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
@@ -2078,6 +2082,7 @@
 !!    integer nplanes
 !!    logical fill, back, backdir
 !!    integer :: ios
+!!    integer :: ipaws
 !!
 !!    print*,'Enter output device:'
 !!    read(*,'(a)',iostat=ios)device
@@ -3130,6 +3135,7 @@
 !!    program demo_textang
 !!    use :: M_draw
 !!    use :: M_units, only : cosd, sind
+!!    integer :: ipaws
 !!
 !!    !! set up drawing environment
 !!    call prefsize(600,600)
@@ -3687,7 +3693,7 @@
 !!    implicit none
 !!    real :: x1=-20.0, x2=20.0, y1=-20.0, y2=20.0
 !!       call prefsize(int(x2-x1)*30,int(y2-y1)*30)
-!!       !!call voutput('|ppmtogif >images/textjustify.3M_draw.gif')
+!!       !!call voutput('|ppmtogif >textjustify.3M_draw.gif')
 !!       !!call vinit('p6')
 !!       call vinit(' ')
 !!       call page(x1,x2,y1,y2)
@@ -7774,7 +7780,6 @@ module M_draw
 ! trim and append null to intent(in) character strings
 ! logical to _Bool mapping not consistent across compilers, g95 does not even define KIND=C_BOOL; so make NAME_F routines
 !
-use M_journal, only : journal
 use ISO_C_BINDING
 implicit none
 
@@ -7954,8 +7959,6 @@ end type MATRIX
  public :: ycentertext
  public :: yobbarays
 !public :: verror
-
- public :: test_suite_M_draw
 
 ! integer,parameter :: C_BOOL = SELECTED_INT_KIND(1) ! _Bool ! integer*1
 !-------------------------------------------------------------------------------
@@ -9872,273 +9875,6 @@ end function s2c
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
-subroutine test_suite_M_draw()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-!! setup
-   call test_backface()
-   call test_backfacedir()
-   call test_boxtext()
-   call test_centertext()
-   call test_clipping()
-   call test_curvebasis()
-   call test_drawchar()
-   call test_drawstr()
-   call test_fixedwidth()
-   call test_font()
-   call test_getmatrix()
-   call test_isobj()
-   call test_linestyle()
-   call test_loadmatrix()
-   call test_loadobj()
-   call test_multmatrix()
-   call test_patch()
-   call test_patchbasis()
-   call test_polyfill()
-   call test_polyhatch()
-   call test_printattribs()
-   call test_printvdevice()
-   call test_pushdev()
-   call test_rcurve()
-   call test_saveobj()
-   call test_strlength()
-   call test_vgetdev()
-   call test_vinit()
-   call test_vnewdev()
-   call test_voutput()
-   call test_vsetflush()
-   ! fortran extensions
-   call test_invokeobj()
-   call test_pop()
-   call test_push()
-   call test_page()
-   call test_page_rri()
-   call test_biggest_ortho2()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_backface()
-implicit none
-   call unit_check_start('backface',msg='')
-   !!call unit_check('backface', 0.eq.0, 'checking',100)
-   call unit_check_done('backface',msg='')
-end subroutine test_backface
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_backfacedir()
-implicit none
-   call unit_check_start('backfacedir',msg='')
-   !!call unit_check('backfacedir', 0.eq.0, 'checking',100)
-   call unit_check_done('backfacedir',msg='')
-end subroutine test_backfacedir
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_boxtext()
-implicit none
-   call unit_check_start('boxtext',msg='')
-   !!call unit_check('boxtext', 0.eq.0, 'checking',100)
-   call unit_check_done('boxtext',msg='')
-end subroutine test_boxtext
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_centertext()
-implicit none
-   call unit_check_start('centertext',msg='')
-   !!call unit_check('centertext', 0.eq.0, 'checking',100)
-   call unit_check_done('centertext',msg='')
-end subroutine test_centertext
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_clipping()
-implicit none
-   call unit_check_start('clipping',msg='')
-   !!call unit_check('clipping', 0.eq.0, 'checking',100)
-   call unit_check_done('clipping',msg='')
-end subroutine test_clipping
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_curvebasis()
-implicit none
-   call unit_check_start('curvebasis',msg='')
-   !!call unit_check('curvebasis', 0.eq.0, 'checking',100)
-   call unit_check_done('curvebasis',msg='')
-end subroutine test_curvebasis
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_drawchar()
-implicit none
-   call unit_check_start('drawchar',msg='')
-   !!call unit_check('drawchar', 0.eq.0, 'checking',100)
-   call unit_check_done('drawchar',msg='')
-end subroutine test_drawchar
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_drawstr()
-implicit none
-   call unit_check_start('drawstr',msg='')
-   !!call unit_check('drawstr', 0.eq.0, 'checking',100)
-   call unit_check_done('drawstr',msg='')
-end subroutine test_drawstr
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_fixedwidth()
-implicit none
-   call unit_check_start('fixedwidth',msg='')
-   !!call unit_check('fixedwidth', 0.eq.0, 'checking',100)
-   call unit_check_done('fixedwidth',msg='')
-end subroutine test_fixedwidth
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_font()
-implicit none
-   call unit_check_start('font',msg='')
-   !!call unit_check('font', 0.eq.0, 'checking',100)
-   call unit_check_done('font',msg='')
-end subroutine test_font
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_getmatrix()
-implicit none
-   call unit_check_start('getmatrix',msg='')
-   !!call unit_check('getmatrix', 0.eq.0, 'checking',100)
-   call unit_check_done('getmatrix',msg='')
-end subroutine test_getmatrix
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_isobj()
-implicit none
-   call unit_check_start('isobj',msg='')
-   !!call unit_check('isobj', 0.eq.0, 'checking',100)
-   call unit_check_done('isobj',msg='')
-end subroutine test_isobj
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_linestyle()
-implicit none
-   call unit_check_start('linestyle',msg='')
-   !!call unit_check('linestyle', 0.eq.0, 'checking',100)
-   call unit_check_done('linestyle',msg='')
-end subroutine test_linestyle
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_loadmatrix()
-implicit none
-   call unit_check_start('loadmatrix',msg='')
-   !!call unit_check('loadmatrix', 0.eq.0, 'checking',100)
-   call unit_check_done('loadmatrix',msg='')
-end subroutine test_loadmatrix
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_loadobj()
-implicit none
-   call unit_check_start('loadobj',msg='')
-   !!call unit_check('loadobj', 0.eq.0, 'checking',100)
-   call unit_check_done('loadobj',msg='')
-end subroutine test_loadobj
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_multmatrix()
-implicit none
-   call unit_check_start('multmatrix',msg='')
-   !!call unit_check('multmatrix', 0.eq.0, 'checking',100)
-   call unit_check_done('multmatrix',msg='')
-end subroutine test_multmatrix
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_patch()
-implicit none
-   call unit_check_start('patch',msg='')
-   !!call unit_check('patch', 0.eq.0, 'checking',100)
-   call unit_check_done('patch',msg='')
-end subroutine test_patch
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_patchbasis()
-implicit none
-   call unit_check_start('patchbasis',msg='')
-   !!call unit_check('patchbasis', 0.eq.0, 'checking',100)
-   call unit_check_done('patchbasis',msg='')
-end subroutine test_patchbasis
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_polyfill()
-implicit none
-   call unit_check_start('polyfill',msg='')
-   !!call unit_check('polyfill', 0.eq.0, 'checking',100)
-   call unit_check_done('polyfill',msg='')
-end subroutine test_polyfill
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_polyhatch()
-implicit none
-   call unit_check_start('polyhatch',msg='')
-   !!call unit_check('polyhatch', 0.eq.0, 'checking',100)
-   call unit_check_done('polyhatch',msg='')
-end subroutine test_polyhatch
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_printattribs()
-implicit none
-   call unit_check_start('printattribs',msg='')
-   !!call unit_check('printattribs', 0.eq.0, 'checking',100)
-   call unit_check_done('printattribs',msg='')
-end subroutine test_printattribs
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_printvdevice()
-implicit none
-   call unit_check_start('printvdevice',msg='')
-   !!call unit_check('printvdevice', 0.eq.0, 'checking',100)
-   call unit_check_done('printvdevice',msg='')
-end subroutine test_printvdevice
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_pushdev()
-implicit none
-   call unit_check_start('pushdev',msg='')
-   !!call unit_check('pushdev', 0.eq.0, 'checking',100)
-   call unit_check_done('pushdev',msg='')
-end subroutine test_pushdev
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_rcurve()
-implicit none
-   call unit_check_start('rcurve',msg='')
-   !!call unit_check('rcurve', 0.eq.0, 'checking',100)
-   call unit_check_done('rcurve',msg='')
-end subroutine test_rcurve
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_saveobj()
-implicit none
-   call unit_check_start('saveobj',msg='')
-   !!call unit_check('saveobj', 0.eq.0, 'checking',100)
-   call unit_check_done('saveobj',msg='')
-end subroutine test_saveobj
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_strlength()
-implicit none
-   call unit_check_start('strlength',msg='')
-   !!call unit_check('strlength', 0.eq.0, 'checking',100)
-   call unit_check_done('strlength',msg='')
-end subroutine test_strlength
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_vgetdev()
-implicit none
-   call unit_check_start('vgetdev',msg='')
-   !!call unit_check('vgetdev', 0.eq.0, 'checking',100)
-   call unit_check_done('vgetdev',msg='')
-end subroutine test_vgetdev
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_vinit()
-implicit none
-   call unit_check_start('vinit',msg='')
-   !!call unit_check('vinit', 0.eq.0, 'checking',100)
-   call unit_check_done('vinit',msg='')
-end subroutine test_vinit
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_vnewdev()
-implicit none
-   call unit_check_start('vnewdev',msg='')
-   !!call unit_check('vnewdev', 0.eq.0, 'checking',100)
-   call unit_check_done('vnewdev',msg='')
-end subroutine test_vnewdev
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_voutput()
-implicit none
-   call unit_check_start('voutput',msg='')
-   !!call unit_check('voutput', 0.eq.0, 'checking',100)
-   call unit_check_done('voutput',msg='')
-end subroutine test_voutput
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_vsetflush()
-implicit none
-   call unit_check_start('vsetflush',msg='')
-   !!call unit_check('vsetflush', 0.eq.0, 'checking',100)
-   call unit_check_done('vsetflush',msg='')
-end subroutine test_vsetflush
-!===================================================================================================================================
-end subroutine test_suite_M_draw
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
@@ -10248,15 +9984,6 @@ end subroutine invokeobj
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_invokeobj()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-   call unit_check_start('invokeobj',msg='')
-   !!call unit_check('invokeobj', 0.eq.0, 'checking',100)
-   call unit_check_done('invokeobj',msg='')
-end subroutine test_invokeobj
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
@@ -10484,6 +10211,10 @@ end subroutine biggest_ortho2
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
+subroutine journal(string)
+character(len=*),intent(in) :: string
+write(*,'(a)')string
+end subroutine journal
 subroutine page_rri(xsize,ysize,icolor)
 real,intent(in)             :: xsize
 real,intent(in)             :: ysize
@@ -10494,33 +10225,6 @@ integer                     :: icolor
       call clear()
    call popattributes()
 end subroutine page_rri
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_page()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-   call unit_check_start('page',msg='')
-   !!call unit_check('page', 0.eq.0, 'checking',100)
-   call unit_check_done('page',msg='')
-end subroutine test_page
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_page_rri()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-   call unit_check_start('page_rri',msg='')
-   !!call unit_check('page_rri', 0.eq.0, 'checking',100)
-   call unit_check_done('page_rri',msg='')
-end subroutine test_page_rri
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_biggest_ortho2()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-   call unit_check_start('biggest_ortho2',msg='')
-   !!call unit_check('biggest_ortho2', 0.eq.0, 'checking',100)
-   call unit_check_done('biggest_ortho2',msg='')
-end subroutine test_biggest_ortho2
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
@@ -10553,15 +10257,6 @@ end subroutine pop
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_pop()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-   call unit_check_start('pop',msg='')
-   !!call unit_check('pop', 0.eq.0, 'checking',100)
-   call unit_check_done('pop',msg='')
-end subroutine test_pop
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -10627,15 +10322,86 @@ end subroutine test_pop
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine print(g1, g2, g3, g4, g5, g6, g7, g8, g9)
-use M_msg, only : str
 class(*),intent(in),optional :: g1 ,g2 ,g3 ,g4 ,g5, g6 ,g7 ,g8 ,g9
    call drawstr(str(g1, g2, g3, g4, g5, g6, g7, g8, g9))
 end subroutine print
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
+function str(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
+                  & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
+                  & sep)
+implicit none
 
+! ident_2="@(#)M_msg::str(3fp): writes a message to a string composed of any standard scalar types"
 
+class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
+class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
+class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
+class(*),intent(in),optional  :: genericf, genericg, generich, generici, genericj
+character(len=:),allocatable  :: str
+character(len=4096)           :: line
+integer                       :: istart
+integer                       :: increment
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
+   if(present(sep))then
+      increment=len(sep)+1
+      sep_local=sep
+   else
+      increment=2
+      sep_local=' '
+   endif
+
+   istart=1
+   line=''
+   if(present(generic0))call print_generic(generic0)
+   if(present(generic1))call print_generic(generic1)
+   if(present(generic2))call print_generic(generic2)
+   if(present(generic3))call print_generic(generic3)
+   if(present(generic4))call print_generic(generic4)
+   if(present(generic5))call print_generic(generic5)
+   if(present(generic6))call print_generic(generic6)
+   if(present(generic7))call print_generic(generic7)
+   if(present(generic8))call print_generic(generic8)
+   if(present(generic9))call print_generic(generic9)
+   if(present(generica))call print_generic(generica)
+   if(present(genericb))call print_generic(genericb)
+   if(present(genericc))call print_generic(genericc)
+   if(present(genericd))call print_generic(genericd)
+   if(present(generice))call print_generic(generice)
+   if(present(genericf))call print_generic(genericf)
+   if(present(genericg))call print_generic(genericg)
+   if(present(generich))call print_generic(generich)
+   if(present(generici))call print_generic(generici)
+   if(present(genericj))call print_generic(genericj)
+   str=trim(line)
+contains
+
+subroutine print_generic(generic)
+!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+class(*),intent(in) :: generic
+   select type(generic)
+      type is (integer(kind=int8));     write(line(istart:),'(i0)') generic
+      type is (integer(kind=int16));    write(line(istart:),'(i0)') generic
+      type is (integer(kind=int32));    write(line(istart:),'(i0)') generic
+      type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
+      type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
+      type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
+      type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+      type is (logical);                write(line(istart:),'(l1)') generic
+      type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
+      type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
+   end select
+   istart=len_trim(line)+increment
+   line=trim(line)//sep_local
+end subroutine print_generic
+
+end function str
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
@@ -10665,15 +10431,6 @@ end subroutine push
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_push()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-implicit none
-   call unit_check_start('push',msg='')
-   !!call unit_check('push', 0.eq.0, 'checking',100)
-   call unit_check_done('push',msg='')
-end subroutine test_push
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

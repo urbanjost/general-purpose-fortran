@@ -208,7 +208,6 @@ end subroutine test_random_int
 subroutine test_random_hex()
 
 integer :: i
-real    :: x
 intrinsic random_number
    call unit_check_start('random_hex',msg='')
    call init_random_seed(218595421)
@@ -250,7 +249,6 @@ subroutine test_random_string()
 
 intrinsic random_number
 integer           :: i
-real              :: x
 integer,parameter :: tests=100
 character(len=8)  :: alpha(tests)
 integer           :: repeats

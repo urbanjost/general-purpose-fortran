@@ -1,22 +1,12 @@
 #!/bin/bash
 #@(#) Makes the binary Hershey font file for M_DRAW
 #
-if [ -w /usr/share/hershey ]
-then
-   FONTLIB=/usr/share/hershey
-elif [ -w $HOME/.local/lib ]
-then
-   FONTLIB=$HOME/.local/lib/hershey
-else
-   mkdir -p ./hershey
-   FONTLIB=./hershey
-fi
-
-BINDIR=$(dirname $0)/PROGRAMS
+FONTLIB=/usr/share/hershey
+FONTLIB=./lib/hershey
+BINDIR=$(dirname $0)/../PROGRAMS/MAKE_HERSHEY
 PATH=$PATH:$BINDIR
 
 # uses ccall script to compile M_DRAW executables using machine-specific options
-# and place them in $(BINDIR)
 #
 if test ! -d $FONTLIB
 then 

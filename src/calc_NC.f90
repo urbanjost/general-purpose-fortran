@@ -3,6 +3,9 @@ subroutine calc_NC(name,args,iargs_type,n,fval,i,ier) ! look this name up to see
 !
 !@(#) user-added calculator call function for ncurses routines
 !
+!   The ncurses library lets you tree the screen as an array in which you can
+!   place characters, allowing you to precisely control the screen.
+!
 !-----------------------------------------------------------------------------------------------------------------------------------
 use M_journal, only : journal
 use M_calculator, only : x, y, values_len, values, iclen_calc, icname_calc, stuff, getvalue, stuffa

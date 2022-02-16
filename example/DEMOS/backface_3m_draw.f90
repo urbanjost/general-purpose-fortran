@@ -10,6 +10,7 @@
      integer nplanes
      logical fill, back, backdir
      integer :: ios
+     integer :: ipaws
 
      print*,'Enter output device:'
      read(*,'(a)',iostat=ios)device

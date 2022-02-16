@@ -271,6 +271,8 @@ real :: zlen
    endif
    if(alpha.lt.0..or.alpha.gt.88..or.beta.lt.1..or.beta.gt.90.)then
       write(*,*)'("*** dl_slices INPUT ANGLE ERROR ***") ALPHA=',alpha,'(allowed 0 to 88) BETA=',beta,'(allowed 1 to 90)'
+      if(allocated(h))deallocate(h)
+      if(allocated(p))deallocate(p)
       return
    endif
    if (amax.eq.aminq) then
@@ -590,7 +592,10 @@ real :: zlen
 !
    enddo mainloop
 !
-520 call move_(0.,0.)   ! PEN UP
+520 continue
+   call move_(0.,0.)   ! PEN UP
+   if(allocated(h))deallocate(h)
+   if(allocated(p))deallocate(p)
    return
 999 continue
    write(*,3002)

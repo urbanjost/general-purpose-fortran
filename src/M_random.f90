@@ -287,6 +287,7 @@ logical,save         :: called=.false.
    if(.not.called)then
    ! initialize seed
       call random_seed(size = n)
+      if(allocated(seed))deallocate(seed)
       allocate(seed(n))
       call random_seed(get=seed)
       called=.true.
@@ -300,6 +301,7 @@ logical,save         :: called=.false.
    call random_number(rand_val)
    ! use random value to choose an integer from first to last
    rand_int = first + floor((last-first+1)*rand_val)
+   if(allocated(seed))deallocate(seed)
 end function random_int
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -460,7 +462,7 @@ function random_kiss64()
 !
 ! Revised on April 14, 2010 21:40:44 by Jason Blevins (75.178.9.182)
 ! This version was modified by Jason Blevins to use "implicit none"
-! and to portably declare the 64-bit/eight-byte integer type.
+! and to declare the 64-bit/eight-byte integer type in a portable manner.
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer, parameter         :: i8b = selected_int_kind(18)  ! eight-byte integer
    integer(i8b), save         :: x, y, z, c
@@ -540,13 +542,13 @@ subroutine init_random_seed_by_system_clock()
    integer :: i, n, clock
    integer, dimension(:), allocatable :: seed
    call random_seed(size = n)
+   if(allocated(seed))deallocate(seed)
    allocate(seed(n))
    call system_clock(count=clock)
    seed = clock + 37 * (/ (i - 1, i = 1, n) /)
 !   write(*,*)seed
 !   write(*,*)(/ (i - 1, i = 1, n) /)
    call random_seed(put = seed)
-
    deallocate(seed)
 end subroutine init_random_seed_by_system_clock
 !==================================================================================================================================!
@@ -612,6 +614,7 @@ subroutine init_random_seed_by_dat()
   v(2) = ival(6) + 64*ival(5)                     ! skip value(4) because it is the timezone, which is typically constant
   v(3) = ival(3) + 32*ival(2) + 32*8*ival(1)
   call random_seed(size=n)
+  if(allocated(seed))deallocate(seed)
   allocate(seed(n))
   call random_seed()                              ! give the seed an implementation-dependent kick
   call random_seed(get=seed)
@@ -687,6 +690,7 @@ integer,intent(in) :: mine
    integer         :: i, n
    integer, dimension(:), allocatable :: seed
    call random_seed(size = n)
+   if(allocated(seed))deallocate(seed)
    allocate(seed(n))
    seed = mine + 37 * (/ (i - 1, i = 1, n) /)
   !write(*,*)seed

@@ -7,7 +7,7 @@
      implicit none
      real :: x1=-20.0, x2=20.0, y1=-20.0, y2=20.0
         call prefsize(int(x2-x1)*30,int(y2-y1)*30)
-        !!call voutput('|ppmtogif >images/textjustify.3M_draw.gif')
+        !!call voutput('|ppmtogif >textjustify.3M_draw.gif')
         !!call vinit('p6')
         call vinit(' ')
         call page(x1,x2,y1,y2)

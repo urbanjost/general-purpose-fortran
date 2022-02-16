@@ -151,7 +151,7 @@ subroutine date_to_julian(dat,julian,ierr)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !! AUTHOR:    John S. Urban
-!!##VERSION:   1.0 2015-12-21
+!!##VERSION:   2.0 2022-01-16
 !! REFERENCE: From Wikipedia, the free encyclopedia 2015-12-19
 ! * There is no year zero
 ! * Julian Date must be non-negative

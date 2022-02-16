@@ -169,7 +169,7 @@ character(len=256)           :: line
    call process_close(fp,ierr)
    ! check expected file
    open(newunit=lun,file='_scratch_.txt')
-   do i=1,5
+   do i=1,4
       read(lun,'(a)',iostat=ios)line
       if(ios.ne.0)exit
       call unit_check('process_writeline_array',line.eq.lines(i),'got ',line,'expected',line)
@@ -201,7 +201,7 @@ character(len=256)           :: line
    call process_close(fp,ierr)
    ! check expected file
    open(newunit=lun,file='_scratch_.txt')
-   do i=1,5
+   do i=1,size(lines)
       read(lun,'(a)',iostat=ios)line
       if(ios.ne.0)exit
       call unit_check('process_writeline_scalar',line.eq.lines(i),line)

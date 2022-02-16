@@ -29,7 +29,7 @@ usage()
 {
 cat << EOT
 NAME
-  txt2man - [DEVELOPER] convert flat ASCII text to man page format
+  txt2man - [DEVELOPER] convert flat ASCII text to manpage format
 SYNOPSIS
   txt2man [-hpTxX] [-t mytitle] [-P pname] [-r rel] [-s sect]
           [-v vol] [-I txt] [-B txt] [ifile]
@@ -83,7 +83,7 @@ DESCRIPTION
 		    code starts indented with a blank line
 
   Cross references  
-	      A cross reference (another man page) is defined by a word
+	      A cross reference (another manpage) is defined by a word
 	      followed by a number in parenthesis.
 
   Special sections:
@@ -106,7 +106,7 @@ OPTIONS
   -h          The option -h displays help.
   -P pname    Set pname as project name in header. Default to uname -s.
   -p          Probe title, section name and volume.
-  -t mytitle  Set mytitle as title of generated man page.
+  -t mytitle  Set mytitle as title of generated manpage.
   -r rel      Set rel as project name and release.
   -s sect     Set sect as section in heading, usually a value from 1 to 8.
   -v vol      Set vol as volume name, i.e. "Unix user 's manual".
@@ -301,25 +301,30 @@ BEGIN {
 		print ".SS" $0
 	sub(/^ +/, "")
 	section = $0
+	if (section == "NAME")
+		#print "\\fB"
+		#print ""
 	if (section == "SYNOPSIS")
 		print ".nf\n.fam C"
-	ls = 0		# line start index
-	pls = 0		# previous line start index
-	pnzls = 0	# previous non zero line start index
-	ni = 0		# indent level
-	ind[0] = 0	# indent offset table
+	line_start_index = 0		# line start index
+	previous_line_start_index = 0		# previous line start index
+	previous_non_zero_line_start_index = 0	# previous non zero line start index
+	indent_level = 0		# indent level
+	indent_offset_table[0] = 0	# indent offset table
 	prevblankline = 0
 	next
 }
 ####################################################################################################################################
 {
 	# Compute line start index, handle start of example display block
-	pls = ls
-	if (ls != 0)
-		pnzls = ls
+	previous_line_start_index = line_start_index
+	if (line_start_index != 0)
+		previous_non_zero_line_start_index = line_start_index
 	match($0, /[^ ]/)
-	ls = RSTART
-	if (pls == 0 && pnzls > 0 && ls > pnzls && $1 !~ /^[0-9\-\*o]\.*$/) {
+	line_start_index = RSTART
+	if (previous_line_start_index == 0 && previous_non_zero_line_start_index > 0  \
+	   && line_start_index > previous_non_zero_line_start_index  \
+	   && $1 !~ /^[0-9\-\*o]\.*$/) {
 		# example display block
 		if (prevblankline == 1) {
 			print ".PP"
@@ -327,15 +332,15 @@ BEGIN {
 		}
 		print ".nf\n.fam C"
 		in_bd = 1
-		eoff = ls
+		eoff = line_start_index
 	}
-	if (ls > 0 && ind[0] == 0)
-		ind[0] = ls
+	if (line_start_index > 0 && indent_offset_table[0] == 0)
+		indent_offset_table[0] = line_start_index
 }
 ####################################################################################################################################
 (in_bd + 0) == 1 {
 	# In example display block
-	if (ls != 0 && ls < eoff) {
+	if (line_start_index != 0 && line_start_index < eoff) {
 		# End of literal display block
 		in_bd = 0
 		print ".fam T\n.fi"
@@ -343,8 +348,8 @@ BEGIN {
 }
 ####################################################################################################################################
 section == "NAME" {
-	$1 = "\\fB" $1
-	sub(/ \- /, " \\fP- ")
+	$1 = "" $1
+	#sub(/ \- /, " \\fP- ")
 }
 ####################################################################################################################################
 section == "SYNOPSIS" {
@@ -443,7 +448,7 @@ section == "SYNOPSIS" {
 		prevblankline = 0
 		if (NF == 0)
 			next
-	} else if (pls == 0) {
+	} else if (previous_line_start_index == 0) {
 		# new paragraph
 		adjust_indent()
 	} else if (NF == 0) {
@@ -464,12 +469,12 @@ section == "SYNOPSIS" {
 ####################################################################################################################################
 function adjust_indent()
 {
-	if (ls > ind[ni]) {
-		ind[++ni] = ls
+	if (line_start_index > indent_offset_table[indent_level]) {
+		indent_offset_table[++indent_level] = line_start_index
 		print ".RS"
-	} else if (ls < ind[ni]) {
-		while (ls < ind[ni]) {
-			ni--
+	} else if (line_start_index < indent_offset_table[indent_level]) {
+		while (line_start_index < indent_offset_table[indent_level]) {
+			indent_level--
 			print ".RE"
 		}
 	}
