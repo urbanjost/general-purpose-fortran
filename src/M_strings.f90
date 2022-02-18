@@ -50,6 +50,8 @@
 !!      use M_strings, only : isnumber
 !!      use M_strings, only : fortran_name
 !!      use M_strings, only : describe
+!!      use M_strings, only : edit_distance
+!!      use M_strings, only : cc
 !!
 !!   TOKENS
 !!
@@ -198,6 +200,9 @@
 !!   MISCELLANEOUS
 !!
 !!       describe   returns a string describing the name of a single character
+!!       edit_distance  returns a naive edit distance using the Levenshtein
+!!                      distance algorithm
+!!       cc         return up to twenty strings of arbitrary length as an array
 !!
 !!   INTRINSICS
 !!
@@ -408,6 +413,8 @@ public isxdigit        !  elemental function returns .true. if CHR is a hexadeci
 public fortran_name    !  elemental function returns .true. if LINE is a valid Fortran name
 !----------------------#
 public describe        !  returns a string describing character
+public edit_distance   !  returns a naive edit distance using the Levenshtein distance algorithm
+public cc              !  return up to twenty strings of arbitrary length as an array
 !----------------------#
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -6392,6 +6399,193 @@ logical                              :: inside
    unquoted_str=unquoted_str(:iput-1)
 !-----------------------------------------------------------------------------------------------------------------------------------
 end function unquote
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+!>
+!!##NAME
+!!    edit_distance(3f) - [M_strings] returns a naive edit distance using
+!!    the Levenshtein distance algorithm
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    pure elemental function edit_distance(str1,str2) result (distance)
+!!
+!!     character(len=*),intent(in)   :: str1, str2
+!!     integer :: distance
+!!
+!!##DESCRIPTION
+!!
+!!   The Levenshtein distance function returns how many edits (deletions,
+!!   insertions, transposition) are required to turn one string into another.
+!!
+!!##EXAMPLES
+!!
+!!   Sample Program:
+!!
+!!    program demo_edit_distance
+!!    use M_strings, only : edit_distance
+!!       write(*,*)edit_distance('kittens','sitting')==3
+!!       write(*,*)edit_distance('geek','gesek')==1
+!!       write(*,*)edit_distance('Saturday','Sunday')==3
+!!    end program demo_edit_distance
+!!
+!!   Expected output
+!!
+!!     T
+!!     T
+!!     T
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+! The Levenshtein distance function returns how many edits (deletions,
+! insertions, transposition) are required to turn one string into another.
+pure elemental integer function edit_distance (a,b)
+character(len=*), intent(in) :: a, b
+integer                      :: len_a, len_b, i, j, cost
+! matrix for calculating Levenshtein distance
+integer                      :: matrix(0:len_trim(a), 0:len_trim(b))
+   len_a = len_trim(a)
+   len_b = len_trim(b)
+   matrix(:,0) = [(i,i=0,len_a)]
+   matrix(0,:) = [(j,j=0,len_b)]
+   do i = 1, len_a
+      do j = 1, len_b
+         cost=merge(0,1,a(i:i)==b(j:j))
+         matrix(i,j) = min(matrix(i-1,j)+1, matrix(i,j-1)+1, matrix(i-1,j-1)+cost)
+      enddo
+   enddo
+   edit_distance = matrix(len_a,len_b)
+end function edit_distance
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+!>
+!!##NAME
+!!    cc(3f) - [M_strings] return up to twenty strings of arbitrary length as an array
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function cc(str1,str2,...str20,len) result (vec)
+!!     character(len=*),intent(in),optional   :: str1, str2 ... str20
+!!     integer,intent(in),optional            :: len
+!!
+!!##DESCRIPTION
+!!    Given a list of up to twenty strings create a string array. The
+!!    length of the variables with be the same as the maximum length
+!!    of the input strings unless explicitly specified via LEN.
+!!
+!!    This is an alternative to the syntax
+!!
+!!      [ CHARACTER(LEN=NN) :: str1, str2, ... ]
+!!
+!!    that calulates the minimum length required to prevent truncation by
+!!    default.
+!!
+!!##OPTIONS
+!!    str1,str2, ... str20  input strings to combine into a vector
+!!    len   length of returned array variables
+!!
+!!##EXAMPLES
+!!
+!!   Sample Program:
+!!
+!!    program demo_cc
+!!    use M_strings, only: cc
+!!    implicit none
+!!       print "(*('""',a,'""':,',',1x))", cc("one")
+!!       print "(*('""',a,'""':,',',1x))", cc("one","two")
+!!       print "(*('""',a,'""':,',',1x))", cc("one","two","three")
+!!       print "(*('""',a,'""':,',',1x))", cc("one","two","three",&
+!!               & "four","five","six","seven","eight","nine","ten")
+!!    end program demo_cc
+!!
+!!   Expected output
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+function cc(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,len) result(vec)
+! return character array containing present arguments
+character(len=*),intent(in),optional  :: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10
+character(len=*),intent(in),optional  :: x11,x12,x13,x14,x15,x16,x17,x18,x19,x20
+integer,intent(in),optional           :: len
+character(len=:),allocatable          :: vec(:)
+integer                               :: ilen, icount, iset
+   ilen=0
+   icount=0
+   iset=0
+   call increment(x1)
+   call increment(x2)
+   call increment(x3)
+   call increment(x4)
+   call increment(x5)
+   call increment(x6)
+   call increment(x7)
+   call increment(x8)
+   call increment(x9)
+   call increment(x10)
+   call increment(x11)
+   call increment(x12)
+   call increment(x13)
+   call increment(x14)
+   call increment(x15)
+   call increment(x16)
+   call increment(x17)
+   call increment(x18)
+   call increment(x19)
+   call increment(x20)
+
+   if(present(len)) ilen=len
+   allocate (character(len=ilen) ::vec(icount))
+
+   call set(x1)
+   call set(x2)
+   call set(x3)
+   call set(x4)
+   call set(x5)
+   call set(x6)
+   call set(x7)
+   call set(x8)
+   call set(x9)
+   call set(x10)
+   call set(x11)
+   call set(x12)
+   call set(x13)
+   call set(x14)
+   call set(x15)
+   call set(x16)
+   call set(x17)
+   call set(x18)
+   call set(x19)
+   call set(x20)
+
+contains
+
+subroutine increment(str)
+character(len=*),intent(in),optional :: str
+   if(present(str))then
+      ilen=max(ilen,len_trim(str))
+      icount=icount+1
+   endif
+end subroutine increment
+
+subroutine set(str)
+character(len=*),intent(in),optional :: str
+   if(present(str))then
+      iset=iset+1
+      vec(iset)=str
+   endif
+end subroutine set
+
+end function cc
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!

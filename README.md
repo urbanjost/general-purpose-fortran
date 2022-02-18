@@ -1,7 +1,6 @@
 # General-Purpose Fortran Repository
 
 ## Shortcut
-### [Procedure Index](https://urbanjost.github.io/general-purpose-fortran/docs/man3.html)
 
 The majority of the documentation is in HTML at the 
 [Documentation](https://urbanjost.github.io/general-purpose-fortran/docs/index.html)
