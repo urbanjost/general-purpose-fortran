@@ -84,6 +84,7 @@
 !!       join           join an array of CHARACTER variables with specified
 !!                      separator
 !!       rotate13       apply trivial encryption algorithm ROT13 to a string
+!!       squeeze        delete adjacent duplicate characters from a string
 !!
 !!   CASE
 !!
@@ -101,6 +102,8 @@
 !!       nospace  function replaces whitespace with nothing
 !!       indent   find number of leading spaces
 !!       crop     function trims leading and trailing spaces
+!!
+!!       See Also: squeeze
 !!
 !!   QUOTES
 !!
@@ -260,7 +263,7 @@
 !!     use M_strings, only : replace, join
 !!     use M_strings, only : upper, lower, upper_quoted
 !!     use M_strings, only : rotate13
-!!     use M_strings, only : adjustc, compact, nospace, indent, crop
+!!     use M_strings, only : adjustc, compact, nospace, indent, crop, squeeze
 !!     use M_strings, only : unquote, quote
 !!     use M_strings, only : len_white, atleast, stretch, lenset, merge_str
 !!     use M_strings, only : switch, s2c, c2s
@@ -314,6 +317,7 @@ public modif           !  change string using a directive using rules similar to
 public transliterate   !  when characters in set one are found replace them with characters from set two
 public reverse         !  elemental function reverses character order in a string
 public join            !  append an array of character variables with specified separator into a single CHARACTER variable
+public squeeze         !  delete adjacent duplicate characters from a string
 public rotate13        !  apply trivial encryption algorithm ROT13 to string
 !----------------------# CHARACTER ARRAY VERSUS STRING
 public switch          !  generic switch between a string and an array of single characters (a2s,s2a)
@@ -4752,6 +4756,96 @@ end function merge_str
 !===================================================================================================================================
 !>
 !!##NAME
+!!    squeeze(3f) - [M_strings:EDITING] delete adjacent duplicate occurrences
+!!    of a character from a string
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function squeeze(STR,CHAR) result (OUTSTR)
+!!
+!!     character(len=*),intent(in)          :: STR
+!!     character(len=*),intent(in),optional :: CHAR
+!!     character(len=len(str))              :: OUTSTR
+!!
+!!##DESCRIPTION
+!!    squeeze(3f) reduces adjacent duplicates of the specified character to
+!!    a single character
+!!
+!!##OPTIONS
+!!    STR     input string in which to reduce adjacent duplicate characters
+!!            to a single character
+!!    CHAR    The character to remove adjacent duplicates of
+!!
+!!##RETURNS
+!!    OUTSTR  string with all contiguous adjacent occurrences of CHAR removed
+!!
+!!##EXAMPLES
+!!
+!!   Sample Program:
+!!
+!!    program demo_squeeze
+!!    use M_strings, only : squeeze
+!!    implicit none
+!!    character(len=:),allocatable :: strings(:)
+!!
+!!    strings=[ character(len=72) :: &
+!!    '', &
+!!    '"If I were two-faced, would I be wearing this one?" --- Abraham Lincoln',  &
+!!    '..1111111111111111111111111111111111111111111111111111111111111117777888', &
+!!    'I never give ''em hell, I just tell the truth, and they think it''s hell.',&
+!!    '                                                    --- Harry S Truman'    &
+!!    ]
+!!       call printme( trim(strings(1)), ' ' )
+!!       call printme( strings(2:4),     ['-','7','.'] )
+!!       call printme( strings(5),       [' ','-','r'] )
+!!    contains
+!!    impure elemental subroutine printme(str,chr)
+!!    character(len=*),intent(in) :: str
+!!    character(len=1),intent(in) :: chr
+!!    character(len=:),allocatable :: answer
+!!       write(*,'(a)')repeat('=',11)
+!!       write(*,'("IN:   <<<",g0,">>>")')str
+!!       answer=squeeze(str,chr)
+!!       write(*,'("OUT:  <<<",g0,">>>")')answer
+!!       write(*,'("LENS: ",*(g0,1x))')"from",len(str),"to",len(answer),"for a change of",len(str)-len(answer)
+!!       write(*,'("CHAR: ",g0)')chr
+!!    end subroutine printme
+!!    end program demo_squeeze
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+function squeeze(str,charp) result (outstr)
+
+character(len=*),intent(in)  :: str
+character(len=1),intent(in)  :: charp
+character(len=:),allocatable :: outstr
+character(len=1)             :: ch, last_one
+integer                      :: i, pio ! position in output
+
+   outstr=repeat(' ',len(str))      ! start with a string big enough to hold any output
+   if(len(outstr)==0)return         ! handle edge condition
+   last_one=str(1:1)                ! since at least this long start output with first character
+   outstr(1:1)=last_one
+   pio=1
+
+   do i=2,len(str)
+      ch=str(i:i)
+      pio=pio+merge(0,1, ch.eq.last_one.and.ch.eq.charp) ! decide whether to advance before saving
+      outstr(pio:pio)=ch  ! store new one or overlay the duplcation
+      last_one=ch
+   enddo
+
+   outstr=outstr(:pio)              ! trim the output string to just what was set
+end function squeeze
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
 !!    compact(3f) - [M_strings:WHITESPACE] converts contiguous whitespace
 !!    to a single character (or nothing)
 !!    (LICENSE:PD)
@@ -6472,6 +6566,7 @@ end function edit_distance
 !!##SYNOPSIS
 !!
 !!    function cc(str1,str2,...str20,len) result (vec)
+!!
 !!     character(len=*),intent(in),optional   :: str1, str2 ... str20
 !!     integer,intent(in),optional            :: len
 !!
@@ -6502,10 +6597,15 @@ end function edit_distance
 !!       print "(*('""',a,'""':,',',1x))", cc("one","two")
 !!       print "(*('""',a,'""':,',',1x))", cc("one","two","three")
 !!       print "(*('""',a,'""':,',',1x))", cc("one","two","three",&
-!!               & "four","five","six","seven","eight","nine","ten")
+!!               & "four","five","six","seven")
 !!    end program demo_cc
 !!
 !!   Expected output
+!!
+!!    "one"
+!!    "one", "two"
+!!    "one  ", "two  ", "three"
+!!    "one  ", "two  ", "three", "four ", "five ", "six  ", "seven"
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -8021,7 +8121,7 @@ end function ispunct
 !!      program demo_fortran_name
 !!      use M_strings, only : fortran_name
 !!      implicit none
-!!      character(len=*),parameter :: names(*)=[character(len=20) ::  &
+!!      character(len=20),parameter :: names(*)=[character(len=20) ::  &
 !!       & '_name',         'long_variable_name', 'name_',         &
 !!       & '12L',           'a__b__c  ',          'PropertyOfGas', &
 !!       & '3%3',           '$NAME',              ' ',             &
@@ -9160,6 +9260,7 @@ class(*),intent(in) :: generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
       !x!type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+      !x!type is (real(kind=real256));     write(line(istart:),'(1pg0)') generic
       type is (logical);                write(line(istart:),'(l1)') generic
       type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
@@ -9220,6 +9321,7 @@ integer :: i
       type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
       !x!type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
+      !x!type is (real(kind=real256));     write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
       type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic

@@ -131,7 +131,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-01-09 23:07:40 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 09:35:10 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -580,7 +580,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    convert text files with ASA carriage return to Adobe PDF files>',&
 '@(#)VERSION:        2.0, 20170210>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-01-09 23:08:01 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 10:17:44 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

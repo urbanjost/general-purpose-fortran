@@ -5,7 +5,7 @@
       use M_strings, only : replace, join
       use M_strings, only : upper, lower, upper_quoted
       use M_strings, only : rotate13
-      use M_strings, only : adjustc, compact, nospace, indent, crop
+      use M_strings, only : adjustc, compact, nospace, indent, crop, squeeze
       use M_strings, only : unquote, quote
       use M_strings, only : len_white, atleast, stretch, lenset, merge_str
       use M_strings, only : switch, s2c, c2s

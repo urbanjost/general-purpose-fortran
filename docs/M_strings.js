@@ -59,6 +59,7 @@ append("s2vs.3m_strings.html");
 append("sep.3m_strings.html");
 append("split.3m_strings.html");
 append("split2020.3m_strings.html");
+append("squeeze.3m_strings.html");
 append("stretch.3m_strings.html");
 append("string_to_value.3m_strings.html");
 append("string_to_values.3m_strings.html");

@@ -1,7 +1,7 @@
        program demo_fortran_name
        use M_strings, only : fortran_name
        implicit none
-       character(len=*),parameter :: names(*)=[character(len=20) ::  &
+       character(len=20),parameter :: names(*)=[character(len=20) ::  &
         & '_name',         'long_variable_name', 'name_',         &
         & '12L',           'a__b__c  ',          'PropertyOfGas', &
         & '3%3',           '$NAME',              ' ',             &

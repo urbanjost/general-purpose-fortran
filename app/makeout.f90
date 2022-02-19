@@ -86,82 +86,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    makeout(1f) - [DEVELOPER] Generate a Makefile from the sources (C, Fortran) in the current directory
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!        makeout program_files [ -o [filename]] [ -l LIBNAME] [ -v][ --version|--help]
-!!##DESCRIPTION
-!!   If all the source for a set of programs exists in a single directory,
-!!   with a subdirectory containing the files with main programs,
-!!   then makeout(1) creates a make(1) file for the current directory
-!!   and the specified programs. A mixture of C and Fortran files is
-!!   allowed. makeout(1) looks for dependencies created by INCLUDE(7f),
-!!   "#include", and USE(3f) statements in their most common forms.
-!!
-!!   The resulting makefile is quite simple, with few comments. The targets
-!!   and rules are explicit. The goal is to provide a well defined starting
-!!   point for your Fortran makefile. You might need to customize the
-!!   resultant makefile, but doing so is intended to be quite simple.
-!!
-!!   For more complex dependencies see your compiler information, as
-!!   several compilers have switches that will generate a very complete
-!!   list of dependencies.
-!!
-!!        gfortran  -M        # GNU/Linux GCC, Free Software Foundation, Inc.
-!!        ifort     -gen-dep  # Intel Compiler Suite
-!!
-!!##OPTIONS
-!!        program_files  optional name of program files.
-!!                       Defaults to current directory.
-!!        -o             output file. If not present, defaults to stdout.
-!!                       If present but no value is given "Makefile" is
-!!                       used.
-!!        -v             verbose mode. Shows lines in input files that
-!!                       were used to create the dependencies.
-!!        -mode          profile|production|debug
-!!                       If the default gfortran options are being used
-!!                       (ie. environment variables overide defaults)
-!!                       different compile and loader options are selected.
-!!                         profile     adds -pg option for gprof(1)
-!!                         production  good options for optimized performance
-!!                         debug       typical debug options
-!!        -l LIBNAME     optional library name to merge all *.o files into
-!!
-!!        --help         display command help and exit
-!!        --version      output version information and exit EXAMPLES
-!!
-!!##ENVIRONMENT
-!!    CC              defaults to "cc"
-!!    CFLAGS          defaults to "-O"
-!!
-!!    F90             defaults to "gfortran"
-!!    F90FLAGS        defaults to "-O"
-!!
-!!    FC              defaults to "gfortran"
-!!    FFLAGS          defaults to "-O"
-!!
-!!    LDFLAGS         defaults to "-s"
-!!    LIBS            defaults to "-lncurses -lsqlite3 -lreadline"
-!!##EXAMPLES
-!!
-!!   Common usage
-!!
-!!     makeout ../test/testit.f90 -o
-!!     make
-!!
-!!##SEE ALSO
-!!   If your project needs exceeds the capabilities of makeout(1), see
-!!   the documentation for gmake(1), make(1), cmake(1), cpp(1), fpp(1),
-!!   automake(1), create_makefile(1), create_makefiles(1), gccmakedep(1),
-!!   imake(1), makedepend(1), xmkmf(1) and many resources on the WWW.
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -177,7 +101,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    create Makefile for current directory>',&
 '@(#)VERSION:        1.0, 2017-12-09>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-02-11 04:27:51 UTC-300>',&
+'@(#)COMPILED:       2022-01-10 01:03:49 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -712,11 +636,11 @@ character(len=*),intent(in) :: filename
 end function scanfile
 !----------------------------------------------------------------------------------------------------------------------------------
 subroutine printmakevar(varname,default)
-!>
-!!
-!!  given environment variable name and default value look in environment
-!!  table for the variable and if it is set override the default, then
-!!  print the value as "VARNAME := VALUE" in makefile
+! 
+!  given environment variable name and default value look in environment
+!  table for the variable and if it is set override the default, then
+!  print the value as "VARNAME := VALUE" in makefile
+!
 implicit none
 character(len=*),intent(in)     :: varname
 character(len=*),intent(in)     :: default
