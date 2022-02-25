@@ -11,7 +11,7 @@ PROGFILES = ../app/rmdir-.f90 ../app/table2html.f90 ../app/logname-.f90 ../app/h
         ../app/explain.f90 ../app/paws.f90 ../app/fcmd.f90 ../app/whoami-.f90 ../app/qsort.f90 \
         ../app/colrm-.f90 ../app/quadratic.f90 ../app/asa2pdf.f90 ../app/fpm-time.f90 ../app/rename-.f90 \
         ../app/anagrams.f90 ../app/ln-.f90 ../app/lala.f90 ../app/unlink-.f90 ../app/note.f90 \
-        ../app/touch-.f90 ../app/true-.f90 ../app/makeout.f90 ../app/mv-.f90 ../app/unicode_example1.f90 \
+        ../app/touch-.f90 ../app/true-.f90 ../app/makeout.f90 ../app/mv-.f90 \
         ../app/sec2days.f90 ../app/mkdir-.f90 ../app/tabulate.f90 ../app/minefield.f90 ../app/prompt.f90 \
         ../app/match.f90 ../app/easter.f90 ../app/cylinder.f90 ../app/numdiff.f90 ../app/sqlite3_version.f90 \
         ../app/shuf-.f90 ../app/now.f90 ../app/echo-.f90 ../app/today.f90 ../app/change.f90 \
@@ -49,7 +49,7 @@ SRCS =  M_fixedform.f90 M_math.f90 C-rgbhls.c M_strings.f90 C-polygons.c  \
      calc_NC.f90 cntcrv.f90 M_help.f90 M_stopwatch.f90 C-canvas.c M_kracken95.f90  \
      M_getopt_long.f90 C-tek.c M_color.f90 C-move.c M_Compare_Float_Numbers.f90 M_journal.f90  \
      M_msg.f90 M_time_oop.f90 C-drivers.c C-ppm.c M_readline.f90 sparanoia.f90  \
-     C-text.c C-M_draw.c M_sqlite.f90 M_blas.f90 C-curl.c C-aspect.c  \
+     C-text.c M_sqlite.f90 M_blas.f90 C-curl.c C-aspect.c  \
      C-valloc.c C-yobbarays.c C-pdf.c M_LA.f90 M_match.f90 C-curves.c  \
      C-M_sqlite.c M_constants.f90 M_intrinsics.f90 M_kracken.f90 M_units.f90 M_regex.f90  \
      C-objects.c M_display.f90 M_uuid.f90 M_xterm.f90 M_attr.f90 C-viewing.c  \
@@ -77,7 +77,7 @@ OBJS =  M_fixedform.o M_math.o C-rgbhls.o M_strings.o C-polygons.o  \
      calc_NC.o cntcrv.o M_help.o M_stopwatch.o C-canvas.o M_kracken95.o  \
      M_getopt_long.o C-tek.o M_color.o C-move.o M_Compare_Float_Numbers.o M_journal.o  \
      M_msg.o M_time_oop.o C-drivers.o C-ppm.o M_readline.o sparanoia.o  \
-     C-text.o C-M_draw.o M_sqlite.o M_blas.o C-curl.o C-aspect.o  \
+     C-text.o M_sqlite.o M_blas.o C-curl.o C-aspect.o  \
      C-valloc.o C-yobbarays.o C-pdf.o M_LA.o M_match.o C-curves.o  \
      C-M_sqlite.o M_constants.o M_intrinsics.o M_kracken.o M_units.o M_regex.o  \
      C-objects.o M_display.o M_uuid.o M_xterm.o M_attr.o C-viewing.o  \
