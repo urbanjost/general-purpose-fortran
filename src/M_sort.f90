@@ -2445,7 +2445,7 @@ end subroutine sort_quick_rx_complex
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    unique(3f) - [M_sort] assuming an array is sorted, return array with duplicate values removed
+!!    unique(3f) - [M_sort] return array with adjacent duplicate values removed
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -2455,43 +2455,67 @@ end subroutine sort_quick_rx_complex
 !!     integer,intent(out)     :: ivals
 !!
 !!##DESCRIPTION
-!!     Assuming an array is sorted, return the array with duplicate values removed.
+!!     Assuming an array is sorted, return the array with adjacent duplicate
+!!     values removed.  If the array is sorted, a list of unique values
+!!     will be produced.
 !!
 !!##OPTIONS
-!!    array      may be of type INTEGER, REAL, CHARACTER, COMPLEX, DOUBLEPRECISION,
-!!               or complex doubleprecision (that is, complex(kind=kind(0.0d0)) ).
-!!    ivals      number of unique values packed into beginning of array
+!!    array   may be of type INTEGER, REAL, CHARACTER, COMPLEX,
+!!            DOUBLEPRECISION, or complex(kind=kind(0.0d0)).
+!!
+!!    ivals   returned number of unique values packed into beginning of array
 !!##EXAMPLE
 !!
 !!    Sample program
 !!
-!!     program demo_unique
-!!     use M_sort, only : unique
-!!     implicit none
-!!     character(len=:),allocatable :: strings(:)
-!!     integer                      :: icount
+!!       program demo_unique
+!!       use M_sort, only : unique
+!!       implicit none
+!!       character(len=:),allocatable :: strings(:)
+!!       integer,allocatable :: ints(:)
+!!       integer :: icount
+!!       integer :: ilong
 !!
-!!     strings=[character(len=2) :: '1','1','2','3','4','4','10','20','20','30']
-!!     write(*,'(a,*(a3,1x))')'ORIGINAL:',strings
-!!     write(*,'("SIZE=",i0)')size(strings)
+!!       strings=[character(len=20) :: 'orange','green','green', &
+!!       & 'red','white','blue','yellow','blue','magenta','cyan','black']
+!!       ints=[30,1,1,2,3,4,4,-10,20,20,30]
+!!       ilong=maxval(len_trim(strings))
 !!
-!!     call unique(strings,icount)
+!!       write(*,'(a,*(a,1x))')'ORIGINAL:',strings(:)(:ilong)
+!!       write(*,'("SIZE=",i0)')size(strings)
+!!       call unique(strings,icount)
+!!       write(*,*)
+!!       write(*,'(a,*(a,1x))')'AFTER   :',strings(1:icount)(:ilong)
+!!       write(*,'("SIZE=",i0)')size(strings)
+!!       write(*,'("ICOUNT=",i0)')icount
 !!
-!!     write(*,*)
-!!     write(*,'(a,*(a3,1x))')'AFTER   :',strings(1:icount)(:2)
-!!     write(*,'("SIZE=",i0)')size(strings)
-!!     write(*,'("ICOUNT=",i0)')icount
+!!       write(*,'(a,*(g0,1x))')'ORIGINAL:',ints
+!!       write(*,'("SIZE=",i0)')size(ints)
+!!       call unique(ints,icount)
+!!       write(*,*)
+!!       write(*,'(a,*(g0,1x))')'AFTER   :',ints(1:icount)
+!!       write(*,'("SIZE=",i0)')size(ints)
+!!       write(*,'("ICOUNT=",i0)')icount
 !!
-!!     end program demo_unique
+!!       end program demo_unique
 !!
-!!    Expected output
+!!   Expected output
 !!
-!!     ORIGINAL: 1   1   2   3   4   4   10  20  20  30
-!!     SIZE=10
+!!    ORIGINAL:orange  green   green   red     white   blue
+!!    yellow  blue    magenta cyan    black
+!!    SIZE=11
 !!
-!!     AFTER   : 1   2   3   4   10  20  30
-!!     SIZE=10
-!!     ICOUNT=7
+!!    AFTER   :orange  green   red     white   blue    yellow
+!!    blue    magenta cyan    black
+!!    SIZE=11
+!!    ICOUNT=10
+!!
+!!    ORIGINAL:30 1 1 2 3 4 4 -10 20 20 30
+!!    SIZE=11
+!!
+!!    AFTER   :30 1 2 3 4 -10 20 30
+!!    SIZE=11
+!!    ICOUNT=8
 
 
 !===================================================================================================================================

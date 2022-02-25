@@ -42,6 +42,7 @@ append("join.3m_strings.html");
 append("len_white.3m_strings.html");
 append("lenset.3m_strings.html");
 append("listout.3m_strings.html");
+append("longest_common_substring.3m_strings.html");
 append("lower.3m_strings.html");
 append("merge_str.3m_strings.html");
 append("modif.3m_strings.html");

@@ -2544,7 +2544,10 @@ integer                     :: ioerr
    ioerr=0
    chars_local=trim(adjustl(chars))//' ' ! minimum of one character required
    if(chars_local.eq.'?')then       ! if string is a (unsigned) question mark, use value returned from last completed calculation
-     read(last,'(bn,g256.40)',iostat=ioerr,err=9991)rval8   ! assuming cannot get a read error out of reading last
+     !x!read(last,'(bn,g512.40)',iostat=ioerr,err=9991)rval8  ! assuming cannot get a read error out of reading last
+     write(frmt,101)len(last)                                 ! build a format statement to try and read the string as a number with
+     chars_local=trim(last)//repeat(' ',512)                  ! kludge: problems if string is not long enough for format
+     read(chars_local,fmt=frmt,iostat=ioerr,err=9991)rval8    ! try and read the string as a number
    elseif('$'.eq.chars_local(1:1))then                ! string is a string variable name
       call locate(keys_q,chars_local,indx,ier)        ! try to find the index in the character array for the string variable
       if(indx.le.0)then                         ! if indx is not .gt. 0 string was not a variable name

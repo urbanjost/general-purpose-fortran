@@ -61,6 +61,57 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    colors(1f) - [CONVERT] list colors and their values using common color models
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    colors [color_name | R G B | model_name_A V1 V2 V3 model_name_B ]
+!!
+!!##DESCRIPTION
+!!    Display colors using common color models; or convert color values
+!!    to a different color model
+!!
+!!     # list known color names and their RGB values
+!!     colors
+!!     # show values for a known named color
+!!     colors COLOR_NAME
+!!     # find closest named color
+!!     colors R G B
+!!     #convert color between models
+!!     colors INPUT_MODEL_NAME VALUE1 VALUE2 VALUE3 OUTPUT_MODEL_NAME
+!!
+!!##OPTIONS
+!!     Model Names(case sensitive):
+!!
+!!     rgb   color TV monitors (RGB values in range 0 to 100)
+!!     hls   Hue (0 to 360 degrees), Lightness (0 to 100), Saturation (0 to 100)
+!!     cmy   Cyan, Magenta, Yellow : pigment-based printing devices
+!!           ( values in range 0 to 100 )
+!!     hsv   Hue (0 to 360 degrees), Saturation (0 to 100), Value (0 to 100)
+!!     yiq   Broadcast TV color system (y ranges from 0 to 100,
+!!           i ranges from -60 to 60, q ranges from -52 to 52)
+!!
+!!     --help      display this help and exit
+!!
+!!     --version   output version information and exit
+!!
+!!##EXAMPLE
+!!
+!!     Common forms of use:
+!!
+!!      # list named colors
+!!      colors
+!!      # convert RGB values to HLS value
+!!      colors rgb 0 100 0 hls
+!!      # display RGB values for named color
+!!      colors green
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -79,7 +130,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2022-01-09 20:18:09 UTC-300>',&
+'@(#)COMPILED:       2022-01-09 23:07:50 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

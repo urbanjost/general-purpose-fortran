@@ -37,6 +37,7 @@
 !!      use M_strings, only : len_white,atleast,stretch,lenset,merge_str
 !!      use M_strings, only : switch,s2c,c2s
 !!      use M_strings, only : noesc,notabs,dilate,expand,visible
+!!      use M_strings, only : longest_common_substring
 !!      !x!use M_strings, only : uc
 !!      use M_strings, only : string_to_value,string_to_values,s2v,s2vs
 !!      use M_strings, only : value_to_string,v2s,msg
@@ -202,10 +203,12 @@
 !!
 !!   MISCELLANEOUS
 !!
+!!       cc         return up to twenty strings of arbitrary length as an array
 !!       describe   returns a string describing the name of a single character
 !!       edit_distance  returns a naive edit distance using the Levenshtein
 !!                      distance algorithm
-!!       cc         return up to twenty strings of arbitrary length as an array
+!!       longest_common_substring  function that returns the longest common
+!!                                 substring of two strings.
 !!
 !!   INTRINSICS
 !!
@@ -238,6 +241,7 @@
 !!        llt                 Lexical less than
 !!
 !!   OOPS INTERFACE
+!!
 !!    The M_strings_oop(3fm) module (included with the M_strings(3fm)
 !!    module) provides an OOP (Object-Oriented Programming) interface to
 !!    the M_strings(3fm) module.
@@ -268,6 +272,7 @@
 !!     use M_strings, only : len_white, atleast, stretch, lenset, merge_str
 !!     use M_strings, only : switch, s2c, c2s
 !!     use M_strings, only : noesc, notabs, dilate, expand, visible
+!!     use M_strings, only : longest_common_substring
 !!     !x!use M_strings, only : uc
 !!     use M_strings, only : string_to_value, string_to_values, s2v, s2vs
 !!     use M_strings, only : value_to_string, v2s, msg
@@ -414,12 +419,13 @@ public isspace         !  elemental function true if CHR is a null, space, tab, 
 public isupper         !  elemental function returns .true. if CHR is an uppercase letter (A-Z)
 public isxdigit        !  elemental function returns .true. if CHR is a hexadecimal digit (0-9, a-f, or A-F).
 !----------------------#
-public fortran_name    !  elemental function returns .true. if LINE is a valid Fortran name
-!----------------------#
-public describe        !  returns a string describing character
-public edit_distance   !  returns a naive edit distance using the Levenshtein distance algorithm
-public cc              !  return up to twenty strings of arbitrary length as an array
-!----------------------#
+!-------------------------------#
+public fortran_name             !  elemental function returns .true. if LINE is a valid Fortran name
+public describe                 !  returns a string describing character
+public edit_distance            !  returns a naive edit distance using the Levenshtein distance algorithm
+public cc                       !  return up to twenty strings of arbitrary length as an array
+public longest_common_substring !  function that returns the longest common substring of two strings.
+!-------------------------------#
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -9800,6 +9806,108 @@ endif
 imatch=i
 
 end subroutine matching_delimiter
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    longest_common_substring(3f) - [M_strings] function that returns the longest common substring of two strings.
+!!##SYNOPSIS
+!!
+!!    function longest_common_substring(a,b) result(match)
+!!
+!!     character(len=*),intent(in)  :: a, b
+!!     character(len=:),allocatable :: match
+!!##DESCRIPTION
+!!    function that returns the longest common substring of two strings.
+!!
+!!    Note that substrings are consecutive characters within a string.
+!!    This distinguishes them from subsequences, which is any sequence of
+!!    characters within a string, even if there are extraneous characters in
+!!    between them.
+!!
+!!    Hence, the longest common subsequence between "thisisatest" and
+!!    "testing123testing" is "tsitest", whereas the longest common substring
+!!    is just "test".
+!!##OPTIONS
+!!    a,b  strings to search for the longest common substring.
+!!##RETURNS
+!!    longest_common_substring  the longest common substring found
+!!##EXAMPLE
+!!
+!!  Sample program
+!!
+!!    program demo_longest_common_substring
+!!    use M_strings, only : longest_common_substring
+!!    implicit none
+!!       call  compare('testing123testingthing', 'thisis',                 'thi')
+!!       call  compare('testing',                'sting',                  'sting')
+!!       call  compare('thisisatest_stinger',    'testing123testingthing', 'sting')
+!!       call  compare('thisisatest_stinger',    'thisis',                 'thisis')
+!!       call  compare('thisisatest',            'testing123testing',      'test')
+!!       call  compare('thisisatest',            'thisisatest',            'thisisatest')
+!!    contains
+!!
+!!    subroutine compare(a,b,answer)
+!!    character(len=*),intent(in) :: a, b, answer
+!!    character(len=:),allocatable :: match
+!!    character(len=*),parameter :: g='(*(g0))'
+!!    integer :: i
+!!       match=longest_common_substring(a,b)
+!!       write(*,g) 'comparing "',a,'" and "',b,'"'
+!!       write(*,g) merge('(PASSED) "','(FAILED) "',answer.eq.match), &
+!!       & match,'"; expected "',answer,'"'
+!!    end subroutine compare
+!!
+!!    end program demo_longest_common_substring
+!!
+!!   expected output
+!!
+!!    comparing "testing123testingthing" and "thisis"
+!!    (PASSED) "thi"; expected "thi"
+!!    comparing "testing" and "sting"
+!!    (PASSED) "sting"; expected "sting"
+!!    comparing "thisisatest_stinger" and "testing123testingthing"
+!!    (PASSED) "sting"; expected "sting"
+!!    comparing "thisisatest_stinger" and "thisis"
+!!    (PASSED) "thisis"; expected "thisis"
+!!    comparing "thisisatest" and "testing123testing"
+!!    (PASSED) "test"; expected "test"
+!!    comparing "thisisatest" and "thisisatest"
+!!    (PASSED) "thisisatest"; expected "thisisatest"
+function longest_common_substring(a,b) result(match)
+character(len=*),intent(in)  :: a, b
+character(len=:),allocatable :: match
+character(len=:),allocatable :: a2, b2
+integer :: left, foundat, len_a, i
+   if(len(a).lt.len(b))then ! to reduce required comparisions look for shortest string in longest string
+      a2=a
+      b2=b
+   else
+      a2=b
+      b2=a
+   endif
+
+   match=''
+
+   do i=1,len(a2)-1
+      len_a=len(a2)
+      do left=1,len_a
+         foundat=index(b2,a2(left:))
+         if(foundat.ne.0.and.len(match).lt.len_a-left+1)then
+            if(len(a2(left:)).gt.len(match))then
+               match=a2(left:)
+               exit
+            endif
+         endif
+      enddo
+
+      if(len(a2).lt.len(match))exit
+      a2=a2(:len(a2)-1)
+
+   enddo
+
+end function longest_common_substring
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
