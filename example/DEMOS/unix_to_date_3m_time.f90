@@ -1,13 +1,14 @@
        program demo_unix_to_date
        use M_time, only : unix_to_date, u2d, fmtdate, realtime
        implicit none
+       integer,parameter :: dp=kind(0.0d0)
        real(kind=realtime)           :: unixtime
        ! seconds in a day
-       real(kind=realtime),parameter :: DAY=86400.0d0
+       real(kind=realtime),parameter :: DAY=86400.0_dp
        integer                       :: dat(8)
        integer                       :: ierr
           ! sample Unix Epoch time
-          unixtime=1468939038.4639933d0
+          unixtime=1468939038.4639933_dp
           ! create DAT array for today
           call unix_to_date(unixtime,dat,ierr)
           write(*,*)'Sample Date=',fmtdate(dat)

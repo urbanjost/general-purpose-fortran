@@ -68,20 +68,21 @@ private
    private call_sleep
    private call_usleep
 !-----------------------------------------------------------------------------------------------------------------------------------
-integer,parameter,public   :: realtime=kind(0.0d0)            ! type for 1 epoch time and julian days
+integer,parameter          :: dp=kind(0.0d0)
+integer,parameter,public   :: realtime=kind(0.0d0)           ! type for 1 epoch time and julian days
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! INTERNAL
-real(kind=realtime),parameter,private :: SECDAY=86400.0d0     ! 24:00:00 hours as seconds
+real(kind=realtime),parameter,private :: SECDAY=86400.0_dp    ! 24:00:00 hours as seconds
 !-----------------------------------------------------------------------------------------------------------------------------------
 !  integer,parameter       :: igreg_1582=15+31*(10+12*1582)   ! ASSUMES: Gregorian Calendar was adopted 15 Oct. 1582 (588829)
 !  integer,parameter       :: igreg_1752=03+31*( 9+12*1752)   ! ASSUMES: Gregorian Calendar was adopted 3 Sep. 1752 (652026)
 !  integer,save            :: igreg=igreg_1582
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! CONVENIENT CONSTANTS FOR USE WITH + AND - OPERATORS
-real(kind=realtime),public,parameter :: dt_minute=60.0d0      ! one minute in seconds
-real(kind=realtime),public,parameter :: dt_hour=3600.0d0      ! one hour in seconds
-real(kind=realtime),public,parameter :: dt_day=86400.0d0      ! 24:00:00 hours in seconds
-real(kind=realtime),public,parameter :: dt_week=dt_day*7.0d0  ! one week in seconds
+real(kind=realtime),public,parameter :: dt_minute=60.0_dp     ! one minute in seconds
+real(kind=realtime),public,parameter :: dt_hour=3600.0_dp     ! one hour in seconds
+real(kind=realtime),public,parameter :: dt_day=86400.0_dp     ! 24:00:00 hours in seconds
+real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seconds
 !-----------------------------------------------------------------------------------------------------------------------------------
  contains
 !===================================================================================================================================
@@ -174,7 +175,7 @@ integer                          :: A, Y, M, JDN
    utc    = dat(4)*60                     ! Delta from UTC, convert from minutes to seconds
    hour   = dat(5)                        ! Hour
    minute = dat(6)                        ! Minute
-   second = dat(7)-utc+dat(8)/1000.0d0    ! Second   ! correction for time zone and milliseconds
+   second = dat(7)-utc+dat(8)/1000.0_dp   ! Second   ! correction for time zone and milliseconds
 !-----------------------------------------------------------------------------------------------------------------------------------
    julian = -HUGE(99999)                  ! this is the date if an error occurs and IERR is < 0
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -192,9 +193,9 @@ integer                          :: A, Y, M, JDN
 !  Staring from a Gregorian calendar date
    JDN=day + (153*M+2)/5 + 365*Y + Y/4 - Y/100 + Y/400 - 32045  !  with integer truncation
 !  Finding the Julian Calendar date given the JDN (Julian day number) and time of day
-   julian=JDN + dble(hour-12)/24.0d0 + dble(minute)/1440.0d0 + second/86400.0d0
+   julian=JDN + dble(hour-12)/24.0_dp + dble(minute)/1440.0_dp + second/86400.0_dp
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(julian.lt.0.d0) then                  ! Julian Day must be non-negative
+   if(julian.lt.0.0_dp) then                  ! Julian Day must be non-negative
       ierr=1
    else
       ierr=0
@@ -242,19 +243,20 @@ end subroutine date_to_julian
 !!      program demo_julian_to_date
 !!      use M_time, only : julian_to_date, fmtdate, realtime
 !!      implicit none
+!!      integer,parameter :: dp=kind(0.0d0)
 !!      real(kind=realtime)     :: juliandate
 !!      integer                 :: dat(8)
 !!      integer                 :: ierr
 !!         ! set sample Julian Date
-!!         juliandate=2457589.129d0
+!!         juliandate=2457589.129_dp
 !!         ! create DAT array for this date
 !!         call julian_to_date(juliandate,dat,ierr)
 !!         write(*,*)'Sample Date=',fmtdate(dat)
 !!         ! go back one day
-!!         call julian_to_date(juliandate-1.0d0,dat,ierr)
+!!         call julian_to_date(juliandate-1.0_dp,dat,ierr)
 !!         write(*,*)'Day Before =',fmtdate(dat)
 !!         ! go forward one day
-!!         call julian_to_date(juliandate+1.0d0,dat,ierr)
+!!         call julian_to_date(juliandate+1.0_dp,dat,ierr)
 !!         write(*,*)'Day After  =',fmtdate(dat)
 !!      end program demo_julian_to_date
 !!
@@ -284,7 +286,7 @@ integer                          :: hour
 integer                          :: minute
 integer                          :: jalpha,ja,jb,jc,jd,je,ijul
 
-   if(julian.lt.0.d0) then                      ! Negative Julian Date not allowed
+   if(julian.lt.0.0_dp) then                     ! Negative Julian Date not allowed
       ierr=1
       return
    else
@@ -296,11 +298,11 @@ integer                          :: jalpha,ja,jb,jc,jd,je,ijul
    second=sngl((julian-dble(ijul))*secday)      ! Seconds from beginning of Jul. Day
    second=second+(tz*60)
 
-   if(second.ge.(secday/2.0d0)) then            ! In next calendar day
+   if(second.ge.(secday/2.0_dp)) then           ! In next calendar day
       ijul=ijul+1
-      second=second-(secday/2.0d0)              ! Adjust from noon to midnight
+      second=second-(secday/2.0_dp)             ! Adjust from noon to midnight
    else                                         ! In same calendar day
-      second=second+(secday/2.0d0)              ! Adjust from noon to midnight
+      second=second+(secday/2.0_dp)             ! Adjust from noon to midnight
    endif
 
    if(second.ge.secday) then                    ! Final check to prevent time 24:00:00
@@ -308,21 +310,21 @@ integer                          :: jalpha,ja,jb,jc,jd,je,ijul
       second=second-secday
    endif
 
-   minute=int(second/60.0d0)                    ! Integral minutes from beginning of day
+   minute=int(second/60.0_dp)                   ! Integral minutes from beginning of day
    second=second-dble(minute*60)                ! Seconds from beginning of minute
    hour=minute/60                               ! Integral hours from beginning of day
    minute=minute-hour*60                        ! Integral minutes from beginning of hour
 
    !---------------------------------------------
-   jalpha=idint((dble(ijul-1867216)-0.25d0)/36524.25d0) ! Correction for Gregorian Calendar
-   ja=ijul+1+jalpha-idint(0.25d0*dble(jalpha))
+   jalpha=idint((dble(ijul-1867216)-0.25_dp)/36524.25_dp) ! Correction for Gregorian Calendar
+   ja=ijul+1+jalpha-idint(0.25_dp*dble(jalpha))
    !---------------------------------------------
 
    jb=ja+1524
-   jc=idint(6680.d0+(dble(jb-2439870)-122.1d0)/365.25d0)
-   jd=365*jc+idint(0.25d0*dble(jc))
-   je=idint(dble(jb-jd)/30.6001d0)
-   day=jb-jd-idint(30.6001d0*dble(je))
+   jc=idint(6680.0_dp+(dble(jb-2439870)-122.1_dp)/365.25_dp)
+   jd=365*jc+idint(0.25_dp*dble(jc))
+   je=idint(dble(jb-jd)/30.6001_dp)
+   day=jb-jd-idint(30.6001_dp*dble(je))
    month=je-1
 
    if(month.gt.12)then
@@ -464,13 +466,14 @@ end subroutine date_to_unix
 !!      program demo_unix_to_date
 !!      use M_time, only : unix_to_date, u2d, fmtdate, realtime
 !!      implicit none
+!!      integer,parameter :: dp=kind(0.0d0)
 !!      real(kind=realtime)           :: unixtime
 !!      ! seconds in a day
-!!      real(kind=realtime),parameter :: DAY=86400.0d0
+!!      real(kind=realtime),parameter :: DAY=86400.0_dp
 !!      integer                       :: dat(8)
 !!      integer                       :: ierr
 !!         ! sample Unix Epoch time
-!!         unixtime=1468939038.4639933d0
+!!         unixtime=1468939038.4639933_dp
 !!         ! create DAT array for today
 !!         call unix_to_date(unixtime,dat,ierr)
 !!         write(*,*)'Sample Date=',fmtdate(dat)
@@ -2198,7 +2201,7 @@ integer                               :: ierr_local
       ierr_local=-2
    else
       ! Julian Day is in Z time zone and starts at noon so add 1/2 day; and add time zone
-      iweekday = mod(int((julian+dble(values(4)/60.0d0/24.0d0)+0.5d0)+1.0d0), 7)
+      iweekday = mod(int((julian+dble(values(4)/60.0_dp/24.0_dp)+0.5_dp)+1.0_dp), 7)
       iweekday = iweekday +1  ! change range from 0 to 6 to 1 to 7
       iweekday = mod(iweekday+5,7)+1  ! change from Sunday=1 to Monday=1
 
@@ -2772,14 +2775,15 @@ end function d2j
 !!     program demo_j2d
 !!     use M_time, only : j2d, d2j, fmtdate, realtime
 !!     implicit none
+!!     integer,parameter :: dp=kind(0.0d0)
 !!     real(kind=realtime) :: today
 !!     integer :: dat(8)
 !!        call date_and_time(values=dat) ! get the date using intrinsic
 !!        today=d2j(dat)                  ! convert today to Julian Date
 !!        write(*,*)'Today=',fmtdate(j2d(today))
 !!        ! math is easy with Julian Days and Julian Dates
-!!        write(*,*)'Yesterday=',fmtdate(j2d(today-1.0d0))
-!!        write(*,*)'Tomorrow=',fmtdate(j2d(today+1.0d0))
+!!        write(*,*)'Yesterday=',fmtdate(j2d(today-1.0_dp))
+!!        write(*,*)'Tomorrow=',fmtdate(j2d(today+1.0_dp))
 !!     end program demo_j2d
 !!
 !!    results:
@@ -2913,6 +2917,7 @@ end function d2u
 !!     program demo_u2d
 !!     use M_time, only : u2d, d2u, fmtdate, realtime
 !!     implicit none
+!!     integer,parameter :: dp=kind(0.0d0)
 !!     real(kind=realtime) :: today
 !!     integer :: dat(8)
 !!        ! get the date using intrinsic
@@ -2921,9 +2926,9 @@ end function d2u
 !!        today=d2u(dat)
 !!        write(*,*)'Today=',fmtdate(u2d(today))
 !!        ! subtract day
-!!        write(*,*)'Yesterday=',fmtdate(u2d(today-86400.0d0))
+!!        write(*,*)'Yesterday=',fmtdate(u2d(today-86400.0_dp))
 !!        ! add day
-!!        write(*,*)'Tomorrow=',fmtdate(u2d(today+86400.0d0))
+!!        write(*,*)'Tomorrow=',fmtdate(u2d(today+86400.0_dp))
 !!     end program demo_u2d
 !!
 !!    results:
@@ -3031,8 +3036,9 @@ end function get_timezone
 !!     program demo_sec2days
 !!     use M_time, only : sec2days
 !!     implicit none
+!!     integer,parameter :: dp=kind(0.0d0)
 !!        write(*,*)sec2days(129860)
-!!        write(*,*)sec2days(80000.0d0)
+!!        write(*,*)sec2days(80000.0_dp)
 !!        write(*,*)sec2days(80000.0,crop=.true.)
 !!        write(*,*)sec2days('1 day 2.0hr 100 min 300.0seconds')
 !!     end program demo_sec2days
@@ -3060,7 +3066,7 @@ integer                  :: i
 class(*),intent(in)               :: seconds
 logical,intent(in),optional       :: crop
 character(len=:),allocatable      :: dhms
-real(kind=realtime), parameter    :: units_hl(4)=[ 86400.0d0, 3600.0d0, 60.0d0, 1.0d0 ]
+real(kind=realtime), parameter    :: units_hl(4)=[ 86400.0_dp, 3600.0_dp, 60.0_dp, 1.0_dp ]
 character(len=40)                 :: scratch
 integer(kind=int64)               :: days, hours, minutes, secsleft
 integer,parameter                 :: one_day=86400
@@ -3109,7 +3115,7 @@ doubleprecision                   :: dtime
       call substitute(strlocal,'d','d ')
       call substitute(strlocal,'w','w ')
 
-      dtime=0.0d0
+      dtime=0.0_dp
       call split(strlocal,array,' ')
 
       do i=1,size(array)
@@ -3292,18 +3298,18 @@ real(kind=realtime)               :: time
 !
 character(len=:),allocatable      :: strlocal
 character(len=:),allocatable      :: array(:)
-real(kind=realtime), parameter    :: units_lh(4)=[ 1.0d0, 60.0d0, 3600.0d0, 86400.0d0 ]
-real(kind=realtime), parameter    :: units_hl(4)=[ 86400.0d0, 3600.0d0, 60.0d0, 1.0d0 ]
+real(kind=realtime), parameter    :: units_lh(4)=[ 1.0_dp, 60.0_dp, 3600.0_dp, 86400.0_dp ]
+real(kind=realtime), parameter    :: units_hl(4)=[ 86400.0_dp, 3600.0_dp, 60.0_dp, 1.0_dp ]
 integer                           :: i, icount, iwords, ilast
 logical                           :: negative
 
-   time=0.0d0
+   time=0.0_dp
    strlocal=compact(str,'')                              ! remove whitespace
    strlocal=transliterate(strlocal,"_',",'')             ! remove single quotes,underscores sometimes used in numbers
    strlocal=lower(strlocal)//repeat(' ',len(strlocal))   ! change to lowercase and add whitespace to make room for spaces
 
    if(len(strlocal).eq.0)then
-      time=0.0d0
+      time=0.0_dp
    elseif(scan(strlocal,'smhdw').ne.0)then               ! unit code values not DD-HH:MM:SS either plain number or unit numbers
       call substitute(strlocal,'days','d')               ! from long names to short names substitute common aliases for units
       call substitute(strlocal,'day','d')
@@ -3475,7 +3481,7 @@ integer                       :: phase
 real(kind=realtime)           :: days
 
 days= d2j(datin)-d2j(reference)                               ! days between reference date and input date
-days = mod(days + phase_length/2.0d0, syndonic_month)         ! modulo calculation of which phase rounding up
+days = mod(days + phase_length/2.0_dp, syndonic_month)        ! modulo calculation of which phase rounding up
 if(days.lt.0)days=days+syndonic_month                         ! correct for days before reference date
 phase = int( days * ( size(phase_names) / syndonic_month ))+1 ! index into phase names
 phase_of_moon=phase_names(phase)
@@ -3771,8 +3777,8 @@ class(*),intent(in)           :: seconds
 integer(kind=c_int)           :: cint
    select type(seconds)
    type is (integer);             cint=seconds                    ; call call_sleep(cint)
-   type is (real);                cint=nint(seconds*1000000.0d0)  ; call call_usleep(cint)
-   type is (real(kind=realtime)); cint=nint(seconds*1000000.0d0)  ; call call_usleep(cint)
+   type is (real);                cint=nint(seconds*1000000.0_dp) ; call call_usleep(cint)
+   type is (real(kind=realtime)); cint=nint(seconds*1000000.0_dp) ; call call_usleep(cint)
    end select
 end SUBROUTINE system_sleep
 !===================================================================================================================================

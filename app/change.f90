@@ -1,152 +1,250 @@
-subroutine help_usage(l_help)
+program change
+use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
+use M_CLI2,    only : set_args, lget, sget, filenames=>unnamed
+use M_strings, only : replace
+use M_io,      only : scratch, read_line
+use M_system,  only : system_rename, system_remove, system_perror
 implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
-help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   change(1f) - [FILE EDIT] replace old fixed string with new fixed string in names of files                                    ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   change c/old/new/ FILENAMES [ -dryrun][ -cmd COMMAND]| --version| --help                                                     ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Given a change directive and a list of filenames replace all occurrences of                                                  ',&
-'   the original string with the new string.                                                                                     ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   c/old/new/    change occurrences of old string to new string in filenames.                                                   ',&
-'                 The first character after the c is the delimiter for the strings.                                              ',&
-'                 Spaces are not allowed in the expression.                                                                      ',&
-'   FILENAMES     names of files to rename                                                                                       ',&
-'   -dryrun       write the commands to stdout instead of executing them                                                         ',&
-'   -verbose      echo the commands to be executed                                                                               ',&
-'   -cmd COMMAND  change command from "mv" to specified command name                                                             ',&
-'   --help        display this help and exit                                                                                     ',&
-'   --version     output version information and exit                                                                            ',&
-'                                                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-'  Sample commands:                                                                                                              ',&
-'                                                                                                                                ',&
-'   # change all files with .f90 in their name to *.F90                                                                          ',&
-'   change c/.f90/.F90/  *.f90                                                                                                   ',&
-'   # copy all files with .f90 in their name to *.F90                                                                            ',&
-'   change c@.f90@.F90@  *.f90 -cmd cp                                                                                           ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-!>
-!!##NAME
-!!    change(1f) - [FILE EDIT] replace old fixed string with new fixed string in names of files
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    change c/old/new/ FILENAMES [ -dryrun][ -cmd COMMAND]| --version| --help
-!!
-!!##DESCRIPTION
-!!    Given a change directive and a list of filenames replace all occurrences of
-!!    the original string with the new string.
-!!
-!!##OPTIONS
-!!    c/old/new/    change occurrences of old string to new string in filenames.
-!!                  The first character after the c is the delimiter for the strings.
-!!                  Spaces are not allowed in the expression.
-!!    FILENAMES     names of files to rename
-!!    -dryrun       write the commands to stdout instead of executing them
-!!    -verbose      echo the commands to be executed
-!!    -cmd COMMAND  change command from "mv" to specified command name
-!!    --help        display this help and exit
-!!    --version     output version information and exit
-!!
-!!##EXAMPLE
-!!
-!!   Sample commands:
-!!
-!!    # change all files with .f90 in their name to *.F90
-!!    change c/.f90/.F90/  *.f90
-!!    # copy all files with .f90 in their name to *.F90
-!!    change c@.f90@.F90@  *.f90 -cmd cp
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
-'@(#)PROGRAM:        change(1f)>',&
-'@(#)DESCRIPTION:    rename files by changing old fixed string to new string>',&
-'@(#)VERSION:        1.0, 2017-06-29>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-01-09 23:07:52 UTC-300>',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
-program demo_change
-use M_kracken, only : kracken, sgets, lget, IPvalue, sget
-use M_strings, only : change
-implicit none
-character(len=*),parameter         :: ident="@(#) change(1f):rename files by changing old fixed string to new string"
-character(len=IPvalue),allocatable :: names(:)
-character(len=:),allocatable       :: directive
-character(len=IPvalue)             :: newname
-character(len=:),allocatable       :: cmd
-character(len=:),allocatable       :: action
-integer                            :: i, ierr
-logical                            :: dryrun, verbose
-integer                            :: cstat
-character(len=256)                 :: sstat
+logical                       :: verbose, dryrun, case, ask
+character(len=1)              :: answer
+character(len=:),allocatable  :: old, new
+integer                       :: i
+character(len=:),allocatable  :: help_text(:)
+character(len=:),allocatable  :: version_text(:)
 
-   call kracken('change', &
-   & ' -oo -help .F. -version .F. -dryrun .F. -cmd mv -verbose .F.') ! parse command line
-   call help_usage(lget('change_help'))                                     ! display help information and stop if true
-   call help_version(lget('change_version'))                                ! display version information and stop if true
-   dryrun=lget('change_dryrun')
-   verbose=lget('change_verbose')
-   cmd=trim(sget('change_cmd'))
+   call setup()
+   ! define command arguments,default values and crack command line
+   call set_args('-i -dryrun:d F -ask:a F',help_text,version_text)
 
-   names=sgets('change_oo')
-   select case(size(names))
-   case(1)
-   case(2:)
-      do i=2,size(names,dim=1)
-         newname=names(i)
-         if(names(1)(1:1).eq.'/')then
-            directive='c'//names(1)
-         else
-            directive=names(1)
-         endif
-         call change(newname,directive,ierr)                                 ! if ierr>0 it is the number of changes made to string
-         if(ierr.gt.0)then
-            action=cmd//' '//trim(names(i))//' '//newname
-            if(dryrun.or.verbose)then
-               write(*,'(a)') trim(action)
-            endif
-            if(.not.dryrun)then
-               call execute_command_line(action,cmdstat=cstat,cmdmsg=sstat)
-            endif
-         endif
+   case=lget('i')
+   ask=lget('ask')
+   verbose=lget('verbose')
+   dryrun=lget('dryrun')
+   if(dryrun)verbose=.true.
+
+   if(size(filenames).ge.3)then
+      old=trim(filenames(1))
+      new=trim(filenames(2))
+      do i=3,size(filenames)
+         call dofile()
       enddo
-   endselect
-end program demo_change
+   else
+      write(*,'(a)')'<ERROR> insufficient arguments: change OLD NEW [OPTIONS] FILE(S)'
+   endif
+
+contains
+
+subroutine dofile()
+integer                      :: lun_in,lun_out
+character(len=256)           :: msg
+integer                      :: ios
+character(len=:),allocatable :: line
+character(len=:),allocatable :: maybe
+integer                      :: ierr
+integer                      :: icount
+integer                      :: ilines
+character(len=:),allocatable :: scratch_file
+logical                      :: exists, open
+
+   OKBLOCK: block
+   icount=0
+   scratch_file=''
+   lun_in=-1        ! should be a bad value for a LUN
+   lun_out=-1       ! should be a bad value for a LUN
+
+   open(newunit=lun_in,                  &
+      & file=filenames(i),               &
+      & iostat=ios,                      &
+      & status='old',                    &
+      & form='formatted',                &
+      & action='read',                   &
+      & access='sequential',             &
+      & iomsg=msg)
+   if(ios.ne.0)then
+      if(lun_in.ne.-1)close(lun_in,iostat=ios)
+      write(stderr,*)'*change* ERROR : '//msg
+      exit OKBLOCK
+   endif
+
+   scratch_file=scratch('./')
+   open(newunit=lun_out,      &
+      & file=scratch_file,    &
+      & iostat=ios,           &
+      & status='new',         &
+      & form='formatted',     &
+      & action='write',       &
+      & access='sequential',  &
+      & iomsg=msg)
+   if(ios.ne.0)then
+      if(lun_out.ne.-1)close(lun_out,iostat=ios)
+      write(stderr,*)trim(filenames(i))//' : '//msg
+      exit OKBLOCK
+   endif
+
+   ilines=0
+   INFINITE: do while (read_line(line,lun_in)==0)
+      ilines=ilines+1
+      if(ask)then
+         maybe=replace(line,old,new,ierr=ierr,ignorecase=case)
+         if(maybe.ne.line)then
+            write(*,*)'OLD:'//line
+            write(*,*)'NEW:'//maybe
+            write(*,'(a)',advance='no')'CHANGE?'
+            read(*,'(a)')answer
+            if(answer.eq.'y'.or.answer.eq.'Y')then
+               line=maybe
+            endif
+         else
+            line=maybe
+         endif
+      else
+         line=replace(line,old,new,ierr=ierr,ignorecase=case)
+      endif
+      if(ierr.gt.0)then !
+         if(icount.eq.0)write(*,'(a)')'==>'//trim(filenames(i))
+         if(verbose)then
+            write(*,'(i0.4," : ",a)')ilines,line
+         endif
+         icount=icount+1
+      elseif(ierr.lt.0)then
+         write(stderr,*)'error changing string'//old//' to '//new
+         exit OKBLOCK
+      endif
+      write(lun_out,'(a)',iostat=ios,iomsg=msg)line
+      if(ios.ne.0)then
+         write(stderr,*)msg
+         exit OKBLOCK
+      endif
+   enddo INFINITE
+   if(icount.ne.0.and..not.dryrun)then                 ! if a change was made move scratch file back to original filename
+      ierr=system_rename(scratch_file,filenames(i))
+      if(ierr.ne.0)then
+         write(*,*)'ERROR RENAMING FILE ',ierr
+         call system_perror('*change*')
+      endif
+   endif
+   endblock OKBLOCK
+
+   if(lun_out.ne.-1)then
+      inquire(unit=lun_out, exist=exists, opened=open)
+      if(open)then
+         close(unit=lun_out,iostat=ios)               ! ensure output file closed so a system command can be performed
+      endif
+   endif
+   if(scratch_file.ne.'')then
+      ierr=system_remove(scratch_file)             ! unconditionally remove scratch file
+   endif
+
+   if(lun_in.ne.-1)then
+      inquire(unit=lun_in, exist=exists, opened=open)
+      if(open)then
+         close(unit=lun_in,iostat=ios)                ! unconditionally close input file
+      endif
+   endif
+
+end subroutine dofile
+
+subroutine setup()
+
+! @(#)help_usage(3f): sets help information
+
+version_text=[ CHARACTER(LEN=128) :: &
+'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
+'@(#)PROGRAM:        change(1)>',&
+'@(#)DESCRIPTION:    replace old string with new string in files)>',&
+'@(#)VERSION:        1.1, 20210224>',&
+'@(#)AUTHOR:         John S. Urban>',&
+'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
+'@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/',&
+'@(#)LICENSE:        MIT. This is free software: you are free to change and redistribute it.',&
+'']
+
+help_text=[ CHARACTER(LEN=128) :: &
+'NAME',&
+'   change(1f) - [FILE EDIT] replace fixed strings in files',&
+'   (LICENSE:MIT)',&
+'SYNOPSIS',&
+'    change [ --ignorecase][ --dryrun][ --verbose] old new filename(s)',&
+'',&
+'     or',&
+'',&
+'    change --help| --version| --usage',&
+'',&
+'DESCRIPTION',&
+'   The change(1) utility changes strings in-place in files.',&
+'',&
+'   trailing spaces on OLD and NEW are ignored.',&
+'',&
+'   TABS are expanded.',&
+'',&
+'   files named on the command are modified in-place, so you may want',&
+'   to make a copy of the original before converting it. change(1) prints',&
+'   a message indicating any of the input files it actually modifies.',&
+'',&
+'   Do not change binary files with this program, which uses sequential',&
+'   access to read and write the files. It can corrupt binary files.',&
+'',&
+'OPTIONS',&
+'   old              string to look for',&
+'   new              the replacement string',&
+'   filenames        list of files to replace strings in',&
+'   --ignorecase,-i  ignore case of input',&
+'   --ask,-a         interactively confirm each change',&
+'   --dryrun,-d      does all file operations except for moving the',&
+'                    changed file back to the original. Implies --verbose.',&
+'   --verbose,-V     print information about what the program changes.',&
+'   --help,-h        display a help message and exit.',&
+'   --version,-v     display version information and exit.',&
+'   --usage,-u       display options table',&
+'',&
+'AUTHOR',&
+'   John S. Urban',&
+'',&
+'LICENSE',&
+'   MIT',&
+'']
+! NAME
+!    change(1f) - [FILE EDIT] replace fixed strings in files
+!    (LICENSE:MIT)
+! SYNOPSIS
+!     change [ --ignorecase][ --dryrun][ --verbose] old new filename(s)
+! 
+!      or
+! 
+!     change --help| --version| --usage
+! 
+! DESCRIPTION
+!    The change(1) utility changes strings in-place in files.
+! 
+!    trailing spaces on OLD and NEW are ignored.
+! 
+!    TABS are expanded.
+! 
+!    files named on the command are modified in-place, so you may want
+!    to make a copy of the original before converting it. change(1) prints
+!    a message indicating any of the input files it actually modifies.
+! 
+!    Do not change binary files with this program, which uses sequential
+!    access to read and write the files. It can corrupt binary files.
+! 
+! OPTIONS
+!    old              string to look for
+!    new              the replacement string
+!    filenames        list of files to replace strings in
+!    --ignorecase,-i  ignore case of input
+!    --ask,-a         interactively confirm each change
+!    --dryrun,-d      does all file operations except for moving the
+!                     changed file back to the original. Implies --verbose.
+!    --verbose,-V     print information about what the program changes.
+!    --help,-h        display a help message and exit.
+!    --version,-v     display version information and exit.
+!    --usage,-u       display options table
+! 
+! AUTHOR
+!    John S. Urban
+! 
+! LICENSE
+!    MIT
+end subroutine setup
+
+end program change

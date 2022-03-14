@@ -10899,8 +10899,8 @@ end subroutine mat_help_text
 !===================================================================================================================================
 function find_exec_file(filename) result(returned)
 ! look for file. If not found look for file.la. If not found, repeat using directories in MATRIX_PATH=DIR1:DIR2:DIR3...
-character(len=:),allocatable,intent(in) :: filename
-character(len=:),allocatable            :: returned
+character(len=*),intent(in)  :: filename
+character(len=:),allocatable :: returned
    if(exists(filename))then
       returned=filename
    elseif(exists(trim(filename)//'.la'))then

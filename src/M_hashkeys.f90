@@ -477,6 +477,7 @@ end function sha256b
       integer(kind=c_int32_t) :: swap32
       integer(kind=c_int32_t), intent(in)  :: inp
       ! -----------------------------------
+      swap32=0 !  ifort (IFORT) 2021.3.0 20210609 bug
       call mvbits(inp, 24, 8, swap32,  0)
       call mvbits(inp, 16, 8, swap32,  8)
       call mvbits(inp,  8, 8, swap32, 16)
@@ -495,6 +496,7 @@ end function sha256b
       integer(kind=c_int64_t) :: swap64
       integer(kind=c_int64_t), intent(in)  :: inp
       ! -----------------------------------
+      swap64=0 !  ifort (IFORT) 2021.3.0 20210609 bug
       call mvbits(inp, 56, 8, swap64,  0)
       call mvbits(inp, 48, 8, swap64,  8)
       call mvbits(inp, 40, 8, swap64, 16)
@@ -518,6 +520,7 @@ end function sha256b
       integer(kind=c_int64_t) :: swap64a
       integer(kind=c_int64_t), intent(in)  :: inp
       ! -----------------------------------
+      swap64a=0 !  ifort (IFORT) 2021.3.0 20210609 bug
       call mvbits(inp,  0, 8, swap64a, 32)
       call mvbits(inp,  8, 8, swap64a, 40)
       call mvbits(inp, 16, 8, swap64a, 48)
@@ -1202,15 +1205,27 @@ contains
    end subroutine test_sha256_6
 
    subroutine test_sha256_11
-      integer,parameter     :: big=16777216
+      !integer,parameter     :: big=16777216  ! too big for ifort
+      !integer,parameter     :: big=167777  ! too big for ifort
+      integer,parameter     :: big=16777
       character(len=big*64) :: str
       integer :: i
       call unit_check_start('test_sha256_11')
-      write(*,*)'A long test'
+      !write(*,*)'A long test'
       do i=1,big
          str(1+(i-1)*64:i*64) = "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmno"
       enddo
-      call unit_check('test_sha256_11',sha256(str)=="50E72A0E26442FE2552DC3938AC58658228C0CBFB1D2CA872AE435266FCD055E",'sha256 11 ')
+      !call unit_check('test_sha256_11',sha256(str)=="50E72A0E26442FE2552DC3938AC58658228C0CBFB1D2CA872AE435266FCD055E",'sha256 11')
+
+      !call unit_check('test_sha256_11',sha256(str)=="6BC568C54C0BB123FBCA27DAD40067345DD9FBE61E1376FE3C27902943FCF6A5",&
+      !& 'sha256 11 GOT',sha256(str),'expected 6BC568C54C0BB123FBCA27DAD40067345DD9FBE61E1376FE3C27902943FCF6A5')
+
+
+      call unit_check('test_sha256_11',sha256(str)=="711CC2AB7E0A98D1EDBDA435A7B219E8AAA12661F347339A14041208751373C6", &
+      & 'sha256 11 GOT',sha256(str),'expected 711CC2AB7E0A98D1EDBDA435A7B219E8AAA12661F347339A14041208751373C6')
+
+
+
       call unit_check_done('test_sha256_11')
    end subroutine test_sha256_11
 
@@ -1910,7 +1925,6 @@ integer(kind=int128)         :: hash_128
 character(len=1),allocatable :: chars(:)
 
    chars=anything_to_bytes(anything)
-
 
    if(present(continue))then
       hash_128=sdbm_hash_arr(chars,continue)

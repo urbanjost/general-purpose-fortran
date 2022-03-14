@@ -8,6 +8,7 @@
       !!use M_time_oop,only : operator(+),operator(-),operator(>),operator(<)
       !!use M_time_oop,only : operator(<=),operator(>=),operator(==),operator(/=)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
       integer         :: dat(8)
       TYPE(date_time) :: event
       TYPE(date_time) :: otherdate
@@ -147,13 +148,13 @@
 
          ! OVERLOADED OPERATORS (add and subtract)
          ! a date_time object can have seconds added
-         answer=event+1*86400.0d0
+         answer=event+1*86400.0_dp
          !
          ! a nice friendly format
          write(*,*)answer%format('TOMORROW="%W, %L %d, %Y %H:%m:%s %N"')
          !
          ! a date_time object can have seconds subtracted
-         answer=event-1*86400.0d0
+         answer=event-1*86400.0_dp
          ! a nice friendly format
          write(*,*)answer%format('YESTERDAY="%W, %L %d, %Y %H:%m:%s %N"')
          !

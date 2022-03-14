@@ -76,6 +76,7 @@
 !!     !!use M_time_oop,only : operator(+),operator(-),operator(>),operator(<)
 !!     !!use M_time_oop,only : operator(<=),operator(>=),operator(==),operator(/=)
 !!     implicit none
+!!     integer,parameter :: dp=kind(0.0d0)
 !!     integer         :: dat(8)
 !!     TYPE(date_time) :: event
 !!     TYPE(date_time) :: otherdate
@@ -215,13 +216,13 @@
 !!
 !!        ! OVERLOADED OPERATORS (add and subtract)
 !!        ! a date_time object can have seconds added
-!!        answer=event+1*86400.0d0
+!!        answer=event+1*86400.0_dp
 !!        !
 !!        ! a nice friendly format
 !!        write(*,*)answer%format('TOMORROW="%W, %L %d, %Y %H:%m:%s %N"')
 !!        !
 !!        ! a date_time object can have seconds subtracted
-!!        answer=event-1*86400.0d0
+!!        answer=event-1*86400.0_dp
 !!        ! a nice friendly format
 !!        write(*,*)answer%format('YESTERDAY="%W, %L %d, %Y %H:%m:%s %N"')
 !!        !
@@ -416,6 +417,7 @@ use M_time, only : d2u, u2d, fmtdate, d2o, dow, fmtdate_usage, days2sec, realtim
 use M_time, only : j2d, d2j
 use M_strings, only : upper
 implicit none
+integer,parameter :: dp=kind(0.0d0)
 private
 private upper
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -511,7 +513,7 @@ integer,intent(in)          :: dat(:)                       ! (maybe partial) da
 integer                     :: datlocal(8)                  ! date time array similar to that returned by DATE_AND_TIME
 type(date_time)             :: construct_from_dat
 
-   datlocal=u2d(0.0d0)                                      ! initialize to start of Unix Epoch Time using local time zone
+   datlocal=u2d(0.0_dp)                                     ! initialize to start of Unix Epoch Time using local time zone
    if(size(dat).gt.0)then                                   ! allow for partial DAT arrays
       datlocal(:size(dat))=dat
    endif
