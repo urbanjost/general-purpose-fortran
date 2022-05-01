@@ -1,3 +1,15 @@
+program true
+use M_kracken, only : kracken, lget
+use M_messages, only : junsun
+implicit none
+call kracken('true','-help .F. -version .F. -verbose .F.')
+call help_usage(lget('true_help'))      ! if -help option is present, display help text and exit
+call help_version(lget('true_version')) ! if -version option is present, display version text and exit
+if(lget('true_verbose'))then
+   call junsun('s')
+endif
+stop
+contains
 subroutine help_usage(l_help)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
@@ -75,21 +87,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    do nothing, successfully>',&
 '@(#)VERSION:        1.0, 20170125>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-01-09 23:08:38 UTC-300>',&
+'@(#)COMPILED:       2022-04-29 11:57:26 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
-program true
-use M_kracken, only : kracken, lget
-use M_messages, only : junsun
-implicit none
-call kracken('true','-help .F. -version .F. -verbose .F.')
-call help_usage(lget('true_help'))      ! if -help option is present, display help text and exit
-call help_version(lget('true_version')) ! if -version option is present, display version text and exit
-if(lget('true_verbose'))then
-   call junsun('s')
-endif
-stop
 end program true

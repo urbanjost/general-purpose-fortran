@@ -291,12 +291,12 @@ void draw_callobj(int n){
          case OBJ_CIRCLE:
             inpoly = vdevice.inpolygon;
             if ((vdevice.attr->a.fill || vdevice.attr->a.hatch) && !inpoly)
-             draw_makepoly();
-             draw_doarc(t[1].f, t[2].f, t[3].f, 0.0, t[4].f, t[5].f, t[6].i);
+               draw_makepoly();
+            draw_doarc(t[1].f, t[2].f, t[3].f, 0.0, t[4].f, t[5].f, t[6].i);
             if ((vdevice.attr->a.fill || vdevice.attr->a.hatch) && !inpoly)
-             draw_closepoly();
+               draw_closepoly();
             else
-             draw_draw2(t[1].f + t[3].f, t[2].f);
+               draw_draw2(t[1].f + t[3].f, t[2].f);
             t += 7;
             break;
          case OBJ_CLEAR:

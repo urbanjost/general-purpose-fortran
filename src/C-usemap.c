@@ -54,6 +54,9 @@ typedef struct {
 
 #define    CMAPSIZE        8192
 #define    CMAPDEPTH       13
+static byte *graphics_r; /* the big graphics data */
+static byte *graphics_g; /* the big graphics data */
+static byte *graphics_b; /* the big graphics data */
 
 static ColorTable coltab[CMAPSIZE];
 /******************************************************************************/
@@ -109,6 +112,9 @@ static int USEMAP_init(void) {
    X_SIZE=vdevice.sizeSx;
    Y_SIZE=vdevice.sizeSy;
    LAST=X_SIZE*Y_SIZE-1;
+   graphics_r = (byte *) malloc( X_SIZE * Y_SIZE * sizeof(byte) ); /* the graphics array */
+   graphics_g = (byte *) malloc( X_SIZE * Y_SIZE * sizeof(byte) ); /* the graphics array */
+   graphics_b = (byte *) malloc( X_SIZE * Y_SIZE * sizeof(byte) ); /* the graphics array */
 
    vdevice.depth = CMAPDEPTH;
 
@@ -197,7 +203,7 @@ static int USEMAP_fill(int n, int x[], int y[]) { /* "fill" a polygon */
 
    for (i = 1; i < n; i++) {
       icount++;
-      if(i > 1){ fprintf(draw_fp,","); }                     /* separate point values with a comma */
+      if(i > 1){ fprintf(draw_fp,","); }                     /* seperate point values with a comma */
       /* if(icount > 10){ fprintf(draw_fp,"\n   "); icount=0;}*/  /* add line breaks once in a while */
       fprintf(draw_fp,"%d,%d",x[i],FLIPY(y[i]));             /* draw outline across graphics array */
    }

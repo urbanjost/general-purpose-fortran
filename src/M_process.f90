@@ -1,7 +1,7 @@
 !>
 !!##NAME
-!!    M_process(3fm) - [M_process::INTRO] Fortran Module for calling process-related
-!!    C functions from Fortran
+!!    M_process(3fm) - [M_process::INTRO] Fortran Module for calling
+!!                     process-related C functions from Fortran
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -256,66 +256,66 @@
 !! This example shows a routine to read the output of one command and
 !! then call another command to write that output to.
 !!
-!!   program test
-!!   implicit none
-!!     call readit('ls -l')
-!!     call writeit('cat -n')
-!!   contains
+!!      program test
+!!      implicit none
+!!        call readit('ls -l')
+!!        call writeit('cat -n')
+!!      contains
 !!
-!!   subroutine readit(cmd)
-!!   use M_process ,ONLY: process_open_read, process_readline
-!!   use M_process ,ONLY: streampointer, process_close
-!!   ! C file pointer returned by process_open()
-!!   type(streampointer) :: fp
-!!   ! command line executed to start process
-!!   character(len=*)    :: cmd
-!!   ! line of data to read (assumed long enough to hold any input line)
-!!   character(len=4096) :: line
-!!   integer ierr
-!!     ! open process to read from
-!!     call process_open_read(cmd,fp,ierr)
-!!     write(*,*)'READTEST: process is opened with status ',ierr
-!!     ierr=0
-!!     do while(ierr .eq. 0)
-!!       ! read a line from the process
-!!       call process_readline(line,fp,ierr)
-!!       if(ierr.ne.0)then
-!!         write(*,*)'READTEST: ierr is ',ierr
-!!         exit
-!!       endif
-!!       write(*,*)'READTEST: line:'//trim(line)
-!!     enddo
-!!     call process_close(fp,ierr)
-!!     write(*,*)'READTEST: process closed with status ',ierr
-!!   end subroutine readit
-!!   !---------------------------------------------------------------------
-!!   subroutine writeit(cmd)
-!!   use M_process, only: process_open_write, process_writeline
-!!   use M_process, only: streampointer, process_close
-!!   ! C file pointer returned by process_open()
-!!   type(streampointer) :: fp
-!!   ! command line executed to start process
-!!   character(len=*)    :: cmd
-!!   ! line of data to write (assumed long enough to hold any output line)
-!!   character(len=4096) :: line
-!!   integer             :: ierr
-!!   integer             :: i
-!!     ! open process to write to
-!!     call process_open_write(cmd,fp,ierr)
-!!     write(*,*)'WRITETEST: process is opened'
-!!     ierr=0
-!!     do i=1,10
-!!       write(line,'("WRITETEST: line ",i0)')i
-!!       call process_writeline(line,fp,ierr)
-!!       if(ierr.lt.0)then
-!!         write(*,*)'WRITETEST: process write error ',ierr
-!!         exit
-!!       endif
-!!     enddo
-!!     call process_close(fp,ierr)
-!!     write(*,*)'WRITETEST: process closed with status ',ierr
-!!   end subroutine writeit
-!!   end program test
+!!      subroutine readit(cmd)
+!!      use M_process ,ONLY: process_open_read, process_readline
+!!      use M_process ,ONLY: streampointer, process_close
+!!      ! C file pointer returned by process_open()
+!!      type(streampointer) :: fp
+!!      ! command line executed to start process
+!!      character(len=*)    :: cmd
+!!      ! line of data to read (assumed long enough to hold any input line)
+!!      character(len=4096) :: line
+!!      integer ierr
+!!        ! open process to read from
+!!        call process_open_read(cmd,fp,ierr)
+!!        write(*,*)'READTEST: process is opened with status ',ierr
+!!        ierr=0
+!!        do while(ierr .eq. 0)
+!!          ! read a line from the process
+!!          call process_readline(line,fp,ierr)
+!!          if(ierr.ne.0)then
+!!            write(*,*)'READTEST: ierr is ',ierr
+!!            exit
+!!          endif
+!!          write(*,*)'READTEST: line:'//trim(line)
+!!        enddo
+!!        call process_close(fp,ierr)
+!!        write(*,*)'READTEST: process closed with status ',ierr
+!!      end subroutine readit
+!!      !---------------------------------------------------------------------
+!!      subroutine writeit(cmd)
+!!      use M_process, only: process_open_write, process_writeline
+!!      use M_process, only: streampointer, process_close
+!!      ! C file pointer returned by process_open()
+!!      type(streampointer) :: fp
+!!      ! command line executed to start process
+!!      character(len=*)    :: cmd
+!!      ! line of data to write (assumed long enough to hold any output line)
+!!      character(len=4096) :: line
+!!      integer             :: ierr
+!!      integer             :: i
+!!        ! open process to write to
+!!        call process_open_write(cmd,fp,ierr)
+!!        write(*,*)'WRITETEST: process is opened'
+!!        ierr=0
+!!        do i=1,10
+!!          write(line,'("WRITETEST: line ",i0)')i
+!!          call process_writeline(line,fp,ierr)
+!!          if(ierr.lt.0)then
+!!            write(*,*)'WRITETEST: process write error ',ierr
+!!            exit
+!!          endif
+!!        enddo
+!!        call process_close(fp,ierr)
+!!        write(*,*)'WRITETEST: process closed with status ',ierr
+!!      end subroutine writeit
+!!      end program test
 !!
 !!##SEE ALSO
 !!    o PIPES: pipe(3c), popen(3c), pclose(3c), fflush(3c)
@@ -1123,7 +1123,8 @@ end function process_readall
 !-------------------------------------------------------------------------------
 !>
 !!##NAME
-!!    process_writeline(3fm) - [M_process] write to a process using a POSIX interface
+!!    process_writeline(3fm) - [M_process] write to a process using a
+!!                             POSIX interface
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS

@@ -1,12 +1,12 @@
      program demo_longest_common_substring
      use M_strings, only : longest_common_substring
      implicit none
-        call  compare('testing123testingthing', 'thisis',                 'thi')
-        call  compare('testing',                'sting',                  'sting')
-        call  compare('thisisatest_stinger',    'testing123testingthing', 'sting')
-        call  compare('thisisatest_stinger',    'thisis',                 'thisis')
-        call  compare('thisisatest',            'testing123testing',      'test')
-        call  compare('thisisatest',            'thisisatest',            'thisisatest')
+        call compare('testing123testingthing','thisis',              'thi')
+        call compare('testing',             'sting',               'sting')
+        call compare('thisisatest_stinger', 'testing123testingthing','sting')
+        call compare('thisisatest_stinger', 'thisis',              'thisis')
+        call compare('thisisatest',         'testing123testing',   'test')
+        call compare('thisisatest',         'thisisatest',         'thisisatest')
      contains
 
      subroutine compare(a,b,answer)

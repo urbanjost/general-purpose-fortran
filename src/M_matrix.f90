@@ -4011,8 +4011,8 @@ integer           :: nn
       GM_IMAGS(location+1) = 0.0d0
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
       G_VAR_COLS(G_ARGUMENT_POINTER) = 2
-43    format(' det =  ',f7.4,7h * 10**,i4)
-44    format(' det =  ',f7.4,' + ',f7.4,' i ',7h * 10**,i4)
+43    format(' det =  ',f7.4,' * 10**',i4)
+44    format(' det =  ',f7.4,' + ',f7.4,' i ',' * 10**',i4)
 !===================================================================================================================================
     case(3) ! COMMAND::RCOND
       if (m .ne. n) then

@@ -9,7 +9,8 @@
         do i=1,len(letters)
            write(*,'(80("="))')
            call system_uname(letters(i:i),string)
-           write(*,*)'=====> TESTING system_uname('//letters(i:i)//')--->'//trim(string)
+           write(*,*)&
+           &'=====> TESTING system_uname('//letters(i:i)//')--->'//trim(string)
         enddo
 
      end program demo_system_uname

@@ -139,9 +139,9 @@
        allpassed= test("abc",&
        &"********a********b********c********", .true.) .and. allpassed
        allpassed=&
-       &test("********a********b********c********", "abc", .false.) .and. allpassed
+       &test("********a********b********c********", "abc",.false.).and.allpassed
        allpassed= &
-       &test("abc", "********a********b********b********", .false.) .and. allpassed
+       &test("abc", "********a********b********b********",.false.).and.allpassed
        allpassed= test("*abc*", "***a*b*c***", .true.) .and. allpassed
 
        ! A case-insensitive algorithm test.

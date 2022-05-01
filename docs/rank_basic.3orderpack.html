@@ -1,0 +1,283 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>rank_basic (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>rank_basic</B>(3f) - [orderpack:RANK] create an INDEX that defines the
+order of array sorted in ascending order (basic
+merge-sort)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>Maintainer</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+Subroutine Rank_Basic (<I>INVALS</I>, <I>IRNGT</I>)
+<P>
+<PRE>
+      ${TYPE} (kind=${KIND}), Intent (In) :: INVALS(:)
+      Integer, Intent (Out)               :: IRNGT(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+Where ${TYPE}(kind=${KIND}) may be
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Where ${TYPE}(kind=${KIND}) may be
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Real</B>(kind=real32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Real</B>(kind=real64)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Integer</B>(kind=int32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Character</B>(kind=selected_char_kind("DEFAULT"),len=*)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Ranks array <I>INVALS</I>, filling array <I>IRNGT</I> with sorted indices.
+<P>
+It uses a basic merge-sort.
+<P>
+This version is not optimized for performance, and is thus
+not as difficult to read as some other ones.
+<P>
+It uses Merge-sort.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>INVALS</I> </TD><TD valign=bottom>
+input array to rank
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>IRNGT</I> </TD><TD valign=bottom>
+returned rank array
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_rank_basic
+   ! create an index that can order an array in ascending order
+   use M_orderpack, only : rank_basic
+   implicit none
+   character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+   integer,parameter             :: dp=kind(0.0d0)
+   integer,parameter             :: isz=10000
+   real(kind=dp)                 :: dd(isz)
+   real(kind=dp)                 :: pp
+   integer                       :: indx(isz)
+   integer                       :: i,j,k
+   character(len=:),allocatable  :: strings(:)
+   integer,allocatable           :: cindx(:)
+      ! make some random numbers
+      call random_seed()
+      call random_number(dd)
+      dd=dd-0.50_dp
+      k=int(log(huge(0.0_dp))/log(2.0_dp))-1
+      do i=1,isz
+         call random_number(pp)
+         j=floor((k+1)*pp)
+         dd(i)=dd(i)*(2.0_dp**j)
+      enddo
+      ! rank the numeric data
+      call rank_basic(dd,indx)
+      ! check order
+      do i=1,isz-1
+         if(dd(indx(i)).gt.dd(indx(i+1)))then
+            write(*,g)&#146;ERROR: data not sorted i=&#146;,i,&#146;index=&#146;,indx(i), &
+            & &#146;values &#146;,dd(indx(i)),dd(indx(i+1))
+            stop 1
+         endif
+      enddo
+      ! sort data using rank values
+      dd=dd(indx)
+      write(*,g)&#146;sorted &#146;,isz,&#146;values&#146;
+      write(*,g)&#146;from&#146;,dd(1),&#146;to&#146;,dd(isz)
+      write(*,*)minval(dd).eq.dd(1)
+      write(*,*)maxval(dd).eq.dd(isz)
+      write(*,*)minloc(dd).eq.1
+      write(*,*)maxloc(dd).eq.isz
+      ! do a character sort
+      strings= [ character(len=20) ::                               &
+      & &#146;red&#146;,    &#146;green&#146;, &#146;blue&#146;, &#146;yellow&#146;, &#146;orange&#146;,   &#146;black&#146;, &
+      & &#146;white&#146;,  &#146;brown&#146;, &#146;gray&#146;, &#146;cyan&#146;,   &#146;magenta&#146;,           &
+      & &#146;purple&#146;]
+      if(allocated(cindx))deallocate(cindx)
+      allocate(cindx(size(strings)))
+<P>
+      write(*,&#146;(a,8(a:,","))&#146;)&#146;BEFORE &#146;,&
+              & (trim(strings(i)),i=1,size(strings))
+<P>
+      call rank_basic(strings,cindx)
+<P>
+      write(*,&#146;(a,8(a:,","))&#146;)&#146;SORTED &#146;,&
+              & (trim(strings(cindx(i))),i=1,size(strings))
+<P>
+      strings=strings(cindx) ! sort the array using the rank index
+<P>
+      do i=1,size(strings)-1
+         if(strings(i).gt.strings(i+1))then
+            write(*,*)&#146;Error in sorting strings a-z&#146;
+         endif
+      enddo
+   end program demo_rank_basic
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   sorted  10000 values
+   from -.3393216923767161E+308 to .4341912370205701E+308
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+BEFORE red,green,blue,yellow,orange,black,white,brown,
+gray,cyan,magenta,purple
+SORTED black,blue,brown,cyan,gray,green,magenta,orange,
+purple,red,white,yellow
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Michel Olagnon - April 2000
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.04.16
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rank_basic (3)</TD> <TD align=right width=33%><I>May 01, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6ea84463-4dc2-4653-80cf-05459701baf7 using man macros.</FONT>
+<br><br><center><img src="images/rank_basic.3orderpack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

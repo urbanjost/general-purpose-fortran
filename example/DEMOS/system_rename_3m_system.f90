@@ -16,7 +16,8 @@
 
        ! create scratch file to rename
        open(unit=10,file='_scratch_file_',status='new')
-       write(10,'(a)') 'Test by renaming "_scratch_file_" to "_renamed_scratch_file_"'
+       write(10,'(a)') &
+       & 'Test by renaming "_scratch_file_" to "_renamed_scratch_file_"'
        write(10,'(a)') 'IF YOU SEE THIS ON OUTPUT THE RENAME WORKED'
        close(10)
        ! rename scratch file

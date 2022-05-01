@@ -10,6 +10,7 @@
      'sock.test       ', &
      'PROBABLY_NOT    ']
      do i=1,size(names)
-        write(*,*)' is ',trim(names(i)),' a socket? ', system_issock(names(i))
+        write(*,*)' is ',trim(names(i)),' a socket? ', &
+                & system_issock(names(i))
      enddo
      end program demo_system_issock

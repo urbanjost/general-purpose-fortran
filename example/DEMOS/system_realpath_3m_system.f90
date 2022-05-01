@@ -17,7 +17,8 @@
            if(patho.ne.char(0))then
               write(*,*)trim(pathi),'=>',trim(patho)
            else
-              call system_perror('*system_realpath* error for pathname '//trim(pathi)//':')
+              call system_perror(&
+              & '*system_realpath* error for pathname '//trim(pathi)//':')
               write(*,*)trim(pathi),'=>',trim(patho)
            endif
            deallocate(pathi)

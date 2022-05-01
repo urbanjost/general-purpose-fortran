@@ -1253,7 +1253,7 @@ integer                           :: place
 
       else       ! currnt is not one of the special characters
          ! the space after a keyword before the value
-         if(currnt == " ".and.itype  ==  KEYW)then
+         if(currnt == " " .and. itype  ==  KEYW)then
             ! switch from building a keyword string to building a value string
             itype=VAL
             ! beginning of a delimited value
@@ -1440,12 +1440,14 @@ logical                               :: set_mandatory
    call split(trim(key),long_short,':',nulls='return') ! split long:short keyname or long:short:: or long:: or short::
    ! check for :: on end
    isize=size(long_short)
+
    if(isize.gt.0)then                     ! very special-purpose syntax where if ends in :: next field is a value even
       if(long_short(isize).eq.'')then     ! if it starts with a dash, for --flags option on fpm(1).
          set_mandatory=.true.
          long_short=long_short(:isize-1)
       endif
    endif
+
    select case(size(long_short))
    case(0)
       long=''
@@ -1471,6 +1473,7 @@ logical                               :: set_mandatory
       long=trim(long_short(1))
       short=trim(long_short(2))
    end select
+
    if(present(val))then
       val_local=val
       iilen=len_trim(val_local)

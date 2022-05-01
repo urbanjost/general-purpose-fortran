@@ -4,7 +4,7 @@
 program demo_fmt
 use M_kracken, only : kracken, lget, sget, iget                  ! add command-line parser module
 use M_io,      only : read_line
-use M_strings, only : fmt, indent
+use M_strings, only : paragraph, indent
 implicit none
 character(len=:),allocatable :: line
 character(len=:),allocatable :: bigline
@@ -34,14 +34,14 @@ character(len=20)            :: style
       endif
       if(line.eq.'')then ! hit blank line so output previous paragraph
          if(bigline.ne.'')then
-            write(*,fmt=style) fmt(bigline,width)
+            write(*,fmt=style) paragraph(bigline,width)
          endif
          bigline=''
          style='(a)'
          write(*,*)
       elseif(step.ne.step_before)then ! hit new indent so output previous paragraph
          if(bigline.ne.'')then
-            write(*,fmt=style) fmt(bigline,width)
+            write(*,fmt=style) paragraph(bigline,width)
          endif
          bigline=line
          call makeformat()
@@ -50,7 +50,7 @@ character(len=20)            :: style
       endif
    enddo INFINITE
    if(bigline.ne.'')then
-      write(*,style) fmt(bigline,width)
+      write(*,style) paragraph(bigline,width)
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -81,7 +81,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-01-09 23:08:27 UTC-300>',&
+'@(#)COMPILED:       2022-04-29 11:57:11 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

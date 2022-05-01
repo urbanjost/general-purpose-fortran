@@ -2,7 +2,8 @@
       !
       ! This is an example using the object-oriented class/type model
       ! This is essentially the same functionality as the procedures
-      ! in the procedural module M_time(3fm), but allows for Object Oriented syntax:
+      ! in the procedural module M_time(3fm), but allows for Object
+      ! Oriented syntax:
       !
       use M_time_oop,only : date_time
       !!use M_time_oop,only : operator(+),operator(-),operator(>),operator(<)
@@ -108,7 +109,7 @@
          ! FORMATTED STRINGS (many strings possible.
          ! Takes the same format string as fmtdate(3f))
          write(*,*)
-         write(*,*)'Formatted Strings (%format("STRING") &
+         write(*,'(a)')' Formatted Strings (%format("STRING") &
          & -- see fmtdate(3f) for format descriptions'
          ! abbreviated month name             %l  Dec
          write(*,303)'Short month............ ',&

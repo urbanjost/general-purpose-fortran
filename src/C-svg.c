@@ -19,7 +19,7 @@
      files and change the suffix to .svgz instead of .svg if you desire to
      save space.
 
-  o  Since SVG is scalable, if each output is in a separate file you can lay
+  o  Since SVG is scalable, if each output is in a seperate file you can lay
      them out any way you want; one plot per page; many small plots per page;
      and so on. Assuming you have a file called a.svg here is an example html
      file to lay out frames for printing or viewing from an HTML/SVG browser/:

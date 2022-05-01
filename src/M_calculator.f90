@@ -464,6 +464,7 @@ help_text=[ &
 &' ichar($value)            : return ASCII Decimal Equivalent of character        ',&
 &' $char(value)             : return character given ASCII Decimal Equivalent     ',&
 &' $f(format,value)         : using FORMAT to create it convert number to string  ',&
+&' $repeat(string,count)    : repeat string count times                           ',&
 &' $if(expr,$val1,$val2)    : if expr==0 return $val1, else return $val2          ',&
 &' if(expr,val1,val2)       : if expr==0 return val1, else return val2            ',&
 &' hypot(x,y)               : Euclidean distance function                         ',&
@@ -529,9 +530,9 @@ help_text=[ &
 &' date_to_unix(vals(8)) : converts DAT date-time array to Unix Epoch Time        ',&
 &'--------------------------------------------------------------------------------',&
 &'TRIGONOMETRIC:                                                                  ',&
-&' cos(radians) : cosine  | acos(x/r)   | cosh()   | acosh()   | cosd(degrees)    ',&
-&' sin(radians) : sine    | asin(y/r)   | sinh()   | asinh()   | sind(degrees)    ',&
-&' tan(radians) : tangent | atan(y/x)   | tanh()   | atanh()   | tand(degrees)    ',&
+&' cos(radians) : cosine  | acos(x/r)   | cosh(x)  | acosh(x)  | cosd(degrees)    ',&
+&' sin(radians) : sine    | asin(y/r)   | sinh(x)  | asinh(x)  | sind(degrees)    ',&
+&' tan(radians) : tangent | atan(y/x)   | tanh(x)  | atanh(x)  | tand(degrees)    ',&
 &'                        | atan2(x,y)  |                                         ',&
 &'--------------------------------------------------------------------------------',&
 &'UNIT CONVERSION:                                                                ',&
@@ -548,6 +549,12 @@ help_text=[ &
 &' lgt($a,$b): A greater than B         | llt($a,$b): A less than B               ',&
 &' leq($a,$b): A equal to B             | lne($a,$b): A not equal to B            ',&
 &'--------------------------------------------------------------------------------',&
+&'HIGHER FUNCTIONS:                                                               ',&
+&' fraction(x): fraction part of model | exponent(x) : largest exponent           ',&
+&' gamma(x): gamma function            | log_gamma(x): logarithm of gamma function',&
+&' tiny()  : smallest number              | huge():       largest number          ',&
+!' erf(x), erfc_scaled(x): Error function | erfc(x): Complementary error function ',&
+&'--------------------------------------------------------------------------------',&
 &'                                                                                ']
    do i=1,size(help_text)
       call journal(help_text(i))
@@ -555,20 +562,10 @@ help_text=[ &
 end subroutine help_funcs_
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
-! fraction : Fractional part of the model representation
-! exponent :
-! gamma    : Logarithm of the Gamma function
-! log_gamma  Logarithm of the Gamma function
-! erf Error function erfc (3fortran) -
-! Complementary error function erfc_scaled
-! erfc Complementary error function
-! erfc_scaled  Error function
 ! modulo Modulo function
 ! ncr Calculate the number of unique combinations of r objects out of n.
 ! btest MANIPULATION] Bit test function
-! tiny Smallest positive number of a real kind
 ! epsilon Epsilon function
-! huge Largest number of a kind
 ! same pads strings to same length and then calls MERGE(3f)
 ! flush flush I/O buffers of specified files
 ! unusedf
@@ -1516,8 +1513,31 @@ case("$f")                              ! $f(format,value) Using single format s
             if(ios.ne.0)then
                ctmp='*'
                ier=-1
-               mssge='*$f() error writing value'
+               mssge='*$f()* error writing value'
             endif
+         endif
+      endif
+      iend=len_trim(ctmp)
+!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=------------------------------------------------------------
+case("$repeat")                              ! $repeat(string,count) concatenate string count times
+      ier=2                                  ! string will be returned
+      if(n.eq.0)then
+         ctmp=' '
+      else
+         ctmp=' '
+         if(iargs_type(1).eq.2)then     ! if first field is a string
+            ii=int(args(1))             ! get index into values() array
+            iend1=values_len(ii)        ! maximum end is at end of string
+            if(n.gt.1)fval=args(n)      ! get the real value
+            if(fval.lt.0)then
+               ier=-1
+               mssge='Argument NCOPIES of REPEAT intrinsic is negative'
+            else
+               ctmp=repeat(values(ii)(:iend1),nint(fval))
+            endif
+         else
+            ier=-1
+            mssge='*$repeat()* first value not string'
          endif
       endif
       iend=len_trim(ctmp)

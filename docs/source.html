@@ -80,11 +80,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 Driver for reading a character from stdin */<br/>
 	 Driver for writing a character to stdout */<br/>
 </td>
-<tr><td><a href="../src/C-M_units.c">../src/C-M_units.c</a></td>
-<td>
-	d2r(3c): Convert degrees to radians<br/>
-	r2d(3c): Convert radians to degrees<br/>
-</td>
 <tr><td><a href="../src/C-X11.c">../src/C-X11.c</a></td>
 <td>
 	M_DRAW:driver/X11.c - M_DRAW driver for X11 Windows<br/>
@@ -706,6 +701,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_csv::csv_write(3f): write scalar intrinsic type using current CSV style<br/>
 	M_csv::csv(3f): writes up to twenty standard scalar types as a line in a CSV file<br/>
 </td>
+<tr><td><a href="../src/M_ctrper.f90">../src/M_ctrper.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_curl.f90">../src/M_curl.f90</a></td>
 <td>
 </td>
@@ -745,9 +743,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	use the color string constants, optionally ignoring them if G_switch is .false. as set by color_mode(3f)<br/>
 	 M_escape::split(3f): parse string on delimiter characters and store tokens into an allocatable array<br/>
 </td>
-<tr><td><a href="../src/M_f2kcli.f90">../src/M_f2kcli.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_factor.f90">../src/M_factor.f90</a></td>
 <td>
 	M_factor::least_common_multiple(3f): function finds LCM for (i,j)|m(:)|m(:,:)|m(:,:,:)'<br/>
@@ -767,6 +762,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 from current cursor position jump to previous input field in pad jsu<br/>
 	 convert tabs in input to spaces in output while maintaining columns, assuming a tab is set every 8 characters<br/>
 	 append a number to the end of the filename that makes it relatively unique<br/>
+</td>
+<tr><td><a href="../src/M_fndnth.f90">../src/M_fndnth.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_generic_list.f90">../src/M_generic_list.f90</a></td>
 <td>
@@ -824,6 +822,18 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	strgar3(3f):read a string into an array USING CALCULATOR passing double-quoted strings<br/>
 	errc(3f): function for specifying error curve numbers<br/>
 	M_xyplot::fetch(3f): call sget(3f) (and calculator if fetched string starts with $ or double-quote)<br/>
+</td>
+<tr><td><a href="../src/M_indmed.f90">../src/M_indmed.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_indnth.f90">../src/M_indnth.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_inspar.f90">../src/M_inspar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_inssor.f90">../src/M_inssor.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_intrinsics.f90">../src/M_intrinsics.f90</a></td>
 <td>
@@ -916,6 +926,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_list::dict_delete(3f): remove string from sorted allocatable string array if present<br/>
 	M_list::dict_get(3f): get value of key-value pair in dictionary, given key<br/>
 	M_list::dict_add(3f): place key-value pair into dictionary, adding the key if required<br/>
+	M_list::dict_clear(3f): clear basic dictionary<br/>
+	M_list::dict_ifdef(3f): return whether name is defined or not<br/>
 </td>
 <tr><td><a href="../src/M_logic.f90">../src/M_logic.f90</a></td>
 <td>
@@ -996,6 +1008,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	too much memory required<br/>
 	M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)<br/>
 </td>
+<tr><td><a href="../src/M_median.f90">../src/M_median.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_messages.f90">../src/M_messages.f90</a></td>
 <td>
 	M_messages::messages(3f): module collecting various general routines for displaying messages<br/>
@@ -1011,6 +1026,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_messages::signs(3f):write large block letters<br/>
 	place a non-advancing status counter on terminal display (not redirected)<br/>
 </td>
+<tr><td><a href="../src/M_mrgref.f90">../src/M_mrgref.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_mrgrnk.f90">../src/M_mrgrnk.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_msg.f90">../src/M_msg.f90</a></td>
 <td>
 	M_msg::str(3f): {msg_scalar,msg_one}<br/>
@@ -1018,10 +1039,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_msg::stderr(3f): writes a message to standard error using a standard f2003 method<br/>
 	M_msg::write(3f): writes a message to any number of open files with any scalar values<br/>
 </td>
+<tr><td><a href="../src/M_mulcnt.f90">../src/M_mulcnt.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_ncurses.f90">../src/M_ncurses.f90</a></td>
 <td>
 	 Fortran interface to the ncurses(3c) library -John S.Urban 20141205<br/>
 	 wrapper around ICHAR(3f) that returns integer type C_LONG<br/>
+</td>
+<tr><td><a href="../src/M_orderpack.f90">../src/M_orderpack.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_overload.f90">../src/M_overload.f90</a></td>
 <td>
@@ -1134,12 +1161,21 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_random::mtprng_rand_real2(3f): Obtain a pseudo-random real number .ge. 0.0 and .lt. 1.0<br/>
 	M_random::mtprng_rand_real3(3f): Obtain a pseudo-random real number .gt. 0 and .lt. 1.<br/>
 </td>
+<tr><td><a href="../src/M_rapknr.f90">../src/M_rapknr.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_readgif.f90">../src/M_readgif.f90</a></td>
 <td>
 </td>
 <tr><td><a href="../src/M_readline.f90">../src/M_readline.f90</a></td>
 <td>
 	 Call readline(3c) from Fortran using ISO_C_BINDING<br/>
+</td>
+<tr><td><a href="../src/M_refpar.f90">../src/M_refpar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_refsor.f90">../src/M_refsor.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_regex.f90">../src/M_regex.f90</a></td>
 <td>
@@ -1149,6 +1185,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_exec::regerror(3f): describe error generated by regcomp(3f) or regexec(3f)<br/>
 	M_exec::regfree(3f): release storage created by regcomp(3f) compiled regular expression<br/>
 	M_regex::regsub(3f): perform regex substitutions<br/>
+</td>
+<tr><td><a href="../src/M_rinpar.f90">../src/M_rinpar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_rnkpar.f90">../src/M_rnkpar.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_sha3.f90">../src/M_sha3.f90</a></td>
 <td>
@@ -1165,14 +1207,22 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_sort::sort_heap(3f): Generic subroutine sorts the array X using a heap sort<br/>
 	M_sort::unique(3f): assuming an array is sorted, return array with duplicate values removed<br/>
 	M_sort::swap(3f): swap two variables of like type (real,integer,complex,character,double)<br/>
-	M_sort::sort_quick_rx_integer_int8(3f): indexed hybrid quicksort of a integer(kind=int8) array<br/>
-	M_sort::sort_quick_rx_integer_int16(3f): indexed hybrid quicksort of a integer(kind=int16) array<br/>
-	M_sort::sort_quick_rx_integer_int32(3f): indexed hybrid quicksort of a integer(kind=int32) array<br/>
-	M_sort::sort_quick_rx_integer_int64(3f): indexed hybrid quicksort of a integer(kind=int64) array<br/>
-	M_sort::sort_quick_rx_real_real32(3f): indexed hybrid quicksort of a real(kind=real32) array<br/>
-	M_sort::sort_quick_rx_real_real64(3f): indexed hybrid quicksort of a real(kind=real64) array<br/>
-	M_sort::sort_quick_rx_character_ascii(3f): indexed hybrid quicksort of a character(kind=ascii) array<br/>
-	M_sort::sort_quick_rx_complex(3f): indexed hybrid quicksort of a real array<br/>
+	M_sort::sort_quick_rx_integer_int8_int32(3f): indexed hybrid quicksort of a integer(kind=int8) array<br/>
+	M_sort::sort_quick_rx_integer_int16_int32(3f): indexed hybrid quicksort of a integer(kind=int16) array<br/>
+	M_sort::sort_quick_rx_integer_int32_int32(3f): indexed hybrid quicksort of a integer(kind=int32) array<br/>
+	M_sort::sort_quick_rx_integer_int64_int32(3f): indexed hybrid quicksort of a integer(kind=int64) array<br/>
+	M_sort::sort_quick_rx_real_real32_int32(3f): indexed hybrid quicksort of a real(kind=real32) array<br/>
+	M_sort::sort_quick_rx_real_real64_int32(3f): indexed hybrid quicksort of a real(kind=real64) array<br/>
+	M_sort::sort_quick_rx_character_ascii_int32(3f): indexed hybrid quicksort of a character(kind=ascii) array<br/>
+	M_sort::sort_quick_rx_integer_int8_int64(3f): indexed hybrid quicksort of a integer(kind=int8) array<br/>
+	M_sort::sort_quick_rx_integer_int16_int64(3f): indexed hybrid quicksort of a integer(kind=int16) array<br/>
+	M_sort::sort_quick_rx_integer_int32_int64(3f): indexed hybrid quicksort of a integer(kind=int32) array<br/>
+	M_sort::sort_quick_rx_integer_int64_int64(3f): indexed hybrid quicksort of a integer(kind=int64) array<br/>
+	M_sort::sort_quick_rx_real_real32_int64(3f): indexed hybrid quicksort of a real(kind=real32) array<br/>
+	M_sort::sort_quick_rx_real_real64_int64(3f): indexed hybrid quicksort of a real(kind=real64) array<br/>
+	M_sort::sort_quick_rx_character_ascii_int64(3f): indexed hybrid quicksort of a character(kind=ascii) array<br/>
+	M_sort::sort_quick_rx_complex_int32(3f): indexed hybrid quicksort of a real array<br/>
+	M_sort::sort_quick_rx_complex_int64(3f): indexed hybrid quicksort of a real array<br/>
 	M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order<br/>
 	M_sort::tree_print(3f):<br/>
 	 M_random::random_string(3f): create random string composed of provided characters of specified length<br/>
@@ -1283,8 +1333,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_strings::decodebase(3f): convert whole number string in base [2-36] to base 10 number<br/>
 	M_strings::codebase(3f): convert whole number in base 10 to string in base [2-36]<br/>
 	M_strings::todecimal(3f): given string and base return decimal integer<br/>
-	M_strings::todecimal(3f): given integer and base return string<br/>
-	M_strings::fmt(3f): wrap a long string into a paragraph<br/>
+	M_strings::tobase(3f): given integer and base return string<br/>
+	M_strings::paragraph(3f): wrap a long string into a paragraph<br/>
 </td>
 <tr><td><a href="../src/M_strings_oop.f90">../src/M_strings_oop.f90</a></td>
 <td>
@@ -1415,6 +1465,18 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_time::minus_date_time(3f): add derived type date_time object and seconds<br/>
 	M_time::eq(3f): compare derived type date_time objects (eq,lt,gt,le,ge,ne)<br/>
 </td>
+<tr><td><a href="../src/M_uniinv.f90">../src/M_uniinv.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_unipar.f90">../src/M_unipar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_unirnk.f90">../src/M_unirnk.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_unista.f90">../src/M_unista.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_units.f90">../src/M_units.f90</a></td>
 <td>
 	M_units::c2f(3f): Convert celsius to fahrenheit<br/>
@@ -1449,6 +1511,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_uuid::M_uid(3fm): generate UUIDs according to RFC 4122<br/>
 	M_uuid::generate_uuid(3f): generate(approximately) a UUID (Universally Unique IDentifier) string per RFC 4122<br/>
 </td>
+<tr><td><a href="../src/M_valmed.f90">../src/M_valmed.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_valnth.f90">../src/M_valnth.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_verify.f90">../src/M_verify.f90</a></td>
 <td>
 	M_verify::unit_check_msg(3f): writes a message to a string composed of any standard scalar types<br/>
@@ -1468,7 +1536,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_verify::dp_accdig(3f): compare two values only up to a specified number of digits<br/>
 	M_verify::in_margin(3f): check if two reals are approximately equal using a relative margin<br/>
 	M_verify::round(3f): round val to specified number of significant digits<br/>
-	M_verify::anyscalar_to_real128(3f): convert integer or real parameter of any kind to real128<br/>
+	M_verify::anyscalar_to_realbig(3f): convert integer or real parameter of any kind to real128 or biggest available<br/>
 	M_verify::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision<br/>
 </td>
 <tr><td><a href="../src/M_writegif.f90">../src/M_writegif.f90</a></td>

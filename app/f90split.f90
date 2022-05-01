@@ -1435,7 +1435,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         Michel Olagnon, Phil Garnatz>',&
 '@(#)VERSION:        V-2.0 2019-09-10, minor modifications to integrate into GPF>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-01-09 23:08:09 UTC-300>',&
+'@(#)COMPILED:       2022-04-29 11:56:58 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

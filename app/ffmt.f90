@@ -4,7 +4,7 @@
 program demo_ffmt
 use M_kracken, only : kracken, lget, sget, iget                  ! add command-line parser module
 use M_io,      only : read_line
-use M_strings, only : fmt, indent
+use M_strings, only : paragraph, indent
 implicit none
 ! ident_1="@(#)ffmt(1f): simple text formatter for Fortran comments"
 character(len=:),allocatable :: line
@@ -42,21 +42,21 @@ character(len=1)             :: first
       endif
       if(first.ne.'!')then
          if(bigline.ne.'')then
-            write(*,fmt=style) fmt(bigline,width)
+            write(*,fmt=style) paragraph(bigline,width)
          endif
          write(*,'(a)')line
          bigline=''
          style='("!",a)'
       elseif(line.eq.'')then ! hit blank line so output previous paragraph
          if(bigline.ne.'')then
-            write(*,fmt=style) fmt(bigline,width)
+            write(*,fmt=style) paragraph(bigline,width)
          endif
          bigline=''
          style='("!",a)'
          write(*,'("!")')
       elseif(step.ne.step_before)then ! hit new indent so output previous paragraph
          if(bigline.ne.'')then
-            write(*,fmt=style) fmt(bigline,width)
+            write(*,fmt=style) paragraph(bigline,width)
          endif
          bigline=line
          call makeformat()
@@ -65,7 +65,7 @@ character(len=1)             :: first
       endif
    enddo INFINITE
    if(bigline.ne.'')then
-      write(*,style) fmt(bigline,width)
+      write(*,style) paragraph(bigline,width)
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -95,7 +95,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2022-01-09 23:07:34 UTC-300>',&
+'@(#)COMPILED:       2022-04-29 11:56:25 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

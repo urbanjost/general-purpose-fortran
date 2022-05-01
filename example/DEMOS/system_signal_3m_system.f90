@@ -12,7 +12,8 @@
       write(*,*)'Starting another loop. Do Ctrl+\ anytime to quit.'
       loop=.true.
       call system_signal(2)
-      write(*,*)'Just installed do-nothing handler for SIGINT. Try Ctrl+C to test.'
+      write(*,*)&
+       & 'Just installed do-nothing handler for SIGINT. Try Ctrl+C to test.'
       do while(loop)
       enddo
       write(*,*)'You should never see this line when running this demo.'

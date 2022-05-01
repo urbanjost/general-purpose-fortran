@@ -1,0 +1,264 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>perturb (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>perturb</B>(3f) - [orderpack:PERMUTATION] generate a random permutation
+of an array leaving elements close to initial locations
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>Maintainer</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+Subroutine Perturb (<I>INOUTVALS</I>, <I>CLOSENESS</I>)
+<P>
+<PRE>
+     ${TYPE} (kind=${KIND}), Intent (InOut) :: INOUTVALS(:)
+     Real, Intent (In)                      :: CLOSENESS
+<P>
+</PRE>
+</BLOCKQUOTE>
+Where ${TYPE}(kind=${KIND}) may be
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Where ${TYPE}(kind=${KIND}) may be
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Real</B>(kind=real32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Real</B>(kind=real64)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Integer</B>(kind=int32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Character</B>(kind=selected_char_kind("DEFAULT"),len=*)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Shuffle the array <I>INOUTVALS</I> randomly, leaving elements close to their
+initial locations.
+<P>
+Nearbyness is controlled by <I>CLOSENESS</I>. The relative proportion of
+initial order and random order is defined as 1-<I>CLOSENESS</I> / <I>CLOSENESS</I>,
+thus when <I>CLOSENESS</I> = 0, there is no change in the order whereas the
+new order is fully random when <I>CLOSENESS</I> = 1.
+<P>
+Note this differs from adding random noise to the values. The original
+values remain unchanged, their order is just perturbed.
+<P>
+Internally, the routine creates a real array of the indices of
+<I>INOUTVALS</I>() perturbed by random values that are based on the size
+of <I>CLOSENESS</I>. The new array is then ranked using <B>RANK</B>(3f) and the
+resulting index is used to permute the input array.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><I>INOUTVALS</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Array of values to perturb.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><I>CLOSENESS</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Proportion of closeness, constrained to the range <B>0.0</B>(no
+change) to <B>1.0</B>(fully random).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_perturb
+   ! generate a random perturbation of an array
+   use M_orderpack, only : perturb
+   implicit none
+   character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+   character(len=*),parameter :: list= &#146;(*(g0:,", "))&#146;
+   integer,allocatable :: xout(:,:)
+   integer          :: isz, i, j
+   isz=200
+      ! randomly perturb location of values
+      !
+      ! make an array with three initially identical rows of
+      ! values perturbed by different amounts
+      if(allocated(xout))deallocate(xout)
+      allocate(xout(3,isz))
+      xout(1,:)=[(i,i=isz,1,-1)]*10
+      xout(2,:)=xout(1,:)
+      xout(3,:)=xout(1,:)
+      ! perturb each row a different amount
+      call perturb(xout(1,:),0.0)
+      call perturb(xout(2,:),0.1)
+      call perturb(xout(3,:),1.0)
+      ! show values
+      write(*,&#146;(a)&#146;)&#146;count    unchanged  perturbed  random&#146;
+      do i=1,size(xout,dim=2)
+         write(*,&#146;(*(i8,1x))&#146;)i,xout(:,i)
+      enddo
+   char: block
+   character(len=:),allocatable :: cdont(:)
+      cdont=[character(len=20) :: &#146;a&#146;, &#146;be&#146;, &#146;car&#146;, &#146;dam&#146;,&#146;fan&#146;,&#146;gas&#146;,&#146;egg&#146;]
+      isz=size(cdont)
+      write(*,g)&#146;Original&#46;&#46;&#46;..............:&#146;,(trim(cdont(i)),i=1,isz)
+      call perturb(cdont,1.0)
+      write(*,g)&#146;Perturbed &#46;&#46;&#46;............:&#146;,(trim(cdont(i)),i=1,isz)
+      write(*,g)
+   endblock char
+<P>
+   end program demo_perturb
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   count    unchanged  perturbed  random
+          1     2000     1980       80
+          2     1990     1990      580
+          3     1980     1890     1690
+          4     1970     1900     1340
+          5     1960     1920     1260
+          6     1950     1950     1220
+          7     1940     1880      160
+          8     1930     1960     1620
+          9     1920     1860      540
+         10     1910     1930     1300
+         11     1900     1940     1190
+          .        .        .        .
+          .        .        .        .
+          .        .        .        .
+          .        .        .        .
+        189      120       80     1200
+        190      110      150      800
+        191      100      120     1430
+        192       90      170     1410
+        193       80      140      370
+        194       70       90     1720
+        195       60       10      830
+        196       50      100     1670
+        197       40       20      470
+        198       30       70     1020
+        199       20       60     1540
+        200       10       30     1810
+   Original&#46;&#46;&#46;..............: a be car dam fan gas egg
+   Perturbed &#46;&#46;&#46;............: a be gas dam fan car egg
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Michel Olagnon, 2000-2012
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.04.16
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>perturb (3)</TD> <TD align=right width=33%><I>May 01, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 96abd96a-b15c-4b96-a56a-4c6955a35046 using man macros.</FONT>
+<br><br><center><img src="images/perturb.3orderpack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

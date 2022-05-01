@@ -11,7 +11,6 @@ void draw_getgp(float *x, float *y, float *z){
 	*z = vdevice.cpW[V_Z];
 	/*
 	if (vdevice.inobject) {
-	        call move(x,y,z);
 		fprintf(stderr,"warning: getgp called in object \n");
 	}
 	*/
@@ -23,7 +22,6 @@ void draw_getgp2(float *x, float *y){
 	*y = vdevice.cpW[V_Y];
 	/*
 	if (vdevice.inobject) {
-	        call move2(x,y);
 		fprintf(stderr,"warning: getgp2 called in object \n");
 	}
 	*/

@@ -16,22 +16,26 @@
 !!
 !!##SYNOPSIS
 !!
-!!    use M_list, only : insert, replace, remove
+!!    use M_list, only : insert, replace, remove, locate
 !!    use M_list, only : dictionary
 !!
 !!##DESCRIPTION
 !!
-!!    The M_list(3fm) module allows for maintaining an array as a sorted
-!!    list. An example is given that creates a keyword-value dictionary
-!!    using the lists.
+!!    The M_list(3fm) module allows for maintaining an allocatable array of
+!!    intrinsic type (REAL, INTEGER, CHARACTER) as a sorted list. An example
+!!    is given that creates a keyword-value dictionary using the lists.
 !!
 !!    The lists are maintained as simple allocatable arrays. Each time an
 !!    entry is added or deleted the array is re-allocated. Because of the
 !!    expense of reallocating the data these routines are best suited for
 !!    maintaining small lists that do not change size frequently.
 !!
-!!    The advantage is that the dictionary components are simple arrays of
-!!    intrinsic types which can be easily accessed with standard routines.
+!!    The advantage of this simplistic approach is that the dictionary
+!!    components are simple arrays of intrinsic types which can be easily
+!!    accessed with standard routines. It is easy to understand, as it
+!!    works with simple arrays. For more demanding applications this would
+!!    be implemented as a linked list, which there are a number of freely
+!!    available examples of; several are listed on the Fortran Wiki.
 !!
 !!    BASIC LIST
 !!
@@ -47,23 +51,7 @@
 !!    subroutine remove(list,place)           remove entry from an allocatable
 !!                                            array at specified position
 !!
-!!    BASIC DICTIONARY
-!!
-!!    Due to bugs in gfortran up to at least 7.4.0, this next section
-!!    does not work.
-!!
-!!    type dictionary
-!!
-!!       character(len=:),allocatable :: key(:)
-!!       character(len=:),allocatable :: value(:)
-!!       integer,allocatable          :: count(:)
-!!
-!!    %get      get value from type(dictionary) given an existing key
-!!    %set      set or replace value for type(dictionary) given a key
-!!    %del      delete an existing key from type(dictionary)
-!!    %clr      empty a type(dictionary)
-!!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -86,16 +74,18 @@
 !!     call update('d','value of d')
 !!     call update('a','value of a again')
 !!     ! show array
-!!     write(*,'(*(a,"==>","[",a,"]",/))')(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+!!     write(*,'(*(a,"==>","[",a,"]",/))')&
+!!      & (trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
 !!     ! remove some entries
 !!     call update('a')
 !!     call update('c')
-!!     write(*,'(*(a,"==>","[",a,"]",/))')(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+!!     write(*,'(*(a,"==>","[",a,"]",/))')&
+!!      & (trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
 !!     ! get some values
 !!     write(*,*)'get b=>',get('b')
 !!     write(*,*)'get d=>',get('d')
 !!     write(*,*)'get notthere=>',get('notthere')
-!!
+!!     !
 !!     contains
 !!     subroutine update(key,valin)
 !!     character(len=*),intent(in)           :: key
@@ -138,21 +128,103 @@
 !!           valout=values(place)(:counts(place))
 !!        endif
 !!     end function get
-!!    end program demo_M_list
+!!     end program demo_M_list
 !!
-!!   Results:
+!!   Results
 !!
-!!    d==>[value of d]
-!!    c==>[value of c again]
-!!    b==>[value of b]
-!!    a==>[value of a again]
+!!       >  d==>[value of d]
+!!       >  c==>[value of c again]
+!!       >  b==>[value of b]
+!!       >  a==>[value of a again]
+!!       >
+!!       > d==>[value of d]
+!!       > b==>[value of b]
+!!       >
+!!       >  get b=>value of b
+!!       >  get d=>value of d
+!!       >  get notthere=>
 !!
-!!    d==>[value of d]
-!!    b==>[value of b]
 !!
-!!     get b=>value of b
-!!     get d=>value of d
-!!     get notthere=>
+!!    BASIC DICTIONARY
+!!
+!!    A basic dictionary that uses the basic M_list functions.
+!!
+!!    Consider using generic linked-list based dictionaries when heavy
+!!    usage is required, now that that is available in more recent versions
+!!    of Fortran.
+!!
+!!    Note: this does not work with gfortran(1) up to at least 7.4.0 but
+!!    works from at least 10.3.0 and onward.
+!!
+!!    Dictionary type definition:
+!!
+!!       type dictionary
+!!          character(len=:),allocatable :: key(:)
+!!          character(len=:),allocatable :: value(:)
+!!          integer,allocatable          :: count(:)
+!!          contains
+!!             procedure,public :: get => dict_get
+!!             procedure,public :: set => dict_add
+!!             procedure,public :: del => dict_delete
+!!             procedure,public :: clr => dict_clear
+!!       end type dictionary
+!!
+!!       %get      get value from type(dictionary) given an existing key
+!!       %set      set or replace value for type(dictionary) given a key
+!!       %del      delete an existing key from type(dictionary)
+!!       %clr      empty a type(dictionary)
+!!       %ifdef    test if name is defined
+!!
+!!##EXAMPLES
+!!
+!!   Sample program
+!!
+!!       program test_dictionary
+!!       use M_list, only : dictionary
+!!       implicit none
+!!       type(dictionary)             :: table
+!!         !
+!!         ! create a character string dictionary
+!!         !
+!!         call table%set('A','aye')
+!!         call table%set('B','bee')
+!!         call table%set('C','see')
+!!         call table%set('D','dee')
+!!         !
+!!         write(*,*)'A=',table%get('A')
+!!         write(*,*)'C=',table%get('C')
+!!         write(*,*)'notthere=',table%get('notthere')
+!!         !
+!!         call print_dict()
+!!         !
+!!         ! delete dictionary entries
+!!         !
+!!         call  table%del('A')
+!!         call  table%del('C')
+!!         call  table%del('z') ! a noop as there is no key of 'z'
+!!         !
+!!         call print_dict()
+!!         !
+!!         ! clear dictionary
+!!         !
+!!         call  table%clr()
+!!         !
+!!         call print_dict()
+!!       !
+!!       contains
+!!       !
+!!       subroutine print_dict()
+!!       integer :: i
+!!          ! the dictionary is just three arrays
+!!          write(*,'("DICTIONARY:")')
+!!          write(*,'(*(a,"==>","[",a,"]",/))') &
+!!          & (trim(table%key(i)),               &
+!!          & table%value(i)(:table%count(i)),    &
+!!          & i=1,size(table%key))
+!!          !
+!!       end subroutine print_dict
+!!       !
+!!       end program test_dictionary
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -218,9 +290,11 @@ type dictionary
    character(len=:),allocatable :: value(:)
    integer,allocatable          :: count(:)
    contains
-      procedure,public :: get => dict_get
-      procedure,public :: set => dict_add    ! insert entry by name into a sorted allocatable character array if it is not present
-      procedure,public :: del => dict_delete ! delete entry by name from a sorted allocatable character array if it is present
+      procedure,public :: get   => dict_get    ! get value associated with a key in a dictionary or return blank
+      procedure,public :: set   => dict_add    ! insert or replace entry by name into a dictionary
+      procedure,public :: del   => dict_delete ! delete entry by name from a dictionary if entry is present
+      procedure,public :: clr   => dict_clear  ! clear dictionary
+      procedure,public :: ifdef => dict_ifdef  ! return if defined or not
 end type dictionary
 
 logical,save :: debug=.false.
@@ -279,9 +353,8 @@ contains
 !!
 !!##EXAMPLES
 !!
-!!
-!!    Find if a string is in a sorted array, and insert the string into
-!!    the list if it is not present ...
+!!   Find if a string is in a sorted array, and insert the string into
+!!   the list if it is not present ...
 !!
 !!     program demo_locate
 !!     use M_sort, only : sort_shell
@@ -333,19 +406,19 @@ contains
 !!     end subroutine update
 !!     end program demo_locate
 !!
-!!   Results:
+!!   Results
 !!
-!!     for "b" index is            2           5
-!!     for "[" index is           -4           5
-!!    SIZE=5 xxx,b,aaa,[,ZZZ,
-!!     for "c" index is           -2           6
-!!    SIZE=6 xxx,c,b,aaa,[,ZZZ,
-!!     for "ZZ" index is           -7           7
-!!    SIZE=7 xxx,c,b,aaa,[,ZZZ,,
-!!     for "ZZZZ" index is           -6           8
-!!    SIZE=8 xxx,c,b,aaa,[,ZZZZ,ZZZ,,
-!!     for "z" index is           -1           9
-!!    SIZE=9 z,xxx,c,b,aaa,[,ZZZZ,ZZZ,,
+!!       >  for "b" index is            2           5
+!!       >  for "[" index is           -4           5
+!!       > SIZE=5 xxx,b,aaa,[,ZZZ,
+!!       >  for "c" index is           -2           6
+!!       > SIZE=6 xxx,c,b,aaa,[,ZZZ,
+!!       >  for "ZZ" index is           -7           7
+!!       > SIZE=7 xxx,c,b,aaa,[,ZZZ,,
+!!       >  for "ZZZZ" index is           -6           8
+!!       > SIZE=8 xxx,c,b,aaa,[,ZZZZ,ZZZ,,
+!!       >  for "z" index is           -1           9
+!!       > SIZE=9 z,xxx,c,b,aaa,[,ZZZZ,ZZZ,,
 !!
 !!##AUTHOR
 !!    1989,2017 John S. Urban
@@ -694,8 +767,7 @@ end subroutine locate_i
 !!
 !!##EXAMPLES
 !!
-!!
-!!    Sample program
+!!   Sample program
 !!
 !!     program demo_remove
 !!     use M_sort, only : sort_shell
@@ -720,13 +792,11 @@ end subroutine locate_i
 !!
 !!     end program demo_remove
 !!
-!!   Results:
+!!   Results
 !!
-!!    Expected output
-!!
-!!     SIZE=9 xxx,bb,b,b,ab,aaa,ZZZ,Z,,
-!!     SIZE=8 bb,b,b,ab,aaa,ZZZ,Z,,
-!!     SIZE=7 bb,b,b,aaa,ZZZ,Z,,
+!!       > SIZE=9 xxx,bb,b,b,ab,aaa,ZZZ,Z,,
+!!       > SIZE=8 bb,b,b,ab,aaa,ZZZ,Z,,
+!!       > SIZE=7 bb,b,b,aaa,ZZZ,Z,,
 !!
 !!##AUTHOR
 !!    1989,2017 John S. Urban
@@ -873,7 +943,6 @@ end subroutine remove_i
 !!
 !!##EXAMPLES
 !!
-!!
 !!   Replace key-value pairs in a dictionary
 !!
 !!     program demo_replace
@@ -899,7 +968,7 @@ end subroutine remove_i
 !!
 !!     call locate(keywords,'a',place)
 !!     if(place.gt.0)then
-!!        write(*,*)'The value of "a" is',trim(values(place))
+!!        write(*,*)'The value of "a" is ',trim(values(place))
 !!     else
 !!        write(*,*)'"a" not found'
 !!     endif
@@ -923,12 +992,12 @@ end subroutine remove_i
 !!     end subroutine update
 !!    end program demo_replace
 !!
-!!   Expected output
+!!   Results
 !!
-!!    d==>value of d
-!!    c==>value of c again
-!!    b==>value of b
-!!    a==>value of a again
+!!    > d==>value of d
+!!    > c==>value of c again
+!!    > b==>value of b
+!!    > a==>value of a again
 !!
 !!##AUTHOR
 !!    1989,2017 John S. Urban
@@ -1081,9 +1150,8 @@ end subroutine replace_i
 !!
 !!##EXAMPLES
 !!
-!!
-!!    Find if a string is in a sorted array, and insert the string into
-!!    the list if it is not present ...
+!!   Find if a string is in a sorted array, and insert the string into
+!!   the list if it is not present ...
 !!
 !!     program demo_insert
 !!     use M_sort, only : sort_shell
@@ -1125,14 +1193,14 @@ end subroutine replace_i
 !!     end subroutine update
 !!     end program demo_insert
 !!
-!!   Results:
+!!   Results
 !!
-!!     array is now SIZE=5 xxx,b,aaa,ZZZ,,
-!!     array is now SIZE=6 xxx,b,aaa,[,ZZZ,,
-!!     array is now SIZE=7 xxx,c,b,aaa,[,ZZZ,,
-!!     array is now SIZE=8 xxx,c,b,aaa,[,ZZZ,ZZ,,
-!!     array is now SIZE=9 xxx,c,b,aaa,[,ZZZZ,ZZZ,ZZ,,
-!!     array is now SIZE=10 z,xxx,c,b,aaa,[,ZZZZ,ZZZ,ZZ,,
+!!        > array is now SIZE=5 xxx,b,aaa,ZZZ,,
+!!        > array is now SIZE=6 xxx,b,aaa,[,ZZZ,,
+!!        > array is now SIZE=7 xxx,c,b,aaa,[,ZZZ,,
+!!        > array is now SIZE=8 xxx,c,b,aaa,[,ZZZ,ZZ,,
+!!        > array is now SIZE=9 xxx,c,b,aaa,[,ZZZZ,ZZZ,ZZ,,
+!!        > array is now SIZE=10 z,xxx,c,b,aaa,[,ZZZZ,ZZZ,ZZ,,
 !!
 !!##AUTHOR
 !!    1989,2017 John S. Urban
@@ -1288,59 +1356,56 @@ end subroutine insert_i
 !===================================================================================================================================
 !>
 !!##NAME
-!!    dict_delete(3f) - [M_list] delete entry by name from an allocatable sorted string array if it is present
+!!    del(3f) - [M_list::dictionary::OOPS] delete entry by key name from a basic dictionary
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine dict_delete(key,dict)
+!!   type(dictionary) :: dict
 !!
 !!    character(len=*),intent(in) :: key
-!!    type(dictionary)            :: dict
+!!
+!!    dict%del(key)
 !!
 !!##DESCRIPTION
 !!
-!!    Find if a string is in a sorted array, and delete the string
-!!    from the dictionary if it is present.
+!!    Delete an entry from a basic dictionary if it is present.
 !!
 !!##OPTIONS
 !!
-!!    KEY           the key name to find and delete from the dictionary.
-!!    DICTIONARY    the dictionary.
+!!    DICT   the dictionary.
+!!    KEY    the key name to find and delete from the dictionary.
 !!
 !!##EXAMPLES
 !!
+!!   Delete an entry from a dictionary by key name.
 !!
-!!    delete a key from a dictionary by name.
-!!
-!!     program demo_dict_delete
+!!     program demo_del
 !!     use M_list, only : dictionary
 !!     implicit none
 !!     type(dictionary) :: caps
 !!     integer                       :: i
-!!     call caps%set(caps,'A','aye')
-!!     call caps%set(caps,'B','bee')
-!!     call caps%set(caps,'C','see')
-!!     call caps%set(caps,'D','dee')
+!!        ! create a character string dictionary
+!!        call caps%set('A','aye')
+!!        call caps%set('B','bee')
+!!        call caps%set('C','see')
+!!        call caps%set('D','dee')
+!!        ! show current dictionary
+!!        write(*,101)(trim(caps%key(i)),trim(caps%value(i)),i=1,size(caps%key)) ! show array
+!!        ! delete dictionary entries
+!!        call  caps%del('A')
+!!        call  caps%del('C')
+!!        call  caps%del('z') ! a noop as there is no key of 'z'
+!!        ! show current dictionary
+!!        write(*,101)(trim(caps%key(i)),trim(caps%value(i)),i=1,size(caps%key)) ! show array
 !!
-!!     write(*,101)(trim(arr(i)),i=1,size(caps%keys)) ! show array
-!!     call  caps%del(caps,'A')
-!!     call  caps%del(caps,'C')
-!!     call  caps%del(caps,'z')
-!!     write(*,101)(trim(arr(i)),i=1,size(arr)) ! show array
-!!     101 format (1x,*("[",a,"]",:,","))
-!!     end program demo_dict_delete
+!!     101 format (1x,*(a,"='",a,"'",:,","))
+!!     end program demo_del
 !!
-!!    Results:
+!!   Results
 !!
-!!     [z],[xxx],[c],[b],[b],[aaa],[ZZZ],[ZZ]
-!!     [z],[xxx],[b],[b],[aaa],[ZZZ],[ZZ]
-!!     [z],[xxx],[b],[b],[aaa],[ZZZ],[ZZ]
-!!     [z],[xxx],[b],[b],[aaa],[ZZZ],[ZZ]
-!!     [z],[xxx],[aaa],[ZZZ],[ZZ]
-!!     [z],[xxx],[aaa],[ZZZ]
-!!     [z],[xxx],[aaa],[ZZZ]
-!!     [xxx],[aaa],[ZZZ]
+!!        > D='dee',C='see',B='bee',A='aye'
+!!        > D='dee',B='bee'
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -1350,9 +1415,9 @@ subroutine dict_delete(self,key)
 
 ! ident_24="@(#)M_list::dict_delete(3f): remove string from sorted allocatable string array if present"
 
-class(dictionary),intent(inout) :: self
-character(len=*),intent(in)     :: key
-integer                         :: place
+class(dictionary),intent(in) :: self
+character(len=*),intent(in)  :: key
+integer                      :: place
 
    call locate(self%key,key,place)
    if(place.ge.1)then
@@ -1367,16 +1432,18 @@ end subroutine dict_delete
 !===================================================================================================================================
 !>
 !!##NAME
-!!    dict_get(3f) - [M_list] get value of key-value pair in a dictionary given key
+!!    get(3f) - [M_list::dictionary::OOPS] get value of key-value pair in a dictionary given key
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine dict_get(dict,key,value)
+!!   type(dictionary) :: dict
 !!
-!!    type(dictionary)            :: dict
 !!    character(len=*),intent(in) :: key
 !!    character(len=*),intent(in) :: VALUE
+!!
+!!    value=dict%get(key)
+!!
 !!
 !!##DESCRIPTION
 !!
@@ -1392,32 +1459,44 @@ end subroutine dict_delete
 !!
 !!##EXAMPLES
 !!
+!!   Sample program:
 !!
-!!     program demo_locate
+!!     program demo_get
 !!     use M_list, only : dictionary
 !!     implicit none
 !!     type(dictionary)             :: table
 !!     character(len=:),allocatable :: val
-!!     integer          :: i
+!!     integer                      :: i
 !!
-!!     call table%set('A','value for A')
-!!     call table%set('B','value for B')
-!!     call table%set('C','value for C')
-!!     call table%set('D','value for D')
-!!     call table%set('E','value for E')
-!!     call table%set('F','value for F')
-!!     call table%set('G','value for G')
-!!     write(*,*)table%get('A')
-!!     write(*,*)table%get('B')
-!!     write(*,*)table%get('C')
-!!     write(*,*)table%get('D')
-!!     write(*,*)table%get('E')
-!!     write(*,*)table%get('F')
-!!     write(*,*)table%get('G')
-!!     write(*,*)table%get('H')
-!!     end program demo_locate
+!!        call table%set('A','value for A')
+!!        call table%set('B','value for B')
+!!        call table%set('C','value for C')
+!!        call table%set('D','value for D')
+!!        call table%set('E','value for E')
+!!        call table%set('F','value for F')
+!!        call table%set('G','value for G')
 !!
-!!    Results:
+!!        write(*,*)'A=',table%get('A')
+!!        write(*,*)'B=',table%get('B')
+!!        write(*,*)'C=',table%get('C')
+!!        write(*,*)'D=',table%get('D')
+!!        write(*,*)'E=',table%get('E')
+!!        write(*,*)'F=',table%get('F')
+!!        write(*,*)'G=',table%get('G')
+!!        write(*,*)'H=',table%get('H')
+!!
+!!      end program demo_get
+!!
+!!   Results
+!!
+!!       >  A=value for A
+!!       >  B=value for B
+!!       >  C=value for C
+!!       >  D=value for D
+!!       >  E=value for E
+!!       >  F=value for F
+!!       >  G=value for G
+!!       >  H=
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -1427,8 +1506,7 @@ function dict_get(self,key) result(value)
 
 ! ident_25="@(#)M_list::dict_get(3f): get value of key-value pair in dictionary, given key"
 
-!!class(dictionary),intent(inout) :: self
-class(dictionary)               :: self
+class(dictionary),intent(in)    :: self
 character(len=*),intent(in)     :: key
 character(len=:),allocatable    :: value
 integer                         :: place
@@ -1444,16 +1522,17 @@ end function dict_get
 !===================================================================================================================================
 !>
 !!##NAME
-!!    dict_add(3f) - [M_list] add or replace a key-value pair in a dictionary
+!!    set(3f) - [M_list::dictionary::OOPS] add or replace a key-value pair in a dictionary
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine dict_add(dict,key,value)
+!!   type(dictionary) :: dict
 !!
-!!    type(dictionary)            :: dict
 !!    character(len=*),intent(in) :: key
 !!    character(len=*),intent(in) :: VALUE
+!!
+!!    call dict%rep(key,value)
 !!
 !!##DESCRIPTION
 !!    Add or replace a key-value pair in a dictionary.
@@ -1465,26 +1544,39 @@ end function dict_get
 !!
 !!##EXAMPLES
 !!
-!!    If string is not found in a sorted array, insert the string
+!!   Add or replace a key and value pair in a dictionary
 !!
-!!     program demo_add
+!!     program demo_set
 !!     use M_list, only : dictionary
 !!     implicit none
 !!     type(dictionary) :: dict
 !!     integer          :: i
 !!
-!!     call dict%set('A','b')
-!!     call dict%set('B','^')
-!!     call dict%set('C',' ')
-!!     call dict%set('D','c')
-!!     call dict%set('E','ZZ')
-!!     call dict%set('F','ZZZZ')
-!!     call dict%set('G','z')
-!!     call dict%set('A','new value for A')
-!!     write(*,'(*(a,"==>","[",a,"]",/))')(trim(dict%key(i)),dict%value(i)(:dict%count(i)),i=1,size(dict%key))
-!!     end program demo_add
+!!         call dict%set('A','b')
+!!         call dict%set('B','^')
+!!         call dict%set('C',' ')
+!!         call dict%set('D','c')
+!!         call dict%set('E','ZZ')
+!!         call dict%set('F','ZZZZ')
+!!         call dict%set('G','z')
+!!         call dict%set('A','new value for A')
 !!
-!!    Results:
+!!         write(*,'(*(a,"==>","[",a,"]",/))') &
+!!          & (trim(dict%key(i)),              &
+!!          & dict%value(i)(:dict%count(i)),   &
+!!          & i=1,size(dict%key))
+!!
+!!      end program demo_set
+!!
+!!   Results
+!!
+!!       > G==>[z]
+!!       > F==>[ZZZZ]
+!!       > E==>[ZZ]
+!!       > D==>[c]
+!!       > C==>[]
+!!       > B==>[^]
+!!       > A==>[new value for A]
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -1500,16 +1592,169 @@ character(len=*),intent(in)     :: value
 integer                         :: place
 integer                         :: place2
    call locate(self%key,key,place)
-   if(place.lt.1)then
+   if(place.le.0)then
       place2=iabs(place)
       call insert( self%key,   key,             place2 )
       call insert( self%value, value,           place2 )
       call insert( self%count, len_trim(value), place2 )
    elseif(place.gt.0)then  ! replace instead of insert
-      call insert( self%value, value,           place )
-      call insert( self%count, len_trim(value), place )
+      call replace( self%value, value,           place )
+      call replace( self%count, len_trim(value), place )
    endif
 end subroutine dict_add
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
+!!    clr(3f) - [M_list::dictionary::OOPS] clear basic dictionary
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!   type(dictionary) :: dict
+!!
+!!    call dict%clr()
+!!
+!!##DESCRIPTION
+!!
+!!    clear a basic dictionary.
+!!
+!!##OPTIONS
+!!
+!!    DICT   the dictionary.
+!!
+!!##EXAMPLES
+!!
+!!   create and clear a basic dictionary
+!!
+!!     program demo_clr
+!!     use M_list, only : dictionary
+!!     implicit none
+!!     type(dictionary) :: caps
+!!     integer                       :: i
+!!        ! create a character string dictionary
+!!        call caps%set('A','aye')
+!!        call caps%set('B','bee')
+!!        call caps%set('C','see')
+!!        call caps%set('D','dee')
+!!        ! show current dictionary
+!!        write(*,'("DICTIONARY BEFORE CLEARED")')
+!!        write(*,101)(trim(caps%key(i)),trim(caps%value(i)),i=1,size(caps%key)) ! show array
+!!        call  caps%clr()
+!!        write(*,'("DICTIONARY AFTER CLEARED")')
+!!        ! show current dictionary
+!!        write(*,101)(trim(caps%key(i)),trim(caps%value(i)),i=1,size(caps%key)) ! show array
+!!
+!!     101 format (1x,*(a,"='",a,"'",:,","))
+!!     end program demo_clr
+!!
+!!   Results
+!!
+!!       > DICTIONARY BEFORE CLEARED
+!!       >  D='dee',C='see',B='bee',A='aye'
+!!       > DICTIONARY AFTER CLEARED
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+subroutine dict_clear(self)
+
+! ident_27="@(#)M_list::dict_clear(3f): clear basic dictionary"
+
+class(dictionary),intent(inout) :: self
+integer                         :: i
+
+   do i=size(self%key),1,-1
+      call self%del(self%key(i))
+   enddo
+
+end subroutine dict_clear
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
+!!    ifdef(3f) - [M_list::dictionary::OOPS] return whether name is present in dictionary or not
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!   type(dictionary) :: dict
+!!
+!!    character(len=*),intent(in) :: key
+!!    logical :: value
+!!
+!!    value=dict%ifdef(key)
+!!
+!!
+!!##DESCRIPTION
+!!
+!!    determine if name is already defined in dictionary or not
+!!
+!!##OPTIONS
+!!
+!!    DICT     is the dictionary.
+!!    KEY      key name
+!!
+!!##RETURNS
+!!    VALUE    .FALSE. if name not defined, .TRUE if name is defined.
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!     program demo_ifdef
+!!     use M_list, only : dictionary
+!!     implicit none
+!!     type(dictionary)             :: table
+!!     character(len=:),allocatable :: val
+!!     integer                      :: i
+!!
+!!        call table%set('A','value for A')
+!!        call table%set('B','value for B')
+!!        call table%set('C','value for C')
+!!        call table%set('D','value for D')
+!!        call table%set('E','value for E')
+!!        call table%set('F','value for F')
+!!        call table%set('G','value for G')
+!!        call table%del('F')
+!!        call table%del('D')
+!!
+!!        write(*,*)'A=',table%ifdef('A')
+!!        write(*,*)'B=',table%ifdef('B')
+!!        write(*,*)'C=',table%ifdef('C')
+!!        write(*,*)'D=',table%ifdef('D')
+!!        write(*,*)'E=',table%ifdef('E')
+!!        write(*,*)'F=',table%ifdef('F')
+!!        write(*,*)'G=',table%ifdef('G')
+!!        write(*,*)'H=',table%ifdef('H')
+!!
+!!      end program demo_ifdef
+!!
+!!   Results
+!!
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function dict_ifdef(self,key) result(value)
+
+! ident_28="@(#)M_list::dict_ifdef(3f): return whether name is defined or not"
+
+class(dictionary),intent(in)    :: self
+character(len=*),intent(in)     :: key
+logical                         :: value
+integer                         :: place
+   call locate(self%key,key,place)
+   if(place.lt.1)then
+      value=.false.
+   else
+      value=.true.
+   endif
+end function dict_ifdef
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

@@ -41,6 +41,8 @@ static struct rgb_color carray[MAXCOLOR];
 
 extern  FILE     *draw_fp;
 
+static int prefx, prefy, prefxs, prefys;
+
 /* How to convert degrees to radians */
 #ifndef PI
 #define PI      3.14159265358979323846264338327950288419716939937510
@@ -81,7 +83,6 @@ static int xfig_mapcolor(int i, int r, int g, int b) {
  */
 static int xfig_init(void) {
         int i; draw_fp = _draw_outfile();
-        int prefx, prefy, prefxs, prefys;
 
         draw_getprefposandsize(&prefx, &prefy, &prefxs, &prefys);
         if (prefxs != -1 ) {

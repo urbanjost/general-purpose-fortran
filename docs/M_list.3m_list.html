@@ -61,17 +61,18 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
-<A HREF=#3>Example</A><BR>
-<A HREF=#4>Author</A><BR>
-<A HREF=#5>License</A><BR>
+<A HREF=#3>Examples</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>use</B> M_list, <I>only</I> : insert, replace, <I>remove</I>
+<B>use</B> M_list, <I>only</I> : insert, replace, remove, <I>locate</I>
 <B>use</B> M_list, <I>only</I> : <I>dictionary</I>
 </BLOCKQUOTE>
 <A name=2>
@@ -81,17 +82,21 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-The <B>M_list</B>(3fm) module allows for maintaining an array as a sorted
-list. An example is given that creates a keyword-value <I>dictionary</I>
-using the lists.
+The <B>M_list</B>(3fm) module allows for maintaining an allocatable array of
+intrinsic type (REAL, INTEGER, CHARACTER) as a sorted list. An example
+is given that creates a keyword-value <I>dictionary</I> using the lists.
 <P>
 The lists are maintained as simple allocatable arrays. Each time an
 entry is added or deleted the array is re-allocated. Because of the
 expense of reallocating the data these routines are best suited for
 maintaining small lists that do not change size frequently.
 <P>
-The advantage is that the <I>dictionary</I> components are simple arrays of
-intrinsic types which can be easily accessed with standard routines.
+The advantage of this simplistic approach is that the <I>dictionary</I>
+components are simple arrays of intrinsic types which can be easily
+accessed with standard routines. It is easy to understand, as it
+works with simple arrays. For more demanding applications this would
+be implemented as a linked list, which there are a number of freely
+available examples of; several are listed on the Fortran Wiki.
 </BLOCKQUOTE>
 <A name=>
 
@@ -120,48 +125,13 @@ array at specified position
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>subroutine </B><B>remove</B>(list,place) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<I>remove</I> entry from an allocatable
+remove entry from an allocatable
 array at specified position
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+<A name=4>
 
-    <H4>&nbsp; &nbsp; BASIC DICTIONARY</H4>
-</A>
-<BLOCKQUOTE>
-<P>
-Due to bugs in gfortran up to at least 7.4.0, this next section
-does not work.
-<P>
-type <I>dictionary</I>
-<P>
-<PRE>
-      character(len=:),allocatable :: key(:)
-      character(len=:),allocatable :: value(:)
-      integer,allocatable          :: count(:)
-<P>
-</PRE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>%get</B> </TD><TD valign=bottom>
-get value from <B>type</B>(<I>dictionary</I>) given an existing key
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>%set</B> </TD><TD valign=bottom>
-set or replace value for <B>type</B>(<I>dictionary</I>) given a key
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>%del</B> </TD><TD valign=bottom>
-delete an existing key from <B>type</B>(<I>dictionary</I>)
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>%clr</B> </TD><TD valign=bottom>
-empty a <B>type</B>(<I>dictionary</I>)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=3>
-
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
@@ -187,16 +157,18 @@ Sample program
     call update(&#146;d&#146;,&#146;value of d&#146;)
     call update(&#146;a&#146;,&#146;value of a again&#146;)
     ! show array
-    write(*,&#146;(*(a,"==&gt;","[",a,"]",/))&#146;)(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+    write(*,&#146;(*(a,"==&gt;","[",a,"]",/))&#146;)&
+     & (trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
     ! remove some entries
     call update(&#146;a&#146;)
     call update(&#146;c&#146;)
-    write(*,&#146;(*(a,"==&gt;","[",a,"]",/))&#146;)(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+    write(*,&#146;(*(a,"==&gt;","[",a,"]",/))&#146;)&
+     & (trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
     ! get some values
     write(*,*)&#146;get b=&gt;&#146;,get(&#146;b&#146;)
     write(*,*)&#146;get d=&gt;&#146;,get(&#146;d&#146;)
     write(*,*)&#146;get notthere=&gt;&#146;,get(&#146;notthere&#146;)
-<P>
+    !
     contains
     subroutine update(key,valin)
     character(len=*),intent(in)           :: key
@@ -239,27 +211,123 @@ Sample program
           valout=values(place)(:counts(place))
        endif
     end function get
-</PRE>
-end program demo_M_list
+    end program demo_M_list
 <P>
-Results:
+</PRE>
+Results
 <P>
 <PRE>
-   d==&gt;[value of d]
-   c==&gt;[value of c again]
-   b==&gt;[value of b]
-   a==&gt;[value of a again]
+      &gt;  d==&gt;[value of d]
+      &gt;  c==&gt;[value of c again]
+      &gt;  b==&gt;[value of b]
+      &gt;  a==&gt;[value of a again]
+      &gt;
+      &gt; d==&gt;[value of d]
+      &gt; b==&gt;[value of b]
+      &gt;
+      &gt;  get b=&gt;value of b
+      &gt;  get d=&gt;value of d
+      &gt;  get notthere=&gt;
 <P>
-   d==&gt;[value of d]
-   b==&gt;[value of b]
 <P>
-    get b=&gt;value of b
-    get d=&gt;value of d
-    get notthere=&gt;
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BASIC DICTIONARY</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A basic <I>dictionary</I> that uses the basic M_list functions.
+<P>
+Consider using generic linked-list based dictionaries when heavy
+usage is required, now that that is available in more recent versions
+of Fortran.
+<P>
+Note: this does not work with <B>gfortran</B>(1) up to at least 7.4.0 but
+works from at least 10.3.0 and onward.
+<P>
+Dictionary type definition:
+<P>
+<PRE>
+      type dictionary
+         character(len=:),allocatable :: key(:)
+         character(len=:),allocatable :: value(:)
+         integer,allocatable          :: count(:)
+         contains
+            procedure,public :: get =&gt; dict_get
+            procedure,public :: set =&gt; dict_add
+            procedure,public :: del =&gt; dict_delete
+            procedure,public :: clr =&gt; dict_clear
+      end type dictionary
+<P>
+      %get      get value from type(dictionary) given an existing key
+      %set      set or replace value for type(dictionary) given a key
+      %del      delete an existing key from type(dictionary)
+      %clr      empty a type(dictionary)
+      %ifdef    test if name is defined
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+      program test_dictionary
+      use M_list, only : dictionary
+      implicit none
+      type(dictionary)             :: table
+        !
+        ! create a character string dictionary
+        !
+        call table%set(&#146;A&#146;,&#146;aye&#146;)
+        call table%set(&#146;B&#146;,&#146;bee&#146;)
+        call table%set(&#146;C&#146;,&#146;see&#146;)
+        call table%set(&#146;D&#146;,&#146;dee&#146;)
+        !
+        write(*,*)&#146;A=&#146;,table%get(&#146;A&#146;)
+        write(*,*)&#146;C=&#146;,table%get(&#146;C&#146;)
+        write(*,*)&#146;notthere=&#146;,table%get(&#146;notthere&#146;)
+        !
+        call print_dict()
+        !
+        ! delete dictionary entries
+        !
+        call  table%del(&#146;A&#146;)
+        call  table%del(&#146;C&#146;)
+        call  table%del(&#146;z&#146;) ! a noop as there is no key of &#146;z&#146;
+        !
+        call print_dict()
+        !
+        ! clear dictionary
+        !
+        call  table%clr()
+        !
+        call print_dict()
+      !
+      contains
+      !
+      subroutine print_dict()
+      integer :: i
+         ! the dictionary is just three arrays
+         write(*,&#146;("DICTIONARY:")&#146;)
+         write(*,&#146;(*(a,"==&gt;","[",a,"]",/))&#146;) &
+         & (trim(table%key(i)),               &
+         & table%value(i)(:table%count(i)),    &
+         & i=1,size(table%key))
+         !
+      end subroutine print_dict
+      !
+      end program test_dictionary
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
 
      <H3>AUTHOR</H3>
 
@@ -267,7 +335,7 @@ Results:
 <BLOCKQUOTE>
 John S. Urban
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>LICENSE</H3>
 
@@ -276,7 +344,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_list (3)</TD> <TD align=right width=33%><I>March 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c624a2da-b531-4b6f-a563-61fe5b76979e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_list (3)</TD> <TD align=right width=33%><I>May 01, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b9628ee9-aa70-4b47-95c4-dd31b7aa5eb0 using man macros.</FONT>
 <br><br><center><img src="images/M_list.3m_list.gif"></center>
 </div>
 </div>

@@ -34,18 +34,18 @@ type(dictionary) :: dict
    & ' -description "add string into allocatable string array by name" '//share)
    call  dict%set('A','value for a')
 
-   !!call unit_check('dict%set',all(dict.eq.[character(len=20) :: 'A']),msg='array should be A')
+   call unit_check('dict%set',all(dict%key.eq.[character(len=20) :: 'A']),msg='array should be A')
 
    call dict%set('b','value for b')
    call dict%set('c','value for c')
    call dict%set('z','value for z')
-   !!call unit_check('dict%set',all(dict.eq.[character(len=20) :: 'z','c','b','A']),'array should be z c b A')
+   call unit_check('dict%set',all(dict%key.eq.[character(len=20) :: 'z','c','b','A']),'array should be z c b A')
 
    call dict%set('ZZ','value for ZZ')
    call dict%set('NOT','not this one')
    call dict%set('ZZZ','value for ZZZ')
    call dict%set('Z','value for Z')
-   !!call unit_check('dict%set',all(dict.eq.[character(len=20) :: 'z','not this one','c','b','ZZZ','ZZ','Z','A']),'string adds ')
+   call unit_check('dict%set',all(dict%key.eq.[character(len=20) :: 'z','c','b','ZZZ','ZZ','Z','NOT','A']),'strings ok')
 
    call unit_check_done('dict%set') 
 end subroutine test_dict_set
@@ -55,23 +55,44 @@ type(dictionary) :: dict
    call unit_check_start('dict%del',&
    & ' -description "delete string by name from allocatable string array" '//share)
 
+    call dict%set('A','some A')
+   call dict%set('a','some a')
+   call dict%set('b','some b')
+    call dict%set('ZZ','some ZZ')
+    call dict%set('ZZZ','some ZZZ')
+    call dict%set('ZZ','some ZZ')
+    call dict%set('Z','some Z')
+    call dict%set('z','some z')
+   call dict%set('c','some c')
+   !write(*,'("built ",a)')dict%key
+
    call dict%del('A')
    call dict%del('Z')
    call dict%del('X')
-   !!call unit_check('dict%del',all(dict.eq.[character(len=20) :: 'z','c','b','ZZZ','ZZ','A']),'string deletes ')
+   call dict%del('ZZZ')
+   call dict%del('ZZ')
+   call dict%del('z')
+   !write(*,'("remaining ",a)')dict%key
+   call unit_check('dict%del',all(dict%key.eq.[character(len=20) :: 'c','b','a']),'string deletes keys')
+   !write(*,'("remaining key ",a)')dict%key
+   !write(*,'("remaining val ",a)')dict%value
+   call unit_check('dict%del',all(dict%value.eq.[character(len=20) :: 'some c','some b','some a']),'string deletes values')
 
    call unit_check_done('dict%del')
 end subroutine test_dict_delete
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_dict_get
 type(dictionary)             :: dict
-character(len=:),allocatable :: val
+character(len=20),allocatable :: val(:)
    call unit_check_start('dict%get',&
    & ' -description "locate and get value from key-value pair by key name from dictionary" '//share)
-   val=dict%get('A')
-   val=dict%get('Z')
-   val=dict%get('X')
-   !!call unit_check('dict%get',all(dict.eq.[character(len=20) :: 'z','c','b','ZZZ','ZZ','A']),'string deletes ')
+   call dict%set('A','some A')
+   call dict%set('Z','some Z')
+   call dict%set('X','some X')
+   val=[dict%get('Z'), dict%get('A'), dict%get('X')]
+   !write(*,'("remaining ",a)')dict%key
+   call unit_check('dict%get',all(dict%key.eq.[character(len=20) :: 'Z','X','A']),'string get keys')
+   call unit_check('dict%get',all(dict%value.eq.[character(len=20) :: 'some Z','some X','some A']),'string get values ')
 
    call unit_check_done('dict%get')
 end subroutine test_dict_get

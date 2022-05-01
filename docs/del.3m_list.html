@@ -45,7 +45,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>fmt (3)</NOBR><HR></H1>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>del (3)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -53,7 +53,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>fmt</B>(3f) - [M_strings:TOKENS] break a long line into a paragraph
+<B>del</B>(3f) - [M_list::dictionary::OOPS] delete entry by key name from a basic dictionary
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -62,23 +62,22 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
-<A HREF=#4>Returns</A><BR>
-<A HREF=#5>Example</A><BR>
-<A HREF=#6>Author</A><BR>
-<A HREF=#7>License</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
 </BLOCKQUOTE>
-<A name=8>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-function <B>fmt</B>(source_string,length)
+<B>type</B>(<I>dictionary</I>) :: dict
 <P>
 <PRE>
-   character(len=*),intent(in)       :: source_string
-   integer,intent(in)                :: length
-   character(allocatable(len=length)    :: fmt(:)
+   character(len=*),intent(in) :: key
+<P>
+   dict%del(key)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -88,12 +87,8 @@ function <B>fmt</B>(source_string,length)
 
 </A>
 <BLOCKQUOTE>
-<B>fmt</B>(3f) breaks a long line into a simple paragraph of specified
-line length.
 <P>
-Given a long string break it on spaces into an array such that no
-variable is longer than the specified length. Individual words longer
-than LENGTH will be placed in variables by themselves.
+Delete an entry from a basic <I>dictionary</I> if it is present.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -101,70 +96,58 @@ than LENGTH will be placed in variables by themselves.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>SOURCE_STRING</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-input string to break into an array of shorter strings
-on blank delimiters
+<TR valign=top><TD width=6% nowrap>
+<B>DICT</B> </TD><TD valign=bottom>
+the <I>dictionary</I>.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>LENGTH</B> </TD><TD valign=bottom>
-length of lines to break the string into.
+<B>KEY</B> </TD><TD valign=bottom>
+the key name to find and delete from the <I>dictionary</I>.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>RETURNS</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>FMT</B> </TD><TD valign=bottom>
-character array filled with data from source_string broken at
-spaces into variables of length LENGTH.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=5>
-
-     <H3>EXAMPLE</H3>
-
-</A>
-<BLOCKQUOTE>
-sample program
+Delete an entry from a <I>dictionary</I> by key name.
 <P>
 <PRE>
-   program demo_fmt
-   use M_strings, only : fmt
-   implicit none
-   character(len=:),allocatable :: paragraph(:)
-   character(len=*),parameter    :: string= &#146;&
-    &one two three four five &
-    &six seven eight &
-    &nine ten eleven twelve &
-    &thirteen fourteen fifteen sixteen &
-    &seventeen&#146;
+    program demo_del
+    use M_list, only : dictionary
+    implicit none
+    type(dictionary) :: caps
+    integer                       :: i
+       ! create a character string dictionary
+       call caps%set(&#146;A&#146;,&#146;aye&#146;)
+       call caps%set(&#146;B&#146;,&#146;bee&#146;)
+       call caps%set(&#146;C&#146;,&#146;see&#146;)
+       call caps%set(&#146;D&#146;,&#146;dee&#146;)
+       ! show current dictionary
+       write(*,101)(trim(caps%key(i)),trim(caps%value(i)),i=1,size(caps%key)) ! show array
+       ! delete dictionary entries
+       call  caps%del(&#146;A&#146;)
+       call  caps%del(&#146;C&#146;)
+       call  caps%del(&#146;z&#146;) ! a noop as there is no key of &#146;z&#146;
+       ! show current dictionary
+       write(*,101)(trim(caps%key(i)),trim(caps%value(i)),i=1,size(caps%key)) ! show array
 <P>
-   write(*,*)&#146;LEN=&#146;,len(string)
-   write(*,*)&#146;INPUT:&#146;
-   write(*,*)string
-<P>
-   paragraph=fmt(string,40)
-   write(*,*)&#146;LEN=&#146;,len(paragraph),&#146; SIZE=&#146;,size(paragraph)
-   write(*,*)&#146;OUTPUT:&#146;
-   write(*,&#146;(a)&#146;)paragraph
-<P>
-   write(*,&#146;(a)&#146;)fmt(string,0)
-   write(*,&#146;(3x,a)&#146;)fmt(string,47)
-<P>
-   end program demo_fmt
+    101 format (1x,*(a,"=&#146;",a,"&#146;",:,","))
+    end program demo_del
 <P>
 </PRE>
-Results:
+Results
+<P>
+<PRE>
+       &gt; D=&#146;dee&#146;,C=&#146;see&#146;,B=&#146;bee&#146;,A=&#146;aye&#146;
+       &gt; D=&#146;dee&#146;,B=&#146;bee&#146;
+<P>
+</PRE>
 </BLOCKQUOTE>
-<P>
-<P>
-<A name=6>
+<A name=5>
 
      <H3>AUTHOR</H3>
 
@@ -172,7 +155,7 @@ Results:
 <BLOCKQUOTE>
 John S. Urban
 </BLOCKQUOTE>
-<A name=7>
+<A name=6>
 
      <H3>LICENSE</H3>
 
@@ -181,8 +164,8 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>fmt (3)</TD> <TD align=right width=33%><I>March 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b85cac1b-4d90-43ab-8f80-d5fd343e01c2 using man macros.</FONT>
-<br><br><center><img src="images/fmt.3m_strings.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>del (3)</TD> <TD align=right width=33%><I>May 01, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a4b38d13-3e03-4612-8ff5-936c7456ed1e using man macros.</FONT>
+<br><br><center><img src="images/del.3m_list.gif"></center>
 </div>
 </div>
 </body>

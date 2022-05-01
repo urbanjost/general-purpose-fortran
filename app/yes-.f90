@@ -4,19 +4,17 @@
 ! this is a utility program. It is typically built using ccall(1).
 !-----------------------------------------------------------------------------------------------------------------------------------
 program yes                                                         ! combine yes(1),repeat(1),watch(1),xargs(1). Start with yes(1)
-   use M_kracken, only : kracken, lget, sget, iget                  ! add command-line parser module
-   !!use M_kracken, only : show
-   use M_verify,   only : debug
-   implicit none
-   character(len=:),allocatable :: string
-   logical                      :: fmt
-   integer                      :: ios
-   integer                      :: repeat
-   integer                      :: i
-   integer                      :: istart
-   character(len=1024)          :: message
+use M_kracken, only : kracken, lget, sget, iget                  ! add command-line parser module
+!!use M_kracken, only : show
+implicit none
+character(len=:),allocatable :: string
+logical                      :: fmt
+integer                      :: ios
+integer                      :: repeat
+integer                      :: i
+integer                      :: istart
+character(len=1024)          :: message
 !-----------------------------------------------------------------------------------------------------------------------------------
-   !!debug=.true.
    call kracken('yes','-help .F. -version .F. -repeat -1 -fmt .F.') ! define command arguments,default values and crack command line
 !-----------------------------------------------------------------------------------------------------------------------------------
    !!call show('',.false.,0)
@@ -73,7 +71,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-01-09 23:08:41 UTC-300>',&
+'@(#)COMPILED:       2022-04-29 11:57:30 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -10,6 +10,7 @@
      'block_device.tst', &
      'PROBABLY_NOT    ']
      do i=1,size(names)
-         write(*,*)' is ',trim(names(i)),' a block device? ', system_isblk(names(i))
+         write(*,*)' is ',trim(names(i)),' a block device? ', &
+                 & system_isblk(names(i))
      enddo
      end program demo_system_isblk

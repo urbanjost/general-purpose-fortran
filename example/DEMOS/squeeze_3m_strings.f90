@@ -22,7 +22,8 @@
         write(*,'("IN:   <<<",g0,">>>")')str
         answer=squeeze(str,chr)
         write(*,'("OUT:  <<<",g0,">>>")')answer
-        write(*,'("LENS: ",*(g0,1x))')"from",len(str),"to",len(answer),"for a change of",len(str)-len(answer)
+        write(*,'("LENS: ",*(g0,1x))')"from",len(str),"to",len(answer), &
+                & "for a change of",len(str)-len(answer)
         write(*,'("CHAR: ",g0)')chr
      end subroutine printme
      end program demo_squeeze

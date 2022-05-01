@@ -412,7 +412,7 @@ char datestring[256];
 static char local_buff[17] = { 0 };
 int i;
 
-   errno = 0;                                                              /* always set errno to zero first.      */
+   errno = 0;                                                              /* always set errno to zero first. */
    if (stat (file, buf) != 0) {
    perror (file);                                                          /* if stat does not work, print a diagnostic. */
       *ierr=1;

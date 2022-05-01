@@ -201,7 +201,7 @@ do
 	P) sys=$OPTARG;;
 	p) doprobe=1;;
 	I) itxt="$OPTARG§$itxt";;
-	B) btxt=$OPTARG;;
+	B) btxt="$OPTARG§$btxt";;
 	T) post="groff -m man  -Tlatin1 | ${PAGER:-more -f}";;
 	X) post="groff -m man  -X";;
 	T) post="groff -mandoc -Tlatin1 | ${PAGER:-more -f}";;

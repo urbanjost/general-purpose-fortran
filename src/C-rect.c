@@ -35,14 +35,14 @@ void draw_rect(float x1, float y1, float x2, float y2) {
    draw_draw2(x2, y1);
    draw_draw2(x2, y2);
    draw_draw2(x1, y2);
-   draw_draw2(x1, y1);
 
    /* 
     * if fill on or hatch on and in a polygon started in this call close polygon
     */
-   if (started){
+   if (started)
       draw_closepoly();
-   }
+   else
+      draw_draw2(x1, y1);
 
    if(sync){
 	   vdevice.sync = 1;

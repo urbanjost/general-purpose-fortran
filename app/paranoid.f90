@@ -9,7 +9,8 @@ stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                                                                            ',&
-'    paranoid(1f) - [DEVELOPER] call doubleprecision and real versions of paranoia(3f)                                           ',&
+'    paranoid(1f) - [DEVELOPER] call doubleprecision and real versions                                                           ',&
+'    of paranoia(3f)                                                                                                             ',&
 '    (LICENSE:PD)                                                                                                                ',&
 'SYNOPSIS                                                                                                                        ',&
 '    paranoid                                                                                                                    ',&
@@ -36,42 +37,6 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   selected while building a program and the system hardware currently                                                          ',&
 '   being used reasonably perform floating point operations.                                                                     ',&
 '                                                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-'                                                                                                                                ',&
-'                                                                                                                                ',&
-' Sample beginning of dialog ...                                                                                                 ',&
-'                                                                                                                                ',&
-'   ============================================================                                                                 ',&
-'   Tuesday, February 7th, 2017 4:35:06 AM UTC-0300                                                                              ',&
-'    sysname:   CYGWIN_NT-10.0                                                                                                   ',&
-'    release:  2.6.0(0.304/5/3)                                                                                                  ',&
-'    version:  2016-08-31 14:32                                                                                                  ',&
-'    nodename: buzz                                                                                                              ',&
-'    machine:  x86_64                                                                                                            ',&
-'   This file was compiled by GCC version 5.4.0                                                                                  ',&
-'   using the options                                                                                                            ',&
-'        -I /usr/include/w32api                                                                                                  ',&
-'        -I /home/urbanjs/V600/lib/CYGWIN64_GFORTRAN                                                                             ',&
-'        -mtune=generic                                                                                                          ',&
-'        -march=x86-64                                                                                                           ',&
-'        -g                                                                                                                      ',&
-'        -Wunused                                                                                                                ',&
-'        -Wuninitialized                                                                                                         ',&
-'        -Wall                                                                                                                   ',&
-'        -std=f2008                                                                                                              ',&
-'        -fbounds-check                                                                                                          ',&
-'        -fbacktrace                                                                                                             ',&
-'        -finit-real=nan                                                                                                         ',&
-'        -fno-range-check                                                                                                        ',&
-'        -frecord-marker=4                                                                                                       ',&
-'        -J /home/urbanjs/V600/lib/CYGWIN64_GFORTRAN                                                                             ',&
-'   ============================================================                                                                 ',&
-'   *paranoid*" double precision test(3f)                                                                                        ',&
-'    Is this a program restart after failure (1)                                                                                 ',&
-'    or a start from scratch (0) ?                                                                                               ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'                                                                                                                                ',&
 'LICENSE                                                                                                                         ',&
 '   Public Domain                                                                                                                ',&
 '']
@@ -81,7 +46,8 @@ endif
 end subroutine help_usage
 !>
 !!##NAME
-!!     paranoid(1f) - [DEVELOPER] call doubleprecision and real versions of paranoia(3f)
+!!     paranoid(1f) - [DEVELOPER] call doubleprecision and real versions
+!!     of paranoia(3f)
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -109,43 +75,6 @@ end subroutine help_usage
 !!    selected while building a program and the system hardware currently
 !!    being used reasonably perform floating point operations.
 !!
-!!##EXAMPLE
-!!
-!!
-!!
-!!  Sample beginning of dialog ...
-!!
-!!    ============================================================
-!!    Tuesday, February 7th, 2017 4:35:06 AM UTC-0300
-!!     sysname:   CYGWIN_NT-10.0
-!!     release:  2.6.0(0.304/5/3)
-!!     version:  2016-08-31 14:32
-!!     nodename: buzz
-!!     machine:  x86_64
-!!    This file was compiled by GCC version 5.4.0
-!!    using the options
-!!         -I /usr/include/w32api
-!!         -I /home/urbanjs/V600/lib/CYGWIN64_GFORTRAN
-!!         -mtune=generic
-!!         -march=x86-64
-!!         -g
-!!         -Wunused
-!!         -Wuninitialized
-!!         -Wall
-!!         -std=f2008
-!!         -fbounds-check
-!!         -fbacktrace
-!!         -finit-real=nan
-!!         -fno-range-check
-!!         -frecord-marker=4
-!!         -J /home/urbanjs/V600/lib/CYGWIN64_GFORTRAN
-!!    ============================================================
-!!    *paranoid*" double precision test(3f)
-!!     Is this a program restart after failure (1)
-!!     or a start from scratch (0) ?
-!!
-!!##AUTHOR
-!!
 !!##LICENSE
 !!    Public Domain
 subroutine help_version(l_version)
@@ -161,63 +90,39 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)PROGRAM:        paranoid(1)>',&
 '@(#)DESCRIPTION:    call doubleprecision and real versions of paranoia(3f)>',&
 '@(#)VERSION:        1.0, 20150508>',&
-'@(#)COMPILED:       2022-01-09 23:08:06 UTC-300>',&
+'@(#)COMPILED:       2022-05-01 09:49:45 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-program test_paranoia
-use M_kracken, only  : kracken,lget
-use M_strings, only  : substitute
-use M_time, only     : now
-use M_system, only   : system_uname
-use M_messages, only : signs
-implicit none
-
-character(len=*),parameter   :: ident="@(#)paranoid(1f): call doubleprecision and real versions of paranoia(3f)"
-
-character(len=:),allocatable :: options
-integer,parameter            :: is=100
-character(len=is)            :: string=' '
-!-----------------------------------------------------------------------------------------------------------------------------------
-   call kracken('paranoid','-help .F. -version .F.')     ! define command arguments,default values and crack command line
-   call help_usage(lget('paranoid_help'))                ! if -help option is present, display help text and exit
-   call help_version(lget('paranoid_version'))           ! if -version option is present, display version text and exit
-!-----------------------------------------------------------------------------------------------------------------------------------
-                                                         ! options can be very long. Take a guess on how it can be pretty-printed
-   options='UNKNOWN'
-
-   print '(a)', repeat('=',80)                           ! print break line
-   print '(a)', now()                                    ! print date and time
-
-   call system_uname('s',string)                         ! print system information
-   write(*,*)'sysname:  '//trim(string)
-
-   call system_uname('r',string)
-   write(*,*)'release:  '//trim(string)
-
-   call system_uname('v',string)
-   write(*,*)'version:  '//trim(string)
-
-   call system_uname('n',string)
-   write(*,*)'nodename: '//trim(string)
-
-   call system_uname('m',string)
-   write(*,*)'machine:  '//trim(string)
-
-
-   print '(a)', repeat('=',80)
-
-   call signs('DOUBLE',6)
-   call paranoia('double')                               ! start tests
-   call signs('SINGLE',6)
-   call paranoia('single')
-
-end program test_paranoia
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
+!===============================================================================
+! *prep* ERROR(008) - NOT LOGICAL OR INTEGER EXPRESSION:HAVE_ISO_FORTRAN_ENV=FALSE
+! Current state of prep(1):(09:49  1 May 2022)
+! Total lines read ............... 51
+! Conditional nesting level....... 2
+! G_WRITE (general processing).... T
+! G_LLWRITE (write input lines)... T
+! Arguments ...................... TESTPRG90 -D Linux -D Linux_gfortran -D ENDCON=1 -I /tmp/USH.1425621/CCALL_Linux_gfortran_1437025 -I /home/urbanjs/venus/V600/LIBRARY/libDL/inc -I /home/urbanjs/venus/V600/LIBRARY/libGCS/inc -I /home/urbanjs/venus/V600/LIBRARY/libgdi/inc -I /home/urbanjs/venus/V600/LIBRARY/libgks2/inc -I /home/urbanjs/venus/V600/LIBRARY/libmachine/inc -I /home/urbanjs/venus/V600/LIBRARY/libMULTI/inc -I /home/urbanjs/venus/V600/LIBRARY/libncar/inc -I /home/urbanjs/venus/V600/LIBRARY/libnswc/inc -I /home/urbanjs/venus/V600/LIBRARY/libObsolete/inc -I /home/urbanjs/venus/V600/LIBRARY/librandlib/inc -I /home/urbanjs/venus/V600/LIBRARY/libSTUG/inc -I /home/urbanjs/venus/V600/LIBRARY/libtemplate/inc -I /home/urbanjs/venus/V600/LIBRARY/libvg320/inc -I /home/urbanjs/venus/V600/LIBRARY/libvogle/inc -I /home/urbanjs/venus/V600/LIBRARY/libvopl/inc -I /home/urbanjs/venus/V600/LIBRARY/EXE/BLINK/inc -I /home/urbanjs/venus/V600/LIBRARY/EXE/FLECS90/inc -I /home/urbanjs/venus/V600/LIBRARY/FROZEN/libvogle/inc -I /home/urbanjs/venus/V600/github/programs/app/source -verbose -system .true. -i /home/urbanjs/venus/V600/github/programs/app/source/paranoid.FF -o /tmp/USH.1425621/CCALL_Linux_gfortran_1437025/paranoid.1437025.f90 
+! Open files:
+!    unit ! line number ! filename
+!      50 !          51 ! /home/urbanjs/venus/V600/github/programs/app/source/paranoid.FF
+! INCLUDE directories:
+!    /home/urbanjs/venus/V600/github/programs/app/source
+! Variables:
+!    $DEFINE WINDOWS  =  3
+!    $DEFINE UNKNOWN  =  0
+!    $DEFINE TRUE  =  1
+!    $DEFINE TESTPRG90  =  1
+!    $DEFINE SYSTEMON  =  .TRUE.
+!    $DEFINE SOLARIS  =  5
+!    $DEFINE OS  =  1
+!    $DEFINE OPENBSD  =  7
+!    $DEFINE MACOS  =  2
+!    $DEFINE LINUX  =  1
+!    $DEFINE FREEBSD  =  6
+!    $DEFINE FALSE  =  0
+!    $DEFINE ENDCON  =  1
+!    $DEFINE CYGWIN  =  4
+! Parcels:
+!-------------------------------------------------------------------------------

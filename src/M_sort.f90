@@ -82,14 +82,25 @@ interface swap_any
 end interface
 !===================================================================================================================================
 interface sort_quick_rx
-   module procedure sort_quick_rx_real_real32
-   module procedure sort_quick_rx_real_real64
-   module procedure sort_quick_rx_integer_int8
-   module procedure sort_quick_rx_integer_int16
-   module procedure sort_quick_rx_integer_int32
-   module procedure sort_quick_rx_integer_int64
-   module procedure sort_quick_rx_character_ascii
-   module procedure sort_quick_rx_complex
+
+   module procedure sort_quick_rx_real_real32_int32
+   module procedure sort_quick_rx_real_real64_int32
+   module procedure sort_quick_rx_integer_int8_int32
+   module procedure sort_quick_rx_integer_int16_int32
+   module procedure sort_quick_rx_integer_int32_int32
+   module procedure sort_quick_rx_integer_int64_int32
+   module procedure sort_quick_rx_character_ascii_int32
+   module procedure sort_quick_rx_complex_int32
+
+   module procedure sort_quick_rx_real_real32_int64
+   module procedure sort_quick_rx_real_real64_int64
+   module procedure sort_quick_rx_integer_int8_int64
+   module procedure sort_quick_rx_integer_int16_int64
+   module procedure sort_quick_rx_integer_int32_int64
+   module procedure sort_quick_rx_integer_int64_int64
+   module procedure sort_quick_rx_character_ascii_int64
+   module procedure sort_quick_rx_complex_int64
+
 end interface
 !===================================================================================================================================
 ! For TREE SORT
@@ -1031,17 +1042,18 @@ end subroutine sort_shell_complex_double
 !==================================================================================================================================!
 !==================================================================================================================================!
 
-subroutine sort_quick_rx_integer_int8(data,indx)
 
-! ident_23="@(#)M_sort::sort_quick_rx_integer_int8(3f): indexed hybrid quicksort of a integer(kind=int8) array"
+subroutine sort_quick_rx_integer_int8_int32(data,indx)
+
+! ident_23="@(#)M_sort::sort_quick_rx_integer_int8_int32(3f): indexed hybrid quicksort of a integer(kind=int8) array"
 
 integer(kind=int8),intent(in)   :: data(:)
-integer,intent(out)                :: indx(:)
+integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int8)  :: datap
 
-integer                :: n
-integer                :: lstk(31),rstk(31),istk
-integer                :: l,r,i,j,p,indexp,indext
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1204,18 +1216,18 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_integer_int8
-subroutine sort_quick_rx_integer_int16(data,indx)
+end subroutine sort_quick_rx_integer_int8_int32
+subroutine sort_quick_rx_integer_int16_int32(data,indx)
 
-! ident_24="@(#)M_sort::sort_quick_rx_integer_int16(3f): indexed hybrid quicksort of a integer(kind=int16) array"
+! ident_24="@(#)M_sort::sort_quick_rx_integer_int16_int32(3f): indexed hybrid quicksort of a integer(kind=int16) array"
 
 integer(kind=int16),intent(in)   :: data(:)
-integer,intent(out)                :: indx(:)
+integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int16)  :: datap
 
-integer                :: n
-integer                :: lstk(31),rstk(31),istk
-integer                :: l,r,i,j,p,indexp,indext
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1378,18 +1390,18 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_integer_int16
-subroutine sort_quick_rx_integer_int32(data,indx)
+end subroutine sort_quick_rx_integer_int16_int32
+subroutine sort_quick_rx_integer_int32_int32(data,indx)
 
-! ident_25="@(#)M_sort::sort_quick_rx_integer_int32(3f): indexed hybrid quicksort of a integer(kind=int32) array"
+! ident_25="@(#)M_sort::sort_quick_rx_integer_int32_int32(3f): indexed hybrid quicksort of a integer(kind=int32) array"
 
 integer(kind=int32),intent(in)   :: data(:)
-integer,intent(out)                :: indx(:)
+integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int32)  :: datap
 
-integer                :: n
-integer                :: lstk(31),rstk(31),istk
-integer                :: l,r,i,j,p,indexp,indext
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1552,18 +1564,18 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_integer_int32
-subroutine sort_quick_rx_integer_int64(data,indx)
+end subroutine sort_quick_rx_integer_int32_int32
+subroutine sort_quick_rx_integer_int64_int32(data,indx)
 
-! ident_26="@(#)M_sort::sort_quick_rx_integer_int64(3f): indexed hybrid quicksort of a integer(kind=int64) array"
+! ident_26="@(#)M_sort::sort_quick_rx_integer_int64_int32(3f): indexed hybrid quicksort of a integer(kind=int64) array"
 
 integer(kind=int64),intent(in)   :: data(:)
-integer,intent(out)                :: indx(:)
+integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int64)  :: datap
 
-integer                :: n
-integer                :: lstk(31),rstk(31),istk
-integer                :: l,r,i,j,p,indexp,indext
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1726,18 +1738,18 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_integer_int64
-subroutine sort_quick_rx_real_real32(data,indx)
+end subroutine sort_quick_rx_integer_int64_int32
+subroutine sort_quick_rx_real_real32_int32(data,indx)
 
-! ident_27="@(#)M_sort::sort_quick_rx_real_real32(3f): indexed hybrid quicksort of a real(kind=real32) array"
+! ident_27="@(#)M_sort::sort_quick_rx_real_real32_int32(3f): indexed hybrid quicksort of a real(kind=real32) array"
 
 real(kind=real32),intent(in)   :: data(:)
-integer,intent(out)                :: indx(:)
+integer(kind=int32),intent(out)                :: indx(:)
 real(kind=real32)  :: datap
 
-integer                :: n
-integer                :: lstk(31),rstk(31),istk
-integer                :: l,r,i,j,p,indexp,indext
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1900,18 +1912,18 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_real_real32
-subroutine sort_quick_rx_real_real64(data,indx)
+end subroutine sort_quick_rx_real_real32_int32
+subroutine sort_quick_rx_real_real64_int32(data,indx)
 
-! ident_28="@(#)M_sort::sort_quick_rx_real_real64(3f): indexed hybrid quicksort of a real(kind=real64) array"
+! ident_28="@(#)M_sort::sort_quick_rx_real_real64_int32(3f): indexed hybrid quicksort of a real(kind=real64) array"
 
 real(kind=real64),intent(in)   :: data(:)
-integer,intent(out)                :: indx(:)
+integer(kind=int32),intent(out)                :: indx(:)
 real(kind=real64)  :: datap
 
-integer                :: n
-integer                :: lstk(31),rstk(31),istk
-integer                :: l,r,i,j,p,indexp,indext
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -2074,18 +2086,18 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_real_real64
-subroutine sort_quick_rx_character_ascii(data,indx)
+end subroutine sort_quick_rx_real_real64_int32
+subroutine sort_quick_rx_character_ascii_int32(data,indx)
 
-! ident_29="@(#)M_sort::sort_quick_rx_character_ascii(3f): indexed hybrid quicksort of a character(kind=ascii) array"
+! ident_29="@(#)M_sort::sort_quick_rx_character_ascii_int32(3f): indexed hybrid quicksort of a character(kind=ascii) array"
 
 character(kind=ascii,len=*),intent(in)   :: data(:)
-integer,intent(out)                  :: indx(:)
+integer(kind=int32),intent(out)                  :: indx(:)
 character(kind=ascii,len=len(data))  :: datap
 
-integer                :: n
-integer                :: lstk(31),rstk(31),istk
-integer                :: l,r,i,j,p,indexp,indext
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -2248,19 +2260,1241 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_character_ascii
+end subroutine sort_quick_rx_character_ascii_int32
+
+
+subroutine sort_quick_rx_integer_int8_int64(data,indx)
+
+! ident_30="@(#)M_sort::sort_quick_rx_integer_int8_int64(3f): indexed hybrid quicksort of a integer(kind=int8) array"
+
+integer(kind=int8),intent(in)   :: data(:)
+integer(kind=int64),intent(out)                :: indx(:)
+integer(kind=int8)  :: datap
+
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_integer_int8* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      if (data(indx(l)) .gt. datap) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      if (datap .gt. data(indx(r))) then
+
+         if (data(indx(l)) .gt. data(indx(r))) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         if (data(indx(i)).lt.datap)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            if (data(indx(j)).le.datap) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   if (data(indx(i-1)) .gt. data(indx(i))) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         if (data(indx(p)).le.datap)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_integer_int8_int64
+subroutine sort_quick_rx_integer_int16_int64(data,indx)
+
+! ident_31="@(#)M_sort::sort_quick_rx_integer_int16_int64(3f): indexed hybrid quicksort of a integer(kind=int16) array"
+
+integer(kind=int16),intent(in)   :: data(:)
+integer(kind=int64),intent(out)                :: indx(:)
+integer(kind=int16)  :: datap
+
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_integer_int16* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      if (data(indx(l)) .gt. datap) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      if (datap .gt. data(indx(r))) then
+
+         if (data(indx(l)) .gt. data(indx(r))) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         if (data(indx(i)).lt.datap)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            if (data(indx(j)).le.datap) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   if (data(indx(i-1)) .gt. data(indx(i))) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         if (data(indx(p)).le.datap)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_integer_int16_int64
+subroutine sort_quick_rx_integer_int32_int64(data,indx)
+
+! ident_32="@(#)M_sort::sort_quick_rx_integer_int32_int64(3f): indexed hybrid quicksort of a integer(kind=int32) array"
+
+integer(kind=int32),intent(in)   :: data(:)
+integer(kind=int64),intent(out)                :: indx(:)
+integer(kind=int32)  :: datap
+
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_integer_int32* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      if (data(indx(l)) .gt. datap) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      if (datap .gt. data(indx(r))) then
+
+         if (data(indx(l)) .gt. data(indx(r))) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         if (data(indx(i)).lt.datap)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            if (data(indx(j)).le.datap) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   if (data(indx(i-1)) .gt. data(indx(i))) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         if (data(indx(p)).le.datap)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_integer_int32_int64
+subroutine sort_quick_rx_integer_int64_int64(data,indx)
+
+! ident_33="@(#)M_sort::sort_quick_rx_integer_int64_int64(3f): indexed hybrid quicksort of a integer(kind=int64) array"
+
+integer(kind=int64),intent(in)   :: data(:)
+integer(kind=int64),intent(out)                :: indx(:)
+integer(kind=int64)  :: datap
+
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_integer_int64* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      if (data(indx(l)) .gt. datap) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      if (datap .gt. data(indx(r))) then
+
+         if (data(indx(l)) .gt. data(indx(r))) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         if (data(indx(i)).lt.datap)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            if (data(indx(j)).le.datap) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   if (data(indx(i-1)) .gt. data(indx(i))) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         if (data(indx(p)).le.datap)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_integer_int64_int64
+subroutine sort_quick_rx_real_real32_int64(data,indx)
+
+! ident_34="@(#)M_sort::sort_quick_rx_real_real32_int64(3f): indexed hybrid quicksort of a real(kind=real32) array"
+
+real(kind=real32),intent(in)   :: data(:)
+integer(kind=int64),intent(out)                :: indx(:)
+real(kind=real32)  :: datap
+
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_real_real32* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      if (data(indx(l)) .gt. datap) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      if (datap .gt. data(indx(r))) then
+
+         if (data(indx(l)) .gt. data(indx(r))) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         if (data(indx(i)).lt.datap)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            if (data(indx(j)).le.datap) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   if (data(indx(i-1)) .gt. data(indx(i))) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         if (data(indx(p)).le.datap)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_real_real32_int64
+subroutine sort_quick_rx_real_real64_int64(data,indx)
+
+! ident_35="@(#)M_sort::sort_quick_rx_real_real64_int64(3f): indexed hybrid quicksort of a real(kind=real64) array"
+
+real(kind=real64),intent(in)   :: data(:)
+integer(kind=int64),intent(out)                :: indx(:)
+real(kind=real64)  :: datap
+
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_real_real64* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      if (data(indx(l)) .gt. datap) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      if (datap .gt. data(indx(r))) then
+
+         if (data(indx(l)) .gt. data(indx(r))) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         if (data(indx(i)).lt.datap)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            if (data(indx(j)).le.datap) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   if (data(indx(i-1)) .gt. data(indx(i))) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         if (data(indx(p)).le.datap)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_real_real64_int64
+subroutine sort_quick_rx_character_ascii_int64(data,indx)
+
+! ident_36="@(#)M_sort::sort_quick_rx_character_ascii_int64(3f): indexed hybrid quicksort of a character(kind=ascii) array"
+
+character(kind=ascii,len=*),intent(in)   :: data(:)
+integer(kind=int64),intent(out)                  :: indx(:)
+character(kind=ascii,len=len(data))  :: datap
+
+integer(kind=int64)    :: n
+integer(kind=int64)    :: lstk(31),rstk(31),istk
+integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_character_ascii* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      if (data(indx(l)) .gt. datap) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      if (datap .gt. data(indx(r))) then
+
+         if (data(indx(l)) .gt. data(indx(r))) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         if (data(indx(i)).lt.datap)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            if (data(indx(j)).le.datap) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   if (data(indx(i-1)) .gt. data(indx(i))) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         if (data(indx(p)).le.datap)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_character_ascii_int64
+
+
 
 !==================================================================================================================================!
-subroutine sort_quick_rx_complex(data,indx)
+subroutine sort_quick_rx_complex_int32(data,indx)
 
-! ident_30="@(#)M_sort::sort_quick_rx_complex(3f): indexed hybrid quicksort of a real array"
+! ident_37="@(#)M_sort::sort_quick_rx_complex_int32(3f): indexed hybrid quicksort of a real array"
 
 complex,intent(in)   :: data(:)
-integer,intent(out)  :: indx(:)
+integer(kind=int32),intent(out)  :: indx(:)
 
-integer              :: n
-integer              :: lstk(31),rstk(31),istk
-integer              :: l,r,i,j,p,indexp,indext
+integer(kind=int64)  :: n
+integer(kind=int64)  :: lstk(31),rstk(31),istk
+integer(kind=int64)  :: l,r,i,j,p,indexp,indext
 complex              :: datap
 doubleprecision      :: cdsize1, cdsize2
 
@@ -2439,7 +3673,197 @@ do i=2,n
 enddo
 !===================================================================================================================================
 !     All done
-end subroutine sort_quick_rx_complex
+end subroutine sort_quick_rx_complex_int32
+!==================================================================================================================================!
+subroutine sort_quick_rx_complex_int64(data,indx)
+
+! ident_38="@(#)M_sort::sort_quick_rx_complex_int64(3f): indexed hybrid quicksort of a real array"
+
+complex,intent(in)   :: data(:)
+integer(kind=int64),intent(out)  :: indx(:)
+
+integer(kind=int64)  :: n
+integer(kind=int64)  :: lstk(31),rstk(31),istk
+integer(kind=int64)  :: l,r,i,j,p,indexp,indext
+complex              :: datap
+doubleprecision      :: cdsize1, cdsize2
+
+!  QuickSort Cutoff
+!
+!  Quit QuickSort-ing when a subsequence contains M or fewer elements and finish off at end with straight insertion sort.
+!  According to Knuth, V.3, the optimum value of M is around 9.
+
+integer,parameter :: M=9
+!===================================================================================================================================
+n=size(data)
+if(size(indx).lt.n)then  ! if index is not big enough, only sort part of the data
+  write(*,*)'*sort_quick_rx_complex* ERROR: insufficient space to store index data'
+  n=size(indx)
+endif
+!===================================================================================================================================
+!  Make initial guess for INDEX
+
+do i=1,n
+   indx(i)=i
+enddo
+
+!  If array is short go directly to the straight insertion sort, else execute a QuickSort
+if (N.gt.M)then
+   !=============================================================================================================================
+   !  QuickSort
+   !
+   !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
+   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+
+   ! Q1: Initialize
+   istk=0
+   l=1
+   r=n
+   !=============================================================================================================================
+   TOP: do
+
+      ! Q2: Sort the subsequence DATA[L]..DATA[R].
+      !
+      !  At this point, DATA[l] <= DATA[m] <= DATA[r] for all l < L, r > R, and L <= m <= R.
+      !  (First time through, there is no DATA for l < L or r > R.)
+
+      i=l
+      j=r
+
+      ! Q2.5: Select pivot key
+      !
+      !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
+      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+
+      p=(l+r)/2
+      indexp=indx(p)
+      datap=data(indexp)
+
+      cdsize1=sqrt(dble(data(indx(l)))**2+aimag(data(indx(l)))**2)
+      cdsize2=sqrt(dble(datap**2+aimag(datap)**2))
+      if (cdsize1 .gt. cdsize2) then
+         indx(p)=indx(l)
+         indx(l)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      cdsize1=sqrt(dble(data(indx(r)))**2+aimag(data(indx(r)))**2)
+      cdsize2=sqrt(dble(datap**2+aimag(datap)**2))
+      if (cdsize2 .gt. cdsize1) then
+
+      cdsize1=sqrt(dble(data(indx(l)))**2+aimag(data(indx(l)))**2)
+      cdsize2=sqrt(dble(data(indx(r)))**2+aimag(data(indx(r)))**2)
+         if (cdsize1 .gt. cdsize2) then
+            indx(p)=indx(l)
+            indx(l)=indx(r)
+         else
+            indx(p)=indx(r)
+         endif
+
+         indx(r)=indexp
+         indexp=indx(p)
+         datap=data(indexp)
+      endif
+
+      !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
+      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  in its final position.
+      Q3: do
+         ! Q3: Search for datum on left >= DATAP
+         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         I=I+1
+         cdsize1=sqrt(dble(data(indx(i)))**2+aimag(data(indx(i)))**2)
+         cdsize2=sqrt(dble(datap**2+aimag(datap)**2))
+         if (cdsize1.lt.cdsize2)then
+            cycle Q3
+         endif
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q4: Search for datum on right <= DATAP
+         !
+         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
+         Q4: do
+            j=j-1
+            cdsize1=sqrt(dble(data(indx(j)))**2+aimag(data(indx(j)))**2)
+            cdsize2=sqrt(dble(datap**2+aimag(datap)**2))
+            if (cdsize1.le.cdsize2) then
+               exit Q4
+            endif
+         enddo Q4
+         !-----------------------------------------------------------------------------------------------------------------------
+         ! Q5: Have the two scans collided?
+         if (i.lt.j) then
+            ! Q6: No, interchange DATA[I] <--> DATA[J] and continue
+            indext=indx(i)
+            indx(i)=indx(j)
+            indx(j)=indext
+            cycle Q3
+         else
+            ! Q7: Yes, select next subsequence to sort
+            !   At this point, I >= J and DATA[l] <= DATA[I] == DATAP <= DATA[r], for all L <= l < I and J < r <= R.
+         !   If both subsequences are more than M elements long, push the longer one on the stack
+            !   and go back to QuickSort the shorter; if only one is more than M elements long, go back and QuickSort it;
+         !   otherwise, pop a subsequence off the stack and QuickSort it.
+            if (r-j .ge. i-l .and. i-l .gt. m) then
+               istk=istk+1
+               lstk(istk)=j+1
+               rstk(istk)=r
+               r=i-1
+            else if (i-l .gt. r-j .and. r-j .gt. m) then
+               istk=istk+1
+               lstk(istk)=l
+               rstk(istk)=i-1
+               l=j+1
+            else if (r-j .gt. m) then
+               l=j+1
+            else if (i-l .gt. m) then
+               r=i-1
+            else
+               ! Q8: Pop the stack, or terminate QuickSort if empty
+               if (istk.lt.1) then
+                  exit TOP
+               endif
+               l=lstk(istk)
+               r=rstk(istk)
+               istk=istk-1
+            endif
+            cycle TOP
+         endif
+         ! never get here, as cycle Q3 or cycle TOP
+      enddo Q3
+      exit TOP
+   enddo TOP
+endif
+!===================================================================================================================================
+! Q9: Straight Insertion sort
+do i=2,n
+   cdsize1=sqrt(dble(data(indx(i-1)))**2+aimag(data(indx(i-1)))**2)
+   cdsize2=sqrt(dble(data(indx(i)))**2+aimag(data(indx(i)))**2)
+   if (cdsize1 .gt. cdsize2) then
+      indexp=indx(i)
+      datap=data(indexp)
+      p=i-1
+      INNER: do
+         indx(p+1) = indx(p)
+         p=p-1
+         if (p.le.0)then
+            exit INNER
+         endif
+         cdsize1=sqrt(dble(data(indx(p)))**2+aimag(data(indx(p)))**2)
+         cdsize2=sqrt(dble(datap**2+aimag(datap)**2))
+         if (cdsize1.le.cdsize2)then
+            exit INNER
+         endif
+      enddo INNER
+      indx(p+1) = indexp
+   endif
+enddo
+!===================================================================================================================================
+!     All done
+end subroutine sort_quick_rx_complex_int64
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -2456,12 +3880,13 @@ end subroutine sort_quick_rx_complex
 !!
 !!##DESCRIPTION
 !!     Assuming an array is sorted, return the array with adjacent duplicate
-!!     values removed.  If the array is sorted, a list of unique values
-!!     will be produced.
+!!     values removed.
+!!
+!!     If the input array is sorted, this will produce a list of unique values.
 !!
 !!##OPTIONS
 !!    array   may be of type INTEGER, REAL, CHARACTER, COMPLEX,
-!!            DOUBLEPRECISION, or complex(kind=kind(0.0d0)).
+!!            DOUBLEPRECISION, or COMPLEX(KIND=KIND(0.0d0)).
 !!
 !!    ivals   returned number of unique values packed into beginning of array
 !!##EXAMPLE
@@ -2478,7 +3903,7 @@ end subroutine sort_quick_rx_complex
 !!
 !!       strings=[character(len=20) :: 'orange','green','green', &
 !!       & 'red','white','blue','yellow','blue','magenta','cyan','black']
-!!       ints=[30,1,1,2,3,4,4,-10,20,20,30]
+!!       ints=[30,1,1,2,3,4,4,-10,20,20,30,3]
 !!       ilong=maxval(len_trim(strings))
 !!
 !!       write(*,'(a,*(a,1x))')'ORIGINAL:',strings(:)(:ilong)
@@ -2510,11 +3935,11 @@ end subroutine sort_quick_rx_complex
 !!    SIZE=11
 !!    ICOUNT=10
 !!
-!!    ORIGINAL:30 1 1 2 3 4 4 -10 20 20 30
-!!    SIZE=11
+!!    ORIGINAL:30 1 1 2 3 4 4 -10 20 20 30 3
+!!    SIZE=12
 !!
-!!    AFTER   :30 1 2 3 4 -10 20 30
-!!    SIZE=11
+!!    AFTER   :30 1 2 3 4 -10 20 30 3
+!!    SIZE=12
 !!    ICOUNT=8
 
 
@@ -3001,42 +4426,42 @@ end subroutine unique_allocatable_strings
 !!    >1,1,1
 !===================================================================================================================================
 elemental subroutine d_swap(x,y)
-! ident_31="@(#)M_sort::d_swap(3fp): swap two double variables"
+! ident_39="@(#)M_sort::d_swap(3fp): swap two double variables"
 doubleprecision, intent(inout) :: x,y
 doubleprecision                :: temp
    temp = x; x = y; y = temp
 end subroutine d_swap
 !===================================================================================================================================
 elemental subroutine r_swap(x,y)
-! ident_32="@(#)M_sort::r_swap(3fp): swap two real variables"
+! ident_40="@(#)M_sort::r_swap(3fp): swap two real variables"
 real, intent(inout) :: x,y
 real                :: temp
    temp = x; x = y; y = temp
 end subroutine r_swap
 !===================================================================================================================================
 elemental subroutine i_swap(i,j)
-! ident_33="@(#)M_sort::i_swap(3fp): swap two integer variables"
+! ident_41="@(#)M_sort::i_swap(3fp): swap two integer variables"
 integer, intent(inout) :: i,j
 integer                :: itemp
    itemp = i; i = j; j = itemp
 end subroutine i_swap
 !===================================================================================================================================
 elemental subroutine l_swap(l,ll)
-! ident_34="@(#)M_sort::l_swap(3fp): swap two logical variables"
+! ident_42="@(#)M_sort::l_swap(3fp): swap two logical variables"
 logical, intent(inout) :: l,ll
 logical                :: ltemp
    ltemp = l; l = ll; ll = ltemp
 end subroutine l_swap
 !===================================================================================================================================
 elemental subroutine c_swap(xx,yy)
-! ident_35="@(#)M_sort::c_swap(3fp): swap two complex variables"
+! ident_43="@(#)M_sort::c_swap(3fp): swap two complex variables"
 complex, intent(inout) :: xx,yy
 complex                :: tt
    tt = xx; xx = yy; yy = tt
 end subroutine c_swap
 !===================================================================================================================================
 elemental subroutine cd_swap(xx,yy)
-! ident_36="@(#)M_sort::cd_swap(3fp): swap two double complex variables"
+! ident_44="@(#)M_sort::cd_swap(3fp): swap two double complex variables"
 complex(kind=cd), intent(inout) :: xx,yy
 complex(kind=cd)                :: tt
    tt = xx; xx = yy; yy = tt
@@ -3051,7 +4476,7 @@ elemental subroutine s_swap(string1,string2)
 !!    Note that the len of a dummy argument can be used to calculate the automatic variable length.
 !!    Therefore, you can make sure len is at least max(len(string1),len(string2)) by adding the two lengths together:
 
-! ident_37="@(#)M_sort::s_swap(3fp): swap two double variables"
+! ident_45="@(#)M_sort::s_swap(3fp): swap two double variables"
 character(len=*), intent(inout)             :: string1,string2
 !character( len=len(string1) + len(string2)) :: string_temp
 character( len=max(len(string1),len(string2))) :: string_temp
@@ -3489,7 +4914,7 @@ end subroutine swap_any_array
 recursive subroutine tree_insert (t, number)
 implicit none
 
-! ident_38="@(#)M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order"
+! ident_46="@(#)M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order"
 
 type (tree_node), pointer :: t  ! a tree
 integer, intent (in) :: number
@@ -3548,7 +4973,7 @@ end subroutine tree_insert
 recursive subroutine tree_print(t)
 implicit none
 
-! ident_39="@(#)M_sort::tree_print(3f):"
+! ident_47="@(#)M_sort::tree_print(3f):"
 
 type (tree_node), pointer :: t  ! a tree
 
@@ -3640,7 +5065,7 @@ end subroutine tree_print
 function anything_to_bytes_arr(anything) result(chars)
 implicit none
 
-! ident_40="@(#)M_sort::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_48="@(#)M_sort::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything(:)
 character(len=1),allocatable :: chars(:)
@@ -3666,7 +5091,7 @@ end function anything_to_bytes_arr
 function  anything_to_bytes_scalar(anything) result(chars)
 implicit none
 
-! ident_41="@(#)M_sort::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_49="@(#)M_sort::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything
 character(len=1),allocatable :: chars(:)

@@ -12,7 +12,7 @@ stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                                                                            ',&
-'   rand - [FUNIX] generate pseudo-random permutations of file lines, whole                                                      ',&
+'   rand - [M_random] generate pseudo-random permutations of file lines, whole                                                   ',&
 '   numbers, or strings                                                                                                          ',&
 '   (LICENSE:PD)                                                                                                                 ',&
 '                                                                                                                                ',&
@@ -24,7 +24,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   rand -i LO-HI   [ -n]                                                                                                        ',&
 '                                                                                                                                ',&
 'DESCRIPTION                                                                                                                     ',&
-'   Generates pseudo=random permutations, similar to the shuf(1) command.                                                        ',&
+'   Generates pseudorandom permutations, similar to the shuf(1) command.                                                         ',&
 '   Writes pseudo-random permutations of:                                                                                        ',&
 '                                                                                                                                ',&
 '   o the lines in a file                                                                                                        ',&
@@ -44,8 +44,15 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                                                                ',&
 '   # generate a random number from 0 to 100                                                                                     ',&
 '   rand -i 0 100 -n 1                                                                                                           ',&
+'                                                                                                                                ',&
+'   # randomly pick a line from a file                                                                                           ',&
+'   rand -n 1 MYFILE.TXT                                                                                                         ',&
+'                                                                                                                                ',&
 '   # randomly select xterm(1) color                                                                                             ',&
-'   xterm -bg `rand -e green black gray blue -n 1`                                                                               ',&
+'   xterm -bg `rand green black gray blue -e -n 1`                                                                               ',&
+'                                                                                                                                ',&
+'   # randomly sleep 10 to 30 seconds                                                                                            ',&
+'   sleep `rand 10 30 -n 1`                                                                                                      ',&
 '                                                                                                                                ',&
 'AUTHOR                                                                                                                          ',&
 '   John S. Urban                                                                                                                ',&
@@ -60,7 +67,7 @@ endif
 end subroutine help_usage
 !>
 !!##NAME
-!!    rand - [FUNIX] generate pseudo-random permutations of file lines, whole
+!!    rand - [M_random] generate pseudo-random permutations of file lines, whole
 !!    numbers, or strings
 !!    (LICENSE:PD)
 !!
@@ -73,7 +80,7 @@ end subroutine help_usage
 !!    rand -i LO-HI   [ -n]
 !!
 !!##DESCRIPTION
-!!    Generates pseudo=random permutations, similar to the shuf(1) command.
+!!    Generates pseudorandom permutations, similar to the shuf(1) command.
 !!    Writes pseudo-random permutations of:
 !!
 !!    o the lines in a file
@@ -94,8 +101,15 @@ end subroutine help_usage
 !!
 !!    # generate a random number from 0 to 100
 !!    rand -i 0 100 -n 1
+!!
+!!    # randomly pick a line from a file
+!!    rand -n 1 MYFILE.TXT
+!!
 !!    # randomly select xterm(1) color
-!!    xterm -bg `rand -e green black gray blue -n 1`
+!!    xterm -bg `rand green black gray blue -e -n 1`
+!!
+!!    # randomly sleep 10 to 30 seconds
+!!    sleep `rand 10 30 -n 1`
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -119,7 +133,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-01-09 23:07:44 UTC-300>',&
+'@(#)COMPILED:       2022-04-29 11:56:32 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -21,7 +21,7 @@
 
       call locate(keywords,'a',place)
       if(place.gt.0)then
-         write(*,*)'The value of "a" is',trim(values(place))
+         write(*,*)'The value of "a" is ',trim(values(place))
       else
          write(*,*)'"a" not found'
       endif

@@ -297,7 +297,7 @@ call unit_check('unique',ic.eq.1 .and. all(ints(:ic).eq.[10]),msg='check array o
 
 ints=[10,10,10,10]
 call unique(ints,ic)
-call unit_check('unique',ic.eq.1 .and. all(ints(:ic).eq.[10,10,10,10]),msg='all duplicates')
+call unit_check('unique',ic.eq.1 .and. all(ints(:ic).eq.[10]),msg='all duplicates')
 
 ints=[10,20,30,40]
 call unique(ints,ic)

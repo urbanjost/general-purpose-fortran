@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!    M_strings(3f) - [M_strings::INTRO::OOPS] Fortran string module
+!!    M_strings(3f) - [M_strings::INTRO] Fortran string module
 !!
 !!##DESCRIPTION
 !!    The M_strings(3fm) module is a collection of Fortran procedures
@@ -43,7 +43,7 @@
 !!      use M_strings, only : value_to_string,v2s,msg
 !!      use M_strings, only : listout,getvals
 !!      use M_strings, only : glob, ends_with
-!!      use M_strings, only : fmt
+!!      use M_strings, only : paragraph
 !!      use M_strings, only : base, decodebase, codebase, base2
 !!      use M_strings, only : isalnum, isalpha, iscntrl, isdigit
 !!      use M_strings, only : isgraph, islower, isprint, ispunct
@@ -63,7 +63,7 @@
 !!              and store tokens into an array
 !!       chomp  function consumes input line as it returns next token in a
 !!              string using specified delimiters
-!!       fmt    convert a string into a paragraph
+!!       paragraph    convert a string into a paragraph
 !!       strtok tokenize a string like C strtok(3c) routine
 !!
 !!   EDITING
@@ -259,7 +259,6 @@
 !!    interface does not have individual man(1) pages, but is instead
 !!    demonstrated using the following example program:
 !!
-!!
 !!     program demo_M_strings
 !!     use M_strings, only : split, delim, chomp, sep
 !!     use M_strings, only : substitute, change, modif
@@ -278,7 +277,7 @@
 !!     use M_strings, only : value_to_string, v2s, msg
 !!     use M_strings, only : listout, getvals
 !!     use M_strings, only : glob, ends_with
-!!     use M_strings, only : fmt
+!!     use M_strings, only : paragraph
 !!     use M_strings, only : base, decodebase, codebase, base2
 !!     use M_strings, only : isalnum, isalpha, iscntrl, isdigit, isgraph
 !!     use M_strings, only : islower, isprint, ispunct, isspace, isupper
@@ -313,7 +312,7 @@ public sep             !  function interface to split
 public chomp           !  function consumes input line as it returns next token in a string using specified delimiters
 public delim           !  subroutine parses a string using specified delimiter characters and store tokens into an array
 public strtok          !  gets next token. Used by change(3f)
-public fmt             !  convert a long string into a paragraph
+public paragraph       !  convert a long string into a paragraph
 !----------------------# EDITING
 public substitute      !  subroutine non-recursively globally replaces old substring with new substring in string
 public replace         !  function non-recursively globally replaces old substring with new substring in string
@@ -333,7 +332,7 @@ public c2s             !  convert null-terminated array of character(len=1) to s
 !----------------------# CASE
 public upper           !  elemental function converts string to uppercase
 public lower           !  elemental function converts string to miniscule
-public upper_quoted          !  elemental function converts string to miniscule skipping strings quoted per Fortran syntax rules
+public upper_quoted    !  elemental function converts string to miniscule skipping strings quoted per Fortran syntax rules
 !----------------------# WHITE SPACE
 public adjustc         !  elemental function centers string within the length of the input string
 public compact         !  left justify string and replace duplicate whitespace with single characters or nothing
@@ -667,9 +666,9 @@ CONTAINS
 !!      allpassed= test("abc",&
 !!      &"********a********b********c********", .true.) .and. allpassed
 !!      allpassed=&
-!!      &test("********a********b********c********", "abc", .false.) .and. allpassed
+!!      &test("********a********b********c********", "abc",.false.).and.allpassed
 !!      allpassed= &
-!!      &test("abc", "********a********b********b********", .false.) .and. allpassed
+!!      &test("abc", "********a********b********b********",.false.).and.allpassed
 !!      allpassed= test("*abc*", "***a*b*c***", .true.) .and. allpassed
 !!
 !!      ! A case-insensitive algorithm test.
@@ -818,7 +817,8 @@ end function glob
 !===================================================================================================================================
 !>
 !!##NAME
-!!    ends_with(3f) - [M_strings:MATCH] test if string ends with specified suffix(es)
+!!    ends_with(3f) - [M_strings:MATCH] test if string ends with specified
+!!                    suffix(es)
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -849,11 +849,12 @@ end function glob
 !!
 !!    program demo_ends_with
 !!    use M_strings, only : ends_with
+!!    use, intrinsic :: iso_fortran_env, only : stdout=>output_unit
 !!    implicit none
-!!       write(*,*)ends_with('prog.a',['.o','.i','.s'])
-!!       write(*,*)ends_with('prog.f90',['.F90','.f90'])
-!!       write(*,*)ends_with('prog.pdf','.pdf')
-!!       write(*,*)ends_with('prog.doc','.txt')
+!!       write(stdout,*)ends_with('prog.a',['.o','.i','.s'])
+!!       write(stdout,*)ends_with('prog.f90',['.F90','.f90'])
+!!       write(stdout,*)ends_with('prog.pdf','.pdf')
+!!       write(stdout,*)ends_with('prog.doc','.txt')
 !!    end program demo_ends_with
 !!
 !!   Results:
@@ -1522,7 +1523,32 @@ end function chomp
 !!     enddo
 !!     end program demo_delim
 !!
-!!  Expected output
+!!   Results:
+!!
+!!    =========================================================
+!!    PARSING=[ first  second 10.3 words_of_stuff] on
+!!     number of tokens found=           4
+!!     last character in column           34
+!!    [first][second][10.3][words_of_stuff]
+!!    [first][second][10.3][words_of_stuff]
+!!    =========================================================
+!!    PARSING=[ first  second 10.3 words_of_stuff] on o
+!!     number of tokens found=           4
+!!     last character in column           34
+!!    [ first  sec][nd 10.3 w][rds_][f_stuff]
+!!    [ first  sec][nd 10.3 w][rds_][f_stuff]
+!!    =========================================================
+!!    PARSING=[ first  second 10.3 words_of_stuff] on  aeiou
+!!     number of tokens found=          10
+!!     last character in column           34
+!!
+!!    [f][rst][s][c][nd][10.3][w][rds_][f_st][ff]
+!!    =========================================================
+!!    PARSING=[AAAaBBBBBBbIIIIIi  J K L] on  aeiou
+!!     number of tokens found=           5
+!!     last character in column           24
+!!
+!!    [AAA][BBBBBBbIIIII][J][K][L]
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -2654,6 +2680,12 @@ end subroutine modif                     !RETURN
 !!
 !!     end program demo_len_white
 !!
+!!   Results:
+!!
+!!     total length of variable is           80
+!!     trimmed length of variable is           16
+!!     trimmed string=[ ABCDEFG abcdefg]
+!!
 !!##NOTES
 !!
 !! o len_white
@@ -2718,7 +2750,8 @@ end function len_white
 !===================================================================================================================================
 !>
 !!##NAME
-!!    crop(3f) - [M_strings:WHITESPACE] trim leading and trailing blanks and control characters from a string
+!!    crop(3f) - [M_strings:WHITESPACE] trim leading and trailing blanks
+!!               and control characters from a string
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -2732,7 +2765,6 @@ end function len_white
 !!    All control characters throughout the string are replaced with spaces
 !!    and leading and trailing spaces are trimmed from the resulting string.
 !!    Tabs are expanded assuming a stop every eight characters.
-!!
 !!
 !!##OPTIONS
 !!    strin   input string to trim leading and trailing space and control
@@ -2777,7 +2809,8 @@ end function crop
 !===================================================================================================================================
 !>
 !!##NAME
-!!    transliterate(3f) - [M_strings:EDITING] replace characters from old set with new set
+!!    transliterate(3f) - [M_strings:EDITING] replace characters from old
+!!                        set with new set
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -3186,7 +3219,8 @@ end function reverse
 !===================================================================================================================================
 !>
 !!##NAME
-!! upper_quoted(3f) - [M_strings:CASE] elemental function converts string to miniscule skipping strings quoted per Fortran syntax rules
+!! upper_quoted(3f) - [M_strings:CASE] elemental function converts string to
+!!                miniscule skipping strings quoted per Fortran syntax rules
 !! (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -4608,7 +4642,8 @@ end function atleast
 !===================================================================================================================================
 !>
 !!##NAME
-!!    lenset(3f) - [M_strings:LENGTH] return string trimmed or padded to specified length
+!!    lenset(3f) - [M_strings:LENGTH] return string trimmed or padded to
+!!                 specified length
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -4814,7 +4849,8 @@ end function merge_str
 !!       write(*,'("IN:   <<<",g0,">>>")')str
 !!       answer=squeeze(str,chr)
 !!       write(*,'("OUT:  <<<",g0,">>>")')answer
-!!       write(*,'("LENS: ",*(g0,1x))')"from",len(str),"to",len(answer),"for a change of",len(str)-len(answer)
+!!       write(*,'("LENS: ",*(g0,1x))')"from",len(str),"to",len(answer), &
+!!               & "for a change of",len(str)-len(answer)
 !!       write(*,'("CHAR: ",g0)')chr
 !!    end subroutine printme
 !!    end program demo_squeeze
@@ -5399,7 +5435,6 @@ doubleprecision function s2v(chars,ierr,onerr)
 !  1989 John S. Urban
 
 ! ident_44="@(#)M_strings::s2v(3f): returns doubleprecision number from string;zero if error occurs"
-
 
 character(len=*),intent(in)  :: chars
 integer,optional             :: ierr
@@ -6566,7 +6601,8 @@ end function edit_distance
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    cc(3f) - [M_strings] return up to twenty strings of arbitrary length as an array
+!!    cc(3f) - [M_strings] return up to twenty strings of arbitrary length
+!!             as an array
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -7479,7 +7515,6 @@ end function s2vs
 !!    ISPRINT:  !"#$%&'()*+,-./0123456789:;<=>?@ABCDEF
 !!    GHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmn
 !!    opqrstuvwxyz{|}~
-!!
 !!
 !!##AUTHOR
 !!     John S. Urban
@@ -8775,7 +8810,6 @@ end function decodebase
 !!
 !!    The letters A,B,...,Z represent 10,11,...,36 in the base > 10.
 !!
-!!
 !!##EXAMPLE
 !!
 !!   Sample program:
@@ -8872,7 +8906,7 @@ end function todecimal
 !===================================================================================================================================
 function tobase(base, number)
 
-! ident_76="@(#)M_strings::todecimal(3f): given integer and base return string"
+! ident_76="@(#)M_strings::tobase(3f): given integer and base return string"
 
 ! based on an example at rosetta code.
 character(len=36),parameter  :: alphanum = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -8912,19 +8946,19 @@ end function tobase
 !===================================================================================================================================
 !>
 !!##NAME
-!!    fmt(3f) - [M_strings:TOKENS] break a long line into a paragraph
+!!    paragraph(3f) - [M_strings:TOKENS] break a long line into a paragraph
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!   function fmt(source_string,length)
+!!   function paragraph(source_string,length)
 !!
 !!    character(len=*),intent(in)       :: source_string
 !!    integer,intent(in)                :: length
-!!    character(allocatable(len=length)    :: fmt(:)
+!!    character(allocatable(len=length)    :: paragraph(:)
 !!
 !!##DESCRIPTION
-!!    fmt(3f) breaks a long line into a simple paragraph of specified
+!!    paragraph(3f) breaks a long line into a simple paragraph of specified
 !!    line length.
 !!
 !!    Given a long string break it on spaces into an array such that no
@@ -8937,17 +8971,17 @@ end function tobase
 !!     LENGTH         length of lines to break the string into.
 !!
 !!##RETURNS
-!!     FMT  character array filled with data from source_string broken at
-!!          spaces into variables of length LENGTH.
+!!     PARAGRAPH  character array filled with data from source_string
+!!                broken at spaces into variables of length LENGTH.
 !!
 !!##EXAMPLE
 !!
 !!  sample program
 !!
-!!    program demo_fmt
-!!    use M_strings, only : fmt
+!!    program demo_paragraph
+!!    use M_strings, only : paragraph
 !!    implicit none
-!!    character(len=:),allocatable :: paragraph(:)
+!!    character(len=:),allocatable :: paragrph(:)
 !!    character(len=*),parameter    :: string= '&
 !!     &one two three four five &
 !!     &six seven eight &
@@ -8959,27 +8993,56 @@ end function tobase
 !!    write(*,*)'INPUT:'
 !!    write(*,*)string
 !!
-!!    paragraph=fmt(string,40)
-!!    write(*,*)'LEN=',len(paragraph),' SIZE=',size(paragraph)
+!!    paragrph=paragraph(string,40)
+!!    write(*,*)'LEN=',len(paragrph),' SIZE=',size(paragrph)
 !!    write(*,*)'OUTPUT:'
-!!    write(*,'(a)')paragraph
+!!    write(*,'(a)')paragrph
 !!
-!!    write(*,'(a)')fmt(string,0)
-!!    write(*,'(3x,a)')fmt(string,47)
+!!    write(*,'(a)')paragraph(string,0)
+!!    write(*,'(3x,a)')paragraph(string,47)
 !!
-!!    end program demo_fmt
+!!    end program demo_paragraph
 !!
-!!  Results:
+!!   Results:
 !!
+!!     LEN=         106
+!!     INPUT:
+!!     one two three four five six seven eight nine ten eleven twelve
+!!     thirteen fourteen fifteen sixteen seventeen
+!!     LEN=          40  SIZE=           3
+!!     OUTPUT:
+!!    one two three four five six seven eight
+!!    nine ten eleven twelve thirteen fourteen
+!!    fifteen sixteen seventeen
+!!    one
+!!    two
+!!    three
+!!    four
+!!    five
+!!    six
+!!    seven
+!!    eight
+!!    nine
+!!    ten
+!!    eleven
+!!    twelve
+!!    thirteen
+!!    fourteen
+!!    fifteen
+!!    sixteen
+!!    seventeen
+!!       one two three four five six seven eight nine
+!!       ten eleven twelve thirteen fourteen fifteen
+!!       sixteen seventeen
 !!
 !!##AUTHOR
 !!    John S. Urban
 !!
 !!##LICENSE
 !!    Public Domain
-function fmt(source_string,length)
+function paragraph(source_string,length)
 
-! ident_77="@(#)M_strings::fmt(3f): wrap a long string into a paragraph"
+! ident_77="@(#)M_strings::paragraph(3f): wrap a long string into a paragraph"
 
 character(len=*),intent(in)       :: source_string
 integer,intent(in)                :: length
@@ -8987,7 +9050,7 @@ integer                           :: itoken
 integer                           :: istart
 integer                           :: iend
 character(len=*),parameter        :: delimiters=' '
-character(len=:),allocatable      :: fmt(:)
+character(len=:),allocatable      :: paragraph(:)
 integer                           :: ilines
 integer                           :: ilength
 integer                           :: iword, iword_max
@@ -9007,31 +9070,31 @@ integer                           :: i
             if(ilength.ne.0)then
                ilines=ilines+1
             endif
-            if(i.eq.2)then                 ! if fmt has been allocated store data, else just gathering data to determine size of fmt
-               fmt(ilines)=source_string(istart:iend)//' '
+            if(i.eq.2)then     ! if paragraph has been allocated store data, else just gathering data to determine size of paragraph
+               paragraph(ilines)=source_string(istart:iend)//' '
             endif
             ilength=iword+1
          elseif(ilength+iword.le.length)then       ! this word will fit on current line
             if(i.eq.2)then
-               fmt(ilines)=fmt(ilines)(:ilength)//source_string(istart:iend)
+               paragraph(ilines)=paragraph(ilines)(:ilength)//source_string(istart:iend)
             endif
             ilength=ilength+iword+1
          else                                      ! adding this word would make line too long so start new line
             ilines=ilines+1
             ilength=0
             if(i.eq.2)then
-               fmt(ilines)=fmt(ilines)(:ilength)//source_string(istart:iend)
+               paragraph(ilines)=paragraph(ilines)(:ilength)//source_string(istart:iend)
             endif
             ilength=iword+1
          endif
       enddo
       if(i==1)then                                 ! determined number of lines needed so allocate output array
-         allocate(character(len=max(length,iword_max)) :: fmt(ilines))
-         fmt=' '
+         allocate(character(len=max(length,iword_max)) :: paragraph(ilines))
+         paragraph=' '
       endif
    enddo
-   fmt=fmt(:ilines)
-end function fmt
+   paragraph=paragraph(:ilines)
+end function paragraph
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -9515,9 +9578,12 @@ end function msg_one
 !!      last 9 12
 !!      example 15 21
 !!
-!!      > ??? option to skip adjacent delimiters (not return null tokens) common with whitespace
-!!      > ??? quoted strings, especially CSV both " and ', Fortran adjacent is insert versus other rules
-!!      > ??? escape character like \!!      > ??? multi-character delimiters like \\n, \\t,
+!!      > ??? option to skip adjacent delimiters (not return null tokens)
+!!      >     common with whitespace
+!!      > ??? quoted strings, especially CSV both " and ', Fortran adjacent
+!!      >     is insert versus other rules
+!!      > ??? escape character like \\ .
+!!      > ??? multi-character delimiters like \\n, \\t,
 !!      > ??? regular expression separator
 !!
 !!##AUTHOR
@@ -9811,7 +9877,8 @@ end subroutine matching_delimiter
 !===================================================================================================================================
 !>
 !!##NAME
-!!    longest_common_substring(3f) - [M_strings] function that returns the longest common substring of two strings.
+!!    longest_common_substring(3f) - [M_strings] function that returns the
+!!                                   longest common substring of two strings.
 !!##SYNOPSIS
 !!
 !!    function longest_common_substring(a,b) result(match)
@@ -9840,12 +9907,12 @@ end subroutine matching_delimiter
 !!    program demo_longest_common_substring
 !!    use M_strings, only : longest_common_substring
 !!    implicit none
-!!       call  compare('testing123testingthing', 'thisis',                 'thi')
-!!       call  compare('testing',                'sting',                  'sting')
-!!       call  compare('thisisatest_stinger',    'testing123testingthing', 'sting')
-!!       call  compare('thisisatest_stinger',    'thisis',                 'thisis')
-!!       call  compare('thisisatest',            'testing123testing',      'test')
-!!       call  compare('thisisatest',            'thisisatest',            'thisisatest')
+!!       call compare('testing123testingthing','thisis',              'thi')
+!!       call compare('testing',             'sting',               'sting')
+!!       call compare('thisisatest_stinger', 'testing123testingthing','sting')
+!!       call compare('thisisatest_stinger', 'thisis',              'thisis')
+!!       call compare('thisisatest',         'testing123testing',   'test')
+!!       call compare('thisisatest',         'thisisatest',         'thisisatest')
 !!    contains
 !!
 !!    subroutine compare(a,b,answer)

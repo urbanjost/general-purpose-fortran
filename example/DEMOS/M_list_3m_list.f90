@@ -17,16 +17,18 @@
       call update('d','value of d')
       call update('a','value of a again')
       ! show array
-      write(*,'(*(a,"==>","[",a,"]",/))')(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+      write(*,'(*(a,"==>","[",a,"]",/))')&
+       & (trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
       ! remove some entries
       call update('a')
       call update('c')
-      write(*,'(*(a,"==>","[",a,"]",/))')(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
+      write(*,'(*(a,"==>","[",a,"]",/))')&
+       & (trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
       ! get some values
       write(*,*)'get b=>',get('b')
       write(*,*)'get d=>',get('d')
       write(*,*)'get notthere=>',get('notthere')
-
+      !
       contains
       subroutine update(key,valin)
       character(len=*),intent(in)           :: key
@@ -69,4 +71,4 @@
             valout=values(place)(:counts(place))
          endif
       end function get
-  end program demo_M_list
+      end program demo_M_list

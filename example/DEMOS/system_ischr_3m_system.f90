@@ -10,6 +10,9 @@
      'char_dev.test   ', &
      'PROBABLY_NOT    ']
      do i=1,size(names)
-        write(*,*)' is ',trim(names(i)),' a character device? ', system_ischr(names(i))
+        write(*,*)' is ',                   &
+                 & trim(names(i)),          &
+                 & ' a character device? ', &
+                 & system_ischr(names(i))
      enddo
      end program demo_system_ischr

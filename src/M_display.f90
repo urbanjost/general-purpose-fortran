@@ -187,7 +187,7 @@ END MODULE PUTSTRMODULE
 !! +inf or -inf.
 !!
 !! the remaining sections in this user manual contain detailed information
-!! on using the module.  section 2 discusses the basics of using the
+!! on using the module. section 2 discusses the basics of using the
 !! module, including use statements, compiling and linking, and add-on
 !! modules supporting non-default kinds of data. section 3 gives a detailed
 !! description of the generic subroutine disp. all the possible arguments
@@ -202,7 +202,7 @@ END MODULE PUTSTRMODULE
 !! The file M_display.f90 actually begins with two auxiliary modules,
 !! PUTSTRMODULE and M_display_UTIL. The first one contains two dummy
 !! subroutines, PUTSTR and PUTNL, which do nothing, but must be incorporated
-!! to avoid an "undefined symbol" link error.  In addition it defines the
+!! to avoid an "undefined symbol" link error. In addition it defines the
 !! named constant (parameter) DEFAULT_UNIT = -3, which makes the asterisk
 !! unit (usually the screen) the default to display on.
 !!
@@ -1355,7 +1355,7 @@ MODULE M_display
 !!
 !!        With the add-on modules described in section 2.3 other kinds may
 !!        be displayed. Matrices are displayed in traditional mathematical
-!!        order, so the rows displayed are X(1,:), X(2,:) etc.  Vectors are
+!!        order, so the rows displayed are X(1,:), X(2,:) etc. Vectors are
 !!        by default displayed as column vectors (but a row orientation may
 !!        be specified with the ORIENT argument). An SS edit descriptor is
 !!        applied automatically so positive elements are not prefixed with
@@ -1398,7 +1398,7 @@ MODULE M_display
 !!       SEP, STYLE, TRIM, UNIT, ZEROAS)
 !!
 !! All dummy arguments are optional and some of them are incompatible
-!! with some data types of X.  The arguments control how X is displayed,
+!! with some data types of X. The arguments control how X is displayed,
 !! as described in section 3.1 and below. For the character arguments
 !! ADVANCE and ORIENT the case of letters is ignored (so e.g. ADVANCE =
 !! 'yes' and ADVANCE = 'YES' are equivalent). Normally argument association
@@ -1415,7 +1415,7 @@ MODULE M_display
 !!        will display "1.3 + 2.47i". If FMT_IMAG is absent and FMT
 !!        is present then both real and imaginary parts are edited with
 !!        FMT. If both are absent, separate defaults are used, as explained
-!!        in the DIGMAX-paragraph below.  FMT_IMAG must be absent if X is
+!!        in the DIGMAX-paragraph below. FMT_IMAG must be absent if X is
 !!        not complex.
 !!
 !! ADVANCE = adv  The value for ADVANCE may be 'yes', 'no' or 'double'. If
@@ -1427,7 +1427,7 @@ MODULE M_display
 !!       keyword). When this occurs, all the items displayed with DISP since
 !!       the last output occurred on the unit are written out side by side,
 !!       separated by three spaces unless a different separation has been
-!!       specified via the MATSEP argument of DISP_SET.  Default value of
+!!       specified via the MATSEP argument of DISP_SET. Default value of
 !!       ADVANCE is 'yes'.
 !!
 !! DIGMAX = n  Controls the format used for real and complex data in the
@@ -1505,7 +1505,7 @@ MODULE M_display
 !!       'AUTO'. When YES is specified, each column of displayed items is
 !!       trimmed from the left, with 'NO' the items are not trimmed and if
 !!       TRIM is 'AUTO' the items are trimmed when FMT is absent but not when
-!!       it is present.  In the following example, X and U are displayed
+!!       it is present. In the following example, X and U are displayed
 !!       with TRIM = 'yes', but Y and V with TRIM = 'no'. In all cases the
 !!       edit descriptor is the default (I4). The default is TRIM = 'AUTO'.
 !!
@@ -1601,7 +1601,7 @@ MODULE M_display
 !!
 !! The first of these should output the string S, and the second one should
 !! advance output to the next line. These subroutines should be placed
-!! in a module PUTSTRMODULE as explained in section 2.  The module should
+!! in a module PUTSTRMODULE as explained in section 2. The module should
 !! also define a named constant DEFAULT_UNIT, which could be set to -2 to
 !! make the PUTSTR_UNIT default. An example that works with g95 and Matlab
 !! mex-files is:
@@ -1860,7 +1860,7 @@ CONTAINS
 !!         (to trim blanks) and 'NO' (for no trimming). Default is 'YES'.
 !!
 !! TRIMZ   Controls whether trailing zeros are trimmed from the fractional
-!!         part of displayed items.  Possible values are 'NONE' (for no
+!!         part of displayed items. Possible values are 'NONE' (for no
 !!         zero trimming), 'G' (to trim fractional trailing zeros only when
 !!         G editing is used), and 'ALL' (to trim zeros with all types
 !!         of editing). Trailing decimal points are also removed when
@@ -2286,7 +2286,7 @@ end subroutine getwid_dint
 !!       print *, trim(s)
 !!
 !! but this is cumbersome, and also there is the disadvantage that the
-!! result is compiler-dependent.  M_display has a function, TOSTRING, which
+!! result is compiler-dependent. M_display has a function, TOSTRING, which
 !! overcomes this disadvantage and offers additional flexibility. With x =
 !! 1.5 the following statement will produce the same output as Matlab and
 !! Java give:

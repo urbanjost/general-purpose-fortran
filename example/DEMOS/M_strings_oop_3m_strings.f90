@@ -11,15 +11,15 @@
       TYPE(string) :: str2
       TYPE(string) :: str3
       TYPE(string) :: str4
-      !==============================================================================
+      !====================================================================
         write(*,*)'exercise the M_STRING_OOP module interface'
         ! draw a break line in the output
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         write(*,*)'Call methods of type(STRING)'
         ! define TYPE(STRING) with constructor
         str2=string('   This  is  a  String!       ')
         str4=string(' a  String ')
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         ! print members of type
         write(*,101)'str2%str is ................ ',str2%str
         ! same as intrinsic LEN()
@@ -43,28 +43,33 @@
         ! center string in current string length
         write(*,101)'adjustc .................... ',p(str2%adjustc())
         ! center string in string length of NN
-        write(*,101)'adjustc(49) ................ ',p(str2%adjustc(49))
+        write(*,101)'adjustc(40) ................ ',p(str2%adjustc(40))
         ! force %str to be NN characters long
-        write(*,101)'lenset(49) ................. ',p(str2%lenset(49))
+        write(*,101)'lenset(40) ................. ',p(str2%lenset(40))
         ! same as intrinsic TRIM()
         write(*,101)'trim ....................... ',p(str2%trim())
         ! trim leading and trailing spaces
         write(*,101)'crop ....................... ',p(str2%crop())
         ! calls M_strings procedure SUBSTITUTE()
-        write(*,101)'substitute("This","Here") .. ',p(str2%substitute("This","Here"))
+        write(*,101)'substitute("This","Here") .. ',&
+                & p(str2%substitute("This","Here"))
         ! calls M_strings procedure COMPACT()
         write(*,101)'compact .................... ',p(str2%compact())
         write(*,101)'compact("") ................ ',p(str2%compact(""))
         write(*,101)'compact(":") ............... ',p(str2%compact(":"))
         ! calls M_strings procedure TRANSLITERATE()
-        write(*,101)'transliterate("aei","VWX") . ',p(str2%transliterate("aei","VWX"))
-        write(*,101)'transliterate("aeiou"," ") . ',p(str2%transliterate("aeiou"," "))
-        write(*,101)'transliterate("aeiou","") .. ',p(str2%transliterate("aeiou",""))
-        write(*,101)'transliterate(" aeiou","") . ',p(str2%transliterate(" aeiou",""))
+        write(*,101)'transliterate("aei","VWX") . ',&
+                & p(str2%transliterate("aei","VWX"))
+        write(*,101)'transliterate("aeiou"," ") . ',&
+                & p(str2%transliterate("aeiou"," "))
+        write(*,101)'transliterate("aeiou","") .. ',&
+                & p(str2%transliterate("aeiou",""))
+        write(*,101)'transliterate(" aeiou","") . ',&
+                & p(str2%transliterate(" aeiou",""))
         ! calls M_strings procedure SWITCH()
         write(*,404)'chars .................... . ',str4%chars()
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         str2%str='\t\tSome tabs\t   x\bX '
         write(*,101)'str2%str ................... ',str2%str
         write(*,101)'expand ..................... ',p(str2%expand())
@@ -74,7 +79,7 @@
         ! calls M_strings procedure NOESC()
         write(*,101)'noesc ...................... ',p(str2%noesc())
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         write(*,*)'Casting to numeric variables'
         str3=string('   12.345678901234567e1        ')
         write(*,101)'str3%str ................... ',str3%str
@@ -85,7 +90,7 @@
         ! calls M_strings procedure STRING_TO_VALUE()
         write(*,*)'dble ....................... ', str3%dble()
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         write(*,*)'Matching simple globbing patterns'
         str3=string('   12.345678901234567e1        ')
         str3=string('Four score and seven years ago')
@@ -102,7 +107,7 @@
         303 format(1x,*(l3))
         404 format(1x,a,*("[",a1,"]":))
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         write(*,*)'OVERLOADED OPERATORS (add and subtract,return TYPE(STRING))'
         str1%str='123.456'
         str2%str='AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj'
@@ -114,13 +119,13 @@
         write(*,*)'str1 - 20.0 ................ ',p(str1 -20.0)
         write(*,*)'str2 - "Aa" (removes ALL) .. ',p(str2 - 'Aa')
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         write(*,*)'OVERLOADED OPERATORS (multiply,return TYPE(STRING))'
         str1%str='AaBbCcDdEeFfGgHhIiJj'
         write(*,101)'str1%str ................... ',str1%str
-        write(*,*)'str1 * 3 ................... ',p(str1 * 3)
+        write(*,*)'str1 * 2 ................... ',p(str1 * 2)
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         write(*,*)'OVERLOADED OPERATORS (//,return TYPE(STRING))'
         str1%str='String one:'
         str2%str='String two:'
@@ -131,7 +136,7 @@
         write(*,*)'str1 // 20000 ............... ',p(str1 // 20000)
         write(*,*)'str1 // 20.0 ................ ',p(str1 // 20.0)
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
         write(*,*)'OVERLOADED OPERATORS (logical comparisons,return logical)'
         ! NOTE: comparisons are performed on the character variable members
         !       of the type(string)
@@ -150,6 +155,6 @@
         write(*,303)str2.eq.str1  ,str2.lt.str1  ,str2.gt.str1  ,str2.le.str1 &
                    & ,str2.ge.str1  ,str2.ne.str1
 
-        write(*,*)repeat('=',78)
+        write(*,*)repeat('=',68)
 
       end program demo_M_strings_oop

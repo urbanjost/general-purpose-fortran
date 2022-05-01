@@ -70,7 +70,8 @@
 !!     !
 !!     ! This is an example using the object-oriented class/type model
 !!     ! This is essentially the same functionality as the procedures
-!!     ! in the procedural module M_time(3fm), but allows for Object Oriented syntax:
+!!     ! in the procedural module M_time(3fm), but allows for Object
+!!     ! Oriented syntax:
 !!     !
 !!     use M_time_oop,only : date_time
 !!     !!use M_time_oop,only : operator(+),operator(-),operator(>),operator(<)
@@ -176,7 +177,7 @@
 !!        ! FORMATTED STRINGS (many strings possible.
 !!        ! Takes the same format string as fmtdate(3f))
 !!        write(*,*)
-!!        write(*,*)'Formatted Strings (%format("STRING") &
+!!        write(*,'(a)')' Formatted Strings (%format("STRING") &
 !!        & -- see fmtdate(3f) for format descriptions'
 !!        ! abbreviated month name             %l  Dec
 !!        write(*,303)'Short month............ ',&
@@ -336,7 +337,7 @@
 !!   DEFAULT CONSTRUCTOR %format()               1970-01-01T00:00:00.000+00:00
 !!   DEFAULT CONSTRUCTOR %format("")             1970-01-01T00:00:00.000+00:00
 !!   DEFAULT CONSTRUCTOR %format(user-specified) 1970-01-01T00:00:00.000+00:00
-!!   DEFAULT CONSTRUCTOR %format("USA")          Thursday, January 1st, 1970 12:00:00 AM
+!!   DEFAULT CONSTRUCTOR %format("USA")   Thursday, January 1st, 1970 12:00:00 AM
 !!   DEFAULT CONSTRUCTOR setting values          1492-10-12T00:00:00.000+00:00
 !!   DEFAULT CONSTRUCTOR with partial values     2016-06-11T00:00:00.000+00:00
 !!   DEFAULT CONSTRUCTOR with values by name     2016-06-11T21:09:11.500-04:00
@@ -359,7 +360,8 @@
 !!   %epoch      Unix epoch time........ 1603590594.1049695
 !!   %julian     Julian date............ 2459147.5763206594
 !!
-!!   Formatted Strings (%format("STRING")  -- see fmtdate(3f) for format descriptions
+!!   Formatted Strings (%format("STRING")
+!!   -- see fmtdate(3f) for format descriptions
 !!   Short month............ "Oct"
 !!   Month.................. "October"
 !!   Short week............. "Sat"

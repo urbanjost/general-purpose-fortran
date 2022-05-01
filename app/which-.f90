@@ -50,7 +50,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '       (LICENSE:PD)                                                                                                             ',&
 '                                                                                                                                ',&
 'SYNOPSIS                                                                                                                        ',&
-'       which- program_leafname [ -all -e]|[ --help|--version]                                                                   ',&
+'       which- program_leafname [ --all| -a]|[ --help|--version]                                                                 ',&
 '                                                                                                                                ',&
 'DESCRIPTION                                                                                                                     ',&
 '       which-(1f) takes one or more pathnames. For each of its arguments                                                        ',&
@@ -87,7 +87,7 @@ end subroutine help_usage
 !!
 !!##SYNOPSIS
 !!
-!!        which- program_leafname [ -all -e]|[ --help|--version]
+!!        which- program_leafname [ --all| -a]|[ --help|--version]
 !!
 !!##DESCRIPTION
 !!        which-(1f) takes one or more pathnames. For each of its arguments
@@ -128,7 +128,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    list pathnames of leaf names that are executable and can be found using the $PATH variable>',&
 '@(#)VERSION:        1.0, 2017-10-15>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-01-09 23:08:40 UTC-300>',&
+'@(#)COMPILED:       2022-04-29 11:57:29 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

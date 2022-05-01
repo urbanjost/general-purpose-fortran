@@ -8,7 +8,7 @@
 
         strings=[character(len=20) :: 'orange','green','green', &
         & 'red','white','blue','yellow','blue','magenta','cyan','black']
-        ints=[30,1,1,2,3,4,4,-10,20,20,30]
+        ints=[30,1,1,2,3,4,4,-10,20,20,30,3]
         ilong=maxval(len_trim(strings))
 
         write(*,'(a,*(a,1x))')'ORIGINAL:',strings(:)(:ilong)

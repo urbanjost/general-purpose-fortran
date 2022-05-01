@@ -1,0 +1,226 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>medianloc (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>medianloc</B>(3f) - [orderpack:MEDIAN] Returns median value&#146;s INDEX.
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>Maintainer</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+Subroutine MedianLoc (<I>INVALS</I>, <I>OUTORD</I>)
+<P>
+<PRE>
+      ${TYPE} (kind=${KIND}), Intent (In) :: INVALS(:)
+      Integer, Intent (Out)               :: OUTORD
+<P>
+</PRE>
+</BLOCKQUOTE>
+Where ${TYPE}(kind=${KIND}) may be
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Where ${TYPE}(kind=${KIND}) may be
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Real</B>(kind=real32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Real</B>(kind=real64)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Integer</B>(kind=int32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>Character</B>(kind=selected_char_kind("DEFAULT"),len=*)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>MEDIANLOC</B>(3f) Returns the index of the median (((Size(<I>INVALS</I>)+1))/2^th value).
+</BLOCKQUOTE>
+<P>
+<P>
+<BLOCKQUOTE>
+Internally, <B>MEDIANLOC</B>(3f) Finds the index of the median of the array
+<I>INVALS</I>() using the recursive procedure described in Knuth, The Art of
+Computer Programming, vol. 3, 5.3.3.
+<P>
+This procedure is linear in time, and does not require to be able
+to interpolate in the set as the one used in <B>ORDERLOC</B>(3f), which can
+also be used to calculate a median. It also has better worst-case
+behavior than <B>ORDERLOC</B>(3f), but is about 10% slower on average for
+random uniformly distributed values.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>INVALS</I> </TD><TD valign=bottom>
+array to find the median value of.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><I>OUTORD</I> </TD><TD valign=bottom>
+index of the median value.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_medianloc
+   ! return index of median value
+   use M_orderpack, only : medianloc
+   implicit none
+   real,allocatable :: INVALS(:)
+   character(len=:),allocatable :: cdont(:)
+   character(len=*),parameter :: fmt=&#146;(i5,t11,g0)&#146;
+   integer :: ii
+      write(*,*) &#146;location  median&#146;
+<P>
+      INVALS=[80.0,70.0,20.0,10.0,1000.0]
+      call medianloc(INVALS,ii)
+      write(*,fmt) ii,INVALS(ii)
+      !
+      INVALS=[11, 22, 33, 44, 55, 66, 77, 88]
+      call medianloc(INVALS,ii)
+      write(*,fmt) ii,INVALS(ii)
+      !
+      INVALS=[11.0d0,77.0d0,22.0d0,66.0d0,33.0d0,88.0d0]
+      call medianloc(INVALS,ii)
+      write(*,fmt) ii,INVALS(ii)
+      !
+      cdont=[character(len=20) :: &#146;apple&#146;,&#146;bee&#146;,&#146;cherry&#146;,&#146;duck&#146;,&
+              &#146;elephant&#146;,&#146;finger&#146;,&#146;goose&#146;,&#146;h&#146;,&#146;insect&#146;,&#146;j&#146;]
+      call medianloc(cdont,ii)
+      write(*,fmt) ii,cdont(ii)
+      !
+   end program demo_medianloc
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    location  median
+       2     70.00000
+       4     44.00000
+       5     33.00000
+       5     elephant
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Michel Olagnon, 2000-2012
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.04.16
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>medianloc (3)</TD> <TD align=right width=33%><I>May 01, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e58e1b36-6ba8-4d16-91f8-b9a32350b584 using man macros.</FONT>
+<br><br><center><img src="images/medianloc.3orderpack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
