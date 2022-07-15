@@ -1,0 +1,450 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>nbran (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>nbran</B>(3f) - [M_datapac:RANDOM] generate negative binomial random numbers
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output Arguments</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>References</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>NBRAN</B>(N,P,Npar,Istart,X)
+<P>
+<PRE>
+       INTEGER,intent(in)        :: N
+       REAL(kind=wp),intent(in)  :: P
+       INTEGER,intent(in)        :: Npar
+       INTEGER,intent(inout)     :: Istart
+       REAL(kind=wp),intent(out) :: X(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>NBRAN</B>(3f) generates a random sample of size N from the negative
+binomial distribution with precision &#146;Bernoulli probability&#146;
+parameter = P, and integer &#146;number of successes in Bernoulli trials&#146;
+parameter = NPAR. The negative binomial distribution used herein has
+mean = NPAR*(1-P)/P and standard deviation = <B>sqrt</B>(NPAR*(1-P)/(P*P))).
+<P>
+This distribution is defined for all non-negative integer X-- X = 0,
+1, 2, &#46;&#46;&#46; .
+<P>
+This distribution has the probability function
+<P>
+<PRE>
+       f(X) = c(NPAR+X-1,NPAR) * P**NPAR * (1-P)**X
+<P>
+</PRE>
+Where <B>c</B>(NPAR+X-1,NPAR) is the combinatorial function equaling the
+number of combinations of NPAR+X-1 items taken NPAR at a time.
+<P>
+The negative binomial distribution is the distribution of the number
+of failures before obtaining NPAR successes in an indefinite sequence
+of Bernoulli (0,1) trials where the probability of success in a precision
+trial = P.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The desired integer number of random numbers to be generated.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>P</B> </TD><TD valign=bottom>
+The value of the &#146;Bernoulli probability&#146; parameter for the
+negative binomial distribution. P Should be between
+0.0 (exclusively) and 1.0 (exclusively).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NPAR</B> </TD><TD valign=bottom>
+The integer value of the &#146;number of successes in Bernoulli
+trials&#146; parameter. NPAR should be a positive integer.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ISTART</B> </TD><TD valign=bottom>
+An integer flag code which (if set to 0) will start the
+generator over and hence produce the same random sample
+over and over again upon successive calls to this subroutine
+within a run; or (if set to some integer value not equal to 0,
+like, say, 1) will allow the generator to continue from where
+it stopped and hence produce different random samples upon
+successive calls to this subroutine within a run.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+A vector (of dimension at least N) into which the generated
+random sample of size N from the negative binomial distribution
+will be placed.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_nbran
+   use m_datapac, only : nbran, plott, label, plotxt, sort
+   implicit none
+   integer,parameter :: n=400
+   real              :: p
+   integer           :: Npar
+   integer           :: Istart
+   real              :: x(n)
+      call label(&#146;nbran&#146;)
+      p=0.4
+      Npar=3
+      istart=12345
+      call nbran(N,P,Npar,Istart,X)
+      call plotxt(x,n)
+      call sort(x,n,x) ! sort to show distribution
+      call plotxt(x,n)
+   end program demo_nbran
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<P>
+The following is a plot of <B>X</B>(I) (vertically) versus I (horizontally)
+I-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The following is a plot of <B>X</B>(I) (vertically) versus I (horizontally)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>0.2700000E+02 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.2600000E+02 I
+0.2500000E+02 I
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.2400000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.2300000E+02 I
+0.2200000E+02 I
+0.2100000E+02 -
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.2000000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.1900000E+02 I
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1800000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X                          X X X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1700000E+02 I</B> <!-- Consumed .TP -->
+<BR>
+<B>0.1600000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X                            X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1500000E+02 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X      X X           X          X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1400000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X  X         X        X  X       X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1300000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X    X X    X  X  XX      X  X XXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1200000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X     X    X    X          X              X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1100000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX   X X    X   XX   X      XXX   XXXXX XX   XX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1000000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X XX   XXXX   X    XXX   X  XX    X  X     X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.9000000E+01 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX    XXXX XX   X  XX XX X   X X    X  X XX  X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.8000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXX XX  XXX  XX XXXXXXX X XX    X XXX   XXXX X X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.7000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX XXXXXX XXXXX X    XXXX  X XXX  X XXX XXXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.6000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X XXX X X XXXXXX X  X  XXX X XXXX X XXXXX XXXX X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.5000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXXXXXXXX XXXXXX XX XX XXX XXXX X XXXXXXXXXXX  X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.4000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX X X XXXX  XXXX XXXX XX X  XXXX XX XX   XX   X
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.3000000E+01 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+X XXX    XX  X XXX  XX XXX    X XX XX     XX X
+I-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>
+<TABLE width=100% cellpadding=3><!-- tsb: X XXX    XX  X XXX  XX XXX    X XX XX     XX X
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1000E+01</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.1008E+03  0.2005E+03  0.3002E+03  0.4000E+03
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The following is a plot of <B>X</B>(I) (vertically) versus I (horizontally)
+I-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The following is a plot of <B>X</B>(I) (vertically) versus I (horizontally)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>0.2700000E+02 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.2600000E+02 I
+0.2500000E+02 I
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.2400000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.2300000E+02 I
+0.2200000E+02 I
+0.2100000E+02 -
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.2000000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.1900000E+02 I
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1800000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1700000E+02 I</B> <!-- Consumed .TP -->
+<BR>
+<B>0.1600000E+02 I</B> <!-- Consumed .TP -->
+<BR>
+<B>0.1500000E+02 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1400000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1300000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1200000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1100000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1000000E+02 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.9000000E+01 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.8000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXXXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.7000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXXXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.6000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXXXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.5000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXXXXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.4000000E+01 I</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXXXX
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.3000000E+01 -</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XXXX
+I-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>-<B>----------I</B>
+<TABLE width=100% cellpadding=3><!-- tsb: XXXX
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>0.1000E+01</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.1008E+03  0.2005E+03  0.3002E+03  0.4000E+03
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Hastings and Peacock, Statistical Distributions-<B>-A</B> Handbook for
+Students and Practitioners, 1975, page 95.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Johnson and Kotz, Discrete Distributions, 1969, pages 122-142.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Feller, an Introduction to Probability Theory and its Applications,
+Volume 1, Edition 2, 1957, pages 155-157, 210.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+National Bureau of Standards Applied Mathematics Series 55, 1964,
+page 929.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Kendall and Stuart, the Advanced Theory of Statistics, Volume 1,
+Edition 2, 1963, pages 130-131.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nbran (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from aeb3f760-50fb-415d-8cb2-f76081405de9 using man macros.</FONT>
+<br><br><center><img src="images/nbran.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,167 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>User Commands  &nbsp;-&nbsp;</I><NOBR>fpm-man (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fpm-man</B>(1f) - [DEVELOPER] output descriptions of Fortran intrinsics
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+fpm-man <B>NAME</B>(<I>s</I>) [[-ignorecase][-<B>-regex</B> Regular_Expression]]|[-topic_only]
+[-<B>-color</B>][-<B>-demo</B>]
+<P>
+fpm-man [ <B>--help</B>| <B>--version</B>]
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fpm-man</B>(1) prints descriptions of Fortran intrinsics as simple flat text.
+<P>
+The text is formatted in the <B>txt2man</B>(1) markdown language so one can easily
+generate man-pages on ULS (Unix-Like Systems).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>TOPIC</B>(<I>s</I>) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A list of Fortran intrinsic names or the special names
+"toc" and "manual" (which generate a table of contents
+and the entire set of documents respecively).
+The default is "toc" and to ignore case.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--regex</B>,<B>-e</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Search all output per the provided Regular Expression.
+Output is prefixed with the topic it was found in.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--itopic_only</B>,<B>-t</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Only show topic names. Other switches are ignored.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--ignorecase</B>,<B>-i</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Ignore case when searching for a Regular Expression.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--demo</B>,<B>-d</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+extract first demo program found for a topic (starting with
+"program demo_" and ending with "end program demo_").
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--color</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Use ANSI in-line escape sequences to display the text in
+set colors. Does not work with all terminal emulators or
+terminals. Must use the <B>-r</B> switch with <B>less</B>(1) for <B>less</B>(1)
+to display colors.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--help</B> </TD><TD valign=bottom>
+Display this help and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Output version information and exit
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample commands
+<P>
+<PRE>
+   fpm-man                 # list table of contents
+   fpm-man -e character    # check TOC for string. try "trigo","size","complex"
+   fpm-man tan|less        # display a description of tan(3f)
+<P>
+   fpm-man --regex &#146;&#146;character&#146;&#146; # look for string in the TOC ignoring case
+<P>
+   fpm-man manual&gt;fortran.txt    # create a copy of all descriptions
+<P>
+   # list the topic "scan" if found and lines containing "scan" from the entire
+   # manual, prefixing the lines with the section name, while ignoring case.
+   fpm-man -e scan -i manual
+<P>
+   fpm-man -d verify &gt;demo_verify.f90 # get sample program to try VERIFY(3f).
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>fpm-man (1)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 445a08f4-ac55-4d79-b117-5f6b3ce6eccd using man macros.</FONT>
+<br><br><center><img src="images/fpm-man.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

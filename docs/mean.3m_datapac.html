@@ -1,0 +1,222 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>mean (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>mean</B>(3f) - [M_datapac:STATISTICS] compute the sample mean of a data vector
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output Arguments</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>References</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine <B>mean</B>(X,N,Iwrite,Xmean)
+<P>
+<PRE>
+       real(kind=wp),intent(in)  :: X(:)
+       integer,intent(in)        :: N
+       integer,intent(in)        :: Iwrite
+       real(kind=wp),intent(out) :: Xmean
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>MEAN</B>(3f) computes the sample mean of the data in the input vector X.
+<P>
+The sample mean = (sum of the observations)/n.
+<P>
+For a data set, the arithmetic mean, also known as arithmetic
+average, is a measure of central tendency of a finite set of numbers:
+specifically, the sum of the values divided by the number of values. If
+the data set were based on a series of observations obtained by
+sampling from a statistical population, the arithmetic mean is the
+sample mean.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+The vector of (unsorted or sorted) observations.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The integer number of observations in the vector X.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IWRITE</B> </TD><TD valign=bottom>
+An integer flag code which (if set to 0) will suppress
+the printing of the sample mean as it is computed; or (if set
+to some integer value not equal to 0), like, say, 1) will cause
+the printing of the sample mean at the time it is computed.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>XMEAN</B> </TD><TD valign=bottom>
+The value of the computed sample mean.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_mean
+   use M_datapac, only : mean, label
+   implicit none
+   real :: sp_mean
+   double precision :: dp_mean
+      call label(&#146;mean&#146;)
+      call mean([4.0, 36.0, 45.0, 50.0, 75.0], 5, 1, sp_mean)
+      write(*,*)sp_mean,sp_mean==42.0
+      call mean([4.0d0, 36.0d0, 45.0d0, 50.0d0, 75.0d0], 5, 1, dp_mean)
+      write(*,*)dp_mean,dp_mean==42.0
+   end program demo_mean
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Kendall and Stuart, The Advanced Theory of Statistics, Volume 2,
+Edition 1, 1961, page 4.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Mood and Grable, Introduction to the Theory of Statistics, Edition 2,
+1963, page 146.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Dixon and Massey, Introduction to Statistical Analysis, Edition 2,
+1957, page 14.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>mean (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 938a1e60-4c4b-44a9-b01e-22454234616f using man macros.</FONT>
+<br><br><center><img src="images/mean.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

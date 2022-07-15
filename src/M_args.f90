@@ -1238,7 +1238,6 @@ implicit none
 
 character(len=*)             :: prototype
 character(len=:),allocatable :: nml
-integer                      :: i
 integer                      :: ibig
    if(debug)then
       write(stderr,*)'*prototype_and_cmd_args_to_nlist* DEBUG: prototype=',trim(prototype)

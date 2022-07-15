@@ -1,0 +1,293 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>code (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>code</B>(3f) - [M_datapac:VECTOR_OPERATIONS] code the elements of a vector
+(1 for the minimum, 2 for the next larger value, and so on)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output Arguments</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>CODE</B>(X,N,Y)
+<P>
+<PRE>
+       REAL(kind=wp),intent(in)  :: X(:)
+       INTEGER,intent(in)        :: N
+       REAL(kind=wp),intent(out) :: Y(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>CODE</B>(3f) codes the elements of the input vector X and puts the coded
+values into the output vector Y. This essentially ranks the array
+elements so they can be accessed in ascending order like <B>RANK</B>(3f),
+but allowing duplicate ranks.
+<P>
+The coding is as follows--
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The coding is as follows--
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the minimum is coded as 1.0.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the next larger value as 2.0,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the next larger value as 3.0,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+etc.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+The vector of observations to be coded. The input vector X
+remains unaltered.
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The integer number of observations in the vector X. The maximum
+allowable value of N for this subroutine is 15000.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3% nowrap>
+<B>Y</B> </TD><TD valign=bottom>
+The vector Y which will contain the coded values corresponding
+to the observations in the vector X. It must be at least as large
+as X.
+<TABLE width=100% cellpadding=3><!-- tsb: The vector Y which will contain the coded values corresponding
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+All occurrances of the minimum are coded as 1.0;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+All occurances of the next larger value are coded as 2.0;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+All occurances of the next larger value are coded as 3.0, etc.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_code
+   use M_datapac, only : code
+   implicit none
+   integer,parameter            :: isz=20
+   real                         :: vals(isz)
+   real                         :: rndx(isz)
+   integer                      :: i
+      write(*,*)&#146; initializing array with &#146;,isz,&#146; random numbers&#146;
+      call random_seed()
+      CALL RANDOM_NUMBER(vals)
+      vals=vals*450000.0
+      ! make sure some duplicates
+      vals(3)=vals(6)
+      vals(4)=vals(15)
+<P>
+      call code(vals,isz,rndx) ! code data
+      ! check order
+      write(*,*)
+      write(*,&#146;(2(5x,g0.10,1x))&#146;)&#146;Values&#146;,&#146;Code&#146;,(vals(i),nint(rndx(i)),i=1,isz)
+<P>
+   end program demo_code
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt; initializing array with           20  random numbers
+    &gt;
+    &gt; Output from the code subroutine
+    &gt; Number of distinct code values =       18
+    &gt;
+    &gt;         Value     Coded Value
+    &gt;    3137.9548340          1.
+    &gt;   39334.0585938          2.
+    &gt;   58048.1054688          3.
+    &gt;   60169.2890625          4.
+    &gt;   61479.1015625          5.
+    &gt;   92335.1250000          6.
+    &gt;  101141.3671875          7.
+    &gt;  107306.5859375          8.
+    &gt;  135199.7343750          9.
+    &gt;  185223.0625000         10.
+    &gt;  214747.2656250         11.
+    &gt;  251820.6718750         12.
+    &gt;  267047.5000000         13.
+    &gt;  277210.9062500         14.
+    &gt;  296296.5625000         15.
+    &gt;  382931.3437500         16.
+    &gt;  414374.2187500         17.
+    &gt;  427620.9375000         18.
+    &gt;
+    &gt;    Values      Code
+    &gt;    277210.9062      14
+    &gt;    60169.28906      4
+    &gt;    101141.3672      7
+    &gt;    382931.3438      16
+    &gt;    61479.10156      5
+    &gt;    101141.3672      7
+    &gt;    296296.5625      15
+    &gt;    214747.2656      11
+    &gt;    3137.954834      1
+    &gt;    267047.5000      13
+    &gt;    107306.5859      8
+    &gt;    427620.9375      18
+    &gt;    414374.2188      17
+    &gt;    251820.6719      12
+    &gt;    382931.3438      16
+    &gt;    58048.10547      3
+    &gt;    39334.05859      2
+    &gt;    135199.7344      9
+    &gt;    185223.0625      10
+    &gt;    92335.12500      6
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>code (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e6074d67-bb50-4d58-b9c8-ec34ffa8b7e0 using man macros.</FONT>
+<br><br><center><img src="images/code.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

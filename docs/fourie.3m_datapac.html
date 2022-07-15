@@ -1,0 +1,279 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>fourie (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>fourie</B>(3f) - [M_datapac:ANALYSIS] perform a Fourier analysis of a data set
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>References</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>FOURIE</B>(X,N)
+<P>
+<PRE>
+       REAL(kind=wp),intent(in) :: X(:)
+       INTEGER                  :: N
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>FOURIE</B>(3f) performs a Fourier analysis of the data in the input vector
+X. The analysis consists of the following--
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <B>FOURIE</B>(3f) performs a Fourier analysis of the data in the input vector
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+computing (and printing)
+(for each of the harmonic frequencies
+1/n, 2/n, 3/n, &#46;&#46;&#46;, 1/2)
+the corresponding fourier coefficients,
+the amplitude, the phase,
+the contribution to the total variance,
+and the relative contribution to the total
+variance.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+plotting out a fourier line spectrum =
+the periodogram = the plot of relative
+contribution to total variance
+(at each fourier frequency) versus
+the fourier frequency.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+In order that the results of the Fourier analysis be valid and properly
+interpreted, the input data in X should be equi-spaced in time (or
+whatever variable corresponds to time).
+<P>
+The horizontal axis of the spectra produced by <B>fourie</B>(3f) is frequency.
+This frequency is measured in units of cycles per &#146;data point&#146; or,
+more precisely, in cycles per unit time where &#146;unit time&#146; is defined
+as the elapsed time between adjacent observations.
+<P>
+The range of the frequency axis is 0.0 to 0.5.
+<P>
+Fourier analysis differs from spectral analysis (as, for example,
+produced by the datapac <B>TIMESE</B>(3f) subroutine) in that a Fourier
+analysis does no smoothing on the spectral estimates whereas a spectral
+analysis does smooth the spectral estimates. The net result is that
+the spectral estimates obtained from a Fourier analysis are almost
+always more variable than those obtained in a spectral analysis.
+<P>
+The practical conclusion is that when the data analyst has a choice
+of whether to perform a Fourier analysis or a spectral analysis,
+the spectral analysis should almost always be preferred.
+<P>
+the maximum number of Fourier frequencies for which the Fourier
+coefficients is computed (and listed) is N/2 where N is the sample
+size (length of the data record in the vector X). This rule is
+overridden (for listing purposes only) in large data sets and is
+replaced by the rule that the maximum number of lags listed = 800
+(which corresponds to an 8-page listing of Fourier coefficients.
+If more pages are desired, change the value of the variable MAXPAG
+within this subroutine from 8 to whatever is desired.
+<P>
+If the input observations in X are considered to have been collected
+1 second apart in time, then the frequency axis of the resulting
+spectra would be in units of Hertz (= cycles per second).
+<P>
+The frequency of 0.0 corresponds to a cycle in the data of infinite
+(= <B>1/</B>(0.0)) length or period. the frequency of 0.5 corresponds to
+a cycle in the data of length = <B>1/</B>(0.5) = 2 data points.
+<P>
+Any equi-spaced fourier analysis is intrinsically limited to detecting
+frequencies no larger than 0.5 cycles per data point; this corresponds
+to the fact that the smallest detectable cycle in the data is 2 data
+points per cycle.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+The vector of (unsorted) observations.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The integer number of observations in the vector X.
+The maximum allowable value of N for this subroutine is 15000.
+The sample size N must be greater than or equal to 3.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+2 to 10 pages (depending on the input sample size) of automatic
+printout--
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: 2 to 10 pages (depending on the input sample size) of automatic
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+a listing of the amplitude, phase, contribution to the total
+variance, and relative contribution to the total variance for
+each of the fourier frequencies (1/n, 2/n, 3/n, &#46;&#46;&#46;, 1/2).
+this listing may take as little as 1 page or as many as n/100
+pages (the exact number depending on the input sample size n).
+this listing is terminated after at most 8 computer pages.
+if more pages are desired, change the value of the variable
+maxpag within this subroutine from 8 to whatever desired.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+a plot of the relative contribution to the total variance versus
+frequency.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_fourie
+   use M_datapac, only : fourie
+   implicit none
+   ! call fourie(x,y)
+   end program demo_fourie
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Jenkins and Watts, especially page 290.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>fourie (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from df4b3f10-5759-43fe-9a9e-da88d8827ae9 using man macros.</FONT>
+<br><br><center><img src="images/fourie.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

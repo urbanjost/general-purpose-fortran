@@ -4805,12 +4805,15 @@ end subroutine skekurx
 !!      Calculate the number of unique combinations of r objects out of n.
 !!
 !!##OPTIONS
-!!      ier  returns error code
-!!           * 0  if no error is detected
-!!           * 1  if n < 1
-!!           * 2  if r < 0
-!!           * 3  if r > n
-!!           * 4  if nCr > 1.e+308, i.e. if it overflows. In this case, the
+!!      n      number of objects
+!!      r      number of the objects to select in a set
+!!      ncomp  returns number of unique combinations
+!!      ier    returns error code
+!!             * 0  if no error is detected
+!!             * 1  if n < 1
+!!             * 2  if r < 0
+!!             * 3  if r > n
+!!             * 4  if nCr > 1.e+308, i.e. if it overflows. In this case, the
 !!                natural log of nCr is returned.
 !!##EXAMPLE
 !!
@@ -4822,9 +4825,11 @@ end subroutine skekurx
 !!    integer, parameter  :: dp = selected_real_kind(12, 60)
 !!    integer             :: n, r, ier
 !!    real (dp)           :: result
-!!    do
-!!       write(*, '(a)', advance='no') ' Enter n, r : '
-!!       read(*, *) n, r
+!!    !do
+!!    !   write(*, '(a)', advance='no') ' Enter n, r : '
+!!    !   read(*, *) n, r
+!!       n=10
+!!       r=2
 !!       call ncr(n, r, result, ier)
 !!       if (ier /= 0) then
 !!          write(*, *) ' Error, IER = ', ier
@@ -4832,8 +4837,12 @@ end subroutine skekurx
 !!       else
 !!          write(*, '(a, g16.8)') ' ncr = ', result
 !!       endif
-!!    enddo
+!!    !enddo
 !!    end program demo_ncr
+!!
+!!   Results:
+!!
+!!     ncr =    45.000000
 !!
 !!##AUTHOR
 !!    Alan Miller
@@ -5495,7 +5504,6 @@ end subroutine quadratic
 !!    implicit none
 !!    integer           :: arr(15,15)
 !!    integer           :: i, j, k
-!!
 !!       do k=1,15
 !!          write(*,*)'K=',k
 !!          call magic_square(arr(:k,:k))

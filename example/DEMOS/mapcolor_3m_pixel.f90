@@ -35,7 +35,6 @@
         call write_animated_gif('mapcolor.3m_pixel.gif',movie,P_colormap,delay=40)
         call vexit()
      contains
-     !=======================================================================--------
      subroutine wheel() ! draw an entire wheel
         character(len=40) :: inline
         real              :: hue_val
@@ -63,7 +62,6 @@
         enddo
         call centertext(.false.)
      end subroutine wheel
-     !=======================================================================--------
      subroutine slice(hue_val) ! draw a slice
      integer           :: buffer
      real              :: hue_val, ang_inc
@@ -109,7 +107,8 @@
         ! draw a chunk in a slice
         MAXCOLORS=(256)-buffer
         do icount=RINGS+1,2,-1
-           CURRENT_COLOR=MOD(color_count,MAXCOLORS)+buffer  ! add buffer to leave base colors alone
+           ! add buffer to leave base colors alone
+           CURRENT_COLOR=MOD(color_count,MAXCOLORS)+buffer
            color_count=color_count+1
            ! fancy mapcolor
            call hue("hls",hue_val,LIGHTNESS,saturation,"rgb",r,g,b,status)

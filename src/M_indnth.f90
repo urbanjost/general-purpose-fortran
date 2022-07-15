@@ -7,7 +7,7 @@ public :: indnth
 !>
 !!##NAME
 !!    orderloc(3f) - [orderpack:FRACTILE] Return INDEX of Nth ordered value of
-!!                 array, or "fractile of order N/SIZE(array)" (QuickSort-like)
+!!                   array (QuickSort-like)
 !!
 !!##SYNOPSIS
 !!
@@ -74,13 +74,6 @@ public :: indnth
 !!          write(*,sp,advance='no') iarr(orderloc(iarr,i))
 !!       enddo
 !!       print *
-!!    contains
-!!    subroutine printme(n)
-!!    integer,intent(in) :: n
-!!    integer :: ii
-!!       ii=orderloc(iarr,n)
-!!       print sp,'nord=',n,' index=',ii,' fractile=',iarr(ii)
-!!    end subroutine printme
 !!    end program demo_orderloc
 !!
 !!   Results:

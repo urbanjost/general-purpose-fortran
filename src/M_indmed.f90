@@ -24,7 +24,8 @@ Integer, Allocatable, Dimension(:), Private, Save :: IDONT
 !!       o Character(kind=selected_char_kind("DEFAULT"),len=*)
 !!
 !!##DESCRIPTION
-!!    MEDIANLOC(3f) Returns the index of the median (((Size(INVALS)+1))/2^th value).
+!!    MEDIANLOC(3f) Returns the index of the median (((Size(INVALS)+1))/2^th
+!!    value).
 !!
 !!
 !!    Internally, MEDIANLOC(3f) Finds the index of the median of the array

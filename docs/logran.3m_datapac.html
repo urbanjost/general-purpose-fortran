@@ -1,0 +1,298 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>logran (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>logran</B>(3f) - [M_datapac:RANDOM] generate logistic random numbers
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output Arguments</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>References</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>LOGRAN</B>(N,Iseed,X)
+<P>
+<PRE>
+       INTEGER,intent(in)        :: N
+       INTEGER,intent(inout)     :: Iseed
+       REAL(kind=wp),intent(out) :: X(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>LOGRAN</B>(3f) generates a random sample of size N from the logistic
+distribution with mean = 0 and standard deviation = <B>pi/sqrt</B>(3).
+<P>
+This distribution is defined for all X and has the probability
+density function
+<P>
+<PRE>
+       f(X) = exp(X)/(1+exp(X))
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The desired integer number of random numbers to be generated.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>ISEED</B> </TD><TD valign=bottom>
+An integer seed value. Should be set to a non-negative value
+to start a new sequence of values. Will be set to <B>-1</B> on return
+to indicate the next call should continue the current random
+sequence walk.
+</TD></TR>
+<TR></TR></TABLE><A name=4>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+A vector (of dimension at least N) into which the generated
+random sample of size N from the logistic distribution will
+be placed.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_logran
+   use m_datapac, only : logran, plott, label, plotxt, sort
+   implicit none
+   integer,parameter :: n=4000
+   integer           :: iseed
+   real              :: x(n)
+      call label(&#146;logran&#146;)
+      iseed=12345
+      call logran(N,Iseed,X)
+      call plotxt(x,n)
+      call sort(x,n,x) ! sort to show distribution
+      call plotxt(x,n)
+   end program demo_logran
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<P>
+<P>
+<PRE>
+    THE FOLLOWING IS A PLOT OF X(I) (VERTICALLY) VERSUS I (HORIZONTALLY
+                      I-----------I-----------I-----------I-----------I
+     0.1011046E+02 -   X
+     0.9310020E+01 I
+     0.8509579E+01 I                   X
+     0.7709137E+01 I                          X
+     0.6908696E+01 I                                    X
+     0.6108254E+01 I           X      X X          X      X  XXX
+     0.5307813E+01 -   X        X X X XX X        X X         X X    X
+     0.4507371E+01 I    X X  X      X XXX    XXXX XXX  X X X XX X  X X
+     0.3706930E+01 I  XXXXXXXXXXXXX XX XX XXX XXXXXXXXXXXXXXXXX X XXXXX
+     0.2906488E+01 I  XXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXXXXX
+     0.2106047E+01 I  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+     0.1305605E+01 I  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+     0.5051632E+00 -  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    -0.2952785E+00 I  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    -0.1095719E+01 I  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    -0.1896161E+01 I  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    -0.2696603E+01 I  XXXXXXXXXXXXXXXXXXXXXXXXX XXXX XXXXXXXXXXXXXXXXXX
+    -0.3497045E+01 I  XX XXXX XXXXX XXXXXXXX  XX XXXX XXXX XXXXXXXXXXXX
+    -0.4297486E+01 -  XXX XXXXXXX XX X XXX  XXX XXXX XXXXX   X X XXXX
+    -0.5097927E+01 I       XX X     X X XXX XX X    XXXX       X   XXX
+    -0.5898369E+01 I        X          X   X  XX XXX  X          X
+    -0.6698811E+01 I               X
+    -0.7499252E+01 I                       X
+    -0.8299694E+01 I
+    -0.9100137E+01 -                                          X
+                      I-----------I-----------I-----------I-----------I
+               0.1000E+01  0.1001E+04  0.2000E+04  0.3000E+04  0.4000E+04
+<P>
+    THE FOLLOWING IS A PLOT OF X(I) (VERTICALLY) VERSUS I (HORIZONTALLY
+                      I-----------I-----------I-----------I-----------I
+     0.1011046E+02 -                                                  X
+     0.9310020E+01 I
+     0.8509579E+01 I                                                  X
+     0.7709137E+01 I                                                  X
+     0.6908696E+01 I                                                  X
+     0.6108254E+01 I                                                  X
+     0.5307813E+01 -                                                  X
+     0.4507371E+01 I                                                 XX
+     0.3706930E+01 I                                                XX
+     0.2906488E+01 I                                              XXX
+     0.2106047E+01 I                                          XXXXX
+     0.1305605E+01 I                                   XXXXXXXX
+     0.5051632E+00 -                           XXXXXXXXX
+    -0.2952785E+00 I                  XXXXXXXXXX
+    -0.1095719E+01 I           XXXXXXXX
+    -0.1896161E+01 I      XXXXXX
+    -0.2696603E+01 I    XXX
+    -0.3497045E+01 I   XX
+    -0.4297486E+01 -  XX
+    -0.5097927E+01 I  X
+    -0.5898369E+01 I  X
+    -0.6698811E+01 I  X
+    -0.7499252E+01 I  X
+    -0.8299694E+01 I
+    -0.9100137E+01 -  X
+                      I-----------I-----------I-----------I-----------I
+               0.1000E+01  0.1001E+04  0.2000E+04  0.3000E+04  0.4000E+04
+<P>
+</PRE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Tocher, The Art of Simulation, 1963, pages 14-15.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Hammersley and Handscomb, Monte Carlo Methods, 1964, page 36.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Filliben, Simple and Robust Linear Estimation of the Location
+Parameter of a Symmetric Distribution (Unpublished PH.D. Dissertation,
+Princeton University), 1969, page 230.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Filliben, &#146;The Percent Point Function&#146;, (Unpublished Manuscript),
+1970, pages 28-31.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Johnson and Kotz, Continuous Univariate Distributions-<B>-2</B>, 1970,
+pages 1-21.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>logran (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 42cb5269-ac64-4124-a4a2-f1ffa7a03cf1 using man macros.</FONT>
+<br><br><center><img src="images/logran.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -11,7 +11,8 @@
 
 !>
 !!##NAME
-!!    write_animated_gif(3f) - [M_writegif_animated] Codes pixel-maps with palette into animated GIF format. Optional transparent color
+!!    write_animated_gif(3f) - [M_writegif_animated] Codes pixel-maps with
+!!    palette into animated GIF format. Optional transparent color
 !!
 !!##SYNOPSIS
 !!
@@ -45,7 +46,9 @@
 !!    !  Use the gif module to create a sample animated gif.
 !!    !
 !!    !# See also
-!!    !  * [Make a circle illusion animation](http://codegolf.stackexchange.com/questions/34887/make-a-circle-illusion-animation)
+!!    !  * [Make a circle illusion animation]
+!!    !    (http://codegolf.stackexchange.com/questions/34887/
+!!    !    make-a-circle-illusion-animation)
 !!    !
 !!    use, intrinsic :: iso_fortran_env, only: wp=>real64
 !!    use M_writegif_animated, only : write_animated_gif
@@ -211,36 +214,41 @@
 !!
 !!##AUTHOR
 !!    o Version 1.01, August 1999, Written by Jos Bergervoet
-!!    o 2008 Jan 28: Modified by Clive Page to use stream I/O, array as colourmap.
-!!    * Jacob Williams, 7/27/2014. Refactored, updated, added ability to export animated gifs.
-!!    o Minor modifications to make more easily used with M_PIXEL(3f) module, 2017-July-06, John Urban
+!!    o 2008 Jan 28: Modified by Clive Page to use stream I/O, array as
+!!      colourmap.
+!!    o Jacob Williams, 7/27/2014. Refactored, updated, added ability to
+!!      export animated gifs.
+!!    o Minor modifications to make more easily used with M_PIXEL(3f)
+!!      module, 2017-July-06, John Urban
 !!##LICENSE
 !!   Copyright (c) 2014-2015, Jacob Williams.
 !!   All rights reserved.
 !!
 !!   Redistribution and use in source and binary forms, with or without
-!!   modification, are permitted provided that the following conditions are met:
+!!   modification, are permitted provided that the following conditions
+!!   are met:
 !!
-!!   * Redistributions of source code must retain the above copyright notice, this
-!!     list of conditions and the following disclaimer.
+!!   * Redistributions of source code must retain the above copyright
+!!     notice, this list of conditions and the following disclaimer.
 !!
-!!   * Redistributions in binary form must reproduce the above copyright notice,
-!!     this list of conditions and the following disclaimer in the documentation
-!!     and/or other materials provided with the distribution.
+!!   * Redistributions in binary form must reproduce the above copyright
+!!     notice, this list of conditions and the following disclaimer in the
+!!     documentation and/or other materials provided with the distribution.
 !!
 !!   * Neither the name of the {organization} nor the names of its
 !!     contributors may be used to endorse or promote products derived from
 !!     this software without specific prior written permission.
 !!
-!!   This software is provided by the copyright holders and contributors "AS IS"
-!!   and any express or implied warranties, including, but not limited to, the
-!!   implied warranties of merchantability and fitness for a particular purpose are
-!!   disclaimed. In no event shall the copyright holder or contributors be liable
-!!   for any direct, indirect, incidental, special, exemplary, or consequential
-!!   damages (including, but not limited to, procurement of substitute goods or
-!!   services; loss of use, data, or profits; or business interruption) However
-!!   caused and on any theory of liability, whether in contract, strict liability,
-!!   or tort (Including negligence or otherwise) arising in any way out of the use
+!!   This software is provided by the copyright holders and contributors
+!!   "AS IS" and any express or implied warranties, including, but not
+!!   limited to, the implied warranties of merchantability and fitness for
+!!   a particular purpose are disclaimed. In no event shall the copyright
+!!   holder or contributors be liable for any direct, indirect, incidental,
+!!   special, exemplary, or consequential damages (including, but not
+!!   limited to, procurement of substitute goods or services; loss of use,
+!!   data, or profits; or business interruption) However caused and on any
+!!   theory of liability, whether in contract, strict liability, or tort
+!!   (Including negligence or otherwise) arising in any way out of the use
 !!   of this software, even if advised of the possibility of such damage.
 !>
 !  Conversion of raster data to GIF89 format.

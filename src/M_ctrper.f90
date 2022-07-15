@@ -55,9 +55,8 @@ public :: ctrper
 !!    use M_orderpack, only : perturb
 !!    implicit none
 !!    character(len=*),parameter :: g='(*(g0,1x))'
-!!    character(len=*),parameter :: list= '(*(g0:,", "))'
 !!    integer,allocatable :: xout(:,:)
-!!    integer          :: isz, i, j
+!!    integer          :: isz, i
 !!    isz=200
 !!       ! randomly perturb location of values
 !!       !

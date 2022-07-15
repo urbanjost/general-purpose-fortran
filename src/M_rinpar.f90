@@ -81,7 +81,7 @@ public :: rinpar
 !!##LICENSE
 !!    CC0-1.0
 interface rinpar
-   module procedure real64_rinpar, real32_rinpar, int32_rinpar
+   module procedure real64_rinpar, real32_rinpar, int32_rinpar, f_char_rinpar
 end interface rinpar
 contains
 Subroutine real64_rinpar (INVALS, IRNGT, NORD)

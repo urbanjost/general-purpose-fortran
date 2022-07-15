@@ -18,6 +18,8 @@ use, intrinsic :: ISO_FORTRAN_ENV, only : REAL32, REAL64, REAL128         !  4  
 implicit none                       ! declare that all variables must be explicitly declared
 integer,parameter :: dp=kind(0.0d0)
 integer,parameter :: cd=kind(0.0d0)
+integer,parameter :: cs=kind(0.0)
+integer,parameter :: lk=kind(.false.)
 private                             ! the PRIVATE declaration requires use of a module, and changes the default from PUBLIC
 public sort_quick_rx
 public sort_shell
@@ -70,7 +72,16 @@ end interface
 ! ident_4="@(#)M_sort::swap(3f): swap two variables of like type (real,integer,complex,character,double)"
 
 interface swap
-   module procedure r_swap, i_swap, c_swap, s_swap, d_swap, l_swap, cd_swap
+   module procedure swap_int8
+   module procedure swap_int16
+   module procedure swap_int32
+   module procedure swap_int64
+   module procedure swap_real32
+   module procedure swap_real64
+   module procedure swap_string
+   module procedure swap_cs
+   module procedure swap_cd
+   module procedure swap_lk
 end interface
 
 !-interface exchange
@@ -133,7 +144,8 @@ contains
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_sort(3fm) - [M_sort::INTRO] Fortran module containing sorting algorithms for arrays of standard scalar types
+!!    M_sort(3fm) - [M_sort::INTRO] Fortran module containing sorting
+!!                  algorithms for arrays of standard scalar types
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -142,25 +154,38 @@ contains
 !!    use M_sort, only : unique
 !!
 !!##DESCRIPTION
-!!    Under development. Currently only provides a few common routines, but it is intended that
-!!    other procedures will provide a variety of sort methods, including ...
+!!    Under development. Currently only provides a few common routines,
+!!    but it is intended that other procedures will provide a variety of
+!!    sort methods, including ...
 !!
-!!    Exchange sorts      Bubble sort, Cocktail shaker sort, Odd-even sort, Comb sort, Gnome sort, Quicksort, Stooge sort, Bogosort
-!!    Selection sorts     Selection sort, Heapsort, Smoothsort, Cartesian tree sort, Tournament sort, Cycle sort
-!!    Insertion sorts     Insertion sort, Shellsort, Splaysort, Tree sort, Library sort, Patience sorting
-!!    Merge sorts         Merge sort, Cascade merge sort, Oscillating merge sort, Polyphase merge sort
-!!    Distribution sorts  American flag sort, Bead sort, Bucket sort, Burstsort, Counting sort, Pigeonhole sort, Proxmap sort,
-!!                        Radix sort, Flashsort
-!!    Concurrent sorts    Bitonic sorter, Batcher odd-even mergesort, Pairwise sorting network
+!!    Exchange sorts      Bubble sort, Cocktail shaker sort, Odd-even sort,
+!!                        Comb sort, Gnome sort, Quicksort, Stooge sort,
+!!                        Bogosort
+!!    Selection sorts     Selection sort, Heapsort, Smoothsort, Cartesian
+!!                        tree sort, Tournament sort, Cycle sort
+!!    Insertion sorts     Insertion sort, Shellsort, Splaysort, Tree sort,
+!!                        Library sort, Patience sorting
+!!    Merge sorts         Merge sort, Cascade merge sort, Oscillating merge
+!!                        sort, Polyphase merge sort
+!!    Distribution sorts  American flag sort, Bead sort, Bucket sort,
+!!                        Burstsort, Counting sort, Pigeonhole sort,
+!!                        Proxmap sort, Radix sort, Flashsort
+!!    Concurrent sorts    Bitonic sorter, Batcher odd-even mergesort,
+!!                        Pairwise sorting network
 !!    Hybrid sorts        Block merge sortTimsort, Introsort, Spreadsort
-!!    Other               Topological sorting, Pancake sorting, Spaghetti sort
+!!    Other               Topological sorting, Pancake sorting, Spaghetti
+!!                        sort
 !!
 !!    and an overview of topics concerning sorting
 !!
-!!    Theory              Computational complexity theory, Big O notation, Total orderLists, InplacementStabilityComparison sort,
-!!                        Adaptive sort, Sorting network, Integer sorting, X + Y sorting, Transdichotomous model, Quantum sort
+!!    Theory              Computational complexity theory, Big O notation,
+!!                        Total orderLists, InplacementStabilityComparison
+!!                        sort, Adaptive sort, Sorting network, Integer
+!!                        sorting, X + Y sorting, Transdichotomous model,
+!!                        Quantum sort
 !!
-!!    In the mean time those keywords can be useful in locating materials on the WWW, especially in Wikipedia.
+!!    In the mean time those keywords can be useful in locating materials
+!!    on the WWW, especially in Wikipedia.
 !!
 !!##RANKING
 !!
@@ -184,7 +209,8 @@ contains
 !!     o All elements less than the pivot must be in the first partition.
 !!     o All elements greater than the pivot must be in the second partition.
 !!     o Use recursion to sort both partitions.
-!!     o Join the first sorted partition, the pivot, and the second sorted partition.
+!!     o Join the first sorted partition, the pivot, and the second sorted
+!!       partition.
 !!
 !!    The best pivot creates partitions of equal length (or lengths differing
 !!    by 1).
@@ -192,15 +218,16 @@ contains
 !!    The worst pivot creates an empty partition (for example, if the pivot
 !!    is the first or last element of a sorted array).
 !!
-!!    The run-time of Quicksort ranges from O(n log n) with the best
-!!    pivots, to O(n2) with the worst pivots, where n is the
-!!    number of elements in the array.
+!!    The run-time of Quicksort ranges from O(n log n) with the best pivots,
+!!    to O(n2) with the worst pivots, where n is the number of elements in
+!!    the array.
 !!
-!!    Quicksort has a reputation as the fastest sort. Optimized variants of
-!!    quicksort are common features of many languages and libraries.
+!!    Quicksort has a reputation as the fastest sort. Optimized variants
+!!    of quicksort are common features of many languages and libraries.
 !>
 !!##NAME
-!!    sort_shell(3f) - [M_sort] Generic subroutine sorts the array X using Shell's Method
+!!    sort_shell(3f) - [M_sort] Generic subroutine sorts the array X using
+!!                     Shell's Method
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -275,7 +302,8 @@ contains
 !!                REAL, DOUBLEPRECISION, COMPLEX, or DOUBLEPRECISION COMPLEX.
 !!     order      sort order
 !!                o A for Ascending  (a-z for strings, small to large for values)
-!!                o D for Descending (z-a for strings, large to small for values, default)
+!!                o D for Descending (z-a for strings, large to small for
+!!                  values, default)
 !!
 !!    FOR CHARACTER DATA:
 !!
@@ -333,14 +361,18 @@ contains
 !!
 !!   Expected output
 !!
-!!       BEFORE red,green,blue,yellow,orange,black,white,brown,gray,cyan,magenta,purple
-!!       A-Z    black,blue,brown,cyan,gray,green,magenta,orange,purple,red,white,yellow
-!!       BEFORE RED,GREEN,BLUE,YELLOW,ORANGE,BLACK,WHITE,BROWN,GRAY,CYAN,MAGENTA,PURPLE
-!!       Z-A    YELLOW,WHITE,RED,PURPLE,ORANGE,MAGENTA,GREEN,GRAY,CYAN,BROWN,BLUE,BLACK
+!!       BEFORE
+!!       red,green,blue,yellow,orange,black,white,brown,gray,cyan,magenta,purple
+!!       A-Z
+!!       black,blue,brown,cyan,gray,green,magenta,orange,purple,red,white,yellow
+!!       BEFORE
+!!       RED,GREEN,BLUE,YELLOW,ORANGE,BLACK,WHITE,BROWN,GRAY,CYAN,MAGENTA,PURPLE
+!!       Z-A
+!!       YELLOW,WHITE,RED,PURPLE,ORANGE,MAGENTA,GREEN,GRAY,CYAN,BROWN,BLUE,BLACK
 !!
 !!##REFERENCE
-!!    1.  ALGORITHM 201, SHELLSORT, J. BOOTHROYD, CACM VOL. 6, NO. 8, P 445, (1963)
-!!    2.  D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
+!!    1. ALGORITHM 201, SHELLSORT, J. BOOTHROYD, CACM VOL. 6, NO. 8, P 445, (1963)
+!!    2. D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
 !!
 !!##AUTHOR
 !!      John S. Urban, 19970201
@@ -951,14 +983,14 @@ end subroutine sort_shell_complex_double
 !!
 !!##DESCRIPTION
 !!    A rank hybrid quicksort. The data is not moved. An integer array is
-!!    generated instead with values that are indices to the sorted order of
-!!    the data. This requires a second array the size of the input array,
-!!    which for large arrays could require a significant amount of memory. One
-!!    major advantage of this method is that any element of a user-defined type
-!!    that is a scalar intrinsic can be used to provide the sort data and
-!!    subsequently the indices can be used to access the entire user-defined
-!!    type in sorted order. This makes this seemingly simple sort procedure
-!!    usuable with the vast majority of user-defined types.
+!!    generated instead with values that are indices to the sorted order
+!!    of the data. This requires a second array the size of the input
+!!    array, which for large arrays could require a significant amount of
+!!    memory. One major advantage of this method is that any element of a
+!!    user-defined type that is a scalar intrinsic can be used to provide the
+!!    sort data and subsequently the indices can be used to access the entire
+!!    user-defined type in sorted order. This makes this seemingly simple
+!!    sort procedure usuable with the vast majority of user-defined types.
 !!
 !!##BACKGROUND
 !!    From Leonard J. Moss of SLAC:
@@ -1016,15 +1048,18 @@ end subroutine sort_shell_complex_double
 !!    write(*,*)'checking index of sort_quick_rx(3f)'
 !!    do i=1,isz-1
 !!       if(rr(ii(i)).gt.rr(ii(i+1)))then
-!!          write(*,*)'Error in sorting reals small to large ',i,rr(ii(i)),rr(ii(i+1))
+!!          write(*,*)'Error in sorting reals small to large ', &
+!!          & i,rr(ii(i)),rr(ii(i+1))
 !!       endif
 !!    enddo
 !!    write(*,*)'test of sort_quick_rx(3f) complete'
-!!    ! use the index array to actually move the input array into a sorted order
+!!    ! use the index array to actually move the input array into a sorted
+!!    ! order
 !!    rr=rr(ii)
 !!    do i=1,isz-1
 !!       if(rr(i).gt.rr(i+1))then
-!!          write(*,*)'Error in sorting reals small to large ',i,rr(i),rr(i+1)
+!!          write(*,*)'Error in sorting reals small to large ', &
+!!          & i,rr(i),rr(i+1)
 !!       endif
 !!    enddo
 !!    write(*,*)'test of sort_quick_rx(3f) complete'
@@ -1080,8 +1115,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -1101,7 +1136,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -1129,11 +1164,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -1142,7 +1177,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -1254,8 +1289,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -1275,7 +1310,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -1303,11 +1338,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -1316,7 +1351,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -1428,8 +1463,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -1449,7 +1484,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -1477,11 +1512,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -1490,7 +1525,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -1602,8 +1637,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -1623,7 +1658,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -1651,11 +1686,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -1664,7 +1699,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -1776,8 +1811,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -1797,7 +1832,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -1825,11 +1860,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -1838,7 +1873,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -1950,8 +1985,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -1971,7 +2006,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -1999,11 +2034,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -2012,7 +2047,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -2124,8 +2159,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -2145,7 +2180,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -2173,11 +2208,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -2186,7 +2221,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -2300,8 +2335,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -2321,7 +2356,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -2349,11 +2384,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -2362,7 +2397,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -2474,8 +2509,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -2495,7 +2530,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -2523,11 +2558,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -2536,7 +2571,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -2648,8 +2683,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -2669,7 +2704,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -2697,11 +2732,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -2710,7 +2745,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -2822,8 +2857,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -2843,7 +2878,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -2871,11 +2906,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -2884,7 +2919,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -2996,8 +3031,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -3017,7 +3052,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -3045,11 +3080,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -3058,7 +3093,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -3170,8 +3205,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -3191,7 +3226,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -3219,11 +3254,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -3232,7 +3267,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -3344,8 +3379,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -3365,7 +3400,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -3393,11 +3428,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          if (data(indx(i)).lt.datap)then
@@ -3406,7 +3441,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -3523,8 +3558,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -3544,7 +3579,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -3578,11 +3613,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          cdsize1=sqrt(dble(data(indx(i)))**2+aimag(data(indx(i)))**2)
@@ -3593,7 +3628,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -3713,8 +3748,8 @@ if (N.gt.M)then
    !  QuickSort
    !
    !  The "Qn:"s correspond roughly to steps in Algorithm Q, Knuth, V.3, PP.116-117, modified to select the median
-   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K").  Also modified to leave
-   !  data in place and produce an INDEX array.  To simplify comments, let DATA[I]=DATA(INDX(I)).
+   !  of the first, last, and middle elements as the "pivot key" (in Knuth's notation, "K"). Also modified to leave
+   !  data in place and produce an INDEX array. To simplify comments, let DATA[I]=DATA(INDX(I)).
 
    ! Q1: Initialize
    istk=0
@@ -3734,7 +3769,7 @@ if (N.gt.M)then
       ! Q2.5: Select pivot key
       !
       !  Let the pivot, P, be the midpoint of this subsequence, P=(L+R)/2; then rearrange INDX(L), INDX(P), and INDX(R)
-      !  so the corresponding DATA values are in increasing order.  The pivot key, DATAP, is then DATA[P].
+      !  so the corresponding DATA values are in increasing order. The pivot key, DATAP, is then DATA[P].
 
       p=(l+r)/2
       indexp=indx(p)
@@ -3768,11 +3803,11 @@ if (N.gt.M)then
       endif
 
       !  Now we swap values between the right and left sides and/or move DATAP until all smaller values are on the left and all
-      !  larger values are on the right.  Neither the left or right side will be internally ordered yet; however, DATAP will be
+      !  larger values are on the right. Neither the left or right side will be internally ordered yet; however, DATAP will be
       !  in its final position.
       Q3: do
          ! Q3: Search for datum on left >= DATAP
-         !   At this point, DATA[L] <= DATAP.  We can therefore start scanning up from L, looking for a value >= DATAP
+         !   At this point, DATA[L] <= DATAP. We can therefore start scanning up from L, looking for a value >= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          I=I+1
          cdsize1=sqrt(dble(data(indx(i)))**2+aimag(data(indx(i)))**2)
@@ -3783,7 +3818,7 @@ if (N.gt.M)then
          !-----------------------------------------------------------------------------------------------------------------------
          ! Q4: Search for datum on right <= DATAP
          !
-         !   At this point, DATA[R] >= DATAP.  We can therefore start scanning down from R, looking for a value <= DATAP
+         !   At this point, DATA[R] >= DATAP. We can therefore start scanning down from R, looking for a value <= DATAP
          !   (this scan is guaranteed to terminate since we initially placed DATAP near the middle of the subsequence).
          Q4: do
             j=j-1
@@ -3869,7 +3904,8 @@ end subroutine sort_quick_rx_complex_int64
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    unique(3f) - [M_sort] return array with adjacent duplicate values removed
+!!    unique(3f) - [M_sort] return array with adjacent duplicate values
+!!    removed
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -3882,7 +3918,8 @@ end subroutine sort_quick_rx_complex_int64
 !!     Assuming an array is sorted, return the array with adjacent duplicate
 !!     values removed.
 !!
-!!     If the input array is sorted, this will produce a list of unique values.
+!!     If the input array is sorted, this will produce a list of unique
+!!     values.
 !!
 !!##OPTIONS
 !!    array   may be of type INTEGER, REAL, CHARACTER, COMPLEX,
@@ -4255,23 +4292,11 @@ end subroutine unique_allocatable_strings
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-!>
-!! DESCRIPTION: swap(3f):subroutine swaps two variables of like type (real,integer,complex,character,double)
-!!##VERSION:     1.0 19970201
-!! AUTHOR:      John S. Urban
-!!
-!!     M_sort::swap(3f): swap two variables of like type (real,integer,complex,character,double)
-!!
-!!     SWAP is a Generic Interface in a module with PRIVATE specific procedures.
-!!     This means the individual subroutines cannot be called from outside of the M_sort(3fm) module.
-!!
-!!      o procedure names are declared private in this module so they are not accessible except by their generic name
-!!      o procedures must include a "use M_sort" to access the generic name "swap"
-!!      o if these routines are recompiled, routines with the USE statement should then be recompiled and reloaded.
 !===================================================================================================================================
 !>
 !!##NAME
-!!    swap(3f) - [M_sort] elemental subroutine swaps two standard type variables of like type
+!!    swap(3f) - [M_sort] elemental subroutine swaps two standard type
+!!               variables of like type
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -4280,11 +4305,11 @@ end subroutine unique_allocatable_strings
 !!    Generic subroutine SWAP(GEN1,GEN2) swaps two variables of like type
 !!    (real, integer, complex, character, double, logical).
 !!
-!!    On output, the values of X and Y have been interchanged.
-!!    Swapping is commonly required in procedures that sort data.
+!!    On output, the values of X and Y have been interchanged. Swapping is
+!!    commonly required in procedures that sort data.
 !!
-!!    SWAP(3f) is elemental, so it can operate on vectors and arrays as well
-!!    as scalar values.
+!!    SWAP(3f) is elemental, so it can operate on vectors and arrays as
+!!    well as scalar values.
 !!
 !!##EXAMPLE
 !!
@@ -4381,8 +4406,8 @@ end subroutine unique_allocatable_strings
 !!    > reals after swap     22.2199993       11.1099997
 !!    > doubles before swap    1234.5678900000000        9876.5432099999998
 !!    > doubles after swap     9876.5432099999998        1234.5678900000000
-!!    > complexes before swap  (  1234.00000    ,  56789.0000    ) (  9876.00000    ,  54321.0000    )
-!!    > complexes after swap   (  9876.00000    ,  54321.0000    ) (  1234.00000    ,  56789.0000    )
+!!    > complexes before swap  (1234.00000,56789.0000) (9876.00000,54321.0000)
+!!    > complexes after swap   (9876.00000,54321.0000) (1234.00000,56789.0000)
 !!    > logicals before swap  T F
 !!    > logicals after swap   F T
 !!    > strings before swap First string    The other string
@@ -4425,49 +4450,70 @@ end subroutine unique_allocatable_strings
 !!    >1,1,1
 !!    >1,1,1
 !===================================================================================================================================
-elemental subroutine d_swap(x,y)
-! ident_39="@(#)M_sort::d_swap(3fp): swap two double variables"
-doubleprecision, intent(inout) :: x,y
-doubleprecision                :: temp
+elemental subroutine swap_real32(x,y)
+! ident_39="@(#)M_sort::swap_real32(3fp): swap two variables of TYPE(real(KIND=real32))"
+type(real(kind=real32)), intent(inout) :: x,y
+type(real(kind=real32))                :: temp
    temp = x; x = y; y = temp
-end subroutine d_swap
+end subroutine swap_real32
 !===================================================================================================================================
-elemental subroutine r_swap(x,y)
-! ident_40="@(#)M_sort::r_swap(3fp): swap two real variables"
-real, intent(inout) :: x,y
-real                :: temp
+elemental subroutine swap_real64(x,y)
+! ident_40="@(#)M_sort::swap_real64(3fp): swap two variables of TYPE(real(KIND=real64))"
+type(real(kind=real64)), intent(inout) :: x,y
+type(real(kind=real64))                :: temp
    temp = x; x = y; y = temp
-end subroutine r_swap
+end subroutine swap_real64
 !===================================================================================================================================
-elemental subroutine i_swap(i,j)
-! ident_41="@(#)M_sort::i_swap(3fp): swap two integer variables"
-integer, intent(inout) :: i,j
-integer                :: itemp
-   itemp = i; i = j; j = itemp
-end subroutine i_swap
+elemental subroutine swap_int8(x,y)
+! ident_41="@(#)M_sort::swap_int8(3fp): swap two variables of TYPE(integer(KIND=int8))"
+type(integer(kind=int8)), intent(inout) :: x,y
+type(integer(kind=int8))                :: temp
+   temp = x; x = y; y = temp
+end subroutine swap_int8
 !===================================================================================================================================
-elemental subroutine l_swap(l,ll)
-! ident_42="@(#)M_sort::l_swap(3fp): swap two logical variables"
-logical, intent(inout) :: l,ll
-logical                :: ltemp
-   ltemp = l; l = ll; ll = ltemp
-end subroutine l_swap
+elemental subroutine swap_int16(x,y)
+! ident_42="@(#)M_sort::swap_int16(3fp): swap two variables of TYPE(integer(KIND=int16))"
+type(integer(kind=int16)), intent(inout) :: x,y
+type(integer(kind=int16))                :: temp
+   temp = x; x = y; y = temp
+end subroutine swap_int16
 !===================================================================================================================================
-elemental subroutine c_swap(xx,yy)
-! ident_43="@(#)M_sort::c_swap(3fp): swap two complex variables"
-complex, intent(inout) :: xx,yy
-complex                :: tt
-   tt = xx; xx = yy; yy = tt
-end subroutine c_swap
+elemental subroutine swap_int32(x,y)
+! ident_43="@(#)M_sort::swap_int32(3fp): swap two variables of TYPE(integer(KIND=int32))"
+type(integer(kind=int32)), intent(inout) :: x,y
+type(integer(kind=int32))                :: temp
+   temp = x; x = y; y = temp
+end subroutine swap_int32
 !===================================================================================================================================
-elemental subroutine cd_swap(xx,yy)
-! ident_44="@(#)M_sort::cd_swap(3fp): swap two double complex variables"
-complex(kind=cd), intent(inout) :: xx,yy
-complex(kind=cd)                :: tt
-   tt = xx; xx = yy; yy = tt
-end subroutine cd_swap
+elemental subroutine swap_int64(x,y)
+! ident_44="@(#)M_sort::swap_int64(3fp): swap two variables of TYPE(integer(KIND=int64))"
+type(integer(kind=int64)), intent(inout) :: x,y
+type(integer(kind=int64))                :: temp
+   temp = x; x = y; y = temp
+end subroutine swap_int64
 !===================================================================================================================================
-elemental subroutine s_swap(string1,string2)
+elemental subroutine swap_cs(x,y)
+! ident_45="@(#)M_sort::swap_cs(3fp): swap two variables of TYPE(complex(KIND=cs))"
+type(complex(kind=cs)), intent(inout) :: x,y
+type(complex(kind=cs))                :: temp
+   temp = x; x = y; y = temp
+end subroutine swap_cs
+!===================================================================================================================================
+elemental subroutine swap_cd(x,y)
+! ident_46="@(#)M_sort::swap_cd(3fp): swap two variables of TYPE(complex(KIND=cd))"
+type(complex(kind=cd)), intent(inout) :: x,y
+type(complex(kind=cd))                :: temp
+   temp = x; x = y; y = temp
+end subroutine swap_cd
+!===================================================================================================================================
+elemental subroutine swap_lk(x,y)
+! ident_47="@(#)M_sort::swap_lk(3fp): swap two variables of TYPE(logical(KIND=lk))"
+type(logical(kind=lk)), intent(inout) :: x,y
+type(logical(kind=lk))                :: temp
+   temp = x; x = y; y = temp
+end subroutine swap_lk
+!===================================================================================================================================
+elemental subroutine swap_string(string1,string2)
 
 !>
 !!   F90 NOTE:
@@ -4476,16 +4522,16 @@ elemental subroutine s_swap(string1,string2)
 !!    Note that the len of a dummy argument can be used to calculate the automatic variable length.
 !!    Therefore, you can make sure len is at least max(len(string1),len(string2)) by adding the two lengths together:
 
-! ident_45="@(#)M_sort::s_swap(3fp): swap two double variables"
+! ident_48="@(#)M_sort::s_swap(3fp): swap two double variables"
 character(len=*), intent(inout)             :: string1,string2
 !character( len=len(string1) + len(string2)) :: string_temp
 character( len=max(len(string1),len(string2))) :: string_temp
    string_temp = string1; string1 = string2; string2 = string_temp
-end subroutine s_swap
+end subroutine swap_string
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-!-$BLOCK COMMENT -file exchange.3m_sort.man
+!-$BLOCK COMMENT --file exchange.3m_sort.man
 !-NAME
 !-   exchange(3f) - [M_sort] subroutine exchanges two variables of like type
 !-   (LICENSE:PD)
@@ -4602,8 +4648,8 @@ end subroutine s_swap
 !-   > reals after exchange     22.2199993       11.1099997
 !-   > doubles before exchange    1234.5678900000000        9876.5432099999998
 !-   > doubles after exchange     9876.5432099999998        1234.5678900000000
-!-   > complexes before exchange  (  1234.00000    ,  56789.0000    ) (  9876.00000    ,  54321.0000    )
-!-   > complexes after exchange   (  9876.00000    ,  54321.0000    ) (  1234.00000    ,  56789.0000    )
+!-   > complexes before exchange (1234.00000,56789.0000) (9876.00000,54321.0000)
+!-   > complexes after exchange  (9876.00000,54321.0000) (1234.00000,56789.0000)
 !-   > logicals before exchange  T F
 !-   > logicals after exchange   F T
 !-   > strings before exchange First string    The other string
@@ -4793,8 +4839,8 @@ end subroutine s_swap
 !!    > reals after swap_any     22.2199993       11.1099997
 !!    > doubles before swap_any    1234.5678900000000        9876.5432099999998
 !!    > doubles after swap_any     9876.5432099999998        1234.5678900000000
-!!    > complexes before swap_any  (  1234.00000    ,  56789.0000    ) (  9876.00000    ,  54321.0000    )
-!!    > complexes after swap_any   (  9876.00000    ,  54321.0000    ) (  1234.00000    ,  56789.0000    )
+!!    > complexes before swap_any  (1234.00000,56789.0000) (9876.00000,54321.0000)
+!!    > complexes after swap_any   (9876.00000,54321.0000) (1234.00000,56789.0000)
 !!    > logicals before swap_any  T F
 !!    > logicals after swap_any   F T
 !!    > strings before swap_any First string    The other string
@@ -4874,7 +4920,8 @@ end subroutine swap_any_array
 !===================================================================================================================================
 !>
 !!##NAME
-!!    tree_insert(3f) - [M_sort] sort a number of integers by building a tree, sorted in infix order
+!!    tree_insert(3f) - [M_sort] sort a number of integers by building a
+!!                      tree, sorted in infix order
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
@@ -4914,7 +4961,7 @@ end subroutine swap_any_array
 recursive subroutine tree_insert (t, number)
 implicit none
 
-! ident_46="@(#)M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order"
+! ident_49="@(#)M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order"
 
 type (tree_node), pointer :: t  ! a tree
 integer, intent (in) :: number
@@ -4936,7 +4983,8 @@ end subroutine tree_insert
 !===================================================================================================================================
 !>
 !!##NAME
-!!    tree_print(3f) - [M_sort] print a sorted integer tree generated by tree_insert(3f)
+!!    tree_print(3f) - [M_sort] print a sorted integer tree generated by
+!!                     tree_insert(3f)
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
@@ -4973,7 +5021,7 @@ end subroutine tree_insert
 recursive subroutine tree_print(t)
 implicit none
 
-! ident_47="@(#)M_sort::tree_print(3f):"
+! ident_50="@(#)M_sort::tree_print(3f):"
 
 type (tree_node), pointer :: t  ! a tree
 
@@ -5065,7 +5113,7 @@ end subroutine tree_print
 function anything_to_bytes_arr(anything) result(chars)
 implicit none
 
-! ident_48="@(#)M_sort::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_51="@(#)M_sort::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything(:)
 character(len=1),allocatable :: chars(:)
@@ -5091,7 +5139,7 @@ end function anything_to_bytes_arr
 function  anything_to_bytes_scalar(anything) result(chars)
 implicit none
 
-! ident_49="@(#)M_sort::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_52="@(#)M_sort::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything
 character(len=1),allocatable :: chars(:)
@@ -5118,7 +5166,8 @@ end function  anything_to_bytes_scalar
 !===================================================================================================================================
 !>
 !!##NAME
-!!    bytes_to_anything(3f) - [M_sort] convert bytes(character)len=1):: array(:)) to standard types
+!!    bytes_to_anything(3f) - [M_sort] convert bytes(character)len=1):: array(:))
+!!    to standard types
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -5288,18 +5337,19 @@ end function sort_character
 !!       integer,intent(out) :: indx(size(dat))
 !!
 !!##DESCRIPTION
-!!    An indexed sort of an array. The data is not moved. An integer array is
-!!    generated instead with values that are indices to the sorted order of
-!!    the data. This requires a second array the size of the input array,
-!!    which for large arrays could require a significant amount of memory. One
-!!    major advantage of this method is that any element of a user-defined type
-!!    that is a scalar intrinsic can be used to provide the sort data and
-!!    subsequently the indices can be used to access the entire user-defined
-!!    type in sorted order. This makes this seemingly simple sort procedure
-!!    usuable with the vast majority of user-defined types.
+!!    An indexed sort of an array. The data is not moved. An integer array
+!!    is generated instead with values that are indices to the sorted
+!!    order of the data. This requires a second array the size of the input
+!!    array, which for large arrays could require a significant amount of
+!!    memory. One major advantage of this method is that any element of a
+!!    user-defined type that is a scalar intrinsic can be used to provide the
+!!    sort data and subsequently the indices can be used to access the entire
+!!    user-defined type in sorted order. This makes this seemingly simple
+!!    sort procedure usuable with the vast majority of user-defined types.
 !!
 !!##OPTIONS
-!!     DAT    an array of type REAL, INTEGER, or CHARACTER(KIND=kind('A') to be sorted
+!!     DAT    an array of type REAL, INTEGER, or CHARACTER(KIND=kind('A')
+!!            to be sorted
 !!##RETURNS
 !!     INDX   an INTEGER array of default kind that contains the sorted
 !!            indices.
@@ -5322,7 +5372,9 @@ end function sort_character
 !!    rr=rr*450000.0
 !!    ii=rr
 !!    do i=1,size(cc)
-!!       cc(i)=random_string('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',len(cc))
+!!       cc(i)=random_string(&
+!!       & 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', &
+!!       & len(cc))
 !!    enddo
 !!
 !!    write(*,*)'checking if real values are sorted(3f)'
@@ -5362,7 +5414,7 @@ end function sort_character
 !!
 !!    function random_string(chars,length) result(out)
 !!
-!!    !$@(#) M_random::random_string(3f): create random string composed of provided characters of specified length
+!!    !$@(#) M_random::random_string(3f): create random string from provided chars
 !!
 !!    character(len=*),intent(in)     :: chars
 !!    integer,intent(in)              :: length

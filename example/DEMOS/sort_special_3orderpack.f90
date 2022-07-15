@@ -7,7 +7,6 @@
      ! but generally slower than methods like quicksort and mergesort.
      integer,parameter :: isz=2000
      real(kind=real64) :: dd(isz), hi, low
-     integer           :: i
         ! make an array of random values
         call random_seed()
         call random_number(dd)

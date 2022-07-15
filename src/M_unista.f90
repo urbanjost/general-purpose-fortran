@@ -46,8 +46,7 @@ public :: unista
 !!    ! remove duplicates with remaining elements remaining in initial order
 !!    use M_orderpack, only : unique
 !!    implicit none
-!!    character(len=*),parameter :: g='(*(g0,1x))'
-!!    character(len=*),parameter :: list= '(*(g0:,", "))',sp='(*(g0,1x))'
+!!    character(len=*),parameter :: list= '(*(g0:,", "))'
 !!    integer :: nuni
 !!
 !!    int : block

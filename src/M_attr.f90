@@ -37,8 +37,8 @@
 !!    in color(see app/light.f90) or perhaps converts it to another format.
 !!
 !!    So this approach makes it trivial to read specially-formatted data
-!!    from a file like a message catalog (perhaps with various versions
-!!    in different languages) and colorize it or display it as plain text
+!!    from a file like a message catalog (perhaps with various versions in
+!!    different languages) and colorize it or display it as plain text
 !!
 !!    By making each line self-contained (by default) lines can be filtered
 !!    by external utilities and still display correctly.
@@ -55,14 +55,14 @@
 !!
 !!    This will compile the M_attr module and example programs.
 !!
-!!    Alternatively, via fpm ( described at https://github.com/fortran-lang/fpm):
+!!    Alternatively, via fpm (see https://github.com/fortran-lang/fpm):
 !!
 !!         git clone https://github.com/urbanjost/M_attr.git
 !!
 !!    or just list it as a dependency in your fpm.toml project file.
 !!
 !!         [dependencies]
-!!         M_attr        = { git = "https://github.com/urbanjost/M_attr.git" }
+!!         M_attr = { git = "https://github.com/urbanjost/M_attr.git" }
 !!
 !!##LIMITATIONS
 !!   o colors are not nestable.
@@ -305,8 +305,8 @@ contains
 !!        integer,intent(in),optional  :: chars
 !!
 !!##DESCRIPTION
-!!    Use HTML-like syntax to add attributes to terminal output such as color
-!!    on devices that recognize ANSI escape sequences.
+!!    Use HTML-like syntax to add attributes to terminal output such as
+!!    color on devices that recognize ANSI escape sequences.
 !!
 !!##OPTIONS
 !!    string        input string  of form
@@ -387,10 +387,11 @@ contains
 !!
 !!    By default, if the color mnemonics (ie. the keywords) are uppercase
 !!    they change the background color. If lowercase, the foreground color.
-!!    When preceded by a "/" character the attribute is returned to the default.
+!!    When preceded by a "/" character the attribute is returned to the
+!!    default.
 !!
-!!    The "default" keyword is typically used explicitly when
-!!    reset=.false, and sets all text attributes to their initial defaults.
+!!    The "default" keyword is typically used explicitly when reset=.false,
+!!    and sets all text attributes to their initial defaults.
 !!
 !!##LIMITATIONS
 !!    o colors are not nestable, keywords are case-sensitive,
@@ -879,7 +880,8 @@ end subroutine wipe_dictionary
 !>
 !! !>
 !!##NAME
-!!    attr_update(3f) - [M_attr] update internal dictionary given keyword and value
+!!    attr_update(3f) - [M_attr] update internal dictionary given keyword
+!!                      and value
 !!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
@@ -1149,12 +1151,14 @@ end subroutine insert
 !>
 !! !>
 !!##NAME
-!!    alert(3f) - [M_attr] print messages using a standard format including time and program name
+!!    alert(3f) - [M_attr] print messages using a standard format including
+!!    time and program name
 !!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!     subroutine alert(message,g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+!!     subroutine alert(message,&
+!!     g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 !!
 !!        character(len=*),intent(in),optional :: type
 !!        character(len=*),intent(in),optional :: message
@@ -1174,8 +1178,8 @@ end subroutine insert
 !!    and will only be displayed in color mode!
 !!
 !!##OPTIONS
-!!    TYPE     if present and one of 'warn','message','info', or 'debug'  a predefined
-!!             message is written to stderr of the form
+!!    TYPE     if present and one of 'warn','message','info', or 'debug'
+!!             a predefined message is written to stderr of the form
 !!
 !!              : <HR>:<MI>:<SE>.<MS> : (<ARG0>) : TYPE -> message
 !!
@@ -1185,45 +1189,56 @@ end subroutine insert
 !!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
 !!                COMPLEX, or CHARACTER.
 !!
-!!    if no parameters are supplied the macros are updated but no output is generated.
+!!    if no parameters are supplied the macros are updated but no output
+!!    is generated.
 !!
 !!##EXAMPLE
 !!
 !!    Sample program
 !!
-!!       program demo_alert
-!!       use M_attr, only : alert, attr, attr_mode
-!!       implicit none
-!!       real X
-!!          call attr_mode(manner='plain')
-!!          call attr_mode(manner='color')
-!!          call alert("error", "Say you didn't!")
-!!          call alert("warn",  "I wouldn't if I were you, Will Robinson.")
-!!          call alert("info",  "I fixed that for you, but it was a bad idea.")
-!!          call alert("debug", "Who knows what is happening now?.")
-!!          call alert("???    ",  "not today you don't")
-!!          ! call to just update the macros
-!!          call alert()
-!!          ! conventional call to ATTR(3f) using the ALERT(3f)-defined macros
-!!          write(*,*)attr('<bo>The year was <g><YE></g>, the month was <g><MO></g>')
-!!          ! optional arguments
-!!          X=211.3
-!!          call alert('error','allowed range of X is 0 <lt> X <lt> 100, X=<r>',X)
-!!          ! up to twenty values are allowed of intrinsic type
-!!          call alert('info','values are<g>',10,234.567,cmplx(11.0,22.0),123.456d0,'</g>today')
-!!       end program demo_alert
+!!     program demo_alert
+!!     use M_attr, only : alert, attr, attr_mode
+!!     implicit none
+!!     real X
+!!      call attr_mode(manner='plain')
+!!      call attr_mode(manner='color')
+!!      call alert("error",&
+!!                "Say you didn't!")
+!!      call alert("warn", &
+!!                "I wouldn't if I were you, Will Robinson.")
+!!      call alert("info", &
+!!                "I fixed that for you, but it was a bad idea.")
+!!      call alert("debug", &
+!!                "Who knows what is happening now?.")
+!!      call alert("???    ",  "not today you don't")
+!!      ! call to just update the macros
+!!      call alert()
+!!      ! conventional call to ATTR(3f) using the ALERT(3f)-defined macros
+!!      write(*,*)attr(&
+!!              '<bo>The year was <g><YE></g>, the month was <g><MO></g>')
+!!      ! optional arguments
+!!      X=211.3
+!!      call alert('error',&
+!!              'allowed range of X is 0 <lt> X <lt> 100, X=<r>',X)
+!!      ! up to twenty values are allowed of intrinsic type
+!!      call alert('info','values are<g>',10,234.567,&
+!!              cmplx(11.0,22.0),123.456d0,'</g>today')
+!!     end program demo_alert
 !!
 !!   Results:
 !!
-!!     00:38:30.566 : (demo_alert) : error    -> Say you didn't!
-!!     00:38:30.567 : (demo_alert) : warning  -> I wouldn't if I were you, Will Robinson.
-!!     00:38:30.567 : (demo_alert) : info     -> I fixed that for you, but it was a bad idea.
-!!     00:38:30.567 : (demo_alert) : debug    -> Who knows what is happening now?.
-!!     00:38:30.567 : (demo_alert) : ???      -> not today you don't
-!!     00:38:30.567 : (demo_alert) : error    -> allowed range of X is 0  X  100, X= 211.300003
-!!     00:38:30.567 : (demo_alert) : info     -> values are 10 234.567001 (11.0000000,22.0000000) 123.45600000000000 today
-!!
-!!
+!!     00:38:30: (prg) : error    -> Say you didn't!
+!!     00:38:30: (prg) : warning  -> I wouldn't if I were you, ...
+!!                                   Will Robinson.
+!!     00:38:30: (prg) : info     -> I fixed that for you,  ...
+!!                                   but it was a bad idea.
+!!     00:38:30: (prg) : debug    -> Who knows what is happening now?. ...
+!!     00:38:30: (prg) : ???      -> not today you don't
+!!     00:38:30: (prg) : error    -> allowed range of X is 0  X  100, ...
+!!                                   X= 211.300003
+!!     00:38:30: (prg) : info     -> values are 10 234.567001 ...
+!!                                   (11.0000000,22.0000000) ...
+!!                                   123.45600000000000 today
 !!
 !!##AUTHOR
 !!    John S. Urban, 2021
@@ -1310,7 +1325,8 @@ end subroutine alert
 !!      character,len=(:),allocatable :: str
 !!
 !!##DESCRIPTION
-!!    str(3f) builds a space-separated string from up to twenty scalar values.
+!!    str(3f) builds a space-separated string from up to twenty scalar
+!!    values.
 !!
 !!##OPTIONS
 !!    g[0-9a-j]   optional value to print the value of after the message. May

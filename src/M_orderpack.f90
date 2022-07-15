@@ -32,6 +32,18 @@ use M_fndnth, only : orderval_special=>fndnth ! [FRACTILE] Return VALUE of Nth o
 use M_unista, only : unique=>unista           ! [UNIQUE] Removes duplicates from an array otherwise retaining original order
 use M_mulcnt, only : occurrences=>mulcnt      ! [MULTIPLICITY] gives number of times that each value appears in the input
 use M_ctrper, only : perturb=>ctrper          ! [PERMUTATION] perturbs an array leaving elements close to initial locations
+
+! BUG: without explicitly adding this section ifort(1) fails
+private
+public sort, sort_special
+public psort
+public rank, rank_basic, rank_decreasing, rank_unique
+public prank, prank_basic, prank_special, prank_decreasing, prank_unique
+public median, medianval, medianloc
+public orderloc, orderval, orderval_special
+public unique
+public occurrences
+public perturb
 !>
 !!##NAME
 !!    M_orderpack(3f) - [orderpack::INTRO]General and Specialized Ranking

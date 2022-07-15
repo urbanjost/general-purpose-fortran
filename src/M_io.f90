@@ -2414,10 +2414,9 @@ integer                                  :: lun_local
    else
       lun_local=stdin
    endif
-   open(lun_local,pad='yes')
 
    INFINITE: do                                                      ! read characters from line and append to result
-      read(lun_local,iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for files
+      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for files
                                                                      ! other than stdin so system line limit is not limiting
       if(isize.gt.0)line_local=line_local//buffer(:isize)            ! append what was read to result
       if(is_iostat_eor(ier))then                                     ! if hit EOR reading is complete unless backslash ends the line
@@ -2532,9 +2531,8 @@ integer                                  :: lun_local
    line_local=''
    ier=0
    lun_local=merge(lun,stdin,present(lun))
-   open(lun_local,pad='yes')
    INFINITE: do                                                           ! read characters from line and append to result
-      read(lun_local,iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
+      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
                                                                           ! files other than stdin so system line limit
                                                                           ! is not limiting
       if(isize.gt.0)line_local=line_local//buffer(:isize)   ! append what was read to result

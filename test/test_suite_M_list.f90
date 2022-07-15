@@ -17,14 +17,17 @@ use M_list, only : locate, insert, remove, replace, dictionary
 character(len=*),parameter   :: share=' -library libGPF -filename `pwd`/M_list.FF -documentation y -ufpp y -ccall n -archive GPF.a'
 integer                      :: place
    ! list
-   call test_locate()
-   call test_insert()
-   call test_remove()
-   call test_replace()
+   call test_locate()        ! finds the index where a string is found or should be in a sorted array 
+   call test_insert()        ! insert entry into a string array at specified position 
+   call test_remove()        ! remove entry from an allocatable array at specified position 
+   call test_replace()       ! replace entry in a string array at specified position 
    ! dictionary
-   call test_dict_set()
-   call test_dict_delete()
-   call test_dict_get()
+   call test_dict_set()      ! add or replace a key-value pair in a dictionary 
+   call test_dict_delete()   ! delete entry by key name from a basic dictionary
+   call test_dict_get()      ! value of key-value pair in a dictionary given key 
+   call test_dict_ifdef()    ! return whether name is present in dictionary or not 
+   call test_dict_clr()      ! clear basic dictionary 
+
    !
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -80,6 +83,51 @@ type(dictionary) :: dict
 
    call unit_check_done('dict%del')
 end subroutine test_dict_delete
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_dict_ifdef
+type(dictionary)     :: tt
+logical,allocatable  :: answers(:)
+   call unit_check_start('dict%ifdef',&
+   & ' -description "return whether name is present in dictionary or not" '//share)
+   call tt%set('A','value for A')
+   call tt%set('B','value for B')
+   call tt%set('C','value for C')
+   call tt%set('D','value for D')
+   call tt%set('E','value for E')
+   call tt%set('F','value for F')
+   call tt%set('G','value for G')
+   call tt%del('F')
+   call tt%del('D')
+
+   answers=[tt%ifdef('A'), tt%ifdef('B'), tt%ifdef('C'), tt%ifdef('D'), tt%ifdef('E'), tt%ifdef('F'), tt%ifdef('G'), tt%ifdef('H')]
+
+   call unit_check('dict%',all(answers.eqv. [.true., .true., .true., .false., .true., .false., .true., .false.]),'ifdef tests')
+   call unit_check_done('dict%ifdef')
+
+end subroutine test_dict_ifdef
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_dict_clr
+type(dictionary)     :: tt
+logical,allocatable  :: answers(:)
+   call unit_check_start('dict%ifdef',&
+   & ' -description "return whether name is present in dictionary or not" '//share)
+   call tt%set('A','value for A')
+   call tt%set('B','value for B')
+   call tt%set('C','value for C')
+   call tt%set('D','value for D')
+   call tt%set('E','value for E')
+   call tt%set('F','value for F')
+   call tt%set('G','value for G')
+   call tt%del('F')
+   call tt%del('D')
+   call tt%clr()
+
+   answers=[tt%ifdef('A'), tt%ifdef('B'), tt%ifdef('C'), tt%ifdef('D'), tt%ifdef('E'), tt%ifdef('F'), tt%ifdef('G'), tt%ifdef('H')]
+
+   call unit_check('dict%',all(answers.eqv. [.false., .false., .false., .false., .false., .false., .false., .false.]),'clr tests')
+   call unit_check_done('dict%clr')
+
+end subroutine test_dict_clr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_dict_get
 type(dictionary)             :: dict

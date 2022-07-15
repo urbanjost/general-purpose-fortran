@@ -39,11 +39,12 @@
         points(1:2,3)=[xx+16.0, yy+16.0 ]
         points(1:2,4)=[xx+16.0, yy      ]
         points(1:2,5)=[xx,      yy      ]
-        ! get some nice RGB values to try from named colors known by M_pixel module
+        ! get some nice RGB values to try from named colors known by M_pixel
         call color_name2rgb(i2s(icolor),red,green,blue,echoname)
         if(echoname.eq.'Unknown') return
         ! set a color number to the new RGB values
-        write(*,*)icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55),trim(echoname)
+        write(*,*)icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55),&
+               & trim(echoname)
         call mapcolor(icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55))
         ! set to the new color
         call color(icolor)

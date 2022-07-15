@@ -13,15 +13,18 @@
      write(*,*)'checking index of sort_quick_rx(3f)'
      do i=1,isz-1
         if(rr(ii(i)).gt.rr(ii(i+1)))then
-           write(*,*)'Error in sorting reals small to large ',i,rr(ii(i)),rr(ii(i+1))
+           write(*,*)'Error in sorting reals small to large ', &
+           & i,rr(ii(i)),rr(ii(i+1))
         endif
      enddo
      write(*,*)'test of sort_quick_rx(3f) complete'
-     ! use the index array to actually move the input array into a sorted order
+     ! use the index array to actually move the input array into a sorted
+     ! order
      rr=rr(ii)
      do i=1,isz-1
         if(rr(i).gt.rr(i+1))then
-           write(*,*)'Error in sorting reals small to large ',i,rr(i),rr(i+1)
+           write(*,*)'Error in sorting reals small to large ', &
+           & i,rr(i),rr(i+1)
         endif
      enddo
      write(*,*)'test of sort_quick_rx(3f) complete'

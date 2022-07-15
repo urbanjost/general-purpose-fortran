@@ -1,0 +1,290 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>loc (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>loc</B>(3f) - [M_datapac:STATISTICS] print the sample mean, midrange,
+midmean, and median
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>References</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>LOC</B>(X,N)
+<P>
+<PRE>
+       REAL(kind=wp),intent(in) :: X(:)
+       INTEGER,intent(in) :: N
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>LOC</B>(3f) computes 4 estimates of the location (typical value, measure
+of central tendency) of the data in the input vector X.
+<P>
+the 4 estimators employed are--
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: the 4 estimators employed are--
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+the sample midrange;
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+the sample mean;
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+the sample midmean; and
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+the sample median.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The above 4 estimators are near-optimal estimators of location for
+shorter-tailed symmetric distributions, moderate-tailed distributions,
+moderate-long-tailed distributions, and long-tailed distributions,
+respectively.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+The vector of (unsorted or sorted) observations.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The integer number of observations in the vector X.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+1/4 page of automatic output consisting of the following 4 estimates
+of location for the data in the input vector X
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: 1/4 page of automatic output consisting of the following 4 estimates
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+The sample midrange;
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+The sample mean;
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+The sample midmean; and
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+The sample median.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+     program demo_loc
+     use M_datapac, only : loc, label
+     implicit none
+     integer ::  i
+     real, allocatable ::  x(:), y(:)
+        call label(&#146;loc&#146;)
+        y=[(real(i)/10.0,i=1,20000)]
+        x=y**3.78-6*y**2.52+9*y**1.26
+        call loc(y,size(y))
+     end program demo_loc
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<P>
+<P>
+<P>
+<P>
+<P>
+<PRE>
+                                  Estimates of the Location Parameter
+<P>
+                                      (The sample size N =    30)
+<P>
+<P>
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>The sample midrange is</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.15500000E+01
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>The sample mean is</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.15500000E+01
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>The sample 25 percent trimmed mean is</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.15500001E+01
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>The sample median is</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.15500000E+01
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Dixon and Massey, pages 14, 70, and 71
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Crow, Journal of the American Statistical Association, pages 357
+and 387
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Kendall and Stuart, The Advanced Theory of Statistics, Volume 1,
+Edition 2, 1963, page 8.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>loc (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 531d1427-1638-47c9-99d1-e666233f33f6 using man macros.</FONT>
+<br><br><center><img src="images/loc.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

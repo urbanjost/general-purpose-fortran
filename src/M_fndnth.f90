@@ -7,8 +7,7 @@ public :: fndnth
 !>
 !!##NAME
 !!    orderval_special(3f) - [orderpack:FRACTILE] Return VALUE of Nth
-!!                           ordered element of array, or "fractile of
-!!                           order N/SIZE(array)" (InsertSort-like)
+!!                           ordered element of array (InsertSort-like)
 !!
 !!##SYNOPSIS
 !!

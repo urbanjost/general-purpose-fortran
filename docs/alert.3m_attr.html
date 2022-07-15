@@ -56,7 +56,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>alert</B>(3f) - [M_attr] print messages using a standard format including time and program name
+<B>alert</B>(3f) - [M_attr] print messages using a standard format including
+time and program name
 (LICENSE:MIT)
 <P>
 </BLOCKQUOTE>
@@ -75,7 +76,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-subroutine <B>alert</B>(message,g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+subroutine <B>alert</B>(<I>message</I>,&
+g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
 <P>
 <PRE>
        character(len=*),intent(in),optional :: type
@@ -91,13 +93,13 @@ subroutine <B>alert</B>(message,g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,
 
 </A>
 <BLOCKQUOTE>
-Display a message prefixed with a timestamp and the name
+Display a <I>message</I> prefixed with a timestamp and the name
 of the calling program when the TYPE is specified as any
 of &#146;error&#146;,&#146;warn&#146;, or &#146;info&#146;.
 <P>
 It also allows the keywords
 &lt;ARG0&gt;,&lt;TZ&gt;,&lt;YE&gt;,&lt;MO&gt;,&lt;DA&gt;,&lt;HR&gt;,&lt;MI&gt;,&lt;SE&gt;,&lt;MS&gt; to be used in the
-message (which is passed to <B>ATTR</B>(3f)).
+<I>message</I> (which is passed to <B>ATTR</B>(3f)).
 <P>
 Note that time stamp keywords will only be updated when using <B>ALERT</B>(3f)
 and will only be displayed in color mode!
@@ -111,8 +113,8 @@ and will only be displayed in color mode!
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>TYPE</B> </TD><TD valign=bottom>
-if present and one of &#146;warn&#146;,&#146;message&#146;,&#146;info&#146;, or &#146;debug&#146;  a predefined
-message is written to stderr of the form
+if present and one of &#146;warn&#146;,&#146;<I>message</I>&#146;,&#146;info&#146;, or &#146;debug&#146;
+a predefined <I>message</I> is written to stderr of the form
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -122,15 +124,16 @@ message is written to stderr of the form
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>MESSAGE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-the user-supplied message to display via a call to <B>ATTR</B>(3f)
+the user-supplied <I>message</I> to display via a call to <B>ATTR</B>(3f)
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>g[0-9a-j]</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-optional values to print after the message. May
+optional values to print after the <I>message</I>. May
 be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
 COMPLEX, or CHARACTER.
 </TD></TR>
-<TR></TR></TABLE>if no parameters are supplied the macros are updated but no output is generated.
+<TR></TR></TABLE>if no parameters are supplied the macros are updated but no output
+is generated.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -141,42 +144,52 @@ COMPLEX, or CHARACTER.
 Sample program
 <P>
 <PRE>
-      program demo_alert
-      use M_attr, only : alert, attr, attr_mode
-      implicit none
-      real X
-         call attr_mode(manner=&#146;plain&#146;)
-         call attr_mode(manner=&#146;color&#146;)
-         call alert("error", "Say you didn&#146;t!")
-         call alert("warn",  "I wouldn&#146;t if I were you, Will Robinson.")
-         call alert("info",  "I fixed that for you, but it was a bad idea.")
-         call alert("debug", "Who knows what is happening now?.")
-         call alert("???    ",  "not today you don&#146;t")
-         ! call to just update the macros
-         call alert()
-         ! conventional call to ATTR(3f) using the ALERT(3f)-defined macros
-         write(*,*)attr(&#146;&lt;bo&gt;The year was &lt;g&gt;&lt;YE&gt;&lt;/g&gt;, the month was &lt;g&gt;&lt;MO&gt;&lt;/g&gt;&#146;)
-         ! optional arguments
-         X=211.3
-         call alert(&#146;error&#146;,&#146;allowed range of X is 0 &lt;lt&gt; X &lt;lt&gt; 100, X=&lt;r&gt;&#146;,X)
-         ! up to twenty values are allowed of intrinsic type
-         call alert(&#146;info&#146;,&#146;values are&lt;g&gt;&#146;,10,234.567,cmplx(11.0,22.0),123.456d0,&#146;&lt;/g&gt;today&#146;)
-      end program demo_alert
+    program demo_alert
+    use M_attr, only : alert, attr, attr_mode
+    implicit none
+    real X
+     call attr_mode(manner=&#146;plain&#146;)
+     call attr_mode(manner=&#146;color&#146;)
+     call alert("error",&
+               "Say you didn&#146;t!")
+     call alert("warn", &
+               "I wouldn&#146;t if I were you, Will Robinson.")
+     call alert("info", &
+               "I fixed that for you, but it was a bad idea.")
+     call alert("debug", &
+               "Who knows what is happening now?.")
+     call alert("???    ",  "not today you don&#146;t")
+     ! call to just update the macros
+     call alert()
+     ! conventional call to ATTR(3f) using the ALERT(3f)-defined macros
+     write(*,*)attr(&
+             &#146;&lt;bo&gt;The year was &lt;g&gt;&lt;YE&gt;&lt;/g&gt;, the month was &lt;g&gt;&lt;MO&gt;&lt;/g&gt;&#146;)
+     ! optional arguments
+     X=211.3
+     call alert(&#146;error&#146;,&
+             &#146;allowed range of X is 0 &lt;lt&gt; X &lt;lt&gt; 100, X=&lt;r&gt;&#146;,X)
+     ! up to twenty values are allowed of intrinsic type
+     call alert(&#146;info&#146;,&#146;values are&lt;g&gt;&#146;,10,234.567,&
+             cmplx(11.0,22.0),123.456d0,&#146;&lt;/g&gt;today&#146;)
+    end program demo_alert
 <P>
 </PRE>
 </BLOCKQUOTE>
 Results:
 <P>
 <PRE>
-    00:38:30.566 : (demo_alert) : error    -&gt; Say you didn&#146;t!
-    00:38:30.567 : (demo_alert) : warning  -&gt; I wouldn&#146;t if I were you, Will Robinson.
-    00:38:30.567 : (demo_alert) : info     -&gt; I fixed that for you, but it was a bad idea.
-    00:38:30.567 : (demo_alert) : debug    -&gt; Who knows what is happening now?.
-    00:38:30.567 : (demo_alert) : ???      -&gt; not today you don&#146;t
-    00:38:30.567 : (demo_alert) : error    -&gt; allowed range of X is 0  X  100, X= 211.300003
-    00:38:30.567 : (demo_alert) : info     -&gt; values are 10 234.567001 (11.0000000,22.0000000) 123.45600000000000 today
-<P>
-<P>
+    00:38:30: (prg) : error    -&gt; Say you didn&#146;t!
+    00:38:30: (prg) : warning  -&gt; I wouldn&#146;t if I were you, &#46;&#46;&#46;
+                                  Will Robinson.
+    00:38:30: (prg) : info     -&gt; I fixed that for you,  &#46;&#46;&#46;
+                                  but it was a bad idea.
+    00:38:30: (prg) : debug    -&gt; Who knows what is happening now?. &#46;&#46;&#46;
+    00:38:30: (prg) : ???      -&gt; not today you don&#146;t
+    00:38:30: (prg) : error    -&gt; allowed range of X is 0  X  100, &#46;&#46;&#46;
+                                  X= 211.300003
+    00:38:30: (prg) : info     -&gt; values are 10 234.567001 &#46;&#46;&#46;
+                                  (11.0000000,22.0000000) &#46;&#46;&#46;
+                                  123.45600000000000 today
 <P>
 </PRE>
 <A name=5>
@@ -201,7 +214,7 @@ John S. Urban, 2021
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>alert (3)</TD> <TD align=right width=33%><I>May 01, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 416c384e-9316-4780-b59e-8b33d1466886 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>alert (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fb911959-19d0-43b9-a383-3ee18b910ee5 using man macros.</FONT>
 <br><br><center><img src="images/alert.3m_attr.gif"></center>
 </div>
 </div>

@@ -1,0 +1,231 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>norppf (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>norppf</B>(3f) - [M_datapac:PERCENT_POINT] compute the normal percent point function
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>Maintainer</A><BR>
+<A HREF=#7>License</A><BR>
+<A HREF=#8>References</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>NORPPF</B>(P,Ppf)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>norppf</B>(3f) computes the percent point function value for the normal
+(gaussian) distribution with mean = 0 and standard deviation = 1.
+<P>
+this distribution is defined for all x and has the probability
+density function
+<P>
+<PRE>
+       f(x) = (1/sqrt(2*pi))*exp(-x*x/2).
+<P>
+</PRE>
+note that the percent point function of a distribution is identically
+the same as the inverse cumulative distribution function of the
+distribution.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+description of parameter
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>Y</B> </TD><TD valign=bottom>
+description of parameter
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_norppf
+   use M_datapac, only : norppf
+   implicit none
+   ! call norppf(x,y)
+   end program demo_norppf
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the Statistical
+Engineering Division, National Institute of Standards and Technology.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ODEH AND EVANS, THE PERCENTAGE POINTS OF THE NORMAL DISTRIBUTION,
+ALGORITHM 70, APPLIED STATISTICS, 1974, pages 96-97.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+EVANS, ALGORITHMS FOR MINIMAL DEGREE POLYNOMIAL AND RATIONAL
+APPROXIMATION, M. SC. THESIS, 1972, UNIVERSITY OF VICTORIA, B. C.,
+CANADA.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+HASTINGS, APPROXIMATIONS FOR DIGITAL COMPUTERS, 1955, pages 113,
+191, 192.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NATIONAL BUREAU OF STANDARDS APPLIED MATHEMATICS SERIES 55, 1964,
+page 933, FORMULA 26.2.23.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FILLIBEN, SIMPLE AND ROBUST LINEAR ESTIMATION OF THE LOCATION
+PARAMETER OF A SYMMETRIC DISTRIBUTION (UNPUBLISHED PH.D. DISSERTATION,
+PRINCETON UNIVERSITY), 1969, pages 21-44, 229-231.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FILLIBEN, &#146;THE PERCENT POINT FUNCTION&#146;, (UNPUBLISHED MANUSCRIPT),
+1970, pages 28-31.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+JOHNSON AND KOTZ, CONTINUOUS UNIVARIATE DISTRIBUTIONS-<B>-1</B>, 1970,
+pages 40-111.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+THE KELLEY STATISTICAL TABLES, 1948.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+OWEN, HANDBOOK OF STATISTICAL TABLES, 1962, pages 3-16.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+PEARSON AND HARTLEY, BIOMETRIKA TABLES FOR STATISTICIANS, VOLUME 1,
+1954, pages 104-113.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>norppf (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6632ba78-ff3f-4a50-8e0d-3c3bbd59fe3c using man macros.</FONT>
+<br><br><center><img src="images/norppf.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

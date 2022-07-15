@@ -1,0 +1,233 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>lamsf (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>lamsf</B>(3f) - [M_datapac:SPARSITY] compute the Tukey-Lambda sparsity
+function
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output Arguments</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>References</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>LAMSF</B>(P,Alamba,Sf)
+<P>
+<PRE>
+       REAL(kind=wp),intent(in)  :: P
+       REAL(kind=wp),intent(in)  :: Alamba
+       REAL(kind=wp),intent(out) :: Sf
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>LAMSF</B>(3f) computes the sparsity function value for the (Tukey) lambda
+distribution with tail length parameter value = ALAMBA.
+<P>
+In general, the probability density function for this distribution
+is not simple.
+<P>
+The percent point function for this distribution is
+<P>
+<PRE>
+       g(P) = ((P**ALAMBA)-((1-P)**ALAMBA))/ALAMBA
+<P>
+</PRE>
+Note that the sparsity function of a distribution is the derivative
+of the percent point function, and also is the reciprocal of the
+probability density function (but in units of P rather than X).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>P</B> </TD><TD valign=bottom>
+The value (between 0.0 and 1.0) at which the sparsity function
+is to be evaluated.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ALAMBA</B> </TD><TD valign=bottom>
+The value of Lambda (the Tail Length parameter).
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+           If ALAMBA is positive, then P should be between 0.0 and 1.0,
+           inclusively.
+<P>
+           If ALAMBA is non-positive, then P should be between 0.0 and
+           1.0, exclusively.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>SF</B> </TD><TD valign=bottom>
+The sparsity function value for the Tukey Lambda distribution
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_lamsf
+   use M_datapac, only : lamsf
+   implicit none
+   ! call lamsf(x,y)
+   end program demo_lamsf
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Filliben, Simple and Robust Linear Estimation of the Location
+Parameter of a Symmetric Distribution (Unpublished PH.D. Dissertation,
+Princeton University), 1969, pages 21-44, 229-231, pages 53-58.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Filliben, &#146;The Percent Point Function&#146;, (Unpublished Manuscript),
+1970, pages 28-31.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Hastings, Mosteller, Tukey, and Windsor, &#146;Low Moments for Small
+<TABLE width=100% cellpadding=3><!-- tsb: Hastings, Mosteller, Tukey, and Windsor, &#146;Low Moments for Small
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Samples:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A Comparative Study of Order Statistics&#146;, Annals of
+Mathematical Statistics, 18, 1947, pages 413-426.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lamsf (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c745f42f-26bf-4800-bce2-3727451a61ee using man macros.</FONT>
+<br><br><center><img src="images/lamsf.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

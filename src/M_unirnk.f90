@@ -37,7 +37,7 @@ public :: unirnk
 !!    standard loop, and use dedicated coding.
 !!
 !!##OPTIONS
-!!     INVALS      array to index
+!!     INVALS     array to index
 !!     IRNGT      rank index returned pointing to unique values
 !!     NUNI       the number of unique values found
 !!

@@ -1,0 +1,221 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>move (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>move</B>(3f) - [M_datapac:VECTOR_OPERATION] move selected elements of
+one vector into another vector
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output Arguments</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>SUBROUTINE</B> <B>MOVE</B>(X,M,Ix1,Iy1,Y)
+<P>
+<PRE>
+       REAL(kind=wp),intent(in)  :: X(:)
+       INTEGER,intent(in)        :: M
+       INTEGER,intent(in)        :: Ix1
+       INTEGER,intent(in)        :: Iy1
+       REAL(kind=wp),intent(out) :: Y(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<B>MOVE</B>(3f) moves (copies) M elements of the REAL vector
+X (starting with position Ix1) into the REAL vector Y
+(starting with position Iy1).
+<P>
+This allows the data analyst to take any subvector in X and place it
+anywhere in the vector Y.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+The vector of observations, part (or all) of which is to be moved
+(copied) over into the vector Y. The input vector X remains
+unaltered.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>M</B> </TD><TD valign=bottom>
+The integer number of elements in the vector X to be moved.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IX1</B> </TD><TD valign=bottom>
+The integer value which defines the position in the vector X
+of the first element to be moved.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IY1</B> </TD><TD valign=bottom>
+The integer value which defines the position in the vector Y
+where the first element to be moved will be placed.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>Y</B> </TD><TD valign=bottom>
+The vector into which the copied data values from the vector
+X will be sequentially placed, starting in position IY1 of Y.
+The m elements in positions
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                 IY1, IY1+1, &#46;&#46;&#46; , IY1+M-1
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+will be identical to the M elements
+in the X vector IN positions
+<P>
+<PRE>
+                 IX1, IX1+1, &#46;&#46;&#46; , IX1+M-1.
+<P>
+</PRE>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_move
+   use M_datapac, only : move, label
+   real,allocatable :: x(:), y(:)
+      call label(&#146;move&#146;)
+      x=[10.0,20.0,30.0,40.0,50.0,60.0,70.0,80.0,90.0,100.0,110.0,120.0]
+      if(allocated(y))deallocate(y)
+      allocate(y(size(x)))
+      y=99.0
+      call MOVE(X,4,5,1,Y)
+      write(*,*)int(y)
+   end program demo_move
+<P>
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>move (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a15fcfbd-6d67-4cf2-973c-11319c017864 using man macros.</FONT>
+<br><br><center><img src="images/move.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

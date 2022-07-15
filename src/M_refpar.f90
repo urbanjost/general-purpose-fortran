@@ -85,7 +85,7 @@ public :: refpar
 !!##LICENSE
 !!    CC0-1.0
 interface refpar
-  module procedure real64_refpar, real32_refpar, int32_refpar
+  module procedure real64_refpar, real32_refpar, int32_refpar, f_char_refpar
 end interface refpar
 contains
 Subroutine real64_refpar (INVALS, IRNGT, NORD)

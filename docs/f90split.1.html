@@ -53,7 +53,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>f90split</B>(1f) - [DEVELOPER] split Fortran source file into individual files
+<B>f90split</B>(1f) - [DEVELOPER] split Fortran source file into individual
+files at module or procedure boundaries.
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -63,16 +64,18 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
 <A HREF=#4>License</A><BR>
-<A HREF=#5>Examples</A><BR>
-<A HREF=#6>See Also</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>Examples</A><BR>
+<A HREF=#7>See Also</A><BR>
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>f90split</B> &lt; <I>largefile</I> [ &gt; <I>list_file</I> ] |[ <B>--help</B>| <B>--version</B>]
+f90split [-fcase NAME] [-odir DIRECTORY] <B>largefile</B>(<I>s</I>) [ &gt; list_file ] |
+[ <B>--help</B>| <B>--version</B>]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -80,21 +83,21 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>f90split</B>(1) is a Fortran 90 utility to split free source form code
-into as many files as there are procedures. Contained procedures are
-stored within their container.
+<B>f90split</B>(1) is a utility which splits free source form Fortran code
+into multiple files, one module or procedure per file. Note that
+contained procedures are stored within their parent procedure.
 <P>
-Split standard input stream, containing source of several fortran90
-program units into individual files. each output file contains a single
-program unit named after the unit, unless that filename exists. If the
-name exists a file will be created names main0001.f90-main9999.f90,
-or bdta0001.f90-bdta9999.f90. If a file with that name already exists,
-it is put in dupl0001.f90-dupl9999.f90.
+Each output file contains a single program unit named after the unit,
+unless that filename exists.
 <P>
-Lists on stdout the use and include dependencies
+If the initial output file name exists a file will be created named
+main0001.f90-main9999.f90, or bdta0001.f90-bdta9999.f90. If a file
+with that name already exists, it is put in dupl0001.f90-dupl9999.f90.
+<P>
+<B>f90split</B>(1) also lists on stdout the USE and INCLUDE dependencies
+<P>
+<B>f90split</B>(1) is not aware of preprocessor directives.
 </BLOCKQUOTE>
-<P>
-<P>
 <A name=3>
 
      <H3>OPTIONS</H3>
@@ -102,6 +105,26 @@ Lists on stdout the use and include dependencies
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>largfile</B>(<I>s</I>) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+list of input files. Defaults to stdin.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--fcase</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+case mode for generated filenames
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                   leave  use procedure name case as-is
+                   lower  generate all-lowercase filenames
+                   upper  generate all-uppercase filenames
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--odir</B> </TD><TD valign=bottom>
+output directory. Defaults to current directory.
+</TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>--help</B> </TD><TD valign=bottom>
 display this help and exit
@@ -117,21 +140,41 @@ output version information and exit
 
 </A>
 <BLOCKQUOTE>
-All rights to this code waived, so that it may be freely distributed
-as public domain software subject to the condition that these 6 lines
-are verbatim reproduced.
+All rights to this code are waived, so that it may be freely
+distributed as public domain software subject to the condition that
+these 6 lines are verbatim reproduced.
 <P>
-Originally written by Michel Olagnon, from Ifremer, France, who
-would be pleased to receive your comments and corrections.
-<P>
-<PRE>
-      M. Olagnon (<A HREF="mailto:Michel.Olagnon@ifremer.fr">Michel.Olagnon@ifremer.fr</A>)
-         Improved by
-      Phil Garnatz, Cray Research Inc. for makefile generation
-<P>
-</PRE>
+Originally written by Michel Olagnon, from Ifremer, France, who would
+be pleased to receive your comments and corrections.
 </BLOCKQUOTE>
 <A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M. Olagnon (<A HREF="mailto:Michel.Olagnon@ifremer.fr">Michel.Olagnon@ifremer.fr</A>)
+</TD></TR>
+<TR></TR></TABLE>Improved by
+<TABLE cellpadding=3><!-- tsb: Improved by
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Phil Garnatz, Cray Research Inc. for makefile generation
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+John S. Urban, added CLI
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
 
      <H3>EXAMPLES</H3>
 
@@ -144,16 +187,16 @@ Sample commands
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>f90split</B>(1)
+<B>fsplit</B>(1)
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>f90split (1)</TD> <TD align=right width=33%><I>May 01, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 93df8023-e1ca-42d7-b535-0a94ec98c4c0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>f90split (1)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e7f6faeb-5ac8-4377-afa0-5d746a771d24 using man macros.</FONT>
 <br><br><center><img src="images/f90split.1.gif"></center>
 </div>
 </div>

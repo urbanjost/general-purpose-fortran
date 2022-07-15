@@ -5,7 +5,9 @@
      !  Use the gif module to create a sample animated gif.
      !
      !# See also
-     !  * [Make a circle illusion animation](http://codegolf.stackexchange.com/questions/34887/make-a-circle-illusion-animation)
+     !  * [Make a circle illusion animation]
+     !    (http://codegolf.stackexchange.com/questions/34887/
+     !    make-a-circle-illusion-animation)
      !
      use, intrinsic :: iso_fortran_env, only: wp=>real64
      use M_writegif_animated, only : write_animated_gif

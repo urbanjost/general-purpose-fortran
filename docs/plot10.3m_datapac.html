@@ -1,0 +1,361 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>plot10 (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>plot10</B>(3f) - [M_datapac:GENERIC_LINE_PLOT] generate a line printer
+plot with special plot characters
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Maintainer</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>References</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>PLOT10</B>( &
+& Y,X,Char,N,Ymin,Ymax,Xmin,Xmax,D,Dmin,Dmax,Yaxid,Xaxid,Plchid)
+<P>
+<PRE>
+       REAL(kind=wp) :: Y(:)
+       REAL(kind=wp) :: X(:)
+       REAL(kind=wp) :: Char(:)
+       INTEGER       :: N
+       REAL(kind=wp) :: Ymin, Ymax
+       REAL(kind=wp) :: Xmin, Xmax
+       REAL(kind=wp) :: D(:)
+       REAL(kind=wp) :: Dmin, Dmax
+       REAL(kind=wp) :: Yaxid, Xaxid
+       REAL(kind=wp) :: Plchid
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>PLOT10</B>(3f) yields a one-page printer plot of <B>y</B>(i) versus <B>x</B>(i):
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <B>PLOT10</B>(3f) yields a one-page printer plot of <B>y</B>(i) versus <B>x</B>(i):
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+with special plot characters;
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+with the vertical (y) axis min and max
+and the horizontal (x) axis min and max
+values specified by the data analyst;
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+with only those points (<B>x</B>(i),<B>y</B>(i)) plotted
+for which the corresponding value of <B>d</B>(i)
+is between the specified values of dmin and dmax; and
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+with hollerith labels (at most 6 characters)
+for the vertical axis variable,
+the horizontal axis variable, and
+the plotting character variable
+also being provided by the data analyst.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The &#146;special plotting character&#146; capability allows the data analyst
+to incorporate information from a third variable (aside from y and x)
+into the plot.
+<P>
+The plot character used at the i-th plotting position (that is,
+at the coordinate (<B>x</B>(i),<B>y</B>(i))) will be
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The plot character used at the i-th plotting position (that is,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>1 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0.5 and  1.5
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>2 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+1.5 and  2.5
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>9 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+8.5 and  9.5
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+9.5 and 10.5
+a if <B>char</B>(i) is between 10.5 and 11.5
+b if <B>char</B>(i) is between 11.5 and 12.5
+c if <B>char</B>(i) is between 12.5 and 13.5
+w if <B>char</B>(i) is between 32.5 and 33.5
+x if <B>char</B>(i) is between 33.5 and 34.5
+y if <B>char</B>(i) is between 34.5 and 35.5
+z if <B>char</B>(i) is between 35.5 and 36.5
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>x if </B><B>char</B>(i) is any value outside the range 0.5 to </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+36.5.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The use of the ymin, ymax, xmin, and xmax specifications allows the
+data analyst to control fully the plot axis limits, so as, for example,
+to zero-in on an interesting sub-region of a previous plot.
+<P>
+The use of the subset definition vector d gives the data analyst
+the capability of plotting subsets of the data, where the subset is
+defined by values in the vector d.
+<P>
+The use of hollerith identifying labels allows the data analyst to
+automatically have the plots labeled. this is particularly useful
+in a large analysis when many plots are being generated.
+<P>
+Values in the vertical axis vector (Y) which are smaller than YMIN
+or larger than YMAX, or values in the horizontal axis vector (X)
+which are smaller than XMIN or larger than XMAX will not be plotted.
+<P>
+For a given dummy index I, if <B>D</B>(I) is smaller than DMIN or larger than
+DMAX, then the corresponding point (X(I),Y(I)) will not be plotted.
+<P>
+Values in the vertical axis vector (Y), the horizontal axis vector
+(X), or the plot character vector (CHAR) which are equal to or in
+excess of 10.0**10 will not be plotted.
+<P>
+This convention greatly simplifies the problem of plotting when
+some elements in the vector Y (or X, or CHAR) are &#146;missing data&#146;,
+or when we purposely want to ignore certain elements in the vector Y
+(or X, or CHAR) for plotting purposes (that is, we do not want certain
+elements in Y (or X, or CHAR) to be plotted).
+<P>
+to cause specific elements in Y (or X, or CHAR) to be ignored,
+we replace the elements beforehand (by, for example, use of the
+<B>REPLAC</B>(3f) subroutine) by some large value (like, say, 10.0**10)
+and they will subsequently be ignored in the <B>PLOTC</B>(3f) subroutine.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>Y</B> </TD><TD valign=bottom>
+The vector of (unsorted or sorted) observations to be
+plotted vertically.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+The vector of (unsorted or sorted) observations to be plotted
+horizontally.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>CHAR</B> </TD><TD valign=bottom>
+The vector of observations which control the value of each
+individual plot character.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The integer number of observations in the vector y.
+There is no restriction on the maximum value of n for this
+subroutine.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>YMIN</B> </TD><TD valign=bottom>
+The value of desired minimum for the vertical axis.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>YMAX</B> </TD><TD valign=bottom>
+The value of desired maximum for the vertical axis.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>XMIN</B> </TD><TD valign=bottom>
+The value of desired minimum for the horizontal axis.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>XMAX</B> </TD><TD valign=bottom>
+The value of desired maximum for the horizontal axis.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>D</B> </TD><TD valign=bottom>
+The vector which &#146;defines&#146; the various possible subsets.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>DMIN</B> </TD><TD valign=bottom>
+The value which defines the lower bound (inclusively) of
+The particular subset of interest to be plotted.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>DMAX</B> </TD><TD valign=bottom>
+The value which defines the upper bound (inclusively) of
+The particular subset of interest to be plotted.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>YAXID</B> </TD><TD valign=bottom>
+The hollerith value (at most 6 characters) of the desired
+label for the vertical axis variable.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>XAXID</B> </TD><TD valign=bottom>
+The hollerith value (at most 6 characters) of the desired
+label for the horizontal axis variable.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>PLCHID</B> </TD><TD valign=bottom>
+The hollerith value (at most 6 characters) of the desired
+label for the plotting character variable.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A one-page printer plot of <B>Y</B>(I) versus <B>X</B>(I), with special plot
+characters, with specified axis limits, for only of a specified subset
+of the data, and with specified labels.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_plot10
+   use M_datapac, only : plot10
+   implicit none
+   ! call plot10(x,y)
+   end program demo_plot10
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Filliben, &#146;Statistical Analysis of Interlab Fatigue Time Data&#146;,
+Unpublished Manuscript (available from Author) Presented at the
+<BR>.Computer-Assisted Data Analysis&#146; session at the National Meeting of the
+American Statistical Association, New York City, December 27-30, 1973.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>plot10 (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 778762df-05a8-43ee-a7b5-9af073715582 using man macros.</FONT>
+<br><br><center><img src="images/plot10.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

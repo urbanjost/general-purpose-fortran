@@ -81,7 +81,7 @@ type file_stack
    integer                           ::  line_number=0
    character(len=G_line_length)      ::  filename
 end type
-type(file_stack),public              ::  G_file_dictionary(50)
+type(file_stack),public              ::  G_file_dictionary(250)
 
 type parcel_stack
    integer                           ::  unit_number
@@ -203,24 +203,25 @@ logical                      :: ifound
       case('DEFINE','DEF','LET');     call define(upopts)             ! only process DEFINE if not skipping data lines
       case('REDEFINE','REDEF'); call define(upopts)                   ! only process DEFINE if not skipping data lines
       case('UNDEF','UNDEFINE','DELETE'); call undef(upper(options))   ! only process UNDEF if not skipping data lines
-      case('INCLUDE','READ');   call include(options,50+G_iocount)    ! Filenames can be case sensitive
       case('OUTPUT');           call output_case(options)             ! Filenames can be case sensitive
       case('PARCEL');           call parcel_case(upopts)
       case('ENDPARCEL');        call parcel_case(' ')
-      case('POST');             call post(upopts)
       case('BLOCK');            call document(options)
       case('ENDBLOCK');         call document(' ')
-      case('SET');              call set(options)
-      case('IMPORT');           call import(options)
+      case('SET','REPLACE');    call set(options)
+      case('UNSET');            call unset(upper(options))   ! only process UNSET if not skipping data lines
       case('IDENT','@(#)');     call ident(options)
       case('SHOW') ;            call show_state(upper(options),msg='')
-      case('SYSTEM');           call exe()
       case('MESSAGE');          call write_err(unquote(all_options))      ! trustingly trim MESSAGE from directive
-      case('STOP');             call stop(all_options)
       case('QUIT');             call stop('0 '//all_options)
       case('ERROR');            call stop('1 '//all_options)
       CASE('GET_ARGUMENTS');    call write_get_arguments()
       CASE('HELP');             call short_help(stderr)
+      case('STOP');                                        call stop(all_options)
+      case('INCLUDE','READ');                              call include(options,50+G_iocount)    ! Filenames can be case sensitive
+      case('POST','CALL','DO');                            call prepost(upper(options))
+      case('IMPORT','GET_ENVIRONMENT_VARIABLE');           call import(options)
+      case('SYSTEM','EXECUTE_COMMAND_LINE');               call exe()
       case default
          ifound=.false.
       end select
@@ -375,6 +376,33 @@ end subroutine parcel_case
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+subroutine prepost(opts)                          !@(#)prepost(3f): process $POST directive
+character(len=*)                          :: opts
+character(len=G_line_length)              :: list
+character(len=:),allocatable              :: names(:)        ! names on $POST command
+character(len=:),allocatable              :: fors(:)         ! names on $POST --for 
+integer                                   :: i
+integer                                   :: j,jsz
+   call dissect2('PARCEL','-oo --FOR ',opts)                 ! parse options and inline comment on input line
+   list=sget('PARCEL_oo')
+   call split(list,names,delimiters=' ,')                    ! parse string to an array parsing on delimiters
+   list=sget('PARCEL_FOR')
+   call split(list,fors,delimiters=' ,')                     ! parse string to an array parsing on delimiters
+   jsz=size(fors)
+   do i=size(names),1,-1
+      if(jsz.eq.0)then
+         call post(names(i))
+      else
+         do j=jsz,1,-1
+            call post(names(i))
+            call post(fors(j))
+         enddo
+      endif
+   enddo
+end subroutine prepost
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
 subroutine ident(opts)                                 !@(#)ident(3f): process $IDENT directive
 character(len=*)              :: opts
 character(len=G_line_length)  :: lang               ! language on $IDENT command
@@ -427,6 +455,7 @@ integer                     :: iname                        ! length of variable
 integer                     :: istore                       ! location of variable name in dictionary
 character(len=:),allocatable :: array(:)
 character(len=:),allocatable :: opts
+character(len=G_var_len)     :: value                       ! returned variable value
 
    call split(allopts,array,delimiters=';')                 ! parse string to an array parsing on delimiters
 
@@ -443,12 +472,17 @@ character(len=:),allocatable :: opts
       else                                                     ! =value string trails name on directive
          temp=opts(iequ+1:)                                    ! get expression
       endif
-
+      if(G_debug) write(stderr,*)'*define* :LINE:'//trim(temp)
       call normalize_logical_operators(temp)
+      if(G_debug) write(stderr,*)'*define* :LINE:AFTER NORMALIZE:'//trim(temp)
       call parens(temp)
+      if(G_debug) write(stderr,*)'*define* :LINE:AFTER PARENS:'//trim(temp)
       call math(temp,1,len_trim(temp))
+      if(G_debug) write(stderr,*)'*define* :LINE:AFTER MATH:'//trim(temp)
       call doop(temp,1,len_trim(temp))
+      if(G_debug) write(stderr,*)'*define* :LINE:AFTER DOOP:'//trim(temp)
       call logic(temp,1,len_trim(temp))
+      if(G_debug) write(stderr,*)'*define* :LINE:AFTER LOGIC:'//trim(temp)
 
       temp=nospace(temp)
       select case(temp)
@@ -457,6 +491,13 @@ character(len=:),allocatable :: opts
       case default ! assumed a number
          if ( verify(temp(1:1),'0123456789+-').eq.0 .and.  verify(temp(2:len_trim(temp)),'0123456789').eq.0 ) then
             call table%set(opts(:iname),temp)
+         elseif (temp(1:1).ge.'A'.and.temp(1:1).le.'Z'.or.temp(1:1).eq.'_')then ! appears to be variable name not number or logical
+            value=table%get(temp)                                                  ! find defined parameter in dictionary
+           if (value.eq.'')then                                                   ! unknown variable name
+              call stop_prep('*prep* ERROR(120) - UNDEFINED VARIABLE NAME:'//trim(G_source))
+           else
+              call table%set(opts(:iname),value)
+           endif
          else
             call stop_prep('*prep* ERROR(008) - NOT LOGICAL OR INTEGER EXPRESSION:'//trim(allopts))
          endif
@@ -559,6 +600,28 @@ integer                                :: ivalue
    endif
 
 end subroutine getval
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine unset(opts)                                     !@(#)unset(3f): process UNSET directive
+character(len=*)             :: opts                       ! directive with no spaces, leading prefix removed, and all uppercase
+character(len=:),allocatable :: names(:)
+integer                      :: i,k
+
+   ! REMOVE VARIABLE IF FOUND IN VARIABLE NAME DICTIONARY
+   ! allow basic globbing where * is any string and ? is any character
+   if (len_trim(opts).eq.0) then                           ! if no variable name
+      call stop_prep('*prep* ERROR(023) - $UNSET MISSING TARGETS:'//trim(G_source))
+   endif
+   call split(opts,names,delimiters=' ;,')
+
+   do k=1,size(names)
+      if(G_verbose)then
+         call write_err('+ $UNSET '//names(k))
+      endif
+      call prep_update(names(k))
+   enddo
+end subroutine unset
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -921,7 +984,7 @@ integer                         :: ipos2
 
 character(len=11)               :: temp
 character(len=G_line_length)    :: newl
-character(len=2),save           :: ops(3)= (/'**','*/','+-'/)
+character(len=2),save           :: ops(3)= ['**','*/','+-']
 integer                         :: i
 integer                         :: j
 integer                         :: loc
@@ -1404,13 +1467,13 @@ character(len=G_line_length) :: options                 ! everything after first
       G_outtype='comment'
       G_MAN_PRINT=.true.
       G_MAN_COLLECT=.true.
-      if(sget('block_style').ne.'#N#')then 
+      if(sget('block_style').ne.'#N#')then
          G_comment_style=lower(sget('block_style'))             ! allow formatting comments for particular post-processors
       endif
    case('NULL')
       G_outtype='null'
 
-   case('SET')
+   case('SET','REPLACE')
       G_outtype='set'
       G_MAN_PRINT=.false.
       G_MAN_COLLECT=.false.
@@ -2092,7 +2155,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '     expansion, allowing for basic templating (controlled by directives         ',&
 '     $PARCEL/$ENDPARCEL and $POST). The mechanism supported is to replace       ',&
 '     text of the form ${NAME} with user-supplied strings similar to the         ',&
-'     POSIX shell (controlled by directives $SET and $IMPORT).                   ',&
+'     POSIX shell (controlled by directives $SET, $USET and $IMPORT).            ',&
 '                                                                                ',&
 '   * Filter blocks of text and convert them to comments, a CHARACTER array,     ',&
 '     Fortran WRITE statements, ... (provided by the $BLOCK directive.)          ',&
@@ -2392,8 +2455,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Directives for defining replayable text blocks ...                           ',&
 '                                                                                ',&
 '       $PARCEL [blockname] / $ENDPARCEL                     [! comment ]        ',&
-'       $POST     blockname                                  [! comment ]        ',&
+'       $POST     blockname(s)                               [! comment ]        ',&
 '       $SET varname  string                                                     ',&
+'       $UNSET varname(s)                                    [! comment ]        ',&
 '       $IMPORT   envname[;...]                              [! comment ]        ',&
 '                                                                                ',&
 '   Details ...                                                                  ',&
@@ -2405,7 +2469,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   then be read in with the $POST directive much like a named file can be with  ',&
 '   $INCLUDE except the file is automatically deleted at program termination.    ',&
 '                                                                                ',&
-'       $POST     blockname                                  [! comment ]        ',&
+'       $POST     blockname(s)                               [! comment ]        ',&
 '                                                                                ',&
 '   Read in a scratch file created by the $PARCEL directive. Combined with       ',&
 '   $SET and $IMPORT directives this allows you to replay a section of input     ',&
@@ -2441,6 +2505,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    > write(*,*)''Date ${DATE}''                                                ',&
 '    > write(*,*)''Time ${TIME}''                                                ',&
 '   ...                                                                          ',&
+'                                                                                ',&
+'       $SET varname(s)                                                          ',&
+'                                                                                ',&
+'   Unset variables set with the $SET directive.                                 ',&
 '                                                                                ',&
 '       $IMPORT   envname[;...]                              [! comment ]        ',&
 '                                                                                ',&
@@ -2905,7 +2973,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 "   > $import HOME                                                               ",&
 "   > write(*,*)'${AUTHOR} ${DATE} ${TIME} File ${FILE} Line ${LINE} HOME ${HOME}",&
 "  $PARCEL [blockname] ... $ENDPARCEL ! a reuseable parcel of expandable text    ",&
-"  $POST   blockname  ! insert a defined parcel of text                          ",&
+"  $POST   blockname(s)  ! insert a defined parcel of text                       ",&
 "EXTERNAL FILES (see $BLOCK ... --file also)                                     ",&
 "  $OUTPUT filename [--append]                                                   ",&
 "  $INCLUDE filename                                                             ",&
@@ -2955,7 +3023,7 @@ character(len=256)             :: message
 
    case('null')                                ! do not write
 
-   case('set')                                 ! do not write
+   case('set','replace')                       ! do not write
       call set(line)
 
    case('define')                              ! do not write
@@ -3055,7 +3123,6 @@ end subroutine import
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine set(line)
-use M_list,      only : insert, locate, replace, remove                   ! Basic list lookup and maintenance
 character(len=*),intent(in)  :: line
 character(len=:),allocatable :: temp
 character(len=:),allocatable :: name
@@ -3076,13 +3143,33 @@ integer                      :: i
        val=' '
     endif
     ! insert and replace entries
-    call update(name,val)
+    call prep_update(name,val)
   endif
 
 contains
-subroutine update(key,valin)
-! call update('a','the value')     ! update (add or replace) entry
-!call update('a')                  ! remove entry
+
+function get(key) result(valout)
+use M_list,      only : insert, locate, replace, remove                   ! Basic list lookup and maintenance
+character(len=*),intent(in)   :: key
+character(len=:),allocatable  :: valout
+integer                       :: place
+   ! find where string is or should be
+   call locate(keywords,key,place)
+   if(place.lt.1)then
+      valout=''
+   else
+      valout=values(place)(:counts(place))
+   endif
+end function get
+
+end subroutine set
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine prep_update(key,valin)
+use M_list,      only : insert, locate, replace, remove                   ! Basic list lookup and maintenance
+! call prep_update('a','the value')     ! update (add or replace) entry
+!call prep_update('a')                  ! remove entry
 !write(stderr,*)'get b=>',get('b') ! get value
 character(len=*),intent(in)           :: key
 character(len=*),intent(in),optional  :: valin
@@ -3111,22 +3198,7 @@ else
       call remove(counts,place)
    endif
 endif
-end subroutine update
-
-function get(key) result(valout)
-character(len=*),intent(in)   :: key
-character(len=:),allocatable  :: valout
-integer                       :: place
-   ! find where string is or should be
-   call locate(keywords,key,place)
-   if(place.lt.1)then
-      valout=''
-   else
-      valout=values(place)(:counts(place))
-   endif
-end function get
-
-end subroutine set
+end subroutine prep_update
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3452,8 +3524,10 @@ logical                       :: isscratch
 7     continue                                                      ! end of file encountered on input
       if(G_file_dictionary(G_iocount)%unit_number.ne.5)then
          inquire(unit=G_file_dictionary(G_iocount)%unit_number,iostat=ios,named=isscratch)
-         if(.not.isscratch.and. (G_file_dictionary(G_iocount)%unit_number.gt.0))then
+         if(.not.isscratch.and.(G_file_dictionary(G_iocount)%unit_number.gt.0))then
             close(G_file_dictionary(G_iocount)%unit_number,iostat=ios)
+         elseif(isscratch.or.(G_file_dictionary(G_iocount)%unit_number.lt.-1))then 
+            rewind(unit=G_file_dictionary(G_iocount)%unit_number,iostat=ios)
          endif
       endif
 

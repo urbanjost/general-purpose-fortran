@@ -4,9 +4,11 @@
      integer, parameter  :: dp = selected_real_kind(12, 60)
      integer             :: n, r, ier
      real (dp)           :: result
-     do
-        write(*, '(a)', advance='no') ' Enter n, r : '
-        read(*, *) n, r
+     !do
+     !   write(*, '(a)', advance='no') ' Enter n, r : '
+     !   read(*, *) n, r
+        n=10
+        r=2
         call ncr(n, r, result, ier)
         if (ier /= 0) then
            write(*, *) ' Error, IER = ', ier
@@ -14,5 +16,5 @@
         else
            write(*, '(a, g16.8)') ' ncr = ', result
         endif
-     enddo
+     !enddo
      end program demo_ncr

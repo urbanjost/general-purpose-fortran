@@ -2,7 +2,6 @@ Module M_median
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 implicit none
 Private
-integer,parameter :: f_char=selected_char_kind("DEFAULT")
 public :: median
 !>
 !!##NAME
@@ -29,13 +28,13 @@ public :: median
 !!    the two middle values in the case where size(INVALS) is even.
 !!
 !!    Internally, this routine uses a pivoting strategy similar to the
-!!    method of finding the median based on the Quick-sort algorithm,
-!!    but we skew the pivot choice to try to bring it to NORD as fast as
-!!    possible. It uses two temporary arrays, where it stores the indices of
-!!    the values smaller than the pivot (ILOWT), and the indices of values
-!!    larger than the pivot that we might still need later on (IHIGT). It
-!!    iterates until it can bring the number of values in ILOWT to exactly
-!!    NORD, and then finds the maximum of this set.
+!!    method of finding the median based on the Quick-sort algorithm, but
+!!    we skew the pivot choice to try to bring it to one-half the values as
+!!    fast as possible. It uses two temporary arrays, where it stores the
+!!    indices of the values smaller than the pivot (ILOWT), and the indices
+!!    of values larger than the pivot that we might still need later on
+!!    (IHIGT). It iterates until it can bring the number of values in ILOWT
+!!    to exactly NORD, and then finds the maximum of this set.
 !!
 !!##OPTIONS
 !!     INVALS      array to determine the median value of.
@@ -90,8 +89,8 @@ Function real64_median (INVALS) Result (median)
       Real (Kind=real64) :: XPIV, XPIV0, XWRK, XWRK1, XWRK2, XWRK3, XMIN, XMAX
 !!
       Logical :: IFODD
-      Integer :: NDON, JHIG, JLOW, IHIG, NORD
-      Integer :: IMIL, IFIN, ICRS, IDCR, ILOW
+      Integer :: NDON, JHIG, JLOW, IHIG
+      Integer :: IMIL, IFIN, ICRS, IDCR
       Integer :: JLM2, JLM1, JHM2, JHM1, INTH
 !
       NDON = SIZE (INVALS)
@@ -579,8 +578,8 @@ Function real32_median (INVALS) Result (median)
       Real (Kind=real32) :: XPIV, XPIV0, XWRK, XWRK1, XWRK2, XWRK3, XMIN, XMAX
 !!
       Logical :: IFODD
-      Integer :: NDON, JHIG, JLOW, IHIG, NORD
-      Integer :: IMIL, IFIN, ICRS, IDCR, ILOW
+      Integer :: NDON, JHIG, JLOW, IHIG
+      Integer :: IMIL, IFIN, ICRS, IDCR
       Integer :: JLM2, JLM1, JHM2, JHM1, INTH
 !
       NDON = SIZE (INVALS)
@@ -1068,8 +1067,8 @@ Function int32_median (INVALS) Result (median)
       Integer (Kind=int32) :: XPIV, XPIV0, XWRK, XWRK1, XWRK2, XWRK3, XMIN, XMAX
 !!
       Logical :: IFODD
-      Integer :: NDON, JHIG, JLOW, IHIG, NORD
-      Integer :: IMIL, IFIN, ICRS, IDCR, ILOW
+      Integer :: NDON, JHIG, JLOW, IHIG
+      Integer :: IMIL, IFIN, ICRS, IDCR
       Integer :: JLM2, JLM1, JHM2, JHM1, INTH
 !
       NDON = SIZE (INVALS)

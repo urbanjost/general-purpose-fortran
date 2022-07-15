@@ -93,68 +93,76 @@
      !               = 1 : Use input DL_AXISB-type axis parameters
      !                      (nmx, nnx, mlx, tsx, ndx, etc.)
      !
-     ! (NOTE: the following optional parameters are used if iax < 0 or mod(iflag,10)=1)
-     !        (see DL_AXISB for detailed description of axis parameters)
+     ! NOTE: the following optional parameters are used if iax < 0 or
+     ! mod(iflag,10)=1
+     !
+     ! (see DL_AXISB for detailed description of axis parameters)
      !
      ! XAXIS:
-           xs=-10.0               ! xs,xe (R): starting and ending values displayed on x axis
+           xs=-10.0   ! xs,xe (R): starting and ending values displayed on x axis
            xe=10.0
      !-----------------------
-           nmx=4                  ! nmx   (i): number of minor ticks between major ticks on x axis
-           nnx=0                  ! nnx   (i): highlight length of nnx-th minor tick on x axis
-           mlx=4                  ! mlx   (i): number of major tick marks on x axis
-           tsx=-0.15              ! tsx   (R): size of title and numbers on x axis
-     !                         < 0 auto exponent scaling (x10 to power) disabled
-     !                         > 0 auto exponent scaling (x10 to power) enabled
-           ndx=1                  ! (i): number of digits to right of decimal point on x axis
-           smx=0.1                ! (R): major tick length on x axis
+           nmx=4      ! (i): number of minor ticks between major ticks on x axis
+           nnx=0      ! (i): highlight length of nnx-th minor tick on x axis
+           mlx=4      ! (i): number of major tick marks on x axis
+           tsx=-0.15  ! (R): size of title and numbers on x axis
+                      !      < 0 auto exponent scaling (x10 to power) disabled
+                      !      > 0 auto exponent scaling (x10 to power) enabled
+           ndx=1      ! (i): number of digits to right of decimal point on x axis
+           smx=0.1    ! (R): major tick length on x axis
      !-----------------------
-           xt='dl_slices X TITLE' ! xt    (C): title of x axis (width)
-           nxt=len_trim(xt)       ! nxt   (i): number of characters in xt ;nxt = 0 : no axis plotted ; nxt > 0 : normal
+           xt='dl_slices X TITLE' ! (C): title of x axis (width)
+           nxt=len_trim(xt)       ! (i): number of characters in xt ;
+                                  ! nxt = 0 : no axis plotted ; nxt > 0 : normal
      !
      ! YAXIS:
-           ys=-10.0               ! ys,ye (R): starting and ending values displayed on y axis
+           ys=-10.0               ! ys,ye (R): starting and ending values
+                                  ! displayed on y axis
            ye=10.0
      !-----------------------
-           nmy=1                  ! (i): number of minor ticks between major ticks on y axis
-           nny=0                  ! (i): highlight length of nny-th minor tick on y axis
-           mly=3                  ! (i): number of major tick marks on y axis
-           tsy=-0.15              ! (R): size of title and numbers on y axis
-                                  !      < 0 auto exponent scaling (x10 to power) disabled
-                                  !      > 0 auto exponent scaling (x10 to power) enabled
-           ndy=1                  ! ndy   (i): number of digits to right of decimal point on y axis
-           smy=0.10               ! smy   (R): major tick length on y axis
+           nmy=1      ! (i): number of minor ticks between major ticks on y axis
+           nny=0      ! (i): highlight length of nny-th minor tick on y axis
+           mly=3      ! (i): number of major tick marks on y axis
+           tsy=-0.15  ! (R): size of title and numbers on y axis
+                      !      < 0 auto exponent scaling (x10 to power) disabled
+                      !      > 0 auto exponent scaling (x10 to power) enabled
+           ndy=1      ! ndy   (i): number of digits to right of decimal point
+                      !      on y axis
+           smy=0.10   ! smy  (R): major tick length on y axis
      !-----------------------
-           yt='dl_slices Y TITLE' ! yt    (C): title of y axis (width)
-           nyt=len_trim(yt)       ! nyt   (i): number of characters in xt ;nyt = 0 : no axis plotted ; nyt > 0 : normal
+           yt='dl_slices Y TITLE' ! (C): title of y axis (width)
+           nyt=len_trim(yt)       ! (i): number of characters in xt ;
+                                  ! nyt = 0 : no axis plotted ; nyt > 0 : normal
      !
      ! ZAXIS:
            zs=1.0
-           ze=1.0                 ! zs,ze (R): starting and ending value displayed on z axis
+           ze=1.0      ! (R): starting and ending value displayed on z axis
      !-----------------------
-           nmz=3                  ! nmz   (i): number of minor ticks between major ticks on z axis
-           nnz=2                  ! nnz   (i): highlight length of nnz-th minor tick on z axis
-           mlz=2                  ! mlz   (i): number of major tick marks on z axis
-           tsz=-0.15              ! tsz   (R): size of title and numbers on z axis
-                                  !       < 0 auto exponent scaling (x10 to power) disabled
-                                  !       > 0 auto exponent scaling (x10 to power) enabled
-           ndz=1                  ! ndz   (i): number of digits to right of decimal point on z axis
-           smz=0.1                ! smz   (R): major tick length on z axis
+           nmz=3       ! (i): number of minor ticks between major ticks on z axis
+           nnz=2       ! (i): highlight length of nnz-th minor tick on z axis
+           mlz=2       ! (i): number of major tick marks on z axis
+           tsz=-0.15   ! (R): size of title and numbers on z axis
+                       !      < 0 auto exponent scaling (x10 to power) disabled
+                       !      > 0 auto exponent scaling (x10 to power) enabled
+           ndz=1       ! (i): number of digits to right of decimal point on z axis
+           smz=0.1     ! (R): major tick length on z axis
      !-----------------------
-           zt='SLICE'             ! zt    (C): title of z axis (width)
-           nzt=len_trim(zt)       ! nzt   (i): number of characters in xt ;nzt = 0 : no axis plotted ; nzt > 0 : normal
+           zt='SLICE'         ! (C): title of z axis (width)
+           nzt=len_trim(zt)   ! (i): number of characters in xt ;nzt = 0 :
+                              !      no axis plotted ; nzt > 0 : normal
      !
      !          (NOTE: the following optional parameters are accessed only if
      !                 iax < 0 or mod(iflag,10)=1)
-           dm=-1.0                ! dm,dx (R): minimum and maximum values of SURFDAT array
            dx=1.0
+           dm=-1.0   ! dm,dx (R): minimum and maximum values of SURFDAT array
      ! view angles
-     ! A        (R): angle of x axis from horizontal 0-80 degrees
-     ! B        (R): angle of z axis from horizontal 5-80 degrees
-     !               note: origin (1,1) is in lower-left corner
-     !                     x axis runs left to right on screen
-     !                     y axis runs up to down on screen
-     !                     z axis appears to run into the screen but is angled to the right
+     ! A    (R): angle of x axis from horizontal 0-80 degrees
+     ! B    (R): angle of z axis from horizontal 5-80 degrees
+     !           note: origin (1,1) is in lower-left corner
+     !                 x axis runs left to right on screen
+     !                 y axis runs up to down on screen
+     !                 z axis appears to run into the screen
+     !                   but is angled to the right
            iframe=1
            b=15.0
            do i10=1,85   ! Animate cycling thru angle A

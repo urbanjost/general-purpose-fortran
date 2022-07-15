@@ -3345,7 +3345,7 @@ real,intent(out)   :: user,system,total
 real(kind=c_float) :: c_user,c_system,c_total
 
 interface
-   subroutine c_cpu_time(c_total,c_user,c_system) bind (C,NAME='my_cpu_time')
+   subroutine c_cpu_time(c_total,c_user,c_system) bind (C,NAME='my_stopwatch_cpu_time')
       import c_float
       real(kind=c_float) :: c_total,c_user,c_system
    end subroutine c_cpu_time

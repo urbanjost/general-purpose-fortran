@@ -1,0 +1,295 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>rank (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>rank</B>(3f) - [M_datapac:SORT] rank a vector of sample observations
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Notes</A><BR>
+<A HREF=#4>Input Arguments</A><BR>
+<A HREF=#5>Output Arguments</A><BR>
+<A HREF=#6>Examples</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>Maintainer</A><BR>
+<A HREF=#9>License</A><BR>
+<A HREF=#10>References</A><BR>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>RANK</B>(X,N,Xr)
+<P>
+<PRE>
+       REAL(kind=wp),intent(in)  :: X(:)
+       INTEGER,intent(in)        :: N
+       REAL(kind=wp),intent(out) :: Xr(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>RANK</B>(3f) ranks (in ascending order) the N elements of the precision
+precision vector X, and puts the resulting N ranks into the precision
+precision vector XR.
+<P>
+<B>RANK</B>(3f) gives the data analyst the ability to (for example) rank
+the data preliminary to certain distribution-free analyses.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>NOTES</H3>
+
+</A>
+<BLOCKQUOTE>
+The rank of the first element of the vector X will be placed in the
+first position of the vector XR, the rank of the second element of the
+vector X will be placed in the second position of the vector XR, etc.
+<P>
+The smallest element in the vector X will have a rank of 1 (unless
+<TABLE cellpadding=3><!-- tsb: The smallest element in the vector X will have a rank of 1 (unless
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>ties exist).</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the largest element in the vector X will have a rank of N
+(unless ties exist).
+</TD></TR>
+<TR><TD colspan=2>
+Although ranks are usually (unless ties exist) integral values from
+1 to N, it is to be noted that they are outputted as REAL values in
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the vector XR.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+XR is so as to be consistent with the fact that all
+vector arguments in all other datapac subroutines are REAL; but more
+importantly, because ties frequently do exist in data sets and so some
+of the resulting ranks will be non-integral and so the output vector
+of ranks must necessarily be REAL and not INTEGER.
+</TD></TR>
+<TR><TD colspan=2>
+The input vector X remains unaltered.
+</TD></TR>
+<TR><TD colspan=2>
+Due to conflicting use of labeled common /block2_real64/ by this
+rank subroutine and the SPCORR (Spearman rank correlation coefficient)
+subroutine, the vector XS of this rank subroutine has been placed in
+labeled common /block4_real64/
+</TD></TR>
+<TR><TD colspan=2>
+The first and third arguments in the calling sequence may be identical;
+that is, an &#146;in place&#146; ranking is permitted. The calling sequence
+call <B>RANK</B>(X,N,X) is valid, if desired.
+</TD></TR>
+<TR><TD colspan=2>
+The sorting algorthm used herein is the binary sort. This algorthim
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>is extremely fast as the following time trials indicate.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+These time
+trials were carried out on the UNIVAC 1108 EXEC 8 system at NBS in
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>August of 1974.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+by way of comparison, the time trial values for the
+easy-to-program but extremely inefficient bubble sort algorithm have
+also been included--
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Number of random</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Binary sort       Bubble sort
+numbers sorted
+<TABLE width=100% cellpadding=3><!-- tsb: Binary sort       Bubble sort
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>n = 10</B> </TD><TD valign=bottom>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>n = 100</B> </TD><TD valign=bottom>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>n = 1000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>n = 3000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>n = 10000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+1.887 sec      not computed
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+The vector of observations to be ranked.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The integer number of observations in the vector X.
+The maximum allowable value of N for this subroutine is 7500.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>XR</B> </TD><TD valign=bottom>
+The vector into which the ranks of the X values will be placed
+(in ascending order)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_rank
+   use M_datapac, only : rank
+   implicit none
+   ! call rank(x,y)
+   end program demo_rank
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CACM March 1969, page 186 (Binary Sort Algorithm by Richard
+C. Singleton).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CACM January 1970, page 54.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CACM October 1970, page 624.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+JACM January 1961, page 41.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rank (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2a34b9b1-167d-4594-8e6b-4a19b2660389 using man macros.</FONT>
+<br><br><center><img src="images/rank.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

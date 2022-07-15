@@ -11,7 +11,7 @@ use M_io,                         only : get_next_char
 use M_CLI2,                       only : set_args,lget,sget,sgets, filenames=>unnamed
 implicit none
 
-! ident_1="@(#)flower(1f): convert basic free-format Fortran file to lowercase"
+! ident_1="@(#)flower(1f): convert basic free-format Fortran file to lowercase or uppercase"
 
 character(len=:),allocatable    :: filename
 character(len=:),allocatable    :: help_text(:)

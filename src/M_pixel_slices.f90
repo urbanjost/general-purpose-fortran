@@ -30,27 +30,26 @@ module M_pixel_slices
 !!                     & dm,dx,ic,maxsize)
 !!
 !!##DESCRIPTION
-!!    dl_slices is a simple 3-d surface plotting routine. A 3-d surface is
-!!    plotted by plotting slices through the volume which are parallel to
-!!    the x-y plane. The x,y values of the surface at the intersection of
-!!    the slice plane and the fixed z value are plotted. Hidden lines
+!!    dl_slices is a simple 3-d surface plotting routine. A 3-d surface
+!!    is plotted by plotting slices through the volume which are parallel
+!!    to the x-y plane. The x,y values of the surface at the intersection
+!!    of the slice plane and the fixed z value are plotted. Hidden lines
 !!    are suppressed, giving the illusion of a 3 dimensional surface.
 !!    The height of the plotted surface relative to the y axis value is
-!!    calibrated to the x and z axes. No perspective is used.
-!!    Options exist to vary the plotting angle and to plot axes.
+!!    calibrated to the x and z axes. No perspective is used. Options exist
+!!    to vary the plotting angle and to plot axes.
 !!
-!!    The origin of the plot is in the lower-left corner. The x axis
-!!    runs left to right along the plot bottom. The y axis is
-!!    plotted as a vertical displacement offset by the z axis value. The z
-!!    axis appears to point into the screen. This, with the hidden line
-!!    removal, gives the illusion of depth.
+!!    The origin of the plot is in the lower-left corner. The x axis runs
+!!    left to right along the plot bottom. The y axis is plotted as a
+!!    vertical displacement offset by the z axis value. The z axis appears
+!!    to point into the screen. This, with the hidden line removal, gives
+!!    the illusion of depth.
 !!
-!!    dl_slices contains an internal working storage array
-!!    dimensioned sufficiently large for most surfaces. However,
-!!    for very complex surfaces, the working storage buffer length may
-!!    be exceeded. In this case an error message is written to
-!!    the terminal and the routine terminated.
-!!
+!!    dl_slices contains an internal working storage array dimensioned
+!!    sufficiently large for most surfaces. However, for very complex
+!!    surfaces, the working storage buffer length may be exceeded. In this
+!!    case an error message is written to the terminal and the routine
+!!    terminated.
 !!
 !!##OPTIONS
 !!     d         (R): array of y values dimensioned d(ndx,ndz)
@@ -251,68 +250,76 @@ module M_pixel_slices
 !!    !               = 1 : Use input DL_AXISB-type axis parameters
 !!    !                      (nmx, nnx, mlx, tsx, ndx, etc.)
 !!    !
-!!    ! (NOTE: the following optional parameters are used if iax < 0 or mod(iflag,10)=1)
-!!    !        (see DL_AXISB for detailed description of axis parameters)
+!!    ! NOTE: the following optional parameters are used if iax < 0 or
+!!    ! mod(iflag,10)=1
+!!    !
+!!    ! (see DL_AXISB for detailed description of axis parameters)
 !!    !
 !!    ! XAXIS:
-!!          xs=-10.0               ! xs,xe (R): starting and ending values displayed on x axis
+!!          xs=-10.0   ! xs,xe (R): starting and ending values displayed on x axis
 !!          xe=10.0
 !!    !-----------------------
-!!          nmx=4                  ! nmx   (i): number of minor ticks between major ticks on x axis
-!!          nnx=0                  ! nnx   (i): highlight length of nnx-th minor tick on x axis
-!!          mlx=4                  ! mlx   (i): number of major tick marks on x axis
-!!          tsx=-0.15              ! tsx   (R): size of title and numbers on x axis
-!!    !                         < 0 auto exponent scaling (x10 to power) disabled
-!!    !                         > 0 auto exponent scaling (x10 to power) enabled
-!!          ndx=1                  ! (i): number of digits to right of decimal point on x axis
-!!          smx=0.1                ! (R): major tick length on x axis
+!!          nmx=4      ! (i): number of minor ticks between major ticks on x axis
+!!          nnx=0      ! (i): highlight length of nnx-th minor tick on x axis
+!!          mlx=4      ! (i): number of major tick marks on x axis
+!!          tsx=-0.15  ! (R): size of title and numbers on x axis
+!!                     !      < 0 auto exponent scaling (x10 to power) disabled
+!!                     !      > 0 auto exponent scaling (x10 to power) enabled
+!!          ndx=1      ! (i): number of digits to right of decimal point on x axis
+!!          smx=0.1    ! (R): major tick length on x axis
 !!    !-----------------------
-!!          xt='dl_slices X TITLE' ! xt    (C): title of x axis (width)
-!!          nxt=len_trim(xt)       ! nxt   (i): number of characters in xt ;nxt = 0 : no axis plotted ; nxt > 0 : normal
+!!          xt='dl_slices X TITLE' ! (C): title of x axis (width)
+!!          nxt=len_trim(xt)       ! (i): number of characters in xt ;
+!!                                 ! nxt = 0 : no axis plotted ; nxt > 0 : normal
 !!    !
 !!    ! YAXIS:
-!!          ys=-10.0               ! ys,ye (R): starting and ending values displayed on y axis
+!!          ys=-10.0               ! ys,ye (R): starting and ending values
+!!                                 ! displayed on y axis
 !!          ye=10.0
 !!    !-----------------------
-!!          nmy=1                  ! (i): number of minor ticks between major ticks on y axis
-!!          nny=0                  ! (i): highlight length of nny-th minor tick on y axis
-!!          mly=3                  ! (i): number of major tick marks on y axis
-!!          tsy=-0.15              ! (R): size of title and numbers on y axis
-!!                                 !      < 0 auto exponent scaling (x10 to power) disabled
-!!                                 !      > 0 auto exponent scaling (x10 to power) enabled
-!!          ndy=1                  ! ndy   (i): number of digits to right of decimal point on y axis
-!!          smy=0.10               ! smy   (R): major tick length on y axis
+!!          nmy=1      ! (i): number of minor ticks between major ticks on y axis
+!!          nny=0      ! (i): highlight length of nny-th minor tick on y axis
+!!          mly=3      ! (i): number of major tick marks on y axis
+!!          tsy=-0.15  ! (R): size of title and numbers on y axis
+!!                     !      < 0 auto exponent scaling (x10 to power) disabled
+!!                     !      > 0 auto exponent scaling (x10 to power) enabled
+!!          ndy=1      ! ndy   (i): number of digits to right of decimal point
+!!                     !      on y axis
+!!          smy=0.10   ! smy  (R): major tick length on y axis
 !!    !-----------------------
-!!          yt='dl_slices Y TITLE' ! yt    (C): title of y axis (width)
-!!          nyt=len_trim(yt)       ! nyt   (i): number of characters in xt ;nyt = 0 : no axis plotted ; nyt > 0 : normal
+!!          yt='dl_slices Y TITLE' ! (C): title of y axis (width)
+!!          nyt=len_trim(yt)       ! (i): number of characters in xt ;
+!!                                 ! nyt = 0 : no axis plotted ; nyt > 0 : normal
 !!    !
 !!    ! ZAXIS:
 !!          zs=1.0
-!!          ze=1.0                 ! zs,ze (R): starting and ending value displayed on z axis
+!!          ze=1.0      ! (R): starting and ending value displayed on z axis
 !!    !-----------------------
-!!          nmz=3                  ! nmz   (i): number of minor ticks between major ticks on z axis
-!!          nnz=2                  ! nnz   (i): highlight length of nnz-th minor tick on z axis
-!!          mlz=2                  ! mlz   (i): number of major tick marks on z axis
-!!          tsz=-0.15              ! tsz   (R): size of title and numbers on z axis
-!!                                 !       < 0 auto exponent scaling (x10 to power) disabled
-!!                                 !       > 0 auto exponent scaling (x10 to power) enabled
-!!          ndz=1                  ! ndz   (i): number of digits to right of decimal point on z axis
-!!          smz=0.1                ! smz   (R): major tick length on z axis
+!!          nmz=3       ! (i): number of minor ticks between major ticks on z axis
+!!          nnz=2       ! (i): highlight length of nnz-th minor tick on z axis
+!!          mlz=2       ! (i): number of major tick marks on z axis
+!!          tsz=-0.15   ! (R): size of title and numbers on z axis
+!!                      !      < 0 auto exponent scaling (x10 to power) disabled
+!!                      !      > 0 auto exponent scaling (x10 to power) enabled
+!!          ndz=1       ! (i): number of digits to right of decimal point on z axis
+!!          smz=0.1     ! (R): major tick length on z axis
 !!    !-----------------------
-!!          zt='SLICE'             ! zt    (C): title of z axis (width)
-!!          nzt=len_trim(zt)       ! nzt   (i): number of characters in xt ;nzt = 0 : no axis plotted ; nzt > 0 : normal
+!!          zt='SLICE'         ! (C): title of z axis (width)
+!!          nzt=len_trim(zt)   ! (i): number of characters in xt ;nzt = 0 :
+!!                             !      no axis plotted ; nzt > 0 : normal
 !!    !
 !!    !          (NOTE: the following optional parameters are accessed only if
 !!    !                 iax < 0 or mod(iflag,10)=1)
-!!          dm=-1.0                ! dm,dx (R): minimum and maximum values of SURFDAT array
 !!          dx=1.0
+!!          dm=-1.0   ! dm,dx (R): minimum and maximum values of SURFDAT array
 !!    ! view angles
-!!    ! A        (R): angle of x axis from horizontal 0-80 degrees
-!!    ! B        (R): angle of z axis from horizontal 5-80 degrees
-!!    !               note: origin (1,1) is in lower-left corner
-!!    !                     x axis runs left to right on screen
-!!    !                     y axis runs up to down on screen
-!!    !                     z axis appears to run into the screen but is angled to the right
+!!    ! A    (R): angle of x axis from horizontal 0-80 degrees
+!!    ! B    (R): angle of z axis from horizontal 5-80 degrees
+!!    !           note: origin (1,1) is in lower-left corner
+!!    !                 x axis runs left to right on screen
+!!    !                 y axis runs up to down on screen
+!!    !                 z axis appears to run into the screen
+!!    !                   but is angled to the right
 !!          iframe=1
 !!          b=15.0
 !!          do i10=1,85   ! Animate cycling thru angle A
@@ -1789,7 +1796,7 @@ data q/1.0,2.0,4.0,5.0,8.0,10.0/
 170 continue
 !
 !     BEFORE EXIT, CHECK TO BE SURE THAT DATA IS CONTAINED WITHIN
-!     THE LIMITS XMIN AND XMIN+DX*S.  IF NOT, RESET DX
+!     THE LIMITS XMIN AND XMIN+DX*S. IF NOT, RESET DX
 !
    if (xmm.lt.xmin) xmin=xmm
    if (xmax.gt.xmin+dx*s) then
@@ -2107,7 +2114,7 @@ subroutine dl_symbol(x,y,s,t,a,nn,is)
 !     WRITTEN BY: D. LONG  JAN 1991,1995   BYU
 !     THIS ROUTINE IS FORTRAN-77 COMPATIBLE WITH THE FOLLOWING
 !     EXCEPTIONS:
-!        1. INTEGER*2 ARRAYS ARE USED TO SAVE SPACE.  THEY MAY
+!        1. INTEGER*2 ARRAYS ARE USED TO SAVE SPACE. THEY MAY
 !           BE REPLACED WITH INTEGER.
 !
 !     MACHINE DEPENDENT NOTES:
@@ -2132,12 +2139,12 @@ subroutine dl_symbol(x,y,s,t,a,nn,is)
 !     IS    (I): centering option flag
 !           = -3 end coordinates of string (if it were to  be
 !                            plotted will be returned in x,y where the input
-!                (x,y) are the lower left corner of string.  This
+!                (x,y) are the lower left corner of string. This
 !                permits computation of the plotted length.
 !                However, no plotting is done and the last position
 !                            variables are not changed.
 !           = -2 end coordinates of string are returned in x,y.
-!                Initial (x,y) to be lower left corner of plotted string.  String is plotted.
+!                Initial (x,y) to be lower left corner of plotted string. String is plotted.
 !           = -1 (x,y) to be lower left corner of plotted string
 !                            (x and y not altered)  String is plotted.
 !           = 0  (x,y) to be center of plotted string
@@ -2145,15 +2152,15 @@ subroutine dl_symbol(x,y,s,t,a,nn,is)
 !                       = 1  (x,y) to be lower right corner of plotted string
 !                            (x and y not altered)  String is plotted.
 !
-! DL_SYMBOL plots an ASCII string in a CHARACTER array.  Each character (or string
+! DL_SYMBOL plots an ASCII string in a CHARACTER array. Each character (or string
 ! of characters) can be imagined as a square box with the origin at the lower
-! left corner.  The routine determines the initial position of the lower
+! left corner. The routine determines the initial position of the lower
 ! left of the first character than plots each character relative to this
-! position.  As each character is plotted the "current position" is moved
-! to the right (along the string baseline) a fixed amount S.  When the
+! position. As each character is plotted the "current position" is moved
+! to the right (along the string baseline) a fixed amount S. When the
 ! string centering option is selected, the length of the plotted string is
 ! determined and, based on the character height, the lower left corner is
-! computed from the input (x,y) position.  The special plot symbols (ASCII
+! computed from the input (x,y) position. The special plot symbols (ASCII
 ! 0-31) are always centered about the current position.
 ! **********************************************************************
 implicit none
@@ -2459,7 +2466,7 @@ integer function dl_inbox(x,y,x_bottom_left,y_bottom_left,x_top_right,y_top_righ
 !     RETURNS ZERO IF IT IS
 !     DL_INBOX tests a point to determine if it lies in a rectangle defined
 !     by <x1,y1>,<x2,y2> and returns an integer value indicating where the point
-!     is in relation to the rectangle.  The value can easily be decoded by
+!     is in relation to the rectangle. The value can easily be decoded by
 !     ANDing the return value with the binary values of 1, 2, 4, 8.
 !
 !           |       |

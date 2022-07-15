@@ -1,6 +1,9 @@
 #!/bin/bash
 #@(#) Makes the binary Hershey font file for M_DRAW
 #
+cd $(dirname $0)
+
+
 FONTLIB=/usr/share/hershey
 FONTLIB=./lib/hershey
 BINDIR=$(dirname $0)/../PROGRAMS/MAKE_HERSHEY

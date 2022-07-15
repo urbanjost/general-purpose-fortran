@@ -6,7 +6,7 @@
       integer                       :: i
       integer                       :: end
 
-      arr=[character(len=20) :: '', 'ZZZ', 'Z', 'aaa', 'b', 'b', 'ab', 'bb', 'xxx' ]
+      arr=[character(len=20) :: '','ZZZ','Z','aaa','b','b','ab','bb','xxx' ]
       ! make sure sorted in descending order
       call sort_shell(arr,order='d')
 

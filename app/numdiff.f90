@@ -727,7 +727,7 @@ end subroutine same8
 subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
-' numdiff(1f) - [DEVELOPER] Compare numeric differences in a file',&
+' numdiff(1f) - [DEVELOPER] Compare numeric differences between two files',&
 ' (LICENSE:PD)',&
 '',&
 'SYNOPSIS',&
@@ -924,7 +924,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '']
 !>
 !!##NAME
-!!  numdiff(1f) - [DEVELOPER] Compare numeric differences in a file
+!!  numdiff(1f) - [DEVELOPER] Compare numeric differences between two files
 !!  (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -1124,7 +1124,7 @@ version_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
 '@(#)PROGRAM:        numdiff(1f)>',&
 '@(#)DESCRIPTION:    compare otherwise essentially identical files for numeric differences.>',&
-'@(#)VERSION:        3.0, 20131201>',&
+'@(#)VERSION:        v3.0.0, 20131201>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&

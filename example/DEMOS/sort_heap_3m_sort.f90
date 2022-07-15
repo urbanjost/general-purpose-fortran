@@ -12,7 +12,9 @@
      rr=rr*450000.0
      ii=rr
      do i=1,size(cc)
-        cc(i)=random_string('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',len(cc))
+        cc(i)=random_string(&
+        & 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', &
+        & len(cc))
      enddo
 
      write(*,*)'checking if real values are sorted(3f)'
@@ -52,7 +54,7 @@
 
      function random_string(chars,length) result(out)
 
-     !$@(#) M_random::random_string(3f): create random string composed of provided characters of specified length
+     !$@(#) M_random::random_string(3f): create random string from provided chars
 
      character(len=*),intent(in)     :: chars
      integer,intent(in)              :: length

@@ -6,8 +6,8 @@ integer,parameter :: f_char=selected_char_kind("DEFAULT")
 public :: valnth
 !>
 !!##NAME
-!!    orderval(3f) - [orderpack:FRACTILE] Return VALUE of Nth ordered element of
-!!                 array, or "fractile of order N/SIZE(array)". (QuickSort-like)
+!!    orderval(3f) - [orderpack:FRACTILE] Return VALUE of Nth ordered
+!!                   element of array (QuickSort-like)
 !!
 !!##SYNOPSIS
 !!

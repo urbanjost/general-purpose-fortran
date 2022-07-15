@@ -1,0 +1,340 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>uniran (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>uniran</B>(3f) - [M_datapac:RANDOM] generate Uniform random numbers
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Input Arguments</A><BR>
+<A HREF=#4>Output Arguments</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>Written By</A><BR>
+<A HREF=#8>Maintainer</A><BR>
+<A HREF=#9>License</A><BR>
+<A HREF=#10>References</A><BR>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+SUBROUTINE <B>UNIRAN</B>(N,Iseed,X)
+<P>
+<PRE>
+       INTEGER,intent(in)        :: N
+       INTEGER,intent(inout)     :: Iseed
+       REAL(kind=wp),intent(out) :: X(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>UNIRAN</B>(3f) generates a random sample of size N from the uniform
+(rectangular) distribution on the unit interval (0,1).
+<P>
+This distribution has mean = 0.5 and standard deviation = <B>sqrt</B>(1/12)
+= 0.28867513. This distribution has the probability density function
+<P>
+<PRE>
+       f(X) = 1
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>INPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+The desired integer number of random numbers to be generated.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ISEED</B> </TD><TD valign=bottom>
+An integer iseed value. Should be set to a non-negative value
+to start a new sequence of values. Will be set to <B>-1</B> on return
+to indicate the next call should continue the current random
+sequence walk.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OUTPUT ARGUMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>X</B> </TD><TD valign=bottom>
+A vector (of dimension at least N) into which the generated
+random sample of size N from the rectangular distribution on
+(0,1) will be placed.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_uniran
+   use M_datapac, only : uniran, plotxt, sort, label
+   implicit none
+   integer,parameter :: n=400
+   real :: x(n)
+   integer :: iseed
+      call label(&#146;uniran&#146;)
+      iseed=1234
+      call UNIRAN(n,Iseed,X)
+      call plotxt(x,n) ! plot random values
+      call sort(x,n,x) ! sort values
+      call plotxt(x,n) ! should display the f(x)=1 nature
+                       ! of the distribution
+   end program demo_uniran
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    THE FOLLOWING IS A PLOT OF X(I) (VERTICALLY) VERSUS I (HORIZONTALLY
+                      I-----------I-----------I-----------I-----------I
+     0.9982013E+00 -   X    X           X                X  X    X X
+     0.9566447E+00 I          X    XX       X XX XXXX X       XX
+     0.9150882E+00 I     X  XXXX  X  XXXX X  X X X  X   XX X         X
+     0.8735316E+00 I   XX      XXX XX    XXXXXX X    X   X  X   X
+     0.8319750E+00 I       XXX  X   X  X  X X      XX     X  X     X
+     0.7904184E+00 I   XXX       XX    X   X            X X    X   XXX
+     0.7488618E+00 -   X XX X X X  X     X     X   X      X X   XXX  X
+     0.7073053E+00 I  X      X  X  X  X   X  X  X  X   X X          X
+     0.6657487E+00 I      X     XXX   X  XX  XXX X   X   X  X X    X  X
+     0.6241921E+00 I  X  X    X   X    XX  X             X   X     X
+     0.5826355E+00 I      X        X  X          XX X X       X X X
+     0.5410789E+00 I      XX   X     XX X      X     XXX XX X       X
+     0.4995224E+00 -   X    X        XX         X  XXX     XX
+     0.4579658E+00 I  XXX   X  XXX     X X  X XX XX X  X           X  X
+     0.4164092E+00 I     XX X  X      X X       X       X      X  X X
+     0.3748527E+00 I         XX XX  XX   X X   XX XX XX X           X
+     0.3332961E+00 I   X  XXX          X X  X         X X  XXXX  X  X
+     0.2917395E+00 I          X  X    X   X X    X XX         XX XX  X
+     0.2501829E+00 -    XX       XXX X     X       X   X   XX XXXX   X
+     0.2086263E+00 I  X  X X  X         X     X     XX    X       X  XX
+     0.1670697E+00 I    X  X X      XX X   XX     XX XXX   X   X XXX  X
+     0.1255132E+00 I           X XXX X  X               X    X XX X
+     0.8395660E-01 I   X X X   X    XX    X X X X     X X         X XX
+     0.4240000E-01 I    X    XX    X      X  X X X          X    X X  X
+     0.8433913E-03 -         X                       X X     X  X
+                      I-----------I-----------I-----------I-----------I
+               0.1000E+01  0.1008E+03  0.2005E+03  0.3002E+03  0.4000E+03
+<P>
+    THE FOLLOWING IS A PLOT OF X(I) (VERTICALLY) VERSUS I (HORIZONTALLY
+                      I-----------I-----------I-----------I-----------I
+     0.9982013E+00 -                                                 XX
+     0.9566447E+00 I                                               XXX
+     0.9150882E+00 I                                            XXXX
+     0.8735316E+00 I                                          XXX
+     0.8319750E+00 I                                        XXX
+     0.7904184E+00 I                                      XXX
+     0.7488618E+00 -                                    XXX
+     0.7073053E+00 I                                  XXX
+     0.6657487E+00 I                               XXX
+     0.6241921E+00 I                              XX
+     0.5826355E+00 I                            XXX
+     0.5410789E+00 I                          XXX
+     0.4995224E+00 -                         XX
+     0.4579658E+00 I                      XXXX
+     0.4164092E+00 I                     XX
+     0.3748527E+00 I                   XXX
+     0.3332961E+00 I                XXX
+     0.2917395E+00 I               XX
+     0.2501829E+00 -            XXXX
+     0.2086263E+00 I           XX
+     0.1670697E+00 I        XXXX
+     0.1255132E+00 I      XXX
+     0.8395660E-01 I    XXX
+     0.4240000E-01 I   XX
+     0.8433913E-03 -  X
+                      I-----------I-----------I-----------I-----------I
+               0.1000E+01  0.1008E+03  0.2005E+03  0.3002E+03  0.4000E+03
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+The original DATAPAC library was written by James Filliben of the
+Statistical Engineering Division, National Institute of Standards
+and Technology.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>WRITTEN BY</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+James Blue
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+            Scientific Computing Division
+            Center for Applied Mathematics
+            National Bureau of Standards
+            Washington, D. C. 20234
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+David Kahaner
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+            Scientific Computing Division
+            Center for Applied Mathematics
+            National Bureau of Standards
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+George Marsaglia
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+            Computer Science Department
+            Washington State University
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+James J. Filliben
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+            Statistical Engineering Division
+            Center for Applied Mathematics
+            National Bureau of Standards
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.05.31
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Marsaglia G., "Comments on the Perfect Uniform Random Number
+Generator", Unpublished Notes, Wash S. U.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Johnson and Kotz, Continuous Univariate Distributions-<B>-2</B>, 1970,
+pages 57-74.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>uniran (3)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e8700d47-b304-4e5a-b771-5d381fce3f2d using man macros.</FONT>
+<br><br><center><img src="images/uniran.3m_datapac.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

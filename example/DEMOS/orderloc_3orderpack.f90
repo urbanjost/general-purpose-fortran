@@ -22,11 +22,4 @@
            write(*,sp,advance='no') iarr(orderloc(iarr,i))
         enddo
         print *
-     contains
-     subroutine printme(n)
-     integer,intent(in) :: n
-     integer :: ii
-        ii=orderloc(iarr,n)
-        print sp,'nord=',n,' index=',ii,' fractile=',iarr(ii)
-     end subroutine printme
      end program demo_orderloc

@@ -11,7 +11,8 @@
 
 !>
 !!##NAME
-!!    M_pixel(3f) - [M_pixel::INTRO] module for drawing into a pixel array with 2D vector operations
+!!    M_pixel(3f) - [M_pixel::INTRO] module for drawing into a pixel array
+!!                  with 2D vector operations
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -37,11 +38,12 @@
 !!    use :: M_pixel, only : hue
 !!
 !!    ! Differences between M_pixel and M_draw and M_draw-related procedures:
-!!    !    hershey(3f) and justfy(3f) do not exist in M_draw and might be replaced
-!!    !    and the same font names are not available
-!!    !    print_ansi, print_ascii(3f) and print_ppm|p3|p6(3f) do not exist in M_draw
-!!    !    state(3f) does not exist in M_draw
-!!    !    viewport is in terms of pixels, not range -1.0 to 1.0
+!!    !  o  hershey(3f) and justfy(3f) do not exist in M_draw and might be
+!!    !     replaced and the same font names are not available
+!!    !  o  print_ansi, print_ascii(3f) and print_ppm|p3|p6(3f) do not
+!!    !     exist in M_draw
+!!    !  -  state(3f) does not exist in M_draw
+!!    !  -  viewport is in terms of pixels, not range -1.0 to 1.0
 !!
 !!   Module variables
 !!
@@ -2279,7 +2281,8 @@ end subroutine draw_line_single
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    hershey(3f) - [M_pixel:TEXT] draw text string as Hershey software vector fonts
+!!    hershey(3f) - [M_pixel:TEXT] draw text string as Hershey software
+!!                  vector fonts
 !!    (LICENSE:PD
 !!
 !!##SYNOPSIS
@@ -2370,9 +2373,11 @@ end subroutine draw_line_single
 !!    by \BS\. This is useful, for example, in writing integral signs with
 !!    limits above and below them.
 !!
-!!    Symbol parameters taken from N.M.Wolcott, FORTRAN IV Enhanced Character Graphics, NBS
+!!    Symbol parameters taken from N.M.Wolcott, FORTRAN IV Enhanced Character
+!!    Graphics, NBS
 !!
-!!    A. CHAVE IGPP/UCSD Aug 1981, Modified Feb 1982 by A. Chave, R.L. Parker, and L. Shure
+!!    A. CHAVE IGPP/UCSD Aug 1981, Modified Feb 1982 by A. Chave,
+!!    R.L. Parker, and L. Shure
 !!
 !!    programmed in FORTRAN-77
 !!
@@ -3037,7 +3042,8 @@ end function strlength
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    justfy(3f) - [M_pixel:TEXT] return lengths used to justify a string when calling hershey
+!!    justfy(3f) - [M_pixel:TEXT] return lengths used to justify a string
+!!                 when calling hershey
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -3116,16 +3122,18 @@ subroutine justfy(s, height, text, ntext)
 !  sum the widths of the remaining text, recalling that trailing blanks
 !  were lopped off by chrcod.
       oldwid=0.0
-      do i=lead,P_nchr
-         l=P_ichr(i)
-         if (l.lt.1000) then
-           oldwid=width(l)*scale
-           s(3)=s(3) + oldwid
-         endif
-         if(l.eq.1000)s(3)=s(3)+20.0*scale
-         if(l.ge.1001.and.l.le.1003)scale=scale*factor**ipower(l-1000)
-         if(l.eq.1004)s(3)=s(3)-oldwid
-      enddo
+      if(lead.ne.0)then
+         do i=lead,P_nchr
+            l=P_ichr(i)
+            if (l.lt.1000) then
+              oldwid=width(l)*scale
+              s(3)=s(3) + oldwid
+            endif
+            if(l.eq.1000)s(3)=s(3)+20.0*scale
+            if(l.ge.1001.and.l.le.1003)scale=scale*factor**ipower(l-1000)
+            if(l.eq.1004)s(3)=s(3)-oldwid
+         enddo
+      endif
 !
 !  add on width of surplus trailing blanks.
       s(4)=s(3)+20.0*scale*(ntxt-P_nchr)
@@ -3229,7 +3237,8 @@ end subroutine polyline2
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    clear(3f) - [M_pixel] clear background to current color or specified color index
+!!    clear(3f) - [M_pixel] clear background to current color or specified
+!!                color index
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -3803,7 +3812,6 @@ end subroutine color
 !!       call write_animated_gif('mapcolor.3m_pixel.gif',movie,P_colormap,delay=40)
 !!       call vexit()
 !!    contains
-!!    !=======================================================================--------
 !!    subroutine wheel() ! draw an entire wheel
 !!       character(len=40) :: inline
 !!       real              :: hue_val
@@ -3831,7 +3839,6 @@ end subroutine color
 !!       enddo
 !!       call centertext(.false.)
 !!    end subroutine wheel
-!!    !=======================================================================--------
 !!    subroutine slice(hue_val) ! draw a slice
 !!    integer           :: buffer
 !!    real              :: hue_val, ang_inc
@@ -3877,7 +3884,8 @@ end subroutine color
 !!       ! draw a chunk in a slice
 !!       MAXCOLORS=(256)-buffer
 !!       do icount=RINGS+1,2,-1
-!!          CURRENT_COLOR=MOD(color_count,MAXCOLORS)+buffer  ! add buffer to leave base colors alone
+!!          ! add buffer to leave base colors alone
+!!          CURRENT_COLOR=MOD(color_count,MAXCOLORS)+buffer
 !!          color_count=color_count+1
 !!          ! fancy mapcolor
 !!          call hue("hls",hue_val,LIGHTNESS,saturation,"rgb",r,g,b,status)
@@ -3943,7 +3951,8 @@ end subroutine mapcolor
 !==================================================================================================================================!
 !>
 !!##NAME
-!!     circleprecision(3f) - [M_pixel:ARCS] set number of line segments used to approximate a circle
+!!     circleprecision(3f) - [M_pixel:ARCS] set number of line segments
+!!                           used to approximate a circle
 !!     (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -4168,7 +4177,8 @@ end subroutine viewport
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    mapping(3fp) - [M_pixel] calculate conversion factors between viewport and world window
+!!    mapping(3fp) - [M_pixel] calculate conversion factors between viewport
+!!                   and world window
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -4242,7 +4252,8 @@ end subroutine viewport2world
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    ortho2(3f) - [M_pixel] define the area of the virtual world coordinates to map to the viewport
+!!    ortho2(3f) - [M_pixel] define the area of the virtual world coordinates
+!!                 to map to the viewport
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -4284,7 +4295,8 @@ end subroutine ortho2
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    page(3f) - [M_pixel] define the area of the virtual world coordinates to map to the viewport
+!!    page(3f) - [M_pixel] define the area of the virtual world coordinates
+!!               to map to the viewport
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -4954,7 +4966,8 @@ end subroutine vinit
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    makepoly(3f) - [M_pixel:POLYGONS] opens polygon constructed by a series of move-draws and closed by closepoly                  |
+!!    makepoly(3f) - [M_pixel:POLYGONS] opens polygon constructed by a
+!!                   series of move-draws and closed by closepoly
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -4985,16 +4998,20 @@ end subroutine vinit
 !!       call prefsize(wide,tall)
 !!       call vinit()
 !!       call ortho2(0.0, real(wide), 0.0, real(tall) )
-!!       ! call linewidth(3) ! really slows down pbm driver because all lines are polygons
+!!       ! call linewidth(3) Note:
+!!       ! really slows down pbm driver because all lines are polygons
 !!       call color(7)
 !!       call clear()
 !!       call color(0)
 !!       rows=1
-!!       box_sz=MIN(wide,tall)/rows       ! size of biggest box to use and get specified number of rows
+!!       box_sz=MIN(wide,tall)/rows       ! size of biggest box to use
+!!                                        ! and get specified number of rows
 !!       nrows = tall/box_sz              ! number of rows of objects to draw
 !!       ncols = wide/box_sz              ! number of columns of objects to draw
-!!       xoff = (wide - ncols * box_sz)/2 ! initial x offset to begin row at to center drawings
-!!       yoff = (tall - nrows * box_sz)/2 ! initial x offset to begin column at to center drawings
+!!       xoff = (wide - ncols * box_sz)/2 ! initial x offset to begin row at
+!!                                        ! to center drawings
+!!       yoff = (tall - nrows * box_sz)/2 ! initial x offset to begin column
+!!                                        ! at to center drawings
 !!       sun_radius = 148
 !!       planet_radius = 1
 !!       do ilines = 1, 300
@@ -5018,23 +5035,31 @@ end subroutine vinit
 !!          write(filename,'("hypoc.",i0,".gif")')ilines
 !!          !!call writegif(filename,P_pixel,P_colormap)
 !!       enddo
-!!       call write_animated_gif('makepoly.3m_pixel.gif',movie,P_colormap,delay=70)
+!!       call write_animated_gif('makepoly.3m_pixel.gif',&
+!!               movie,P_colormap,delay=70)
 !!       call vexit()
 !!    contains
 !!    !
 !!    !  Make shapes using hypocycloidal curves.
 !!    !
-!!    subroutine hypoc(xcenter,ycenter,sunr0,planet0,offset0,radius,ilines,ang,angs,ifill)
+!!    subroutine hypoc(xcenter,ycenter,sunr0,planet0,offset0,&
+!!                    radius,ilines,ang,angs,ifill)
 !!    use M_pixel
 !!    implicit none
-!!    real,parameter     :: PI= 3.14159265358979323846264338327950288419716939937510
+!!    real,parameter     :: PI=3.14159265358979323846264338327950288419716939937510
 !!    real,intent(in)    :: xcenter, ycenter      ! center of curve
-!!    real,intent(in)    :: sunr0,planet0,offset0 ! radii of sun, planet, and planet offset
-!!    real,intent(in)    :: radius                ! radius to fit the shape to (no fit if radius is 0)
-!!    integer,intent(in) :: ilines                ! number of points to sample along curve
-!!    real,intent(in)    :: ang                   ! angle to rotate the shape by, to orientate it.
-!!    real,intent(in)    :: angs                  ! angle to start sampling points at; ccw is +; 0 is East
-!!    integer,intent(in) :: ifill                 ! 1 make a filled polygon, 2 make a hatched polygon
+!!    real,intent(in)    :: sunr0,planet0,offset0 ! radii of sun, planet,
+!!                                                ! and planet offset
+!!    real,intent(in)    :: radius                ! radius to fit the shape to
+!!                                                ! (no fit if radius is 0)
+!!    integer,intent(in) :: ilines                ! number of points to sample
+!!                                                ! along curve
+!!    real,intent(in)    :: ang                   ! angle to rotate the shape by,
+!!                                                ! to orientate it.
+!!    real,intent(in)    :: angs                  ! angle to start sampling points
+!!                                                ! at; ccw is +; 0 is East
+!!    integer,intent(in) :: ifill                 ! 1 make a filled polygon,
+!!                                                ! 2 make a hatched polygon
 !!    integer            :: i10
 !!    real               :: ang1, con1, con2, factor
 !!    real               :: offset, planet, r, sunr, u
@@ -5102,7 +5127,8 @@ end subroutine makepoly
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    closepoly(3f) - [M_pixel:POLYGONS] Terminates a polygon opened by makepoly(3f)
+!!    closepoly(3f) - [M_pixel:POLYGONS] Terminates a polygon opened by
+!!                    makepoly(3f)
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -5489,44 +5515,44 @@ end subroutine print_ansi
 !!    program demo_print_ascii
 !!    use M_pixel
 !!    implicit none
-!!    call prefsize(80,24)
+!!    call prefsize(65,24)
 !!       call vinit()
-!!       call ortho2(0.0,80.0,0.0,24.0)
+!!       call ortho2(0.0,65.0,0.0,24.0)
 !!       call linewidth(400)
 !!       call color(1)
 !!       call circle(12.0,12.0,6.0)
 !!       call color(2)
-!!       call circle(72.0,12.0,6.0)
+!!       call circle(55.0,12.0,6.0)
 !!       call print_ascii()
 !!       call vexit()
 !!    end program demo_print_ascii
 !!
 !!   Results:
 !!
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000000111000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000111111110000000000000000000000000000000000000000000000000000022222000000
-!!    00000001111111111000000000000000000000000000000000000000000000000002222222220000
-!!    00000001111001111100000000000000000000000000000000000000000000000022222222222000
-!!    00000011100000011110000000000000000000000000000000000000000000000222200000222200
-!!    00000111100000001111000000000000000000000000000000000000000000000222000000022200
-!!    00000111000000000111000000000000000000000000000000000000000000002220000000002220
-!!    00000111000000000111000000000000000000000000000000000000000000002220000000002220
-!!    00000111000000000111000000000000000000000000000000000000000000002220000000002220
-!!    00000111000000000111000000000000000000000000000000000000000000002220000000002220
-!!    00000111100000001110000000000000000000000000000000000000000000002222000000022220
-!!    00000011110000011110000000000000000000000000000000000000000000000222000000022200
-!!    00000001111111111100000000000000000000000000000000000000000000000020220002202000
-!!    00000000111111111000000000000000000000000000000000000000000000000002222222220000
-!!    00000000011111100000000000000000000000000000000000000000000000000000222222200000
-!!    00000000000000000000000000000000000000000000000000000000000000000000002220000000
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
-!!    00000000000000000000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000011100000000000000000000000000000000000000000000000000
+!!    00000000001111111000000000000000000000000000000000000222222000000
+!!    00000000011101111100000000000000000000000000000000022222222200000
+!!    00000000100000011010000000000000000000000000000000220000022220000
+!!    00000001100000000110000000000000000000000000000002200000002220000
+!!    00000011000000000111000000000000000000000000000002000000000202000
+!!    00000011000000000111000000000000000000000000000022000000000022000
+!!    00000011000000000011000000000000000000000000000022000000000022000
+!!    00000011000000000011000000000000000000000000000022000000000022000
+!!    00000011100000000110000000000000000000000000000020200000000022000
+!!    00000011100000000110000000000000000000000000000002200000000220000
+!!    00000001011000001100000000000000000000000000000002022000000200000
+!!    00000000111111111000000000000000000000000000000000222220222000000
+!!    00000000011111100000000000000000000000000000000000022222220000000
+!!    00000000000000000000000000000000000000000000000000000222000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
+!!    00000000000000000000000000000000000000000000000000000000000000000
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -5731,7 +5757,8 @@ end subroutine textsize
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    ycentertext(3f) - [M_pixel:TEXT] set text centering mode on for drawstr(3f) and drawc(3f) in Y direction
+!!    ycentertext(3f) - [M_pixel:TEXT] set text centering mode on for
+!!                      drawstr(3f) and drawc(3f) in Y direction
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -5766,7 +5793,8 @@ end subroutine ycentertext
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    xcentertext(3f) - [M_pixel:TEXT] set text centering mode on for drawstr(3f) and drawc(3f) in X direction
+!!    xcentertext(3f) - [M_pixel:TEXT] set text centering mode on for
+!!                      drawstr(3f) and drawc(3f) in X direction
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -5805,7 +5833,8 @@ end subroutine xcentertext
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    centertext(3f) - [M_pixel:TEXT] set text centering mode for drawstr(3f) and drawc(3f)
+!!    centertext(3f) - [M_pixel:TEXT] set text centering mode for drawstr(3f)
+!!                     and drawc(3f)
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -5912,8 +5941,8 @@ end subroutine centertext
 !!
 !!##OPTIONS
 !!    ANG   The angle in degrees to draw text with when using drawstr(3f).
-!!          Angles are measured counterclockwise with zero degrees at the horizontal
-!!          line to the right of the original.
+!!          Angles are measured counterclockwise with zero degrees at the
+!!          horizontal line to the right of the original.
 !!
 !!##EXAMPLE
 !!
@@ -6356,7 +6385,8 @@ end subroutine getgp2
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    getdisplaysize(3f) - [M_pixel] Returns the width and height of the device in pixels
+!!    getdisplaysize(3f) - [M_pixel] Returns the width and height of the
+!!                         device in pixels
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -6484,10 +6514,10 @@ end subroutine point2
 !!    FONT:               SIMPLEX
 !!    COLOR NUMBER:                  1
 !!    CIRCLE PRECISION:             60
-!!    TEXT:               HEIGHT=   10.0000000     WIDTH=   7.00000000     ANGLE=   0.00000000
+!!    TEXT:               HEIGHT=   10.000  WIDTH= 7.0000 ANGLE= 0.0000
 !!    TEXT JUSTIFICATION: X_CENTER= F Y_CENTER= F
-!!    VIEWPORT:           LEFT=   0.00000000     RIGHT=   639.000000     BOTTOM=   399.000000     TOP=   0.00000000
-!!    WINDOW:             LEFT=   0.00000000     RIGHT=   640.000000     BOTTOM=   0.00000000     TOP=   400.000000
+!!    VIEWPORT:           LEFT=   0.0000  RIGHT= 639.00 BOTTOM= 399.00 TOP= 0.0000
+!!    WINDOW:             LEFT=   0.0000  RIGHT= 640.00 BOTTOM= 0.0000 TOP= 400.00
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -6500,6 +6530,7 @@ recursive subroutine state(string)
 
 character(len=*),intent(in),optional :: string
 character(len=40)         :: string_local
+character(len=*),parameter :: g='(*(g0))'
 integer :: i
 
 if(present(string))then
@@ -6516,20 +6547,20 @@ case ('all')
    call state('default')
 !-----------------------------------------------------------------------------------------------------------------------------------
 case ('colormap','color')
-write(*,*)'COLOR MAP:          ',new_line('n'),(i,P_COLORMAP(:,i),new_line('n'),i=0,255)
+write(*,g)'COLOR MAP:          ',new_line('n'),(i,P_COLORMAP(:,i),new_line('n'),i=0,255)
 !-----------------------------------------------------------------------------------------------------------------------------------
 case default
-write(*,*)'VINIT CALLED:       ',P_VINIT_CALLED
-write(*,*)'PREFSIZE: WIDTH=',P_VIEWPORT_WIDTH,' HEIGHT=',P_VIEWPORT_HEIGHT
-write(*,*)'CURRENT POSITION: X=',P_X,' Y=',P_Y
-write(*,*)'LINE WIDTH:         ',P_WIDTH
-write(*,*)'FONT:               ',P_FONT
-write(*,*)'COLOR NUMBER:       ',P_COLOR_INDEX
-write(*,*)'CIRCLE PRECISION:   ',P_NSEGS
-write(*,*)'TEXT:               ','HEIGHT=',P_TEXT_HEIGHT,'WIDTH=',P_TEXT_WIDTH,'ANGLE=',P_TEXT_ANGLE
-write(*,*)'TEXT JUSTIFICATION: ','X_CENTER=',P_X_CENTERTEXT,'Y_CENTER=',P_Y_CENTERTEXT
-write(*,*)'VIEWPORT:           ','LEFT=',P_VIEWPORT_LEFT,'RIGHT=',P_VIEWPORT_RIGHT,'BOTTOM=',P_VIEWPORT_BOTTOM,'TOP=',P_VIEWPORT_TOP
-write(*,*)'WINDOW:             ','LEFT=',P_WINDOW_LEFT,'RIGHT=',P_WINDOW_RIGHT,'BOTTOM=',P_WINDOW_BOTTOM,'TOP=',P_WINDOW_TOP
+write(*,g)'VINIT CALLED:       ',P_VINIT_CALLED
+write(*,g)'PREFSIZE: WIDTH=    ',P_VIEWPORT_WIDTH,' HEIGHT=',P_VIEWPORT_HEIGHT
+write(*,g)'CURRENT POSITION: X=',P_X,' Y=',P_Y
+write(*,g)'LINE WIDTH:         ',P_WIDTH
+write(*,g)'FONT:               ',P_FONT
+write(*,g)'COLOR NUMBER:       ',P_COLOR_INDEX
+write(*,g)'CIRCLE PRECISION:   ',P_NSEGS
+write(*,g)'TEXT:               ','HEIGHT=',P_TEXT_HEIGHT,'WIDTH=',P_TEXT_WIDTH,'ANGLE=',P_TEXT_ANGLE
+write(*,g)'TEXT JUSTIFICATION: ','X_CENTER=',P_X_CENTERTEXT,'Y_CENTER=',P_Y_CENTERTEXT
+write(*,g)'VIEWPORT:           ','LEFT=',P_VIEWPORT_LEFT,'RIGHT=',P_VIEWPORT_RIGHT,'BOTTOM=',P_VIEWPORT_BOTTOM,'TOP=',P_VIEWPORT_TOP
+write(*,g)'WINDOW:             ','LEFT=',P_WINDOW_LEFT,'RIGHT=',P_WINDOW_RIGHT,'BOTTOM=',P_WINDOW_BOTTOM,'TOP=',P_WINDOW_TOP
 !-----------------------------------------------------------------------------------------------------------------------------------
 end select
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -6598,11 +6629,12 @@ end subroutine state
 !!       points(1:2,3)=[xx+16.0, yy+16.0 ]
 !!       points(1:2,4)=[xx+16.0, yy      ]
 !!       points(1:2,5)=[xx,      yy      ]
-!!       ! get some nice RGB values to try from named colors known by M_pixel module
+!!       ! get some nice RGB values to try from named colors known by M_pixel
 !!       call color_name2rgb(i2s(icolor),red,green,blue,echoname)
 !!       if(echoname.eq.'Unknown') return
 !!       ! set a color number to the new RGB values
-!!       write(*,*)icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55),trim(echoname)
+!!       write(*,*)icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55),&
+!!              & trim(echoname)
 !!       call mapcolor(icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55))
 !!       ! set to the new color
 !!       call color(icolor)
@@ -7286,7 +7318,8 @@ end function anyscalar_to_double
 
 !>
 !!##NAME
-!!    HUE(3f) - [M_pixel:COLOR] converts a color's components from one color model to another
+!!    HUE(3f) - [M_pixel:COLOR] converts color components from one color
+!!              model to another
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -7969,8 +8002,8 @@ end subroutine rgbyiq
 !===================================================================================================================================
 !>
 !!##NAME
-!!     closest_color_name(3f) - [M_pixel:COLOR] returns the closest name for the
-!!     given RGB values.
+!!     closest_color_name(3f) - [M_pixel:COLOR] returns the closest name
+!!     for the given RGB values.
 !!     (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -8051,7 +8084,8 @@ end SUBROUTINE closest_color_name
 !===================================================================================================================================
 !>
 !!##NAME
-!!     COLOR_NAME2RGB(3f) - [M_pixel:COLOR] returns the RGB values in the range 0 to 100 for a given known color name.
+!!     COLOR_NAME2RGB(3f) - [M_pixel:COLOR] returns the RGB values in the
+!!                          range 0 to 100 for a given known color name.
 !!     (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -8706,7 +8740,8 @@ end function lower
 !===================================================================================================================================
 !>
 !!##NAME
-!!     polar_to_cartesian(3f) - [M_pixel:TRIGONOMETRY] convert polar coordinates to Cartesian coordinates
+!!     polar_to_cartesian(3f) - [M_pixel:TRIGONOMETRY] convert polar
+!!                              coordinates to Cartesian coordinates
 !!     (LICENSE:PD)
 !!
 !!##SYNOPSIS

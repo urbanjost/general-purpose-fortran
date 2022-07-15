@@ -216,7 +216,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 'LICENSE                                                                                                                         ',&
 '   Public Domain                                                                                                                ',&
 '']
-   WRITE(stdout,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
@@ -424,9 +424,9 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180408>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2022-04-24 12:35:54 UTC-240>',&
+'@(#)COMPILED:       2022-07-15 10:00:14 UTC-240>',&
 '']
-   WRITE(stdout,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version

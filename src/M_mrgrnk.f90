@@ -27,8 +27,8 @@ public :: mrgrnk
 !!     RANK(3f) ranks an input array; i.e. it produces an index of the input
 !!     array elements that can order the input array in ascending order.
 !!
-!!     The ranks can be used to sort the input array, or other associated arrays
-!!     or components of user types.
+!!     The ranks can be used to sort the input array, or other associated
+!!     arrays or components of user types.
 !!
 !!     Internally, it uses an optimized and modified version of merge-sort.
 !!     For performance reasons, the first two passes are taken out of the
