@@ -61,6 +61,57 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!      phone(1f) - [M_sqlite] create, change and query SQLite3 database containing phone numbers
+!!      (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!  phone [ -db file] ...
+!!   [
+!!     -name proper_name
+!!     -home phone_number
+!!     -work phone_number
+!!     -cell phone_number
+!!     -email name@address
+!!     -comment Comments
+!!   ]
+!!
+!!  phone -do SQLite3_command [ -db database_filename]
+!!  phone -schema [ -db database_filename]
+!!  phone -debug .... other_options
+!!  phone -help|-version
+!!  phone match
+!!
+!!##DESCRIPTION
+!!
+!!  Experimental program being used to work with the M_sqlite(3fm) module.
+!!
+!!  Add entries into table "rolodex" to create a simple phone book SQLite database.
+!!  Use SQL directives to query the database.
+!!
+!!  Default database file is "phone.db". It would be $HOME/.db/phone.db" except hitting a bug.
+!!
+!!  phone 'SELECT * FROM rolodex;'
+!!  phone 'SELECT * FROM rolodex WHERE name LIKE "%Smith%";'
+!!
+!!  phone -do .  # loop reading SQL directives from input until ".quit" is entered.
+!!
+!!     select * from rolodex;
+!!     select name,home from rolodex;
+!!     select name,home from rolodex where lower(name) like '%smith%';
+!!     .quit
+!!
+!!     select 3.0/4.0 as 'answer'
+!!     sqlite> SELECT sqlite_version() AS 'SQLite Version'; # get SQLite version
+!!
+!!##EXAMPLE
+!!
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -77,7 +128,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180318>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2022-07-15 10:00:43 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:35:51 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

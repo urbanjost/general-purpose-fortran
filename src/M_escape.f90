@@ -588,7 +588,7 @@ end function esc
 !!    Public Domain
 function color(string,fg,bg,style) result (out)
 
-! ident_1="@(#)use the color string constants, optionally ignoring them if G_switch is .false. as set by color_mode(3f)"
+! ident_1="@(#) use the color string constants optionally ignoring them if G_switch is .false. as set by color_mode(3f)"
 
 character(len=*),intent(in)          :: string
 character(len=*),intent(in),optional :: fg

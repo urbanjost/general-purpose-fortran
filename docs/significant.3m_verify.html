@@ -1,0 +1,165 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<h5><a href="index.html">[UP]</a></h5>
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>significant (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>significant</B>(3f) - [M_verify] round val to specified number of significant digits
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+pure elemental function <B>significant</B>(val,digits,round)
+<P>
+<PRE>
+     real,intent(in)                      :: val
+     integer,intent(in)                   :: digits
+     character(len=*),intent(in),optional :: round
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Round real value to specified number of significant digits
+<TABLE cellpadding=3><!-- tsb: Round real value to specified number of significant digits
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>val</B> </TD><TD valign=bottom>
+value to round
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>digits</B> </TD><TD valign=bottom>
+number of significant digits to produce
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>round</B> </TD><TD valign=bottom>
+Use the round edit descriptor
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+          RU  UP : the value resulting from conversion shall be the
+                   smallest representable value that is greater than or
+                   equal to the original value
+          RD  DOWN : the value resulting from conversion shall be the
+                   largest representable value that is less than or
+                   equal to the original value
+          RZ  ZERO : the value resulting from conversion shall be the value
+                   closest to the original value and no greater in
+                   magnitude than the original value.
+          RN  NEAREST : modeis NEAREST,thevalueresulting from conversion
+                       shall be the closer of the two nearest
+                       representable values if one is closer than the
+                       other. If the two nearest representable values
+                       are equidistant from the original value, it is
+                       processor dependent which one of them is chosen.
+          RC  COMPATIBLE : the value resulting from conversion shall be
+                         the closer of the two nearest representable
+                         values or the value away from zero if halfway
+                         between them.
+          RP  PROCESSOR_DEFINED : rounding during conversion shall be
+                                  a processor-dependent default mode,
+                                  which may correspond to one of the
+                                  other modes.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_significant
+   use M_verify, only : significant
+   implicit none
+   integer :: i
+   real :: r, v
+   character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+<P>
+      write(*,g)significant([8765.43210,0.1234567890],5)
+<P>
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#146;RU&#146;),&#146;RU&#146;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#146;RD&#146;),&#146;RD&#146;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#146;RZ&#146;),&#146;RZ&#146;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#146;RN&#146;),&#146;RN&#146;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#146;RC&#146;),&#146;RC&#146;
+      write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],&#146;RP&#146;),&#146;RP&#146;
+</PRE>
+end program demo_significant
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>significant (3)</TD> <TD align=right width=33%><I>August 14, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f9e8bfad-1d98-4e5b-848d-f25fb1d9b914 using man macros.</FONT>
+<br><br><center><img src="images/significant.3m_verify.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -34,7 +34,7 @@ use M_calculator, only : dnum0
 use m_readline,   only : system_readline
 !-----------------------------------------------------------------------------------------------------------------------------------
    implicit NONE
-! ident_1="@(#)line mode calculator program (that calls calculator(3f),cond(3f),M_history(3f),M_kracken(3f),M_pixel(3f))"
+! ident_1="@(#) line mode calculator program (that calls calculator(3f) cond(3f) M_history(3f) M_kracken(3f) M_pixel(3f))"
 
    integer,parameter             :: dp=kind(0.0d0)         ! calculator returns double precision values
    character(len=:),allocatable  :: scratch                ! numeric value as a string returned by calculator
@@ -277,7 +277,7 @@ use :: M_pixel, only : polyline2       ! [M_pixel] connect points with lines
 
 use :: M_writegif,        only : writegif
 !-----------------------------------------------------------------------------------------------------------------------------------
-! ident_2="@(#)pixel(3fp):parse M_pixel(3fm) module routines in shell(1)"
+! ident_2="@(#) pixel(3fp) parse M_pixel(3fm) module routines in shell(1)"
 integer :: ifound
 !-----------------------------------------------------------------------------------------------------------------------------------
       select case(linet(:ii))                               ! using verb (first word) select an action
@@ -915,7 +915,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-07-15 10:01:01 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:36:07 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

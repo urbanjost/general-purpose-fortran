@@ -317,6 +317,7 @@ subroutine dissect(verb,init,pars,ipars,error_return)
       character(len=IPvalue)       :: varvalue        ! value of environment variable
       integer                      :: ipars2
 !-----------------------------------------------------------------------------------------------------------------------------------
+      ier=0
       call store(trim(verb)//'_?','.false.',"add",ier)  ! all commands have the option -? to invoke prompt mode
       call parse(trim(verb),init,"add") ! initialize command
 !-----------------------------------------------------------------------------------------------------------------------------------

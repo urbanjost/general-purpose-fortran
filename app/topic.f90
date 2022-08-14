@@ -29,7 +29,7 @@ use M_regex,   only : regex_type, regcomp, regexec, regmatch, regfree
 use M_strings,only : upper
 implicit none
 
-! ident_1="@(#)helpg(3f): a simple help utility"
+! ident_1="@(#) helpg(3f) a simple help utility"
 
 character(len=*),intent(in)   :: topic0      ! topic name to location
 character(len=*),intent(in)   :: search0     ! search body of text for this string
@@ -502,7 +502,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        2.5, 20130818  Updated and made a seperate program instead of a subroutine>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2022-07-15 10:00:39 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:35:47 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -1353,7 +1353,7 @@ end subroutine f_handler
 elemental impure function system_access(pathname,amode)
 implicit none
 
-! ident_1="@(#)M_system::system_access(3f): checks accessibility or existence of a pathname"
+! ident_1="@(#) M_system system_access(3f) checks accessibility or existence of a pathname"
 
 character(len=*),intent(in) :: pathname
 integer,intent(in)          :: amode
@@ -1486,7 +1486,7 @@ end function system_access
 function system_utime(pathname,times)
 implicit none
 
-! ident_2="@(#)M_system::system_utime(3f): set access and modification times of a pathname"
+! ident_2="@(#) M_system system_utime(3f) set access and modification times of a pathname"
 
 character(len=*),intent(in) :: pathname
 integer,intent(in),optional :: times(2)
@@ -1612,7 +1612,7 @@ end function timestamp
 !!   NotThere=>NotThere
 function system_realpath(input) result(string)
 
-! ident_3="@(#)M_system::system_realpath(3f):call realpath(3c) to get pathname of current working directory"
+! ident_3="@(#) M_system system_realpath(3f) call realpath(3c) to get pathname of current working directory"
 
 character(len=*),intent(in)    :: input
 type(c_ptr)                    :: c_output
@@ -1689,7 +1689,7 @@ end function system_realpath
 function system_issock(pathname)
 implicit none
 
-! ident_4="@(#)M_system::system_issock(3f): determine if pathname is a socket"
+! ident_4="@(#) M_system system_issock(3f) determine if pathname is a socket"
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_issock
@@ -1768,7 +1768,7 @@ end function system_issock
 elemental impure function system_isfifo(pathname)
 implicit none
 
-! ident_5="@(#)M_system::system_isfifo(3f): determine if pathname is a fifo(named pipe)"
+! ident_5="@(#) M_system system_isfifo(3f) determine if pathname is a fifo(named pipe)"
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_isfifo
@@ -1851,7 +1851,7 @@ end function system_isfifo
 elemental impure function system_ischr(pathname)
 implicit none
 
-! ident_6="@(#)M_system::system_ischr(3f): determine if pathname is a link"
+! ident_6="@(#) M_system system_ischr(3f) determine if pathname is a link"
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_ischr
@@ -1952,7 +1952,7 @@ end function system_ischr
 elemental impure function system_isreg(pathname)
 implicit none
 
-! ident_7="@(#)M_system::system_isreg(3f): determine if pathname is a regular file"
+! ident_7="@(#) M_system system_isreg(3f) determine if pathname is a regular file"
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_isreg
@@ -2033,7 +2033,7 @@ end function system_isreg
 elemental impure function system_islnk(pathname)
 implicit none
 
-! ident_8="@(#)M_system::system_islnk(3f): determine if pathname is a link"
+! ident_8="@(#) M_system system_islnk(3f) determine if pathname is a link"
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_islnk
@@ -2113,7 +2113,7 @@ end function system_islnk
 elemental impure function system_isblk(pathname)
 implicit none
 
-! ident_9="@(#)M_system::system_isblk(3f): determine if pathname is a block device"
+! ident_9="@(#) M_system system_isblk(3f) determine if pathname is a block device"
 
 character(len=*),intent(in) :: pathname
 logical                     :: system_isblk
@@ -2217,7 +2217,7 @@ end function system_isblk
 elemental impure function system_isdir(dirname)
 implicit none
 
-! ident_10="@(#)M_system::system_isdir(3f): determine if DIRNAME is a directory name"
+! ident_10="@(#) M_system system_isdir(3f) determine if DIRNAME is a directory name"
 
 character(len=*),intent(in) :: dirname
 logical                     :: system_isdir
@@ -2307,7 +2307,7 @@ end function system_isdir
 elemental impure function system_chown(dirname,owner,group)
 implicit none
 
-! ident_11="@(#)M_system::system_chown(3f): change owner and group of a file relative to directory file descriptor"
+! ident_11="@(#) M_system system_chown(3f) change owner and group of a file relative to directory file descriptor"
 
 character(len=*),intent(in) :: dirname
 integer,intent(in)          :: owner
@@ -2517,7 +2517,7 @@ end subroutine system_cpu_time
 !!    end program demo_system_link
 elemental impure function system_link(oldname,newname) result(ierr)
 
-! ident_12="@(#)M_system::system_link(3f): call link(3c) to create a file link"
+! ident_12="@(#) M_system system_link(3f) call link(3c) to create a file link"
 
 character(len=*),intent(in) :: oldname
 character(len=*),intent(in) :: newname
@@ -2608,7 +2608,7 @@ end function system_link
 !!    end program demo_system_unlink
 elemental impure function system_unlink(fname) result (ierr)
 
-! ident_13="@(#)M_system::system_unlink(3f): call unlink(3c) to rm file link"
+! ident_13="@(#) M_system system_unlink(3f) call unlink(3c) to rm file link"
 
 character(len=*),intent(in) :: fname
 integer                     :: ierr
@@ -2787,7 +2787,7 @@ end function system_getumask
 subroutine system_perror(prefix)
 use, intrinsic :: iso_fortran_env, only : ERROR_UNIT, INPUT_UNIT, OUTPUT_UNIT     ! access computing environment
 
-! ident_14="@(#)M_system::system_perror(3f): call perror(3c) to display error message"
+! ident_14="@(#) M_system system_perror(3f) call perror(3c) to display error message"
 
 character(len=*),intent(in) :: prefix
 integer                     :: ios
@@ -2877,7 +2877,7 @@ end subroutine system_perror
 !!      *CHDIR TEST* IERR=           0
 subroutine system_chdir(path, err)
 
-! ident_15="@(#)M_system::system_chdir(3f): call chdir(3c)"
+! ident_15="@(#) M_system system_chdir(3f) call chdir(3c)"
 
 character(len=*)               :: path
 integer, optional, intent(out) :: err
@@ -2968,7 +2968,7 @@ end subroutine system_chdir
 !!    Public Domain
 elemental impure function system_remove(path) result(err)
 
-! ident_16="@(#)M_system::system_remove(3f): call remove(3c) to remove file"
+! ident_16="@(#) M_system system_remove(3f) call remove(3c) to remove file"
 
 character(*),intent(in) :: path
 integer(c_int)          :: err
@@ -3078,7 +3078,7 @@ end function system_remove
 !!    Public Domain
 function system_rename(input,output) result(ierr)
 
-! ident_17="@(#)M_system::system_rename(3f): call rename(3c) to change filename"
+! ident_17="@(#) M_system system_rename(3f) call rename(3c) to change filename"
 
 character(*),intent(in)    :: input,output
 integer                    :: ierr
@@ -3276,7 +3276,7 @@ end function system_chmod
 !!    Public Domain
 subroutine system_getcwd(output,ierr)
 
-! ident_18="@(#)M_system::system_getcwd(3f):call getcwd(3c) to get pathname of current working directory"
+! ident_18="@(#) M_system system_getcwd(3f) call getcwd(3c) to get pathname of current working directory"
 
 character(len=:),allocatable,intent(out) :: output
 integer,intent(out)                      :: ierr
@@ -3361,7 +3361,7 @@ end subroutine system_getcwd
 !!    Public Domain
 function system_rmdir(dirname) result(err)
 
-! ident_19="@(#)M_system::system_rmdir(3f): call rmdir(3c) to remove empty directory"
+! ident_19="@(#) M_system system_rmdir(3f) call rmdir(3c) to remove empty directory"
 
 character(*),intent(in) :: dirname
 integer(c_int) :: err
@@ -3502,7 +3502,7 @@ end function system_rmdir
 !!    Public Domain
 function system_mkfifo(pathname,mode) result(err)
 
-! ident_20="@(#)M_system::system_mkfifo(3f): call mkfifo(3c) to create a new FIFO special file"
+! ident_20="@(#) M_system system_mkfifo(3f) call mkfifo(3c) to create a new FIFO special file"
 
 character(len=*),intent(in)       :: pathname
 integer,intent(in)                :: mode
@@ -3586,7 +3586,7 @@ end function system_mkfifo
 !!    Public Domain
 function system_mkdir(dirname,mode) result(ierr)
 
-! ident_21="@(#)M_system::system_mkdir(3f): call mkdir(3c) to create empty directory"
+! ident_21="@(#) M_system system_mkdir(3f) call mkdir(3c) to create empty directory"
 
 character(len=*),intent(in)    :: dirname
 integer,intent(in)             :: mode
@@ -4088,7 +4088,7 @@ end subroutine system_closedir
 !!    Public Domain
 subroutine system_putenv(string, err)
 
-! ident_22="@(#)M_system::system_putenv(3f): call putenv(3c)"
+! ident_22="@(#) M_system system_putenv(3f) call putenv(3c)"
 
 interface
    integer(kind=c_int)  function c_putenv(c_string) bind(C,name="putenv")
@@ -4169,7 +4169,7 @@ end subroutine system_putenv
 !!    Public Domain
 function system_getenv(name,default) result(value)
 
-! ident_23="@(#)M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)"
+! ident_23="@(#) M_system system_getenv(3f) call get_environment_variable as a function with a default value(3f)"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: default
@@ -4344,7 +4344,7 @@ end subroutine set_environment_variable
 subroutine system_clearenv(ierr)
 !  emulating because not available on some platforms
 
-! ident_24="@(#)M_system::system_clearenv(3f): emulate clearenv(3c) to clear environment"
+! ident_24="@(#) M_system system_clearenv(3f) emulate clearenv(3c) to clear environment"
 
 integer,intent(out),optional    :: ierr
    character(len=:),allocatable :: string
@@ -4437,7 +4437,7 @@ end subroutine system_clearenv
 !!    Public Domain
 subroutine system_unsetenv(name,ierr)
 
-! ident_25="@(#)M_system::system_unsetenv(3f): call unsetenv(3c) to remove variable from environment"
+! ident_25="@(#) M_system system_unsetenv(3f) call unsetenv(3c) to remove variable from environment"
 
 character(len=*),intent(in)  :: name
 integer,intent(out),optional :: ierr
@@ -4524,7 +4524,7 @@ end subroutine system_unsetenv
 !!    Public Domain
 function system_readenv() result(string)
 
-! ident_26="@(#)M_system::system_readenv(3f): read next entry from environment table"
+! ident_26="@(#) M_system system_readenv(3f) read next entry from environment table"
 
 character(len=:),allocatable  :: string
 character(kind=c_char)        :: c_buff(longest_env_variable+1)
@@ -4597,7 +4597,7 @@ subroutine fileglob(glob, list) ! NON-PORTABLE AT THIS POINT. REQUIRES ls(1) com
 !  The list can be zero names long, it is still allocated.
 implicit none
 
-! ident_27="@(#)M_system::fileglob(3f): Returns list of files using a file globbing pattern"
+! ident_27="@(#) M_system fileglob(3f) Returns list of files using a file globbing pattern"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)   :: glob                   ! Pattern for the filenames (like: *.txt)
@@ -4678,7 +4678,7 @@ end subroutine fileglob
 subroutine system_uname(WHICH,NAMEOUT)
 implicit none
 
-! ident_28="@(#)M_system::system_uname(3f): call my_uname(3c) which calls uname(3c)"
+! ident_28="@(#) M_system system_uname(3f) call my_uname(3c) which calls uname(3c)"
 
 character(KIND=C_CHAR),intent(in) :: WHICH
 character(len=*),intent(out)      :: NAMEOUT
@@ -4744,7 +4744,7 @@ end subroutine system_uname
 subroutine system_gethostname(NAME,IERR)
 implicit none
 
-! ident_29="@(#)M_system::system_gethostname(3f): get name of current host by calling gethostname(3c)"
+! ident_29="@(#) M_system system_gethostname(3f) get name of current host by calling gethostname(3c)"
 
 character(len=:),allocatable,intent(out) :: NAME
 integer,intent(out)                      :: IERR
@@ -5089,7 +5089,7 @@ end function system_getpwuid
 !===================================================================================================================================
 pure function arr2str(array)  result (string)
 
-! ident_30="@(#)M_system::arr2str(3fp): function copies null-terminated char array to string"
+! ident_30="@(#) M_system arr2str(3fp) function copies null-terminated char array to string"
 
 character(len=1),intent(in)  :: array(:)
 character(len=size(array))   :: string
@@ -5110,7 +5110,7 @@ end function arr2str
 !===================================================================================================================================
 pure function str2_carr(string) result (array)
 
-! ident_31="@(#)M_system::str2_carr(3fp): function copies trimmed string to null terminated char array"
+! ident_31="@(#) M_system str2_carr(3fp) function copies trimmed string to null terminated char array"
 
 character(len=*),intent(in)     :: string
 character(len=1,kind=c_char)    :: array(len(string)+1)
@@ -5302,7 +5302,7 @@ end function C2F_string
 subroutine system_stat(pathname,values,ierr)
 implicit none
 
-! ident_32="@(#)M_system::system_stat(3f): call stat(3c) to get pathname information"
+! ident_32="@(#) M_system system_stat(3f) call stat(3c) to get pathname information"
 
 character(len=*),intent(in)          :: pathname
 
@@ -5528,7 +5528,7 @@ end function system_dir
 ! copied from M_strings.ff to make stand-alone github version
 function matchw(tame,wild,ignorecase)
 
-! ident_33="@(#)M_strings::matchw(3f): function compares text strings, one of which can have wildcards ('*' or '?')."
+! ident_33="@(#) M_strings matchw(3f) function compares text strings one of which can have wildcards ('*' or '?')."
 
 logical                      :: matchw
 character(len=*)             :: tame       ! A string without wildcards
@@ -5630,7 +5630,7 @@ end function matchw
 !===================================================================================================================================
 elemental pure function lower(str) result (string)
 
-! ident_34="@(#)M_system::lower(3f): Changes a string to lowercase"
+! ident_34="@(#) M_system lower(3f) Changes a string to lowercase"
 
 character(*), intent(in)     :: str
 character(len(str))          :: string
@@ -5771,7 +5771,7 @@ end function anyinteger_to_64bit
 function system_system(command)
 implicit none
 
-! ident_35="@(#)M_system::system_system(3f): call execute_command_line as a function"
+! ident_35="@(#) M_system system_system(3f) call execute_command_line as a function"
 
 character(len=*),intent(in) :: command
 integer                     :: exitstat

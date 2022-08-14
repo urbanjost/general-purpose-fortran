@@ -138,49 +138,6 @@ help_text=[ CHARACTER(LEN=128) :: &
 'SEE ALSO',&
 '    gprof(1), gcov(1)',&
 '']
-!>
-!! help_text=[ CHARACTER(LEN=128) :: &
-!!##NAME
-!!   fpm-time(1) - call fpm(1) with gprof(1) to generata a flat timing profile
-!!##SYNOPIS
-!!   fpm-time [subcommand] [--target] targets
-!!##DESCRIPTION
-!!   Run the fpm(1) command with the gfortran(1) compiler and compiler flags
-!!   required to build instrumented programs which will generate gprof(1)
-!!   output files. Run the program and then run a basic gprof(1) command
-!!   on each output.
-!!
-!!   IMPORTANT: ONE target program should be selected if multiple targets exist.
-!!
-!!   NOTE: 2021-03-21
-!!
-!!      This is a prototype plug-in for fpm(1), which is currently in alpha
-!!      release. It may require changes at any time as a result.
-!!
-!!##OPTIONS
-!!    subcommand  fpm(1) subcommand used to run a program (test,run). If
-!!                no options are specified the default is "test".
-!!                The name "example" will be converted to "run --example"
-!!                internally.
-!!    --targets   which targets to run. The default is "*". ONE target should
-!!                be tested
-!!    --flag      ADDITIONAL flags to add to the compile
-!!    --repeat,R  number of times to execute the program. Typically, this helps
-!!                reduce the effects of I/O buffering and other factors that can
-!!                skew results. Defaults to one execution.
-!!    --help      display this help and exit
-!!    --version   output version information and exit
-!!
-!!##EXAMPLE
-!!
-!!    # in the parent directory of the fpm(1) project
-!!    # (where "fpm.toml" resides).
-!!
-!!     fpm-time
-!!     fpm-time run demo1 demo2
-!!
-!!##SEE ALSO
-!!     gprof(1), gcov(1)
 
 version_text=[ CHARACTER(LEN=128) :: &
 'version_text=[ CHARACTER(LEN=128) :: &',&

@@ -113,7 +113,7 @@ CONTAINS
 subroutine h_array(iounit,array)
 implicit none
 
-! ident_1="@(#)M_html::h_array(3f):write table from array"
+! ident_1="@(#) M_html h_array(3f) write table from array"
 
 integer,intent(in) :: iounit
 real,intent(in)    :: array(:,:)
@@ -180,7 +180,7 @@ end subroutine h_array
 subroutine h_close(iounit)
 implicit none
 
-! ident_2="@(#)M_html::h_close(3f):close HTML file"
+! ident_2="@(#) M_html h_close(3f) close HTML file"
 
 integer,intent(in) :: iounit
    write(iounit,*)'</body>'
@@ -241,7 +241,7 @@ end subroutine h_close
 subroutine h_open(iounit,filename)
 implicit none
 
-! ident_3="@(#)M_html::h_open(3f):open HTML file"
+! ident_3="@(#) M_html h_open(3f) open HTML file"
 
 character(len=*),intent(in) :: filename
 integer,intent(in)          :: iounit

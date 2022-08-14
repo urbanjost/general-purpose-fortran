@@ -340,7 +340,7 @@ module M_process
 use, intrinsic :: ISO_C_BINDING
 implicit none
 
-! ident_1="@(#)M_process(3fm): call C process open,close,read,write functions"
+! ident_1="@(#) M_process(3fm) call C process open close read write functions"
 
 private
 public  :: process_open_read  ! (cmd,fp,ierr)     ! open process to read from
@@ -580,7 +580,7 @@ contains
 !!    Public Domain
 subroutine process_open_read(cmd,fp,ierr)
 
-! ident_2="@(#)M_process::process_open_read(3f): open process to read from"
+! ident_2="@(#) M_process process_open_read(3f) open process to read from"
 
 ! shell command to start process with
 character(len=*),intent(in)     :: cmd
@@ -697,7 +697,7 @@ end subroutine process_open_read
 !!    Public Domain
 subroutine process_open_write(cmd,fp,ierr)
 
-! ident_3="@(#)M_process::process_open_write(3f): open process to write to"
+! ident_3="@(#) M_process process_open_write(3f) open process to write to"
 
 ! shell command to start process with
 character(len=*),intent(in)     :: cmd
@@ -729,7 +729,7 @@ end subroutine process_open_write
 !!    Public Domain
 subroutine process_open(cmd,mode,fp,ierr)
 
-! ident_4="@(#)M_process::process_open(3fp): open process"
+! ident_4="@(#) M_process process_open(3fp) open process"
 
 ! shell command to start process with
 character(len=*),intent(in)     :: cmd
@@ -820,7 +820,7 @@ integer,intent(out)             :: ierr
 !!    Public Domain
 subroutine process_close(fp,ierr)
 
-! ident_5="@(#)M_process::process_close(3f): close process"
+! ident_5="@(#) M_process process_close(3f) close process"
 
 ! file pointer returned for process ! DO NOT MAKE fp INTENT(IN)
 type(streampointer) :: fp
@@ -938,7 +938,7 @@ end subroutine process_close
 !!    Public Domain
 subroutine process_readline(readfrom,fp,ierr)
 
-! ident_6="@(#)M_process::process_readline(3f): read line from process"
+! ident_6="@(#) M_process process_readline(3f) read line from process"
 
 ! readfrom length must be at least two
 character(len=*),intent(out)   :: readfrom
@@ -1066,7 +1066,7 @@ end subroutine process_readline
 !!    Public Domain
 function process_readall(cmd,delim,ierr)  result(string)      !! not hardened
 
-! ident_7="@(#)M_process::process_readall(3f): read all lines from process"
+! ident_7="@(#) M_process process_readall(3f) read all lines from process"
 
 character(len=*),intent(in)    :: cmd
 character(len=:),allocatable   :: string  !! assume will not run out of memory
@@ -1220,7 +1220,7 @@ end function process_readall
 !!    Public Domain
 subroutine process_writeline_scalar(writefrom,fp,ierr,trm)
 
-! ident_8="@(#)M_process::process_writeline_scalar(3fp): write line to process"
+! ident_8="@(#) M_process process_writeline_scalar(3fp) write line to process"
 
 character(len=*),intent(in)    :: writefrom
 type(streampointer),intent(in) :: fp
@@ -1253,7 +1253,7 @@ logical                        :: trm_local
 end subroutine process_writeline_scalar
 subroutine process_writeline_array(writefrom,fp,ierr)
 
-! ident_9="@(#)M_process::process_writeline_array(3fp): write lines to process"
+! ident_9="@(#) M_process process_writeline_array(3fp) write lines to process"
 
 character(len=*),intent(in)    :: writefrom(:)
 type(streampointer),intent(in) :: fp

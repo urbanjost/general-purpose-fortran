@@ -243,7 +243,7 @@ subroutine redo(inputline,r,lun)
 !       r
 !       r string
 
-! ident_1="@(#)M_history::redo(3f): open binary direct access file for keeping history"
+! ident_1="@(#) M_history redo(3f) open binary direct access file for keeping history"
 
 character(len=*),intent(inout) :: inputline                ! user string
 character(len=1),intent(in),optional :: r                  ! character to use to trigger editing
@@ -296,7 +296,7 @@ subroutine open_history_(iunit,fname,sname,ierr)
 implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
 
-! ident_2="@(#)M_history::open_history_(3fp): open history file for REDO(3f) procedure"
+! ident_2="@(#) M_history open_history_(3fp) open history file for REDO(3f) procedure"
 
 integer,intent(in)          :: iunit   ! Fortran unit to open
 character(len=*),intent(in) :: fname   ! filename to open
@@ -328,7 +328,7 @@ subroutine redol_(redoline,iobuf,iredo,ibuf0,init,lun)
 !  maybe make .NAME stick into variable $NAME in the calculator
 !  allow changing the edit characters in a modify
 
-! ident_3="@(#)M_history::redoline(3fp): redo a previous input line"
+! ident_3="@(#) M_history redoline(3fp) redo a previous input line"
 
 character(len=*),intent(out)   :: redoline    ! edited command line to be returned
 integer,intent(in)             :: iobuf       ! history file unit to read old commands from
@@ -675,7 +675,7 @@ end subroutine redol_
 !===================================================================================================================================
 subroutine help_()
 
-! ident_4="@(#)M_history::help_(3fp): prints help for REDO(3f)"
+! ident_4="@(#) M_history help_(3fp) prints help for REDO(3f)"
 
 character(len=80),allocatable :: usage(:)
 integer                       :: i

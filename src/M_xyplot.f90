@@ -24,7 +24,7 @@ use M_calculator, only : expression
 
 implicit none
 private
-! ident_1="@(#)M_xyplot::xyplot(3f): XY plot procedures"
+! ident_1="@(#) M_xyplot xyplot(3f) XY plot procedures"
 !===================================================================================================================================
 
 !     contains sizes for the main global data xy_array
@@ -1109,7 +1109,7 @@ end subroutine xy_init_markers
 subroutine plot_setfill()
 implicit none
 
-! ident_2="@(#)M_xyplot::plot_setfill(3f): set background, middleground, and foreground colors for plot"
+! ident_2="@(#) M_xyplot plot_setfill(3f) set background middleground and foreground colors for plot"
 
 integer :: i440
 integer :: ifore0
@@ -1170,7 +1170,7 @@ subroutine xy_init_default()
 use M_kracken,         only: parse, store
 implicit none
 
-! ident_3="@(#)M_xyplot::xy_init_default(3f): Initialize command dictionary and global values"
+! ident_3="@(#) M_xyplot xy_init_default(3f) Initialize command dictionary and global values"
 
 !  1989 John S. Urban
 !
@@ -1455,7 +1455,7 @@ use M_draw
 use M_system,     only: set_environment_variable
 implicit none
 
-! ident_4="@(#)M_xyplot::plot_hcopy(3f): process hcopy command"
+! ident_4="@(#) M_xyplot plot_hcopy(3f) process hcopy command"
 
 integer,parameter            :: dn=20                             ! device name length
 character(len=dn)            :: checkdev                          ! used to check a good device name has been used
@@ -1615,7 +1615,7 @@ end subroutine plot_hcopy
 logical function xy_noclose(dev_name)
 implicit none
 
-! ident_5="@(#)M_xyplot::plot_noclose(3f): flag whether to keep current device open while switching to alternate device"
+! ident_5="@(#) M_xyplot plot_noclose(3f) flag whether to keep current device open while switching to alternate device"
 
 character(len=*),intent(in) ::  dev_name
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1645,7 +1645,7 @@ use M_journal, only : journal
 use M_kracken, only: store, IPvalue
 implicit none
 
-! ident_6="@(#)M_xyplot::plot_set_xmin(3f): set value for xmin/xmax/ymin/... command"
+! ident_6="@(#) M_xyplot plot_set_xmin(3f) set value for xmin/xmax/ymin/... command"
 
 character(len=IPvalue) :: temp1 ! IPvalue= length of input command or parameter
 character(len=IPvalue) :: temp2
@@ -1760,7 +1760,7 @@ subroutine plot_storage()
 use M_draw, only : vgetdev
 implicit none
 
-! ident_7="@(#)M_xyplot::plot_storage(3f): if on a storage tube, clear the screen to unclutter it"
+! ident_7="@(#) M_xyplot plot_storage(3f) if on a storage tube clear the screen to unclutter it"
 
 character(len=20) :: devname
    call vgetdev(devname)                          ! get name of current device
@@ -1791,7 +1791,7 @@ use M_journal, only : journal
 use M_strings, only : listout
 implicit none
 
-! ident_8="@(#)M_xyplot::plot_setmark(3f): set or display marker geometries"
+! ident_8="@(#) M_xyplot plot_setmark(3f) set or display marker geometries"
 
 character(len=*)         :: parms
 real                     :: pat(ipq2)
@@ -1917,7 +1917,7 @@ use M_journal,         only : journal
 use M_kracken,         only : store
 implicit none
 
-! ident_9="@(#)M_xyplot::plot_page_aspect(3f): Get aspect ratio from ASPECT command and call xy_aspct"
+! ident_9="@(#) M_xyplot plot_page_aspect(3f) Get aspect ratio from ASPECT command and call xy_aspct"
 
 integer           :: ier
 real              :: shape
@@ -1974,7 +1974,7 @@ use M_draw
 use M_drawplus,        only : spirograph
 implicit none
 
-! ident_10="@(#)M_xyplot::plot_marks(3f): draw screen of markers or pen styles or dash codes or color table or fonts"
+! ident_10="@(#) M_xyplot plot_marks(3f) draw screen of markers or pen styles or dash codes or color table or fonts"
 
 character(len=*),intent(in)     :: nameit       ! drawing name type
 
@@ -2198,7 +2198,7 @@ subroutine plot_title()
 use M_kracken, only: store,current_command_length
 implicit none
 
-! ident_11="@(#)M_xyplot::plot_title(3f): allow user to add extra title lines by number"
+! ident_11="@(#) M_xyplot plot_title(3f) allow user to add extra title lines by number"
 
 character(len=20)   :: name
 integer             :: i10
@@ -2256,7 +2256,7 @@ use M_journal,         only : journal
 use M_strings,         only : listout
 implicit none
 
-! ident_12="@(#)M_xyplot::plot_jut(3f): allow user to place text on screen"
+! ident_12="@(#) M_xyplot plot_jut(3f) allow user to place text on screen"
 
 character(len=*)        :: parms
 real                    :: xyz(3)
@@ -2532,7 +2532,7 @@ use M_draw
 use M_kracken,         only : store
 implicit none
 
-! ident_13="@(#)M_xyplot::plot_sz(3f): close and reopen window to new size if possible"
+! ident_13="@(#) M_xyplot plot_sz(3f) close and reopen window to new size if possible"
 
 character(len=20)           :: dev
 real                        :: rvals(2)
@@ -2629,7 +2629,7 @@ use M_draw
 use M_drawplus, only : plain_rect
 implicit none
 
-! ident_14="@(#)M_xyplot::plot_drawplot(3f): draw an xy plot"
+! ident_14="@(#) M_xyplot plot_drawplot(3f) draw an xy plot"
 
 !     1989 John S. Urban
 logical,intent(in)         :: lclear                                 ! flag to not clear if creating a segment
@@ -2962,7 +2962,7 @@ subroutine plot_juparea()
 use M_journal, only : journal
 implicit none
 
-! ident_15="@(#)M_xyplot::plot_juparea(3f): parse parea command"
+! ident_15="@(#) M_xyplot plot_juparea(3f) parse parea command"
 
 real           :: rpat(4)
 integer        :: ichars
@@ -3017,7 +3017,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_16="@(#)M_xyplot::plot_jupage(3f): a good try at allowing mixing of PLT commands and M_plot commands"
+! ident_16="@(#) M_xyplot plot_jupage(3f) a good try at allowing mixing of PLT commands and M_plot commands"
 
 real,save          :: rpat(4)=[0.0, 8.5, 0.0, 11.0]
 integer            :: ichars
@@ -3121,7 +3121,7 @@ use M_kracken, only: lget
 use M_strings, only : listout
 implicit none
 
-! ident_17="@(#)M_xyplot::plot_id(3f): allow user to alter legend strings by number"
+! ident_17="@(#) M_xyplot plot_id(3f) allow user to alter legend strings by number"
 
 integer,intent(in)          :: icmdlen
 
@@ -3340,7 +3340,7 @@ subroutine plot_clear(ctype)
 use M_draw
 implicit none
 
-! ident_18="@(#)M_xyplot::plot_clear(3f): clear graphics area and ensure in graphics mode"
+! ident_18="@(#) M_xyplot plot_clear(3f) clear graphics area and ensure in graphics mode"
 
 character(len=*),intent(in) :: ctype
 integer                     :: ibuf
@@ -3385,7 +3385,7 @@ end subroutine plot_clear
 subroutine xy_aspct(xsmall,xlarge,ysmall,ylarge)
 implicit none
 
-! ident_19="@(#)M_xyplot::xy_aspct(3f): Store plot window size in global variables and call BIGGEST_ORTHO2()"
+! ident_19="@(#) M_xyplot xy_aspct(3f) Store plot window size in global variables and call BIGGEST_ORTHO2()"
 
 real,intent(in)   :: xsmall
 real,intent(in)   :: xlarge
@@ -3414,7 +3414,7 @@ subroutine xy_bans()
 use M_draw
 implicit none
 
-! ident_20="@(#)M_xyplot::xy_bans(3f): draw banner lines from PLT ban command"
+! ident_20="@(#) M_xyplot xy_bans(3f) draw banner lines from PLT ban command"
 
 real               :: bothi
 real               :: centr
@@ -3535,7 +3535,7 @@ subroutine xy_printban(name,startx,starty,slenfac,iprinted)
 use M_draw
 implicit none
 
-! ident_21="@(#)M_xyplot::xy_printban(3f): plot horizontal banner string at specified location"
+! ident_21="@(#) M_xyplot xy_printban(3f) plot horizontal banner string at specified location"
 
 character(len=*),intent(in)    :: name
 real,intent(in)                :: startx
@@ -3573,7 +3573,7 @@ subroutine xy_printbanv(name,startx,starty,slenfac,iprinted)
 use M_draw
 implicit none
 
-! ident_22="@(#)M_xyplot::xy_printbanv(3f): plot vertical banner string"
+! ident_22="@(#) M_xyplot xy_printbanv(3f) plot vertical banner string"
 
 character(len=*),intent(in)    :: name
 real,intent(in)                :: startx
@@ -3611,7 +3611,7 @@ end subroutine xy_printbanv
 subroutine xy_fxed(string,llisub)
 implicit none
 
-! ident_23="@(#)M_xyplot::xy_fxed(3f): select whether a string is fixed-space or not"
+! ident_23="@(#) M_xyplot xy_fxed(3f) select whether a string is fixed-space or not"
 
 character(len=*),intent(in)      :: string
 logical,intent(out)              :: llisub
@@ -3644,7 +3644,7 @@ use M_kracken,    only : iget, sget, store
 use M_draw
 implicit none
 
-! ident_24="@(#)M_xyplot::xy_init_graphics(3f): Initialize PLT graphics environment"
+! ident_24="@(#) M_xyplot xy_init_graphics(3f) Initialize PLT graphics environment"
 
 character(len=256) :: value
 character(len=256) :: cmd_d
@@ -3752,7 +3752,7 @@ end subroutine xy_init_graphics
 logical function xy_ifdrawn()
 implicit none
 
-! ident_25="@(#)M_xyplot::xy_ifdrawn(3f): xy_ifdrawn() is used to see if first page drawn or not"
+! ident_25="@(#) M_xyplot xy_ifdrawn(3f) xy_ifdrawn() is used to see if first page drawn or not"
 
 ! if never called before in this program execution return .false. else return .true.
 logical,save :: ifcalled=.false.
@@ -3783,7 +3783,7 @@ use M_draw
 use M_drawplus, only : plain_rect
 implicit none
 
-! ident_26="@(#)M_xyplot::xy_iftext(3f): Add user-specified text strings to plot"
+! ident_26="@(#) M_xyplot xy_iftext(3f) Add user-specified text strings to plot"
 
 real        :: asz
 integer     :: i20
@@ -3956,7 +3956,7 @@ use M_journal,         only : journal
 use M_draw,            only : vgetdev
 implicit none
 
-! ident_27="@(#)M_xyplot::xy_jucurv(3f): find extrema for group of curves and set legend label defaults"
+! ident_27="@(#) M_xyplot xy_jucurv(3f) find extrema for group of curves and set legend label defaults"
 
 real,intent(out)            :: xlowa(2),xhigha(2),ylowa(2),yhigha(2)
 integer,intent(out)         :: iunits(4)
@@ -4230,7 +4230,7 @@ use M_draw, only : mapcolor
 use M_strings, only: v2s, listout
 implicit none
 
-! ident_28="@(#)M_xyplot::xy_jumapc(3f): map colors using HUE command"
+! ident_28="@(#) M_xyplot xy_jumapc(3f) map colors using HUE command"
 
 ! 1989 John S. Urban
 
@@ -4550,7 +4550,7 @@ use M_journal,    only : journal
 use M_draw
 implicit none
 
-! ident_29="@(#)M_xyplot::xy_pause(3f): conditionally  pause until graphic or text-window response"
+! ident_29="@(#) M_xyplot xy_pause(3f) conditionally pause until graphic or text-window response"
 
 character(len=1)       :: cjunk
 integer                :: i10
@@ -4625,7 +4625,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_30="@(#)M_xyplot::xy_jutitl(3f): add title lines to plot"
+! ident_30="@(#) M_xyplot xy_jutitl(3f) add title lines to plot"
 
 integer,intent(in)      :: ifile
 integer,intent(in)      :: idonly
@@ -4658,7 +4658,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_31="@(#)M_xyplot::xy_jutitlX(3f): draw plot titling information (titles and legend block)"
+! ident_31="@(#) M_xyplot xy_jutitlX(3f) draw plot titling information (titles and legend block)"
 
 character(len=4096)  :: l
 integer              :: isize
@@ -4807,7 +4807,7 @@ subroutine xy_set_bigger(tallest,width,height,factor)
 use M_draw
 implicit none
 
-! ident_32="@(#)M_xyplot::xy_set_bigger(3f): change title line size"
+! ident_32="@(#) M_xyplot xy_set_bigger(3f) change title line size"
 
 real,intent(in)    :: tallest
 real,intent(out)   :: width
@@ -4838,7 +4838,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_33="@(#)M_xyplot::xy_laxis(3f): draw linear axis and logarithmic axis for PLT"
+! ident_33="@(#) M_xyplot xy_laxis(3f) draw linear axis and logarithmic axis for PLT"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 !     ixdiv and iydiv are number of major and minor axis divisions
@@ -5023,7 +5023,7 @@ use M_draw
 use M_drawplus, only : rdpnt
 implicit none
 
-! ident_34="@(#)M_xyplot::xy_pickpnt(3f): interactively draw a line to current left scale and store the curve or return point"
+! ident_34="@(#) M_xyplot xy_pickpnt(3f) interactively draw a line to current left scale and store the curve or return point"
 
 !  if itype is 0, store a curve into the pseudo file
 !  if itype is 1, return point in xecho, yecho
@@ -5144,7 +5144,7 @@ subroutine xy_setlbl(ii)
 !     1992 John S. Urban
 implicit none
 
-! ident_35="@(#)M_xyplot::xy_setlbl(3f): decide axis label strings"
+! ident_35="@(#) M_xyplot xy_setlbl(3f) decide axis label strings"
 
 !     If axis label string is empty, use units to get default string
 !----- PUT IN CHECKS FOR LABELS THAT ARE TOO LONG
@@ -5220,7 +5220,7 @@ use M_draw
 use M_verify
 implicit none
 
-! ident_36="@(#)M_xyplot::xy_setsize(3f): use values to set size and border on output device"
+! ident_36="@(#) M_xyplot xy_setsize(3f) use values to set size and border on output device"
 
 !     note that a value of '-1 -1 -1 -1' will reset to default driver size
 !     assumes prefsize(3) and prefposition(3) will complain about bad values and take corrective action, as it is hard to say what
@@ -5260,7 +5260,7 @@ use M_journal,         only : journal
 use M_draw
 implicit none
 
-! ident_37="@(#)M_xyplot::xy_tidybox(3f): draw legend lines inside box specified on call"
+! ident_37="@(#) M_xyplot xy_tidybox(3f) draw legend lines inside box specified on call"
 
 character(len=255) :: corners
 character(len=1)   :: cwhere
@@ -5331,7 +5331,7 @@ subroutine xy_arrow(xleft,ybot,xright,ytop,xto,yto,where,asz)
 use M_drawplus, only : arrowhead
 implicit none
 
-! ident_38="@(#)M_xyplot::xy_arrow(3f): Add xy_arrow from T text box to specified point"
+! ident_38="@(#) M_xyplot xy_arrow(3f) Add xy_arrow from T text box to specified point"
 
 real             :: asz
 real             :: size
@@ -5415,7 +5415,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_39="@(#)M_xyplot::xy_idbox(3f): Draw ID legend box specified with LEGEND command"
+! ident_39="@(#) M_xyplot xy_idbox(3f) Draw ID legend box specified with LEGEND command"
 
 integer,parameter :: lbllen=4096     ! maximum number of characters in a label
 real              :: factor
@@ -5618,7 +5618,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_40="@(#)M_xyplot::xy_idbox0(3f): draw legend lines"
+! ident_40="@(#) M_xyplot xy_idbox0(3f) draw legend lines"
 
 character(len=4096) :: line
 integer,parameter   :: lbllen=4096 ! maximum number of characters in a label
@@ -5813,7 +5813,7 @@ subroutine xy_iflou(iflag)
 use M_journal, only : journal
 implicit none
 
-! ident_41="@(#)M_xyplot::xy_iflou(3f): set global flag for Leading Edge trimming (see LE command)"
+! ident_41="@(#) M_xyplot xy_iflou(3f) set global flag for Leading Edge trimming (see LE command)"
 
 integer,intent(in)  :: iflag
 !     look up in the dictionary whether xy_jucurv and priv_toscale want leading values
@@ -5851,7 +5851,7 @@ subroutine xy_judraw(ifile0)
 use M_journal, only : journal
 implicit none
 
-! ident_42="@(#)M_xyplot::xy_judraw(3f): draw curves to plot scales using plot_ values"
+! ident_42="@(#) M_xyplot xy_judraw(3f) draw curves to plot scales using plot_ values"
 !-----------------------------------------------------------------------------------------------------------------------------------
 real, dimension(:), allocatable :: holdx3,holdx4
 real, dimension(:), allocatable :: holdy3,holdy4
@@ -6048,7 +6048,7 @@ subroutine xy_loadtl(ifile,ftitle,isize,ititles)
 use M_journal, only : journal
 implicit none
 
-! ident_43="@(#)M_xyplot::xy_loadtl(3f): load title xy_array"
+! ident_43="@(#) M_xyplot xy_loadtl(3f) load title xy_array"
 
 character(len=20)         :: name
 character(len=IZSZQ)      :: ztitle
@@ -6200,7 +6200,7 @@ use M_draw
 use M_drawplus, only : plain_rect
 implicit none
 
-! ident_44="@(#)M_xyplot::xy_tidybox1(3f):draw legend lines in box with legend box autosized and positioned by edge number"
+! ident_44="@(#) M_xyplot xy_tidybox1(3f) draw legend lines in box with legend box autosized and positioned by edge number"
 
 real               :: gap
 real               :: gapx
@@ -6483,7 +6483,7 @@ use M_draw
 use M_drawplus, only : plain_rect
 implicit none
 
-! ident_45="@(#)M_xyplot::xy_tidybox2(3f): draw legend lines inside box specified on call"
+! ident_45="@(#) M_xyplot xy_tidybox2(3f) draw legend lines inside box specified on call"
 
 real                 :: factor
 real                 :: gap1
@@ -6710,7 +6710,7 @@ subroutine xy_listout3(rcurve_in,iszin,rcurve_out,iszout,isize,inums)
 use M_journal, only : journal
 implicit none
 
-! ident_46="@(#)M_xyplot::xy_listout3(3f): copy rcurve_in to rcurve_out expanding negative curve numbers to ranges (1 -10 means 1 thru 10)"
+! ident_46="@(#) M_xyplot xy_listout3(3f) copy rcurve_in to rcurve_out expanding negative curve numbers to ranges (1 -10 means 1 thru 10)"
 
 !     use rcurve(:,1) for list of numbers to expand
 !     use rcurve(:,2) expand values in this column only
@@ -6836,7 +6836,7 @@ subroutine xy_retrv2(name,val,ilen,ier)
 use M_kracken, only    : retrev
 implicit none
 
-! ident_47="@(#)M_xyplot::xy_retrv2(3f): Call RETREV and then expand string variables with Calculator"
+! ident_47="@(#) M_xyplot xy_retrv2(3f) Call RETREV and then expand string variables with Calculator"
 
 character(len=*),intent(in)  :: name
 character(len=*),intent(out) :: val
@@ -6937,7 +6937,7 @@ use M_journal, only : journal
 use M_kracken, only: parse, store, IPvalue, IPverb
 implicit none
 
-! ident_48="@(#)M_xyplot::plot_toggle(3f): copy of TOGGLE that uses xy_retrv2 instead of RETREV"
+! ident_48="@(#) M_xyplot plot_toggle(3f) copy of TOGGLE that uses xy_retrv2 instead of RETREV"
 
 ! If value is explicitly on or off, set appropriate string,
 ! if no value is specified, toggle on/off value.
@@ -7008,7 +7008,7 @@ use M_journal, only : journal
 use M_math, only    : extremum
 implicit none
 
-! ident_49="@(#)M_xyplot::xy_getdat(3f): place data from specified file and curve into xy_arrayQ xy_array"
+! ident_49="@(#) M_xyplot xy_getdat(3f) place data from specified file and curve into xy_arrayQ xy_array"
 
 !===================================================================================================================================
 integer,intent(in)            :: ifile   ! file number to extract data from
@@ -7208,7 +7208,7 @@ use M_journal, only    : journal
 use M_math, only       : extremum
 implicit none
 
-! ident_50="@(#)M_xyplot::xy_juput(3f): write current memory-resident curves in global variables(q) onto pseudo file"
+! ident_50="@(#) M_xyplot xy_juput(3f) write current memory-resident curves in global variables(q) onto pseudo file"
 
 integer             :: ipadz(5)
 character(len=*)    :: iquiet
@@ -7343,7 +7343,7 @@ end subroutine xy_juput
 real function xy_slide(xmin,xmax,value,bottom)
 implicit none
 
-! ident_51="@(#)M_xyplot::xy_slide(3f): slide value"
+! ident_51="@(#) M_xyplot xy_slide(3f) slide value"
 
 real,intent(in) :: xmin
 real,intent(in) :: xmax
@@ -7369,7 +7369,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_52="@(#)M_xyplot::plot_z(3f): Interactive ZOOM mode"
+! ident_52="@(#) M_xyplot plot_z(3f) Interactive ZOOM mode"
 
 real               :: con(4)
 character(len=10)  :: action
@@ -7454,7 +7454,7 @@ use M_kracken, only: store
 use M_draw
 implicit none
 
-! ident_53="@(#)M_xyplot::plot_zmode(3f): Interactive ZOOM mode"
+! ident_53="@(#) M_xyplot plot_zmode(3f) Interactive ZOOM mode"
 
 real                  :: con(4)
 character(len=10)     :: action
@@ -7833,7 +7833,7 @@ end subroutine plot_zmode
 subroutine xy_getrel(iuniti,iunito,rmult,const)
 implicit none
 
-! ident_54="@(#)M_xyplot::xy_getrel(3f): return values to convert one set of units to another"
+! ident_54="@(#) M_xyplot xy_getrel(3f) return values to convert one set of units to another"
 
 integer         :: iuniti
 integer         :: iunito
@@ -7868,7 +7868,7 @@ subroutine xy_units(n0,eunit)
 use M_strings,only: upper
 implicit none
 
-! ident_55="@(#)M_xyplot::xy_units(3f): given unit code return string label optionally converted to uppercase"
+! ident_55="@(#) M_xyplot xy_units(3f) given unit code return string label optionally converted to uppercase"
 
 integer,intent(in)  :: n0
 character(len=80)   :: eunit
@@ -7896,7 +7896,7 @@ subroutine xy_juprint(x,y,line,icenter)
 use M_draw
 implicit none
 
-! ident_56="@(#)M_xyplot::xy_juprint(3f): print string LINE at position x,y with embedded directives"
+! ident_56="@(#) M_xyplot xy_juprint(3f) print string LINE at position x y with embedded directives"
 
 !      icenter=1    centermode
 !      icenter=2    clear centering data, print right justified
@@ -7929,7 +7929,7 @@ end subroutine xy_juprint
 subroutine priv_justrlen(line,xlen,ylen,ydown,yup)
 implicit none
 
-! ident_57="@(#)M_xyplot::priv_justrlen(3f): query string size with embedded directives"
+! ident_57="@(#) M_xyplot priv_justrlen(3f) query string size with embedded directives"
 
 character(len=*) :: line
 integer          :: ilen
@@ -7982,7 +7982,7 @@ use M_draw
 use M_journal,         only : journal
 implicit none
 
-! ident_58="@(#)M_xyplot::priv_justr(3f): print string l0 at position x,y with embedded directives"
+! ident_58="@(#) M_xyplot priv_justr(3f) print string l0 at position x y with embedded directives"
 
 character(len=*)    :: l0
 character(len=4096) :: line
@@ -8599,7 +8599,7 @@ subroutine xy_jucp2(line,ilen)
 use M_draw
 implicit none
 
-! ident_59="@(#)M_xyplot::xy_jucp2(3f): plot string line at current position"
+! ident_59="@(#) M_xyplot xy_jucp2(3f) plot string line at current position"
 
 character(len=*)   :: line
 integer,parameter  :: imx=257
@@ -8677,7 +8677,7 @@ subroutine xy_juprints(x,y,l)
 use M_draw
 implicit none
 
-! ident_60="@(#)M_xyplot::xy_juprints(3f): simple print of string l at position x,y"
+! ident_60="@(#) M_xyplot xy_juprints(3f) simple print of string l at position x y"
 
 real,intent(in)      :: x
 real,intent(in)      :: y
@@ -8724,7 +8724,7 @@ subroutine xy_jucp(line)
 use M_draw
 implicit none
 
-! ident_61="@(#)M_xyplot::xy_jucp(3f): plot string line at current position"
+! ident_61="@(#) M_xyplot xy_jucp(3f) plot string line at current position"
 
 character*(*) line
 integer,parameter        :: imx=257
@@ -8773,7 +8773,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_62="@(#)M_xyplot::xy_jufont(3f): check and set font and store it so can query it"
+! ident_62="@(#) M_xyplot xy_jufont(3f) check and set font and store it so can query it"
 
 character(len=*)      :: name
 character(len=60)     :: msg
@@ -8824,7 +8824,7 @@ end subroutine xy_jufont
 subroutine xy_getxy_jufont(name)
 implicit none
 
-! ident_63="@(#)M_xyplot::xy_jufont(3f): check and set font and store it so can query it"
+! ident_63="@(#) M_xyplot xy_jufont(3f) check and set font and store it so can query it"
 
 character*(*) name
    name=LASTNAMEQ
@@ -8846,7 +8846,7 @@ subroutine xy_rasters(iwidth)
 use M_draw
 implicit none
 
-! ident_64="@(#)M_xyplot::xy_rasters(3f): set line width"
+! ident_64="@(#) M_xyplot xy_rasters(3f) set line width"
 
 integer,intent(in) :: iwidth
 character(len=80)  :: value
@@ -8889,7 +8889,7 @@ real function xy_ustrlen(string)
 use M_draw
 implicit none
 
-! ident_65="@(#)M_xyplot::xy_ustrlen(3f): get software string length including trailing whitespace"
+! ident_65="@(#) M_xyplot xy_ustrlen(3f) get software string length including trailing whitespace"
 
 character(len=*),intent(in) :: string
 intrinsic len
@@ -8914,7 +8914,7 @@ real function xy_ustrlen2(string,ichars)
 use M_draw
 implicit none
 
-! ident_66="@(#)M_xyplot::xy_ustrlen2(3f): get software string length up to specified character"
+! ident_66="@(#) M_xyplot xy_ustrlen2(3f) get software string length up to specified character"
 
 character(len=*),intent(in) :: string
 integer,intent(in)    :: ichars
@@ -8936,7 +8936,7 @@ end function xy_ustrlen2
 subroutine plot_get_plot_area(xsmall,xlarge,ysmall,ylarge)
 implicit none
 
-! ident_67="@(#)M_xyplot::plot_get_plot_area(3f): initialize plot page and set up common page-related values"
+! ident_67="@(#) M_xyplot plot_get_plot_area(3f) initialize plot page and set up common page-related values"
 
 real,intent(out)  :: xsmall
 real,intent(out)  :: xlarge
@@ -8964,7 +8964,7 @@ end subroutine plot_get_plot_area
 subroutine plot_set_plot_area(xsmall,xlarge,ysmall,ylarge)
 implicit none
 
-! ident_68="@(#)M_xyplot::plot_set_plot_area(3f): initialize plot page and set up common page-related values"
+! ident_68="@(#) M_xyplot plot_set_plot_area(3f) initialize plot page and set up common page-related values"
 
 real,intent(in)  :: xsmall
 real,intent(in)  :: xlarge
@@ -9012,7 +9012,7 @@ subroutine plot_axes() ! draw the axes
 use M_draw
 implicit none
 
-! ident_69="@(#)M_xyplot::plot_axes(3f): generically draw linear axis and logarithmic axis"
+! ident_69="@(#) M_xyplot plot_axes(3f) generically draw linear axis and logarithmic axis"
 
 !     draw y-axis first, as it adjusts left margin of plot area
 !
@@ -9757,7 +9757,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_70="@(#)M_xyplot::priv_labelx(3fp): print a logarithmic label or linear label on x axis on bottom side"
+! ident_70="@(#) M_xyplot priv_labelx(3fp) print a logarithmic label or linear label on x axis on bottom side"
 
 !     alabel is numeric value to print
 !     y is height of baseline to print at
@@ -9819,7 +9819,7 @@ subroutine priv_labely(iside,alabel,x,y,xtext,ytext,ilong,xxx,icount,ilogy,fmt)
 use M_draw
 implicit none
 
-! ident_71="@(#)M_xyplot::priv_labely(3fp): print logarithmic or linear y axis label on left or right"
+! ident_71="@(#) M_xyplot priv_labely(3fp) print logarithmic or linear y axis label on left or right"
 
 !     iside=1 for left side label, iside=2 for right side label
 !     alabel is numeric value to print
@@ -9882,7 +9882,7 @@ use M_strings, only : value_to_string, crop
 use M_time,    only : fmtdate, unix_to_date
 implicit none
 
-! ident_72="@(#)M_xyplot::xy_toa(3f): convert number to a nice string (1 to 20 characters) or explicit string for an axis label"
+! ident_72="@(#) M_xyplot xy_toa(3f) convert number to a nice string (1 to 20 characters) or explicit string for an axis label"
 
 real,intent(in)                 :: val32   ! number to convert to a string
 character(len=*),intent(out)    :: form    ! return string to hold ASCII representation of number
@@ -10025,7 +10025,7 @@ subroutine plot_page(xsmall,xlarge,ysmall,ylarge)
 use M_draw
 implicit none
 
-! ident_73="@(#)M_xyplot::plot_page(3f): initialize plot page and set up common page-related values"
+! ident_73="@(#) M_xyplot plot_page(3f) initialize plot page and set up common page-related values"
 
 real,intent(in)    :: xsmall
 real,intent(in)    :: xlarge
@@ -10048,7 +10048,7 @@ end subroutine plot_page
 subroutine priv_getpage(xsmall,xlarge,ysmall,ylarge)
 implicit none
 
-! ident_74="@(#)M_xyplot::priv_getpage(3fp):  return plot page size"
+! ident_74="@(#) M_xyplot priv_getpage(3fp) return plot page size"
 
 real,intent(out)    :: xsmall
 real,intent(out)    :: xlarge
@@ -10066,7 +10066,7 @@ end subroutine priv_getpage
 subroutine xy_setdatarange(x8)
 implicit none
 
-! ident_75="@(#)M_xyplot::xy_setdatarange(3f): set plot window extremes, set plot window extremes for dual axis"
+! ident_75="@(#) M_xyplot xy_setdatarange(3f) set plot window extremes set plot window extremes for dual axis"
 
 real       :: x8(8)
 integer    :: i10
@@ -10091,7 +10091,7 @@ end subroutine xy_setdatarange
 subroutine plot_getdatarange(X8)
 implicit none
 
-! ident_76="@(#)M_xyplot::plot_getdatarange(3f):  get plot window extremes, set plot window extremes for dual axis"
+! ident_76="@(#) M_xyplot plot_getdatarange(3f) get plot window extremes set plot window extremes for dual axis"
 
 real         :: x8(8)
 integer      :: i10
@@ -10106,7 +10106,7 @@ end subroutine plot_getdatarange
 subroutine plot_setticper(TICPRX0,TICPRY0,TICPRX20,TICPRY20,TYPE)
 implicit none
 
-! ident_77="@(#)M_xyplot::plot_setticper(3f): set tic size"
+! ident_77="@(#) M_xyplot plot_setticper(3f) set tic size"
 
 character(len=*)        :: type
 real                    :: ticprx0
@@ -10168,7 +10168,7 @@ subroutine xy_getscale(iadd,xslope,xinter,yslope,yinter)
 use M_draw
 implicit none
 
-! ident_78="@(#)M_xyplot::xy_getscale(3f): set up scaling between graphing area and user-scaled axis"
+! ident_78="@(#) M_xyplot xy_getscale(3f) set up scaling between graphing area and user-scaled axis"
 
 ! iadd=0 uses left and bottom axis
 real           :: left,right,bottom,top
@@ -10213,7 +10213,7 @@ end subroutine xy_getscale
 subroutine plot_line(ipen,ivals,where,xar,yar)
 implicit none
 
-! ident_79="@(#)M_xyplot::plot_line(3f): buffer curve data and call xy_line"
+! ident_79="@(#) M_xyplot plot_line(3f) buffer curve data and call xy_line"
 
 integer,intent(in) :: ipen
 integer,intent(in) :: ivals
@@ -10231,7 +10231,7 @@ subroutine plot_label(iwhich,label)
 use M_journal, only : journal
 implicit none
 
-! ident_80="@(#)M_xyplot::plot_label(3f): set plot axis labels"
+! ident_80="@(#) M_xyplot plot_label(3f) set plot axis labels"
 
 integer,intent(in)          :: iwhich
 character(len=*),intent(in) :: label
@@ -10247,7 +10247,7 @@ end subroutine plot_label
 subroutine plot_resetplot()
 implicit none
 
-! ident_81="@(#)M_xyplot::plot_resetplot(3f): reset plot-related common values"
+! ident_81="@(#) M_xyplot plot_resetplot(3f) reset plot-related common values"
 
    call xy_resetpens()
 
@@ -10331,7 +10331,7 @@ use M_draw
 use M_math, only : scale1
 implicit none
 
-! ident_82="@(#)M_xyplot::plot_set_nice_range(3f): determine nice range for creating an axis"
+! ident_82="@(#) M_xyplot plot_set_nice_range(3f) determine nice range for creating an axis"
 
 real        :: X8(8)
 real        :: xlow
@@ -10365,7 +10365,7 @@ subroutine xy_line(ipen,ivals,ctype,xy_arrayx,xy_arrayy)
 use M_draw
 implicit none
 
-! ident_83="@(#)M_xyplot::xy_line(3f): draw polyline using data in xy_arrayx xy_arrayy, using pen style ipen"
+! ident_83="@(#) M_xyplot xy_line(3f) draw polyline using data in xy_arrayx xy_arrayy using pen style ipen"
 
 !===================================================================================================================================
 integer                       :: iadd
@@ -10432,7 +10432,7 @@ end subroutine xy_line
 subroutine priv_drawseg_using_pen(ipen,x1,y1,x2,y2)
 implicit none
 
-! ident_84="@(#)M_xyplot::priv_drawseg_using_pen(3fp):  draw a line using pen style ipen NOT to axis scale NOT setting color"
+! ident_84="@(#) M_xyplot priv_drawseg_using_pen(3fp) draw a line using pen style ipen NOT to axis scale NOT setting color"
 
 !     conversion arrays used to distinguish between toframe and priv_toscale lines
 
@@ -10480,7 +10480,7 @@ use M_journal, only : journal
 use M_strings, only : listout
 implicit none
 
-! ident_85="@(#)M_xyplot::plot_setdash(3f):  allow user to display|alter|retrieve  dash codes by style number"
+! ident_85="@(#) M_xyplot plot_setdash(3f) allow user to display|alter|retrieve dash codes by style number"
 
 character(len=*),intent(in) :: parms   ! action keyword
 
@@ -10796,7 +10796,7 @@ use M_journal, only : journal
 use M_math, only : scale1
 implicit none
 
-! ident_86="@(#)M_xyplot::xy_jurang(3f): return nice max and min values for the axis, and nice axis grid spacings"
+! ident_86="@(#) M_xyplot xy_jurang(3f) return nice max and min values for the axis and nice axis grid spacings"
 
 
 integer,intent(in)           :: iside
@@ -10916,7 +10916,7 @@ function xy_con_x(xvalue0) result(xvalue)
 use M_journal, only : journal
 implicit none
 
-! ident_87="@(#)M_xyplot::xy_con_x(3f): scale an axis value to the overall window/viewport"
+! ident_87="@(#) M_xyplot xy_con_x(3f) scale an axis value to the overall window/viewport"
 
 real     :: xvalue0
 real     :: xvalue
@@ -10948,7 +10948,7 @@ function xy_con_y(yvalue0) result(yvalue)
 use M_journal, only : journal
 implicit none
 
-! ident_88="@(#)M_xyplot::xy_con_y(3f): scale an axis value to the overall window/viewport"
+! ident_88="@(#) M_xyplot xy_con_y(3f) scale an axis value to the overall window/viewport"
 
 real     :: yvalue0
 real     :: yvalue
@@ -10980,7 +10980,7 @@ subroutine xy_setcnv(ilogx,ilogy)
 use M_draw, only : pop, push
 implicit none
 
-! ident_89="@(#)M_xyplot::xy_setcnv(3f): set up conversion table for xy_con_x and xy_con_y functions"
+! ident_89="@(#) M_xyplot xy_setcnv(3f) set up conversion table for xy_con_x and xy_con_y functions"
 
 integer,intent(in) :: ilogx
 integer,intent(in) :: ilogy
@@ -11011,7 +11011,7 @@ subroutine xy_jugetwn(xsmall,xlarge,ysmall,ylarge)
 use M_draw
 implicit none
 
-! ident_90="@(#)M_xyplot::xy_jugetwn(3f): query current window ( appropriate for 2-d only)"
+! ident_90="@(#) M_xyplot xy_jugetwn(3f) query current window ( appropriate for 2-d only)"
 
 real,intent(out) :: xsmall
 real,intent(out) :: xlarge
@@ -11066,7 +11066,7 @@ use M_drawplus, only : rdbox
 use M_drawplus, only : plain_rect
 implicit none
 
-! ident_91="@(#)M_xyplot::xy_zoom(3f):  given current four numbers defining a box; alter them by indicated selections of an old and new box"
+! ident_91="@(#) M_xyplot xy_zoom(3f) given current four numbers defining a box; alter them by indicated selections of an old and new box"
 
 real             :: high1
 real             :: high2
@@ -11247,7 +11247,7 @@ subroutine xy_convert(a,b,x,n)
 use M_journal, only : journal
 implicit none
 
-! ident_92="@(#)M_xyplot::xy_convert(3f): do a linear conversion on an xy_array of the form y=ax+b"
+! ident_92="@(#) M_xyplot xy_convert(3f) do a linear conversion on an xy_array of the form y=ax+b"
 
 real       :: x(*)
 real       :: a
@@ -11285,7 +11285,7 @@ end subroutine xy_convert
 subroutine priv_hilow(rmin,rmax)
 implicit none
 
-! ident_93="@(#)M_xyplot::priv_hilow(3fp): avoid bug where plot fails if zero range in abscissa or ordinate"
+! ident_93="@(#) M_xyplot priv_hilow(3fp) avoid bug where plot fails if zero range in abscissa or ordinate"
 
 real :: rmin
 real :: rmax
@@ -11323,7 +11323,7 @@ use M_draw
 use M_drawplus, only : plain_rect
 implicit none
 
-! ident_94="@(#)M_xyplot::priv_jubox(3fp): draw a filled box around current scaled plot area"
+! ident_94="@(#) M_xyplot priv_jubox(3fp) draw a filled box around current scaled plot area"
 
 integer,intent(in) :: imidl
 real,intent(in) :: XMIN, YMIN, XMAX, YMAX
@@ -11356,7 +11356,7 @@ use M_draw
 use M_drawplus, only : plain_rect
 implicit none
 
-! ident_95="@(#)M_xyplot::priv_jugrid(3fp): draw linear and logarithmic grids after actual axis have been drawn"
+! ident_95="@(#) M_xyplot priv_jugrid(3fp) draw linear and logarithmic grids after actual axis have been drawn"
 
 !     extracted this so can put colored box behind grid and come up with
 !     nice tic plot_marks so tic lines cross with an x at grid points
@@ -11656,7 +11656,7 @@ use M_math, only : scale1
 use M_math, only : scale3
 implicit none
 
-! ident_96="@(#)M_xyplot::priv_logrng(3fp): return nice ranges for logarithmic scales"
+! ident_96="@(#) M_xyplot priv_logrng(3fp) return nice ranges for logarithmic scales"
 
 character(len=*) :: logtype
 integer          :: itic
@@ -11708,7 +11708,7 @@ subroutine xy_obj12345(string)
 use M_draw
 implicit none
 
-! ident_97="@(#)M_xyplot::xy_obj12345(3f): create or close M_plot object 12345"
+! ident_97="@(#) M_xyplot xy_obj12345(3f) create or close M_plot object 12345"
 
 logical                     :: ldummy
 character(len=*),intent(in) :: string
@@ -11748,7 +11748,7 @@ end subroutine xy_obj12345
 subroutine priv_setrng(rin,value,ichange)
 implicit none
 
-! ident_98="@(#)M_xyplot::priv_setrng(3fp): adjust the scaling according to user limits if specified"
+! ident_98="@(#) M_xyplot priv_setrng(3fp) adjust the scaling according to user limits if specified"
 
 real                ::  rin
 real,intent(out)    :: value
@@ -11777,7 +11777,7 @@ end subroutine priv_setrng
 subroutine priv_solidline(mode)  ! override dash code and symbol drawing and draw solid line for error bars
 implicit none
 
-! ident_99="@(#)M_xyplot::priv_solidline(3fp): override dash code and symbol drawing and draw solid line for error bars"
+! ident_99="@(#) M_xyplot priv_solidline(3fp) override dash code and symbol drawing and draw solid line for error bars"
 
 logical,intent(in)  :: mode
       isolidq2=mode
@@ -11809,7 +11809,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_100="@(#)M_xyplot::priv_toscale(3fp): display 2-d vector described by x and y to axis or plot scale"
+! ident_100="@(#) M_xyplot priv_toscale(3fp) display 2-d vector described by x and y to axis or plot scale"
 
 !     graph is in x,y xy_arrays; use points 1 to n
 
@@ -11971,7 +11971,7 @@ subroutine priv_endgrid(iflag,endnew,rmax,rmin,ticlen,istyle)
 use M_journal, only : journal
 implicit none
 
-! ident_101="@(#)M_xyplot::priv_endgrid(3fp): determine length of major and minor grid lines"
+! ident_101="@(#) M_xyplot priv_endgrid(3fp) determine length of major and minor grid lines"
 
 integer,intent(in)    :: iflag  !-> 0 = full grid, 1= tic makrs, 2= plain
 real,intent(out)      :: endnew !-> where to end line
@@ -12013,7 +12013,7 @@ use M_draw
 use ISO_C_BINDING
 implicit none
 
-! ident_102="@(#)M_xyplot::priv_judash(3fp): draw dashed line"
+! ident_102="@(#) M_xyplot priv_judash(3fp) draw dashed line"
 
 !  primitive dashed code generator. assumes a simple cartesian
 !  coordinate system where x-units and y-units are the same length.
@@ -12160,7 +12160,7 @@ use M_draw
 use ISO_C_BINDING
 implicit none
 
-! ident_103="@(#)M_xyplot::priv_jufill(3fp): fill or draw impulse line under curve"
+! ident_103="@(#) M_xyplot priv_jufill(3fp) fill or draw impulse line under curve"
 
 !     given a curve of x(n),y(n) put a line every istep points or fill
 !     depending on clipping for now. Should let top/bottom be set
@@ -12298,7 +12298,7 @@ use M_drawplus, only : spirograph
 use M_drawplus, only : arrowhead
 implicit none
 
-! ident_104="@(#)M_xyplot::priv_jusym(3fp): put symbols at points on a polyline"
+! ident_104="@(#) M_xyplot priv_jusym(3fp) put symbols at points on a polyline"
 
 !     given a curve of X(N),Y(N) put a symbol every ISTEP points, using symbol number IM
 !     caution: when letters are used, centermode is off after call; and current font is used.

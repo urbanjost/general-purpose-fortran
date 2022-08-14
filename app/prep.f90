@@ -1,69 +1,47 @@
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-!  @(#)prep: FORTRAN preprocessor
+!  @(#)prep: Fortran preprocessor
 !  Fortran preprocessor originally based on public-domain FPP preprocessor from Lahey Fortran Code Repository
 !     http://www.lahey.com/code.htm
 !  Extensively rewritten since under a MIT License.
 !     2013-10-03,2020-12-19,2021-06-12 : John S. Urban
-!
+! ADD
+! o line control  # linenumber "file"
+! o looping
 ! CONSIDER
-! make $OUTPUT file nestable
-! allow multiple files on $INCLUDE?
-! undocument $BLOCK HELP|VERSION?
-! %,>>,<< operators
-! replace math parsing with M_calculator (but add logical operators to M_calculator)
-! cpp-like procedure macros
-! cpp or fpp compatibility mode
-! line control  # linenumber "file"
-! modularize and modernize calculator expression, if/else/endif
+! o make $OUTPUT file nestable
+! o allow multiple files on $INCLUDE?
+! o undocument $BLOCK HELP|VERSION?
+! o %,>>,<< operators
+! o replace math parsing with M_calculator (but add logical operators to M_calculator)
+! o cpp-like procedure macros
+! o cpp or fpp compatibility mode
+! o modularize and modernize calculator expression, if/else/endif
 !
 ! REMOVED $REDEFINE and no longer produce warning message if redefine a variable, more like fpp(1) and cpp(1)
+!
+! some fpp versions allow integer intrinsics, not well documented but things like "#define AND char(34)"
+!
+! a PROCEDURE variable with current procedure name, maybe MODULE::PROCEDURE::CONTAINS format would be very handy in messages
+!
+! perhaps change to a more standard CLI syntax; but either way support multiple -D and maybe -D without a space before value
+!
+! extend $INCLUDE to call libcurl to access remote files
+!
+! case('ENDBLOCK');           call document(' ') ! BUG: '' instead of 'END' worked with kracken95, not with M_CLI2
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-module M_expression
-use M_strings,   only : str_replace=>replace
-private
-public normalize_logical_operators
-contains
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine normalize_logical_operators(string)
-character(len=*) :: string
-
-   string=str_replace(string,'==','.EQ.')
-   string=str_replace(string,'/=','.NE.')
-   string=str_replace(string,'!=','.NE.')
-   string=str_replace(string,'>=','.GE.')
-   string=str_replace(string,'<=','.LE.')
-   string=str_replace(string,'>','.GT.')
-   string=str_replace(string,'<','.LT.')
-   string=str_replace(string,'&&','.AND.')
-   string=str_replace(string,'||','.OR.')
-   string=str_replace(string,'!','.NOT.')
-   string=str_replace(string,'.XOR.','.NEQV.')
-
-end subroutine normalize_logical_operators
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-end module M_expression
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-module M_fpp                                                              !@(#)M_fpp(3f): module used by prep program
+module M_prep                                                             !@(#)M_prep(3f): module used by prep program
 USE ISO_FORTRAN_ENV, ONLY : STDERR=>ERROR_UNIT, STDOUT=>OUTPUT_UNIT,STDIN=>INPUT_UNIT
-use M_io,        only : get_tmp, dirname, uniq, fileopen, filedelete, get_env  ! Fortran file I/O routines
-use M_kracken95, only : sget, dissect, lget                                    ! load command argument parsing module
+use M_io,        only : get_tmp, dirname, uniq, fileopen, filedelete, get_env       ! Fortran file I/O routines
+use M_CLI2,      only : set_args, SGET, lget, unnamed !,print_dictionary, specified ! load command argument parsing module
 use M_strings,   only : nospace, v2s, substitute, upper, lower, isalpha, split, delim, str_replace=>replace, sep, atleast, unquote
 use M_strings,   only : glob
-use M_expression
-use M_list,     only : dictionary
+use M_list,      only : dictionary
+use M_expr,      only : expr, get_integer_from_string, table
 implicit none
-
-logical,save                         :: G_debug=.false.
 
 integer,parameter                    :: num=2048                       ! number of named values allowed
 integer,public,parameter             :: G_line_length=4096             ! allowed length of input lines
@@ -74,7 +52,7 @@ logical,public                       :: G_ident=.false.                ! whether
 character(len=G_line_length),public  :: G_source                       ! original source file line
 character(len=G_line_length),public  :: G_outline                      ! message to build for writing to output
 
-type(dictionary)                     :: table
+type(dictionary),save                :: macro
 
 type file_stack
    integer                           ::  unit_number
@@ -115,7 +93,8 @@ character(len=10)                    :: G_MAN_FILE_POSITION='ASIS      '
 integer,public                       :: G_nestl=0                      ! count of if/elseif/else/endif nesting level
 integer,public,parameter             :: G_nestl_max=20                 ! maximum nesting level of conditionals
 
-logical,save,public                  :: G_verbose=.false.           ! verbose, including write strings after @(#) like what(1).
+logical,save                         :: G_debug=.false.
+logical,save,public                  :: G_verbose=.false.              ! verbose, including write strings after @(#) like what(1).
 logical,save,public                  :: G_system_on=.false.            ! allow system commands or not on $SYSTEM
 
 logical,public,save                  :: G_condop(0:G_nestl_max)        ! storage to keep track of previous write flags
@@ -133,13 +112,13 @@ integer,save                         :: G_scratch_lun=-1
 
 character(len=:),allocatable,save    :: G_extract_start
 character(len=:),allocatable,save    :: G_extract_stop
+character(len=:),allocatable,save    :: G_extract_start0
+character(len=:),allocatable,save    :: G_extract_stop0
 logical,save                         :: G_extract=.false.
 logical,save                         :: G_extract_auto=.true.
 logical,save                         :: G_extract_flag=.false.
-
-character(len=:),allocatable         :: keywords(:)
-character(len=:),allocatable         :: values(:)
-integer,allocatable                  :: counts(:)
+character(len=:),allocatable,save    :: G_cmd
+character(len=:),allocatable,save    :: G_file
 
 contains
 !===================================================================================================================================
@@ -149,12 +128,13 @@ subroutine cond()       !@(#)cond(3f): process conditional directive assumed to 
 character(len=G_line_length) :: line                       ! directive line with leading prefix character (default is $) removed
 character(len=G_line_length) :: verb                       ! first word of command converted to uppercase
 character(len=G_line_length) :: options                    ! everything after first word of command till end of line or !
-character(len=G_line_length) :: all_options                ! everything after first word of command till end of line or !
 character(len=G_line_length) :: upopts                     ! directive line with leading prefix removed; uppercase; no spaces
 logical,save                 :: eb=.false.
 integer,save                 :: noelse=0
 integer                      :: verblen
 logical                      :: ifound
+integer                      :: ierr
+character(len=G_var_len)     :: value
 
    line=adjustl(G_source(2:))                              ! remove leading prefix and spaces from directive line
 
@@ -176,7 +156,6 @@ logical                      :: ifound
       verb=line(:verblen-1)
       options=adjustl(line(verblen:))
    endif
-   all_options=adjustl(G_source(verblen+1:))
    verb=upper(verb)
    upopts=nospace(upper(options))                          ! remove spaces from directive
 
@@ -185,7 +164,6 @@ logical                      :: ifound
       write(stderr,*)'LINE='//trim(line)
       write(stderr,*)'VERB='//trim(verb)
       write(stderr,*)'OPTIONS='//trim(options)
-      write(stderr,*)'ALL_OPTIONS='//trim(all_options)
       write(stderr,*)'UPOPTS='//trim(upopts)
       call flushit()
    endif
@@ -198,56 +176,57 @@ logical                      :: ifound
          return
       endif
                                                                       ! process the directive
+      ierr=0
       select case(VERB)
-      case('  ')                                                      ! entire line is a comment
-      case('DEFINE','DEF','LET');     call define(upopts)             ! only process DEFINE if not skipping data lines
-      case('REDEFINE','REDEF'); call define(upopts)                   ! only process DEFINE if not skipping data lines
-      case('UNDEF','UNDEFINE','DELETE'); call undef(upper(options))   ! only process UNDEF if not skipping data lines
-      case('OUTPUT');           call output_case(options)             ! Filenames can be case sensitive
-      case('PARCEL');           call parcel_case(upopts)
-      case('ENDPARCEL');        call parcel_case(' ')
-      case('BLOCK');            call document(options)
-      case('ENDBLOCK');         call document(' ')
-      case('SET','REPLACE');    call set(options)
-      case('UNSET');            call unset(upper(options))   ! only process UNSET if not skipping data lines
-      case('IDENT','@(#)');     call ident(options)
-      case('SHOW') ;            call show_state(upper(options),msg='')
-      case('MESSAGE');          call write_err(unquote(all_options))      ! trustingly trim MESSAGE from directive
-      case('QUIT');             call stop('0 '//all_options)
-      case('ERROR');            call stop('1 '//all_options)
-      CASE('GET_ARGUMENTS');    call write_get_arguments()
-      CASE('HELP');             call short_help(stderr)
-      case('STOP');                                        call stop(all_options)
-      case('INCLUDE','READ');                              call include(options,50+G_iocount)    ! Filenames can be case sensitive
-      case('POST','CALL','DO');                            call prepost(upper(options))
+      case('  ')                                                          ! entire line is a comment
+      case('DEFINE','DEF','LET'); call expr(upopts,value,ierr,def=.true.) ! only process DEFINE if not skipping data lines
+      case('REDEFINE','REDEF');   call expr(upopts,value,ierr,def=.true.) ! only process REDEFINE if not skipping data lines
+      case('UNDEF','UNDEFINE','DELETE'); call undef(upper(options))       ! only process UNDEF if not skipping data lines
+
+      case('INCLUDE','READ');     call include(options,50+G_iocount)      ! Filenames can be case sensitive
+      case('OUTPUT','ENDOUTPUT','OPEN','CLOSE'); call output_cmd(options) ! Filenames can be case sensitive
+
+      case('PARCEL');             call parcel_case(upopts)
+      case('ENDPARCEL');          call parcel_case('')
+      case('POST','CALL','DO');   call prepost(upper(options))
+
+      case('BLOCK');              call document(options)
+      case('ENDBLOCK');           call document(' ')
+
+      case('SET','REPLACE','MACRO');      call set(options)
+      case('UNSET');              call unset(upper(options))              ! only process UNSET if not skipping data lines
+
+      case('IDENT','@(#)');       call ident(options)
+      case('MESSAGE','WARNING');  call write_err(unquote(options))        ! trustingly trim MESSAGE from directive
+      case('SHOW') ;              call show_state(upper(options),msg='')
+      CASE('HELP','CRIB');        call crib_help(stderr)
+
+      case('STOP');               call stop(options)
+      case('QUIT');               call stop('0 '//options)
+      case('ERROR');              call stop('1 '//options)
+
+      CASE('GET_ARGUMENTS');      call write_get_arguments()
+
+      case('DEBUG');            G_debug=.not.G_debug      ;write(stderr,*)'DEBUG:',G_debug
+      case('VERBOSE');          G_verbose=.not.G_verbose  ;write(stderr,*)'VERBOSE:',G_verbose
+
       case('IMPORT','GET_ENVIRONMENT_VARIABLE');           call import(options)
       case('SYSTEM','EXECUTE_COMMAND_LINE');               call exe()
+
       case default
          ifound=.false.
       end select
+      if(ierr.ne.0) call stop_prep('*prep* ERROR(001) - expression invalid:'//trim(G_source))
    endif
 
    select case(VERB)                                                  ! process logical flow control even if G_write is false
    case('ELSE','ELSEIF','ELIF');  call else(verb,upopts,noelse,eb)
-   case('ENDIF');          call endif(noelse,eb)
-   case('IF');       call if(upopts,noelse,eb)
-   case('IFDEF','IFNDEF'); call def(verb,upopts,noelse,eb)
+   case('ENDIF','FI');            call endif(noelse,eb)
+   case('IF');                    call if(upopts,noelse,eb)
+   case('IFDEF','IFNDEF');        call def(verb,upopts,noelse,eb)
    case default
       if(.not.ifound)then
-         !==========================================================================================================================
-         !PROPOSAL>!==================== allow assignments  name=expression by default
-         !upopts=nospace(upper(line))     ! remove spaces from directive
-         !if(index(upopts,'=').gt.1.and.G_write)then  ! maybe try it as a simple expression instead; but should do it earlier
-         !                                ! to behave like fortran and not have reserved words, and only if LHS is
-         !                                ! an acceptable variable name
-         !   call define(upopts)          ! only process DEFINE if not skipping data lines
-         !else
-         !   call stop_prep('*prep* ERROR(001) - UNKNOWN COMPILER DIRECTIVE ['//trim(verb)//']: '//trim(G_SOURCE))
-         !endif
-         !PROPOSAL<!====================
-            call stop_prep('*prep* ERROR(001) - UNKNOWN COMPILER DIRECTIVE ['//trim(verb)//']: '//trim(G_SOURCE))
-         !PROPOSAL!====================
-         !==========================================================================================================================
+         call stop_prep('*prep* ERROR(002) - UNKNOWN COMPILER DIRECTIVE ['//trim(verb)//']: '//trim(G_SOURCE))
       endif
    end select
 
@@ -260,7 +239,9 @@ character(len=G_line_length)  :: command      ! directive line with leading pref
 character(len=G_line_length)  :: defineme     ! scratch string for writing a DEFINE directive in to return command status
 integer                       :: icmd=0
 integer                       :: cstat
+integer                       :: ierr
 character(len=256)            :: sstat
+character(len=G_var_len)      :: value
 
    if(G_system_on)then
       command=adjustl(G_source(2:))                                                 ! remove $ from directive
@@ -273,15 +254,16 @@ character(len=256)            :: sstat
       call execute_command_line (command, exitstat=icmd,cmdstat=cstat,cmdmsg=sstat) ! execute system command
 
       if(icmd.ne.0)then                                                             ! if system command failed exit program
-         call stop_prep('*prep* ERROR(002) - SYSTEM COMMAND FAILED:'//v2s(icmd))
+         call stop_prep('*prep* ERROR(003) - SYSTEM COMMAND FAILED:'//v2s(icmd))
       endif
    else
-      call stop_prep('*prep* ERROR(003) - SYSTEM DIRECTIVE ENCOUNTERED BUT NOT ENABLED:'//trim(G_SOURCE))
+      call stop_prep('*prep* ERROR(004) - SYSTEM DIRECTIVE ENCOUNTERED BUT NOT ENABLED:'//trim(G_SOURCE))
    endif
 
    write(defineme,'("CMD_STATUS=",i8)')icmd
    defineme=nospace(defineme)
-   call define(defineme)
+   call expr(defineme,value,ierr)    ! only process DEFINE if not skipping data lines
+   if(ierr.ne.0) call stop_prep('*prep* ERROR(005) - expression invalid:'//trim(G_source))
 
 end subroutine exe
 !===================================================================================================================================
@@ -318,34 +300,42 @@ end subroutine write_get_arguments
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine output_case(opts)                                  !@(#)output_case(3f): process $OUTPUT directive
+subroutine output_cmd(opts)                                  !@(#)output_cmd(3f): process $OUTPUT directive
 character(len=*)              :: opts
 character(len=G_line_length)  :: filename                     ! filename on $OUTPUT command
 character(len=20)             :: position
 integer                       :: ios
-      call dissect2('output','-oo --append .false.',opts)     ! parse options and inline comment on input line
-      filename=sget('output_oo')
-      select case(filename)
-      case('@')
-         G_iout=stdout
-      case(' ')                                               ! reset back to initial output file
-         if(G_iout.ne.stdout.and.G_iout.ne.G_iout_init)then   ! do not close current output if it is stdout or default output file
-            close(G_iout,iostat=ios)
-         endif
-         G_iout=G_iout_init
-      case default
-         G_iout=61
+   call dissect2('output','-oo --append .false.',opts)     ! parse options and inline comment on input line
+
+   if(size(unnamed).gt.0.and.opts.ne.'')then
+      filename=unnamed(1)
+   else
+      filename=' '
+   endif
+
+   select case(filename)
+   case('@')
+      G_iout=stdout
+   case(' ')                                               ! reset back to initial output file
+      if(G_iout.ne.stdout.and.G_iout.ne.G_iout_init)then   ! do not close current output if it is stdout or default output file
          close(G_iout,iostat=ios)
-         if(lget('output_append'))then; position='append'; else; position='asis'; endif
-         open(unit=G_iout,file=filename,iostat=ios,action='write',position=position)
-         if(ios.ne.0)then
-            call stop_prep('*prep* ERROR(004) - FAILED TO OPEN OUTPUT FILE:'//trim(filename))
-         endif
-      end select
+      endif
+      G_iout=G_iout_init
+   case default
+      G_iout=61
+      close(G_iout,iostat=ios)
+      if(lget('append'))then; position='append'; else; position='asis'; endif
+      open(unit=G_iout,file=filename,iostat=ios,action='write',position=position)
+      if(ios.ne.0)then
+         call stop_prep('*prep* ERROR(006) - FAILED TO OPEN OUTPUT FILE:'//trim(filename))
+      endif
+   end select
+
    if(G_verbose)then
       call write_err( '+ OUTPUT FILE CHANGED TO: '//trim(filename) )
    endif
-end subroutine output_case
+
+end subroutine OUTPUT_CMD
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -355,15 +345,19 @@ character(len=G_line_length)  :: name                 ! name on $PARCEL command
 integer                       :: ios
 integer                       :: lun
 character(len=256)            :: message
-   call dissect2('parcel','-oo ',opts)                ! parse options and inline comment on input line
-   name=sget('parcel_oo')
-   if(name.eq.'')then
+   if(opts.eq.'')then
       G_inparcel=.false.
       G_iout=G_iout_init
    else
+      call dissect2('parcel','-oo ',opts)             ! parse options and inline comment on input line
+      if(size(unnamed).gt.0.and.opts.ne.'')then
+         name=unnamed(1)
+      else
+         name=''
+      endif
       open(newunit=lun,iostat=ios,action='readwrite',status='scratch',iomsg=message)
       if(ios.ne.0)then
-         call stop_prep('*prep* ERROR(005) - FAILED TO OPEN PARCEL SCRATCH FILE:'//trim(name)//' '//trim(message))
+         call stop_prep('*prep* ERROR(007) - FAILED TO OPEN PARCEL SCRATCH FILE:'//trim(name)//' '//trim(message))
       else
          G_parcelcount=G_parcelcount+1
          G_parcel_dictionary(G_parcelcount)%name=name
@@ -378,15 +372,23 @@ end subroutine parcel_case
 !===================================================================================================================================
 subroutine prepost(opts)                          !@(#)prepost(3f): process $POST directive
 character(len=*)                          :: opts
-character(len=G_line_length)              :: list
+character(len=:),allocatable              :: list
 character(len=:),allocatable              :: names(:)        ! names on $POST command
-character(len=:),allocatable              :: fors(:)         ! names on $POST --for 
+character(len=:),allocatable              :: fors(:)         ! names on $POST --for
 integer                                   :: i
 integer                                   :: j,jsz
-   call dissect2('PARCEL','-oo --FOR ',opts)                 ! parse options and inline comment on input line
-   list=sget('PARCEL_oo')
+   call dissect2('PARCEL',' --FOR " " ',opts)                 ! parse options and inline comment on input line
+
+   list=''
+   if(size(unnamed).eq.0.and.opts.ne.'')then
+      list=' '
+   else
+      do i=1,size(unnamed)
+         list=list//' '//unnamed(i)
+      enddo
+   endif
    call split(list,names,delimiters=' ,')                    ! parse string to an array parsing on delimiters
-   list=sget('PARCEL_FOR')
+   list=SGET('FOR')
    call split(list,fors,delimiters=' ,')                     ! parse string to an array parsing on delimiters
    jsz=size(fors)
    do i=size(names),1,-1
@@ -403,15 +405,65 @@ end subroutine prepost
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine ident(opts)                                 !@(#)ident(3f): process $IDENT directive
+subroutine post(parcel_name)  !@(#)post(3f): switch to scratch file defined by PARCEL
+implicit none
+character(len=*),intent(in)  :: parcel_name
+integer                      :: ifound
+integer                      :: ios
+character(len=4096)          :: message
+integer                      :: i
+   ifound=-1
+   do i=1,G_parcelcount
+      if(G_parcel_dictionary(i)%name.eq.parcel_name)then
+         ifound=G_parcel_dictionary(i)%unit_number
+         exit
+      endif
+   enddo
+   if(ifound.eq.-1)then
+      call stop_prep('*prep* ERROR(028) - PARCEL NAME NOT DEFINED:'//trim(G_source))
+   else
+      inquire(unit=ifound,iostat=ios)
+      rewind(unit=ifound,iostat=ios,iomsg=message)
+      if(ios.ne.0)then
+         call stop_prep('*prep* ERROR(029) - ERROR REWINDING PARCEL:'//trim(G_source)//':'//trim(message))
+      endif
+
+      if(G_debug)then
+         do
+            read(ifound,'(a)',iostat=ios)message
+            if(ios.ne.0)exit
+            write(stdout,*)'>>>'//trim(message)
+         enddo
+         rewind(unit=ifound,iostat=ios,iomsg=message)
+      endif
+
+      G_iocount=G_iocount+1
+      if(G_iocount.gt.size(G_file_dictionary))then
+         call stop_prep('*prep* ERROR(030) - INPUT FILE NESTING TOO DEEP:'//trim(G_source))
+      endif
+      G_file_dictionary(G_iocount)%unit_number=ifound
+      G_file_dictionary(G_iocount)%filename=parcel_name
+      G_file_dictionary(G_iocount)%line_number=0
+   endif
+end subroutine post
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine ident(opts)                              !@(#)ident(3f): process $IDENT directive
 character(len=*)              :: opts
 character(len=G_line_length)  :: lang               ! language on $IDENT command
 character(len=:),allocatable  :: text
 integer,save                  :: ident_count=1
+integer                       :: i
 
-   call dissect2('ident','-oo --language fortran',opts)  ! parse options and inline comment on input line
-   text=trim(sget('ident_oo'))
-   lang=sget('ident_language')
+   call dissect2('ident',' --language fortran',opts)  ! parse options and inline comment on input line
+
+   text=''
+   do i=1,size(unnamed)
+      text=text//' '//trim(unnamed(i))
+   enddo
+
+   lang=SGET('language')
 
    select case(lang)
    case('fortran')    !x! should make look for characters not allowed in metadata, continue over multiple lines, ...
@@ -432,83 +484,19 @@ integer,save                  :: ident_count=1
          endif
          ident_count=ident_count+1
       case default
-         call stop_prep('*prep* ERROR(006) - IDENT TOO LONG:'//trim(G_SOURCE))
+         call stop_prep('*prep* ERROR(008) - IDENT TOO LONG:'//trim(G_SOURCE))
       end select
    case('c')
          write(G_iout,'(a)')'#ident "@(#)'//text//'"'
    case default
-         call stop_prep('*prep* ERROR(007) - IDENT LANGUAGE UNKNOWN:'//trim(G_SOURCE))
+         call stop_prep('*prep* ERROR(009) - IDENT LANGUAGE UNKNOWN:'//trim(G_SOURCE))
    end select
 
 end subroutine ident
-!==================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine define(allopts)                                  !@(#)define(3f): process 'DEFINE variablename[=expression]' directive
-character(len=*),intent(in)    :: allopts                   ! packed uppercase working copy of input line with leading $verb removed
-
-character(len=G_line_length):: temp                         ! scratch
-integer                     :: iequ                         ! location of "=" in the directive, if any
-integer                     :: i                            ! loop through each expression
-integer                     :: j                            ! index thru variable dictionary to see if variable is already defined
-integer                     :: iname                        ! length of variable name
-integer                     :: istore                       ! location of variable name in dictionary
-character(len=:),allocatable :: array(:)
-character(len=:),allocatable :: opts
-character(len=G_var_len)     :: value                       ! returned variable value
-
-   call split(allopts,array,delimiters=';')                 ! parse string to an array parsing on delimiters
-
-   do i=1,size(array)
-     opts=trim(array(i))
-     if(opts.eq.'')cycle
-      ! CHECK COMMAND SYNTAX
-      iequ=index(opts,'=')                                     ! find "=" in "variable_name=expression" if any
-      iname=merge(len_trim(opts),iequ-1,iequ.eq.0)             ! find end of variable name
-      call checkname(opts(:iname))                             ! check that variable name is composed of allowed characters
-
-      if (iequ.eq.0) then                                      ! if no = then variable assumes value of 1
-         temp='1'                                              ! set string to default value
-      else                                                     ! =value string trails name on directive
-         temp=opts(iequ+1:)                                    ! get expression
-      endif
-      if(G_debug) write(stderr,*)'*define* :LINE:'//trim(temp)
-      call normalize_logical_operators(temp)
-      if(G_debug) write(stderr,*)'*define* :LINE:AFTER NORMALIZE:'//trim(temp)
-      call parens(temp)
-      if(G_debug) write(stderr,*)'*define* :LINE:AFTER PARENS:'//trim(temp)
-      call math(temp,1,len_trim(temp))
-      if(G_debug) write(stderr,*)'*define* :LINE:AFTER MATH:'//trim(temp)
-      call doop(temp,1,len_trim(temp))
-      if(G_debug) write(stderr,*)'*define* :LINE:AFTER DOOP:'//trim(temp)
-      call logic(temp,1,len_trim(temp))
-      if(G_debug) write(stderr,*)'*define* :LINE:AFTER LOGIC:'//trim(temp)
-
-      temp=nospace(temp)
-      select case(temp)
-      case('.FALSE.','.TRUE.')
-         call table%set(opts(:iname),temp)
-      case default ! assumed a number
-         if ( verify(temp(1:1),'0123456789+-').eq.0 .and.  verify(temp(2:len_trim(temp)),'0123456789').eq.0 ) then
-            call table%set(opts(:iname),temp)
-         elseif (temp(1:1).ge.'A'.and.temp(1:1).le.'Z'.or.temp(1:1).eq.'_')then ! appears to be variable name not number or logical
-            value=table%get(temp)                                                  ! find defined parameter in dictionary
-           if (value.eq.'')then                                                   ! unknown variable name
-              call stop_prep('*prep* ERROR(120) - UNDEFINED VARIABLE NAME:'//trim(G_source))
-           else
-              call table%set(opts(:iname),value)
-           endif
-         else
-            call stop_prep('*prep* ERROR(008) - NOT LOGICAL OR INTEGER EXPRESSION:'//trim(allopts))
-         endif
-      end select
-   enddo
-
-end subroutine define
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function getdate(name) result(s)         !@(#) getdate(3f): Function to write date and time into returned string in different styles
+function getdate(name) result(s)      !@(#) getdate(3f): Function to write date and time into returned string in different styles
 character(len=*),intent(in),optional :: name
 
 character(len=*),parameter           :: month='JanFebMarAprMayJunJulAugSepOctNovDec'
@@ -523,95 +511,54 @@ character(len=10)                    :: name_
    name_='prep'
    if(present(name))name_=name
    select case(lower(name_))
-   case('prep')  ; write(line,fmt) v(5), ':', v(6), v(3), month(3*v(2)-2:3*v(2)), v(1) ! PREP_DATE="00:39  5 Nov 2013"
-   case('date')  ; write(line,'(i4.4,"-",i2.2,"-",i2.2)') v(1),v(2),v(3)
-   case('cdate') ; write(line,cdate) month(3*v(2)-2:3*v(2)), v(3), v(1)
-   case('long')  ; write(line,'(i4.4,"-",i2.2,"-",i2.2," ",i2.2,":",i2.2,":",i2.2," UTC",sp,i0)') v(1),v(2),v(3),v(5),v(6),v(7),v(4)
-   case('time')  ; write(line,'(i2.2,":",i2.2,":",i2.2)') v(5),v(6),v(7)
-   case default  ; write(line,'(i4.4,"-",i2.2,"-",i2.2," ",i2.2,":",i2.2,":",i2.2," UTC",sp,i0)') v(1),v(2),v(3),v(5),v(6),v(7),v(4)
+   case('prep') ; write(line,fmt) v(5), ':', v(6), v(3), month(3*v(2)-2:3*v(2)), v(1) ! PREP_DATE="00:39  5 Nov 2013"
+   case('date') ; write(line,'(i4.4,"-",i2.2,"-",i2.2)') v(1),v(2),v(3)
+   case('cdate'); write(line,cdate) month(3*v(2)-2:3*v(2)), v(3), v(1)
+   case('long') ; write(line,'(i4.4,"-",i2.2,"-",i2.2," ",i2.2,":",i2.2,":",i2.2," UTC",sp,i0)') v(1),v(2),v(3),v(5),v(6),v(7),v(4)
+   case('time') ; write(line,'(i2.2,":",i2.2,":",i2.2)') v(5),v(6),v(7)
+   case default ; write(line,'(i4.4,"-",i2.2,"-",i2.2," ",i2.2,":",i2.2,":",i2.2," UTC",sp,i0)') v(1),v(2),v(3),v(5),v(6),v(7),v(4)
    end select
    s=trim(line)
 end function getdate
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine checkname(line)                                                 !@(#)name(3f): test for legal variable name
-character(len=*)          :: line
-integer                   :: i
-
-   if (len(line).eq.0)then
-    call stop_prep("*prep* ERROR(028) - NULL VARIABLE NAME:"//trim(G_source))
-   else if (line(1:1).lt.'A'.or.line(1:1).gt.'Z'.and.line(1:1).ne.'_')then                         ! variable names start with a-z
-    call stop_prep("*prep* ERROR(016) - NAME DOES NOT START WITH ALPHAMERIC OR '_' (OR GENERAL SYNTAX ERROR):"//trim(G_source))
-   elseif(len_trim(line).gt.G_var_len)then
-     call stop_prep('*prep* ERROR(017) - VARIABLE NAME EXCEEDS '//v2s(G_var_len)//' CHARACTERS:'//trim(G_source))
+subroutine check_name(line)
+! determine if a string is a valid Fortran name ignoring trailing spaces (but not leading spaces)
+character(len=*),parameter   :: dig='0123456789'
+character(len=*),parameter   :: lower='abcdefghijklmnopqrstuvwxyz'
+character(len=*),parameter   :: upper='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+character(len=*),parameter   :: allowed=upper//lower//dig//'_'
+character(len=*),intent(in)  :: line
+character(len=:),allocatable :: name
+logical                      :: lout
+   name=trim(line)
+   if(len(name).ne.0)then
+      lout = .true.                         &
+      & .and. verify(name,allowed) == 0     &
+      & .and. len(name) <= 63
+   else
+      call stop_prep("*check_name* ERROR(010) - null variable name:"//trim(G_source))
+      lout = .false.
    endif
-
-   do i=2,len_trim(line)                                                 ! name uses $  _ and letters (A-Z) digits (0-9)
-      if(line(i:i).ne.'$'.and.line(i:i).ne.'_'.and.     &
-      & (line(i:i).lt.'A'.or.line(i:i).gt.'Z').and.     &
-      & (line(i:i).lt.'0'.or.line(i:i).gt.'9')) then
-      call stop_prep('*prep* ERROR(018) - VARIABLE NAME CONTAINS UNALLOWED CHARACTER(OR GENERAL SYNTAX ERROR):'//trim(G_source))
-      endif
-   enddo
-
-end subroutine checkname
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine getval(line,ipos1,ipos2,value)     !@(#)getval(3f): get value from dictionary for given variable name or return input
-character(len=G_line_length),intent(in)   :: line                           ! current(maybe partial) directive line
-integer,intent(in)                        :: ipos1                          ! beginning position of variable name in LINE
-integer,intent(in)                        :: ipos2                          ! ending position of variable name in LINE
-character(len=G_var_len),intent(out)      :: value                          ! returned variable value
-
-character(len=G_line_length)           :: temp                              ! copy of substring being examined
-integer                                :: i
-integer                                :: ivalue
-
-   temp=line(ipos1:ipos2)                                                   ! place variable name/value substring into TEMP
-
-   if (temp(1:1).eq.' ')then                                                ! did not find expected variable name or value
-      call stop_prep('*prep* ERROR(019) - INCOMPLETE STATEMENT.'//trim(G_SOURCE))
+   if(.not.lout)then
+     call stop_prep('*check_name* ERROR(011) - name contains unallowed character(or general syntax error):'//trim(G_source))
    endif
-
-   if (temp(1:1).ge.'A'.and.temp(1:1).le.'Z'.or.temp(1:1).eq.'_') then      ! appears to be a variable name (not number or logical)
-
-     value=table%get(temp)                                                  ! find defined parameter in dictionary
-     if (value.eq.'')then                                                   ! unknown variable name
-        call stop_prep('*prep* ERROR(020) - UNDEFINED VARIABLE NAME:'//trim(G_source))
-     endif
-     return
-   else                                                                     ! not a variable name, try as a value
-     read(temp(1:11),'(i11)',err=3) ivalue                                  ! try string as a numeric integer value
-     write(value,'(i11)') ivalue                                            ! write numeric value into VALUE
-     return                                                                 ! successfully return numeric VALUE
-
-3    continue                                                               ! failed to read numeric value
-     value=temp(:G_var_len)                                                 ! test TEMP as a logical
-     if (value.ne.'.FALSE.'.and.value.ne.'.TRUE.')then                      ! if here, value should be a logical
-        call stop_prep('*prep* ERROR(021) - SYNTAX ERROR.'//trim(G_source))
-     endif
-                                                                            ! value is ".TRUE." or ".FALSE."
-   endif
-
-   if(temp(1:1).ge.'A')then
-      call stop_prep('*prep* ERROR(022) - $DEFINE VALUE MUST BE AN INTEGER OR LOGICAL CONSTANT.'//trim(G_source))
-   endif
-
-end subroutine getval
+end subroutine check_name
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine unset(opts)                                     !@(#)unset(3f): process UNSET directive
 character(len=*)             :: opts                       ! directive with no spaces, leading prefix removed, and all uppercase
 character(len=:),allocatable :: names(:)
-integer                      :: i,k
+integer                      :: i
+integer                      :: k
+integer                      :: ibug
 
    ! REMOVE VARIABLE IF FOUND IN VARIABLE NAME DICTIONARY
    ! allow basic globbing where * is any string and ? is any character
    if (len_trim(opts).eq.0) then                           ! if no variable name
-      call stop_prep('*prep* ERROR(023) - $UNSET MISSING TARGETS:'//trim(G_source))
+      call stop_prep('*prep* ERROR(012) - $UNSET MISSING TARGETS:'//trim(G_source))
    endif
    call split(opts,names,delimiters=' ;,')
 
@@ -619,36 +566,15 @@ integer                      :: i,k
       if(G_verbose)then
          call write_err('+ $UNSET '//names(k))
       endif
-      call prep_update(names(k))
-   enddo
-end subroutine unset
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine undef(opts)                                     !@(#)undef(3f): process UNDEFINE directive
-character(len=*)             :: opts                       ! directive with no spaces, leading prefix removed, and all uppercase
-character(len=:),allocatable :: names(:)
-integer                      :: i,k
-
-   ! REMOVE VARIABLE IF FOUND IN VARIABLE NAME DICTIONARY
-   ! allow basic globbing where * is any string and ? is any character
-   if (len_trim(opts).eq.0) then                           ! if no variable name
-      call stop_prep('*prep* ERROR(023) - $UNDEFINE MISSING TARGETS:'//trim(G_source))
-   endif
-   call split(opts,names,delimiters=' ;,')
-
-   do k=1,size(names)
-      if(G_verbose)then
-         call write_err('+ $UNDEFINE '//names(k))
-      endif
-      do i=size(table%key),1,-1                           ! find defined variable to be undefined by searching dictionary
-         if (glob(trim(table%key(i)),trim(names(k))))then   ! found the requested variable name
-            call  table%del(table%key(i))
+      ! added UBOUND call because GFORTRAN returns size of 1 when undefined, OK with ifort and nvfortran
+      ibug=minval([size(macro%key),ubound(macro%key)])   ! print variable dictionary
+      do i=ibug,1,-1                           ! find defined variable to be undefined by searching dictionary
+         if (glob(trim(macro%key(i)),trim(names(k))))then   ! found the requested variable name
+            call  macro%del(macro%key(i))
          endif
       enddo
    enddo
-
-end subroutine undef
+end subroutine unset
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -656,10 +582,9 @@ subroutine if(opts,noelse,eb)                                 !@(#)if(3f): proce
 character(len=*),intent(in)  :: opts
 integer,intent(out)          :: noelse
 logical                      :: eb
-character(len=G_var_len)     :: name
 character(len=G_var_len)     :: value
 integer                      :: ios
-integer                      :: i
+integer                      :: ierr
 integer                      :: ithen
 character(len=G_line_length) :: expression
 
@@ -668,7 +593,7 @@ character(len=G_line_length) :: expression
 
    G_nestl=G_nestl+1                                          ! increment IF nest level
    if (G_nestl.gt.G_nestl_max) then
-      call stop_prep('*prep* ABORT(bh) - "IF" BLOCK NESTING TOO DEEP, LIMITED TO '//v2s(G_nestl_max)//' LEVELS:'//trim(G_source))
+      call stop_prep('*prep* ERROR(013) - "IF" BLOCK NESTING TOO DEEP, LIMITED TO '//v2s(G_nestl_max)//' LEVELS:'//trim(G_source))
    endif
 
    expression=opts
@@ -679,40 +604,25 @@ character(len=G_line_length) :: expression
       endif
    endif
 
-   FIND_DEFINED: do                                               ! find and reduce all DEFINED() functions to ".TRUE." or ".FALSE."
-      if (index(expression,'DEFINED(').ne.0) then                 ! find a DEFINED() function
-         call ifdefined(expression,index(expression,'DEFINED('))  ! reduce DEFINED() function that was found
-         expression=nospace(expression)                           ! remove any spaces from rewritten expression
-         cycle                                                    ! look for another DEFINED() function
-      endif
-      exit                                                        ! no remaining DEFINED() functions so exit loop
-   enddo FIND_DEFINED
+   if(G_debug.and.G_verbose) write(stderr,*)'*if* TOP:EXPRESSION:'//trim(expression)
 
-   call normalize_logical_operators(expression)
-   call parens(expression)
-   if (index(expression,'.').eq.0) then                            ! if line should be a variable only
-      if (expression(1:1).ge.'A'.and.expression(1:1).le.'Z'.or.expression(1:1).eq.'_') then ! check name starts with valid character
-         call checkname(expression)                        ! check that expression contains only a legitimate variable name
-         name=expression(:G_var_len)                      ! get variable name
-         value=table%get(name)
-         if (value.eq.'') then                           ! if failed to find variable name
-            call stop_prep('*prep* ERROR(024) - UNDEFINED PARAMETER IN IF:'//trim(G_source))
-         endif
-         read(value,'(l4)',iostat=ios) G_dc          ! convert variable value to a logical
-         if(ios.ne.0)then
-            call stop_prep('*prep* ERROR(025) - CONSTANT LOGICAL EXPRESSION REQUIRED.'//trim(G_source))
-         endif
-      else                                                 ! this should have been a variable name
-         call stop_prep('*prep* ERROR(026) - CONSTANT LOGICAL EXPRESSION REQUIRED:'//trim(G_source))
-      endif
-   else                                                    ! a period is present in the expression so it needs evaluated
-      call eval(expression)                                ! evaluate line
+   value=''
+   call expr(expression,value,ierr,logical=.true.)
+   if(ierr.eq.0)then
+      read(value,'(l7)',iostat=ios)G_dc
+   else
+      G_dc=.false.
+      call stop_prep('*prep* ERROR(014) - "IF" expression invalid:'//trim(G_source))
    endif
+
    if (.not.G_dc.or..not.G_condop(G_nestl-1).or.eb)then
+      if(G_debug.and.G_verbose) write(stderr,*)'*if* PREVIOUS:'
       return                                               ! check to make sure previous IF was true
    endif
    G_condop(G_nestl)=.true.
    G_write=G_condop(G_nestl)
+   if(G_debug.and.G_verbose) write(stderr,*)'*if* BOT:'
+
 end subroutine if
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -724,21 +634,20 @@ integer,intent(out)          :: noelse
 logical                      :: eb
 character(len=G_var_len)     :: name
 character(len=G_var_len)     :: value
-integer                      :: i
 character(len=:),allocatable :: varvalue
 
    noelse=0
    G_write=.false.
    G_nestl=G_nestl+1                                 ! increment IF nest level
    if (G_nestl.gt.G_nestl_max) then
-      call stop_prep('*prep* ABORT(bh) - "IF" BLOCK NESTING TOO DEEP, LIMITED TO '//v2s(G_nestl_max)//' LEVELS:'//trim(G_source))
+      call stop_prep('*prep* ERROR(015) - "IF" BLOCK NESTING TOO DEEP, LIMITED TO '//v2s(G_nestl_max)//' LEVELS:'//trim(G_source))
    endif
-   call checkname(opts)                              ! check that opts contains only a legitimate variable name
+   call check_name(opts)                             ! check that opts contains only a legitimate variable name
    value=opts                                        ! set VALUE to variable name
    G_dc=.true.                                       ! initialize
 
    name=table%get(value)
-   if (name.eq.'') then                           ! if failed to find variable name
+   if (name.eq.'') then                              ! if failed to find variable name
       G_dc=.false.
    endif
    if((.not.G_noenv).and.(.not.G_dc))then            ! if not found in variable dictionary check environment variables if allowed
@@ -759,47 +668,13 @@ end subroutine def
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine ifdefined(line,ipos1)                         !@(#)ifdefined(3f): process and reduce DEFINED() function that was found
-character(len=G_line_length)         :: line
-integer,intent(in)                   :: ipos1
-
-character(len=G_line_length)         :: newl
-character(len=G_var_len),allocatable :: ifvars(:)
-character(len=G_var_len),allocatable :: value
-integer                              :: j
-
-   newl=line(ipos1+7:) ! defined(
-
-   if (len_trim(newl).eq.1.or.index(newl,')').eq.0.or. index(newl,')').eq.2)then
-      call stop_prep("*prep* ERROR(027) - INCOMPLETE STATEMENT."//trim(G_SOURCE))
-   endif
-
-   G_dc=.true.
-   line(ipos1:ipos1+6+index(newl,')'))='.TRUE.'
-   ifvars= sep(newl(2:index(newl,')')-1),',')
-
-   LIST: do j=1,size(ifvars)
-
-      call checkname(ifvars(j))                          ! test for legal variable name
-      value=table%get(ifvars(j))
-      if(value.ne.'')cycle LIST
-      G_dc=.false.
-      line(ipos1:ipos1+6+index(newl,')'))='.FALSE.'
-      exit LIST
-
-   enddo LIST
-
-end subroutine ifdefined
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 subroutine else(verb,opts,noelse,eb)                       !@(#)else(3f): process else and elseif
 character(len=*)              :: verb
 character(len=*)              :: opts
 integer                       :: noelse
-integer                       :: ithen
 logical                       :: eb
 character(len=G_line_length)  :: expression
+integer                       :: ithen
 
    expression=opts
    ithen=len_trim(opts)  ! trim off ")THEN"
@@ -810,7 +685,8 @@ character(len=G_line_length)  :: expression
    endif
 
    if(noelse.eq.1.or.G_nestl.eq.0) then                    ! test for else instead of elseif
-      call stop_prep("*prep* ERROR(031) - MISPLACED $ELSE OR $ELSEIF DIRECTIVE:"//trim(G_SOURCE))
+      call stop_prep("*prep* ERROR(016) - MISPLACED $ELSE OR $ELSEIF DIRECTIVE:"//trim(G_SOURCE))
+      return
    endif
    if(verb.eq.'ELSE')then
       noelse=1
@@ -844,7 +720,7 @@ logical,intent(out)           :: eb
    G_nestl=G_nestl-1                                           ! decrease if level
 
    if(G_nestl.lt.0)then
-      call stop_prep("*prep* ERROR(032) - MISPLACED $ENDIF DIRECTIVE:"//trim(G_source))
+      call stop_prep("*prep* ERROR(017) - MISPLACED $ENDIF DIRECTIVE:"//trim(G_source))
    endif
 
    noelse=0                                                    ! reset else level
@@ -861,340 +737,7 @@ end subroutine endif
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine parens(line)                       !@(#)parens(3f): find subexpressions in parenthesis and process them
-character(len=G_line_length)    :: line       ! line        -
-integer                         :: i
-integer                         :: j
-
-   if(G_debug.and.G_verbose)then
-       write(stderr,*)'*parens* TOP:LINE:'//trim(line)
-   endif
-   TILLDONE: do
-      if (index(line,')').ne.0) then          ! closing parens found
-         do i=index(line,')'),1,-1            ! find first right paren, then backwards to left paren (find innermost set of parens)
-            if (line(i:i).eq.'(') exit
-         enddo
-         if (i.eq.0) then
-            call stop_prep("*prep* ERROR(033) - CONSTANT LOGICAL EXPRESSION REQUIRED:"//trim(G_source))
-         endif
-         call math(line,i+1,index(line,')')-1)
-         call doop(line,i+1,index(line,')')-1)
-         call logic(line,i+1,index(line,')')-1)
-         if (i.eq.1.and.index(line,')').eq.len_trim(line)) then          ! rewrite line after no more parens
-            line=line(i+1:index(line,')')-1)
-         elseif (i.eq.1) then                                            ! rewrite line after first set of parens
-            line=line(2:index(line,')')-1)//line(index(line,')')+1:)
-         elseif (index(line,')').eq.len_trim(line)) then                 ! rewrite line after last set of parens on line
-
-            if (line(i+1:i+1).eq.'-'.and.index('*/+-',line(i-1:i-1)).ne.0) then
-               do j=i-2,1,-1
-                  if (index('*/+-',line(j:j)).ne.0) exit
-               enddo
-               !if (j.eq.i-2) then
-               !   call stop_prep("*prep* 1**(-1) NOT IMPLEMENTED YET")
-               !endif
-
-               select case (index('*/+-',line(i-1:i-1)))
-               case(1,2)
-                  if (j.eq.0) then
-                     line='-'//line(:i-1)//line(i+2:index(line,')')-1)
-                  else
-                     line=line(:j)//'(-'//line(j+1:i-1)//line(i+2:index(line,')'))
-                  endif
-               case(3)
-                  line=line(:i-2)//'-'//line(i+2:index(line,')')-1)
-               case(4)
-                  line=line(:i-2)//'+'//line(i+2:index(line,')')-1)
-               case default
-               end select
-            else
-               line=line(:i-1)//line(i+1:index(line,')')-1)
-            endif
-         elseif (line(i+1:i+1).eq.'-'.and.index('*/+-',line(i-1:i-1)).ne.0) then
-            do j=i-2,1,-1
-               if (index('*/+-',line(j:j)).ne.0) exit
-            enddo
-            !if (j.eq.i-2) then
-            !   !call stop_prep("*prep* 1**(-1) Not Implemented Yet")
-            !endif
-
-            select case (index('*/+-',line(i-1:i-1)))
-            case(1,2)
-               if (j.eq.0) then
-                  line='-'//line(:i-1)//line(i+2:index(line,')')-1)//line(index(line,')')+1:)
-               else
-                  line=line(:j)//'(-'//line(j+1:i-1)//line(i+2:index(line,')'))//line(index(line,')')+1:)
-               endif
-            case(3)
-               line=line(:i-2)//'-'//line(i+2:index(line,')')-1)//line(index(line,')')+1:)
-            case(4)
-               line=line(:i-2)//'+'//line(i+2:index(line,')')-1)//line(index(line,')')+1:)
-            case default
-            end select
-         else
-            line=line(:i-1)//line(i+1:index(line,')')-1)//line(index(line,')')+1:)
-         endif
-      line=nospace(line)
-      cycle TILLDONE
-   elseif (index(line,'(').ne.0) then
-      call stop_prep('*prep* ERROR(034) - CONSTANT LOGICAL EXPRESSION REQUIRED:'//trim(G_source))
-   endif
-   exit
-   enddo TILLDONE
-   if(G_debug.and.G_verbose)then
-       write(stderr,*)'*parens* BOTTOM:LINE:'//trim(line)
-   endif
-end subroutine parens
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine math(line,ipos1,ipos2)                             !@(#)math(3f):
-integer                               :: ipos1
-integer                               :: ipos2
-integer                               :: i,j
-character(len=G_line_length)          :: line
-character(len=G_line_length)          :: newl
-
-   newl=line(ipos1:ipos2)
-   i=1
-
-   do
-      j=index(newl(i:),'.')
-      if (j.ne.0.and.j.ne.1) then
-         call domath(newl(i:j+i-2),j-1)
-         i=i+j
-      elseif (j.eq.1) then
-         i=i+1
-      else
-         call domath(newl(i:),ipos2-i+1)
-         exit
-      endif
-   enddo
-
-   line(ipos1:ipos2)=newl
-   line=nospace(line)
-
-end subroutine math
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine domath(line,ipos2)            !@(#)domath(3f): reduce integer expression containing  +-/* and ** operators
-character(len=*)                :: line
-integer                         :: ipos2
-
-character(len=11)               :: temp
-character(len=G_line_length)    :: newl
-character(len=2),save           :: ops(3)= ['**','*/','+-']
-integer                         :: i
-integer                         :: j
-integer                         :: loc
-integer                         :: minus1
-integer                         :: i1
-integer                         :: i2
-integer                         :: l
-integer                         :: len
-integer                         :: numop
-
-  if (ipos2.eq.0) return
-  loc=0
-  j=0
-  minus1=1
-  newl=line(:ipos2)
-  OVERALL: do numop=1,3                         ! check **, then */, then +-
-     TILLDONE: do                               ! keep doing reduction of current operators
-       i=index(newl,ops(numop))                 ! find location in input string where operator string was found
-       if (numop.ne.1) then                     ! if not the two-character operator ** check for either operator of current group
-         i=index(newl,ops(numop)(1:1))          ! find  first operator of group, if present
-         j=index(newl,ops(numop)(2:2))          ! find second operator of group, if present
-         i=max(i,j)                             ! find right-most operator, if any
-         if (i*j.ne.0) i=min(i,j)               ! if at least one operator is present find left-most
-       endif
-       IF (I.EQ.0) cycle OVERALL                ! did not find these operators
-
-       LEN=1                                    ! operator length
-       IF (NUMOP.EQ.1) LEN=2
-       IF (I.EQ.len_trim(NEWL)) then            ! if operator is at end of string
-          call stop_prep("*prep* ERROR(035) - INCOMPLETE STATEMENT. OPERATOR (**,/,*,+,-) AT STRING END:"//trim(G_SOURCE))
-          exit OVERALL
-       endif
-       IF (I.EQ.1.AND.NUMOP.NE.3) then          ! if operator at beginning of string and not +-
-        call stop_prep("*prep* ERROR(036) - SYNTAX ERROR. OPERATOR (**,*,/) NOT ALLOWED TO PREFIX EXPRESSION:"//trim(G_SOURCE))
-          exit OVERALL
-       endif
-       if (.not.(i.eq.1.and.numop.eq.3)) then   ! if processing +- operators and sign at beginning of string skip this
-          if (index('*/+-',newl(i-1:i-1)).ne.0.or.index('*/+-',newl(i+len:i+len)).ne.0) then
-            call stop_prep('*prep* ERROR(037) - SYNTAX ERROR IN DOMATH:'//trim(G_source))
-            exit OVERALL
-          endif
-       endif
-
-       i1=0
-       if (.not.(i.eq.1.and.numop.eq.3)) then
-          do j=i-1,1,-1
-            if (index('*/+-.',newl(j:j)).eq.0) cycle
-            exit
-          enddo
-          if (.not.(j.eq.i-1.and.j.ne.1))then
-             i1=get_integer_from_string(newl(j+1:i-1))
-          endif
-       endif
-       do l=i+len_trim(ops(numop)),len_trim(newl)
-         if (index('*/+-.',newl(l:l)).eq.0) cycle
-         exit
-       enddo
-
-       i2=get_integer_from_string(newl(i+len:l-1))
-
-       if (numop.eq.1) then
-         i1=i1**i2*minus1
-       else
-          select case (index('*/+-',newl(i:i)))
-          case(1)
-             i1=i1*i2*minus1
-          case(2)
-             if(i2.eq.0)then
-                call stop_prep('*prep* ERROR(038) - DIVIDE BY ZERO:'//trim(G_source))
-                exit OVERALL
-             endif
-             i1=i1/i2*minus1
-          case(3)
-          if (i1.ne.0) then
-            i1=i1*minus1+i2
-          else
-            i1=i1+i2*minus1
-          endif
-          case(4)
-             if (i1.ne.0) then
-               i1=i1*minus1-i2
-             else
-               i1=i1-i2*minus1
-             endif
-          case default
-             call stop_prep('*prep* ERROR(039) - INTERNAL PROGRAM ERROR:'//trim(G_source))
-             exit OVERALL
-          end select
-       endif
-
-       if (i1.le.0) then
-         if (j.eq.i-1.and.j.ne.1) then
-           minus1=-1
-           i1=abs(i1)
-           loc=j+1
-           newl(j+1:j+1)=' '
-           l=l-1
-           newl=nospace(newl)
-         elseif (i.eq.1.and.numop.eq.3) then
-           minus1=-1
-           i1=abs(i1)
-           loc=i
-           newl(j:j)=' '
-           l=l-1
-           j=j-1
-           newl=nospace(newl)
-         else
-           minus1=1
-         endif
-       else
-         minus1=1
-       endif
-       write(temp,'(i11)') i1
-       temp=nospace(temp)
-       if (j.eq.0.and.l.gt.len_trim(newl)) then
-         newl=temp(:len_trim(temp))
-         cycle overall
-       elseif (j.eq.0) then
-         newl=temp(:len_trim(temp))//newl(l:)
-       elseif (l.gt.len_trim(newl)) then
-         newl=newl(:j)//temp(:len_trim(temp))
-       else
-         newl=newl(:j)//temp(:len_trim(temp))//newl(l:)
-       endif
-       if(i1.lt.0)then  ! if i1 is negative, could produce +-
-          call substitute(newl,'+-','-')
-       endif
-     enddo TILLDONE
-  enddo OVERALL
-
-  if (minus1.eq.-1.and.(loc.eq.0.or.loc.eq.1)) then
-     newl(:G_line_length)='-'//trim(newl)  !x! note potentially trimming a character off the end
-  elseif (minus1.eq.-1.and.loc.ne.1) then
-     newl=newl(:loc-1)//'-'//newl(loc:)
-  endif
-
-  line(:ipos2)=newl(:len_trim(newl))
-
-end subroutine domath
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine doop(line,ipos1,ipos2)                       !@(#)doop(3f): find VAL.OP.VAL strings and reduce to .TRUE. or .FALSE.
-character(len=G_line_length)    :: line
-integer                         :: ipos1
-integer                         :: ipos2
-
-character(len=4),parameter      :: ops(6) = ['.EQ.','.NE.','.GE.','.GT.','.LE.','.LT.']
-character(len=G_var_len)        :: val1
-character(len=G_var_len)        :: val2
-integer                         :: ival1, ival2
-character(len=7)                :: temp
-
-character(len=G_line_length)    :: newl
-integer                         :: i,j,k
-
-   newl=line(ipos1:ipos2)
-   CHECK_EACH_OP_TYPE: do i=1,6
-      FIND_MORE_OF: do
-         G_dc=.false.
-         if (index(newl,ops(i)).ne.0) then                       ! found current operator looking for
-            do j=index(newl,ops(i))-1,1,-1
-               if (newl(j:j).eq.'.') then
-                  exit
-               endif
-            enddo
-            call getval(newl,j+1,index(newl,ops(i))-1,val1)
-            do k=index(newl,ops(i))+4,len_trim(newl)
-               if (newl(k:k).eq.'.')then
-                  exit
-               endif
-            enddo
-            call getval(newl,index(newl,ops(i))+4,k-1,val2)
-            ival1=get_integer_from_string(val1)
-            ival2=get_integer_from_string(val2)
-            select case(i)                                       ! determine truth
-            case(1)                                              ! .eq.
-               if (ival1.eq.ival2) G_dc=.true.
-            case(2)                                              ! .ne.
-               if (ival1.ne.ival2) G_dc=.true.
-            case(3)                                              ! .ge.
-               if (ival1.ge.ival2) G_dc=.true.
-            case(4)                                              ! .gt.
-               if (ival1.gt.ival2) G_dc=.true.
-            case(5)                                              ! .le.
-               if (ival1.le.ival2) G_dc=.true.
-            case(6)                                              ! .lt.
-               if (ival1.lt.ival2) G_dc=.true.
-            case default
-            end select
-            temp='.FALSE.'
-            if (G_dc) temp='.TRUE.'
-            call rewrit(newl,temp(:len_trim(temp)),j,j,k,k)
-            newl=nospace(newl)
-            cycle
-         endif
-         exit
-      enddo FIND_MORE_OF
-   enddo CHECK_EACH_OP_TYPE
-   if (ipos1.ne.1) then
-      line=line(:ipos1-1)//newl(:len_trim(newl))//line(ipos2+1:)
-   else
-      line=newl(:len_trim(newl))//line(ipos2+1:)
-   endif
-   line=nospace(line)
-end subroutine doop
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-logical function true_or_false(line,ipos1,ipos2)       !@(#)true_or_false(3f): convert variable name or .TRUE./.FALSE. to a logical value
+logical function true_or_false(line,ipos1,ipos2) !@(#)true_or_false(3f): convert variable name or .TRUE./.FALSE. to a logical value
 character(len=G_line_length),intent(in) :: line              ! line containing string to interpret as a logical value
 integer,intent(in)                      :: ipos1             ! starting column of substring in LINE
 integer,intent(in)                      :: ipos2             ! ending column of substring in LINE
@@ -1215,11 +758,11 @@ integer                                 :: ios               ! error code return
       value=table%get(substring)
 
       if (value.eq.'') then                                  ! if not a defined variable name stop program
-         call stop_prep('*prep* ERROR(040) - UNDEFINED VARIABLE.'//trim(G_source))
+         call stop_prep('*prep* ERROR(018) - UNDEFINED VARIABLE. DIRECTIVE='//trim(G_source)//' VARIABLE='//trim(substring))
       else
          read(value,'(l4)',iostat=ios) true_or_false         ! try to read a logical from the value for the variable name
          if(ios.ne.0)then                                    ! not successful in reading string as a logical value
-            call stop_prep('*prep* ERROR(041) - CONSTANT LOGICAL EXPRESSION REQUIRED.'//trim(G_source))
+            call stop_prep('*prep* ERROR(019) - CONSTANT LOGICAL EXPRESSION REQUIRED.'//trim(G_source))
          endif
       endif
 
@@ -1229,186 +772,12 @@ end function true_or_false
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine logic(line,ipos1,ipos2)           !@(#)logic(3f): process .OP. operator strings
-character(len=*)             :: line
-integer,intent(in)           :: ipos1, ipos2
-
-logical                      :: one, two
-character(len=7)             :: temp
-character(len=G_line_length) :: newl
-character(len=6),save        :: ops(5)= (/'.NOT. ','.AND. ','.OR.  ','.EQV. ','.NEQV.'/)
-integer                      :: i,j,k,l
-integer                      :: ieqv
-integer                      :: ineqv
-integer                      :: i1
-integer                      :: iop
-integer                      :: len
-integer                      :: len1
-integer                      :: len2
-
-   newl=line(ipos1:ipos2)
-   len1=0
-   len2=0
-   one=.false.
-   LOOP: do i=1,3
-      20 continue
-           LEN=len_trim(ops(i))
-           IF (INDEX(NEWL,OPS(I)(:len_trim(OPS(I)))).EQ.0) cycle
-           I1=INDEX(NEWL,OPS(I)(:len_trim(OPS(I))))-1
-           J=I1+1
-           LEN1=0
-           IF (I.NE.1) then
-              OUTER: DO J=I1,1,-1
-                INNER: DO K=1,5
-                   LEN1=5
-                   IF (K.EQ.3) LEN1=4
-                   IF (INDEX(NEWL(J:I1),OPS(K)(:len_trim(OPS(K)))).NE.0) exit OUTER
-                enddo INNER
-              enddo OUTER
-              IF (J.EQ.0) LEN1=1
-              ONE=true_or_false(NEWL,J+LEN1,I1)
-           endif
-
-           OUT: DO L=I1+LEN,len_trim(NEWL)
-             IN: DO K=1,5
-                LEN2=5
-                IF (K.EQ.3) LEN2=4
-                IF (INDEX(NEWL(I1+LEN:L),OPS(K)(:len_trim(OPS(K)))).NE.0) exit OUT
-             enddo IN
-           enddo OUT
-
-           IF (L.GT.len_trim(NEWL)) LEN2=0
-           TWO=true_or_false(NEWL,I1+LEN+1,L-LEN2)
-
-           select case(i)
-           case(1); G_dc=.not.two
-           case(2); G_dc=one.and.two
-           case(3); G_dc=one.or.two
-           case default
-              call stop_prep('*prep* internal error')
-           end select
-
-           temp='.FALSE.'
-           if (G_dc) temp='.TRUE.'
-           call rewrit(newl,temp(:len_trim(temp)),j,j+len1-1,l,l-len2+1)
-        goto 20
-   enddo LOOP
-   TILLDONE: do
-      ieqv=index(newl,'.EQV.')
-      ineqv=index(newl,'.NEQV.')
-      if (ieqv*ineqv.eq.0.and.ieqv.ne.ineqv) then
-        iop=max(ieqv,ineqv)
-      elseif (ieqv.ne.0) then
-        iop=min(ieqv,ineqv)
-      elseif (ipos1.eq.1) then
-        line=newl(:len_trim(newl))//line(ipos2+1:)
-        return
-      else
-        line=line(:ipos1-1)//newl(:len_trim(newl))//line(ipos2+1:)
-        return
-      endif
-      len=5
-      if (index(newl,'.EQV.').ne.iop) len=6
-      do j=iop-1,1,-1
-         if (newl(j:j+1).eq.'V.') exit
-      enddo
-      if (j.eq.0) len1=1
-      one=true_or_false(newl,j+len1,iop-1)
-      do l=iop+len,len_trim(newl)
-         if (newl(l:l+1).eq.'.E'.or.newl(l:l+1).eq.'.N') exit
-      enddo
-      if (l.gt.len_trim(newl)) len2=0
-      two=true_or_false(newl,iop+len,l+len2)
-      G_dc=one.eqv.two
-      if (len.ne.5) G_dc=one.neqv.two
-      temp='.FALSE.'
-      if (G_dc) temp='.TRUE.'
-      call rewrit(newl,temp(:len_trim(temp)),j,j+len1-1,l,l-len2+1)
-   enddo TILLDONE
-end subroutine logic
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine eval(line)                                   !@(#)eval(3f): evaluate math expression to .TRUE. or .FALSE.
-character(len=G_line_length)   :: line
-character(len=7)               :: value
-
-   call parens(line)
-   call math(line,1,len_trim(line))
-   call doop(line,1,len_trim(line))
-   call logic(line,1,len_trim(line))
-   value=line(1:7)
-
-   if (value.ne.'.TRUE.'.and.value.ne.'.FALSE.') then
-      call stop_prep('*prep* ERROR(043) - value neither true or false:'//trim(value)//' when evaluating: '//trim(G_source))
-   endif
-
-   read(value,'(l4)') G_dc
-
-end subroutine eval
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-function get_integer_from_string(line) !@(#)get_integer_from_string(3f): read integer value from line
-                                                                    ! assume string is a variable name or an integer value
-character(len=*),intent(in)  :: line                                ! string to read an integer value from
-integer                      :: i                                   ! index of variable dictionary where variable name is stored
-integer                      :: ios                                 ! I/O error value to check to see if internal reads succeeded
-integer                      :: get_integer_from_string             ! integer value to return if string is converted successfully
-character(len=:),allocatable :: value
-   get_integer_from_string=0
-   if(len_trim(line).eq.0)then
-      get_integer_from_string=0
-   elseif (verify(line,'0123456789 +-').eq.0) then                  ! assumed a number
-      read(line,'(i11)',iostat=ios) get_integer_from_string         ! try to read integer value from input string
-      if(ios.ne.0)then                                              ! failed to convert the string to an integer, so stop
-        call stop_prep('*prep* ERROR(044) - MUST BE INTEGER:"'//trim(line)//'" IN '//trim(G_source))
-      endif
-   else                                                             ! input is not a number, assume it represents a variable name
-      value=table%get(line)
-      if (value.eq.'')then                                          ! if variable name not found in dictionary, stop
-        call stop_prep('*prep* ERROR(045) - UNDEFINED VARIABLE NAME:"'//trim(line)//'" IN '//trim(G_source))
-      else
-         read(value,'(i11)',iostat=ios) get_integer_from_string     ! read integer value from the value associated with name
-         if(ios.ne.0)then                                           ! failed reading integer from value, stop
-           call stop_prep('*prep* ERROR(046) - MUST BE INTEGER:"'//trim(line)//"="//trim(value)//'" IN '//trim(G_source))
-         endif
-      endif
-   endif                                                            ! return integer value
-end function get_integer_from_string
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine rewrit(line,temp,j,j1,l,l1)           !@(#)rewrit(3f):
-character(len=G_line_length)  line
-character(len=*)           :: temp
-integer                    :: j
-integer                    :: j1
-integer                    :: l
-integer                    :: l1
-
-   if (j.eq.0.and.l.gt.len_trim(line)) then      ! done
-      line=temp
-   elseif (j.eq.0) then                          ! first item
-      line=temp//line(l1:)
-   elseif (l.gt.len_trim(line)) then             ! last item
-      if (j1.ne.0) then
-         line=line(:j1)//temp
-      else
-         line=temp
-      endif
-   else                                          ! middle item
-        line=line(:j1)//temp//line(l1:)
-   endif
-end subroutine rewrit
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 subroutine document(opts)                    !@(#)document(3f): process BLOCK command to start or stop special processing
 character(len=*),intent(in)  :: opts
 integer                      :: ierr
 integer                      :: ios
 character(len=G_line_length) :: options                 ! everything after first word of command till end of line or !
+character(len=:),allocatable :: name
 
 ! CHECK COMMAND SYNTAX
    if(G_outtype.eq.'help')then  ! if in 'help' mode wrap up the routine
@@ -1422,7 +791,7 @@ character(len=G_line_length) :: options                 ! everything after first
       write(G_iout,'(a)')"'']"
    elseif(G_outtype.eq.'system')then
          close(unit=G_scratch_lun,iostat=ios)
-         call execute_command_line( trim(sget('block_cmd'))//' < '//G_scratch_file//' > '//G_scratch_file//'.out')
+         call execute_command_line( trim(G_cmd)//' < '//G_scratch_file//' > '//G_scratch_file//'.out')
          ierr=filedelete(G_scratch_file)
          options=G_scratch_file//'.out'
          call include(options,50+G_iocount)    ! Filenames can be case sensitive
@@ -1439,15 +808,15 @@ character(len=G_line_length) :: options                 ! everything after first
    endif
 
    ! parse options on input line
-   call dissect2('block','--oo --file --cmd sh --varname textblock --style "#N#" --append .false.',opts)
+   call dissect2('block','--file --cmd sh --varname textblock --style "#N#" --append .false.',opts)
    ! if a previous command has opened a --file FILENAME flush it, because a new one is being opened or this is an END command
    ! and if a --file FILENAME has been selected open it
    call print_comment_block()
 
    ! now can start new section
    G_MAN=''
-   if(sget('block_file').ne.'')then
-      G_MAN_FILE=sget('block_file')
+   if(SGET('file').ne.'')then
+      G_MAN_FILE=SGET('file')
       G_MAN_COLLECT=.true.
    else
       G_MAN_FILE=''
@@ -1455,20 +824,27 @@ character(len=G_line_length) :: options                 ! everything after first
    endif
 
    G_MAN_PRINT=.false.
-   if(lget('block_append'))then
+
+   if(LGET('append'))then
       G_MAN_FILE_POSITION='APPEND'
    else
       G_MAN_FILE_POSITION='ASIS'
    endif
 
-   select case(upper(sget('block_oo')))
+   if(size(unnamed).gt.0.and.opts.ne.'')then
+      name=upper(unnamed(1))
+   else
+      name=' '
+   endif
+
+   select case(name)
 
    case('COMMENT')
       G_outtype='comment'
       G_MAN_PRINT=.true.
       G_MAN_COLLECT=.true.
-      if(sget('block_style').ne.'#N#')then
-         G_comment_style=lower(sget('block_style'))             ! allow formatting comments for particular post-processors
+      if(SGET('style').ne.'#N#')then
+         G_comment_style=lower(SGET('style'))             ! allow formatting comments for particular post-processors
       endif
    case('NULL')
       G_outtype='null'
@@ -1500,16 +876,16 @@ character(len=G_line_length) :: options                 ! everything after first
          G_scratch_file=trim(uniq(get_tmp()//'prep_scratch.'))  !! THIS HAS TO BE A UNIQUE NAME -- IMPROVE THIS
          G_scratch_lun=fileopen(G_scratch_file,'rw',ierr)
          if(ierr.lt.0)then
-            call stop_prep('*prep* ERROR(048) - FILTER COMMAND FAILED TO OPEN PROCESS:'//trim(G_SOURCE))
+            call stop_prep('*prep* ERROR(020) - FILTER COMMAND FAILED TO OPEN PROCESS:'//trim(G_SOURCE))
          endif
       else
-         call stop_prep('*prep* ERROR(049) - FILTER COMMAND BLOCK ENCOUNTERED BUT SYSTEM COMMANDS NOT ENABLED:'//trim(G_SOURCE))
+         call stop_prep('*prep* ERROR(021) - FILTER COMMAND BLOCK ENCOUNTERED BUT SYSTEM COMMANDS NOT ENABLED:'//trim(G_SOURCE))
       endif
 
    case('VARIABLE')
       G_outtype='variable'
-      write(G_iout,'(a)')trim(sget('block_varname'))//'=[ CHARACTER(LEN=128) :: &'
-      G_MAN_PRINT=.true.
+      write(G_iout,'(a)')trim(SGET('varname'))//'=[ CHARACTER(LEN=128) :: &'
+      G_MAN_PRINT=.false.
 
    case('HELP')
       G_outtype='help'
@@ -1553,13 +929,17 @@ character(len=G_line_length) :: options                 ! everything after first
 
    case('WRITE')
       G_outtype='write'
-   case('','END')
+   case(' ','END')
       G_outtype='asis'
       G_MAN_COLLECT=.false.
    case('ASIS')
       G_outtype='asis'
    case default
-      call stop_prep('*prep* ERROR(047) - UNEXPECTED "BLOCK" OPTION. FOUND:'//trim(sget('block_oo'))//' IN '//trim(G_source) )
+      if(size(unnamed).gt.0)then
+         call stop_prep('*prep* ERROR(022) - UNEXPECTED "BLOCK" OPTION. FOUND:'//trim(unnamed(1))//' IN '//trim(G_source) )
+      else
+         call stop_prep('*prep* ERROR(022) - UNEXPECTED "BLOCK" OPTION. FOUND:'//' '//' IN '//trim(G_source) )
+      endif
    end select
 
    G_comment_count=0
@@ -1590,7 +970,7 @@ integer                      :: ios,iend,lun
       open(newunit=lun,file=filename,iostat=ios,action='write',position=G_MAN_FILE_POSITION)
 
       if(ios.ne.0)then
-         call stop_prep('*prep* ERROR(054) - FAILED TO OPEN DOCUMENT OUTPUT FILE:'//trim(filename))
+         call stop_prep('*prep* ERROR(023) - FAILED TO OPEN DOCUMENT OUTPUT FILE:'//trim(filename))
       else
          if(len(G_MAN).gt.1)then                   ! the way the string is built it starts with a newline
             write(lun,'(a)',iostat=ios) G_MAN(2:)
@@ -1599,7 +979,7 @@ integer                      :: ios,iend,lun
          endif
          if(ios.ne.0)then
             call write_err('G_MAN='//G_MAN)
-            call stop_prep('*prep* ERROR(055) - FAILED TO WRITE OUTPUT FILE:'//trim(filename))
+            call stop_prep('*prep* ERROR(024) - FAILED TO WRITE OUTPUT FILE:'//trim(filename))
          endif
       endif
 
@@ -1712,7 +1092,7 @@ integer                        :: i
          exit ALL
       endblock WRITEIT
       call write_err('G_MAN='//G_MAN)
-      call stop_prep('*prep* ERROR(056) - FAILED TO WRITE COMMENT BLOCK')
+      call stop_prep('*prep* ERROR(025) - FAILED TO WRITE COMMENT BLOCK')
    endblock ALL
 end subroutine format_g_man
 !===================================================================================================================================
@@ -1721,17 +1101,27 @@ end subroutine format_g_man
 subroutine show_state(list,msg)                        !@(#)debug(3f): process $SHOW command or state output when errors occur
 character(len=*),intent(in),optional :: list
 character(len=*),intent(in) :: msg
-integer                     :: i, j
+integer                     :: i
+integer                     :: j
 character(len=:),allocatable   :: array(:)    ! output array of tokens
 character(len=*),parameter  :: fmt='(*(g0,1x))'
+integer                     :: ibugm
+integer                     :: ibugt
    if(present(list))then
       if(list.ne.'')then
          ! print variables:
          CALL split(list,array,delimiters=' ;,') ! parse string to an array parsing on delimiters
+         ibugm=minval([size(macro%key),ubound(macro%key)])
+         ibugt=minval([size(table%key),ubound(table%key)])
          do j=1,size(array)
-            do i=1,size(table%key)
+            do i=1,ibugm                     ! size(macro%key) bug in gfortran
+               if(glob(trim(macro%key(i)),trim(array(j))))then ! write variable and corresponding value
+                  write(G_iout,fmt)"! MACRO: ",trim(macro%key(i)),' = ',adjustl(macro%value(i)(:macro%count(i)))
+               endif
+            enddo
+            do i=1,ibugt                     ! size(table%key) bug in gfortran
                if(glob(trim(table%key(i)),trim(array(j))))then ! write variable and corresponding value
-                  write(G_iout,fmt)"! ",trim(table%key(i)),' = ',adjustl(table%value(i)(:table%count(i)))
+                  write(G_iout,fmt)"! VARIABLE: ",trim(table%key(i)),' = ',adjustl(table%value(i)(:table%count(i)))
                endif
             enddo
          enddo
@@ -1764,19 +1154,25 @@ character(len=*),parameter  :: fmt='(*(g0,1x))'
       write(G_iout,'("!    ",a)') trim(G_inc_files(i))
    enddo
 
-   write(G_iout,'(a)')'! Variables:'
-   do i=1,size(table%key)                                                        ! print variable dictionary
-      write(G_iout,fmt)"!    $DEFINE",trim(table%key(i)),' = ',adjustl(table%value(i)(:table%count(i)) )
-   enddo
+   ibugt=minval([size(table%key),ubound(table%key)])   ! print variable dictionary
+   if(ibugt.gt.0)then
+      write(G_iout,fmt)'! Variables:(There are',ibugt,'variables defined)'
+      do i=1,ibugt                    ! size(table%key) bug in gfortran
+         write(G_iout,fmt)"!    $DEFINE",trim(table%key(i)),' = ',adjustl(table%value(i)(:table%count(i)) )
+      enddo
+   endif
 
-   write(G_iout,'(a)')'! Parcels:'
+   if(G_parcelcount.gt.0)write(G_iout,'(a)')'! Parcels:'
    do i=1,G_parcelcount
       write(G_iout,fmt) '!   ',trim(G_parcel_dictionary(i)%name)
    enddo
 
-   if(size(keywords).gt.0)then
-      write(G_iout,fmt)'! SET strings:(There are',size(keywords),'keywords defined)'
-      write(G_iout,'(3(g0,1x))')('!    $SET',keywords(i),values(i)(:counts(i)),i=1,size(keywords))
+   ibugm=minval([size(macro%key),ubound(macro%key)])   ! print variable dictionary
+   if(ibugm.gt.0)then ! size(macro%key).gt.0)then
+      write(G_iout,fmt)'! Macros:(There are',ibugm,'keywords defined)'
+      do i=1,ibugm                    ! size(table%key) bug in gfortran
+         write(G_iout,fmt)"! $SET   ",trim(macro%key(i)),' = ',adjustl(macro%value(i)(:macro%count(i)) )
+      enddo
    endif
 
    write(G_iout,'(a)')'!-------------------------------------------------------------------------------'
@@ -1833,12 +1229,12 @@ integer                                  :: iend
    if(ios.ne.0)then
       call show_state(msg='OPEN IN INCLUDE')
       call write_err(message)
-      call stop_prep("*prep* ERROR(057) - FAILED OPEN OF INPUT FILE("//v2s(iunit)//"):"//trim(line_unquoted))
+      call stop_prep("*prep* ERROR(026) - FAILED OPEN OF INPUT FILE("//v2s(iunit)//"):"//trim(line_unquoted))
    else
       rewind(unit=iunit)
       G_iocount=G_iocount+1
       if(G_iocount.gt.size(G_file_dictionary))then
-         call stop_prep('*prep* ERROR(058) - INPUT FILE NESTING TOO DEEP:'//trim(G_source))
+         call stop_prep('*prep* ERROR(027) - INPUT FILE NESTING TOO DEEP:'//trim(G_source))
       endif
       G_file_dictionary(G_iocount)%unit_number=iunit
       G_file_dictionary(G_iocount)%filename=line_unquoted
@@ -1846,50 +1242,6 @@ integer                                  :: iend
    endif
 
 end subroutine include
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine post(parcel_name)  !@(#)post(3f): switch to scratch file defined by PARCEL
-implicit none
-character(len=*),intent(in)  :: parcel_name
-integer                      :: ifound
-integer                      :: ios
-character(len=4096)          :: message
-integer                      :: i
-   ifound=-1
-   do i=1,G_parcelcount
-      if(G_parcel_dictionary(i)%name.eq.parcel_name)then
-         ifound=G_parcel_dictionary(i)%unit_number
-         exit
-      endif
-   enddo
-   if(ifound.eq.-1)then
-      call stop_prep('*prep* ERROR(059) - PARCEL NAME NOT DEFINED:'//trim(G_source))
-   else
-      inquire(unit=ifound,iostat=ios)
-      rewind(unit=ifound,iostat=ios,iomsg=message)
-      if(ios.ne.0)then
-         call stop_prep('*prep* ERROR(060) - ERROR REWINDING PARCEL:'//trim(G_source)//':'//trim(message))
-      endif
-
-      if(G_debug)then
-         do
-            read(ifound,'(a)',iostat=ios)message
-            if(ios.ne.0)exit
-            write(stdout,*)'>>>'//trim(message)
-         enddo
-         rewind(unit=ifound,iostat=ios,iomsg=message)
-      endif
-
-      G_iocount=G_iocount+1
-      if(G_iocount.gt.size(G_file_dictionary))then
-         call stop_prep('*prep* ERROR(061) - INPUT FILE NESTING TOO DEEP:'//trim(G_source))
-      endif
-      G_file_dictionary(G_iocount)%unit_number=ifound
-      G_file_dictionary(G_iocount)%filename=parcel_name
-      G_file_dictionary(G_iocount)%line_number=0
-   endif
-end subroutine post
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -1923,7 +1275,7 @@ integer                         :: iend_dir
       filename=trim(line)
    endif
 
-   call stop_prep("*prep* ERROR(062) - MISSING INPUT FILE:"//trim(filename))
+   call stop_prep("*prep* ERROR(031) - MISSING INPUT FILE:"//trim(filename))
 
 end subroutine findit
 !===================================================================================================================================
@@ -1938,31 +1290,26 @@ character(len=1)                      :: dlim=' '                   ! string of 
 integer                               :: icount                     ! how many tokens are found
 integer                               :: ibegin(n)                  ! starting column numbers for the tokens in INLINE
 integer                               :: iterm(n)                   ! ending column numbers for the tokens in INLINE
-integer                               :: ilen                       ! is the position of last non‐blank character in INLINE
-character(len=G_line_length)          :: in_filename1=''            ! input filename, default is stdin
+integer                               :: ilength                    ! is the position of last non‐blank character in INLINE
 character(len=G_line_length)          :: in_filename2=''            ! input filename, default is stdin
 integer                               :: i, ii
 integer                               :: ivalue
 character(len=G_line_length)          :: dir                        ! directory used by an input file
 
-   in_filename1(:G_line_length)  = sget('_prep_i')                  ! get values from command line
-   in_filename2(:G_line_length)  = sget('prep_i')                   ! get values from command line
-   if(in_filename1.ne.''.and.in_filename2.eq.in_filename1)then
-      in_filename2=''
-   endif
+   in_filename2(:G_line_length)  = SGET('i')                   ! get values from command line
    if(in_filename2.eq.'')then                                       ! read stdin if no -i on command line
       in_filename2  = '@'
    endif
 
-   ! break command argument prep_i into single words
-   call delim(adjustl(trim(sget('_prep_i'))//' '//trim(in_filename2)),array,n,icount,ibegin,iterm,ilen,dlim)
+   ! break command argument "i" into single words
+   call delim(adjustl(trim(in_filename2)),array,n,icount,ibegin,iterm,ilength,dlim)
    ivalue=50                                ! starting file unit to use
    do i=icount,1,-1
       G_source='$include '//trim(array(i))  ! for messages
       call include(array(i),ivalue)
       ivalue=ivalue+1
 
-      ALREADY: block                       ! store directory path of input files as an implicit directory for reading $INCLUDE files
+      ALREADY: block                 ! store directory path of input files as an implicit directory for reading $INCLUDE files
          dir=dirname(array(i))
          do ii=1,G_inc_count
             if(G_inc_files(ii).eq.dir)exit ALREADY
@@ -1976,7 +1323,7 @@ character(len=G_line_length)          :: dir                        ! directory 
 
 ! >>>
 !   If ARRAY(N) fills before reaching the end of the line the routine stops.
-!   Check "if(iend(icount) .eq. ilen)" to see if you got to the end to warn if not all files include
+!   Check "if(iend(icount) .eq. ilength)" to see if you got to the end to warn if not all files include
 
 end subroutine opens
 !===================================================================================================================================
@@ -1988,13 +1335,13 @@ integer,parameter                     :: n=50                    ! maximum numbe
 character(len=1)                      :: dlim=' '                ! string of single characters to use as delimiters
 integer                               :: ibegin(n)               ! starting column numbers for the tokens in G_inc_files
 integer                               :: iterm(n)                ! ending column numbers for the tokens in G_inc_files
-integer                               :: ilen                    ! is the position of last non‐blank character in G_inc_files
+integer                               :: ilength                 ! is the position of last non‐blank character in G_inc_files
 
    ! G_inc_files is the array to fill with tokens
    ! G_inc_count is the number of tokens found
 
-   ! break command argument prep_I into single words
-   call delim(adjustl(trim(sget('_prep_I'))//' '//trim(sget('prep_I'))),G_inc_files,n,G_inc_count,ibegin,iterm,ilen,dlim)
+   ! break command argument "I" into single words
+   call delim(adjustl(trim(SGET('I'))),G_inc_files,n,G_inc_count,ibegin,iterm,ilength,dlim)
 end subroutine includes
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2007,34 +1354,52 @@ character(len=1)                      :: dlim=' '                ! string of sin
 integer                               :: icount                  ! how many tokens are found
 integer                               :: ibegin(n)               ! starting column numbers for the tokens in INLINE
 integer                               :: iterm(n)                ! ending column numbers for the tokens in INLINE
-integer                               :: ilen                    ! is the position of last non‐blank character in INLINE
-character(len=G_line_length)          :: in_define1=''           ! variable definition from environment variable
-character(len=G_line_length)          :: in_define2=''           ! variable definition from environment variable and command
+integer                               :: ilength                 ! is the position of last non‐blank character in INLINE
+character(len=:),allocatable          :: in_define2              ! variable definition from command line
 integer                               :: i
 
-   if(allocated(keywords))deallocate(keywords)
-   if(allocated(values))deallocate(values)
-   if(allocated(counts))deallocate(counts)
-   allocate(character(len=0) :: keywords(0))
-   allocate(character(len=0) :: values(0))
-   allocate(counts(0))
+   in_define2=''
+   do i=1,size(unnamed)
+      in_define2=in_define2//' '//unnamed(i)
+   enddo
 
-   in_define1=sget('_prep_oo')
-   in_define2=sget('prep_oo')
-   if(in_define1.ne.''.and.in_define2.eq.in_define1)then            ! if duplicates remove one
-      in_define2=''
-   endif
    ! break command argument prep_oo into single words
-   call delim(adjustl(trim(in_define1)//' '//trim(in_define2))//' '//trim(sget('prep_D')),array,n,icount,ibegin,iterm,ilen,dlim)
+   call delim(adjustl(trim(in_define2))//' '//trim(SGET('D')),array,n,icount,ibegin,iterm,ilength,dlim)
    do i=1,icount
       G_source='$redefine '//trim(array(i))
       call cond() ! convert variable name into a "$define variablename" directive and process it
    enddo
 
 !   If ARRAY(N) fills before reaching the end of the line the routine stops.
-!   Check "if(iend(icount) .eq. ilen)" to see if you got to the end.
+!   Check "if(iend(icount) .eq. ilength)" to see if you got to the end.
 
 end subroutine defines
+!===================================================================================================================================
+subroutine undef(opts)                                     !@(#)undef(3f): process UNDEFINE directive
+character(len=*)             :: opts                       ! directive with no spaces, leading prefix removed, and all uppercase
+character(len=:),allocatable :: names(:)
+integer                      :: i
+integer                      :: k
+
+   ! REMOVE VARIABLE IF FOUND IN VARIABLE NAME DICTIONARY
+   ! allow basic globbing where * is any string and ? is any character
+   if (len_trim(opts).eq.0) then                           ! if no variable name
+      call stop_prep('*prep* ERROR(032) - $UNDEFINE MISSING TARGETS:'//trim(G_source))
+   endif
+   call split(opts,names,delimiters=' ;,')
+
+   do k=1,size(names)
+      if(G_verbose)then
+         call write_err('+ $UNDEFINE '//names(k))
+      endif
+      do i=size(table%key),1,-1                           ! find defined variable to be undefined by searching dictionary
+         if (glob(trim(table%key(i)),trim(names(k))))then   ! found the requested variable name
+            call  table%del(table%key(i))
+         endif
+      enddo
+   enddo
+
+end subroutine undef
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2102,18 +1467,14 @@ end subroutine warn_prep
 !    o documentation for the features subsequently added to the program.
 !    o examination of the code.
 
-subroutine help_usage(l_help) !@(#)help_usage(3f): prints help information
+subroutine setup(help_text,version_text) !@(#)help_usage(3f): prints help information
 implicit none
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
+character(len=:),allocatable,intent(out) :: help_text(:)
+character(len=:),allocatable,intent(out) :: version_text(:)
 !-------------------------------------------------------------------------------
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
-'   prep(1) - [DEVELOPER] preprocess FORTRAN source files                        ',&
+'   prep(1) - [DEVELOPER] preprocess Fortran source files                        ',&
 '   (LICENSE:MIT)                                                                ',&
 '                                                                                ',&
 'SYNOPSIS                                                                        ',&
@@ -2135,14 +1496,16 @@ help_text=[ CHARACTER(LEN=128) :: &
 '        [--help]                                                                ',&
 'DESCRIPTION                                                                     ',&
 '                                                                                ',&
+'   prep(1) is a Fortran source preprocesor.                                     ',&
+'                                                                                ',&
 '   A preprocessor performs operations on input files before they are passed to  ',&
 '   a compiler, including conditional selection of lines based on directives     ',&
 '   contained in the file. This makes it possible to use a single source file    ',&
-'   even when different code is required for different execution environments.   ',&
+'   even when different code is required for different programming environments. ',&
 '                                                                                ',&
-'   The prep(1) preprocessor has additional features that allow documentation    ',&
-'   in the same file as the source and the generation of generic code using a    ',&
-'   simple templating technique. The basic directives ....                       ',&
+'   The prep(1) preprocessor has additional features that support free-format    ',&
+'   documentation in the same file as the source and the generation of generic   ',&
+'   code using a simple templating technique. The basic directives ....          ',&
 '                                                                                ',&
 '   * Conditionally output parts of the source file (controlled by expressions   ',&
 '     on the directives $IF, $IFDEF, $IFNDEF, and $ENDIF. The expressions may    ',&
@@ -2173,13 +1536,14 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   * Record the parameters used and the date and time executed as Fortran       ',&
 '     comments in the output (using $SHOW).                                      ',&
 '                                                                                ',&
-'   * Cause an error (controlled by directive $STOP or $ERROR) and produce       ',&
-'     messages on stderr (using $MESSAGE).                                       ',&
+'   * Stop the preprocessing (controlled by directive $STOP, $QUIT or $ERROR)    ',&
+'     and produce messages on stderr (using $MESSAGE).                           ',&
 '                                                                                ',&
 'OPTIONS                                                                         ',&
 '   define_list, -D define_list  An optional space-delimited list of expressions ',&
 '                                used to define variables before file processing ',&
-'                                commences.                                      ',&
+'                                commences. These can subsequently be used in    ',&
+'                                $IF/$ELSE/$ELSEIF and $DEFINE directives.       ',&
 '                                                                                ',&
 '   -i input_files               The default input file is stdin. Filenames are  ',&
 '                                space-delimited. In a list, @ represents stdin. ',&
@@ -2267,7 +1631,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                           compiling fixed-format Fortran source.               ',&
 '                                                                                ',&
 '   --width n   Maximum line length of the output file. The default is 1024.     ',&
-'               The parameter is typically used to trim fixed-format FORTRAN     ',&
+'               The parameter is typically used to trim fixed-format Fortran     ',&
 '               code that contains comments or "ident" labels past column 72     ',&
 '               when compiling fixed-format Fortran code.                        ',&
 '                                                                                ',&
@@ -2363,7 +1727,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   defined only if it has appeared in the source previously in a $DEFINE        ',&
 '   directive or been declared on the command line.                              ',&
 '   The names used in compiler directives are district from names in the         ',&
-'   FORTRAN source, which means that "a" in a $DEFINE and "a" in a FORTRAN       ',&
+'   Fortran source, which means that "a" in a $DEFINE and "a" in a Fortran       ',&
 '   source statement are totally unrelated.                                      ',&
 '   The DEFINED() variable is NOT valid in a $DEFINE directive.                  ',&
 '                                                                                ',&
@@ -2527,6 +1891,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   Directives for reading and writing external files ...                        ',&
 '                                                                                ',&
 '       $OUTPUT   filename  [--append]                          [! comment ]     ',&
+'       $ENDOUTPUT                                              [! comment ]     ',&
 '       $INCLUDE filename                                                        ',&
 '                                                                                ',&
 '   Details ...                                                                  ',&
@@ -2539,6 +1904,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   Files are open at the first line by default. Use the --append switch to      ',&
 '   append to the end of an existing file instead of overwriting it.             ',&
+'                                                                                ',&
+'       $ENDOUTPUT                                              [! comment ]     ',&
+'                                                                                ',&
+'   Ends writing to an alternate output file begun by a $OUTPUT directive.       ',&
 '                                                                                ',&
 '       $INCLUDE filename                                                        ',&
 '                                                                                ',&
@@ -2914,37 +2283,23 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   MIT                                                                          ',&
 '']
 
-   WRITE(stdout,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   call stop('0')
-endif
-end subroutine help_usage
-
-subroutine help_version(l_version) !@(#)help_version(3f): prints version information
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
+version_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
 '@(#)PROGRAM:        prep(1f)>',&
 '@(#)DESCRIPTION:    Fortran Preprocessor>',&
 !'@(#)VERSION:        4.0.0: 20170502>',&
 !'@(#)VERSION:        5.0.0: 20201219>',&
-'@(#)VERSION:        8.1.1: 20220405>',&
+!'@(#)VERSION:        8.1.1: 20220405>',&
+!'@(#)VERSION:        9.0.0: 20220804>',&
+'@(#)VERSION:        9.1.0: 20220805>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE       https://github.com/urbanjost/prep.git/>',&
 '']
-   WRITE(stdout,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   call stop('0')
-endif
-end subroutine help_version
+end subroutine setup
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine short_help(lun) !@(#)short_help(3f): prints help information
+subroutine crib_help(lun) !@(#)crib_help(3f): prints abridged help information
 implicit none
 integer,intent(in) :: lun
 character(len=:),allocatable :: help_text(:)
@@ -2960,14 +2315,15 @@ help_text=[ CHARACTER(LEN=128) :: &
 "   > SYSTEMON is .TRUE. if --system is present on the command line, else .FALSE.",&
 "  $UNDEFINE|$UNDEF variable_name[;...]                                          ",&
 "CONDITIONAL CODE SELECTION:                                                     ",&
-"  $IF logical_integer-based_expression | $IFDEF|$IFNDEF variable_or_envname     ",&
-"  $IF DEFINED(varname[,...]) | $IF .NOT. DEFINED(varname[,...]) |               ",&
+"  $IF logical_integer-based_expression| [.NOT.] DEFINED(varname[,...])          ",&
+"  $IFDEF|$IFNDEF variable_or_envname                                            ",&
 "  $ELSEIF|$ELIF logical_integer-based_expression                                ",&
 "  $ELSE                                                                         ",&
 "  $ENDIF                                                                        ",&
 "MACRO STRING EXPANSION AND TEXT REPLAY:                                         ",&
 "   > Unless at least one variable name is defined no ${NAME} expansion occurs.  ",&
 "  $SET varname string                                                           ",&
+"  $$UNSET variable_name[;...]                                                   ",&
 "  $IMPORT envname[;...]                                                         ",&
 "   > $set author  William Shakespeare                                           ",&
 "   > $import HOME                                                               ",&
@@ -2987,7 +2343,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 "  $SYSTEM command                                                               ",&
 "  $STOP [stop_value[ ""message""]] | $QUIT [""message""]| $ERROR [""message""]        "]
    WRITE(lun,'(a)')(trim(help_text(i)),i=1,size(help_text))
-end subroutine short_help
+end subroutine crib_help
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3012,10 +2368,13 @@ integer,parameter              :: linewidth=128
 character(len=*),intent(in)    :: line
 character(len=:),allocatable   :: buff
 character(len=115)             :: chunk
-integer                        :: ilen
+integer                        :: ilength
 integer                        :: ios
+integer                        :: ierr
 character(len=256)             :: message
+character(len=G_var_len)       :: value
 
+   ierr=0
    select case(trim(G_outtype))
 
    case('comment')                             ! write as a Fortran comment preceded by two explanations and a space
@@ -3027,10 +2386,10 @@ character(len=256)             :: message
       call set(line)
 
    case('define')                              ! do not write
-      call define(nospace(upper(line)))
+      call expr(nospace(upper(line)),value,ierr,def=.true.)    ! only process DEFINE if not skipping data lines
 
    case('redefine')                            ! do not write
-      call define(nospace(upper(line)))
+      call expr(nospace(upper(line)),value,ierr,def=.true.)    ! only process DEFINE if not skipping data lines
 
    case('message')                             ! do not write
       call write_err(line)                     ! trustingly trim MESSAGE from directive
@@ -3038,22 +2397,22 @@ character(len=256)             :: message
    case('system')
       write(G_scratch_lun,'(a)',iostat=ios,iomsg=message)trim(line)
       if(ios.lt.0)then
-         call stop_prep('*prep* ERROR(068) - FAILED TO WRITE TO PROCESS:'//trim(line)//':'//trim(message))
+         call stop_prep('*prep* ERROR(033) - FAILED TO WRITE TO PROCESS:'//trim(line)//':'//trim(message))
       endif
 
    case('variable')
-      buff=trim(line)                          ! do not make a line over 132 characters. Trim input line if needed
+      buff=trim(line)                                 ! do not make a line over 132 characters. Trim input line if needed
       buff=buff//repeat(' ',max(linewidth,len(buff))) ! ensure space in buffer for substitute
-      call substitute(buff,"'","''")           ! change single quotes in input to two adjacent single quotes
-      ilen=min(len_trim(buff),linewidth)       ! make all lines have at least linewidth characters for a more legible output
-      write(G_iout,'("''",a,"'',&")') buff(:ilen)
+      call substitute(buff,"'","''")                  ! change single quotes in input to two adjacent single quotes
+      ilength=min(len_trim(buff),linewidth)           ! make all lines have at least linewidth characters for a more legible output
+      write(G_iout,'("''",a,"'',&")') buff(:ilength)
 
    case('help')
-      buff=trim(line)                          ! do not make a line over 132 characters. Trim input line if needed
-      buff=buff//repeat(' ',max(linewidth,len(buff))) ! ensure space in buffer for substitute
-      call substitute(buff,"'","''")           ! change single quotes in input to two adjacent single quotes
-      ilen=max(len_trim(buff),linewidth)              ! make all lines have at least 80 characters for a more legible output
-      write(G_iout,'("''",a,"'',&")') buff(:ilen)
+      buff=trim(line)                                    ! do not make a line over 132 characters. Trim input line if needed
+      buff=buff//repeat(' ',max(linewidth,len(buff)))    ! ensure space in buffer for substitute
+      call substitute(buff,"'","''")                     ! change single quotes in input to two adjacent single quotes
+      ilength=max(len_trim(buff),linewidth)              ! make all lines have at least 80 characters for a more legible output
+      write(G_iout,'("''",a,"'',&")') buff(:ilength)
 
    case('version')                             ! write version information with SCCS ID prefix for use with what(1) command
       write(G_iout,'("''@(#)",a,"'',&")')trim(line(:min(len_trim(line),128-1)))//'>'
@@ -3072,10 +2431,12 @@ character(len=256)             :: message
       write(G_iout,'(a)')trim(line(:min(len(line),G_iwidth)))
 
    case default
-      call stop_prep('*prep* ERROR(063) - UNEXPECTED "BLOCK" VALUE. FOUND:'//trim(G_source))
-      call stop_prep('*prep* ERROR(064) - UNEXPECTED "BLOCK" VALUE. FOUND:'//trim(G_outtype))
+      call stop_prep('*prep* ERROR(034) - UNEXPECTED "BLOCK" VALUE. FOUND:'//trim(G_source))
+      call stop_prep('*prep* ERROR(035) - UNEXPECTED "BLOCK" VALUE. FOUND:'//trim(G_outtype))
 
    end select
+
+   if(ierr.ne.0) call stop_prep('*prep* ERROR(036) - expression invalid:'//trim(G_source))
 
    if(G_MAN_COLLECT)then
       G_MAN=G_MAN//new_line('N')//trim(line)
@@ -3102,10 +2463,10 @@ subroutine dissect2(verb,init,pars,error_return) !@(#)dissect2(3f): convenient c
 character(len=*),intent(in)  :: verb             ! the name of the command to be reset/defined  and then set
 character(len=*),intent(in)  :: init             ! used to define or reset command options; usually hard-set in the program.
 character(len=*),intent(in)  :: pars             ! defines the command options to be set, usually from a user input file
-integer                      :: ipars            ! length of the user-input string pars.
 integer,intent(out),optional :: error_return
-   ipars=len(pars)
-   call dissect(verb,init,pars,ipars,error_return)
+   !call dissect(verb,init,pars,len(pars),error_return)
+   call set_args(init,string=pars//'--')
+   !call print_dictionary()
 end subroutine dissect2
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3128,77 +2489,26 @@ character(len=:),allocatable :: temp
 character(len=:),allocatable :: name
 character(len=:),allocatable :: val
 integer                      :: iend
-integer                      :: i
 ! create a dictionary with character keywords, values, and value lengths
 ! using the routines for maintaining a list
 
   temp=adjustl(line)
-  iend=index(temp,' ')
-  iend=merge(len(temp),iend,iend.eq.0)
+  iend=merge(len(temp),index(temp,' '),index(temp,' ').eq.0)
   name=adjustl(upper(temp(:iend)))
+
   if(name.ne.'')then
     if(len(temp).gt.iend)then
        val=temp(min(iend+1,len(temp)):)
+       call check_name(name)
+       if(val.eq.' ')val='1'
+       call macro%set(name,val) ! insert and replace entries
     else
-       val=' '
     endif
-    ! insert and replace entries
-    call prep_update(name,val)
+  else
+       call stop_prep('*prep* ERROR(037) - INCOMPLETE SET:'//trim(G_SOURCE))
   endif
 
-contains
-
-function get(key) result(valout)
-use M_list,      only : insert, locate, replace, remove                   ! Basic list lookup and maintenance
-character(len=*),intent(in)   :: key
-character(len=:),allocatable  :: valout
-integer                       :: place
-   ! find where string is or should be
-   call locate(keywords,key,place)
-   if(place.lt.1)then
-      valout=''
-   else
-      valout=values(place)(:counts(place))
-   endif
-end function get
-
 end subroutine set
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine prep_update(key,valin)
-use M_list,      only : insert, locate, replace, remove                   ! Basic list lookup and maintenance
-! call prep_update('a','the value')     ! update (add or replace) entry
-!call prep_update('a')                  ! remove entry
-!write(stderr,*)'get b=>',get('b') ! get value
-character(len=*),intent(in)           :: key
-character(len=*),intent(in),optional  :: valin
-integer                               :: place
-integer                               :: ilen
-character(len=:),allocatable          :: val
-if(present(valin))then
-   val=valin
-   ilen=len_trim(val)
-   ! find where string is or should be
-   call locate(keywords,key,place)
-   ! if string was not found insert it
-   if(place.lt.1)then
-      call insert(keywords,key,iabs(place))
-      call insert(values,val,iabs(place))
-      call insert(counts,ilen,iabs(place))
-   else
-      call replace(values,val,place)
-      call replace(counts,ilen,place)
-   endif
-else
-   call locate(keywords,key,place)
-   if(place.gt.0)then
-      call remove(keywords,place)
-      call remove(values,place)
-      call remove(counts,place)
-   endif
-endif
-end subroutine prep_update
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3209,23 +2519,25 @@ subroutine expand_variables(line)
 ! the way this is written it would do recursive substitution and does not know when there is just not a match
 character(len=*)              :: line
 character(len=:),allocatable  :: temp,search
-integer,parameter             :: toomany=1000
-integer                       :: i, j
+integer                       :: i
+integer                       :: j
+integer                       :: ibug
 character(len=4096)           :: scratch
 
 if(index(line,'${').ne.0)then
    write(scratch,'(i0)')G_file_dictionary(G_iocount)%line_number
-
    call set('LINE ' // scratch)
    call set('FILE ' // G_file_dictionary(G_iocount)%filename )
    call set('TIME ' // getdate('time'))
    call set('DATE ' // getdate('cdate'))
+   call set('PROCEDURE ' // 'PROCNAME')
    temp=trim(line)
-   INFINITE: do i=1,toomany
-      do j=1,size(keywords)
+   ibug=minval([size(macro%key),ubound(macro%key)])   ! print variable dictionary
+   INFINITE: do i=1,len_trim(line)
+      do j=1,ibug
          if(index(temp,'${').ne.0)then
-            search='${'//trim(keywords(j))//'}'
-            temp=str_replace(temp,search,values(j)(:counts(j)),ignorecase=.true.)
+            search='${'//trim(macro%key(j))//'}'
+            temp=str_replace(temp,search,macro%value(j)(:macro%count(j)),ignorecase=.true.)
          else
             exit INFINITE
          endif
@@ -3265,14 +2577,14 @@ integer           :: r
 logical           :: file_exists
 character(len=80) :: scratch
 
-   call define('UNKNOWN=0' )
-   call define('LINUX=1' )
-   call define('MACOS=2' )
-   call define('WINDOWS=3' )
-   call define('CYGWIN=4' )
-   call define('SOLARIS=5' )
-   call define('FREEBSD=6' )
-   call define('OPENBSD=7' )
+   call put( 'UNKNOWN=0' )
+   call put( 'LINUX=1' )
+   call put( 'MACOS=2' )
+   call put( 'WINDOWS=3' )
+   call put( 'CYGWIN=4' )
+   call put( 'SOLARIS=5' )
+   call put( 'FREEBSD=6' )
+   call put( 'OPENBSD=7' )
 
    r = OS_UNKNOWN
    ! Check environment variable `OS`.
@@ -3310,7 +2622,7 @@ character(len=80) :: scratch
    endif
    scratch=' '
    write(scratch,'("OS=",i0)')r
-   call define(scratch)
+   call put(scratch)
 end subroutine get_os_type
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3337,70 +2649,81 @@ end subroutine flushit
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-end module M_fpp
+subroutine put(opts)                                 !@(#)expr_short(3f): call expr with just an expression
+character(len=*),intent(in)  :: opts
+character(len=G_var_len)     :: value
+integer                      :: ierr
+character(len=G_line_length) :: expression
+expression=upper(opts)
+call expr(expression,value,ierr,def=.true.)
+if(ierr.ne.0) call stop_prep('*prep* ERROR(038) - expression invalid:'//trim(G_source))
+end subroutine put
+end module M_prep
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-program prep                                                 !@(#)prep(1f): preprocessor for Fortran/FORTRAN source code
-use M_kracken95, only : kracken, lget, rget, iget, sget, kracken_comment
-use M_strings,   only : notabs, isdigit, switch
-use M_fpp
-
+program prep                                                 !@(#)prep(1f): preprocessor for Fortran/Fortran source code
+use M_CLI2, only : set_args, lget, rget, iget, SGET !JSU kracken_comment
+use M_strings,   only : notabs, isdigit, switch, sep
+use M_io, only : getname, basename
+use M_prep
 implicit none
 character(len=G_line_length) :: out_filename=''           ! output filename, default is stdout
 character(len=1)             :: prefix                    ! directive prefix character
 character(len=1)             :: letterd                   !
-
 character(len=G_line_length) :: line                      ! working copy of input line
 logical                      :: keeptabs=.false.          ! flag whether to retain tabs and carriage returns or not
 integer                      :: ilast
 integer                      :: ios
-character(len=1024)          :: cmd=' &
-   & -i                          &
-   & -D                          &
-   & -I                          &
-   & -o                          &
-   & --prefix           36       &
-   & --keeptabs         .false.  &
-   & -d                 ignore   &
-   & --help             .false.  &
-   & --verbose          .false.  &
-   & --system           .false.  &
-   & --version          .false.  &
-   & --crib             .false.  &
-   & --debug            .false.  &
-   & --noenv            .false.  &
-   & --comment          COMMENT  &
-   & --ident            .false.  &
-   & --width            1024     &
-   & --start            " "      &
-   & --stop             " "      &
-   & --type             auto     &
+character(len=:),allocatable :: help_text(:)
+character(len=:),allocatable :: version_text(:)
+character(len=:),allocatable :: string
+character(len=:),allocatable :: cmd
+logical                      :: isscratch
+   cmd='&
+   & -i " "              &
+   & -D " "              &
+   & -I " "              &
+   & -o " "              &
+   & --prefix 36         &
+   & --keeptabs .false.  &
+   & -d ignore           &
+   & --help .false.      &
+   & --verbose .false.   &
+   & --system .false.    &
+   & --version .false.   &
+   & --crib .false.      &
+   & --debug .false.     &
+   & --noenv .false.     &
+   & --comment "'//get_env('PREP_COMMENT_STYLE','default')//'" &
+   & --ident .false.     &
+   & --width 1024        &
+   & --start " "         &
+   & --stop " "          &
+   & --type auto         &
    & '
-logical                       :: isscratch
-
-                                                                 ! allow formatting comments for particular post-processors
-   G_comment_style=get_env('PREP_COMMENT_STYLE')                 ! get environment variable for -comment switch
-   if(G_comment_style.eq.'')G_comment_style='default'            ! if environment variable not set set default
-   call substitute(cmd,'COMMENT',trim(G_comment_style))          ! change command line to have correct default
-                                                                 ! this would actually allow any parameter after number
+   ! allow formatting comments for particular post-processors
    G_comment='! '
-   kracken_comment=G_comment
-   call kracken('prep',cmd)                                      ! define command arguments, default values and crack command line
+   !JSUkracken_comment=G_comment
+   call setup(help_text,version_text)
+   call set_args(cmd,help_text,version_text)                ! define command arguments, default values and crack command line
+
+   string=adjustl(trim(SGET('prefix')))
+   if ( all( isdigit(switch(string)) ) ) then               ! if all characters are numeric digits
+      prefix = char(iget('prefix'))                         ! assume this is an ADE
+   else
+      prefix(1:1) = trim(SGET('prefix'))                    ! not a digit so not an ADE so assume a literal character
+   endif
 
    G_inc_files=' '
 
-   out_filename(:G_line_length) = sget('prep_o')
-   if ( all(isdigit(switch(trim(sget('prep_prefix'))))) ) then   ! if all characters are numeric digits
-      prefix = char(iget('prep_prefix'))                         ! assume this is an ADE
-   else
-      prefix = sget('prep_prefix')                               ! not a digit so not an ADE so assume a literal character
-   endif
-   G_ident=lget('prep_ident')                                    ! write IDENT as comment or CHARACTER variable
-   G_iwidth                     = iget('prep_width')
+   out_filename(:G_line_length) = SGET('o')
+
+   G_ident=lget('ident')                                    ! write IDENT as comment or CHARACTER variable
+   G_iwidth                   = iget('width')
    G_iwidth=max(0,G_iwidth)
-   letterd(1:1)               = sget('prep_d')
-   G_noenv=lget('prep_noenv')
+   letterd(1:1)               = trim(SGET('d'))
+   G_noenv                    = lget('noenv')
 
    if(out_filename.eq.'')then                                    ! open output file
       G_iout=stdout
@@ -3412,33 +2735,33 @@ logical                       :: isscratch
       G_IHELP=60
       open(unit=60,file=out_filename,iostat=ios,action='write')
       if(ios.ne.0)then
-         call stop_prep('*prep* ERROR(065) - FAILED TO OPEN OUTPUT FILE:'//trim(out_filename))
+         call stop_prep('*prep* ERROR(039) - FAILED TO OPEN OUTPUT FILE:'//trim(out_filename))
       endif
    endif
    G_iout_init=G_iout
 
-   call help_version(lget('prep_version'))                 ! if version switch is present display version and exit
-   call help_usage(lget('prep_help'))                      ! if help switch is present display help and exit
-   if(lget('prep_crib'))then
-      call short_help(stdout)
+   if(lget('crib'))then
+      call crib_help(stdout)
       stop
    endif
-   G_debug=lget('prep_debug')                              ! turn on debug mode for developer
+   G_debug=lget('debug')                              ! turn on debug mode for developer
 
-   keeptabs=lget('prep_keeptabs')
-   G_verbose=lget('prep_verbose')                          ! set flag for special mode where lines with @(#) are written to stderr
+   keeptabs=lget('keeptabs')
+   G_verbose=lget('verbose')                          ! set flag for special mode where lines with @(#) are written to stderr
    if(G_verbose)then
       call write_err('+ verbose mode on ')
    endif
-   G_comment_style=lower(sget('prep_comment'))             ! allow formatting comments for particular post-processors
-   G_system_on = lget('prep_system')                       ! allow system commands on $SYSTEM directives
+   G_comment_style=lower(SGET('comment'))             ! allow formatting comments for particular post-processors
+   G_system_on = lget('system')                       ! allow system commands on $SYSTEM directives
    if(G_system_on)then
-      call define('SYSTEMON=.TRUE.')
+      call put('SYSTEMON=.TRUE.')
    else
-      call define('SYSTEMON=.FALSE.')
+      call put('SYSTEMON=.FALSE.')
    endif
    !TODO! have an auto mode where start and end are selected based on file suffix
-   select case(sget('prep_type'))
+   G_extract_start0=''
+   G_extract_stop0=''
+   select case(SGET('type'))
    case('md','.md')
       G_extract_start='```fortran'
       G_extract_stop='```'
@@ -3460,8 +2783,10 @@ logical                       :: isscratch
       G_extract_auto=.false.
       G_extract=.false.
    case default
-      G_extract_start=trim(sget('prep_start'))
-      G_extract_stop=trim(sget('prep_stop'))
+      G_extract_start=trim(SGET('start'))
+      G_extract_stop=trim(SGET('stop'))
+      G_extract_start0=G_extract_start
+      G_extract_stop0=G_extract_stop
    end select
    if(G_extract_start.ne.''.or.G_extract_stop.ne.'')G_extract=.true.
 
@@ -3495,7 +2820,7 @@ logical                       :: isscratch
       endif
 
       if(G_inparcel)then                                   ! do not expand lines stored in a parcel
-      elseif(size(keywords).ne.0)then                      ! expand variables if any variable is defined, else skip for efficieny
+      elseif(size(macro%key).ne.0)then                     ! expand variables if any variable is defined, else skip for efficieny
          call expand_variables(G_source)                   ! expand ${NAME} strings
       endif
 
@@ -3526,7 +2851,7 @@ logical                       :: isscratch
          inquire(unit=G_file_dictionary(G_iocount)%unit_number,iostat=ios,named=isscratch)
          if(.not.isscratch.and.(G_file_dictionary(G_iocount)%unit_number.gt.0))then
             close(G_file_dictionary(G_iocount)%unit_number,iostat=ios)
-         elseif(isscratch.or.(G_file_dictionary(G_iocount)%unit_number.lt.-1))then 
+         elseif(isscratch.or.(G_file_dictionary(G_iocount)%unit_number.lt.-1))then
             rewind(unit=G_file_dictionary(G_iocount)%unit_number,iostat=ios)
          endif
       endif
@@ -3543,7 +2868,7 @@ logical                       :: isscratch
    enddo READLINE
 
    if (G_nestl.ne.0) then                                           ! check to make sure all if blocks are closed
-      call stop_prep('*prep* ERROR(067) - $IF BLOCK NOT CLOSED.')
+      call stop_prep('*prep* ERROR(040) - $IF BLOCK NOT CLOSED.')
    endif
    call print_comment_block()
 
@@ -3562,8 +2887,8 @@ subroutine auto()
          G_extract_start='<xmp>'
          G_extract_stop='</xmp>'
       case default
-         G_extract_start=trim(sget('prep_start'))
-         G_extract_stop=trim(sget('prep_stop'))
+         G_extract_start=G_extract_start0
+         G_extract_stop=G_extract_stop0
       end select
       if(G_extract_start.eq.''.and.G_extract_stop.eq.'')then
          G_extract=.false.
@@ -3577,30 +2902,3 @@ end program prep
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-!        ! create a character string dictionary
-!        call table%set('B','bee')
-!        call table%set('C','see')
-!        call table%set('D','dee')
-!        write(*,*)'A=',table%get('A')
-!        write(*,*)'C=',table%get('C')
-!        write(*,*)'notthere=',table%get('notthere')
-!        call print_dict()
-!        ! delete dictionary entries
-!        call  table%del('A')
-!        call  table%del('C')
-!        call  table%del('z') ! a noop as there is no key of 'z'
-!        call print_dict()
-!        ! clear dictionary
-!        call  table%clr()
-!        call print_dict()
-!      contains
-!      subroutine print_dict()
-!      integer :: i
-!         ! the dictionary is just three arrays
-!         write(*,'("DICTIONARY:")')
-!         write(*,'(*(a,"==>","[",a,"]",/))') &
-!         & (trim(table%key(i)),               &
-!         & table%value(i)(:table%count(i)),    &
-!         & i=1,size(table%key))
-!         !
-!      end subroutine print_dict

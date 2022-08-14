@@ -6,7 +6,7 @@ use M_kracken, only : kracken, lget, sget, iget                  ! add command-l
 use M_io,      only : read_line
 use M_strings, only : paragraph, indent
 implicit none
-! ident_1="@(#)ffmt(1f): simple text formatter for Fortran comments"
+! ident_1="@(#) ffmt(1f) simple text formatter for Fortran comments"
 character(len=:),allocatable :: line
 character(len=:),allocatable :: bigline
 integer                      :: iline
@@ -95,7 +95,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2022-07-15 10:00:28 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:35:39 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

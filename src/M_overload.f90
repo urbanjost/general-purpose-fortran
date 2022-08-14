@@ -221,7 +221,7 @@
 module m_overload
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 implicit none
-! ident_1="@(#)M_overload(3fm): overloads of standard operators and intrinsic procedures"
+! ident_1="@(#) M_overload(3fm) overloads of standard operators and intrinsic procedures"
 private
 public boolean_equal, boolean_notequal      !
 public operator(==)
@@ -279,7 +279,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 function g_g(value1,value2) result (string)
 
-! ident_2="@(#)M_overload::g_g(3f): convert two single intrinsic values to a string"
+! ident_2="@(#) M_overload g_g(3f) convert two single intrinsic values to a string"
 
 class(*),intent(in)          :: value1, value2
 character(len=:),allocatable :: string1
@@ -320,7 +320,7 @@ end function strmerge
 !-----------------------------------------------------------------------------------------------------------------------------------
 function adjustl_atleast(line,length) result(strout)
 
-! ident_3="@(#)M_strings::adjustl_atleast(3f): return string padded on right to at least specified length"
+! ident_3="@(#) M_strings adjustl_atleast(3f) return string padded on right to at least specified length"
 
 character(len=*),intent(in)                :: line
 integer,intent(in)                         :: length
@@ -330,7 +330,7 @@ end function adjustl_atleast
 !-----------------------------------------------------------------------------------------------------------------------------------
 function adjustr_atleast(line,length) result(strout)
 
-! ident_4="@(#)M_overload::adjustr_atleast(3f): return string padded on left to at least specified length"
+! ident_4="@(#) M_overload adjustr_atleast(3f) return string padded on left to at least specified length"
 
 character(len=*),intent(in)                :: line
 integer,intent(in)                         :: length
@@ -466,7 +466,7 @@ end function dbles_s2v
 function ffmt(generic,format) result (line)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-! ident_5="@(#)M_overload::ffmt(3f): convert any intrinsic to a string using specified format"
+! ident_5="@(#) M_overload ffmt(3f) convert any intrinsic to a string using specified format"
 
 class(*),intent(in)          :: generic
 character(len=*),intent(in)  :: format
@@ -603,7 +603,7 @@ use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 intrinsic dble
 
-! ident_6="@(#)M_anything::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
+! ident_6="@(#) M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out
@@ -638,7 +638,7 @@ use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 intrinsic int
 
-! ident_7="@(#)M_anything::anyscalar_to_int64(3f): convert integer parameter of any kind to 64-bit integer"
+! ident_7="@(#) M_anything anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer"
 
 class(*),intent(in)    :: valuein
    integer(kind=int64) :: ii38
@@ -670,7 +670,7 @@ use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 intrinsic real
 
-! ident_8="@(#)M_anything::anyscalar_to_real(3f): convert integer or real parameter of any kind to real"
+! ident_8="@(#) M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real"
 
 class(*),intent(in) :: valuein
 real                :: r_out

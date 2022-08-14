@@ -601,7 +601,7 @@ end subroutine check_commandline
 !===================================================================================================================================
 function commandline(definition,name,noquote) result (readme)
 
-! ident_1="@(#)M_CLI::commandline(3f): return all command arguments as a NAMELIST(3f) string to read"
+! ident_1="@(#) M_CLI commandline(3f) return all command arguments as a NAMELIST(3f) string to read"
 
 character(len=*),intent(in)          :: definition
 character(len=*),intent(in),optional :: name
@@ -693,7 +693,7 @@ end function commandline
 subroutine prototype_to_dictionary(string)
 implicit none
 
-! ident_2="@(#)M_CLI::prototype_to_dictionary(3f): parse user command and store tokens into dictionary"
+! ident_2="@(#) M_CLI prototype_to_dictionary(3f) parse user command and store tokens into dictionary"
 
 character(len=*),intent(in)       :: string ! string is character input string of options and values
 
@@ -1045,7 +1045,7 @@ end function get
 subroutine prototype_and_cmd_args_to_nlist(prototype,nml)
 implicit none
 
-! ident_3="@(#)M_CLI::prototype_and_cmd_args_to_nlist: create dictionary from prototype (if not null) and update from command line arguments"
+! ident_3="@(#) M_CLI prototype_and_cmd_args_to_nlist create dictionary from prototype (if not null) and update from command line arguments"
 
 character(len=*),intent(in)              :: prototype
 character(len=:),intent(out),allocatable :: nml
@@ -1518,7 +1518,7 @@ end function specified
 !===================================================================================================================================
 subroutine locate_c(list,value,place,ier,errmsg)
 
-! ident_4="@(#)M_list::locate_c(3f): find PLACE in sorted character array where VALUE can be found or should be placed"
+! ident_4="@(#) M_list locate_c(3f) find PLACE in sorted character array where VALUE can be found or should be placed"
 
 character(len=*),intent(in)             :: value
 integer,intent(out)                     :: place
@@ -1593,7 +1593,7 @@ end subroutine locate_c
 !===================================================================================================================================
 subroutine locate_d(list,value,place,ier,errmsg)
 
-! ident_5="@(#)M_list::locate_d(3f): find PLACE in sorted doubleprecision array where VALUE can be found or should be placed"
+! ident_5="@(#) M_list locate_d(3f) find PLACE in sorted doubleprecision array where VALUE can be found or should be placed"
 
 ! Assuming an array sorted in descending order
 !
@@ -1674,7 +1674,7 @@ end subroutine locate_d
 !===================================================================================================================================
 subroutine locate_r(list,value,place,ier,errmsg)
 
-! ident_6="@(#)M_list::locate_r(3f): find PLACE in sorted real array where VALUE can be found or should be placed"
+! ident_6="@(#) M_list locate_r(3f) find PLACE in sorted real array where VALUE can be found or should be placed"
 
 ! Assuming an array sorted in descending order
 !
@@ -1755,7 +1755,7 @@ end subroutine locate_r
 !===================================================================================================================================
 subroutine locate_i(list,value,place,ier,errmsg)
 
-! ident_7="@(#)M_list::locate_i(3f): find PLACE in sorted integer array where VALUE can be found or should be placed"
+! ident_7="@(#) M_list locate_i(3f) find PLACE in sorted integer array where VALUE can be found or should be placed"
 
 ! Assuming an array sorted in descending order
 !
@@ -1838,7 +1838,7 @@ end subroutine locate_i
 !===================================================================================================================================
 subroutine remove_c(list,place)
 
-! ident_8="@(#)M_list::remove_c(3fp): remove string from allocatable string array at specified position"
+! ident_8="@(#) M_list remove_c(3fp) remove string from allocatable string array at specified position"
 
 character(len=:),allocatable :: list(:)
 integer,intent(in)           :: place
@@ -1860,7 +1860,7 @@ end subroutine remove_c
 !===================================================================================================================================
 subroutine remove_d(list,place)
 
-! ident_9="@(#)M_list::remove_d(3fp): remove doubleprecision value from allocatable array at specified position"
+! ident_9="@(#) M_list remove_d(3fp) remove doubleprecision value from allocatable array at specified position"
 
 doubleprecision,allocatable  :: list(:)
 integer,intent(in)           :: place
@@ -1882,7 +1882,7 @@ end subroutine remove_d
 !===================================================================================================================================
 subroutine remove_r(list,place)
 
-! ident_10="@(#)M_list::remove_r(3fp): remove value from allocatable array at specified position"
+! ident_10="@(#) M_list remove_r(3fp) remove value from allocatable array at specified position"
 
 real,allocatable    :: list(:)
 integer,intent(in)  :: place
@@ -1904,7 +1904,7 @@ end subroutine remove_r
 !===================================================================================================================================
 subroutine remove_l(list,place)
 
-! ident_11="@(#)M_list::remove_l(3fp): remove value from allocatable array at specified position"
+! ident_11="@(#) M_list remove_l(3fp) remove value from allocatable array at specified position"
 
 logical,allocatable    :: list(:)
 integer,intent(in)     :: place
@@ -1927,7 +1927,7 @@ end subroutine remove_l
 !===================================================================================================================================
 subroutine remove_i(list,place)
 
-! ident_12="@(#)M_list::remove_i(3fp): remove value from allocatable array at specified position"
+! ident_12="@(#) M_list remove_i(3fp) remove value from allocatable array at specified position"
 
 integer,allocatable    :: list(:)
 integer,intent(in)     :: place
@@ -1952,7 +1952,7 @@ end subroutine remove_i
 !===================================================================================================================================
 subroutine replace_c(list,value,place)
 
-! ident_13="@(#)M_list::replace_c(3fp): replace string in allocatable string array at specified position"
+! ident_13="@(#) M_list replace_c(3fp) replace string in allocatable string array at specified position"
 
 character(len=*),intent(in)  :: value
 character(len=:),allocatable :: list(:)
@@ -1982,7 +1982,7 @@ end subroutine replace_c
 !===================================================================================================================================
 subroutine replace_d(list,value,place)
 
-! ident_14="@(#)M_list::replace_d(3fp): place doubleprecision value into allocatable array at specified position"
+! ident_14="@(#) M_list replace_d(3fp) place doubleprecision value into allocatable array at specified position"
 
 doubleprecision,intent(in)   :: value
 doubleprecision,allocatable  :: list(:)
@@ -2005,7 +2005,7 @@ end subroutine replace_d
 !===================================================================================================================================
 subroutine replace_r(list,value,place)
 
-! ident_15="@(#)M_list::replace_r(3fp): place value into allocatable array at specified position"
+! ident_15="@(#) M_list replace_r(3fp) place value into allocatable array at specified position"
 
 real,intent(in)       :: value
 real,allocatable      :: list(:)
@@ -2028,7 +2028,7 @@ end subroutine replace_r
 !===================================================================================================================================
 subroutine replace_l(list,value,place)
 
-! ident_16="@(#)M_list::replace_l(3fp): place value into allocatable array at specified position"
+! ident_16="@(#) M_list replace_l(3fp) place value into allocatable array at specified position"
 
 logical,allocatable   :: list(:)
 logical,intent(in)    :: value
@@ -2051,7 +2051,7 @@ end subroutine replace_l
 !===================================================================================================================================
 subroutine replace_i(list,value,place)
 
-! ident_17="@(#)M_list::replace_i(3fp): place value into allocatable array at specified position"
+! ident_17="@(#) M_list replace_i(3fp) place value into allocatable array at specified position"
 
 integer,intent(in)    :: value
 integer,allocatable   :: list(:)
@@ -2076,7 +2076,7 @@ end subroutine replace_i
 !===================================================================================================================================
 subroutine insert_c(list,value,place)
 
-! ident_18="@(#)M_list::insert_c(3fp): place string into allocatable string array at specified position"
+! ident_18="@(#) M_list insert_c(3fp) place string into allocatable string array at specified position"
 
 character(len=*),intent(in)  :: value
 character(len=:),allocatable :: list(:)
@@ -2113,7 +2113,7 @@ end subroutine insert_c
 !===================================================================================================================================
 subroutine insert_r(list,value,place)
 
-! ident_19="@(#)M_list::insert_r(3fp): place real value into allocatable array at specified position"
+! ident_19="@(#) M_list insert_r(3fp) place real value into allocatable array at specified position"
 
 real,intent(in)       :: value
 real,allocatable      :: list(:)
@@ -2143,7 +2143,7 @@ end subroutine insert_r
 !===================================================================================================================================
 subroutine insert_d(list,value,place)
 
-! ident_20="@(#)M_list::insert_d(3fp): place doubleprecision value into allocatable array at specified position"
+! ident_20="@(#) M_list insert_d(3fp) place doubleprecision value into allocatable array at specified position"
 
 doubleprecision,intent(in)       :: value
 doubleprecision,allocatable      :: list(:)
@@ -2170,7 +2170,7 @@ end subroutine insert_d
 !===================================================================================================================================
 subroutine insert_l(list,value,place)
 
-! ident_21="@(#)M_list::insert_l(3fp): place value into allocatable array at specified position"
+! ident_21="@(#) M_list insert_l(3fp) place value into allocatable array at specified position"
 
 logical,allocatable   :: list(:)
 logical,intent(in)    :: value
@@ -2198,7 +2198,7 @@ end subroutine insert_l
 !===================================================================================================================================
 subroutine insert_i(list,value,place)
 
-! ident_22="@(#)M_list::insert_i(3fp): place value into allocatable array at specified position"
+! ident_22="@(#) M_list insert_i(3fp) place value into allocatable array at specified position"
 
 integer,allocatable   :: list(:)
 integer,intent(in)    :: value
@@ -2228,7 +2228,7 @@ end subroutine insert_i
 !===================================================================================================================================
 subroutine dict_delete(self,key)
 
-! ident_23="@(#)M_list::dict_delete(3f): remove string from sorted allocatable string array if present"
+! ident_23="@(#) M_list dict_delete(3f) remove string from sorted allocatable string array if present"
 
 class(dictionary),intent(inout) :: self
 character(len=*),intent(in)     :: key
@@ -2247,7 +2247,7 @@ end subroutine dict_delete
 !===================================================================================================================================
 function dict_get(self,key) result(value)
 
-! ident_24="@(#)M_list::dict_get(3f): get value of key-value pair in dictionary, given key"
+! ident_24="@(#) M_list dict_get(3f) get value of key-value pair in dictionary given key"
 
 class(dictionary)               :: self
 character(len=*),intent(in)     :: key
@@ -2265,7 +2265,7 @@ end function dict_get
 !===================================================================================================================================
 subroutine dict_add(self,key,value)
 
-! ident_25="@(#)M_list::dict_add(3f): place key-value pair into dictionary, adding the key if required"
+! ident_25="@(#) M_list dict_add(3f) place key-value pair into dictionary adding the key if required"
 
 class(dictionary),intent(inout) :: self
 character(len=*),intent(in)     :: key
@@ -2292,7 +2292,7 @@ end subroutine dict_add
 !===================================================================================================================================
 pure elemental function isupper(ch) result(res)
 
-! ident_26="@(#)M_strings::isupper(3f): returns true if character is an uppercase letter (A-Z)"
+! ident_26="@(#) M_strings isupper(3f) returns true if character is an uppercase letter (A-Z)"
 
 character,intent(in) :: ch
 logical              :: res
@@ -2308,7 +2308,7 @@ end function isupper
 !===================================================================================================================================
 elemental pure function upper(str,begin,end) result (string)
 
-! ident_27="@(#)M_strings::upper(3f): Changes a string to uppercase"
+! ident_27="@(#) M_strings upper(3f) Changes a string to uppercase"
 
 character(*), intent(In)      :: str                 ! inpout string to convert to all uppercase
 integer, intent(in), optional :: begin,end
@@ -2340,7 +2340,7 @@ end function upper
 !===================================================================================================================================
 elemental pure function lower(str,begin,end) result (string)
 
-! ident_28="@(#)M_strings::lower(3f): Changes a string to lowercase over specified range"
+! ident_28="@(#) M_strings lower(3f) Changes a string to lowercase over specified range"
 
 character(*), intent(In)     :: str
 character(len(str))          :: string
@@ -2401,7 +2401,7 @@ end function quote
 !===================================================================================================================================
 function replace_str(targetline,old,new,ierr,cmd,range) result (newline)
 
-! ident_29="@(#)M_strings::replace(3f): Globally replace one substring for another in string"
+! ident_29="@(#) M_strings replace(3f) Globally replace one substring for another in string"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! parameters
@@ -2561,7 +2561,7 @@ end subroutine crack_cmd
 FUNCTION strtok(source_string,itoken,token_start,token_end,delimiters) result(strtok_status)
 ! JSU- 20151030
 
-! ident_30="@(#)M_strings::strtok(3f): Tokenize a string"
+! ident_30="@(#) M_strings strtok(3f) Tokenize a string"
 
 character(len=*),intent(in)  :: source_string    ! Source string to tokenize.
 character(len=*),intent(in)  :: delimiters       ! list of separator characters. May change between calls
@@ -2685,7 +2685,7 @@ end function strtok
 !!    Public Domain
 subroutine substitute(targetline,old,new,ierr,start,end)
 
-! ident_31="@(#)M_strings::substitute(3f): Globally substitute one substring for another in string"
+! ident_31="@(#) M_strings substitute(3f) Globally substitute one substring for another in string"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*)               :: targetline         ! input line to be changed

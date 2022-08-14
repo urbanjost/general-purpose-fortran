@@ -13,4 +13,7 @@
      integer              :: iarr(7)=[1,2,3,4,5,6,7]
         call set(iarr,a,b,c,i,j,k,l)
         write(*,nml=all)
+        call set(10,a)
+        call set(100,l)
+        write(*,nml=all)
      end program demo_set

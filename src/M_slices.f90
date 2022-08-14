@@ -145,7 +145,7 @@ SUBROUTINE dl_slices(a,INX,INZ,NX,NZ,ALPHA,BETA,XH,YH,ZH,IFLAG,IAXIS,XT,NXT, &
 !
 implicit none
 
-! ident_1="@(#)M_slices::dl_slices(3f): Routine to plot data in 3-D overlay form."
+! ident_1="@(#) M_slices dl_slices(3f) Routine to plot data in 3-D overlay form."
 
 integer                     :: inx
 integer                     :: inz
@@ -611,7 +611,7 @@ implicit none
 !  CREATED BY DAVID LONG    AUG, 1982 AT JPL; revised 1993
 !  SUBPROGRAM OF DL_slices
 
-! ident_2="@(#)M_slices::vxpt3_(3fp) :: routine to determine x,y value of a point on 3-d surface for dl_slices(3f)"
+! ident_2="@(#) M_slices vxpt3_(3fp) routine to determine x y value of a point on 3-d surface for dl_slices(3f)"
 
 real,intent(out)    :: x
 real,intent(out)    :: y
@@ -1713,7 +1713,7 @@ subroutine dl_init(xmax0,ymax0,vpx,vpy,zom)
 use M_draw
 implicit none
 
-! ident_3="@(#)M_slices::dl_init(3f): initialize the longlib graphics plot package"
+! ident_3="@(#) M_slices dl_init(3f) initialize the longlib graphics plot package"
 
 real,intent(in)   :: xmax0
 real,intent(in)   :: ymax0
@@ -1867,7 +1867,7 @@ SUBROUTINE DL_SYMBOL(X,Y,S,T,A,NN,IS)
 !           IN I STARTING AT J FOR K BITS.
 implicit none
 
-! ident_4="@(#)M_slices::dl_symbol(3f): routine to plot characters and symbols"
+! ident_4="@(#) M_slices dl_symbol(3f) routine to plot characters and symbols"
 
 real                :: X
 real                :: Y

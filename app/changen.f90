@@ -1,6 +1,6 @@
 program change_exe
 
-! ident_1="@(#)changen(1f):rename files by changing old fixed string to new string"
+! ident_1="@(#) changen(1f) rename files by changing old fixed string to new string"
 
 use M_CLI2, only : set_args, sgets, lget, sget, names=>unnamed
 use M_strings, only : substitute
@@ -96,47 +96,6 @@ help_text=[ CHARACTER(LEN=128) :: &
 'LICENSE',&
 '   Public Domain',&
 '']
-!>
-!!##NAME
-!!    changen(1f) - [FILE EDIT] replace old fixed string with new fixed
-!!    string in names of files
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!  combinations:
-!!
-!!    changen [ -dryrun][ -cmd COMMAND] old new  FILENAMES
-!!     or
-!!    changen  --version| --help
-!!
-!!##DESCRIPTION
-!!    Given an old and new string and a list of filenames replace all
-!!    occurrences of the original string with the new string in the
-!!    filenames.
-!!
-!!##OPTIONS
-!!    old,new       change occurrences of old string to new string in
-!!                  filenames. Trailing spaces are ignored.
-!!    FILENAMES     names of files to rename. default is "*old".
-!!    -dryrun       write the commands to stdout instead of executing them
-!!    -verbose      echo the commands to be executed
-!!    -cmd COMMAND  change command from "mv -i" to specified command name
-!!    --help        display this help and exit
-!!    --version     output version information and exit
-!!
-!!##EXAMPLE
-!!
-!!   Sample commands:
-!!
-!!    # change all files with .f90 in their name to names ending in .F90
-!!    changen .f90 .F90 *.f90
-!!    # copy all files with .f90 in their name to names ending in .F90
-!!    changen .f90 .F90 *.f90 -cmd cp
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 version_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
 '@(#)PROGRAM:        changen(1f)>',&

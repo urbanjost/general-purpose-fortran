@@ -1363,7 +1363,7 @@ function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, 
                   & sep)
 implicit none
 
-! ident_1="@(#)M_attr::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
+! ident_1="@(#) M_attr msg_scalar(3fp) writes a message to a string composed of any standard scalar types"
 
 class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
@@ -1434,7 +1434,7 @@ function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, gene
                & sep)
 implicit none
 
-! ident_2="@(#)M_attr::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
+! ident_2="@(#) M_attr msg_one(3fp) writes a message to a string composed of any standard one dimensional types"
 
 class(*),intent(in)           :: generic0(:)
 class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)

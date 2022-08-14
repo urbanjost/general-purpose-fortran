@@ -1197,7 +1197,7 @@ end function linspace_int8
 !==================================================================================================================================!
 subroutine mat_inverse_hilbert(a,lda,n)
 
-! ident_1="@(#)M_LA::mat_inverse_hilbert(3fp): generate doubleprecision inverse hilbert matrix"
+! ident_1="@(#) M_LA mat_inverse_hilbert(3fp) generate doubleprecision inverse hilbert matrix"
 !
 ! References:
 ! Forsythe, G. E. and C. B. Moler. Computer Solution of Linear Algebraic Systems. Englewood Cliffs, NJ: Prentice-Hall, 1967.
@@ -1355,7 +1355,7 @@ end subroutine mat_inverse_hilbert
 !==================================================================================================================================!
 subroutine mat_magic(a,rows,n)
 !
-! ident_2="@(#)M_LA::mat_magic(3fp): Algorithms for magic squares"
+! ident_2="@(#) M_LA mat_magic(3fp) Algorithms for magic squares"
 
 integer,intent(in) :: rows
 integer,intent(in) :: n
@@ -2378,7 +2378,7 @@ end subroutine mat_watan
 !==================================================================================================================================!
 subroutine la_err(n)
 
-! ident_3="@(#)M_matrix::la_err(3fp): given error number, write associated error message"
+! ident_3="@(#) M_matrix la_err(3fp) given error number write associated error message"
 
 integer,intent(in)   :: n
 character(len=255)   :: msg

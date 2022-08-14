@@ -131,7 +131,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    Calculate and print the roots of a quadratic formula even if they are complex>',&
 '@(#)VERSION:        2.0, 20180825>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-07-15 10:01:02 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:36:08 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -142,7 +142,7 @@ use M_kracken,  only : kracken, lget, sget
 use M_math,     only : quadratic
 use M_strings,  only : v2s
 implicit none
-! ident_1="@(#)quadratic(1f)"
+! ident_1="@(#) Calculate and print the roots of a quadratic formula even if they are complex"
 namelist /coeff/ A, B, C
 real               :: A=0.0, B=0.0, C=0.0
 character(len=255) :: coeff_string

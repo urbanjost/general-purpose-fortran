@@ -103,7 +103,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        2.0, 20200526>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2022-07-15 10:00:27 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:35:39 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -115,7 +115,7 @@ use M_strings, only : split, listout
 use M_io, only : read_line
 implicit none
 
-! ident_1="@(#)cprint(1f): filter to print specified columns"
+! ident_1="@(#) cprint(1f) filter to print specified columns"
 
 character(len=:),allocatable       :: line
 character(len=:),allocatable       :: delimiters               ! characters used to delimit columns

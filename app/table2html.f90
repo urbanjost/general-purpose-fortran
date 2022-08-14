@@ -2,7 +2,7 @@ program table2html
 use M_kracken, only : kracken, iget, sgets, sget, lget, IPvalue
 use M_strings, only : substitute, split
 implicit none
-! ident_1="@(#)table2html(1f): filter to format input into an HTML table form"
+! ident_1="@(#) table2html(1f) filter to format input into an HTML table form"
 
 character(len=IPvalue)             :: line
 character(len=IPvalue),allocatable :: listof_classes(:)
@@ -264,7 +264,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-07-15 10:00:50 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:35:59 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

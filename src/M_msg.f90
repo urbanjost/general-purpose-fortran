@@ -18,7 +18,7 @@ private
 ! USED SO FREQUENTLY IN OTHER MODULES PUT IN THIS ONE WITH NO DEPENDENCIES TO PREVENT CIRCULAR DEPENDENCY
 !-----------------------------------------------------------------------------------------------------------------------------------
 
-! ident_1="@(#)M_msg::str(3f): {msg_scalar,msg_one}"
+! ident_1="@(#) M_msg str(3f) {msg_scalar msg_one}"
 
 public str
 public stderr
@@ -33,6 +33,7 @@ end interface str
 
 interface set
    module procedure set_scalar
+   module procedure set_single
 end interface set
 
 contains
@@ -126,7 +127,7 @@ function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, 
                   & sep)
 implicit none
 
-! ident_2="@(#)M_msg::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
+! ident_2="@(#) M_msg msg_scalar(3fp) writes a message to a string composed of any standard scalar types"
 
 class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
@@ -200,7 +201,7 @@ function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, gene
                & sep)
 implicit none
 
-! ident_3="@(#)M_msg::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
+! ident_3="@(#) M_msg msg_one(3fp) writes a message to a string composed of any standard one dimensional types"
 
 class(*),intent(in)           :: generic0(:)
 class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)
@@ -331,7 +332,7 @@ end function msg_one
 recursive function fmt(generic,format) result (line)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-! ident_4="@(#)M_msg::fmt(3f): convert any intrinsic to a string using specified format"
+! ident_4="@(#) M_msg fmt(3f) convert any intrinsic to a string using specified format"
 
 class(*),intent(in)          :: generic
 character(len=*),intent(in),optional  :: format
@@ -477,7 +478,7 @@ end function fmt
 subroutine stderr(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj)
 implicit none
 
-! ident_5="@(#)M_msg::stderr(3f): writes a message to standard error using a standard f2003 method"
+! ident_5="@(#) M_msg stderr(3f) writes a message to standard error using a standard f2003 method"
 
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
 class(*),intent(in),optional :: ga, gb, gc, gd, ge, gf, gg, gh, gi, gj
@@ -561,7 +562,7 @@ end subroutine stderr
 subroutine wrt(luns,g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj,iostat)
 implicit none
 
-! ident_6="@(#)M_msg::write(3f): writes a message to any number of open files with any scalar values"
+! ident_6="@(#) M_msg write(3f) writes a message to any number of open files with any scalar values"
 
 integer,intent(in)           :: luns(:)
 class(*),intent(in),optional :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9
@@ -595,7 +596,7 @@ end subroutine wrt
 !!      class(*),intent(out),optional  :: gb,gc,gd,ge,gf,gg,gh,gi,gj,gk
 !!
 !!##DESCRIPTION
-!!    set(3f) sets up to tweny scalars to elements from an array.
+!!    set(3f) sets up to twenty scalars to elements from an array.
 !!    Sort of like an equivalence.
 !!
 !!##OPTIONS
@@ -622,9 +623,12 @@ end subroutine wrt
 !!    integer              :: iarr(7)=[1,2,3,4,5,6,7]
 !!       call set(iarr,a,b,c,i,j,k,l)
 !!       write(*,nml=all)
+!!       call set(10,a)
+!!       call set(100,l)
+!!       write(*,nml=all)
 !!    end program demo_set
 !!
-!!    Output
+!!   Results:
 !!
 !!     &ALL
 !!     A       =   1.000000    ,
@@ -635,17 +639,102 @@ end subroutine wrt
 !!     K       =           6,
 !!     L       =                     7
 !!     /
+!!     &ALL
+!!     A       =   10.00000    ,
+!!     B       =   2.00000000000000     ,
+!!     C       =   3.00000000000000000000000000000000      ,
+!!     I       =    4,
+!!     J       =      5,
+!!     K       =           6,
+!!     L       =                   100
+!!     /
+!!
 !!
 !!##AUTHOR
 !!    John S. Urban
 !!
 !!##LICENSE
 !!    Public Domain
+subroutine set_single(generic0, generic1)
+implicit none
+class(*),intent(in)            :: generic0
+class(*),intent(out)           :: generic1
+   call set_generic(generic1)
+contains
+subroutine set_generic(gen)
+class(*),intent(out) :: gen
+   select type(generic0)
+
+   type is(integer(kind=int8))
+      select type(gen)
+         type is (integer(kind=int8));     gen=generic0
+         type is (integer(kind=int16));    gen=generic0
+         type is (integer(kind=int32));    gen=generic0
+         type is (integer(kind=int64));    gen=generic0
+         type is (real(kind=real32));      gen=generic0
+         type is (real(kind=real64));      gen=generic0
+         type is (real(kind=real128));     gen=generic0
+      end select
+   type is(integer(kind=int16))
+      select type(gen)
+         type is (integer(kind=int8));     gen=generic0
+         type is (integer(kind=int16));    gen=generic0
+         type is (integer(kind=int32));    gen=generic0
+         type is (integer(kind=int64));    gen=generic0
+         type is (real(kind=real32));      gen=generic0
+         type is (real(kind=real64));      gen=generic0
+         type is (real(kind=real128));     gen=generic0
+      end select
+   type is(integer(kind=int32))
+      select type(gen)
+         type is (integer(kind=int8));     gen=generic0
+         type is (integer(kind=int16));    gen=generic0
+         type is (integer(kind=int32));    gen=generic0
+         type is (integer(kind=int64));    gen=generic0
+         type is (real(kind=real32));      gen=generic0
+         type is (real(kind=real64));      gen=generic0
+         type is (real(kind=real128));     gen=generic0
+      end select
+   type is(integer(kind=int64))
+      select type(gen)
+         type is (integer(kind=int8));     gen=generic0
+         type is (integer(kind=int16));    gen=generic0
+         type is (integer(kind=int32));    gen=generic0
+         type is (integer(kind=int64));    gen=generic0
+         type is (real(kind=real32));      gen=generic0
+         type is (real(kind=real64));      gen=generic0
+         type is (real(kind=real128));     gen=generic0
+      end select
+   type is(real(kind=real32))
+      select type(gen)
+         type is (integer(kind=int8));     gen=generic0
+         type is (integer(kind=int16));    gen=generic0
+         type is (integer(kind=int32));    gen=generic0
+         type is (integer(kind=int64));    gen=generic0
+         type is (real(kind=real32));      gen=generic0
+         type is (real(kind=real64));      gen=generic0
+         type is (real(kind=real128));     gen=generic0
+      end select
+   type is(real(kind=real64))
+      select type(gen)
+         type is (integer(kind=int8));     gen=generic0
+         type is (integer(kind=int16));    gen=generic0
+         type is (integer(kind=int32));    gen=generic0
+         type is (integer(kind=int64));    gen=generic0
+         type is (real(kind=real32));      gen=generic0
+         type is (real(kind=real64));      gen=generic0
+         type is (real(kind=real128));     gen=generic0
+      end select
+   type is(real(kind=real128))
+
+   end select
+end subroutine set_generic
+end subroutine set_single
 subroutine set_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
           & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, generick)
 implicit none
 
-! ident_7="@(#)M_msg::set_scalar(3fp): set scalars to array elements"
+! ident_7="@(#)M_msg::set_scalar(3fp): set scalars from array elements"
 
 class(*),intent(in)            :: generic0(:)
 class(*),intent(out),optional  ::           generic1, generic2, generic3, generic4

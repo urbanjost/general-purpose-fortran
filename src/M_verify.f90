@@ -279,6 +279,8 @@ public almost         ! function compares two numbers only up to a specified num
 public dp_accdig      ! compare two double numbers only up to a specified number of digits
 public in_margin      ! check if two reals are approximately equal using a relative margin
 public round          ! round val to specified number of significant digits
+public round_to_power ! round val to specified number of digits after the decimal point
+public significant    ! round val to specified number of significant digits
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
 !===================================================================================================================================
@@ -328,7 +330,7 @@ contains
 subroutine unit_check_msg(name,g1, g2, g3, g4, g5, g6, g7, g8, g9)
 implicit none
 
-! ident_1="@(#)M_verify::unit_check_msg(3f): writes a message to a string composed of any standard scalar types"
+! ident_1="@(#) M_verify unit_check_msg(3f) writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: name
 class(*),intent(in),optional  :: g1 ,g2 ,g3 ,g4 ,g5
@@ -344,7 +346,7 @@ end subroutine unit_check_msg
 subroutine stderr(msg, gen0, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9)
 implicit none
 
-! ident_2="@(#)M_verify::stderr(3f): writes a message to standard error using a standard f2003 method"
+! ident_2="@(#) M_verify stderr(3f) writes a message to standard error using a standard f2003 method"
 
 class(*),intent(in),optional :: msg
 class(*),intent(in),optional :: gen0, gen1, gen2, gen3, gen4
@@ -412,7 +414,7 @@ end subroutine stderr
 !!    Public Domain
 subroutine fstop(ierr,stdout,stderr)
 
-! ident_3="@(#)M_verify::fstop(3f): calls 'STOP VALUE' passing in a value (1-32), with optional message"
+! ident_3="@(#) M_verify fstop(3f) calls 'STOP VALUE' passing in a value (1-32) with optional message"
 
 integer,intent(in)                   :: ierr
 character(len=*),optional,intent(in) :: stdout
@@ -651,7 +653,7 @@ end subroutine fstop
 !!    Public Domain
 subroutine unit_check(name,logical_expression,msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
 
-! ident_4="@(#)M_verify::unit_check(3f):if .not.expression call 'goodbad NAME bad' & stop program"
+! ident_4="@(#) M_verify unit_check(3f) if .not.expression call 'goodbad NAME bad' & stop program"
 
 character(len=*),intent(in)          :: name
 logical,intent(in)                   :: logical_expression
@@ -759,7 +761,7 @@ end subroutine unit_check
 !!    Public Domain
 subroutine unit_check_start(name,options,msg)
 
-! ident_5="@(#)M_verify::unit_check_start(3f): call 'goodbad NAME start'"
+! ident_5="@(#) M_verify unit_check_start(3f) call 'goodbad NAME start'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: options
@@ -862,7 +864,7 @@ end subroutine unit_check_start
 subroutine unit_check_stop(msg)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-! ident_6="@(#)M_verify::unit_check_stop(3f):  stop program with report on calls to unit_check(3f)"
+! ident_6="@(#) M_verify unit_check_stop(3f) stop program with report on calls to unit_check(3f)"
 
 character(len=*),intent(in),optional :: msg
 character(len=:),allocatable         :: msg_local
@@ -963,7 +965,7 @@ end subroutine unit_check_stop
 subroutine unit_check_done(name,opts,msg)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
-! ident_7="@(#)M_verify::unit_check_done(3f): call 'goodbad NAME bad'"
+! ident_7="@(#) M_verify unit_check_done(3f) call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -1085,7 +1087,7 @@ end subroutine unit_check_done
 !!    Public Domain
 subroutine unit_check_bad(name,opts,msg)
 
-! ident_8="@(#)M_verify::unit_check_bad(3f): call 'goodbad NAME bad'"
+! ident_8="@(#) M_verify unit_check_bad(3f) call 'goodbad NAME bad'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -1155,7 +1157,7 @@ end subroutine unit_check_bad
 !!    Public Domain
 subroutine unit_check_good(name,opts,msg)
 
-! ident_9="@(#)M_verify::unit_check_good(3f): call 'goodbad NAME good'"
+! ident_9="@(#) M_verify unit_check_good(3f) call 'goodbad NAME good'"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: opts
@@ -1233,7 +1235,7 @@ end subroutine unit_check_good
 !!    Public Domain
 subroutine pdec(string)
 
-! ident_10="@(#)M_verify::pdec(3f): write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
+! ident_10="@(#) M_verify pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string"
 
 character(len=*),intent(in) :: string   ! the string to print
 integer                     :: ilen     ! number of characters in string to print
@@ -1255,7 +1257,7 @@ end subroutine pdec
 !===================================================================================================================================
 function atleast(line,length) result(strout)
 
-! ident_11="@(#)M_verify::atleast(3fp): return string padded to at least specified length"
+! ident_11="@(#) M_verify atleast(3fp) return string padded to at least specified length"
 
 character(len=*),intent(in)  ::  line
 integer,intent(in)           ::  length
@@ -1314,7 +1316,7 @@ end function atleast
 subroutine assert(filename,linen,expr,g1, g2, g3, g4, g5, g6, g7, g8, g9)
 implicit none
 
-! ident_12="@(#)M_verify::assert(3f): writes a message to a string composed of any standard scalar types"
+! ident_12="@(#) M_verify assert(3f) writes a message to a string composed of any standard scalar types"
 
 character(len=*),intent(in)   :: filename
 integer,intent(in)            :: linen
@@ -1335,7 +1337,7 @@ end subroutine assert
 function julian()
 ! REFERENCE: From Wikipedia, the free encyclopedia 2015-12-19
 
-! ident_13="@(#)M_verify::julian(3f): Converts proleptic Gregorian DAT date-time array to Julian Date"
+! ident_13="@(#) M_verify julian(3f) Converts proleptic Gregorian DAT date-time array to Julian Date"
 
 real(kind=realtime)              :: julian   ! Julian Date (non-negative, but may be non-integer)
 integer                          :: dat(8)   ! array like returned by DATE_AND_TIME(3f)
@@ -1436,7 +1438,7 @@ end function julian
 function almost(x,y,digits,verbose)
 use M_journal,  only : journal
 
-! ident_14="@(#)M_verify::almost(3f): function to compare two real numbers only up to a specified number of digits by calling DP_ACCDIG(3f)"
+! ident_14="@(#) M_verify almost(3f) function to compare two real numbers only up to a specified number of digits by calling DP_ACCDIG(3f)"
 
 class(*),intent(in)         :: x,y
 class(*),intent(in)         :: digits
@@ -1629,7 +1631,7 @@ SUBROUTINE accdig(X,Y,digi0,ACURCY,IND)
 use M_journal, only : journal
 implicit none
 
-! ident_15="@(#)M_verify::accdig(3f): compare two real numbers only up to a specified number of digits"
+! ident_15="@(#) M_verify accdig(3f) compare two real numbers only up to a specified number of digits"
 
 !     INPUT ...
 real,intent(in) :: x           ! First  of two real numbers to be compared.
@@ -1818,7 +1820,7 @@ use,intrinsic :: iso_fortran_env, only : wp=>real128
 use M_journal,  only : journal
 implicit none
 
-! ident_16="@(#)M_verify::dp_accdig(3f): compare two values only up to a specified number of digits"
+! ident_16="@(#) M_verify dp_accdig(3f) compare two values only up to a specified number of digits"
 
 !  INPUT ...
 class(*),intent(in)  :: x           ! FIRST  OF TWO NUMBERS TO BE COMPARED.
@@ -1927,10 +1929,10 @@ end subroutine dp_accdig
 !!     T
 !!     T
 !===================================================================================================================================
-elemental pure function in_margin(expected_value, measured_value, allowed_margin)
+elemental impure function in_margin(expected_value, measured_value, allowed_margin)
 implicit none
 
-! ident_17="@(#)M_verify::in_margin(3f): check if two reals are approximately equal using a relative margin"
+! ident_17="@(#) M_verify in_margin(3f) check if two reals are approximately equal using a relative margin"
 
 class(*),intent(in) :: expected_value, measured_value, allowed_margin
 logical             :: in_margin
@@ -1948,10 +1950,25 @@ logical             :: in_margin
    endif
 
 end function in_margin
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+pure elemental function round_to_power(val,n)
+
+! ident_18="@(#) M_verify round_to_power(3f) round val to specified given decimal (power) position"
+
+real,intent(in) :: val
+integer,intent(in) :: n
+real :: round_to_power
+   round_to_power = anint(val*10.0**n)/10.0**n
+end function round_to_power
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
 function round(val,idigits0)
 implicit none
 
-! ident_18="@(#)M_verify::round(3f): round val to specified number of significant digits"
+! ident_19="@(#) M_verify round(3f) round val to specified number of significant digits"
 
 integer,parameter          :: dp=kind(0.0d0)
 real(kind=dp),intent(in)   :: val
@@ -1981,12 +1998,97 @@ end function round
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!   significant(3f) - [M_verify] round val to specified number of significant digits
+!!
+!!##SYNOPSIS
+!!
+!!     pure elemental function significant(val,digits,round)
+!!
+!!      real,intent(in)                      :: val
+!!      integer,intent(in)                   :: digits
+!!      character(len=*),intent(in),optional :: round
+!!
+!!##DESCRIPTION
+!!
+!! Round real value to specified number of significant digits
+!!
+!! val     value to round
+!! digits  number of significant digits to produce
+!! round   Use the round edit descriptor
+!!
+!!           RU  UP : the value resulting from conversion shall be the
+!!                    smallest representable value that is greater than or
+!!                    equal to the original value
+!!           RD  DOWN : the value resulting from conversion shall be the
+!!                    largest representable value that is less than or
+!!                    equal to the original value
+!!           RZ  ZERO : the value resulting from conversion shall be the value
+!!                    closest to the original value and no greater in
+!!                    magnitude than the original value.
+!!           RN  NEAREST : modeis NEAREST,thevalueresulting from conversion
+!!                        shall be the closer of the two nearest
+!!                        representable values if one is closer than the
+!!                        other. If the two nearest representable values
+!!                        are equidistant from the original value, it is
+!!                        processor dependent which one of them is chosen.
+!!           RC  COMPATIBLE : the value resulting from conversion shall be
+!!                          the closer of the two nearest representable
+!!                          values or the value away from zero if halfway
+!!                          between them.
+!!           RP  PROCESSOR_DEFINED : rounding during conversion shall be
+!!                                   a processor-dependent default mode,
+!!                                   which may correspond to one of the
+!!                                   other modes.
+!!
+!!##EXAMPLE
+!!
+!!  Sample program
+!!
+!!    program demo_significant
+!!    use M_verify, only : significant
+!!    implicit none
+!!    integer :: i
+!!    real :: r, v
+!!    character(len=*),parameter :: g='(*(g0,1x))'
+!!
+!!       write(*,g)significant([8765.43210,0.1234567890],5)
+!!
+!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
+!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RU'),'RU'
+!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RD'),'RD'
+!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RZ'),'RZ'
+!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RN'),'RN'
+!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
+!!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
+!!    end program demo_significant
+pure elemental function significant(val,digits,round)
+
+! ident_20="@(#) M_verify significant(3f) round val to specified number of significant digits"
+
+real,intent(in)                      :: val
+integer,intent(in)                   :: digits
+character(len=*),intent(in),optional :: round
+character(len=80)                    :: line,fmt
+real                                 :: significant
+   if(present(round))then
+      write(fmt,'("(",a,",e0.",i0,")")')trim(round),digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
+   else
+      write(fmt,'("(e0.",i0,")")')digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
+   endif
+   write(line,fmt)val                  ! write with specified number of significant diguts
+   read(line,'(e50.20)')significant    ! read back into a value
+end function significant
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
 pure elemental function anyscalar_to_realbig(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 use,intrinsic :: iso_fortran_env, only : wp=>real128
 implicit none
 
-! ident_19="@(#)M_verify::anyscalar_to_realbig(3f): convert integer or real parameter of any kind to real128 or biggest available"
+! ident_21="@(#) M_verify anyscalar_to_realbig(3f) convert integer or real parameter of any kind to real128 or biggest available"
 
 class(*),intent(in)          :: valuein
 real(kind=wp)           :: d_out
@@ -2015,7 +2117,7 @@ pure elemental function anyscalar_to_double(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_20="@(#)M_verify::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
+! ident_22="@(#) M_verify anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out

@@ -26,6 +26,7 @@
 !!   use M_anything,only : anyscalar_to_real128
 !!   use M_anything,only : anyscalar_to_double
 !!   use M_anything,only : anything_to_bytes
+!!   use M_anything,only : get_type
 !!   use M_anything,only : bytes_to_anything
 !!   use M_anything,only : empty, assignment(=)
 !!
@@ -36,6 +37,7 @@
 !!    anyscalar_to_real128    convert integer or real parameter of any kind to real128
 !!    anyscalar_to_double     convert integer or real parameter of any kind to doubleprecision
 !!    anything_to_bytes       convert anything to bytes
+!!    get_type                return array of strings containing type names of arguments
 !!    empty                   create an empty array
 !!
 !!##EXAMPLE
@@ -102,6 +104,7 @@ public anyscalar_to_real     ! convert integer or real parameter of any kind to 
 public anyscalar_to_real128  ! convert integer or real parameter of any kind to real128
 public anyscalar_to_double   ! convert integer or real parameter of any kind to doubleprecision
 public anything_to_bytes
+public get_type
 public bytes_to_anything
 !!public setany
 
@@ -109,6 +112,11 @@ interface anything_to_bytes
    module procedure anything_to_bytes_arr
    module procedure anything_to_bytes_scalar
 end interface anything_to_bytes
+
+interface get_type
+   module procedure get_type_arr
+   module procedure get_type_scalar
+end interface get_type
 !===================================================================================================================================
 !   Because there is no builtin "empty array" object, I've tried to mimic
 !   it with some user-defined type (just for fun).  -- spectrum
@@ -290,7 +298,7 @@ end subroutine bytes_to_anything
 !!
 !!##SYNOPSIS
 !!
-!!    function anything_to_bytes_arr(anything) result(chars)
+!!    function anything_to_bytes(anything) result(chars)
 !!
 !!     class(*),intent(in)  :: anything
 !!             or
@@ -362,10 +370,12 @@ end subroutine bytes_to_anything
 function anything_to_bytes_arr(anything) result(chars)
 implicit none
 
-! ident_1="@(#)M_anything::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_1="@(#) M_anything anything_to_bytes_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything(:)
 character(len=1),allocatable :: chars(:)
+   if(allocated(chars))deallocate(chars)
+   allocate(chars( storage_size(anything)/8) )
    select type(anything)
 
     type is (character(len=*));     chars=transfer(anything,chars)
@@ -388,10 +398,12 @@ end function anything_to_bytes_arr
 function  anything_to_bytes_scalar(anything) result(chars)
 implicit none
 
-! ident_2="@(#)M_anything::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_2="@(#) M_anything anything_to_bytes_scalar(3fp) anything to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything
 character(len=1),allocatable :: chars(:)
+   if(allocated(chars))deallocate(chars)
+   allocate(chars( storage_size(anything)/8) )
    select type(anything)
 
     type is (character(len=*));     chars=transfer(anything,chars)
@@ -498,7 +510,7 @@ pure elemental function anyscalar_to_real128(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_3="@(#)M_anything::anyscalar_to_real128(3f): convert integer or real parameter of any kind to real128"
+! ident_3="@(#) M_anything anyscalar_to_real128(3f) convert integer or real parameter of any kind to real128"
 
 class(*),intent(in)          :: valuein
 real(kind=real128)           :: d_out
@@ -591,7 +603,7 @@ pure elemental function anyscalar_to_double(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_4="@(#)M_anything::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
+! ident_4="@(#) M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out
@@ -604,20 +616,14 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
    Type is (real(kind=real128))
-      !!if(valuein.gt.big)then
-      !!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
-      !!endif
+      !IMPURE! if(valuein.gt.big)then
+      !IMPURE!    write(error_unit,'(*(g0,1x))')'*anyscalar_to_double* value too large ',valuein
+      !IMPURE! endif
       d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
-   type is (character(len=*));      read(valuein,*) d_out
-   !type is (real(kind=real128))
-   !   if(valuein.gt.big)then
-   !      write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
-   !   endif
-   !   d_out=dble(valuein)
+   type is (character(len=*));     read(valuein,*) d_out
    class default
-     d_out=0.0d0
-     !!stop '*M_anything::anyscalar_to_double: unknown type'
+     !IMPURE! stop '*M_anything::anyscalar_to_double: unknown type'
    end select
 end function anyscalar_to_double
 !===================================================================================================================================
@@ -690,7 +696,7 @@ pure elemental function anyscalar_to_real(valuein) result(r_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_5="@(#)M_anything::anyscalar_to_real(3f): convert integer or real parameter of any kind to real"
+! ident_5="@(#) M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real"
 
 class(*),intent(in) :: valuein
 real                :: r_out
@@ -793,7 +799,7 @@ impure elemental function anyscalar_to_int64(valuein) result(ii38)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 
-! ident_6="@(#)M_anything::anyscalar_to_int64(3f): convert integer parameter of any kind to 64-bit integer"
+! ident_6="@(#) M_anything anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer"
 
 class(*),intent(in)    :: valuein
    integer(kind=int64) :: ii38
@@ -880,7 +886,7 @@ end function anyscalar_to_int64
 impure function anyinteger_to_string(int) result(out)
 use,intrinsic :: iso_fortran_env, only : int64
 
-! ident_7="@(#)M_anything::anyinteger_to_string(3f): function that converts an integer value to a character string"
+! ident_7="@(#) M_anything anyinteger_to_string(3f) function that converts an integer value to a character string"
 
 class(*),intent(in)          :: int
 character(len=:),allocatable :: out
@@ -908,6 +914,118 @@ integer,parameter            :: minus= ichar('-')
       out(i-k+1:i-k+1)=char(str(k))
    enddo
 end function anyinteger_to_string
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    get_type(3f) - [M_anything] return array of strings containing type
+!!    names of arguments
+!!    (LICENSE:MIT)
+!!
+!!##SYNOPSIS
+!!
+!!    function get_type(anything) result(chars)
+!!
+!!     class(*),intent(in)  :: anything
+!!             or
+!!     class(*),intent(in)  :: anything(..)
+!!
+!!     character(len=:),allocatable :: chars
+!!
+!!##DESCRIPTION
+!!
+!!    This function uses polymorphism to allow input arguments of different
+!!    types. It is used by other procedures that can take many
+!!    argument types as input options.
+!!
+!!##OPTIONS
+!!
+!!    VALUEIN  input array or scalar to return type of
+!!             May be of KIND INTEGER(kind=int8), INTEGER(kind=int16),
+!!             INTEGER(kind=int32), INTEGER(kind=int64),
+!!             REAL(kind=real32, REAL(kind=real64),
+!!             REAL(kind=real128), complex, or CHARACTER(len=*)
+!!##RETURN
+!!
+!!    CHARS    The returned value is an array of names
+!!
+!!##EXAMPLE
+!!
+!!
+!!   Sample program
+!!
+!!    program demo_get_type
+!!    use M_anything,      only : get_type
+!!    implicit none
+!!    integer :: i
+!!       write(*,*)get_type([(i*i,i=1,10)])
+!!       write(*,*)get_type([11.11,22.22,33.33])
+!!       write(*,*)get_type('This is a string')
+!!       write(*,*)get_type(30.0d0)
+!!    end program demo_get_type
+!!
+!!   Results:
+!!
+!!     int32
+!!     real32
+!!     character
+!!     real64
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    MIT
+function get_type_arr(anything) result(chars)
+implicit none
+
+! ident_8="@(#) M_anything get_type_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+
+class(*),intent(in) :: anything(:) ! anything(..)
+character(len=20)   :: chars
+   select type(anything)
+
+    type is (character(len=*));     chars='character'
+    type is (complex);              chars='complex'
+    type is (complex(kind=dp));     chars='complex_real64'
+    type is (integer(kind=int8));   chars='int8'
+    type is (integer(kind=int16));  chars='int16'
+    type is (integer(kind=int32));  chars='int32'
+    type is (integer(kind=int64));  chars='int64'
+    type is (real(kind=real32));    chars='real32'
+    type is (real(kind=real64));    chars='real64'
+    type is (real(kind=real128));   chars='real128'
+    type is (logical);              chars='logical'
+    class default
+      stop 'crud. get_type_arr(1) does not know about this type'
+
+   end select
+end function get_type_arr
+!-----------------------------------------------------------------------------------------------------------------------------------
+elemental impure function get_type_scalar(anything) result(chars)
+implicit none
+
+! ident_9="@(#) M_anything get_type_scalar(3fp) anything to bytes (an array of CHARACTER(LEN=1) variables)"
+
+class(*),intent(in) :: anything
+character(len=20)   :: chars
+   select type(anything)
+    type is (character(len=*));     chars='character'
+    type is (complex);              chars='complex'
+    type is (complex(kind=dp));     chars='complex_real64'
+    type is (integer(kind=int8));   chars='int8'
+    type is (integer(kind=int16));  chars='int16'
+    type is (integer(kind=int32));  chars='int32'
+    type is (integer(kind=int64));  chars='int64'
+    type is (real(kind=real32));    chars='real32'
+    type is (real(kind=real64));    chars='real64'
+    type is (real(kind=real128));   chars='real128'
+    type is (logical);              chars='logical'
+    class default
+      stop 'crud. get_type_scalar(1) does not know about this type'
+
+   end select
+end function  get_type_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

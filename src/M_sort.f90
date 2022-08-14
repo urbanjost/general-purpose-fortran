@@ -39,7 +39,7 @@ public tree_node
 integer,parameter :: ASCII=kind('A')
 !===================================================================================================================================
 
-! ident_1="@(#)M_sort::sort_shell(3f): Generic subroutine sorts the array X using a shell sort"
+! ident_1="@(#) M_sort sort_shell(3f) Generic subroutine sorts the array X using a shell sort"
 
 interface sort_shell
    module procedure sort_shell_integers, sort_shell_reals, sort_shell_strings
@@ -50,7 +50,7 @@ end interface
 ! cannot be called from outside of this module.
 !===================================================================================================================================
 
-! ident_2="@(#)M_sort::sort_heap(3f): Generic subroutine sorts the array X using a heap sort"
+! ident_2="@(#) M_sort sort_heap(3f) Generic subroutine sorts the array X using a heap sort"
 
 interface sort_heap
    module procedure sort_heap_integer_int8, sort_heap_integer_int16, sort_heap_integer_int32, sort_heap_integer_int64
@@ -59,7 +59,7 @@ interface sort_heap
 end interface
 !===================================================================================================================================
 
-! ident_3="@(#)M_sort::unique(3f): assuming an array is sorted, return array with duplicate values removed"
+! ident_3="@(#) M_sort unique(3f) assuming an array is sorted return array with duplicate values removed"
 
 interface unique
 module procedure  unique_integer_int8,            unique_integer_int16,   unique_integer_int32,   unique_integer_int64
@@ -69,7 +69,7 @@ module procedure  unique_strings_allocatable_len  !!,unique_strings
 end interface
 !===================================================================================================================================
 
-! ident_4="@(#)M_sort::swap(3f): swap two variables of like type (real,integer,complex,character,double)"
+! ident_4="@(#) M_sort swap(3f) swap two variables of like type (real integer complex character double)"
 
 interface swap
    module procedure swap_int8
@@ -381,7 +381,7 @@ contains
 !===================================================================================================================================
 subroutine sort_shell_strings(lines,order,startcol,endcol)
 
-! ident_5="@(#)M_sort::sort_shell_strings(3fp):sort strings over specified field using shell sort"
+! ident_5="@(#) M_sort sort_shell_strings(3fp) sort strings over specified field using shell sort"
 
 character(len=*),  intent(inout)          :: lines(:)       ! input/output array
 character(len=*),  intent(in)             :: order          ! sort order 'ascending'|'descending'
@@ -413,7 +413,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_strings_lh(lines,startcol,endcol)
 
-! ident_6="@(#)M_sort::sort_shell_strings_lh(3fp):sort strings(a-z) over specified field using shell sort"
+! ident_6="@(#) M_sort sort_shell_strings_lh(3fp) sort strings(a-z) over specified field using shell sort"
 
 !  1989 John S. Urban
 !  lle to sort 'a-z', lge to sort 'z-a'
@@ -463,7 +463,7 @@ end subroutine sort_shell_strings_lh
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_strings_hl(lines,startcol,endcol)
 
-! ident_7="@(#)M_sort::sort_shell_strings_hl(3fp):sort strings(z-a) over specified field using shell sort"
+! ident_7="@(#) M_sort sort_shell_strings_hl(3fp) sort strings(z-a) over specified field using shell sort"
 
 !  1989 John S. Urban
 !  lle to sort 'a-z', lge to sort 'z-a'
@@ -517,7 +517,7 @@ end subroutine sort_shell_strings
 !===================================================================================================================================
 subroutine sort_shell_integers(iarray,order)
 
-! ident_8="@(#)M_sort::sort_shell_integers(3fp):sort integer array using Shell sort and specified order"
+! ident_8="@(#) M_sort sort_shell_integers(3fp) sort integer array using Shell sort and specified order"
 
 integer,intent(inout)          :: iarray(:)   ! iarray input/output array
 character(len=*),  intent(in)  ::  order      ! sort order 'ascending'|'descending'
@@ -533,7 +533,7 @@ contains
 subroutine sort_shell_integers_hl(iarray)
 ! Copyright (C) 1989,1996 John S. Urban;  all rights reserved
 
-! ident_9="@(#)M_sort::sort_shell_integers_hl(3fp):sort integer array using Shell sort (high to low)"
+! ident_9="@(#) M_sort sort_shell_integers_hl(3fp) sort integer array using Shell sort (high to low)"
 
 integer,intent(inout)      :: iarray(:)  ! input/output array
 integer                    :: n          ! number of elements in input array (iarray)
@@ -563,7 +563,7 @@ end subroutine sort_shell_integers_hl
 subroutine sort_shell_integers_lh(iarray) ! sort an integer array in ascending order (low to high)
 ! Copyright (C) 1989,1996 John S. Urban;  all rights reserved
 
-! ident_10="@(#)M_sort::sort_shell_integers_lh(3fp):sort integer array using Shell sort low to high"
+! ident_10="@(#) M_sort sort_shell_integers_lh(3fp) sort integer array using Shell sort low to high"
 
 integer,intent(inout) :: iarray(:)      ! iarray input/output array
    integer            :: n
@@ -597,7 +597,7 @@ end subroutine sort_shell_integers
 !===================================================================================================================================
 subroutine sort_shell_reals(array,order)
 
-! ident_11="@(#)M_sort::sort_shell_reals(3fp):sort real array using Shell sort and specified order"
+! ident_11="@(#) M_sort sort_shell_reals(3fp) sort real array using Shell sort and specified order"
 
 real,intent(inout)          :: array(:)   ! input/output array
 character(len=*),intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -612,7 +612,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_reals_hl(array)
 
-! ident_12="@(#)M_sort::sort_shell_reals_hl(3fp):sort real array using Shell sort (high to low)"
+! ident_12="@(#) M_sort sort_shell_reals_hl(3fp) sort real array using Shell sort (high to low)"
 
 !  Copyright(C) 1989 John S. Urban
 real,intent(inout) :: array(:) ! input array
@@ -642,7 +642,7 @@ end subroutine sort_shell_reals_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_reals_lh(array)
 
-! ident_13="@(#)M_sort::sort_shell_reals_lh(3fp):sort real array using Shell sort (low to high)"
+! ident_13="@(#) M_sort sort_shell_reals_lh(3fp) sort real array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban
 real,intent(inout) :: array(:)            ! input array
@@ -676,7 +676,7 @@ end subroutine sort_shell_reals
 !===================================================================================================================================
 subroutine sort_shell_doubles(array,order)
 
-! ident_14="@(#)M_sort::sort_shell_doubles(3fp):sort double array using Shell sort and specified order"
+! ident_14="@(#) M_sort sort_shell_doubles(3fp) sort double array using Shell sort and specified order"
 
 doubleprecision,intent(inout)          :: array(:)   ! input/output array
 character(len=*),intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -691,7 +691,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_doubles_hl(array)
 
-! ident_15="@(#)M_sort::sort_shell_doubles_hl(3fp):sort double array using Shell sort (high to low)"
+! ident_15="@(#) M_sort sort_shell_doubles_hl(3fp) sort double array using Shell sort (high to low)"
 
 !  Copyright(C) 1989 John S. Urban
 doubleprecision,intent(inout) :: array(:) ! input array
@@ -721,7 +721,7 @@ end subroutine sort_shell_doubles_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_doubles_lh(array)
 
-! ident_16="@(#)M_sort::sort_shell_doubles_lh(3fp):sort double array using Shell sort (low to high)"
+! ident_16="@(#) M_sort sort_shell_doubles_lh(3fp) sort double array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban
 doubleprecision,intent(inout) :: array(:)            ! input array
@@ -755,7 +755,7 @@ end subroutine sort_shell_doubles
 !===================================================================================================================================
 subroutine sort_shell_complex(array,order,type)  ! select ascending or descending order
 
-! ident_17="@(#)M_sort::sort_shell_complex(3fp):sort complex array using Shell sort"
+! ident_17="@(#) M_sort sort_shell_complex(3fp) sort complex array using Shell sort"
 
 complex,intent(inout)         :: array(:)   ! array  input/output array
 character(len=*),  intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -771,7 +771,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_hl(array,type)
 
-! ident_18="@(#)M_sort::sort_shell_reals_hl(3fp):sort complex array using Shell sort (high to low)"
+! ident_18="@(#) M_sort sort_shell_reals_hl(3fp) sort complex array using Shell sort (high to low)"
 
 !     Copyright(C) 1989 John S. Urban   all rights reserved
    complex,intent(inout)       :: array(:)            ! input array
@@ -813,7 +813,7 @@ end subroutine sort_shell_complex_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_lh(array,type)
 
-! ident_19="@(#)M_sort::sort_shell_reals_lh(3fp):sort complex array using Shell sort (low to high)"
+! ident_19="@(#) M_sort sort_shell_reals_lh(3fp) sort complex array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban   all rights reserved
 !  array    input array
@@ -860,7 +860,7 @@ end subroutine sort_shell_complex
 !===================================================================================================================================
 subroutine sort_shell_complex_double(array,order,type)  ! select ascending or descending order
 
-! ident_20="@(#)M_sort::sort_shell_complex_double(3fp):sort double complex array using Shell sort"
+! ident_20="@(#) M_sort sort_shell_complex_double(3fp) sort double complex array using Shell sort"
 
 complex(kind=cd),intent(inout)         :: array(:)   ! array  input/output array
 character(len=*),  intent(in) :: order      ! sort order 'ascending'|'descending'
@@ -876,7 +876,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_double_hl(array,type)
 
-! ident_21="@(#)M_sort::sort_shell_reals_hl(3fp):sort double complex array using Shell sort (high to low)"
+! ident_21="@(#) M_sort sort_shell_reals_hl(3fp) sort double complex array using Shell sort (high to low)"
 
 !     Copyright(C) 1989 John S. Urban   all rights reserved
    complex(kind=cd),intent(inout)       :: array(:)            ! input array
@@ -918,7 +918,7 @@ end subroutine sort_shell_complex_double_hl
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine sort_shell_complex_double_lh(array,type)
 
-! ident_22="@(#)M_sort::sort_shell_reals_lh(3fp):sort double complex array using Shell sort (low to high)"
+! ident_22="@(#) M_sort sort_shell_reals_lh(3fp) sort double complex array using Shell sort (low to high)"
 
 !  Copyright(C) 1989 John S. Urban   all rights reserved
 !  array    input array
@@ -1080,7 +1080,7 @@ end subroutine sort_shell_complex_double
 
 subroutine sort_quick_rx_integer_int8_int32(data,indx)
 
-! ident_23="@(#)M_sort::sort_quick_rx_integer_int8_int32(3f): indexed hybrid quicksort of a integer(kind=int8) array"
+! ident_23="@(#) M_sort sort_quick_rx_integer_int8_int32(3f) indexed hybrid quicksort of a integer(kind=int8) array"
 
 integer(kind=int8),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
@@ -1254,7 +1254,7 @@ enddo
 end subroutine sort_quick_rx_integer_int8_int32
 subroutine sort_quick_rx_integer_int16_int32(data,indx)
 
-! ident_24="@(#)M_sort::sort_quick_rx_integer_int16_int32(3f): indexed hybrid quicksort of a integer(kind=int16) array"
+! ident_24="@(#) M_sort sort_quick_rx_integer_int16_int32(3f) indexed hybrid quicksort of a integer(kind=int16) array"
 
 integer(kind=int16),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
@@ -1428,7 +1428,7 @@ enddo
 end subroutine sort_quick_rx_integer_int16_int32
 subroutine sort_quick_rx_integer_int32_int32(data,indx)
 
-! ident_25="@(#)M_sort::sort_quick_rx_integer_int32_int32(3f): indexed hybrid quicksort of a integer(kind=int32) array"
+! ident_25="@(#) M_sort sort_quick_rx_integer_int32_int32(3f) indexed hybrid quicksort of a integer(kind=int32) array"
 
 integer(kind=int32),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
@@ -1602,7 +1602,7 @@ enddo
 end subroutine sort_quick_rx_integer_int32_int32
 subroutine sort_quick_rx_integer_int64_int32(data,indx)
 
-! ident_26="@(#)M_sort::sort_quick_rx_integer_int64_int32(3f): indexed hybrid quicksort of a integer(kind=int64) array"
+! ident_26="@(#) M_sort sort_quick_rx_integer_int64_int32(3f) indexed hybrid quicksort of a integer(kind=int64) array"
 
 integer(kind=int64),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
@@ -1776,7 +1776,7 @@ enddo
 end subroutine sort_quick_rx_integer_int64_int32
 subroutine sort_quick_rx_real_real32_int32(data,indx)
 
-! ident_27="@(#)M_sort::sort_quick_rx_real_real32_int32(3f): indexed hybrid quicksort of a real(kind=real32) array"
+! ident_27="@(#) M_sort sort_quick_rx_real_real32_int32(3f) indexed hybrid quicksort of a real(kind=real32) array"
 
 real(kind=real32),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
@@ -1950,7 +1950,7 @@ enddo
 end subroutine sort_quick_rx_real_real32_int32
 subroutine sort_quick_rx_real_real64_int32(data,indx)
 
-! ident_28="@(#)M_sort::sort_quick_rx_real_real64_int32(3f): indexed hybrid quicksort of a real(kind=real64) array"
+! ident_28="@(#) M_sort sort_quick_rx_real_real64_int32(3f) indexed hybrid quicksort of a real(kind=real64) array"
 
 real(kind=real64),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
@@ -2124,7 +2124,7 @@ enddo
 end subroutine sort_quick_rx_real_real64_int32
 subroutine sort_quick_rx_character_ascii_int32(data,indx)
 
-! ident_29="@(#)M_sort::sort_quick_rx_character_ascii_int32(3f): indexed hybrid quicksort of a character(kind=ascii) array"
+! ident_29="@(#) M_sort sort_quick_rx_character_ascii_int32(3f) indexed hybrid quicksort of a character(kind=ascii) array"
 
 character(kind=ascii,len=*),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                  :: indx(:)
@@ -2300,7 +2300,7 @@ end subroutine sort_quick_rx_character_ascii_int32
 
 subroutine sort_quick_rx_integer_int8_int64(data,indx)
 
-! ident_30="@(#)M_sort::sort_quick_rx_integer_int8_int64(3f): indexed hybrid quicksort of a integer(kind=int8) array"
+! ident_30="@(#) M_sort sort_quick_rx_integer_int8_int64(3f) indexed hybrid quicksort of a integer(kind=int8) array"
 
 integer(kind=int8),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
@@ -2474,7 +2474,7 @@ enddo
 end subroutine sort_quick_rx_integer_int8_int64
 subroutine sort_quick_rx_integer_int16_int64(data,indx)
 
-! ident_31="@(#)M_sort::sort_quick_rx_integer_int16_int64(3f): indexed hybrid quicksort of a integer(kind=int16) array"
+! ident_31="@(#) M_sort sort_quick_rx_integer_int16_int64(3f) indexed hybrid quicksort of a integer(kind=int16) array"
 
 integer(kind=int16),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
@@ -2648,7 +2648,7 @@ enddo
 end subroutine sort_quick_rx_integer_int16_int64
 subroutine sort_quick_rx_integer_int32_int64(data,indx)
 
-! ident_32="@(#)M_sort::sort_quick_rx_integer_int32_int64(3f): indexed hybrid quicksort of a integer(kind=int32) array"
+! ident_32="@(#) M_sort sort_quick_rx_integer_int32_int64(3f) indexed hybrid quicksort of a integer(kind=int32) array"
 
 integer(kind=int32),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
@@ -2822,7 +2822,7 @@ enddo
 end subroutine sort_quick_rx_integer_int32_int64
 subroutine sort_quick_rx_integer_int64_int64(data,indx)
 
-! ident_33="@(#)M_sort::sort_quick_rx_integer_int64_int64(3f): indexed hybrid quicksort of a integer(kind=int64) array"
+! ident_33="@(#) M_sort sort_quick_rx_integer_int64_int64(3f) indexed hybrid quicksort of a integer(kind=int64) array"
 
 integer(kind=int64),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
@@ -2996,7 +2996,7 @@ enddo
 end subroutine sort_quick_rx_integer_int64_int64
 subroutine sort_quick_rx_real_real32_int64(data,indx)
 
-! ident_34="@(#)M_sort::sort_quick_rx_real_real32_int64(3f): indexed hybrid quicksort of a real(kind=real32) array"
+! ident_34="@(#) M_sort sort_quick_rx_real_real32_int64(3f) indexed hybrid quicksort of a real(kind=real32) array"
 
 real(kind=real32),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
@@ -3170,7 +3170,7 @@ enddo
 end subroutine sort_quick_rx_real_real32_int64
 subroutine sort_quick_rx_real_real64_int64(data,indx)
 
-! ident_35="@(#)M_sort::sort_quick_rx_real_real64_int64(3f): indexed hybrid quicksort of a real(kind=real64) array"
+! ident_35="@(#) M_sort sort_quick_rx_real_real64_int64(3f) indexed hybrid quicksort of a real(kind=real64) array"
 
 real(kind=real64),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
@@ -3344,7 +3344,7 @@ enddo
 end subroutine sort_quick_rx_real_real64_int64
 subroutine sort_quick_rx_character_ascii_int64(data,indx)
 
-! ident_36="@(#)M_sort::sort_quick_rx_character_ascii_int64(3f): indexed hybrid quicksort of a character(kind=ascii) array"
+! ident_36="@(#) M_sort sort_quick_rx_character_ascii_int64(3f) indexed hybrid quicksort of a character(kind=ascii) array"
 
 character(kind=ascii,len=*),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                  :: indx(:)
@@ -3522,7 +3522,7 @@ end subroutine sort_quick_rx_character_ascii_int64
 !==================================================================================================================================!
 subroutine sort_quick_rx_complex_int32(data,indx)
 
-! ident_37="@(#)M_sort::sort_quick_rx_complex_int32(3f): indexed hybrid quicksort of a real array"
+! ident_37="@(#) M_sort sort_quick_rx_complex_int32(3f) indexed hybrid quicksort of a real array"
 
 complex,intent(in)   :: data(:)
 integer(kind=int32),intent(out)  :: indx(:)
@@ -3712,7 +3712,7 @@ end subroutine sort_quick_rx_complex_int32
 !==================================================================================================================================!
 subroutine sort_quick_rx_complex_int64(data,indx)
 
-! ident_38="@(#)M_sort::sort_quick_rx_complex_int64(3f): indexed hybrid quicksort of a real array"
+! ident_38="@(#) M_sort sort_quick_rx_complex_int64(3f) indexed hybrid quicksort of a real array"
 
 complex,intent(in)   :: data(:)
 integer(kind=int64),intent(out)  :: indx(:)
@@ -4451,63 +4451,63 @@ end subroutine unique_allocatable_strings
 !!    >1,1,1
 !===================================================================================================================================
 elemental subroutine swap_real32(x,y)
-! ident_39="@(#)M_sort::swap_real32(3fp): swap two variables of TYPE(real(KIND=real32))"
+! ident_39="@(#) M_sort swap_real32(3fp) swap two variables of TYPE(real(KIND=real32))"
 type(real(kind=real32)), intent(inout) :: x,y
 type(real(kind=real32))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_real32
 !===================================================================================================================================
 elemental subroutine swap_real64(x,y)
-! ident_40="@(#)M_sort::swap_real64(3fp): swap two variables of TYPE(real(KIND=real64))"
+! ident_40="@(#) M_sort swap_real64(3fp) swap two variables of TYPE(real(KIND=real64))"
 type(real(kind=real64)), intent(inout) :: x,y
 type(real(kind=real64))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_real64
 !===================================================================================================================================
 elemental subroutine swap_int8(x,y)
-! ident_41="@(#)M_sort::swap_int8(3fp): swap two variables of TYPE(integer(KIND=int8))"
+! ident_41="@(#) M_sort swap_int8(3fp) swap two variables of TYPE(integer(KIND=int8))"
 type(integer(kind=int8)), intent(inout) :: x,y
 type(integer(kind=int8))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_int8
 !===================================================================================================================================
 elemental subroutine swap_int16(x,y)
-! ident_42="@(#)M_sort::swap_int16(3fp): swap two variables of TYPE(integer(KIND=int16))"
+! ident_42="@(#) M_sort swap_int16(3fp) swap two variables of TYPE(integer(KIND=int16))"
 type(integer(kind=int16)), intent(inout) :: x,y
 type(integer(kind=int16))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_int16
 !===================================================================================================================================
 elemental subroutine swap_int32(x,y)
-! ident_43="@(#)M_sort::swap_int32(3fp): swap two variables of TYPE(integer(KIND=int32))"
+! ident_43="@(#) M_sort swap_int32(3fp) swap two variables of TYPE(integer(KIND=int32))"
 type(integer(kind=int32)), intent(inout) :: x,y
 type(integer(kind=int32))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_int32
 !===================================================================================================================================
 elemental subroutine swap_int64(x,y)
-! ident_44="@(#)M_sort::swap_int64(3fp): swap two variables of TYPE(integer(KIND=int64))"
+! ident_44="@(#) M_sort swap_int64(3fp) swap two variables of TYPE(integer(KIND=int64))"
 type(integer(kind=int64)), intent(inout) :: x,y
 type(integer(kind=int64))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_int64
 !===================================================================================================================================
 elemental subroutine swap_cs(x,y)
-! ident_45="@(#)M_sort::swap_cs(3fp): swap two variables of TYPE(complex(KIND=cs))"
+! ident_45="@(#) M_sort swap_cs(3fp) swap two variables of TYPE(complex(KIND=cs))"
 type(complex(kind=cs)), intent(inout) :: x,y
 type(complex(kind=cs))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_cs
 !===================================================================================================================================
 elemental subroutine swap_cd(x,y)
-! ident_46="@(#)M_sort::swap_cd(3fp): swap two variables of TYPE(complex(KIND=cd))"
+! ident_46="@(#) M_sort swap_cd(3fp) swap two variables of TYPE(complex(KIND=cd))"
 type(complex(kind=cd)), intent(inout) :: x,y
 type(complex(kind=cd))                :: temp
    temp = x; x = y; y = temp
 end subroutine swap_cd
 !===================================================================================================================================
 elemental subroutine swap_lk(x,y)
-! ident_47="@(#)M_sort::swap_lk(3fp): swap two variables of TYPE(logical(KIND=lk))"
+! ident_47="@(#) M_sort swap_lk(3fp) swap two variables of TYPE(logical(KIND=lk))"
 type(logical(kind=lk)), intent(inout) :: x,y
 type(logical(kind=lk))                :: temp
    temp = x; x = y; y = temp
@@ -4522,7 +4522,7 @@ elemental subroutine swap_string(string1,string2)
 !!    Note that the len of a dummy argument can be used to calculate the automatic variable length.
 !!    Therefore, you can make sure len is at least max(len(string1),len(string2)) by adding the two lengths together:
 
-! ident_48="@(#)M_sort::s_swap(3fp): swap two double variables"
+! ident_48="@(#) M_sort s_swap(3fp) swap two double variables"
 character(len=*), intent(inout)             :: string1,string2
 !character( len=len(string1) + len(string2)) :: string_temp
 character( len=max(len(string1),len(string2))) :: string_temp
@@ -4961,7 +4961,7 @@ end subroutine swap_any_array
 recursive subroutine tree_insert (t, number)
 implicit none
 
-! ident_49="@(#)M_sort::tree_insert(3f): sort a number of integers by building a tree, sorted in infix order"
+! ident_49="@(#) M_sort tree_insert(3f) sort a number of integers by building a tree sorted in infix order"
 
 type (tree_node), pointer :: t  ! a tree
 integer, intent (in) :: number
@@ -5021,7 +5021,7 @@ end subroutine tree_insert
 recursive subroutine tree_print(t)
 implicit none
 
-! ident_50="@(#)M_sort::tree_print(3f):"
+! ident_50="@(#) M_sort tree_print(3f)"
 
 type (tree_node), pointer :: t  ! a tree
 
@@ -5113,7 +5113,7 @@ end subroutine tree_print
 function anything_to_bytes_arr(anything) result(chars)
 implicit none
 
-! ident_51="@(#)M_sort::anything_to_bytes_arr(3fp): any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_51="@(#) M_sort anything_to_bytes_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything(:)
 character(len=1),allocatable :: chars(:)
@@ -5139,7 +5139,7 @@ end function anything_to_bytes_arr
 function  anything_to_bytes_scalar(anything) result(chars)
 implicit none
 
-! ident_52="@(#)M_sort::anything_to_bytes_scalar(3fp): anything to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_52="@(#) M_sort anything_to_bytes_scalar(3fp) anything to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything
 character(len=1),allocatable :: chars(:)

@@ -37,7 +37,7 @@ use M_stopwatch, only : option_stopwatch, create_watch, start_watch
 use M_stopwatch, only : stop_watch, print_watch, destroy_watch
 implicit none
 
-! ident_1="@(#)time-(1f): time command"
+! ident_1="@(#) time-(1f) time command"
 
 type(watchtype)              :: w1
 character(len=4096)          :: arg

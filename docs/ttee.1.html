@@ -103,36 +103,36 @@ Change format for timestamp prefix using a call to <B>now</B>(3f).
 <P>
           Base time array:
            (1) %Y -- year, yyyy                                2022
-           (2) %M -- month of year, 01 to 12                   01
-           (3) %D -- day of month, 01 to 31                    09
-               %d -- day of month, with suffix (1st, 2nd,&#46;&#46;&#46;)  9th
-           (4) %Z -- minutes from UTC                          -0300
-               %z -- -+hh:mm from UTC                          -05:00
-               %T -- -+hhmm  from UTC                          -0500
-           (5) %h -- hours, 00 to 23                           11
-               %H -- hour (1 to 12, or twelve-hour clock)      11
+           (2) %M -- month of year, 01 to 12                   08
+           (3) %D -- day of month, 01 to 31                    02
+               %d -- day of month, with suffix (1st, 2nd,&#46;&#46;&#46;)  2nd
+           (4) %Z -- minutes from UTC                          -0240
+               %z -- -+hh:mm from UTC                          -04:00
+               %T -- -+hhmm  from UTC                          -0400
+           (5) %h -- hours, 00 to 23                           03
+               %H -- hour (1 to 12, or twelve-hour clock)      3
                %N -- midnight&lt; AM &lt;=noon; noon&lt;= PM &lt;midnight  AM
-           (6) %m -- minutes, 00 to 59                         25
-           (7) %s -- sec, 00 to 59                             43
-           (8) %x -- milliseconds 000 to 999                   081
+           (6) %m -- minutes, 00 to 59                         46
+           (7) %s -- sec, 00 to 59                             47
+           (8) %x -- milliseconds 000 to 999                   455
           Conversions:
-               %E -- Unix Epoch time                           1641745543.0810153
-               %e -- integer value of Unix Epoch time          1641745543
-               %J -- Julian  date                              2459589.1845264006
-               %j -- integer value of Julian Date(Julian Day)  2459589
-               %O -- Ordinal day (day of year)                 009
-               %o -- Whole days since Unix Epoch date          19001
-               %U -- day of week, 1..7 Sunday=1                1
-               %u -- day of week, 1..7 Monday=1                7
-               %i -- ISO week of year 1..53                    1
-               %I -- iso-8601 week-numbering date(yyyy-Www-d)  2022-W01-7
+               %E -- Unix Epoch time                           1659426407.455006
+               %e -- integer value of Unix Epoch time          1659426407
+               %J -- Julian  date                              2459793.824160393
+               %j -- integer value of Julian Date(Julian Day)  2459793
+               %O -- Ordinal day (day of year)                 214
+               %o -- Whole days since Unix Epoch date          19206
+               %U -- day of week, 1..7 Sunday=1                3
+               %u -- day of week, 1..7 Monday=1                2
+               %i -- ISO week of year 1..53                    31
+               %I -- iso-8601 week-numbering date(yyyy-Www-d)  2022-W31-2
            Names:
-               %l -- abbreviated month name                    Jan
-               %L -- full month name                           January
-               %w -- first three characters of weekday         Sun
-               %W -- weekday name                              Sunday
-               %p -- phase of moon                             First quarter
-               %P -- percent of way from new to full moon      45%
+               %l -- abbreviated month name                    Aug
+               %L -- full month name                           August
+               %w -- first three characters of weekday         Tue
+               %W -- weekday name                              Tuesday
+               %p -- phase of moon                             Waxing crescent
+               %P -- percent of way from new to full moon      31%
            Literals:
                %% -- a literal %                               %
                %t -- tab character                             
@@ -143,11 +143,11 @@ Change format for timestamp prefix using a call to <B>now</B>(3f).
                %q -- single quote (apostrophe)                 &#146;
                %Q -- double quote                              "
            Program timing:
-               %c -- CPU_TIME(3f) output                       0.59860000000000000E-2
+               %c -- CPU_TIME(3f) output                       .2323500000000000E-01
                %C -- number of times this routine is used      1
-               %S -- seconds since last use of this format     0.0000000000000000
-               %k -- time in seconds from SYSTEM_CLOCK(3f)     135590.953
-               %K -- time in clicks from SYSTEM_CLOCK(3f)      135590957
+               %S -- seconds since last use of this format     .000000000000000
+               %k -- time in seconds from SYSTEM_CLOCK(3f)     68611.47
+               %K -- time in clicks from SYSTEM_CLOCK(3f)      686114677
 <P>
           If no percent (%) is found in the format one of several
           alternate substitutions occurs.
@@ -155,42 +155,42 @@ Change format for timestamp prefix using a call to <B>now</B>(3f).
           If the format is composed entirely of one of the following
           keywords the following substitutions occur:
             "iso-8601",
-            "iso"        ==&gt; %Y-%M-%DT%h:%m:%s%z             2022-01-09T11:25:43-05:00
+            "iso"        ==&gt; %Y-%M-%DT%h:%m:%s%z             2022-08-02T03:46:47-04:00
             "iso-8601W",
-            "isoweek"    ==&gt; %I                              2022-W01-7
-            "sql"        ==&gt; "%Y-%M-%D %h:%m:%s.%x"          "2022-01-09 11:25:43.083"
-            "sqlday"     ==&gt; "%Y-%M-%D"                      "2022-01-09"
-            "sqltime"    ==&gt; "%h:%m:%s.%x"                   "11:25:43.083"
+            "isoweek"    ==&gt; %I                              2022-W31-2
+            "sql"        ==&gt; "%Y-%M-%D %h:%m:%s.%x"          "2022-08-02 03:46:47.470"
+            "sqlday"     ==&gt; "%Y-%M-%D"                      "2022-08-02"
+            "sqltime"    ==&gt; "%h:%m:%s.%x"                   "03:46:47.470"
             "rfc-2822"   ==&gt; %w, %D %l %Y %h:%m:%s %T
-                             Sun, 09 Jan 2022 11:25:43 -0500
-            "rfc-3339"   ==&gt; %Y-%M-%DT%h:%m:%s%z             2022-01-09T11:25:43-05:00
+                             Tue, 02 Aug 2022 03:46:47 -0400
+            "rfc-3339"   ==&gt; %Y-%M-%DT%h:%m:%s%z             2022-08-02T03:46:47-04:00
             "date"       ==&gt; %w %l %D %h:%m:%s UTC%z %Y
-                             Sun Jan 09 11:25:43 UTC-05:00 2022
+                             Tue Aug 02 03:46:47 UTC-04:00 2022
             "short"      ==&gt; %w, %l %d, %Y %H:%m:%s %N UTC%z
-                             Sun, Jan 9th, 2022 11:25:43 AM UTC-05:00
+                             Tue, Aug 2nd, 2022 3:46:47 AM UTC-04:00
             "long"," "   ==&gt; %W, %L %d, %Y %H:%m:%s %N UTC%z
-                             Sunday, January 9th, 2022 11:25:43 AM UTC-05:00
-            "suffix"     ==&gt; %Y%D%M%h%m%s                    20220901112543
-            "formal"     ==&gt; The %d of %L %Y                 The 9th of January 2022
+                             Tuesday, August 2nd, 2022 3:46:47 AM UTC-04:00
+            "suffix"     ==&gt; %Y%D%M%h%m%s                    20220208034647
+            "formal"     ==&gt; The %d of %L %Y                 The 2nd of August 2022
             "lord"       ==&gt; the %d day of %L in the year of our Lord %Y
-                             the 9th day of January in the year of our Lord 2022
+                             the 2nd day of August in the year of our Lord 2022
             "easter"     ==&gt; FOR THE YEAR OF THE CURRENT DATE:
                                Easter day: the %d day of %L in the year of our Lord %Y
             "all"        ==&gt; A SAMPLE OF DATE FORMATS
           otherwise the following words are replaced with the most
           common macros:
              year          %Y  2022
-             month         %M  01
-             day           %D  09
-             timezone      %z  -05:00
-             hour          %h  11
-             minute        %m  25
-             second        %s  43
-             millisecond   %x  085
-             epoch         %e  1641745543
-             julian        %j  2459589
-             ordinal       %O  009
-             weekday       %u  7
+             month         %M  08
+             day           %D  02
+             timezone      %z  -04:00
+             hour          %h  03
+             minute        %m  46
+             second        %s  47
+             millisecond   %x  471
+             epoch         %e  1659426407
+             julian        %j  2459793
+             ordinal       %O  214
+             weekday       %u  2
              MONTH         %L  July
              Month         %l  Jul
              DAY           %d  7th
@@ -203,7 +203,7 @@ Change format for timestamp prefix using a call to <B>now</B>(3f).
           if none of these keywords are found then every letter that
           is a macro is assumed to have an implied percent in front
           of it. For example:
-             YMDhms ==&gt; %Y%M%D%h%m%s ==&gt; 20220109112543
+             YMDhms ==&gt; %Y%M%D%h%m%s ==&gt; 20220802034647
 <P>
 </PRE>
 <TABLE cellpadding=3>
@@ -279,7 +279,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ttee (1)</TD> <TD align=right width=33%><I>July 15, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 351d892d-c8b6-45ff-a8f8-fb1f6d3b58b4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ttee (1)</TD> <TD align=right width=33%><I>August 14, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8797a6f2-cdeb-4198-a453-873419c4619a using man macros.</FONT>
 <br><br><center><img src="images/ttee.1.gif"></center>
 </div>
 </div>

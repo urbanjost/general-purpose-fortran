@@ -293,7 +293,7 @@ end function r2f
 !!   Public Domain
 function getpat_(arg, pat)
 
-! ident_1="@(#)M_match::getpat_ convert argument into pattern"
+! ident_1="@(#) M_match getpat_ convert argument into pattern"
 
 integer(kind=def) :: getpat_
 integer(kind=def) :: arg(maxarg)
@@ -341,7 +341,7 @@ end function getpat__
 !!   Public Domain
 function addset(c, set, j, maxsiz)
 
-! ident_2="@(#)M_match::addset put C in SET(J) if it fits, increment J"
+! ident_2="@(#) M_match addset put C in SET(J) if it fits increment J"
 
 integer(kind=byte)            :: addset
 integer(kind=chr),intent(in)  :: c
@@ -420,7 +420,7 @@ end subroutine dodash
 !----------------------------------------------------------------------------------------------------------------------------------!
 pure function locate(c, pat, offset)
 
-! ident_3="@(#)M_match::locate look for c in char class at pat(offset)"
+! ident_3="@(#) M_match locate look for c in char class at pat(offset)"
 
 integer(kind=def)            :: locate
 integer(kind=chr),intent(in) :: c
@@ -503,7 +503,7 @@ end function locate
 !!   Public Domain
 function match_(lin, pat)
 
-! ident_4="@(#)M_match::match find match anywhere on line"
+! ident_4="@(#) M_match match find match anywhere on line"
 
 integer(kind=def) :: match_
 integer(kind=chr) :: lin(maxline), pat(maxpat)
@@ -530,7 +530,7 @@ end function match_
 !==================================================================================================================================!
 function match__(lin_str, pat)
 
-! ident_5="@(#)M_match::match find match anywhere on line"
+! ident_5="@(#) M_match match find match anywhere on line"
 
 character(len=*),intent(in) :: lin_str
 integer(kind=def) :: match__
@@ -561,7 +561,7 @@ end function match__
 !!   Public Domain
 function patsiz(pat, n)
 
-! ident_6="@(#)M_match::patsiz returns size of pattern entry at pat(n)"
+! ident_6="@(#) M_match patsiz returns size of pattern entry at pat(n)"
 
 integer(kind=def) :: patsiz
 integer(kind=chr) :: pat(MAXPAT)
@@ -605,7 +605,7 @@ end function patsiz
 !!   Public Domain
 function stclos(pat, j, lastj, lastcl)
 
-! ident_7="@(#)M_match::stclos insert closure entry at pat(j)"
+! ident_7="@(#) M_match stclos insert closure entry at pat(j)"
 
 integer(kind=def) :: stclos
 integer(kind=chr) :: pat(maxpat)
@@ -650,7 +650,7 @@ end function stclos
 !!   Public Domain
 function getccl(arg, i, pat, j)
 
-! ident_8="@(#)M_match::getccl expand char class at arg(i) into pat(j)"
+! ident_8="@(#) M_match getccl expand char class at arg(i) into pat(j)"
 
 integer(kind=def) :: getccl
 integer(kind=chr)  :: arg(maxarg), pat(maxpat)
@@ -696,7 +696,7 @@ end function getccl
 !!   Public Domain
 subroutine filset(delim, array, i, set, j, maxset)
 
-! ident_9="@(#)M_match::filset expand set at  array(i)  into  set(j),  stop at  delim"
+! ident_9="@(#) M_match filset expand set at array(i) into set(j) stop at delim"
 
 integer(kind=def) :: i, j, junk, maxset
 integer(kind=chr) :: array(:), delim, set(:)
@@ -775,7 +775,7 @@ end subroutine filset
 !!   Public Domain
 function esc(array, i)
 
-! ident_10="@(#)M_match::esc map  array(i)  into escaped character if appropriate"
+! ident_10="@(#) M_match esc map array(i) into escaped character if appropriate"
 
 integer(kind=chr) :: esc
 integer(kind=chr) :: array(:)
@@ -841,7 +841,7 @@ end function esc
 !!   Public Domain
 function omatch_(lin, i, pat, j)
 
-! ident_11="@(#)M_match::omatch_ try to match a single pattern at pat(j)"
+! ident_11="@(#) M_match omatch_ try to match a single pattern at pat(j)"
 
 integer(kind=def) ::  omatch_
 integer(kind=chr)  :: lin(maxline), pat(maxpat)
@@ -972,7 +972,7 @@ end function omatch_
 !!    Public Domain
 function amatch_(lin, from, pat)
 
-! ident_12="@(#)M_match::amatch_  (non-recursive) look for match starting at lin(from)"
+! ident_12="@(#) M_match amatch_ (non-recursive) look for match starting at lin(from)"
 
 integer(kind=def) :: amatch_
 integer(kind=chr)  :: lin(maxline), pat(maxpat)
@@ -1025,7 +1025,7 @@ end function amatch_
 !==================================================================================================================================!
 function amatch__(lin_str, from, pat)
 
-! ident_13="@(#)M_match::amatch"
+! ident_13="@(#) M_match amatch"
 
 character(len=*),intent(in) :: lin_str
 integer,intent(in) :: from
@@ -1058,7 +1058,7 @@ end function amatch__
 !!   Public Domain
 function makpat_(arg, from, delim, pat)
 
-! ident_14="@(#)M_match::makpat_ make pattern from arg(from), terminate at delim"
+! ident_14="@(#) M_match makpat_ make pattern from arg(from) terminate at delim"
 
 integer(kind=def) :: makpat_
 integer(kind=chr)  :: arg(maxarg), delim, pat(maxpat)
@@ -1146,7 +1146,7 @@ end function makpat_
 !!    Public Domain
 subroutine error(message)
 
-! ident_15="@(#)M_match::error(3f): print message and stop program execution"
+! ident_15="@(#) M_match error(3f) print message and stop program execution"
 
 character(len=*),intent(in) :: message
    write(stderr,'(a)')trim(message)

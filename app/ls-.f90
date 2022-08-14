@@ -5,7 +5,7 @@ use M_system, only : system_opendir,system_readdir, system_closedir, system_stat
 use iso_c_binding, only : c_ptr
 implicit none
 
-! ident_1="@(#)ls-(1f): list files in a directory"
+! ident_1="@(#) ls-(1f) list files in a directory"
 
 character(len=:),allocatable :: directories(:)
 character(len=:),allocatable :: directory
@@ -348,7 +348,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    list files in a directory>',&
 '@(#)VERSION:        1.0, 20161120>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-07-15 10:01:33 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:35:13 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

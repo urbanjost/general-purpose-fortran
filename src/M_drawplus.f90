@@ -247,7 +247,7 @@ subroutine arrowhead(xpoint,ypoint,xstart,ystart,size,idraw)
 use M_draw
 implicit none
 
-! ident_1="@(#)M_drawplus::arrowhead(3f): Draw arrow head (for text boxes and line markers)"
+! ident_1="@(#) M_drawplus arrowhead(3f) Draw arrow head (for text boxes and line markers)"
 
 real,intent(in)    :: xpoint,ypoint
 real,intent(in)    :: xstart,ystart
@@ -327,7 +327,7 @@ subroutine plain_rect(x1,y1,x2,y2)
 use M_draw
 implicit none
 
-! ident_2="@(#)M_xyplot::plain_rect(3fp): Draw a rectangle; gets around problem with filled boxes in M_DRAW"
+! ident_2="@(#) M_xyplot plain_rect(3fp) Draw a rectangle; gets around problem with filled boxes in M_DRAW"
 
 real,intent(in) :: x1
 real,intent(in) :: y1
@@ -523,7 +523,7 @@ subroutine uarc(x,y,angle)
 !-----------------------------------------------------------------------------------------------------------------------------------
 use M_draw
 
-! ident_3="@(#)M_drawplus::create circular arc, leaving CP at end of arc"
+! ident_3="@(#) M_drawplus create circular arc leaving CP at end of arc"
 
 real,intent(in) :: x
 real,intent(in) :: y
@@ -590,7 +590,7 @@ real :: ynow
 subroutine arc2(x, y, radius, startang, endang)
 use M_draw
 
-! ident_4="@(#)M_drawplus::arc2(3f): Like M_draw(3f) arc(3f) routine without move at end so can be in a polygon"
+! ident_4="@(#) M_drawplus arc2(3f) Like M_draw(3f) arc(3f) routine without move at end so can be in a polygon"
 
 real,intent(in) :: x
 real,intent(in) :: y
@@ -676,7 +676,7 @@ use M_draw
 use ISO_C_BINDING
 implicit none
 
-! ident_5="@(#)M_drawplus::m_draw:ellipse(3f):: draw ellipse or elliptical arc"
+! ident_5="@(#) M_drawplus m_draw ellipse(3f) draw ellipse or elliptical arc"
 
 real,intent(in)    :: xpage
 real,intent(in)    :: ypage
@@ -920,7 +920,7 @@ use M_draw
 use ISO_C_BINDING
 use m_units, only: d2r
 
-! ident_6="@(#)M_drawplus::m_draw:uconic(3f): general conic sections"
+! ident_6="@(#) M_drawplus m_draw uconic(3f) general conic sections"
 
 real :: an
 real :: angdel
@@ -1196,7 +1196,7 @@ end subroutine uconic
 subroutine barcode(XCORNER_IN,YCORNER_IN,XSMALL_IN,XLARGE_IN,YSIZE_IN,STRING)
 implicit none
 
-! ident_7="@(#)M_drawplus::barcode(3f): draw 3-of-9 bar code"
+! ident_7="@(#) M_drawplus barcode(3f) draw 3-of-9 bar code"
 
 ! void barcode( float xcorner, float ycorner, float xsmall, float xlarge, float ysize, char *string);
    interface
@@ -1416,7 +1416,7 @@ use M_draw
 !!implicit real   (a-h,o-z)
 implicit none
 
-! ident_8="@(#)M_drawplus::call_draw(3f): parse most M_draw(3fm) routines positionally"
+! ident_8="@(#) M_drawplus call_draw(3f) parse most M_draw(3fm) routines positionally"
 
 ! parse most M_draw(3fm) routines positionally
 ! simplistic, does not handle quoted parameters directly, just parses on space
@@ -1856,7 +1856,7 @@ logical function iflogic(string)
 use M_calculator, only : inum0
 use M_strings,    only : lower
 
-! ident_9="@(#)M_drawplus::iflogic(3fp): evaluate string in calculator and return false if value is zero"
+! ident_9="@(#) M_drawplus iflogic(3fp) evaluate string in calculator and return false if value is zero"
 
 character(len=*)           :: string
    select case(lower(string))
@@ -1929,7 +1929,7 @@ subroutine spirograph(xcenter,ycenter,sunr0,planet0,offset0,radius,ilines,ang,an
 !===================================================================================================================================
 use M_draw
 
-! ident_10="@(#)M_drawplus::spirograph(3f): draw hypocycloidal curves"
+! ident_10="@(#) M_drawplus spirograph(3f) draw hypocycloidal curves"
 
 real,parameter :: PI= 3.14159265358979323846264338327950288419716939937510
 real,intent(in)    :: xcenter, ycenter      ! center of curve
@@ -2027,7 +2027,7 @@ use M_draw
 
 !! public :: ismoo,ismoo1,ismoo2,ismoo3,perin
 
-! ident_11="@(#)M_drawplus::smoot(3f): draw smooth curve thru set up points using spline-fitting technique"
+! ident_11="@(#) M_drawplus smoot(3f) draw smooth curve thru set up points using spline-fitting technique"
 
 !
 ! 4.4  subroutine smoot
@@ -2354,7 +2354,7 @@ real :: y3
 subroutine reflx(vx1,vy1,vx2,vy2)
 implicit none
 
-! ident_12="@(#)M_drawplus::reflx(3fp): internal routine called by SMOOT"
+! ident_12="@(#) M_drawplus reflx(3fp) internal routine called by SMOOT"
 
 real,intent(in)  :: vx1
 real,intent(in)  :: vy1
@@ -2377,7 +2377,7 @@ end subroutine reflx
 subroutine plot_in(x,y,lc)
 use M_draw
 
-! ident_13="@(#)M_drawplus::plot_in(3fp): internal routine called by SMOOT"
+! ident_13="@(#) M_drawplus plot_in(3fp) internal routine called by SMOOT"
 
 real,intent(in) :: x
 real,intent(in) :: y
@@ -2477,7 +2477,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_14="@(#)M_drawplus::rdbox(3f): reads two points and outline defined box and return points"
+! ident_14="@(#) M_drawplus rdbox(3f) reads two points and outline defined box and return points"
 
 real,intent(out)    :: returnx1, returny1
 real,intent(out)    :: returnx2, returny2
@@ -2593,7 +2593,7 @@ use M_journal,  only : journal
 use M_draw
 implicit none
 
-! ident_15="@(#)M_drawplus::rdpnt(3f): reads coordinates of point locator clicked at"
+! ident_15="@(#) M_drawplus rdpnt(3f) reads coordinates of point locator clicked at"
 
 ! see M_DRAW locator(3f) description for more details
 real,intent(in)     :: oldx, oldy
@@ -2698,7 +2698,7 @@ use m_calculator,      only : dnum0
 use M_draw
 implicit none
 
-! ident_16="@(#)display sample page of a font"
+! ident_16="@(#) display sample page of a font"
 
 character(len=*),intent(in)   :: fontin
 character(len=80)             :: line

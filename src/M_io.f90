@@ -45,9 +45,9 @@ public which
 public get_env
 public getname
 
-! ident_1="@(#)M_io::read_table(3f): read file containing a table of numeric values"
+! ident_1="@(#) M_io read_table(3f) read file containing a table of numeric values"
 
-! ident_2="@(#)M_io::rd(3f): ask for string or number from standard input with user-definable prompt"
+! ident_2="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
 interface rd
    module procedure rd_character
    module procedure rd_integer
@@ -159,7 +159,7 @@ CONTAINS
 function uniq(name,istart,verbose,create)
 implicit none
 
-! ident_3="@(#)M_io::uniq(3f): append a number to the end of filename to make a unique name if name exists"
+! ident_3="@(#) M_io uniq(3f) append a number to the end of filename to make a unique name if name exists"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)  :: name
@@ -319,7 +319,7 @@ end function uniq
 !!    Public Domain
 subroutine print_inquire(lun_in,namein_in) ! Version: JSU-1997-12-31, 2020-01-11
 
-! ident_4="@(#)M_io::print_inquire(3f): Do INQUIRE on file by name/number and print results"
+! ident_4="@(#) M_io print_inquire(3f) Do INQUIRE on file by name/number and print results"
 
 integer,intent(in),optional             :: lun_in        ! if unit >= 0 then query by unit number, else by name
 character(len=*),intent(in),optional    :: namein_in
@@ -873,7 +873,7 @@ character(len=1),allocatable             :: text(:)    ! array to hold file in m
 contains
 function page(array)  result (table)
 
-! ident_5="@(#)page(3fp): function to copy char array to page of text"
+! ident_5="@(#) page(3fp) function to copy char array to page of text"
 
 character(len=1),intent(in)  :: array(:)
 character(len=:),allocatable :: table(:)
@@ -1008,7 +1008,7 @@ end subroutine gulp
 subroutine slurp(filename,text,length,lines)
 implicit none
 
-! ident_6="@(#)M_io::slurp(3f): allocate text array and read file filename into it"
+! ident_6="@(#) M_io slurp(3f) allocate text array and read file filename into it"
 
 class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
@@ -1280,7 +1280,7 @@ end function number_of_lines
 integer function notopen(start,end,err)
 implicit none
 
-! ident_7="@(#)M_io::notopen(3f): find free FORTRAN unit number to OPEN() a file"
+! ident_7="@(#) M_io notopen(3f) find free FORTRAN unit number to OPEN() a file"
 
 integer,optional,intent(in)    :: start                           ! unit number to start looking at
 integer,optional,intent(in)    :: end                             ! last unit number to look at
@@ -1403,7 +1403,7 @@ end function notopen
 function dirname(filename) result (directory)
 implicit none
 
-! ident_8="@(#)M_io::dirname(3f): strip last component from filename"
+! ident_8="@(#) M_io dirname(3f) strip last component from filename"
 
 character(len=*),intent(in)      :: filename
 character(len=:),allocatable     :: directory
@@ -1522,7 +1522,7 @@ end function dirname
 function basename(filename,suffix) result (leaf)
 implicit none
 
-! ident_9="@(#)M_io::basename(3f): strip last component from filename"
+! ident_9="@(#) M_io basename(3f) strip last component from filename"
 
 character(len=*),intent(in)          :: filename
 character(len=*),intent(in),optional :: suffix
@@ -2231,7 +2231,7 @@ end function joinpath
 subroutine splitpath(path,dir,name,basename,ext)
 implicit none
 
-! ident_10="@(#)M_io::splitpath(3f): split Unix pathname into components (dir,name,basename,extension)"
+! ident_10="@(#) M_io splitpath(3f) split Unix pathname into components (dir name basename extension)"
 
 !===================================================================================================================================
 character(len=*),intent(in)           :: path
@@ -2394,7 +2394,7 @@ end subroutine splitpath
 function getline(line,lun) result(ier)
 implicit none
 
-! ident_11="@(#)M_io::getline(3f): read a line from specified LUN into allocatable string up to line length limit"
+! ident_11="@(#) M_io getline(3f) read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
@@ -2512,7 +2512,7 @@ end function getline
 function read_line(line,lun,ios) result(ier)
 implicit none
 
-! ident_12="@(#)M_io::read_line(3f): read a line from specified LUN into allocatable string up to line length limit"
+! ident_12="@(#) M_io read_line(3f) read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
@@ -2607,7 +2607,7 @@ end function read_line
 !!    Public Domain
 function get_tmp() result(tname)
 
-! ident_13="@(#)M_io::get_tmp(3f): Return the name of the scratch directory"
+! ident_13="@(#) M_io get_tmp(3f) Return the name of the scratch directory"
 
 character(len=:),allocatable :: tname
 integer                      :: lngth
@@ -2714,7 +2714,7 @@ end function get_tmp
 !!    Public Domain
 function scratch(prefix) result(tname)
 
-! ident_14="@(#)M_io::scratch(3f): Return the name of a scratch file"
+! ident_14="@(#) M_io scratch(3f) Return the name of a scratch file"
 
 character(len=*),intent(in),optional :: prefix
 character(len=:),allocatable         :: tname
@@ -2828,7 +2828,7 @@ function rd_logical(prompt,default) result(out)
 !
 implicit none
 
-! ident_15="@(#)M_io::rd_logical(3fp): ask for logical value from standard input with user-definable prompt"
+! ident_15="@(#) M_io rd_logical(3fp) ask for logical value from standard input with user-definable prompt"
 
 character(len=*),intent(in)  :: prompt
 logical,intent(in)           :: default
@@ -2880,7 +2880,7 @@ function rd_character(prompt,default) result(strout)
 !
 implicit none
 
-! ident_16="@(#)M_io::rd_character(3fp): ask for string from standard input with user-definable prompt"
+! ident_16="@(#) M_io rd_character(3fp) ask for string from standard input with user-definable prompt"
 
 character(len=*),intent(in)  :: prompt
 character(len=*),intent(in)  :: default
@@ -2915,7 +2915,7 @@ end function rd_character
 function rd_doubleprecision(prompt,default,iostat) result(dvalue)
 implicit none
 
-! ident_17="@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
+! ident_17="@(#) M_io rd_doubleprecision(3fp) ask for number from standard input with user-definable prompt"
 
 doubleprecision              :: dvalue
 integer                      :: ivalue
@@ -2958,7 +2958,7 @@ end function rd_doubleprecision
 function rd_real(prompt,default,iostat) result(rvalue)
 implicit none
 
-! ident_18="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
+! ident_18="@(#) M_io rd_real(3fp) ask for number from standard input with user-definable prompt"
 
 real                         :: rvalue
 real(kind=dp)                :: dvalue
@@ -2979,7 +2979,7 @@ end function rd_real
 function rd_integer(prompt,default,iostat) result(ivalue)
 implicit none
 
-! ident_19="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
+! ident_19="@(#) M_io rd_integer(3fp) ask for number from standard input with user-definable prompt"
 
 integer                      :: ivalue
 real(kind=dp)                :: dvalue

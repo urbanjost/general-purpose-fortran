@@ -1360,7 +1360,7 @@ end subroutine usersub_placeholder
 !!      >      ]
 subroutine LALA_init(init,echo)
 
-! ident_1="@(#)M_matrix::lala(3f): initialize and/or pass commands to matrix laboratory interpreter"
+! ident_1="@(#) M_matrix lala(3f) initialize and/or pass commands to matrix laboratory interpreter"
 
 integer,intent(in)          :: init
 logical,intent(in),optional :: echo
@@ -1458,7 +1458,7 @@ end subroutine LALA_init
 !==================================================================================================================================
 subroutine LALA_cmd(input_string,echo)
 
-! ident_2="@(#)M_matrix::lala(3f): run a single command in matrix laboratory interpreter and return to calling program"
+! ident_2="@(#) M_matrix lala(3f) run a single command in matrix laboratory interpreter and return to calling program"
 
 character(len=*),intent(in) :: input_string
 logical,intent(in),optional :: echo
@@ -1469,7 +1469,7 @@ end subroutine LALA_cmd
 !==================================================================================================================================
 subroutine LALA_cmds(pseudo_file,echo)
 
-! ident_3="@(#)M_matrix::lala(3f): run an array of commands in matrix laboratory interpreter and return to calling program"
+! ident_3="@(#) M_matrix lala(3f) run an array of commands in matrix laboratory interpreter and return to calling program"
 
 character(len=*),intent(in),optional :: pseudo_file(:)
 logical,intent(in),optional          :: echo
@@ -1513,7 +1513,7 @@ end subroutine LALA_cmds
 !==================================================================================================================================!
 subroutine mat_err(n)
 
-! ident_4="@(#)M_matrix::mat_err(3fp): given error number, write associated error message and set G_ERR"
+! ident_4="@(#) M_matrix mat_err(3fp) given error number write associated error message and set G_ERR"
 
 integer,intent(in)   :: n
 
@@ -1637,7 +1637,7 @@ end subroutine mat_files
 !==================================================================================================================================!
 subroutine mat_getsym()
 
-! ident_5="@(#)M_matrix::mat_getsym(3fp): get a symbol"
+! ident_5="@(#) M_matrix mat_getsym(3fp) get a symbol"
 
 doubleprecision   :: syv
 doubleprecision   :: s
@@ -1722,7 +1722,7 @@ end subroutine mat_getsym
 !==================================================================================================================================!
 subroutine mat_str2buf(string,buf,lrecl)
 
-! ident_6="@(#)M_matrix::mat_str2buf(3fp): convert string to hollerith"
+! ident_6="@(#) M_matrix mat_str2buf(3fp) convert string to hollerith"
 
 ! g95 compiler does not support Hollerith, this is a KLUDGE to give time to think about it
 
@@ -1742,7 +1742,7 @@ end subroutine mat_str2buf
 !==================================================================================================================================!
 function str2ade(string) result(vec)
 
-! ident_7="@(#)M_matrix::mat_str2buf(3fp): convert CHARACTER TO ADE array vector"
+! ident_7="@(#) M_matrix mat_str2buf(3fp) convert CHARACTER TO ADE array vector"
 
 character(len=*),intent(in)  :: string
 integer,allocatable          :: vec(:)
@@ -1757,7 +1757,7 @@ end function str2ade
 !==================================================================================================================================!
 function ade2str(buf) result(string)
 
-! ident_8="@(#)M_matrix::mat_str2buf(3fp): convert ADE array to CHARACTER"
+! ident_8="@(#) M_matrix mat_str2buf(3fp) convert ADE array to CHARACTER"
 
 character(len=:),allocatable :: string
 integer,intent(in)           :: buf(:)
@@ -1776,7 +1776,7 @@ end function ade2str
 !==================================================================================================================================!
 subroutine mat_buf2str(string,buf,lrecl)
 
-! ident_9="@(#)M_matrix::mat_buf2string(3fp): convert hollerith to string"
+! ident_9="@(#) M_matrix mat_buf2string(3fp) convert hollerith to string"
 
 integer,intent(in)     :: lrecl
 integer,intent(in)     :: buf(:)
@@ -1794,7 +1794,7 @@ end subroutine mat_buf2str
 !==================================================================================================================================!
 subroutine ints2str(ints,string,ierr)
 
-! ident_10="@(#)M_matrix::ints2str(3f): convert lala integers to a character variable"
+! ident_10="@(#) M_matrix ints2str(3f) convert lala integers to a character variable"
 
 ! temporary procedure while writing ASCII-based upgrade
 
@@ -1822,7 +1822,7 @@ end subroutine ints2str
 !==================================================================================================================================!
 subroutine mat_matfn6()
 !
-! ident_11="@(#)M_matrix::mat_matfn6(3f):evaluate utility functions"
+! ident_11="@(#) M_matrix mat_matfn6(3f) evaluate utility functions"
 !
 integer :: i, j, k
 integer :: ia
@@ -2252,7 +2252,7 @@ end subroutine mat_matfn6
 !==================================================================================================================================!
 subroutine mat_funs(id)
 
-! ident_12="@(#)M_matrix::ml_funcs(3fp):scan function list and set G_FUN and G_FIN"
+! ident_12="@(#) M_matrix ml_funcs(3fp) scan function list and set G_FUN and G_FIN"
 
 integer,intent(in)                :: id(GG_MAX_NAME_LENGTH)
 integer                           :: selector
@@ -2362,7 +2362,7 @@ end subroutine mat_funs
 !==================================================================================================================================!
 subroutine mat_copyid(x,y)
 
-! ident_13="@(#)M_matrix::mat_copyid(3fp): copy a name to allow an easy way to store a name"
+! ident_13="@(#) M_matrix mat_copyid(3fp) copy a name to allow an easy way to store a name"
 
 integer,intent(out) :: x(GG_MAX_NAME_LENGTH)
 integer,intent(in)  :: y(GG_MAX_NAME_LENGTH)
@@ -2376,7 +2376,7 @@ end subroutine mat_copyid
 !==================================================================================================================================!
 subroutine mat_getval(s)
 
-! ident_14="@(#)M_matrix::mat_getval(3fp): form numerical value from string of integer characters"
+! ident_14="@(#) M_matrix mat_getval(3fp) form numerical value from string of "integer" characters"
 
 doubleprecision,intent(out) :: s
       s = 0.0d0
@@ -2403,7 +2403,7 @@ end subroutine mat_getval
 !==================================================================================================================================!
 subroutine mat_getch()
 
-! ident_15="@(#)M_matrix::mat_getch(3f): get next character from input line into G_CHRA"
+! ident_15="@(#) M_matrix mat_getch(3f) get next character from input line into G_CHRA"
 
    G_CHRA = G_LIN(G_LINE_POINTER(4))
    if (G_CHRA .ne. GG_EOL) G_LINE_POINTER(4) = G_LINE_POINTER(4) + 1
@@ -2414,7 +2414,7 @@ end subroutine mat_getch
 !==================================================================================================================================!
 subroutine mat_base(x,base,eps,s,n)
 
-! ident_16="@(#)M_matrix::mat_base(3fp): store representation of x in s(1:n) using specified base"
+! ident_16="@(#) M_matrix mat_base(3fp) store representation of x in s(1 n) using specified base"
 
 doubleprecision            :: x
 doubleprecision,intent(in) :: base
@@ -2479,7 +2479,7 @@ end subroutine mat_base
 !==================================================================================================================================!
 subroutine mat_print(ID,K)
 
-! ident_17="@(#)M_matrix::mat_print(3fp): primary output routine"
+! ident_17="@(#) M_matrix mat_print(3fp) primary output routine"
 
 integer           :: id(GG_MAX_NAME_LENGTH)
 integer           :: k
@@ -2686,7 +2686,7 @@ end subroutine mat_print
 !==================================================================================================================================!
 subroutine mat_formz(x,y)
 
-! ident_18="@(#)M_matrix::mat_formz: system dependent routine to print with z format"
+! ident_18="@(#) M_matrix mat_formz system dependent routine to print with z format"
 
 doubleprecision,intent(in) :: x,y
 
@@ -2706,7 +2706,7 @@ end subroutine mat_formz
 !==================================================================================================================================!
 subroutine mat_prompt(pause)
 
-! ident_19="@(#)M_matrix::mat_prompt(3f): issue interactive prompt with optional pause"
+! ident_19="@(#) M_matrix mat_prompt(3f) issue interactive prompt with optional pause"
 
 integer,intent(in) :: pause
 character(len=1)   :: dummy
@@ -2724,7 +2724,7 @@ end subroutine mat_prompt
 !==================================================================================================================================!
 subroutine mat_stack1(op)
 
-! ident_20="@(#)M_matrix::mat_stack1(3f): Unary Operations"
+! ident_20="@(#) M_matrix mat_stack1(3f) Unary Operations"
 
 integer           :: op
 integer           :: i
@@ -2768,7 +2768,7 @@ end subroutine mat_stack1
 !==================================================================================================================================!
 subroutine mat_print_id(id,argcnt)
 
-! ident_21="@(#)M_matrix::mat_print_id(3fp): print table of variable id names (up to) eight per line"
+! ident_21="@(#) M_matrix mat_print_id(3fp) print table of variable id names (up to) eight per line"
 
 !     ID     Is array of GG_MAX_NAME_LENGTH character IDs to print
 !     ARGCNT is number of IDs to print
@@ -2814,7 +2814,7 @@ end subroutine mat_print_id
 !==================================================================================================================================!
 subroutine mat_stack_put(id)
 
-! ident_22="@(#)M_matrix::mat_stack_put(3fp): put variables into storage"
+! ident_22="@(#) M_matrix mat_stack_put(3fp) put variables into storage"
 
 integer  :: id(GG_MAX_NAME_LENGTH)
 integer  :: i, j, k
@@ -3685,7 +3685,7 @@ end subroutine mat_comand
 !==================================================================================================================================!
 subroutine sh_command()
 
-! ident_23="@(#)M_matrix::sh_command(3f): start system shell interactively"
+! ident_23="@(#) M_matrix sh_command(3f) start system shell interactively"
 
 character(len=GG_LINELEN) :: line
 integer                   :: istat
@@ -3703,7 +3703,7 @@ end subroutine sh_command
 !==================================================================================================================================!
 subroutine mat_plot(lplot,x,y,n,p,k)
 
-! ident_24="@(#)M_matrix::mat_plot(3fp): Plot X vs. Y on LPLOT.  If K is nonzero, then P(1),...,P(K) are extra parameters"
+! ident_24="@(#) M_matrix mat_plot(3fp) Plot X vs. Y on LPLOT. If K is nonzero then P(1) ... P(K) are extra parameters"
 
 integer           :: lplot
 integer           :: n
@@ -3787,7 +3787,7 @@ end subroutine mat_plot
 !==================================================================================================================================!
 subroutine mat_matfn1()
 
-! ident_25="@(#)M_matrix::mat_matfn1(3fp): evaluate functions involving gaussian elimination"
+! ident_25="@(#) M_matrix mat_matfn1(3fp) evaluate functions involving gaussian elimination"
 
 doubleprecision   :: dtr(2)
 doubleprecision   :: dti(2)
@@ -4426,7 +4426,7 @@ end subroutine mat_matfn2
 !==================================================================================================================================!
 subroutine mat_matfn3()
 
-! ident_26="@(#)M_matrix::mat_matfn3(3fp): evaluate functions involving singular value decomposition"
+! ident_26="@(#) M_matrix mat_matfn3(3fp) evaluate functions involving singular value decomposition"
 
 integer         :: i
 integer         :: j
@@ -4736,7 +4736,7 @@ end subroutine mat_matfn3
 !==================================================================================================================================!
 SUBROUTINE mat_matfn4()
 
-! ident_27="@(#)M_matrix::mat_matfn4(3fp): evaluate functions involving qr decomposition (least squares)"
+! ident_27="@(#) M_matrix mat_matfn4(3fp) evaluate functions involving qr decomposition (least squares)"
 
 integer           :: info
 integer           :: j
@@ -4964,7 +4964,7 @@ END SUBROUTINE mat_matfn4
 !==================================================================================================================================!
 subroutine mat_matfn5()
 
-! ident_28="@(#)M_matrix::mat_matfn5(3fp):file handling and other I/O"
+! ident_28="@(#) M_matrix mat_matfn5(3fp) file handling and other I/O"
 
 character(len=GG_LINELEN)  :: mline
 character(len=256)         :: errmsg
@@ -5347,7 +5347,7 @@ end subroutine mat_matfn5
 !==================================================================================================================================!
 subroutine mat_stack_get(id)
 
-! ident_29="@(#)M_matrix::mat_stack_get(3fp): get variables from storage"
+! ident_29="@(#) M_matrix mat_stack_get(3fp) get variables from storage"
 
 integer,intent(in)  :: id(GG_MAX_NAME_LENGTH)
 integer             :: i
@@ -5483,7 +5483,7 @@ END SUBROUTINE MAT_STACK_GET
 !==================================================================================================================================!
 subroutine mat_stack2(op)
 
-! ident_30="@(#)M_matrix::ml_stackp(3fp): binary and ternary operations"
+! ident_30="@(#) M_matrix ml_stackp(3fp) binary and ternary operations"
 
 integer           :: op
 doubleprecision   :: sr,si,e1,st,e2
@@ -6602,7 +6602,7 @@ end subroutine mat_term
 !==================================================================================================================================!
 subroutine mat_savlod(lun,id,m,n,img,space_left,xreal,ximag)
 
-! ident_31="@(#)M_matrix::mat_savlod(3fp): read next variable from a save file or write next variable to it"
+! ident_31="@(#) M_matrix mat_savlod(3fp) read next variable from a save file or write next variable to it"
 
 integer,intent(in)                :: lun                                       ! logical unit number
 integer                           :: id(GG_MAX_NAME_LENGTH)                    ! name, format 32a1
@@ -6713,7 +6713,7 @@ end function mat_eqid
 !!     unknown  F
 function ifin_lala(varname)
 
-! ident_32="@(#)M_matrix::ifin_lala(3f) :: access LALA variable stack and see if a variable name exists"
+! ident_32="@(#) M_matrix ifin_lala(3f) access LALA variable stack and see if a variable name exists"
 
 character(len=*),intent(in)        :: varname
 integer                            :: id(GG_MAX_NAME_LENGTH)
@@ -6847,7 +6847,7 @@ end function ifin_lala
 !!    > 2 8 0 3 7 7 9 7 9 1 6 7 8 2 6 2 2 2 9 7
 subroutine get_double_from_lala(varname,A,type,IERR)
 
-! ident_33="@(#)M_matrix::get_double_from_lala(3f) :: access LALA variable stack and get a variable by name and its data from the stack"
+! ident_33="@(#) M_matrix get_double_from_lala(3f) access LALA variable stack and get a variable by name and its data from the stack"
 
 character(len=*),intent(in)              :: varname    ! the name of A.
 integer,intent(in)                       :: type       ! type =  0  get REAL A from LALA, type  = 1  get IMAGINARY A into LALA,
@@ -6970,7 +6970,7 @@ end function rowpack
 !!      >This is my title
 subroutine store_double_into_lala(varname,realxx,imagxx,ierr)
 
-! ident_34="@(#)M_matrix:: _store_double_into_lala(3f): put a variable name and its data onto LALA stack"
+! ident_34="@(#) M_matrix _store_double_into_lala(3f) put a variable name and its data onto LALA stack"
 
 character(len=*),intent(in)          :: varname                ! the name of realxx.
 doubleprecision,intent(in)           :: realxx(:,:)            ! inputarray is an M by N matrix
@@ -7792,7 +7792,7 @@ function too_much_memory(expression)
 integer,intent(in) :: expression
 logical            :: too_much_memory
 
-! ident_35="@(#)too much memory required"
+! ident_35="@(#) too much memory required"
 
    G_ERR=expression
    if(G_ERR.gt.0)then
@@ -7808,7 +7808,7 @@ end function too_much_memory
 !===================================================================================================================================
 function system_getenv(name,default) result(value)
 
-! ident_36="@(#)M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)"
+! ident_36="@(#) M_system system_getenv(3f) call get_environment_variable as a function with a default value(3f)"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: default
@@ -11037,7 +11037,7 @@ end subroutine mat_wlog
 !==================================================================================================================================!
 subroutine mat_watan(xr,xi,yr,yi)
 
-! ident_37="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
+! ident_37="@(#) M_LA mat_watan(3fp) y = atan(x) = (i/2)*log((i+x)/(i-x))" --"
 
 doubleprecision,intent(in)  :: xr, xi
 doubleprecision,intent(out) :: yr, yi

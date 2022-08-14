@@ -1160,7 +1160,7 @@ contains
 subroutine circl(startx,starty,start_angle,end_angle,start_radius,end_radius,dash_code)
 implicit none
 
-! ident_1="@(#)M_calcomp::circl(3f): draws an arc or spiral"
+! ident_1="@(#) M_calcomp circl(3f) draws an arc or spiral"
 
 real,intent(in) :: startx
 real,intent(in) :: starty
@@ -1342,7 +1342,7 @@ end subroutine circl
 SUBROUTINE DASHL  (X,Y,N,K)
 implicit none
 
-! ident_2="@(#)M_calcomp::dashl(3f): draws a polyline with dashed lines"
+! ident_2="@(#) M_calcomp dashl(3f) draws a polyline with dashed lines"
 
 real    :: x(*)
 real    :: y(*)
@@ -1459,7 +1459,7 @@ end subroutine dashl
 SUBROUTINE DASHP  (X,Y,DL)
 implicit none
 
-! ident_3="@(#)M_calcomp::dashp(3f): draw from current position to new point with dashed line"
+! ident_3="@(#) M_calcomp dashp(3f) draw from current position to new point with dashed line"
 
 !     A DASHED LINE IS DRAWN IN INCHES FROM THE CURRENT PEN POSITION TO
 !     THE SPECIFIED XPAGE, YPAGE. THE SIZE OF THE DASH WILL BE AS CALLED
@@ -1622,7 +1622,7 @@ end subroutine dashp
 subroutine elips(x0,y0,a,b,alpha,thet0, thetf, iv)
 implicit none
 
-! ident_4="@(#)M_calcomp::elips(3f): draw an elliptical arc"
+! ident_4="@(#) M_calcomp elips(3f) draw an elliptical arc"
 
 real,intent(in)     :: x0, y0
 real,intent(in)     :: a
@@ -1772,7 +1772,7 @@ end subroutine elips
 subroutine fit (xa,ya,xb,yb,xc,yc)
 implicit none
 
-! ident_5="@(#)m_calcomp::fit(3f): draws a semi-hyperbolic curve through three points"
+! ident_5="@(#) m_calcomp fit(3f) draws a semi-hyperbolic curve through three points"
 
 real      :: xa
 real      :: ya
@@ -1926,7 +1926,7 @@ end subroutine fit
 subroutine grid (x,y,xs,ys,m,n)
 implicit none
 
-! ident_6="@(#)M_calcomp::grid(3f): draws a linear grid"
+! ident_6="@(#) M_calcomp grid(3f) draws a linear grid"
 
 real,intent(in)    :: x,y ! (x,y) is the starting position of grid
 real,intent(in)    :: xs  ! xs    is the space of grid in x direction.
@@ -2030,7 +2030,7 @@ end subroutine grid
 subroutine poly (x,y,side_length,rn,th)
 implicit none
 
-! ident_7="@(#)M_calcomp::poly(3f): draw an equilateral polygon"
+! ident_7="@(#) M_calcomp poly(3f) draw an equilateral polygon"
 
 real,intent(in) :: x,y
 real,intent(in) :: side_length
@@ -2142,7 +2142,7 @@ end subroutine poly
 SUBROUTINE RECT (X,Y,H,W,TH,IV)
 implicit none
 
-! ident_8="@(#)M_calcomp::rect(3f): draw a rectangle"
+! ident_8="@(#) M_calcomp rect(3f) draw a rectangle"
 
 real    :: h
 integer :: iv
@@ -2315,7 +2315,7 @@ end subroutine solut
 subroutine curvx  (x0,xf,a,e,b,f,c,g,d,h)
 implicit none
 
-! ident_9="@(#)M_calcomp::curvx(3f): plots a function of X over a given range"
+! ident_9="@(#) M_calcomp curvx(3f) plots a function of X over a given range"
 
 !     CALL CURVX
 !      (XO, XF, COEFF1, EXP1, COEFF2, EXP2, COEFF3, EXP3, COEFF4, EXP4)
@@ -2463,7 +2463,7 @@ end subroutine curvx
 subroutine curvy  (y0,yf,a,e,b,f,c,g,d,h)
 implicit none
 
-! ident_10="@(#)M_calcomp::curvy(3f): plots a function of Y over a given range"
+! ident_10="@(#) M_calcomp curvy(3f) plots a function of Y over a given range"
 
 !     CALL CURVY
 !      (YO, YF, COEFF1, EXP1, COEFF2, EXP2, COEFF3, EXP3, COEFF4, EXP4)
@@ -2743,7 +2743,7 @@ end subroutine fit4
 subroutine fline (x,y,nn,k,j,l)
 implicit none
 
-! ident_11="@(#)M_calcomp::fline(3f): plot a polyline with optional fit"
+! ident_11="@(#) M_calcomp fline(3f) plot a polyline with optional fit"
 
 !             X  IS THE NAME OF THE ARRAY OF UNSCALED ORDINATE VALUES.
 !             Y  IS THE NAME OF THE ARRAY OF UNSCALED ABSCISSA VALUES.
@@ -3109,7 +3109,7 @@ end subroutine fline
 subroutine lgaxs(xo,yo,ibcd,n,dist,theta,vorg,delta)
 implicit none
 
-! ident_12="@(#)M_calcomp::lgaxs(3f): draw logarithmic axis"
+! ident_12="@(#) M_calcomp lgaxs(3f) draw logarithmic axis"
 
 ! EARLIER VERSION OF THIS SUBROUTINE WAS
 
@@ -3483,7 +3483,7 @@ end subroutine lgaxs
 subroutine lglin (xarra,yarra,nv,k,jtype,nsy,lgtyp)
 implicit none
 
-! ident_13="@(#)m_calcomp::lglin(3f): draw polyline in log-log or semi-log mode"
+! ident_13="@(#) m_calcomp lglin(3f) draw polyline in log-log or semi-log mode"
 
 !  THE VARIABLE IBCD HAS BEEN DECLARED AS CHARACTER TYPE FOR USE IN
 !  THE CALL TO THE 'SYMBOL' ROUTINE. SINCE 'IBCD' HAS NO MEANING IN
@@ -3788,7 +3788,7 @@ end subroutine lglin
 subroutine polar(radar,angar,npts,inc,ltyp,inteq,rmax,dr)
 implicit none
 
-! ident_14="@(#)M_calcomp::polar(3f): plot radial values versus angular variables (as polar coordinates)"
+! ident_14="@(#) M_calcomp polar(3f) plot radial values versus angular variables (as polar coordinates)"
 
 !
 !       RARRAY IS THE ARRAY CONTAINING THE RADIAL VALUES OF THE POINTS
@@ -4192,7 +4192,7 @@ end subroutine reflx
 subroutine scalg(array,axlen,npts,inc)
 implicit none
 
-! ident_15="@(#)M_calcomp::scalg(3f): determine scale factors for a logarithmic scale"
+! ident_15="@(#) M_calcomp scalg(3f) determine scale factors for a logarithmic scale"
 
 !  IN THE CALCOMP CORP. ORIGINAL, HAS A BUG: IF ARRAY CONTAINED
 !  ANY VALUES .LT. 1.0, THE LOWER BOUND OF THE AXIS WOULD BE TOO
@@ -4366,7 +4366,7 @@ end subroutine scalg
 subroutine smoot(xn,yn,ic)
 implicit none
 
-! ident_16="@(#)M_calcomp::smoot(3f): draw a polyline using modified spline-fitting technique"
+! ident_16="@(#) M_calcomp smoot(3f) draw a polyline using modified spline-fitting technique"
 
 !     THE SMOOTH ROUTINE SIMULATES THE 'PLOT' ROUTINE WITH A NEW 'PLOT'
 !     MODE (DRAWING A SMOOTH CURVE TO THE NEW POINT). THE SMOOTH MODE
@@ -4737,7 +4737,7 @@ end subroutine smoot
 subroutine axis(xpage,ypage,ibcd,nchar,axlen,angle,firstv,deltav)
 implicit none
 
-! ident_17="@(#)M_calcomp::axis(3f): Draw linear axis with numeric scale and axis label"
+! ident_17="@(#) M_calcomp axis(3f) Draw linear axis with numeric scale and axis label"
 
 !          XPAGE,YPAGE  COORDINATES OF STARTING POINT OF AXIS, IN INCHES
 !          IBCD         AXIS TITLE.
@@ -4966,7 +4966,7 @@ end subroutine axis
 subroutine factor(fct)
 implicit none
 
-! ident_18="@(#)M_calcomp::factor(3f): rescale entire plot"
+! ident_18="@(#) M_calcomp factor(3f) rescale entire plot"
 
 real,intent(in) :: fct
    call plot(fct,fct,1001)
@@ -4977,7 +4977,7 @@ end subroutine factor
 subroutine mset(mode)
 implicit none
 
-! ident_19="@(#)M_calcomp::mset(3f): this is a general mode setting routine."
+! ident_19="@(#) M_calcomp mset(3f) this is a general mode setting routine."
 
 ! FUNCTION: SET THE MODE ACCORDING TO THE CHARACTER VALUE PASSED
 !           AS MODE. THE MODES ARE SET IN COMMON WMODE
@@ -5166,7 +5166,7 @@ end subroutine mpset
 subroutine line(xarray,yarray,npts,inc,lintyp,inteq)
 implicit none
 
-! ident_20="@(#)M_calcomp::line(3f): Plot a polyline with optional rescaling"
+! ident_20="@(#) M_calcomp line(3f) Plot a polyline with optional rescaling"
 
 !          XARRAY  NAME OF ARRAY CONTAINING ABSCISSA OR X VALUES.
 !          YARRAY  NAME OF ARRAY CONTAINING ORDINATE OR Y VALUES.
@@ -5301,7 +5301,7 @@ end subroutine line
 subroutine width(iwidth)
 implicit none
 
-! ident_21="@(#)M_calcomp::width(3f): select new pen width"
+! ident_21="@(#) M_calcomp width(3f) select new pen width"
 
 integer,intent(in)    :: iwidth ! (positive integer) new pen width
 
@@ -5388,7 +5388,7 @@ end subroutine width
 subroutine newpen(index)
 implicit none
 
-! ident_22="@(#)M_calcomp::newpen(3f): select new pen color and move to origin"
+! ident_22="@(#) M_calcomp newpen(3f) select new pen color and move to origin"
 
 integer,intent(in)    :: index ! (positive integer) new pen color
 
@@ -5524,7 +5524,7 @@ end subroutine newpen
 subroutine nframe
 implicit none
 
-! ident_23="@(#)M_calcomp::nframe(3f): start new frame"
+! ident_23="@(#) M_calcomp nframe(3f) start new frame"
 
    call plot(0.0,0.0,1008)
 end subroutine nframe
@@ -5608,7 +5608,7 @@ end subroutine nframe
 subroutine number(xpage,ypage,height,fpn,angle,ndec)
 implicit none
 
-! ident_24="@(#)M_calcomp::number(3f): plots a floating-point number"
+! ident_24="@(#) M_calcomp number(3f) plots a floating-point number"
 
 !     XPAGE,YPAGE COORDINATES OF LOWER LEFT CORNER OF NUMBER.
 !     HEIGHT   HEIGHT OF PLOTTED NUMBER.
@@ -5879,7 +5879,7 @@ end subroutine number
 subroutine plot(xpag, ypag, ipen)
 implicit none
 
-! ident_25="@(#)M_calcomp::plot(3f): move with pen up or down or start new origin or terminate plotting"
+! ident_25="@(#) M_calcomp plot(3f) move with pen up or down or start new origin or terminate plotting"
 
 !
 !  SUBROUTINE DESCRIPTION -
@@ -6187,7 +6187,7 @@ end subroutine plot
 subroutine plots(xmin,xmax,ymin,ymax)
 implicit none
 
-! ident_26="@(#)M_calcomp::plots(3f): initialize the CALCOMP package"
+! ident_26="@(#) M_calcomp plots(3f) initialize the CALCOMP package"
 
 real,intent(in) :: xmin, xmax, ymin, ymax
 !
@@ -6364,7 +6364,7 @@ end subroutine plots
 subroutine scale(array,axlen,npts,inc)
 implicit none
 
-! ident_27="@(#)M_calcomp::scale(3f): calculate scaling factors for producing XY plots with LINE(3f) and AXIS(3f) routines"
+! ident_27="@(#) M_calcomp scale(3f) calculate scaling factors for producing XY plots with LINE(3f) and AXIS(3f) routines"
 
 !     ARRAY   NAME OF ARRAY CONTAINING VALUES TO BE SCALED.
 !     AXLEN   LENGTH IN IN./CM. OVER WHICH ARRAY IS TO BE SCALED.
@@ -6642,7 +6642,7 @@ end subroutine scale
 subroutine symbol(xpage,ypage,height,string,inteq,angle,nchar)
 implicit none
 
-! ident_28="@(#)M_calcomp::symbol(3f): draw text string or marker"
+! ident_28="@(#) M_calcomp symbol(3f) draw text string or marker"
 
 !
 !  PROCEDURE DESCRIPTION -
@@ -7167,7 +7167,7 @@ end subroutine symbol
 !===================================================================================================================================
 function upper(str,begin,end) result (string)
 
-! ident_29="@(#)M_strings::upper(3f): Changes a string to uppercase"
+! ident_29="@(#) M_strings upper(3f) Changes a string to uppercase"
 
 character(*), intent(in)      :: str                 ! inpout string to convert to all uppercase
 integer, intent(in), optional :: begin,end
@@ -7243,7 +7243,7 @@ end function upper
 subroutine where(xpag,ypag,fct)
 implicit none
 
-! ident_30="@(#)M_calcomp::where(3f): return current position and current plot-scaling factor"
+! ident_30="@(#) M_calcomp where(3f) return current position and current plot-scaling factor"
 
 real,intent(out) :: xpag
 real,intent(out) :: ypag
@@ -7680,7 +7680,7 @@ end subroutine primitive__tracer
 subroutine cntour (am,xx,yy,totx,toty,hgt,cv,cvn,tab,ndimyy)
 implicit none
 
-! ident_31="@(#)m_calcomp::cntour(3f): draw a contour plot"
+! ident_31="@(#) m_calcomp cntour(3f) draw a contour plot"
 
 integer xx,yy,cvn
 character encxde*9

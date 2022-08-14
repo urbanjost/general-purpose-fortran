@@ -11,7 +11,8 @@
 
 !>
 !!##NAME
-!!   M_getopt(3fm) - [ARGUMENTS:M_getopt::INTRO] parse command line arguments. similar to those in standard C library.
+!!   M_getopt(3fm) - [ARGUMENTS:M_getopt::INTRO] parse command line
+!!   arguments. similar to those in standard C library.
 !!   (LICENSE:GPL)
 !!
 !!##SYNOPSIS
@@ -30,19 +31,22 @@
 !!
 !!##OPTIONS
 !!   optstring  contains characters that are recognized as options.
-!!              If a character is followed by a colon, then it takes a required argument.
-!!              For example, "x" recognizes "-x", while "x:" recognizes "-x arg" or "-xarg".
-!!   opterr     Errors are printed by default. Set opterr=.false. to suppress them.
+!!              If a character is followed by a colon, then it takes a
+!!              required argument.  For example, "x" recognizes "-x", while
+!!              "x:" recognizes "-x arg" or "-xarg".
+!!   opterr     Errors are printed by default. Set opterr=.false. to
+!!              suppress them.
 !!
 !!##RETURNS
 !!   optopt     is set to the option character, even if it isn't recognized.
 !!   optarg     is set to the option's argument.
-!!   optind     has the index of the next argument to process. Initially optind=1.
+!!   optind     has the index of the next argument to process. Initially
+!!              optind=1.
 !!
 !!   Grouped options are allowed, so "-abc" is the same as "-a -b -c".
 !!
-!!   If longopts is present, it is an array of type(option_s), where each entry
-!!   describes one long option.
+!!   If longopts is present, it is an array of type(option_s), where each
+!!   entry describes one long option.
 !!
 !!      type option_s
 !!          character(len=4096) :: name
@@ -52,9 +56,10 @@
 !!
 !!   The name field is the option name, without the leading -- double dash.
 !!   Set the has_arg field to true if it requires an argument, false if not.
-!!   The val field is returned. Typically this is set to the corresponding short
-!!   option, so short and long options can be processed together. (But there
-!!   is no requirement that every long option has a short option, or vice-versa.)
+!!   The val field is returned. Typically this is set to the corresponding
+!!   short option, so short and long options can be processed together. (But
+!!   there is no requirement that every long option has a short option,
+!!   or vice-versa.)
 !!
 !!   Differences from C version:
 !!   - when options are finished, C version returns -1 instead of char(0),
@@ -65,7 +70,8 @@
 !!   - argc and argv are implicit
 !!
 !!   Differences for long options:
-!!   - optional argument to getopt(), rather than separate function getopt_long()
+!!   - optional argument to getopt(), rather than separate function
+!!     getopt_long()
 !!   - has_arg is logical, and does not support optional_argument
 !!   - does not support flag field (and thus always returns val)
 !!   - does not support longindex
@@ -107,34 +113,43 @@
 !!   This program is free software; you can redistribute or modify it under
 !!   the terms of the GNU general public license (GPL), version 2 or later.
 !!
-!!   This program is distributed in the hope that it will be useful, but
-!!   WITHOUT ANY WARRANTY; without even the implied warranty of
+!!   This program is distributed in the hope that it will be useful,
+!!   but WITHOUT ANY WARRANTY; without even the implied warranty of
 !!   merchantability or fitness for a particular purpose.
 !!
 !!   If you wish to incorporate this into non-GPL software, please contact
 !!   me regarding licensing terms.
 !!
-!!   Slightly modified from original to integrate it into the GPF (General Purpose
-!!   Fortran) format and create a man(1) page - JSU
+!!   Slightly modified from original to integrate it into the GPF (General
+!!   Purpose Fortran) format and create a man(1) page - JSU
 !-----------------------------------------------------------------------------------------------------------------------------------
 module M_getopt
-    use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
-    implicit none
+use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
+implicit none
 
-    character(len=80)     :: optarg        ! Option's value
-    character             :: optopt        ! Option's character
-    integer               :: optind=1      ! Index of the next argument to process
-    logical               :: opterr=.true. ! Errors are printed by default. Set opterr=.false. to suppress them
+private
+character(len=80)     :: optarg        ! Option's value
+character             :: optopt        ! Option's character
+integer               :: optind=1      ! Index of the next argument to process
+logical               :: opterr=.true. ! Errors are printed by default. Set opterr=.false. to suppress them
 
-    type option_s
-        character(len=80) :: name          ! Name of the option
-        logical           :: has_arg       ! Option has an argument (.true./.false.)
-        character         :: short         ! Option's short character equal to optopt
-    end type option_s
+type option_s
+   character(len=80) :: name          ! Name of the option
+   logical           :: has_arg       ! Option has an argument (.true./.false.)
+   character         :: short         ! Option's short character equal to optopt
+end type option_s
 
-    integer, private:: grpind=2            ! grpind is index of next option within group; always >= 2
+integer, private:: grpind=2            ! grpind is index of next option within group; always >= 2
 
-    public test_suite_M_getopt
+public getopt
+public option_s
+public optarg
+public optopt
+
+private process_long
+private process_short
+private substr
+
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 character function substr( str, i, j )
@@ -279,54 +294,5 @@ integer                      :: i, arglen
 
 end function process_short
 !-----------------------------------------------------------------------------------------------------------------------------------
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_getopt()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-
-!! setup
-   call test_getopt()
-   call test_process_long()
-   call test_process_short()
-   call test_substr()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_getopt()
-
-   call unit_check_start('getopt',msg='')
-   !!call unit_check('getopt', 0.eq.0, 'checking',100)
-   call unit_check_done('getopt',msg='')
-end subroutine test_getopt
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_process_long()
-
-   call unit_check_start('process_long',msg='')
-   !!call unit_check('process_long', 0.eq.0, 'checking',100)
-   call unit_check_done('process_long',msg='')
-end subroutine test_process_long
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_process_short()
-
-   call unit_check_start('process_short',msg='')
-   !!call unit_check('process_short', 0.eq.0, 'checking',100)
-   call unit_check_done('process_short',msg='')
-end subroutine test_process_short
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_substr()
-
-   call unit_check_start('substr',msg='')
-   !!call unit_check('substr', 0.eq.0, 'checking',100)
-   call unit_check_done('substr',msg='')
-end subroutine test_substr
-!===================================================================================================================================
-end subroutine test_suite_M_getopt
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
 end module M_getopt
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
+!-----------------------------------------------------------------------------------------------------------------------------------

@@ -93,7 +93,7 @@ subroutine ephemeris(itime,planet,declination_d,declination_m,declination_compas
 use M_strings, only : lower
 implicit none
 
-! ident_1="@(#)M_time::ephemeris(3f): ephemeris position of planets for adjusting an equatorial telescope"
+! ident_1="@(#) M_time ephemeris(3f) ephemeris position of planets for adjusting an equatorial telescope"
 
 integer,parameter            :: dp=kind(0.0d0)
 integer,intent(in)           :: itime(8)
@@ -482,7 +482,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    ephemeris position of planets for adjusting an equitorial telescope>',&
 '@(#)VERSION:        1.0, 20170910>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-07-15 10:00:36 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:34:56 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

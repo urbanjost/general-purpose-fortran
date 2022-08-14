@@ -130,7 +130,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John Burkardt>',&
 '@(#)VERSION:        1.07, 20190125>',&
 '@(#)MODIFIED:       John S. Urban>',&
-'@(#)COMPILED:       2022-07-15 10:00:40 UTC-240>',&
+'@(#)COMPILED:       2022-08-14 13:35:47 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -168,7 +168,7 @@ use M_strings, only : upper, isdigit, compact
 use M_io,      only : notopen
   implicit none
 
-! ident_1="@(#)HLPVMS(3f): provides extensive help from a VMS help file."
+! ident_1="@(#) HLPVMS(3f) provides extensive help from a VMS help file."
 
 !  LICENSING:    This code is distributed under the GNU LGPL license.
 !  MODIFIED:     06 March 2001
