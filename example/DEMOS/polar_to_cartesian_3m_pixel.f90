@@ -12,4 +12,4 @@
          call polar_to_cartesian(r,i,x,y)
          write(*,*)'x=',x,' y=',y,'radius=',r,'inclination=',i
       !!enddo INFINITE
-  end program demo_polar_to_cartesian
+     end program demo_polar_to_cartesian

@@ -35,7 +35,31 @@
 !!
 !!##EXAMPLE
 !!
-!! Sample program using type conversion routines
+!!
+!! Sample typical minimal usage
+!!
+!!     program minimal
+!!     use M_CLI2,  only : set_args, lget, rget, filenames=>unnamed
+!!     implicit none
+!!     real    :: x, y
+!!     integer :: i
+!!        call set_args(' -y 0.0 -x 0.0 -v F')
+!!        x=rget('x')
+!!        y=rget('y')
+!!        if(lget('v'))then
+!!           write(*,*)'X=',x
+!!           write(*,*)'Y=',y
+!!           write(*,*)'ATAN2(Y,X)=',atan2(x=x,y=y)
+!!        else
+!!           write(*,*)atan2(x=x,y=y)
+!!        endif
+!!        if(size(filenames).gt.0)then
+!!           write(*,'(g0)')'filenames:'
+!!           write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
+!!        endif
+!!     end program minimal
+!!
+!! Sample program using type get_args() and variants
 !!
 !!     program demo_M_CLI2
 !!     use M_CLI2,  only : set_args, get_args
@@ -707,6 +731,9 @@ end subroutine check_commandline
 !!                o give a blank string value as " ".
 !!                o use F|T for lists of logicals,
 !!                o lists of numbers should be comma-delimited.
+!!                o --usage, --help, --version, --verbose, and unknown
+!!                  options are ignored.
+!!
 !!    comment|#  Line is a comment line
 !!    system|!   System command.
 !!               System commands are executed as a simple call to
@@ -714,6 +741,8 @@ end subroutine check_commandline
 !!               would not effect subsequent lines, for example)
 !!    print|>    Message to screen
 !!    stop       display message and stop program.
+!!
+!!
 !!
 !!  So if a program that does nothing but echos its parameters
 !!
@@ -1798,7 +1827,18 @@ integer                      :: i
 integer                      :: ios
    prototype=''
    ! look for NAME.rsp
-   filename=rname//'.rsp'
+   ! assume if have / or \ a full filename was supplied to support ifort(1)
+   if((index(rname,'/').ne.0.or.index(rname,'\').ne.0) .and. len(rname).gt.1 )then
+      filename=rname
+      lun=fileopen(filename,message)
+      if(lun.ne.-1)then
+         call process_response()
+         close(unit=lun,iostat=ios)
+      endif
+      return
+   else
+      filename=rname//'.rsp'
+   endif
    if(debug_m_cli2)write(*,gen)'<DEBUG>FIND_AND_READ_RESPONSE_FILE:FILENAME=',filename
 
    ! look for name.rsp in directories from environment variable assumed to be a colon-separated list of directories
@@ -1841,6 +1881,8 @@ integer :: ios
 end subroutine position_response
 !===================================================================================================================================
 subroutine process_response()
+character(len=:),allocatable :: padded
+character(len=:),allocatable :: temp
    line=''
    lines_processed=0
       INFINITE: do
@@ -1852,37 +1894,54 @@ subroutine process_response()
          write(*,gen)'<ERROR>*process_response*:'//trim(message)
          exit INFINITE
       endif
-      line=adjustl(line)
-      if(index(line//' ','#').eq.1)cycle
-      if(line.ne.'')then
+      line=trim(adjustl(line))
+      temp=line
+      if(index(temp//' ','#').eq.1)cycle
+      if(temp.ne.'')then
 
-         if(index(line,'@').eq.1.and.lines_processed.ne.0)exit INFINITE
+         if(index(temp,'@').eq.1.and.lines_processed.ne.0)exit INFINITE
 
-         call split(line,array) ! get first word
+         call split(temp,array) ! get first word
          itrim=len_trim(array(1))+2
-         line=line(itrim:)
+         temp=temp(itrim:)
 
          PROCESS: select case(lower(array(1)))
          case('comment','#','')
          case('system','!','$')
             if(G_options_only)exit PROCESS
             lines_processed= lines_processed+1
-            call execute_command_line(line)
+            call execute_command_line(temp)
          case('options','option','-')
             lines_processed= lines_processed+1
-            prototype=prototype//' '//trim(line)
+            prototype=prototype//' '//trim(temp)
          case('print','>','echo')
             if(G_options_only)exit PROCESS
             lines_processed= lines_processed+1
-            write(*,'(a)')trim(line)
+            write(*,'(a)')trim(temp)
          case('stop')
             if(G_options_only)exit PROCESS
-            write(*,'(a)')trim(line)
+            write(*,'(a)')trim(temp)
             stop
          case default
-            if(array(1)(1:1).eq.'@')cycle INFINITE !skip adjacent @ lines from first
-            lines_processed= lines_processed+1
-            write(*,'(*(g0))')'unknown response keyword [',array(1),'] with options of [',trim(line),']'
+            if(array(1)(1:1).eq.'-')then
+               ! assume these are simply options to support ifort(1)
+               ! if starts with a single dash must assume a single argument
+               ! and rest is value to support -Dname and -Ifile option
+               ! which currently is not supported, so multiple short keywords
+               ! does not work. Just a ifort(1) test at this point, so do not document
+               if(G_options_only)exit PROCESS
+               padded=trim(line)//'  '
+               if(padded(2:2).eq.'-')then
+                  prototype=prototype//' '//trim(line)
+               else
+                  prototype=prototype//' '//padded(1:2)//' '//trim(padded(3:))
+               endif
+               lines_processed= lines_processed+1
+            else
+               if(array(1)(1:1).eq.'@')cycle INFINITE !skip adjacent @ lines from first
+               lines_processed= lines_processed+1
+               write(*,'(*(g0))')'unknown response keyword [',array(1),'] with options of [',trim(temp),']'
+            endif
          end select PROCESS
 
       endif
@@ -4755,7 +4814,7 @@ integer           :: ierr
      do i=1, long
         k=long+1-i
         ch=string_local(k:k)
-        if(ch.eq.'-'.and.k.eq.1)then
+        IF(CH.EQ.'-'.AND.K.EQ.1)THEN
            out_sign=-1
            cycle
         endif

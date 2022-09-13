@@ -24,4 +24,4 @@
          write(*,*)'G=',table%ifdef('G')
          write(*,*)'H=',table%ifdef('H')
 
-    end program demo_ifdef
+       end program demo_ifdef

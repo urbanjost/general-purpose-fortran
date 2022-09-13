@@ -2009,6 +2009,7 @@ end function round
 !!      real,intent(in)                      :: val
 !!      integer,intent(in)                   :: digits
 !!      character(len=*),intent(in),optional :: round
+!!      real                                 :: significant
 !!
 !!##DESCRIPTION
 !!
@@ -2051,10 +2052,11 @@ end function round
 !!    implicit none
 !!    integer :: i
 !!    real :: r, v
-!!    character(len=*),parameter :: g='(*(g0,1x))'
+!!    character(len=*),parameter :: g='(*(g0.7,1x))'
 !!
 !!       write(*,g)significant([8765.43210,0.1234567890],5)
 !!
+!!       write(*,*)'default:',1.23456789012345
 !!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9])
 !!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RU'),'RU'
 !!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RD'),'RD'
@@ -2063,6 +2065,18 @@ end function round
 !!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
 !!       write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
 !!    end program demo_significant
+!!
+!!   Results:
+!!
+!!    8765.400 .1234600
+!!     default:   1.234568
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568
+!!    2.000000 1.300000 1.240000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RU
+!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 1.234567 1.234568 1.234568 RD
+!!    1.000000 1.200000 1.230000 1.234000 1.234500 1.234560 1.234567 1.234568 1.234568 RZ
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RN
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RC
+!!    1.000000 1.200000 1.230000 1.235000 1.234600 1.234570 1.234568 1.234568 1.234568 RP
 pure elemental function significant(val,digits,round)
 
 ! ident_20="@(#) M_verify significant(3f) round val to specified number of significant digits"
@@ -2070,8 +2084,8 @@ pure elemental function significant(val,digits,round)
 real,intent(in)                      :: val
 integer,intent(in)                   :: digits
 character(len=*),intent(in),optional :: round
-character(len=80)                    :: line,fmt
 real                                 :: significant
+character(len=80)                    :: line,fmt
    if(present(round))then
       write(fmt,'("(",a,",e0.",i0,")")')trim(round),digits ! build e0.N format to write specified number of digits as 0.NNNNN+EE
    else

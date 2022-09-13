@@ -143,12 +143,12 @@ use M_math,     only : quadratic
 use M_strings,  only : v2s
 implicit none
 ! ident_1="@(#) Calculate and print the roots of a quadratic formula even if they are complex"
-namelist /coeff/ A, B, C
 real               :: A=0.0, B=0.0, C=0.0
 character(len=255) :: coeff_string
 complex            :: z1, z2  ! roots
 real               :: discriminant
 logical            :: verbose
+namelist /coeff/ A, B, C
 
    call kracken('quadratic',' --help .false. --version .false. -verbose .false.')
    call help_usage(lget('quadratic_help'))          ! check for help text

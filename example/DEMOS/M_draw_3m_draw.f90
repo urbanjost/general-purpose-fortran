@@ -134,4 +134,4 @@
         call textsize(height,height)
         call drawstr(itext)
         end subroutine hershey
-  end program demo_M_draw
+     end program demo_M_draw

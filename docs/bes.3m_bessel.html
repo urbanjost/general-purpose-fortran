@@ -109,90 +109,44 @@ Description of parameters
               FOR I(X), -600.0 .LE. X .LE. 600.0
               FOR K(X), 0.0 .LE. X .LE. 600.0
 <P>
-</PRE>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>NO</B> </TD><TD valign=bottom>
-= Input,integer order of function desired for a
-single value to be returned, or the maximum order
-desired (+ or -) if an array of values is to be
-returned.
-Let XX = <B>abs</B>(X). Then bounds on orders are
-<TABLE width=100% cellpadding=3><!-- tsb: = Input,integer order of function desired for a
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-For 0.0 .LE. XX .LE. 0.025,
-The absolute value of maximum order, ANO,
-and argument supplied (ABS(X)) must
-satisfy the relation
+   NO    = Input,integer order of function desired for a
+           single value to be returned, or the maximum order
+           desired (+ or -) if an array of values is to be
+           returned.
+           Let XX = abs(X). Then bounds on orders are
 <P>
-<B>log</B>(GAMMA(ANO))<B>-ANO</B>*<B>log</B>(XX/2.0)
-<TABLE width=100% cellpadding=3><!-- tsb: <B>log</B>(GAMMA(ANO))<B>-ANO</B>*<B>log</B>(XX/2.0)
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-<B>log</B>(XX)/2.0 .LE. 679.0
-</TD></TR>
-<TR></TR></TABLE>For a given argument and an order greater
-than that allowed by the above relation
+           1. For 0.0 .LE. XX .LE. 0.025,
+                The absolute value of maximum order, ANO,
+                and argument supplied (ABS(X)) must
+                satisfy the relation
 <P>
-<B>JN</B>(X) = 0.0, N.NE.0, AND =1.0 FOR N=0
-<B>YN</B>(X) = <B>-INF</B>
-<B>IN</B>(X) = 0.0, N.NE.0, AND =1.0 FOR N=0
-<B>KN</B>(X) = INF
-</TD></TR>
-<TR valign=top><TD width=3%>
-2.
-</TD><TD>
-FOR 0.025 .LT. XX .LE. 0.20,
-<B>ABS</B>(NO) .LE. <B>INT</B>(140.0*XX + 83.0)
-</TD></TR>
-<TR valign=top><TD width=3%>
-3.
-</TD><TD>
-FOR 0.20 .LT. XX .LE. 1.0,
-<B>ABS</B>(NO) .LE. <B>INT</B>(42.0*XX + 102.0)
-</TD></TR>
-<TR valign=top><TD width=3%>
-4.
-</TD><TD>
-FOR 1.0 .LT. XX .LE. 20.0,
-<B>ABS</B>(NO) .LE. <B>INT</B>(0.02*XX**3 - 0.86*XX**2 +
-17.15*XX + 124.0)
-</TD></TR>
-<TR valign=top><TD width=3%>
-5.
-</TD><TD>
-FOR 20.0 .LT. XX .LE. 100.0,
-<B>ABS</B>(NO) .LE. <B>INT</B>(2.75*XX + 228.0)
-</TD></TR>
-<TR valign=top><TD width=3%>
-6.
-</TD><TD>
-FOR 100.0 .LT. XX .LE. 400.0,
-<B>ABS</B>(NO) .LE. <B>INT</B>(1.67*XX + 336.0)
-</TD></TR>
-<TR valign=top><TD width=3%>
-7.
-</TD><TD>
-FOR 400.0 .LT. XX .LE. 1100.0,
-<B>ABS</B>(NO) .LE. <B>INT</B>(1.33*XX + 470.0)
-</TD></TR>
-<TR></TR></TABLE><!-- .TP -->
-</TD></TR>
-<TR valign=top><TD width=3% nowrap>
-<B>KODE</B> </TD><TD valign=bottom>
-= Input,integer indicator for the particular
-function to be computed.
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
+                log(GAMMA(ANO))-ANO*log(XX/2.0)
+                + log(XX)/2.0  .LE. 679.0
+<P>
+                For a given argument and an order greater
+                than that allowed by the above relation
+<P>
+                JN(X) = 0.0, N.NE.0, AND =1.0 FOR N=0
+                YN(X) = -INF
+                IN(X) = 0.0, N.NE.0, AND =1.0 FOR N=0
+                KN(X) = INF
+           2. FOR 0.025 .LT. XX .LE. 0.20,
+                ABS(NO) .LE. INT(140.0*XX + 83.0)
+           3. FOR 0.20 .LT. XX .LE. 1.0,
+               ABS(NO) .LE. INT(42.0*XX + 102.0)
+           4. FOR 1.0 .LT. XX .LE. 20.0,
+                ABS(NO) .LE. INT(0.02*XX**3 - 0.86*XX**2 +
+                                 17.15*XX + 124.0)
+           5. FOR 20.0 .LT. XX .LE. 100.0,
+                ABS(NO) .LE. INT(2.75*XX + 228.0)
+           6. FOR 100.0 .LT. XX .LE. 400.0,
+                ABS(NO) .LE. INT(1.67*XX + 336.0)
+           7. FOR 400.0 .LT. XX .LE. 1100.0,
+                ABS(NO) .LE. INT(1.33*XX + 470.0)
+<P>
+   KODE  = Input,integer indicator for the particular
+           function to be computed.
+<P>
              KODE = 10 -- FUNCTION J(X) ONLY
                   = 11 --          Y(X) ONLY
                   = 12 --          J(X) AND Y(X)
@@ -201,50 +155,35 @@ function to be computed.
                   = 21 --          K(X) ONLY
                   = 22 --          I(X) AND K(X)
 <P>
-</PRE>
-RSLT1 = output,contains the doubleprecision function value for <B>J</B>(X)
-or <B>I</B>(X) corresponding to the order and argument
-supplied, depending on the KODE value. This
-parameter would contain the result if only one
-function value is to be returned.
-</TD></TR>
-<TR><TD colspan=2>
-RSLT2 = output,contains the doubleprecision function value for <B>Y</B>(X)
-or <B>K</B>(X) in a manner similar to RSLT1.
-</TD></TR>
-<TR valign=top><TD width=3% nowrap>
-<B>T1</B> </TD><TD valign=bottom>
-= output,a work area which will contain the array oF
-doubleprecision function values for <B>J</B>(X) or <B>I</B>(X) of orders
-zero through NO, depending on KODE.
-T1 must be dimensioned in the calling program and
-must contain at least M cells of storage, where
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
+   RSLT1 = output,contains the doubleprecision function value for J(X)
+           or I(X) corresponding to the order and argument
+           supplied, depending on the KODE value. This
+           parameter would contain the result if only one
+           function value is to be returned.
+<P>
+   RSLT2 = output,contains the doubleprecision function value for Y(X)
+           or K(X) in a manner similar to RSLT1.
+<P>
+   T1    = output,a work area which will contain the array oF
+           doubleprecision function values for J(X) or I(X) of orders
+           zero through NO, depending on KODE.
+           T1 must be dimensioned in the calling program and
+           must contain at least M cells of storage, where
+<P>
                M = MAX(ABS(NO),INT(2*ABS(X))) + 51
 <P>
-</PRE>
-</TD></TR>
-<TR><TD width=3%>&nbsp;</TD><TD>
-In using the array, <B>T1</B>(1) = function of order 0,
---- <B>T1</B>(NO+1) = function of order NO.
-</TD></TR>
-<TR valign=top><TD width=3% nowrap>
-<B>T2</B> </TD><TD valign=bottom>
-= Output,similar to T1 for the functions <B>Y</B>(X) or
-<B>K</B>(X). an exception is that if only <B>J</B>(X) or <B>I</B>(X)
-are called, then T2 needs no dimension in the
-calling program, but the parameter must still
-appear in the calling sequence. Otherwise, T2
-must be dimensioned at least M.
-</TD></TR>
-<TR valign=top><TD width=3% nowrap>
-<B>IERR</B> </TD><TD valign=bottom>
-= Output,error flag for the conditions
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
+           In using the array, T1(1) = function of order 0,
+           --- T1(NO+1) = function of order NO.
+<P>
+   T2    = Output,similar to T1 for the functions Y(X) or
+           K(X). an exception is that if only J(X) or I(X)
+           are called, then T2 needs no dimension in the
+           calling program, but the parameter must still
+           appear in the calling sequence. Otherwise, T2
+           must be dimensioned at least M.
+<P>
+   IERR  = Output,error flag for the conditions
+<P>
             -- Normal code
                =0, Normal - No errors
             -- Abnormal codes
@@ -254,12 +193,8 @@ must be dimensioned at least M.
                =4, Negative arguments for Y(X) or K(X)
                =5, Incorrect parameter KODE
 <P>
+     BS is documented for the original version in SC-M-69-336
 </PRE>
-</TD></TR>
-<TR><TD width=3%>&nbsp;</TD><TD>
-BS is documented for the original version in SC-M-69-336
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
 
@@ -290,7 +225,7 @@ Based on routines originally from
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bes (3)</TD> <TD align=right width=33%><I>August 14, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e490eadc-3961-40ed-92f3-9ae7daaf6877 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bes (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 483a1d9a-1dee-4257-930c-5b970ff92c55 using man macros.</FONT>
 <br><br><center><img src="images/bes.3m_bessel.gif"></center>
 </div>
 </div>

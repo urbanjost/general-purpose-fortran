@@ -46,6 +46,7 @@ SRCS =  M_fixedform.f90 M_math.f90 C-rgbhls.c M_strings.f90 C-polygons.c  \
      C-mif.c C-pcl5.c M_inssor.f90 C-cgmt.c M_strings_oop.f90 C-getgp.c  \
      C-vml.c M_draw.f90 C-M_system.c C-M_getkey.c C-unixplot.c M_datapac.f90  \
      M_escape.f90 C-hlsrgb.c C-mapping.c C-hpdxy.c M_messages.f90 C-M_drawplus.c  \
+     C-my_stopwatch_cpu_time.c \
      M_hashkeys.f90 M_indnth.f90 M_xyplot.f90 M_matrix.f90 M_mulcnt.f90 M_unipar.f90  \
      M_datapac_d.f90 M_pixel.f90 M_curl.f90 M_getkey.f90 C-M_readline.c M_sha3.f90  \
      calc_NC.f90 cntcrv.f90 M_median.f90 M_help.f90 M_stopwatch.f90 C-canvas.c  \
@@ -78,6 +79,7 @@ OBJS =  M_fixedform.o M_math.o C-rgbhls.o M_strings.o C-polygons.o  \
      my_stopwatch_cpu_time.o \
      C-mif.o C-pcl5.o M_inssor.o C-cgmt.o M_strings_oop.o C-getgp.o  \
      C-vml.o M_draw.o C-M_system.o C-M_getkey.o C-unixplot.o M_datapac.o  \
+     C-my_stopwatch_cpu_time.o \
      M_escape.o C-hlsrgb.o C-mapping.o C-hpdxy.o M_messages.o C-M_drawplus.o  \
      M_hashkeys.o M_indnth.o M_xyplot.o M_matrix.o M_mulcnt.o M_unipar.o  \
      M_datapac_d.o M_pixel.o M_curl.o M_getkey.o C-M_readline.o M_sha3.o  \

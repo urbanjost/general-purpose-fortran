@@ -14,4 +14,4 @@
          ! remove blanks
          call change(line,'c/ //',ierr)
          write(*,*)trim(line)
-  end program demo_change
+     end program demo_change

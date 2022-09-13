@@ -35,4 +35,4 @@
           call rdraw2(  0.0, -side)
           end subroutine square
 
-    end program demo_rdraw2
+       end program demo_rdraw2

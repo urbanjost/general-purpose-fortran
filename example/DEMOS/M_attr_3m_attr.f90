@@ -38,4 +38,4 @@
          write(*,*)
          write(*,'(a)')attr('<MYERROR> my custom message style')
 
-    end program demo_M_attr
+      end program demo_M_attr
