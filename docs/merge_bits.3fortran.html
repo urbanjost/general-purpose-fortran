@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,89 +41,221 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>merge_bits (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>merge_bits (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>merge_bits</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>merge_bits</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>merge_bits</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] Merge of bits
-under mask
+<B>MERGE_BITS</B>(3) - [BIT:COPY] Merge bits using a mask
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=7>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>merge_bits</B>(i, j, mask)
+result = <B>merge_bits</B>(<I>i</I>, <I>j</I>, <I>mask</I>)
+<P>
+<PRE>
+           elemental integer(kind=KIND) function merge_bits(i,j,mask)
+<P>
+            integer(kind=KIND), intent(in) :: i, j, mask
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+where the result and all input values have the same integer type and KIND
+with the exception that the <I>mask</I> and either I or J may be a BOZ constant.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>merge_bits</B>(i, j, mask) merges the bits of I and J as determined by
-the mask. The k-th bit of the result is equal to the k-th bit of
-I if the k-th bit of MASK is 1; it is equal to the k-th bit of
-J otherwise.
+A common graphics operation in Ternary Raster Operations is to combine bits
+from two different sources, generally referred to as bit-blending.
+<B>MERGE_BITS</B>(3) performs a masked bit-blend of I and J using the bits of the
+MASK value to determine which of the input values to copy bits from.
+<P>
+Specifically, The k-th bit of the result is equal to the k-th bit of I if
+the k-th bit of MASK is 1; it is equal to the k-th bit of J otherwise (so
+all three input values must have the same number of bits).
+<P>
+The resulting value is the same as would result from
+<P>
+<PRE>
+          ior (iand (i, mask),iand (j, not (mask)))
+<P>
+</PRE>
+An exception to all values being of the same integer type is that I or J
+and/or the <I>mask</I> may be a BOZ constant (A BOZ constant means it is either a
+Binary, Octal, or Hexadecimal literal constant). The BOZ values are
+converted to the integer type of the non-BOZ <B>value</B>(s) as if called by the
+intrinsic function <B>INT</B>() with the kind of the non-BOZ <B>value</B>(s), so the BOZ
+values must be in the range of the type of the result.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-Shall be of type INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : value to select bits from when the associated bit in the <I>mask</I> is
+<TABLE width=100% cellpadding=3><!-- tsb: I : value to select bits from when the associated bit in the <I>mask</I> is
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+<P>
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>J</B> </TD><TD valign=bottom>
-Shall be of type INTEGER and of the same kind as I.
+<TR></TR></TABLE><!-- .IP \(bu 3 -->
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>MASK</B> </TD><TD valign=bottom>
-Shall be of type INTEGER and of the same kind as I.
+<TR valign=top><TD width=4%>
+o
+</TD><TD>
+J : value to select bits from when the associated bit in the <I>mask</I> is
+<TABLE width=100% cellpadding=3><!-- tsb: J : value to select bits from when the associated bit in the <I>mask</I> is
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+0.
+</TD><TD>
+<P>
+</TD></TR>
+<TR></TR></TABLE><!-- .IP \(bu 3 -->
+</TD></TR>
+<TR valign=top><TD width=4%>
+o
+</TD><TD>
+MASK : a value whose bits are used as a <I>mask</I> to select bits from I and J
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The result is of the same type and kind as I.
+The bits blended from I and J using the <I>mask</I> MASK. It is the same type as I
+if I is of type integer, otherwise the same type as J.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_merge_bits
+      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
+      implicit none
+      integer(kind=int16) :: if_one,if_zero,msk
+      character(len=*),parameter :: fmt=&#146;(*(g0, 1X))&#146;
+<P>
+         ! basic usage
+         print *,&#146;MERGE_BITS( 5,10,41) should be 3.=&gt;&#146;,merge_bits(5,10,41)
+         print *,&#146;MERGE_BITS(13,18,22) should be 4.=&gt;&#146;,merge_bits(13,18,22)
+<P>
+         ! use some values in base2 illustratively:
+         if_one =int(b&#146;1010101010101010&#146;,kind=int16)
+         if_zero=int(b&#146;0101010101010101&#146;,kind=int16)
+<P>
+         msk=int(b&#146;0101010101010101&#146;,kind=int16)
+         print &#146;("should get all zero bits =&gt;",b16.16)&#146;, &
+         & merge_bits(if_one,if_zero,msk)
+<P>
+         msk=int(b&#146;1010101010101010&#146;,kind=int16)
+         print &#146;("should get all ones bits =&gt;",b16.16)&#146;, &
+         & merge_bits(if_one,if_zero,msk)
+<P>
+         ! using BOZ values
+         print fmt, &
+         & merge_bits(32767_int16,    o&#146;12345&#146;,         32767_int16), &
+         & merge_bits(o&#146;12345&#146;, 32767_int16, b&#146;0000000000010101&#146;), &
+         & merge_bits(32767_int16,    o&#146;12345&#146;,             z&#146;1234&#146;)
+<P>
+         ! a do-it-yourself equivalent for comparison and validation
+         print fmt, &
+         & ior(iand(32767_int16, 32767_int16),                   &
+         &   iand(o&#146;12345&#146;, not(32767_int16))),                  &
+<P>
+         & ior(iand(o&#146;12345&#146;, int(o&#146;12345&#146;, kind=int16)),        &
+         &   iand(32767_int16, not(int(o&#146;12345&#146;, kind=int16)))), &
+<P>
+         & ior(iand(32767_int16, z&#146;1234&#146;),                       &
+         &   iand(o&#146;12345&#146;, not(int( z&#146;1234&#146;, kind=int16))))
+<P>
+      end program demo_merge_bits
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+          MERGE_BITS( 5,10,41) should be 3.=&gt;           3
+          MERGE_BITS(13,18,22) should be 4.=&gt;           4
+</PRE>
+should get all zero bits =&gt;0000000000000000 should get all ones bits
+=&gt;1111111111111111 32767 32751 5877 32767 32767 5877
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2008]] and later
+Fortran 2008
 </BLOCKQUOTE>
-<A name=6>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Elemental function]]
+****(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022           merge_bits(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>merge_bits (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 60ea4b61-968a-4b50-b1d7-cbcb0e4b1c8a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>merge_bits (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 283e6c53-ec1a-4443-a900-0a4cc62584de using man macros.</FONT>
 <br><br><center><img src="images/merge_bits.3fortran.gif"></center>
 </div>
 </div>

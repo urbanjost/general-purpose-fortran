@@ -59,35 +59,35 @@ character(len=*),parameter   :: gen='(*(g0,1x))'
       write(6,*)'check defaults'
 
       write(6,*)'default integers'
-      call printit(all([x,y,z,ints,ithree].eq.[10,20,30,11,22,33,-1,-2,-3]))
+      call printit(all([x,y,z,ints,ithree] == [10,20,30,11,22,33,-1,-2,-3]))
 
       write(6,*)'default reals scalar'
-      call printit(all([r_x,r_y,r_z].eq.[-8.0,-88.0,-888.0]))
+      call printit(all([r_x,r_y,r_z] == [-8.0,-88.0,-888.0]))
       write(6,*)'default reals fixed array'
-      call printit(all(rfour.eq.[1.1,2.2,3.3,4.4])) 
+      call printit(all(rfour == [1.1,2.2,3.3,4.4])) 
       write(6,*)'default allocatable array'
       write(*,*)reals
       write(*,*)[1.2,2.3,3.4,4.5,5.6,6.7,7.8]
-      call printit(all(reals.eq.[1.2,2.3,3.4,4.5,5.6,6.7,7.8]))
+      call printit(all(reals == [1.2,2.3,3.4,4.5,5.6,6.7,7.8]))
 
       write(6,*)'default logicals'
       call printit(all([l_x ,l_y,lfive,logicals].eqv. &
       & [.true., .false., .true., .false., .true., .false., .true., .true., .true., .true., .false., .false., .false., .true.]))
 
       write(6,*)'default complex'
-      call printit(all([c_x,c_y,c_z,c_three,c_aarr].eq. [(cmplx(-999,-999),i=1,8)]))
+      call printit(all([c_x,c_y,c_z,c_three,c_aarr] ==  [(cmplx(-999,-999),i=1,8)]))
 
       call runit('-x 4 -y 5 -z 6 -casen 1')       ! now call itself with some values specified
    case(1)
       write(6,*)'scalar ints'
-      call printit(all([x,y,z].eq.[4,5,6]))       ! options set on command line in previous case
+      call printit(all([x,y,z] == [4,5,6]))       ! options set on command line in previous case
       call runit('-r_x 40 -r_y 50 -r_z 60 -casen 2')
    case(2)
       write(6,*)'scalar reals'
-      call printit(all([r_x,r_y,r_z].eq.[40.0,50.0,60.0]))
+      call printit(all([r_x,r_y,r_z] == [40.0,50.0,60.0]))
       call runit('-x 400 -y 500 -z 600 --ints -1,-2,-3 --ithree -11,-22,-33 -casen 3')
    case(3)
-      call printit(all([x,y,z,ints,ithree].eq.[400,500,600,-1,-2,-3,-11,-22,-33]))
+      call printit(all([x,y,z,ints,ithree] == [400,500,600,-1,-2,-3,-11,-22,-33]))
       call runit('-c_x "(1,2)" -c_y 10,20 -c_z "(2#111,16#-AB)" -c_three 1,2,3,4,5,6 -c_aarr 111::222,333::444 -casen 4')
    case(4)
       ! test results for case 4
@@ -97,10 +97,10 @@ character(len=*),parameter   :: gen='(*(g0,1x))'
          
       write(6,gen)'CASE4 RESULTS:',[c_x,c_y,c_z,c_three,c_aarr]
 
-      write(6,gen)'CASE4 TESTS:',[c_x,c_y,c_z,c_three,c_aarr].eq.&
+      write(6,gen)'CASE4 TESTS:',[c_x,c_y,c_z,c_three,c_aarr] == &
       & [cmplx(1.0,2.0),cmplx(10.0,20.0),cmplx(7,-171),cmplx(1,2),cmplx(3,4),cmplx(5,6),cmplx(111,222),cmplx(333,444)]
 
-      call printit(all([c_x,c_y,c_z,c_three,c_aarr].eq.&
+      call printit(all([c_x,c_y,c_z,c_three,c_aarr] == &
       & [cmplx(1.0,2.0),cmplx(10.0,20.0),cmplx(7,-171),cmplx(1,2),cmplx(3,4),cmplx(5,6),cmplx(111,222),cmplx(333,444)]))
 
       flush(unit=6)

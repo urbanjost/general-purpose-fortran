@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,109 +41,172 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iachar (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iachar (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>iachar</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>iachar</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>iachar</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] Code in ASCII collating sequence
+<B>IACHAR</B>(3) - [CHARACTER:CONVERSION] Return integer ASCII code of a character
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=10>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>iachar</B>(c [, kind])
+result = <B>iachar</B>(c [,<I>kind</I>])
+<P>
+<PRE>
+           elemental integer(kind=KIND) function iachar(c,kind)
+<P>
+            character(len=1),intent(in) :: c
+            integer(kind=**),intent(in),optional :: KIND
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The return value is of type integer and of <I>kind</I> KIND. If KIND is absent,
+the return value is of default integer <I>kind</I>.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND may be of any integer <I>kind</I>.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>iachar</B>(c) returns the code for the ASCII character
-in the first character position of C.
+<B>IACHAR</B>(3) returns the code for the ASCII character in the first character
+position of C.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>C</B> </TD><TD valign=bottom>
-Shall be a scalar CHARACTER, with <B>intent</B>(in)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+C : A character to determine the ASCII code of. : A common extension is
+to allow strings but all but the first character is then ignored.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(Optional) An INTEGER initialization
-expression indicating the kind parameter of the result.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND : A constant initialization expression indicating the <I>kind</I> parameter
+of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type INTEGER and of kind KIND. If
-KIND is absent, the return value is of default integer kind.
+the result is the position of the character C in the ASCII collating
+sequence. It is nonnegative and less than or equal to 127.
+<P>
+By ASCII, it is meant that C is in the collating sequence defined by the
+codes specified in ISO/IEC 646:1991 (International Reference Version).
+<P>
+The value of the result is processor dependent if C is not in the ASCII
+collating sequence.
+<P>
+The results are consistent with the <B>LGE</B>(3), <B>LGT</B>(3), <B>LLE</B>(3), and <B>LLT</B>(3)
+comparison functions. For example, if <B>LLE</B>(C, D) is true, <B>IACHAR</B>(C) &lt;= IACHAR
+(D) is true where C and D are any two characters representable by the
+processor.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_iachar
-   implicit none
-   ! create function to convert uppercase letters to lowercase
-      write(*,&#146;(a)&#146;)lower(&#146;abcdefg ABCDEFG&#146;)
-   contains
-   !
-   elemental pure function lower(str) result (string)
-   ! Changes a string to lowercase
-   character(*), intent(In)     :: str
-   character(len(str))          :: string
-   integer                      :: i
-      string = str
-      ! step thru each letter in the string in specified range
-      do i = 1, len(str)
-         select case (str(i:i))
-         case (&#146;A&#146;:&#146;Z&#146;) ! change letter to miniscule
-            string(i:i) = char(iachar(str(i:i))+32)
-         case default
-         end select
-      end do
-   end function lower
-   !
-   end program demo_iachar
+      program demo_iachar
+      implicit none
+         ! basic usage
+          ! just does a string one character long
+          write(*,*)iachar(&#146;A&#146;)
+          ! elemental: can do an array of letters
+          write(*,*)iachar([&#146;A&#146;,&#146;Z&#146;,&#146;a&#146;,&#146;z&#146;])
+<P>
+         ! convert all characters to lowercase
+          write(*,&#146;(a)&#146;)lower(&#146;abcdefg ABCDEFG&#146;)
+      contains
+      !
+      pure elemental function lower(str) result (string)
+      ! Changes a string to lowercase
+      character(*), intent(In)     :: str
+      character(len(str))          :: string
+      integer                      :: i
+         string = str
+         ! step thru each letter in the string in specified range
+         do i = 1, len(str)
+            select case (str(i:i))
+            case (&#146;A&#146;:&#146;Z&#146;) ! change letter to miniscule
+               string(i:i) = char(iachar(str(i:i))+32)
+            case default
+            end select
+         end do
+      end function lower
+      !
+      end program demo_iachar
 <P>
 </PRE>
-</BLOCKQUOTE>
-<A name=6>
-
-     <H3>NOTE</H3>
-
-</A>
-<BLOCKQUOTE>
-See [[ichar]] for a discussion of converting between numerical
-values and formatted string representations.
+Results:
+<P>
+<PRE>
+         65
+         65          90          97         122
+         abcdefg abcdefg
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -151,41 +214,42 @@ values and formatted string representations.
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later, with KIND argument [[Fortran 2003]] and later
+Fortran 95 , with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
-</BLOCKQUOTE>
-<A name=9>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[achar]], [[char]], [[ichar]]
+<B>ACHAR</B>(3), <B>CHAR</B>(3), <B>ICHAR</B>(3)
 <P>
-Functions that perform operations on character strings, return lengths
-of arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
+See <B>ICHAR</B>(3) in particular for a discussion of converting between numerical
+values and formatted string representations.
+<P>
+Functions that perform operations on character strings, return lengths of
+arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>Elemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>adjustl</B>(3), <B>adjustr</B>(3), <B>index</B>(3), <B>len_trim</B>(3),
-<B>scan</B>(3), <B>verify</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3), <B>SCAN</B>(3), <B>VERIFY</B>(3)
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Nonelemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>repeat</B>(3), <B>trim</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022               iachar(3fortran)
+</PRE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iachar (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 07dd4729-4ec4-4622-91f2-5fd7a3f8f609 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iachar (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 57460a12-3ace-4fde-b776-6f5c1728dd16 using man macros.</FONT>
 <br><br><center><img src="images/iachar.3fortran.gif"></center>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,129 +41,242 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>minval (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>minval (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>minval</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>minval</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>minval</B>(3f) - [FORTRAN:INTRINSIC:ARRAY REDUCTION] Minimum value of an array
+<B>MINVAL</B>(3) - [ARRAY:REDUCTION] Minimum value of an array
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>minval</B>(array, dim [, mask])
-result = <B>minval</B>(array [, mask])
+result = <B>minval</B>(<I>array</I>, [mask])
+<P>
+<PRE>
+           NUMERIC function minval(array ,mask)
+<P>
+            NUMERIC,intent(in) :: array(..)
+            logical(kind=**),intent(in),optional :: mask(..)
+<P>
+</PRE>
+or
+<P>
+<PRE>
+          result = minval(array [,dim] [,mask])
+<P>
+           NUMERIC function minval(array, dim, mask)
+<P>
+            NUMERIC,intent(in) :: array(..)
+            integer(kind=**),intent(in),optional :: dim
+            logical(kind=**),intent(in),optional :: mask(..)
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NUMERIC is any numeric type and kind.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Determines the minimum value of the elements in an array value, or, if
-the DIM argument is supplied, determines the minimum value along
-each row of the array in the DIM direction. If MASK is
-present, only the elements for which MASK is .true. are
-considered. If the array has zero size, or all of the elements of
-MASK are .false., then the result is <B>huge</B>(array) if
-ARRAY is numeric, or a string of <B>char</B>(255) characters if
-ARRAY is of character type.
+<B>MINVAL</B>(3) determines the minimum value of the elements in an <I>array</I> value,
+or, if the DIM argument is supplied, determines the minimum value along each
+row of the <I>array</I> in the DIM direction.
+<P>
+If MASK is present, only the elements for which MASK is .true. are
+considered.
+<P>
+If the <I>array</I> has zero size, or all of the elements of MASK are .false., then
+the result is <B>HUGE</B>(ARRAY) if ARRAY is numeric, or a string of <B>CHAR</B>(LEN=255)
+characters if ARRAY is of character type.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>ARRAY</B> </TD><TD valign=bottom>
-Shall be an array of type INTEGER,
-REAL, or CHARACTER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY : Shall be an <I>array</I> of type integer, real, or character.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DIM</B> </TD><TD valign=bottom>
-(Optional) Shall be a scalar of type
-INTEGER, with a value between one and the rank of ARRAY,
-inclusive. It may not be an optional dummy argument.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : (Optional) Shall be a scalar of type integer, with a value between
+one and the rank of ARRAY, inclusive. It may not be an optional dummy
+argument.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>MASK</B> </TD><TD valign=bottom>
-Shall be an array of type LOGICAL,
-and conformable with ARRAY.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK : Shall be an <I>array</I> of type logical, and conformable with ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-If DIM is absent, or if ARRAY has a rank of one, the result
-is a scalar. If DIM is present, the result is an array with a
-rank one less than the rank of ARRAY, and a size corresponding to
-the size of ARRAY with the DIM dimension removed. In all
-cases, the result is of the same type and kind as ARRAY.
+If DIM is absent, or if ARRAY has a rank of one, the result is a scalar.
+<P>
+If DIM is present, the result is an <I>array</I> with a rank one less than the rank
+of ARRAY, and a size corresponding to the size of ARRAY with the DIM
+dimension removed. In all cases, the result is of the same type and kind as
+ARRAY.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 sample program:
 <P>
 <PRE>
-    program demo_minval
-    implicit none
-    integer,save :: ints(3,5)= reshape([&
-       1,  2,  3,  4,  5, &
-      10, 20, 30, 40, 50, &
-      11, 22, 33, 44, 55  &
-    ],shape(ints),order=[2,1])
-    write(*,*) minval(ints)
-    write(*,*) minval(ints,dim=1)
-    write(*,*) minval(ints,dim=2)
-    end program demo_minval
+      program demo_minval
+      implicit none
+      integer :: i
+      character(len=*),parameter :: g=&#146;(3x,*(g0,1x))&#146;
+<P>
+      integer,save :: ints(3,5)= reshape([&
+             1,  -2,   3,   4,   5,  &
+            10,  20, -30,  40,  50,  &
+            11,  22,  33, -44,  55  &
+      ],shape(ints),order=[2,1])
+<P>
+      integer,save :: box(3,5,2)
+<P>
+         box(:,:,1)=ints
+         box(:,:,2)=-ints
+<P>
+         write(*,*)&#146;Given the array&#146;
+         write(*,&#146;(1x,*(g4.4,1x))&#146;) &
+         & (ints(i,:),new_line(&#146;a&#146;),i=1,size(ints,dim=1))
+<P>
+         write(*,*)&#146;What is the smallest element in the array?&#146;
+         write(*,g) minval(ints),&#146;at &lt;&#146;,minloc(ints),&#146;&gt;&#146;
+<P>
+         write(*,*)&#146;What is the smallest element in each column?&#146;
+         write(*,g) minval(ints,dim=1)
+<P>
+         write(*,*)&#146;What is the smallest element in each row?&#146;
+         write(*,g) minval(ints,dim=2)
+<P>
+         ! notice the shape of the output has less columns
+         ! than the input in this case
+         write(*,*)&#146;What is the smallest element in each column,&#146;
+         write(*,*)&#146;considering only those elements that are&#146;
+         write(*,*)&#146;greater than zero?&#146;
+         write(*,g) minval(ints, dim=1, mask = ints &gt; 0)
+<P>
+         write(*,*)&
+         & &#146;if everything is false a zero-sized array is NOT returned&#146;
+         write(*,*) minval(ints, dim=1, mask = .false.)
+         write(*,*)&#146;even for a zero-sized input&#146;
+         write(*,g) minval([integer ::], dim=1, mask = .false.)
+<P>
+         write(*,*)&#146;a scalar answer for everything false is huge()&#146;
+         write(*,g) minval(ints, mask = .false.)
+         write(*,g) minval([integer ::], mask = .false.)
+<P>
+         write(*,*)&#146;some calls with three dimensions&#146;
+         write(*,g) minval(box, mask = .true. )
+         write(*,g) minval(box, dim=1, mask = .true. )
+<P>
+         write(*,g) minval(box, dim=2, mask = .true. )
+         write(*,g) &#146;shape of answer is &#146;, &
+         & shape(minval(box, dim=2, mask = .true. ))
+<P>
+      end program demo_minval
 <P>
 </PRE>
-results:
+Results:
 <P>
 <PRE>
-    &gt; 1
-    &gt; 1    2     3     4     5
-    &gt; 1   10    11
+       Given the array
+          1   -2    3    4    5
+         10   20  -30   40   50
+         11   22   33  -44   55
+<P>
+       What is the smallest element in the array?
+         -44 at &lt; 3 4 &gt;
+       What is the smallest element in each column?
+         1 -2 -30 -44 5
+       What is the smallest element in each row?
+         -2 -30 -44
+       What is the smallest element in each column,
+       considering only those elements that are
+       greater than zero?
+         1 20 3 4 5
+       if everything is false a zero-sized array is NOT returned
+        2147483647  2147483647  2147483647  2147483647  2147483647
+       even for a zero-sized input
+         2147483647
+       a scalar answer for everything false is huge()
+         2147483647
+         2147483647
+       some calls with three dimensions
+         -55
+         1 -2 -30 -44 5 -11 -22 -33 -40 -55
+         -2 -30 -44 -5 -50 -55
+         shape of answer is  3 2
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Transformational function
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -171,10 +284,16 @@ Transformational function
 
 </A>
 <BLOCKQUOTE>
-<B>min</B>(3), <B>minloc</B>(3)
+<B>MIN</B>(3), <B>MINLOC</B>(3) <B>MAXLOC</B>(3), <B>MAXVAL</B>(3), <B>MIN</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022               minval(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>minval (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a986c14a-91aa-4528-87f0-bc2822c392d3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>minval (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8120e3bb-4af0-4bf2-bee4-ef4c76d5cf15 using man macros.</FONT>
 <br><br><center><img src="images/minval.3fortran.gif"></center>
 </div>
 </div>

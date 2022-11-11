@@ -15,7 +15,7 @@
          ! get the RGB values and English name of the color
          call color_name2rgb(name,red,green,blue,echoname)
          ! the last color name is "Unknown" so the loop should exit
-         if(echoname.eq.'Unknown')exit TRYALL
+         if(echoname == 'Unknown')exit TRYALL
          ! display the English name and RGB values for the name
          write(*,*)echoname,int([red,green,blue])
       enddo TRYALL

@@ -10,7 +10,7 @@
      INFINITE: do
         write(*,'("Enter number in start base (0 to quit): ")',advance='no')
         read *, x
-        if(x.eq.'0') exit INFINITE
+        if(x == '0') exit INFINITE
         if(base(x,bd,y,ba))then
              write(*,'("In base ",I2,": ",A20)')  ba, y
          else

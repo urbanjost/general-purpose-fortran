@@ -41,7 +41,7 @@
           istart = p + 1
           call split2020 (string, set, p)
           iend=p-1
-          if(iend.gt.istart)then
+          if(iend > istart)then
              print '(t3,a,1x,i0,1x,i0)', string (istart:iend),istart,iend
           endif
         enddo

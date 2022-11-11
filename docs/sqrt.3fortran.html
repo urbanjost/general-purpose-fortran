@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,99 +41,193 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sqrt (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sqrt (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>sqrt</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>sqrt</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>sqrt</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS] Square-root function
+<B>SQRT</B>(3) - [MATHEMATICS] Square-root function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>sqrt</B>(x)
+result = <B>sqrt</B>(<I>x</I>)
+<P>
+<PRE>
+           elemental TYPE(kind=KIND) function sqrt(x)
+<P>
+            TYPE(kind=KIND),intent(in) :: x
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TYPE may be real or complex.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND may be any kind valid for the declared type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result has the same characteristics as X.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>sqrt</B>(x) computes the square root of X.
+<B>SQRT</B>(3) computes the principal square root of X.
+<P>
+The number whose square root is being considered is known as the radicand.
+<P>
+In mathematics, a square root of a radicand X is a number Y such that Y*Y =
+X.
+<P>
+Every nonnegative radicand <I>x</I> has two square roots of the same unique
+magnitude, one positive and one negative. The nonnegative square root is
+called the principal square root.
+<P>
+The principal square root of 9 is 3, for example, even though (<B>-3</B>)*(-3) is
+also 9.
+<P>
+Square roots of negative numbers are a special case of complex numbers,
+where with COMPLEX input the components of the radicand need not be positive
+in order to have a valid square root.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type shall be REAL or COMPLEX.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : If X is real its value must be greater than or equal to zero.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type REAL or COMPLEX. The kind type
-parameter is the same as X.
+The square root of X is returned.
+<P>
+A complex is the principal value with the real part greater than or equal to
+zero. When the real part of the result is zero, the imaginary part has the
+same sign as the imaginary part of X.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_sqrt
-    use, intrinsic :: iso_fortran_env, only : real_kinds, &
-    & real32, real64, real128
-    implicit none
-      real(kind=real64) :: x = 2.0_real64
-      complex :: z = (1.0, 2.0)
-      x = sqrt(x)
-      z = sqrt(z)
-    end program demo_sqrt
+      program demo_sqrt
+      use, intrinsic :: iso_fortran_env, only : real_kinds, &
+       & real32, real64, real128
+      implicit none
+      real(kind=real64) :: x, x2
+      complex :: z, z2
+<P>
+        ! basics
+         x = 2.0_real64
+         ! complex
+         z = (1.0, 2.0)
+         write(*,*)&#146;input values &#146;,x,z
+<P>
+         x2 = sqrt(x)
+         z2 = sqrt(z)
+         write(*,*)&#146;output values &#146;,x2,z2
+<P>
+        ! elemental
+        write(*,*)&#146;elemental&#146;,sqrt([64.0,121.0,30.0])
+<P>
+        ! alternatives
+         x2 = x**0.5
+         z2 = z**0.5
+         write(*,*)&#146;alternatively&#146;,x2,z2
+<P>
+      end program demo_sqrt
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+          input values    2.00000000000000      (1.000000,2.000000)
+          output values    1.41421356237310      (1.272020,0.7861513)
+          elemental   8.000000       11.00000       5.477226
+          alternatively   1.41421356237310      (1.272020,0.7861513)
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
+FORTRAN 77
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-Elemental function
+<B>EXP</B>(3), <B>LOG</B>(3), <B>LOG10</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 sqrt(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sqrt (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d178f56b-bca3-44b5-b299-89eee9b4cde4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sqrt (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2a82ea32-7dd7-461d-b9cf-4d2b8e0ee7d8 using man macros.</FONT>
 <br><br><center><img src="images/sqrt.3fortran.gif"></center>
 </div>
 </div>

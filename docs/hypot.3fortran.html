@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,103 +41,195 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>hypot (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>hypot (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>hypot</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>hypot</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>hypot</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS] Euclidean distance function
+<B>HYPOT</B>(3) - [MATHEMATICS] Returns the distance between the point and the
+origin.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>hypot</B>(x, y)
+result = <B>hypot</B>(<I>x</I>, <I>y</I>)
+<P>
+<PRE>
+           elemental real(kind=KIND) function hypot(x,y)
+<P>
+            real(kind=KIND),intent(in) :: x
+            real(kind=KIND),intent(in) :: y
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X,Y and the result shall all be of the same KIND.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>hypot</B>(x,y) is the Euclidean distance function. It is equal to
+<B>HYPOT</B>(3) is referred to as the Euclidean distance function. It is equal to
 <P>
 <PRE>
-      sqrt{X**2 + Y**2}, without undue underflow or overflow.
+      sqrt(x**2+y**2)
 <P>
 </PRE>
+without undue underflow or overflow.
+<P>
+In mathematics, the Euclidean distance between two points in Euclidean space
+is the length of a line segment between two points.
+<P>
+<B>HYPOT</B>(X,Y) returns the distance between the point &lt;X,Y&gt; and the origin.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type shall be REAL.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The type shall be real.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>Y</B> </TD><TD valign=bottom>
-The type and kind type parameter shall be the same as X.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Y : The type and kind type parameter shall be the same as X.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
 The return value has the same type and kind type parameter as X.
+<P>
+The result is the positive magnitude of the distance of the point &lt;X,Y&gt; from
+the origin &lt;0.0,0.0&gt; .
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_hypot
-    implicit none
-      real(4) :: x = 1.e0_4, y = 0.5e0_4
-      x = hypot(x,y)
-    end program demo_hypot
+      program demo_hypot
+      use, intrinsic :: iso_fortran_env, only : &
+       & real_kinds, real32, real64, real128
+      implicit none
+      real(kind=real32) :: x, y
+      real(kind=real32),allocatable :: xs(:), ys(:)
+      integer :: i
+      character(len=*),parameter :: f=&#146;(a,/,SP,*(3x,g0,1x,g0:,/))&#146;
+<P>
+         x = 1.e0_real32
+         y = 0.5e0_real32
+<P>
+         write(*,*)
+         write(*,&#146;(*(g0))&#146;)&#146;point &lt;&#146;,x,&#146;,&#146;,y,&#146;&gt; is &#146;,hypot(x,y)
+         write(*,&#146;(*(g0))&#146;)&#146;units away from the origin&#146;
+         write(*,*)
+<P>
+         ! elemental
+         xs=[  x,  x**2,  x*10.0,  x*15.0, -x**2  ]
+         ys=[  y,  y**2, -y*20.0,  y**2,   -y**2  ]
+<P>
+         write(*,f)"the points",(xs(i),ys(i),i=1,size(xs))
+         write(*,f)"have distances from the origin of ",hypot(xs,ys)
+         write(*,f)"the closest is",minval(hypot(xs,ys))
+<P>
+      end program demo_hypot
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+         point &lt;1.00000000,0.500000000&gt; is 1.11803401
+         units away from the origin
+<P>
+         the points
+            +1.00000000 +0.500000000
+            +1.00000000 +0.250000000
+            +10.0000000 -10.0000000
+            +15.0000000 +0.250000000
+            -1.00000000 -0.250000000
+         have distances from the origin of
+            +1.11803401 +1.03077638
+            +14.1421356 +15.0020828
+            +1.03077638
+         the closest is
+            +1.03077638
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2008]] and later
+Fortran 2008
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+****(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                hypot(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hypot (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 23e1250f-4fe5-44f2-b7c5-8e2fd87f67d4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hypot (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 313680ee-6abb-4610-8d28-692724e5be82 using man macros.</FONT>
 <br><br><center><img src="images/hypot.3fortran.gif"></center>
 </div>
 </div>

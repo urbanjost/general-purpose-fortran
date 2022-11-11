@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,126 +41,176 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>this_image (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>this_image (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>this_image</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>this_image</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>this_image</B>(3f) - [FORTRAN:INTRINSIC:COLLECTIVE] Cosubscript index of
-this image
+<B>THIS_IMAGE</B>(3) - [COLLECTIVE] Cosubscript index of this image
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
 result = <B>this_image</B>()
-result = <B>this_image</B>(distance)
-result = <B>this_image</B>(coarray [, dim])
+<P>
+or
+<P>
+<PRE>
+       result = this_image(distance)
+<P>
+</PRE>
+or
+<P>
+<PRE>
+        result = this_image(coarray, dim)
+<P>
+         integer function this_image( distance ,coarray, dim )
+<P>
+          type(TYPE(kind=**),optional :: coarray[*]
+          integer,intent(in),optional :: distance
+          integer,intent(in),optional :: dim
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DISTANCE (not permitted together with COARRAY).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COARRAY can be of any type. If DIM is present it is required.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if DIM if present, coarray is required.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Returns the cosubscript for this image.
+<B>THIS_IMAGE</B>(3) returns the cosubscript for this image.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>DISTANCE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-(optional, <B>intent</B>(in)) Nonnegative scalar integer
-(not permitted together with COARRAY).
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DISTANCE : Nonnegative scalar integer (not permitted together with
+COARRAY).
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>COARRAY</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Coarray of any type (optional; if DIM present,
-required).
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COARRAY : if DIM present, required).
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DIM</B> </TD><TD valign=bottom>
-default integer scalar (optional). If present, DIM shall
-be between one and the corank of COARRAY.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : If present, DIM shall be between one and the corank of COARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-Default integer. If COARRAY is not present, it is scalar; if DISTANCE
-is not present or has value 0, its value is the image index on the
-invoking image for the current team, for values smaller or equal
-distance to the initial team, it returns the image index on the
-ancestor team which has a distance of DISTANCE from the invoking
-team. If DISTANCE is larger than the distance to the initial team,
-the image index of the initial team is returned. Otherwise when
-the COARRAY is present, if DIM is not present, a rank-1 array with
-corank elements is returned, containing the cosubscripts for COARRAY
-specifying the invoking image. If DIM is present, a scalar is returned,
-with the value of the DIM element of <B>this_image</B>(coarray).
+Default integer. If COARRAY is not present, it is scalar; if DISTANCE is not
+present or has value 0, its value is the image index on the invoking image
+for the current team, for values smaller or equal distance to the initial
+team, it returns the image index on the ancestor team which has a distance
+of DISTANCE from the invoking team. If DISTANCE is larger than the distance
+to the initial team, the image index of the initial team is returned.
+Otherwise when the COARRAY is present, if DIM is not present, a rank-1 array
+with corank elements is returned, containing the cosubscripts for COARRAY
+specifying the invoking image. If DIM is present, a scalar is returned, with
+the value of the DIM element of <B>THIS_IMAGE</B>(COARRAY).
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_this_image
-   implicit none
-   integer :: value[*]
-   integer :: i
-      value = this_image()
-      sync all
-      if (this_image() == 1) then
-        do i = 1, num_images()
-          write(*,&#146;(2(a,i0))&#146;) &#146;value[&#146;, i, &#146;] is &#146;, value[i]
-        end do
-      endif
-   end program demo_this_image
-   !
-   ! Check whether the current image is the initial image
-   if (this_image(huge(1)) /= this_image())
-   error stop "something is rotten here"
+      program demo_this_image
+      implicit none
+      integer :: value[*]
+      integer :: i
+         value = this_image()
+         sync all
+         if (this_image() == 1) then
+            do i = 1, num_images()
+               write(*,&#146;(2(a,i0))&#146;) &#146;value[&#146;, i, &#146;] is &#146;, value[i]
+            end do
+         endif
+      end program demo_this_image
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+         value[1] is 1
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2008]] and later. With DISTANCE argument, [[TS 18508]] or later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Transformational function
+Fortran 2008. With DISTANCE argument, TS 18508
 </BLOCKQUOTE>
 <A name=8>
 
@@ -168,10 +218,16 @@ Transformational function
 
 </A>
 <BLOCKQUOTE>
-<B>num_images</B>(3), <B>image_index</B>(3)
+<B>NUM_IMAGES</B>(3), <B>IMAGE_INDEX</B>(3)
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022           this_image(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>this_image (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d7b1dbe2-df0c-4b15-b656-0eac5570a6a4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>this_image (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 676c1502-ad2f-49ad-bc73-e855c2746aa8 using man macros.</FONT>
 <br><br><center><img src="images/this_image.3fortran.gif"></center>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,110 +41,202 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>mod (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>mod (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>mod</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>mod</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>mod</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC] Remainder function
+<B>MOD</B>(3) - [NUMERIC] Remainder function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>mod</B>(a, p)
+result = <B>mod</B>(<I>a</I>, <I>p</I>)
+<P>
+<PRE>
+           elemental type(TYPE(kind=KIND)) function mod(a,p)
+<P>
+            type(TYPE(kind=KIND),intent(in) :: a
+            type(TYPE(kind=KIND),intent(in) :: p
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The result and arguments are all of the same type and kind.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The type may be any kind of real or integer.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>mod</B>(a,p) computes the remainder of the division of A by P.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>A</B> </TD><TD valign=bottom>
-Shall be a scalar of type INTEGER or REAL.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>P</B> </TD><TD valign=bottom>
-Shall be a scalar of the same type and kind as A and not equal to zero.
+<B>MOD</B>(3) computes the remainder of the division of A by P.
+<P>
+In mathematics, the remainder is the amount "left over" after performing
+some computation. In arithmetic, the remainder is the integer "left over"
+after dividing one integer by another to produce an integer quotient
+(integer division). In algebra of polynomials, the remainder is the
+polynomial "left over" after dividing one polynomial by another. The modulo
+operation is the operation that produces such <I>a</I> remainder when given <I>a</I>
+dividend and divisor.
+<TABLE cellpadding=3><!-- tsb: In mathematics, the remainder is the amount "left over" after performing
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+(remainder). (2022, October 10). In Wikipedia.
+https://en.wikipedia.org/wiki/Remainder
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>RETURN VALUE</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is the result of a - (int(a/p) * p). The type
-and kind of the return value is the same as that of the arguments. The
-returned value has the same sign as A and a magnitude less than the
-magnitude of P.
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A : The dividend
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+P : the divisor (not equal to zero).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+The return value is the result of A - (INT(A/P) * P).
+<P>
+As can be seen by the formula the sign of P is canceled out. Therefore the
+returned value always has the sign of A.
+<P>
+Of course, the magnitude of the result will be less than the magnitude of P,
+as the result has been reduced by all multiples of P.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_mod
-   implicit none
-     print *, mod(17,3)           ! yields 2
-     print *, mod(17.5,5.5)       ! yields 1.0
-     print *, mod(17.5d0,5.5d0)   ! yields 1.0d0
-     print *, mod(17.5d0,5.5d0)   ! yields 1.0d0
+      program demo_mod
+      implicit none
 <P>
-     print *, mod(-17,3)          ! yields -2
-     print *, mod(-17.5,5.5)      ! yields -1.0
-     print *, mod(-17.5d0,5.5d0)  ! yields -1.0d0
-     print *, mod(-17.5d0,5.5d0)  ! yields -1.0d0
+         ! basics
+          print *, mod( -17,  3 ), modulo( -17,  3 )
+          print *, mod(  17, -3 ), modulo(  17, -3 )
+          print *, mod(  17,  3 ), modulo(  17,  3 )
+          print *, mod( -17, -3 ), modulo( -17, -3 )
 <P>
-     print *, mod(17,-3)          ! yields 2
-     print *, mod(17.5,-5.5)      ! yields 1.0
-     print *, mod(17.5d0,-5.5d0)  ! yields 1.0d0
-     print *, mod(17.5d0,-5.5d0)  ! yields 1.0d0
-   end program demo_mod
+          print *, mod(-17.5, 5.2), modulo(-17.5, 5.2)
+          print *, mod( 17.5,-5.2), modulo( 17.5,-5.2)
+          print *, mod( 17.5, 5.2), modulo( 17.5, 5.2)
+          print *, mod(-17.5,-5.2), modulo(-17.5,-5.2)
+<P>
+        ! with a divisor of 1 the fractional part is returned
+          print *, mod(-17.5, 1.0), modulo(-17.5, 1.0)
+          print *, mod( 17.5,-1.0), modulo( 17.5,-1.0)
+          print *, mod( 17.5, 1.0), modulo( 17.5, 1.0)
+          print *, mod(-17.5,-1.0), modulo(-17.5,-1.0)
+<P>
+      end program demo_mod
 <P>
 </PRE>
+Results:
+<P>
+<PRE>
+                   -2           1
+                    2          -1
+                    2           2
+                   -2          -2
+<P>
+</PRE>
+<B>-1.900001</B>
+3.299999
+<BLOCKQUOTE>
+<P>
+1.900001
+<B>-3.299999</B>
+<P>
+1.900001
+1.900001
 </BLOCKQUOTE>
-<A name=6>
+<P>
+<B>-1.900001</B>
+<B>-1.900001</B>
+<P>
+<B>-0.5000000</B>
+0.5000000
+<BLOCKQUOTE>
+<P>
+0.5000000
+<B>-0.5000000</B>
+<P>
+0.5000000
+0.5000000
+</BLOCKQUOTE>
+<P>
+<B>-0.5000000</B>
+<B>-0.5000000</B>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
 
@@ -152,10 +244,40 @@ Sample program:
 
 </A>
 <BLOCKQUOTE>
-<B>modulo</B>(3)
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>MODULO</B>(3) - Modulo function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>AINT</B>(3) - truncate toward zero to <I>a</I> whole real number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>INT</B>(3) - truncate toward zero to <I>a</I> whole integer number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>ANINT</B>(3) - real nearest whole number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>NINT</B>(3) - integer nearest whole number
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  mod(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>mod (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 44e0d498-b4df-44f4-a347-85b8711c8427 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>mod (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b2510dbc-4a12-452a-8272-3535c83c0c85 using man macros.</FONT>
 <br><br><center><img src="images/mod.3fortran.gif"></center>
 </div>
 </div>

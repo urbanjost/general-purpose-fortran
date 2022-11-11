@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,101 +41,230 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>mvbits (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>mvbits (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>mvbits</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>mvbits</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>mvbits</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] Move bits from one
-integer to another
+<B>MVBITS</B>(3) - [BIT:COPY] Reproduce bit patterns found in one integer in
+another
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-call <B>mvbits</B>(from, frompos, len, to, topos)
+call <B>mvbits</B>(<I>from</I>, <I>frompos</I>, <I>len</I>, <I>to</I>, <I>topos</I>)
+<P>
+<PRE>
+          elemental subroutine mvbits(from,frompos,len,to,topos)
+<P>
+           integer(kind=KIND),intent(in)    :: from
+           integer(kind=KIND),intent(in)    :: frompos
+           integer(kind=KIND),intent(in)    :: len
+           integer(kind=KIND),intent(inout) :: to
+           integer(kind=KIND),intent(in)    :: topos
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Moves LEN bits from positions FROMPOS through
-frompos+len-1 of FROM to positions TOPOS through
-topos+len-1 of TO. The portion of argument TO not
-affected by the movement of bits is unchanged. The values of
-frompos+len-1 and topos+len-1 must be less than
-<B>bit_size</B>(from).
+<B>MVBITS</B>(3) copies a bit pattern found in a range of adjacent bits in the
+integer FROM <I>to</I> a specified position in another integer TO (which is of the
+same kind as FROM). It otherwise leaves the bits in TO as-is.
+<P>
+The bit positions copied must exist within the value of FROM. That is, the
+values of FROMPOS+LEN-1 and TOPOS+LEN-1 must be nonnegative and less than
+<B>BIT_SIZE</B>(<I>from</I>).
+<P>
+The bits are numbered 0 <I>to</I> <B>BIT_SIZE</B>(I)<B>-1</B>, <I>from</I> right <I>to</I> left.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>FROM</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FROM : An integer <I>to</I> read bits <I>from</I>.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>FROMPOS</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FROMPOS : FROMPOS is the position of the first bit <I>to</I> copy. It is a
+nonnegative integer value &lt; <B>BIT_SIZE</B>(FROM).
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>LEN</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LEN : A nonnegative integer value that indicates how many bits <I>to</I> copy
+<I>from</I> FROM. It must not specify copying bits past the end of FROM. That
+is, FROMPOS + LEN must be less than or equal <I>to</I> <B>BIT_SIZE</B>(FROM).
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>TO</B> </TD><TD valign=bottom>
-The type shall be INTEGER, of the
-same kind as FROM.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TO : The integer variable <I>to</I> place the copied bits into. It must be of
+the same kind as FROM and may even be the same variable as FROM.
+<P>
+TO is set by copying the sequence of bits of length LEN, starting at
+position FROMPOS of FROM <I>to</I> position TOPOS of TO. No other bits of TO are
+altered. On return, the LEN bits of TO starting at TOPOS are equal <I>to</I> the
+value that the LEN bits of FROM starting at FROMPOS had on entry.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>TOPOS</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TOPOS : A nonnegative integer value indicating the starting location in
+TO <I>to</I> place the specified copy of bits <I>from</I> FROM. TOPOS + LEN must be
+less than or equal <I>to</I> <B>BIT_SIZE</B>(TO).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program that populates a new 32-bit integer with its bytes in reverse
+order (ie. changes the Endian of the integer).
+<P>
+<PRE>
+      program demo_mvbits
+      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
+      implicit none
+      integer(kind=int32) :: intfrom, intto, abcd_int
+      character(len=*),parameter :: bits= &#146;(g0,t30,b32.32)&#146;
+      character(len=*),parameter :: fmt= &#146;(g0,t30,a,t40,b32.32)&#146;
+<P>
+          intfrom=huge(0)  ! all bits are 1 accept the sign bit
+          intto=0          ! all bits are 0
+<P>
+          !! CHANGE BIT 0
+          ! show the value and bit pattern
+          write(*,bits)intfrom,intfrom
+          write(*,bits)intto,intto
+<P>
+          ! copy bit 0 from intfrom to intto to show the rightmost bit changes
+          !          (from,    frompos, len,    to, topos)
+          call mvbits(intfrom,       0,   1, intto,     0) ! change bit 0
+          write(*,bits)intto,intto
+<P>
+          !! COPY PART OF A VALUE TO ITSELF
+          ! can copy bit from a value to itself
+          call mvbits(intfrom,0,1,intfrom,31)
+          write(*,bits)intfrom,intfrom
+<P>
+          !! MOVING BYTES AT A TIME
+          ! make native integer value with bit patterns
+          ! that happen to be the same as the beginning of the alphabet
+          ! to make it easy to see the bytes are reversed
+          abcd_int=transfer(&#146;abcd&#146;,0)
+          ! show the value and bit pattern
+          write(*,*)&#146;native&#146;
+          write(*,fmt)abcd_int,abcd_int,abcd_int
+<P>
+          ! change endian of the value
+          abcd_int=int_swap32(abcd_int)
+          ! show the values and their bit pattern
+          write(*,*)&#146;non-native&#146;
+          write(*,fmt)abcd_int,abcd_int,abcd_int
+<P>
+       contains
+<P>
+       pure elemental function int_swap32(intin) result(intout)
+       ! Convert a 32 bit integer from big Endian to little Endian,
+       ! or conversely from little Endian to big Endian.
+       !
+       integer(kind=int32), intent(in)  :: intin
+       integer(kind=int32) :: intout
+          ! copy bytes from input value to new position in output value
+          !          (from,  frompos, len,     to, topos)
+          call mvbits(intin,       0,   8, intout,    24) ! byte1 to byte4
+          call mvbits(intin,       8,   8, intout,    16) ! byte2 to byte3
+          call mvbits(intin,      16,   8, intout,     8) ! byte3 to byte2
+          call mvbits(intin,      24,   8, intout,     0) ! byte4 to byte1
+       end function int_swap32
+<P>
+       end program demo_mvbits
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+         2147483647                   01111111111111111111111111111111
+         0                            00000000000000000000000000000000
+         1                            00000000000000000000000000000001
+         -1                           11111111111111111111111111111111
+          native
+         1684234849                   abcd      01100100011000110110001001100001
+          non-native
+         1633837924                   dcba      01100001011000100110001101100100
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
+Fortran 95
 </BLOCKQUOTE>
-<A name=5>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental subroutine]]
-</BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ibclr</B>(3), <B>ibset</B>(3), <B>ibits</B>(3),
-<B>iand</B>(3), <B>ior</B>(3)
+<B>IEOR</B>(3), <B>IBCLR</B>(3), <B>NOT</B>(3), <B>BTEST</B>(3), <B>IBCLR</B>(3), <B>IBITS</B>(3), <B>IBSET</B>(3), <B>IAND</B>(3),
+<B>IOR</B>(3), <B>IEOR</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022               mvbits(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>mvbits (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 570be276-0523-4776-9295-73e0f37815b8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>mvbits (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b73ac21a-a5db-42b2-8fa6-1d30c294da2a using man macros.</FONT>
 <br><br><center><img src="images/mvbits.3fortran.gif"></center>
 </div>
 </div>

@@ -43,15 +43,15 @@
       !  * change database status for specified entry to -1 and stop program, else continue
       !  * produce a SUCCESS: or FAIL: message and keep going
       !  * produce a FAIL: message if test fails but no SUCCESS: message if test passes
-      call unit_check('one',i.gt.0,msg='I > 0')
+      call unit_check('one',i > 0,msg='I > 0')
 
       ! using ANY(3f) and ALL(3f)
-      call unit_check('one',all([i,j,k].gt.0),      'testing if everyone greater than zero')
+      call unit_check('one',all([i,j,k] > 0),      'testing if everyone greater than zero')
       ! display message built of scalars as well
-      call unit_check('one',all(.not.[i,j,k].eq.4),'for set ',i,j,k,'testing if no one is equal to four')
+      call unit_check('one',all(.not.[i,j,k] == 4),'for set ',i,j,k,'testing if no one is equal to four')
 
       ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
-      if(i+j+k.lt.1)then
+      if(i+j+k < 1)then
          call unit_check_bad('one')
       endif
 
@@ -61,17 +61,17 @@
       subroutine test_two
       ! use of all(3f), any(3f), merge(3f) can be useful
       ! if you know what these would produce
-      ! write(*,*)['A','X','X','X','X','B'].eq.'B'      ! this would return an array, the last element having the value T, else F
-      ! write(*,*)all(['A','X','X','X','X','X'].eq.'X') ! this would return F
-      ! write(*,*)any(['A','X','X','X','X','X'].eq.'B') ! this would return F
-      ! write(*,*)any(['A','X','X','X','X','B'].eq.'B') ! this would return T
-      ! write(*,*).not.all(array.lt.100)
-      ! write(*,*)all(array.lt.100)
-      ! write(*,*)all([a,b,c,d].eq.[21,51,14,45]) ! compare a list. This would return T
-      ! write(*,*)all(arr.eq.[21,51,14,45])       ! compare an array. This would return T
+      ! write(*,*)['A','X','X','X','X','B'] == 'B'      ! this would return an array, the last element having the value T, else F
+      ! write(*,*)all(['A','X','X','X','X','X'] == 'X') ! this would return F
+      ! write(*,*)any(['A','X','X','X','X','X'] == 'B') ! this would return F
+      ! write(*,*)any(['A','X','X','X','X','B'] == 'B') ! this would return T
+      ! write(*,*).not.all(array < 100)
+      ! write(*,*)all(array < 100)
+      ! write(*,*)all([a,b,c,d] == [21,51,14,45]) ! compare a list. This would return T
+      ! write(*,*)all(arr == [21,51,14,45])       ! compare an array. This would return T
       ! you know how valuable ANY(3f) and ALL(3f) will be
       call unit_check_start('two','check on "two" passed')
-      call unit_check('two', 1.gt.0 .and. abs(10.10000-10.10001).lt.0.0001,msg='two looks good')
+      call unit_check('two', 1 > 0 .and. abs(10.10000-10.10001) < 0.0001,msg='two looks good')
       call unit_check_done('two','checks on "two" ended')
       end subroutine test_two
 

@@ -157,22 +157,22 @@ integer             :: ierr
    call unit_check_start('date_to_julian',msg='Checking Julian Date') ! assume if got here passed checks
 
    call date_to_julian( [1970, 1, 1,0, 0,0,0,0] ,julian,ierr)
-   call unit_check('date_to_julian',abs(julian-2440587.5d0).lt.0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
+   call unit_check('date_to_julian',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
 
    call date_to_julian( [1995, 1, 1,0,12,0,0,0] ,julian,ierr)
-   call unit_check('date_to_julian',int(julian).eq.2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
+   call unit_check('date_to_julian',int(julian) == 2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
 
    call date_to_julian( [1995,10,19,0,12,0,0,0] ,julian,ierr)
-   call unit_check('date_to_julian',int(julian).eq.2450010, msg="Oct 19th, 1995 12:00(2450010)")
+   call unit_check('date_to_julian',int(julian) == 2450010, msg="Oct 19th, 1995 12:00(2450010)")
 
    call date_to_julian( [1995,12,31,0,12,0,0,0] ,julian,ierr)
-   call unit_check('date_to_julian',int(julian).eq.2450083, msg="Dec 31st, 1995 12:00(2450083)")
+   call unit_check('date_to_julian',int(julian) == 2450083, msg="Dec 31st, 1995 12:00(2450083)")
 
    call date_to_julian( [1996, 1, 1,0,12,0,0,0] ,julian,ierr)
-   call unit_check('date_to_julian',int(julian).eq.2450084, msg="Jan  1st, 1996 12:00(2450084)")
+   call unit_check('date_to_julian',int(julian) == 2450084, msg="Jan  1st, 1996 12:00(2450084)")
 
    call date_to_julian( [1996,12,31,0,12,0,0,0] ,julian,ierr)
-   call unit_check('date_to_julian',int(julian).eq.2450449, msg="Dec 31th, 1996 12:00(2450449)")
+   call unit_check('date_to_julian',int(julian) == 2450449, msg="Dec 31th, 1996 12:00(2450449)")
 
    call unit_check_done('date_to_julian')
 
@@ -191,17 +191,17 @@ character(len=:),allocatable :: expected
    juliandate=2457589.129d0                 ! set sample Julian Date
    call julian_to_date(juliandate,dat,ierr) ! create DAT array for this date
    expected='2016-07-19 11:05:45'
-   call unit_check('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second').eq.expected,&
+   call unit_check('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
           & juliandate,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
 
    call julian_to_date(juliandate-1.0d0,dat,ierr) ! go back one day
    expected='2016-07-18 11:05:45'
-   call unit_check('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second').eq.expected,&
+   call unit_check('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
           & juliandate,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
 
    call julian_to_date(juliandate+1.0d0,dat,ierr) ! go forward one day
    expected='2016-07-20 11:05:45'
-   call unit_check('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second').eq.expected,&
+   call unit_check('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
           & juliandate,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
 
    call unit_check_done('julian_to_date')
@@ -215,7 +215,7 @@ integer                          :: ierr
 call unit_check_start('date_to_unix')
 
 call date_to_unix([2017,03,29,-240,01,46,47,0],unixtime,ierr)
-call unit_check('d2u',abs(unixtime-1490766407).lt.0.001 ,d2u([2017,03,29,-240,01,46,47,0]) )
+call unit_check('d2u',abs(unixtime-1490766407) < 0.001 ,d2u([2017,03,29,-240,01,46,47,0]) )
 
 call unit_check_done('date_to_unix')
 
@@ -223,7 +223,7 @@ end subroutine test_date_to_unix
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unix_to_date
 call unit_check_start('unix_to_date')
-call unit_check('unix_to_date',all([2017,03,29,-240,01,46,47,0].eq.u2d(1490766407)),msg=d2u([2017,03,29,-240,01,46,47,0]) )
+call unit_check('unix_to_date',all([2017,03,29,-240,01,46,47,0] == u2d(1490766407)),msg=d2u([2017,03,29,-240,01,46,47,0]) )
 call unit_check_done('unix_to_date')
 end subroutine test_unix_to_date
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -249,7 +249,7 @@ character(len=40)            :: readme
        read(readme,*)iday,iyear,omonth,oday
        dat=o2d(iday,iyear)
        rday=d2o(dat)
-       call unit_check('d2o',iday.eq.rday,msg=tests(i))
+       call unit_check('d2o',iday == rday,msg=tests(i))
     enddo
 
    call unit_check_done('d2o')
@@ -263,7 +263,7 @@ integer  :: rday
 
    call unit_check_start('ordinal_seconds')
    rday=ordinal_seconds()/(60*60*24)
-   call unit_check('ordinal_seconds',rday.eq.d2o(),rday,d2o())
+   call unit_check('ordinal_seconds',rday == d2o(),rday,d2o())
    call unit_check_done('ordinal_seconds')
 
 end subroutine test_ordinal_seconds
@@ -289,7 +289,7 @@ character(len=40)            :: readme
       readme=tests(i)
       read(readme,*)iday,iyear,omonth,oday
       call ordinal_to_date(iyear,iday,dat)
-      call unit_check('ordinal_to_date',dat(2).eq.omonth.and.dat(3).eq.oday,'year',iyear,'ordinal',iday)
+      call unit_check('ordinal_to_date',dat(2) == omonth.and.dat(3) == oday,'year',iyear,'ordinal',iday)
    enddo
 
    call unit_check_done('ordinal_to_date')
@@ -317,7 +317,7 @@ character(len=40)            :: readme
       readme=tests(i)
       read(readme,*)iday,iyear,omonth,oday
       dat=o2d(iday,iyear)
-      call unit_check('o2d',dat(1).eq.iyear.and.dat(2).eq.omonth.and.dat(3).eq.oday,msg=tests(i))
+      call unit_check('o2d',dat(1) == iyear.and.dat(2) == omonth.and.dat(3) == oday,msg=tests(i))
    enddo
 
    call unit_check_done('o2d')
@@ -326,18 +326,18 @@ end subroutine test_o2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_v2mo
 call unit_check_start('v2mo')
-call unit_check('v2mo',v2mo(1).eq.'January',    msg='January')
-call unit_check('v2mo',v2mo(2).eq.'February',   msg='February')
-call unit_check('v2mo',v2mo(3).eq.'March',      msg='March')
-call unit_check('v2mo',v2mo(4).eq.'April',      msg='April')
-call unit_check('v2mo',v2mo(5).eq.'May',        msg='May')
-call unit_check('v2mo',v2mo(6).eq.'June',       msg='June')
-call unit_check('v2mo',v2mo(7).eq.'July',       msg='July')
-call unit_check('v2mo',v2mo(8).eq.'August',     msg='August')
-call unit_check('v2mo',v2mo(9).eq.'September',  msg='September')
-call unit_check('v2mo',v2mo(10).eq.'October',   msg='October')
-call unit_check('v2mo',v2mo(11).eq.'November',  msg='November')
-call unit_check('v2mo',v2mo(12).eq.'December',  msg='December')
+call unit_check('v2mo',v2mo(1) == 'January',    msg='January')
+call unit_check('v2mo',v2mo(2) == 'February',   msg='February')
+call unit_check('v2mo',v2mo(3) == 'March',      msg='March')
+call unit_check('v2mo',v2mo(4) == 'April',      msg='April')
+call unit_check('v2mo',v2mo(5) == 'May',        msg='May')
+call unit_check('v2mo',v2mo(6) == 'June',       msg='June')
+call unit_check('v2mo',v2mo(7) == 'July',       msg='July')
+call unit_check('v2mo',v2mo(8) == 'August',     msg='August')
+call unit_check('v2mo',v2mo(9) == 'September',  msg='September')
+call unit_check('v2mo',v2mo(10) == 'October',   msg='October')
+call unit_check('v2mo',v2mo(11) == 'November',  msg='November')
+call unit_check('v2mo',v2mo(12) == 'December',  msg='December')
 call unit_check_done('v2mo')
 end subroutine test_v2mo
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -345,18 +345,18 @@ subroutine test_mo2d
 integer :: dat(8)
 call unit_check_start('mo2d')
 call date_and_time(values=dat)
-call  unit_check('mo2d',all(mo2d('january',    2019).eq.[2019,01,01,dat(4),0,0,0,0]),msg='January    2019')
-call  unit_check('mo2d',all(mo2d('february',   2019).eq.[2019,02,01,dat(4),0,0,0,0]),msg='February   2019')
-call  unit_check('mo2d',all(mo2d('march',      2019).eq.[2019,03,01,dat(4),0,0,0,0]),msg='March      2019')
-call  unit_check('mo2d',all(mo2d('april',      2019).eq.[2019,04,01,dat(4),0,0,0,0]),msg='April      2019')
-call  unit_check('mo2d',all(mo2d('may',        2019).eq.[2019,05,01,dat(4),0,0,0,0]),msg='May        2019')
-call  unit_check('mo2d',all(mo2d('june',       2019).eq.[2019,06,01,dat(4),0,0,0,0]),msg='June       2019')
-call  unit_check('mo2d',all(mo2d('july',       2019).eq.[2019,07,01,dat(4),0,0,0,0]),msg='July       2019')
-call  unit_check('mo2d',all(mo2d('august',     2019).eq.[2019,08,01,dat(4),0,0,0,0]),msg='August     2019')
-call  unit_check('mo2d',all(mo2d('september',  2019).eq.[2019,09,01,dat(4),0,0,0,0]),msg='September  2019')
-call  unit_check('mo2d',all(mo2d('october',    2019).eq.[2019,10,01,dat(4),0,0,0,0]),msg='October    2019')
-call  unit_check('mo2d',all(mo2d('november',   2019).eq.[2019,11,01,dat(4),0,0,0,0]),msg='November   2019')
-call  unit_check('mo2d',all(mo2d('december',   2019).eq.[2019,12,01,dat(4),0,0,0,0]),msg='December   2019')
+call  unit_check('mo2d',all(mo2d('january',    2019) == [2019,01,01,dat(4),0,0,0,0]),msg='January    2019')
+call  unit_check('mo2d',all(mo2d('february',   2019) == [2019,02,01,dat(4),0,0,0,0]),msg='February   2019')
+call  unit_check('mo2d',all(mo2d('march',      2019) == [2019,03,01,dat(4),0,0,0,0]),msg='March      2019')
+call  unit_check('mo2d',all(mo2d('april',      2019) == [2019,04,01,dat(4),0,0,0,0]),msg='April      2019')
+call  unit_check('mo2d',all(mo2d('may',        2019) == [2019,05,01,dat(4),0,0,0,0]),msg='May        2019')
+call  unit_check('mo2d',all(mo2d('june',       2019) == [2019,06,01,dat(4),0,0,0,0]),msg='June       2019')
+call  unit_check('mo2d',all(mo2d('july',       2019) == [2019,07,01,dat(4),0,0,0,0]),msg='July       2019')
+call  unit_check('mo2d',all(mo2d('august',     2019) == [2019,08,01,dat(4),0,0,0,0]),msg='August     2019')
+call  unit_check('mo2d',all(mo2d('september',  2019) == [2019,09,01,dat(4),0,0,0,0]),msg='September  2019')
+call  unit_check('mo2d',all(mo2d('october',    2019) == [2019,10,01,dat(4),0,0,0,0]),msg='October    2019')
+call  unit_check('mo2d',all(mo2d('november',   2019) == [2019,11,01,dat(4),0,0,0,0]),msg='November   2019')
+call  unit_check('mo2d',all(mo2d('december',   2019) == [2019,12,01,dat(4),0,0,0,0]),msg='December   2019')
 call unit_check_done('mo2d')
 end subroutine test_mo2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -365,22 +365,22 @@ subroutine test_mo2v()
 
 call unit_check_start('mo2v')
 
-call unit_check('mo2v', mo2v('jan')       .eq.  1   ,msg='Check January')
-call unit_check('mo2v', mo2v('Feb')       .eq.  2   ,msg='Check February')
-call unit_check('mo2v', mo2v('March')     .eq.  3   ,msg='Check March')
-call unit_check('mo2v', mo2v('APR')       .eq.  4   ,msg='Check April')
-call unit_check('mo2v', mo2v('may')       .eq.  5   ,msg='Check May')
-call unit_check('mo2v', mo2v('jun')       .eq.  6   ,msg='Check Jun')
-call unit_check('mo2v', mo2v('july')      .eq.  7   ,msg='Check July')
-call unit_check('mo2v', mo2v('Aug')       .eq.  8   ,msg='Check August')
-call unit_check('mo2v', mo2v('Sept')      .eq.  9   ,msg='Check September')
-call unit_check('mo2v', mo2v('Oct')       .eq.  10  ,msg='Check October')
-call unit_check('mo2v', mo2v('Nov')       .eq.  11  ,msg='Check November')
-call unit_check('mo2v', mo2v('December')  .eq.  12  ,msg='Check December')
-call unit_check('mo2v', mo2v('jax')       .eq.  1   ,msg='Check "jax"')
-call unit_check('mo2v', mo2v('ja')        .eq.  1   ,msg='Check "ja"')
-call unit_check('mo2v', mo2v('j')         .eq. -1   ,msg='Check "j"')
-call unit_check('mo2v', mo2v('')          .eq. -1   ,msg='Check ""')
+call unit_check('mo2v', mo2v('jan')        ==   1   ,msg='Check January')
+call unit_check('mo2v', mo2v('Feb')        ==   2   ,msg='Check February')
+call unit_check('mo2v', mo2v('March')      ==   3   ,msg='Check March')
+call unit_check('mo2v', mo2v('APR')        ==   4   ,msg='Check April')
+call unit_check('mo2v', mo2v('may')        ==   5   ,msg='Check May')
+call unit_check('mo2v', mo2v('jun')        ==   6   ,msg='Check Jun')
+call unit_check('mo2v', mo2v('july')       ==   7   ,msg='Check July')
+call unit_check('mo2v', mo2v('Aug')        ==   8   ,msg='Check August')
+call unit_check('mo2v', mo2v('Sept')       ==   9   ,msg='Check September')
+call unit_check('mo2v', mo2v('Oct')        ==   10  ,msg='Check October')
+call unit_check('mo2v', mo2v('Nov')        ==   11  ,msg='Check November')
+call unit_check('mo2v', mo2v('December')   ==   12  ,msg='Check December')
+call unit_check('mo2v', mo2v('jax')        ==   1   ,msg='Check "jax"')
+call unit_check('mo2v', mo2v('ja')         ==   1   ,msg='Check "ja"')
+call unit_check('mo2v', mo2v('j')          ==  -1   ,msg='Check "j"')
+call unit_check('mo2v', mo2v('')           ==  -1   ,msg='Check ""')
 
 call unit_check_done('mo2v') ! assume if got here passed checks
 
@@ -426,15 +426,15 @@ call unit_check_start('fmtdate')
 
 do i=1,size(line)-1
    read(line(i),*)date1,date2,iso_week_date,comment
-   if(unit_check_level.gt.0)then
+   if(unit_check_level > 0)then
       call unit_check_msg('fmtdate','GIVEN:'//trim(date1)//' '//trim(comment))
    endif
 
    call guessdate(date1,dat)                                         ! convert date string to DAT
-   call unit_check('fmtdate',fmtdate(dat,'year-month-day').eq.trim(date2),'GOT',fmtdate(dat,'year-month-day'),'expected',date2)
+   call unit_check('fmtdate',fmtdate(dat,'year-month-day') == trim(date2),'GOT',fmtdate(dat,'year-month-day'),'expected',date2)
 
    ! convert DAT to ISO week date, all generated dates should match ISO week date
-   call unit_check('fmtdate',fmtdate(dat,"%I").eq.iso_week_date, msg=iso_week_date)
+   call unit_check('fmtdate',fmtdate(dat,"%I") == iso_week_date, msg=iso_week_date)
 enddo
 
 call unit_check_done('fmtdate')
@@ -485,9 +485,9 @@ do i=1,size(line)-1
  read(line(i),*)date1,date2,iso_week_date,comment
  call guessdate(date1,dat)                                         ! convert date string to DAT
  call unit_check('guessdate',&
- &fmtdate(dat,"%I").eq.iso_week_date,'input',date1,'produced',fmtdate(dat,"%I"),'expected',iso_week_date)
+ &fmtdate(dat,"%I") == iso_week_date,'input',date1,'produced',fmtdate(dat,"%I"),'expected',iso_week_date)
  call unit_check('guessdate',&
- &fmtdate(dat,"year-month-day").eq.date2,'input',date1,'produced',fmtdate(dat,"year-month-day"),'expected',date2)
+ &fmtdate(dat,"year-month-day") == date2,'input',date1,'produced',fmtdate(dat,"year-month-day"),'expected',date2)
 enddo
 
 call unit_check_done('guessdate')
@@ -504,7 +504,7 @@ integer          :: ierr
 call unit_check_start('dow')
 call date_and_time(values=dat)
 call dow([1957,3,2,dat(4),12,0,0,0], weekday, day, ierr)
-call unit_check('dow',day.eq.'Saturday'.and.weekday.eq.6,msg='Saturday')
+call unit_check('dow',day == 'Saturday'.and.weekday == 6,msg='Saturday')
 call unit_check_done('dow')
 end subroutine test_dow
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -544,7 +544,7 @@ line=[ character(len=372) :: &
 do i=1,size(line)-1
    read(line(i),*)y,m,d,iso_year,iso_week,iso_weekday
    call w2d(iso_year,iso_week,iso_weekday,dat)                                      ! convert ISO week date to DAT
-   call unit_check('w2d',dat(1).eq.y.and.dat(2).eq.m.and.dat(3).eq.d,msg=line(i))   ! all should match
+   call unit_check('w2d',dat(1) == y.and.dat(2) == m.and.dat(3) == d,msg=line(i))   ! all should match
 enddo
 
 call unit_check_done('w2d')
@@ -567,11 +567,11 @@ mnth=[ &
 '                     ']
 call unit_check_start('box_month')
 call box_month(dat,calendar)
-if(unit_check_level.gt.0)then
+if(unit_check_level > 0)then
    write(*,'(a)')calendar
    write(*,'(a)')mnth
 endif
-call unit_check('box_month',all(calendar.eq.mnth),msg='July 2016')
+call unit_check('box_month',all(calendar == mnth),msg='July 2016')
 call unit_check_done('box_month')
 end subroutine test_box_month
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -583,22 +583,22 @@ call unit_check_start('d2j')
    call unit_check_start('d2j',msg='Checking Julian Date') ! assume if got here passed checks
 
    julian=d2j( [1970, 1, 1,0, 0,0,0,0])
-   call unit_check('d2j',abs(julian-2440587.5d0).lt.0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
+   call unit_check('d2j',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
 
    julian=d2j( [1995, 1, 1,0,12,0,0,0])
-   call unit_check('d2j',int(julian).eq.2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
+   call unit_check('d2j',int(julian) == 2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
 
    julian=d2j( [1995,10,19,0,12,0,0,0])
-   call unit_check('d2j',int(julian).eq.2450010, msg="Oct 19th, 1995 12:00(2450010)")
+   call unit_check('d2j',int(julian) == 2450010, msg="Oct 19th, 1995 12:00(2450010)")
 
    julian=d2j( [1995,12,31,0,12,0,0,0])
-   call unit_check('d2j',int(julian).eq.2450083, msg="Dec 31st, 1995 12:00(2450083)")
+   call unit_check('d2j',int(julian) == 2450083, msg="Dec 31st, 1995 12:00(2450083)")
 
    julian=d2j( [1996, 1, 1,0,12,0,0,0])
-   call unit_check('d2j',int(julian).eq.2450084, msg="Jan  1st, 1996 12:00(2450084)")
+   call unit_check('d2j',int(julian) == 2450084, msg="Jan  1st, 1996 12:00(2450084)")
 
    julian=d2j( [1996,12,31,0,12,0,0,0])
-   call unit_check('d2j',int(julian).eq.2450449, msg="Dec 31th, 1996 12:00(2450449)")
+   call unit_check('d2j',int(julian) == 2450449, msg="Dec 31th, 1996 12:00(2450449)")
 
 call unit_check_done('d2j')
 
@@ -614,17 +614,17 @@ call unit_check_start('j2d')
    juliandate=2457589.129d0                 ! set sample Julian Date
 
    expected='2016-07-19 11:05:45'
-   call unit_check('j2d',fmtdate(j2d(juliandate),'year-month-day hour:minute:second').eq.expected, &
+   call unit_check('j2d',fmtdate(j2d(juliandate),'year-month-day hour:minute:second') == expected, &
    & juliandate,'==> EXPECTED ',expected,' GOT ',fmtdate(j2d(juliandate),'year-month-day hour:minute:second'))
 
    ! go back one day
    expected='2016-07-18 11:05:45'
-   call unit_check('j2d',fmtdate(j2d(juliandate-1.0d0),'year-month-day hour:minute:second').eq.expected, &
+   call unit_check('j2d',fmtdate(j2d(juliandate-1.0d0),'year-month-day hour:minute:second') == expected, &
    & juliandate,'==> EXPECTED ',expected,' GOT ',fmtdate(j2d(juliandate-1.0d0),'year-month-day hour:minute:second'))
 
    ! go forward one day
    expected='2016-07-20 11:05:45'
-   call unit_check('j2d',fmtdate(j2d(juliandate+1.0d0),'year-month-day hour:minute:second').eq.expected, &
+   call unit_check('j2d',fmtdate(j2d(juliandate+1.0d0),'year-month-day hour:minute:second') == expected, &
    & juliandate,'==> EXPECTED ',expected,' GOT ',fmtdate(j2d(juliandate+1.0d0),'year-month-day hour:minute:second'))
 
 call unit_check_done('j2d')
@@ -645,7 +645,7 @@ implicit none
 
    call unit_check_start('d2u')
 
-   call unit_check('d2u',nint(d2u([2017,03,29,-240,01,46,47,0])+0.5).eq.1490766407,d2u([2017,03,29,-240,01,46,47,0]) )
+   call unit_check('d2u',nint(d2u([2017,03,29,-240,01,46,47,0])+0.5) == 1490766407,d2u([2017,03,29,-240,01,46,47,0]) )
 
    call unit_check_done('d2u')
 
@@ -653,7 +653,7 @@ end subroutine test_d2u
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_u2d
 call unit_check_start('u2d')
-call unit_check('u2d',all([2017,03,29,-240,01,46,47,0].eq.u2d(1490766407)),&
+call unit_check('u2d',all([2017,03,29,-240,01,46,47,0] == u2d(1490766407)),&
         & d2u([2017,03,29,-240,01,46,47,0]) )
 call unit_check_done('u2d')
 end subroutine test_u2d
@@ -664,10 +664,10 @@ implicit none
 
    call unit_check_start('sec2days')
 
-   call unit_check('sec2days',sec2days(129860).eq.             '1-12:04:20','129860 is 1-12:04:20')
-   call unit_check('sec2days',sec2days(80000.0d0).eq.          '0-22:13:20','80000.0d0 is 0-22:13:20')
-   call unit_check('sec2days',sec2days(80000,crop=.true.).eq.    '22:13:20','80000 is 22:13:20')
-   call unit_check('sec2days',sec2days('1day 2hr 3 min 4s').eq.'1-02:03:04','1day 2hr 3 min 4s is 1-02:03:04')
+   call unit_check('sec2days',sec2days(129860) ==              '1-12:04:20','129860 is 1-12:04:20')
+   call unit_check('sec2days',sec2days(80000.0d0) ==           '0-22:13:20','80000.0d0 is 0-22:13:20')
+   call unit_check('sec2days',sec2days(80000,crop=.true.) ==     '22:13:20','80000 is 22:13:20')
+   call unit_check('sec2days',sec2days('1day 2hr 3 min 4s') == '1-02:03:04','1day 2hr 3 min 4s is 1-02:03:04')
 
    call unit_check_done('sec2days')
 
@@ -679,28 +679,28 @@ implicit none
 
    call unit_check_start('days2sec')
 
-   call unit_check('days2sec',nint(days2sec('1')).eq.             1, 'expected',1,'got',nint(days2sec('1')))
-   call unit_check('days2sec',nint(days2sec('1:00')).eq.         60,'expected',60,'got',nint(days2sec('1:00')))
-   call unit_check('days2sec',nint(days2sec('1:00:00')).eq.    3600, 'expected',3600,'got',nint(days2sec('1:00:00')))
-   call unit_check('days2sec',nint(days2sec('1-00:00:00')).eq.86400, 'expected',86400,'got',nint(days2sec('1-00:00:00')))
+   call unit_check('days2sec',nint(days2sec('1')) ==              1, 'expected',1,'got',nint(days2sec('1')))
+   call unit_check('days2sec',nint(days2sec('1:00')) ==          60,'expected',60,'got',nint(days2sec('1:00')))
+   call unit_check('days2sec',nint(days2sec('1:00:00')) ==     3600, 'expected',3600,'got',nint(days2sec('1:00:00')))
+   call unit_check('days2sec',nint(days2sec('1-00:00:00')) == 86400, 'expected',86400,'got',nint(days2sec('1-00:00:00')))
    call unit_check('days2sec',&
-   &nint(days2sec('1d2h 3.0 minutes 4sec')).eq.93784,'expected',1,'got',nint(days2sec('1d2h 3.0 minutes 4sec')))
+   &nint(days2sec('1d2h 3.0 minutes 4sec')) == 93784,'expected',1,'got',nint(days2sec('1d2h 3.0 minutes 4sec')))
 
-   call unit_check('days2sec',nint(days2sec(' 1-12:04:20              ')) .eq. 129860, &
+   call unit_check('days2sec',nint(days2sec(' 1-12:04:20              '))  ==  129860, &
    & 'expected',129860,'got',nint(days2sec('1.12:03:20')))
-   call unit_check('days2sec',nint(days2sec(' 1.5 days                ')) .eq. 129600, &
+   call unit_check('days2sec',nint(days2sec(' 1.5 days                '))  ==  129600, &
    & 'expected',129600,'got',nint(days2sec('1.5 days')))
-   call unit_check('days2sec',nint(days2sec(' 1.5 days 4hrs 30minutes ')) .eq. 145800, &
+   call unit_check('days2sec',nint(days2sec(' 1.5 days 4hrs 30minutes '))  ==  145800, &
    & 'expected',145800,'got',nint(days2sec('1.5 days 4hrs 30minutes')))
-   call unit_check('days2sec',nint(days2sec(' 1.5d                    ')) .eq. 129600, &
+   call unit_check('days2sec',nint(days2sec(' 1.5d                    '))  ==  129600, &
    & 'expected',129600,'got',nint(days2sec('1.5d')))
-   call unit_check('days2sec',nint(days2sec(' 1d2h3m4s                ')) .eq. 93784, &
+   call unit_check('days2sec',nint(days2sec(' 1d2h3m4s                '))  ==  93784, &
    & 'expected',93784,'got',nint(days2sec('1d2h3m4s')))
-   call unit_check('days2sec',nint(days2sec(' 1d1d1d                  ')) .eq. 259200, &
+   call unit_check('days2sec',nint(days2sec(' 1d1d1d                  '))  ==  259200, &
    & 'expected',259200,'got',nint(days2sec('1d1d1d')))
-   call unit_check('days2sec',nint(days2sec(' 4d-12h                  ')) .eq. 302400, &
+   call unit_check('days2sec',nint(days2sec(' 4d-12h                  '))  ==  302400, &
    & 'expected',302400,'got',nint(days2sec('4d-12h')))
-   call unit_check('days2sec',nint(days2sec(' 3  d  1 2   h           ')) .eq. 302400, &
+   call unit_check('days2sec',nint(days2sec(' 3  d  1 2   h           '))  ==  302400, &
    & 'expected',302400,'got',nint(days2sec('3 d 1 s  h')))
 
    call unit_check_done('days2sec')
@@ -710,14 +710,14 @@ end subroutine test_days2sec
 subroutine test_phase_of_moon
 integer  :: dat(8)=[2018,11,3,-240,20,18,44,245]
 call unit_check_start('phase_of_moon')
-call unit_check('phase_of_moon',phase_of_moon(dat).eq.'Waning crescent')
+call unit_check('phase_of_moon',phase_of_moon(dat) == 'Waning crescent')
 call unit_check_done('phase_of_moon')
 end subroutine test_phase_of_moon
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_moon_fullness
 integer  :: dat(8)=[2018,11,3,-240,20,18,44,245]
 call unit_check_start('moon_fullness')
-call unit_check('moon_fullness', moon_fullness(dat).eq.-30)
+call unit_check('moon_fullness', moon_fullness(dat) == -30)
 call unit_check_done('moon_fullness')
 end subroutine test_moon_fullness
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -786,7 +786,7 @@ do ii=1,size(tests)
    call easter(inyear,dat)
    outmonth=dat(2)
    outday=dat(3)
-   call unit_check('easter', tmonth.eq.outmonth.and.tday.eq.outday ,tests(ii),'month=',mon(outmonth))
+   call unit_check('easter', tmonth == outmonth.and.tday == outday ,tests(ii),'month=',mon(outmonth))
 enddo
 
 call unit_check_done('easter') ! assume if got here passed checks
@@ -853,7 +853,7 @@ character(len=*) :: string
 integer          :: iyear,iweek,iweekday
 character(len=10):: name
    call d2w(dat,iyear,iweek,iweekday,name)
-   call unit_check('d2w', name.eq.string ,iyear,iweek,iweekday,name,string)
+   call unit_check('d2w', name == string ,iyear,iweek,iweekday,name,string)
 end subroutine showme
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end subroutine test_suite_M_time

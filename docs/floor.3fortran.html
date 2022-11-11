@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,99 +41,222 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>floor (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>floor (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>floor</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>floor</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>floor</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC] Integer floor function
+<B>FLOOR</B>(3) - [NUMERIC] Function to return largest integral value not greater
+than argument
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>DESCRIPTION</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>floor</B>(a) returns the greatest integer less than or equal to X.
+result = <B>floor</B>(a [,<I>kind</I>])
+<P>
+<PRE>
+           elemental integer(kind=KIND) function floor( a ,kind )
+<P>
+            real(kind=**),intent(in) :: a
+            integer(kind=**),intent(in),optional :: KIND
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
-     <H3>SYNTAX</H3>
-
-</A>
-<BLOCKQUOTE>
-result = <B>floor</B>(a [, kind])
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
+     <H3>CHARACTERISTICS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>A</B> </TD><TD valign=bottom>
-The type shall be REAL.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(Optional) An INTEGER initialization
-expression indicating the kind parameter of the result.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A is a real of any <I>kind</I>
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND is any valid value for type integer.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is an integer of the specified or default <I>kind</I>
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=3>
 
-     <H3>RETURN VALUE</H3>
+     <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type <B>integer</B>(kind) if KIND is present
-and of default-kind INTEGER otherwise.
+<B>FLOOR</B>(3) returns the greatest integer less than or equal to A.
+<P>
+In other words, it picks the whole number at or to the left of the value on
+the number line.
+<P>
+This means care has to be taken that the magnitude of the real value A does
+not exceed the range of the output value, as the range of values supported
+by real values is typically larger than the range for integers.
 </BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A : The value to operate on. Valid values are restricted by the size of
+the returned integer <I>kind</I> to the range <B>-HUGE</B>(INT(A,KIND=KIND))-1 to
+<B>HUGE</B>(INT(A),KIND=KIND).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND : A scalar integer constant initialization expression indicating the
+<I>kind</I> parameter of the result.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+The return value is of type <B>integer</B>(<I>kind</I>) if KIND is present and of default-
+<I>kind</I> integer otherwise.
+<P>
+The result is undefined if it cannot be represented in the specified integer
+type.
+<P>
+If in range for the <I>kind</I> of the result the result is the whole number at or
+to the left of the input value on the number line.
+<P>
+If A is positive the result is the value with the fractional part removed.
+<P>
+If A is negative, it is the whole number at or to the left of the input
+value.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_floor
-    implicit none
-        real :: x = 63.29
-        real :: y = -63.59
-        print *, floor(x) ! returns 63
-        print *, floor(y) ! returns -64
-    end program demo_floor
+      program demo_floor
+      implicit none
+      real :: x = 63.29
+      real :: y = -63.59
+          print *, x, floor(x)
+          print *, y, floor(y)
+         ! elemental
+         print *,floor([ &
+         &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &
+         &  0.0,   &
+         &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])
+<P>
+         ! note even a small deviation from the whole number changes the result
+         print *,      [2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)]
+         print *,floor([2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)])
+<P>
+         ! A=Nan, Infinity or  &lt;huge(0_KIND)-1 &lt; A &gt; huge(0_KIND) is undefined
+      end program demo_floor
 <P>
 </PRE>
+Results:
+<P>
+<PRE>
+            63.29000              63
+<P>
+</PRE>
+<B>-63.59000</B>
+<B>-64</B>
+<BLOCKQUOTE>
+<P>
+<B>-3</B>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <B>-3</B>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>-3</B> </TD><TD valign=bottom>
+-3          -2          -2          -1
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<B>-1</B>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <B>-1</B>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>0</B> </TD><TD valign=bottom>
+0           1           1           2
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>2 2</B> </TD><TD valign=bottom>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+<P>
+2.000000
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: 2.000000
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>2.000000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+2.000000
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>2 1</B> </TD><TD valign=bottom>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -141,10 +264,16 @@ Sample program:
 
 </A>
 <BLOCKQUOTE>
-<B>ceiling</B>(3), <B>nint</B>(3)
+<B>CEILING</B>(3), <B>NINT</B>(3), <B>AINT</B>(3), <B>ANINT</B>(3), <B>INT</B>(3), <B>SELECTED_INT_KIND</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                floor(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>floor (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from efc70dec-647b-4d9a-b861-2dbbe0c03f9c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>floor (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 70d600b6-f578-4053-8f3b-9a471a89c3e5 using man macros.</FONT>
 <br><br><center><img src="images/floor.3fortran.gif"></center>
 </div>
 </div>

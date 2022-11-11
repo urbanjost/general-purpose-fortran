@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,277 +41,375 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>findloc (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>findloc (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>findloc</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>findloc</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>findloc</B>(3f) - [FORTRAN:INTRINSIC] Location of first element of ARRAY
-identified by MASK along dimension DIM having a value
+<B>FINDLOC</B>(3) - [ARRAY:LOCATION] Location of first element of ARRAY identified
+by MASK along dimension DIM matching a target value
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-FINDLOC (<I>ARRAY</I>, <I>VALUE</I>, DIM [, <I>MASK</I>, <I>KIND</I>, <I>BACK</I>])
+result = findloc (<I>array</I>, <I>value</I>, dim [,<I>mask</I>] [,<I>kind</I>] [,<I>back</I>])
+<P>
+<PRE>
+           function findloc (array, value, dim, mask, kind, back)
+<P>
+            integer(kind=KIND),  intent(in)      :: array(..)
+            integer(kind=KIND),  intent(in)      :: value
+            integer(kind=KIND),  intent(in)      :: dim
+            logical(kind=**),intent(in),optional :: mask(..)
+            integer(kind=**),intent(in),optional :: kind
+            logical(kind=**),intent(in),optional :: back
+<P>
+</PRE>
 or
-FINDLOC (<I>ARRAY</I>, <I>VALUE</I> [, <I>MASK</I>, <I>KIND</I>, <I>BACK</I>])
+<P>
+<PRE>
+          result = findloc(array, value [,mask] [,kind] [,back])
+<P>
+           function findloc (array, value, mask, kind, back)
+<P>
+            integer(kind=KIND),  intent(in)       :: array(..)
+            integer(kind=KIND),  intent(in)       :: value
+            logical(kind=**), intent(in),optional :: mask(..)
+            integer(kind=**), intent(in),optional :: kind
+            logical(kind=**),intent(in),optional  :: back
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> <I>value</I> for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY shall be an <I>array</I> of intrinsic type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VALUE shall be scalar but in type conformance with ARRAY
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM The corresponding actual argument shall not be an optional dummy
+argument.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK shall be conformable with ARRAY.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND a scalar integer initialization expression (ie. a constant)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BACK a logical scalar.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Location of the first element of <I>ARRAY</I> identified by <I>MASK</I> along
-dimension DIM having a value equal to <I>VALUE</I>.
+<B>FINDLOC</B>(3) returns the location of the first element of ARRAY identified by
+MASK along dimension DIM having a <I>value</I> equal to VALUE.
+<P>
+If both ARRAY and VALUE are of type logical, the comparison is performed
+with the .EQV. operator; otherwise, the comparison is performed with the ==
+operator. If the <I>value</I> of the comparison is .true., that element of ARRAY
+matches VALUE.
+<P>
+If only one element matches VALUE, that element&#146;s subscripts are returned.
+Otherwise, if more than one element matches VALUE and BACK is absent or
+present with the <I>value</I> .false., the element whose subscripts are returned is
+the first such element, taken in <I>array</I> element order. If BACK is present
+with the <I>value</I> .true., the element whose subscripts are returned is the last
+such element, taken in <I>array</I> element order.
 </BLOCKQUOTE>
-<P>
-<P>
-<BLOCKQUOTE>
-If both <I>ARRAY</I> and <I>VALUE</I> are of type logical, the comparison is performed
-with the .EQV. operator; otherwise, the comparison is performed with
-the == operator. If the value of the comparison is true, that element
-of <I>ARRAY</I> matches <I>VALUE</I>.
-<P>
-If only one element matches <I>VALUE</I>, that element&#146;s subscripts are
-returned. Otherwise, if more than one element matches <I>VALUE</I> and <I>BACK</I> is
-absent or present with the value false, the element whose subscripts are
-returned is the first such element, taken in array element order. If
-<I>BACK</I> is present with the value true, the element whose subscripts are
-returned is the last such element, taken in array element order.
-</BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
      <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B></B><I>ARRAY</I> </TD><TD valign=bottom>
-shall be an array of intrinsic type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY : shall be an <I>array</I> of intrinsic type.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B></B><I>VALUE</I> </TD><TD valign=bottom>
-shall be scalar and in type conformance with <I>ARRAY</I>, as specified
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VALUE : shall be scalar and in type conformance with ARRAY, as specified
 in Table 7.3 for relational intrinsic operations 7.1.5.5.2).
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DIM</B> </TD><TD valign=bottom>
-shall be an integer scalar with a value in the range 1 DIM n,
-where n is the rank of <I>ARRAY</I>.
-The corresponding actual argument shall not be an optional dummy
-argument.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : shall be an integer scalar with a <I>value</I> in the range 1 DIM n, where
+n is the rank of ARRAY. The corresponding actual argument shall not be an
+optional dummy argument.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B></B><I>MASK</I> </TD><TD valign=bottom>
-(optional) shall be of type logical and shall be conformable
-with <I>ARRAY</I>.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK : (optional) shall be of type logical and shall be conformable with
+ARRAY.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B></B><I>KIND</I> </TD><TD valign=bottom>
-(optional) shall be a scalar integer initialization expression.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND : (optional) shall be a scalar integer initialization expression.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B></B><I>BACK</I> </TD><TD valign=bottom>
-(optional) shall be a logical scalar.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BACK : (optional) shall be a logical scalar.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=6>
 
      <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-Result Characteristics. Integer. If <I>KIND</I> is present, the kind type
-parameter is that specified by the value of <I>KIND</I>; otherwise the kind
-type parameter is that of default integer type. If DIM does not appear,
-the result is an array of rank one and of size equal to the rank of
-<I>ARRAY</I>; otherwise, the result is of rank n - 1 and shape
+Result Characteristics. Integer. If KIND is present, the <I>kind</I> type parameter
+is that specified by the <I>value</I> of KIND; otherwise the <I>kind</I> type parameter is
+that of default integer type. If DIM does not appear, the result is an <I>array</I>
+of rank one and of size equal to the rank of ARRAY; otherwise, the result is
+of rank n - 1 and shape
 <P>
 <PRE>
-   [d1 , d2 , . . . , dDIM-1 , dDIM+1 , . . . , dn ]
+         [d1, d2, . . ., dDIM-1, dDIM+1, . . ., dn ]
 <P>
 </PRE>
 where
 <P>
 <PRE>
-   [d1 , d2 , . . . , dn ]
+         [d1, d2, . . ., dn ]
 <P>
 </PRE>
-is the shape of <I>ARRAY</I>.
+is the shape of ARRAY.
 </BLOCKQUOTE>
-<A name=>
+<A name=6>
 
-    <H4>&nbsp; &nbsp; RESULT VALUE</H4>
+     <H3>RESULT</H3>
+
 </A>
 <BLOCKQUOTE>
-<P>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>Case (i):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The result of FINDLOC (<I>ARRAY</I>, <I>VALUE</I>) is a rank-one array
-whose element values are the values of the subscripts
-of an element of <I>ARRAY</I> whose value matches <I>VALUE</I>. If
-there is such a value, the ith subscript returned lies
-in the range 1 to ei , where ei is the extent of the
-ith dimension of <I>ARRAY</I>. If no elements match <I>VALUE</I> or
-<I>ARRAY</I> has size zero, all elements of the result are zero.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CASE (I): The result of FINDLOC (ARRAY, VALUE) is a rank-one <I>array</I> whose
+element values are the values of the subscripts of an element of ARRAY
+whose <I>value</I> matches VALUE. If there is such a <I>value</I>, the ith subscript
+returned lies in the range 1 to ei, where ei is the extent of the ith
+dimension of ARRAY. If no elements match VALUE or ARRAY has size zero,
+all elements of the result are zero.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Case (ii):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The result of FINDLOC (<I>ARRAY</I>, <I>VALUE</I>, <I>MASK</I> = <I>MASK</I>) is a
-rank-one array whose element values are the values of
-the subscripts of an element of <I>ARRAY</I>, corresponding to
-a true element of <I>MASK</I>, whose value matches <I>VALUE</I>. If
-there is such a value, the ith subscript returned lies
-in the range 1 to ei , where ei is the extent of the
-ith dimension of <I>ARRAY</I>. If no elements match <I>VALUE</I>,
-<I>ARRAY</I> has size zero, or every element of <I>MASK</I> has the
-value false, all elements of the result are zero.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CASE (II): the result of FINDLOC (ARRAY, VALUE, MASK = MASK) is a rank-
+one <I>array</I> whose element values are the values of the subscripts of an
+element of ARRAY, corresponding to a true element of MASK, whose <I>value</I>
+matches VALUE. If there is such a <I>value</I>, the ith subscript returned lies
+in the range 1 to ei, where ei is the extent of the ith dimension of
+ARRAY. If no elements match VALUE, ARRAY has size zero, or every element
+of MASK has the <I>value</I> false, all elements of the result are zero.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Case (iii):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-If <I>ARRAY</I> has rank one, the result of
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CASE (III): If ARRAY has rank one, the result of
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-                 findloc (array, value, dim=dim [, mask = mask])
+            findloc (array, value, dim=dim [, mask = mask])
 <P>
 </PRE>
-is a scalar whose value is equal to that of the first element of
+is a scalar whose <I>value</I> is equal to that of the first element of
 <P>
 <PRE>
-                 findloc (array, value [, mask = mask])
+            findloc (array, value [, mask = mask])
 <P>
 </PRE>
-Otherwise, the value of element
+Otherwise, the <I>value</I> of element
 <P>
 <PRE>
-                 (s1 , s2 , . . . , sDIM-1 , sDIM+1 , . . . , sn )
+            (s1, s2, . . ., sDIM-1, sDIM+1, . . ., sn )
 <P>
 </PRE>
 of the result is equal to
 <P>
 <PRE>
-                 findloc (array (s1, s2, &#46;&#46;&#46;, sdim-1, :, sdim+1, ..., sn ), &
-                 value, dim=1 [, mask = mask (s1, s2, &#46;&#46;&#46;, sdim-1, :,
-                                 sdim+1 ,&#46;&#46;&#46; , sn )]).
+            findloc (array (s1, s2, &#46;&#46;&#46;, sdim-1, :, sdim+1, ..., sn ), &
+            value, dim=1 [, mask = mask (s1, s2, &#46;&#46;&#46;, sdim-1, :,
+                            sdim+1, &#46;&#46;&#46;, sn )]).
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=7>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>Case (i):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The value of
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CASE (I): The <I>value</I> of
 </TD></TR>
-<TR><TD colspan=2>
+<TR></TR></TABLE><!-- .nf -->
 <PRE>
-                  findloc ([2, 6, 4, 6,], value = 6)
+              findloc ([2, 6, 4, 6,], value = 6)
 <P>
 </PRE>
-is [2], and the value of
-</TD></TR>
-<TR><TD colspan=2>
+is [2], and the <I>value</I> of
+<P>
 <PRE>
-                  findloc ([2, 6, 4, 6], value = 6, back = .true.)
+              findloc ([2, 6, 4, 6], value = 6, back = .true.)
 <P>
 </PRE>
 is [4].
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Case (ii):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-If A
-has the value
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                 &gt; 0 -5  7 7
-                 &gt; 3  4 -1 2
-                 &gt; 1  5  6 7
+<TABLE cellpadding=3><!-- tsb: is [4].
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CASE (II): If A has the <I>value</I>
 <P>
-</PRE>
-and M has the value
+0 <B>-5</B>
+7 7
+<P>
+3 4 <B>-1</B> 2
+<TABLE width=100% cellpadding=3><!-- tsb: 3 4 <B>-1</B> 2
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>1 5</B> </TD><TD valign=bottom>
+6 7
 </TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                 &gt; T T F T
-                 &gt; T T F T
-                 &gt; T T F T
-<P>
-                 FINDLOC (A, 7, MASK = M)
-<P>
-</PRE>
-has the value [1, 4] and
+<TR></TR></TABLE><!-- .PP -->
 </TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                 FINDLOC (A, 7, MASK = M, BACK = .TRUE.)
-<P>
-</PRE>
-has the value [3, 4]. This is independent of the declared
-lower bounds for A.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Case (iii):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The value of
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                 FINDLOC ([2, 6, 4], VALUE = 6, DIM = 1)
-<P>
-</PRE>
-is 2. If B has the value
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                  &gt; 1 2 -9
-                  &gt; 2 2  6
-<P>
-</PRE>
-FINDLOC (B, <I>VALUE</I> = 2, DIM = 1)
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
-<P>
-has the value [2, 1, 0] and
-<P>
-<PRE>
-                 FINDLOC (B, VALUE = 2, DIM = 2)
-<P>
-</PRE>
-has the value [2, 1]. This is independent of the declared
-lower bounds for B.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=6>
+<TR></TR></TABLE>and M has the <I>value</I>
+</BLOCKQUOTE>
+<A name=>
 
-     <H3>CLASS</H3>
-
+    <H4>&nbsp; &nbsp; T T F T</H4>
 </A>
 <BLOCKQUOTE>
-Transformational function.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T T F T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T T F T</H4>
+</A>
+<BLOCKQUOTE>
+findloc (a, 7, <I>mask</I> = m)
+<P>
+has the <I>value</I> [1, 4] and
+<P>
+<PRE>
+            findloc (a, 7, mask = m, back = .true.)
+<P>
+</PRE>
+has the <I>value</I> [3, 4]. This is independent of the declared lower bounds for A
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: has the <I>value</I> [3, 4]. This is independent of the declared lower bounds for A
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CASE (III): The <I>value</I> of
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+              findloc ([2, 6, 4], value = 6, dim = 1)
+<P>
+</PRE>
+is 2. If B has the <I>value</I>
+<BLOCKQUOTE>
+<P>
+1 2 <B>-9</B>
+<P>
+2 2
+</BLOCKQUOTE>
+<P>
+findloc (b, VALUE = 2, dim = 1)
+<P>
+has the <I>value</I> [2, 1, 0] and
+<P>
+<PRE>
+              findloc (b, value = 2, dim = 2)
+<P>
+</PRE>
+has the <I>value</I> [2, 1]. This is independent of the declared lower bounds for
+B.
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022              findloc(3fortran)
+</PRE>
+</BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>findloc (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a6a03804-9cc8-422b-ad6f-2b7fd5d1d107 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>findloc (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7fdaba86-679b-464f-bdd1-5466a80ebcd2 using man macros.</FONT>
 <br><br><center><img src="images/findloc.3fortran.gif"></center>
 </div>
 </div>

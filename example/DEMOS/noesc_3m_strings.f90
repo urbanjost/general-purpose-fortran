@@ -30,9 +30,9 @@
 
            ! replace lower unprintable characters with spaces
            write(*,101)(merge(string(i:i),' ',&
-           & iachar(string(i:i)).ge.32        &
+           & iachar(string(i:i)) >= 32        &
            & .and.                            &
-           & iachar(string(i:i)).le.126)      &
+           & iachar(string(i:i)) <= 126)      &
            & ,i=1,lgth)
 
            ! print ADE value of character underneath it

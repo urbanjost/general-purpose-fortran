@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,107 +41,242 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>unpack (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>unpack (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>unpack</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unpack</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>unpack</B>(3f) - [FORTRAN:INTRINSIC:ARRAY CONSTRUCTION] Store the elements
-of a vector in an array of higher rank
+<B>UNPACK</B>(3) - [ARRAY:CONSTRUCTION] Scatter the elements of a vector into an
+array using a mask
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>unpack</B>(vector, mask, field)
+result = <B>unpack</B>(<I>vector</I>, <I>mask</I>, <I>field</I>)
+<P>
+<PRE>
+           type(TYPE(kind=KIND)) unpack(vector, mask, field)
+<P>
+            type(TYPE(kind=KIND)),intent(in) :: vector(:)
+            logical,intent(in)               :: mask(..)
+            type(TYPE(kind=KIND)),intent(in) :: field(..)
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+The result is an array of the same type and type parameters as VECTOR and
+the same shape as MASK.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Store the elements of VECTOR in an array of higher rank.
+<B>UNPACK</B>(3) scatters the elements of VECTOR into a copy of an array FIELD of
+any rank using .true. values from MASK in array element order to specify
+placement of the VECTOR values.
+<P>
+So a copy of FIELD is generated with select elements replaced with values
+from VECTOR. This allows for complex replacement patterns that would be
+difficult when using array syntax or multiple assignment statements,
+particularly when the replacements are conditional.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>VECTOR</B> </TD><TD valign=bottom>
-Shall be an array of any type and rank one. It shall
-have at least as many elements as MASK has TRUE values.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VECTOR : New values to place into specified locations in FIELD. Shall be
+an array of any type and rank one. It shall have at least as many
+elements as MASK has .true. values.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>MASK</B> </TD><TD valign=bottom>
-Shall be an array of type LOGICAL.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK : Shall be an array of type logical that specifies which values in
+FIELD are to be replaced with values from VECTOR.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>FIELD</B> </TD><TD valign=bottom>
-Shall be of the same type as VECTOR and have the same
-shape as MASK.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FIELD : The original data to be edited. Shall be of the same type and
+type parameters as VECTOR and shall be conformable with MASK.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
-
-     <H3>RETURN VALUE</H3>
-
-</A>
-<BLOCKQUOTE>
-The resulting array corresponds to FIELD with TRUE elements
-of MASK replaced by values from VECTOR in array element order.
-</BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
+The element of the result that corresponds to the ith true element of MASK,
+<TABLE cellpadding=3><!-- tsb: The element of the result that corresponds to the ith true element of MASK,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>in array element order, has the value VECTOR (i) for i = 1, 2, . .</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+\., t,
+where t is the number of true values in MASK. Each other element has a value
+equal to FIELD if FIELD is scalar or to the corresponding element of FIELD
+if it is an array.
+</TD></TR>
+<TR></TR></TABLE>The resulting array corresponds to FIELD with .true. elements of MASK
+replaced by values from VECTOR in array element order.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Particular values may be "scattered" to particular positions in an array by
+using
+<BLOCKQUOTE>
+<P>
+1 0 0
+</BLOCKQUOTE>
+<P>
+If M is the array
+0 1 0 0 0 1
+<BLOCKQUOTE>
+<P>
+V is the array [1, 2, 3],
+<P>
+and Q is the logical <I>mask</I>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: and Q is the logical <I>mask</I>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>T . .</B> </TD><TD valign=bottom>
+where "T" represents true and "." represents false, then the
+result of
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+UNPACK (V, MASK = Q, FIELD = M) has the value
+<BLOCKQUOTE>
+<P>
+1 2 0 1 1 0 0 0 3
+</BLOCKQUOTE>
+<P>
+and the result of UNPACK (V, MASK = Q, FIELD = 0) has the value
+<BLOCKQUOTE>
+<P>
+0 2 0 1 0 0 0 0 3
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-    program demo_unpack
-    implicit none
-      integer :: vector(2)  = [1,1]
-      logical :: mask(4)  = [ .true., .false., .false., .true. ]
-      integer :: field(2,2) = 0, unity(2,2)
+      program demo_unpack
+      implicit none
+      logical,parameter :: T=.true., F=.false.
 <P>
-      ! result: unity matrix
-      unity = unpack(vector, reshape(mask, [2,2]), field)
-    end program demo_unpack
+      integer :: vector(2)  = [1,1]
+<P>
+      ! mask and field must conform
+      integer,parameter :: r=2, c=2
+      logical :: mask(r,c)  = reshape([ T,F,F,T ],[2,2])
+      integer :: field(r,c) = 0, unity(2,2)
+<P>
+         ! basic usage
+         unity = unpack( vector, mask, field )
+         call print_matrix_int(&#146;unity=&#146;, unity)
+<P>
+         ! if FIELD is a scalar it is used to fill all the elements
+         ! not assigned to by the vector and mask.
+         call print_matrix_int(&#146;scalar field&#146;,         &
+         & unpack(                                     &
+         & vector=[ 1, 2, 3, 4 ],                      &
+         & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &
+         & field=0) )
+<P>
+      contains
+<P>
+         subroutine print_matrix_int(title,arr)
+         ! convenience routine:
+         ! just prints small integer arrays in row-column format
+         implicit none
+         character(len=*),intent(in)  :: title
+         integer,intent(in)           :: arr(:,:)
+         integer                      :: i
+         character(len=:),allocatable :: biggest
+<P>
+              write(*,*)trim(title)
+              ! make buffer to write integer into
+              biggest=&#146;           &#146;
+              ! find how many characters to use for integers
+              write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
+              ! use this format to write a row
+              biggest=&#146;("  [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+              ! print one row of array at a time
+              do i=1,size(arr,dim=1)
+                 write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+                 write(*,&#146;(" ]")&#146;)
+              enddo
+         end subroutine print_matrix_int
+<P>
+      end program demo_unpack
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+         &gt; unity=
+         &gt;  [ 1, 0 ]
+         &gt;  [ 0, 1 ]
+         &gt; scalar field
+         &gt;  [  1,  0,  3 ]
+         &gt;  [  0,  0,  0 ]
+         &gt;  [  2,  0,  4 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-Fortran 95 and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Transformational function
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -149,10 +284,16 @@ Transformational function
 
 </A>
 <BLOCKQUOTE>
-<B>pack</B>(3), <B>spread</B>(3)
+<B>MERGE</B>(3), <B>PACK</B>(3), <B>SPREAD</B>(3)
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022               unpack(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f0aa1ac6-fad8-4e21-b418-6abcf84be978 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d175d9e7-b001-48a6-a8cd-390e49bb04bb using man macros.</FONT>
 <br><br><center><img src="images/unpack.3fortran.gif"></center>
 </div>
 </div>

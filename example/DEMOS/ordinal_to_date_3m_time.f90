@@ -8,7 +8,7 @@
            write(*,'(a)',advance='no')&
            & 'Enter year YYYY and ordinal day of year DD '
            read(*,*,iostat=ios)yyyy,ddd
-           if(ios.ne.0)exit INFINITE
+           if(ios/=0)exit INFINITE
            ! recover month and day from year and day number.
            call ordinal_to_date(yyyy, ddd, dat)
            yy=dat(1)

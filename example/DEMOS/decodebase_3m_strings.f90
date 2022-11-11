@@ -11,7 +11,7 @@
      INFINITE: do
         print *,''
         write(*,'("Enter number in start base: ")',advance='no'); read *, x
-        if(x.eq.'0') exit INFINITE
+        if(x == '0') exit INFINITE
         if(decodebase(x,bd,r)) then
            if(codebase(r,ba,y)) then
              write(*,'("In base ",I2,": ",A20)')  ba, y

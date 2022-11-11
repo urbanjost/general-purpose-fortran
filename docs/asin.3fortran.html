@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,140 +41,200 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>asin (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>asin (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>asin</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>asin</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>asin</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS:TRIGONOMETRIC] Arcsine function
+<B>ASIN</B>(3) - [MATHEMATICS:TRIGONOMETRIC] Arcsine function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=10>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>asin</B>(X)
+result = <B>asin</B>(<I>x</I>)
+<P>
+<PRE>
+           elemental TYPE(kind=KIND) function asin(x)
+<P>
+            TYPE(kind=KIND) :: x
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TYPE may be real or complex
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND may be any kind supported by the associated type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The returned value will be of the same type and kind as the argument.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>asin</B>(x) computes the arcsine of its argument X.
+<B>ASIN</B>(3) computes the arcsine of its argument X.
 <P>
-The arcsine is the inverse function of the sine function. It is
-commonly used in trigonometry when trying to find the angle when the
-lengths of the hypotenuse and the opposite side of a right triangle
-are known.
+The arcsine is the inverse function of the sine function. It is commonly
+used in trigonometry when trying to find the angle when the lengths of the
+hypotenuse and the opposite side of a right triangle are known.
 </BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type shall be either REAL and a magnitude that is less
-than or equal to one; or be COMPLEX.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>RETURN VALUE</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>RESULT</B> </TD><TD valign=bottom>
-The return value is of the same type and kind as X.
-The real part of the result is in radians and lies in the
-range <B>-PI</B>/2 &lt;= <B>asin</B>(x) &lt;= PI/2.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The value to compute the arcsine of : The type shall be either real
+and a magnitude that is less than or equal to one; or be complex.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The arcsine will allow you to find the measure of a right angle when
-you know the ratio of the side opposite the angle to the hypotenuse.
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+RESULT The result has a value equal to a processor-dependent
+approximation to <B>arcsin</B>(<I>x</I>).
 <P>
-So if you knew that a train track rose 1.25 vertical miles on a
-track that was 50 miles long, you could determine the average angle
-of incline of the track using the arcsine. Given
+If X is real the result is real and it is expressed in radians and lies
+in the range
 <P>
 <PRE>
-    sin(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
+                 PI/2 &lt;= ASIN (X) &lt;= PI/2.
 <P>
-    program demo_asin
-    use, intrinsic :: iso_fortran_env, only : dp=&gt;real64
-    implicit none
-    ! value to convert degrees to radians
-    real(kind=dp),parameter :: D2R=acos(-1.0_dp)/180.0_dp
-    real(kind=dp)           :: angle, rise, run
-      ! given sine(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
-      ! then taking the arcsine of both sides of the equality yields
-      ! theta = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)
-      rise=1.250_dp
-      run=50.00_dp
-      angle = asin(rise/run)
-      write(*,*)&#146;angle of incline(radians) = &#146;, angle
-      angle = angle/D2R
-      write(*,*)&#146;angle of incline(degrees) = &#146;, angle
+</PRE>
+If the argument (and therefore the result) is imaginary The real part of
+the result is in radians and lies in the range
 <P>
-      write(*,*)&#146;percent grade=&#146;,rise/run*100.0_dp
-    end program demo_asin
+<PRE>
+             -PI/2 &lt;= real(asin(x)) &lt;= PI/2
+<P>
+</PRE>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+The arcsine will allow you to find the measure of a right angle when you
+know the ratio of the side opposite the angle to the hypotenuse.
+<P>
+So if you knew that a train track rose 1.25 vertical miles on a track that
+was 50 miles long, you could determine the average angle of incline of the
+track using the arcsine. Given
+<P>
+<PRE>
+       sin(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
+<P>
+</PRE>
+Sample program:
+<P>
+<PRE>
+      program demo_asin
+      use, intrinsic :: iso_fortran_env, only : dp=&gt;real64
+      implicit none
+      ! value to convert degrees to radians
+      real(kind=dp),parameter :: D2R=acos(-1.0_dp)/180.0_dp
+      real(kind=dp)           :: angle, rise, run
+      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+        ! given sine(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
+        ! then taking the arcsine of both sides of the equality yields
+        ! theta = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)
+        rise=1.250_dp
+        run=50.00_dp
+        angle = asin(rise/run)
+        print all, &#146;angle of incline(radians) = &#146;, angle
+        angle = angle/D2R
+        print all, &#146;angle of incline(degrees) = &#146;, angle
+<P>
+        print all, &#146;percent grade=&#146;,rise/run*100.0_dp
+      end program demo_asin
+<P>
 </PRE>
 Results:
 <P>
 <PRE>
-    angle of incline(radians) =    2.5002604899361139E-002
-    angle of incline(degrees) =    1.4325437375665075
-    percent grade=   2.5000000000000000
+          angle of incline(radians) =    2.5002604899361139E-002
+          angle of incline(degrees) =    1.4325437375665075
+          percent grade=   2.5000000000000000
 <P>
 </PRE>
-The percentage grade is the slope, written as a percent. To calculate
-the slope you divide the rise by the run. In the example the rise
-is 1.25 mile over a run of 50 miles so the slope is 1.25/50 =
-0.025. Written as a percent this is 2.5 %.
+The percentage grade is the slope, written as a percent. To calculate the
+slope you divide the rise by the run. In the example the rise is 1.25 mile
+<TABLE cellpadding=3><!-- tsb: The percentage grade is the slope, written as a percent. To calculate the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>over a run of 50 miles so the slope is 1.25/50 = 0.025.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Written as a
+percent this is 2.5 %.
+</TD></TR>
+<TR></TR></TABLE>For the US, two and 1/2 percent is generally thought of as the upper limit.
+This means a rise of 2.5 feet when going 100 feet forward. In the US this
+was the maximum grade on the first major US railroad, the Baltimore and
+Ohio. Note curves increase the frictional drag on a train reducing the
+allowable grade.
 </BLOCKQUOTE>
-<P>
-for the US, two and 1/2 percent is generally thought of as the upper
-limit. This means a rise of 2.5 feet when going 100 feet forward. In
-the US this was the maximum grade on the first major US railroad,
-the Baltimore and Ohio. Note curves increase the frictional drag on
-a train reducing the allowable grade.
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later, for a complex argument [[Fortran 2008]] or later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+FORTRAN 77 , for a complex argument Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
 
@@ -182,17 +242,28 @@ a train reducing the allowable grade.
 
 </A>
 <BLOCKQUOTE>
-Inverse function: <B>sin</B>(3)
+Inverse function: <B>SIN</B>(3)
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>JSU</H3>
+     <H3>RESOURCES</H3>
 
 </A>
 <BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+wikipedia: inverse trigonometric functions
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 asin(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>asin (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9a144562-5ca6-49e8-b8d7-0de2e93e4ce0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>asin (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cf1efd4d-f2a3-46a3-a85d-057472dbee7a using man macros.</FONT>
 <br><br><center><img src="images/asin.3fortran.gif"></center>
 </div>
 </div>

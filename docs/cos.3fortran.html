@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,111 +41,146 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cos (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cos (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>cos</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>cos</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>cos</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS:TRIGONOMETRIC] Cosine function
+<B>COS</B>(3) - [MATHEMATICS:TRIGONOMETRIC] Cosine function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=9>
+<A name=10>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>cos</B>(x)
+result = <B>cos</B>(<I>x</I>)
+<P>
+<PRE>
+           elemental TYPE(kind=KIND) function cos(x)
+<P>
+            TYPE(kind=KIND),intent(in) :: x
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+where TYPE may be real or complex of any kind.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the returned value will be of the same type and kind as the argument.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>cos</B>(x) computes the cosine of X.
+<B>COS</B>(3) computes the cosine of an angle X given the size of the angle in
+radians.
+<P>
+The cosine of a real value is the ratio of the adjacent side to the
+hypotenuse of a right-angled triangle.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type shall be REAL or COMPLEX.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The angle in radians to compute the cosine of.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of the same type and kind as X. The real part
-of the result is in radians. If X is of the type REAL, the return
-value lies in the range <B>-1</B> &lt;= <B>cos</B>(x) &lt;= 1.
+The return value is the tangent of X.
+<P>
+If X is of the type real, the return value lies in the range <B>-1</B> &lt;= <B>COS</B>(X) &lt;=
+1 .
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_cos
-   implicit none
-   doubleprecision,parameter :: PI=atan(1.0d0)*4.0d0
-   write(*,*)&#146;COS(0.0)=&#146;,cos(0.0)
-   write(*,*)&#146;COS(PI)=&#146;,cos(PI)
-   write(*,*)&#146;COS(PI/2.0d0)=&#146;,cos(PI/2.0d0),&#146; EPSILON=&#146;,epsilon(PI)
-   write(*,*)&#146;COS(2*PI)=&#146;,cos(2*PI)
-   write(*,*)&#146;COS(-2*PI)=&#146;,cos(-2*PI)
-   write(*,*)&#146;COS(-2000*PI)=&#146;,cos(-2000*PI)
-   write(*,*)&#146;COS(3000*PI)=&#146;,cos(3000*PI)
-   end program demo_cos
+      program demo_cos
+      implicit none
+      doubleprecision,parameter :: PI=atan(1.0d0)*4.0d0
+         write(*,*)&#146;COS(0.0)=&#146;,cos(0.0)
+         write(*,*)&#146;COS(PI)=&#146;,cos(PI)
+         write(*,*)&#146;COS(PI/2.0d0)=&#146;,cos(PI/2.0d0),&#146; EPSILON=&#146;,epsilon(PI)
+         write(*,*)&#146;COS(2*PI)=&#146;,cos(2*PI)
+         write(*,*)&#146;COS(-2*PI)=&#146;,cos(-2*PI)
+         write(*,*)&#146;COS(-2000*PI)=&#146;,cos(-2000*PI)
+         write(*,*)&#146;COS(3000*PI)=&#146;,cos(3000*PI)
+      end program demo_cos
 <P>
 </PRE>
-Expected output:
+Results:
 <P>
 <PRE>
-   COS(0.0)=        1.00000000
-   COS(PI)=        -1.0000000000000000
-   COS(PI/2.0d0)=   6.1232339957367660E-017
-   EPSILON=         2.2204460492503131E-016
-   COS(2*PI)=       1.0000000000000000
-   COS(-2*PI)=      1.0000000000000000
-   COS(-2000*PI)=   1.0000000000000000
+         COS(0.0)=        1.00000000
+         COS(PI)=        -1.0000000000000000
+         COS(PI/2.0d0)=   6.1232339957367660E-017
+         EPSILON=         2.2204460492503131E-016
+         COS(2*PI)=       1.0000000000000000
+         COS(-2*PI)=      1.0000000000000000
+         COS(-2000*PI)=   1.0000000000000000
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
 
@@ -153,10 +188,28 @@ Expected output:
 
 </A>
 <BLOCKQUOTE>
-<B>acos</B>(3), <B>sin</B>(3), <B>tan</B>(3)
+<B>ACOS</B>(3), <B>SIN</B>(3), <B>TAN</B>(3)
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>RESOURCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Wikipedia:sine and cosine
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022                  cos(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cos (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 564fc1ec-0489-4df7-8c27-e882e5f9a3e7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cos (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4ba4b774-e0de-4bf1-819b-e32fe74cb220 using man macros.</FONT>
 <br><br><center><img src="images/cos.3fortran.gif"></center>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,116 +41,184 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>llt (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>llt (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>llt</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>llt</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>llt</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] Lexical less than
+<B>LLT</B>(3) - [CHARACTER:COMPARE] ASCII Lexical less than
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>llt</B>(string_a, string_b)
+result = <B>llt</B>(<I>string_a</I>, <I>stringb</I>)
+<P>
+<PRE>
+            elemental logical function llt(string_a, string_b)
+<P>
+             character(len=*),intent(in) :: string_a
+             character(len=*),intent(in) :: string_b
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Determines whether one string is lexically less than another string,
-where the two strings are interpreted as containing ASCII character
-codes. If the String A and String B are not the same length, the
-shorter is compared as if spaces were appended to it to form a value
-that has the same length as the longer.
+<B>LLT</B>(3) determines whether one string is lexically less than another string,
+where the two strings are interpreted as containing ASCII character codes.
+If the STRING_A and STRING_B are not the same length, the shorter is
+compared as if spaces were appended to it to form a value that has the same
+length as the longer.
 <P>
-In general, the lexical comparison intrinsics LGE, LGT,
-LLE, and LLT differ from the corresponding intrinsic
-operators .ge., .gt., .le., and .lt., in
-that the latter use the processor&#146;s character ordering (which is not
-ASCII on some targets), whereas the former always use the ASCII
-ordering.
+In general, the lexical comparison intrinsics LGE, LGT, LLE, and LLT differ
+from the corresponding intrinsic operators .ge., .gt., .le., and \.lt., in
+that the latter use the processor&#146;s character ordering (which is not ASCII
+on some targets), whereas the former always use the ASCII ordering.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>string_a</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Shall be of default CHARACTER type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING_A : Shall be of default character type.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>string_b</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Shall be of default CHARACTER type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING_B : Shall be of default character type.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-Returns .true. if string_a &lt;= string_b, and .false.
-otherwise, based on the ASCII ordering.
+Returns .true. if <I>string_a</I> &lt;= string_b, and .false. otherwise, based on the
+ASCII ordering.
+<P>
+If both input arguments are null strings, .false. is always returned.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_llt
+      implicit none
+      integer :: i
+         write(*,&#146;(*(a))&#146;)(char(i),i=32,126)  ! ASCII order
+         write(*,*) llt(&#146;abc&#146;,&#146;ABC&#146;)          ! [F] lowercase is &gt; uppercase
+         write(*,*) llt(&#146;abc&#146;,&#146;abc  &#146;)        ! [F] trailing spaces
+         ! If both strings are of zero length the result is false.
+         write(*,*) llt(&#146;&#146;,&#146;&#146;)                ! [F]
+         write(*,*) llt(&#146;&#146;,&#146;a&#146;)               ! [T] the null string is padded
+         write(*,*) llt(&#146;a&#146;,&#146;&#146;)               ! [F]
+         write(*,*) llt(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;])  ! [F F]  scalar and array
+         write(*,*) llt([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;) ! [F T]
+         write(*,*) llt([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T F]  both arrays
+      end program demo_llt
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+        &gt; !"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        &gt; [\]^_&#145;abcdefghijklmnopqrstuvwxyz{|}~
+        &gt; F
+        &gt; F
+        &gt; F
+        &gt; T
+        &gt; F
+        &gt; F F
+        &gt; F T
+        &gt; T F
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
+FORTRAN 77
 </BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
-</BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>[[lge</B>(3), <B>[[lgt</B>(3), <B>[[lle</B>(3)
+<B>LGE</B>(3), <B>LGT</B>(3), <B>LLE</B>(3))
 <P>
-Functions that perform operations on character strings, return lengths
-of arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
+Functions that perform operations on character strings, return lengths of
+arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>Elemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>adjustl</B>(3), <B>adjustr</B>(3), <B>index</B>(3), <B>len_trim</B>(3),
-<B>scan</B>(3), <B>verify</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3), <B>SCAN</B>(3), <B>VERIFY</B>(3)
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Nonelemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>repeat</B>(3), <B>trim</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  llt(3fortran)
+</PRE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>llt (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from eb1cea64-3f57-492b-8cd1-aed9deb82474 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>llt (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 006be2ed-65df-4ab9-a92c-4f1d546680bd using man macros.</FONT>
 <br><br><center><img src="images/llt.3fortran.gif"></center>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,94 +41,187 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ibset (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ibset (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ibset</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ibset</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ibset</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] Set bit
+<B>IBSET</B>(3) - [BIT:SET] Set a bit to one in an integer value
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>ibset</B>(i, pos)
+result = <B>ibset</B>(<I>i</I>, <I>pos</I>)
+<P>
+<PRE>
+           elemental integer(kind=KIND) function ibset(i,pos)
+<P>
+            integer(kind=KIND),intent(in) :: i
+            integer(kind=**),intent(in) :: pos
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The return value is of the same kind as I. Otherwise, any integer kinds
+are allowed.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-IBSET returns the value of I with the bit at position
-POS set to one.
+<B>IBSET</B>(3) returns the value of I with the bit at position POS set to one.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : The initial value to be modified
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>POS</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
-A value of zero refers to the least significant bit.
-pos is an <B>INTENT</B>(IN) scalar or array of type INTEGER.
-The value of pos must be within the range zero to (BIT_SIZE(i)<B>-1</B>).
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+POS : The position of the bit to change in the input value. A value of
+zero refers to the right-most bit. The value of POS must be nonnegative
+and less than (BIT_SIZE(I)).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type INTEGER and of the same kind as I.
+The returned value has the same bit sequence as I except the designated bit
+is unconditionally set to 1.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_ibset
+      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
+      implicit none
+      integer(kind=int16) :: i,j
+        ! basic usage
+         print *,ibset (12, 1), &#146;ibset(12,1) has the value 14&#146;
+<P>
+         ! it is easier to see using binary representation
+         i=int(b&#146;0000000000000110&#146;,kind=int16)
+         write(*,&#146;(b16.16,1x,i0,1x,i0)&#146;) ibset(i,12), ibset(i,12), i
+<P>
+        ! elemental
+         print *,&#146;an array of initial values may be given as well&#146;
+         print *,ibset(i=[0,4096], pos=2)
+         print *
+         print *,&#146;a list of positions results in multiple returned values&#146;
+         print *,&#146;not multiple bits set in one value, as the routine is  &#146;
+         print *,&#146;a scalar function; calling it elementally essentially  &#146;
+         print *,&#146;calls it multiple times.                               &#146;
+         write(*,&#146;(b16.16)&#146;) ibset(i=0, pos=[1,2,3,4])
+<P>
+         ! both may be arrays if of the same size
+<P>
+      end program demo_ibset
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+       &gt;           14 ibset(12,1) has the value 14
+       &gt; 0001000000000110 4102 6
+       &gt;  an array of initial values may be given as well
+       &gt;            4        4100
+       &gt;
+       &gt;  a list of positions results in multiple returned values
+       &gt;  not multiple bits set in one value, as the routine is
+       &gt;  a scalar function; calling it elementally essentially
+       &gt;  calls it multiple times.
+       &gt; 0000000000000010
+       &gt; 0000000000000100
+       &gt; 0000000000001000
+       &gt; 0000000000010000
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
+Fortran 95
 </BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
-</BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>btest</B>(3), <B>ibclr</B>(3), <B>ibits</B>(3), <B>iand</B>(3), <B>ior</B>(3), <B>ieor</B>(3),
-<B>mvbits</B>(3)
+<B>IBCLR</B>(3)
+<P>
+<B>IEOR</B>(3), <B>NOT</B>(3), <B>BTEST</B>(3), <B>IBITS</B>(3), <B>IAND</B>(3), <B>IOR</B>(3), <B>IEOR</B>(3), <B>MVBITS</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                ibset(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ibset (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 69524192-1531-45de-96f3-f263fcd8302c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ibset (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6e46d031-5938-463e-ac5b-70cb2f7cc042 using man macros.</FONT>
 <br><br><center><img src="images/ibset.3fortran.gif"></center>
 </div>
 </div>

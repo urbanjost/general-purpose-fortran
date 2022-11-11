@@ -7,7 +7,7 @@
         integer            :: ios,icount,ierr
         INFINITE: do
            read(*,'(a)',iostat=ios) line
-           if(ios.ne.0)exit INFINITE
+           if(ios /= 0)exit INFINITE
            call getvals(line,values,icount,ierr)
            write(*,'(4(g0,1x))')'VALUES=',values(:icount)
         enddo INFINITE

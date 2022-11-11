@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,89 +41,250 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bge (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bge (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>bge</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>bge</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>bge</B>(3f) - [FORTRAN:INTRINSIC:BIT COMPARE] Bitwise greater than or equal to
+<B>BGE</B>(3) - [BIT:COMPARE] Bitwise greater than or equal to
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+result = <B>bge</B>(i,j)
+<P>
+<PRE>
+            elemental logical function bge(i, j)
+<P>
+             integer(kind=**),intent(in) :: i
+             integer(kind=**),intent(in) :: j
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the integer kind of I and J may not necessarily be the same. In addition,
+values may be a BOZ constant with a value valid for the integer kind
+available with the most bits on the current platform.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The return value is of type logical and of the default kind.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Determines whether an integer is a bitwise greater than or equal to another.
+<B>BGE</B>(3) Determines whether one integer is bitwise greater than or equal to
+another.
+<P>
+The bit-level representation of a value is platform dependent. The endian-
+ness of a system and whether the system uses a "two&#146;s complement"
+representation of signs can affect the results, for example.
+<P>
+A BOZ constant (Binary, Octal, Hexadecimal) does not have a kind or type of
+its own, so be aware it is subject to truncation when transferred to an
+integer type. The most bits the constant may contain is limited by the most
+bits representable by any integer kind supported by the compilation.
+<P>
+Bit Sequence Comparison
+<P>
+When bit sequences of unequal length are compared, the shorter sequence is
+padded with zero bits on the left to the same length as the longer sequence
+(up to the largest number of bits any available integer kind supports).
+<P>
+Bit sequences are compared from left to right, one bit at a time, until
+unequal bits are found or until all bits have been compared and found to be
+equal.
+<P>
+The bits are always evaluated in this order, not necessarily from MSB to LSB
+(most significant bit to least significant bit).
+<P>
+If unequal bits are found the sequence with zero in the unequal position is
+considered to be less than the sequence with one in the unequal position.
 </BLOCKQUOTE>
-<A name=2>
+<A name=4>
 
-     <H3>SYNTAX</H3>
-
-</A>
-<BLOCKQUOTE>
-result = <B>bge</B>(i, j)
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-Shall be of INTEGER type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : The value to test if &gt;= J based on the bit representation of the
+values.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>J</B> </TD><TD valign=bottom>
-Shall be of INTEGER type, and of the same kind as I.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+J : The value to test I against.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type LOGICAL and of the default kind.
+Returns .true. if I is bit-wise greater than J and .false. otherwise.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_bge
+      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+      implicit none
+      integer            :: i
+      integer(kind=int8) :: byte
+      integer(kind=int8),allocatable :: arr1(:), arr2(:)
+<P>
+        ! BASIC USAGE
+         write(*,*)&#146;bge(-127,127)=&#146;,bge( -127, 127 )
+         ! on (very common) "two&#146;s complement" machines that are
+         ! little-endian -127 will be greater than 127
+<P>
+         ! BOZ constants
+         ! BOZ constants are subject to truncation, so make sure
+         ! your values are valid for the integer kind being compared to
+         write(*,*)&#146;bge(b"0001",2)=&#146;,bge( b"1", 2)
+<P>
+        ! ELEMENTAL
+         ! an array and scalar
+         write(*, *)&#146;compare array of values [-128, -0, +0, 127] to 127&#146;
+         write(*, *)bge(int([-128, -0, +0, 127], kind=int8), 127_int8)
+<P>
+         ! two arrays
+         write(*, *)&#146;compare two arrays&#146;
+         arr1=int( [ -127, -0, +0,  127], kind=int8 )
+         arr2=int( [  127,  0,  0, -127], kind=int8 )
+         write(*,*)&#146;arr1=&#146;,arr1
+         write(*,*)&#146;arr2=&#146;,arr2
+         write(*, *)&#146;bge(arr1,arr2)=&#146;,bge( arr1, arr2 )
+<P>
+        ! SHOW TESTS AND BITS
+         ! actually looking at the bit patterns should clarify what affect
+         ! signs have &#46;&#46;&#46;
+         write(*,*)&#146;Compare some one-byte values to 64.&#146;
+         write(*,*)&#146;Notice that the values are tested as bits not as integers&#146;
+         write(*,*)&#146;so the results are as if values are unsigned integers.&#146;
+         do i=-128,127,32
+            byte=i
+            write(*,&#146;(sp,i0.4,*(1x,1l,1x,b0.8))&#146;)i,bge(byte,64_int8),byte
+         enddo
+<P>
+        ! SIGNED ZERO
+         ! are +0 and -0 the same on your platform? When comparing at the
+         ! bit level this is important
+         write(*,&#146;("plus zero=",b0)&#146;)  +0
+         write(*,&#146;("minus zero=",b0)&#146;) -0
+<P>
+      end program demo_bge
+<P>
+</PRE>
+Results:
+<P>
+How an integer value is represented at the bit level can vary. These are
+just the values expected on Today&#146;s most common platforms &#46;&#46;&#46;
+<P>
+<PRE>
+          &gt; bge(-127,127)= T
+          &gt; bge(b"0001",2)= F
+          &gt; compare array of values [-128, -0, +0, 127] to 127
+          &gt; T F F T
+          &gt; compare two arrays
+          &gt; arr1= -127    0    0  127
+          &gt; arr2=  127    0    0 -127
+          &gt; bge(arr1,arr2)= T T T F
+          &gt; Compare some one-byte values to 64.
+          &gt; Notice that the values are tested as bits not as integers
+          &gt; so the results are as if values are unsigned integers.
+          &gt; -0128  T 10000000
+          &gt; -0096  T 10100000
+          &gt; -0064  T 11000000
+          &gt; -0032  T 11100000
+          &gt; +0000  F 00000000
+          &gt; +0032  F 00100000
+          &gt; +0064  T 01000000
+          &gt; +0096  T 01100000
+          &gt; plus zero=0
+          &gt; minus zero=0
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2008]] and later
+Fortran 2008
 </BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental function]]
-</BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>bgt</B>(3), <B>ble</B>(3), <B>blt</B>(3)
+<B>BGT</B>(3), <B>BLE</B>(3), <B>BLT</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  bge(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bge (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c4ee4733-d9a9-4b87-9417-361db5d64f95 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bge (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 46d0be38-990b-416d-ad2c-b4d09b96215b using man macros.</FONT>
 <br><br><center><img src="images/bge.3fortran.gif"></center>
 </div>
 </div>

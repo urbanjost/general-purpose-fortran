@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,103 +41,193 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>len (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>len (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>len</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>len</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>len</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] Length of a character entity
+<B>LEN</B>(3) - [CHARACTER] Length of a character entity
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-l = <B>len</B>(string [, kind])
+result = <B>len</B>(string [,<I>kind</I>])
+<P>
+<PRE>
+           integer(kind=KIND) function len(string,kind)
+<P>
+            character(len=*),intent(in) :: string
+            integer,optional,intent(in) :: kind
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+where the returned value is the same integer <I>kind</I> as the KIND argument, or
+of the default integer <I>kind</I> if KIND is not specified.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Returns the length of a character string. If STRING is an array,
-the length of an element of STRING is returned. Note that
-STRING need not be defined when this intrinsic is invoked, since
-only the length, not the content, of STRING is needed.
+<B>LEN</B>(3) returns the length of a character string.
+<P>
+If STRING is an array, the length of an element of STRING is returned, as
+all elements of an array are the same length.
+<P>
+Note that STRING need not be defined when this intrinsic is invoked, as only
+the length (not the content) of STRING is needed.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>STRING</B> </TD><TD valign=bottom>
-Shall be a scalar or array of type
-CHARACTER, with <B>intent</B>(in)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING : A scalar or array of type character to return the length of
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(Optional) An INTEGER initialization
-expression indicating the kind parameter of the result.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND : A constant integer initialization expression indicating the <I>kind</I>
+parameter of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
-
-     <H3>RETURN VALUE</H3>
-
-</A>
-<BLOCKQUOTE>
-The return value is of type INTEGER and of kind KIND. If
-KIND is absent, the return value is of default integer kind.
-</BLOCKQUOTE>
 <A name=5>
 
-     <H3>STANDARD</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later, with KIND argument [[Fortran 2003]] and later
+The return value is of type integer and of <I>kind</I> KIND. If KIND is absent, the
+return value is of default integer <I>kind</I>.
 </BLOCKQUOTE>
 <A name=6>
 
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Inquiry function]]
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program
 <P>
 <PRE>
-     program demo_len
-     implicit none
-     character(len=:),allocatable :: string
-        string=&#146; how long is this string?     &#146;
-        write(*,*)&#146;LENGTH=&#146;,len(string)
-        write(*,*)&#146;TRIMMED LENGTH=&#146;,len_trim(string)
-     end program demo_len
+      program demo_len
+      implicit none
+<P>
+      ! fixed length
+      character(len=40) :: string
+      ! allocatable length
+      character(len=:),allocatable :: astring
+      character(len=:),allocatable :: many_strings(:)
+      integer :: ii
+        ! BASIC USAGE
+         ii=len(string)
+         write(*,*)&#146;length =&#146;,ii
+<P>
+        ! ALLOCATABLE VARIABLE LENGTH CAN CHANGE
+        ! the allocatable string length will be the length of RHS expression
+         astring=&#146; How long is this allocatable string? &#146;
+         write(*,*)astring, &#146; LEN=&#146;, len(astring)
+        ! print underline
+         write(*,*) repeat(&#146;=&#146;,len(astring))
+        ! assign new value to astring and length changes
+         astring=&#146;New allocatable string&#146;
+         write(*,*)astring, &#146; LEN=&#146;, len(astring)
+        ! print underline
+         write(*,*) repeat(&#146;=&#146;,len(astring))
+<P>
+        ! THE STRING LENGTH WILL BE CONSTANT FOR A FIXED-LENGTH VARIABLE
+         string=&#146; How long is this fixed string? &#146;
+         write(*,*)string,&#146; LEN=&#146;,len(string)
+         string=&#146;New fixed string &#146;
+         write(*,*)string,&#146; LEN=&#146;,len(string)
+<P>
+        ! ALL STRINGS IN AN ARRAY ARE THE SAME LENGTH
+        ! a scalar is returned for an array, as all values in a Fortran
+        ! character array must be of the same length.
+         many_strings = [ character(len=7) :: &#146;Tom&#146;, &#146;Dick&#146;, &#146;Harry&#146; ]
+         write(*,*)&#146;length of ALL elements of array=&#146;,len(many_strings)
+<P>
+        ! NAME%LEN IS ESSENTIALLY THE SAME AS LEN(NAME)
+        ! you can also query the length (and other attributes) of a string
+        ! using a "type parameter inquiry" (available since fortran 2018)
+         write(*,*)&#146;length from type parameter inquiry=&#146;,string%len
+        ! %len is equivalent to a call to LEN() except the kind of the integer
+        ! value returned is always of default kind.
+<P>
+        ! LOOK AT HOW A PASSED STRING CAN BE USED &#46;&#46;&#46;
+         call passed(&#146; how long? &#146;)
+<P>
+      contains
+<P>
+         subroutine passed(str)
+         character(len=*),intent(in)  :: str
+         ! the length of str can be used in the definitions of variables
+            ! you can query the length of the passed variable
+            write(*,*)&#146;length of passed value is &#146;, LEN(str)
+         end subroutine passed
+<P>
+      end program demo_len
 <P>
 </PRE>
+Results:
+<P>
+<PRE>
+          length =          40
+           How long is this allocatable string?  LEN=          38
+          ======================================
+          New allocatable string LEN=          22
+          ======================
+           How long is this fixed string?          LEN=          40
+          New fixed string                         LEN=          40
+          length of ALL elements of array=           7
+          length from type parameter inquiry=          40
+          length of passed value is           11
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+FORTRAN 77 ; with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
 
@@ -145,23 +235,32 @@ Sample program
 
 </A>
 <BLOCKQUOTE>
-Functions that perform operations on character strings, return lengths
-of arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
+<B>len_trim</B>(3), <B>adjustr</B>(3), <B>trim</B>(3), and <B>adjustl</B>(3) are related routines that
+allow you to deal with leading and trailing blanks.
+<P>
+Functions that perform operations on character strings, return lengths of
+arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>Elemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>adjustl</B>(3), <B>adjustr</B>(3), <B>index</B>(3), <B>len_trim</B>(3),
-<B>scan</B>(3), <B>verify</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3), <B>SCAN</B>(3), <B>VERIFY</B>(3)
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Nonelemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>repeat</B>(3), <B>trim</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  len(3fortran)
+</PRE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>len (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0274e11d-2cd1-4c3c-b761-66ab582ca64f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>len (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 83abc382-fd3e-42d6-96c5-e39482c6dcf9 using man macros.</FONT>
 <br><br><center><img src="images/len.3fortran.gif"></center>
 </div>
 </div>

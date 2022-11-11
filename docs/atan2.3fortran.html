@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,124 +41,341 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atan2 (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atan2 (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>atan2</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>atan2</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>atan2</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS:TRIGONOMETRIC] Arctangent
-function
+<B>ATAN2</B>(3) - [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=10>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>atan2</B>(y, x)
+result = <B>atan2</B>(<I>y</I>, <I>x</I>)
+<P>
+<PRE>
+           elemental function atan2(y, x)
+<P>
+            real,kind=KIND) :: atan2
+            real,kind=KIND),intent(in) :: y, x
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+X and Y must be reals of the same kind.
+<P>
+The return value has the same type and kind as Y and X.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>atan2</B>(y, x) computes the arctangent of the complex number
-<P>
-<PRE>
-      X + i Y.
-<P>
-</PRE>
-This function can be used to transform from Cartesian into polar
-coordinates and allows to determine the angle in the correct quadrant.
-To convert from Cartesian Coordinates (x,y) to polar coordinates
-<P>
-(r,theta):
-$$
-\begin{aligned}
-r &= \sqrt{x**2 + y**2} \\
-\theta &= \tan**{<B>-1</B>}(y / x)
-\end{aligned}
-$$
+<B>ATAN2</B>(3) computes in radians a processor-dependent approximation of the
+arctangent of the complex number ( X, Y ) or equivalently the principal
+value of the arctangent of the value Y/X (which determines a unique angle).
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>Y</B> </TD><TD valign=bottom>
-The type shall be REAL.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Y : The imaginary component of the complex value (X,Y) or the Y component
+of the point &lt;X,Y&gt;.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type and kind type parameter shall be the same as Y.
-If Y is zero, then X must be nonzero.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The real component of the complex value (X,Y) or the X component of
+the point &lt;X,Y&gt;.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value has the same type and kind type parameter as Y.
-It is the principal value of the complex number (X + i, Y). If
-X is nonzero, then it lies in the range <B>-PI</B> &lt;= <B>atan</B>(x) &lt;= PI.
-The sign is positive if Y is positive. If Y is zero, then
-the return value is zero if X is strictly positive, PI if
-X is negative and Y is positive zero (or the processor does
-not handle signed zeros), and <B>-PI</B> if X is negative and
-Y is negative zero. Finally, if X is zero, then the
-magnitude of the result is PI/2.
+The value returned is by definition the principal value of the complex
+number (X, Y).
+<P>
+The principal value is simply what we get when we adjust a radian value to
+lie between <B>-PI</B> and PI inclusive,
+<P>
+The classic definition of the arctangent is the angle that is formed in
+Cartesian coordinates of the line from the origin point &lt;0,0&gt; to the point
+&lt;X,Y&gt; .
+<P>
+Pictured as a vector it is easy to see that if X and Y are both zero the
+angle is indeterminate because it sits directly over the origin, so
+<B>ATAN</B>(0.0,0.0) will produce an error.
+<P>
+Range of returned values by quadrant:
+<P>
+<PRE>
+      &gt;                   +PI/2
+      &gt;                     |
+      &gt;                     |
+      &gt;     PI/2 &lt; z &lt; PI   |   0 &gt; z &lt; PI/2
+      &gt;                     |
+      &gt;   +-PI -------------+---------------- +-0
+      &gt;                     |
+      &gt;     PI/2 &lt; -z &lt; PI  |   0 &lt; -z &lt; PI/2
+      &gt;                     |
+      &gt;                     |
+      &gt;                   -PI/2
+      &gt;
+           NOTES:
+<P>
+           If the processor distinguishes -0 and +0 then the sign of the
+           returned value is that of Y when Y is zero, else when Y is zero
+           the returned value is always positive.
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_atan2
-   implicit none
-   real(4) :: x = 1.e0_4, y = 0.5e0_4
-      x = atan2(y,x)
-   end program demo_atan2
+      program demo_atan2
+      real :: z
+      complex :: c
+<P>
+       ! basic usage
+        ! ATAN2 (1.5574077, 1.0) has the value 1.0 (approximately).
+        z=atan2(1.5574077, 1.0)
+        write(*,*) &#146;radians=&#146;,z,&#146;degrees=&#146;,r2d(z)
+<P>
+       ! elemental arrays
+        write(*,*)&#146;elemental&#146;,atan2( [10.0, 20.0], [30.0,40.0] )
+<P>
+       ! elemental arrays and scalars
+        write(*,*)&#146;elemental&#146;,atan2( [10.0, 20.0], 50.0 )
+<P>
+       ! break complex values into real and imaginary components
+       ! (note TAN2() can take a complex type value )
+        c=(0.0,1.0)
+        write(*,*)&#146;complex&#146;,c,atan2( x=c%re, y=c%im )
+<P>
+       ! extended sample converting cartesian coordinates to polar
+        COMPLEX_VALS: block
+        real                :: ang, radius
+        complex,allocatable :: vals(:)
+<P>
+        vals=[ &
+          ( 1.0, 0.0 ), & ! 0
+          ( 1.0, 1.0 ), & ! 45
+          ( 0.0, 1.0 ), & ! 90
+          (-1.0, 1.0 ), & ! 135
+          (-1.0, 0.0 ), & ! 180
+          (-1.0,-1.0 ), & ! 225
+          ( 0.0,-1.0 )]   ! 270
+        do i=1,size(vals)
+           call cartesian_to_polar(vals(i)%re, vals(i)%im, radius,ang)
+           write(*,101)vals(i),ang,r2d(ang),radius
+        enddo
+        101 format(             &
+        & &#146;X= &#146;,f5.2,           &
+        & &#146; Y= &#146;,f5.2,          &
+        & &#146; ANGLE= &#146;,g0,        &
+        & T38,&#146;DEGREES= &#146;,g0.4, &
+        & T54,&#146;DISTANCE=&#146;,g0)
+       endblock COMPLEX_VALS
+<P>
+      contains
+<P>
+      elemental real function r2d(radians)
+      ! input radians to convert to degrees
+      doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
+      real,intent(in)           :: radians
+         r2d=radians / DEGREE ! do the conversion
+      end function r2d
+<P>
+      subroutine cartesian_to_polar(x,y,radius,inclination)
+      ! return angle in radians in range 0 to 2*PI
+      implicit none
+      real,intent(in)  :: x,y
+      real,intent(out) :: radius,inclination
+         radius=sqrt(x**2+y**2)
+         if(radius.eq.0)then
+            inclination=0.0
+         else
+            inclination=atan2(y,x)
+            if(inclination &lt; 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)
+         endif
+      end subroutine cartesian_to_polar
+<P>
+      end program demo_atan2
 <P>
 </PRE>
+Results:
+<P>
+<PRE>
+          radians=   1.000000     degrees=   57.29578
+          elemental  0.3217506      0.4636476
+          elemental  0.1973956      0.3805064
+          complex (0.0000000E+00,1.000000)   1.570796
+<P>
+</PRE>
+X=
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: X=
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>1.00 Y=</B> </TD><TD valign=bottom>
+0.00 ANGLE= .000000     DEGREES= .000   DISTANCE=1.000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+X=
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: X=
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>1.00 Y=</B> </TD><TD valign=bottom>
+1.00 ANGLE= .7853982    DEGREES= 45.00  DISTANCE=1.414214
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+X=
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: X=
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>0.00 Y=</B> </TD><TD valign=bottom>
+1.00 ANGLE= 1.570796    DEGREES= 90.00  DISTANCE=1.000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+X= <B>-1.00</B> Y=
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: X= <B>-1.00</B> Y=
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>1.00 ANGLE= 2.356194</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+DEGREES= 135.0  DISTANCE=1.414214
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+X= <B>-1.00</B> Y=
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: X= <B>-1.00</B> Y=
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>0.00 ANGLE= 3.141593</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+DEGREES= 180.0  DISTANCE=1.000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+X= <B>-1.00</B> Y= -1.00 ANGLE= 3.926991
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: X= <B>-1.00</B> Y= -1.00 ANGLE= 3.926991
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>DEGREES= 225.0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+DISTANCE=1.414214
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+X=
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: X=
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>0.00 Y= </B><B>-1.00</B> ANGLE= 4.712389 </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+DEGREES= 270.0  DISTANCE=1.000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
+FORTRAN 77
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>ATAN</B>(3)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=9>
+
+     <H3>RESOURCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+arctan:wikipedia fortran-lang intrinsic descriptions (license: MIT)
+@urbanjost
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+                               October 11, 2022                atan2(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 21eb688d-faf5-496c-8541-486a0bd5aba8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7283b777-4ba8-477a-a1a9-41b60388f5b0 using man macros.</FONT>
 <br><br><center><img src="images/atan2.3fortran.gif"></center>
 </div>
 </div>

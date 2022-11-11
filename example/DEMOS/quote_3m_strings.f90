@@ -8,7 +8,7 @@
         do
            write(*,'(a)',advance='no')'Enter test string:'
            read(*,'(a)',iostat=ios,iomsg=msg)inline
-           if(ios.ne.0)then
+           if(ios /= 0)then
               write(*,*)trim(inline)
               exit
            endif

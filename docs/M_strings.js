@@ -9,6 +9,7 @@ append("c2s.3m_strings.html");
 append("cc.3m_strings.html");
 append("change.3m_strings.html");
 append("chomp.3m_strings.html");
+append("clip.3m_strings.html");
 append("codebase.3m_strings.html");
 append("compact.3m_strings.html");
 append("crop.3m_strings.html");

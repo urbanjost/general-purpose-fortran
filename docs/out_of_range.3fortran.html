@@ -1,0 +1,253 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>out_of_range (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>out_of_range (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>out_of_range</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>out_of_range</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>OUT_OF_RANGE</B>(3) - [TYPE:NUMERIC] Whether a value cannot be converted safely.
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+result = out_of_range (<I>x</I>, mold [, <I>round</I>])
+<P>
+<PRE>
+           elemental logical function(x, mold, round)
+<P>
+            TYPE,kind=KIND),intent(in) :: x
+            TYPE,kind=KIND),intent(in) :: mold
+            logical,intent(in),optional     :: round
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+where TYPE may be real or integer of any available KIND.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>OUT_OF_RANGE</B>(3) determines whether a value X can be converted safely to a
+real or integer variable the same type and kind as MOLD.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : a scalar of type integer or real to be tested for whether it can be
+stored in a variable of the type and kind of MOLD
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MOLD : shall be an integer or real scalar. If it is a variable, it need
+not be defined, as only the type and kind are queried.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ROUND : flag whether to <I>round</I> the value of XX before validating it as an
+integer value like MOLD.
+<P>
+ROUND can only be present if X is of type real and MOLD is of type
+integer.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+From the standard:
+<P>
+Case (i): If MOLD is of type integer, and ROUND is absent or present with
+the value false, the result is true if and only if the value of X is an IEEE
+infinity or NaN, or if the integer with largest magnitude that lies between
+zero and X inclusive is not representable by objects with the type and kind
+of MOLD.
+<P>
+Case (ii): If MOLD is of type integer, and ROUND is present with the value
+true, the result is true if and only if the value of X is an IEEE infinity
+or NaN, or if the integer nearest X, or the integer of greater magnitude if
+two integers are equally near to X, is not representable by objects with the
+type and kind of MOLD.
+<P>
+Case (iii): Otherwise, the result is true if and only if the value of X is
+an IEEE infinity or NaN that is not supported by objects of the type and
+kind of MOLD, or if X is a finite number and the result of rounding the
+value of X (according to the IEEE rounding mode if appropriate) to the
+extended model for the kind of MOLD has magnitude larger than that of the
+largest finite number with the same sign as X that is representable by
+objects with the type and kind of MOLD.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>NOTE</H3>
+
+</A>
+<BLOCKQUOTE>
+MOLD is required to be a scalar because the only information taken from it
+is its type and kind. Allowing an array MOLD would require that it be
+conformable with X. ROUND is scalar because allowing an array rounding mode
+would have severe performance difficulties on many processors.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_out_of_range
+      use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+      use, intrinsic :: iso_fortran_env, only : real32, real64, real128
+      implicit none
+      integer            :: i
+      integer(kind=int8) :: i8, j8
+<P>
+          ! compilers are not required to produce an error on out of range.
+          ! here storing the default integers into 1-byte integers
+          ! incorrectly can have unexpected results
+          do i=127,130
+             i8=i
+             j8=-i
+             ! OUT_OF_RANGE(3f) can let you check if the value will fit
+             write(*,*)i8,j8,&#146; might have expected&#146;,i,-i, &
+              & out_of_range( i,i8), &
+              & out_of_range(-i,i8)
+          enddo
+          write(*,*) &#146;RANGE IS &#146;,-1-huge(0_int8),&#146;TO&#146;,huge(0_int8)
+          ! the real -128.5 is truncated to -128 and is in range
+          write(*,*) out_of_range (  -128.5, 0_int8)         ! false
+<P>
+          ! the real -128.5 is rounded to -129 and is not in range
+          write(*,*) out_of_range (  -128.5, 0_int8, .true.) ! true
+<P>
+      end program demo_out_of_range
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+        &gt;  127 -127  might have expected         127        -127 F F
+        &gt; -128 -128  might have expected         128        -128 T F
+        &gt; -127  127  might have expected         129        -129 T T
+        &gt; -126  126  might have expected         130        -130 T T
+        &gt; RANGE IS         -128 TO  127
+        &gt; F
+        &gt; T
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+FORTRAN 2018
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+****(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022         out_of_range(3fortran)
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>out_of_range (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ed8f5de0-f54a-47b6-a4e9-331a87504342 using man macros.</FONT>
+<br><br><center><img src="images/out_of_range.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

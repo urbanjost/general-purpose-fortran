@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,107 +41,131 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atomic_fetch_xor (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atomic_fetch_xor (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>atomic_fetch_xor</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>atomic_fetch_xor</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>atomic_fetch_xor</B>(3f) - [FORTRAN:INTRINSIC:ATOMIC:BIT MANIPULATION] Atomic
-bitwise XOR operation with prior fetch
+<B>ATOMIC_FETCH_XOR</B>(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise XOR operation
+with prior fetch
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=8>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-call atomic_fetch_xor (atom, value, old [, stat])
+call atomic_fetch_xor (<I>atom</I>, <I>value</I>, old [,<I>stat</I>] )
+<P>
+<PRE>
+           subroutine atomic_fetch_xor (atom, value, old, stat)
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>atomic_fetch_xor</B>(atom, value, old) atomically stores the value of
-ATOM in OLD and defines ATOM with the bitwise XOR between the
-values of ATOM and VALUE. When STAT is present and the
-invocation was successful, it is assigned the value 0. If it is
-present and the invocation has failed, it is assigned a positive
-value; in particular, for a coindexed ATOM, if the remote image has
-stopped, it is assigned the value of iso_fortran_env&#146;s
-stat_stopped_image and if the remote image has failed, the value
-stat_failed_image.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>ATOM</B> </TD><TD valign=bottom>
-Scalar coarray or coindexed variable of integer
-type with atomic_int_kind kind.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>VALUE</B> </TD><TD valign=bottom>
-Scalar of the same type as ATOM. If the kind
-is different, the value is converted to the kind of ATOM.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>OLD</B> </TD><TD valign=bottom>
-Scalar of the same type and kind as ATOM.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>STAT</B> </TD><TD valign=bottom>
-(optional) Scalar default-kind integer variable.
+<B>ATOMIC_FETCH_XOR</B>(3) atomically stores the <I>value</I> of ATOM in OLD and defines
+<TABLE cellpadding=3><!-- tsb: <B>ATOMIC_FETCH_XOR</B>(3) atomically stores the <I>value</I> of ATOM in OLD and defines
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>ATOM with the bitwise XOR between the values of ATOM and VALUE.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+When STAT
+is present and the invocation was successful, it is assigned the <I>value</I> 0. If
+it is present and the invocation has failed, it is assigned a positive
+<I>value</I>; in particular, for a coindexed ATOM, if the remote image has stopped,
+it is assigned the <I>value</I> of iso_fortran_env&#146;s stat_stopped_image and if the
+remote image has failed, the <I>value</I> stat_failed_image.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>EXAMPLE</H3>
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ATOM : Scalar coarray or coindexed variable of integer type with
+atomic_int_kind kind.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VALUE : Scalar of the same type as ATOM. If the kind is different, the
+<I>value</I> is converted to the kind of ATOM.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+OLD : Scalar of the same type and kind as ATOM.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STAT : (optional) Scalar default-kind integer variable.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_atomic_fetch_xor
-   use iso_fortran_env
-   implicit none
-   integer(atomic_int_kind) :: atom[*], old
-      call atomic_fetch_xor (atom[1], int(b&#146;10100011101&#146;), old)
-   end program demo_atomic_fetch_xor
+      program demo_atomic_fetch_xor
+      use iso_fortran_env
+      implicit none
+      integer(atomic_int_kind) :: atom[*], old
+         call atomic_fetch_xor (atom[1], int(b&#146;10100011101&#146;), old)
+      end program demo_atomic_fetch_xor
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[TS 18508]] or later
-</BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Atomic subroutine
+TS 18508
 </BLOCKQUOTE>
 <A name=7>
 
@@ -149,11 +173,20 @@ Atomic subroutine
 
 </A>
 <BLOCKQUOTE>
-<B>atomic_define</B>(3), <B>atomic_xor</B>(3), <B>iso_fortran_env</B>(3),
-<B>atomic_fetch_add</B>(3), <B>atomic_fetch_and</B>(3), <B>atomic_fetch_or</B>(3)
+<B>ATOMIC_DEFINE</B>(3), <B>ATOMIC_XOR</B>(3), <B>ISO_FORTRAN_ENV</B>(3),
+<P>
+<B>ATOMIC_FETCH_ADD</B>(3), <B>ATOMIC_FETCH_AND</B>(3),
+<P>
+<B>ATOMIC_FETCH_OR</B>(3)
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022     atomic_fetch_xor(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_fetch_xor (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e4fd10ec-6641-4112-b221-07d8e0047ce3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_fetch_xor (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b20d890e-83a4-45d4-a11b-318c49087088 using man macros.</FONT>
 <br><br><center><img src="images/atomic_fetch_xor.3fortran.gif"></center>
 </div>
 </div>

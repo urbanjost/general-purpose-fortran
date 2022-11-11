@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,98 +41,247 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>gamma (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>gamma (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>gamma</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>gamma</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>gamma</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS] Gamma function
+<B>GAMMA</B>(3) - [MATHEMATICS] Gamma function, which yields factorials for
+positive whole numbers
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=9>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+result = <B>gamma</B>(<I>x</I>)
+<P>
+<PRE>
+           elemental real(kind=KIND) function gamma( x)
+<P>
+            type(real,kind=KIND),intent(in) :: x
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>GAMMA</B>(3) returns a real value with the kind as X.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>gamma</B>(x) computes Gamma of X. For positive,
-integer values of X the Gamma function simplifies to the factorial
-function <B>Gamma</B>(x)=(x-1)!.
+<B>GAMMA</B>(X) computes Gamma of X. For positive whole number values of N the
+Gamma function can be used to calculate factorials, as (N-1)! ==
+<B>GAMMA</B>(REAL(N)). That is
 <P>
-$$
-\<B>Gamma</B>(x) = \int_0**\infty t**{x-1}{\mathrm{e}}**{<B>-t</B>}\,{\mathrm{d}}t
-$$
+<PRE>
+      n! == gamma(real(n+1))
+<P>
+</PRE>
+$$ \<B>GAMMA</B>(<I>x</I>) = \int_0**\infty t**{<I>x</I>-1}{\mathrm{e}}**{<B>-T</B>}\,{\mathrm{d}}t $$
 </BLOCKQUOTE>
-<A name=2>
+<A name=4>
 
-     <H3>SYNTAX</H3>
-
-</A>
-<BLOCKQUOTE>
-x = <B>gamma</B>(x)
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-Shall be of type REAL and neither zero
-nor a negative integer.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : Shall be of type real and neither zero nor a negative integer.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type REAL of the same kind as X.
+The return value is of type real of the same kind as <I>x</I>.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_gamma
-   implicit none
-     real :: x = 1.0
-     x = gamma(x) ! returns 1.0
-   end program demo_gamma
+      program demo_gamma
+      use, intrinsic :: iso_fortran_env, only : wp=&gt;real64
+      implicit none
+      real :: x, xa(4)
+      integer :: i
+<P>
+         x = gamma(1.0)
+         write(*,*)&#146;gamma(1.0)=&#146;,x
+<P>
+         ! elemental
+         xa=gamma([1.0,2.0,3.0,4.0])
+         write(*,*)xa
+         write(*,*)
+<P>
+         ! gamma(3) is related to the factorial function
+         do i=1,20
+            ! check value is not too big for default integer type
+            if(factorial(i).gt.huge(0))then
+               write(*,*)i,factorial(i)
+            else
+               write(*,*)i,factorial(i),int(factorial(i))
+            endif
+         enddo
+         ! more factorials
+         FAC: block
+         integer,parameter :: n(*)=[0,1,5,11,170]
+         integer :: j
+            do j=1,size(n)
+               write(*,&#146;(*(g0,1x))&#146;)&#146;factorial of&#146;, n(j),&#146; is &#146;, &
+                & product([(real(i,kind=wp),i=1,n(j))]),  &
+                & gamma(real(n(j)+1,kind=wp))
+            enddo
+         endblock FAC
+<P>
+         contains
+         function factorial(i) result(f)
+         integer,parameter :: dp=kind(0d0)
+         integer,intent(in) :: i
+         real :: f
+            if(i.le.0)then
+               write(*,&#146;(*(g0))&#146;)&#146;&lt;ERROR&gt; gamma(3) function value &#146;,i,&#146; &lt;= 0&#146;
+               stop      &#146;&lt;STOP&gt; bad value in gamma function&#146;
+            endif
+            f=gamma(real(i+1))
+         end function factorial
+      end program demo_gamma
 <P>
 </PRE>
+Results:
+<P>
+<PRE>
+          gamma(1.0)=   1.000000
+            1.000000       1.000000       2.000000       6.000000
+<P>
+                    1   1.000000               1
+                    2   2.000000               2
+                    3   6.000000               6
+                    4   24.00000              24
+                    5   120.0000             120
+                    6   720.0000             720
+                    7   5040.000            5040
+                    8   40320.00           40320
+                    9   362880.0          362880
+                   10   3628800.         3628800
+                   11  3.9916800E+07    39916800
+                   12  4.7900160E+08   479001600
+                   13  6.2270208E+09
+                   14  8.7178289E+10
+                   15  1.3076744E+12
+                   16  2.0922791E+13
+                   17  3.5568741E+14
+                   18  6.4023735E+15
+                   19  1.2164510E+17
+                   20  2.4329020E+18
+<P>
+</PRE>
+factorial of 0
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: factorial of 0
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>is</B> </TD><TD valign=bottom>
+1.000000000000000 1.000000000000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+factorial of 1
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: factorial of 1
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>is</B> </TD><TD valign=bottom>
+1.000000000000000 1.000000000000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+factorial of 5
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: factorial of 5
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>is</B> </TD><TD valign=bottom>
+120.0000000000000 120.0000000000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+factorial of 11
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: factorial of 11
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>is</B> </TD><TD valign=bottom>
+39916800.00000000 39916800.00000000
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+factorial of 170
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: factorial of 170
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>is</B> </TD><TD valign=bottom>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2008]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental function]]
+Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
 
@@ -140,10 +289,24 @@ Sample program:
 
 </A>
 <BLOCKQUOTE>
-Logarithm of the Gamma function: <B>[[log_gamma</B>(3)
+Logarithm of the Gamma function: <B>LOG_GAMMA</B>(3)
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>RESOURCES</H3>
+
+</A>
+<BLOCKQUOTE>
+Wikipedia: Gamma_function
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022                gamma(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>gamma (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6dc53001-57c5-4687-a6d6-31843d73b654 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>gamma (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a34621ec-4c76-4c3d-975f-f9989dae033c using man macros.</FONT>
 <br><br><center><img src="images/gamma.3fortran.gif"></center>
 </div>
 </div>

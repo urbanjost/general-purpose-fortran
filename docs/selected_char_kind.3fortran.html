@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,105 +41,236 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>selected_char_kind (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>selected_char_kind (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>selected_char_kind</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>selected_char_kind</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>selected_char_kind</B>(3f) - [FORTRAN:INTRINSIC:KIND] Choose character
-kind such as "Unicode"
+<B>SELECTED_CHAR_KIND</B>(3) - [KIND] Select character kind such as "Unicode"
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=7>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>selected_char_kind</B>(name)
+result = <B>selected_char_kind</B>(<I>name</I>)
+<P>
+<PRE>
+           integer function selected_char_kind(name)
+<P>
+            character(len=*),intent(in) :: name
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>selected_char_kind</B>(name) returns the kind value for the character
-set named NAME, if a character set with such a name is supported, or
-<B>-1</B> otherwise. Currently, supported character sets include "ASCII"
-and "DEFAULT" (iwhich are equivalent), and "ISO_10646" (Universal
-Character Set, UCS-4) which is commonly known as "Unicode".
+<B>SELECTED_CHAR_KIND</B>(3) returns the kind value for the character set named
+NAME, if a character set with such a <I>name</I> is supported, or <B>-1</B> otherwise.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>NAME</B> </TD><TD valign=bottom>
-Shall be a scalar and of the default character type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NAME : A <I>name</I> to query the processor kind value of , and/or to determine
+if it is supported. NAME is interpreted without respect to case or
+trailing blanks.
+<P>
+Currently, supported character sets include "ASCII" and "DEFAULT" and
+"ISO_10646" (Universal Character Set, UCS-4) which is commonly known as
+"Unicode". Supported names other than "DEFAULT" are processor dependent.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+If a <I>name</I> is not supported, <B>-1</B> is returned. Otherwise
+<TABLE cellpadding=3><!-- tsb: If a <I>name</I> is not supported, <B>-1</B> is returned. Otherwise
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If NAME has the value "DEFAULT", then the result has a value equal to
+that of the kind type parameter of default character. This <I>name</I> is always
+supported.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If NAME has the value "ASCII", then the result has a value equal to that
+of the kind type parameter of ASCII character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If NAME has the value "ISO_10646", then the result has a value equal to
+that of the kind type parameter of the ISO 10646 character kind
+(corresponding to UCS-4 as specified in ISO/IEC 10646).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If NAME is a processor-defined <I>name</I> of some other character kind
+supported by the processor, then the result has a value equal to that
+kind type parameter value.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_selected_char_kind
-     use iso_fortran_env
-     implicit none
-     integer, parameter :: ascii = selected_char_kind ("ascii")
-     integer, parameter :: ucs4  = selected_char_kind (&#146;ISO_10646&#146;)
+      program demo_selected_char_kind
+      use iso_fortran_env
+      implicit none
 <P>
-     character(kind=ascii, len=26) :: alphabet
-     character(kind=ucs4,  len=30) :: hello_world
+      intrinsic date_and_time,selected_char_kind
 <P>
-     alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"
-     hello_world = ucs4_&#146;Hello World and Ni Hao -- &#146; &
-                   // char (int (z&#146;4F60&#146;), ucs4)     &
-                   // char (int (z&#146;597D&#146;), ucs4)
+      integer, parameter :: default = selected_char_kind ("default")
+      integer, parameter :: ascii =   selected_char_kind ("ascii")
+      integer, parameter :: ucs4  =   selected_char_kind (&#146;ISO_10646&#146;)
+      integer, parameter :: utf8  =   selected_char_kind (&#146;utf-8&#146;)
 <P>
-     write (*,*) alphabet
+      character(len=26, kind=ascii ) :: alphabet
+      character(len=30, kind=ucs4  ) :: hello_world
+      character(len=30, kind=ucs4  ) :: string
 <P>
-     open (output_unit, encoding=&#146;UTF-8&#146;)
-     write (*,*) trim (hello_world)
-   end program demo_selected_char_kind
+         write(*,*)&#146;ASCII     &#146;,&
+          & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,ascii /= -1)
+         write(*,*)&#146;ISO_10646 &#146;,&
+          & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,ucs4 /= -1)
+         write(*,*)&#146;UTF-8     &#146;,&
+          & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,utf8 /= -1)
+<P>
+         if(default.eq.ascii)then
+             write(*,*)&#146;ASCII is the default on this processor&#146;
+         endif
+<P>
+        ! the kind precedes the value, somewhat like a BOZ constant
+         alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"
+         write (*,*) alphabet
+<P>
+         hello_world = ucs4_&#146;Hello World and Ni Hao -- &#146; &
+                       // char (int (z&#146;4F60&#146;), ucs4)     &
+                       // char (int (z&#146;597D&#146;), ucs4)
+<P>
+        ! an  encoding option is required on OPEN for non-default I/O
+         if(ucs4 /= -1 )then
+            open (output_unit, encoding=&#146;UTF-8&#146;)
+            write (*,*) trim (hello_world)
+         else
+            write (*,*) &#146;cannot use utf-8&#146;
+         endif
+<P>
+         call create_date_string(string)
+         write (*,*) trim (string)
+<P>
+      contains
+<P>
+      ! The following produces a Japanese date stamp.
+      subroutine create_date_string(string)
+      intrinsic date_and_time,selected_char_kind
+      integer,parameter :: ucs4 = selected_char_kind("ISO_10646")
+      character(len=1,kind=ucs4),parameter :: &
+             nen =   char(int( z&#146;5e74&#146; ),ucs4), & ! year
+             gatsu = char(int( z&#146;6708&#146; ),ucs4), & ! month
+             nichi = char(int( z&#146;65e5&#146; ),ucs4)    ! day
+           character(len= *, kind= ucs4) string
+           integer values(8)
+           call date_and_time(values=values)
+           write(string,1) values(1),nen,values(2),gatsu,values(3),nichi
+         1 format(i0,a,i0,a,i0,a)
+      end subroutine create_date_string
+<P>
+      end program demo_selected_char_kind
+<P>
+</PRE>
+Results:
+<P>
+The results are very processor-dependent
+<P>
+<PRE>
+       ASCII     Supported
+       ISO_10646 Supported
+       UTF-8     Not Supported
+       ASCII is the default on this processor
+       abcdefghijklmnopqrstuvwxyz
+       Hello World and Ni Hao --
+       2022105
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2003]] and later
+Fortran 2003
 </BLOCKQUOTE>
-<A name=6>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-Transformational function
+<B>ACHAR</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022   selected_char_kind(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_char_kind (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d3bea460-3e63-4572-96bd-bef8faddb1dc using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_char_kind (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dcb1ec65-1b0a-44d2-84af-466650a63e4d using man macros.</FONT>
 <br><br><center><img src="images/selected_char_kind.3fortran.gif"></center>
 </div>
 </div>

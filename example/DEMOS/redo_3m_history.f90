@@ -16,7 +16,7 @@
            read(*,'(a)',iostat=ios) line       ! read new input line
            ! if "r", edit and return a line from the history editor
            call redo(line) ! store into history if not "r".
-           if(line.eq.'quit')stop ! exit program if user enters "quit"
+           if(line == 'quit')stop ! exit program if user enters "quit"
            ! now call user code to process new line of data
            ! As an example, call the system shell
            call execute_command_line(trim(line),cmdstat=cstat,cmdmsg=sstat)

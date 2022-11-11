@@ -167,14 +167,14 @@
          ! OVERLOADED OPERATORS (logical comparisons)
          ! NOTE COMPARISONS ARE PERFORMED BY
          ! CONVERTING TIMES TO INTEGER SECONDS
-         write(*,*)'> ',event.eq.event   ,event.lt.event   ,event.gt.event &
-         & ,event.le.event   ,event.ge.event   ,event.ne.event
+         write(*,*)'> ',event==event   ,event<event   ,event>event &
+         & ,event<=event   ,event>=event   ,event/=event
          !
-         write(*,*)'> ',event.eq.answer  ,event.lt.answer  ,event.gt.answer  &
-         & ,event.le.answer  ,event.ge.answer  ,event.ne.answer
+         write(*,*)'> ',event==answer  ,event<answer  ,event>answer  &
+         & ,event<=answer  ,event>=answer  ,event/=answer
          !
-         write(*,*)'> ',answer.eq.event  ,answer.lt.event  ,answer.gt.event  &
-         & ,answer.le.event  ,answer.ge.event  ,answer.ne.event
+         write(*,*)'> ',answer==event  ,answer<event  ,answer>event  &
+         & ,answer<=event  ,answer>=event  ,answer/=event
 
          ! %DELTA easily lets you change dates by common increments
          write(*,*)

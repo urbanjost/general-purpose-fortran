@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,133 +41,258 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>any (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>any (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>any</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>any</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>any</B>(3f) - [FORTRAN:INTRINSIC:ARRAY REDUCTION] determines if any of the
-values in the logical array are true.
+<B>ANY</B>(3) - [ARRAY:REDUCTION] Determines if any of the values in the logical
+array are .true.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>any</B>(mask [, dim])
+result = <B>any</B>(mask [,<I>dim</I>])
+<P>
+<PRE>
+           logical(kind=KIND) function any(mask, dim)
+<P>
+            logical(kind=KIND),intent(in) :: mask(..)
+            integer,intent(in),optional   :: dim
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK is a logical array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM is a scalar integer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is a logical array if DIM is supplied, otherwise it is a
+logical scalar.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ANY</B>(MASK [, DIM]) determines if any of the values in the logical
-array MASK along dimension DIM are .TRUE..
+<B>ANY</B>(3) determines if any of the values in the logical array MASK along
+dimension DIM are .true..
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>MASK</B> </TD><TD valign=bottom>
-the type of the argument shall be LOGICAL and
-it shall not be scalar.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK : an array of logical expressions or values to be tested in groups
+or in total for a .true. value.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DIM</B> </TD><TD valign=bottom>
-(optional) DIM shall be a scalar integer with a value
-that lies between one and the rank of MASK.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : a whole number value that lies between one and <B>RANK</B>(MASK) that
+indicates to return an array of values along the indicated dimension
+instead of a scalar answer.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ANY</B>(MASK) returns a scalar value of type LOGICAL where the kind
-type parameter is the same as the kind type parameter of MASK. If
-DIM is present, then <B>ANY</B>(MASK, DIM) returns an array with the rank
-of MASK minus 1. The shape is determined from the shape of MASK
-where the DIM dimension is elided.
-<TABLE cellpadding=3><!-- tsb: <B>ANY</B>(MASK) returns a scalar value of type LOGICAL where the kind
+<B>ANY</B>(MASK) returns a scalar value of type logical where the kind type
+parameter is the same as the kind type parameter of MASK. If DIM is present,
+then <B>ANY</B>(MASK, DIM) returns an array with the rank of MASK minus 1. The
+shape is determined from the shape of MASK where the DIM dimension is
+elided.
+<TABLE cellpadding=3><!-- tsb: <B>ANY</B>(MASK) returns a scalar value of type logical where the kind type
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-<B>ANY</B>(MASK) is true if any element of MASK is true; otherwise, it
-is false. It also is false if MASK has zero size.
+<B>ANY</B>(MASK) is .true. if any element of MASK is .true.; otherwise, it is
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-If the rank of MASK is one, then <B>ANY</B>(MASK, DIM) is equivalent
-to <B>ANY</B>(MASK). If the rank is greater than one, then <B>ANY</B>(MASK,
-DIM) is determined by applying ANY to the array sections.
+If the rank of MASK is one, then <B>ANY</B>(MASK, DIM) is equivalent to
+<B>ANY</B>(MASK). If the rank is greater than one, then <B>ANY</B>(MASK, DIM) is
+determined by applying <B>ANY</B>(MASK) to the array sections.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_any
-    implicit none
-    logical l
-       l = any([.true., .true., .true.])
-       print *, l
-       call section
-       contains
-         subroutine section
-         integer a(2,3), b(2,3)
-           a = 1
-           b = 1
-           b(2,2) = 2
-           print *, any(a .eq. b, 1)
-           print *, any(a .eq. b, 2)
-         end subroutine section
-    end program demo_any
+      program demo_any
+      implicit none
+      logical,parameter :: T=.true., F=.false.
+      integer           :: a(2,3), b(2,3)
+      logical           :: bool
+        ! basic usage
+         bool = any([F,F,T,F])
+         print *,bool
+         bool = any([F,F,F,F])
+         print *,bool
+        ! fill two integer arrays with values for testing
+         a = 1
+         b = 1
+         b(:,2) = 2
+         b(:,3) = 3
+        ! using any(3) with logical expressions you can compare two arrays
+        ! in a myriad of ways
+         ! first, print where elements of b are bigger than in a
+         call printl( &#146;first print b &gt; a             &#146;, b &gt; a         )
+         ! now use any() to test
+         call printl( &#146;any true values?  any(b &gt; a)  &#146;, any(b &gt; a )   )
+         call printl( &#146;again by columns? any(b &gt; a,1)&#146;, any(b &gt; a, 1) )
+         call printl( &#146;again by rows?    any(b &gt; a,2)&#146;, any(b &gt; a, 2) )
+      contains
+      ! CONVENIENCE ROUTINE. this is not specific to ANY()
+      subroutine printl(title,a)
+      use, intrinsic :: iso_fortran_env, only : &
+       & stderr=&gt;ERROR_UNIT,&
+       & stdin=&gt;INPUT_UNIT,&
+       & stdout=&gt;OUTPUT_UNIT
+      implicit none
+<P>
+      !@(#) print small 2d logical scalar, vector, or matrix
+<P>
+      character(len=*),parameter   :: all=&#146;(*(g0,1x))&#146;
+      character(len=*),parameter   :: row=&#146;(" &gt; [ ",*(l1:,","))&#146;
+      character(len=*),intent(in)  :: title
+      logical,intent(in)           :: a(..)
+      integer                      :: i
+         write(*,*)
+         write(*,all,advance=&#146;no&#146;)trim(title),&
+          & &#146; : shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
+         ! get size and shape of input
+         select rank(a)
+         rank (0); write(*,&#146;(a)&#146;)&#146;(a scalar)&#146;
+            write(*,fmt=row,advance=&#146;no&#146;)a
+            write(*,&#146;(" ]")&#146;)
+         rank (1); write(*,&#146;(a)&#146;)&#146;(a vector)&#146;
+            do i=1,size(a)
+               write(*,fmt=row,advance=&#146;no&#146;)a(i)
+               write(*,&#146;(" ]")&#146;)
+            enddo
+         rank (2); write(*,&#146;(a)&#146;)&#146;(a matrix) &#146;
+            do i=1,size(a,dim=1)
+               write(*,fmt=row,advance=&#146;no&#146;)a(i,:)
+               write(*,&#146;(" ]")&#146;)
+            enddo
+         rank default
+            write(stderr,*)&#146;*printl* did not expect rank=&#146;, rank(a), &
+             & &#146;shape=&#146;, shape(a),&#146;size=&#146;,size(a)
+            stop &#146;*printl* unexpected rank&#146;
+         end select
+<P>
+      end subroutine printl
+<P>
+      end program demo_any
 <P>
 </PRE>
+Results:
 </BLOCKQUOTE>
-<A name=6>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; F</H4>
+</A>
+<BLOCKQUOTE>
+first print b &gt; a : <B>shape=23,rank=2,size=6</B>(a matrix) &gt; [ F,T,T ] &gt; [ F,T,T ]
+<P>
+any true values?
+<B>any</B>(b &gt; a) : <B>shape=,rank=0,size=1</B>(a scalar) &gt; [ T ]
+<P>
+again by columns? <B>any</B>(b &gt; a,1) : <B>shape=3,rank=1,size=3</B>(a vector) &gt; [ F ] &gt; [
+T ] &gt; [ T ]
+<P>
+again by rows?
+<B>any</B>(b &gt; a,2) : <B>shape=2,rank=1,size=2</B>(a vector) &gt; [ T ] &gt; [ T ]
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
+Fortran 95
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-Transformational function
+<B>ALL</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  any(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>any (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 58c18ff0-7602-4a41-9ac9-f65ba0e7e5fa using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>any (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bd78509f-6b7b-4a5d-93b2-df9a30acd871 using man macros.</FONT>
 <br><br><center><img src="images/any.3fortran.gif"></center>
 </div>
 </div>

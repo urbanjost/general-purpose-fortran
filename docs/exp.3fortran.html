@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,94 +41,214 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>exp (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>exp (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>exp</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>exp</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>exp</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS] Exponential function
+<B>EXP</B>(3) - [MATHEMATICS] Base-e exponential function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=10>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>exp</B>(x)
+result = <B>exp</B>(<I>x</I>)
+<P>
+<PRE>
+           elemental TYPE(kind=KIND) function exp(x)
+<P>
+            TYPE(kind=KIND),intent(in) :: x
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X may be real or complex.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The return value has the same type and kind as X.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>exp</B>(x) computes the base "e" exponential of X.
+<B>EXP</B>(3) returns the value of e (the base of natural logarithms) raised to the
+power of X.
+<P>
+"e" is also known as Euler&#146;s constant.
+<P>
+If X is of type complex, its imaginary part is regarded as a value in
+radians such that if (see Euler&#146;s formula):
+<P>
+<PRE>
+          cx=(re,im)
+<P>
+</PRE>
+then
+<P>
+<PRE>
+          exp(cx) = exp(re) * cmplx(cos(im),sin(im),kind=kind(cx))
+<P>
+</PRE>
+Since <B>EXP</B>(3) is the inverse function of <B>LOG</B>(3) the maximum valid magnitude
+of the real component of X is <B>LOG</B>(HUGE(X)).
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type shall be REAL or COMPLEX.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The type shall be real or complex.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value has same type and kind as X.
+The value of the result is E**X where E is Euler&#146;s constant.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_exp
-    implicit none
-      real :: x = 1.0
-      x = exp(x)
-    end program demo_exp
+      program demo_exp
+      implicit none
+      real :: x, re, im
+      complex :: cx
+<P>
+         x = 1.0
+         write(*,*)"Euler&#146;s constant is approximately",exp(x)
+<P>
+         !! complex values
+         ! given
+         re=3.0
+         im=4.0
+         cx=cmplx(re,im)
+<P>
+         ! complex results from complex arguments are Related to Euler&#146;s formula
+         write(*,*)&#146;given the complex value &#146;,cx
+         write(*,*)&#146;exp(x) is&#146;,exp(cx)
+         write(*,*)&#146;is the same as&#146;,exp(re)*cmplx(cos(im),sin(im),kind=kind(cx))
+<P>
+         ! exp(3) is the inverse function of log(3) so
+         ! the real component of the input must be less than or equal to
+         write(*,*)&#146;maximum real component&#146;,log(huge(0.0))
+         ! or for double precision
+         write(*,*)&#146;maximum doubleprecision component&#146;,log(huge(0.0d0))
+<P>
+         ! but since the imaginary component is passed to the cos(3) and sin(3)
+         ! functions the imaginary component can be any real value
+<P>
+      end program demo_exp
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+       Euler&#146;s constant is approximately   2.718282
+       given the complex value  (3.000000,4.000000)
+       exp(x) is (-13.12878,-15.20078)
+       is the same as (-13.12878,-15.20078)
+       maximum real component   88.72284
+       maximum doubleprecision component   709.782712893384
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
+FORTRAN 77
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>LOG</B>(3)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=9>
+
+     <H3>RESOURCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Wikipedia:Exponential function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Wikipedia:Euler&#146;s formula
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  exp(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>exp (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from eebac4a9-fa6f-4bcb-8adc-f313058f2eaf using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>exp (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9989fc48-6220-44b4-9b96-d507c2d1bac7 using man macros.</FONT>
 <br><br><center><img src="images/exp.3fortran.gif"></center>
 </div>
 </div>

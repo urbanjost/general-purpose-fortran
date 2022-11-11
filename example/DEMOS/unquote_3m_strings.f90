@@ -10,7 +10,7 @@
         do
            write(*,'(a)',advance='no')'Enter test string:'
            read(*,'(a)',iostat=ios,iomsg=msg)quoted_str
-           if(ios.ne.0)then
+           if(ios /= 0)then
               write(*,*)trim(msg)
               exit
            endif
@@ -24,7 +24,7 @@
 
            ! read the string list-directed to compare the results
            read(quoted_str,*,iostat=ios,iomsg=msg)dummy
-           if(ios.ne.0)then
+           if(ios /= 0)then
               write(*,*)trim(msg)
            else
               write(*,'(a)')'LIST DIRECTED['//trim(dummy)//']'

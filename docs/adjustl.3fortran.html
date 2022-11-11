@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,118 +41,165 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>adjustl (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>adjustl (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>adjustl</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>adjustl</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>adjustl</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] Left-adjust a string
+<B>ADJUSTL</B>(3) - [CHARACTER:WHITESPACE] Left-justified a string
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=10>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>adjustl</B>(string)
+result = <B>adjustl</B>(<I>string</I>)
 <P>
 <PRE>
-     character(len=*),intent(in) :: string
-     character(len=len(string))  :: result
+         elemental character(len=len(string),kind=KIND) function adjustl(string)
+<P>
+          character(len=*,kind=KIND),intent(in) :: string
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
 
-     <H3>DESCRIPTION</H3>
-
-</A>
-<BLOCKQUOTE>
-<B>adjustl</B>(STRING) will left adjust a string by removing leading spaces.
-Spaces are inserted at the end of the string as needed.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
+     <H3>CHARACTERISTICS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>STRING</B> </TD><TD valign=bottom>
-the type shall be CHARACTER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING is a character variable of any supported kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The return value is a character variable of the same kind and length as
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=>
 
-     <H3>RETURN VALUE</H3>
+    <H4>&nbsp; &nbsp; STRING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type CHARACTER and of the same kind as
-STRING where leading spaces are removed and the same number of
-spaces are inserted on the end of STRING.
+<B>ADJUSTL</B>(3) will left-justify a <I>string</I> by removing leading spaces. Spaces are
+inserted at the end of the <I>string</I> as needed.
 </BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING : the <I>string</I> to left-justify
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+A copy of STRING where leading spaces are removed and the same number of
+spaces are inserted on the end of STRING.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_adjustl
-    implicit none
-    character(len=20) :: str = &#146;   sample string&#146;
-    character(len=:),allocatable :: astr
-       !
-       ! basic use
-       str = adjustl(str)
-       write(*,&#146;("[",a,"]")&#146;) str, trim(str)
-       !
-       ! an allocatable string stays the same length
-       ! and is not trimmed.
-       astr=&#146;    allocatable string   &#146;
-       write(*,&#146;("[",a,"]")&#146;) adjustl(astr)
-       !
-    end program demo_adjustl
+      program demo_adjustl
+      implicit none
+      character(len=20) :: str = &#146;   sample string&#146;
+      character(len=:),allocatable :: astr
+      integer :: length
+<P>
+         ! basic use
+          write(*,&#146;(a,"[",a,"]")&#146;) &#146;original: &#146;,str
+          str=adjustl(str)
+          write(*,&#146;(a,"[",a,"]")&#146;) &#146;adjusted: &#146;,str
+<P>
+          ! a fixed-length string can be printed
+          ! trimmed using trim(3f) or len_trim(3f)
+          write(*,&#146;(a,"[",a,"]")&#146;) &#146;trimmed:  &#146;,trim(str)
+          length=len_trim(str)
+          write(*,&#146;(a,"[",a,"]")&#146;) &#146;substring:&#146;,str(:length)
+<P>
+          ! note an allocatable string stays the same length too
+          ! and is not trimmed by just an adjustl(3f) call.
+          astr=&#146;    allocatable string   &#146;
+          write(*,&#146;(a,"[",a,"]")&#146;) &#146;original:&#146;,astr
+          astr = adjustl(astr)
+          write(*,&#146;(a,"[",a,"]")&#146;) &#146;adjusted:&#146;,astr
+          ! trim(3f) can be used to change the length
+          astr = trim(astr)
+          write(*,&#146;(a,"[",a,"]")&#146;) &#146;trimmed: &#146;,astr
+<P>
+      end program demo_adjustl
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-   [sample string       ]
-   [sample string]
-   [allocatable string       ]
+         original: [   sample string    ]
+         adjusted: [sample string       ]
+         trimmed:  [sample string]
+         substring:[sample string]
+         original:[    allocatable string   ]
+         adjusted:[allocatable string       ]
+         trimmed: [allocatable string]
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Elemental function
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -160,29 +207,16 @@ Elemental function
 
 </A>
 <BLOCKQUOTE>
-Functions that perform operations on character strings, return lengths
-of arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>elemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>adjustl</B>(3), <B>adjustr</B>(3), <B>index</B>(3), <B>len_trim</B>(3),
-<B>scan</B>(3), <B>verify</B>(3)
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>nonelemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>repeat</B>(3), <B>trim</B>(3)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=9>
-
-    <H4>&nbsp; &nbsp; JSU</H4>
-</A>
-<BLOCKQUOTE>
+<B>ADJUSTR</B>(3), <B>TRIM</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022              adjustl(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>adjustl (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 62f5147c-4358-4186-9072-3d17b26acb4f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>adjustl (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 871072a8-0535-41d2-a256-eb74f6b38e3f using man macros.</FONT>
 <br><br><center><img src="images/adjustl.3fortran.gif"></center>
 </div>
 </div>

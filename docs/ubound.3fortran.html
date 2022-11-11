@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,158 +41,217 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ubound (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ubound (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ubound</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ubound</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ubound</B>(3f) - [FORTRAN:INTRINSIC:ARRAY INQUIRY] Upper dimension bounds
-of an array
+<B>UBOUND</B>(3) - [ARRAY:INQUIRY] Upper dimension bounds of an array
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>ubound</B>(array [, dim [, kind]])
+result = <B>ubound</B>(array [,<I>dim</I>] [,<I>kind</I>] )
+<P>
+<PRE>
+           elemental TYPE(kind=KIND) function ubound(array,dim,kind)
+<P>
+            TYPE(kind=KIND),intent(in)  :: array
+            integer(kind=**),intent(in),optional :: dim
+            integer(kind=**),intent(in),optional :: kind
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY shall be an array, of any type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM shall be a scalar integer.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND an integer initialization expression indicating the <I>kind</I> parameter
+of the result.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The return value is of type integer and of <I>kind</I> KIND. If KIND is absent,
+the return value is of default integer <I>kind</I>.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Returns the upper bounds of an array, or a single upper bound
+<B>UBOUND</B>(3) returns the upper bounds of an array, or a single upper bound
 along the DIM dimension.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>ARRAY</B> </TD><TD valign=bottom>
-Shall be an array, of any type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY : The array to determine the upper bounds of
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DIM</B> </TD><TD valign=bottom>
-(Optional) Shall be a scalar INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : a specific rank to determine the bounds of If DIM is absent, the
+result is an array of the upper bounds of ARRAY.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(Optional) An INTEGER initialization expression
-indicating the kind parameter of the result.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND : indicates the <I>kind</I> parameter of the result. If absent, an integer
+of the default <I>kind</I> is returned.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
-
-     <H3>RETURN VALUE</H3>
-
-</A>
-<BLOCKQUOTE>
-The return value is of type INTEGER and of kind KIND. If KIND is
-absent, the return value is of default integer kind. If DIM is absent,
-the result is an array of the upper bounds of ARRAY. If DIM is present,
-the result is a scalar corresponding to the upper bound of the array
-along that dimension. If ARRAY is an expression rather than a whole
-array or array structure component, or if it has a zero extent along
-the relevant dimension, the upper bound is taken to be the number of
-elements along the relevant dimension.
-</BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-Note that in my opinion this function should not be used on
-assumed-size arrays or in any function without an explicit
-interface. Errors can occur if there is no interface defined.
+The return value is of type integer and of <I>kind</I> KIND. If KIND is absent, the
+return value is of default integer <I>kind</I>.
+<P>
+If DIM is absent, the result is an array of the upper bounds of ARRAY.
+<P>
+If DIM is present, the result is a scalar corresponding to the upper bound
+of the array along that dimension.
+<P>
+If ARRAY is an expression rather than a whole array or array structure
+component, or if it has a zero extent along the relevant dimension, the
+upper bound is taken to be the number of elements along the relevant
+dimension.
 </BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Note this function should not be used on assumed-size arrays or in any
+function without an explicit interface. Errors can occur if there is no
+interface defined.
 <P>
 Sample program
 <P>
 <PRE>
-  ! program demo_ubound
-  module m2_bounds
-  implicit none
-   contains
+      ! program demo_ubound
+      module m2_bounds
+      implicit none
+<P>
+      contains
+<P>
       subroutine msub(arr)
-         !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array
-         integer,intent(in) :: arr(:)
+      !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array
+      integer,intent(in) :: arr(:)
          write(*,*)&#146;MSUB: LOWER=&#146;,lbound(arr),&#146;UPPER=&#146;,ubound(arr), &
          & &#146;SIZE=&#146;,size(arr)
       end subroutine msub
-   end module m2_bounds
 <P>
-   use m2_bounds, only : msub
-   implicit none
-   interface
-      subroutine esub(arr)
-      integer,intent(in) :: arr(:)
-      end subroutine esub
-   end interface
-   integer :: arr(-10:10)
-      write(*,*)&#146;MAIN: LOWER=&#146;,lbound(arr),&#146;UPPER=&#146;,ubound(arr), &
-      & &#146;SIZE=&#146;,size(arr)
-      call csub()
-      call msub(arr)
-      call esub(arr)
-   contains
+      end module m2_bounds
+<P>
+      use m2_bounds, only : msub
+      implicit none
+      interface
+         subroutine esub(arr)
+         integer,intent(in) :: arr(:)
+         end subroutine esub
+      end interface
+      integer :: arr(-10:10)
+         write(*,*)&#146;MAIN: LOWER=&#146;,lbound(arr),&#146;UPPER=&#146;,ubound(arr), &
+         & &#146;SIZE=&#146;,size(arr)
+         call csub()
+         call msub(arr)
+         call esub(arr)
+      contains
       subroutine csub
          write(*,*)&#146;CSUB: LOWER=&#146;,lbound(arr),&#146;UPPER=&#146;,ubound(arr), &
          & &#146;SIZE=&#146;,size(arr)
       end subroutine csub
-   end
 <P>
-   subroutine esub(arr)
-   implicit none
-   integer,intent(in) :: arr(:)
-      ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE
-      ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)
-      write(*,*)&#146;ESUB: LOWER=&#146;,lbound(arr),&#146;UPPER=&#146;,ubound(arr), &
-      & &#146;SIZE=&#146;,size(arr)
-   end subroutine esub
-  !end program demo_ubound
+      end
+<P>
+      subroutine esub(arr)
+      implicit none
+      integer,intent(in) :: arr(:)
+         ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE
+         ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)
+         write(*,*)&#146;ESUB: LOWER=&#146;,lbound(arr),&#146;UPPER=&#146;,ubound(arr), &
+         & &#146;SIZE=&#146;,size(arr)
+      end subroutine esub
+      !end program demo_ubound
 <P>
 </PRE>
-Expected output
+Results:
 <P>
 <PRE>
-  MAIN: LOWER=         -10 UPPER=          10 SIZE=          21
-  CSUB: LOWER=         -10 UPPER=          10 SIZE=          21
-  MSUB: LOWER=           1 UPPER=          21 SIZE=          21
-  ESUB: LOWER=           1 UPPER=          21 SIZE=          21
+        MAIN: LOWER=         -10 UPPER=          10 SIZE=          21
+        CSUB: LOWER=         -10 UPPER=          10 SIZE=          21
+        MSUB: LOWER=           1 UPPER=          21 SIZE=          21
+        ESUB: LOWER=           1 UPPER=          21 SIZE=          21
 <P>
 </PRE>
-<A name=6>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later, with KIND argument [[Fortran 2003]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Inquiry function]]
+Fortran 95 , with KIND argument Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
 
@@ -200,10 +259,38 @@ Expected output
 
 </A>
 <BLOCKQUOTE>
-<B>lbound</B>(3), <B>co_ubound</B>(3), <B>co_lbound</B>(3)
-</BLOCKQUOTE>
+Array inquiry:
+<TABLE cellpadding=3><!-- tsb: Array inquiry:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>SIZE</B>(3) - Determine the size of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>RANK</B>(3) - Rank of a data object
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>SHAPE</B>(3) - Determine the shape of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>UBOUND</B>(3) - Upper dimension bounds of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>LBOUND</B>(3) - Lower dimension bounds of an array
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ubound (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 82ccf5f0-36c9-4edf-9d5c-eeaa826224e6 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ubound (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 19679d52-5111-4801-99ae-15b78d035c69 using man macros.</FONT>
 <br><br><center><img src="images/ubound.3fortran.gif"></center>
 </div>
 </div>

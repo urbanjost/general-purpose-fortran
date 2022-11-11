@@ -8,8 +8,8 @@
       x=10
       call unit_check_start('myroutine')
 
-      call unit_check('myroutine', x.gt.3 ,'test if big enough')
-      call unit_check('myroutine', x.lt.100 ,'test if small enough')
+      call unit_check('myroutine', x > 3 ,'test if big enough')
+      call unit_check('myroutine', x < 100 ,'test if small enough')
 
       call unit_check_good('myroutine',msg='checks on "myroutine" ')
 

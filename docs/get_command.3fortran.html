@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,137 +41,178 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>get_command (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>get_command (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>get_command</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>get_command</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>get_command</B>(3f) - [FORTRAN:INTRINSIC:SYSTEM ENVIRONMENT] Get the entire
-command line
+<B>GET_COMMAND</B>(3) - [SYSTEM:COMMAND LINE] Get the entire command line
+invocation
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=9>
+<A name=8>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-call <B>get_command</B>([command, length, status])
+call <B>get_command</B>([command] [,<I>length</I>] [,<I>status</I>] [,<I>errmsg</I>])
 <P>
 <PRE>
-    character(len=*),intent(out),optional :: command
-    integer,intent(out),optional :: length
-    integer,intent(out),optional :: status
+           subroutine get_command( command ,length ,status, errmsg )
+<P>
+            character(len=*),intent(out),optional   :: command
+            integer(kind=**),intent(out),optional   :: length
+            integer(kind=**),intent(out),optional   :: status
+            character(len=*),intent(inout),optional :: errmsg
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
 
-     <H3>DESCRIPTION</H3>
-
-</A>
-<BLOCKQUOTE>
-Retrieve the entire command line that was used to invoke the program.
-<P>
-Note that what is typed on the command line is often processed by
-a shell. The shell often processes special characters and white
-space before passing it to the program. The processing can typically
-be turned off by turning off globbing or quoting the command line
-arguments with quote characters and/or changing the default field
-separators, but this should rarely be necessary.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>RETURNS</H3>
+     <H3>CHARACTERISTICS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>COMMAND</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-(Optional) shall be of type CHARACTER and of default kind.
-If COMMAND is present, stores the entire command line that
-was used to invoke the program in COMMAND.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind value for the type
+meeting the conditions described herein.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>LENGTH</B> </TD><TD valign=bottom>
-(Optional) Shall be of type INTEGER and of default kind.
-If LENGTH is present, it is assigned the length of the
-command line.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COMMAND and ERRMSG are scalar character variables of default kind.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>STATUS</B> </TD><TD valign=bottom>
-(Optional) Shall be of type INTEGER and of default kind.
-If STATUS is present, it is assigned 0 upon success of the
-command, <B>-1</B> if COMMAND is too short to store the command line,
-or a positive value in case of an error.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LENGTH and STATUS are scalar integer with a decimal exponent range of at
+least four.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>GET_COMMAND</B>(3) retrieves the entire command line that was used to invoke the
+program.
+<P>
+Note that what is typed on the command line is often processed by a shell.
+The shell typically processes special characters and white space before
+passing it to the program. The processing can typically be turned off by
+turning off globbing or quoting the command line arguments and/or changing
+the default field separators, but this should rarely be necessary.
+</BLOCKQUOTE>
 <A name=4>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COMMAND : If COMMAND is present, the entire command line that was used to
+invoke the program is stored into it. If the command cannot be
+determined, COMMAND is assigned all blanks.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LENGTH : If LENGTH is present, it is assigned the <I>length</I> of the command
+line. It is system-dependent as to whether trailing blanks will be
+counted. : If the command <I>length</I> cannot be determined, a <I>length</I> of 0 is
+assigned.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STATUS : If STATUS is present, it is assigned 0 upon success of the
+command, <B>-1</B> if COMMAND is too short to store the command line, or a
+positive value in case of an error.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ERRMSG : It is assigned a processor-dependent explanatory message if the
+command retrieval fails. Otherwise, it is unchanged.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_get_command
-   implicit none
-   integer                      :: COMMAND_LINE_LENGTH
-   character(len=:),allocatable :: COMMAND_LINE
-      ! get command line length
-      call get_command(length=COMMAND_LINE_LENGTH)
-      ! allocate string big enough to hold command line
-      allocate(character(len=COMMAND_LINE_LENGTH) :: COMMAND_LINE)
-      ! get command line as a string
-      call get_command(command=COMMAND_LINE)
-      ! trim leading spaces just in case
-      COMMAND_LINE=adjustl(COMMAND_LINE)
-      write(*,&#146;("OUTPUT:",a)&#146;)COMMAND_LINE
-   end program demo_get_command
+      program demo_get_command
+      implicit none
+      integer                      :: command_line_length
+      character(len=:),allocatable :: command_line
+         ! get command line length
+         call get_command(length=command_line_length)
+         ! allocate string big enough to hold command line
+         allocate(character(len=command_line_length) :: command_line)
+         ! get command line as a string
+         call get_command(command=command_line)
+         ! trim leading spaces just in case
+         command_line=adjustl(command_line)
+         write(*,&#146;("OUTPUT:",a)&#146;)command_line
+      end program demo_get_command
 <P>
 </PRE>
-Sample execution:
+Results:
 <P>
 <PRE>
-     # note that shell expansion removes some of the whitespace
-     # without quotes
-     ./test_get_command  arguments    on the    command   line to   echo
+           # note that shell expansion removes some of the whitespace
+           # without quotes
+           ./test_get_command  arguments    on command   line to   echo
 <P>
-     OUTPUT:./test_get_command arguments on the command line to echo
+           OUTPUT:./test_get_command arguments on command line to echo
 <P>
-     # using the bash shell with single quotes
-     ./test_get_command  &#146;arguments  *&gt;&lt;&#145;~[]!{}?"#146;| on the    command   line &#146;
+           # using the bash shell with single quotes
+           ./test_get_command  &#146;arguments  *&gt;&lt;&#145;~[]!{}?"#146;| &#146;
 <P>
-     OUTPUT:./test_get_command arguments  *&gt;&lt;&#145;~[]!{}?"&#146;| on the   command   line
+           OUTPUT:./test_get_command arguments  *&gt;&lt;&#145;~[]!{}?"&#146;|
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2003]] and later
-</BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Subroutine
+Fortran 2003
 </BLOCKQUOTE>
 <A name=7>
 
@@ -179,16 +220,16 @@ Subroutine
 
 </A>
 <BLOCKQUOTE>
-<B>get_command_argument</B>(3), <B>command_argument_count</B>(3)
-</BLOCKQUOTE>
-<A name=8>
-
-    <H4>&nbsp; &nbsp; JSU</H4>
-</A>
-<BLOCKQUOTE>
+<B>GET_COMMAND_ARGUMENT</B>(3), <B>COMMAND_ARGUMENT_COUNT</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022          get_command(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_command (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from feb45559-e49c-4ea1-869a-62824cb9f3b5 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_command (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4987b7f2-52c2-4437-b592-e16cabe966b2 using man macros.</FONT>
 <br><br><center><img src="images/get_command.3fortran.gif"></center>
 </div>
 </div>

@@ -1,7 +1,18 @@
-      program demo_iostat
+        program demo_iostat
         implicit none
-        integer :: stat, i
-        open(88, file='test.dat')
-        read(88, *, iostat=stat) i
-        if(is_iostat_end(stat)) stop 'end of file'
-      end program demo_iostat
+        real               :: value
+        integer            :: ios
+        character(len=256) :: message
+           write(*,*)'Begin entering numeric values, one per line'
+           do
+              read(*,*,iostat=ios,iomsg=message)value
+              if(ios.eq.0)then
+                 write(*,*)'VALUE=',value
+              elseif( is_iostat_end(ios) ) then
+                 stop 'end of file. Goodbye!'
+              else
+                 write(*,*)'ERROR:',ios,trim(message)
+              endif
+              !
+           enddo
+        end program demo_iostat

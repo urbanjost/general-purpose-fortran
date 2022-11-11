@@ -3,9 +3,9 @@
       implicit none
       character(len=:), allocatable :: answer
          answer=merge_str('first string', &
-          & 'second string is longer',10.eq.10)
+          & 'second string is longer',10 == 10)
          write(*,'("[",a,"]")') answer
          answer=merge_str('first string', &
-          & 'second string is longer',10.ne.10)
+          & 'second string is longer',10 /= 10)
          write(*,'("[",a,"]")') answer
       end program demo_merge_str

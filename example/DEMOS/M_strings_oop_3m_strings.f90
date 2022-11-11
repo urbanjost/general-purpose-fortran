@@ -146,14 +146,14 @@
         write(*,101)'str2%str ................... ',str2%str
         write(*,*)': EQ LT GT LE GE NE'
         write(*,*)'compare str1 to str1'
-        write(*,303)str1.eq.str1  ,str1.lt.str1  ,str1.gt.str1  ,str1.le.str1 &
-                   & ,str1.ge.str1  ,str1.ne.str1
+        write(*,303)str1 == str1  ,str1 < str1  ,str1 > str1  ,str1 <= str1 &
+                   & ,str1 >= str1  ,str1 /= str1
         write(*,*)'compare str1 to str2'
-        write(*,303)str1.eq.str2  ,str1.lt.str2  ,str1.gt.str2  ,str1.le.str2 &
-                   & ,str1.ge.str2  ,str1.ne.str2
+        write(*,303)str1 == str2  ,str1 < str2  ,str1 > str2  ,str1 <= str2 &
+                   & ,str1 >= str2  ,str1 /= str2
         write(*,*)'compare str2 to str1'
-        write(*,303)str2.eq.str1  ,str2.lt.str1  ,str2.gt.str1  ,str2.le.str1 &
-                   & ,str2.ge.str1  ,str2.ne.str1
+        write(*,303)str2 == str1  ,str2 < str1  ,str2 > str1  ,str2 <= str1 &
+                   & ,str2 >= str1  ,str2 /= str1
 
         write(*,*)repeat('=',68)
 

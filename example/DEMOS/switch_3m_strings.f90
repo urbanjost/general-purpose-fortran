@@ -7,15 +7,15 @@
 
      ! First, examples of standard Fortran features
      ! returns array [F,T,T,T,T,T]
-     write(*,*)['A','=','=','=','=','='].eq.'='
+     write(*,*)['A','=','=','=','=','='] == '='
      ! this would return T
-     write(*,*)all(['=','=','=','=','=','='].eq.'=')
+     write(*,*)all(['=','=','=','=','=','='] == '=')
      ! this would return F
-     write(*,*)all(['A','=','=','=','=','='].eq.'=')
+     write(*,*)all(['A','=','=','=','=','='] == '=')
 
      ! so to test if the string DASHES is all dashes
      ! using SWITCH(3f) is
-     if(all(switch(dashes).eq.'-'))then
+     if(all(switch(dashes) == '-'))then
         write(*,*)'DASHES is all dashes'
      endif
 

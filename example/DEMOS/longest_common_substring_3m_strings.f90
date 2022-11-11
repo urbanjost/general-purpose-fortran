@@ -16,7 +16,7 @@
      integer :: i
         match=longest_common_substring(a,b)
         write(*,g) 'comparing "',a,'" and "',b,'"'
-        write(*,g) merge('(PASSED) "','(FAILED) "',answer.eq.match), &
+        write(*,g) merge('(PASSED) "','(FAILED) "',answer == match), &
         & match,'"; expected "',answer,'"'
      end subroutine compare
 

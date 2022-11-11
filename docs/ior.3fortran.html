@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,113 +41,149 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ior (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ior (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ior</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ior</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ior</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] Bitwise logical inclusive or
+<B>IOR</B>(3) - [BIT:LOGICAL] Bitwise logical inclusive OR
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>ior</B>(i, j)
+result = <B>ior</B>(<I>i</I>, <I>j</I>)
 <P>
 <PRE>
-    integer,intent(in) :: i
-    integer,intent(in) :: j
+           elemental integer(kind=KIND) function ior(i,j)
+<P>
+            integer(kind=KIND ,intent(in) :: i
+            integer(kind=KIND ,intent(in) :: j
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
 
-     <H3>DESCRIPTION</H3>
-
-</A>
-<BLOCKQUOTE>
-IOR returns the bit-wise Boolean inclusive-OR of I and J.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
+     <H3>CHARACTERISTICS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-an INTEGER scalar or array.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>J</B> </TD><TD valign=bottom>
-INTEGER scalar or array, of the same kind as I.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I, J and the result shall have the same integer type and kind, with the
+exception that one of I or J may be a BOZ constant.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=3>
 
-     <H3>RETURN VALUE</H3>
+     <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-The return type is INTEGER, of the same kind as the arguments. (If the
-argument kinds differ, it is of the same kind as the larger argument.)
+<B>IOR</B>(3) returns the bit-wise Boolean inclusive-or of I and J.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : one of the pair of values to compare the bits of
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+J : one of the pair of values to compare the bits of
+</TD></TR>
+<TR></TR></TABLE>If either I or J is a BOZ-literal-constant, it is first converted as if by
+the intrinsic function <B>INT</B>(3) to type integer with the kind type parameter
+of the other.
 </BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+The result has the value obtained by combining I and J bit-by-bit according
+to the following table:
+<P>
+<PRE>
+                I   J   IOR (I, J)
+                1   1        1
+                1   0        1
+                0   1        1
+                0   0        0
+<P>
+</PRE>
+This is commonly called the "bitwise logical inclusive OR" of the two
+values.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_ior
-   implicit none
-   integer :: i, j, k
-      i=53       ! i=00110101 binary (lowest order byte)
-      j=45       ! j=00101101 binary (lowest order byte)
-      k=ior(i,j) ! k=00111101 binary (lowest order byte) , k=61 decimal
-      write(*,&#146;(i8,1x,b8.8)&#146;)i,i,j,j,k,k
-   end program demo_ior
+      program demo_ior
+      implicit none
+      integer :: i, j, k
+         i=53       ! i=00110101 binary (lowest order byte)
+         j=45       ! j=00101101 binary (lowest order byte)
+         k=ior(i,j) ! k=00111101 binary (lowest order byte), k=61 decimal
+         write(*,&#146;(i8,1x,b8.8)&#146;)i,i,j,j,k,k
+      end program demo_ior
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         53 00110101
-         45 00101101
-         61 00111101
+               53 00110101
+               45 00101101
+               61 00111101
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -155,11 +191,17 @@ Results:
 
 </A>
 <BLOCKQUOTE>
-<B>ieor</B>(3), <B>iand</B>(3), <B>ibits</B>(3), <B>ibset</B>(3),
-<B>ibclr</B>(3), <B>not</B>(3)
+<B>IEOR</B>(3), <B>IBCLR</B>(3), <B>NOT</B>(3), <B>BTEST</B>(3), <B>IBCLR</B>(3), <B>IBITS</B>(3), <B>IBSET</B>(3), <B>IAND</B>(3),
+<B>IEOR</B>(3), <B>MVBITS</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  ior(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ior (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6160770a-bf35-49e5-a7cf-d23a82fc0883 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ior (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0cc8cc57-f7e8-4e00-8556-2db1a0434184 using man macros.</FONT>
 <br><br><center><img src="images/ior.3fortran.gif"></center>
 </div>
 </div>

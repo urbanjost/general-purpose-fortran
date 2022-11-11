@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,95 +41,197 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>null (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>null (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>null</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>null</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>null</B>(3f) - [FORTRAN:INTRINSIC:TRANSFORMATIONAL FUNCTION] Function
-that returns a disassociated pointer
+<B>NULL</B>(3) - [TRANSFORMATIONAL] Function that returns a disassociated pointer
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-ptr =&gt; <B>null</B>([mold])
+ptr =&gt; <B>null</B>( [mold] )
+<P>
+<PRE>
+           function null(mold)
+<P>
+            type(TYPE(kind=**)),pointer,optional :: mold
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MOLD is a pointer of any association status and of any type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The result is a disassociated pointer or an unallocated allocatable
+entity.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Returns a disassociated pointer.
+<B>NULL</B>(3) returns a disassociated pointer.
 <P>
-If MOLD is present, a disassociated pointer of the same type is
-returned, otherwise the type is determined by context.
+If MOLD is present, a disassociated pointer of the same type is returned,
+otherwise the type is determined by context.
 <P>
-In [[Fortran 95]], MOLD is optional. Please note that [[Fortran 2003]]
-includes cases where it is required.
+In Fortran 95, MOLD is optional. Please note that Fortran 2003 includes
+cases where it is required.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>MOLD</B> </TD><TD valign=bottom>
-(Optional) shall be a pointer of any association
-status and of any type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MOLD : a pointer of any association status and of any type.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-A disassociated pointer.
+A disassociated pointer or an unallocated allocatable entity.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    real, pointer, dimension(:) :: vec =&gt; null ()
+      !program demo_null
+      module showit
+      implicit none
+      private
+      character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+      public gen
+      ! a generic interface that only differs in the
+      ! type of the pointer the second argument is
+      interface gen
+       module procedure s1
+       module procedure s2
+      end interface
+<P>
+      contains
+<P>
+      subroutine s1 (j, pi)
+       integer j
+       integer, pointer :: pi
+         if(associated(pi))then
+            write(*,g)&#146;Two integers in S1:,&#146;,j,&#146;and&#146;,pi
+         else
+            write(*,g)&#146;One integer in S1:,&#146;,j
+         endif
+      end subroutine s1
+<P>
+      subroutine s2 (k, pr)
+       integer k
+       real, pointer :: pr
+         if(associated(pr))then
+            write(*,g)&#146;integer and real in S2:,&#146;,k,&#146;and&#146;,pr
+         else
+            write(*,g)&#146;One integer in S2:,&#146;,k
+         endif
+      end subroutine s2
+<P>
+      end module showit
+<P>
+      use showit, only : gen
+<P>
+      real,target :: x = 200.0
+      integer,target :: i = 100
+<P>
+      real, pointer :: real_ptr
+      integer, pointer :: integer_ptr
+<P>
+      ! so how do we call S1() or S2() with a disassociated pointer?
+<P>
+      ! the answer is the null() function with a mold value
+<P>
+      ! since s1() and s2() both have a first integer
+      ! argument the NULL() pointer must be associated
+      ! to a real or integer type via the mold option
+      ! so the following can distinguish whether s1(1)
+      ! or s2() is called, even though the pointers are
+      ! not associated or defined
+<P>
+      call gen (1, null (real_ptr) )    ! invokes s2
+      call gen (2, null (integer_ptr) ) ! invokes s1
+      real_ptr =&gt; x
+      integer_ptr =&gt; i
+      call gen (3, real_ptr ) ! invokes s2
+      call gen (4, integer_ptr ) ! invokes s1
+<P>
+      end
+      !end program demo_null
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+         One integer in S2:, 1
+         One integer in S1:, 2
+         integer and real in S2:, 3 and 200.000000
+         Two integers in S1:, 4 and 100
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Transformational function
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -137,10 +239,16 @@ Transformational function
 
 </A>
 <BLOCKQUOTE>
-<B>associated</B>(3)
+<B>ASSOCIATED</B>(3)
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022                 null(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>null (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 937069ba-89a4-44e3-8399-1b8f001222ab using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>null (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a6b9158-f0a2-476a-afaf-479e5ca9a2ff using man macros.</FONT>
 <br><br><center><img src="images/null.3fortran.gif"></center>
 </div>
 </div>

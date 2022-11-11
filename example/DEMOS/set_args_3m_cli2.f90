@@ -46,7 +46,7 @@
       write(*,*)'l=',l
       write(*,*)'L=',lbig
       ! UNNAMED VALUES
-      if(size(filenames).gt.0)then
+      if(size(filenames) > 0)then
          write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
       endif
       end program demo_set_args

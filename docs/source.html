@@ -809,7 +809,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	eval(3f): evaluate math expression to .TRUE. or .FALSE. or integer value<br/>
 	parens(3f): find subexpressions in parenthesis and process them<br/>
 	math(3f):<br/>
-	domath(3f): reduce integer expression containing  +-/* and ** operators<br/>
+	domath(3f): reduce integer expression containing  +*-/ and ** operators<br/>
 	doop(3f): find VAL.OP.VAL strings and reduce to .TRUE. or .FALSE.<br/>
 	logic(3f): process .OP. operator strings<br/>
 	true_or_false(3f): convert variable name or .TRUE./.FALSE. to a logical value<br/>
@@ -875,11 +875,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_hashkeys.f90">../src/M_hashkeys.f90</a></td>
 <td>
-	M_hashkeys::sha256(3f): SHA-256 interface function<br/>
-	M_hashkeys::dirty_sha256(3f): Quick and dirty SHA-256 interface function (no bit-swapping).<br/>
-	LUHN_CHECKSUM determines the Luhn checksum of a string composed of digits<br/>
-	M_hashkeys::crc32_hash_arr: CRC (Cyclic Redundancy Check) calculation<br/>
-	djb2(3f): call C routine djb2(3c) with a Fortran CHARACTER variable<br/>
+	 M_hashkeys sha256(3f) SHA-256 interface function<br/>
+	 M_hashkeys dirty_sha256(3f) Quick and dirty SHA-256 interface function (no bit-swapping).<br/>
+	 LUHN_CHECKSUM determines the Luhn checksum of a string composed of digits<br/>
+	 M_hashkeys crc32_hash_arr CRC (Cyclic Redundancy Check) calculation<br/>
+	 djb2(3f) call C routine djb2(3c) with a Fortran CHARACTER variable<br/>
 </td>
 <tr><td><a href="../src/M_help.f90">../src/M_help.f90</a></td>
 <td>
@@ -918,7 +918,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>
 	 grab lines in NAME section and append them to generate an index of manpages<br/>
 	 upper(3f): function to return a trimmed uppercase-only string', &<br/>
+	 print small 2d logical scalar, vector, or matrix', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
+	 print small 2d logical scalar, vector, matrix in row-column format', &<br/>
+	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
+	 print small 2d integer arrays in row-column format', &<br/>
+	 print small 2d integer arrays in row-column format', &<br/>
+	 print small 2d integer arrays in row-column format', &<br/>
+	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
+	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
 	 M_strings::lower(3f): Changes a string to lowercase over specified range<br/>
 </td>
 <tr><td><a href="../src/M_io.f90">../src/M_io.f90</a></td>
@@ -1120,16 +1128,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_msg stderr(3f) writes a message to standard error using a standard f2003 method<br/>
 	 M_msg write(3f) writes a message to any number of open files with any scalar values<br/>
 </td>
-<tr><td><a href="../src/M_mulcnt.f90">../src/M_mulcnt.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_ncurses.f90">../src/M_ncurses.f90</a></td>
 <td>
 	 Fortran interface to the ncurses(3c) library -John S.Urban 20141205<br/>
 	 wrapper around ICHAR(3f) that returns integer type C_LONG<br/>
-</td>
-<tr><td><a href="../src/M_orderpack.f90">../src/M_orderpack.f90</a></td>
-<td>
 </td>
 <tr><td><a href="../src/M_overload.f90">../src/M_overload.f90</a></td>
 <td>
@@ -1345,7 +1347,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_stopwatch.f90">../src/M_stopwatch.f90</a></td>
 <td>
-	M_stopwatch::M_stopwatch(3f): package for measuring cpu and wall clock<br/>
+	 M_stopwatch M_stopwatch(3f) package for measuring cpu and wall clock<br/>
 </td>
 <tr><td><a href="../src/M_strings.f90">../src/M_strings.f90</a></td>
 <td>
@@ -1366,6 +1368,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings::modif(3f): Emulate the MODIFY command from the line editor XEDIT<br/>
 	 M_strings len_white(3f) return position of last non-blank/non-null character in string<br/>
 	 M_strings crop(3f) replace control characters with whitespace and trim leading and trailings spaces from resulting string<br/>
+	 M_strings clip(3f) trim leading and trailings spaces from resulting string<br/>
 	 M_strings transliterate(3f) replace characters from old set with new set<br/>
 	 M_strings rotate13(3f) converts a character to its ROT13 equivalent which is a trivial encryption.<br/>
 	 M_strings join(3f) merge string array into a single CHARACTER value adding specified separators caps prefix and suffix<br/>
@@ -1629,7 +1632,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_writegif.f90">../src/M_writegif.f90</a></td>
 <td>
-	 This   module can    write  a      GIF    file   in     GIF89  format from   raster data  <br/>
+	 This module can write a GIF file in GIF89 format from raster data<br/>
 </td>
 <tr><td><a href="../src/M_writegif_animated.f90">../src/M_writegif_animated.f90</a></td>
 <td>

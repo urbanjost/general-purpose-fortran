@@ -1,57 +1,53 @@
-      program demo_max
-      implicit none
-      real :: arr1(4)= [10.0,11.0,30.0,-100.0]
-      real :: arr2(5)= [20.0,21.0,32.0,-200.0,2200.0]
+        program demo_max
+        implicit none
+        real :: arr1(4)= [10.0,11.0,30.0,-100.0]
+        real :: arr2(5)= [20.0,21.0,32.0,-200.0,2200.0]
+        integer :: box(3,4)= reshape([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6],shape(box))
 
-         !! this is simple enough because it is not being called elementally
-         !! because all arguments are scalar
-         !!
+          ! basic usage
+           ! this is simple enough when all arguments are scalar
 
-         write(*,*)'scalars:',max(10.0,11.0,30.0,-100.0)
+           ! the most positive value is returned, not the one with the
+           ! largest magnitude
+           write(*,*)'scalars:',max(10.0,11.0,30.0,-100.0)
+           write(*,*)'scalars:',max(-22222.0,-0.0001)
 
-         !!
-         !! this is all max(3f) could do before it became an elemental
-         !! function and is the most intuitive
-         !! except that it can take an arbitrary number of options,
-         !! which is not common in Fortran without
-         !! declaring a lot of optional parameters.
-         !!
-         !! That is it unless you want to use the elemental features of max(3f)!
+           ! strings do not need to be of the same length
+           write(*,*)'characters:',max('the','words','order')
 
-         !! Error: Intrinsic    max    at (1) must have at least two arguments
-         !!write(*,*)max(arr1)
-         !! This does not work because it is like trying to return
-         !! [(max(arr1(i)),i=1,size(arr1))]
-         !! so it is trying to take the max of a single value.
-         !! To find the largest element of an array
-         !! call maxloc(3f) or maxval(3f).
+           ! leading spaces are significant; everyone is padded on the right
+           ! to the length of the longest argument
+           write(*,*)'characters:',max('c','bb','a')
+           write(*,*)'characters:',max(' c','b','a')
 
-         !! Error: Different shape for arguments 'a1' and 'a2' for intrinsic
-         !! 'max' at (1) on dimension 1 (4 and 5)
-         !!write(*,*)max(arr1,arr2)
-         !! but this will return an array of
-         !! [(max(arr1(N),arr2(N),N=1,size(arr1))]
+          ! elemental
+           ! there must be at least two arguments, so even if A1 is an array
+           ! max(A1) is not valid. See MAXVAL(3) and/or MAXLOC(3) instead.
 
-         write(*,*)max(arr1,arr2(1:4))
+           ! strings in a single array do need to be of the same length
+           ! but the different objects can still be of different lengths.
+           write(*,"(*('""',a,'""':,1x))")MAX(['A','Z'],['BB','Y '])
+           ! note the result is now an array with the max of every element
+           ! position, as can be illustrated numerically as well:
+           write(*,'(a,*(i3,1x))')'box=   ',box
+           write(*,'(a,*(i3,1x))')'box**2=',sign(1,box)*box**2
+           write(*,'(a,*(i3,1x))')'max    ',max(box,sign(1,box)*box**2)
 
-         !! so this works only if all the arrays are the same size and
-         !! you want an array of the largest Nth elements
-         !! from the input arrays.
-         !! maybe you wanted to do maxval([arr1,arr2]) or
-         !! equivalently max(maxval(arr1),maxval(arr2))
-         !! to find the single largest element in both arrays?
+           ! Remember if any argument is an array by the definition of an
+           ! elemental function all the array arguments must be the same shape.
 
-         !! compares all scalars to each member of array and
-         !! returns array of size arr2
+           ! to find the single largest value of arrays you could use something
+           ! like MAXVAL([arr1, arr2]) or probably better (no large temp array),
+           ! max(maxval(arr1),maxval(arr2)) instead
 
-         write(*,*)'scalars and array:',max(10.0,11.0,30.0,-100.0,arr2)
+           ! so this returns an array of the same shape as any input array
+           ! where each result is the maximum that occurs at that position.
+           write(*,*)max(arr1,arr2(1:4))
+           ! this returns an array just like arr1 except all values less than
+           ! zero are set to zero:
+           write(*,*)max(box,0)
+           ! When mixing arrays and scalars you can think of the scalars
+           ! as being a copy of one of the arrays with all values set to
+           ! the scalar value.
 
-         !! Error: Different shape for arguments 'a5' and 'a6'
-         !! for intrinsic 'max' at (1) on dimension 1 (5 and 4)
-         !! write(*,*)'scalars and array:',max(10.0,11.0,30.0,-100.0,arr2,arr1)
-         !! as the same reason above when arrays are used
-         !! (without scalar values) all the arrays must be the same size
-
-         write(*,*)'scalars and array:',max(40.0,11.0,30.0,-100.0,arr2(:4),arr1)
-
-      end program demo_max
+        end program demo_max

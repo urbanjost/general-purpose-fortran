@@ -1,17 +1,21 @@
-     program demo_mod
-     implicit none
-       print *, mod(17,3)           ! yields 2
-       print *, mod(17.5,5.5)       ! yields 1.0
-       print *, mod(17.5d0,5.5d0)   ! yields 1.0d0
-       print *, mod(17.5d0,5.5d0)   ! yields 1.0d0
+        program demo_mod
+        implicit none
 
-       print *, mod(-17,3)          ! yields -2
-       print *, mod(-17.5,5.5)      ! yields -1.0
-       print *, mod(-17.5d0,5.5d0)  ! yields -1.0d0
-       print *, mod(-17.5d0,5.5d0)  ! yields -1.0d0
+           ! basics
+            print *, mod( -17,  3 ), modulo( -17,  3 )
+            print *, mod(  17, -3 ), modulo(  17, -3 )
+            print *, mod(  17,  3 ), modulo(  17,  3 )
+            print *, mod( -17, -3 ), modulo( -17, -3 )
 
-       print *, mod(17,-3)          ! yields 2
-       print *, mod(17.5,-5.5)      ! yields 1.0
-       print *, mod(17.5d0,-5.5d0)  ! yields 1.0d0
-       print *, mod(17.5d0,-5.5d0)  ! yields 1.0d0
-     end program demo_mod
+            print *, mod(-17.5, 5.2), modulo(-17.5, 5.2)
+            print *, mod( 17.5,-5.2), modulo( 17.5,-5.2)
+            print *, mod( 17.5, 5.2), modulo( 17.5, 5.2)
+            print *, mod(-17.5,-5.2), modulo(-17.5,-5.2)
+
+          ! with a divisor of 1 the fractional part is returned
+            print *, mod(-17.5, 1.0), modulo(-17.5, 1.0)
+            print *, mod( 17.5,-1.0), modulo( 17.5,-1.0)
+            print *, mod( 17.5, 1.0), modulo( 17.5, 1.0)
+            print *, mod(-17.5,-1.0), modulo(-17.5,-1.0)
+
+        end program demo_mod

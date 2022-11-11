@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,117 +41,168 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bit_size (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bit_size (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>bit_size</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>bit_size</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>bit_size</B>(3f) - [FORTRAN:INTRINSIC:BIT INQUIRY] Bit size inquiry function
+<B>BIT_SIZE</B>(3) - [BIT:INQUIRY] Bit size inquiry function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>bit_size</B>(i)
+result = <B>bit_size</B>(<I>i</I>)
+<P>
+<PRE>
+           integer(kind=KIND) function bit_size(i)
+<P>
+            integer(kind=KIND),intent(in) :: i(..)
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the value of KIND is any valid value for an integer kind parameter on the
+processor.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the return value is of the same kind as the input value.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>bit_size</B>(i) returns the number of bits (integer precision plus sign bit)
-represented by the type of I.
+<B>BIT_SIZE</B>(3) returns the number of bits (integer precision plus sign bit)
+represented by the type of the integer I.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : An integer value of any kind whose size in bits is to be determined.
+Because only the type of the argument is examined, the argument need not
+be defined; I can be a scalar or an array, but a scalar representing just
+a single element is always returned.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type INTEGER of the same type as I.
+The number of bits used to represent a value of the type of I. The result is
+a integer scalar of the same kind as I.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_bit_size
-   use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-   implicit none
-   integer(kind=int64)          :: answer
-   integer                      :: ilen
-      write(*,&#146;(i0)&#146;)bit_size(bit_size(0_int8))
-      write(*,&#146;(i0)&#146;)bit_size(bit_size(0_int16))
-      write(*,&#146;(i0)&#146;)bit_size(bit_size(0_int32))
-      write(*,&#146;(i0)&#146;)bit_size(bit_size(0_int64))
-      answer=0_int64
-      ilen=999
-      ! notice use of INT(3f)
-      ilen=min(ilen,int(bit_size(answer)))
-      ! arguments to MIN(3f) would be of different TYPES
-      !ilen=min(ilen,bit_size(answer))
-      write(*,&#146;(i0)&#146;)ilen
-   end program demo_bit_size
+      program demo_bit_size
+      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+      use,intrinsic :: iso_fortran_env, only : integer_kinds
+      implicit none
+      character(len=*),parameter   :: fmt=&
+      & &#146;(a,": bit size is ",i3," which is kind=",i3," on this platform")&#146;
+<P>
+          ! default integer bit size on this platform
+          write(*,fmt) "default", bit_size(0), kind(0)
+<P>
+          write(*,fmt) "int8   ", bit_size(0_int8),   kind(0_int8)
+          write(*,fmt) "int16  ", bit_size(0_int16),  kind(0_int16)
+          write(*,fmt) "int32  ", bit_size(0_int32),  kind(0_int32)
+          write(*,fmt) "int64  ", bit_size(0_int64),  kind(0_int64)
+<P>
+          write(*,&#146;(a,*(i0:,", "))&#146;) "The available kinds are ",integer_kinds
+<P>
+      end program demo_bit_size
 <P>
 </PRE>
-Expected output:
+Typical Results:
 <P>
 <PRE>
-    &gt; 8
-    &gt; 16
-    &gt; 32
-    &gt; 64
-    &gt; 64
+          default: bit size is  32 which is kind=  4 on this platform
+          int8   : bit size is   8 which is kind=  1 on this platform
+          int16  : bit size is  16 which is kind=  2 on this platform
+          int32  : bit size is  32 which is kind=  4 on this platform
+          int64  : bit size is  64 which is kind=  8 on this platform
+          The available kinds are 1, 2, 4, 8, 16
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
+Fortran 95
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Inquiry function]]
+****(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022             bit_size(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bit_size (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7234a2a0-95c6-4f89-baed-7e571431bea7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bit_size (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fb6a37f5-2643-4310-ae0a-c2d844195647 using man macros.</FONT>
 <br><br><center><img src="images/bit_size.3fortran.gif"></center>
 </div>
 </div>

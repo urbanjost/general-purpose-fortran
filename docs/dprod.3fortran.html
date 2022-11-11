@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,138 +41,198 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dprod (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dprod (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>dprod</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>dprod</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>dprod</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC] Double product function
+<B>DPROD</B>(3) - [NUMERIC] Double precision real product
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>dprod</B>(x, y)
+result = <B>dprod</B>(x,y)
+<P>
+<PRE>
+           elemental function dprod(x,y)
+<P>
+            real,intent(in) :: x
+            real,intent(in) :: y
+            doubleprecision :: dprod
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+X and Y must both be real values of default kind.
+<P>
+The return value is doubleprecision (ie. <B>real</B>(kind=kind(0.0d0))).
+<P>
+The setting of compiler options specifying the size of a default real can
+affect this function.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>DPROD</B>(X,Y) produces a higher DOUBLEPRECISION product of default REAL
-numbers X and Y.
+<B>DPROD</B>(3) produces a doubleprecision product of default real values X and Y.
 <P>
-The result has a value equal to a processor-dependent approximation to
-the product of X and Y. It is recommended that the processor compute
-the product in double precision, rather than in single precision and
-then converted to double precision.
-<TABLE cellpadding=3><!-- tsb: The result has a value equal to a processor-dependent approximation to
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-shall be default real.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>Y</B> </TD><TD valign=bottom>
-shall be default real.
-</TD></TR>
-<TR></TR></TABLE>The setting of compiler options specifying REAL size can affect
-this function.
+That is, it is expected to convert the arguments to double precision before
+multiplying, which a simple expression X*Y would not be required to do. This
+can be significant in specialized computations requiring high precision.
+<P>
+The result has a value equal to a processor-dependent approximation to the
+product of X and Y. Note it is recommended in the standard that the
+processor compute the product in double precision, rather than in single
+precision then converted to double precision; but is only a recommendation.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-Must be of default <B>REAL</B>(kind=kind(0.0)) type
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : the multiplier
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>Y</B> </TD><TD valign=bottom>
-Must have the same type and kind parameters as X
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Y : the multiplicand
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type <B>real</B>(kind=kind(0.0d0)).
+The returned value of the product should have the same value as
+<B>DBLE</B>(X)*<B>DBLE</B>(Y).
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_dprod
-    use, intrinsic :: iso_fortran_env, only : real_kinds, &
-    & real32, real64, real128
-    implicit none
-    integer,parameter :: dp=kind(0.0d0)
-    real :: x = 5.2
-    real :: y = 2.3
-    real(kind=dp) :: dd
-       dd = dprod(x,y)
-       print *, dd, x*y, kind(x), kind(dd), kind(dprod(x,y))
-       ! interesting comparisons
-       print *, 52*23
-       print *, 52*23/100.0
-       print *, 52*23/100.0d0
+      program demo_dprod
+      implicit none
+      integer,parameter :: dp=kind(0.0d0)
+      real :: x = 5.2
+      real :: y = 2.3
+      doubleprecision :: xx
+      real(kind=dp)   :: dd
 <P>
-       !! common extension is to take doubleprecision arguments
-       !! and return higher precision
-       bigger: block
-       doubleprecision :: xx = 5.2d0
-       doubleprecision :: yy = 2.3d0
-       real(kind=real128) :: ddd
-       !ddd = dprod(xx,yy)
-       !print *, ddd, xx*yy, kind(xx), kind(ddd), kind(dprod(xx,yy))
-       endblock bigger
+         print *,&#146;algebraically 5.2 x 2.3 is exactly 11.96&#146;
+         print *,&#146;as floating point values results may differ slightly:&#146;
+         ! basic usage
+         dd = dprod(x,y)
+         print *, &#146;compare dprod(xy)=&#146;,dd, &
+         & &#146;to x*y=&#146;,x*y, &
+         & &#146;to dble(x)*dble(y)=&#146;,dble(x)*dble(y)
 <P>
-    end program demo_dprod
+         print *,&#146;test if an expected result is produced&#146;
+         xx=-6.0d0
+         write(*,*)DPROD(-3.0, 2.0),xx
+         write(*,*)merge(&#146;PASSED&#146;,&#146;FAILED&#146;,DPROD(-3.0, 2.0) == xx)
+<P>
+         print *,&#146;elemental&#146;
+         print *, dprod( [2.3,3.4,4.5], 10.0 )
+         print *, dprod( [2.3,3.4,4.5], [9.8,7.6,5.4] )
+<P>
+      end program demo_dprod
+<P>
+</PRE>
+Results: (this can vary between programming environments):
+<P>
+<PRE>
+          algebraically 5.2 x 2.3 is exactly 11.96
+          as floating point values results may differ slightly:
+          compare dprod(xy)=   11.959999313354501      to x*y=   11.9599991
+          to dble(x)*dble(y)=   11.959999313354501
+          test if an expected result is produced
+           -6.0000000000000000       -6.0000000000000000
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PASSED</H4>
+</A>
+<BLOCKQUOTE>
+elemental
+<P>
+<PRE>
+    22.999999523162842
+      34.000000953674316        45.000000000000000
+<P>
+    22.539999971389761
+      25.840000400543204        24.300000429153442
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
+FORTRAN 77
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+****(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                dprod(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dprod (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 780f5602-180b-4299-af4c-9b18014028ee using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dprod (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 974b04bc-6213-4e9c-b91a-deb70347bf85 using man macros.</FONT>
 <br><br><center><img src="images/dprod.3fortran.gif"></center>
 </div>
 </div>

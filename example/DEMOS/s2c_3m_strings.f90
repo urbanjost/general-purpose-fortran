@@ -9,7 +9,7 @@
          ! write array with ASCII Decimal Equivalent below it except show
          ! unprintable characters like NULL as "XXX"
          write(*,'(1x,*("[",a3,"]":))')&
-              & merge('XXX',array,iachar(array(:)(1:1)).lt.32)
+              & merge('XXX',array,iachar(array(:)(1:1)) < 32)
          write(*,'(1x,*("[",i3,"]":))')&
               & iachar(array(:)(1:1))
       end program demo_s2c

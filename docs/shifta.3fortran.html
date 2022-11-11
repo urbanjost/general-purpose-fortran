@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,94 +41,214 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>shifta (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>shifta (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>shifta</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>shifta</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>shifta</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] shift bits right with fill
+<B>SHIFTA</B>(3) - [BIT:SHIFT] Shift bits right with fill
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>SHIFTA</B>(I, SHIFT)
+result = <B>shifta</B>(<I>i</I>, shift )
+<P>
+<PRE>
+           elemental integer(kind=KIND) function shifta(i, shift)
+<P>
+            integer(kind=KIND),intent(in) :: i
+            integer(kind=**),intent(in) :: shift
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY may be any type and rank (and the result will automatically be of
+the same type, kind and rank as ARRAY).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Returns a value corresponding to I with all of the bits shifted right
-by SHIFT places. If the absolute value of SHIFT is greater than
-<B>BIT_SIZE</B>(I), the value is undefined. Bits shifted out from the
-right end are lost. The fill is arithmetic: the bits shifted in from
-the left end are equal to the leftmost bit, which in two&#146;s complement
-representation is the sign bit.
+<B>SHIFTA</B>(3) returns a value corresponding to I with all of the bits shifted
+right by SHIFT places and the vacated bits on the left filled with the value
+of the original left-most bit..
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : The initial value to shift and fill
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>SHIFT</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SHIFT : how many bits to shift right. It shall be nonnegative and less
+than or equal to <B>BIT_SIZE</B>(I). or the value is undefined.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type INTEGER and of the same kind as I.
+The result characteristics (kind, type, rank, shape, &#46;&#46;&#46;.) are the same as
+I.
+<P>
+The result has the value obtained by shifting the bits of I to the right
+SHIFT bits and replicating the leftmost bit of I in the left SHIFT bits (the
+leftmost bit in "two&#146;s complement" representation is the sign bit).
+<P>
+Bits shifted out from the right end are lost.
+<P>
+If SHIFT is zero the result is I.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_shifta
+      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+      implicit none
+      integer(kind=int32) :: ival
+      integer             :: shift
+      integer(kind=int32) :: oval
+      integer(kind=int32),allocatable :: ivals(:)
+      integer             :: i
+      integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])
+<P>
+        ! basic usage
+        write(*,*)shifta(100,3)
+<P>
+        ! loop through some interesting values
+         shift=5
+<P>
+         ivals=[ -1, -0, +0, +1, &
+         & int(b"01010101010101010101010101010101"), &
+         & int(b"10101010101010101010101010101010"), &
+         & int(b"00000000000000000000000000011111") ]
+<P>
+         ! does your platform distinguish between +0 and -0?
+         ! note the original leftmost bit is used to fill in the vacated bits
+<P>
+         write(*,&#146;(/,"SHIFT =  ",i0)&#146;) shift
+         do i=1,size(ivals)
+            ival=ivals(i)
+            write(*,&#146;(  "I =      ",b32.32," == ",i0)&#146;) ival,ival
+            oval=shifta(ival,shift)
+            write(*,&#146;(  "RESULT = ",b32.32," == ",i0)&#146;) oval,oval
+         enddo
+         ! elemental
+         write(*,*)"characteristics of the result are the same as input"
+         write(*,&#146;(*(g0,1x))&#146;) &
+           & "kind=",kind(shifta(arr,3)), "shape=",shape(shifta(arr,3)), &
+           & "size=",size(shifta(arr,3)) !, "rank=",rank(shifta(arr,3))
+<P>
+      end program demo_shifta
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+       &gt;           12
+       &gt;
+       &gt; SHIFT =  5
+       &gt; I =      11111111111111111111111111111111 == -1
+       &gt; RESULT = 11111111111111111111111111111111 == -1
+       &gt; I =      00000000000000000000000000000000 == 0
+       &gt; RESULT = 00000000000000000000000000000000 == 0
+       &gt; I =      00000000000000000000000000000000 == 0
+       &gt; RESULT = 00000000000000000000000000000000 == 0
+       &gt; I =      00000000000000000000000000000001 == 1
+       &gt; RESULT = 00000000000000000000000000000000 == 0
+       &gt; I =      01010101010101010101010101010101 == 1431655765
+       &gt; RESULT = 00000010101010101010101010101010 == 44739242
+       &gt; I =      10101010101010101010101010101010 == -1431655766
+       &gt; RESULT = 11111101010101010101010101010101 == -44739243
+       &gt; I =      00000000000000000000000000011111 == 31
+       &gt; RESULT = 00000000000000000000000000000000 == 0
+       &gt;  characteristics of the result are the same as input
+       &gt; kind= 1 shape= 2 2 size= 4
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2008]] and later
+Fortran 2008
 </BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental function]]
-</BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>shiftl</B>(3), <B>shiftr</B>(3)
+<B>SHIFTL</B>(3), <B>SHIFTR</B>(3), <B>ISHFT</B>(3), <B>ISHFTC</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022               shifta(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shifta (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ac515fdf-080b-4739-ad88-e64d874c1a69 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shifta (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 013082d6-c508-4854-9c24-bbf521f9e717 using man macros.</FONT>
 <br><br><center><img src="images/shifta.3fortran.gif"></center>
 </div>
 </div>

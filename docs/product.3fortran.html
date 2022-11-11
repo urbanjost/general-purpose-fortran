@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,26 +41,55 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>product (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>product (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>product</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>product</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>product</B>(3f) - [FORTRAN:INTRINSIC:ARRAY REDUCTION] Product of array elements
+<B>PRODUCT</B>(3) - [ARRAY:REDUCTION] Product of array elements
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+result = <B>product</B>(array [,<I>dim</I>] [,<I>mask</I>])
+<P>
+<PRE>
+           NUMERIC function product(array, dim, mask)
+<P>
+            NUMERIC,intent(in) :: array(..)
+            integer(kind=**),intent(in),optional :: dim
+            logical(kind=**),intent(in),optional :: mask(..)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
 
 </A>
 <BLOCKQUOTE>
@@ -68,91 +97,254 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-result = <B>product</B>(array[, mask])
+a kind designated as ** may be any supported kind value for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-result = <B>product</B>(array, dim[, mask])
+NUMERIC is any numeric type and kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=2>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Multiplies the elements of ARRAY along dimension DIM if
-the corresponding element in MASK is TRUE.
+<B>PRODUCT</B>(3) multiplies together all the selected elements of ARRAY, or along
+dimension DIM if the corresponding element in MASK is .true..
+<P>
+If DIM is absent, a scalar with the product of all elements in ARRAY is
+returned. (Note a zero-sized ARRAY returns 1).
+<P>
+When DIM is present, If the masked array has a dimension of one (ie. is a
+vector) the result is a scalar. Otherwise, an array of rank N-1, where N
+equals the rank of ARRAY, and a shape similar to that of ARRAY with
+dimension DIM dropped is returned.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>ARRAY</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-Shall be an array of type INTEGER, REAL or COMPLEX.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY : Shall be an array of type integer, real or complex.
 </TD></TR>
-<TR valign=top><TD width=3% nowrap>
-<B>DIM</B> </TD><TD valign=bottom>
-(Optional) shall be a scalar of type INTEGER with a
-value in the range from 1 to n, where n equals the rank of ARRAY.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : shall be a scalar of type integer with a value in the range from 1
+TO N, where N equals the rank of ARRAY.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>MASK</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-(Optional) shall be of type LOGICAL
-and either be a scalar or an array of the same shape as ARRAY.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK : shall be of type logical and either be a scalar or an array of the
+same shape as ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
 The result is of the same type as ARRAY.
-<P>
-If DIM is absent, a scalar with the product of all elements in
-ARRAY is returned. Otherwise, an array of rank n-1, where n equals
-the rank of ARRAY, and a shape similar to that of ARRAY with
-dimension DIM dropped is returned.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_product
-    implicit none
-      integer :: x(5) = [ 1, 2, 3, 4 ,5 ]
-      print *, product(x)                    ! all elements, product = 120
-      print *, product(x, mask=mod(x, 2)==1) ! odd elements, product = 15
-    end program demo_product
+      program demo_product
+      implicit none
+      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146; ! a handy format
+      character(len=1),parameter :: nl=new_line(&#146;a&#146;)
+<P>
+      NO_DIM: block
+      !    If DIM is not specified, the result is the product of all the
+      !    selected array elements.
+      integer :: i,n, p1, p2
+      integer,allocatable :: array(:)
+         ! all elements are selected by default
+         do n=1,10
+            print all, &#146;factorial of &#146;,n,&#146; is &#146;, product([(real(i),i=1,n)])
+         enddo
+<P>
+         ! using a mask
+         array=[10,12,13,15,20,25,30]
+         p1=product(array, mask=mod(array, 2)==1) ! only odd elements
+         p2=product(array, mask=mod(array, 2)/=1) ! only even elements
+         print all, nl,&#146;product of all elements&#146;,product(array) ! all elements
+         print all, &#146; odd * even =&#146;,nl,p1,&#146;*&#146;,p2,&#146;=&#146;,p1*p2
+<P>
+         ! NOTE: If ARRAY is a zero-sized array, the result is equal to one
+         print all
+         print all, &#146;zero-sized array=&gt;&#146;,product([integer :: ])
+         ! NOTE: If nothing in the mask is true, this also results in a null
+         !       array
+         print all, &#146;all elements have a false mask=&gt;&#146;, &
+                  & product(array,mask=.false.)
+<P>
+      endblock NO_DIM
+<P>
+      WITH_DIM: block
+      integer :: rect(2,3)
+      integer :: box(2,3,4)
+<P>
+      !  lets fill a few arrays
+         rect = reshape([ &
+           1, 2, 3,       &
+           4, 5, 6        &
+         ],shape(rect),order=[2,1])
+         call print_matrix_int(&#146;rect&#146;,rect)
+<P>
+      !  Find the product of each column in RECT.
+         print all, &#146;product of columns=&#146;,product(rect, dim = 1)
+<P>
+      ! Find the product of each row in RECT.
+         print all, &#146;product of rows=&#146;,product(rect, dim = 2)
+<P>
+      ! now lets try a box
+         box(:,:,1)=rect
+         box(:,:,2)=rect*(+10)
+         box(:,:,3)=rect*(-10)
+         box(:,:,4)=rect*2
+         ! lets look at the values
+         call print_matrix_int(&#146;box 1&#146;,box(:,:,1))
+         call print_matrix_int(&#146;box 2&#146;,box(:,:,2))
+         call print_matrix_int(&#146;box 3&#146;,box(:,:,3))
+         call print_matrix_int(&#146;box 4&#146;,box(:,:,4))
+<P>
+         ! remember without dim= even a box produces a scalar
+         print all, &#146;no dim gives a scalar&#146;,product(real(box))
+<P>
+         ! only one plane has negative values, so note all the "1" values
+         ! for vectors with no elements
+         call print_matrix_int(&#146;negative values&#146;, &
+         & product(box,mask=box &lt; 0,dim=1))
+<P>
+      !   If DIM is specified and ARRAY has rank greater than one, the
+      !   result is a new array in which dimension DIM has been eliminated.
+<P>
+         ! pick a dimension to multiply though
+         call print_matrix_int(&#146;dim=1&#146;,product(box,dim=1))
+<P>
+         call print_matrix_int(&#146;dim=2&#146;,product(box,dim=2))
+<P>
+         call print_matrix_int(&#146;dim=3&#146;,product(box,dim=3))
+<P>
+      endblock WITH_DIM
+<P>
+      contains
+<P>
+         subroutine print_matrix_int(title,arr)
+         implicit none
+<P>
+         !@(#) print small 2d integer arrays in row-column format
+<P>
+         character(len=*),intent(in)  :: title
+         integer,intent(in)           :: arr(:,:)
+         integer                      :: i
+         character(len=:),allocatable :: biggest
+<P>
+            print all
+            print all, trim(title),&#146;:(&#146;,shape(arr),&#146;)&#146;  ! print title
+            biggest=&#146;           &#146;  ! make buffer to write integer into
+            ! find how many characters to use for integers
+            write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
+            ! use this format to write a row
+            biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+            ! print one row of array at a time
+            do i=1,size(arr,dim=1)
+               write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+               write(*,&#146;(" ]")&#146;)
+            enddo
+<P>
+         end subroutine print_matrix_int
+<P>
+      end program demo_product
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+      factorial of  1  is  1.000000
+      factorial of  2  is  2.000000
+      factorial of  3  is  6.000000
+      factorial of  4  is  24.00000
+      factorial of  5  is  120.0000
+      factorial of  6  is  720.0000
+      factorial of  7  is  5040.000
+      factorial of  8  is  40320.00
+      factorial of  9  is  362880.0
+      factorial of  10  is  3628800.
+<P>
+       product of all elements 351000000
+       odd * even =
+       4875 * 72000 = 351000000
+<P>
+      zero-sized array=&gt; 1
+      all elements have a false mask=&gt; 1
+<P>
+      rect :( 2 3 )
+       &gt; [  1,  2,  3 ]
+       &gt; [  4,  5,  6 ]
+      product of columns= 4 10 18
+      product of rows= 6 120
+<P>
+      box 1 :( 2 3 )
+       &gt; [  1,  2,  3 ]
+       &gt; [  4,  5,  6 ]
+<P>
+      box 2 :( 2 3 )
+       &gt; [  10,  20,  30 ]
+       &gt; [  40,  50,  60 ]
+<P>
+      box 3 :( 2 3 )
+       &gt; [ -10, -20, -30 ]
+       &gt; [ -40, -50, -60 ]
+<P>
+      box 4 :( 2 3 )
+       &gt; [   2,   4,   6 ]
+       &gt; [   8,  10,  12 ]
+      no dim gives a scalar .1719927E+26
+<P>
+      negative values :( 3 4 )
+       &gt; [     1,     1,   400,     1 ]
+       &gt; [     1,     1,  1000,     1 ]
+       &gt; [     1,     1,  1800,     1 ]
+<P>
+      dim=1 :( 3 4 )
+       &gt; [     4,   400,   400,    16 ]
+       &gt; [    10,  1000,  1000,    40 ]
+       &gt; [    18,  1800,  1800,    72 ]
+<P>
+      dim=2 :( 2 4 )
+       &gt; [       6,    6000,   -6000,      48 ]
+       &gt; [     120,  120000, -120000,     960 ]
+<P>
+      dim=3 :( 2 3 )
+       &gt; [    -200,   -3200,  -16200 ]
+       &gt; [  -51200, -125000, -259200 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Transformational function
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -160,11 +352,17 @@ Transformational function
 
 </A>
 <BLOCKQUOTE>
-<B>sum</B>(3), note that an element by element multiplication is done directly
+<B>SUM</B>(3), note that an element by element multiplication is done directly
 using the star character.
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022              product(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>product (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4190c0e7-d4fb-45fc-848e-9b2e42d2f7c7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>product (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0cd2a195-39a5-4df4-b7c2-d09290f6c05b using man macros.</FONT>
 <br><br><center><img src="images/product.3fortran.gif"></center>
 </div>
 </div>

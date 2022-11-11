@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,109 +41,142 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>event_query (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>event_query (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>event_query</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>event_query</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>event_query</B>(3f) - [FORTRAN:INTRINSIC:COLLECTIVE] Query whether a coarray
-event has occurred
+<B>EVENT_QUERY</B>(3) - [COLLECTIVE] Query whether a coarray event has occurred
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-call <B>EVENT_QUERY</B>(EVENT, COUNT [, STAT])
+call <B>event_query</B>(<I>event</I>, count [,<I>stat</I>] )
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-EVENT_QUERY assigns the number of events to COUNT which have been
-posted to the EVENT variable and not yet been removed by calling
-EVENT_WAIT. When STAT is present and the invocation was
-successful, it is assigned the value 0. If it is present and the
-invocation has failed, it is assigned a positive value and COUNT is
-assigned the value <B>-1</B>.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>EVENT</B> </TD><TD valign=bottom>
-(intent(in)) Scalar of type event_type, defined in
-iso_fortran_env; shall not be coindexed.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>COUNT</B> </TD><TD valign=bottom>
-(intent(out))Scalar integer with at least the precision of
-default integer.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>STAT</B> </TD><TD valign=bottom>
-(OPTIONAL) Scalar default-kind integer variable.
+<B>EVENT_QUERY</B>(3) assigns the number of events to COUNT which have been posted
+to the EVENT variable and not yet been removed by calling EVENT_WAIT. When
+STAT is present and the invocation was successful, it is assigned the value
+<TABLE cellpadding=3><!-- tsb: <B>EVENT_QUERY</B>(3) assigns the number of events to COUNT which have been posted
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+0.
+</TD><TD>
+If it is present and the invocation has failed, it is assigned a positive
+value and COUNT is assigned the value <B>-1</B>.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>EXAMPLE</H3>
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+EVENT : (intent(in)) Scalar of type event_type, defined in
+iso_fortran_env; shall not be coindexed.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COUNT : (intent(out))Scalar integer with at least the precision of
+default integer.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STAT : (OPTIONAL) Scalar default-kind integer variable.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_event_query
-     use iso_fortran_env
-     implicit none
-     type(event_type) :: event_value_has_been_set[*]
-     integer :: cnt
-     if (this_image() == 1) then
-       call event_query(event_value_has_been_set, cnt)
-       if (cnt &gt; 0) write(*,*) "Value has been set"
-     elseif (this_image() == 2) then
-       event post(event_value_has_been_set[1])
-     endif
-   end program demo_event_query
+      program demo_event_query
+      use iso_fortran_env
+      implicit none
+      type(event_type) :: event_value_has_been_set[*]
+      integer :: cnt
+         if (this_image() == 1) then
+            call event_query(event_value_has_been_set, cnt)
+            if (cnt &gt; 0) write(*,*) "Value has been set"
+         elseif (this_image() == 2) then
+            event post(event_value_has_been_set[1])
+         endif
+      end program demo_event_query
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[TS 18508]] or later
+TS 18508
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-Subroutine
+****(3)
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022          event_query(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>event_query (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bba4a8df-282c-4d63-b033-6ae5f6d8ef9a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>event_query (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from feb45396-1c93-4db5-aaf3-7f957dc9595e using man macros.</FONT>
 <br><br><center><img src="images/event_query.3fortran.gif"></center>
 </div>
 </div>

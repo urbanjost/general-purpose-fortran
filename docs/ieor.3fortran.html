@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,91 +41,197 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ieor (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ieor (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ieor</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ieor</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ieor</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] Bitwise logical exclusive or
+<B>IEOR</B>(3) - [BIT:LOGICAL] Bitwise exclusive OR
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>ieor</B>(i, j)
+result = <B>ieor</B>(<I>i</I>, <I>j</I>)
+<P>
+<PRE>
+           elemental integer(kind=**) function ieor(i,j)
+<P>
+            integer(kind=**),intent(in) :: i
+            integer(kind=**),intent(in) :: j
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I, J and the result must be of the same integer kind.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An exception is that one of I and J may be a BOZ literal constant
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-IEOR returns the bitwise Boolean exclusive-OR of I and J.
+<B>IEOR</B>(3) returns a bitwise exclusive-OR of I and J.
+<P>
+An exclusive OR or "exclusive disjunction" is a logical operation that is
+true if and only if its arguments differ. In this case a one-bit and a zero-
+bit substitute for true and false.
+<P>
+This is often represented with the notation "XOR", for "eXclusive OR".
+<P>
+An alternate way to view the process is that the result has the value
+obtained by combining I and J bit-by-bit according to the following table:
+<P>
+<PRE>
+        &gt;  I | J |IEOR (I, J)
+        &gt;  --#---#-----------
+        &gt;  1 | 1 |  0
+        &gt;  1 | 0 |  1
+        &gt;  0 | 1 |  1
+        &gt;  0 | 0 |  0
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : the first of the two values to XOR
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>J</B> </TD><TD valign=bottom>
-The type shall be INTEGER, of the same kind as I.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+J : the second of the two values to XOR
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<TR></TR></TABLE>If either I or J is a boz-literal-constant, it is first converted as if by
+the intrinsic function INT to type integer with the kind type parameter of
+the other.
+</BLOCKQUOTE>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return type is INTEGER, of the same kind as the arguments. (If the
-argument kinds differ, it is of the same kind as the larger argument.)
+If a bit is different at the same location in I and J the corresponding bit
+in the result is 1, otherwise it is 0.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_ieor
+      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
+      implicit none
+      integer(kind=int16) :: i,j
+        ! basic usage
+         print *,ieor (16, 1), &#146; ==&gt; ieor(16,1) has the value 17&#146;
+<P>
+         ! it is easier to see using binary representation
+         i=int(b&#146;0000000000111111&#146;,kind=int16)
+         j=int(b&#146;0000001111110000&#146;,kind=int16)
+         write(*,&#146;(a,b16.16,1x,i0)&#146;)&#146;i=     &#146;,i, i
+         write(*,&#146;(a,b16.16,1x,i0)&#146;)&#146;j=     &#146;,j, j
+         write(*,&#146;(a,b16.16,1x,i0)&#146;)&#146;result=&#146;,ieor(i,j), ieor(i,j)
+<P>
+        ! elemental
+         print *,&#146;arguments may be arrays. If both are arrays they &#146;
+         print *,&#146;must have the same shape.                        &#146;
+         print *,ieor(i=[7,4096,9], j=2)
+<P>
+         ! both may be arrays if of the same size
+<P>
+      end program demo_ieor
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+       &gt;           17  ==&gt; ieor(16,1) has the value 17
+       &gt; i=     0000000000111111 63
+       &gt; j=     0000001111110000 1008
+       &gt; result=0000001111001111 975
+       &gt;  arguments may be arrays. If both are arrays they
+       &gt;  must have the same shape.
+       &gt;            5        4098          11
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
+Fortran 95
 </BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
-</BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ior</B>(3), <B>iand</B>(3), <B>ibits</B>(3), <B>ibset</B>(3),
-<B>ibclr</B>(3), <B>not</B>(3)
+<B>IEOR</B>(3), <B>IBCLR</B>(3), <B>NOT</B>(3), <B>BTEST</B>(3), <B>IBCLR</B>(3), <B>IBITS</B>(3), <B>IBSET</B>(3), <B>IAND</B>(3),
+<B>IOR</B>(3), <B>MVBITS</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 ieor(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ieor (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7464e13f-a15e-415b-ad84-d108dba690c3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ieor (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 48eb9528-8b30-4e1e-90fe-e48d1ef4f15d using man macros.</FONT>
 <br><br><center><img src="images/ieor.3fortran.gif"></center>
 </div>
 </div>

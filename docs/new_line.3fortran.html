@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,94 +41,265 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>new_line (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>new_line (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>new_line</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>new_line</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>new_line</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] New line character
+<B>NEW_LINE</B>(3) - [CHARACTER:INQUIRY] Newline character
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>new_line</B>(c)
+result = <B>new_line</B>(<I>c</I>)
+<P>
+<PRE>
+           character(len=1,kind=KIND) function new_line(c)
+<P>
+            character(len=1,kind=KIND),intent(in) :: c(..)
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+C shall be of type character. It may be a scalar or an array.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is a character scalar of length one with the same kind type
+parameter as C.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>new_line</B>(c) returns the new-line character.
+<B>NEW_LINE</B>(3) returns the newline character.
+<P>
+Normally, newlines are generated with regular formatted I/O statements like
+<B>WRITE</B>() and <B>PRINT</B>() when each statement completes:
+<P>
+<PRE>
+         print *, &#146;x=11&#146;
+         print *
+         print *, &#146;y=22&#146;
+         end
+<P>
+</PRE>
+produces: x=11
+<P>
+<PRE>
+      y=22
+<P>
+      Alternatively, a "/" descriptor in a format is used to generate a
+      newline on the output. For example:
+      &#145;&#145;&#145;fortran
+         write(*,&#146;(a,1x,i0,/,a)&#146;) &#146;x =&#146;,11,&#146;is the answer&#146;
+         end
+<P>
+</PRE>
+produces:
+<P>
+<PRE>
+         x = 11
+         is the answer
+<P>
+</PRE>
+Also, for formatted sequential output if more data is listed on the output
+statement than can be represented by the format statement a newline is
+generated and then the format is reused until the output list is exhausted.
+<P>
+<PRE>
+         write(*,&#146;(a,"=",i0)&#146;) &#146;x&#146;, 10, &#146;y&#146;, 20
+         end
+<P>
+</PRE>
+produces
+<P>
+<PRE>
+         x=10
+         y=20
+<P>
+</PRE>
+But there are occasions, particularly when non-advancing I/O or stream I/O
+is being generated (which does not generate a newline at the end of each
+WRITE statement, as normally occurs) where it is preferable to place a
+newline explicitly in the output at specified points.
+<P>
+To do so you must make sure you are generating the correct newline
+character, which the techniques above do automatically.
+<P>
+The newline character varies between some platforms, and can even depend on
+the encoding (ie. which character set is being used) of the output file. In
+these cases selecting the correct character to output can be determined by
+the <B>NEW_LINE</B>(3) procedure.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>C</B> </TD><TD valign=bottom>
-- The argument shall be a scalar or array of the type CHARACTER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+C : an arbitrary character whose kind is used to decide on the output
+character that represents a newline.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-Returns a CHARACTER scalar of length one with the new-line character of
-the same kind as parameter C.
+Case (i) : If A is default character and the character in position 10 of the
+ASCII collating sequence is representable in the default character set, then
+the result is <B>ACHAR</B>(10).
+<P>
+This is the typical case, and just requires using "<B>new_line</B>(&#146;a&#146;)".
+<P>
+Case (ii) : If A is an ASCII character or an ISO 10646 character, then the
+result is <B>CHAR</B>(10, KIND (A)).
+<P>
+Case (iii) : Otherwise, the result is a processor-dependent character that
+represents a newline in output to files connected for formatted stream
+output if there is such a character.
+<P>
+Case (iv) : If not of the previous cases apply, the result is the blank
+character.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_new_line
+      program demo_new_line
       implicit none
-      write(*,&#146;(A)&#146;) &#146;This is record 1.&#146;//NEW_LINE(&#146;A&#146;)//&#146;This is record 2.&#146;
-    end program demo_new_line
+      character,parameter :: nl=new_line(&#146;a&#146;)
+      character(len=:),allocatable :: string
+      real :: r
+      integer :: i, count
+<P>
+        ! basics
+         ! print a string with a newline embedded in it
+         string=&#146;This is record 1.&#146;//nl//&#146;This is record 2.&#146;
+         write(*,&#146;(a)&#146;) string
+<P>
+         ! print a newline character string
+         write(*,&#146;(*(a))&#146;,advance=&#146;no&#146;) &
+            nl,&#146;This is record 1.&#146;,nl,&#146;This is record 2.&#146;,nl
+<P>
+         ! output a number of words of random length as a paragraph
+         ! by inserting a new_line before line exceeds 70 characters
+<P>
+        ! simplistic paragraph print using non-advancing I/O
+         count=0
+         do i=1,100
+<P>
+            ! make some fake word of random length
+            call random_number(r)
+            string=repeat(&#146;x&#146;,int(r*10)+1)
+<P>
+            count=count+len(string)+1
+            if(count.gt.70)then
+               write(*,&#146;(a)&#146;,advance=&#146;no&#146;)nl
+               count=len(string)+1
+            endif
+            write(*,&#146;(1x,a)&#146;,advance=&#146;no&#146;)string
+         enddo
+         write(*,&#146;(a)&#146;,advance=&#146;no&#146;)nl
+<P>
+      end program demo_new_line
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+         This is record 1.
+         This is record 2.
+<P>
+         This is record 1.
+         This is record 2.
+          x x xxxx xxxxxxx xxxxxxxxxx xxxxxxxxx xxxx xxxxxxxxxx xxxxxxxx
+          xxxxxxxxx xxxx xxxxxxxxx x xxxxxxxxx xxxxxxxx xxxxxxxx xxxx x
+          xxxxxxxxxx x x x xxxxxx xxxxxxxxxx x xxxxxxxxxx x xxxxxxx xxxxxxxxx
+          xx xxxxxxxxxx xxxxxxxx x xx xxxxxxxxxx xxxxxxxx xxx xxxxxxx xxxxxx
+          xxxxx xxxxxxxxx x xxxxxxxxxx xxxxxx xxxxxxxx xxxxx xxxxxxxx xxxxxxxx
+          xxxxx xxx xxxxxxxx xxxxxxx xxxxxxxx xxx xxxx xxx xxxxxxxx xxxxxx
+          xxxxxxx xxxxxxx xxxxx xxxxx xx xxxxxx xx xxxxxxxxxx xxxxxx x xxxx
+          xxxxxx xxxxxxx x xxx xxxxx xxxxxxxxx xxx xxxxxxx x xxxxxx xxxxxxxxx
+          xxxx xxxxxxxxx xxxxxxxx xxxxxxxx xxx xxxxxxx xxxxxxx xxxxxxxxxx
+          xxxxxxxxxx xxxxxx xxxxx xxxx xxxxxxx xx xxxxxxxxxx xxxxxx xxxxxx
+          xxxxxx xxxx xxxxx
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2003]] and later
+Fortran 2003
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Inquiry function]]
+<B>ACHAR</B>(3), <B>CHAR</B>(3), <B>IACHAR</B>(3), <B>ICHAR</B>(3), <B>SELECTED_CHAR_KIND</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022             new_line(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>new_line (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4fd13234-42c6-43d1-b2ed-3ca39964425c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>new_line (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from db75f1d8-7725-4664-9caf-79afe80e6ed7 using man macros.</FONT>
 <br><br><center><img src="images/new_line.3fortran.gif"></center>
 </div>
 </div>

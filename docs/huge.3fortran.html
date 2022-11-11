@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,151 +41,179 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>huge (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>huge (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>huge</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>huge</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>huge</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC MODEL] Largest number of a kind
+<B>HUGE</B>(3) - [NUMERIC MODEL] Largest number of a type and kind
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>huge</B>(x)
+result = <B>huge</B>(<I>x</I>)
+<P>
+<PRE>
+           TYPE(kind=KIND) function huge(x)
+<P>
+            TYPE(kind=KIND),intent(in) :: x
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+where TYPE may be real or integer and KIND is any supported associated kind.
+It need not be defined, as only its characteristics are used.
+<P>
+The result will be of the same type and kind as the input to ensure the
+returned value does not overflow. Any assignment of the result should take
+this into consideration.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>huge</B>(x) returns the largest number that is not an infinity in
-the model of the type of X.
+<B>HUGE</B>(3) returns the largest number that is not an infinity for the kind and
+type of X.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-Shall be of type REAL or INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : XX is an arbitrary value which is used merely to determine what kind
+and type of scalar is being queried.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of the same type and kind as X
+The return value is of the same type and kind as <I>x</I> and is the largest value
+supported by the specified model.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_huge_tiny
-    ! or, "why I have my own NINT function"
-    implicit none
-    character(len=*),parameter :: f=&#146;(i2,1x,2(i11,1x),f14.0:,1x,l1,1x,a)&#146;
-    integer :: i,j,k,biggest
-    real :: v, w
-      ! basic
-      print *, huge(0), huge(0.0), huge(0.0d0)
-      print *, tiny(0.0), tiny(0.0d0)
+      program demo_huge
+      implicit none
+      character(len=*),parameter :: f=&#146;(i2,1x,2(i11,1x),f14.0:,1x,l1,1x,a)&#146;
+      integer :: i,j,k,biggest
+      real :: v, w
+         ! basic
+         print *, huge(0), huge(0.0), huge(0.0d0)
+         print *, tiny(0.0), tiny(0.0d0)
 <P>
-      ! advanced
-      biggest=huge(0)
-      ! be careful when using integers in computation
-      do i=1,14
-         j=6**i   ! Danger, Danger
-         w=6**i   ! Danger, Danger
-         v=6.0**i
-         k=v      ! Danger, Danger
-         if(v.gt.biggest)then
-            write(*,f) i, j, k, v, v.eq.w, &#146;wrong j and k and w&#146;
-         else
-            write(*,f) i, j, k, v, v.eq.w
-         endif
-      enddo
-    end program demo_huge_tiny
+         ! advanced
+         biggest=huge(0)
+         ! be careful of overflow when using integers in computation
+         do i=1,14
+            j=6**i   ! Danger, Danger
+            w=6**i   ! Danger, Danger
+            v=6.0**i
+            k=v      ! Danger, Danger
+            if(v.gt.biggest)then
+               write(*,f) i, j, k, v, v.eq.w, &#146;wrong j and k and w&#146;
+            else
+               write(*,f) i, j, k, v, v.eq.w
+            endif
+         enddo
+      end program demo_huge
 <P>
-     2147483647  3.4028235E+38  1.797693134862316E+308
-     1.1754944E-38  2.225073858507201E-308
-    1           6           6             6. T
-    2          36          36            36. T
-    3         216         216           216. T
-    4        1296        1296          1296. T
-    5        7776        7776          7776. T
-    6       46656       46656         46656. T
-    7      279936      279936        279936. T
-    8     1679616     1679616       1679616. T
-    9    10077696    10077696      10077696. T
 </PRE>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:      2147483647  3.4028235E+38  1.797693134862316E+308
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>10</B> </TD><TD valign=bottom>
-60466176    60466176      60466176. T
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>11</B> </TD><TD valign=bottom>
-362797056   362797056     362797056. T
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>12 </B><B>-2118184960</B> <B>-2147483648</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-2176782336. F wrong for j and k and w
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>13</B> </TD><TD valign=bottom>
-175792128 <B>-2147483648</B>   13060694016. F wrong for j and k and w
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>14</B> </TD><TD valign=bottom>
-1054752768 <B>-2147483648</B>   78364164096. F wrong for j and k and w
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+Results:
+<P>
+<PRE>
+        2147483647  3.4028235E+38  1.797693134862316E+308
+        1.1754944E-38  2.225073858507201E-308
+<P>
+          1      6           6             6. T
+          2      36          36            36. T
+          3      216         216           216. T
+          4      1296        1296          1296. T
+          5      7776        7776          7776. T
+          6      46656       46656         46656. T
+          7      279936      279936        279936. T
+          8      1679616     1679616       1679616. T
+          9      10077696    10077696      10077696. T
+          10     60466176    60466176      60466176. T
+          11     362797056   362797056     362797056. T
+          12    -2118184960 -2147483648    2176782336. F wrong for j and k and w
+          13     175792128  -2147483648   13060694016. F wrong for j and k and w
+          14     1054752768 -2147483648   78364164096. F wrong for j and k and w
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
+Fortran 95
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Inquiry function]]
+<B>DIGITS</B>(3), <B>EPSILON</B>(3), <B>EXPONENT</B>(3), <B>FRACTION</B>(3), <B>MAXEXPONENT</B>(3),
+<B>MINEXPONENT</B>(3), <B>NEAREST</B>(3), <B>PRECISION</B>(3), <B>RADIX</B>(3), <B>RANGE</B>(3), <B>RRSPACING</B>(3),
+<B>SCALE</B>(3), <B>SET_EXPONENT</B>(3), <B>SPACING</B>(3), <B>TINY</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 huge(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>huge (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c9ce87f8-b321-4f94-a1af-b43d9ba7890c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>huge (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8c33bbf6-1c66-4d92-bc55-32ab530f6bb1 using man macros.</FONT>
 <br><br><center><img src="images/huge.3fortran.gif"></center>
 </div>
 </div>

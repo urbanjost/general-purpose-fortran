@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,120 +41,204 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>aimag (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>aimag (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>aimag</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>aimag</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>aimag</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC:TYPE] Imaginary part of complex
-number
+<B>AIMAG</B>(3) - [TYPE:NUMERIC] Imaginary part of complex number
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>AIMAG</B>(Z)
+result = <B>aimag</B>(<I>z</I>)
+<P>
+<PRE>
+           elemental complex(kind=KIND) function aimag(z)
+<P>
+            complex(kind=KIND),intent(in) :: z
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The type of the argument Z shall be complex and any supported complex
+kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The return value is of type real with the kind type parameter of the
+argument.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>AIMAG</B>(Z) yields the imaginary part of complex argument Z.
+<B>AIMAG</B>(3) yields the imaginary part of the complex argument Z.
+<P>
+This is similar to the modern complex-part-designator %IM which also
+designates the imaginary part of a value, accept a designator can appear on
+the left-hand side of an assignment as well, as in VAL%IM=10.0.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>Z</B> </TD><TD valign=bottom>
-The type of the argument shall be COMPLEX.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Z : The complex value to extract the imaginary component of.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
+The return value is a real value with the magnitude and sign of the
+imaginary component of the argument Z.
 <P>
-The return value is of type REAL with the kind type parameter of
-the argument.
+That is, If Z has the value (X,Y), the result has the value Y.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_aimag
-    use, intrinsic :: iso_fortran_env, only : real_kinds, &
-    & real32, real64, real128
-    implicit none
-    complex(kind=real32) z4
-    complex(kind=real64) z8
-       z4 = cmplx(1.e0, 2.e0)
-       z8 = cmplx(3.e0_real64, 4.e0_real64,kind=real64)
-       print *, aimag(z4), aimag(z8)
-       ! an elemental function can be passed an array
-       print *
-       print *, [z4,z4/2.0,z4+z4,z4**3]
-       print *
-       print *, aimag([z4,z4/2.0,z4+z4,z4**3])
-    end program demo_aimag
+      program demo_aimag
+      use, intrinsic :: iso_fortran_env, only : real_kinds, &
+       & real32, real64, real128
+      implicit none
+      character(len=*),parameter :: g=&#146;(*(1x,g0))&#146;
+      complex              :: z4
+      complex(kind=real64) :: z8
+         ! basics
+          z4 = cmplx(1.e0, 2.e0)
+          print *, &#146;value=&#146;,z4
+          print g, &#146;imaginary part=&#146;,aimag(z4),&#146;or&#146;, z4%im
+<P>
+          ! other kinds other than the default may be supported
+          z8 = cmplx(3.e0_real64, 4.e0_real64,kind=real64)
+          print *, &#146;value=&#146;,z8
+          print g, &#146;imaginary part=&#146;,aimag(z8),&#146;or&#146;, z8%im
+<P>
+          ! an elemental function can be passed an array
+          print *
+          print *, [z4,z4/2.0,z4+z4,z4**3]
+          print *
+          print *, aimag([z4,z4/2.0,z4+z4,z4**3])
+<P>
+      end program demo_aimag
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-      2.000000       4.00000000000000    
+       value= (1.00000000,2.00000000)
+       imaginary part= 2.00000000 or 2.00000000
+       value= (3.0000000000000000,4.0000000000000000)
+       imaginary part= 4.0000000000000000 or 4.0000000000000000
 <P>
-</PRE>
-(1.000000,2.000000) (0.5000000,1.000000) (2.000000,4.000000)
-(<B>-11.00000</B>,<B>-2.000000</B>)
+       (1.00000000,2.00000000) (0.500000000,1.00000000) (2.00000000,4.00000000)
+       (-11.0000000,-2.00000000)
 <P>
-<PRE>
-      2.000000       1.000000       4.000000      -2.000000   
+         2.00000000       1.00000000       4.00000000      -2.00000000
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
+FORTRAN 77
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-Elemental function
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>CMPLX</B>(3) - Complex conversion function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>CONJG</B>(3) - Complex conjugate function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>REAL</B>(3) - Convert to real type
+</TD></TR>
+<TR></TR></TABLE>Fortran has strong support for complex values, including many intrinsics
+that take or produce complex values in addition to algebraic and logical
+expressions:
+<P>
+<B>ABS</B>(3), <B>ACOSH</B>(3), <B>ACOS</B>(3), <B>ASINH</B>(3), <B>ASIN</B>(3), <B>ATAN2</B>(3), <B>ATANH</B>(3), <B>ATAN</B>(3),
+<B>COSH</B>(3), <B>COS</B>(3), <B>CO_SUM</B>(3), <B>DBLE</B>(3), <B>DOT_PRODUCT</B>(3), <B>EXP</B>(3), <B>INT</B>(3),
+<B>IS_CONTIGUOUS</B>(3), <B>KIND</B>(3), <B>LOG</B>(3), <B>MATMUL</B>(3), <B>PRECISION</B>(3), <B>PRODUCT</B>(3),
+<B>RANGE</B>(3), <B>RANK</B>(3), <B>SINH</B>(3), <B>SIN</B>(3), <B>SQRT</B>(3), <B>STORAGE_SIZE</B>(3), <B>SUM</B>(3),
+<B>TANH</B>(3), <B>TAN</B>(3), <B>UNPACK</B>(3),
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                aimag(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>aimag (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6e3dbfb2-f686-4558-baec-55b73489ab55 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>aimag (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d04b3529-75d9-4b58-92ec-0c2288d63f45 using man macros.</FONT>
 <br><br><center><img src="images/aimag.3fortran.gif"></center>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,174 +41,218 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>get_command_argument (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>get_command_argument (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>get_command_argument</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>get_command_argument</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>get_command_argument</B>(3f) - [FORTRAN:INTRINSIC:SYSTEM ENVIRONMENT] Get
-command line arguments
+<B>GET_COMMAND_ARGUMENT</B>(3) - [SYSTEM:COMMAND LINE] Get command line arguments
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=10>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-call <B>get_command_argument</B>(number [, value, length, status])
+call <B>get_command_argument</B>(number [,<I>value</I>] [,<I>length</I>] & & [,<I>status</I>] [,<I>errmsg</I>])
 <P>
 <PRE>
-     integer,intent(in)                    :: number
-     character(len=*),intent(out),optional :: value
-     integer,intent(out),optional          :: length
-     integer,intent(out),optional          :: status
+         subroutine get_command_argument( number, value, length, &
+         & status ,errmsg)
+<P>
+          integer(kind=**),intent(in)             :: number
+          character(len=*),intent(out),optional   :: value
+          integer(kind=**),intent(out),optional   :: length
+          integer(kind=**),intent(out),optional   :: status
+          character(len=*),intent(inout),optional :: errmsg
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
 
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind <I>value</I> for the type
+meeting the conditions described herein.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NUMBER, LENGTH, and STATUS are scalar integer with a decimal exponent
+range of at least four.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VALUE and ERRMSG are scalar character variables of default kind.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Retrieve the NUMBER-th argument that was passed on the command line
-when the containing program was invoked.
+<B>GET_COMMAND_ARGUMENT</B>(3) retrieves or queries the n-th argument that was
+passed on the command line to the current program execution.
 <P>
-There is not anything specifically stated about what an argument is but
-in practice the arguments are split on whitespace unless the arguments
-are quoted and IFS values (Internal Field Separators) used by common
-shells are ignored.
+There is not anything specifically stated about what an argument is but in
+practice the arguments are strings split on whitespace unless the arguments
+are quoted. IFS values (Internal Field Separators) used by common shells are
+typically ignored and unquoted whitespace is almost always the separator.
+<P>
+Shells have often expanded command arguments and spell characters before
+passing them to the program, so the strings read are often not exactly what
+the user typed on the command line.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
      <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>NUMBER</B> </TD><TD valign=bottom>
-Shall be a scalar of type <B>integer</B>(4), NUMBER &gt;= 0.
-If NUMBER = 0, VALUE is set to the name of the program
-(on systems that support this feature).
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
-
-     <H3>RETURNS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>VALUE</B> </TD><TD valign=bottom>
-Shall be a scalar of type CHARACTER and of default kind.
-After get_command_argument returns, the VALUE argument
-holds the NUMBER-th command line argument. If VALUE can
-not hold the argument, it is truncated to fit the length
-of VALUE. If there are less than NUMBER arguments specified
-at the command line, VALUE will be filled with blanks.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>LENGTH</B> </TD><TD valign=bottom>
-(Optional) Shall be a scalar of type <B>integer</B>(4).
-The LENGTH argument contains the length of the
-NUMBER-th command line argument.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>STATUS</B> </TD><TD valign=bottom>
-(Optional) Shall be a scalar of type <B>integer</B>(4).
-If the argument retrieval fails, STATUS is a positive number;
-if VALUE contains a truncated command line argument, STATUS
-is <B>-1</B>; and otherwise the STATUS is zero.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NUMBER : is a non-negative number indicating which argument of the
+current program command line is to be retrieved or queried. : If NUMBER =
+0, the argument pointed to is set to the name of the program (on systems
+that support this feature). : if the processor does not have such a
+concept as a command name the <I>value</I> of command argument 0 is processor
+dependent. : For values from 1 to the number of arguments passed to the
+program a <I>value</I> is returned in an order determined by the processor.
+Conventionally they are returned consecutively as they appear on the
+command line from left to right.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VALUE : The VALUE argument holds the command line argument. If VALUE can
+not hold the argument, it is truncated to fit the <I>length</I> of VALUE. : If
+there are less than NUMBER arguments specified at the command line or if
+the argument specified does not exist for other reasons, VALUE will be
+filled with blanks.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LENGTH : The LENGTH argument contains the <I>length</I> of the n-th command line
+argument. The <I>length</I> of VALUE has no effect on this <I>value</I>, It is the
+<I>length</I> required to hold all the significant characters of the argument
+regardless of how much storage is provided by VALUE.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STATUS : If the argument retrieval fails, STATUS is a positive number; if
+VALUE contains a truncated command line argument, STATUS is <B>-1</B>; and
+otherwise the STATUS is zero.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_get_command_argument
-   implicit none
-   character(len=255)           :: progname
-   integer                      :: stat
-   integer                      :: count,i, longest, argument_length
-   integer,allocatable          :: istat(:), ilen(:)
-   character(len=:),allocatable :: arguments(:)
-     ! get number of arguments
-     count = command_argument_count()
-     write(*,*)&#146;The number of arguments is &#146;,count
-     ! simple usage
-     call get_command_argument (0, progname, status=stat)
-     if (stat == 0) then
-        print *, "The program&#146;s name is " // trim (progname)
-     endif
-     ! showing how to make an array to hold any argument list
-     ! find longest argument
-     longest=0
-     do i=0,count
-        call get_command_argument(number=i,length=argument_length)
-        longest=max(longest,argument_length)
-     enddo
-     ! allocate string array big enough to hold command line argument strings
-     ! and related information
-     allocate(character(len=longest) :: arguments(0:count))
-     allocate(istat(0:count))
-     allocate(ilen(0:count))
-     ! read the arguments into the array
-     do i=0,count
-       call get_command_argument(i, arguments(i),status=istat(i),length=ilen(i))
-     enddo
-     ! show the results
-     write (*,&#146;(i3.3,1x,i0.5,1x,i0.5,1x,"[",a,"]")&#146;) &
-     & (i,istat(i),ilen(i),arguments(i)(:ilen(i)),i=0,count)
-   end program demo_get_command_argument
+      program demo_get_command_argument
+      implicit none
+      character(len=255)           :: progname
+      integer                      :: count, i, argument_length, istat
+      character(len=:),allocatable :: arg
+<P>
+       ! command name assuming it is less than 255 characters in length
+        call get_command_argument (0, progname, status=istat)
+        if (istat == 0) then
+           print *, "The program&#146;s name is " // trim (progname)
+        else
+           print *, "Could not get the program&#146;s name " // trim (progname)
+        endif
+<P>
+       ! get number of arguments
+        count = command_argument_count()
+        write(*,*)&#146;The number of arguments is &#146;,count
+<P>
+        !
+        ! allocate string array big enough to hold command line
+        ! argument strings and related information
+        !
+        do i=1,count
+           call get_command_argument(number=i,length=argument_length)
+           if(allocated(arg))deallocate(arg)
+           allocate(character(len=argument_length) :: arg)
+           call get_command_argument(i, arg,status=istat)
+           ! show the results
+           write (*,&#146;(i3.3,1x,i0.5,1x,i0.5,1x,"[",a,"]")&#146;) &
+           & i,istat,argument_length,arg
+        enddo
+<P>
+      end program demo_get_command_argument
 <P>
 </PRE>
-Sample output:
+Results:
 <P>
 <PRE>
-   ./test_get_command_argument a    test  &#146;of getting   arguments  &#146; "  leading"
+       ./demo_get_command_argument a  test &#146;of getting  arguments &#146; " leading"
 <P>
-   &gt; The number of arguments is            5
-   &gt; The program&#146;s name is xxx
-   &gt;000 00000 00003 [./test_get_command_argument]
-   &gt;001 00000 00001 [a]
-   &gt;003 00000 00004 [test]
-   &gt;004 00000 00024 [of getting   arguments  ]
-   &gt;005 00000 00018 [  leading]
+       The program&#146;s name is ./demo_get_command_argument
+       The number of arguments is            4
+</PRE>
+001 00000 00001 [a] 002 00000 00004 [test]
+<P>
+<PRE>
+    003 00000 00022 [of getting
+      arguments ] 004 00000 00008 [ leading]
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2003]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Subroutine
+Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
 
@@ -216,16 +260,16 @@ Subroutine
 
 </A>
 <BLOCKQUOTE>
-<B>get_command</B>(3), <B>command_argument_count</B>(3)
-</BLOCKQUOTE>
-<A name=9>
-
-    <H4>&nbsp; &nbsp; JSU</H4>
-</A>
-<BLOCKQUOTE>
+<B>GET_COMMAND</B>(3), <B>COMMAND_ARGUMENT_COUNT</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022 get_command_argument(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_command_argument (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bc073679-df56-4c75-a0fd-02b68c3a34d6 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_command_argument (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b48c3b28-bb9a-4223-886d-d6bcc1beb45c using man macros.</FONT>
 <br><br><center><img src="images/get_command_argument.3fortran.gif"></center>
 </div>
 </div>

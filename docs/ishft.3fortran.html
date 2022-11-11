@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,95 +41,172 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ishft (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ishft (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>ishft</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ishft</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ishft</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] Shift bits
+<B>ISHFT</B>(3) - [BIT:SHIFT] Shift bits
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>ishft</B>(i, shift)
+result = <B>ishftc</B>( <I>i</I>, shift )
+<P>
+<PRE>
+           elemental integer(kind=KIND) function ishft(i, shift )
+<P>
+            integer(kind=KIND),intent(in) :: i
+            integer(kind=**),intent(in) :: shift
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the kind for I dictates the kind of the returned value.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-ISHFT returns a value corresponding to I with all of the
-bits shifted SHIFT places. A value of SHIFT greater than
-zero corresponds to a left shift, a value of zero corresponds to no
-shift, and a value less than zero corresponds to a right shift. If the
-absolute value of SHIFT is greater than <B>bit_size</B>(i), the
-value is undefined. Bits shifted out from the left end or right end are
-lost; zeros are shifted in from the opposite end.
+<B>ISHFT</B>(3) returns a value corresponding to I with all of the bits shifted
+SHIFT places left or right as specified by the sign and magnitude of SHIFT.
+<P>
+Bits shifted out from the left end or right end are lost; zeros are shifted
+in from the opposite end.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : The value specifying the pattern of bits to shift
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>SHIFT</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SHIFT : A value of SHIFT greater than zero corresponds to a left shift, a
+value of zero corresponds to no shift, and a value less than zero
+corresponds to a right shift.
+<P>
+If the absolute value of SHIFT is greater than <B>BIT_SIZE</B>(I), the value is
+undefined.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type INTEGER and of the same kind as I.
+The return value has the same characteristics (shape, kind, &#46;&#46;&#46;) as I.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_ishft
+      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+      implicit none
+      integer             :: shift
+      character(len=*),parameter :: g=&#146;(b32.32,1x,i0)&#146;
+<P>
+         write(*,*) ishft(3, 1),&#146; &lt;== typically should have the value 6&#146;
+<P>
+         shift=4
+         write(*,g) ishft(huge(0),shift), shift
+         shift=0
+         write(*,g) ishft(huge(0),shift), shift
+         shift=-4
+         write(*,g) ishft(huge(0),shift), shift
+      end program demo_ishft
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+      &gt;              6  &lt;== typically should have the value 6
+      &gt;   11111111111111111111111111110000 4
+      &gt;   01111111111111111111111111111111 0
+      &gt;   00000111111111111111111111111111 -4
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
+Fortran 95
 </BLOCKQUOTE>
-<A name=6>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
-</BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ishftc</B>(3)
+<B>ISHFTC</B>(3)
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022                ishft(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ishft (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fa427fc7-d133-4032-9eb6-6dcff453570e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ishft (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fc0a94e5-b493-4c3c-8f3e-5f4adc2ba69f using man macros.</FONT>
 <br><br><center><img src="images/ishft.3fortran.gif"></center>
 </div>
 </div>

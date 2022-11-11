@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,91 +41,122 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sin (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sin (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>sin</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>sin</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>sin</B>(3f) - [FORTRAN:INTRINSIC:MATHEMATICS:TRIGONOMETRIC] Sine function
+<B>SIN</B>(3) - [MATHEMATICS:TRIGONOMETRIC] Sine function
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=10>
+<A name=11>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>sin</B>(x)
+result = <B>sin</B>(<I>x</I>)
+<P>
+<PRE>
+           elemental TYPE(kind=KIND) function sin(x)
+<P>
+            TYPE(kind=KIND) :: x
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+where TYPE may be real or complex and KIND may be any kind supported by the
+associated type.
+<P>
+The returned value will be of the same type and kind as the argument.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>sin</B>(3f) computes the sine of an angle given the size of the angle
-in radians.
+<B>SIN</B>(3) computes the sine of an angle given the size of the angle in radians.
 <P>
-The sine of an angle in a right-angled triangle is the ratio of the
-length of the side opposite the given angle divided by the length of
-the hypotenuse.
+The sine of an angle in a right-angled triangle is the ratio of the length
+of the side opposite the given angle divided by the length of the
+hypotenuse.
 </BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type shall be REAL or COMPLEX in radians.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>RETURN VALUE</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>RESULT</B> </TD><TD valign=bottom>
-The return value has the same type and kind as X.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The angle in radians to compute the sine of.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+RESULT : The return value contains the sine of X.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program sample_sin
-    implicit none
+      program sample_sin
+      implicit none
       real :: x = 0.0
-      x = sin(x)
-    end program sample_sin
+         x = sin(x)
+      end program sample_sin
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=>
+<A name=7>
 
-    <H4>&nbsp; &nbsp; HAVERSINE FORMULA</H4>
+     <H3>HAVERSINE FORMULA</H3>
+
 </A>
 <BLOCKQUOTE>
-<P>
 From the article on "Haversine formula" in Wikipedia:
 <P>
 <PRE>
@@ -134,109 +165,114 @@ From the article on "Haversine formula" in Wikipedia:
       their longitudes and latitudes.
 <P>
 </PRE>
-So to show the great-circle distance between the Nashville
-International Airport (BNA) in TN, USA, and the Los Angeles
-International Airport (LAX) in CA, USA you would start with their
-latitude and longitude, commonly given as
+So to show the great-circle distance between the Nashville International
+Airport (BNA) in TN, USA, and the Los Angeles International Airport (LAX) in
+CA, USA you would start with their latitude and longitude, commonly given as
 <P>
 <PRE>
-     BNA: N 36 degrees 7.2&#146;,   W 86 degrees 40.2&#146;
-     LAX: N 33 degrees 56.4&#146;,  W 118 degrees 24.0&#146;
+      BNA: N 36 degrees 7.2&#146;,   W 86 degrees 40.2&#146;
+      LAX: N 33 degrees 56.4&#146;,  W 118 degrees 24.0&#146;
 <P>
 </PRE>
 which converted to floating-point values in degrees is:
 <P>
 <PRE>
-          Latitude Longitude
+           Latitude Longitude
+<P>
 </PRE>
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:           Latitude Longitude
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>BNA</B> </TD><TD valign=bottom>
-36.12,   <B>-86.67</B>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BNA 36.12, <B>-86.67</B>
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>LAX</B> </TD><TD valign=bottom>
-33.94,   <B>-118.40</B>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LAX 33.94, <B>-118.40</B>
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
 <P>
-And then use the haversine formula to roughly calculate the distance
-along the surface of the Earth between the locations:
-<BLOCKQUOTE>
+And then use the haversine formula to roughly calculate the distance along
+the surface of the Earth between the locations:
 <P>
 Sample program:
 <P>
 <PRE>
-    program demo_sin
-    implicit none
-    real :: d
-        d = haversine(36.12,-86.67, 33.94,-118.40) ! BNA to LAX
-        print &#146;(A,F9.4,A)&#146;, &#146;distance: &#146;,d,&#146; km&#146;
-    contains
-    function haversine(latA,lonA,latB,lonB) result (dist)
-    !
-    ! calculate great circle distance in kilometers
-    ! given latitude and longitude in degrees
-    !
-    real,intent(in) :: latA,lonA,latB,lonB
-    real :: a,c,dist,delta_lat,delta_lon,lat1,lat2
-    real,parameter :: radius = 6371 ! mean earth radius in kilometers,
-    ! recommended by the International Union of Geodesy and Geophysics
-    real, parameter :: deg_to_rad = atan(1.0)/45.0 ! generate constant pi/180
-       delta_lat = deg_to_rad*(latB-latA)
-       delta_lon = deg_to_rad*(lonB-lonA)
-       lat1 = deg_to_rad*(latA)
-       lat2 = deg_to_rad*(latB)
-       a = (sin(delta_lat/2))**2 + cos(lat1)*cos(lat2)*(sin(delta_lon/2))**2
-       c = 2*asin(sqrt(a))
-       dist = radius*c
-    end function haversine
-    end program demo_sin
+      program demo_sin
+      implicit none
+      real :: d
+          d = haversine(36.12,-86.67, 33.94,-118.40) ! BNA to LAX
+          print &#146;(A,F9.4,A)&#146;, &#146;distance: &#146;,d,&#146; km&#146;
+      contains
+      function haversine(latA,lonA,latB,lonB) result (dist)
+      !
+      ! calculate great circle distance in kilometers
+      ! given latitude and longitude in degrees
+      !
+      real,intent(in) :: latA,lonA,latB,lonB
+      real :: a,c,dist,delta_lat,delta_lon,lat1,lat2
+      real,parameter :: radius = 6371 ! mean earth radius in kilometers,
+      ! recommended by the International Union of Geodesy and Geophysics
+<P>
+      ! generate constant pi/180
+      real, parameter :: deg_to_rad = atan(1.0)/45.0
+         delta_lat = deg_to_rad*(latB-latA)
+         delta_lon = deg_to_rad*(lonB-lonA)
+         lat1 = deg_to_rad*(latA)
+         lat2 = deg_to_rad*(latB)
+         a = (sin(delta_lat/2))**2 + &
+                & cos(lat1)*cos(lat2)*(sin(delta_lon/2))**2
+         c = 2*asin(sqrt(a))
+         dist = radius*c
+      end function haversine
+      end program demo_sin
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-   distance: 2886.4446 km
+          distance: 2886.4446 km
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=8>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
+FORTRAN 77
 </BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental function]]
-</BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>asin</B>(3), <B>cos</B>(3), <B>tan</B>(3)
+<B>ASIN</B>(3), <B>COS</B>(3), <B>TAN</B>(3)
 </BLOCKQUOTE>
-<A name=9>
+<A name=10>
 
-    <H4>&nbsp; &nbsp; JSU</H4>
+     <H3>RESOURCES</H3>
+
 </A>
 <BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Wikipedia:sine and cosine
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  sin(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sin (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from aaa383a4-8405-4763-ae22-ad284d21edd1 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sin (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6d9d24d8-ae24-4ee6-a434-25c30edbfd5a using man macros.</FONT>
 <br><br><center><img src="images/sin.3fortran.gif"></center>
 </div>
 </div>

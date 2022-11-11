@@ -19,8 +19,8 @@
         & ')
 
       ival=10
-      call unit_check('myroutine', ival.gt.3 ,   msg='test if big enough')
-      call unit_check('myroutine', ival.lt.100 , msg='test if small enough')
+      call unit_check('myroutine', ival > 3 ,   msg='test if big enough')
+      call unit_check('myroutine', ival < 100 , msg='test if small enough')
 
       call unit_check_done('myroutine',msg='completed checks of "myroutine"')
 

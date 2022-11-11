@@ -5,7 +5,7 @@
      integer            :: ios
      do
         read(*,'(a)',iostat=ios)line
-        if(ios.ne.0)exit
+        if(ios /= 0)exit
         write(*,'(a)')rotate13(line)
      enddo
      end program demo_rotate13

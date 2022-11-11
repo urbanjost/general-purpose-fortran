@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,148 +41,259 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>achar (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>achar (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>achar</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>achar</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>achar</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] returns a character in a specified
+<B>ACHAR</B>(3) - [CHARACTER:CONVERSION] Returns a character in a specified
 position in the ASCII collating sequence
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=10>
+<A name=11>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>ACHAR</B>(I [, KIND])
+result = <B>achar</B>(i [,<I>kind</I>])
+<P>
+<PRE>
+           elemental character(len=1,kind=KIND) function achar(i,KIND)
+<P>
+            integer(kind=**),intent(in) :: i
+            integer(kind=**),intent(in),optional :: KIND
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The character <I>kind</I> returned is the value of KIND if present. otherwise,
+a single default character is returned.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>achar</B>(I) returns the character located at position I in the ASCII
-collating sequence.
+<B>ACHAR</B>(3) returns the character located at position I (commonly called the
+ADE or ASCII Decimal Equivalent) in the ASCII collating sequence.
 <P>
+The <B>ACHAR</B>(3) function is often used for generating in-band escape sequences
+to control terminal attributes, as it makes it easy to print unprintable
+characters such as escape and tab. For example:
+<P>
+<PRE>
+         write(*,&#146;(*(a))&#146;)achar(27),&#146;[2J&#146;
+<P>
+</PRE>
+will clear the screen on an ANSI-compatible terminal display,
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>NOTE</H3>
+
+</A>
+<BLOCKQUOTE>
 The ADEs (ASCII Decimal Equivalents) for ASCII are
 <P>
 <PRE>
-    *-------*-------*-------*-------*-------*-------*-------*-------*
-    | 00 nul| 01 soh| 02 stx| 03 etx| 04 eot| 05 enq| 06 ack| 07 bel|
-    | 08 bs | 09 ht | 10 nl | 11 vt | 12 np | 13 cr | 14 so | 15 si |
-    | 16 dle| 17 dc1| 18 dc2| 19 dc3| 20 dc4| 21 nak| 22 syn| 23 etb|
-    | 24 can| 25 em | 26 sub| 27 esc| 28 fs | 29 gs | 30 rs | 31 us |
-    | 32 sp | 33  ! | 34  " | 35  # | 36  $ | 37  % | 38  & | 39  &#146; |
-    | 40  ( | 41  ) | 42  * | 43  + | 44  , | 45  - | 46  . | 47  / |
-    | 48  0 | 49  1 | 50  2 | 51  3 | 52  4 | 53  5 | 54  6 | 55  7 |
-    | 56  8 | 57  9 | 58  : | 59  ; | 60  &lt; | 61  = | 62  &gt; | 63  ? |
-    | 64  @ | 65  A | 66  B | 67  C | 68  D | 69  E | 70  F | 71  G |
-    | 72  H | 73  I | 74  J | 75  K | 76  L | 77  M | 78  N | 79  O |
-    | 80  P | 81  Q | 82  R | 83  S | 84  T | 85  U | 86  V | 87  W |
-    | 88  X | 89  Y | 90  Z | 91  [ | 92  \ | 93  ] | 94  ^ | 95  _ |
-    | 96  &#145; | 97  a | 98  b | 99  c |100  d |101  e |102  f |103  g |
-    |104  h |105  i |106  j |107  k |108  l |109  m |110  n |111  o |
-    |112  p |113  q |114  r |115  s |116  t |117  u |118  v |119  w |
-    |120  x |121  y |122  z |123  { |124  | |125  } |126  ~ |127 del|
-    *-------*-------*-------*-------*-------*-------*-------*-------*
+      *-------*-------*-------*-------*-------*-------*-------*-------*
+      | 00 nul| 01 soh| 02 stx| 03 etx| 04 eot| 05 enq| 06 ack| 07 bel|
+      | 08 bs | 09 ht | 10 nl | 11 vt | 12 np | 13 cr | 14 so | 15 si |
+      | 16 dle| 17 dc1| 18 dc2| 19 dc3| 20 dc4| 21 nak| 22 syn| 23 etb|
+      | 24 can| 25 em | 26 sub| 27 esc| 28 fs | 29 gs | 30 rs | 31 us |
+      | 32 sp | 33  ! | 34  " | 35  # | 36  $ | 37  % | 38  & | 39  &#146; |
+      | 40  ( | 41  ) | 42  * | 43  + | 44  , | 45  - | 46  . | 47  / |
+      | 48  0 | 49  1 | 50  2 | 51  3 | 52  4 | 53  5 | 54  6 | 55  7 |
+      | 56  8 | 57  9 | 58  : | 59  ; | 60  &lt; | 61  = | 62  &gt; | 63  ? |
+      | 64  @ | 65  A | 66  B | 67  C | 68  D | 69  E | 70  F | 71  G |
+      | 72  H | 73  I | 74  J | 75  K | 76  L | 77  M | 78  N | 79  O |
+      | 80  P | 81  Q | 82  R | 83  S | 84  T | 85  U | 86  V | 87  W |
+      | 88  X | 89  Y | 90  Z | 91  [ | 92  \ | 93  ] | 94  ^ | 95  _ |
+      | 96  &#145; | 97  a | 98  b | 99  c |100  d |101  e |102  f |103  g |
+      |104  h |105  i |106  j |107  k |108  l |109  m |110  n |111  o |
+      |112  p |113  q |114  r |115  s |116  t |117  u |118  v |119  w |
+      |120  x |121  y |122  z |123  { |124  | |125  } |126  ~ |127 del|
+      *-------*-------*-------*-------*-------*-------*-------*-------*
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=3>
+<A name=5>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-the type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : the integer value to convert to an ASCII character, in the range 0 to
+<TABLE width=100% cellpadding=3><!-- tsb: I : the integer value to convert to an ASCII character, in the range 0 to
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+127.
+</TD><TD>
+: <B>ACHAR</B>(3) shall have the value C for any character C capable of
+representation as a default character.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(optional) an INTEGER initialization expression
-indicating the kind parameter of the result.
+<TR></TR></TABLE><!-- .IP \(bu 3 -->
+</TD></TR>
+<TR valign=top><TD width=4%>
+o
+</TD><TD>
+KIND : a integer initialization expression indicating the <I>kind</I> parameter
+of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=6>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type CHARACTER with a length of one. If the
-KIND argument is present, the return value is of the specified kind
-and of the default kind otherwise.
+Assuming I has a value in the range 0 &lt;= I &lt;= 127, the result is the
+character in position I of the ASCII collating sequence, provided the
+processor is capable of representing that character in the character <I>kind</I> of
+the result; otherwise, the result is processor dependent.
 </BLOCKQUOTE>
-<A name=5>
+<A name=7>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_achar
-    implicit none
-    character(len=1) :: c
-    integer,parameter :: blank=32
-    integer,parameter :: horizonal_tab=11
-    integer,parameter :: escape=27
-    integer :: i
-      c = achar(blank)
-      write(*,&#146;(i0,1x,a,1x,b0,1x,o0,1x,z0)&#146;)blank,c,c,c,c
-      write(*,&#146;(32(a))&#146;) (achar(i),i=32,126)
-    end program demo_achar
+      program demo_achar
+      use,intrinsic::iso_fortran_env,only:int8,int16,int32,int64
+      implicit none
+      integer :: i
+         i=65
+         write(*,&#146;("decimal     =",i0)&#146;)i
+         write(*,&#146;("character   =",a1)&#146;)achar(i)
+         write(*,&#146;("binary      =",b0)&#146;)achar(i)
+         write(*,&#146;("octal       =",o0)&#146;)achar(i)
+         write(*,&#146;("hexadecimal =",z0)&#146;)achar(i)
+<P>
+         write(*,&#146;(8(i3,1x,a,1x),/)&#146;)(i,achar(i), i=32,126)
+<P>
+         write(*,&#146;(a)&#146;)upper(&#146;Mixed Case&#146;)
+      contains
+      ! a classic use of achar(3) is to convert the case of a string
+<P>
+      pure elemental function upper(str) result (string)
+      !
+      !$@(#) upper(3f): function to return a trimmed uppercase-only string
+      !
+      ! input string to convert to all uppercase
+      character(*), intent(in)      :: str
+      ! output string that contains no miniscule letters
+      character(len(str))           :: string
+      integer                       :: i, iend
+      integer,parameter             :: toupper = iachar(&#146;A&#146;)-iachar(&#146;a&#146;)
+         iend=len_trim(str)
+         ! initialize output string to trimmed input string
+         string = str(:iend)
+         ! process each letter in the string
+         do concurrent (i = 1:iend)
+             select case (str(i:i))
+             ! located miniscule letter
+             case (&#146;a&#146;:&#146;z&#146;)
+                ! change miniscule to majuscule letter
+                string(i:i) = achar(iachar(str(i:i))+toupper)
+             end select
+         enddo
+      end function upper
+      end program demo_achar
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-   32   100000 40 20
-    !"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?
-   @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
-   &#145;abcdefghijklmnopqrstuvwxyz{|}~
+         decimal     =65
+         character   =A
+         binary      =1000001
+         octal       =101
+         hexadecimal =41
+          32    33 !  34 "  35 #  36 $  37 %  38 &  39 &#146;
+<P>
+          40 (  41 )  42 *  43 +  44 ,  45 -  46 .  47 /
+<P>
+          48 0  49 1  50 2  51 3  52 4  53 5  54 6  55 7
+<P>
+          56 8  57 9  58 :  59 ;  60 &lt;  61 =  62 &gt;  63 ?
+<P>
+          64 @  65 A  66 B  67 C  68 D  69 E  70 F  71 G
+<P>
+          72 H  73 I  74 J  75 K  76 L  77 M  78 N  79 O
+<P>
+          80 P  81 Q  82 R  83 S  84 T  85 U  86 V  87 W
+<P>
+          88 X  89 Y  90 Z  91 [  92 \  93 ]  94 ^  95 _
+<P>
+          96 &#145;  97 a  98 b  99 c 100 d 101 e 102 f 103 g
+<P>
+         104 h 105 i 106 j 107 k 108 l 109 m 110 n 111 o
+<P>
+         112 p 113 q 114 r 115 s 116 t 117 u 118 v 119 w
+<P>
+         120 x 121 y 122 z 123 { 124 | 125 } 126 ~
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=>
 
-     <H3>NOTE</H3>
-
+    <H4>&nbsp; &nbsp; MIXED CASE</H4>
 </A>
 <BLOCKQUOTE>
-see [[ichar]] for a discussion of converting between numerical
-values and formatted string representations.
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later, with KIND argument Fortran 2003 and later
-</BLOCKQUOTE>
-<A name=8>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Elemental function
+FORTRAN 77. KIND argument added Fortran 2003
 </BLOCKQUOTE>
 <A name=9>
 
@@ -190,24 +301,33 @@ Elemental function
 
 </A>
 <BLOCKQUOTE>
-<B>char</B>(3), <B>iachar</B>(3), <B>ichar</B>(3)
+<B>CHAR</B>(3), <B>IACHAR</B>(3), <B>ICHAR</B>(3)
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>RESOURCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ANSI escape sequences
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_attr module for controlling ANSI-compatible terminals
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
-Functions that perform operations on character strings, return lengths
-of arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>elemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>adjustl</B>(3), <B>adjustr</B>(3), <B>index</B>(3), <B>len_trim</B>(3), <B>scan</B>(3), <B>verify</B>(3)
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>nonelemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>repeat</B>(3), <B>trim</B>(3)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<PRE>
+                               October 11, 2022                achar(3fortran)
+</PRE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>achar (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4e526782-8b19-43ef-b326-4175220c4f4c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>achar (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cefa8b92-eb3f-4420-9c9a-c72220af847a using man macros.</FONT>
 <br><br><center><img src="images/achar.3fortran.gif"></center>
 </div>
 </div>

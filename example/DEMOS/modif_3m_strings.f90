@@ -20,7 +20,7 @@
         COMMAND_LINE=adjustl(COMMAND_LINE(COUNT+2:))
         INFINITE: do
            read(*,'(a)',iostat=ios)line
-           if(ios.ne.0)exit
+           if(ios /= 0)exit
            call modif(line,COMMAND_LINE)
            write(*,'(a)')trim(line)
         enddo INFINITE

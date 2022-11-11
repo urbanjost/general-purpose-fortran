@@ -9,7 +9,7 @@
         in='  this is my string  '
         ! change spaces to tabs to make a sample input
         do i=1,len(in)
-           if(in(i:i).eq.' ')in(i:i)=char(9)
+           if(in(i:i) == ' ')in(i:i)=char(9)
         enddo
         write(*,'(a)')in,dilate(in)
      end program demo_dilate

@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,133 +41,200 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>real (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>real (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>real</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>real</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>real</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC:TYPE] Convert to real type
+<B>REAL</B>(3) - [TYPE:NUMERIC] Convert to real type
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>real</B>(x [, kind])
+result = <B>real</B>(x [,<I>kind</I>])
+<P>
+<PRE>
+         elemental real(kind=KIND) function real(x,kind)
+<P>
+          TYPE(kind=**),intent(in) :: x
+          integer(kind=**),intent(in),optional :: KIND
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the type of X may be integer, real, or complex.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND is a integer initialization expression (a constant expression)
+<TABLE width=100% cellpadding=3><!-- tsb: KIND is a integer initialization expression (a constant expression)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If KIND is present it defines the <I>kind</I> of the result
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+if KIND is not present
+<TABLE width=100% cellpadding=3><!-- tsb: if KIND is not present
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+when X is complex the result is the same <I>kind</I> as X.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+when X is real or integer the result is a real of default <I>kind</I>
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>real</B>(x [, kind]) converts its argument X to a real type.
+<B>REAL</B>(3) converts its argument X to a real type.
+<P>
+For complex values this is similar to the modern complex-part-designator %RE
+which also designates the real part of complex a value.
+<P>
+<PRE>
+            z=(3.0,4.0)     ! if z is a complex value
+            print *, z%re == real(z) ! these expressions are equivalent
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-Shall be INTEGER, REAL, or COMPLEX.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(Optional) An INTEGER initialization expression
-indicating the kind parameter of the result.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
-
-     <H3>RETURN VALUE</H3>
-
-</A>
-<BLOCKQUOTE>
-These functions return a REAL variable or array under
-the following rules:
-<TABLE cellpadding=3><!-- tsb: These functions return a REAL variable or array under
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
+<TR valign=top><TD width=3%>
+o
 </TD><TD>
-<B>real</B>(x) is converted to a default real type if X is an integer
-or real variable.
+X : A integer, real, or complex value to convert to real.
 </TD></TR>
-<TR valign=top><TD width=4%>
-2.
+<TR valign=top><TD width=3%>
+o
 </TD><TD>
-<B>real</B>(x) is converted to a real type with the kind type parameter
-of X if X is a complex variable.
-</TD></TR>
-<TR valign=top><TD width=4%>
-3.
-</TD><TD>
-<B>real</B>(x, kind) is converted to a real type with kind type
-parameter KIND if X is a complex, integer, or real variable.
+KIND : When present the value of KIND defines the <I>kind</I> of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+<B>REAL</B>(X) converts X to a default real type if X is an integer or real
+variable.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+<B>REAL</B>(X) converts a complex value to a real type with the magnitude of
+the real component of the input with <I>kind</I> type parameter the same as X.
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+<B>REAL</B>(X, KIND) is converted to a real type with <I>kind</I> type parameter KIND
+if X is a complex, integer, or real variable.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_real
+      program demo_real
       use,intrinsic :: iso_fortran_env, only : dp=&gt;real64
       implicit none
       complex              :: zr = (1.0, 2.0)
       doubleprecision      :: xd=huge(3.0d0)
       complex(kind=dp) :: zd=cmplx(4.0e0_dp,5.0e0_dp,kind=dp)
 <P>
-      print *, real(zr), aimag(zr)
-      print *, dble(zd), aimag(zd)
+         print *, real(zr), aimag(zr)
+         print *, dble(zd), aimag(zd)
 <P>
-      write(*,*)xd,real(xd,kind=kind(0.0d0)),dble(xd)
-   end program demo_real
+         write(*,*)xd,real(xd,kind=kind(0.0d0)),dble(xd)
+      end program demo_real
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-   1.00000000       2.00000000
-   4.0000000000000000        5.0000000000000000
-   1.7976931348623157E+308   1.7976931348623157E+308   1.7976931348623157E+308
+       1.00000000       2.00000000
+       4.0000000000000000       5.0000000000000000
+       1.7976931348623157E+308  1.7976931348623157E+308  1.7976931348623157E+308
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Elemental function
+FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
 
@@ -175,10 +242,40 @@ Elemental function
 
 </A>
 <BLOCKQUOTE>
-<B>dble</B>(3), <B>float</B>(3)
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>AIMAG</B>(3) - Imaginary part of complex number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>CMPLX</B>(3) - Complex conversion function
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>CONJG</B>(3) - Complex conjugate function
+</TD></TR>
+<TR></TR></TABLE>Fortran has strong support for complex values, including many intrinsics
+that take or produce complex values in addition to algebraic and logical
+expressions:
+<P>
+<B>ABS</B>(3), <B>ACOSH</B>(3), <B>ACOS</B>(3), <B>ASINH</B>(3), <B>ASIN</B>(3), <B>ATAN2</B>(3), <B>ATANH</B>(3), <B>ATAN</B>(3),
+<B>COSH</B>(3), <B>COS</B>(3), <B>CO_SUM</B>(3), <B>DBLE</B>(3), <B>DOT_PRODUCT</B>(3), <B>EXP</B>(3), <B>INT</B>(3),
+<B>IS_CONTIGUOUS</B>(3), <B>KIND</B>(3), <B>LOG</B>(3), <B>MATMUL</B>(3), <B>PRECISION</B>(3), <B>PRODUCT</B>(3),
+<B>RANGE</B>(3), <B>RANK</B>(3), <B>SINH</B>(3), <B>SIN</B>(3), <B>SQRT</B>(3), <B>STORAGE_SIZE</B>(3), <B>SUM</B>(3),
+<B>TANH</B>(3), <B>TAN</B>(3), <B>UNPACK</B>(3),
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 real(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>real (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7165605c-4576-4710-ba2f-05d6c54142ac using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>real (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c6a47a00-61e4-401b-9744-372ee2974785 using man macros.</FONT>
 <br><br><center><img src="images/real.3fortran.gif"></center>
 </div>
 </div>

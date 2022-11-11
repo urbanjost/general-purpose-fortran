@@ -14,7 +14,7 @@
             ! try string as number using list-directed input
             line=''
             read(line,*,iostat=ios2,iomsg=message) value
-            if(ios2.eq.0)then
+            if(ios2 == 0)then
                write(*,*)'VALUE=',value
             elseif( is_iostat_end(ios1) ) then
                stop 'end of file'
@@ -24,7 +24,7 @@
             !
             ! try string using isnumber(3f)
             answer=isnumber(line,msg=description)
-            if(answer.gt.0)then
+            if(answer > 0)then
                write(*,*) &
                & ' for ',trim(line),' ',answer,':',description
             else

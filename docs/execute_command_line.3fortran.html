@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,170 +41,203 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>execute_command_line (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>execute_command_line (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>execute_command_line</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>execute_command_line</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>execute_command_line</B>(3f) - [FORTRAN:INTRINSIC:SYSTEM ENVIRONMENT] Execute
-a shell command
+<B>EXECUTE_COMMAND_LINE</B>(3) - [SYSTEM:PROCESSES] Execute a shell command
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-subroutine <B>execute_command_line</B>(command, wait, exitstat, cmdstat, cmdmsg)
+call <B>execute_command_line</B>( & & command [,<I>wait</I>] [,<I>exitstat</I>] [,<I>cmdstat</I>]
+[,<I>cmdmsg</I>] )
 <P>
 <PRE>
-    character(len=*),intent(in)  :: command
-    logical,intent(in),optional  :: wait
-    integer,intent(out),optional :: exitstat
-    integer,intent(out),optional :: cmdstat
-    character(len=*),intent(out),optional :: cmdmsg
+           subroutine execute_command_line(command,wait,exitstat,cmdstat,cmdmsg)
+<P>
+            character(len=*),intent(in)  :: command
+            logical,intent(in),optional  :: wait
+            integer,intent(out),optional :: exitstat
+            integer,intent(out),optional :: cmdstat
+            character(len=*),intent(out),optional :: cmdmsg
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
 
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-The COMMAND argument is passed to the shell and executed. (The shell
-is generally <B>sh</B>(1) on Unix systems, and cmd.exe on Windows.) If WAIT
-is present and has the value .FALSE., the execution of the command
-is asynchronous if the system supports it; otherwise, the command is
+For <B>EXECUTE_COMMAND_LINE</B>(3) the COMMAND argument is passed to the shell and
+executed. (The shell is generally <B>SH</B>(1) on Unix systems, and cmd.exe on
+Windows.) If WAIT is present and has the value .false., the execution of the
+command is asynchronous if the system supports it; otherwise, the command is
 executed synchronously.
 <P>
-The three last arguments allow the user to get status information.
-After synchronous execution, EXITSTAT contains the integer exit code
-of the command, as returned by SYSTEM. CMDSTAT is set to zero if the
-command line was executed (whatever its exit status was). CMDMSG is
-assigned an error message if an error has occurred.
+The three last arguments allow the user to get status information. After
+synchronous execution, EXITSTAT contains the integer exit code of the
+command, as returned by SYSTEM. CMDSTAT is set to zero if the command line
+was executed (whatever its exit status was). CMDMSG is assigned an error
+message if an error has occurred.
 <P>
-Note that the system call need not be thread-safe. It is the
-responsibility of the user to ensure that the system is not called
-concurrently if required.
+Note that the system call need not be thread-safe. It is the responsibility
+of the user to ensure that the system is not called concurrently if
+required.
 <P>
-When the command is executed synchronously, EXECUTE_COMMAND_LINE
-returns after the command line has completed execution. Otherwise,
+When the command is executed synchronously, EXECUTE_COMMAND_LINE returns
+after the command line has completed execution. Otherwise,
 EXECUTE_COMMAND_LINE returns without waiting.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>COMMAND</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-a default CHARACTER scalar containing the command line
-to be executed. The interpretation is
-programming-environment dependent.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COMMAND : a default character scalar containing the command line to be
+executed. The interpretation is programming-environment dependent.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>WAIT</B> </TD><TD valign=bottom>
-(Optional) a default LOGICAL scalar. If WAIT is present
-with the value .false., and the processor supports
-asynchronous execution of the command, the command
-is executed asynchronously; otherwise it is executed
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+WAIT : (Optional) a default logical scalar. If WAIT is present with the
+value .false., and the processor supports asynchronous execution of the
+command, the command is executed asynchronously; otherwise it is executed
 synchronously.
 </TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+EXITSTAT : (Optional) an integer of the default kind with <B>INTENT</B>(INOUT).
+If the command is executed synchronously, it is assigned the value of the
+<TABLE width=100% cellpadding=3><!-- tsb: EXITSTAT : (Optional) an integer of the default kind with <B>INTENT</B>(INOUT).
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>EXITSTAT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-(Optional) an INTEGER of the default kind with
-<B>intent</B>(INOUT). If the command is executed synchronously,
-it is assigned the value of the processor-dependent exit
-status. Otherwise, the value of EXITSTAT is unchanged.
+<B>processor-dependent exit status.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Otherwise, the value of EXITSTAT is
+unchanged.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>CMDSTAT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-(Optional) an INTEGER of default kind with <B>intent</B>(INOUT).
-If an error condition occurs and CMDSTAT is not present,
-error termination of execution of the image is initiated.
+<TR></TR></TABLE><!-- .IP \(bu 3 -->
+</TD></TR>
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+CMDSTAT : (Optional) an integer of default kind with <B>INTENT</B>(INOUT). If
+an error condition occurs and CMDSTAT is not present, error termination
+of execution of the image is initiated.
 <P>
-It is assigned the value <B>-1</B> if the processor does not
-support command line execution, a processor-dependent
-positive value if an error condition occurs, or the
-value <B>-2</B> if no error condition occurs but WAIT is present
-with the value false and the processor does not support
-asynchronous execution. Otherwise it is assigned the
-value 0.
+It is assigned the value <B>-1</B> if the processor does not support command
+line execution, a processor-dependent positive value if an error
+condition occurs, or the value <B>-2</B> if no error condition occurs but WAIT
+is present with the value false and the processor does not support
+asynchronous execution. Otherwise it is assigned the value 0.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>CMDMSG</B> </TD><TD valign=bottom>
-(Optional) a CHARACTER scalar of the default kind.
-It is an INTENT (INOUT) argument.If an error condition
-occurs, it is assigned a processor-dependent explanatory
-message.Otherwise, it is unchanged.
+<TR valign=top><TD width=6%>
+o
+</TD><TD>
+CMDMSG : (Optional) a character scalar of the default kind. It is an
+INTENT (INOUT) argument.If an error condition occurs, it is assigned a
+processor-dependent explanatory message.Otherwise, it is unchanged.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_exec
-   implicit none
-     integer :: i
+      program demo_exec
+      implicit none
+         integer :: i
 <P>
-     call execute_command_line("external_prog.exe", exitstat=i)
-     print *, "Exit status of external_prog.exe was ", i
+         call execute_command_line("external_prog.exe", exitstat=i)
+         print *, "Exit status of external_prog.exe was ", i
 <P>
-     call execute_command_line("reindex_files.exe", wait=.false.)
-     print *, "Now reindexing files in the background"
-   end program demo_exec
+         call execute_command_line("reindex_files.exe", wait=.false.)
+         print *, "Now reindexing files in the background"
+      end program demo_exec
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>NOTE</H3>
 
 </A>
 <BLOCKQUOTE>
-Because this intrinsic is making a system call, it is very system
-dependent. Its behavior with respect to signaling is processor
-dependent. In particular, on POSIX-compliant systems, the SIGINT and
-SIGQUIT signals will be ignored, and the SIGCHLD will be blocked. As
-such, if the parent process is terminated, the child process might
-not be terminated alongside.
+Because this intrinsic is making a system call, it is very system dependent.
+Its behavior with respect to signaling is processor dependent. In
+particular, on POSIX-compliant systems, the SIGINT and SIGQUIT signals will
+be ignored, and the SIGCHLD will be blocked. As such, if the parent process
+is terminated, the child process might not be terminated alongside.
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 2008]] and later
+Fortran 2008
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
-     <H3>CLASS</H3>
+     <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-Subroutine
+****(3)
+<P>
+fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022 execute_command_line(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>execute_command_line (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7d216f8b-4b3c-4395-839f-ffed2daed1de using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>execute_command_line (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9d530e1e-6bb6-4d88-8794-a0247df0b2b2 using man macros.</FONT>
 <br><br><center><img src="images/execute_command_line.3fortran.gif"></center>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,114 +41,145 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>scan (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>scan (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>scan</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>scan</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>scan</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] Scan a string for the presence
-of a set of characters
+<B>SCAN</B>(3) - [CHARACTER:SEARCH] Scan a string for the presence of a set of
+characters
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>scan</B>(string, set[, back [, kind]])
+result = <B>scan</B>( <I>string</I>, <I>set</I>, [,<I>back</I>] [,<I>kind</I>] )
+<P>
+<PRE>
+           elemental integer(kind=KIND) function scan(string,set,back,kind)
+<P>
+            character(len=*,kind=**),intent(in) :: string
+            character(len=*,kind=**),intent(in) :: set
+            logical,intent(in),optional :: back
+            integer,intent(in),optional :: kind
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+STRING and SET must have the same <I>kind</I> type parameter.
+<P>
+the <I>kind</I> of the returned value is the same as KIND if present. Otherwise a
+default integer <I>kind</I> is returned.
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Scans a STRING for any of the characters in a SET
-of characters.
+<B>SCAN</B>(3) scans a STRING for any of the characters in a SET of characters.
 <P>
-If BACK is either absent or equals FALSE, this function
-returns the position of the leftmost character of STRING that is
-in SET. If BACK equals TRUE, the rightmost position
-is returned. If no character of SET is found in STRING, the
-result is zero.
+If BACK is either absent or equals .false., this function returns the
+position of the leftmost character of STRING that is in SET. If BACK equals
+in STRING, the result is zero.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>STRING</B> </TD><TD valign=bottom>
-Shall be of type CHARACTER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING : Shall be of type character.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>SET</B> </TD><TD valign=bottom>
-Shall be of type CHARACTER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SET : Shall be of type character.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>BACK</B> </TD><TD valign=bottom>
-(Optional) shall be of type LOGICAL.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BACK : (Optional) shall be of type logical.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(Optional) An INTEGER initialization expression
-indicating the kind parameter of the result.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND : (Optional) An integer initialization expression indicating the
+<I>kind</I> parameter of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The return value is of type INTEGER and of kind KIND. If
-KIND is absent, the return value is of default integer kind.
+The return value is of type integer and of <I>kind</I> KIND. If KIND is absent, the
+return value is of default integer <I>kind</I>.
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_scan
-    implicit none
-      write(*,*) scan("fortran", "ao")          ! 2, found &#146;o&#146;
-      write(*,*) scan("fortran", "ao", .true.)  ! 6, found &#146;a&#146;
-      write(*,*) scan("fortran", "c++")         ! 0, found none
-    end program demo_scan
+      program demo_scan
+      implicit none
+         write(*,*) scan("fortran", "ao")          ! 2, found &#146;o&#146;
+         write(*,*) scan("fortran", "ao", .true.)  ! 6, found &#146;a&#146;
+         write(*,*) scan("fortran", "c++")         ! 0, found none
+      end program demo_scan
 <P>
 </PRE>
+Results:
+<BLOCKQUOTE>
+<P>
+2 6 0
 </BLOCKQUOTE>
-<A name=6>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later, with KIND argument [[Fortran 2003]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+Fortran 95 , with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
 
@@ -156,23 +187,29 @@ Sample program:
 
 </A>
 <BLOCKQUOTE>
-Functions that perform operations on character strings, return lengths
-of arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
+Functions that perform operations on character strings, return lengths of
+arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>Elemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>adjustl</B>(3), <B>adjustr</B>(3), <B>index</B>(3), <B>len_trim</B>(3),
-<B>scan</B>(3), <B>verify</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3), <B>SCAN</B>(3), <B>VERIFY</B>(3)
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Nonelemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>repeat</B>(3), <B>trim</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions
+<P>
+<PRE>
+                               October 11, 2022                 scan(3fortran)
+</PRE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>scan (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 96e9fff6-064d-468d-9805-597b31f53383 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>scan (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 199f65f3-ba22-4a69-be70-7ac3b6b74847 using man macros.</FONT>
 <br><br><center><img src="images/scan.3fortran.gif"></center>
 </div>
 </div>

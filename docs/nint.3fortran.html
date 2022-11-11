@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,173 +41,280 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>nint (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>nint (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>nint</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>nint</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+              magnitude.
+<P>
+</PRE>
+nint
+</BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>nint</B>(3f) - [FORTRAN:INTRINSIC:NUMERIC:TYPE] Nearest whole number
+<B>NINT</B>(3) - [TYPE:NUMERIC] Integre nearest whole number
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-elemental function <B>nint</B>(x [, kind=NN]) <B>result</B>(ANSWER)
+result = <B>nint</B>( a [,<I>kind</I>] )
 <P>
 <PRE>
-     real(kind=??),intent(in) :: X
-     integer(kind=NN) :: ANSWER
+           elemental integer(kind=KIND) function nint(a, kind )
+<P>
+            real(kind=**),intent(in) :: a
+            integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
 
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A is type real of any <I>kind</I>
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND is a scalar integer constant expression
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The result is default integer <I>kind</I> or the value of KIND if KIND is
+present.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>NINT</B>(X) rounds its argument to the nearest whole number with its
-sign preserved.
+<B>NINT</B>(3) rounds its argument to the nearest whole number with its sign
+preserved.
 <P>
-The user must ensure the value is a valid value for the range of the
-KIND returned. If the processor cannot represent the result in the
-kind specified, the result is undefined.
+The user must ensure the value is a valid value for the range of the KIND
+returned. If the processor cannot represent the result in the <I>kind</I>
+specified, the result is undefined.
 <P>
-If X is greater than zero, <B>NINT</B>(X) has the value <B>INT</B>(X+0.5).
+If A is greater than zero, <B>NINT</B>(A) has the value <B>INT</B>(A+0.5).
 <P>
-If X is less than or equal to zero, <B>NINT</B>(X) has the value <B>INT</B>(a-0.5).
+If A is less than or equal to zero, <B>NINT</B>(A) has the value <B>INT</B>(A-0.5).
 </BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>X</B> </TD><TD valign=bottom>
-The type of the argument shall be REAL.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>KIND</B> </TD><TD valign=bottom>
-(Optional) A constant INTEGER expression indicating
-the kind parameter of the result. Otherwise, the kind type
-parameter is that of default INTEGER type.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>RETURN VALUE</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
-<P>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>ANSWER</B> </TD><TD valign=bottom>
-The result is the integer nearest X, or if there are two
-integers equally near X, the result is whichever such integer
-has the greater magnitude.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A : The value to round to the nearest whole number
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND : can specify the <I>kind</I> of the output value. If not present, the
+output is the default type of integer.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+The result is the integer nearest A, or if there are two integers equally
+near A, the result is whichever such integer has the greater magnitude.
+<P>
+The result is undefined if it cannot be represented in the specified integer
+type.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_nint
-    implicit none
-    integer,parameter :: dp=kind(0.0d0)
-    real              :: x4 = 1.234E0
-    real(kind=dp)     :: x8 = 4.721_dp
+      program demo_nint
+      implicit none
+      integer,parameter   :: dp=kind(0.0d0)
+      real,allocatable    :: in(:)
+      integer,allocatable :: out(:)
+      integer             :: i
+      real                :: x4
+      real(kind=dp)       :: x8
 <P>
-    ! basic use
-       print *, nint(x4), nint(x8),nint(-x8)
+        ! basic use
+         x4 = 1.234E0
+         x8 = 4.721_dp
+         print *, nint(x4), nint(-x4)
+         print *, nint(x8), nint(-x8)
 <P>
-    ! issues
-    ISSUES: block
-    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-    integer :: icheck
-       ! make sure input is in range for the type returned
-       write(*,*)&#146;Range limits for typical KINDS:&#146;
-       write(*,&#146;(1x,g0,1x,g0)&#146;)  &
-       & int8,huge(0_int8),   &
-       & int16,huge(0_int16), &
-       & int32,huge(0_int32), &
-       & int64,huge(0_int64)
+        ! elemental
+         in = [ -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, -0.4, &
+              &  0.0,   &
+              & +0.04, +0.5, +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ]
+         out = nint(in)
+         do i=1,size(in)
+            write(*,*)in(i),out(i)
+         enddo
 <P>
-       ! the standard does not require this to be an error &#46;&#46;&#46;
-       x8=12345.67e15 ! too big of a number
-       icheck=selected_int_kind(ceiling(log10(x8)))
-       write(*,*)&#146;Any KIND big enough? ICHECK=&#146;,icheck
-       print *, &#146;These are all wrong answers for &#146;,x8
-       print *, nint(x8,kind=int8)
-       print *, nint(x8,kind=int16)
-       print *, nint(x8,kind=int32)
-       print *, nint(x8,kind=int64)
-    endblock ISSUES
+        ! dusty corners
+         ISSUES: block
+         use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+         integer :: icheck
+            ! make sure input is in range for the type returned
+            write(*,*)&#146;Range limits for typical KINDS:&#146;
+            write(*,&#146;(1x,g0,1x,g0)&#146;)  &
+            & int8,huge(0_int8),   &
+            & int16,huge(0_int16), &
+            & int32,huge(0_int32), &
+            & int64,huge(0_int64)
 <P>
-    end program demo_nint
+            ! the standard does not require this to be an error &#46;&#46;&#46;
+            x8=12345.67e15 ! too big of a number
+            icheck=selected_int_kind(ceiling(log10(x8)))
+            write(*,*)&#146;Any KIND big enough? ICHECK=&#146;,icheck
+            print *, &#146;These are all wrong answers for &#146;,x8
+            print *, nint(x8,kind=int8)
+            print *, nint(x8,kind=int16)
+            print *, nint(x8,kind=int32)
+            print *, nint(x8,kind=int64)
+         endblock ISSUES
+<P>
+      end program demo_nint
 <P>
 </PRE>
-Results
+Results:
+<BLOCKQUOTE>
+<P>
+1 <B>-1</B>
+<P>
+5 <B>-5</B>
+</BLOCKQUOTE>
+<P>
+<B>-2.700000</B>
+<B>-3</B>
+<BLOCKQUOTE>
+<P>
+<B>-2.500000</B>
+<B>-3</B>
+<P>
+<B>-2.200000</B>
+<B>-2</B>
+<P>
+<B>-2.000000</B>
+<B>-2</B>
+<P>
+<B>-1.500000</B>
+<B>-2</B>
+<P>
+<B>-1.000000</B>
+<B>-1</B>
+</BLOCKQUOTE>
+<P>
+<B>-0.5000000</B>
+<B>-1</B>
+<BLOCKQUOTE>
+<P>
+<B>-0.4000000</B>
 <P>
 <PRE>
-     &gt; 1 5 -5
-     &gt; Range limits for typical KINDS:
-     &gt; 1 127
-     &gt; 2 32767
-     &gt; 4 2147483647
-     &gt; 8 9223372036854775807
-     &gt; Any KIND big enough? ICHECK=          -1
-     &gt; These are all wrong answers for   1.234566949990144E+019
-     &gt; 0
-     &gt; 0
-     &gt; -2147483648
-     &gt; -9223372036854775808
+      0.0000000E+00
+<P>
+      3.9999999E-02
+<P>
+      0.5000000
+<P>
+        1.000000
+<P>
+        1.500000
+<P>
+        2.000000
+<P>
+        2.200000
+<P>
+        2.500000
+<P>
+        2.700000
+          Range limits for typical KINDS: 1 127 2 32767 4 2147483647 8
+          9223372036854775807
 <P>
 </PRE>
+Any KIND big enough? ICHECK=
+<B>-1</B>
+<P>
+These are all wrong answers for
+1.234566949990144E+019 0 0 <B>-2147483648</B> -9223372036854775808
 </BLOCKQUOTE>
-<A name=6>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later, with KIND argument [[Fortran 90]] and later
+FORTRAN 77 , with KIND argument - Fortran 90
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>ceiling</B>(3), <B>floor</B>(3)
-</BLOCKQUOTE>
-<A name=8>
-
-    <H4>&nbsp; &nbsp; JSU</H4>
-</A>
-<BLOCKQUOTE>
+<B>AINT</B>(3), <B>ANINT</B>(3), <B>INT</B>(3), <B>SELECTED_INT_KIND</B>(3), <B>CEILING</B>(3), <B>FLOOR</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 nint(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nint (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 700822b8-9366-494a-923d-9833fafd8226 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nint (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 999c93bf-b1fd-4f7a-b3b2-fcd161eacc84 using man macros.</FONT>
 <br><br><center><img src="images/nint.3fortran.gif"></center>
 </div>
 </div>

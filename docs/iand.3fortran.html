@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,98 +41,167 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iand (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iand (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>iand</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>iand</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>iand</B>(3f) - [FORTRAN:INTRINSIC:BIT MANIPULATION] Bitwise logical and
+<B>IAND</B>(3) - [BIT:LOGICAL] Bitwise logical AND
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>iand</B>(i, j)
+result = <B>iand</B>(<I>i</I>, <I>j</I>)
+<P>
+<PRE>
+           elemental integer(kind=KIND) function iand(i,j)
+<P>
+            integer(kind=KIND),intent(in) :: i
+            integer(kind=KIND),intent(in) :: j
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I, J and the result shall have the same integer type and kind, with the
+exception that one of I or J may be a BOZ constant.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Bitwise logical AND.
+<B>IAND</B>(3) returns the bitwise logical AND of two values.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>I</B> </TD><TD valign=bottom>
-The type shall be INTEGER.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I : one of the pair of values to compare the bits of
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>J</B> </TD><TD valign=bottom>
-The type shall be INTEGER, of the same kind as I.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+J : one of the pair of values to compare the bits of
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
-
-     <H3>RETURN VALUE</H3>
-
-</A>
-<BLOCKQUOTE>
-The return type is INTEGER, of the same kind as the
-arguments. (If the argument kinds differ, it is of the same kind as
-the larger argument.)
+<TR></TR></TABLE>If either I or J is a BOZ-literal-constant, it is first converted as if by
+the intrinsic function <B>INT</B>(3) to type integer with the kind type parameter
+of the other.
 </BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+The result has the value obtained by combining I and I bit-by-bit according
+to the following table:
+<P>
+<PRE>
+          I  |  J  |  IAND (I, J)
+</PRE>
+----------------------------
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:           I  |  J  |  IAND (I, J)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>1 |</B> </TD><TD valign=bottom>
+1  |    1
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>1 |</B> </TD><TD valign=bottom>
+0  |    0
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>0 |</B> </TD><TD valign=bottom>
+1  |    0
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>0 |</B> </TD><TD valign=bottom>
+0  |    0
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+So if both the bit in I and J are on the resulting bit is on (a one); else
+the resulting bit is off (a zero).
+<P>
+This is commonly called the "bitwise logical AND" of the two values.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_iand
-    implicit none
+      program demo_iand
+      implicit none
       integer :: a, b
-      data a / z&#146;f&#146; /, b / z&#146;3&#146; /
-      write (*,*) iand(a, b)
-    end program demo_iand
+       data a / z&#146;f&#146; /, b / z&#146;3&#146; /
+       write (*,*) &#146;a=&#146;,a,&#146; b=&#146;,b,&#146;iand(a,b)=&#146;,iand(a, b)
+       write (*,&#146;(b32.32)&#146;) a,b,iand(a,b)
+      end program demo_iand
 <P>
 </PRE>
+Results:
+<P>
+<PRE>
+          a= 15  b= 3 iand(a,b)= 3
+</PRE>
+00000000000000000000000000001111 00000000000000000000000000000011
+00000000000000000000000000000011
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -140,11 +209,17 @@ Sample program:
 
 </A>
 <BLOCKQUOTE>
-<B>ior</B>(3), <B>ieor</B>(3), <B>ibits</B>(3), <B>ibset</B>(3), <B>ibclr</B>(3),
-<B>not</B>(3)
+<B>IEOR</B>(3), <B>IBCLR</B>(3), <B>NOT</B>(3), <B>BTEST</B>(3), <B>IBCLR</B>(3), <B>IBITS</B>(3), <B>IBSET</B>(3), <B>IOR</B>(3),
+<B>IEOR</B>(3), <B>MVBITS</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 iand(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iand (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ade2a8e2-3b02-46d5-a900-6c56acc8a334 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iand (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dcc61a13-b084-4acd-95c9-4eab34be6c77 using man macros.</FONT>
 <br><br><center><img src="images/iand.3fortran.gif"></center>
 </div>
 </div>

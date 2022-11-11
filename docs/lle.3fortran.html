@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,146 +41,202 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>lle (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>lle (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>lle</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>lle</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>lle</B>(3f) - [FORTRAN:INTRINSIC:CHARACTER] Lexical less than or equal
+<B>LLE</B>(3) - [CHARACTER:COMPARE] ASCII Lexical less than or equal
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>lle</B>(STR_A, STR_B)
+result = <B>lle</B>(<I>string_a</I>, <I>stringb</I>)
 <P>
-<B>character</B>(len=*),intent(in) :: STR_A, STR_B
-or
-<B>character</B>(len=*),intent(in) :: STR_A, <B>STR_B</B>(*)
-logical :: result
+<PRE>
+            elemental logical function lle(string_a, string_b)
+<P>
+             character(len=*),intent(in) :: string_a
+             character(len=*),intent(in) :: string_b
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Determines whether one string is lexically less than or equal to
-another string, where the two strings are interpreted as containing
-ASCII character codes. If the String A and String B are not the same
-length, the shorter is compared as if spaces were appended to it to
-form a value that has the same length as the longer. Leading spaces
-are significant.
+<B>LLE</B>(3) determines whether one string is lexically less than or equal to
+another string, where the two strings are interpreted as containing ASCII
+character codes. if the STRING_A and STRING_B are not the same length, the
+shorter is compared as if spaces were appended to it to form a value that
+has the same length as the longer. Leading spaces are significant.
 <P>
-In general, the lexical comparison intrinsics LGE, LGT, LLE, and LLT
-differ from the corresponding intrinsic operators .ge., .gt., .le.,
-and .lt., in that the latter use the processor&#146;s character ordering
-(which is not ASCII on some targets), whereas the former always use
-the ASCII ordering.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>ARGUMENTS</H3>
-
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>STR_A</B> </TD><TD valign=bottom>
-variable or array of default CHARACTER type.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>STR_B</B> </TD><TD valign=bottom>
-variable or array of default CHARACTER type.
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-            if STR_A and STR_B are both arrays they must be of the
-            same shape.
-<P>
-</PRE>
+In general, the lexical comparison intrinsics LGE, LGT, LLE, and LLT differ
+from the corresponding intrinsic operators .ge., .gt., .le., and \.lt., in
+that the latter use the processor&#146;s character ordering (which is not ASCII
+on some targets), whereas the former always use the ASCII ordering.
 </BLOCKQUOTE>
 <A name=4>
 
-     <H3>RETURN VALUE</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>RESULT</B> </TD><TD valign=bottom>
-Returns .TRUE. if STR_A &lt;= STR_B, and .FALSE.
-otherwise, based on the ASCII ordering.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STR_A : variable or array of default character type.
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STR_B : variable or array of default character type.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+      if STR_A and STR_B are both arrays they must be of the same shape.
+<P>
+</PRE>
+</BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+RESULT Returns .true. if STR_A &lt;= STR_B, and .false. otherwise, based on
+the ASCII ordering.
+<P>
+If both input arguments are null strings, .true. is always returned.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-   program demo_lle
-   implicit none
-   integer             :: i
-      write(*,&#146;(*(a))&#146;)(char(i),i=32,126)
-        write(*,*) lle(&#146;abc&#146;,&#146;ABC&#146;)              ! F lowercase is &gt; uppercase
-        write(*,*) lle(&#146;abc&#146;,&#146;abc  &#146;)            ! T trailing spaces
-        ! If both strings are of zero length the result is true.
-        write(*,*) lle(&#146;&#146;,&#146;&#146;)                    ! T
-        write(*,*) lle(&#146;&#146;,&#146;a&#146;)                   ! T the null string is padded
-        write(*,*) lle(&#146;a&#146;,&#146;&#146;)                   ! F
-        write(*,*) lle(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;])      ! [T,F] scalar and array
-        write(*,*) lle([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;)     ! [F,T]
-        write(*,*) lle([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T,T] both arrays
-   end program demo_lle
+      program demo_lle
+      implicit none
+      integer :: i
+         write(*,&#146;(*(a))&#146;)(char(i),i=32,126)
+         write(*,*) lle(&#146;abc&#146;,&#146;ABC&#146;)          ! F lowercase is &gt; uppercase
+         write(*,*) lle(&#146;abc&#146;,&#146;abc  &#146;)        ! T trailing spaces
+         ! If both strings are of zero length the result is true.
+         write(*,*) lle(&#146;&#146;,&#146;&#146;)                ! T
+         write(*,*) lle(&#146;&#146;,&#146;a&#146;)               ! T the null string is padded
+         write(*,*) lle(&#146;a&#146;,&#146;&#146;)               ! F
+         write(*,*) lle(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;])  ! [T,F] scalar and array
+         write(*,*) lle([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;) ! [F,T]
+         write(*,*) lle([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T,T] both arrays
+      end program demo_lle
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-   &gt; !"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
-   &gt; [\]^_&#145;abcdefghijklmnopqrstuvwxyz{|}~
-   &gt; F
-   &gt; T
-   &gt; T
-   &gt; T
-   &gt; F
-   &gt; T F
-   &gt; F T
-   &gt; T T
+        !"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        [\]^_&#145;abcdefghijklmnopqrstuvwxyz{|}~
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=>
+
+    <H4>&nbsp; &nbsp; F</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; F</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T F</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; F T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; T T</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[FORTRAN 77]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-[[Elemental procedure|Elemental function]]
+FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
 
@@ -188,25 +244,35 @@ Results:
 
 </A>
 <BLOCKQUOTE>
-<B>lge</B>(3), <B>lgt</B>(3), <B>llt</B>(3)
+<B>LGE</B>(3), <B>LGT</B>(3), <B>LLT</B>(3)
 <P>
-Functions that perform operations on character strings, return lengths
-of arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
+Functions that perform operations on character strings, return lengths of
+arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>Elemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>adjustl</B>(3), <B>adjustr</B>(3), <B>index</B>(3), <B>len_trim</B>(3),
-<B>scan</B>(3), <B>verify</B>(3)
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3),
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>Nonelemental:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>repeat</B>(3), <B>trim</B>(3)
+<TR></TR></TABLE><B>SCAN</B>(3), <B>VERIFY</B>(3)
+<TABLE cellpadding=3><!-- tsb: <B>SCAN</B>(3), <B>VERIFY</B>(3)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                  lle(3fortran)
+</PRE>
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lle (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a029a473-cd47-43a5-9b22-c56da6934b52 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lle (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8f9392e6-a7fc-430d-9e3e-b4e02f78ad62 using man macros.</FONT>
 <br><br><center><img src="images/lle.3fortran.gif"></center>
 </div>
 </div>

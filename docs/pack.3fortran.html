@@ -2,7 +2,7 @@
 <head> 
 <title> </title>
 <style> 
-px {font-family: "Lucida Console", Monaco }
+px {font-family: "Lucida Console", Monaco, monospace }
 p { font-size:100%; line-height:1.1em; }
 body {xfont-style: sans-serif}
 body {
@@ -41,150 +41,171 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </style> 
 </head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
 <h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>pack (3)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>pack (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>pack</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>pack</B>(3fortran)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>pack</B>(3f) - [FORTRAN:INTRINSIC:ARRAY CONSTRUCTION] Pack an array into
-an array of rank one
+<B>PACK</B>(3) - [ARRAY:CONSTRUCTION] Pack an array into an array of rank one
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
 
-     <H3>SYNTAX</H3>
+     <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-result = <B>pack</B>(array, mask[,vector])
+result = <B>pack</B>( <I>array</I>, mask [,<I>vector</I>] )
+<P>
+<PRE>
+           TYPE(kind=KIND) function pack(array,mask,vector)
+<P>
+            TYPE(kind=KIND),option(in) :: array(..)
+            logical  :: mask(*)
+            TYPE(kind=KIND),option(in),optional :: vector(*)
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY, VECTOR and the returned value are all of the same kind and type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK may be a scalar as well an an <I>array</I>.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-Stores the elements of ARRAY in an array of rank one.
+<B>PACK</B>(3) stores the elements of ARRAY in an <I>array</I> of rank one.
 <P>
-The beginning of the resulting array is made up of elements whose MASK
-equals TRUE. Afterwards, positions are filled with elements taken from
+The beginning of the resulting <I>array</I> is made up of elements whose MASK
+equals .true.. Afterwards, positions are filled with elements taken from
 VECTOR.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
-     <H3>ARGUMENTS</H3>
+     <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>ARRAY</B> </TD><TD valign=bottom>
-Shall be an array of any type.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ARRAY : The data from this <I>array</I> is used to fill the resulting <I>vector</I>
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>MASK</B> </TD><TD valign=bottom>
-Shall be an array of type LOGICAL and of the same size
-as ARRAY. Alternatively, it may be a LOGICAL scalar.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK : the logical mask must be the same size as ARRAY or, alternatively,
+it may be a logical scalar.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>VECTOR</B> </TD><TD valign=bottom>
-(Optional) shall be an array of the same type as ARRAY
-and of rank one. If present, the number of elements in VECTOR
-shall be equal to or greater than the number of true elements in
-MASK. If MASK is scalar, the number of elements in VECTOR
-shall be equal to or greater than the number of elements in
-ARRAY.
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VECTOR : (Optional) shall be an <I>array</I> of the same type as ARRAY and of
+rank one. If present, the number of elements in VECTOR shall be equal to
+or greater than the number of true elements in MASK. If MASK is scalar,
+the number of elements in VECTOR shall be equal to or greater than the
+number of elements in ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
-     <H3>RETURN VALUE</H3>
+     <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The result is an array of rank one and the same type as that of ARRAY.
-If VECTOR is present, the result size is that of VECTOR, the
-number of TRUE values in MASK otherwise.
-</BLOCKQUOTE>
-<A name=5>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>The result is an </B><I>array</I> of rank one and the same type as that of ARRAY. </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+If
+VECTOR is present, the result size is that of VECTOR, the number of \.true.
+values in MASK otherwise.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
 Sample program:
 <P>
 <PRE>
-    program demo_pack
-    implicit none
-    call test1()
-    call test2()
-    call test3()
-    contains
-    !
-    subroutine test1()
-    ! gathering nonzero elements from an array:
-    integer :: m(6)
-      m = [ 1, 0, 0, 0, 5, 0 ]
-      write(*, fmt="(*(i0, &#146; &#146;))") pack(m, m /= 0)  ! "1 5"
-    end subroutine test1
-    !
-    subroutine test2()
-    ! Gathering nonzero elements from an array and appending elements
-    ! from VECTOR:
-    integer :: m(4)
-      m = [ 1, 0, 0, 2 ]
-      write(*, fmt="(*(i0, &#146; &#146;))") pack(m, m /= 0, [ 0, 0, 3, 4 ])  ! "1 2 3 4"
-    end subroutine test2
-    !
-    subroutine test3()
-    ! select strings whose second character is "a"
-    character(len=10) :: m(4)
-    m = [ character(len=10) :: &#146;ape&#146;, &#146;bat&#146;, &#146;cat&#146;, &#146;dog&#146;]
-      write(*, fmt="(*(g0, &#146; &#146;))") pack(m, m(:)(2:2) == &#146;a&#146; )  ! "bat" "cat"
-    end subroutine test3
-    !
-    end program demo_pack
+      program demo_pack
+      implicit none
+      integer, allocatable :: m(:)
+      character(len=10) :: c(4)
+<P>
+       ! gathering nonzero elements from an array:
+         m = [ 1, 0, 0, 0, 5, 0 ]
+         write(*, fmt="(*(i0, &#146; &#146;))") pack(m, m /= 0)
+<P>
+       ! Gathering nonzero elements from an array and appending elements
+       ! from VECTOR till the size of the mask array (or array size if the
+       ! mask is scalar):
+         m = [ 1, 0, 0, 2 ]
+         write(*, fmt="(*(i0, &#146; &#146;))") pack(m, m /= 0, [ 0, 0, 3, 4 ])
+<P>
+       ! select strings whose second character is "a"
+         c = [ character(len=10) :: &#146;ape&#146;, &#146;bat&#146;, &#146;cat&#146;, &#146;dog&#146;]
+         write(*, fmt="(*(g0, &#146; &#146;))") pack(c, c(:)(2:2) == &#146;a&#146; )
+<P>
+      end program demo_pack
 <P>
 </PRE>
 Results:
 <BLOCKQUOTE>
 <P>
-1 5
-1 2 3 4
-<TABLE cellpadding=3><!-- tsb: 1 5
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>bat</B> </TD><TD valign=bottom>
+1 5 1 2 3 4
+<P>
+bat
 cat
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
-[[Fortran 95]] and later
-</BLOCKQUOTE>
-<A name=7>
-
-     <H3>CLASS</H3>
-
-</A>
-<BLOCKQUOTE>
-Transformational function
+Fortran 95
 </BLOCKQUOTE>
 <A name=8>
 
@@ -192,10 +213,16 @@ Transformational function
 
 </A>
 <BLOCKQUOTE>
-<B>unpack</B>(3)
+<B>MERGE</B>(3), <B>SPREAD</B>(3), <B>UNPACK</B>(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               October 11, 2022                 pack(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>pack (3)</TD> <TD align=right width=33%><I>September 13, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9adf029d-e4eb-4c2f-9d4f-0e33a1e79d20 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>pack (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 57d1c262-ff84-477e-bd0d-24d6753aeb4f using man macros.</FONT>
 <br><br><center><img src="images/pack.3fortran.gif"></center>
 </div>
 </div>
