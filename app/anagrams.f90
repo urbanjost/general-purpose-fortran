@@ -1,3 +1,4 @@
+program anagrams_exe
 !>
 !!##NAME
 !!    anagrams(1f) - print anagrams of strings
@@ -59,7 +60,6 @@
 !!##EXAMPLES
 !!
 !!    anagrams hello world
-program testit
 use M_sort, only : sort_shell
 implicit none
 integer                      :: argument_length
@@ -119,4 +119,4 @@ integer            :: i
      endif
    enddo
 end function findlast
-end program testit
+end program anagrams_exe

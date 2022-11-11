@@ -320,7 +320,7 @@ integer,parameter   :: ref(8)=[1582,10,15,0,0,0,0,0]
    call date_to_unix(values,unixtime,ierr)                                     ! seconds from given date to Unix Epoch Time
    ! if system clock is higher resolution use it even though that makes fractional second wrong
    call system_clock(count=clicks,count_rate=rate,count_max=maxclicks)
-   if(rate.gt.1000)then                                                        ! system clock available and higher resolution
+   if(rate > 1000)then                                                        ! system clock available and higher resolution
       rate8=real(rate,kind=dp)
       frac8=mod(real(clicks,kind=dp),rate8)/rate8*10000000_i8b                 ! MOD(A,P) == A - INT (A/P) * P.
       frac=int(frac8)                                                          ! truncate to one remainder of one second

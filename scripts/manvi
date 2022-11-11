@@ -174,7 +174,7 @@ fi
 # $VISUAL - common variable used for this purpose (tcsh,...)
 # edit man pages with nice vim(1) options
 VIM=$(cat <<\EOF
-vim -c "so $SCRATCH.vimrc"
+vim -n -c "so $SCRATCH.vimrc"
 EOF
 #vim -c "so $SCRATCH.vimrc" -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>'
 )

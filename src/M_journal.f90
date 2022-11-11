@@ -42,7 +42,7 @@
 !!     >      :
 !!     > do
 !!     >    read(*,'(a)',iostat=ios) userline  ! read user input
-!!     >    if(ios.ne.0)exit
+!!     >    if(ios /= 0)exit
 !!     >    ! echo user input to trail file
 !!     >    call journal('T',userline)
 !!     >    ! assume user input causes values i1, i2, and i3 to be calculated
@@ -449,7 +449,7 @@ character(len=4096)                :: mssge
       case('T','t')
          if(trailopen) then
             write(itrail,'(a)',advance=adv)prefix//trim(msg)
-         !!elseif(times.eq.0)then
+         !!elseif(times == 0)then
          !!   write(my_stdout,'(a)',advance=adv)prefix//trim(msg)
          !!   times=times+1
          endif
@@ -469,7 +469,7 @@ character(len=4096)                :: mssge
       case('<'); debug=.false.
       !-----------------------------------------------------------------------------------------------------------------------------
       case('%')                       ! setting timestamp prefix
-         if(msg.eq.'')then            ! if message is blank turn off prefix
+         if(msg == '')then            ! if message is blank turn off prefix
             prefix_it=.false.
          else                         ! store message as string to pass to now_ex() on subsequent calls to make prefix
             prefix_template=msg
@@ -477,16 +477,16 @@ character(len=4096)                :: mssge
          endif
       !-----------------------------------------------------------------------------------------------------------------------------
       case('N')                                                   ! new name for my_stdout
-         if(msg.ne.' '.and.msg.ne.'#N#'.and.msg.ne.'"#N#"')then   ! if filename not special or blank open new file
+         if(msg /= ' '.and.msg /= '#N#'.and.msg /= '"#N#"')then   ! if filename not special or blank open new file
             close(unit=last_int,iostat=ios)
             open(unit=last_int,file=adjustl(trim(msg)),iostat=ios)
-            if(ios.eq.0)then
+            if(ios == 0)then
                my_stdout=last_int
             else
                write(*,*)'*journal* error opening redirected output file, ioerr=',ios
                write(*,*)'*journal* msg='//trim(msg)
             endif
-         elseif(msg.eq.' ')then
+         elseif(msg == ' ')then
             close(unit=last_int,iostat=ios)
             my_stdout=6
          endif
@@ -494,7 +494,7 @@ character(len=4096)                :: mssge
       case('C','c')
          if(trailopen)then
             write(itrail,'(3a)',advance=adv)prefix,comment,trim(msg)
-         elseif(times.eq.0)then
+         elseif(times == 0)then
             !! write(my_stdout,'(2a)',advance=adv)prefix,trim(msg)
             !! times=times+1
          endif
@@ -502,24 +502,24 @@ character(len=4096)                :: mssge
          if(debug)then
             if(trailopen)then
                write(itrail,'(4a)',advance=adv)prefix,comment,'DEBUG: ',trim(msg)
-            elseif(times.eq.0)then
+            elseif(times == 0)then
                write(my_stdout,'(3a)',advance=adv)prefix,'DEBUG:',trim(msg)
                times=times+1
             endif
          endif
       case('F','f')
          flush(unit=itrail,iostat=ios,iomsg=mssge)
-         if(ios.ne.0)then
+         if(ios /= 0)then
             write(*,'(a)') trim(mssge)
          endif
       case('A','a')
-         if(msg.ne.'')then
+         if(msg /= '')then
             open(newunit=itrail,status='unknown',access='sequential',file=adjustl(trim(msg)),&
             & form='formatted',iostat=ios,position='append')
             trailopen=.true.
          endif
       case('O','o')
-         if(msg.ne.'')then
+         if(msg /= '')then
             open(newunit=itrail,status='unknown',access='sequential', file=adjustl(trim(msg)),form='formatted',iostat=ios)
             trailopen=.true.
          else

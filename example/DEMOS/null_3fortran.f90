@@ -35,6 +35,7 @@
 
         end module showit
 
+        program demo_null
         use showit, only : gen
 
         real,target :: x = 200.0
@@ -61,5 +62,4 @@
         call gen (3, real_ptr ) ! invokes s2
         call gen (4, integer_ptr ) ! invokes s1
 
-        end
-        !end program demo_null
+        end program demo_null

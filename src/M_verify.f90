@@ -166,15 +166,15 @@
 !!     !  * change database status for specified entry to -1 and stop program, else continue
 !!     !  * produce a SUCCESS: or FAIL: message and keep going
 !!     !  * produce a FAIL: message if test fails but no SUCCESS: message if test passes
-!!     call unit_check('one',i.gt.0,msg='I > 0')
+!!     call unit_check('one',i > 0,msg='I > 0')
 !!
 !!     ! using ANY(3f) and ALL(3f)
-!!     call unit_check('one',all([i,j,k].gt.0),      'testing if everyone greater than zero')
+!!     call unit_check('one',all([i,j,k] > 0),      'testing if everyone greater than zero')
 !!     ! display message built of scalars as well
-!!     call unit_check('one',all(.not.[i,j,k].eq.4),'for set ',i,j,k,'testing if no one is equal to four')
+!!     call unit_check('one',all(.not.[i,j,k] == 4),'for set ',i,j,k,'testing if no one is equal to four')
 !!
 !!     ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
-!!     if(i+j+k.lt.1)then
+!!     if(i+j+k < 1)then
 !!        call unit_check_bad('one')
 !!     endif
 !!
@@ -184,17 +184,17 @@
 !!     subroutine test_two
 !!     ! use of all(3f), any(3f), merge(3f) can be useful
 !!     ! if you know what these would produce
-!!     ! write(*,*)['A','X','X','X','X','B'].eq.'B'      ! this would return an array, the last element having the value T, else F
-!!     ! write(*,*)all(['A','X','X','X','X','X'].eq.'X') ! this would return F
-!!     ! write(*,*)any(['A','X','X','X','X','X'].eq.'B') ! this would return F
-!!     ! write(*,*)any(['A','X','X','X','X','B'].eq.'B') ! this would return T
-!!     ! write(*,*).not.all(array.lt.100)
-!!     ! write(*,*)all(array.lt.100)
-!!     ! write(*,*)all([a,b,c,d].eq.[21,51,14,45]) ! compare a list. This would return T
-!!     ! write(*,*)all(arr.eq.[21,51,14,45])       ! compare an array. This would return T
+!!     ! write(*,*)['A','X','X','X','X','B'] == 'B'      ! this would return an array, the last element having the value T, else F
+!!     ! write(*,*)all(['A','X','X','X','X','X'] == 'X') ! this would return F
+!!     ! write(*,*)any(['A','X','X','X','X','X'] == 'B') ! this would return F
+!!     ! write(*,*)any(['A','X','X','X','X','B'] == 'B') ! this would return T
+!!     ! write(*,*).not.all(array < 100)
+!!     ! write(*,*)all(array < 100)
+!!     ! write(*,*)all([a,b,c,d] == [21,51,14,45]) ! compare a list. This would return T
+!!     ! write(*,*)all(arr == [21,51,14,45])       ! compare an array. This would return T
 !!     ! you know how valuable ANY(3f) and ALL(3f) will be
 !!     call unit_check_start('two','check on "two" passed')
-!!     call unit_check('two', 1.gt.0 .and. abs(10.10000-10.10001).lt.0.0001,msg='two looks good')
+!!     call unit_check('two', 1 > 0 .and. abs(10.10000-10.10001) < 0.0001,msg='two looks good')
 !!     call unit_check_done('two','checks on "two" ended')
 !!     end subroutine test_two
 !!
@@ -471,7 +471,7 @@ character(len=132)                   :: message
 !&aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab'
 !-----------------------------------------------------------------------------------------------------------------------------------
 if(present(stderr))then       ! write message to stderr, assuming string length is allowed
-   if(stderr.ne.'')then
+   if(stderr /= '')then
       write(error_unit,'(a)')trim(stderr)
    endif
 !f2015!   select case(ierr)             ! have executable return an exit status to the system (IF SUPPORTED)
@@ -515,7 +515,7 @@ if(present(stderr))then       ! write message to stderr, assuming string length 
 !f2015!   end select
 endif
 if(present(stdout))then       ! write message to stdout, assuming string length is allowed
-   if(stdout.ne.'')then
+   if(stdout /= '')then
       write(*,'(a)')trim(stdout)
    endif
 endif
@@ -619,16 +619,16 @@ end subroutine fstop
 !!       arr2=[1.0001,10.001,100.01]
 !!       call unit_check_start('myroutine')
 !!
-!!       call unit_check('myroutine', x.gt.3 ,'test if big enough')
-!!       call unit_check('myroutine', x.lt.100 ,'test if small enough')
+!!       call unit_check('myroutine', x > 3 ,'test if big enough')
+!!       call unit_check('myroutine', x < 100 ,'test if small enough')
 !!
 !!       do i=1,size(arr1)
 !!          call unit_check('myroutine', almost(arr1(i),arr2(i),3.9,verbose=.true.) )
 !!       enddo
 !!
 !!       arr=[10,20,30]
-!!       call unit_check('myroutine', .not.any(arr.lt.0) ,'test if any negative values in array ARR')
-!!       call unit_check('myroutine', all(arr.lt.100) ,'test if all values less than 100 in array ARR')
+!!       call unit_check('myroutine', .not.any(arr < 0) ,'test if any negative values in array ARR')
+!!       call unit_check('myroutine', all(arr < 100) ,'test if all values less than 100 in array ARR')
 !!
 !!       call unit_check_done('myroutine',msg='checks on "myroutine" all passed')
 !!
@@ -664,7 +664,7 @@ msg_local=str(msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(.not.logical_expression)then
       call stderr('unit_check:       '//atleast(name,20)//' FAILURE : '//trim(msg_local))  ! write message to standard error
-      if(unit_check_command.ne.'')then
+      if(unit_check_command /= '')then
          call execute_command_line(unit_check_command//' '//trim(name)//' bad')
       endif
       if(.not.unit_check_keep_going) then
@@ -748,8 +748,8 @@ end subroutine unit_check
 !!       & ')
 !!
 !!     ival=10
-!!     call unit_check('myroutine', ival.gt.3 ,   msg='test if big enough')
-!!     call unit_check('myroutine', ival.lt.100 , msg='test if small enough')
+!!     call unit_check('myroutine', ival > 3 ,   msg='test if big enough')
+!!     call unit_check('myroutine', ival < 100 , msg='test if small enough')
 !!
 !!     call unit_check_done('myroutine',msg='completed checks of "myroutine"')
 !!
@@ -770,14 +770,14 @@ character(len=4096)                  :: var
 logical,save                         :: called=.false.
 !-----------------------------------------------------------------------------------------------------------------------------------
    call get_environment_variable('UNIT_CHECK_COMMAND',var)
-   if(var.ne.'')unit_check_command=var
+   if(var /= '')unit_check_command=var
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(present(options))then
-      if(unit_check_command.ne.'')then
+      if(unit_check_command /= '')then
          call execute_command_line(unit_check_command//' '//trim(name)//' start '//trim(options))
       endif
    else
-      if(unit_check_command.ne.'')then
+      if(unit_check_command /= '')then
          call execute_command_line(unit_check_command//' '//trim(name)//' start')
       endif
    endif
@@ -790,7 +790,7 @@ logical,save                         :: called=.false.
       called=.true.
    endif
    if(present(msg))then
-     if(msg.ne.'')then
+     if(msg /= '')then
         call stderr('unit_check_start: '//atleast(name,20)//' START   : '//trim(msg)) ! write message to standard error
      endif
    endif
@@ -811,7 +811,8 @@ end subroutine unit_check_start
 !>
 !!
 !!##NAME
-!!    unit_check_stop(3f) - [M_verify] call command "goodbad NAME good" or "goodbad NAME bad" depending on whether failures were found
+!!    unit_check_stop(3f) - [M_verify] call command "goodbad NAME good" or
+!!    goodbad NAME bad" depending on whether failures were found
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -846,11 +847,11 @@ end subroutine unit_check_start
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x.gt.3 ,'test if big enough')
-!!     call unit_check('myroutine', x.lt.100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,'test if big enough')
+!!     call unit_check('myroutine', x < 100 ,'test if small enough')
 !!
-!!     if(x.ne.0)then
-!!        call unit_check_bad  ('myroutine',msg='x.ne.0' )
+!!     if(x /= 0)then
+!!        call unit_check_bad  ('myroutine',msg='x /= 0' )
 !!     endif
 !!     call unit_check_done  ('myroutine',msg='checks on "myroutine"' )
 !!
@@ -880,8 +881,8 @@ integer                              :: clicks_now
    call system_clock(clicks_now)
    milliseconds=(julian()-duration_all)*1000
    milliseconds=clicks_now-clicks_all
-   PF=merge('PASSED  :','FAILED  :',ifailed_all_G.eq.0)
-   if(PF.eq.'PASSED  :'.and.ipassed_all_G.eq.0)then
+   PF=merge('PASSED  :','FAILED  :',ifailed_all_G == 0)
+   if(PF == 'PASSED  :'.and.ipassed_all_G == 0)then
       PF='UNTESTED:'
    endif
    write(out,'("unit_check_stop:  ", &
@@ -900,7 +901,7 @@ integer                              :: clicks_now
    else
       call stderr(trim(out))
    endif
-   if(IFAILED_ALL_G.eq.0)then
+   if(IFAILED_ALL_G == 0)then
       stop EXIT_SUCCESS
    else
       stop EXIT_FAILURE
@@ -950,10 +951,10 @@ end subroutine unit_check_stop
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x.gt.3 ,'test if big enough')
-!!     call unit_check('myroutine', x.lt.100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,'test if big enough')
+!!     call unit_check('myroutine', x < 100 ,'test if small enough')
 !!
-!!     if(x.ne.0)then
+!!     if(x /= 0)then
 !!        call unit_check_done ('myroutine',msg='checks on "myroutine"' ) ! program execution stopped
 !!     endif
 !!
@@ -987,8 +988,8 @@ integer                              :: clicks_now
       opts_local=''
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(unit_check_command.ne.'')then                           ! if system command name is not blank call system command
-      if(ifailed_g.eq.0)then
+   if(unit_check_command /= '')then                           ! if system command name is not blank call system command
+      if(ifailed_g == 0)then
          call execute_command_line(unit_check_command//' '//trim(name)//' bad '//trim(opts))
          if(.not.unit_check_keep_going) call fstop(1)            ! stop program depending on mode
       else
@@ -996,11 +997,11 @@ integer                              :: clicks_now
       endif
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   PF=merge('PASSED  :','FAILED  :',ifailed_G.eq.0)
-   if(PF.eq.'PASSED  :'.and.ipassed_G.eq.0)then
+   PF=merge('PASSED  :','FAILED  :',ifailed_G == 0)
+   if(PF == 'PASSED  :'.and.ipassed_G == 0)then
       PF='UNTESTED:'
    endif
-   if(duration.ne.0.0d0)then
+   if(duration /= 0.0d0)then
       call system_clock(clicks_now)
       milliseconds=(julian()-duration)*1000
       milliseconds=clicks_now-clicks
@@ -1071,10 +1072,10 @@ end subroutine unit_check_done
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x.gt.3 ,'test if big enough')
-!!     call unit_check('myroutine', x.lt.100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,'test if big enough')
+!!     call unit_check('myroutine', x < 100 ,'test if small enough')
 !!
-!!     if(x.ne.0)then
+!!     if(x /= 0)then
 !!        call unit_check_bad ('myroutine',msg='checks on "myroutine" failed') ! program execution stopped
 !!     endif
 !!
@@ -1144,8 +1145,8 @@ end subroutine unit_check_bad
 !!     x=10
 !!     call unit_check_start('myroutine')
 !!
-!!     call unit_check('myroutine', x.gt.3 ,'test if big enough')
-!!     call unit_check('myroutine', x.lt.100 ,'test if small enough')
+!!     call unit_check('myroutine', x > 3 ,'test if big enough')
+!!     call unit_check('myroutine', x < 100 ,'test if small enough')
 !!
 !!     call unit_check_good('myroutine',msg='checks on "myroutine" ')
 !!
@@ -1306,7 +1307,7 @@ end function atleast
 !!    implicit none
 !!    real :: a, toobig=1024
 !!    a=2000
-!!    call assert('myroutine', 101, a.gt.toobig, 'The value is too large', a, '.gt.', toobig)
+!!    call assert('myroutine', 101, a > toobig, 'The value is too large', a, ' > ', toobig)
 !!    end program demo_assert
 !!
 !!##AUTHOR
@@ -1479,7 +1480,7 @@ integer                     :: ind
       endif
    end select
 
-   if(ind.eq.0)then
+   if(ind == 0)then
       almost=.true.
    else
       almost=.false.
@@ -1648,24 +1649,24 @@ integer  :: ireal_significant_digits
 !-----------------------------------------------------------------------------------------------------------------------------------
    ireal_significant_digits=int(log10(2.**digits(0.0))) ! maximum number of significant digits in a real number.
    digi=digi0
-   if(digi.le.0)then
+   if(digi <= 0)then
       call journal('sc','*accdig* bad number of significant digits=',digi)
       digi=ireal_significant_digits
-   elseif(digi .gt. ireal_significant_digits)then
+   elseif(digi  >  ireal_significant_digits)then
       call journal('sc','*accdig* significant digit request too high=',digi)
       digi=min(digi,real(ireal_significant_digits))
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    diff = x - y
-   if(diff .eq. 0.0) then
+   if(diff  ==  0.0) then
       acurcy = digi
-   elseif(y .eq. 0.0) then
+   elseif(y  ==  0.0) then
       acurcy = - log10(abs(x))
    else
       acurcy = - log10(abs(diff)) + log10(abs(y))
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(acurcy .lt. digi ) then
+   if(acurcy  <  digi ) then
       ind = 1
    else
       ind = 0
@@ -1843,22 +1844,22 @@ integer              :: idble_significant_digits
    digi=anyscalar_to_realbig(digi0)
 !-----------------------------------------------------------------------------------------------------------------------------------
    idble_significant_digits=int(log10(2.0_wp**digits(0.0_wp))) ! MAXIMUM NUMBER OF SIGNIFICANT DIGITS IN A REAL128 NUMBER.
-   if(digi.le.0)then
+   if(digi <= 0)then
       call journal('sc','*dp_accdig* bad number of significant digits=',real(digi,kind=wp))
       digi=idble_significant_digits
-   elseif(digi .gt. idble_significant_digits)then
+   elseif(digi  >  idble_significant_digits)then
       call journal('sc','*dp_accdig* significant digit request too high=',real(digi,kind=wp))
       digi=min(digi,real(idble_significant_digits,kind=wp))
    endif
    diff = x_local - y_local
-   if(diff .eq. 0.0_wp) then
+   if(diff  ==  0.0_wp) then
       acurcy = digi
-   elseif(y_local .eq. 0.0_wp) then
+   elseif(y_local  ==  0.0_wp) then
       acurcy = - log10(abs(x_local))
    else
       acurcy = - log10(abs(diff)) + log10(abs(y_local))
    endif
-   if(acurcy .lt. digi ) then
+   if(acurcy  <  digi ) then
       ind = 1
    else
       ind = 0
@@ -1983,13 +1984,13 @@ integer,intent(in)         :: idigits0
    aval=abs(val)
 !  select a power that will normalize the number
 !  (put it in the range 1 > abs(val) <= 0)
-   if(aval.ge.1)then
+   if(aval >= 1)then
       ipow=int(log10(aval)+1)
    else
       ipow=int(log10(aval))
    endif
    rnormal=val/(10.0d0**ipow)
-   if(rnormal.eq.1)then
+   if(rnormal == 1)then
       ipow=ipow+1
    endif
    !normalize, multiply by 10*idigits to an integer, and so on
@@ -2144,14 +2145,14 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
    Type is (real(kind=real128))
-      !!if(valuein.gt.big)then
+      !!if(valuein > big)then
       !!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
       !!endif
       d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
    !type is (real(kind=real128))
-   !   if(valuein.gt.big)then
+   !   if(valuein > big)then
    !      write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
    !   endif
    !   d_out=dble(valuein)

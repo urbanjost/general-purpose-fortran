@@ -20,25 +20,27 @@
 !!
 !!##SYNOPSIS
 !!
-!!   use M_anything,only : anyinteger_to_string
-!!   use M_anything,only : anyscalar_to_int64
-!!   use M_anything,only : anyscalar_to_real
-!!   use M_anything,only : anyscalar_to_real128
-!!   use M_anything,only : anyscalar_to_double
-!!   use M_anything,only : anything_to_bytes
-!!   use M_anything,only : get_type
-!!   use M_anything,only : bytes_to_anything
-!!   use M_anything,only : empty, assignment(=)
+!!      use M_anything,only : anyscalar_to_string
+!!      use M_anything,only : anyscalar_to_int64
+!!      use M_anything,only : anyscalar_to_real
+!!      use M_anything,only : anyscalar_to_real128
+!!      use M_anything,only : anyscalar_to_double
+!!      use M_anything,only : anything_to_bytes
+!!      use M_anything,only : anyinteger_to_string
+!!      use M_anything,only : get_type
+!!      use M_anything,only : bytes_to_anything
+!!      use M_anything,only : empty, assignment(=)
 !!
 !!##DESCRIPTION
-!!    anyinteger_to_string    convert integer parameter of any kind to string
-!!    anyscalar_to_int64      convert integer parameter of any kind to 64-bit integer
-!!    anyscalar_to_real       convert integer or real parameter of any kind to real
-!!    anyscalar_to_real128    convert integer or real parameter of any kind to real128
-!!    anyscalar_to_double     convert integer or real parameter of any kind to doubleprecision
-!!    anything_to_bytes       convert anything to bytes
-!!    get_type                return array of strings containing type names of arguments
-!!    empty                   create an empty array
+!!       anyscalar_to_string     convert intrinsic type to string
+!!       anyscalar_to_int64      convert integer or real of any kind to 64-bit integer
+!!       anyscalar_to_real       convert integer or real of any kind to real
+!!       anyscalar_to_real128    convert integer or real of any kind to real128
+!!       anyscalar_to_double     convert integer or real of any kind to doubleprecision
+!!       anything_to_bytes       convert anything to bytes
+!!       anyinteger_to_string    convert integer to string
+!!       get_type                return array of strings containing type names of arguments
+!!       empty                   create an empty array
 !!
 !!##EXAMPLE
 !!
@@ -98,7 +100,7 @@ use, intrinsic :: ISO_FORTRAN_ENV, only : REAL32, REAL64, REAL128         !  4  
 implicit none
 private
 integer,parameter        :: dp=kind(0.0d0)
-public anyinteger_to_string  ! convert integer parameter of any kind to string
+public anyscalar_to_string   ! convert integer parameter of any kind to string
 public anyscalar_to_int64    ! convert integer parameter of any kind to 64-bit integer
 public anyscalar_to_real     ! convert integer or real parameter of any kind to real
 public anyscalar_to_real128  ! convert integer or real parameter of any kind to real128
@@ -106,6 +108,8 @@ public anyscalar_to_double   ! convert integer or real parameter of any kind to 
 public anything_to_bytes
 public get_type
 public bytes_to_anything
+
+public anyinteger_to_string  ! convert integer parameter of any kind to string
 !!public setany
 
 interface anything_to_bytes
@@ -263,6 +267,19 @@ contains
 !!
 !!   Sample program
 !!
+!!      program demo_bytes_to_anything
+!!      use M_anything,      only : bytes_to_anything
+!!      use M_anything,      only : anything_to_bytes
+!!      implicit none
+!!      character(len=1),allocatable :: chars(:)
+!!      integer :: ints(10)
+!!      integer :: i
+!!         chars=anything_to_bytes([(i*i,i=1,size(ints))])
+!!         write(*,'(/,4(1x,z2.2))')chars
+!!         call bytes_to_anything(chars,ints)
+!!         write(*,*)ints
+!!      end program demo_bytes_to_anything
+!!
 !!   Expected output
 !!
 !!##AUTHOR
@@ -271,7 +288,7 @@ contains
 !!    MIT
 subroutine bytes_to_anything(chars,anything)
    character(len=1),allocatable :: chars(:)
-   class(*) :: anything
+   class(*) :: anything(:)
    select type(anything)
     type is (character(len=*));     anything=transfer(chars,anything)
     type is (complex);              anything=transfer(chars,anything)
@@ -616,7 +633,7 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
    Type is (real(kind=real128))
-      !IMPURE! if(valuein.gt.big)then
+      !IMPURE! if(valuein > big)then
       !IMPURE!    write(error_unit,'(*(g0,1x))')'*anyscalar_to_double* value too large ',valuein
       !IMPURE! endif
       d_out=dble(valuein)
@@ -708,12 +725,12 @@ real,parameter      :: big=huge(0.0)
    type is (integer(kind=int64));  r_out=real(valuein)
    type is (real(kind=real32));    r_out=real(valuein)
    type is (real(kind=real64))
-      !!if(valuein.gt.big)then
+      !!if(valuein > big)then
       !!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
       !!endif
       r_out=real(valuein)
    type is (real(kind=real128))
-      !!if(valuein.gt.big)then
+      !!if(valuein > big)then
       !!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
       !!endif
       r_out=real(valuein)
@@ -816,7 +833,7 @@ class(*),intent(in)    :: valuein
    type is (logical);              ii38=merge(0_int64,1_int64,valuein)
    type is (character(len=*))   ;
       read(valuein,*,iostat=ios,iomsg=message)ii38
-      if(ios.ne.0)then
+      if(ios /= 0)then
          write(error_unit,*)'*anyscalar_to_int64* ERROR: '//trim(message)
          stop 2
       endif
@@ -825,6 +842,168 @@ class(*),intent(in)    :: valuein
       stop 3
    end select
 end function anyscalar_to_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    anyscalar_to_string(3f) - [M_anything] converts up to twenty standard scalar type values to a string
+!!    (LICENSE:MIT)
+!!
+!!##SYNOPSIS
+!!
+!!    Syntax:
+!!
+!!      pure function anyscalar_to_string(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+!!      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
+!!      class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!      class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+!!      character(len=*),intent(in),optional :: sep
+!!      character,len=(:),allocatable :: anyscalar_to_string
+!!
+!!##DESCRIPTION
+!!    anyscalar_to_string(3f) builds a space-separated string from up to twenty scalar values.
+!!
+!!##OPTIONS
+!!    g[0-9a-j]   optional value to print the value of after the message. May
+!!                be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
+!!                COMPLEX, or CHARACTER.
+!!
+!!                Optionally, all the generic values can be
+!!                single-dimensioned arrays. Currently, mixing scalar
+!!                arguments and array arguments is not supported.
+!!
+!!    sep         separator string used between values. Defaults to a space.
+!!
+!!##RETURNS
+!!    anyscalar_to_string     a representation of the input as a string
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!    program demo_anyscalar_to_string
+!!    use M_anything, only : anyscalar_to_string
+!!    implicit none
+!!    character(len=:),allocatable :: pr
+!!    character(len=:),allocatable :: frmt
+!!    integer                      :: biggest
+!!
+!!    pr=anyscalar_to_string('HUGE(3f) integers',huge(0),&
+!!    &'and real',huge(0.0),'and double',huge(0.0d0))
+!!    write(*,'(a)')pr
+!!    pr=anyscalar_to_string('real            :',huge(0.0),0.0,12345.6789,tiny(0.0) )
+!!    write(*,'(a)')pr
+!!    pr=anyscalar_to_string('doubleprecision :',huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
+!!    write(*,'(a)')pr
+!!    pr=anyscalar_to_string('complex         :',cmplx(huge(0.0),tiny(0.0)) )
+!!    write(*,'(a)')pr
+!!
+!!    ! create a format on the fly
+!!    biggest=huge(0)
+!!    frmt=anyscalar_to_string('(*(i',int(log10(real(biggest))),':,1x))',sep='')
+!!    write(*,*)'format=',frmt
+!!
+!!    ! although it will often work, using anyscalar_to_string(3f)
+!!    ! in an I/O statement is not recommended
+!!    ! because if an error occurs anyscalar_to_string(3f) will try
+!!    ! to write while part of an I/O statement
+!!    ! which not all compilers can handle and is currently non-standard
+!!    write(*,*)anyscalar_to_string('program will now stop')
+!!
+!!    end program demo_anyscalar_to_string
+!!
+!!  Output
+!!
+!!    HUGE(3f) integers 2147483647 and real 3.40282347E+38
+!!    and double 1.7976931348623157E+308
+!!    real            : 3.40282347E+38 0.00000000 12345.6787 1.17549435E-38
+!!    doubleprecision : 1.7976931348623157E+308 0.0000000000000000
+!!    12345.678900000001 2.2250738585072014E-308
+!!    complex         : (3.40282347E+38,1.17549435E-38)
+!!     format=(*(i9:,1x))
+!!     program will now stop
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    MIT
+pure function anyscalar_to_string(gen0, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9, &
+                                & gena, genb, genc, gend, gene, genf, geng, genh, geni, genj, &
+                                & sep)
+implicit none
+
+! ident_7="@(#) M_anything anyscalar_to_string(3fp) writes a message to a string composed of any standard scalar types"
+
+class(*),intent(in),optional  :: gen0, gen1, gen2, gen3, gen4
+class(*),intent(in),optional  :: gen5, gen6, gen7, gen8, gen9
+class(*),intent(in),optional  :: gena, genb, genc, gend, gene
+class(*),intent(in),optional  :: genf, geng, genh, geni, genj
+character(len=:),allocatable  :: anyscalar_to_string
+character(len=4096)           :: line
+integer                       :: istart
+integer                       :: increment
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
+   if(present(sep))then
+      increment=len(sep)+1
+      sep_local=sep
+   else
+      increment=2
+      sep_local=' '
+   endif
+
+   istart=1
+   line=''
+   if(present(gen0))call print_generic(gen0,line,istart,increment,sep_local)
+   if(present(gen1))call print_generic(gen1,line,istart,increment,sep_local)
+   if(present(gen2))call print_generic(gen2,line,istart,increment,sep_local)
+   if(present(gen3))call print_generic(gen3,line,istart,increment,sep_local)
+   if(present(gen4))call print_generic(gen4,line,istart,increment,sep_local)
+   if(present(gen5))call print_generic(gen5,line,istart,increment,sep_local)
+   if(present(gen6))call print_generic(gen6,line,istart,increment,sep_local)
+   if(present(gen7))call print_generic(gen7,line,istart,increment,sep_local)
+   if(present(gen8))call print_generic(gen8,line,istart,increment,sep_local)
+   if(present(gen9))call print_generic(gen9,line,istart,increment,sep_local)
+   if(present(gena))call print_generic(gena,line,istart,increment,sep_local)
+   if(present(genb))call print_generic(genb,line,istart,increment,sep_local)
+   if(present(genc))call print_generic(genc,line,istart,increment,sep_local)
+   if(present(gend))call print_generic(gend,line,istart,increment,sep_local)
+   if(present(gene))call print_generic(gene,line,istart,increment,sep_local)
+   if(present(genf))call print_generic(genf,line,istart,increment,sep_local)
+   if(present(geng))call print_generic(geng,line,istart,increment,sep_local)
+   if(present(genh))call print_generic(genh,line,istart,increment,sep_local)
+   if(present(geni))call print_generic(geni,line,istart,increment,sep_local)
+   if(present(genj))call print_generic(genj,line,istart,increment,sep_local)
+   anyscalar_to_string=trim(line)
+contains
+!===================================================================================================================================
+pure subroutine print_generic(generic,line,istart,increment,sep)
+!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+class(*),intent(in) :: generic
+character(len=4096),intent(inout) :: line
+integer,intent(inout) :: istart
+integer,intent(in) :: increment
+character(len=*),intent(in) :: sep
+   select type(generic)
+      type is (integer(kind=int8));     write(line(istart:),'(i0)') generic
+      type is (integer(kind=int16));    write(line(istart:),'(i0)') generic
+      type is (integer(kind=int32));    write(line(istart:),'(i0)') generic
+      type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
+      type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
+      type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
+      type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+      type is (logical);                write(line(istart:),'(l1)') generic
+      type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
+      type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
+   end select
+   istart=len_trim(line)+increment
+   line=trim(line)//sep
+end subroutine print_generic
+
+end function anyscalar_to_string
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -886,7 +1065,7 @@ end function anyscalar_to_int64
 impure function anyinteger_to_string(int) result(out)
 use,intrinsic :: iso_fortran_env, only : int64
 
-! ident_7="@(#) M_anything anyinteger_to_string(3f) function that converts an integer value to a character string"
+! ident_8="@(#) M_anything anyinteger_to_string(3f) function that converts an integer value to a character string"
 
 class(*),intent(in)          :: int
 character(len=:),allocatable :: out
@@ -979,7 +1158,7 @@ end function anyinteger_to_string
 function get_type_arr(anything) result(chars)
 implicit none
 
-! ident_8="@(#) M_anything get_type_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_9="@(#) M_anything get_type_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in) :: anything(:) ! anything(..)
 character(len=20)   :: chars
@@ -1005,7 +1184,7 @@ end function get_type_arr
 elemental impure function get_type_scalar(anything) result(chars)
 implicit none
 
-! ident_9="@(#) M_anything get_type_scalar(3fp) anything to bytes (an array of CHARACTER(LEN=1) variables)"
+! ident_10="@(#) M_anything get_type_scalar(3fp) anything to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in) :: anything
 character(len=20)   :: chars

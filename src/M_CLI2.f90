@@ -53,7 +53,7 @@
 !!        else
 !!           write(*,*)atan2(x=x,y=y)
 !!        endif
-!!        if(size(filenames).gt.0)then
+!!        if(size(filenames) > 0)then
 !!           write(*,'(g0)')'filenames:'
 !!           write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
 !!        endif
@@ -126,7 +126,7 @@
 !!     !
 !!     ! unnamed strings
 !!     !
-!!     if(size(filenames).gt.0)then
+!!     if(size(filenames) > 0)then
 !!        write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
 !!     endif
 !!     !
@@ -345,7 +345,7 @@ contains
 !!         write (*,*)x,y,z
 !!         ! the optional unnamed values on the command line are
 !!         ! accumulated in the character array "UNNAMED"
-!!         if(size(unnamed).gt.0)then
+!!         if(size(unnamed) > 0)then
 !!            write (*,'(a)')'files:'
 !!            write (*,'(i6.6,3a)') (i,'[',unnamed(i),']',i=1,size(unnamed))
 !!         endif
@@ -358,31 +358,31 @@ character(len=:),allocatable         :: line
 integer                              :: i
 integer                              :: istart
 integer                              :: iback
-   if(get('usage').eq.'T')then
+   if(get('usage') == 'T')then
       call print_dictionary('USAGE:')
       !x!call default_help()
       call mystop(32)
       return
    endif
    if(present(help_text))then
-      if(get('help').eq.'T')then
+      if(get('help') == 'T')then
          do i=1,size(help_text)
             call journal('sc',help_text(i))
          enddo
          call mystop(1,'displayed help text')
          return
       endif
-   elseif(get('help').eq.'T')then
+   elseif(get('help') == 'T')then
       call default_help()
       call mystop(2,'displayed default help text')
       return
    endif
    if(present(version_text))then
-      if(get('version').eq.'T')then
+      if(get('version') == 'T')then
          istart=1
          iback=0
-         if(size(version_text).gt.0)then
-            if(index(version_text(1),'@'//'(#)').eq.1)then ! allow for what(1) syntax
+         if(size(version_text) > 0)then
+            if(index(version_text(1),'@'//'(#)') == 1)then ! allow for what(1) syntax
                istart=5
                iback=1
             endif
@@ -395,7 +395,7 @@ integer                              :: iback
          call mystop(3,'displayed version text')
          return
       endif
-   elseif(get('version').eq.'T')then
+   elseif(get('version') == 'T')then
 
       if(G_QUIET)then
          G_STOP_MESSAGE = 'no version text'
@@ -614,7 +614,7 @@ end subroutine check_commandline
 !!     write(*,*)'l=',l
 !!     write(*,*)'L=',lbig
 !!     ! UNNAMED VALUES
-!!     if(size(filenames).gt.0)then
+!!     if(size(filenames) > 0)then
 !!        write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
 !!     endif
 !!     end program demo_set_args
@@ -862,8 +862,8 @@ end subroutine check_commandline
 !!
 !!    The intel Fortran compiler now calls the response files "indirect
 !!    files" and does not add the implied suffix ".rsp" to the files
-!!    anymore. It also allows the @NAME syntax anywhere on the command
-!!    line, not just at the beginning. --  20201212
+!!    anymore. It also allows the @NAME syntax anywhere on the command line,
+!!    not just at the beginning. -- 20201212
 !!
 !!##AUTHOR
 !!      John S. Urban, 2019
@@ -914,7 +914,7 @@ integer                                           :: ibig
    call prototype_and_cmd_args_to_nlist(hold,string)
    if(allocated(G_RESPONSE_IGNORED))then
       if(debug_m_cli2)write(*,gen)'<DEBUG>SET_ARGS:G_RESPONSE_IGNORED:',G_RESPONSE_IGNORED
-      if(size(unnamed).ne.0)write(*,*)'LOGIC ERROR'
+      if(size(unnamed) /= 0)write(*,*)'LOGIC ERROR'
       call split(G_RESPONSE_IGNORED,unnamed)
    endif
 
@@ -1090,12 +1090,12 @@ integer                       :: j
    ! look for @NAME if CLI_RESPONSE_FILE=.TRUE. AND LOAD THEM
    do i = 1, command_argument_count()
       call get_command_argument(i, cmdarg)
-      if(adjustl(cmdarg(1:1)) .eq. '@')then
+      if(adjustl(cmdarg(1:1))  ==  '@')then
          call get_prototype(cmdarg,prototype)
          call split(prototype,array)
          ! assume that if using subcommands first word not starting with dash is the subcommand
          do j=1,size(array)
-            if(adjustl(array(j)(1:1)) .ne. '-')then
+            if(adjustl(array(j)(1:1))  /=  '-')then
             G_subcommand=trim(array(j))
             sub=G_subcommand
             exit
@@ -1104,15 +1104,15 @@ integer                       :: j
       endif
    enddo
 
-   if(G_subcommand.ne.'')then
+   if(G_subcommand /= '')then
       sub=G_subcommand
-   elseif(size(unnamed).ne.0)then
+   elseif(size(unnamed) /= 0)then
       sub=unnamed(1)
    else
       cmdarg(:) = ''
       do i = 1, command_argument_count()
          call get_command_argument(i, cmdarg)
-         if(adjustl(cmdarg(1:1)) .ne. '-')then
+         if(adjustl(cmdarg(1:1))  /=  '-')then
             sub=trim(cmdarg)
            exit
         endif
@@ -1236,7 +1236,7 @@ integer                           :: place
 
       if((currnt=="-" .and. prev==" " .and. delmt == "off" .and. index("0123456789.",forwrd) == 0).or.ipoint > islen)then
          ! beginning of a keyword
-         if(forwrd.eq.'-')then                      ! change --var to -var so "long" syntax is supported
+         if(forwrd == '-')then                      ! change --var to -var so "long" syntax is supported
             !x!dummy(ifwd:ifwd)='_'
             ipoint=ipoint+1                         ! ignore second - instead (was changing it to _)
             G_keyword_single_letter=.false.         ! flag this is a long keyword
@@ -1256,7 +1256,7 @@ integer                           :: place
                   exit TESTIT
                endif
             enddo TESTIT
-            if(keyword.ne.' ')then
+            if(keyword /= ' ')then
                call update(keyword,value)            ! store name and its value
             elseif( G_remaining_option_allowed)then  ! meaning "--" has been encountered
                call update('_args_',trim(value))
@@ -1267,11 +1267,11 @@ integer                           :: place
             endif
          else
             call locate_key(keyword,place)
-            if(keyword.ne.' '.and.place.lt.0)then
+            if(keyword /= ' '.and.place < 0)then
                call update(keyword,'F')           ! store name and null value (first pass)
-            elseif(keyword.ne.' ')then
+            elseif(keyword /= ' ')then
                call update(keyword,' ')           ! store name and null value (second pass)
-            elseif(.not.G_keyword_single_letter.and.ipoint-2.eq.islen) then ! -- at end of line
+            elseif(.not.G_keyword_single_letter.and.ipoint-2 == islen) then ! -- at end of line
                G_remaining_option_allowed=.true.  ! meaning for "--" is that everything on commandline goes into G_remaining
             endif
          endif
@@ -1290,7 +1290,7 @@ integer                           :: place
          elseif(currnt  ==  """".and.itype  ==  VAL)then
             ! second of a double quote, put quote in
             if(prev  ==  """")then
-               if(itype.eq.VAL)then
+               if(itype == VAL)then
                   value=value//currnt
                else
                   keyword=keyword//currnt
@@ -1303,7 +1303,7 @@ integer                           :: place
                delmt="on"
             endif
             if(prev /= """")then  ! leave quotes where found them
-               if(itype.eq.VAL)then
+               if(itype == VAL)then
                   value=value//currnt
                else
                   keyword=keyword//currnt
@@ -1311,7 +1311,7 @@ integer                           :: place
                ipnt(itype)=ipnt(itype)+1
             endif
          else     ! add character to current keyword or value
-            if(itype.eq.VAL)then
+            if(itype == VAL)then
                value=value//currnt
             else
                keyword=keyword//currnt
@@ -1415,7 +1415,7 @@ character(len=*),intent(in) :: key
 logical                     :: specified
 integer                     :: place
    call locate_key(key,place)                   ! find where string is or should be
-   if(place.lt.1)then
+   if(place < 1)then
       specified=.false.
    else
       specified=present_in(place)
@@ -1467,8 +1467,8 @@ logical                               :: set_mandatory
    ! check for :: on end
    isize=size(long_short)
 
-   if(isize.gt.0)then                     ! very special-purpose syntax where if ends in :: next field is a value even
-      if(long_short(isize).eq.'')then     ! if it starts with a dash, for --flags option on fpm(1).
+   if(isize > 0)then                     ! very special-purpose syntax where if ends in :: next field is a value even
+      if(long_short(isize) == '')then     ! if it starts with a dash, for --flags option on fpm(1).
          set_mandatory=.true.
          long_short=long_short(:isize-1)
       endif
@@ -1480,10 +1480,10 @@ logical                               :: set_mandatory
       short=''
    case(1)
       long=trim(long_short(1))
-      if(len_trim(long).eq.1)then
+      if(len_trim(long) == 1)then
          !x!ii= findloc (shorts, long, dim=1) ! if parsing arguments on line and a short keyword look up long value
-         ii=maxloc([0,merge(1, 0, shorts.eq.long)],dim=1)
-         if(ii.gt.1)then
+         ii=maxloc([0,merge(1, 0, shorts == long)],dim=1)
+         if(ii > 1)then
             long=keywords(ii-1)
          endif
          short=long
@@ -1504,7 +1504,7 @@ logical                               :: set_mandatory
       val_local=val
       iilen=len_trim(val_local)
       call locate_key(long,place)                  ! find where string is or should be
-      if(place.lt.1)then                                ! if string was not found insert it
+      if(place < 1)then                                ! if string was not found insert it
          call insert(keywords,long,iabs(place))
          call insert(values,val_local,iabs(place))
          call insert(counts,iilen,iabs(place))
@@ -1514,7 +1514,7 @@ logical                               :: set_mandatory
       else
          if(present_in(place))then                      ! if multiple keywords append values with space between them
             if(G_append)then
-               if(values(place)(1:1).eq.'"')then
+               if(values(place)(1:1) == '"')then
                ! UNDESIRABLE: will ignore previous blank entries
                   val_local='"'//trim(unquote(values(place)))//' '//trim(unquote(val_local))//'"'
                else
@@ -1529,7 +1529,7 @@ logical                               :: set_mandatory
       endif
    else                                                 ! if no value is present remove the keyword and related values
       call locate_key(long,place)                       ! check name as long and short
-      if(place.gt.0)then
+      if(place > 0)then
          call remove(keywords,place)
          call remove(values,place)
          call remove(counts,place)
@@ -1603,7 +1603,7 @@ character(len=:),allocatable  :: valout
 integer                       :: place
    ! find where string is or should be
    call locate_key(key,place)
-   if(place.lt.1)then
+   if(place < 1)then
       valout=''
    else
       valout=values(place)(:counts(place))
@@ -1665,7 +1665,7 @@ end function get
 !!         call get_args('x',x,'y',y,'z',z)
 !!            something=sqrt(x**2+y**2+z**2)
 !!            write (*,*)something,x,y,z
-!!            if(size(unnamed).gt.0)then
+!!            if(size(unnamed) > 0)then
 !!               write (*,'(a)')'files:'
 !!               write (*,'(i6.6,3a)')(i,'[',unnamed(i),']',i=1,size(unnamed))
 !!            endif
@@ -1700,31 +1700,31 @@ integer                               :: iused
    G_remaining_option_allowed=.false.
    G_remaining_on=.false.
    G_remaining=''
-   if(prototype.ne.'')then
+   if(prototype /= '')then
       call prototype_to_dictionary(prototype)       ! build dictionary from prototype
 
       ! if short keywords not used by user allow them for standard options
 
       call locate_key('h',iused)
-      if(iused.le.0)then
+      if(iused <= 0)then
          call update('help')
          call update('help:h','F')
       endif
 
       call locate_key('v',iused)
-      if(iused.le.0)then
+      if(iused <= 0)then
          call update('version')
          call update('version:v','F')
       endif
 
       call locate_key('V',iused)
-      if(iused.le.0)then
+      if(iused <= 0)then
          call update('verbose')
          call update('verbose:V','F')
       endif
 
       call locate_key('u',iused)
-      if(iused.le.0)then
+      if(iused <= 0)then
          call update('usage')
          call update('usage:u','F')
       endif
@@ -1740,9 +1740,9 @@ integer                               :: iused
       call cmd_args_to_dictionary()
    endif
 
-   if(len(G_remaining).gt.1)then                    ! if -- was in prototype then after -- on input return rest in this string
+   if(len(G_remaining) > 1)then                    ! if -- was in prototype then after -- on input return rest in this string
       itrim=len(G_remaining)
-      if(G_remaining(itrim:itrim).eq.' ')then       ! was adding a space at end as building it, but do not want to remove blanks
+      if(G_remaining(itrim:itrim) == ' ')then       ! was adding a space at end as building it, but do not want to remove blanks
          G_remaining=G_remaining(:itrim-1)
       endif
       remaining=G_remaining
@@ -1758,7 +1758,7 @@ character(len=:),allocatable :: prototype
 logical :: hold
    if(debug_m_cli2)write(*,gen)'<DEBUG>EXPAND_RESPONSE:START:NAME=',name
    call get_prototype(name,prototype)
-   if(prototype.ne.'')then
+   if(prototype /= '')then
       hold=G_append
       G_append=.false.
       if(debug_m_cli2)write(*,gen)'<DEBUG>EXPAND_RESPONSE:CALL PROTOTYPE_TO_DICTIONARY:PROTOTYPE=',prototype
@@ -1790,28 +1790,28 @@ integer                                  :: lines_processed
 
    search_for=''
    ! look for NAME.rsp and see if there is an @OS  section in it and position to it and read
-   if(os.ne.'@')then
+   if(os /= '@')then
       search_for=os
       call find_and_read_response_file(plain_name)
-      if(lines_processed.ne.0)return
+      if(lines_processed /= 0)return
    endif
 
    ! look for NAME.rsp and see if there is anything before an OS-specific section
    search_for=''
    call find_and_read_response_file(plain_name)
-   if(lines_processed.ne.0)return
+   if(lines_processed /= 0)return
 
    ! look for ARG0.rsp  with @OS@NAME  section in it and position to it
-   if(os.ne.'@')then
+   if(os /= '@')then
       search_for=os//name
       call find_and_read_response_file(basename(get_name(),suffix=.true.))
-      if(lines_processed.ne.0)return
+      if(lines_processed /= 0)return
    endif
 
    ! look for ARG0.rsp  with a section called @NAME in it and position to it
    search_for=name
    call find_and_read_response_file(basename(get_name(),suffix=.true.))
-   if(lines_processed.ne.0)return
+   if(lines_processed /= 0)return
 
    write(*,gen)'<ERROR> response name ['//trim(name)//'] not found'
    stop 1
@@ -1828,10 +1828,10 @@ integer                      :: ios
    prototype=''
    ! look for NAME.rsp
    ! assume if have / or \ a full filename was supplied to support ifort(1)
-   if((index(rname,'/').ne.0.or.index(rname,'\').ne.0) .and. len(rname).gt.1 )then
+   if((index(rname,'/') /= 0.or.index(rname,'\') /= 0) .and. len(rname) > 1 )then
       filename=rname
       lun=fileopen(filename,message)
-      if(lun.ne.-1)then
+      if(lun /= -1)then
          call process_response()
          close(unit=lun,iostat=ios)
       endif
@@ -1849,14 +1849,14 @@ integer                      :: ios
    do i=1,size(paths)
       testpath=join_path(paths(i),filename)
       lun=fileopen(testpath,message)
-      if(lun.ne.-1)then
+      if(lun /= -1)then
          if(debug_m_cli2)write(*,gen)'<DEBUG>FIND_AND_READ_RESPONSE_FILE:SEARCH_FOR=',search_for
-         if(search_for.ne.'') call position_response() ! set to end of file or where string was found
+         if(search_for /= '') call position_response() ! set to end of file or where string was found
          call process_response()
          if(debug_m_cli2)write(*,gen)'<DEBUG>FIND_AND_READ_RESPONSE_FILE:LINES_PROCESSED=',LINES_PROCESSED
          close(unit=lun,iostat=ios)
          if(debug_m_cli2)write(*,gen)'<DEBUG>FIND_AND_READ_RESPONSE_FILE:CLOSE:LUN=',LUN,' IOSTAT=',IOS
-         if(lines_processed.ne.0)exit
+         if(lines_processed /= 0)exit
       endif
    enddo
 
@@ -1871,12 +1871,12 @@ integer :: ios
          if(debug_m_cli2)write(*,gen)'<DEBUG>POSITION_RESPONSE:EOF'
          backspace(lun,iostat=ios)
          exit INFINITE
-      elseif(ios.ne.0)then
+      elseif(ios /= 0)then
          write(*,gen)'<ERROR>*position_response*:'//trim(message)
          exit INFINITE
       endif
       line=adjustl(line)
-      if(line.eq.search_for)return
+      if(line == search_for)return
    enddo INFINITE
 end subroutine position_response
 !===================================================================================================================================
@@ -1890,16 +1890,16 @@ character(len=:),allocatable :: temp
       if(is_iostat_end(ios))then
          backspace(lun,iostat=ios)
          exit INFINITE
-      elseif(ios.ne.0)then
+      elseif(ios /= 0)then
          write(*,gen)'<ERROR>*process_response*:'//trim(message)
          exit INFINITE
       endif
       line=trim(adjustl(line))
       temp=line
-      if(index(temp//' ','#').eq.1)cycle
-      if(temp.ne.'')then
+      if(index(temp//' ','#') == 1)cycle
+      if(temp /= '')then
 
-         if(index(temp,'@').eq.1.and.lines_processed.ne.0)exit INFINITE
+         if(index(temp,'@') == 1.and.lines_processed /= 0)exit INFINITE
 
          call split(temp,array) ! get first word
          itrim=len_trim(array(1))+2
@@ -1923,7 +1923,7 @@ character(len=:),allocatable :: temp
             write(*,'(a)')trim(temp)
             stop
          case default
-            if(array(1)(1:1).eq.'-')then
+            if(array(1)(1:1) == '-')then
                ! assume these are simply options to support ifort(1)
                ! if starts with a single dash must assume a single argument
                ! and rest is value to support -Dname and -Ifile option
@@ -1931,14 +1931,14 @@ character(len=:),allocatable :: temp
                ! does not work. Just a ifort(1) test at this point, so do not document
                if(G_options_only)exit PROCESS
                padded=trim(line)//'  '
-               if(padded(2:2).eq.'-')then
+               if(padded(2:2) == '-')then
                   prototype=prototype//' '//trim(line)
                else
                   prototype=prototype//' '//padded(1:2)//' '//trim(padded(3:))
                endif
                lines_processed= lines_processed+1
             else
-               if(array(1)(1:1).eq.'@')cycle INFINITE !skip adjacent @ lines from first
+               if(array(1)(1:1) == '@')cycle INFINITE !skip adjacent @ lines from first
                lines_processed= lines_processed+1
                write(*,'(*(g0))')'unknown response keyword [',array(1),'] with options of [',trim(temp),']'
             endif
@@ -1963,7 +1963,7 @@ character(len=256)                       :: message_local
     & form='formatted',access='sequential',action='read',&
     & position='rewind',status='old',iostat=ios,iomsg=message_local)
 
-   if(ios.ne.0)then
+   if(ios /= 0)then
       lun=-1
       if(present(message))then
          message=trim(message_local)
@@ -1985,7 +1985,7 @@ integer                              :: stat
 integer                              :: length
    ! get length required to hold value
    length=0
-   if(NAME.ne.'')then
+   if(NAME /= '')then
       call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
       select case (stat)
       case (1)
@@ -2000,12 +2000,12 @@ integer                              :: length
           allocate(character(len=max(howbig,1)) :: VALUE)
           ! get value
          call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
-          if(stat.ne.0)VALUE=''
+          if(stat /= 0)VALUE=''
       end select
    else
       VALUE=''
    endif
-   if(VALUE.eq.''.and.present(DEFAULT))VALUE=DEFAULT
+   if(VALUE == ''.and.present(DEFAULT))VALUE=DEFAULT
 end function get_env
 !===================================================================================================================================
 function join_path(a1,a2,a3,a4,a5) result(path)
@@ -2017,7 +2017,7 @@ function join_path(a1,a2,a3,a4,a5) result(path)
    character(len=1)                       :: filesep
 
    filesep = separator()
-   if(a1.ne.'')then
+   if(a1 /= '')then
       path = trim(a1) // filesep // trim(a2)
    else
       path = trim(a2)
@@ -2042,11 +2042,11 @@ character(len=:),allocatable :: name
    name=''
    long_name=''
    call get_command_argument(0,length=arg0_length,status=istat)
-   if(istat.eq.0)then
+   if(istat == 0)then
       if(allocated(arg0))deallocate(arg0)
       allocate(character(len=arg0_length) :: arg0)
       call get_command_argument(0,arg0,status=istat)
-      if(istat.eq.0)then
+      if(istat == 0)then
          inquire(file=arg0,iostat=istat,name=long_name)
          name=trim(long_name)
       else
@@ -2073,14 +2073,14 @@ logical :: with_suffix
 
    if (with_suffix) then
       call split(path,file_parts,delimiters='\/')
-      if(size(file_parts).gt.0)then
+      if(size(file_parts) > 0)then
          base = trim(file_parts(size(file_parts)))
       else
          base = ''
       endif
    else
       call split(path,file_parts,delimiters='\/.')
-      if(size(file_parts).ge.2)then
+      if(size(file_parts) >= 2)then
          base = trim(file_parts(size(file_parts)-1))
       else
          base = ''
@@ -2105,18 +2105,18 @@ character(len=:),allocatable :: fname
    allocate(character(len=arg0_length) :: arg0)
    call get_command_argument(0,arg0,status=istat)
    ! check argument name
-   if(index(arg0,'\').ne.0)then
+   if(index(arg0,'\') /= 0)then
       sep='\'
-   elseif(index(arg0,'/').ne.0)then
+   elseif(index(arg0,'/') /= 0)then
       sep='/'
    else
       ! try name returned by INQUIRE(3f)
       existing=.false.
       name=' '
       inquire(file=arg0,iostat=istat,exist=existing,name=name)
-      if(index(name,'\').ne.0)then
+      if(index(name,'\') /= 0)then
          sep='\'
-      elseif(index(name,'/').ne.0)then
+      elseif(index(name,'/') /= 0)then
          sep='/'
       else
          ! well, try some common syntax and assume in current directory
@@ -2184,11 +2184,11 @@ character(len=4096)          :: name
 character(len=:),allocatable :: envnames(:)
 
     ! NOTE:  A parallel code might theoretically use multiple OS
-    !x!FORT BUG:if(sep_cache.ne.' ')then  ! use cached value.
+    !x!FORT BUG:if(sep_cache /= ' ')then  ! use cached value.
     !x!FORT BUG:    sep=sep_cache
     !x!FORT BUG:    return
     !x!FORT BUG:endif
-    if(isep.ne.-1)then  ! use cached value.
+    if(isep /= -1)then  ! use cached value.
         sep=char(isep)
         return
     endif
@@ -2197,7 +2197,7 @@ character(len=:),allocatable :: envnames(:)
     ! most MSWindows environments see to work with backslash even when
     ! using POSIX filenames to do not rely on '\.'.
     inquire(file='/.',exist=existing,iostat=ios,name=name)
-    if(existing.and.ios.eq.0)then
+    if(existing.and.ios == 0)then
         sep='/'
         exit FOUND
     endif
@@ -2208,10 +2208,10 @@ character(len=:),allocatable :: envnames(:)
     ! POSIX filenames in the environment.
     envnames=[character(len=10) :: 'PATH', 'HOME']
     do i=1,size(envnames)
-       if(index(get_env(envnames(i)),'\').ne.0)then
+       if(index(get_env(envnames(i)),'\') /= 0)then
           sep='\'
           exit FOUND
-       elseif(index(get_env(envnames(i)),'/').ne.0)then
+       elseif(index(get_env(envnames(i)),'/') /= 0)then
           sep='/'
           exit FOUND
        endif
@@ -2249,12 +2249,12 @@ logical                      :: next_mandatory
    i=1
    GET_ARGS: do while (get_next_argument()) ! insert and replace entries
 
-      if( current_argument .eq. '-' .and. nomore .eqv. .true. )then   ! sort of
-      elseif( current_argument .eq. '-')then                          ! sort of
+      if( current_argument  ==  '-' .and. nomore .eqv. .true. )then   ! sort of
+      elseif( current_argument  ==  '-')then                          ! sort of
          current_argument='"stdin"'
       endif
-      if( current_argument .eq. '--' .and. nomore .eqv. .true. )then  ! -- was already encountered
-      elseif( current_argument .eq. '--' )then                        ! everything after this goes into the unnamed array
+      if( current_argument  ==  '--' .and. nomore .eqv. .true. )then  ! -- was already encountered
+      elseif( current_argument  ==  '--' )then                        ! everything after this goes into the unnamed array
          nomore=.true.
          pointer=0
          if(G_remaining_option_allowed)then
@@ -2268,13 +2268,13 @@ logical                      :: next_mandatory
 
       !x!guess_if_value=maybe_value()
 
-      if(.not.next_mandatory.and..not.nomore.and.current_argument_padded(1:2).eq.'--')then    ! beginning of long word
+      if(.not.next_mandatory.and..not.nomore.and.current_argument_padded(1:2) == '--')then    ! beginning of long word
          G_keyword_single_letter=.false.
-         if(lastkeyword.ne.'')then
+         if(lastkeyword /= '')then
             call ifnull()
          endif
          call locate_key(current_argument_padded(3:),pointer)
-         if(pointer.le.0)then
+         if(pointer <= 0)then
             if(G_QUIET)then
                lastkeyword="UNKNOWN"
                pointer=0
@@ -2288,21 +2288,21 @@ logical                      :: next_mandatory
          next_mandatory=mandatory(pointer)
       elseif(.not.next_mandatory &
       & .and..not.nomore &
-      & .and.current_argument_padded(1:1).eq.'-' &
-      & .and.index("0123456789.",dummy(2:2)).eq.0)then
+      & .and.current_argument_padded(1:1) == '-' &
+      & .and.index("0123456789.",dummy(2:2)) == 0)then
       ! short word
          G_keyword_single_letter=.true.
-         if(lastkeyword.ne.'')then
+         if(lastkeyword /= '')then
             call ifnull()
          endif
          call locate_key(current_argument_padded(2:),pointer)
-         if(pointer.le.0)then
+         if(pointer <= 0)then
             jj=len(current_argument)
-            if(G_STRICT.and.jj.gt.2)then  ! in strict mode this might be multiple single-character values
+            if(G_STRICT.and.jj > 2)then  ! in strict mode this might be multiple single-character values
               do kk=2,jj
                  letter=current_argument_padded(kk:kk)
                  call locate_key(letter,pointer)
-                 if(pointer.gt.0)then
+                 if(pointer > 0)then
                     call update(keywords(pointer),'T')
                  else
                     call print_dictionary('UNKNOWN COMPOUND SHORT KEYWORD:'//letter//' in '//current_argument)
@@ -2329,11 +2329,11 @@ logical                      :: next_mandatory
          endif
          lastkeyword=trim(current_argument_padded(2:))
          next_mandatory=mandatory(pointer)
-      elseif(pointer.eq.0)then                                       ! unnamed arguments
+      elseif(pointer == 0)then                                       ! unnamed arguments
          if(G_remaining_on)then
-            if(len(current_argument).lt.1)then
+            if(len(current_argument) < 1)then
                G_remaining=G_remaining//'"" '
-            elseif(current_argument(1:1).eq.'-')then
+            elseif(current_argument(1:1) == '-')then
                !get fancier to handle spaces and =!G_remaining=G_remaining//current_argument//' '
                G_remaining=G_remaining//'"'//current_argument//'" '
             else
@@ -2343,7 +2343,7 @@ logical                      :: next_mandatory
             args=[character(len=imax) :: args,current_argument]
          else
             imax=max(len(unnamed),len(current_argument))
-            if(index(current_argument//' ','@').eq.1.and.G_response)then
+            if(index(current_argument//' ','@') == 1.and.G_response)then
                if(debug_m_cli2)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:1:CALL EXPAND_RESPONSE:CURRENT_ARGUMENT=',current_argument
                call expand_response(current_argument)
             else
@@ -2352,15 +2352,15 @@ logical                      :: next_mandatory
          endif
       else
          oldvalue=get(keywords(pointer))//' '
-         if(oldvalue(1:1).eq.'"')then
+         if(oldvalue(1:1) == '"')then
             current_argument=quote(current_argument(:ilength))
          endif
-         if(upper(oldvalue).eq.'F'.or.upper(oldvalue).eq.'T')then  ! assume boolean parameter
-            if(current_argument.ne.' ')then
+         if(upper(oldvalue) == 'F'.or.upper(oldvalue) == 'T')then  ! assume boolean parameter
+            if(current_argument /= ' ')then
                if(G_remaining_on)then
-                  if(len(current_argument).lt.1)then
+                  if(len(current_argument) < 1)then
                         G_remaining=G_remaining//'"" '
-                  elseif(current_argument(1:1).eq.'-')then
+                  elseif(current_argument(1:1) == '-')then
                        !get fancier to handle spaces and =!G_remaining=G_remaining//current_argument//' '
                         G_remaining=G_remaining//'"'//current_argument//'" '
                   else
@@ -2370,7 +2370,7 @@ logical                      :: next_mandatory
                   args=[character(len=imax) :: args,current_argument]
                else
                   imax=max(len(unnamed),len(current_argument))
-                  if(index(current_argument//' ','@').eq.1.and.G_response)then
+                  if(index(current_argument//' ','@') == 1.and.G_response)then
                if(debug_m_cli2)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:2:CALL EXPAND_RESPONSE:CURRENT_ARGUMENT=',current_argument
                      call expand_response(current_argument)
                   else
@@ -2386,7 +2386,7 @@ logical                      :: next_mandatory
          next_mandatory=.false.
       endif
    enddo GET_ARGS
-   if(lastkeyword.ne.'')then
+   if(lastkeyword /= '')then
       call ifnull()
    endif
    if(debug_m_cli2)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:NORMAL END'
@@ -2395,9 +2395,9 @@ contains
 
 subroutine ifnull()
    oldvalue=get(lastkeyword)//' '
-   if(upper(oldvalue).eq.'F'.or.upper(oldvalue).eq.'T')then
+   if(upper(oldvalue) == 'F'.or.upper(oldvalue) == 'T')then
       call update(lastkeyword,'T')
-   elseif(oldvalue(1:1).eq.'"')then
+   elseif(oldvalue(1:1) == '"')then
       call update(lastkeyword,'" "')
    else
       call update(lastkeyword,' ')
@@ -2451,14 +2451,14 @@ integer :: iequal
 
        ! if an argument keyword and an equal before a space split on equal and save right hand side for next call
        if(nomore)then
-       elseif(len(current_argument).eq.0)then
+       elseif(len(current_argument) == 0)then
        else
           iright=index(current_argument,' ')
-          if(iright.eq.0)iright=len(current_argument)
+          if(iright == 0)iright=len(current_argument)
           iequal=index(current_argument(:iright),'=')
           if(next_mandatory)then
-          elseif(iequal.ne.0.and.current_argument(1:1).eq.'-')then
-             if(iequal.ne.len(current_argument))then
+          elseif(iequal /= 0.and.current_argument(1:1) == '-')then
+             if(iequal /= len(current_argument))then
                 right_hand_side=current_argument(iequal+1:)
              else
                 right_hand_side=''
@@ -2482,22 +2482,22 @@ integer :: pointer
 character(len=:),allocatable :: oldvalue
 
    oldvalue=get(lastkeyword)//' '
-   if(current_argument_padded(1:1).ne.'-')then
+   if(current_argument_padded(1:1) /= '-')then
       maybe_value=.true.
-   elseif(oldvalue(1:1).ne.'"')then
+   elseif(oldvalue(1:1) /= '"')then
       maybe_value=.false.
-   elseif(index(current_argument,' ').ne.0)then
+   elseif(index(current_argument,' ') /= 0)then
       maybe_value=.true.
-   elseif(scan(current_argument,",:;!@#$%^&*+=()[]{}\|'""./><?").ne.0)then
+   elseif(scan(current_argument,",:;!@#$%^&*+=()[]{}\|'""./><?") /= 0)then
       maybe_value=.true.
    else  ! the last value was a null string so see if this matches an allowed parameter
       pointer=0
-      if(current_argument_padded(1:2).eq.'--')then
+      if(current_argument_padded(1:2) == '--')then
          call locate_key(current_argument_padded(3:),pointer)
-      elseif(current_argument_padded(1:1).eq.'-')then
+      elseif(current_argument_padded(1:1) == '-')then
          call locate_key(current_argument_padded(2:),pointer)
       endif
-      if(pointer.le.0)then
+      if(pointer <= 0)then
          maybe_value=.true.
       else                   ! matched an option name so LIKELY is not a value
          maybe_value=.false.
@@ -2571,30 +2571,30 @@ logical,intent(in),optional          :: stop
 integer          :: i
    if(G_QUIET)return
    if(present(header))then
-      if(header.ne.'')then
+      if(header /= '')then
          write(warn,'(a)')header
       endif
    endif
    if(allocated(keywords))then
-      if(size(keywords).gt.0)then
+      if(size(keywords) > 0)then
          write(warn,'(a,1x,a,1x,a,1x,a)')atleast('KEYWORD',max(len(keywords),8)),'SHORT','PRESENT','VALUE'
          write(warn,'(*(a,1x,a5,1x,l1,8x,"[",a,"]",/))') &
          & (atleast(keywords(i),max(len(keywords),8)),shorts(i),present_in(i),values(i)(:counts(i)),i=1,size(keywords))
       endif
    endif
    if(allocated(unnamed))then
-      if(size(unnamed).gt.0)then
+      if(size(unnamed) > 0)then
          write(warn,'(a)')'UNNAMED'
          write(warn,'(i6.6,3a)')(i,'[',unnamed(i),']',i=1,size(unnamed))
       endif
    endif
    if(allocated(args))then
-      if(size(args).gt.0)then
+      if(size(args) > 0)then
          write(warn,'(a)')'ARGS'
          write(warn,'(i6.6,3a)')(i,'[',args(i),']',i=1,size(args))
       endif
    endif
-   if(G_remaining.ne.'')then
+   if(G_remaining /= '')then
       write(warn,'(a)')'REMAINING'
       write(warn,'(a)')G_remaining
    endif
@@ -2619,7 +2619,7 @@ integer,intent(inout)        :: token_end        ! end of token found if functio
 integer                      :: isource_len
 !----------------------------------------------------------------------------------------------------------------------------
 !  calculate where token_start should start for this pass
-   if(itoken.le.0)then                           ! this is assumed to be the first call
+   if(itoken <= 0)then                           ! this is assumed to be the first call
       token_start=1
    else                                          ! increment start to previous end + 1
       token_start=token_end+1
@@ -2627,15 +2627,15 @@ integer                      :: isource_len
 !----------------------------------------------------------------------------------------------------------------------------
    isource_len=len(source_string)                ! length of input string
 !----------------------------------------------------------------------------------------------------------------------------
-   if(token_start.gt.isource_len)then            ! user input error or at end of string
+   if(token_start > isource_len)then            ! user input error or at end of string
       token_end=isource_len                      ! assume end of token is end of string until proven otherwise so it is set
       strtok_status=.false.
       return
    endif
 !----------------------------------------------------------------------------------------------------------------------------
    ! find beginning of token
-   do while (token_start .le. isource_len)       ! step thru each character to find next delimiter, if any
-      if(index(delimiters,source_string(token_start:token_start)) .ne. 0) then
+   do while (token_start  <=  isource_len)       ! step thru each character to find next delimiter, if any
+      if(index(delimiters,source_string(token_start:token_start))  /=  0) then
          token_start = token_start + 1
       else
          exit
@@ -2643,14 +2643,14 @@ integer                      :: isource_len
    enddo
 !----------------------------------------------------------------------------------------------------------------------------
    token_end=token_start
-   do while (token_end .le. isource_len-1)       ! step thru each character to find next delimiter, if any
-      if(index(delimiters,source_string(token_end+1:token_end+1)) .ne. 0) then  ! found a delimiter in next character
+   do while (token_end  <=  isource_len-1)       ! step thru each character to find next delimiter, if any
+      if(index(delimiters,source_string(token_end+1:token_end+1))  /=  0) then  ! found a delimiter in next character
          exit
       endif
       token_end = token_end + 1
    enddo
 !----------------------------------------------------------------------------------------------------------------------------
-   if (token_start .gt. isource_len) then        ! determine if finished
+   if (token_start  >  isource_len) then        ! determine if finished
       strtok_status=.false.                      ! flag that input string has been completely processed
    else
       itoken=itoken+1                            ! increment count of tokens found
@@ -2765,7 +2765,7 @@ end function strtok
 !!     write(*,*)'title=',title
 !!     write(*,*)'l=',l
 !!     write(*,*)'L=',lbig
-!!     if(size(filenames).gt.0)then
+!!     if(size(filenames) > 0)then
 !!        write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
 !!     endif
 !!     end program demo_get_args
@@ -2942,7 +2942,7 @@ integer                      :: i
 integer                      :: place
 integer                      :: iichar                     ! point to first character of word unless first character is "."
    call locate_key(keyword,place)                          ! find where string is or should be
-   if(place.gt.0)then                                      ! if string was found
+   if(place > 0)then                                      ! if string was found
       val=values(place)(:counts(place))
       call split(adjustl(upper(val)),carray,delimiters=delimiters)  ! convert value to uppercase, trimmed; then parse into array
    else
@@ -2952,12 +2952,12 @@ integer                      :: iichar                     ! point to first char
       allocate(larray(0))
       return
    endif
-   if(size(carray).gt.0)then                                  ! if not a null string
+   if(size(carray) > 0)then                                  ! if not a null string
       if(allocated(larray))deallocate(larray)
       allocate(larray(size(carray)))                          ! allocate output array
       do i=1,size(carray)
          larray(i)=.false.                                    ! initialize return value to .false.
-         if(carray(i)(1:1).eq.'.')then                        ! looking for fortran logical syntax .STRING.
+         if(carray(i)(1:1) == '.')then                        ! looking for fortran logical syntax .STRING.
             iichar=2
          else
             iichar=1
@@ -2991,7 +2991,7 @@ integer                               :: ierr
 character(len=:),allocatable          :: val
 !-----------------------------------------------------------------------------------------------------------------------------------
    call locate_key(keyword,place)                     ! find where string is or should be
-   if(place.gt.0)then                                 ! if string was found
+   if(place > 0)then                                 ! if string was found
       val=values(place)(:counts(place))
       val=replace_str(val,'(','')
       val=replace_str(val,')','')
@@ -3007,7 +3007,7 @@ character(len=:),allocatable          :: val
    allocate(darray(size(carray)))                     ! create the output array
    do i=1,size(carray)
       call a2d(carray(i), darray(i),ierr) ! convert the string to a numeric value
-      if(ierr.ne.0)then
+      if(ierr /= 0)then
          call mystop(10 ,'*get_anyarray_d* unreadable value '//carray(i)//' for keyword '//keyword)
       endif
    enddo
@@ -3040,7 +3040,7 @@ integer                              :: half,sz,i
    call get_anyarray_d(keyword,darray,delimiters)
    sz=size(darray)
    half=sz/2
-   if(sz.ne.half+half)then
+   if(sz /= half+half)then
       call journal('sc','*get_anyarray_x* uneven number of values defining complex value '//keyword)
       call mystop(11,'*get_anyarray_x* uneven number of values defining complex value '//keyword)
       if(allocated(xarray))deallocate(xarray)
@@ -3096,7 +3096,7 @@ character(len=:),allocatable         :: val
    if(place > 0)then                                  ! if index is valid return strings
       val=unquote(values(place)(:counts(place)))
       call split(val,strings_a,delimiters=delimiters)   ! find value associated with keyword and split it into an array
-      if(len(strings_a).le.len(strings))then
+      if(len(strings_a) <= len(strings))then
          strings=strings_a
       else
          call journal('sc','*get_args_fixed_length_a_array* values too long. Longest is',len(strings_a),'allowed is',len(strings))
@@ -3122,7 +3122,7 @@ real(kind=dp),allocatable            :: darray(:)    ! function type
 integer                              :: dsize
    call get_anyarray_d(keyword,darray,delimiters)
    dsize=size(darray)
-   if(ubound(iarray,dim=1).eq.dsize)then
+   if(ubound(iarray,dim=1) == dsize)then
       iarray=nint(darray)
    else
       call journal('sc','*get_fixedarray_i* wrong number of values for keyword',keyword,'got',dsize,'expected',size(iarray))
@@ -3140,7 +3140,7 @@ real,allocatable                     :: darray(:)    ! function type
 integer                              :: dsize
    call get_anyarray_r(keyword,darray,delimiters)
    dsize=size(darray)
-   if(ubound(rarray,dim=1).eq.dsize)then
+   if(ubound(rarray,dim=1) == dsize)then
       rarray=darray
    else
       call journal('sc','*get_fixedarray_r* wrong number of values for keyword',keyword,'got',dsize,'expected',size(rarray))
@@ -3161,13 +3161,13 @@ integer                              :: dsize
    dsize=size(darray)
    sz=dsize*2
    half=sz/2
-   if(sz.ne.half+half)then
+   if(sz /= half+half)then
       call journal('sc','*get_fixed_size_complex* uneven number of values defining complex value '//keyword)
       call mystop(15,'*get_fixed_size_complex* uneven number of values defining complex value '//keyword)
       xarray=0
       return
    endif
-   if(ubound(xarray,dim=1).eq.dsize)then
+   if(ubound(xarray,dim=1) == dsize)then
       xarray=darray
    else
       call journal('sc','*get_fixed_size_complex* wrong number of values for keyword',keyword,'got',dsize,'expected',size(xarray))
@@ -3185,7 +3185,7 @@ real(kind=dp),allocatable            :: darray(:)    ! function type
 integer                              :: dsize
    call get_anyarray_d(keyword,darray,delimiters)
    dsize=size(darray)
-   if(ubound(darr,dim=1).eq.dsize)then
+   if(ubound(darr,dim=1) == dsize)then
       darr=darray
    else
       call journal('sc','*get_fixedarray_d* wrong number of values for keyword',keyword,'got',dsize,'expected',size(darr))
@@ -3203,7 +3203,7 @@ logical,allocatable                  :: darray(:)    ! function type
 integer                              :: dsize
    call get_anyarray_l(keyword,darray,delimiters)
    dsize=size(darray)
-   if(ubound(larray,dim=1).eq.dsize)then
+   if(ubound(larray,dim=1) == dsize)then
       larray=darray
    else
       call journal('sc','*get_fixedarray_l* wrong number of values for keyword',keyword,'got',dsize,'expected',size(larray))
@@ -3253,7 +3253,7 @@ character(len=*),intent(in)   :: keyword      ! keyword to retrieve value from d
 real(kind=dp)                 :: d
 real(kind=dp),allocatable     :: darray(:)    ! function type
    call get_anyarray_d(keyword,darray)
-   if(size(darray).eq.1)then
+   if(size(darray) == 1)then
       d=darray(1)
    else
       call journal('sc','*get_anyarray_d* incorrect number of values for keyword',keyword,'expected one found',size(darray))
@@ -3326,7 +3326,7 @@ character(len=*),intent(in) :: keyword      ! keyword to retrieve value from dic
 complex,intent(out)         :: x
 real(kind=dp)               :: d(2)
    call get_fixedarray_d(keyword,d)
-   if(size(d).eq.2)then
+   if(size(d) == 2)then
       x=cmplx(d(1),d(2),kind=sp)
    else
       call journal('sc','*get_scalar_complex* expected two values found',size(d))
@@ -3340,7 +3340,7 @@ character(len=*),intent(in)   :: keyword      ! keyword to retrieve value from d
 logical                       :: l
 logical,allocatable           :: larray(:)    ! function type
    call get_anyarray_l(keyword,larray)
-   if(size(larray).eq.1)then
+   if(size(larray) == 1)then
       l=larray(1)
    else
       call journal('sc','*get_anyarray_l* expected one value found',size(larray))
@@ -3403,7 +3403,7 @@ integer :: ilongest
       if(istatus /= 0) then                                                 ! on error
          write(warn,*)'*prototype_and_cmd_args_to_nlist* error obtaining length for argument ',i
          exit GET_LONGEST
-      elseif(ilength.gt.0)then
+      elseif(ilength > 0)then
          ilongest=max(ilongest,ilength)
       endif
    enddo GET_LONGEST
@@ -3706,8 +3706,8 @@ integer,intent(out)         :: ierr                       ! error flag (0 == no 
 doubleprecision             :: valu8
    valu8=0.0d0
    call a2d(chars,valu8,ierr,onerr=0.0d0)
-   if(valu8.le.huge(valu))then
-      if(valu8.le.huge(valu))then
+   if(valu8 <= huge(valu))then
+      if(valu8 <= huge(valu))then
          valu=int(valu8)
       else
          call journal('sc','*a2i*','- value too large',valu8,'>',huge(valu))
@@ -3745,10 +3745,10 @@ character(len=3),save        :: nan_string='NaN'
    ierr=0                                                       ! initialize error flag to zero
    local_chars=unquote(chars)
    msg=''
-   if(len(local_chars).eq.0)local_chars=' '
+   if(len(local_chars) == 0)local_chars=' '
    call substitute(local_chars,',','')                          ! remove any comma characters
    pnd=scan(local_chars,'#:')
-   if(pnd.ne.0)then
+   if(pnd /= 0)then
       write(frmt,fmt)pnd-1                                      ! build format of form '(BN,Gn.0)'
       read(local_chars(:pnd-1),fmt=frmt,iostat=ierr,iomsg=msg)basevalue   ! try to read value from string
       if(decodebase(local_chars(pnd+1:),basevalue,ivalu))then
@@ -3776,7 +3776,7 @@ character(len=3),save        :: nan_string='NaN'
          read(local_chars,fmt=frmt,iostat=ierr,iomsg=msg)valu   ! try to read value from string
       end select
    endif
-   if(ierr.ne.0)then                                            ! if an error occurred ierr will be non-zero.
+   if(ierr /= 0)then                                            ! if an error occurred ierr will be non-zero.
       if(present(onerr))then
          select type(onerr)
          type is (integer)
@@ -3787,11 +3787,11 @@ character(len=3),save        :: nan_string='NaN'
             valu=onerr
          end select
       else                                                      ! set return value to NaN
-         read(nan_string,'(g3.3)')valu
+         read(nan_string,'(f3.3)')valu
       endif
-      if(local_chars.ne.'eod')then                           ! print warning message except for special value "eod"
+      if(local_chars /= 'eod')then                           ! print warning message except for special value "eod"
          call journal('sc','*a2d* - cannot produce number from string ['//trim(chars)//']')
-         if(msg.ne.'')then
+         if(msg /= '')then
             call journal('sc','*a2d* - ['//trim(msg)//']')
          endif
       endif
@@ -3977,7 +3977,7 @@ integer                       :: imax                   ! length of longest toke
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! decide on value for optional DELIMITERS parameter
    if (present(delimiters)) then                                     ! optional delimiter list was present
-      if(delimiters.ne.'')then                                       ! if DELIMITERS was specified and not null use it
+      if(delimiters /= '')then                                       ! if DELIMITERS was specified and not null use it
          dlim=delimiters
       else                                                           ! DELIMITERS was specified on call as empty string
          dlim=' '//char(9)//char(10)//char(11)//char(12)//char(13)//char(0)//',:' ! use default delimiter when not specified
@@ -4002,15 +4002,15 @@ integer                       :: imax                   ! length of longest toke
    icount=0                                                       ! how many tokens found
    inotnull=0                                                     ! how many tokens found not composed of delimiters
    imax=0                                                         ! length of longest token found
-   if(iilen.gt.0)then                                             ! there is at least one non-delimiter in INPUT_LINE if get here
+   if(iilen > 0)then                                             ! there is at least one non-delimiter in INPUT_LINE if get here
       icol=1                                                      ! initialize pointer into input line
       INFINITE: do i30=1,iilen,1                                  ! store into each array element
          ibegin(i30)=icol                                         ! assume start new token on the character
-         if(index(dlim(1:idlim),input_line(icol:icol)).eq.0)then  ! if current character is not a delimiter
+         if(index(dlim(1:idlim),input_line(icol:icol)) == 0)then  ! if current character is not a delimiter
             iterm(i30)=iilen                                      ! initially assume no more tokens
             do i10=1,idlim                                        ! search for next delimiter
                ifound=index(input_line(ibegin(i30):iilen),dlim(i10:i10))
-               IF(ifound.gt.0)then
+               IF(ifound > 0)then
                   iterm(i30)=min(iterm(i30),ifound+ibegin(i30)-2)
                endif
             enddo
@@ -4022,7 +4022,7 @@ integer                       :: imax                   ! length of longest toke
          endif
          imax=max(imax,iterm(i30)-ibegin(i30)+1)
          icount=i30                                               ! increment count of number of tokens found
-         if(icol.gt.iilen)then                                     ! no text left
+         if(icol > iilen)then                                     ! no text left
             exit INFINITE
          endif
       enddo INFINITE
@@ -4044,7 +4044,7 @@ integer                       :: imax                   ! length of longest toke
    end select
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i20=1,icount                                                ! fill the array with the tokens that were found
-      if(iterm(i20).lt.ibegin(i20))then
+      if(iterm(i20) < ibegin(i20))then
          select case (trim(adjustl(nlls)))
          case ('ignore','','ignoreend')
          case default
@@ -4141,7 +4141,7 @@ integer                       :: imax                   ! length of longest toke
 !!       targetline=replace_str(targetline,old,new)
 !!       write(*,*)':GOT     ['//targetline//']'
 !!       write(*,*)':EXPECTED['//expected//']'
-!!       write(*,*)':TEST    [',targetline.eq.expected,']'
+!!       write(*,*)':TEST    [',targetline == expected,']'
 !!       end subroutine testit
 !!
 !!       end program demo_replace_str
@@ -4195,7 +4195,7 @@ integer                                  :: start_token,end_token
    new=''
    lmax=len_trim(cmd)                       ! significant length of change directive
 
-   if(lmax.ge.4)then                      ! strtok ignores blank tokens so look for special case where first token is really null
+   if(lmax >= 4)then                      ! strtok ignores blank tokens so look for special case where first token is really null
       delimiters=cmd(id:id)               ! find delimiter in expected location
       itoken=0                            ! initialize strtok(3f) procedure
 
@@ -4205,12 +4205,12 @@ integer                                  :: start_token,end_token
          old=''
       endif
 
-      if(cmd(id:id).eq.cmd(id+1:id+1))then
+      if(cmd(id:id) == cmd(id+1:id+1))then
          new=old
          old=''
       else                                                                     ! normal case
          ifok=strtok(cmd(id:),itoken,start_token,end_token,delimiters)         ! find NEW string
-         if(end_token .eq. (len(cmd)-id+1) )end_token=len_trim(cmd(id:))       ! if missing ending delimiter
+         if(end_token  ==  (len(cmd)-id+1) )end_token=len_trim(cmd(id:))       ! if missing ending delimiter
          new=cmd(start_token+id-1:min(end_token+id-1,lmax))
       endif
    else                                                                        ! command was two or less characters
@@ -4253,7 +4253,7 @@ integer                       :: range_local(2)
 !  get old_local and new_local from cmd or old and new
    if(present(cmd))then
       call crack_cmd(cmd,old_local,new_local,ier2)
-      if(ier2.ne.0)then
+      if(ier2 /= 0)then
          newline=targetline  ! if no changes are made return original string on error
          if(present(ierr))ierr=ier2
          return
@@ -4282,9 +4282,9 @@ integer                       :: range_local(2)
       range_local=[1,original_input_length]
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(len_old.eq.0)then                                ! c//new/ means insert new at beginning of line (or left margin)
+   if(len_old == 0)then                                ! c//new/ means insert new at beginning of line (or left margin)
       iichar=len_new + original_input_length
-      if(len_new.gt.0)then
+      if(len_new > 0)then
          newline=new_local(:len_new)//targetline(left_margin:original_input_length)
       else
          newline=targetline(left_margin:original_input_length)
@@ -4298,23 +4298,23 @@ integer                       :: range_local(2)
    ic=left_margin                                      ! place looking at in input string
    loop: do
       ind=index(targetline(ic:),old_local(:len_old))+ic-1 ! try finding start of OLD in remaining part of input in change window
-      if(ind.eq.ic-1.or.ind.gt.right_margin)then          ! did not find old string or found old string past edit window
+      if(ind == ic-1.or.ind > right_margin)then          ! did not find old string or found old string past edit window
          exit loop                                        ! no more changes left to make
       endif
       icount=icount+1                                  ! found an old string to change, so increment count of change candidates
-      if(ind.gt.ic)then                                ! if found old string past at current position in input string copy unchanged
+      if(ind > ic)then                                ! if found old string past at current position in input string copy unchanged
          ladd=ind-ic                                   ! find length of character range to copy as-is from input to output
          newline=newline(:iichar-1)//targetline(ic:ind-1)
          iichar=iichar+ladd
       endif
-      if(icount.ge.range_local(1).and.icount.le.range_local(2))then    ! check if this is an instance to change or keep
+      if(icount >= range_local(1).and.icount <= range_local(2))then    ! check if this is an instance to change or keep
          ichange=ichange+1
-         if(len_new.ne.0)then                                          ! put in new string
+         if(len_new /= 0)then                                          ! put in new string
             newline=newline(:iichar-1)//new_local(:len_new)
             iichar=iichar+len_new
          endif
       else
-         if(len_old.ne.0)then                                          ! put in copy of old string
+         if(len_old /= 0)then                                          ! put in copy of old string
             newline=newline(:iichar-1)//old_local(:len_old)
             iichar=iichar+len_old
          endif
@@ -4326,7 +4326,7 @@ integer                       :: range_local(2)
    case (0)                                            ! there were no changes made to the window
       newline=targetline                               ! if no changes made output should be input
    case default
-      if(ic.le.len(targetline))then                    ! if there is more after last change on original line add it
+      if(ic <= len(targetline))then                    ! if there is more after last change on original line add it
          newline=newline(:iichar-1)//targetline(ic:max(ic,original_input_length))
       endif
    end select
@@ -4384,7 +4384,7 @@ end function replace_str
 !!        do
 !!           write(*,'(a)',advance='no')'Enter test string:'
 !!           read(*,'(a)',iostat=ios,iomsg=msg)inline
-!!           if(ios.ne.0)then
+!!           if(ios /= 0)then
 !!              write(*,*)trim(inline)
 !!              exit
 !!           endif
@@ -4491,7 +4491,7 @@ end function quote
 !!       do
 !!          write(*,'(a)',advance='no')'Enter test string:'
 !!          read(*,'(a)',iostat=ios,iomsg=msg)quoted_str
-!!          if(ios.ne.0)then
+!!          if(ios /= 0)then
 !!             write(*,*)trim(msg)
 !!             exit
 !!          endif
@@ -4505,7 +4505,7 @@ end function quote
 !!
 !!          ! read the string list-directed to compare the results
 !!          read(quoted_str,*,iostat=ios,iomsg=msg)dummy
-!!          if(ios.ne.0)then
+!!          if(ios /= 0)then
 !!             write(*,*)trim(msg)
 !!          else
 !!             write(*,'(a)')'LIST DIRECTED['//trim(dummy)//']'
@@ -4542,8 +4542,8 @@ logical                              :: inside
    if(allocated(unquoted_str))deallocate(unquoted_str)
    allocate(character(len=inlen) :: unquoted_str) ! initially make output string length of input string
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(inlen.ge.1)then                             ! double_quote is the default quote unless the first character is single_quote
-      if(quoted_str(1:1).eq.single_quote)then
+   if(inlen >= 1)then                             ! double_quote is the default quote unless the first character is single_quote
+      if(quoted_str(1:1) == single_quote)then
          quote=ichar(single_quote)
       else
          quote=ichar(double_quote)
@@ -4558,17 +4558,17 @@ logical                              :: inside
    inside=.false.
    STEPTHROUGH: do i=1,inlen
       current=ichar(quoted_str(i:i))
-      if(before.eq.iesc)then                      ! if previous character was escape use current character unconditionally
+      if(before == iesc)then                      ! if previous character was escape use current character unconditionally
            iput=iput-1                            ! backup
            unquoted_str(iput:iput)=char(current)
            iput=iput+1
            before=-2                              ! this could be second esc or quote
-      elseif(current.eq.quote)then                ! if current is a quote it depends on whether previous character was a quote
-         if(before.eq.quote)then
+      elseif(current == quote)then                ! if current is a quote it depends on whether previous character was a quote
+         if(before == quote)then
            unquoted_str(iput:iput)=char(quote)    ! this is second quote so retain it
            iput=iput+1
            before=-2
-         elseif(.not.inside.and.before.ne.iesc)then
+         elseif(.not.inside.and.before /= iesc)then
             inside=.true.
          else                                     ! this is first quote so ignore it except remember it in case next is a quote
             before=current
@@ -4648,9 +4648,9 @@ end function i2s
 !!     use M_CLI2, only : merge_str
 !!     implicit none
 !!     character(len=:), allocatable :: answer
-!!        answer=merge_str('first string', 'second string is longer',10.eq.10)
+!!        answer=merge_str('first string', 'second string is longer',10 == 10)
 !!        write(*,'("[",a,"]")') answer
-!!        answer=merge_str('first string', 'second string is longer',10.ne.10)
+!!        answer=merge_str('first string', 'second string is longer',10 /= 10)
 !!        write(*,'("[",a,"]")') answer
 !!     end program demo_merge_str
 !!
@@ -4741,7 +4741,7 @@ end function merge_str
 !!      INFINITE: do
 !!         print *,''
 !!         write(*,'("Enter number in start base: ")',advance='no'); read *, x
-!!         if(x.eq.'0') exit INFINITE
+!!         if(x == '0') exit INFINITE
 !!         if(decodebase(x,bd,r)) then
 !!            if(codebase(r,ba,y)) then
 !!              write(*,'("In base ",I2,": ",A20)')  ba, y
@@ -4790,10 +4790,10 @@ integer           :: ierr
   decodebase=.false.
 
   ipound=index(string_local,'#')                                       ! determine if in form [-]base#whole
-  if(basein.eq.0.and.ipound.gt.1)then                                  ! split string into two values
+  if(basein == 0.and.ipound > 1)then                                  ! split string into two values
      call a2i(string_local(:ipound-1),basein_local,ierr)   ! get the decimal value of the base
      string_local=string_local(ipound+1:)                              ! now that base is known make string just the value
-     if(basein_local.ge.0)then                                         ! allow for a negative sign prefix
+     if(basein_local >= 0)then                                         ! allow for a negative sign prefix
         out_sign=1
      else
         out_sign=-1
@@ -4814,7 +4814,7 @@ integer           :: ierr
      do i=1, long
         k=long+1-i
         ch=string_local(k:k)
-        IF(CH.EQ.'-'.AND.K.EQ.1)THEN
+        IF(CH == '-'.AND.K == 1)THEN
            out_sign=-1
            cycle
         endif
@@ -5004,26 +5004,26 @@ character(len=1024)                      :: msg
       select type(gval)
       type is (integer)
          fmt_local='(i0)'
-         if(fmt.ne.'') fmt_local=fmt
+         if(fmt /= '') fmt_local=fmt
          write(chars,fmt_local,iostat=err_local,iomsg=msg)gval
       type is (real)
          fmt_local='(bz,g23.10e3)'
          fmt_local='(bz,g0.8)'
-         if(fmt.ne.'') fmt_local=fmt
+         if(fmt /= '') fmt_local=fmt
          write(chars,fmt_local,iostat=err_local,iomsg=msg)gval
       type is (doubleprecision)
          fmt_local='(bz,g0)'
-         if(fmt.ne.'') fmt_local=fmt
+         if(fmt /= '') fmt_local=fmt
          write(chars,fmt_local,iostat=err_local,iomsg=msg)gval
       type is (logical)
          fmt_local='(l1)'
-         if(fmt.ne.'') fmt_local=fmt
+         if(fmt /= '') fmt_local=fmt
          write(chars,fmt_local,iostat=err_local,iomsg=msg)gval
       class default
          call journal('sc','*value_to_string* UNKNOWN TYPE')
          chars=' '
       end select
-      if(fmt.eq.'') then
+      if(fmt == '') then
          chars=adjustl(chars)
          call trimzeros_(chars)
       endif
@@ -5042,7 +5042,7 @@ character(len=1024)                      :: msg
          chars=''
       end select
       chars=adjustl(chars)
-      if(index(chars,'.').ne.0) call trimzeros_(chars)
+      if(index(chars,'.') /= 0) call trimzeros_(chars)
    endif
    if(present(trimz))then
       if(trimz)then
@@ -5057,7 +5057,7 @@ character(len=1024)                      :: msg
 
    if(present(err)) then
       err=err_local
-   elseif(err_local.ne.0)then
+   elseif(err_local /= 0)then
       !-! cannot currently do I/O from a function being called from I/O
       !-!write(ERROR_UNIT,'(a)')'*value_to_string* WARNING:['//trim(msg)//']'
       chars=chars//' *value_to_string* WARNING:['//trim(msg)//']'
@@ -5117,7 +5117,7 @@ integer                      :: i, ii
       expo=str(ipos:)                        ! keep exponent string so it can be added back as a suffix
       str=str(1:ipos-1)                      ! just the real part, exponent removed will not have trailing zeros removed
    endif
-   if(index(str,'.').eq.0)then               ! if no decimal character in original string add one to end of string
+   if(index(str,'.') == 0)then               ! if no decimal character in original string add one to end of string
       ii=len_trim(str)
       str(ii+1:ii+1)='.'                     ! add decimal to end of string
    endif
@@ -5126,7 +5126,7 @@ integer                      :: i, ii
       case('0')                              ! found a trailing zero so keep trimming
          cycle
       case('.')                              ! found a decimal character at end of remaining string
-         if(i.le.1)then
+         if(i <= 1)then
             str='0'
          else
             str=str(1:i-1)
@@ -5260,7 +5260,7 @@ integer                        :: iichar
 !-----------------------------------------------------------------------------------------------------------------------------------
    len_old=len(old)                                    ! length of old substring to be replaced
    len_new=len(new)                                    ! length of new substring to replace old substring
-   if(id.le.0)then                                     ! no window so change entire input string
+   if(id <= 0)then                                     ! no window so change entire input string
       il=1                                             ! il is left margin of window to change
       ir=maxlengthout                                  ! ir is right margin of window to change
       dum1(:)=' '                                      ! begin with a blank line
@@ -5270,15 +5270,15 @@ integer                        :: iichar
       dum1=targetline(:il-1)                           ! begin with what's below margin
    endif                                               ! end of window settings
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(len_old.eq.0)then                                ! c//new/ means insert new at beginning of line (or left margin)
+   if(len_old == 0)then                                ! c//new/ means insert new at beginning of line (or left margin)
       iichar=len_new + original_input_length
-      if(iichar.gt.maxlengthout)then
+      if(iichar > maxlengthout)then
          call journal('sc','*substitute* new line will be too long')
          ier1=-1
          if (present(ierr))ierr=ier1
          return
       endif
-      if(len_new.gt.0)then
+      if(len_new > 0)then
          dum1(il:)=new(:len_new)//targetline(il:original_input_length)
       else
          dum1(il:)=targetline(il:original_input_length)
@@ -5293,24 +5293,24 @@ integer                        :: iichar
    ic=il                                               ! place looking at in input string
    loop: do
       ind=index(targetline(ic:),old(:len_old))+ic-1    ! try to find start of old string in remaining part of input in change window
-      if(ind.eq.ic-1.or.ind.gt.ir)then                 ! did not find old string or found old string past edit window
+      if(ind == ic-1.or.ind > ir)then                 ! did not find old string or found old string past edit window
          exit loop                                     ! no more changes left to make
       endif
       ier1=ier1+1                                      ! found an old string to change, so increment count of changes
-      if(ind.gt.ic)then                                ! if found old string past at current position in input string copy unchanged
+      if(ind > ic)then                                ! if found old string past at current position in input string copy unchanged
          ladd=ind-ic                                   ! find length of character range to copy as-is from input to output
-         if(iichar-1+ladd.gt.maxlengthout)then
+         if(iichar-1+ladd > maxlengthout)then
             ier1=-1
             exit loop
          endif
          dum1(iichar:)=targetline(ic:ind-1)
          iichar=iichar+ladd
       endif
-      if(iichar-1+len_new.gt.maxlengthout)then
+      if(iichar-1+len_new > maxlengthout)then
          ier1=-2
          exit loop
       endif
-      if(len_new.ne.0)then
+      if(len_new /= 0)then
          dum1(iichar:)=new(:len_new)
          iichar=iichar+len_new
       endif
@@ -5323,13 +5323,13 @@ integer                        :: iichar
    case (0)                                                ! there were no changes made to the window
    case default
       ladd=original_input_length-ic
-      if(iichar+ladd.gt.maxlengthout)then
+      if(iichar+ladd > maxlengthout)then
          call journal('sc','*substitute* new line will be too long')
          ier1=-1
          if(present(ierr))ierr=ier1
          return
       endif
-      if(ic.lt.len(targetline))then
+      if(ic < len(targetline))then
          dum1(iichar:)=targetline(ic:max(ic,original_input_length))
       endif
       targetline=dum1(:maxlengthout)
@@ -5420,18 +5420,18 @@ end subroutine substitute
 !!     call locate(arr,string,place)
 !!     write(*,*)'for "'//string//'" index is ',place, size(arr)
 !!     ! if string was not found insert it
-!!     if(place.lt.1)then
+!!     if(place < 1)then
 !!        plus=abs(place)
 !!        ii=len(arr)
 !!        end=size(arr)
 !!        ! empty array
-!!        if(end.eq.0)then
+!!        if(end == 0)then
 !!           arr=[character(len=ii) :: string ]
 !!        ! put in front of array
-!!        elseif(plus.eq.1)then
+!!        elseif(plus == 1)then
 !!           arr=[character(len=ii) :: string, arr]
 !!        ! put at end of array
-!!        elseif(plus.eq.end)then
+!!        elseif(plus == end)then
 !!           arr=[character(len=ii) :: arr, string ]
 !!        ! put in middle of array
 !!        else
@@ -5482,7 +5482,7 @@ integer                                 :: error
    arraysize=size(list)
 
    error=0
-   if(arraysize.eq.0)then
+   if(arraysize == 0)then
       maxtry=0
       place=-1
    else
@@ -5496,17 +5496,17 @@ integer                                 :: error
    LOOP: block
    do i=1,maxtry
 
-      if(value.eq.list(PLACE))then
+      if(value == list(PLACE))then
          exit LOOP
-      elseif(value.gt.list(place))then
+      elseif(value > list(place))then
          imax=place-1
       else
          imin=place+1
       endif
 
-      if(imin.gt.imax)then
+      if(imin > imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(iabs(place) > arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -5514,7 +5514,7 @@ integer                                 :: error
 
       place=(imax+imin)/2
 
-      if(place.gt.arraysize.or.place.le.0)then
+      if(place > arraysize.or.place <= 0)then
          message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
          error=-1
          exit LOOP
@@ -5525,7 +5525,7 @@ integer                                 :: error
    endblock LOOP
    if(present(ier))then
       ier=error
-   elseif(error.ne.0)then
+   elseif(error /= 0)then
       write(warn,*)message//' VALUE=',trim(value)//' PLACE=',place
       call mystop(-24,'(*locate_c* '//message)
    endif
@@ -5611,8 +5611,8 @@ integer                      :: ii, end
    endif
    ii=len(list)
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[character(len=ii) :: list(:place-1) ]
    else
       list=[character(len=ii) :: list(:place-1), list(place+1:) ]
@@ -5630,8 +5630,8 @@ integer                :: end
       list=[logical :: ]
    endif
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[ list(:place-1)]
    else
       list=[ list(:place-1), list(place+1:) ]
@@ -5649,8 +5649,8 @@ integer                :: end
       list=[integer :: ]
    endif
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[ list(:place-1)]
    else
       list=[ list(:place-1), list(place+1:) ]
@@ -5717,7 +5717,7 @@ end subroutine remove_i
 !!     write(*,'(*(a,"==>",a,/))')(trim(keywords(i)),trim(values(i)),i=1,size(keywords))
 !!
 !!     call locate_key('a',place)
-!!     if(place.gt.0)then
+!!     if(place > 0)then
 !!        write(*,*)'The value of "a" is',trim(values(place))
 !!     else
 !!        write(*,*)'"a" not found'
@@ -5732,7 +5732,7 @@ end subroutine remove_i
 !!     ! find where string is or should be
 !!     call locate_key(key,place)
 !!     ! if string was not found insert it
-!!     if(place.lt.1)then
+!!     if(place < 1)then
 !!        call insert(keywords,key,abs(place))
 !!        call insert(values,val,abs(place))
 !!     else ! replace
@@ -5769,9 +5769,9 @@ integer                      :: end
    endif
    tlen=len_trim(value)
    end=size(list)
-   if(place.lt.0.or.place.gt.end)then
+   if(place < 0.or.place > end)then
            write(warn,*)'*replace_c* error: index out of range. end=',end,' index=',place
-   elseif(len_trim(value).le.len(list))then
+   elseif(len_trim(value) <= len(list))then
       list(place)=value
    else  ! increase length of variable
       ii=max(tlen,len(list))
@@ -5792,9 +5792,9 @@ integer               :: end
       list=[logical :: ]
    endif
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.gt.0.and.place.le.end)then
+   elseif(place > 0.and.place <= end)then
       list(place)=value
    else                                                      ! put in middle of array
       write(warn,*)'*replace_l* error: index out of range. end=',end,' index=',place
@@ -5812,9 +5812,9 @@ integer               :: end
       list=[integer :: ]
    endif
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.gt.0.and.place.le.end)then
+   elseif(place > 0.and.place <= end)then
       list(place)=value
    else                                                      ! put in middle of array
       write(warn,*)'*replace_i* error: index out of range. end=',end,' index=',place
@@ -5884,7 +5884,7 @@ end subroutine replace_i
 !!     ! find where string is or should be
 !!     call locate(arr,string,place)
 !!     ! if string was not found insert it
-!!     if(place.lt.1)then
+!!     if(place < 1)then
 !!        call insert(arr,string,abs(place))
 !!     endif
 !!     ! show array
@@ -5925,15 +5925,15 @@ integer                      :: end
    ii=max(len_trim(value),len(list),2)
    end=size(list)
 
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[character(len=ii) :: value ]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       kludge=[character(len=ii) :: value, list]
       list=kludge
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       kludge=[character(len=ii) :: list, value ]
       list=kludge
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                 ! put in middle of array
       kludge=[character(len=ii) :: list(:place-1), value,list(place:) ]
       list=kludge
    else                                                      ! index out of range
@@ -5953,13 +5953,13 @@ integer               :: end
       list=[logical :: ]
    endif
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                 ! put in middle of array
       list=[list(:place-1), value,list(place:) ]
    else                                                      ! index out of range
       write(warn,*)'*insert_l* error: index out of range. end=',end,' index=',place,' value=',value
@@ -5978,13 +5978,13 @@ integer               :: end
       list=[integer :: ]
    endif
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                 ! put in middle of array
       list=[list(:place-1), value,list(place:) ]
    else                                                      ! index out of range
       write(warn,*)'*insert_i* error: index out of range. end=',end,' index=',place,' value=',value
@@ -6116,7 +6116,7 @@ character,allocatable :: hold
    allocate(lg(size(unnamed)))
    do i=1,size(lg)
       hold=trim(upper(adjustl(unnamed(i))))
-      if(hold(1:1).eq.'.')then                 ! looking for fortran logical syntax .STRING.
+      if(hold(1:1) == '.')then                 ! looking for fortran logical syntax .STRING.
          iichar=2
       else
          iichar=1
@@ -6168,7 +6168,7 @@ subroutine mystop(sig,msg)
 integer,intent(in) :: sig
 character(len=*),intent(in),optional :: msg
    !x!write(*,*)'MYSTOP:',sig,trim(msg)
-   if(sig.lt.0)then
+   if(sig < 0)then
       if(present(msg))call journal('sc',msg)
       !x!stop abs(sig)
       stop 1
@@ -6211,10 +6211,10 @@ subroutine locate_key(value,place)
 character(len=*),intent(in)             :: value
 integer,intent(out)                     :: place
 integer                                 :: ii
-   if(len_trim(value).eq.1)then
+   if(len_trim(value) == 1)then
       !x!ii=findloc(shorts,value,dim=1)
-      ii=maxloc([0,merge(1, 0, shorts.eq.value)],dim=1)
-      if(ii.gt.1)then
+      ii=maxloc([0,merge(1, 0, shorts == value)],dim=1)
+      if(ii > 1)then
          place=ii-1
       else
          call locate(keywords,value,place)

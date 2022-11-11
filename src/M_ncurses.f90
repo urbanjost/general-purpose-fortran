@@ -539,7 +539,7 @@ function ptr_longname() result (longname__OUT) bind(C, name='longname')
    type(C_PTR) :: longname__OUT  ! const char *longname
 end function ptr_longname
 !-------------------------------------------------------------------------------
-  end interface
+end interface
 !-------------------------------------------------------------------------------
 !-------------------------------------------------------------------------------
 ! requires a variable argument list

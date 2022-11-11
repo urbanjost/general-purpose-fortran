@@ -1,4 +1,3 @@
-        ! program demo_ubound
         module m2_bounds
         implicit none
 
@@ -13,6 +12,7 @@
 
         end module m2_bounds
 
+        program demo_ubound
         use m2_bounds, only : msub
         implicit none
         interface
@@ -32,7 +32,7 @@
            & 'SIZE=',size(arr)
         end subroutine csub
 
-        end
+        end program demo_ubound
 
         subroutine esub(arr)
         implicit none

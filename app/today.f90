@@ -16,17 +16,17 @@ help_text=[ CHARACTER(LEN=128) :: &
 '       today(1f) - [TIME] output current time for uses such as file suffixes.                                                   ',&
 '       (LICENSE:PD)                                                                                                             ',&
 'SYNOPSIS                                                                                                                        ',&
-'       today format|--help|--version|--options                                                                                  ',&
+'       today format|--help|--version|--test                                                                                     ',&
 'DESCRIPTION                                                                                                                     ',&
 '       Outputs the current date using the specified format. Typically used                                                      ',&
 '       to generate a string to be used in building filenames containing                                                         ',&
 '       date information.                                                                                                        ',&
 'OPTIONS                                                                                                                         ',&
-'       format     any allowable format for the fmtdate(3) routine. Enter                                                        ',&
-'                  "-" to get a list on stdout. defaults to "YMD".                                                               ',&
+'       format     any allowable format for the fmtdate(3) routine.                                                              ',&
+'                  defaults to "YMD".                                                                                            ',&
 '       --help     display this help and exit                                                                                    ',&
 '       --version  output version information and exit                                                                           ',&
-'       --options  display allowed options for building a format                                                                 ',&
+'       --test     display allowed options for building a format                                                                 ',&
 'EXAMPLE                                                                                                                         ',&
 '       Sample commands:                                                                                                         ',&
 '                                                                                                                                ',&
@@ -34,7 +34,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '        find . -ls > MANIFEST.`today epoch`                                                                                     ',&
 '        mkdir `today YMDhms`                                                                                                    ',&
 '        today yearmonthdayhourminutesecond                                                                                      ',&
-'        today --options                       # show formatting options                                                         ',&
+'        today --test                          # show formatting options                                                         ',&
 'AUTHOR                                                                                                                          ',&
 '   John S. Urban                                                                                                                ',&
 'LICENSE                                                                                                                         ',&
@@ -50,17 +50,17 @@ end subroutine help_usage
 !!        (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!        today format|--help|--version|--options
+!!        today format|--help|--version|--test
 !!##DESCRIPTION
 !!        Outputs the current date using the specified format. Typically used
 !!        to generate a string to be used in building filenames containing
 !!        date information.
 !!##OPTIONS
-!!        format     any allowable format for the fmtdate(3) routine. Enter
-!!                   "-" to get a list on stdout. defaults to "YMD".
+!!        format     any allowable format for the fmtdate(3) routine.
+!!                   defaults to "YMD".
 !!        --help     display this help and exit
 !!        --version  output version information and exit
-!!        --options  display allowed options for building a format
+!!        --test     display allowed options for building a format
 !!##EXAMPLE
 !!
 !!        Sample commands:
@@ -69,7 +69,7 @@ end subroutine help_usage
 !!         find . -ls > MANIFEST.`today epoch`
 !!         mkdir `today YMDhms`
 !!         today yearmonthdayhourminutesecond
-!!         today --options                       # show formatting options
+!!         today --test                          # show formatting options
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -89,7 +89,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    output current time for uses such as file suffixes.>',&
 '@(#)VERSION:        1.0, 2009>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-08-14 13:35:29 UTC-240>',&
+'@(#)COMPILED:       2022-11-11 14:31:26 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -102,10 +102,10 @@ use M_kracken95, only : kracken, lget, sget                    ! add command-lin
 ! ident_1="@(#) today(1f) output current time for uses such as file suffixes."
 
 character(len=:),allocatable :: options
-   call kracken('today','-help .F. -version .F. -options .F.') ! define command arguments,default values and crack command line
+   call kracken('today','-help .F. -version .F. -test .F.')    ! define command arguments,default values and crack command line
    call help_usage(lget('today_help'))                         ! if -help option is present, display help text and exit
    call help_version(lget('today_version'))                    ! if -version option is present, display version text and exit
-   if(lget('today_options'))then                               ! special option to list date format documentation
+   if(lget('today_test'))then                                  ! special option to list date format documentation
       call fmtdate_usage()                                     ! see all formatting options
    else
       options= sget('today_oo')                                ! get -oo STRING

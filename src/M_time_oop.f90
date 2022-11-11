@@ -235,14 +235,14 @@
 !!        ! OVERLOADED OPERATORS (logical comparisons)
 !!        ! NOTE COMPARISONS ARE PERFORMED BY
 !!        ! CONVERTING TIMES TO INTEGER SECONDS
-!!        write(*,*)'> ',event.eq.event   ,event.lt.event   ,event.gt.event &
-!!        & ,event.le.event   ,event.ge.event   ,event.ne.event
+!!        write(*,*)'> ',event==event   ,event<event   ,event>event &
+!!        & ,event<=event   ,event>=event   ,event/=event
 !!        !
-!!        write(*,*)'> ',event.eq.answer  ,event.lt.answer  ,event.gt.answer  &
-!!        & ,event.le.answer  ,event.ge.answer  ,event.ne.answer
+!!        write(*,*)'> ',event==answer  ,event<answer  ,event>answer  &
+!!        & ,event<=answer  ,event>=answer  ,event/=answer
 !!        !
-!!        write(*,*)'> ',answer.eq.event  ,answer.lt.event  ,answer.gt.event  &
-!!        & ,answer.le.event  ,answer.ge.event  ,answer.ne.event
+!!        write(*,*)'> ',answer==event  ,answer<event  ,answer>event  &
+!!        & ,answer<=event  ,answer>=event  ,answer/=event
 !!
 !!        ! %DELTA easily lets you change dates by common increments
 !!        write(*,*)
@@ -418,7 +418,7 @@ module M_time_oop
 use M_time, only : d2u, u2d, fmtdate, d2o, dow, fmtdate_usage, days2sec, realtime
 use M_time, only : j2d, d2j
 use M_strings, only : upper
-implicit none
+implicit none !(type,external)
 integer,parameter :: dp=kind(0.0d0)
 private
 private upper
@@ -516,7 +516,7 @@ integer                     :: datlocal(8)                  ! date time array si
 type(date_time)             :: construct_from_dat
 
    datlocal=u2d(0.0_dp)                                     ! initialize to start of Unix Epoch Time using local time zone
-   if(size(dat).gt.0)then                                   ! allow for partial DAT arrays
+   if(size(dat)>0)then                                   ! allow for partial DAT arrays
       datlocal(:size(dat))=dat
    endif
    construct_from_dat%year=datlocal(1)
@@ -589,7 +589,7 @@ character(len=*),parameter            :: mdy_fmt='%M/%D/%Y %h:%m:%s.%x%z'
    else
       fmtlocal=iso_fmt
    endif
-   if(index(fmtlocal,'%').eq.0)then       ! if a percent(%) in string assume it is a string to be passed to fmtdate
+   if(index(fmtlocal,'%')==0)then       ! if a percent(%) in string assume it is a string to be passed to fmtdate
       select case(upper(fmtlocal))
       case("ISO","ISO-8601",""); fmtlocal=iso_fmt
       case("USA");               fmtlocal=usa_fmt
@@ -777,37 +777,37 @@ logical function eq(self,other)
 
 class(date_time),intent(in)   :: self
 type(date_time),intent(in)    :: other
-   eq= int(d2u(dt2d_(self))) .eq. int(d2u(dt2d_(other)))
+   eq= int(d2u(dt2d_(self))) == int(d2u(dt2d_(other)))
 end function eq
 
 logical function lt(self,other)
 class(date_time),intent(in)   :: self
 type(date_time),intent(in)    :: other
-   lt= int(d2u(dt2d_(self))) .lt. int(d2u(dt2d_(other)))
+   lt= int(d2u(dt2d_(self))) < int(d2u(dt2d_(other)))
 end function lt
 
 logical function gt(self,other)
 class(date_time),intent(in)   :: self
 type(date_time),intent(in)    :: other
-   gt= int(d2u(dt2d_(self))) .gt. int(d2u(dt2d_(other)))
+   gt= int(d2u(dt2d_(self))) > int(d2u(dt2d_(other)))
 end function gt
 
 logical function le(self,other)
 class(date_time),intent(in)   :: self
 type(date_time),intent(in)    :: other
-   le= int(d2u(dt2d_(self))) .le. int(d2u(dt2d_(other)))
+   le= int(d2u(dt2d_(self))) <= int(d2u(dt2d_(other)))
 end function le
 
 logical function ge(self,other)
 class(date_time),intent(in)   :: self
 type(date_time),intent(in)    :: other
-   ge= int(d2u(dt2d_(self))) .ge. int(d2u(dt2d_(other)))
+   ge= int(d2u(dt2d_(self))) >= int(d2u(dt2d_(other)))
 end function ge
 
 logical function ne(self,other)
 class(date_time),intent(in)   :: self
 type(date_time),intent(in)    :: other
-   ne= int(d2u(dt2d_(self))) .ne. int(d2u(dt2d_(other)))
+   ne= int(d2u(dt2d_(self))) /= int(d2u(dt2d_(other)))
 end function ne
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

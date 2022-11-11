@@ -18,8 +18,10 @@ use M_strings, only : string_to_values, s2v, v2s
 use M_strings, only : compact, transliterate
 use M_verify, only : stderr
 use, intrinsic :: iso_fortran_env, only : int64
-implicit none
+implicit none !(external,type)
+
 ! ident_1="@(#) M_time M_time(3f) date and time function module"
+
 private
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! version: 6E61627255202E53206E686F4A-2022-03-18
@@ -118,6 +120,7 @@ real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seco
 !!##RETURNS
 !!    juliandate  A Julian Ephemeris Date (JED) is the number of days since
 !!                noon (not midnight) on January 1st, 4713 BC.
+!!
 !!    ierr        Error code. If 0 no error occurred.
 !!
 !!##EXAMPLE
@@ -148,6 +151,7 @@ real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seco
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine date_to_julian(dat,julian,ierr)
@@ -181,7 +185,7 @@ integer                          :: A, Y, M, JDN
 !-----------------------------------------------------------------------------------------------------------------------------------
    julian = -HUGE(99999)                  ! this is the date if an error occurs and IERR is < 0
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(year==0 .or. year .lt. -4713) then
+   if(year==0 .or. year < -4713) then
       ierr=-1
       return
    endif
@@ -197,7 +201,7 @@ integer                          :: A, Y, M, JDN
 !  Finding the Julian Calendar date given the JDN (Julian day number) and time of day
    julian=JDN + dble(hour-12)/24.0_dp + dble(minute)/1440.0_dp + second/86400.0_dp
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(julian.lt.0.0_dp) then                  ! Julian Day must be non-negative
+   if(julian<0.0_dp) then                  ! Julian Day must be non-negative
       ierr=1
    else
       ierr=0
@@ -236,6 +240,7 @@ end subroutine date_to_julian
 !!##RETURNS
 !!    unixtime  The "Unix Epoch" time, or the number of seconds since 00:00:00 on
 !!              January 1st, 1970, UTC.
+!!
 !!    ierr      Error code. If 0 no error occurred.
 !!
 !!##EXAMPLE
@@ -270,6 +275,7 @@ end subroutine date_to_julian
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine julian_to_date(julian,dat,ierr)
@@ -288,7 +294,7 @@ integer                          :: hour
 integer                          :: minute
 integer                          :: jalpha,ja,jb,jc,jd,je,ijul
 
-   if(julian.lt.0.0_dp) then                     ! Negative Julian Date not allowed
+   if(julian<0.0_dp) then                     ! Negative Julian Date not allowed
       ierr=1
       return
    else
@@ -300,14 +306,14 @@ integer                          :: jalpha,ja,jb,jc,jd,je,ijul
    second=sngl((julian-dble(ijul))*secday)      ! Seconds from beginning of Jul. Day
    second=second+(tz*60)
 
-   if(second.ge.(secday/2.0_dp)) then           ! In next calendar day
+   if(second>=(secday/2.0_dp)) then           ! In next calendar day
       ijul=ijul+1
       second=second-(secday/2.0_dp)             ! Adjust from noon to midnight
    else                                         ! In same calendar day
       second=second+(secday/2.0_dp)             ! Adjust from noon to midnight
    endif
 
-   if(second.ge.secday) then                    ! Final check to prevent time 24:00:00
+   if(second>=secday) then                    ! Final check to prevent time 24:00:00
       ijul=ijul+1
       second=second-secday
    endif
@@ -329,16 +335,16 @@ integer                          :: jalpha,ja,jb,jc,jd,je,ijul
    day=jb-jd-idint(30.6001_dp*dble(je))
    month=je-1
 
-   if(month.gt.12)then
+   if(month>12)then
       month=month-12
    endif
 
    year=jc-4715
-   if(month.gt.2)then
+   if(month>2)then
       year=year-1
    endif
 
-   if(year.le.0)then
+   if(year<=0)then
       year=year-1
    endif
 
@@ -375,6 +381,7 @@ end subroutine julian_to_date
 !!##RETURNS
 !!    unixtime  The "Unix Epoch" time, or the number of seconds since
 !!              00:00:00 on January 1st, 1970, UTC.
+!!
 !!    ierr      Error code. If 0 no error occurred.
 !!
 !!##EXAMPLE
@@ -399,8 +406,10 @@ end subroutine julian_to_date
 !!      Today is:2016:7:18:-240:23:44:20:434
 !!      Unix Epoch time is    1468899860.4340105
 !!      ierr is            0
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine date_to_unix(dat,unixtime,ierr)
@@ -415,14 +424,14 @@ real(kind=realtime),save        :: julian_at_epoch
 logical,save                    :: first=.true.
 integer,parameter               :: ref(8)=[1970,1,1,0,0,0,0,0]
 !-----------------------------------------------------------------------------------------------------------------------------------
-if(first) then                                        ! Convert zero of Unix Epoch Time to Julian Date and save
-   call date_to_julian(ref,julian_at_epoch,ierr)
-   if(ierr.ne.0) return                               ! Error
-   first=.false.
-endif
+   if (first) then                                    ! Convert zero of Unix Epoch Time to Julian Date and save
+      call date_to_julian(ref,julian_at_epoch,ierr)
+      if(ierr /= 0) return                            ! Error
+      first=.false.
+   endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    call date_to_julian(dat,julian,ierr)
-   if(ierr.ne.0) return                               ! Error
+   if(ierr /= 0) return                               ! Error
    unixtime=(julian-julian_at_epoch)*secday
 end subroutine date_to_unix
 !===================================================================================================================================
@@ -497,6 +506,7 @@ end subroutine date_to_unix
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine unix_to_date(unixtime,dat,ierr)
@@ -518,15 +528,15 @@ integer,parameter               :: ref(8)=[1970,1,1,0,0,0,0,0]
    type is (real(kind=realtime)); local_unixtime=unixtime
    end select
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(first)then                                                             ! Initialize calculated constants on first call
-      call date_to_julian(ref,Unix_Origin_as_Julian,ierr)                    ! Compute start of Unix Time as a Julian Date
-      if(ierr.ne.0) return                                                   ! Error
+   if(first)then                                                 ! Initialize calculated constants on first call
+      call date_to_julian(ref,Unix_Origin_as_Julian,ierr)        ! Compute start of Unix Time as a Julian Date
+      if(ierr/=0) return                                         ! Error
       first=.FALSE.
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   julian=(local_unixtime/secday)+Unix_Origin_as_Julian           ! convert seconds from Unix Epoch to Julian Date
-   call julian_to_date(julian,dat,ierr)                           ! calculate date-time array from Julian Date
-   !dat(4)=get_timezone()                                          ! need to get time zone
+   julian=(local_unixtime/secday)+Unix_Origin_as_Julian          ! convert seconds from Unix Epoch to Julian Date
+   call julian_to_date(julian,dat,ierr)                          ! calculate date-time array from Julian Date
+   !dat(4)=get_timezone()                                        ! need to get time zone
 end subroutine unix_to_date
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -599,6 +609,7 @@ end subroutine unix_to_date
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function d2o(dat) result (ordinal)
@@ -619,7 +630,7 @@ integer                     :: temp_dat(8)
      dat_local=getnow()
    endif
    call date_to_unix(dat_local,unixtime,ierr)         ! convert date to Unix Epoch Time
-   if(ierr.ne.0)then
+   if(ierr/=0)then
       call stderr('*d2o* bad date array')
       ordinal=-1                                      ! initialize to bad value
    else
@@ -663,28 +674,23 @@ end function d2o
 !!     write(*,*)'that took ',iend-istart,'seconds'
 !!     write(*,*)istart,iend
 !!     end program demo_ordinal_seconds
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 integer function ordinal_seconds()
 
 ! ident_7="@(#) M_time ordinal_seconds(3f) seconds since beginning of year"
 
-integer                     :: vtime(8)
-integer                     :: year, month, day, hour, minutes, seconds, timezone, milliseconds
-integer                     :: ordinal_day_of_year
-equivalence(vtime(1),year)
-equivalence(vtime(2),month)
-equivalence(vtime(3),day)
-equivalence(vtime(4),timezone)
-equivalence(vtime(5),hour)
-equivalence(vtime(6),minutes)
-equivalence(vtime(7),seconds)
-equivalence(vtime(8),milliseconds)
-   vtime=getnow()
-   ordinal_day_of_year=d2o(vtime)
-   ordinal_seconds=ordinal_day_of_year*24*60*60 +hour*60*60 +minutes*60 +seconds
+integer   :: v(8)
+integer   :: ordinal_day_of_year
+   associate(year=>v(1), month=>v(2), day=>v(3), timezone=>v(4), hour=>v(5), minutes=>v(6), seconds=>v(7), milliseconds=>v(8))
+    v=getnow()
+    ordinal_day_of_year=d2o(v)
+    ordinal_seconds=ordinal_day_of_year*24*60*60 +hour*60*60 +minutes*60 +seconds
+   end associate
 end function ordinal_seconds
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -723,7 +729,7 @@ end function ordinal_seconds
 !!          write(*,'(a)',advance='no')&
 !!          & 'Enter year YYYY and ordinal day of year DD '
 !!          read(*,*,iostat=ios)yyyy,ddd
-!!          if(ios.ne.0)exit INFINITE
+!!          if(ios/=0)exit INFINITE
 !!          ! recover month and day from year and day number.
 !!          call ordinal_to_date(yyyy, ddd, dat)
 !!          yy=dat(1)
@@ -813,8 +819,10 @@ end subroutine ordinal_to_date
 !!     00:00:00 PM UTC-02:40
 !!     100th day of this year is Saturday, April 9th, 2016 ...
 !!     00:00:00 PM UTC-02:40
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function o2d(ordinal,year) result (dat)
@@ -834,7 +842,7 @@ integer                    :: ierr                    ! return 0 on success, oth
    endif
    ierr=0
    call date_to_unix(dat,unixtime,ierr)               ! convert date to Unix Epoch Time
-   if(ierr.ne.0)then
+   if(ierr/=0)then
       call stderr('*o2d* bad date array')
    else
       dat=u2d(unixtime)
@@ -892,8 +900,10 @@ end function o2d
 !!     November
 !!     December
 !!     UNKNOWN.
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function v2mo(imonth) result(month_name)
@@ -961,6 +971,7 @@ end function v2mo
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function mo2d(month_name,year) result (dat)
@@ -975,7 +986,7 @@ integer                     :: dat(8)
       dat(1)=year
    endif
    dat(2)=mo2v(month_name) ! convert given month name to a number
-   if(dat(2).le.0)then
+   if(dat(2)<=0)then
       call stderr('*mo2d* bad month name '//trim(month_name))
       dat(2)=1
    endif
@@ -996,7 +1007,7 @@ end function mo2d
 !!
 !!##SYNOPSIS
 !!
-!!    function mo2v(month_name) result(imonth)
+!!    elemental function mo2v(month_name) result(imonth)
 !!
 !!      character(len=*),intent(in):: month_name ! month name
 !!      integer                    :: imonth     ! month number
@@ -1038,9 +1049,10 @@ end function mo2d
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
-function mo2v(month_name) result(imonth)
+elemental function mo2v(month_name) result(imonth)
 
 ! ident_12="@(#) M_time mo2v(3f) given month name return month number (1-12) of that month"
 
@@ -1126,6 +1138,7 @@ end function mo2v
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function now(format)
@@ -1208,6 +1221,7 @@ end function now
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015-12-19
+!!
 !!##LICENSE
 !!    Public Domain
 function fmtdate(values,format) RESULT (timestr)
@@ -1278,7 +1292,7 @@ real(kind=realtime),save             :: unixtime_last
      &'
    case default
       xxxx=local_format
-      if(index(xxxx,'%').eq.0)then               ! if no % characters try to guess what macros are present
+      if(index(xxxx,'%')==0)then               ! if no % characters try to guess what macros are present
 
          call substitute(xxxx,'year','%Y')
          call substitute(xxxx,'month','%M')
@@ -1308,11 +1322,11 @@ real(kind=realtime),save             :: unixtime_last
          call substitute(xxxx,'julian','%j')
          call substitute(xxxx,'ordinal','%O')
 
-         if(index(xxxx,'%').eq.0)then            ! if no % characters change every char to %char if a format macro letter
+         if(index(xxxx,'%')==0)then            ! if no % characters change every char to %char if a format macro letter
             do i=65,122
-             select case(char(i))
+             select case(achar(i))
              case('B':'E','H':'J','L':'Q','S','T','U','W','Y','Z','b':'e','h':'m','n','o':'q','s':'u','w','x','z')
-                 call substitute(xxxx,char(i),'%'//char(i))
+                 call substitute(xxxx,achar(i),'%'//achar(i))
              end select
             enddo
          endif
@@ -1327,7 +1341,7 @@ real(kind=realtime),save             :: unixtime_last
 
    do i10=1,len(local_format)                  ! Read the FORMAT string and replace the "%" strings per the following rules:
       chara=local_format(i10:i10)
-      if(chara.eq.'%'.and..not.keyword)then
+      if(chara=='%'.and..not.keyword)then
             keyword=.TRUE.
             cycle
       endif
@@ -1369,7 +1383,7 @@ real(kind=realtime),save             :: unixtime_last
          case('h'); write(text(iout:),'(I2.2)')valloc(5)                  ! the hour of the day, in the range of 0 to 23
          !=====================================================================================
          case('H'); ii=mod(valloc(5),12)                                  ! hour of day in range 1..12
-                    if(ii.eq.0)then
+                    if(ii==0)then
                        ii=12
                     endif
                     write(text(iout:),'(I0)')ii
@@ -1401,7 +1415,7 @@ real(kind=realtime),save             :: unixtime_last
          !=====================================================================================
          case('M'); write(text(iout:),'(I2.2)')valloc(2)                  ! month of year (1..12)
          !=====================================================================================
-         case('N'); if( valloc(5).ge.12)then                              ! AM||PM
+         case('N'); if( valloc(5)>=12)then                              ! AM||PM
                        write(text(iout:),'("PM")')
                     else
                        write(text(iout:),'("AM")')
@@ -1434,7 +1448,7 @@ real(kind=realtime),save             :: unixtime_last
                     write(text(iout:),'(G0)')unixtime-unixtime_last
                     unixtime_last=unixtime
          !=====================================================================================
-         case('t'); write(text(iout:),'(A1)')CHAR(9)                      ! tab character
+         case('t'); write(text(iout:),'(a1)')achar(9)                     ! tab character
          !=====================================================================================
          case('T'); write(text(iout:),'(SP,I3.2,SS,I2.2)')int(valloc(4)/60),abs(mod(valloc(4),60)) ! time from UTC as +-hhmm
          !=====================================================================================
@@ -1464,7 +1478,7 @@ real(kind=realtime),save             :: unixtime_last
          end select
          !=====================================================================================
          iout=len_trim(text)+1
-         if(iout.ge.longest)exit
+         if(iout>=longest)exit
       else
          write(text(iout:),'(A1)')chara;iout=iout+1
       endif
@@ -1622,8 +1636,10 @@ end function fmtdate
 !!    of it. For example:
 !!
 !!       YMDhms ==> %Y%M%D%h%m%s ==> 20160729105408
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015-10-24
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine fmtdate_usage(indent)
@@ -1901,8 +1917,8 @@ integer                           :: loops
 
 !-----------------------------------------------------------------------------------------------------------------------------------
    temp=' '//trim(upper(datestring))
-   if(len(temp).ge.2)then
-      if(temp(2:2).eq.'?')then
+   if(len(temp)>=2)then
+      if(temp(2:2)=='?')then
          verbose=.true.
          temp=temp(3:)
       endif
@@ -1978,12 +1994,12 @@ integer                           :: loops
    if(verbose)write(*,*)'*guessdate* B ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                                                       ! a leading +/- is assumed to be a timezone
-      if( index("+-",scratch(i)(1:1)) .ne. 0)then
-         if(index(scratch(i),':').ne.0)then                                   ! assumed to be +-hh:mm
+      if( index("+-",scratch(i)(1:1)) /= 0)then
+         if(index(scratch(i),':')/=0)then                                   ! assumed to be +-hh:mm
             call string_to_values(scratch(i),isize,rvalues,inums,':',ierr)
-            if(inums.ge.2)then
+            if(inums>=2)then
                itz=60*nint(rvalues(1))+nint(rvalues(2))
-            elseif(inums.eq.1)then
+            elseif(inums==1)then
                itz=60*nint(rvalues(1))
             endif
          else                                                                ! assumed to be +-mm
@@ -1995,7 +2011,7 @@ integer                           :: loops
    if(verbose)write(*,*)'*guessdate* C ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                      ! AM and PM are assumed to only occur significantly (not end of day or month name, ...)
-      if(len_trim(scratch(i)).ge.2)then
+      if(len_trim(scratch(i))>=2)then
          iend=len_trim(scratch(i))
          ampm=scratch(i)(iend-1:iend)
          select case (ampm)
@@ -2010,22 +2026,22 @@ integer                           :: loops
    if(verbose)write(*,*)'*guessdate* E ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                                                      ! look for HH:MM:SS
-      if(index(scratch(i),':').ne.0)then
+      if(index(scratch(i),':')/=0)then
          buff=scratch(i)
          call substitute(buff,'-',' -')
          call substitute(buff,'+',' +')
          call string_to_values(buff,isize,rvalues,inums,':/',ierr)
-         if(inums.ge.1) ihr=ihr+nint(rvalues(1))
-         if(inums.ge.2) imi=nint(rvalues(2))
-         if(inums.ge.3) ise=nint(rvalues(3))
-         if(inums.ge.4) itz=nint(rvalues(4))
+         if(inums>=1) ihr=ihr+nint(rvalues(1))
+         if(inums>=2) imi=nint(rvalues(2))
+         if(inums>=3) ise=nint(rvalues(3))
+         if(inums>=4) itz=nint(rvalues(4))
          scratch(i)=' '
       endif
    enddo
    if(verbose)write(*,*)'*guessdate* F ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                                                       ! assume yyyy-mm-dd if found a dash
-      if(index(scratch(i),"-").ne.0)then
+      if(index(scratch(i),"-")/=0)then
             call string_to_values(scratch(i),isize,rvalues,inums,'-',ierr)
             select case(inums)
             case(3)
@@ -2049,7 +2065,7 @@ integer                           :: loops
    enddo
    if(verbose)write(*,*)'*guessdate* G ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(datestring_local.eq.' ')then
+   if(datestring_local==' ')then
      loops=0
    else
      loops=1000
@@ -2061,7 +2077,7 @@ integer                           :: loops
 
       do i=1,12
          ind=index(buff,amon(i))
-         if(ind.ne.0) then                                  ! Found a matching month
+         if(ind/=0) then                                  ! Found a matching month
             mon=i
             buff(ind:ind+2)='   '                           ! Delete month
             alpha=.true.                                    ! Alphabetic month
@@ -2070,36 +2086,36 @@ integer                           :: loops
       enddo
 
       do i=1,len(buff)                                      ! First remove all non-numeric characters
-         idum=ichar(buff(i:i))
-         if(idum.lt.48.or.idum.gt.57)then
+         idum=iachar(buff(i:i))
+         if(idum<48.or.idum>57)then
             buff(i:i)=' '
          endif
       enddo
 
       if(alpha) then                                        ! Alphabetic month
          read(buff,*,iostat=ios) idy,iye
-         if(ios.ne.0)cycle INFINITE
+         if(ios/=0)cycle INFINITE
       else
          read(buff,*,iostat=ios) idy,mon,iye
-         if(ios.ne.0)cycle INFINITE
+         if(ios/=0)cycle INFINITE
       endif
-      !x!if(iye.le.99)then
+      !x!if(iye<=99)then
       !x!   iye=iye+2000                                       ! Cope with two digit year (assume 21st century.)
       !x!endif
-      if(mon.lt.1.or.mon.gt.12) cycle INFINITE              ! Check range of months
-      if(mon.eq.2) then                                     ! Special check for Feb.
-         if((iye/4)*4.eq.iye) then                          ! Leap year
-            if(idy.lt.1.or.idy.gt.29) cycle INFINITE
+      if(mon<1.or.mon>12) cycle INFINITE              ! Check range of months
+      if(mon==2) then                                     ! Special check for Feb.
+         if((iye/4)*4==iye) then                          ! Leap year
+            if(idy<1.or.idy>29) cycle INFINITE
          else                                               ! Non-leap year
-            if(idy.lt.1.or.idy.gt.28) cycle INFINITE
+            if(idy<1.or.idy>28) cycle INFINITE
          endif
       else
-         if(idy.lt.1.or.idy.gt.idmon(mon)) cycle INFINITE   ! Error ..... re-input
+         if(idy<1.or.idy>idmon(mon)) cycle INFINITE   ! Error ..... re-input
       endif
       exit
    enddo INFINITE
    if(verbose)write(*,*)'*guessdate* H ',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill
-   if(itries.ge.1000)then
+   if(itries>=1000)then
       write(*,*)'*guessdate* ERROR: could not extract date for '//trim(datestring)
    endif
    dat(1)=iye
@@ -2177,8 +2193,10 @@ end subroutine guessdate
 !!     weekday=1
 !!     day=Monday
 !!     ierr=0
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015-12-19
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine dow(values, weekday, day, ierr)
@@ -2224,7 +2242,7 @@ integer                               :: ierr_local
 
    if(present(ierr))then
       ierr=ierr_local
-   elseif(ierr_local.ne.0)then
+   elseif(ierr_local/=0)then
       write(*,*)'*dow* Unprocessed Error ',ierr_local,' stopping.'
       stop 2
    endif
@@ -2351,6 +2369,7 @@ end subroutine dow
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015-12-19
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine d2w(dat,iso_year,iso_week,iso_weekday,iso_name)
@@ -2566,6 +2585,7 @@ end subroutine d2w
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2644,6 +2664,7 @@ end subroutine w2d
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 subroutine box_month(dat,calen)
@@ -2673,9 +2694,9 @@ integer                       :: location,ierr,i
    call date_to_julian(dat_1st,julian,ierr)                        ! get Julian Date for 1st day of month
    MNTH: do i=1,31                                                 ! put dates into rest of array starting at third line
       write(calen(location/wklen+3)(mod(location,wklen):),'(i2)')i
-      if(i.ge.28)then                                              ! is tomorrow in another month?
+      if(i>=28)then                                              ! is tomorrow in another month?
          call julian_to_date(julian+i,dat_nextday,ierr)
-         if(dat_nextday(2).ne.dat(2))then
+         if(dat_nextday(2)/=dat(2))then
             exit MNTH
          endif
       endif
@@ -2732,6 +2753,7 @@ end subroutine box_month
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function d2j(dat) result (julian)
@@ -2805,8 +2827,10 @@ end function d2j
 !!     Today=Tuesday, July 19th, 2016 08:48:20 AM
 !!     Yesterday=Monday, July 18th, 2016 08:48:20 AM
 !!     Tomorrow=Wednesday, July 20th, 2016 08:48:20 AM
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function j2d(julian) result (dat)
@@ -2870,8 +2894,10 @@ end function j2d
 !!
 !!     Today is:2016:7:19:-240:2:0:48:561
 !!     Unix Epoch time is    1468908048.5610321
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function d2u(dat) result (unixtime)
@@ -2953,6 +2979,7 @@ end function d2u
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function u2d(unixtime) result (dat)
@@ -2982,12 +3009,11 @@ end function u2d
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function get_timezone() result(tz)
-implicit none
 integer :: tz
 integer :: timezone(8)
    timezone=getnow()
    tz=timezone(4)
-   if(tz.gt.0)then  ! gfortran bug on new-years
+   if(tz>0)then  ! gfortran bug on new-years
       write(*,*)'<ERROR>*get_timezone*TZ=',tz
       tz=mod(tz,1440)-1440
    endif
@@ -3066,6 +3092,7 @@ end function get_timezone
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function sec2days(seconds,crop) result(dhms)
@@ -3153,7 +3180,7 @@ doubleprecision                   :: dtime
       crop_local=.false.
    endif
 
-   if(secsleft.lt.0)then
+   if(secsleft<0)then
       secsleft=-secsleft
       negative=.true.
    else
@@ -3163,11 +3190,11 @@ doubleprecision                   :: dtime
    iprint=4
 
    days=secsleft/one_day                  ! get whole number of days
-   if(days.eq.0) iprint=3
+   if(days==0) iprint=3
    secsleft=secsleft-days*one_day         ! calculate remainder
 
    hours=secsleft/one_hour                ! get whole number of hours
-   if(days.eq.0.and.hours.eq.0) iprint=2
+   if(days==0.and.hours==0) iprint=2
    secsleft=secsleft-hours*one_hour
 
    minutes=secsleft/one_minute            ! get whole number of minutes
@@ -3267,15 +3294,15 @@ end function sec2days
 !!        write(*,*)'one minute ',days2sec('1:00')
 !!        write(*,*)'one hour ',days2sec('1:00:00')
 !!        write(*,*)'one day ',days2sec('1-00:00:00')
-!!        write(*,*)nint(days2sec(' 1-12:04:20              ')) .eq. 129860
-!!        write(*,*)nint(days2sec(' 1.5 days                ')) .eq. 129600
-!!        write(*,*)nint(days2sec(' 1.5 days 4hrs 30minutes ')) .eq. 145800
-!!        write(*,*)nint(days2sec(' 1.5d                    ')) .eq. 129600
-!!        write(*,*)nint(days2sec(' 1d2h3m4s                ')) .eq. 93784
+!!        write(*,*)nint(days2sec(' 1-12:04:20              ')) == 129860
+!!        write(*,*)nint(days2sec(' 1.5 days                ')) == 129600
+!!        write(*,*)nint(days2sec(' 1.5 days 4hrs 30minutes ')) == 145800
+!!        write(*,*)nint(days2sec(' 1.5d                    ')) == 129600
+!!        write(*,*)nint(days2sec(' 1d2h3m4s                ')) == 93784
 !!        ! duplicates
-!!        write(*,*)nint(days2sec(' 1d1d1d                  ')) .eq. 259200
+!!        write(*,*)nint(days2sec(' 1d1d1d                  ')) == 259200
 !!        ! negative values
-!!        write(*,*)nint(days2sec(' 4d-12h                  ')) .eq. 302400
+!!        write(*,*)nint(days2sec(' 4d-12h                  ')) == 302400
 !!     end program demo_days2sec
 !!
 !!    Results:
@@ -3295,10 +3322,10 @@ end function sec2days
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function days2sec(str) result(time)
-implicit none
 
 ! ident_26="@(#) M_time days2sec(3f) convert string [[-]dd-]hh mm ss.nn to seconds or string IId JJh KKm LLs to seconds"
 
@@ -3322,9 +3349,9 @@ logical                           :: negative
    strlocal=transliterate(strlocal,"_',",'')             ! remove single quotes,underscores sometimes used in numbers
    strlocal=lower(strlocal)//repeat(' ',len(strlocal))   ! change to lowercase and add whitespace to make room for spaces
 
-   if(len(strlocal).eq.0)then
+   if(len(strlocal)==0)then
       time=0.0_dp
-   elseif(scan(strlocal,'smhdw').ne.0)then               ! unit code values not DD-HH:MM:SS either plain number or unit numbers
+   elseif(scan(strlocal,'smhdw')/=0)then               ! unit code values not DD-HH:MM:SS either plain number or unit numbers
       call substitute(strlocal,'days','d')               ! from long names to short names substitute common aliases for units
       call substitute(strlocal,'day','d')
       call substitute(strlocal,'hours','h')
@@ -3367,7 +3394,7 @@ logical                           :: negative
       enddo
    else
 
-      if(strlocal(1:1).eq.'-')then          ! allow negative prefix as first character but remove it and change sign of value at end
+      if(strlocal(1:1)=='-')then          ! allow negative prefix as first character but remove it and change sign of value at end
          negative=.true.
          strlocal(1:1)=' '
       else
@@ -3377,12 +3404,12 @@ logical                           :: negative
       call split(trim(strlocal),array,' -:')
       iwords=size(array)
 
-      if(iwords.gt.4)then
+      if(iwords>4)then
          write(*,*)'*days2sec* error: too many values in '//trim(strlocal)
          iwords=4
       endif
 
-      if(index(strlocal,'-').gt.0)then                ! found a dash, assume has days and form DD-HH:MM:SS, DD-, DD-HH, DD-HH:MM
+      if(index(strlocal,'-')>0)then                ! found a dash, assume has days and form DD-HH:MM:SS, DD-, DD-HH, DD-HH:MM
          do i=1,iwords
             time=time+s2v(array(i))*units_hl(i)
          enddo
@@ -3474,10 +3501,10 @@ end function days2sec
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function phase_of_moon(datin)
-implicit none
 
 ! ident_27="@(#) M_time phase_of_moon(3f) return name for phase of moon for given date"
 
@@ -3486,7 +3513,7 @@ character(len=:),allocatable  :: phase_of_moon
 
 real(kind=realtime),parameter :: syndonic_month=29.530588853_realtime ! average period of a lunar cycle, or days per lunation
 integer,parameter             :: reference(*)= [2000,1,6,0,18,14,0,0] ! new moon of January 2000 was January 6, 18:14 UTC.
-character(len=20),parameter   :: phase_names(*)=[ "New            ", "Waxing crescent", &
+character(len=15),parameter   :: phase_names(*)=[ "New            ", "Waxing crescent", &
                                                   "First quarter  ", "Waxing gibbous ", &
                                                   "Full           ", "Waning gibbous ", &
                                                   "Last quarter   ", "Waning crescent"  ]
@@ -3496,9 +3523,9 @@ real(kind=realtime)           :: days
 
 days= d2j(datin)-d2j(reference)                               ! days between reference date and input date
 days = mod(days + phase_length/2.0_dp, syndonic_month)        ! modulo calculation of which phase rounding up
-if(days.lt.0)days=days+syndonic_month                         ! correct for days before reference date
+if(days<0)days=days+syndonic_month                         ! correct for days before reference date
 phase = int( days * ( size(phase_names) / syndonic_month ))+1 ! index into phase names
-phase_of_moon=phase_names(phase)
+phase_of_moon=trim(phase_names(phase))
 
 end function phase_of_moon
 !===================================================================================================================================
@@ -3563,12 +3590,13 @@ end function phase_of_moon
 !!      Today is:2018:11:3:-240:20:18:44:245
 !!      The phase of the moon is Waning crescent, with a fullness of -30%
 !!      The phase of the moon is Waning crescent, with a fullness of -30%
+!!
 !!##AUTHOR
 !!    John S. Urban, 2015
+!!
 !!##LICENSE
 !!    Public Domain
 function moon_fullness(datin)
-implicit none
 
 ! ident_28="@(#) M_time moon_fullness(3f) return percentage of moon phase from new to full"
 
@@ -3580,9 +3608,9 @@ integer,parameter             :: reference(*)= [2000,1,6,0,18,14,0,0]  ! new moo
 real(kind=realtime)           :: days_into_cycle
 
 days_into_cycle = mod(d2j(datin)-d2j(reference) , syndonic_month)      ! number of days into lunar cycle
-if(days_into_cycle.lt.0)days_into_cycle=days_into_cycle+syndonic_month ! correct for input date being before reference date
+if(days_into_cycle<0)days_into_cycle=days_into_cycle+syndonic_month ! correct for input date being before reference date
 
-if(days_into_cycle.le.syndonic_month/2.0_realtime)then                 ! if waxing from new to full report as 0% to 100%
+if(days_into_cycle<=syndonic_month/2.0_realtime)then                 ! if waxing from new to full report as 0% to 100%
    moon_fullness=int((days_into_cycle/syndonic_month)*200.0_realtime+0.5_realtime)
 else                                                                   ! if waning from full to new report as -99% to -1%
    moon_fullness=-(200-int((days_into_cycle/syndonic_month)*200.0_realtime))
@@ -3666,7 +3694,6 @@ end function moon_fullness
 !!   http://aa.usno.navy.mil/faq/docs/easter.html
 !!   Latest revision 8 April 2002
 SUBROUTINE Easter(year, dat)
-implicit none
 
 ! ident_29="@(#) M_time easter(3f) calculate date for Easter given a year"
 
@@ -3812,7 +3839,7 @@ interface
       integer(c_int), intent(in), VALUE :: seconds
    end function c_sleep
 end interface
-   if(wait_seconds.gt.0)then
+   if(wait_seconds>0)then
       how_long=c_sleep(wait_seconds)
    endif
 end subroutine call_sleep
@@ -3833,7 +3860,7 @@ interface
       integer(c_int), intent(in), VALUE :: seconds
    end function c_usleep
 end interface
-   if(wait_seconds.gt.0)then
+   if(wait_seconds>0)then
       how_long=c_usleep(wait_seconds)
    endif
 end subroutine call_usleep

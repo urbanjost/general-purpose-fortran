@@ -11,6 +11,7 @@
             end subroutine msub
          end module m_bounds
 
+         program demo_lbound
          use m_bounds, only : msub
          implicit none
          interface
@@ -31,7 +32,7 @@
            & 'UPPER=',ubound(arr), &
            & 'SIZE=',size(arr)
         end subroutine csub
-        end
+        end program demo_lbound
 
          subroutine esub(arr)
          implicit none

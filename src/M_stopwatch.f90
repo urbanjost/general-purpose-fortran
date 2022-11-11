@@ -69,7 +69,7 @@ use,intrinsic     :: iso_c_binding,   only : c_ptr, c_f_pointer, c_null_char, c_
 implicit none
 private
 
-! ident_1="@(#)M_stopwatch::M_stopwatch(3f): package for measuring cpu and wall clock"
+! ident_1="@(#) M_stopwatch M_stopwatch(3f) package for measuring cpu and wall clock"
 
 public :: create_watch, destroy_watch, start_watch, stop_watch, reset_watch, &
        read_watch, print_watch, pause_watch, end_pause_watch, &
@@ -248,6 +248,9 @@ end interface
 interface which_clocks
    module procedure which_clocks_a, which_clocks_s
 end interface
+
+type (watchtype) :: tictoc   ! This declares tictoc to be a watch
+public :: tic, toc
 contains
 !-------------------------------------------------------------------
 !                 CREATE_WATCH
@@ -3356,6 +3359,25 @@ user=c_user
 system=c_system
 total=c_total
 end subroutine system_cpu_time
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+subroutine tic()
+
+   call create_watch(tictoc,name='tictoc')    ! Watches must be created before they are used
+   call start_watch(tictoc)     ! This starts the watch
+
+end subroutine tic
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+subroutine toc()
+
+   call stop_watch(tictoc)      ! This stops the watch
+   call print_watch(tictoc)     ! This prints the measured time
+   call destroy_watch(tictoc)   ! Always destroy the watches to free up memory
+
+end subroutine toc
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

@@ -309,7 +309,7 @@ end subroutine math
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-recursive subroutine domath(line,ipos2)            !@(#)domath(3f): reduce integer expression containing  +-/* and ** operators
+recursive subroutine domath(line,ipos2)            !@(#)domath(3f): reduce integer expression containing  +*-/ and ** operators
 character(len=*)                :: line
 integer                         :: ipos2
 

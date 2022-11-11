@@ -3,6 +3,8 @@
 #@(#)man2html: call commands to convert man(1) page to HTML if man2html(1) is missing
 ################################################################################
 # try to find a command to change file to HTML
+export MANPATH=$(dirname $0)/../../man/
+PATH=$(dirname $0):$PATH
 if inpath manserver
 then
    COMMAND='manserver'
@@ -34,7 +36,7 @@ i\
 <head> \
 <title> </title>\
 <style> \
-px {font-family: "Lucida Console", Monaco }\
+px {font-family: "Lucida Console", Monaco, monospace }\
 p { font-size:100%; line-height:1.1em; }\
 body {xfont-style: sans-serif}\
 body {\
@@ -74,7 +76,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }\
 </head>
 }' -e '/^ *<[bB][oO][dD][yY].*/{
 a\
+<!--\
 <h5><a href="index.html">[UP]</a></h5>\
+<button type="button" onclick="javascript:history.back()">Back</button>\
+-->\
 <div id="Container">\
 <div id="Content">
 }' -e '/^<\/[bB][oO][dD][yY]/{
@@ -104,15 +109,15 @@ do
          $COMMAND "$FILENAME"
       else
          # If filename is not found, see if can find manpage file that matches name
-	 set -x
+         set -x
          FILENAME=$(whereis -m "${FILENAME:-' '}")
          FILENAME=${FILENAME/* /}
          FILENAME=${FILENAME/%:/}
          # if still cannot find filename notify user and skip this filename
          if [ ! -r "$FILENAME" ]
          then
-      	   echo "file [$FILENAME] not found" 1>&2
-      	   continue # break
+           echo "file [$FILENAME] not found" 1>&2
+           continue # break
          fi
          # if manpage file ends in .gz need to decompress it
          case "$FILENAME" in

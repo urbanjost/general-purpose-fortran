@@ -425,13 +425,15 @@ section == "SYNOPSIS" {
 		}
 	}
 	# word attributes
-	for (i in subwords)
-		gsub(i, subwords[i])
+	for (i in subwords){
+	   #sub(/\(/, "", i)
+	   gsub(i, subwords[i])
+	}
 	# shell options
-	gsub(/\B\-+\w+(\-\w+)*/, "\\fB&\\fP")
+	sub(/\B\-+\w+(\-\w+)*/, "\\fB&\\fP")
 	# unprotect dots inside words
 	gsub(/_dOt_/, ".")
-	gsub(/_sOq_/, "[")
+        gsub(/_sOq_/, "[")
 	########################################################################
 
 	if ($1 == "-"||$1 == "o"||$1 == "*" || $1 == "+") {

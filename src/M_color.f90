@@ -501,7 +501,7 @@ real                        :: c1, c2, c3, r, g, b
    output_color_model=lower(modeo)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !-- check for a trivial instance where the input and output model names are the same
-   if(input_color_model .eq. output_color_model) then
+   if(input_color_model  ==  output_color_model) then
       clr1o=clr1i
       clr2o=clr2i
       clr3o=clr3i
@@ -512,10 +512,10 @@ real                        :: c1, c2, c3, r, g, b
 !-- check for a transpose of terms, another trivial instance.
    SELECT CASE (input_color_model)
    CASE ('hls','hsl','hvs','hsv')
-      if( input_color_model.eq.'hls' .and. output_color_model.eq.'hsl'   &
-    & .or.input_color_model.eq.'hsl' .and. output_color_model.eq.'hls'   &
-    & .or.input_color_model.eq.'hvs' .and. output_color_model.eq.'hsv'   &
-    & .or.input_color_model.eq.'hsv' .and. output_color_model.eq.'hvs') then
+      if( input_color_model == 'hls' .and. output_color_model == 'hsl'   &
+    & .or.input_color_model == 'hsl' .and. output_color_model == 'hls'   &
+    & .or.input_color_model == 'hvs' .and. output_color_model == 'hsv'   &
+    & .or.input_color_model == 'hsv' .and. output_color_model == 'hvs') then
          clr1o=clr1i
          clr2o=clr3i
          clr3o=clr2i
@@ -543,7 +543,7 @@ real                        :: c1, c2, c3, r, g, b
       return
    END SELECT
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(status .ne. 0 )then
+   if(status  /=  0 )then
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -562,7 +562,7 @@ real                        :: c1, c2, c3, r, g, b
       return
    END SELECT
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(status .ne. 0 )then
+   if(status  /=  0 )then
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -647,9 +647,9 @@ real    :: r0,g0,b0
 real    :: r,g,b,h,l,s
 real    :: clrmax,clrmin,clrdel,clrsum,rr,gg,bb
 integer :: status
-   if(r0 .lt. 0.0 .or. r0 .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(g0 .lt. 0.0 .or. g0 .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(b0 .lt. 0.0 .or. b0 .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
+   if(r0  <  0.0 .or. r0  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(g0  <  0.0 .or. g0  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(b0  <  0.0 .or. b0  >  100.0 ) status = 1 !---- passive check for valid range of values.
    r=r0/100.0
    g=g0/100.0
    b=b0/100.0
@@ -658,24 +658,24 @@ integer :: status
    clrdel=clrmax-clrmin
    clrsum=clrmax+clrmin
    l=clrsum/2.0
-   if(clrdel.ne.0.0 ) then
+   if(clrdel /= 0.0 ) then
       rr=(clrmax-r)/clrdel
       gg=(clrmax-g)/clrdel
       bb=(clrmax-b)/clrdel
-      if(l.le.0.5) then
+      if(l <= 0.5) then
          s=clrdel/clrsum
       else
          s=clrdel/(2.0-clrsum)
       endif
-      if(r.eq.clrmax) then
+      if(r == clrmax) then
          h=bb-gg
-      else if(g.eq.clrmax) then
+      else if(g == clrmax) then
          h=2.0 +rr-bb
-      else if(b.eq.clrmax) then
+      else if(b == clrmax) then
          h=4.0 +gg-rr
       endif
       h=h*60.0
-      if(h.lt.0.0 ) then
+      if(h < 0.0 ) then
          h=h+360.0
       endif
    else
@@ -684,12 +684,12 @@ integer :: status
    endif
    l=l*100.0
    s=s*100.0
-   if(h .lt.   0.0 ) h = 0.0   !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(h .gt. 360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(l .lt.   0.0 ) l=0.0
-   if(l .gt. 100.0 ) l = 100.0
-   if(s .lt.   0.0 ) s=0.0
-   if(s .gt. 100.0 ) s = 100.0
+   if(h  <    0.0 ) h = 0.0   !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(h  >  360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(l  <    0.0 ) l=0.0
+   if(l  >  100.0 ) l = 100.0
+   if(s  <    0.0 ) s=0.0
+   if(s  >  100.0 ) s = 100.0
 end subroutine rgbhls
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -780,9 +780,9 @@ real,intent(out) :: h,v,s
 integer          :: status
 real             :: r,g,b
 real             :: clrmax,clrmin,clrdel,rr,gg,bb
-   if(r0 .lt. 0.0 .or. r0 .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(g0 .lt. 0.0 .or. g0 .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(b0 .lt. 0.0 .or. b0 .gt. 100.0 ) status = 1 !---- check for valid range of values.
+   if(r0  <  0.0 .or. r0  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(g0  <  0.0 .or. g0  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(b0  <  0.0 .or. b0  >  100.0 ) status = 1 !---- check for valid range of values.
    r=r0
    g=g0
    b=b0
@@ -793,35 +793,35 @@ real             :: clrmax,clrmin,clrdel,rr,gg,bb
    clrmin=amin1(r,g,b)
    clrdel=clrmax-clrmin
    v=clrmax
-   if(clrmax.ne.0.0 )then
+   if(clrmax /= 0.0 )then
          s=clrdel/clrmax
    else
          s=0.0
    endif
-   if(s.ne.0.0 )then
+   if(s /= 0.0 )then
          rr=(clrmax-r)/clrdel
          gg=(clrmax-g)/clrdel
          bb=(clrmax-b)/clrdel
-         if(r.eq.clrmax)then
+         if(r == clrmax)then
             h=bb-gg
-         else if(g.eq.clrmax) then
+         else if(g == clrmax) then
             h=2.0 +rr-bb
-         else if(b.eq.clrmax) then
+         else if(b == clrmax) then
             h=4.0 +gg-rr
          endif
          h=h*60.0
-         if(h.lt.0.0 ) then
+         if(h < 0.0 ) then
             h=h+360.0
          endif
    endif
    v=v*100.0
    s=s*100.0
-   if(h .gt. 360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(h .lt.   0.0 ) h =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(v .gt. 100.0 ) v = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(v .lt.   0.0 ) v =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(s .gt. 100.0 ) s = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(s .lt.   0.0 ) s =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(h  >  360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(h  <    0.0 ) h =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(v  >  100.0 ) v = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(v  <    0.0 ) v =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(s  >  100.0 ) s = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(s  <    0.0 ) s =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
 end subroutine rgbhvs
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -883,9 +883,9 @@ subroutine cmyrgb(c,m,y,r,g,b,status)
 real,intent(in)   :: c,m,y
 real,intent(out)  :: r,g,b
 integer           :: status
-   if(c .lt. 0.0 .or. c .gt. 100.0 ) status = 1 !---- passively check for valid range of values.
-   if(m .lt. 0.0 .or. m .gt. 100.0 ) status = 1 !---- passively check for valid range of values.
-   if(y .lt. 0.0 .or. y .gt. 100.0 ) status = 1 !---- passively check for valid range of values.
+   if(c  <  0.0 .or. c  >  100.0 ) status = 1 !---- passively check for valid range of values.
+   if(m  <  0.0 .or. m  >  100.0 ) status = 1 !---- passively check for valid range of values.
+   if(y  <  0.0 .or. y  >  100.0 ) status = 1 !---- passively check for valid range of values.
    r= 100.0 - c
    g= 100.0 - m
    b= 100.0 - y
@@ -964,9 +964,9 @@ subroutine rgbcmy(r,g,b,c,m,y,status)
 real,intent(in)  :: r,g,b
 real,intent(out) :: c,m,y
 integer          :: status
-   if(r .lt. 0.0 .or. r .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(g .lt. 0.0 .or. g .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(b .lt. 0.0 .or. b .gt. 100.0 ) status = 1 !---- check for valid range of values.
+   if(r  <  0.0 .or. r  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(g  <  0.0 .or. g  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(b  <  0.0 .or. b  >  100.0 ) status = 1 !---- check for valid range of values.
    c = 100.0 - r
    m = 100.0 - g
    y = 100.0 - b
@@ -1060,9 +1060,9 @@ real,intent(in)      :: rr,rg,rb                ! red, green, blue, & intensity 
 real,intent(out)     :: ri
 integer,intent(out)  :: status
    status=0
-   if(rr .lt. 0.0 .or. rr .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(rg .lt. 0.0 .or. rg .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(rb .lt. 0.0 .or. rb .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
+   if(rr  <  0.0 .or. rr  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(rg  <  0.0 .or. rg  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(rb  <  0.0 .or. rb  >  100.0 ) status = 1 !---- passive check for valid range of values.
    ri = 0.30*rr + 0.59*rg + 0.11*rb
 end subroutine rgbmono
 !===================================================================================================================================
@@ -1114,7 +1114,7 @@ real    :: h
 real    :: h2
    h2=h
    do
-      if(h2.gt.360.0 ) then
+      if(h2 > 360.0 ) then
          h2=h2-360.0
          cycle
       endif
@@ -1122,18 +1122,18 @@ real    :: h2
    enddo
 
    do
-      if( h2 .lt. 0.0 ) then
+      if( h2  <  0.0 ) then
          h2=h2+360.0
          cycle
       endif
       exit
    enddo
 
-   if(h2.lt.60.0 ) then
+   if(h2 < 60.0 ) then
       rgbval=clr1+(clr2-clr1)*h2/60.0
-   else if(h2.lt.180.0) then
+   else if(h2 < 180.0) then
       rgbval=clr2
-   else if(h2.lt.240.0) then
+   else if(h2 < 240.0) then
       rgbval=clr1+(clr2-clr1)*(240.0-h2)/60.0
    else
       rgbval=clr1
@@ -1204,18 +1204,18 @@ real,intent(out)  :: R,G,B
 integer           :: status
 real              :: hue,lightness,saturation
 real              :: clr1,clr2
-   if(h .lt. 0.0 .or. h .gt.360.0 ) status = 1 ! passively report on bad input values
-   if(l .lt. 0.0 .or. l .gt.100.0 ) status = 1 ! passively report on bad input values
-   if(s .lt. 0.0 .or. s .gt.100.0 ) status = 1 ! passively report on bad input values
+   if(h  <  0.0 .or. h  > 360.0 ) status = 1 ! passively report on bad input values
+   if(l  <  0.0 .or. l  > 100.0 ) status = 1 ! passively report on bad input values
+   if(s  <  0.0 .or. s  > 100.0 ) status = 1 ! passively report on bad input values
    hue =           H
    lightness =     L/100.0
    saturation =    S/100.0
-   if( saturation .eq. 0.0 ) then
+   if( saturation  ==  0.0 ) then
       R = lightness
       G = lightness
       B = lightness
    endif
-   if(lightness .le. 0.50) then
+   if(lightness  <=  0.50) then
       clr2= lightness*( 1.0 + saturation )
    else
       clr2= lightness + saturation - lightness * saturation
@@ -1289,20 +1289,20 @@ integer            :: status
 real               :: hue,value,saturation
 integer            :: ifloor
 real               :: f,p,q,t
-   if(h .lt. 0.0 .or. h .gt.360.0 ) status = 1 ! passively report on bad input values
-   if(v .lt. 0.0 .or. v .gt.100.0 ) status = 1 ! passively report on bad input values
-   if(s .lt. 0.0 .or. s .gt.100.0 ) status = 1 ! passively report on bad input values
+   if(h  <  0.0 .or. h  > 360.0 ) status = 1 ! passively report on bad input values
+   if(v  <  0.0 .or. v  > 100.0 ) status = 1 ! passively report on bad input values
+   if(s  <  0.0 .or. s  > 100.0 ) status = 1 ! passively report on bad input values
    hue=h
    value=v/100.0
    saturation=s/100.0
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(saturation.eq.0.0) then
+   if(saturation == 0.0) then
       r=value
       g=value
       b=value
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(hue.eq.360.0) then
+   if(hue == 360.0) then
       hue=0.0
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1379,8 +1379,8 @@ integer          :: status
 !        for yiq.  for example yiq=(100.0,60.0,52.0) when converted to
 !        rgb produces values greater than 100!?
 !
-      if(i .lt. -60.0 .or. i .gt.  60.0) status = 1
-      if(q .lt. -53.0 .or. q .gt.  53.0) status = 1
+      if(i  <  -60.0 .or. i  >   60.0) status = 1
+      if(q  <  -53.0 .or. q  >   53.0) status = 1
 
       r = 1.0 * y + 0.956 * i + 0.621 * q
       g = 1.0 * y - 0.272 * i - 0.647 * q
@@ -1445,19 +1445,19 @@ subroutine rgbyiq(r,g,b,y,i,q,status)
 real,intent(in)  :: r,g,b
 real,intent(out) :: y,i,q
 integer          :: status
-   if(r.lt.0.0 .or. r.gt.100.0) status=1
-   if(g.lt.0.0 .or. g.gt.100.0) status=1
-   if(b.lt.0.0 .or. b.gt.100.0) status=1
+   if(r < 0.0 .or. r > 100.0) status=1
+   if(g < 0.0 .or. g > 100.0) status=1
+   if(b < 0.0 .or. b > 100.0) status=1
 
    y= 0.299 * r + 0.587 * g + 0.114 * b
    i= 0.596 * r - 0.274 * g - 0.322 * b
    q= 0.211 * r - 0.523 * g + 0.312 * b
 
 !-- Eliminate any roundoff that exceeds the limits.
-   if(i .lt. -59.57 ) i = -59.57
-   if(i .gt.  59.57 ) i =  59.57
-   if(q .lt. -52.26 ) q = -52.26
-   if(q .gt.  52.26 ) q =  52.26
+   if(i  <  -59.57 ) i = -59.57
+   if(i  >   59.57 ) i =  59.57
+   if(q  <  -52.26 ) q = -52.26
+   if(q  >   52.26 ) q =  52.26
 end subroutine rgbyiq
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1536,9 +1536,9 @@ character(len=20)             :: string
    INFINITE: do i=1,1000
       write(string,'(i0)')i
       call color_name2rgb(string,rn,gn,bn,echoname)       ! get next color
-      if(echoname.eq.'Unknown') exit INFINITE
+      if(echoname == 'Unknown') exit INFINITE
       distance=sqrt( (r-rn)**2 + (g-gn)**2 + (b-bn)**2 )
-      if(distance.lt.minimum_distance)then
+      if(distance < minimum_distance)then
          closestname=echoname
          minimum_distance=min(minimum_distance,distance)
       endif
@@ -1587,7 +1587,7 @@ end subroutine closest_color_name
 !!        ! get the RGB values and English name of the color
 !!        call color_name2rgb(name,red,green,blue,echoname)
 !!        ! the last color name is "Unknown" so the loop should exit
-!!        if(echoname.eq.'Unknown')exit TRYALL
+!!        if(echoname == 'Unknown')exit TRYALL
 !!        ! display the English name and RGB values for the name
 !!        write(*,*)echoname,int([red,green,blue])
 !!     enddo TRYALL

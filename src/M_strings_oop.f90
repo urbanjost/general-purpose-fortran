@@ -188,14 +188,14 @@
 !!       write(*,101)'str2%str ................... ',str2%str
 !!       write(*,*)': EQ LT GT LE GE NE'
 !!       write(*,*)'compare str1 to str1'
-!!       write(*,303)str1.eq.str1  ,str1.lt.str1  ,str1.gt.str1  ,str1.le.str1 &
-!!                  & ,str1.ge.str1  ,str1.ne.str1
+!!       write(*,303)str1 == str1  ,str1 < str1  ,str1 > str1  ,str1 <= str1 &
+!!                  & ,str1 >= str1  ,str1 /= str1
 !!       write(*,*)'compare str1 to str2'
-!!       write(*,303)str1.eq.str2  ,str1.lt.str2  ,str1.gt.str2  ,str1.le.str2 &
-!!                  & ,str1.ge.str2  ,str1.ne.str2
+!!       write(*,303)str1 == str2  ,str1 < str2  ,str1 > str2  ,str1 <= str2 &
+!!                  & ,str1 >= str2  ,str1 /= str2
 !!       write(*,*)'compare str2 to str1'
-!!       write(*,303)str2.eq.str1  ,str2.lt.str1  ,str2.gt.str1  ,str2.le.str1 &
-!!                  & ,str2.ge.str1  ,str2.ne.str1
+!!       write(*,303)str2 == str1  ,str2 < str1  ,str2 > str1  ,str2 <= str1 &
+!!                  & ,str2 >= str1  ,str2 /= str1
 !!
 !!       write(*,*)repeat('=',68)
 !!
@@ -814,32 +814,32 @@ logical function eq(self,other)
 
    class(string),intent(in) :: self
    type(string),intent(in)  :: other
-   eq= self%str .eq. other%str
+   eq= self%str  ==  other%str
 end function eq
 logical function lt(self,other)
    class(string),intent(in) :: self
    type(string),intent(in)  :: other
-   lt= self%str .lt. other%str
+   lt= self%str  <  other%str
 end function lt
 logical function gt(self,other)
    class(string),intent(in) :: self
    type(string),intent(in)  :: other
-   gt= self%str .gt. other%str
+   gt= self%str  >  other%str
 end function gt
 logical function le(self,other)
    class(string),intent(in) :: self
    type(string),intent(in)  :: other
-   le= self%str .le. other%str
+   le= self%str  <=  other%str
 end function le
 logical function ge(self,other)
    class(string),intent(in) :: self
    type(string),intent(in)  :: other
-   ge= self%str .ge. other%str
+   ge= self%str  >=  other%str
 end function ge
 logical function ne(self,other)
    class(string),intent(in) :: self
    type(string),intent(in)  :: other
-   ne= self%str .ne. other%str
+   ne= self%str  /=  other%str
 end function ne
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

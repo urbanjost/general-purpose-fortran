@@ -474,7 +474,7 @@ do
       expanded=expanded//'>'
    case('<')  ! assuming not nested for now
       ii=index(padded(i+1:),'>')
-      if(ii.eq.0)then
+      if(ii == 0)then
          expanded=expanded//'<'
          i=i+1
       else
@@ -484,14 +484,14 @@ do
          call locate(keywords,name,place)
          if(debug)write(*,*)'DEBUG:*esc* 1: LOCATE=',place
 
-         if(mode.eq.'plain')then
-         elseif(place.le.0)then     ! unknown name; print what you found
+         if(mode == 'plain')then
+         elseif(place <= 0)then     ! unknown name; print what you found
             expanded=expanded//padded(i:i+ii)
          else
             expanded=expanded//get(name)
          endif
-         if(name.eq.'debug')debug=.true.   !! development version
-         if(name.eq.'/debug')debug=.false. !! development version
+         if(name == 'debug')debug=.true.   !! development version
+         if(name == '/debug')debug=.false. !! development version
          i=ii+i+1
       endif
    case default
@@ -500,8 +500,8 @@ do
    end select
    if(i >= maxlen+1)exit
 enddo
-if( (index(expanded,escape).ne.0).and.(.not.clear_at_end_local))then
-   if((mode.ne.'raw').and.(mode.ne.'plain'))then
+if( (index(expanded,escape) /= 0).and.(.not.clear_at_end_local))then
+   if((mode /= 'raw').and.(mode /= 'plain'))then
       expanded=expanded//CODE_RESET                                   ! Clear all styles
    endif
 endif
@@ -951,7 +951,7 @@ if(present(valin))then
    ! find where string is or should be
    call locate(keywords,key,place)
    ! if string was not found insert it
-   if(place.lt.1)then
+   if(place < 1)then
       call insert(keywords,key,iabs(place))
       call insert(values,val,iabs(place))
       call insert(counts,iilen,iabs(place))
@@ -961,7 +961,7 @@ if(present(valin))then
    endif
 else
    call locate(keywords,key,place)
-   if(place.gt.0)then
+   if(place > 0)then
       call remove(keywords,place)
       call remove(values,place)
       call remove(counts,place)
@@ -977,7 +977,7 @@ character(len=:),allocatable  :: valout
 integer                       :: place
    ! find where string is or should be
    call locate(keywords,key,place)
-   if(place.lt.1)then
+   if(place < 1)then
       valout=''
    else
       valout=values(place)(:counts(place))
@@ -1037,12 +1037,12 @@ subroutine print_dictionary(header)
 character(len=*),intent(in),optional :: header
 integer          :: i
    if(present(header))then
-      if(header.ne.'')then
+      if(header /= '')then
          write(stderr,'(a)')header
       endif
    endif
    if(allocated(keywords))then
-      if(size(keywords).gt.0)then
+      if(size(keywords) > 0)then
          write(stderr,'(*(a,t30,a))')'KEYWORD','VALUE'
          write(stderr,'(*(a,t30,"[",a,"]",/))')(trim(keywords(i)),values(i)(:counts(i)),i=1,size(keywords))
       endif
@@ -1084,7 +1084,7 @@ integer                       :: imax                   ! length of longest toke
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! decide on value for optional DELIMITERS parameter
    if (present(delimiters)) then                                     ! optional delimiter list was present
-      if(delimiters.ne.'')then                                       ! if DELIMITERS was specified and not null use it
+      if(delimiters /= '')then                                       ! if DELIMITERS was specified and not null use it
          dlim=delimiters
       else                                                           ! DELIMITERS was specified on call as empty string
          dlim=' '//char(9)//char(10)//char(11)//char(12)//char(13)//char(0) ! use default delimiter when not specified
@@ -1115,11 +1115,11 @@ integer                       :: imax                   ! length of longest toke
       icol=1                                                      ! initialize pointer into input line
       INFINITE: do i30=1,iilen,1                                  ! store into each array element
          ibegin(i30)=icol                                         ! assume start new token on the character
-         if(index(dlim(1:idlim),input_line(icol:icol)).eq.0)then  ! if current character is not a delimiter
+         if(index(dlim(1:idlim),input_line(icol:icol)) == 0)then  ! if current character is not a delimiter
             iterm(i30)=iilen                                      ! initially assume no more tokens
             do i10=1,idlim                                        ! search for next delimiter
                ifound=index(input_line(ibegin(i30):iilen),dlim(i10:i10))
-               IF(ifound.gt.0)then
+               IF(ifound > 0)then
                   iterm(i30)=min(iterm(i30),ifound+ibegin(i30)-2)
                endif
             enddo
@@ -1131,7 +1131,7 @@ integer                       :: imax                   ! length of longest toke
          endif
          imax=max(imax,iterm(i30)-ibegin(i30)+1)
          icount=i30                                               ! increment count of number of tokens found
-         if(icol.gt.iilen)then                                    ! no text left
+         if(icol > iilen)then                                    ! no text left
             exit INFINITE
          endif
       enddo INFINITE
@@ -1144,7 +1144,7 @@ integer                       :: imax                   ! length of longest toke
 !-----------------------------------------------------------------------------------------------------------------------------------
    ii=1
    do i20=1,icount                                                ! fill the array with the tokens that were found
-      if(iterm(i20).lt.ibegin(i20))then
+      if(iterm(i20) < ibegin(i20))then
       else
          array(ii)=input_line(ibegin(i20):iterm(i20))
          ii=ii+1

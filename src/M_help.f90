@@ -204,12 +204,12 @@ integer                                :: old_position
    topic=trim(topic_name)
    old_topic=''
    old_position=0
-   if(index(topic,'search ').eq.1)then
+   if(index(topic,'search ') == 1)then
       topic='search'
    endif
    INFINITE: do
 
-      if (topic.eq.' ') then                                           ! if no topic
+      if (topic == ' ') then                                           ! if no topic
          call journal('Type "help" followed by a case-sensitive topic name ...')
          topic='SUMMARY'
       endif
@@ -218,8 +218,8 @@ integer                                :: old_position
          i=0
          do
             i=i+1
-            if(i.gt.howbig)exit
-            if(help_text(i)(1:3).eq.'===')then
+            if(i > howbig)exit
+            if(help_text(i)(1:3) == '===')then
                if(numbered)then
                   call journal('sc',i,' ')
                else
@@ -233,16 +233,16 @@ integer                                :: old_position
                endif
             endif
             if(want_to_stop())exit INFINITE
-            if(old_topic.ne.'')cycle INFINITE
-            if(i.ge.howbig) then
+            if(old_topic /= '')cycle INFINITE
+            if(i >= howbig) then
                do j=1,max_toomany
                   call journal('sc','[end-of-file] (line',i,')')
                   position(1)=position(2)+1
                   if(want_to_stop())exit INFINITE
-                  if(old_topic.ne.'')cycle INFINITE
-                  if(i.lt.howbig)exit
+                  if(old_topic /= '')cycle INFINITE
+                  if(i < howbig)exit
                enddo
-               if(i.ge.howbig)exit
+               if(i >= howbig)exit
             endif
          enddo
          exit INFINITE
@@ -250,17 +250,17 @@ integer                                :: old_position
          i=1                                 ! display topic starting at start_of_topic
          do
             i=i+1
-            if(i.gt.howbig) exit
-            if(help_text(i)(1:1).eq.'   ')cycle
-            if(help_text(i)(1:3).eq.'===')cycle
-            jj=merge(0,3,help_text(i-1)(1:3).eq.'===')
+            if(i > howbig) exit
+            if(help_text(i)(1:1) == '   ')cycle
+            if(help_text(i)(1:3) == '===')cycle
+            jj=merge(0,3,help_text(i-1)(1:3) == '===')
             if(numbered)then
                call journal('sc',i,'>',repeat(' ',jj)//help_text(i))
             else
                call journal('sc','>',repeat(' ',jj)//help_text(i))
             endif
             if(want_to_stop())then
-               if(old_topic.ne.'')then
+               if(old_topic /= '')then
                   topic=old_topic
                   old_topic=''
                   i=old_position
@@ -272,7 +272,7 @@ integer                                :: old_position
                exit INFINITE
             endif
          enddo
-         if(old_topic.ne.'')then
+         if(old_topic /= '')then
             topic=old_topic
             old_topic=''
             i=old_position
@@ -289,27 +289,27 @@ integer                                :: old_position
          i=0
          do
             i=i+1
-            if(i.gt.howbig)exit
-            if(help_text(i)(1:1).ne.' '.and.help_text(i)(1:3).ne.'===')then
+            if(i > howbig)exit
+            if(help_text(i)(1:1) /= ' '.and.help_text(i)(1:3) /= '===')then
                old_topic=help_text(i)//' '
                ii=index(old_topic,' ')
                old_topic=old_topic(:ii)
             endif
-            if(index(lower(help_text(i)),string).ne.0)then
+            if(index(lower(help_text(i)),string) /= 0)then
                if(numbered)then
                   call journal('sc',i,help_text(i))
                else
                   call journal('sc',old_topic,'>',help_text(i))
                endif
                if(want_to_stop())exit INFINITE
-               if(i.ge.howbig) then
+               if(i >= howbig) then
                   do j=1,max_toomany
                      call journal('sc','[end-of-file] (line',i,')')
                      position(1)=position(2)+1
                      if(want_to_stop())exit INFINITE
-                     if(i.lt.howbig)exit
+                     if(i < howbig)exit
                   enddo
-                  if(i.ge.howbig)exit
+                  if(i >= howbig)exit
                endif
             endif
          enddo
@@ -319,13 +319,13 @@ integer                                :: old_position
          ! find the line to start with by finding a line that starts with the given topic ( ASSUMING FIRST LINE is ===)
          FINDIT: do j=1,len(help_text)
             do i=2, howbig                                          ! get first word of lines not starting with a blank
-               if(help_text(i)(1:1).ne.' ')then                              ! only topic lines start in column one so skip these
+               if(help_text(i)(1:1) /= ' ')then                              ! only topic lines start in column one so skip these
                   end_of_first_word=index(help_text(i),' ')-1
-                  if(end_of_first_word.eq.0)end_of_first_word=len(help_text) ! if line is filled and does not have a blank
+                  if(end_of_first_word == 0)end_of_first_word=len(help_text) ! if line is filled and does not have a blank
                   end_of_first_word=end_of_first_word-j+1
-                  if(end_of_first_word.le.0)cycle
+                  if(end_of_first_word <= 0)cycle
                   !x!write(*,*)'['//topic(:end_of_first_word)//']['//help_text(i)(:end_of_first_word)//']'
-                  if(topic.eq.help_text(i)(:end_of_first_word))then      ! find a line that matches topic
+                  if(topic == help_text(i)(:end_of_first_word))then      ! find a line that matches topic
                      exit FINDIT
                   endif
                endif
@@ -333,19 +333,19 @@ integer                                :: old_position
          enddo FINDIT
          start_of_topic=i
 
-         if(i.eq.0)then
+         if(i == 0)then
             call journal('<ERROR> internal error. First line of text must start with "==="')
             !!help_text=[character(len=len(help_text)) :: repeat("=",80),help_text]
             start_of_topic=start_of_topic+1
          endif
 
-         if(help_text(i-1)(1:3).eq.'===')then  ! if the line above the start started with "===" it is a block comment
+         if(help_text(i-1)(1:3) == '===')then  ! if the line above the start started with "===" it is a block comment
             block_topic=.true.
          else
             block_topic=.false.
          endif
 
-         if(start_of_topic.gt.howbig.or.start_of_topic.eq.0)then
+         if(start_of_topic > howbig.or.start_of_topic == 0)then
             call journal('sc','SORRY, No help on ',topic)
          else
             position(1) = 0
@@ -357,9 +357,9 @@ integer                                :: old_position
 
             i=start_of_topic+1                                              ! display topic starting at start_of_topic
             do
-               if(help_text(i)(1:1).ne.' '.and. .not.block_topic )then       ! stop at next topic if not a block of help
+               if(help_text(i)(1:1) /= ' '.and. .not.block_topic )then       ! stop at next topic if not a block of help
                   exit
-               elseif(block_topic .and. help_text(i)(1:3).eq.'===')then
+               elseif(block_topic .and. help_text(i)(1:3) == '===')then
                   exit
                endif
                if(numbered)then
@@ -368,12 +368,12 @@ integer                                :: old_position
                   call journal('sc',help_text(i))
                endif
                if(want_to_stop())exit INFINITE
-               if(old_topic.ne.'')cycle INFINITE
+               if(old_topic /= '')cycle INFINITE
                toomany=toomany+1
-               if(toomany.ge.max_toomany)exit INFINITE    ! to prevent infinite loops in batch mode
+               if(toomany >= max_toomany)exit INFINITE    ! to prevent infinite loops in batch mode
                i=max(start_of_topic-1,i)
                i=i+1
-               if(i.gt.howbig) exit
+               if(i > howbig) exit
             enddo
          endif
          exit INFINITE
@@ -393,7 +393,7 @@ integer                              :: ierr
    position(1) = position(1) + 1
    want_to_stop=.false.
    PROMPT: do
-      if(position(1) .gt. position(2)) then
+      if(position(1)  >  position(2)) then
          call journal('sc','continue ..')
          read(stdin,'(a)',iostat=ios) response         ! read letter to pause from standard input
          response=adjustl(response)
@@ -424,9 +424,9 @@ integer                              :: ierr
             position(1)=0
             exit PROMPT
             !do j=2,howbig
-            !   if(help_text(j)(1:1).eq.'   ')cycle
-            !   if(help_text(j)(1:3).eq.'===')cycle
-            !   jj=merge(0,3,help_text(j-1)(1:3).eq.'===')
+            !   if(help_text(j)(1:1) == '   ')cycle
+            !   if(help_text(j)(1:3) == '===')cycle
+            !   jj=merge(0,3,help_text(j-1)(1:3) == '===')
             !   if(numbered)then
             !      call journal('sc',j,'>',repeat(' ',jj)//help_text(j))
             !   else
@@ -454,9 +454,9 @@ integer                              :: ierr
             character(len=1000) :: errmsg
             integer :: temp_lun
                response=adjustl(response(2:))
-               if(response.eq.'')response='userguide.txt'
+               if(response == '')response='userguide.txt'
                open(newunit=temp_lun,file=response,status='new',iostat=ios,iomsg=errmsg) ! open help file
-               if(ios.eq.0)then
+               if(ios == 0)then
                   write(temp_lun,'(a)',iostat=ios)( trim(help_text(k)),k=1,howbig )
                   call journal('sc','<INFO> user guide is on file',trim(response) )
                   close(unit=temp_lun,iostat=ios)
@@ -473,28 +473,28 @@ integer                              :: ierr
             position(1) = 0
          case('/','n')                                        ! find string below
             j=i ! hold
-            if(letter.eq.'n')response=last_response
-            if(response(2:).eq.'')response=last_response
+            if(letter == 'n')response=last_response
+            if(response(2:) == '')response=last_response
             i=i+1
             do
-               if(index(lower(help_text(i)),trim(response(2:))).ne.0)then
+               if(index(lower(help_text(i)),trim(response(2:))) /= 0)then
                   i=max(1,i-1)
 
                   exit
                else
                   i=i+1
                endif
-               if(i.gt.howbig) exit
+               if(i > howbig) exit
             enddo
-            if(i.gt.howbig)i=j
+            if(i > howbig)i=j
             position(1) = 0
             last_response=response
          case('\') ! find string
             response=lower(adjustl(response(2:)))
-            if(response.eq.' ')response=last_response
+            if(response == ' ')response=last_response
             jj=len_trim(response)
             do j=1,howbig
-               if(index(lower(help_text(j)),response(:jj)).ne.0)then
+               if(index(lower(help_text(j)),response(:jj)) /= 0)then
                   call journal('sc',j,help_text(j))
                endif
             enddo
@@ -503,16 +503,16 @@ integer                              :: ierr
             last_response='/'//response
          case('?','N','p')                                            ! find string above
             j=i ! hold
-            if(letter.eq.'N'.or.letter.eq.' ')response=last_response
-            if(response(2:).eq.'')response=last_response
+            if(letter == 'N'.or.letter == ' ')response=last_response
+            if(response(2:) == '')response=last_response
             i=i-1
             do
-               if(index(lower(help_text(i)),trim(response(2:))).ne.0)then
+               if(index(lower(help_text(i)),trim(response(2:))) /= 0)then
                   exit
                else
                   i=i-1
                endif
-               if(i.le.1) then
+               if(i <= 1) then
                   i=j
                   exit
                endif
@@ -597,13 +597,13 @@ character(len=3),save        :: nan_string='NaN'
    ierr=0                                                    ! initialize error flag to zero
    local_chars=chars
    msg=''
-   if(len(local_chars).eq.0)local_chars=' '
+   if(len(local_chars) == 0)local_chars=' '
    write(frmt,fmt)len(local_chars)                        ! build format of form '(BN,Gn.0)'
    read(local_chars,fmt=frmt,iostat=ierr,iomsg=msg)valu   ! try to read value from string
-   if(ierr.ne.0)then                                         ! if an error occurred ierr will be non-zero.
+   if(ierr /= 0)then                                         ! if an error occurred ierr will be non-zero.
       read(nan_string,'(g3.3)')valu
       call journal('sc','*a2d* - cannot produce number from string ['//trim(chars)//']')
-      if(msg.ne.'')then
+      if(msg /= '')then
          call journal('sc','*a2d* - ['//trim(msg)//']')
       endif
    endif
