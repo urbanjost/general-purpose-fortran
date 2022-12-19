@@ -86,7 +86,6 @@ integer          :: ios
    enddo
 404 format(1x,i0,T13,"Z",'"',z0,'"',T25,"O",'"',o0,'"',T40,"B",'"',b0,'"',T76,a)
 end subroutine process_option
-!===================================================================================================================================
 subroutine help_usage(l_help)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
@@ -167,7 +166,73 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-
+!>
+!!##NAME
+!!    alphabet(1f) - [CONVERT] print numeric values or a string as decimal, hexadecimal, octal and binary values
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    alphabet [values] [ -h values][ -z values][ -o values][ -t text]
+!!##DESCRIPTION
+!!    Write positive whole number 32-bit values (0 to 2147483647) in base
+!!    10(decimal), base 16(hexadecimal), base 2(binary) and base 8(octal)
+!!    Allowable range of values is from 0 to 2147483647 decimal.
+!!
+!!    Alternatively, given a text string show the ASCII values for each
+!!    character in the string.
+!!##OPTIONS
+!!    value(s)  Values are treated as octal if they start with "o", binary
+!!              if they start with "b", and hexadecimal if they start with
+!!              "z" or "h". Otherwise, the values are assumed to be decimal.
+!!
+!!     -b values(s)     Values **without** a "b" prefix are assumed to be
+!!                      binary values.
+!!     -d values(s)     Values are assumed to be decimal values.
+!!     -o values(s)     Values **without** an "o" prefix are assumed to be
+!!                      octal values.
+!!     -z|-h values(s)  Values **without** a "z" prefix are assumed to be
+!!                      hexadecimal values.
+!!     -t literal_text
+!!     --help           display this help and exit
+!!     --version        output version information and exit
+!!##EXAMPLE
+!!
+!!
+!!   Sample commands:
+!!
+!!    alphabet 2147483647 0  # decimal values
+!!    >Decimal    Hex         Octal          Binary
+!!    >2147483647 Z"7FFFFFFF" O"17777777777" B"1111111111111111111111111111111"
+!!    >0          Z"0"        O"0"           B"0"
+!!
+!!    alphabet o144 z64 100 b1100100 # values with a prefix
+!!    >Decimal    Hex         Octal          Binary
+!!    >100        Z"64"       O"144"         B"1100100"
+!!    >100        Z"64"       O"144"         B"1100100"
+!!    >100        Z"64"       O"144"         B"1100100"
+!!    >100        Z"64"       O"144"         B"1100100"
+!!
+!!    alphabet -o 144 -h 64 -d 100 -b 1100100 # values with a keyword
+!!    >Decimal    Hex         Octal          Binary
+!!    >100        Z"64"       O"144"         B"1100100"
+!!    >100        Z"64"       O"144"         B"1100100"
+!!    >100        Z"64"       O"144"         B"1100100"
+!!    >100        Z"64"       O"144"         B"1100100"
+!!
+!!    alphabet -t Hello # a string
+!!    >Decimal    Hex         Octal          Binary     Description
+!!    >72         Z"48"       O"110"         B"1001000" majuscule H
+!!    >101        Z"65"       O"145"         B"1100101" miniscule e
+!!    >108        Z"6C"       O"154"         B"1101100" miniscule l
+!!    >108        Z"6C"       O"154"         B"1101100" miniscule l
+!!    >111        Z"6F"       O"157"         B"1101111" miniscule o
+!!
+!!##SEE ALSO
+!!    ascii(1),iprint(1)
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -186,11 +251,12 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2022-11-11 14:31:41 UTC-300>',&
+'@(#)COMPILED:       2022-12-18 00:52:04 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
-
+!===================================================================================================================================
 end program hexd
+!===================================================================================================================================

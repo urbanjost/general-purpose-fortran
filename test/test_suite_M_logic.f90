@@ -35,7 +35,7 @@ integer                          :: ioout
 integer                          :: icheck
 integer                          :: ilen
 integer                          :: ios
-real                             :: value
+integer                          :: value
 integer                          :: i
 character(len=:),allocatable     :: text(:)     ! array to hold output file in memory
 character(len=:),allocatable     :: expected(:) ! array to hold expected output in memory

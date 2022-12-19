@@ -19,4 +19,4 @@
       write(*,*) TRANSLITERATE(STRING, &
       & 'abcdefghijklmnopqrstuvwxyz','')
 
-     end program demo_transliterate
+    end program demo_transliterate

@@ -34,4 +34,4 @@
 
         call unit_check_done('myroutine',msg='checks on "myroutine" all passed')
 
-     end program demo_unit_check
+    end program demo_unit_check

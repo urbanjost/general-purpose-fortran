@@ -18,4 +18,4 @@
            & dict%value(i)(:dict%count(i)),   &
            & i=1,size(dict%key))
 
-       end program demo_set
+    end program demo_set

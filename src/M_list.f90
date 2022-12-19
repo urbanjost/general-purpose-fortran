@@ -451,7 +451,7 @@ integer                                 :: error
       maxtry=0
       place=-1
    else
-      maxtry=int(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -532,7 +532,7 @@ integer                                :: error
       maxtry=0
       place=-1
    else
-      maxtry=int(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -612,7 +612,7 @@ integer                                :: error
       maxtry=0
       place=-1
    else
-      maxtry=int(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -692,7 +692,7 @@ integer                                :: error
       maxtry=0
       place=-1
    else
-      maxtry=int(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -932,7 +932,7 @@ end subroutine remove_i
 !!    the array needs the string length to increase this is merely an assign
 !!    of a value to an array element.
 !!
-!!    The array may be of type CHARACTER, DOUBLEPRECISION, REAL, or INTEGER>
+!!    The array may be of type CHARACTER, DOUBLEPRECISION, REAL, or INTEGER.
 !!    It is assumed to be sorted in descending order without duplicate
 !!    values.
 !!
@@ -1216,7 +1216,6 @@ subroutine insert_c(list,value,place)
 
 character(len=*),intent(in)  :: value
 character(len=:),allocatable :: list(:)
-character(len=:),allocatable :: kludge(:)
 integer,intent(in)           :: place
 integer                      :: ii
 integer                      :: end
@@ -1228,7 +1227,13 @@ integer                      :: end
 
    ii=max(len_trim(value),len(list),2)
    end=size(list)
+   !call slower()
+   call faster(ii)
+   if(debug)write(stderr,*)'*insert_c* END VALUE=',trim(value),' PLACE=',place,' NEWSIZE=',size(list)
+contains
 
+subroutine slower()
+character(len=:),allocatable :: kludge(:)
    if(end.eq.0)then                                          ! empty array
       list=[character(len=ii) :: value ]
    elseif(place.eq.1)then                                    ! put in front of array
@@ -1237,14 +1242,36 @@ integer                      :: end
    elseif(place.gt.end)then                                  ! put at end of array
       kludge=[character(len=ii) :: list, value ]
       list=kludge
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
+   elseif(place.ge.2.and.place.le.end)then                   ! put in middle of array
       kludge=[character(len=ii) :: list(:place-1), value,list(place:) ]
       list=kludge
    else                                                      ! index out of range
       write(stderr,*)'*insert_c* error: index out of range. end=',end,' index=',place,' value=',value
    endif
+end subroutine slower
 
-   if(debug)write(stderr,*)'*insert_c* END VALUE=',trim(value),' PLACE=',place,' NEWSIZE=',size(list)
+subroutine faster(ilen)
+integer,intent(in) :: ilen
+character(len=:),allocatable :: temp(:)
+   allocate(character(len=ilen) :: temp(size(list)+1))
+   if(end.eq.0)then                                          ! empty array
+      temp(:)=[character(len=ii) :: value ]
+   elseif(place.eq.1)then                                    ! put in front of array
+      temp(1)=value
+      temp(2:)=list
+   elseif(place.gt.end)then                                  ! put at end of array
+      temp(1:end)=list
+      temp(end+1)=value
+   elseif(place.ge.2.and.place.le.end)then                   ! put in middle of array
+      temp(:place-1)=list(:place-1)
+      temp(place)=value
+      temp(place+1:)=list(place:)
+   else                                                      ! index out of range
+      write(stderr,*)'*insert_c* error: index out of range. end=',end,' index=',place,' value=',value
+   endif
+   call move_alloc (from=temp, to=list)
+end subroutine faster
+
 end subroutine insert_c
 subroutine insert_r(list,value,place)
 

@@ -1,5 +1,4 @@
 function loadthem(){
-append("M_steam67.3m_steam67.html");
 append("condl67.3m_steam67.html");
 append("condv67.3m_steam67.html");
 append("cpl67.3m_steam67.html");

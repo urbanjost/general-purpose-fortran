@@ -166,6 +166,6 @@
 
            call closeobj()
 
-        end subroutine makecube
+    end subroutine makecube
 
-        end program demo_locator
+    end program demo_locator

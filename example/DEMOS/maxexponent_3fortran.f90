@@ -1,9 +1,8 @@
-        program demo_maxexponent
-        use,intrinsic :: iso_fortran_env, only : dp=>real64,sp=>real32
-        implicit none
-        real(kind=sp) :: x
-        real(kind=dp) :: y
-
-           print *, minexponent(x), maxexponent(x)
-           print *, minexponent(y), maxexponent(y)
-        end program demo_maxexponent
+      program demo_maxexponent
+      use, intrinsic :: iso_fortran_env, only : real32,real64,real128
+      implicit none
+      character(len=*),parameter :: g='(*(g0,1x))'
+         print  g,  minexponent(0.0_real32),   maxexponent(0.0_real32)
+         print  g,  minexponent(0.0_real64),   maxexponent(0.0_real64)
+         print  g,  minexponent(0.0_real128),  maxexponent(0.0_real128)
+      end program demo_maxexponent

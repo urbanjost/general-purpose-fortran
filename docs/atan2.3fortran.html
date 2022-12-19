@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>ATAN2</B>(3) - [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function
-<P>
-</BLOCKQUOTE>
+<B>ATAN2(3) </B>- [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=10>
@@ -76,10 +76,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>atan2</B>(<I>y</I>, <I>x</I>)
 <P>
-<PRE>
-           elemental function atan2(y, x)
+           elemental real(kind=KIND) function atan2(y, x)
 <P>
             real,kind=KIND) :: atan2
             real,kind=KIND),intent(in) :: y, x
@@ -92,10 +92,18 @@ result = <B>atan2</B>(<I>y</I>, <I>x</I>)
 
 </A>
 <BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
 X and Y must be reals of the same kind.
-<P>
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
 The return value has the same type and kind as Y and X.
-</BLOCKQUOTE>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
@@ -105,6 +113,11 @@ The return value has the same type and kind as Y and X.
 <B>ATAN2</B>(3) computes in radians a processor-dependent approximation of the
 arctangent of the complex number ( X, Y ) or equivalently the principal
 value of the arctangent of the value Y/X (which determines a unique angle).
+<P>
+If Y has the value zero, X shall not have the value zero.
+<P>
+The resulting phase lies in the range <B>-PI</B> &lt;= ATAN2 (Y,X) &lt;= PI and is equal
+to a processor-dependent approximation to a value of <B>arctan</B>(Y/X).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -133,7 +146,7 @@ the point &lt;X,Y&gt;.
 </A>
 <BLOCKQUOTE>
 The value returned is by definition the principal value of the complex
-number (X, Y).
+number (X, Y), or in other terms, the phase of the phasor <I>x</I>+i*<I>y</I>.
 <P>
 The principal value is simply what we get when we adjust a radian value to
 lie between <B>-PI</B> and PI inclusive,
@@ -223,117 +236,59 @@ Sample program:
         & T54,&#146;DISTANCE=&#146;,g0)
        endblock COMPLEX_VALS
 <P>
-      contains
-<P>
-      elemental real function r2d(radians)
-      ! input radians to convert to degrees
-      doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
-      real,intent(in)           :: radians
-         r2d=radians / DEGREE ! do the conversion
-      end function r2d
-<P>
-      subroutine cartesian_to_polar(x,y,radius,inclination)
-      ! return angle in radians in range 0 to 2*PI
-      implicit none
-      real,intent(in)  :: x,y
-      real,intent(out) :: radius,inclination
-         radius=sqrt(x**2+y**2)
-         if(radius.eq.0)then
-            inclination=0.0
-         else
-            inclination=atan2(y,x)
-            if(inclination &lt; 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)
-         endif
-      end subroutine cartesian_to_polar
-<P>
-      end program demo_atan2
-<P>
 </PRE>
+<BLOCKQUOTE>
+contains
+<P>
+elemental real function <B>r2d</B>(radians)
+! input radians to convert to degrees
+doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
+<TABLE cellpadding=3><!-- tsb: elemental real function <B>r2d</B>(radians)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>real,intent</B>(in) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: radians
+r2d=radians / DEGREE ! do the conversion
+end function r2d
+</TD></TR>
+<TR><TD colspan=2>
+subroutine <B>cartesian_to_polar</B>(<I>x</I>,<I>y</I>,radius,inclination)
+! return angle in radians in range 0 to 2*PI
+implicit none
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>real,intent</B>(in) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: <I>x</I>,<I>y</I>
+<B>real,intent</B>(out) :: radius,inclination
+<B>radius=sqrt</B>(<I>x</I>**2+<I>y</I>**2)
+<B>if</B>(radius.eq.0)then
+inclination=0.0
+else
+<B>inclination=atan2</B>(<I>y</I>,<I>x</I>)
+<B>if</B>(inclination &lt; 0.0)inclination=inclination+2*<B>atan2</B>(0.0d0,<B>-1.0d0</B>)
+endif
+end subroutine cartesian_to_polar
+</TD></TR>
+<TR></TR></TABLE>end program demo_atan2
+</BLOCKQUOTE>
+<P>
 Results:
 <P>
 <PRE>
-          radians=   1.000000     degrees=   57.29578
-          elemental  0.3217506      0.4636476
-          elemental  0.1973956      0.3805064
-          complex (0.0000000E+00,1.000000)   1.570796
+       &gt;  radians=   1.000000     degrees=   57.29578
+       &gt;  elemental  0.3217506      0.4636476
+       &gt;  elemental  0.1973956      0.3805064
+       &gt;  complex (0.0000000E+00,1.000000)   1.570796
+       &gt; X=  1.00 Y=  0.00 ANGLE= .000000     DEGREES= .000   DISTANCE=1.000000
+       &gt; X=  1.00 Y=  1.00 ANGLE= .7853982    DEGREES= 45.00  DISTANCE=1.414214
+       &gt; X=  0.00 Y=  1.00 ANGLE= 1.570796    DEGREES= 90.00  DISTANCE=1.000000
+       &gt; X= -1.00 Y=  1.00 ANGLE= 2.356194    DEGREES= 135.0  DISTANCE=1.414214
+       &gt; X= -1.00 Y=  0.00 ANGLE= 3.141593    DEGREES= 180.0  DISTANCE=1.000000
+       &gt; X= -1.00 Y= -1.00 ANGLE= 3.926991    DEGREES= 225.0  DISTANCE=1.414214
+       &gt; X=  0.00 Y= -1.00 ANGLE= 4.712389    DEGREES= 270.0  DISTANCE=1.000000
 <P>
 </PRE>
-X=
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: X=
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>1.00 Y=</B> </TD><TD valign=bottom>
-0.00 ANGLE= .000000     DEGREES= .000   DISTANCE=1.000000
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-X=
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: X=
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>1.00 Y=</B> </TD><TD valign=bottom>
-1.00 ANGLE= .7853982    DEGREES= 45.00  DISTANCE=1.414214
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-X=
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: X=
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>0.00 Y=</B> </TD><TD valign=bottom>
-1.00 ANGLE= 1.570796    DEGREES= 90.00  DISTANCE=1.000000
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-X= <B>-1.00</B> Y=
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: X= <B>-1.00</B> Y=
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>1.00 ANGLE= 2.356194</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-DEGREES= 135.0  DISTANCE=1.414214
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-X= <B>-1.00</B> Y=
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: X= <B>-1.00</B> Y=
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>0.00 ANGLE= 3.141593</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-DEGREES= 180.0  DISTANCE=1.000000
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-X= <B>-1.00</B> Y= -1.00 ANGLE= 3.926991
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: X= <B>-1.00</B> Y= -1.00 ANGLE= 3.926991
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>DEGREES= 225.0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-DISTANCE=1.414214
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-X=
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: X=
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>0.00 Y= </B><B>-1.00</B> ANGLE= 4.712389 </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-DEGREES= 270.0  DISTANCE=1.000000
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -371,11 +326,11 @@ arctan:wikipedia fortran-lang intrinsic descriptions (license: MIT)
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-                               October 11, 2022                atan2(3fortran)
+                               November 07, 2022               atan2(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7283b777-4ba8-477a-a1a9-41b60388f5b0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 93877844-38b5-47e0-b468-31e7e58c5171 using man macros.</FONT>
 <br><br><center><img src="images/atan2.3fortran.gif"></center>
 </div>
 </div>

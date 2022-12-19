@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SYSTEM_CLOCK</B>(3) - [SYSTEM:TIME] Return numeric data from a real-time clock.
-<P>
-</BLOCKQUOTE>
+<B>SYSTEM_CLOCK(3) </B>- [SYSTEM:TIME] Query system clock
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=8>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 call <B>system_clock</B>([count] [,<I>count_rate</I>] [,<I>count_max</I>] )
 <P>
-<PRE>
            subroutine system_clock(count, count_rate, count_max)
 <P>
             integer,intent(out),optional  :: count
@@ -93,8 +93,23 @@ call <B>system_clock</B>([count] [,<I>count_rate</I>] [,<I>count_max</I>] )
 
 </A>
 <BLOCKQUOTE>
-where TYPE may be real or integer.
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COUNT is an integer scalar
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COUNT_RATE an integer or real scalar
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COUNT_MAX an integer scalar
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
@@ -104,22 +119,23 @@ where TYPE may be real or integer.
 <B>SYSTEM_CLOCK</B>(3) lets you measure durations of time with the precision of the
 smallest time increment generally available on a system by returning
 processor-dependent values based on the current value of the processor
-clock. The CLOCK value is incremented by one for each clock count until the
-value COUNT_MAX is reached and is then reset to zero at the next count.
-CLOCK therefore is a modulo value that lies in the range 0 TO COUNT_MAX.
-COUNT_RATE and COUNT_MAX are assumed constant (even though CPU rates can
-vary on a single platform).
-<P>
-COUNT_RATE is system dependent and can vary depending on the kind of the
-arguments.
-<P>
-If there is no clock, or querying the clock fails, COUNT is set to
-<B>-HUGE</B>(COUNT), and COUNT_RATE and COUNT_MAX are set to zero.
+clock.
 <P>
 SYSTEM_CLOCK is typically used to measure short time intervals (system
 clocks may be 24-hour clocks or measure processor clock ticks since boot,
 for example). It is most often used for measuring or tracking the time spent
 in code blocks in lieu of using profiling tools.
+<P>
+COUNT_RATE and COUNT_MAX are assumed constant (even though CPU rates can
+vary on a single platform).
+<P>
+The accuracy of the measurements may depend on the kind of the arguments!
+<P>
+Whether an image has no clock, has a single clock of its own, or shares a
+clock with another image, is processor dependent.
+<P>
+If there is no clock, or querying the clock fails, COUNT is set to
+<B>-HUGE</B>(COUNT), and COUNT_RATE and COUNT_MAX are set to zero.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -131,25 +147,34 @@ in code blocks in lieu of using profiling tools.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-COUNT : (optional) shall be an integer scalar. It is assigned a
-processor-dependent value based on the current value of the processor
-clock, or <B>-HUGE</B>(COUNT) if there is no clock. The processor-dependent
-value is incremented by one for each clock count until the value
-COUNT_MAX is reached and is reset to zero at the next count. It lies in
-the range 0 to COUNT_MAX if there is a clock.
+COUNT
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+      If there is no clock, COUNT is returned as the negative value
+      -HUGE(COUNT).
+<P>
+      Otherwise, the CLOCK value is incremented by one for each clock
+      count until the value COUNT_MAX is reached and is then reset to zero
+      at the next count. CLOCK therefore is a modulo value that lies in
+      the range 0 TO COUNT_MAX.
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COUNT_RATE : is assigned a processor-dependent approximation to the
+number of processor clock counts per second, or zero if there is no
+clock. COUNT_RATE is system dependent and can vary depending on the kind
+of the arguments. Generally, a large real may generate a more precise
+interval.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-COUNT_RATE : (optional) shall be an integer or real scalar. It is
-assigned a processor-dependent approximation to the number of processor
-clock counts per second, or zero if there is no clock.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-COUNT_MAX : (optional) shall be an integer scalar. It is assigned the
-maximum value that COUNT can have, or zero if there is no clock.
+COUNT_MAX : is assigned the maximum value that COUNT can have, or zero if
+there is no clock.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -158,28 +183,6 @@ maximum value that COUNT can have, or zero if there is no clock.
 
 </A>
 <BLOCKQUOTE>
-Sample program:
-<P>
-<PRE>
-      program demo_system_clock
-      implicit none
-      integer, parameter :: wp = kind(1.0d0)
-      integer :: count, count_rate, count_max
-      integer :: start, finish
-      real    :: time_read
-<P>
-         call system_clock(count, count_rate, count_max)
-         write(*,*) count, count_rate, count_max
-<P>
-         call system_clock(start, count_rate)
-         ! &lt;&lt;&lt;&lt; code to time
-         call system_clock(finish)
-         time_read=(finish-start)/real(count_rate,wp)
-         write(*,&#146;(a30,1x,f7.4,1x,a)&#146;) &#146;time * : &#146;, time_read, &#146; seconds&#146;
-<P>
-      end program demo_system_clock
-<P>
-</PRE>
 If the processor clock is a 24-hour clock that registers time at
 approximately 18.20648193 ticks per second, at 11:30 A.M. the reference
 <P>
@@ -193,6 +196,68 @@ defines
             C = (11*3600+30*60)*18.20648193 = 753748,
             R = 18.20648193, and
             M = 24*3600*18.20648193-1 = 1573039.
+<P>
+</PRE>
+Sample program:
+<P>
+<PRE>
+      program demo_system_clock
+      use, intrinsic :: iso_fortran_env, only : wp=&gt;real64,int32,int64
+      implicit none
+      character(len=*),parameter :: g=&#146;(1x,*(g0,1x))&#146;
+      integer(kind=int64) :: count64, count_rate64, count_max64
+      integer(kind=int64) :: start64, finish64
+      integer(kind=int32) :: count32, count_rate32, count_max32
+      integer(kind=int32) :: start32, finish32
+      real(kind=wp)       :: time_read
+      real(kind=wp)       :: sum
+      integer             :: i
+<P>
+        print g,&#146;accuracy may vary with argument type!&#146;
+        call system_clock(count_rate=count_rate64)
+        print g,&#146;COUNT RATE FOR INT64:&#146;,count_rate64
+        call system_clock(count_rate=count_rate32)
+        print g,&#146;COUNT RATE FOR INT32:&#146;,count_rate32
+<P>
+        print g,&#146;query all arguments&#146;
+        call system_clock(count64, count_rate64, count_max64)
+        print g, &#146;COUNT_MAX=&#146;,count_max64
+        print g, &#146;COUNT_RATE=&#146;,count_rate64
+        print g, &#146;CURRENT COUNT=&#146;,count64
+<P>
+        print g,&#146;time some computation&#146;
+        call system_clock(start64)
+<P>
+        ! some code to time
+        sum=0.0_wp
+        do i=-huge(0)-1, huge(0)-1, 10
+           sum=sum+sqrt(real(i))
+        enddo
+        print g,&#146;SUM=&#146;,sum
+<P>
+        call system_clock(finish64)
+<P>
+        time_read=(finish64-start64)/real(count_rate64,wp)
+        write(*,&#146;(a30,1x,f7.4,1x,a)&#146;) &#146;time : &#146;, time_read, &#146; seconds&#146;
+<P>
+</PRE>
+<BLOCKQUOTE>
+end program demo_system_clock
+</BLOCKQUOTE>
+<P>
+Results:
+<P>
+<PRE>
+       accuracy may vary with argument type!
+       COUNT RATE FOR INT64: 1000000000
+       COUNT RATE FOR INT32: 1000
+       query all arguments
+       COUNT_MAX= 9223372036854775807
+       COUNT_RATE= 1000000000
+       CURRENT COUNT= 518240530647469
+       time some computation
+       SUM= NaN
+                             time :   1.6686  seconds
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -215,11 +280,11 @@ Fortran 95
 fortran-lang intrinsic descriptions
 <P>
 <PRE>
-                               October 11, 2022         system_clock(3fortran)
+                               November 07, 2022        system_clock(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>system_clock (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 46972f1c-a511-4a31-ae01-999c39f4bcb6 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>system_clock (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0269b1b3-b8c0-42a8-beff-298eb4d86851 using man macros.</FONT>
 <br><br><center><img src="images/system_clock.3fortran.gif"></center>
 </div>
 </div>

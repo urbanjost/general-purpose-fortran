@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>prep</B>(1) - [DEVELOPER] pre-process FORTRAN source files
-(LICENSE:MIT)
-<P>
-</BLOCKQUOTE>
+<B>prep(1) </B>- [DEVELOPER] pre-process FORTRAN source files
+<B>(LICENSE:MIT)
+</B><B>
+</B></BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -82,6 +82,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
+</PRE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>prep</B> </TD><TD valign=bottom>
@@ -97,7 +99,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 [-<B>-width</B> <I>n</I>]
 [-d ignore|remove|blank]
 [-<B>-comment</B> default|doxygen|ford|none]
-[-<B>-type</B> <I>FILE_TYPE</I> | --start <I>START_STRING</I> --stop <I>STOP_STRING</I>]
+[-<B>-type</B> <I>FILE_TYPE</I> | <B>--start</B> <I>START_STRING</I> <B>--stop</B> <I>STOP_STRING</I>]
 [-<B>-ident</B>]
 [-<B>-version</B>]
 [-<B>-help</B>]
@@ -241,8 +243,11 @@ The directives fall into the following categories:
       $REDEFINE variable_name[=expression] [;&#46;&#46;&#46;]          [! comment ]
       $UNDEFINE|$UNDEF variable_name [;&#46;&#46;&#46;]                [! comment ]
 <P>
-  Conditional Code Selection
+</PRE>
+<BLOCKQUOTE>
+Conditional Code Selection
 <P>
+<PRE>
       $IF  logical_integer-based expression |
       $IFDEF [variable_name|environment_variable] |
       $IFNDEF [variable_name|environment_variable]         [! comment ]
@@ -253,46 +258,61 @@ The directives fall into the following categories:
               { sequence of source statements}]
       $ENDIF                                               [! comment ]
 <P>
-  Macro String Expansion and Text Replay
+</PRE>
+Macro String Expansion and Text Replay
 <P>
+<PRE>
       $SET      varname  string
       $IMPORT   envname[;&#46;&#46;&#46;]                              [! comment ]
       $PARCEL   blockname                                  [! comment ]
       $ENDPARCEL                                           [! comment ]
       $POST     blockname                                  [! comment ]
 <P>
-  External Files (see $BLOCK &#46;&#46;&#46; --file also)
+</PRE>
+External Files (see $BLOCK &#46;&#46;&#46; <B>--file</B> also)
 <P>
+<PRE>
       $OUTPUT   filename  [--append]                       [! comment ]
       $INCLUDE  filename                                   [! comment ]
 <P>
-  Text Block Filters (--file is ignored unless $PREP_DOCUMENT_DIR is set)
+</PRE>
+Text Block Filters (<B>--file</B> is ignored unless $PREP_DOCUMENT_DIR is set)
 <P>
+<PRE>
       $BLOCK   [null|comment|write|variable [--varname NAME]|
                set|system|message|define|redefine|
                help|version] [--file NAME [--append]]      [! comment ]
       $ENDBLOCK                                            [! comment ]
 <P>
-  Identifiers
+</PRE>
+Identifiers
 <P>
+<PRE>
       $IDENT | $@(#)    metadata                           [! comment ]
 <P>
-  Information
+</PRE>
+Information
 <P>
+<PRE>
       $MESSAGE  message_to_stderr
       $SHOW [defined_variable_name[;&#46;&#46;&#46;]]                  [! comment ]
 <P>
-  System Commands
+</PRE>
+System Commands
 <P>
+<PRE>
       $SYSTEM   system_command
 <P>
-  Program Termination
+</PRE>
+Program Termination
 <P>
+<PRE>
       $STOP     [stop_value ["message"]]                   [! comment ]
       $QUIT     ["message"]                                [! comment ]
       $ERROR    ["message"]                                [! comment ]
 <P>
 </PRE>
+</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=5>
 
@@ -353,6 +373,8 @@ themselves.
                         none
 <P>
 </PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
 The special type "auto" may be specified, in which case
 files will be processed according to their file suffix.
 This allows for easily extracting code from common
@@ -365,12 +387,12 @@ prefixes ("md","html") appropriately.
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>--start</B> STRING </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Same as --type except along with --stop allows for custom
+Same as <B>--type</B> except along with <B>--stop</B> allows for custom
 strings to be specified.
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>--stop</B> STRING </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Same as --type except along with --start allows for custom
+Same as <B>--type</B> except along with <B>--start</B> allows for custom
 strings to be specified.
 </TD></TR>
 <TR valign=top><TD colspan=2>
@@ -675,6 +697,7 @@ $BLOCK has several forms but in all cases operates on a block of lines:
       END:       End block of specially processed text
 <P>
 </PRE>
+<BLOCKQUOTE>
 special-purpose modes primarily for use with the M_kracken module:
 <P>
 <PRE>
@@ -683,6 +706,7 @@ special-purpose modes primarily for use with the M_kracken module:
                  lines with @(#) for use with the what(1) command.
 <P>
 </PRE>
+</BLOCKQUOTE>
 If the "<B>--file</B> NAME" option is present the text is written to the
 specified file unfiltered except for string expansion. This allows
 documentation to easily be maintained in the source file. It can be
@@ -958,7 +982,7 @@ conditional_compile - basic example for <B>prep</B>(1) pre-processor.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-conditional_example [-<B>-help</B>] [--version]
+conditional_example [-<B>-help</B>] [-<B>-version</B>]
 &gt; DESCRIPTION
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
@@ -1069,7 +1093,7 @@ John S. Urban
 <P>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>prep (1)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 32bf9d1b-e685-4384-9b58-55680417e6dd using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>prep (1)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c7950dea-ebd5-4bd0-8a21-44951586d6d9 using man macros.</FONT>
 <br><br><center><img src="images/prep.1.gif"></center>
 </div>
 </div>

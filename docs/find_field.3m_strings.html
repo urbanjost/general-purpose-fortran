@@ -1,0 +1,279 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>find_field (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<B>find_field(3f) </B>- [M_strings:TOKENS] parse a string into tokens
+<B>(LICENSE:MIT)
+</B><B>
+</B></BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+<A HREF=#7>Version</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<PRE>
+subroutine find_field (<I>string</I>, <I>field</I>, <I>position</I>, <I>delims</I>, <I>delim</I>, <I>found</I>)
+<P>
+    character*(*),intent(in)           :: string
+    character*(*),intent(out)          :: field
+    integer,optional,intent(inout)     :: position
+    character*(*),optional,intent(in)  :: delims
+    character*(*),optional,intent(out) :: delim
+    logical,optional,intent(out)       :: found
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Find a delimited <I>field</I> in a <I>string</I>.
+<P>
+Here&#146;s my equivalent, which I&#146;ve used for nearly 2 decades, as you can
+see from the date. This doesn&#146;t try to mimic the C strtok (and doesn&#146;t
+have its limitations either). It is in a much more native Fortran style.
+<P>
+It is a little more complicated than some because it does some things
+that I regularly find useful. For example, it can tell the caller what
+trailing delimiter it <I>found</I>. This can be useful, for example, to
+distinguish between
+<P>
+<PRE>
+       somefield, someotherfield
+<P>
+</PRE>
+versus
+<P>
+<PRE>
+       somefield=somevalue, someotherfield
+<P>
+</PRE>
+Also, I have a bit of special handling for blanks. All the usage
+information is in the argument descriptions. Note that most of the
+arguments are optional.
+<P>
+<PRE>
+       from comp.lang.fortran @ Richard Maine
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>STRING</B> </TD><TD valign=bottom>
+The <I>string</I> input.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>FIELD</B> </TD><TD valign=bottom>
+The returned <I>field</I>. Blank if no <I>field</I> <I>found</I>.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>POSITION</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+On entry, the starting <I>position</I> for searching for the <I>field</I>.
+Default is 1 if the argument is not present.
+On exit, the starting <I>position</I> of the next <I>field</I> or
+<B>len</B>(<I>string</I>)+1 if there is no following <I>field</I>.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>DELIMS</B> </TD><TD valign=bottom>
+String containing the characters to be accepted as delimiters.
+If this includes a blank character, then leading blanks are
+removed from the returned <I>field</I> and the end delimiter may
+optionally be preceeded by blanks. If this argument is
+not present, the default delimiter set is a blank.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>DELIM</B> </TD><TD valign=bottom>
+Returns the actual delimiter that terminated the <I>field</I>.
+Returns <B>char</B>(0) if the <I>field</I> was terminated by the end of
+the <I>string</I> or if no <I>field</I> was <I>found</I>.
+If blank is in delimiters and the <I>field</I> was terminated
+by one or more blanks, followed by a non-blank delimiter,
+the non-blank delimiter is returned.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>FOUND</B> </TD><TD valign=bottom>
+True if a <I>field</I> was <I>found</I>.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample of uses
+<P>
+<PRE>
+       program demo_find_field
+       use M_strings, only : find_field
+       implicit none
+       character(len=256)           :: string
+       character(len=256)           :: field
+       integer                      :: position
+       character(len=:),allocatable :: delims
+       character(len=1)             :: delim
+       logical                      :: found
+<P>
+       delims=&#146;[,]&#146;
+       position=1
+       found=.true.
+       string=&#146;[a,b,[ccc,ddd],and more]&#146;
+       write(*,&#146;(a)&#146;)trim(string)
+       do
+          call find_field(string,field,position,delims,delim,found=found)
+          if(.not.found)exit
+          write(*,&#146;("&lt;",a,"&gt;")&#146;)trim(field)
+       enddo
+       write(*,&#146;(*(g0))&#146;)repeat(&#146;=&#146;,70)
+<P>
+       position=1
+       found=.true.
+       write(*,&#146;(a)&#146;)trim(string)
+       do
+          call find_field(string,field,position,&#146;[], &#146;,delim,found=found)
+          if(.not.found)exit
+          write(*,&#146;("&lt;",a,"&gt;",i0,1x,a)&#146;)trim(field),position,delim
+       enddo
+       write(*,&#146;(*(g0))&#146;)repeat(&#146;=&#146;,70)
+<P>
+       end program demo_find_field
+</PRE>
+&#145;&#145;&#145;
+Results:
+&#145;&#145;&#145;text
+&gt; [a,b,[ccc,ddd],and more]
+&gt; &lt;&gt;
+&gt; &lt;a&gt;
+&gt; &lt;b&gt;
+&gt; &lt;&gt;
+&gt; &lt;ccc&gt;
+&gt; &lt;ddd&gt;
+&gt; &lt;&gt;
+&gt; &lt;and more&gt;
+&gt; &lt;&gt;
+&gt; ======================================================================
+&gt; [a,b,[ccc,ddd],and more]
+&gt; &lt;&gt;2 [
+&gt; &lt;a&gt;4 ,
+&gt; &lt;b&gt;6 ,
+&gt; &lt;&gt;7 [
+&gt; &lt;ccc&gt;11 ,
+&gt; &lt;ddd&gt;15 ]
+&gt; &lt;&gt;16 ,
+&gt; &lt;and&gt;20
+&gt; &lt;more&gt;257 ]
+&gt; ======================================================================
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Richard Maine
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>VERSION</H3>
+
+</A>
+<BLOCKQUOTE>
+version 0.1.0, copyright Nov 15 1990, Richard Maine
+<P>
+Minor editing to conform to inclusion in the <I>string</I> procedure module
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>find_field (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from def1a84d-15f4-48c1-8340-27ce55f77342 using man macros.</FONT>
+<br><br><center><img src="images/find_field.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

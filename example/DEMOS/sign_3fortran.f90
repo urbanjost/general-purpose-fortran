@@ -1,11 +1,19 @@
-        program demo_sign
-        implicit none
-           print *,  sign( -12,  1 )
-           print *,  sign( -12,  0 )
-           print *,  sign( -12, -1 )
+      program demo_sign
+      implicit none
+        ! basics
+         print *,  sign( -12,  1 )
+         print *,  sign( -12,  0 )
+         print *,  sign( -12, -1 )
+         print *,  sign(  12,  1 )
+         print *,  sign(  12,  0 )
+         print *,  sign(  12, -1 )
 
-           print *,  sign( -12.0, [1.0, 0.0, -1.0] )
+         if(sign(1.0,-0.0)== -1.0)then
+            print *, 'this processor distinguishes +0 from -0'
+         else
+            print *, 'this processor does not distinguish +0 from -0'
+         endif
 
-           print *,  'can I distinguish 0 from -0? ', &
-           &  sign( 1.0, -0.0 ) .ne. sign( 1.0, 0.0 )
-        end program demo_sign
+         print *,  'elemental', sign( -12.0, [1.0, 0.0, -1.0] )
+
+      end program demo_sign

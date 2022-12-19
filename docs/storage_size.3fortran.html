@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>STORAGE_SIZE</B>(3) - [BIT:INQUIRY] Storage size in bits
-<P>
-</BLOCKQUOTE>
+<B>STORAGE_SIZE(3) </B>- [BIT:INQUIRY] Storage size in bits
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,13 +76,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-result = <B>storage_size</B>(a [,<I>kind</I>] )
-<P>
 <PRE>
-           integer(kind=KIND) storage_size(a,kind)
+result = <B>storage_size</B>(a [,<I>KIND</I>] )
+<P>
+           integer(kind=KIND) storage_size(a,KIND)
 <P>
             type(TYPE(kind=**)) :: a
-            integer,intent(in),optional :: kind
+            integer,intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -96,12 +96,12 @@ result = <B>storage_size</B>(a [,<I>kind</I>] )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A may be of any type and <I>kind</I>. If it is polymorphic it shall not be an
+A may be of any type and kind. If it is polymorphic it shall not be an
 undefined pointer. If it is unlimited polymorphic or has any deferred
 type parameters, it shall not be an unallocated allocatable variable or a
 disassociated or undefined pointer.
@@ -109,9 +109,15 @@ disassociated or undefined pointer.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The <I>kind</I> type parameter of the returned value is that specified by the
-value of KIND; otherwise, the <I>kind</I> type parameter is that of default
+The kind type parameter of the returned value is that specified by the
+value of <I>KIND</I>; otherwise, the kind type parameter is that of default
 integer type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The result is an integer scalar of default kind unless <I>KIND</I> is specified,
+in which case it has the kind specified by <I>KIND</I>.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -137,7 +143,7 @@ A : The entity to determine the storage size of
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : a scalar integer constant expression that defines the <I>kind</I> of the
+<I>KIND</I> : a scalar integer constant expression that defines the kind of the
 output value.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -156,23 +162,17 @@ module ISO_FORTRAN_ENV.
 <P>
 NOTE1
 <P>
-<PRE>
-      An array element might take "type" more bits to store than an isolated
-      scalar, since any hardware-imposed alignment requirements for
-      array elements might not apply to a simple scalar variable.
+An array element might take "type" more bits to store than an isolated
+scalar, since any hardware-imposed alignment requirements for array elements
+might not apply to a simple scalar variable.
 <P>
-</PRE>
 NOTE2
 <P>
-<PRE>
-      This is intended to be the size in memory that an object takes when
-      it is stored; this might differ from the size it takes during
-      expression handling (which might be the native register size) or
-      when stored in a file. If an object is never stored in memory
-      but only in a register, this function nonetheless returns the size
-      it would take if it were stored in memory.
-<P>
-</PRE>
+This is intended to be the size in memory that an object takes when it is
+stored; this might differ from the size it takes during expression handling
+(which might be the native register size) or when stored in a file. If an
+object is never stored in memory but only in a register, this function
+nonetheless returns the size it would take if it were stored in memory.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -185,14 +185,22 @@ Sample program
 <PRE>
       program demo_storage_size
       implicit none
+<P>
+         ! a default real, integer, and logical are the same storage size
          write(*,*)&#146;size of integer       &#146;,storage_size(0)
          write(*,*)&#146;size of real          &#146;,storage_size(0.0)
          write(*,*)&#146;size of logical       &#146;,storage_size(.true.)
          write(*,*)&#146;size of complex       &#146;,storage_size((0.0,0.0))
+<P>
+         ! note the size of an element of the array, not the storage size of
+         ! the entire array is returned for array arguments
          write(*,*)&#146;size of integer array &#146;,storage_size([0,1,2,3,4,5,6,7,8,9])
-      end program demo_storage_size
 <P>
 </PRE>
+<BLOCKQUOTE>
+end program demo_storage_size
+</BLOCKQUOTE>
+<P>
 Results:
 <P>
 <PRE>
@@ -223,11 +231,11 @@ Fortran 2008
 fortran-lang intrinsic descriptions
 <P>
 <PRE>
-                               October 11, 2022         storage_size(3fortran)
+                               November 07, 2022        storage_size(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>storage_size (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 424f564e-7f2e-4d39-b61d-7ea3fbd9ae14 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>storage_size (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 326f6324-518c-42da-8bda-e73360ff98f5 using man macros.</FONT>
 <br><br><center><img src="images/storage_size.3fortran.gif"></center>
 </div>
 </div>

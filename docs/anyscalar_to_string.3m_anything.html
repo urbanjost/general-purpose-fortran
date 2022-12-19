@@ -48,7 +48,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>jux (3)</NOBR><HR></H1>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>anyscalar_to_string (3)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>jux</B>(3f) - [M_msg] converts up to twenty standard scalar type values to a string
-(LICENSE:PD)
-<P>
-</BLOCKQUOTE>
+<B>anyscalar_to_string(3f) </B>- [M_anything] converts up to twenty standard scalar type values to a string
+<B>(LICENSE:MIT)
+</B><B>
+</B></BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -76,14 +76,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 Syntax:
 <P>
-<PRE>
-     pure function jux(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
-     & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj)
+     pure function anyscalar_to_string(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
+     & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
      class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
      class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
-     character,len=(:),allocatable :: jux
+     character(len=*),intent(in),optional :: sep
+     character,len=(:),allocatable :: anyscalar_to_string
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,7 +94,7 @@ Syntax:
 
 </A>
 <BLOCKQUOTE>
-<B>jux</B>(3f) builds a space-separated string from up to twenty scalar values.
+<B>anyscalar_to_string</B>(3f) builds a space-separated string from up to twenty scalar values.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -107,6 +108,14 @@ Syntax:
 optional value to print the value of after the message. May
 be of type INTEGER, LOGICAL, REAL, DOUBLEPRECISION,
 COMPLEX, or CHARACTER.
+<P>
+Optionally, all the generic values can be
+single-dimensioned arrays. Currently, mixing scalar
+arguments and array arguments is not supported.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>sep</B> </TD><TD valign=bottom>
+separator string used between values. Defaults to a space.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -116,9 +125,9 @@ COMPLEX, or CHARACTER.
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>jux</B> </TD><TD valign=bottom>
-description to print
+<TR valign=top><TD colspan=2>
+<B>anyscalar_to_string</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a representation of the input as a string
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -130,15 +139,52 @@ description to print
 Sample program:
 <P>
 <PRE>
-   program demo_jux
-   use M_msg, only : jux
-   character(len=:),allocatable :: text
-   text=jux(&#146;it is&#146;,.true.,&#146;I like to add some numbers like&#146;,10,&#146;and&#146;,30.4,&#146;and&#146;,(30.0,40.0),&#146;to the message&#146;)
-   print *, text
-   end program demo_jux
+   program demo_anyscalar_to_string
+   use M_anything, only : anyscalar_to_string
+   implicit none
+   character(len=:),allocatable :: pr
+   character(len=:),allocatable :: frmt
+   integer                      :: biggest
+<P>
+   pr=anyscalar_to_string(&#146;HUGE(3f) integers&#146;,huge(0),&
+   &&#146;and real&#146;,huge(0.0),&#146;and double&#146;,huge(0.0d0))
+   write(*,&#146;(a)&#146;)pr
+   pr=anyscalar_to_string(&#146;real            :&#146;,huge(0.0),0.0,12345.6789,tiny(0.0) )
+   write(*,&#146;(a)&#146;)pr
+   pr=anyscalar_to_string(&#146;doubleprecision :&#146;,huge(0.0d0),0.0d0,12345.6789d0,tiny(0.0d0) )
+   write(*,&#146;(a)&#146;)pr
+   pr=anyscalar_to_string(&#146;complex         :&#146;,cmplx(huge(0.0),tiny(0.0)) )
+   write(*,&#146;(a)&#146;)pr
+<P>
+   ! create a format on the fly
+   biggest=huge(0)
+   frmt=anyscalar_to_string(&#146;(*(i&#146;,int(log10(real(biggest))),&#146;:,1x))&#146;,sep=&#146;&#146;)
+   write(*,*)&#146;format=&#146;,frmt
+<P>
+   ! although it will often work, using anyscalar_to_string(3f)
+   ! in an I/O statement is not recommended
+   ! because if an error occurs anyscalar_to_string(3f) will try
+   ! to write while part of an I/O statement
+   ! which not all compilers can handle and is currently non-standard
+   write(*,*)anyscalar_to_string(&#146;program will now stop&#146;)
+<P>
+   end program demo_anyscalar_to_string
 <P>
 </PRE>
 </BLOCKQUOTE>
+Output
+<P>
+<PRE>
+   HUGE(3f) integers 2147483647 and real 3.40282347E+38
+   and double 1.7976931348623157E+308
+   real            : 3.40282347E+38 0.00000000 12345.6787 1.17549435E-38
+   doubleprecision : 1.7976931348623157E+308 0.0000000000000000
+   12345.678900000001 2.2250738585072014E-308
+   complex         : (3.40282347E+38,1.17549435E-38)
+    format=(*(i9:,1x))
+    program will now stop
+<P>
+</PRE>
 <A name=6>
 
      <H3>AUTHOR</H3>
@@ -153,11 +199,16 @@ John S. Urban
 
 </A>
 <BLOCKQUOTE>
-Public Domain
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>jux (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2487af76-fa3d-4368-92bb-016a71d7e917 using man macros.</FONT>
-<br><br><center><img src="images/jux.3m_msg.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>anyscalar_to_string (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 553bcd25-296e-4717-af15-cbfe04e0fc33 using man macros.</FONT>
+<br><br><center><img src="images/anyscalar_to_string.3m_anything.gif"></center>
 </div>
 </div>
 </body>

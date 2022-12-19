@@ -64,6 +64,6 @@
        write(*,*) merge('sign works','sign fails',&
         & sign(10.0_real128).eq.1.0&
         & .and. sign(-10.0_real128).eq.-1.0 )
-     contains
+  contains
 
-     end program demo_M_overload
+    end program demo_M_overload

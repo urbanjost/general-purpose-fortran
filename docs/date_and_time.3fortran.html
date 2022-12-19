@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>DATE_AND_TIME</B>(3) - [SYSTEM:TIME] Gets current time
-<P>
-</BLOCKQUOTE>
+<B>DATE_AND_TIME(3) </B>- [SYSTEM:TIME] Gets current date time
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 call <B>date_and_time</B>( [date] [,<I>time</I>] [,<I>zone</I>] [,<I>values</I>] )
 <P>
-<PRE>
            subroutine date_and_time(date, time, zone, values)
 <P>
             character(len=8),intent(out),optional :: date
@@ -94,7 +94,29 @@ call <B>date_and_time</B>( [date] [,<I>time</I>] [,<I>zone</I>] [,<I>values</I>]
 
 </A>
 <BLOCKQUOTE>
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+*date is a default character scalar
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+*<I>time</I> is a default character scalar
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+*<I>zone</I> is a default character scalar
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VALUES is a rank-one array of type integer with a decimal exponent range
+of at least four.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
@@ -105,6 +127,13 @@ call <B>date_and_time</B>( [date] [,<I>time</I>] [,<I>zone</I>] [,<I>values</I>]
 real-<I>time</I> system clock.
 <P>
 Unavailable <I>time</I> and date character parameters return blanks.
+<P>
+Unavailable numeric parameters return <B>-HUGE</B>(VALUE).
+<P>
+These forms are compatible with the representations defined in ISO
+8601:2004. UTC is established by the International Bureau of Weights and
+Measures (BIPM, i.e. Bureau International des Poids et Mesures) and the
+International Earth Rotation Service (IERS).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -117,37 +146,86 @@ Unavailable <I>time</I> and date character parameters return blanks.
 o
 </TD><TD>
 DATE : A character string of default kind of the form CCYYMMDD, of length
-8 or larger.
+8 or larger, where
 </TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+          + CCYY is the year in the Gregorian calendar
+          + MM is the month within the year
+          + DD is the day within the month.
+<P>
+</PRE>
+The characters of this value are all decimal digits.
+<P>
+<PRE>
+    If there is no date available, DATE is assigned all blanks.
+<P>
+</PRE>
+<TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 TIME : A character string of default kind of the form HHMMSS.SSS, of
-length 10 or larger.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-ZONE : A character string of default kind of the form (+-)HHMM, of length
-5 or larger, representing the difference with respect to Coordinated
-Universal Time (UTC).
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-VALUES : An integer array of eight elements that contains:
-<TABLE width=100% cellpadding=3><!-- tsb: VALUES : An integer array of eight elements that contains:
+length 10 or larger, where
+<TABLE width=100% cellpadding=3><!-- tsb: TIME : A character string of default kind of the form HHMMSS.SSS, of
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(1) : The year
+hh is the hour of the day,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(2) : The month
+mm is the minutes of the hour,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+and ss.sss is the seconds and milliseconds of the minute.
+</TD></TR>
+<TR></TR></TABLE>Except for the decimal point, the characters of this value shall all be
+decimal digits.
+<P>
+If there is no clock available, TIME is assigned all blanks.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ZONE : A string of the form (+-)HHMM, of length 5 or larger, representing
+the difference with respect to Coordinated Universal Time (UTC), where
+<TABLE width=100% cellpadding=3><!-- tsb: ZONE : A string of the form (+-)HHMM, of length 5 or larger, representing
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+hh and mm are the <I>time</I> difference with respect to Coordinated
+Universal Time (UTC) in hours and minutes, respectively.
+</TD></TR>
+<TR></TR></TABLE>The characters of this value following the sign character are all decimal
+digits.
+<P>
+If this information is not available, ZONE is assigned all blanks.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VALUES : An array of at least eight elements. If there is no data
+available for a value it is set to <B>-HUGE</B>(VALUES). Otherwise, it contains:
+<TABLE width=100% cellpadding=3><!-- tsb: VALUES : An array of at least eight elements. If there is no data
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>VALUES</B>(1) : The year, including the century.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>VALUES</B>(2) : The month of the year
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -157,30 +235,36 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(4) : Time difference with UTC in minutes
+<B>VALUES</B>(4) : Time difference in minutes between the reported <I>time</I> and
+UTC <I>time</I>.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(5) : The hour of the day
+<B>VALUES</B>(5) : The hour of the day, in the range 0 to 23.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(6) : The minutes of the hour
+<B>VALUES</B>(6) : The minutes of the hour, in the range 0 to 59
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(7) : The seconds of the minute
+<B>VALUES</B>(7) : The seconds of the minute, in the range 0 to 60
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(8) : The milliseconds of the second
+<B>VALUES</B>(8) : The milliseconds of the second, in the range 0 to 999.
 </TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>The date, clock, and <I>time</I> <I>zone</I> information might be available on some images
+and not others. If the date, clock, or <I>time</I> <I>zone</I> information is available on
+more than one image, it is processor dependent whether or not those images
+share the same information.
+</BLOCKQUOTE>
 <A name=5>
 
      <H3>EXAMPLES</H3>
@@ -213,21 +297,21 @@ Sample program:
            & values(6),&#146; - The minutes of the hour&#146;, &
            & values(7),&#146; - The seconds of the minute&#146;, &
            & values(8),&#146; - The milliseconds of the second&#146;
-      end program demo_date_and_time
-<P>
 </PRE>
+end program demo_date_and_time
+<P>
 Results:
 <P>
 <PRE>
-         DATE="20201222" TIME="165738.779" ZONE="-0500"
-          2020 - The year
-            12 - The month
-            22 - The day of the month
-          -300 - Time difference with UTC in minutes
-            16 - The hour of the day
-            57 - The minutes of the hour
-            38 - The seconds of the minute
-           779 - The milliseconds of the second
+       &gt; DATE="20201222" TIME="165738.779" ZONE="-0500"
+       &gt;  2020 - The year
+       &gt;    12 - The month
+       &gt;    22 - The day of the month
+       &gt;  -300 - Time difference with UTC in minutes
+       &gt;    16 - The hour of the day
+       &gt;    57 - The minutes of the hour
+       &gt;    38 - The seconds of the minute
+       &gt;   779 - The milliseconds of the second
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -260,26 +344,26 @@ date and <I>time</I> conversion, formatting and computation
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-M_time
+M_time - https://github.com/urbanjost/M_time
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-datetime
+fortran-datetime https://github.com/dongli/fortran-datetime
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-datetime-fortran
+datetime-fortran - https://github.com/wavebitscientific/datetime-fortran
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022        date_and_time(3fortran)
+                               November 07, 2022       date_and_time(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 015aa221-c460-4d6a-bc64-22952bce3a43 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 18268580-15f7-4be1-82e8-cd2f483fdb00 using man macros.</FONT>
 <br><br><center><img src="images/date_and_time.3fortran.gif"></center>
 </div>
 </div>

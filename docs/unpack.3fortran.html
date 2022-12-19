@@ -65,10 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>UNPACK</B>(3) - [ARRAY:CONSTRUCTION] Scatter the elements of a vector into an
-array using a mask
-<P>
-</BLOCKQUOTE>
+<B>UNPACK(3) </B>- [ARRAY:CONSTRUCTION] Scatter the elements of a vector into an
+<B>array using a mask
+</B><B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -77,9 +77,9 @@ array using a mask
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>unpack</B>(<I>vector</I>, <I>mask</I>, <I>field</I>)
 <P>
-<PRE>
            type(TYPE(kind=KIND)) unpack(vector, mask, field)
 <P>
             type(TYPE(kind=KIND)),intent(in) :: vector(:)
@@ -94,9 +94,30 @@ result = <B>unpack</B>(<I>vector</I>, <I>mask</I>, <I>field</I>)
 
 </A>
 <BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VECTOR is a rank-one array of any type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK is a logical array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FIELD is the same type and type parameters as VECTOR conformable with
+MASK.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
 The result is an array of the same type and type parameters as VECTOR and
 the same shape as MASK.
-</BLOCKQUOTE>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
@@ -122,21 +143,19 @@ particularly when the replacements are conditional.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VECTOR : New values to place into specified locations in FIELD. Shall be
-an array of any type and rank one. It shall have at least as many
-elements as MASK has .true. values.
+VECTOR : New values to place into specified locations in FIELD. It shall
+have at least as many elements as MASK has .true. values.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : Shall be an array of type logical that specifies which values in
-FIELD are to be replaced with values from VECTOR.
+MASK : Shall be an array that specifies which values in FIELD are to be
+replaced with values from VECTOR.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-FIELD : The original data to be edited. Shall be of the same type and
-type parameters as VECTOR and shall be conformable with MASK.
+FIELD : The input array to be altered.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -150,11 +169,10 @@ The element of the result that corresponds to the ith true element of MASK,
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>in array element order, has the value VECTOR (i) for i = 1, 2, . .</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-\., t,
+<B>in array element order, has the value </B><B>VECTOR</B>(I) for i = 1, 2, . . </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 where t is the number of true values in MASK. Each other element has a value
-equal to FIELD if FIELD is scalar or to the corresponding element of FIELD
-if it is an array.
+equal to *<I>field</I> if *<I>field</I> is scalar or to the corresponding element of
+*<I>field</I> if it is an array.
 </TD></TR>
 <TR></TR></TABLE>The resulting array corresponds to FIELD with .true. elements of MASK
 replaced by values from VECTOR in array element order.
@@ -176,7 +194,7 @@ If M is the array
 0 1 0 0 0 1
 <BLOCKQUOTE>
 <P>
-V is the array [1, 2, 3],
+V is the array [1, 2, 3], . T .
 <P>
 and Q is the logical <I>mask</I>
 <BLOCKQUOTE>
@@ -185,8 +203,7 @@ and Q is the logical <I>mask</I>
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>T . .</B> </TD><TD valign=bottom>
-where "T" represents true and "." represents false, then the
-result of
+the result of
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
@@ -229,8 +246,11 @@ Sample program:
          & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &
          & field=0) )
 <P>
-      contains
+</PRE>
+<BLOCKQUOTE>
+contains
 <P>
+<PRE>
          subroutine print_matrix_int(title,arr)
          ! convenience routine:
          ! just prints small integer arrays in row-column format
@@ -240,23 +260,24 @@ Sample program:
          integer                      :: i
          character(len=:),allocatable :: biggest
 <P>
-              write(*,*)trim(title)
-              ! make buffer to write integer into
-              biggest=&#146;           &#146;
-              ! find how many characters to use for integers
-              write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
-              ! use this format to write a row
-              biggest=&#146;("  [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
-              ! print one row of array at a time
-              do i=1,size(arr,dim=1)
-                 write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
-                 write(*,&#146;(" ]")&#146;)
-              enddo
-         end subroutine print_matrix_int
-<P>
-      end program demo_unpack
-<P>
+            write(*,*)trim(title)
+            ! make buffer to write integer into
+            biggest=&#146;           &#146;
+            ! find how many characters to use for integers
+            write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
+            ! use this format to write a row
+            biggest=&#146;("  [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+            ! print one row of array at a time
+            do i=1,size(arr,dim=1)
+               write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+               write(*,&#146;(" ]")&#146;)
+            enddo
 </PRE>
+end subroutine print_matrix_int
+<P>
+end program demo_unpack
+</BLOCKQUOTE>
+<P>
 Results:
 <P>
 <PRE>
@@ -286,14 +307,14 @@ Fortran 95
 <BLOCKQUOTE>
 <B>MERGE</B>(3), <B>PACK</B>(3), <B>SPREAD</B>(3)
 <P>
-fortran-lang intrinsic descriptions
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022               unpack(3fortran)
+                               November 07, 2022              unpack(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d175d9e7-b001-48a6-a8cd-390e49bb04bb using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b8b305d1-fe22-4ba6-8a4b-1e2bad56df60 using man macros.</FONT>
 <br><br><center><img src="images/unpack.3fortran.gif"></center>
 </div>
 </div>

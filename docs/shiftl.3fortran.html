@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SHIFTL</B>(3) - [BIT:SHIFT] Shift bits left
-<P>
-</BLOCKQUOTE>
+<B>SHIFTL(3) </B>- [BIT:SHIFT] Shift bits left
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>shiftl</B>( <I>i</I>, shift )
 <P>
-<PRE>
            elemental integer(kind=KIND) function shiftl(i, shift)
 <P>
             integer(kind=KIND),intent(in) :: i
@@ -96,13 +96,22 @@ result = <B>shiftl</B>( <I>i</I>, shift )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a kind designated as ** may be any supported kind value for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY may be any type and rank (and the result will automatically be of
-the same type, kind and rank as ARRAY).
+I is an integer of any kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SHIFT is an integer of any kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result will automatically be of the same type, kind and rank as I.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -120,6 +129,14 @@ right end are set to 0.
 If the absolute value of SHIFT is greater than <B>BIT_SIZE</B>(I), the value is
 undefined.
 <P>
+For example, for a 16-bit integer left-shifted five &#46;&#46;&#46;
+<P>
+<PRE>
+          &gt;  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| &lt;- original 16-bit example
+          &gt;  |f|g|h|i|j|k|l|m|n|o|p|           &lt;- left-shifted five
+          &gt;  |f|g|h|i|j|k|l|m|n|o|p|0|0|0|0|0| &lt;- right-padded with zeros
+<P>
+</PRE>
 Note the value of the result is the same as ISHFT (I, SHIFT).
 </BLOCKQUOTE>
 <A name=4>
@@ -167,72 +184,84 @@ Sample program:
       integer(kind=int32),allocatable :: ivals(:)
       integer             :: i
 <P>
-       ! basic usage
+        print *, &#146; basic usage&#146;
         ival=100
-        write(*,*)ival, shiftl(100,3)
-<P>
-       ! elemental (input values may be conformant arrays)
-        ! shifting is often equivalent to multiplying be a power of two
-        write(*,*) shiftl(-1,[(i,i=1,bit_size(0))])
-        write(*,*)
-        write(*,*) shiftl(+3,[(i,i=1,bit_size(0))])
-<P>
-       ! loop through some ivalues
-         shift=9
-         ivals=[ &
-         & int(b"01010101010101010101010101010101"), &
-         & int(b"10101010101010101010101010101010"), &
-         & int(b"11111111111111111111111111111111") ]
-<P>
-         write(*,&#146;(/,"SHIFT =  ",i0)&#146;) shift
-         do i=1,size(ivals)
-            ! print initial value as binary and decimal
-            write(*,&#146;(  "I =      ",b32.32," == ",i0)&#146;) ivals(i),ivals(i)
-            ! print shifted value as binary and decimal
-            oval=shiftl(ivals(i),shift)
-            write(*,&#146;(  "RESULT = ",b32.32," == ",i0)&#146;) oval,oval
-         enddo
-<P>
-        ! elemental (input values may be conformant arrays)
-         ELEM : block
-         integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])
-         write(*,*)"characteristics of the result are the same as input"
-         write(*,&#146;(*(g0,1x))&#146;) &
-           & "kind=",kind(shiftl(arr,3)), "shape=",shape(shiftl(arr,3)), &
-           & "size=",size(shiftl(arr,3)) !, "rank=",rank(shiftl(arr,3))
-         endblock ELEM
-<P>
-      end program demo_shiftl
+        write(*,*)ival, shiftl(ival,3)
 <P>
 </PRE>
+<BLOCKQUOTE>
+! elemental (input values may be conformant arrays)
+print *, &#146; elemental&#146;
+<P>
+! loop through some ivalues
+shift=9
+ivals=[ &
+& <B>int</B>(b"01010101010101010101010101010101"), &
+& <B>int</B>(b"10101010101010101010101010101010"), &
+& <B>int</B>(b"11111111111111111111111111111111") ]
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: ! loop through some ivalues
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,&#146;(/,SHIFT = </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+",i0)&#146;) shift
+do <B>i=1,size</B>(ivals)
+! print initial value as binary and decimal
+<TABLE width=100% cellpadding=3><!-- tsb: ",i0)&#146;) shift
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,&#146;( </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+"I =      ",b32.32," == ",i0)&#146;) <B>ivals</B>(<I>i</I>),<B>ivals</B>(<I>i</I>)
+! print shifted value as binary and decimal
+<B>oval=shiftl</B>(<B>ivals</B>(<I>i</I>),shift)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,&#146;( </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+"RESULT = ",b32.32," == ",i0)&#146;) oval,oval
+enddo
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+! more about elemental
+ELEM : block
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: ! more about elemental
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>integer</B>(kind=int8) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: <B>arr</B>(2,2)=reshape([2,4,8,16],[2,2])
+<B>write</B>(*,*)"characteristics of the result are the same as input"
+<B>write</B>(*,&#146;(*(g0,1x))&#146;) &
+& "kind=",kind(<B>shiftl</B>(arr,3)), "shape=",shape(<B>shiftl</B>(arr,3)), &
+& "size=",size(<B>shiftl</B>(arr,3)) !, "rank=",rank(<B>shiftl</B>(arr,3))
+endblock ELEM
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
+end program demo_shiftl
+<P>
 Results:
 <P>
 <PRE>
-      &gt;         100         800
-      &gt;
-      &gt;           -2          -4          -8         -16         -32         -64
-      &gt;         -128        -256        -512       -1024       -2048       -4096
-      &gt;        -8192      -16384      -32768      -65536     -131072     -262144
-      &gt;      -524288    -1048576    -2097152    -4194304    -8388608   -16777216
-      &gt;    -33554432   -67108864  -134217728  -268435456  -536870912 -1073741824
-      &gt;  -2147483648           0
-      &gt;
-      &gt;            6          12          24          48          96         192
-      &gt;          384         768        1536        3072        6144       12288
-      &gt;        24576       49152       98304      196608      393216      786432
-      &gt;      1572864     3145728     6291456    12582912    25165824    50331648
-      &gt;    100663296   201326592   402653184   805306368  1610612736 -1073741824
-      &gt;  -2147483648           0
-      &gt;
-      &gt;   SHIFT =  9
-      &gt;   I =      01010101010101010101010101010101 == 1431655765
-      &gt;   RESULT = 10101010101010101010101000000000 == -1431655936
-      &gt;   I =      10101010101010101010101010101010 == -1431655766
-      &gt;   RESULT = 01010101010101010101010000000000 == 1431655424
-      &gt;   I =      11111111111111111111111111111111 == -1
-      &gt;   RESULT = 11111111111111111111111000000000 == -512
-      &gt;    characteristics of the result are the same as input
-      &gt;   kind= 1 shape= 2 2 size= 4
+       &gt;    basic usage
+       &gt;           100         800
+       &gt;    elemental
+       &gt;
+       &gt;  SHIFT =  9
+       &gt;  I =      01010101010101010101010101010101 == 1431655765
+       &gt;  RESULT = 10101010101010101010101000000000 == -1431655936
+       &gt;  I =      10101010101010101010101010101010 == -1431655766
+       &gt;  RESULT = 01010101010101010101010000000000 == 1431655424
+       &gt;  I =      11111111111111111111111111111111 == -1
+       &gt;  RESULT = 11111111111111111111111000000000 == -512
+       &gt;   characteristics of the result are the same as input
+       &gt;  kind= 1 shape= 2 2 size= 4
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -255,11 +284,11 @@ Fortran 2008
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022               shiftl(3fortran)
+                               November 07, 2022              shiftl(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftl (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 00b729fa-9fb0-4f57-be23-76610ffb8c91 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftl (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1dd390d8-d262-40d3-97e8-e405e0193112 using man macros.</FONT>
 <br><br><center><img src="images/shiftl.3fortran.gif"></center>
 </div>
 </div>

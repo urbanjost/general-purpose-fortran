@@ -122,12 +122,12 @@ else
    case "${machine}" in
    #=========================================================================
    ULTRIX)
-   /usr/ucb/man -a ${@}|col -b|expand > $SCRATCH.man
+   /usr/ucb/man ${@}|col -b|expand > $SCRATCH.man
    ;;
    #=========================================================================
    sn[0-9]*|UNICOS)
    # module load PrgEnv mpt
-   man -aloub $* > $SCRATCH.man
+   man -loub $* > $SCRATCH.man
    ;;
    #=========================================================================
    IRIX64)
@@ -140,24 +140,24 @@ else
    MANPATH="$MANPATH:/usr/catman/local/man[1-8lnop]/*"       # local unformatted nroff(1) source manual entries
    MANPATH="$MANPATH:/usr/share/man/*"                       # additional unformatted manual pages
    
-   man -a $*|col -b|expand > $SCRATCH.man
+   man $*|col -b|expand > $SCRATCH.man
    ;;
    #=========================================================================
    SunOS)
    MANPATH="$MANPATH:/usr/share/man" # Solaris
    MANPATH="/usr/openwin/man:/usr/man:/opt/SUNWspro/man:$MATHPATH"
-   man -a $*|col -b|expand > $SCRATCH.man
+   man $*|col -b|expand > $SCRATCH.man
    ;;
    #=========================================================================
    HP-UX)
-   man -a $*|col -b|expand > $SCRATCH.man
+   man $*|col -b|expand > $SCRATCH.man
    ;;
    #=========================================================================
    *)
    if [ "$#" -gt 1 ]
    then
       man -k $*
-      man -a $* </dev/null|col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH.man
+      man $* </dev/null|col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH.man
    else
       # generate flat text copy of manpages in scratch file
       man -a $* |col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH.man
@@ -174,7 +174,7 @@ fi
 # $VISUAL - common variable used for this purpose (tcsh,...)
 # edit man pages with nice vim(1) options
 VIM=$(cat <<\EOF
-vim -n -c "so $SCRATCH.vimrc"
+vim -c "so $SCRATCH.vimrc"
 EOF
 #vim -c "so $SCRATCH.vimrc" -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>'
 )

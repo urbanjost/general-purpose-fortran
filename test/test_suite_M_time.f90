@@ -154,8 +154,6 @@ implicit none
 real(kind=realtime) :: julian
 integer             :: ierr
 
-   call unit_check_start('date_to_julian',msg='Checking Julian Date') ! assume if got here passed checks
-
    call date_to_julian( [1970, 1, 1,0, 0,0,0,0] ,julian,ierr)
    call unit_check('date_to_julian',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
 
@@ -186,8 +184,6 @@ integer                      :: dat(8)
 integer                      :: ierr
 character(len=:),allocatable :: expected
 
-   call unit_check_start('julian_to_date')
-
    juliandate=2457589.129d0                 ! set sample Julian Date
    call julian_to_date(juliandate,dat,ierr) ! create DAT array for this date
    expected='2016-07-19 11:05:45'
@@ -211,19 +207,28 @@ end subroutine test_julian_to_date
 subroutine test_date_to_unix
 real(kind=realtime)              :: unixtime
 integer                          :: ierr
+integer                          :: in(8)
+integer                          :: expected
 
-call unit_check_start('date_to_unix')
-
-call date_to_unix([2017,03,29,-240,01,46,47,0],unixtime,ierr)
-call unit_check('d2u',abs(unixtime-1490766407) < 0.001 ,d2u([2017,03,29,-240,01,46,47,0]) )
-
+in=[2017,03,29,-240,01,46,47,0]
+expected=1490766407
+call date_to_unix(in,unixtime,ierr)
+call unit_check('date_to_unix',abs(unixtime-expected) < 0.001 ,'EXPECTED',expected,'RESULT',unixtime)
 call unit_check_done('date_to_unix')
 
 end subroutine test_date_to_unix
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unix_to_date
-call unit_check_start('unix_to_date')
-call unit_check('unix_to_date',all([2017,03,29,-240,01,46,47,0] == u2d(1490766407)),msg=d2u([2017,03,29,-240,01,46,47,0]) )
+integer                          :: ierr
+integer                          :: dat(8)
+integer                          :: result(8)
+integer                          :: unixtime
+dat=[2017,03,29,-240,01,46,47,0]
+unixtime=1490766407
+
+call unix_to_date(unixtime,result,ierr)
+call unit_check('unix_to_date',all(dat == result),'IN',unixtime) !JSU
+call unit_check('unix_to_date',ierr==0,'IERR',ierr)
 call unit_check_done('unix_to_date')
 end subroutine test_unix_to_date
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -242,7 +247,6 @@ character(len=40),parameter  :: tests(*)=[ &
    '100      2016  4      9          ']
 character(len=40)            :: readme
 
-   call unit_check_start('d2o')
 
     do i=2,size(tests)
        readme=tests(i)
@@ -261,7 +265,6 @@ subroutine test_ordinal_seconds()
 implicit none
 integer  :: rday
 
-   call unit_check_start('ordinal_seconds')
    rday=ordinal_seconds()/(60*60*24)
    call unit_check('ordinal_seconds',rday == d2o(),rday,d2o())
    call unit_check_done('ordinal_seconds')
@@ -283,7 +286,6 @@ character(len=40),parameter  :: tests(*)=[ &
    '100      2016  4      9          ']
 character(len=40)            :: readme
 
-   call unit_check_start('ordinal_to_date')
 
    do i=2,size(tests)
       readme=tests(i)
@@ -311,7 +313,6 @@ character(len=40),parameter  :: tests(*)=[ &
    '100      2016  4      9          ']
 character(len=40)            :: readme
 
-  call unit_check_start('o2d')
 
    do i=2,size(tests)
       readme=tests(i)
@@ -325,7 +326,6 @@ character(len=40)            :: readme
 end subroutine test_o2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_v2mo
-call unit_check_start('v2mo')
 call unit_check('v2mo',v2mo(1) == 'January',    msg='January')
 call unit_check('v2mo',v2mo(2) == 'February',   msg='February')
 call unit_check('v2mo',v2mo(3) == 'March',      msg='March')
@@ -343,7 +343,6 @@ end subroutine test_v2mo
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_mo2d
 integer :: dat(8)
-call unit_check_start('mo2d')
 call date_and_time(values=dat)
 call  unit_check('mo2d',all(mo2d('january',    2019) == [2019,01,01,dat(4),0,0,0,0]),msg='January    2019')
 call  unit_check('mo2d',all(mo2d('february',   2019) == [2019,02,01,dat(4),0,0,0,0]),msg='February   2019')
@@ -362,8 +361,6 @@ end subroutine test_mo2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_mo2v()
 !!use M_time,     only: mo2v
-
-call unit_check_start('mo2v')
 
 call unit_check('mo2v', mo2v('jan')        ==   1   ,msg='Check January')
 call unit_check('mo2v', mo2v('Feb')        ==   2   ,msg='Check February')
@@ -387,7 +384,6 @@ call unit_check_done('mo2v') ! assume if got here passed checks
 end subroutine test_mo2v
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_now
-call unit_check_start('now')
 call unit_check_done('now')
 end subroutine test_now
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -422,8 +418,6 @@ line=[ character(len=372) :: &
 & ' "Sun 3 Jan 2010",  "2010-01-03", "2009-W53-7", " " ', &
 &' ' ]
 
-call unit_check_start('fmtdate')
-
 do i=1,size(line)-1
    read(line(i),*)date1,date2,iso_week_date,comment
    if(unit_check_level > 0)then
@@ -442,7 +436,6 @@ call unit_check_done('fmtdate')
 end subroutine test_fmtdate
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fmtdate_usage
-call unit_check_start('fmtdate_usage')
 call unit_check_done('fmtdate_usage')
 end subroutine test_fmtdate_usage
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -456,8 +449,6 @@ character(len=132)             :: comment
 character(len=372),allocatable :: line(:)
 integer                        :: dat(8)
 integer                        :: i
-
-call unit_check_start('guessdate')
 
 ! the data file with dates to read and expected answers and comments
 line=[ character(len=372) :: &
@@ -501,7 +492,6 @@ integer          :: dat(8)     ! input date array
 integer          :: weekday
 character(len=9) :: day
 integer          :: ierr
-call unit_check_start('dow')
 call date_and_time(values=dat)
 call dow([1957,3,2,dat(4),12,0,0,0], weekday, day, ierr)
 call unit_check('dow',day == 'Saturday'.and.weekday == 6,msg='Saturday')
@@ -518,8 +508,6 @@ integer            :: iso_week
 integer            :: iso_weekday
 integer            :: dat(8)
 integer            :: i
-
-call unit_check_start('w2d')
 
 ! the data file with dates to read and expected answers and comments
 line=[ character(len=372) :: &
@@ -565,7 +553,6 @@ mnth=[ &
 '18 19 20 21 22 23 24 ', &
 '25 26 27 28 29 30 31 ', &
 '                     ']
-call unit_check_start('box_month')
 call box_month(dat,calendar)
 if(unit_check_level > 0)then
    write(*,'(a)')calendar
@@ -577,10 +564,6 @@ end subroutine test_box_month
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_d2j
 real(kind=realtime)         :: julian
-
-call unit_check_start('d2j')
-
-   call unit_check_start('d2j',msg='Checking Julian Date') ! assume if got here passed checks
 
    julian=d2j( [1970, 1, 1,0, 0,0,0,0])
    call unit_check('d2j',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
@@ -607,9 +590,6 @@ end subroutine test_d2j
 subroutine test_j2d
 real(kind=realtime)          :: juliandate
 character(len=:),allocatable :: expected
-
-call unit_check_start('j2d')
-
 
    juliandate=2457589.129d0                 ! set sample Julian Date
 
@@ -643,26 +623,29 @@ implicit none
 !    date --date "Wed Mar 29 01:46:47 UTC-400 2017" +%s  ! 1490766407
 !    date --date "Wed Mar 29 01:46:47 UTC-4:00 2017" +%s ! 1490766407
 
-   call unit_check_start('d2u')
-
-   call unit_check('d2u',nint(d2u([2017,03,29,-240,01,46,47,0])+0.5) == 1490766407,d2u([2017,03,29,-240,01,46,47,0]) )
+   ! nint() changed to int(anint() to avoid gfortran OpenBSD bug on i386
+   call unit_check('d2u',int(anint(d2u([2017,03,29,-240,01,46,47,0]))) == 1490766407,d2u([2017,03,29,-240,01,46,47,0]) )
 
    call unit_check_done('d2u')
 
 end subroutine test_d2u
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_u2d
-call unit_check_start('u2d')
-call unit_check('u2d',all([2017,03,29,-240,01,46,47,0] == u2d(1490766407)),&
-        & d2u([2017,03,29,-240,01,46,47,0]) )
+integer :: ex(8)
+integer :: re(8)
+integer :: utime
+   utime=1490766407
+   ex=[2017,03,29,-240,01,46,47,0]
+   re=u2d(1490766407)
+   call unit_check('u2d',all(re == ex),&
+   & 'EXPECTED',1490766407, &
+   & 'GOT',d2u([2017,03,29,-240,01,46,47,0]) )
 call unit_check_done('u2d')
 end subroutine test_u2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sec2days()
 !!use M_time, only: sec2days
 implicit none
-
-   call unit_check_start('sec2days')
 
    call unit_check('sec2days',sec2days(129860) ==              '1-12:04:20','129860 is 1-12:04:20')
    call unit_check('sec2days',sec2days(80000.0d0) ==           '0-22:13:20','80000.0d0 is 0-22:13:20')
@@ -676,8 +659,6 @@ end subroutine test_sec2days
 subroutine test_days2sec()
 !!use M_time, only  : days2sec, realtime
 implicit none
-
-   call unit_check_start('days2sec')
 
    call unit_check('days2sec',nint(days2sec('1')) ==              1, 'expected',1,'got',nint(days2sec('1')))
    call unit_check('days2sec',nint(days2sec('1:00')) ==          60,'expected',60,'got',nint(days2sec('1:00')))
@@ -709,14 +690,12 @@ end subroutine test_days2sec
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_phase_of_moon
 integer  :: dat(8)=[2018,11,3,-240,20,18,44,245]
-call unit_check_start('phase_of_moon')
 call unit_check('phase_of_moon',phase_of_moon(dat) == 'Waning crescent')
 call unit_check_done('phase_of_moon')
 end subroutine test_phase_of_moon
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_moon_fullness
 integer  :: dat(8)=[2018,11,3,-240,20,18,44,245]
-call unit_check_start('moon_fullness')
 call unit_check('moon_fullness', moon_fullness(dat) == -30)
 call unit_check_done('moon_fullness')
 end subroutine test_moon_fullness
@@ -778,8 +757,6 @@ integer :: ii
 integer :: dat(8)
 character (len=5)  :: mon(3:4) = (/ 'march', 'april' /)
 
-call unit_check_start('easter') ! assume if got here passed checks
-
 do ii=1,size(tests)
    readme=tests(ii) ! cannot do internal read on a parameter
    read(readme,*)inyear,tmonth,tday
@@ -794,16 +771,13 @@ call unit_check_done('easter') ! assume if got here passed checks
 end subroutine test_easter
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_now_ex
-call unit_check_start('now_ex')
 call unit_check_done('now_ex')
 end subroutine test_now_ex
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_d2w()
 use M_verify, only: unit_check,unit_check_good,unit_check_bad,unit_check_done,unit_check_start,unit_check_msg,unit_check_level
 implicit none
 
-   call unit_check_start('d2w',msg='Examples of contemporary dates around New Year''s Day')
    call date_and_time(values=dat)
 
    dat=[2005,01,01,dat(4),0,0,0,0] !  Sat 1 Jan 2005 2005-01-01 2004-W53-6

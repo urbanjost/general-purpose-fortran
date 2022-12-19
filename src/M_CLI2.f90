@@ -150,7 +150,6 @@ implicit none
 integer,parameter,private :: dp=kind(0.0d0)
 integer,parameter,private :: sp=kind(0.0)
 private
-!logical,save :: debug_m_cli2=.true.
 logical,public,save :: debug_m_cli2=.false.
 !===================================================================================================================================
 character(len=*),parameter          :: gen='(*(g0))'
@@ -647,9 +646,12 @@ end subroutine check_commandline
 !!  that is, an option in a response file cannot be given the value "@NAME2"
 !!  to call another response file.
 !!
-!!  Note that more than one response name may appear on a command line.
+!!  More than one response name may appear on a command line.
 !!
 !!  They are case-sensitive names.
+!!
+!!  Note "@" s a special character in Powershell, and requires being escaped
+!!  with a grave character.
 !!
 !!   LOCATING RESPONSE FILES
 !!
@@ -739,10 +741,14 @@ end subroutine check_commandline
 !!               System commands are executed as a simple call to
 !!               system (so a cd(1) or setting a shell variable
 !!               would not effect subsequent lines, for example)
+!!               BEFORE the command being processed.
 !!    print|>    Message to screen
 !!    stop       display message and stop program.
 !!
-!!
+!!  NOTE: system commands are executed when encountered, but options are
+!!  gathered from multiple option lines and passed together at the end of
+!!  processing of the block; so all commands will be executed BEFORE the
+!!  command for which options are being supplied no matter where they occur.
 !!
 !!  So if a program that does nothing but echos its parameters
 !!
@@ -787,7 +793,7 @@ end subroutine check_commandline
 !!  ".rsp" suffix added. So if your program is named "myprg" the filename
 !!  must be "myprg.rsp".
 !!
-!!    Note that here `basename` means the last leaf  of the
+!!    Note that here `basename` means the last leaf of the
 !!    name of the program as returned by the Fortran intrinsic
 !!    GET_COMMAND_ARGUMENT(0,...) trimmed of anything after a period ("."),
 !!    so it is a good idea not to use hidden files.
@@ -887,6 +893,14 @@ integer,intent(out),optional                      :: ierr
 character(len=:),intent(out),allocatable,optional :: errmsg
 character(len=:),allocatable                      :: hold               ! stores command line argument
 integer                                           :: ibig
+character(len=:),allocatable                      :: debug_mode
+
+   debug_mode= upper(get_env('CLI_DEBUG_MODE','FALSE'))//' '
+   select case(debug_mode(1:1))
+   case('Y','T')
+      debug_m_cli2=.true.
+   end select
+
    G_response=CLI_RESPONSE_FILE
    G_options_only=.false.
    G_append=.true.
@@ -1090,7 +1104,7 @@ integer                       :: j
    ! look for @NAME if CLI_RESPONSE_FILE=.TRUE. AND LOAD THEM
    do i = 1, command_argument_count()
       call get_command_argument(i, cmdarg)
-      if(adjustl(cmdarg(1:1))  ==  '@')then
+      if(scan(adjustl(cmdarg(1:1)),'@')  ==  1)then
          call get_prototype(cmdarg,prototype)
          call split(prototype,array)
          ! assume that if using subcommands first word not starting with dash is the subcommand
@@ -1753,11 +1767,14 @@ end subroutine prototype_and_cmd_args_to_nlist
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine expand_response(name)
-character(len=*),intent(in) :: name
+character(len=*),intent(in)  :: name
 character(len=:),allocatable :: prototype
-logical :: hold
+logical                      :: hold
+
    if(debug_m_cli2)write(*,gen)'<DEBUG>EXPAND_RESPONSE:START:NAME=',name
+
    call get_prototype(name,prototype)
+
    if(prototype /= '')then
       hold=G_append
       G_append=.false.
@@ -1765,7 +1782,9 @@ logical :: hold
       call prototype_to_dictionary(prototype)       ! build dictionary from prototype
       G_append=hold
    endif
+
    if(debug_m_cli2)write(*,gen)'<DEBUG>EXPAND_RESPONSE:END'
+
 end subroutine expand_response
 !===================================================================================================================================
 subroutine get_prototype(name,prototype) ! process @name abbreviations
@@ -1782,6 +1801,7 @@ character(len=4096)                      :: line !x! assuming input never this l
 character(len=256)                       :: message
 character(len=:),allocatable             :: array(:) ! output array of tokens
 integer                                  :: lines_processed
+
    lines_processed=0
    plain_name=name//'  '
    plain_name=trim(name(2:))
@@ -1804,13 +1824,13 @@ integer                                  :: lines_processed
    ! look for ARG0.rsp  with @OS@NAME  section in it and position to it
    if(os /= '@')then
       search_for=os//name
-      call find_and_read_response_file(basename(get_name(),suffix=.true.))
+      call find_and_read_response_file(basename(get_name(),suffix=.false.))
       if(lines_processed /= 0)return
    endif
 
    ! look for ARG0.rsp  with a section called @NAME in it and position to it
    search_for=name
-   call find_and_read_response_file(basename(get_name(),suffix=.true.))
+   call find_and_read_response_file(basename(get_name(),suffix=.false.))
    if(lines_processed /= 0)return
 
    write(*,gen)'<ERROR> response name ['//trim(name)//'] not found'
@@ -2082,6 +2102,8 @@ logical :: with_suffix
       call split(path,file_parts,delimiters='\/.')
       if(size(file_parts) >= 2)then
          base = trim(file_parts(size(file_parts)-1))
+      elseif(size(file_parts) == 1)then
+         base = trim(file_parts(1))
       else
          base = ''
       endif
@@ -2343,7 +2365,7 @@ logical                      :: next_mandatory
             args=[character(len=imax) :: args,current_argument]
          else
             imax=max(len(unnamed),len(current_argument))
-            if(index(current_argument//' ','@') == 1.and.G_response)then
+            if(scan(current_argument//' ','@') == 1.and.G_response)then
                if(debug_m_cli2)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:1:CALL EXPAND_RESPONSE:CURRENT_ARGUMENT=',current_argument
                call expand_response(current_argument)
             else
@@ -2370,7 +2392,7 @@ logical                      :: next_mandatory
                   args=[character(len=imax) :: args,current_argument]
                else
                   imax=max(len(unnamed),len(current_argument))
-                  if(index(current_argument//' ','@') == 1.and.G_response)then
+                  if(scan(current_argument//' ','@') == 1.and.G_response)then
                if(debug_m_cli2)write(*,gen)'<DEBUG>CMD_ARGS_TO_DICTIONARY:2:CALL EXPAND_RESPONSE:CURRENT_ARGUMENT=',current_argument
                      call expand_response(current_argument)
                   else
@@ -3421,9 +3443,6 @@ class(*),intent(in)           :: g0
 class(*),intent(in),optional  :: g1, g2, g3, g4, g5, g6, g7, g8 ,g9
 class(*),intent(in),optional  :: ga, gb, gc, gd, ge, gf, gg, gh ,gi, gj
 character(len=*),intent(in),optional :: sep
-if(debug_m_cli2)write(*,*)'<DEBUG>JOURNAL:',present(g1)
-if(debug_m_cli2)write(*,*)'<DEBUG>JOURNAL:',present(g2)
-if(debug_m_cli2)write(*,*)'<DEBUG>JOURNAL:',present(sep)
 write(*,'(a)')str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, ga, gb, gc, gd, ge, gf, gg, gh, gi, gj, sep)
 end subroutine journal
 !===================================================================================================================================
@@ -3461,7 +3480,7 @@ end subroutine journal
 !!
 !! Sample program:
 !!
-!!       program demo_msg
+!!       program demo_str
 !!       use M_CLI2, only : str
 !!       implicit none
 !!       character(len=:),allocatable :: pr
@@ -3480,7 +3499,7 @@ end subroutine journal
 !!
 !!       ! create a format on the fly
 !!       biggest=huge(0)
-!!       frmt=str('(*(i',int(log10(real(biggest))),':,1x))',sep=' ')
+!!       frmt=str('(*(i',nint(log10(real(biggest))),':,1x))',sep=' ')
 !!       write(*,*)'format=',frmt
 !!
 !!       ! although it will often work, using str(3f) in an I/O statement
@@ -3489,7 +3508,7 @@ end subroutine journal
 !!       ! can handle and is currently non-standard
 !!       write(*,*)str('program will now stop')
 !!
-!!       end program demo_msg
+!!       end program demo_str
 !!
 !!  Output
 !!
@@ -3523,7 +3542,6 @@ character(len=:), allocatable :: msg_scalar
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(debug_m_cli2)write(*,gen)'<DEBUG>:MSG_SCALAR'
    if(present(sep))then
       sep_local=sep
       increment=len(sep_local)+1
@@ -3531,13 +3549,10 @@ integer                       :: increment
       sep_local=' '
       increment=2
    endif
-   if(debug_m_cli2)write(*,gen)'<DEBUG>:MSG_SCALAR'
 
    istart=1
    line=''
-   if(debug_m_cli2)write(*,gen)'<DEBUG>:MSG_SCALAR:CALL GENERIC:GENERIC0'
    if(present(generic0))call print_generic(generic0)
-   if(debug_m_cli2)write(*,gen)'<DEBUG>:MSG_SCALAR:CALL GENERIC:GENERIC1'
    if(present(generic1))call print_generic(generic1)
    if(present(generic2))call print_generic(generic2)
    if(present(generic3))call print_generic(generic3)
@@ -3563,8 +3578,6 @@ contains
 subroutine print_generic(generic)
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in) :: generic
-   if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:START'
-   if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:LINE',trim(line)
    select type(generic)
       type is (integer(kind=int8));     write(line(istart:),'(i0)') generic
       type is (integer(kind=int16));    write(line(istart:),'(i0)') generic
@@ -3572,19 +3585,14 @@ class(*),intent(in) :: generic
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64))
-         if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:REAL64'
          write(line(istart:),'(1pg0)') generic
       !x! DOES NOT WORK WITH NVFORTRAN: type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
       type is (logical)
-         if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:REAL64'
          write(line(istart:),'(l1)') generic
       type is (character(len=*))
-         if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:CHARACTER'
-         if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:ISTART:',istart
          write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
    end select
-   if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:START'
    istart=len_trim(line)+increment
    line=trim(line)//sep_local
 end subroutine print_generic
@@ -3645,8 +3653,6 @@ integer :: i
       !x! DOES NOT WORK WITH ifort:     type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
       type is (character(len=*))
-         if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:CHARACTER'
-         if(debug_m_cli2)write(*,gen)'<DEBUG>PRINT_GENERIC:ISTART:',istart
          write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic
       class default
@@ -5486,7 +5492,7 @@ integer                                 :: error
       maxtry=0
       place=-1
    else
-      maxtry=int(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1

@@ -12,4 +12,4 @@
          output=fmt(.true.,"'The final answer is [',g0,']'")
          write(*,*)'result is ',output
 
-      end program demo_fmt
+    end program demo_fmt

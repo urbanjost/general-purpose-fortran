@@ -14,4 +14,4 @@
        write(*,*) 'trimmed length of variable is ',lastnb
        write(*,*) 'trimmed string=[',s(:lastnb),']'
 
-      end program demo_len_white
+    end program demo_len_white

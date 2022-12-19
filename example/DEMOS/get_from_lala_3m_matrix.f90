@@ -27,4 +27,4 @@
         write(*,gen)'in calling program ivec=',shape(ivec)
         write(*,gen)ivec
 
-     end program demo_get_from_lala
+    end program demo_get_from_lala

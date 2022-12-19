@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>IS_CONTIGUOUS</B>(3) - [ARRAY:INQUIRY] Test if object is contiguous
-<P>
-</BLOCKQUOTE>
+<B>IS_CONTIGUOUS(3) </B>- [ARRAY:INQUIRY] Test if object is contiguous
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,12 +76,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-result = <B>is_contiguous</B>(<I>a</I>)
-<P>
 <PRE>
-           logical function is_contigious(a)
+result = <B>is_contiguous</B>(<I>array</I>)
 <P>
-            type(TYPE(kind=**)),intent(in) :: a
+           logical function is_contiguous(array)
+<P>
+            type(TYPE(kind=**)),intent(in) :: array
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -95,18 +95,18 @@ result = <B>is_contiguous</B>(<I>a</I>)
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<I>a</I> kind designated as ** may be any supported kind value for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A may be of any type. It shall be an array. If it is <I>a</I> pointer it shall
-be associated.
+ARRAY may be of any type. It shall be an <I>array</I> or assumed-rank. If it is
+a pointer it shall be associated.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is <I>a</I> default logical scalar
+the result is a default logical scalar
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -115,7 +115,7 @@ the result is <I>a</I> default logical scalar
 
 </A>
 <BLOCKQUOTE>
-<B>IS_CONTIGIOUS</B>(3) returns .true. if and only if an object is contiguous.
+<B>IS_CONTIGUOUS</B>(3) returns .true. if and only if an object is contiguous.
 <P>
 An object is contiguous if it is
 <TABLE cellpadding=3><!-- tsb: An object is contiguous if it is
@@ -129,29 +129,29 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(2) <I>a</I> nonpointer whole array that is not assumed-shape,
+(2) a nonpointer whole <I>array</I> that is not assumed-shape,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(3) an assumed-shape array that is argument associated with an array that
+(3) an assumed-shape <I>array</I> that is argument associated with an <I>array</I> that
 is contiguous,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(4) an array allocated by an ALLOCATE statement,
+(4) an <I>array</I> allocated by an ALLOCATE statement,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(5) <I>a</I> pointer associated with <I>a</I> contiguous target, or
+(5) a pointer associated with a contiguous target, or
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(6) <I>a</I> nonzero-sized array section provided that
-<TABLE width=100% cellpadding=3><!-- tsb: (6) <I>a</I> nonzero-sized array section provided that
+(6) a nonzero-sized <I>array</I> section provided that
+<TABLE width=100% cellpadding=3><!-- tsb: (6) a nonzero-sized <I>array</I> section provided that
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -162,19 +162,19 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(B) it does not have <I>a</I> vector subscript,
+(B) it does not have a vector subscript,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(C) the elements of the section, in array element order, are <I>a</I> subset
-of the base object elements that are consecutive in array element
+(C) the elements of the section, in <I>array</I> element order, are a subset
+of the base object elements that are consecutive in <I>array</I> element
 order,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(D) if the array is of type character and <I>a</I> substring-range appears,
+(D) if the <I>array</I> is of type character and a substring-range appears,
 the substring-range specifies all of the characters of the parent-
 string,
 </TD></TR>
@@ -186,12 +186,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(F) it is not the real or imaginary part of an array of type complex.
+(F) it is not the real or imaginary part of an <I>array</I> of type complex.
 </TD></TR>
 <TR></TR></TABLE><!-- .PP -->
 </TD></TR>
-<TR></TR></TABLE>An object is not contiguous if it is an array subobject, and
-<TABLE cellpadding=3><!-- tsb: An object is not contiguous if it is an array subobject, and
+<TR></TR></TABLE>An object is not contiguous if it is an <I>array</I> subobject, and
+<TABLE cellpadding=3><!-- tsb: An object is not contiguous if it is an <I>array</I> subobject, and
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -202,7 +202,7 @@ the object has two or more elements,
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the elements of the object in array element order are not consecutive in
+the elements of the object in <I>array</I> element order are not consecutive in
 the elements of the base object,
 </TD></TR>
 <TR valign=top><TD width=3%>
@@ -213,7 +213,7 @@ the object is not of type character with length zero, and
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the object is not of <I>a</I> derived type that has no ultimate components other
+the object is not of a derived type that has no ultimate components other
 than zero-sized arrays and
 </TD></TR>
 <TR valign=top><TD width=3%>
@@ -233,8 +233,8 @@ characters with length zero.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A : An array of any type to be tested for being contigious. If it is <I>a</I>
-pointer it shall be associated.
+ARRAY : An <I>array</I> of any type to be tested for being contiguous. If it is
+a pointer it shall be associated.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -243,12 +243,9 @@ pointer it shall be associated.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>The result has the value .true. if A is contiguous, and .false.</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+The result has the value .true. if ARRAY is contiguous, and .false.
 otherwise.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
 <A name=6>
 
      <H3>EXAMPLES</H3>
@@ -299,11 +296,11 @@ Fortran 2008
 fortran-lang intrinsic descriptions
 <P>
 <PRE>
-                               October 11, 2022        is_contiguous(3fortran)
+                               November 07, 2022       is_contiguous(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_contiguous (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ea6b6e7c-58db-4ef3-b10c-0c9ffa585d7d using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_contiguous (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 10b14590-5bdd-433d-a961-53bc08c36c5c using man macros.</FONT>
 <br><br><center><img src="images/is_contiguous.3fortran.gif"></center>
 </div>
 </div>

@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>get_namelist</B>(3f) - [ARGUMENTS:M_args] NAMELIST-based command line argument parsing
-(LICENSE:PD)
-<P>
-</BLOCKQUOTE>
+<B>get_namelist(3f) </B>- [ARGUMENTS:M_args] NAMELIST-based command line argument parsing
+<B>(LICENSE:PD)
+</B><B>
+</B></BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,9 +75,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 function <B>get_namelist</B>(definition,all) <B>result</B>(<I>string</I>)
 <P>
-<PRE>
    character(len=*),intent(in),optional  :: definition
    logical,intent(in),optional  :: all
    character(len=:),allocatable :: string
@@ -114,15 +114,18 @@ o
 <P>
       cmd x=1 point=-1,-2,-3 help=T
 <P>
-     This requires nothing but a call to the get_namelist(3f) procedure
-     with no arguments and is very suitable if you just need to pass in
-     a few numeric values. the syntax used on the command line is the
-     syntax required for a NAMELIST input string which is very good for
-     numeric values but does not follow the common syntax rules found
-     in routines like getopts(3c) or IEEE Std 1003.1-2001, for example.
-<P>
 </PRE>
-<TABLE cellpadding=3>
+<BLOCKQUOTE>
+This requires nothing but a call to the <B>get_namelist</B>(3f) procedure
+with no arguments and is very suitable if you just need to pass in
+a few numeric values. the syntax used on the command line is the
+syntax required for a NAMELIST input <I>string</I> which is very good for
+numeric values but does not follow the common syntax rules found
+in routines like <B>getopts</B>(3c) or IEEE Std 1003.1-2001, for example.
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: This requires nothing but a call to the <B>get_namelist</B>(3f) procedure
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -134,13 +137,16 @@ Unix-like command usage when provided a NAMELIST group <I>string</I>.
 <P>
       cmd -x 1 --point -1,-2,-3 --title &#146;my string&#146; --help file1 file2
 <P>
-     You can use an internal write to generate the input string (which
-     means to add a new parameter you need to do nothing but initialize
-     the variable and add the name to the ARGS NAMELIST group and it
-     automatically becomes a new command line argument).
-<P>
 </PRE>
-<TABLE cellpadding=3>
+<BLOCKQUOTE>
+You can use an internal write to generate the input <I>string</I> (which
+means to add a new parameter you need to do nothing but initialize
+the variable and add the name to the ARGS NAMELIST group and it
+automatically becomes a new command line argument).
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: You can use an internal write to generate the input <I>string</I> (which
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -152,12 +158,14 @@ Unix-like command usage when provided a Unix-like prototype.
 <P>
       cmd -x 1 --point -1,-2,-3 --title &#146;my string&#146; --help file1 file2
 <P>
-     If you are not familiar with NAMELIST input and output you can
-     declare all the members of the namelist and their default values
-     much like you were calling the program with a command prototype
-     string.
-<P>
 </PRE>
+<BLOCKQUOTE>
+If you are not familiar with NAMELIST input and output you can
+declare all the members of the namelist and their default values
+much like you were calling the program with a command prototype
+<I>string</I>.
+</BLOCKQUOTE>
+<P>
 For all three modes there is no need to convert from strings to numeric
 values in the source code. Even arrays and user-defined types can be
 used, complex values can be input &#46;&#46;&#46; just define the variable and
@@ -215,9 +223,9 @@ For example:
 <P>
        ! use the values in your program.
        write(*,nml=args)
-    end program nooptions
-<P>
 </PRE>
+end program nooptions
+<P>
 You can call the example program with syntax like:
 <P>
 <PRE>
@@ -330,6 +338,7 @@ on the command line. For example:
     call get_namelist(&#146;&ARGS A_="A value",B_=" ",C_=11 22 33, help=F/&#146;)
 <P>
 </PRE>
+</BLOCKQUOTE>
 Sample with manual definition of NAMELIST <I>string</I>
 <P>
 <PRE>
@@ -368,7 +377,6 @@ Sample with manual definition of NAMELIST <I>string</I>
     end program show_get_namelist_manual
 <P>
 </PRE>
-</BLOCKQUOTE>
 <A name=>
 
     <H4>&nbsp; &nbsp; UNIX PROTOTYPE</H4>
@@ -544,7 +552,7 @@ names except via an EQUIVALENCE.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-short keywords cannot be combined. <B>-a</B> -b -c is required,
+short keywords cannot be combined. <B>-a</B> <B>-b</B> <B>-c</B> is required,
 not <B>-abc</B> even for Boolean keys.
 </TD></TR>
 <TR valign=top><TD width=3%>
@@ -603,7 +611,7 @@ John S. Urban, 2019
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_namelist (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 91494d79-e54e-4f1b-81a9-cfff95ed07b2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_namelist (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a1e70a1e-74d4-4f89-8a56-906fe174e19b using man macros.</FONT>
 <br><br><center><img src="images/get_namelist.3m_args.gif"></center>
 </div>
 </div>

@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>CONJG</B>(3) - [NUMERIC] Complex conjugate of a complex value
-<P>
-</BLOCKQUOTE>
+<B>CONJG(3) </B>- [NUMERIC] Complex conjugate of a complex value
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,12 +76,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>conjg</B>(<I>z</I>)
 <P>
-<PRE>
            elemental complex(kind=KIND) function conjg(z)
 <P>
-            complex(kind=KIND),intent(in) :: z
+            complex(kind=**),intent(in) :: z
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -95,12 +95,12 @@ result = <B>conjg</B>(<I>z</I>)
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND may be any supported value for the complex input value.
+Z is a complex value of any valid kind.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The returned value with be the same complex type as the input.
+The returned value has the same complex type as the input.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -111,11 +111,11 @@ The returned value with be the same complex type as the input.
 <BLOCKQUOTE>
 <B>CONJG</B>(3) returns the complex conjugate of the complex value Z.
 <P>
+That is, If Z is the complex value (X, Y) then the result is (X, <B>-Y</B>).
+<P>
 In mathematics, the complex conjugate of a complex number is a value whose
 real and imaginary part are equal parts are equal in magnitude to each other
 but the Y value has opposite sign.
-<P>
-That is, If Z is the complex value (X, Y) then the result is (X, <B>-Y</B>).
 <P>
 For matrices of complex numbers, <B>CONJG</B>(ARRAY) represents the element-by-
 element conjugation of ARRAY; not the conjugate transpose of the ARRAY .
@@ -130,7 +130,7 @@ element conjugation of ARRAY; not the conjugate transpose of the ARRAY .
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Z : The complex value to create the conjugate of.
+Z : The value to create the conjugate of.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -139,8 +139,10 @@ Z : The complex value to create the conjugate of.
 
 </A>
 <BLOCKQUOTE>
-Returns a complex value equal to the input value except the sign of the
-imaginary component is the opposite of the input value.
+Returns a value equal to the input value except the sign of the imaginary
+component is the opposite of the input value.
+<P>
+That is, if Z has the value (X,Y), the result has the value (X, <B>-Y</B>).
 </BLOCKQUOTE>
 <A name=6>
 
@@ -188,79 +190,22 @@ Sample program:
 Results:
 <P>
 <PRE>
-       (2.000000,3.000000) (2.000000,-3.000000)
-<P>
-       (1.23456789012346,-1.23456789012346)
-       (1.23456789012346,1.23456789012346)
-<P>
-       original
-<P>
-</PRE>
-(<B>-1.0</B>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: (<B>-1.0</B>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>, 2.0</B> </TD><TD valign=bottom>
-) ( 3.0    , 4.0    ) ( 5.0    ,<B>-6.0</B>    )
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-( 7.0
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ( 7.0
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>,</B><B>-8.0</B> </TD><TD valign=bottom>
-) ( 8.0    , 9.0    ) ( 9.0    , 9.0    )
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-( 1.0
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ( 1.0
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>, 9.0</B> </TD><TD valign=bottom>
-) ( 2.0    , 0.0    ) (<B>-3.0</B>    ,-7.0    )
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-         conjugate
+       &gt;  (2.000000,3.000000) (2.000000,-3.000000)
+       &gt;
+       &gt;  (1.23456789012346,-1.23456789012346)
+       &gt;  (1.23456789012346,1.23456789012346)
+       &gt;
+       &gt;  original
+       &gt; (-1.0    , 2.0    ) ( 3.0    , 4.0    ) ( 5.0    ,-6.0    )
+       &gt; ( 7.0    ,-8.0    ) ( 8.0    , 9.0    ) ( 9.0    , 9.0    )
+       &gt; ( 1.0    , 9.0    ) ( 2.0    , 0.0    ) (-3.0    ,-7.0    )
+       &gt;
+       &gt;  conjugate
+       &gt; (-1.0    ,-2.0    ) ( 3.0    ,-4.0    ) ( 5.0    , 6.0    )
+       &gt; ( 7.0    , 8.0    ) ( 8.0    ,-9.0    ) ( 9.0    ,-9.0    )
+       &gt; ( 1.0    ,-9.0    ) ( 2.0    , 0.0    ) (-3.0    , 7.0    )
 <P>
 </PRE>
-(<B>-1.0</B>
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>,</B><B>-2.0</B> </TD><TD valign=bottom>
-) ( 3.0    ,-4.0    ) ( 5.0    , 6.0    )
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-( 7.0
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ( 7.0
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>, 8.0</B> </TD><TD valign=bottom>
-) ( 8.0    ,<B>-9.0</B>    ) ( 9.0    ,-9.0    )
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-( 1.0
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ( 1.0
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>,</B><B>-9.0</B> </TD><TD valign=bottom>
-) ( 2.0    , 0.0    ) (-3.0    , 7.0    )
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -305,11 +250,11 @@ expressions:
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022                conjg(3fortran)
+                               November 07, 2022               conjg(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>conjg (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c5f044dd-7918-4763-bb1c-ecce924aa973 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>conjg (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 85f44c47-4b94-48d1-a3c9-56f92880c4e6 using man macros.</FONT>
 <br><br><center><img src="images/conjg.3fortran.gif"></center>
 </div>
 </div>

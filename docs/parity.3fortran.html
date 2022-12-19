@@ -65,20 +65,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>PARITY</B>(3) - [TRANSFORMATIONAL] Reduction with exclusive <B>OR</B>()
-<P>
-</BLOCKQUOTE>
+<B>PARITY(3) </B>- [ARRAY:REDUCTION] Array reduction by .NEQV. operation
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=7>
+<A name=9>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>parity</B>( mask [,<I>dim</I>] )
 <P>
-<PRE>
            logical(kind=KIND) function parity(mask, dim)
 <P>
             type(logical(kind=KIND)),intent(in)        :: mask(..)
@@ -96,7 +96,24 @@ result = <B>parity</B>( mask [,<I>dim</I>] )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a kind designated as ** may be any supported kind value for the type
+MASK is a logical array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM is an integer scalar
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is of type logical with the same kind type parameter as MASK.
+It is a scalar if DIM does not appear; otherwise it is the rank and shape
+of MASK with the dimension specified by DIM removed.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -105,9 +122,14 @@ a kind designated as ** may be any supported kind value for the type
 
 </A>
 <BLOCKQUOTE>
-<B>PARITY</B>(3) calculates the parity (i.e. the reduction using .xor.) of MASK
-along dimension DIM.
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>PARITY</B>(3) calculates the parity array (i.e. the reduction using .neqv.) </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+of
+MASK along dimension DIM if DIM is present and not 1. Otherwise, it returns
+the parity of the entire MASK array as a scalar.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
      <H3>OPTIONS</H3>
@@ -124,7 +146,7 @@ MASK : Shall be an array of type logical.
 o
 </TD><TD>
 DIM : (Optional) shall be a scalar of type integer with a value in the
-range from 1 TO N, where N equals the rank of MASK.
+range from 1 to n, where n equals the rank of MASK.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -136,11 +158,12 @@ range from 1 TO N, where N equals the rank of MASK.
 The result is of the same type as MASK.
 <P>
 If DIM is absent, a scalar with the parity of all elements in MASK is
-returned: .TRUE. if an odd number of elements are .TRUE. and .FALSE.
+returned: .true. if an odd number of elements are .true. and .false.
 otherwise.
 <P>
-When DIM is specified the returned shape is similar to that of MASK with
-dimension DIM dropped.
+If MASK has rank one, PARITY (MASK, DIM) is equal to PARITY (MASK).
+Otherwise, the result is an array of parity values with dimension DIM
+dropped.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -153,34 +176,98 @@ Sample program:
 <PRE>
       program demo_parity
       implicit none
-      logical :: x(2) = [ .true., .false. ]
+      logical, parameter :: T=.true., F=.false.
+      logical :: x(3,4)
+        ! basics
+         print *, parity([T,F])
+         print *, parity([T,F,F])
+         print *, parity([T,F,F,T])
+         print *, parity([T,F,F,T,T])
+         x(1,:)=[T,T,T,T]
+         x(2,:)=[T,T,T,T]
+         x(3,:)=[T,T,T,T]
          print *, parity(x)
+         print *, parity(x,dim=1)
+         print *, parity(x,dim=2)
       end program demo_parity
 <P>
 </PRE>
 Results:
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; T</H4>
-</A>
-<BLOCKQUOTE>
-### **Standard**
-<P>
-Fortran 2008
-<P>
-### **See also**
-<P>
-[****(3)](#)
 <P>
 <PRE>
-       _fortran-lang intrinsic descriptions_
+       &gt;  T
+       &gt;  T
+       &gt;  F
+       &gt;  T
+       &gt;  F
+       &gt;  T T T T
+       &gt;  F F F
 <P>
-                               October 11, 2022               parity(3fortran)
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+Fortran 2008
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>ALL</B>(3) - Determines if all the values are true
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>ANY</B>(3) - Determines if any of the values in the logical array are .true.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>COUNT</B>(3) - Count true values in an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>SUM</B>(3) - Sum the elements of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>MAXVAL</B>(3) - Determines the maximum value in an array or row
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>MINVAL</B>(3) - Minimum value of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>PRODUCT</B>(3) - Product of array elements
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>REDUCE</B>(3) - General array reduction
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               November 07, 2022              parity(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>parity (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 04a2a46d-ac89-41b8-a73c-bbaf4ebb1e52 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>parity (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fdb4872e-e969-4ee0-bbeb-3484e3bf9d66 using man macros.</FONT>
 <br><br><center><img src="images/parity.3fortran.gif"></center>
 </div>
 </div>

@@ -242,11 +242,10 @@ contains
 !!##LICENSE
 !!    MIT
 subroutine xterm_xrdb(name)
-implicit none
 character(len=*),intent(in)  :: name
 integer                      :: irows, icols, iright, idown
 integer                      :: i
-character(len=80)            :: geometry
+character(len=80)            :: geometry, pcolor
 
    write(*,'(a)')NAME//'*VT100.allowWindowOps:        true'
    write(*,'(a)')NAME//'*VT100.allowTitleOps:         true'
@@ -275,7 +274,8 @@ character(len=80)            :: geometry
    write(*,'(a)')NAME//'*VT100.font: '//xterm_get_font()
 
    do i=0,15
-      write(*,'(a,i0,": ",a)')NAME//'*VT100.color:',i,xterm_get_pencolor(i)
+      pcolor=xterm_get_pencolor(i)
+      write(*,'(a,i0,": ",a)')NAME//'*VT100.color:',i,trim(pcolor)
    enddo
 
 end subroutine xterm_xrdb
@@ -334,7 +334,6 @@ end subroutine xterm_xrdb
 !!##LICENSE
 !!    MIT
 subroutine xterm_occupancy(windowname)
-implicit none
 
 ! ident_2="@(#) M_xterm xterm_occupancy(3f) move xterm(1) to specified virtual display if supported"
 
@@ -390,7 +389,6 @@ end subroutine xterm_occupancy
 !!    MIT
 function xterm_get_pencolor(pennum) result(color)
 use M_strings, only : v2s, split
-implicit none
 
 ! ident_3="@(#) M_xterm xterm_get_pencolor(3f) get description of color assigned to an xterm(1) color number"
 
@@ -572,7 +570,6 @@ end function xterm_get_colors
 !!##LICENSE
 !!    MIT
 subroutine xterm_pencolor(pennum,color)
-implicit none
 
 ! ident_5="@(#) M_xterm xterm_pencolor(3f) set xterm(1) color by number using escape sequences"
 
@@ -1131,7 +1128,6 @@ end subroutine xterm_clear
 function RAWGET(string) result (readback)
 ! write xterm(1) query string and read back reply until a timeout occurs, which is assumed to mean the end of the reply was reached
 !x!use M_getkey, only : system_timeout_getkey
-implicit none
 character(len=*),intent(in)     :: string
 character(len=:),allocatable    :: readback
 
@@ -1212,7 +1208,6 @@ end function RAWGET
 function xterm_get_font() result(fontname)
 ! Obtain current screen fontname
 use M_strings, only : split
-implicit none
 
 ! ident_14="@(#) M_xterm xterm_get_font(3f) Obtain current xterm(1) window font name using escape sequences"
 
@@ -1268,9 +1263,6 @@ end function xterm_get_font
 !!##LICENSE
 !!    MIT
 function xterm_get_iconstate() result(state)
-use M_strings, only : split
-use M_strings, only : visible
-implicit none
 
 ! ident_15="@(#) M_xterm xterm_get_iconstate(3f) Obtain current xterm(1) window icon state using escape sequences"
 
@@ -1329,7 +1321,6 @@ subroutine xterm_get_geometry(rows,cols)
 ! Ps = 1 8  -> Report the size of the text area in characters as CSI  8  ;  height ;  width t
 ! also see stty -a, xwininfo -id $WINDOWID, env ROWS= LINES= COLUMNS=, xresize(1)
 use M_strings, only : split, s2v
-implicit none
 
 ! ident_16="@(#) M_xterm xterm_get_geometry(3f) Obtain current xterm(1) window size in character rows and columns"
 
@@ -1338,6 +1329,8 @@ integer,intent(out)           :: cols
 character(len=:),allocatable  :: string
 character(len=:),allocatable  :: array(:)
 integer                       :: isize
+   rows=0
+   cols=0
    string=rawget(esc//'[18t')
    CALL split(string,array,delimiters=';t')
    isize=size(array)
@@ -1383,7 +1376,6 @@ end subroutine xterm_get_geometry
 subroutine xterm_get_position(right,down)
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 use M_strings, only : split, s2v
-implicit none
 
 ! ident_17="@(#) M_xterm xterm_get_position(3f) Obtain current xterm(1) window position"
 
@@ -1396,6 +1388,8 @@ integer(kind=int64)           :: r,d
 character(len=:),allocatable  :: string
 character(len=:),allocatable  :: array(:)
 integer                       :: isize
+   r=0
+   d=0
    string=rawget(esc//'[13t')
    CALL split(string,array,delimiters=';t')
    isize=size(array)

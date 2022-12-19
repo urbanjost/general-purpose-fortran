@@ -65,10 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>GET_ENVIRONMENT_VARIABLE</B>(3) - [SYSTEM:ENVIRONMENT] Get value of an
-environment variable
-<P>
-</BLOCKQUOTE>
+<B>GET_ENVIRONMENT_VARIABLE(3) </B>- [SYSTEM:ENVIRONMENT] Get value of an
+<B>environment variable
+</B><B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -77,10 +77,10 @@ environment variable
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 call <B>get_environment_variable</B>(name [,<I>value</I>] [,<I>length</I>] & & [,<I>status</I>]
 [,<I>trim_name</I>] [,<I>errmsg</I>] )
 <P>
-<PRE>
            subroutine character(len=*) get_environment_variable( &
            & name, value, length, status, trim_name, errmsg )
 <P>
@@ -103,8 +103,8 @@ call <B>get_environment_variable</B>(name [,<I>value</I>] [,<I>length</I>] & & [
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a kind designated as ** may be any supported kind <I>value</I> for the type
-meeting the conditions described herein.
+a kind designated as ** may be any supported kind for the type meeting
+the conditions described herein.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -210,46 +210,65 @@ Sample program:
            homedir=get_env(var)
            write (*,&#146;(a,"=""",a,"""")&#146;)var,homedir
 <P>
-      contains
-<P>
-      function get_env(name,default) result(value)
-      ! a function that makes calling get_environment_variable(3) simple
-      implicit none
-      character(len=*),intent(in)          :: name
-      character(len=*),intent(in),optional :: default
-      character(len=:),allocatable         :: value
-      integer                              :: howbig
-      integer                              :: stat
-      integer                              :: length
-         length=0
-         value=&#146;&#146;
-         if(name.ne.&#146;&#146;)then
-            call get_environment_variable( name, &
-            & length=howbig,status=stat,trim_name=.true.)
-            select case (stat)
-            case (1)
-             print *, name, " is not defined in the environment. Strange&#46;&#46;&#46;"
-             value=&#146;&#146;
-            case (2)
-             print *, &
-             "This processor does not support environment variables. Boooh!"
-             value=&#146;&#146;
-            case default
-             ! make string of sufficient size to hold value
-             if(allocated(value))deallocate(value)
-             allocate(character(len=max(howbig,1)) :: value)
-             ! get value
-             call get_environment_variable( &
-             & name,value,status=stat,trim_name=.true.)
-             if(stat.ne.0)value=&#146;&#146;
-            end select
-         endif
-         if(value.eq.&#146;&#146;.and.present(default))value=default
-      end function get_env
-<P>
-      end program demo_getenv
-<P>
 </PRE>
+<BLOCKQUOTE>
+contains
+<P>
+function <B>get_env</B>(name,default) <B>result</B>(<I>value</I>)
+! a function that makes calling <B>get_environment_variable</B>(3) simple
+implicit none
+<TABLE cellpadding=3><!-- tsb: function <B>get_env</B>(name,default) <B>result</B>(<I>value</I>)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(len=*),intent(in) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: name
+<B>character</B>(len=*),intent(in),optional :: default
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>character</B>(len=:),allocatable </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: <I>value</I>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: howbig
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: stat
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: <I>length</I>
+<I>length</I>=0
+<I>value</I>=&#146;&#146;
+<B>if</B>(name.ne.&#146;&#146;)then
+call <B>get_environment_variable</B>( name, &
+& <I>length</I>=howbig,<I>status</I>=stat,<I>trim_name</I>=.true.)
+select case (stat)
+case (1)
+print *, name, " is not defined in the environment. Strange&#46;&#46;&#46;"
+<I>value</I>=&#146;&#146;
+case (2)
+print *, &
+"This processor does not support environment variables. Boooh!"
+<I>value</I>=&#146;&#146;
+case default
+! make string of sufficient size to hold <I>value</I>
+<B>if</B>(allocated(<I>value</I>))deallocate(<I>value</I>)
+<B>allocate</B>(<B>character</B>(len=max(howbig,1)) :: <I>value</I>)
+! get <I>value</I>
+call <B>get_environment_variable</B>( &
+& name,<I>value</I>,<I>status</I>=stat,<I>trim_name</I>=.true.)
+<B>if</B>(stat.ne.0)<I>value</I>=&#146;&#146;
+end select
+endif
+<B>if</B>(value.eq.&#146;&#146;.and.present(default))<I>value</I>=default
+end function get_env
+</TD></TR>
+<TR></TR></TABLE>end program demo_getenv
+</BLOCKQUOTE>
+<P>
 Typical Results:
 <P>
 <PRE>
@@ -276,11 +295,11 @@ Fortran 2003
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2get_environment_variable(3fortran)
+                               November 07, get_environment_variable(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_environment_variable (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e7c47585-405d-45ba-832c-9884ee05289a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_environment_variable (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6879a703-e5c3-4052-9c1e-fe21d2921f32 using man macros.</FONT>
 <br><br><center><img src="images/get_environment_variable.3fortran.gif"></center>
 </div>
 </div>

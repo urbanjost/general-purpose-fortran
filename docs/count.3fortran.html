@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>COUNT</B>(3) - [ARRAY:REDUCTION] Count true values in an array
-<P>
-</BLOCKQUOTE>
+<B>COUNT(3) </B>- [ARRAY:REDUCTION] Count true values in an array
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,10 +76,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>count</B>(mask [,<I>dim</I>] [,<I>kind</I>] )
 <P>
-<PRE>
-           integer(kind=KIND) function count(mask, dim, kind )
+           integer(kind=KIND) function count(mask, dim, KIND )
 <P>
             logical(kind=**),intent(in) :: mask(..)
             integer(kind=**),intent(in),optional :: dim
@@ -97,18 +97,23 @@ result = <B>count</B>(mask [,<I>dim</I>] [,<I>kind</I>] )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK is an array of any shape.
+MASK is a logical array of any shape and <I>kind</I>.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 If DIM is present, the result is an array with the specified rank
 removed.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND is a scalar integer constant expression valid as an integer <I>kind</I>
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -144,7 +149,13 @@ MASK : an array to count the number of .true. values in
 o
 </TD><TD>
 DIM : specifies to remove this dimension from the result and produce an
-array of counts of .true. values along the removed dimension.
+array of counts of .true. values along the removed dimension. If not
+present, the result is a scalar count of the true elements in MASK the
+value must be in the range 1 &lt;= <I>dim</I> &lt;= n, where n is the <B>rank</B>(number of
+dimensions) of MASK.
+<P>
+The corresponding actual argument shall not be an optional dummy
+argument, a disassociated pointer, or an unallocated allocatable.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -184,69 +195,104 @@ Sample program:
       logical, dimension(2,3) :: mymask
       integer :: i
       integer :: c(2,3,4)
+<P>
+         print *,&#146;the numeric arrays we will compare&#146;
          a = reshape( [ 1, 2, 3, 4, 5, 6 ], [ 2, 3 ])
          b = reshape( [ 0, 7, 3, 4, 5, 8 ], [ 2, 3 ])
          c = reshape( [( i,i=1,24)], [ 2, 3 ,4])
-        ! show numeric arrays we will compare
          print &#146;(3i3)&#146;, a(1,:)
          print &#146;(3i3)&#146;, a(2,:)
          print *
          print &#146;(3i3)&#146;, b(1,:)
          print &#146;(3i3)&#146;, b(2,:)
 <P>
-        ! basic calls
-         print *, &#146;count a few basic things &#46;&#46;&#46;&#146;
-         print *, &#146;count a&gt;b&#146;,count(a&gt;b)
-         print *, &#146;count b&lt;a&#146;,count(a&lt;b)
-         print *, &#146;count b==a&#146;,count(a==b)
-         print *, &#146;check sum = &#146;,count(a&gt;b) + &
-                               & count(a&lt;b) + &
-                               & count(a==b).eq.size(a)
+</PRE>
+<BLOCKQUOTE>
+! basic calls
+print *, &#146;count a few basic things creating a mask from an expression&#146;
+print *, &#146;count <B>a&gt;b&#146;,count</B>(a&gt;b)
+print *, &#146;count <B>b&lt;a&#146;,count</B>(a&lt;b)
+print *, &#146;count <B>b==a&#146;,count</B>(a==b)
+print *, &#146;check sum = &#146;,<B>count</B>(a&gt;b) + &
+& <B>count</B>(a&lt;b) + &
+& <B>count</B>(a==b).eq.size(a)
+<BLOCKQUOTE>
 <P>
-         ! The common usage is just getting a count, but if you want
-         ! to specify the DIM argument and get back reduced arrays
-         ! of counts this is easier to visualize if we look at a mask
-         ! make a mask identifying unequal elements
-         mymask = a.ne.b
-         print *, &#146;show mask for a.ne.b&#146;
-         print &#146;(3l3)&#146;, mymask(1,:)
-         print &#146;(3l3)&#146;, mymask(2,:)
-         ! count total and along rows and columns
+! The common usage is just getting a count, but if you want
+! to specify the DIM argument and get back reduced arrays
+! of counts this is easier to visualize if we look at a mask.
+print *, &#146;make a mask identifying unequal elements &#46;&#46;&#46;&#146;
+mymask = a.ne.b
+print *, &#146;the mask generated from a.ne.b&#146;
+print &#146;(3l3)&#146;, <B>mymask</B>(1,:)
+print &#146;(3l3)&#146;, <B>mymask</B>(2,:)
 <P>
-         print &#146;(a)&#146;, &#146;number of elements not equal&#146;
-         print &#146;(a)&#146;, &#146;(ie. total true elements in the mask)&#146;
-         print &#146;(3i3)&#146;, count(mymask)
+print *,&#146;count total and along rows and columns &#46;&#46;&#46;&#146;
 <P>
-         print &#146;(a)&#146;, &#146;count of elements not equal in each column&#146;
-         print &#146;(a)&#146;, &#146;(ie. total true elements in each column)&#146;
-         print &#146;(3i3)&#146;, count(mymask, dim=1)
+print &#146;(a)&#146;, &#146;number of elements not equal&#146;
+print &#146;(a)&#146;, &#146;(ie. total true elements in the mask)&#146;
+print &#146;(3i3)&#146;, <B>count</B>(mymask)
 <P>
-         print &#146;(a)&#146;, &#146;count of elements not equal in each row&#146;
-         print &#146;(a)&#146;, &#146;(ie. total true elements in each row)&#146;
-         print &#146;(3i3)&#146;, count(mymask, dim=2)
+print &#146;(a)&#146;, &#146;count of elements not equal in each column&#146;
+print &#146;(a)&#146;, &#146;(ie. total true elements in each column)&#146;
+print &#146;(3i3)&#146;, <B>count</B>(mymask, <I>dim</I>=1)
 <P>
-         ! working with rank=3 &#46;&#46;&#46;
-         print *, &#146;lets try this with c(2,3,4)&#146;
-         print *,&#146;  taking the result of the modulo   &#146;
-         print *,&#146;   z=1      z=2      z=3      z=4   &#146;
-         print *,&#146;  1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |&#146;
-         print *,&#146;  2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |&#146;
-         print *,&#146;                                    &#146;
-         print *,&#146;  would result in the mask ..       &#146;
-         print *,&#146;  F F T || F F F || F T F || F F F |&#146;
-         print *,&#146;  F F F || F T F || F F F || T F F |&#146;
-         print *,&#146;                                    &#146;
-         print *,&#146; the total number of .true.values is&#146;
-         print ints, count(modulo(c,5).eq.0)
-         call printi(&#146;counting up along a row and removing rows&#146;,&
-         count(modulo(c,5).eq.0,dim=1))
-         call printi(&#146;counting up along a column and removing columns&#146;,&
-         count(modulo(c,5).eq.0,dim=2))
-         call printi(&#146;counting up along a depth and removing depths&#146;,&
-         count(modulo(c,5).eq.0,dim=3))
+print &#146;(a)&#146;, &#146;count of elements not equal in each row&#146;
+print &#146;(a)&#146;, &#146;(ie. total true elements in each row)&#146;
+print &#146;(3i3)&#146;, <B>count</B>(mymask, <I>dim</I>=2)
 <P>
-      contains
+! working with rank=3 &#46;&#46;&#46;
+print *, &#146;lets try this with <B>c</B>(2,3,4)&#146;
+<TABLE cellpadding=3><!-- tsb: ! working with rank=3 &#46;&#46;&#46;
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+taking the result of the modulo   &#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+z=1      z=2      z=3      z=4   &#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> <!-- Consumed .TP -->
+<BR>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+would result in the mask ..       &#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+F F T || F F F || F T F || F F F |&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+F F F || F T F || F F F || T F F |&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>print *,&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+print *,&#146; the total number of .true.values is&#146;
+print ints, <B>count</B>(modulo(c,5).eq.0)
+call <B>printi</B>(&#146;counting up along a row and removing rows&#146;,&
+<B>count</B>(modulo(c,5).eq.0,<I>dim</I>=1))
+call <B>printi</B>(&#146;counting up along a column and removing columns&#146;,&
+<B>count</B>(modulo(c,5).eq.0,<I>dim</I>=2))
+call <B>printi</B>(&#146;counting up along a depth and removing depths&#146;,&
+<B>count</B>(modulo(c,5).eq.0,<I>dim</I>=3))
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
 <P>
+contains
+<P>
+<PRE>
          ! CONVENIENCE ROUTINE FOR PRINTING SMALL INTEGER MATRICES
          subroutine printi(title,arr)
          implicit none
@@ -272,89 +318,67 @@ Sample program:
                write(*,&#146;(" ]")&#146;)
             enddo
 <P>
-         end subroutine printi
-      end program demo_count
-<P>
 </PRE>
+<BLOCKQUOTE>
+end subroutine printi
+end program demo_count
+</BLOCKQUOTE>
+<P>
 Results:
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: Results:
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>1 3</B> <!-- Consumed .TP -->
-<BR>
-<B>2 4</B> <!-- Consumed .TP -->
-<BR>
-<B>0 3</B> <!-- Consumed .TP -->
-<BR>
-<B>7 4</B> </TD><TD valign=bottom>
-8 count a few basic things &#46;&#46;&#46;
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-count a&gt;b
 <P>
 <PRE>
-    count b&lt;a
-<P>
-    count b==a
-<P>
-    check sum =
-      show mask for a.ne.b
+       &gt;   the numeric arrays we will compare
+       &gt;    1  3  5
+       &gt;    2  4  6
+       &gt;
+       &gt;    0  3  5
+       &gt;    7  4  8
+       &gt;   count a few basic things creating a mask from an expression
+       &gt;   count a&gt;b           1
+       &gt;   count b&lt;a           2
+       &gt;   count b==a           3
+       &gt;   check sum =  T
+       &gt;   make a mask identifying unequal elements &#46;&#46;&#46;
+       &gt;   the mask generated from a.ne.b
+       &gt;    T  F  F
+       &gt;    T  F  T
+       &gt;   count total and along rows and columns &#46;&#46;&#46;
+       &gt;  number of elements not equal
+       &gt;  (ie. total true elements in the mask)
+       &gt;    3
+       &gt;  count of elements not equal in each column
+       &gt;  (ie. total true elements in each column)
+       &gt;    2  0  1
+       &gt;  count of elements not equal in each row
+       &gt;  (ie. total true elements in each row)
+       &gt;    1  2
+       &gt;   lets try this with c(2,3,4)
+       &gt;     taking the result of the modulo
+       &gt;      z=1      z=2      z=3      z=4
+       &gt;     1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |
+       &gt;     2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |
+       &gt;
+       &gt;     would result in the mask ..
+       &gt;     F F T || F F F || F T F || F F F |
+       &gt;     F F F || F T F || F F F || T F F |
+       &gt;
+       &gt;    the total number of .true.values is
+       &gt;   4
+       &gt;
+       &gt;  counting up along a row and removing rows :( 3 4 )
+       &gt;   &gt; [ 0, 0, 0, 1 ]
+       &gt;   &gt; [ 0, 1, 1, 0 ]
+       &gt;   &gt; [ 1, 0, 0, 0 ]
+       &gt;
+       &gt;  counting up along a column and removing columns :( 2 4 )
+       &gt;   &gt; [ 1, 0, 1, 0 ]
+       &gt;   &gt; [ 0, 1, 0, 1 ]
+       &gt;
+       &gt;  counting up along a depth and removing depths :( 2 3 )
+       &gt;   &gt; [ 0, 1, 1 ]
+       &gt;   &gt; [ 1, 1, 0 ]
 <P>
 </PRE>
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; T F F</H4>
-</A>
-<BLOCKQUOTE>
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; T F T</H4>
-</A>
-<BLOCKQUOTE>
-number of elements not equal (ie. total true elements in the mask) 3 count
-of elements not equal in each column (ie. total true elements in each
-column)
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: number of elements not equal (ie. total true elements in the mask) 3 count
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>2 0</B> </TD><TD valign=bottom>
-1 count of elements not equal in each row (ie. total true elements in
-each row)
-</TD></TR>
-<TR><TD colspan=2>
-1 lets try this with <B>c</B>(2,3,4) taking the result of the modulo
-</TD></TR>
-<TR><TD colspan=2>
-<PRE>
-      z=1
-        z=2      z=3      z=4 1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 | 2 4 1 || 3 0
-        2 || 4 1 3 || 0 2 4 |
-<P>
-</PRE>
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>would result in the mask ..</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-F F T || F F F || F T F || F F F | F F F || F
-T F || F F F || T F F |
-</TD></TR>
-<TR></TR></TABLE>the total number of .true.values is 4
-</BLOCKQUOTE>
-<P>
-counting up along a row and removing rows :( 3 4 ) &gt; [ 0, 0, 0, 1 ] &gt; [ 0,
-1, 1, 0 ] &gt; [ 1, 0, 0, 0 ]
-<P>
-counting up along a column and removing columns :( 2 4 ) &gt; [ 1, 0, 1, 0 ] &gt;
-[ 0, 1, 0, 1 ]
-<P>
-counting up along a depth and removing depths :( 2 3 ) &gt; [ 0, 1, 1 ] &gt; [ 1,
-1, 0 ]
 </BLOCKQUOTE>
 <A name=7>
 
@@ -370,16 +394,16 @@ Fortran 95 , with KIND argument - Fortran 2003
 
 </A>
 <BLOCKQUOTE>
-****(3)
+<B>ANY</B>(3), <B>ALL</B>(3), <B>SUM</B>(3),
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022                count(3fortran)
+                               November 07, 2022               count(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>count (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4c0e0db2-a5e6-49a2-932a-150e4add870a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>count (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4d50f2b5-ad10-4f31-a4fe-a49d8c1e6f53 using man macros.</FONT>
 <br><br><center><img src="images/count.3fortran.gif"></center>
 </div>
 </div>

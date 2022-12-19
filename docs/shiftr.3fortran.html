@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SHIFTR</B>(3) - [BIT:SHIFT] Shift bits right
-<P>
-</BLOCKQUOTE>
+<B>SHIFTR(3) </B>- [BIT:SHIFT] Shift bits right
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>shiftr</B>( <I>i</I>, shift )
 <P>
-<PRE>
            elemental integer(kind=KIND) function shiftr(i, shift)
 <P>
             integer(kind=KIND),intent(in) :: i
@@ -96,13 +96,22 @@ result = <B>shiftr</B>( <I>i</I>, shift )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a kind designated as ** may be any supported kind value for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY may be any type and rank (and the result will automatically be of
-the same type, kind and rank as ARRAY).
+I is an integer of any kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SHIFT is an integer of any kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result will automatically be of the same type, kind and rank as I.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -112,10 +121,22 @@ the same type, kind and rank as ARRAY).
 </A>
 <BLOCKQUOTE>
 <B>SHIFTR</B>(3) returns a value corresponding to I with all of the bits shifted
-right by SHIFT places. If the absolute value of SHIFT is greater than
-<B>BIT_SIZE</B>(I), the value is undefined. Bits shifted out from the right end are
-lost, and bits shifted in from the left end are set to 0.
+right by SHIFT places.
 <P>
+If the absolute value of SHIFT is greater than <B>BIT_SIZE</B>(I), the value is
+undefined.
+<P>
+Bits shifted out from the right end are lost, and bits shifted in from the
+left end are set to 0.
+<P>
+For example, for a 16-bit integer right-shifted five &#46;&#46;&#46;
+<P>
+<PRE>
+          &gt;  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| &lt;- original 16-bit example
+          &gt;            |a|b|c|d|e|f|g|h|i|j|k| &lt;- right-shifted five
+          &gt;  |0|0|0|0|0|f|g|h|i|j|k|l|m|n|o|p| &lt;- left-padded with zeros
+<P>
+</PRE>
 Note the value of the result is the same as ISHFT (I, <B>-SHIFT</B>).
 </BLOCKQUOTE>
 <A name=4>
@@ -128,12 +149,12 @@ Note the value of the result is the same as ISHFT (I, <B>-SHIFT</B>).
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-I : The initial value to shift and fill in with zeros
+I : The value to shift
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT : how many bits to shift right. It shall be nonnegative and less
+SHIFT : How many bits to shift right. It shall be nonnegative and less
 than or equal to <B>BIT_SIZE</B>(I).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -143,7 +164,8 @@ than or equal to <B>BIT_SIZE</B>(I).
 
 </A>
 <BLOCKQUOTE>
-The return value is of type integer and of the same kind as I.
+The remaining bits shifted right SHIFT positions. Vacated positions on the
+left are filled with zeros.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -163,14 +185,12 @@ Sample program:
       integer(kind=int32),allocatable :: ivals(:)
       integer             :: i
 <P>
-        ! basic usage
+        print *,&#146; basic usage&#146;
         ival=100
         write(*,*)ival, shiftr(100,3)
 <P>
         ! elemental (input values may be conformant arrays)
-        write(*,*) shiftr(-1,[(i,i=1,bit_size(0))])
-<P>
-        ! loop through some ivalues
+        print *,&#146; elemental&#146;
          shift=9
          ivals=[ &
          & int(b"01010101010101010101010101010101"), &
@@ -183,10 +203,10 @@ Sample program:
             write(*,&#146;(  "I =      ",b32.32," == ",i0)&#146;) ivals(i),ivals(i)
             ! print shifted value as binary and decimal
             oval=shiftr(ivals(i),shift)
-            write(*,&#146;(  "RESULT = ",b32.32," == ",i0)&#146;) oval,oval
+            write(*,&#146;(  "RESULT = ",b32.32," == ",i0,/)&#146;) oval,oval
          enddo
 <P>
-         ! more on elemental (input values may be conformant arrays)
+         ! more on elemental
          ELEM : block
          integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])
          write(*,*)"characteristics of the result are the same as input"
@@ -195,29 +215,30 @@ Sample program:
            & "size=",size(shiftr(arr,3)) !, "rank=",rank(shiftr(arr,3))
          endblock ELEM
 <P>
-      end program demo_shiftr
-<P>
 </PRE>
+<BLOCKQUOTE>
+end program demo_shiftr
+</BLOCKQUOTE>
+<P>
 Results:
 <P>
 <PRE>
-      &gt;          100          12
-      &gt;   2147483647  1073741823   536870911   268435455   134217727    67108863
-      &gt;     33554431    16777215     8388607     4194303     2097151     1048575
-      &gt;       524287      262143      131071       65535       32767       16383
-      &gt;         8191        4095        2047        1023         511         255
-      &gt;          127          63          31          15           7           3
-      &gt;            1           0
-      &gt;
-      &gt;  SHIFT =  9
-      &gt;  I =      01010101010101010101010101010101 == 1431655765
-      &gt;  RESULT = 00000000001010101010101010101010 == 2796202
-      &gt;  I =      10101010101010101010101010101010 == -1431655766
-      &gt;  RESULT = 00000000010101010101010101010101 == 5592405
-      &gt;  I =      11111111111111111111111111111111 == -1
-      &gt;  RESULT = 00000000011111111111111111111111 == 8388607
-      &gt;   characteristics of the result are the same as input
-      &gt;  kind= 1 shape= 2 2 size= 4
+        &gt;    basic usage
+        &gt;           100          12
+        &gt;    elemental
+        &gt;
+        &gt;  SHIFT =  9
+        &gt;  I =      01010101010101010101010101010101 == 1431655765
+        &gt;  RESULT = 00000000001010101010101010101010 == 2796202
+        &gt;
+        &gt;  I =      10101010101010101010101010101010 == -1431655766
+        &gt;  RESULT = 00000000010101010101010101010101 == 5592405
+        &gt;
+        &gt;  I =      11111111111111111111111111111111 == -1
+        &gt;  RESULT = 00000000011111111111111111111111 == 8388607
+        &gt;
+        &gt;   characteristics of the result are the same as input
+        &gt;  kind= 1 shape= 2 2 size= 4
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -240,11 +261,11 @@ Fortran 2008
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022               shiftr(3fortran)
+                               November 07, 2022              shiftr(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftr (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 19249eb2-66dd-44b3-bb93-cc9396d7c5f7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftr (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ad5985a5-0115-451e-83f2-fbd5ba694405 using man macros.</FONT>
 <br><br><center><img src="images/shiftr.3fortran.gif"></center>
 </div>
 </div>

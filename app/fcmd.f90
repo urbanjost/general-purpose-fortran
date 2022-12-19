@@ -1,7 +1,7 @@
 program fcmd
 use M_CLI2, only : set_args, sgets, sget, lget, leafs=>unnamed, specified
 use M_strings, only : split, lower
-use M_system, only  : system_access, R_OK, W_OK, X_OK, F_OK, system_getenv, system_dir
+use M_system, only  : system_access, R_OK, W_OK, X_OK, F_OK, system_getenv, system_dir, system_isdir
 use M_io,      only : joinpath, basename, rd
 implicit none
 character(len=:),allocatable    :: searchpath
@@ -76,6 +76,7 @@ character(len=256)              :: cmdmsg
          name=trim(leafs(j))
       endif
       DIRLOOP: do i=1,size(directories)
+         if(.not.system_isdir(trim(directories(i))))cycle
          pathnames=system_dir(trim(directories(i)),name,ignorecase=ignorecase)
          do m=1,size(pathnames)
             pathname=trim(joinpath(directories(i),pathnames(m)))
@@ -118,8 +119,8 @@ help=[ CHARACTER(LEN=128) :: &
 '   (LICENSE:MIT)',&
 '',&
 'SYNOPSIS',&
-'    fcmd [commands(s) [[--wild] [ --first]',&
-'    [ --cmd COMMAND;COMMAND,COMMAND;... ][--long]|',&
+'    fcmd [commands(s) [[--wild] [ --first][--ignorecase]',&
+'    [ --cmd COMMAND;COMMAND,COMMAND;... ]|[--long]|',&
 '    [ --help|--version]',&
 '',&
 'DESCRIPTION',&
@@ -135,8 +136,9 @@ help=[ CHARACTER(LEN=128) :: &
 '   If no options are supplied the current search path is displayed one directory',&
 '   per line.',&
 '',&
-'    command(s)  names of commands to locate. simple globbing with *',&
-'                and ? is allowed if the name is quoted.',&
+'    command(s)      names of commands to locate. simple globbing with *',&
+'                    and ? is allowed if the name is quoted.',&
+'    --ignorecase,i  ignore case of input command(s)',&
 '    --first,-f  locate only first matching executable in PATH, not all.',&
 '    --cmd,-c    invoke the command on the files found. If present with',&
 '                no parameter the desired command is assumed to be',&

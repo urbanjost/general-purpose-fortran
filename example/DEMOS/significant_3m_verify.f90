@@ -15,4 +15,4 @@
         write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RN'),'RN'
         write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RC'),'RC'
         write(*,g)significant(1.23456789012345,[1,2,3,4,5,6,7,8,9],'RP'),'RP'
-     end program demo_significant
+  end program demo_significant

@@ -28,12 +28,13 @@
 !!  public entities:
 !!
 !!      use M_strings, only : split,sep,delim,chomp,strtok
+!!      use M_strings, only : split2020, find_field
 !!      use M_strings, only : substitute,change,modif,transliterate,reverse
 !!      use M_strings, only : replace,join
 !!      use M_strings, only : upper,lower,upper_quoted
 !!      use M_strings, only : rotate13
 !!      use M_strings, only : adjustc,compact,nospace,indent
-!!      use M_strings, only : crop,clip,unquote,quote
+!!      use M_strings, only : crop,clip,unquote,quote,matching_delimiter
 !!      use M_strings, only : len_white,atleast,stretch,lenset,merge_str
 !!      use M_strings, only : switch,s2c,c2s
 !!      use M_strings, only : noesc,notabs,dilate,expand,visible
@@ -65,6 +66,12 @@
 !!              string using specified delimiters
 !!       paragraph    convert a string into a paragraph
 !!       strtok tokenize a string like C strtok(3c) routine
+!!
+!!       CONTRIBUTIONS
+!!
+!!       split2020   split a string using prototype of proposed standard
+!!                   procedure
+!!       find_field  token a string
 !!
 !!   EDITING
 !!
@@ -109,7 +116,7 @@
 !!       See Also: squeeze
 !!
 !!   QUOTES
-!!
+!!       matching_delimiter  find position of matching delimiter
 !!       unquote  remove quotes from string as if read with list-directed input
 !!       quote    add quotes to string as if written with list-directed input
 !!
@@ -263,13 +270,14 @@
 !!
 !!     program demo_M_strings
 !!     use M_strings, only : split, delim, chomp, sep
+!!     use M_strings, only : split2020, find_field
 !!     use M_strings, only : substitute, change, modif
 !!     use M_strings, only : transliterate, reverse
 !!     use M_strings, only : replace, join
 !!     use M_strings, only : upper, lower, upper_quoted
 !!     use M_strings, only : rotate13
 !!     use M_strings, only : adjustc, compact, nospace, indent, crop, clip, squeeze
-!!     use M_strings, only : unquote, quote
+!!     use M_strings, only : unquote, quote, matching_delimiter
 !!     use M_strings, only : len_white, atleast, stretch, lenset, merge_str
 !!     use M_strings, only : switch, s2c, c2s
 !!     use M_strings, only : noesc, notabs, dilate, expand, visible
@@ -343,6 +351,7 @@ public indent          !  count number of leading spaces
 public crop            !  function trims leading and trailing spaces and control characters
 public clip            !  function trims leading and trailing spaces
 !----------------------# QUOTES
+public matching_delimiter !  find position of matching delimiter
 public unquote         !  remove quotes from string as if read with list-directed input
 public quote           !  add quotes to string as if written with list-directed input
 !----------------------# STRING LENGTH
@@ -479,6 +488,7 @@ interface ends_with
 end interface ends_with
 !-----------------------------------------------------------------------------------------------------------------------------------
 public :: split2020, string_tokens
+public :: find_field
 
 interface split2020
    module procedure :: split_tokens, split_first_last, split_pos
@@ -852,7 +862,7 @@ end function glob
 !===================================================================================================================================
 !>
 !!##NAME
-!!    ends_with(3f) - [M_strings:MATCH] test if string ends with specified
+!!    ends_with(3f) - [M_strings:COMPARE] test if string ends with specified
 !!                    suffix(es)
 !!    (LICENSE:PD)
 !!
@@ -3008,11 +3018,11 @@ INTEGER                      :: i10                               ! loop counter
 INTEGER                      :: ii,jj
 !-----------------------------------------------------------------------------------------------------------------------------------
    jj=LEN(new_set)
-   IF(jj.NE.0)THEN
+   IF(jj /= 0)THEN
       outstr=instr                                                ! initially assume output string equals input string
       stepthru: DO i10 = 1, LEN(instr)
          ii=iNDEX(old_set,instr(i10:i10))                         ! see if current character is in old_set
-         IF (ii.NE.0)THEN
+         IF (ii /= 0)THEN
             if(ii <= jj)then                                      ! use corresponding character in new_set
                outstr(i10:i10) = new_set(ii:ii)
             else
@@ -3024,7 +3034,7 @@ INTEGER                      :: ii,jj
       outstr=' '
       hopthru: DO i10 = 1, LEN(instr)
          ii=iNDEX(old_set,instr(i10:i10))                         ! see if current character is in old_set
-         IF (ii.EQ.0)THEN                                         ! only keep characters not in old_set
+         IF (ii == 0)THEN                                         ! only keep characters not in old_set
             jj=jj+1
             outstr(jj:jj) = instr(i10:i10)
          ENDIF
@@ -5242,7 +5252,7 @@ end function noesc
 !===================================================================================================================================
 !>
 !!##NAME
-!!      string_to_value(3f) - [M_strings:NUMERIC] subroutine returns numeric
+!!      string_to_value(3f) - [M_strings:TYPE] subroutine returns numeric
 !!      value from string
 !!      (LICENSE:PD)
 !!
@@ -5422,7 +5432,7 @@ end subroutine a2d
 !===================================================================================================================================
 !>
 !!##NAME
-!!    s2v(3f) - [M_strings:NUMERIC] function returns doubleprecision
+!!    s2v(3f) - [M_strings:TYPE] function returns doubleprecision
 !!    numeric value from a string
 !!    (LICENSE:PD)
 !!
@@ -5623,7 +5633,7 @@ end function dbles_s2v
 !===================================================================================================================================
 !>
 !!##NAME
-!!      value_to_string(3f) - [M_strings:NUMERIC] return numeric string
+!!      value_to_string(3f) - [M_strings:TYPE] return numeric string
 !!      from a numeric value
 !!      (LICENSE:PD)
 !!
@@ -5793,7 +5803,7 @@ end subroutine value_to_string
 !===================================================================================================================================
 !>
 !!##NAME
-!!      v2s(3f) - [M_strings:NUMERIC] return numeric string from a numeric value
+!!      v2s(3f) - [M_strings:TYPE] return numeric string from a numeric value
 !!      (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -5925,7 +5935,7 @@ end function l2s
 !===================================================================================================================================
 !>
 !!##NAME
-!!    isnumber(3f) - [M_strings:NUMERIC] determine if a string represents a number
+!!    isnumber(3f) - [M_strings:TYPE] determine if a string represents a number
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -6179,7 +6189,7 @@ end function isNumber
 !===================================================================================================================================
 !>
 !!##NAME
-!!    trimzeros_(3fp) - [M_strings:NUMERIC] Delete trailing zeros from
+!!    trimzeros_(3fp) - [M_strings:TYPE] Delete trailing zeros from
 !!    numeric decimal string
 !!    (LICENSE:PD)
 !!
@@ -6649,7 +6659,7 @@ end function unquote
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    edit_distance(3f) - [M_strings] returns a naive edit distance using
+!!    edit_distance(3f) - [M_strings:DESCRIBE] returns a naive edit distance using
 !!    the Levenshtein distance algorithm
 !!    (LICENSE:PD)
 !!
@@ -6689,13 +6699,19 @@ end function unquote
 !!    Public Domain
 ! The Levenshtein distance function returns how many edits (deletions,
 ! insertions, transposition) are required to turn one string into another.
+
 pure elemental integer function edit_distance (a,b)
 character(len=*), intent(in) :: a, b
 integer                      :: len_a, len_b, i, j, cost
 ! matrix for calculating Levenshtein distance
-integer                      :: matrix(0:len_trim(a), 0:len_trim(b))
+!integer                      :: matrix(0:len_trim(a), 0:len_trim(b)) ! not supported by all compilers yet
+integer,allocatable          :: matrix(:,:)
    len_a = len_trim(a)
    len_b = len_trim(b)
+   !-------------------------------------- ! required by older compilers instead of above declaration
+   if(allocated(matrix))deallocate(matrix)
+   allocate(matrix(0:len_a,0:len_b))
+   !--------------------------------------
    matrix(:,0) = [(i,i=0,len_a)]
    matrix(0,:) = [(j,j=0,len_b)]
    do i = 1, len_a
@@ -6711,7 +6727,7 @@ end function edit_distance
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    cc(3f) - [M_strings] return up to twenty strings of arbitrary length
+!!    cc(3f) - [M_strings:ARRAY] return up to twenty strings of arbitrary length
 !!             as an array
 !!    (LICENSE:PD)
 !!
@@ -6843,7 +6859,7 @@ end function cc
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    describe(3f) - [M_strings] returns a string describing the name of
+!!    describe(3f) - [M_strings:DESCRIBE] returns a string describing the name of
 !!    a single character
 !!    (LICENSE:PD)
 !!
@@ -7153,7 +7169,7 @@ end function describe
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getvals(3f) - [M_strings:NUMERIC] read arbitrary number of REAL values
+!!    getvals(3f) - [M_strings:TYPE] read arbitrary number of REAL values
 !!    from a character variable up to size of VALUES() array
 !!    (LICENSE:PD)
 !!
@@ -7315,7 +7331,7 @@ end subroutine getvals
 !===================================================================================================================================
 !>
 !!##NAME
-!!      string_to_values(3f) - [M_strings:NUMERIC] read a string representing
+!!      string_to_values(3f) - [M_strings:TYPE] read a string representing
 !!      numbers into a numeric array
 !!      (LICENSE:PD)
 !!
@@ -7486,7 +7502,7 @@ end subroutine string_to_values
 !===================================================================================================================================
 !>
 !!##NAME
-!!      s2vs(3f) - [M_strings:NUMERIC] given a string representing numbers
+!!      s2vs(3f) - [M_strings:TYPE] given a string representing numbers
 !!      return a numeric array
 !!      (LICENSE:PD)
 !!
@@ -9210,7 +9226,6 @@ end function paragraph
 !===================================================================================================================================
 function setbits8(string) result(answer)
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
 integer(kind=int8)          :: answer
 character(len=8),intent(in) :: string
@@ -9236,7 +9251,6 @@ end function setbits8
 !-----------------------------------------------------------------------------------------------------------------------------------
 function setbits16(string) result(answer)
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
 integer(kind=int16)          :: answer
 character(len=16),intent(in) :: string
@@ -9262,7 +9276,6 @@ end function setbits16
 !-----------------------------------------------------------------------------------------------------------------------------------
 function setbits32(string) result(answer)
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
 integer(kind=int32)          :: answer
 character(len=32),intent(in) :: string
@@ -9288,7 +9301,6 @@ end function setbits32
 !-----------------------------------------------------------------------------------------------------------------------------------
 function setbits64(string) result(answer)
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
 integer(kind=int64)          :: answer
 character(len=64),intent(in) :: string
@@ -9316,7 +9328,7 @@ end function setbits64
 !===================================================================================================================================
 !>
 !!##NAME
-!!     msg(3f) - [M_strings] converts any standard scalar type to a string
+!!     msg(3f) - [M_strings:TYPE] converts any standard scalar type to a string
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -9515,7 +9527,239 @@ end function msg_one
 !===================================================================================================================================
 !>
 !!##NAME
-!!    split2020(3f) - parse a string into tokens
+!!    find_field(3f) - [M_strings:TOKENS] parse a string into tokens
+!!    (LICENSE:MIT)
+!!
+!!##SYNOPSIS
+!!
+!!    subroutine find_field (string, field, position, delims, delim, found)
+!!
+!!     character*(*),intent(in)           :: string
+!!     character*(*),intent(out)          :: field
+!!     integer,optional,intent(inout)     :: position
+!!     character*(*),optional,intent(in)  :: delims
+!!     character*(*),optional,intent(out) :: delim
+!!     logical,optional,intent(out)       :: found
+!!
+!!##DESCRIPTION
+!!
+!!    Find a delimited field in a string.
+!!
+!!    Here's my equivalent, which I've used for nearly 2 decades, as you can
+!!    see from the date. This doesn't try to mimic the C strtok (and doesn't
+!!    have its limitations either). It is in a much more native Fortran style.
+!!
+!!    It is a little more complicated than some because it does some things
+!!    that I regularly find useful. For example, it can tell the caller what
+!!    trailing delimiter it found. This can be useful, for example, to
+!!    distinguish between
+!!
+!!        somefield, someotherfield
+!!
+!!    versus
+!!
+!!        somefield=somevalue, someotherfield
+!!
+!!    Also, I have a bit of special handling for blanks. All the usage
+!!    information is in the argument descriptions. Note that most of the
+!!    arguments are optional.
+!!
+!!        from comp.lang.fortran @ Richard Maine
+!!
+!!##OPTIONS
+!!    STRING     The string input.
+!!
+!!    FIELD      The returned field. Blank if no field found.
+!!
+!!    POSITION   On entry, the starting position for searching for the field.
+!!               Default is 1 if the argument is not present.
+!!               On exit, the starting position of the next field or
+!!               len(string)+1 if there is no following field.
+!!
+!!    DELIMS     String containing the characters to be accepted as delimiters.
+!!               If this includes a blank character, then leading blanks are
+!!               removed from the returned field and the end delimiter may
+!!               optionally be preceeded by blanks. If this argument is
+!!               not present, the default delimiter set is a blank.
+!!
+!!    DELIM      Returns the actual delimiter that terminated the field.
+!!               Returns char(0) if the field was terminated by the end of
+!!               the string or if no field was found.
+!!               If blank is in delimiters and the field was terminated
+!!               by one or more blanks, followed by a non-blank delimiter,
+!!               the non-blank delimiter is returned.
+!!
+!!    FOUND      True if a field was found.
+!!
+!!##EXAMPLES
+!!
+!! Sample of uses
+!!
+!!        program demo_find_field
+!!        use M_strings, only : find_field
+!!        implicit none
+!!        character(len=256)           :: string
+!!        character(len=256)           :: field
+!!        integer                      :: position
+!!        character(len=:),allocatable :: delims
+!!        character(len=1)             :: delim
+!!        logical                      :: found
+!!
+!!        delims='[,]'
+!!        position=1
+!!        found=.true.
+!!        string='[a,b,[ccc,ddd],and more]'
+!!        write(*,'(a)')trim(string)
+!!        do
+!!           call find_field(string,field,position,delims,delim,found=found)
+!!           if(.not.found)exit
+!!           write(*,'("<",a,">")')trim(field)
+!!        enddo
+!!        write(*,'(*(g0))')repeat('=',70)
+!!
+!!        position=1
+!!        found=.true.
+!!        write(*,'(a)')trim(string)
+!!        do
+!!           call find_field(string,field,position,'[], ',delim,found=found)
+!!           if(.not.found)exit
+!!           write(*,'("<",a,">",i0,1x,a)')trim(field),position,delim
+!!        enddo
+!!        write(*,'(*(g0))')repeat('=',70)
+!!
+!!        end program demo_find_field
+!! ```
+!! Results:
+!! ```text
+!!  > [a,b,[ccc,ddd],and more]
+!!  > <>
+!!  > <a>
+!!  > <b>
+!!  > <>
+!!  > <ccc>
+!!  > <ddd>
+!!  > <>
+!!  > <and more>
+!!  > <>
+!!  > ======================================================================
+!!  > [a,b,[ccc,ddd],and more]
+!!  > <>2 [
+!!  > <a>4 ,
+!!  > <b>6 ,
+!!  > <>7 [
+!!  > <ccc>11 ,
+!!  > <ddd>15 ]
+!!  > <>16 ,
+!!  > <and>20
+!!  > <more>257 ]
+!!  > ======================================================================
+!!
+!!##AUTHOR
+!!    Richard Maine
+!!
+!!##LICENSE
+!!    MIT
+!!
+!!##VERSION
+!!    version 0.1.0, copyright Nov 15 1990, Richard Maine
+!!
+!!    Minor editing to conform to inclusion in the string procedure module
+subroutine find_field (string, field, position, delims, delim, found)
+
+!-- Find a delimited field in a string.
+!-- 15 Nov 90, Richard Maine.
+
+!-------------------- interface.
+character*(*),intent(in)           :: string
+character*(*),intent(out)          :: field
+integer,optional,intent(inout)     :: position
+character*(*),optional,intent(in)  :: delims
+character*(*),optional,intent(out) :: delim
+logical,optional,intent(out)       :: found
+!-------------------- local.
+character  :: delimiter*1
+integer    :: pos, field_start, field_end, i
+logical    :: trim_blanks
+!-------------------- executable code.
+   field = ''
+   delimiter = char(0)
+   pos = 1
+   if (present(found)) found = .false.
+   if (present(position)) pos = position
+   if (pos > len(string)) goto 9000
+   !if (pos < 1) error stop 'Illegal position in find_field'
+   if (pos < 1) stop 'Illegal position in find_field'
+
+   !-- Skip leading blanks if blank is a delimiter.
+   field_start = pos
+   trim_blanks = .true.
+   if (present(delims)) trim_blanks = index(delims,' ') /= 0
+   if (trim_blanks) then
+      i = verify(string(pos:),' ')
+      if (i == 0) then
+         pos = len(string) + 1
+         goto 9000
+      end if
+      field_start = pos + i - 1
+   end if
+   if (present(found)) found = .true.
+
+   !-- Find the end of the field.
+   if (present(delims)) then
+      i = scan(string(field_start:), delims)
+   else
+      i = scan(string(field_start:), ' ')
+   end if
+   if (i == 0) then
+      field_end = len(string)
+      delimiter = char(0)
+      pos = field_end + 1
+   else
+      field_end = field_start + i - 2
+      delimiter = string(field_end+1:field_end+1)
+      pos = field_end + 2
+   end if
+
+   !-- Return the field.
+   field = string(field_start:field_end)
+
+   !-- Skip trailing blanks if blank is a delimiter.
+   if (trim_blanks) then
+      i = verify(string(field_end+1:), ' ')
+      if (i == 0) then
+         pos = len(string) + 1
+         goto 9000
+      end if
+      pos = field_end + i
+
+      !-- If the first non-blank character is a delimiter,
+      !-- skip blanks after it.
+      i = 0
+      if (present(delims)) i = index(delims, string(pos:pos))
+      if (i /= 0) then
+         delimiter = string(pos:pos)
+         pos = pos + 1
+         i = verify(string(pos:), ' ')
+         if (i == 0) then
+            pos = len(string) + 1
+         else
+            pos = pos + i - 1
+         end if
+      end if
+   end if
+   !---------- Normal exit.
+   9000 continue
+   if (present(delim)) delim = delimiter
+   if (present(position)) position = pos
+end subroutine find_field
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    split2020(3f) - [M_strings:TOKENS] parse a string into tokens using
+!!    proposed f2023 method
+!!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
@@ -9916,17 +10160,78 @@ enddo
 
 end function uppercase
 !===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
+!!     matching_delimiter(3f) - [M_strings:QUOTES] find position of matching delimiter
+!!     (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!   impure elemental subroutine matching_delimiter(str,ipos,imatch)
+!!
+!!    character(len=*),intent(in)  :: str
+!!    integer,intent(in)           :: ipos
+!!    integer,intent(out)          :: imatch
+!!
+!!##DESCRIPTION
+!!    Sets imatch to the position in string of the delimiter matching the
+!!    delimiter in position ipos. Allowable delimiters are (), [], {}, <>.
+!!
+!!##OPTIONS
+!!    str     input string to locate delimiter position in
+!!    ipos    position of delimiter to find match for
+!!    imatch  location of matching delimiter. If no match is found, zero (0)
+!!            is returned.
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!    program demo_matching_delimiter
+!!       use M_strings, only : matching_delimiter
+!!       implicit none
+!!       character(len=128)  :: str
+!!       integer             :: imatch
+!!
+!!       str=' a [[[[b] and ] then ] finally ]'
+!!       write(*,*)'string=',str
+!!       call matching_delimiter(str,1,imatch)
+!!       write(*,*)'location=',imatch
+!!       call matching_delimiter(str,4,imatch)
+!!       write(*,*)'location=',imatch
+!!       call matching_delimiter(str,5,imatch)
+!!       write(*,*)'location=',imatch
+!!       call matching_delimiter(str,6,imatch)
+!!       write(*,*)'location=',imatch
+!!       call matching_delimiter(str,7,imatch)
+!!       write(*,*)'location=',imatch
+!!       call matching_delimiter(str,32,imatch)
+!!       write(*,*)'location=',imatch
+!!
+!!    end program demo_matching_delimiter
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+!===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine matching_delimiter(str,ipos,imatch)
+impure elemental subroutine matching_delimiter(str,ipos,imatch)
 
 ! Sets imatch to the position in string of the delimiter matching the delimiter
 ! in position ipos. Allowable delimiters are (), [], {}, <>.
 
-character(len=*) :: str
+! pedigree?
+
+character(len=*),intent(in) :: str
+integer,intent(in) :: ipos
+integer,intent(out) :: imatch
+
 character :: delim1,delim2,ch
-integer :: ipos
-integer :: imatch
 integer :: lenstr
 integer :: idelim2
 integer :: istart, iend
@@ -9934,6 +10239,7 @@ integer :: inc
 integer :: isum
 integer :: i
 
+imatch=0
 lenstr=len_trim(str)
 delim1=str(ipos:ipos)
 select case(delim1)
@@ -9987,8 +10293,8 @@ end subroutine matching_delimiter
 !===================================================================================================================================
 !>
 !!##NAME
-!!    longest_common_substring(3f) - [M_strings] function that returns the
-!!                                   longest common substring of two strings.
+!!    longest_common_substring(3f) - [M_strings:COMPARE] function that
+!!    returns the longest common substring of two strings.
 !!##SYNOPSIS
 !!
 !!    function longest_common_substring(a,b) result(match)

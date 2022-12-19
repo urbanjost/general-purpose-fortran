@@ -14,4 +14,4 @@
         TMPDIR= ge('TMPDIR', ge('TMP', ge('TEMPDIR', ge('TEMP', '/tmp'))))
         write(*,*)'favorite scratch area is ',TMPDIR
 
-     end program demo_system_getenv
+    end program demo_system_getenv

@@ -18,4 +18,4 @@
            call LALA()
 
            write(*,'(a)')'ending program'
-        end program demo_LALA
+  end program demo_LALA

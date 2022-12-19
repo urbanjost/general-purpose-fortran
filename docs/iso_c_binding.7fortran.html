@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>iso_c_binding</B>(7f) - [FORTRAN] standard intrinsic module which defines named constants, types, and procedures for C interoperability
-<P>
+<B>iso_c_binding(7f) </B>- [FORTRAN] standard intrinsic module which defines named constants, types, and procedures for C interoperability
+<B>
 </BLOCKQUOTE>
-<P>
+</B><B>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=10>
@@ -68,6 +68,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 <P>
 <B>Interoperability</B> <I>with</I> <I>C</I>
 <B>2</B> <I>The</I> <I>ISO</I> <I>C</I> <I>BINDING</I> <I>intrinsic</I> <I>module</I>
@@ -87,6 +88,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 15.5.1 <I>Definition</I> <I>and</I> <I>reference</I> <I>of</I> <I>interoperable</I> <I>procedures</I>
 15.5.2 <I>Binding</I> <I>labels</I> <I>for</I> <I>procedures</I>
 15.5.3 <I>Exceptions</I> <I>and</I> <I>IEEE</I> <I>arithmetic</I> <I>procedures</I>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -323,6 +325,7 @@ Both are equivalent to <I>the</I> value &#145;NULL&#145; <I>in</I> <I>C</I>.
     not specific.
 <P>
 </PRE>
+<BLOCKQUOTE>
 C_ASSOCIATED (C_PTR_1 [, C_PTR_2])
 15.2.3.2
 <P>
@@ -339,7 +342,6 @@ C_ASSOCIATED (C_PTR_1 [, C_PTR_2])
 <P>
 </PRE>
 Result Characteristics. Default logical <I>scalar</I>.
-<BLOCKQUOTE>
 <P>
 Result Value.
 <TABLE cellpadding=3><!-- tsb: Result Value.
@@ -412,8 +414,8 @@ C_F_POINTER (CPTR, FPTR [, SHAPE])
     Class. Subroutine.
 <P>
 </PRE>
-Arguments.
 <BLOCKQUOTE>
+Arguments.
 <TABLE cellpadding=3><!-- tsb: Arguments.
  -->
 <TR></TR><TR></TR>
@@ -467,6 +469,7 @@ C_F_PROCPOINTER (CPTR, FPTR)
         referenced by a C pointer, as described in 6.2.5 of the C International Standard.
 <P>
 </PRE>
+<BLOCKQUOTE>
 C_FUNLOC (X)
 15.2.3.5
 <P>
@@ -524,100 +527,239 @@ C_FUNLOC (X)
        however, portable C functions should treat it as a void (generic) C pointer that cannot be dereferenced
        (6.5.3.2 in the C International Standard).
 <P>
-  15.2.3.7   C SIZEOF (X)
-<P>
-  Description. Size of X in bytes.
-<P>
-  Class. Inquiry function.
-<P>
-  Argument. X shall be an interoperable data entity that is not an assumed-size array.
-<P>
-  Result Characteristics. Scalar integer of kind C SIZE T (15.3.2).
-<P>
-  Result Value. If X is scalar, the result value is the value that the companion processor returns as the result of
-  applying the sizeof operator (C International Standard, subclause 6.5.3.4) to an object of a type that interoperates
-  with the type and type parameters of X.
-<P>
-  If X is an array, the result value is the value that the companion processor returns as the result of applying the
-  sizeof operator to an object of a type that interoperates with the type and type parameters of X, multiplied by
-  the number of elements in X.
-<P>
-  15.3       Interoperability between Fortran and C entities
-<P>
-  15.3.1     General
-  Subclause 15.3 defines the conditions under which a Fortran entity is interoperable. If a Fortran entity is
-  interoperable, an equivalent entity may be defined by means of C and the Fortran entity interoperates with the C
-  entity. There does not have to be such an interoperating C entity.
-<P>
+</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>15.2.3.7</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<I>C</I> SIZEOF (X)
+</TD></TR>
+<TR><TD colspan=2>
+Description. Size <I>of</I> X <I>in</I> bytes.
+</TD></TR>
+<TR><TD colspan=2>
+Class. Inquiry function.
+</TD></TR>
+<TR><TD colspan=2>
+Argument. X shall be an <I>interoperable</I> data entity that is not an assumed-size <I>array</I>.
+</TD></TR>
+<TR><TD colspan=2>
+Result Characteristics. Scalar integer <I>of</I> kind <I>C</I> SIZE T (15.3.2).
+</TD></TR>
+<TR><TD colspan=2>
+Result Value. If X is <I>scalar</I>, <I>the</I> result value is <I>the</I> value that <I>the</I> companion processor returns as <I>the</I> result <I>of</I>
+applying <I>the</I> sizeof operator (<I>C</I> International Standard, subclause 6.5.3.4) to an object <I>of</I> a type that interoperates
+<I>with</I> <I>the</I> type <I>and</I> type parameters <I>of</I> X.
+</TD></TR>
+<TR><TD colspan=2>
+If X is an <I>array</I>, <I>the</I> result value is <I>the</I> value that <I>the</I> companion processor returns as <I>the</I> result <I>of</I> applying <I>the</I>
+sizeof operator to an object <I>of</I> a type that interoperates <I>with</I> <I>the</I> type <I>and</I> type parameters <I>of</I> X, multiplied by
+<I>the</I> number <I>of</I> elements <I>in</I> X.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>15.3</B> </TD><TD valign=bottom>
+<I>Interoperability</I> <I>between</I> <I>Fortran</I> <I>and</I> <I>C</I> <I>entities</I>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>15.3.1</B> </TD><TD valign=bottom>
+Subclause 15.3 defines <I>the</I> conditions under which a <I>Fortran</I> entity is <I>interoperable</I>. If a <I>Fortran</I> entity is
+<I>interoperable</I>, an equivalent entity may be defined by means <I>of</I> <I>C</I> <I>and</I> <I>the</I> <I>Fortran</I> entity interoperates <I>with</I> <I>the</I> <I>C</I>
+entity. There does not have to be such an interoperating <I>C</I> entity.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
        NOTE 15.6
        A Fortran entity can be interoperable with more than one C entity.
 <P>
-  15.3.2     Interoperability of intrinsic types
-  Table 15.2 shows the interoperability between Fortran intrinsic types and C types. A Fortran intrinsic type
-  with particular type parameter values is interoperable with a C type if the type and kind type parameter value
-  are listed in the table on the same row as that C type; if the type is character, interoperability also requires
-  that the length type parameter be omitted or be specified by an initialization expression whose value is one. A
-  combination of Fortran type and type parameters that is interoperable with a C type listed in the table is also
-  interoperable with any unqualified C type that is compatible with the listed C type.
-<P>
-  The second column of the table refers to the named constants made accessible by the ISO C BINDING intrinsic
-  module. If the value of any of these named constants is negative, there is no combination of Fortran type and
-  type parameters interoperable with the C type shown in that row.
-<P>
-  A combination of intrinsic type and type parameters is interoperable if it is interoperable with a C type. The
-  C types mentioned in table 15.2 are defined in subclauses 6.2.5, 7.17, and 7.18.1 of the C International Standard.
-<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>15.3.2</B> </TD><TD valign=bottom>
+<I>Interoperability</I> <I>of</I> <I>intrinsic</I> <I>types</I>
+Table 15.2 shows <I>the</I> interoperability <I>between</I> <I>Fortran</I> <I>intrinsic</I> <I>types</I> <I>and</I> <I>C</I> <I>types</I>. A <I>Fortran</I> <I>intrinsic</I> type
+<I>with</I> particular type parameter values is <I>interoperable</I> <I>with</I> a <I>C</I> type if <I>the</I> type <I>and</I> kind type parameter value
+are listed <I>in</I> <I>the</I> table on <I>the</I> same row as that <I>C</I> type; if <I>the</I> type is character, interoperability also requires
+that <I>the</I> length type parameter be omitted or be specified by an initialization expression whose value is one. A
+combination <I>of</I> <I>Fortran</I> type <I>and</I> type parameters that is <I>interoperable</I> <I>with</I> a <I>C</I> type listed <I>in</I> <I>the</I> table is also
+<I>interoperable</I> <I>with</I> any unqualified <I>C</I> type that is compatible <I>with</I> <I>the</I> listed <I>C</I> type.
+</TD></TR>
+<TR><TD colspan=2>
+<I>The</I> second column <I>of</I> <I>the</I> table refers to <I>the</I> named <I>constants</I> made accessible by <I>the</I> <I>ISO</I> <I>C</I> <I>BINDING</I> <I>intrinsic</I>
+<I>module</I>. If <I>the</I> value <I>of</I> any <I>of</I> these named <I>constants</I> is negative, there is no combination <I>of</I> <I>Fortran</I> type <I>and</I>
+type parameters <I>interoperable</I> <I>with</I> <I>the</I> <I>C</I> type shown <I>in</I> that row.
+</TD></TR>
+<TR><TD colspan=2>
+A combination <I>of</I> <I>intrinsic</I> type <I>and</I> type parameters is <I>interoperable</I> if it is <I>interoperable</I> <I>with</I> a <I>C</I> type. <I>The</I>
+<I>C</I> <I>types</I> mentioned <I>in</I> table 15.2 are defined <I>in</I> subclauses 6.2.5, 7.17, <I>and</I> 7.18.1 <I>of</I> <I>the</I> <I>C</I> International Standard.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
                          Table 15.2: Interoperability between Fortran and C types
                            Named constant from the ISO C BINDING module
-       Fortran type                                                        C type
-                           (kind type parameter if value is positive)
-                            C_INT                                          int
-                            C_SHORT                                        short int
-                            C_LONG                                         long int
-                            C_LONG_LONG                                    long long int
-                            C_SIGNED_CHAR                                  signed char
-                                                                           unsigned char
-                            C_SIZE_T                                       size t
-                            C_INT8_T                                       int8 t
-                            C_INT16_T                                      int16 t
-                            C_INT32_T                                      int32 t
-                            C_INT64_T                                      int64 t
-                            C_INT_LEAST8_T                                 int least8 t
-                            C_INT_LEAST16_T                                int least16 t
-                            C_INT_LEAST32_T                                int least32 t
-       INTEGER              C_INT_LEAST64_T                                int least64 t
-                            C_INT_FAST8_T                                  int fast8 t
-                            C_INT_FAST16_T                                 int fast16 t
-                            C_INT_FAST32_T                                 int fast32 t
-                            C_INT_FAST64_T                                 int fast64 t
-                            C_INTMAX_T                                     intmax t
-                            C_INTPTR_T                                     intptr t
-                            C_FLOAT                                        float
-       REAL                 C_DOUBLE                                       double
-                            C_LONG_DOUBLE                                  long double
-                            C_FLOAT_COMPLEX                                float Complex
-       COMPLEX              C_DOUBLE_COMPLEX                               double Complex
-                            C_LONG_DOUBLE_COMPLEX                          long double Complex
-       LOGICAL              C_BOOL                                         Bool
-       CHARACTER            C_CHAR                                         char
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><I>Fortran</I> type </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<I>C</I> type
+(kind type parameter if value is positive)
+<TABLE width=100% cellpadding=3><!-- tsb: <I>C</I> type
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C_INT</B> </TD><TD valign=bottom>
+int
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_SHORT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+short int
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C_LONG</B> </TD><TD valign=bottom>
+long int
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_LONG_LONG</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+long long int
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_SIGNED_CHAR</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+signed char
+unsigned char
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_SIZE_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+size t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT8_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int8 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT16_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int16 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT32_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int32 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT64_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int64 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT_LEAST8_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int least8 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT_LEAST16_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int least16 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT_LEAST32_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int least32 t
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>INTEGER</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+C_INT_LEAST64_T                                int least64 t
+<TABLE width=100% cellpadding=3><!-- tsb: C_INT_LEAST64_T                                int least64 t
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT_FAST8_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int fast8 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT_FAST16_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int fast16 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT_FAST32_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int fast32 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INT_FAST64_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+int fast64 t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INTMAX_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+intmax t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_INTPTR_T</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+intptr t
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_FLOAT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+float
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>REAL</B> </TD><TD valign=bottom>
+C_DOUBLE                                       double
+<TABLE width=100% cellpadding=3><!-- tsb: C_DOUBLE                                       double
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>C_LONG_DOUBLE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+long double
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>C_FLOAT_COMPLEX</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+float Complex
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>COMPLEX</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+C_DOUBLE_COMPLEX                               double Complex
+<TABLE width=100% cellpadding=3><!-- tsb: C_DOUBLE_COMPLEX                               double Complex
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>C_LONG_DOUBLE_COMPLEX</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+long double Complex
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>LOGICAL</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+C_BOOL                                         Bool
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>CHARACTER</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+C_CHAR                                         char
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+NOTE 15.7
+For example, <I>the</I> type integer <I>with</I> a kind type parameter <I>of</I> C_SHORT is <I>interoperable</I> <I>with</I> <I>the</I> <I>C</I> type
+short or any <I>C</I> type <I>derived</I> (via typedef) from short.
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
 <P>
-      NOTE 15.7
-      For example, the type integer with a kind type parameter of C_SHORT is interoperable with the C type
-      short or any C type derived (via typedef) from short.
-<P>
-      NOTE 15.8
-      The C International Standard specifies that the representations for nonnegative signed integers are the
-      same as the corresponding values of unsigned integers. Because Fortran does not provide direct support for
-      unsigned kinds of integers, the ISO C BINDING module does not make accessible named constants for their
-      kind type parameter values. A user can use the signed kinds of integers to interoperate with the unsigned
-      types and all their qualified versions as well. This has the potentially surprising side effect that the C type
-      unsigned char is interoperable with the type integer with a kind type parameter of C SIGNED CHAR.
-<P>
-  15.3.3     Interoperability with C pointer types
-  C PTR and C FUNPTR shall be derived types with only private components. No direct component of either of
-  these types is allocatable or a pointer. C PTR is interoperable with any C object pointer type. C FUNPTR is
-  interoperable with any C function pointer type.
-<P>
+NOTE 15.8
+<I>The</I> <I>C</I> International Standard specifies that <I>the</I> representations <I>for</I> nonnegative signed integers are <I>the</I>
+same as <I>the</I> corresponding values <I>of</I> unsigned integers. Because <I>Fortran</I> does not provide direct support <I>for</I>
+unsigned kinds <I>of</I> integers, <I>the</I> <I>ISO</I> <I>C</I> <I>BINDING</I> <I>module</I> does not make accessible named <I>constants</I> <I>for</I> their
+kind type parameter values. A user can use <I>the</I> signed kinds <I>of</I> integers to interoperate <I>with</I> <I>the</I> unsigned
+<I>types</I> <I>and</I> all their qualified versions as well. This has <I>the</I> potentially surprising side effect that <I>the</I> <I>C</I> type
+unsigned char is <I>interoperable</I> <I>with</I> <I>the</I> type integer <I>with</I> a kind type parameter <I>of</I> <I>C</I> SIGNED CHAR.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>15.3.3</B> </TD><TD valign=bottom>
+<I>Interoperability</I> <I>with</I> <I>C</I> <I>pointer</I> <I>types</I>
+<I>C</I> PTR <I>and</I> <I>C</I> FUNPTR shall be <I>derived</I> <I>types</I> <I>with</I> only private components. No direct component <I>of</I> either <I>of</I>
+these <I>types</I> is allocatable or a <I>pointer</I>. <I>C</I> PTR is <I>interoperable</I> <I>with</I> any <I>C</I> object <I>pointer</I> type. <I>C</I> FUNPTR is
+<I>interoperable</I> <I>with</I> any <I>C</I> function <I>pointer</I> type.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
        NOTE 15.9
        This implies that a C processor is required to have the same representation method for all C object pointer
        types and the same representation method for all C function pointer types if the C processor is to be
@@ -635,39 +777,53 @@ C_FUNLOC (X)
        have a value that is the C address of a procedure or allocatable variable, even in contexts where a procedure
        or allocatable variable is not directly allowed.
 <P>
-  15.3.4     Interoperability of derived types and C struct types
-  A Fortran derived type is interoperable if it has the BIND attribute.
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>15.3.4</B> </TD><TD valign=bottom>
+<I>Interoperability</I> <I>of</I> <I>derived</I> <I>types</I> <I>and</I> <I>C</I> <I>struct</I> <I>types</I>
+A <I>Fortran</I> <I>derived</I> type is <I>interoperable</I> if it has <I>the</I> BIND attribute.
+</TD></TR>
+<TR><TD colspan=2>
+C1501 (R425) A <I>derived</I> type <I>with</I> <I>the</I> BIND attribute shall not have <I>the</I> SEQUENCE attribute.
+</TD></TR>
+<TR><TD colspan=2>
+C1502 (R425) A <I>derived</I> type <I>with</I> <I>the</I> BIND attribute shall not have type parameters.
+</TD></TR>
+<TR><TD colspan=2>
+C1503 (R425) A <I>derived</I> type <I>with</I> <I>the</I> BIND attribute shall not have <I>the</I> EXTENDS attribute.
+</TD></TR>
+<TR><TD colspan=2>
+C1504 (R425) A <I>derived</I> type <I>with</I> <I>the</I> BIND attribute shall not have a type-bound-<I>procedure</I>-part.
+</TD></TR>
+<TR><TD colspan=2>
+C1505 (R425) Each component <I>of</I> a <I>derived</I> type <I>with</I> <I>the</I> BIND attribute shall be a nonpointer, nonallocatable
+data component <I>with</I> <I>interoperable</I> type <I>and</I> type parameters.
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
 <P>
-  C1501 (R425) A derived type with the BIND attribute shall not have the SEQUENCE attribute.
+NOTE 15.11
+<I>The</I> syntax rules <I>and</I> their constraints require that a <I>derived</I> type that is <I>interoperable</I> have components
+that are all data <I>entities</I> that are <I>interoperable</I>. No component is permitted to be allocatable or a <I>pointer</I>,
+but <I>the</I> value <I>of</I> a component <I>of</I> type <I>C</I> FUNPTR or <I>C</I> PTR may be <I>the</I> <I>C</I> address <I>of</I> such an entity.
+</TD></TR>
+<TR></TR></TABLE>A <I>Fortran</I> <I>derived</I> type is <I>interoperable</I> <I>with</I> a <I>C</I> <I>struct</I> type if <I>the</I> <I>derived</I>-type definition <I>of</I> <I>the</I> <I>Fortran</I> type
+specifies <B>BIND</B>(<I>C</I>) (4.5.2), <I>the</I> <I>Fortran</I> <I>derived</I> type <I>and</I> <I>the</I> <I>C</I> <I>struct</I> type have <I>the</I> same number <I>of</I> components,
+<I>and</I> <I>the</I> components <I>of</I> <I>the</I> <I>Fortran</I> <I>derived</I> type have <I>types</I> <I>and</I> type parameters that are <I>interoperable</I> <I>with</I>
+<I>the</I> <I>types</I> <I>of</I> <I>the</I> corresponding components <I>of</I> <I>the</I> <I>C</I> <I>struct</I> type. A component <I>of</I> a <I>Fortran</I> <I>derived</I> type <I>and</I>
+a component <I>of</I> a <I>C</I> <I>struct</I> type correspond if they are declared <I>in</I> <I>the</I> same relative position <I>in</I> their respective
+type definitions.
 <P>
-  C1502 (R425) A derived type with the BIND attribute shall not have type parameters.
-<P>
-  C1503 (R425) A derived type with the BIND attribute shall not have the EXTENDS attribute.
-<P>
-  C1504 (R425) A derived type with the BIND attribute shall not have a type-bound-procedure-part.
-<P>
-  C1505 (R425) Each component of a derived type with the BIND attribute shall be a nonpointer, nonallocatable
-        data component with interoperable type and type parameters.
-<P>
-       NOTE 15.11
-       The syntax rules and their constraints require that a derived type that is interoperable have components
-       that are all data entities that are interoperable. No component is permitted to be allocatable or a pointer,
-       but the value of a component of type C FUNPTR or C PTR may be the C address of such an entity.
-<P>
-  A Fortran derived type is interoperable with a C struct type if the derived-type definition of the Fortran type
-  specifies BIND(C) (4.5.2), the Fortran derived type and the C struct type have the same number of components,
-  and the components of the Fortran derived type have types and type parameters that are interoperable with
-  the types of the corresponding components of the C struct type. A component of a Fortran derived type and
-  a component of a C struct type correspond if they are declared in the same relative position in their respective
-  type definitions.
-<P>
+<PRE>
        NOTE 15.12
        The names of the corresponding components of the derived type and the C struct type need not be the
        same.
 <P>
-  There is no Fortran type that is interoperable with a C struct type that contains a bit field or that contains a
-  flexible array member. There is no Fortran type that is interoperable with a C union type.
+</PRE>
+There is no <I>Fortran</I> type that is <I>interoperable</I> <I>with</I> a <I>C</I> <I>struct</I> type that contains a bit field or that contains a
+flexible <I>array</I> member. There is no <I>Fortran</I> type that is <I>interoperable</I> <I>with</I> a <I>C</I> union type.
 <P>
+<PRE>
         NOTE 15.13
         For example, the C type myctype, declared below, is interoperable with the Fortran type myftype, declared
         below.
@@ -682,6 +838,8 @@ C_FUNLOC (X)
           INTEGER(C_INT) :: I, J
           REAL(C_FLOAT) :: S
 </PRE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
 <A name=>
 
     <H4>&nbsp; &nbsp; END TYPE MYFTYPE</H4>
@@ -1128,7 +1286,7 @@ setting an exception flag to signaling.
 processor-dependent.
 </TD></TR>
 <TR></TR></TABLE><P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iso_c_binding (7)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 66b0d0c8-acfb-43b7-afb2-200d07ac6bbf using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iso_c_binding (7)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5912eb09-cef9-446f-b75e-08d0d59d6441 using man macros.</FONT>
 <br><br><center><img src="images/iso_c_binding.7fortran.gif"></center>
 </div>
 </div>

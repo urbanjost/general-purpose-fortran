@@ -22,4 +22,4 @@
          write(*,*)'G=',table%get('G')
          write(*,*)'H=',table%get('H')
 
-       end program demo_get
+    end program demo_get

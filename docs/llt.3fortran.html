@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>LLT</B>(3) - [CHARACTER:COMPARE] ASCII Lexical less than
-<P>
-</BLOCKQUOTE>
+<B>LLT(3) </B>- [CHARACTER:COMPARE] ASCII Lexical less than
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>llt</B>(<I>string_a</I>, <I>stringb</I>)
 <P>
-<PRE>
             elemental logical function llt(string_a, string_b)
 <P>
              character(len=*),intent(in) :: string_a
@@ -92,7 +92,23 @@ result = <B>llt</B>(<I>string_a</I>, <I>stringb</I>)
 
 </A>
 <BLOCKQUOTE>
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+**<I>string_a</I>** is default _character_ or an ASCII character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+**string_b** is the same type and kind as **<I>string_a</I>**
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is a default logical
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
@@ -106,7 +122,7 @@ compared as if spaces were appended to it to form a value that has the same
 length as the longer.
 <P>
 In general, the lexical comparison intrinsics LGE, LGT, LLE, and LLT differ
-from the corresponding intrinsic operators .ge., .gt., .le., and \.lt., in
+from the corresponding intrinsic operators .ge., .gt., .le., and .lt., in
 that the latter use the processor&#146;s character ordering (which is not ASCII
 on some targets), whereas the former always use the ASCII ordering.
 </BLOCKQUOTE>
@@ -120,12 +136,12 @@ on some targets), whereas the former always use the ASCII ordering.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-STRING_A : Shall be of default character type.
+STRING_A : string to be tested
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-STRING_B : Shall be of default character type.
+STRING_B : string to compare to STRING_A
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -135,9 +151,12 @@ STRING_B : Shall be of default character type.
 </A>
 <BLOCKQUOTE>
 Returns .true. if <I>string_a</I> &lt;= string_b, and .false. otherwise, based on the
-ASCII ordering.
+ASCII collating sequence.
 <P>
 If both input arguments are null strings, .false. is always returned.
+<P>
+If either string contains a character not in the ASCII character set, the
+result is processor dependent.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -151,32 +170,74 @@ Sample program:
       program demo_llt
       implicit none
       integer :: i
-         write(*,&#146;(*(a))&#146;)(char(i),i=32,126)  ! ASCII order
-         write(*,*) llt(&#146;abc&#146;,&#146;ABC&#146;)          ! [F] lowercase is &gt; uppercase
-         write(*,*) llt(&#146;abc&#146;,&#146;abc  &#146;)        ! [F] trailing spaces
-         ! If both strings are of zero length the result is false.
-         write(*,*) llt(&#146;&#146;,&#146;&#146;)                ! [F]
-         write(*,*) llt(&#146;&#146;,&#146;a&#146;)               ! [T] the null string is padded
-         write(*,*) llt(&#146;a&#146;,&#146;&#146;)               ! [F]
-         write(*,*) llt(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;])  ! [F F]  scalar and array
-         write(*,*) llt([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;) ! [F T]
-         write(*,*) llt([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T F]  both arrays
-      end program demo_llt
+<P>
+         print *,&#146;the ASCII collating sequence for printable characters&#146;
+         write(*,&#146;(1x,19a)&#146;)(char(i),i=32,126) ! ASCII order
 <P>
 </PRE>
+<BLOCKQUOTE>
+! basics
+print *,&#146;case matters&#146;
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: ! basics
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>(&#146;abc&#146;,&#146;ABC&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! [F] lowercase is &gt; uppercase
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>(&#146;abc&#146;,&#146;abc </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! If both strings are of zero length the result is false.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>(&#146;&#146;,&#146;&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! [F]
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>(&#146;&#146;,&#146;a&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! [T] the null string is padded
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>(&#146;a&#146;,&#146;&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! [F]
+print *,&#146;elemental&#146;
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;]) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! [F F]  scalar and array
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! [F T]
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>write</B>(*,*) <B>llt</B>([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T F] </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+both arrays
+end program demo_llt
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<P>
 Results:
 <P>
 <PRE>
-        &gt; !"#$%&&#146;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ
-        &gt; [\]^_&#145;abcdefghijklmnopqrstuvwxyz{|}~
-        &gt; F
-        &gt; F
-        &gt; F
-        &gt; T
-        &gt; F
-        &gt; F F
-        &gt; F T
-        &gt; T F
+       &gt;  the ASCII collating sequence for printable characters
+       &gt;   !"#$%&&#146;()*+,-./012
+       &gt;  3456789:;&lt;=&gt;?@ABCDE
+       &gt;  FGHIJKLMNOPQRSTUVWX
+       &gt;  YZ[\]^_&#145;abcdefghijk
+       &gt;  lmnopqrstuvwxyz{|}~
+       &gt;  case matters
+       &gt;  F
+       &gt;  F
+       &gt;  F
+       &gt;  T
+       &gt;  F
+       &gt;  elemental
+       &gt;  F F
+       &gt;  F T
+       &gt;  T F
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -214,11 +275,11 @@ NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022                  llt(3fortran)
+                               November 07, 2022                 llt(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>llt (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 006be2ed-65df-4ab9-a92c-4f1d546680bd using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>llt (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 14b55da7-ef65-4ea1-85f4-156d01015a02 using man macros.</FONT>
 <br><br><center><img src="images/llt.3fortran.gif"></center>
 </div>
 </div>

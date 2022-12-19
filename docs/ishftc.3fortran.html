@@ -65,10 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>ISHFTC</B>(3) - [BIT:SHIFT] Shift rightmost bits circularly, AKA. a logical
-shift
-<P>
-</BLOCKQUOTE>
+<B>ISHFTC(3) </B>- [BIT:SHIFT] Shift rightmost bits circularly, AKA. a logical
+<B>shift
+</B><B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -77,9 +77,9 @@ shift
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>ishftc</B>( <I>i</I>, shift [,<I>size</I>] )
 <P>
-<PRE>
            elemental integer(kind=KIND) function ishftc(i, shift, size)
 <P>
             integer(kind=KIND),intent(in)        :: i
@@ -98,7 +98,17 @@ result = <B>ishftc</B>( <I>i</I>, shift [,<I>size</I>] )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a kind designated as ** may be any supported kind value for the type
+a kind designated as ** may be any supported kind for the type
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I may be an integer of any kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SHIFT and SIZE may be integers of any kind
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -139,17 +149,20 @@ o
 </TD><TD>
 SHIFT : If SHIFT is positive, the shift is to the left; if SHIFT is
 negative, the shift is to the right; and if SHIFT is zero, no shift is
-performed. The absolute value of SHIFT must be less than SIZE (simply
-put, the number of bits to shift must be less than or equal to the number
-of bits specified to be shifting!)
+performed.
+<P>
+The absolute value of SHIFT must be less than SIZE (simply put, the
+number of positions to shift must be less than or equal to the number of
+bits specified to be shifted).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SIZE : (Optional) The type shall be integer; the value must be greater
-than zero and less than or equal to <B>BIT_SIZE</B>(<I>i</I>). The default is
-<B>BIT_SIZE</B>(I). That is, the default is to circularly shift the entire value
-I.
+SIZE : The value must be greater than zero and less than or equal to
+<B>BIT_SIZE</B>(<I>i</I>).
+<P>
+The default if <B>BIT_SIZE</B>(I) is absent is to circularly shift the entire
+value I.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -158,8 +171,7 @@ I.
 
 </A>
 <BLOCKQUOTE>
-The result characteristics (kind, shape, <I>size</I>, ranke, &#46;&#46;&#46;) are the same as
-I.
+The result characteristics (kind, shape, <I>size</I>, rank, &#46;&#46;&#46;) are the same as I.
 <P>
 The result has the value obtained by shifting the SIZE rightmost bits of I
 circularly by SHIFT positions.
@@ -182,13 +194,21 @@ Sample program:
       implicit none
       integer             :: i
       character(len=*),parameter :: g=&#146;(b32.32,1x,i0)&#146;
-<P>
+        ! basics
          write(*,*) ishftc(3, 1),&#146; &lt;== typically should have the value 6&#146;
 <P>
-        ! shift a value by various amounts
+         print *, &#146;lets start with this:&#146;
+         write(*,&#146;(b32.32)&#146;)huge(0)
+         print *, &#146;shift the value by various amounts, negative and positive&#146;
          do i= -bit_size(0), bit_size(0), 8
             write(*,g) ishftc(huge(0),i), i
          enddo
+        print *,&#146;elemental&#146;
+        i=huge(0)
+        write(*,*)ishftc(i,[2,3,4,5])
+        write(*,*)ishftc([2**1,2**3,-2**7],3)
+        print *,&#146;note the arrays have to conform when elemental&#146;
+        write(*,*)ishftc([2**1,2**3,-2**7],[5,20,0])
 <P>
       end program demo_ishftc
 <P>
@@ -196,16 +216,24 @@ Sample program:
 Results:
 <P>
 <PRE>
-      &gt;              6  &lt;== typically should have the value 6
-      &gt;   01111111111111111111111111111111 -32
-      &gt;   11111111111111111111111101111111 -24
-      &gt;   11111111111111110111111111111111 -16
-      &gt;   11111111011111111111111111111111 -8
-      &gt;   01111111111111111111111111111111 0
-      &gt;   11111111111111111111111101111111 8
-      &gt;   11111111111111110111111111111111 16
-      &gt;   11111111011111111111111111111111 24
-      &gt;   01111111111111111111111111111111 32
+       &gt;            6  &lt;== typically should have the value 6
+       &gt;  lets start with this:
+       &gt; 01111111111111111111111111111111
+       &gt;  shift the value by various amounts, negative and positive
+       &gt; 01111111111111111111111111111111 -32
+       &gt; 11111111111111111111111101111111 -24
+       &gt; 11111111111111110111111111111111 -16
+       &gt; 11111111011111111111111111111111 -8
+       &gt; 01111111111111111111111111111111 0
+       &gt; 11111111111111111111111101111111 8
+       &gt; 11111111111111110111111111111111 16
+       &gt; 11111111011111111111111111111111 24
+       &gt; 01111111111111111111111111111111 32
+       &gt;  elemental
+       &gt;           -3          -5          -9         -17
+       &gt;           16          64       -1017
+       &gt;  note the arrays have to conform when elemental
+       &gt;           64     8388608        -128
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -223,16 +251,55 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-<B>ISHFT</B>(3)
-<P>
-fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>ISHFT</B>(3) - Logical shift of bits in an integer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>SHIFTA</B>(3) - Right shift with fill
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>SHIFTL</B>(3) - Shift bits left
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>SHIFTR</B>(3) - Combined right shift of the bits of two int&#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>DSHIFTL</B>(3) - Combined left shift of the bits of two inte&#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>DSHIFTR</B>(3) - Combined right shift of the bits of two int&#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>CSHIFT</B>(3) - Circular shift elements of an array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+<B>EOSHIFT</B>(3) - End-off shift elements of an array
+</TD></TR>
+<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022               ishftc(3fortran)
+                               November 07, 2022              ishftc(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ishftc (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3d9b30e6-8d6c-47b4-a0c4-700e3da49f42 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ishftc (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 061082d2-aa92-44b8-beef-cd9f5b3a38b6 using man macros.</FONT>
 <br><br><center><img src="images/ishftc.3fortran.gif"></center>
 </div>
 </div>

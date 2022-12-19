@@ -55,6 +55,6 @@
         &<y>YELLOW</it></y></ul></bo></in>')
        write(*,'(a)') esc(&
         &'<in><bo><ul><it><w>WHITE</w> and <e>EBONY</e></ul></bo></in>')
-     end subroutine printstuff
+  end subroutine printstuff
 
-     end program demo_esc
+    end program demo_esc

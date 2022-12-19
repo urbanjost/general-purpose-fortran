@@ -1,8 +1,9 @@
       program demo_kind
       implicit none
-        integer,parameter :: kc = kind(' ')
-        integer,parameter :: kl = kind(.true.)
+      integer,parameter :: dc = kind(' ')
+      integer,parameter :: dl = kind(.true.)
 
-      print *, "The default character kind is ", kc
-        print *, "The default logical kind is ", kl
+         print *, "The default character kind is ", dc
+         print *, "The default logical kind is ", dl
+
       end program demo_kind

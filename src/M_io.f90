@@ -3055,10 +3055,16 @@ character(len=:),allocatable :: name
       call get_command_argument(0,arg0,status=ios)
       if(ios.eq.0)then
          inquire(file=arg0,iostat=ios,name=long_name)
-         name=trim(long_name)
+         if(ios == 0)then
+            name=trim(long_name)
+         else
+            name=arg0
+         endif
       else
-         name=arg0
+         arg0=''
       endif
+   else
+      arg0=''
    endif
 end function getname
 !===================================================================================================================================

@@ -5462,9 +5462,16 @@ end subroutine system_stat_print
 !!   Sample program:
 !!
 !!    program demo_system_dir
-!!    use M_system, only : system_dir
+!!    use M_system, only : system_dir, system_isdir
+!!    character(len=:),allocatable :: dirname
 !!    implicit none
 !!       write(*, '(a)')system_dir(pattern='*.f90')
+!!       dirname='/tmp'
+!!       if(system_isdir(dirname))then
+!!          write(*, '(a)')system_dir(pattern='*.f90')
+!!       else
+!!          write(*, '(a)')'<WARNING:>'//dirname//' does not exist'
+!!       endif
 !!    end program demo_system_dir
 !!
 !!##AUTHOR
@@ -5473,7 +5480,7 @@ end subroutine system_stat_print
 !!##LICENSE
 !!    Public Domain
 function system_dir(directory,pattern,ignorecase)
-!use M_system, only : system_opendir, system_readdir, system_rewinddir, system_closedir
+!use M_system, only : system_opendir, system_readdir, system_rewinddir, system_closedir, system_isdir
 use iso_c_binding
 implicit none
 character(len=*),intent(in),optional  :: directory
@@ -5492,7 +5499,11 @@ integer                               :: i, ierr, icount, longest
       wild='*'
    endif
    if(present(directory))then                        !--- open directory stream to read from
-      call system_opendir(directory, dir, ierr)
+      if(system_isdir(trim(directory)))then
+         call system_opendir(trim(directory), dir, ierr)
+      else
+         ierr=-1
+      endif
    else
       call system_opendir('.', dir, ierr)
    endif
@@ -5519,8 +5530,9 @@ integer                               :: i, ierr, icount, longest
             icount=0
          endif
       enddo
+      call system_closedir(dir, ierr)                   !--- close directory stream
    endif
-   call system_closedir(dir, ierr)                   !--- close directory stream
+   if(.not.allocated(system_dir)) allocate(character(len=0) :: system_dir(0))
 end function system_dir
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

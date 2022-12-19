@@ -5234,10 +5234,10 @@ end subroutine bytes_to_anything
 !!
 !!##SYNOPSIS
 !!
-!!      subroutine sort_indexed(data,index)
+!!      function sort_indexed(data) result(indx)
 !!
 !!       TYPE,intent(in) :: data
-!!       integer,intent(out) :: indx(size(data))
+!!       integer :: indx(size(data))
 !!
 !!##DESCRIPTION
 !!    This routine is very slow on large arrays but I liked writing a sort

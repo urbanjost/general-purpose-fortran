@@ -35,4 +35,4 @@
            read(lun,nlist)
            write(*,nlist)
 
-        end program demo_namelist
+    end program demo_namelist

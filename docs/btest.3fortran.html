@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>BTEST</B>(3) - [BIT:INQUIRY] Tests a bit of an integer value.
-<P>
-</BLOCKQUOTE>
+<B>BTEST(3) </B>- [BIT:INQUIRY] Tests a bit of an integer value.
+<B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,13 +76,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>btest</B>(i,pos)
 <P>
-<PRE>
-           elemental integer(kind=KIND) function btest(i,pos)
+           elemental logical function btest(i,pos)
 <P>
-            integer,intent(in)  :: i
-            logical,intent(out) :: pos
+            integer(kind=**),intent(in)  :: i
+            integer(kind=**),intent(in)  :: pos
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,15 +92,32 @@ result = <B>btest</B>(i,pos)
 
 </A>
 <BLOCKQUOTE>
-where KIND is any integer kind supported by the programming environment.
-</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+I is an integer of any kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+POS is a _integer of any kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is a default logical
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>BTEST</B>(3) returns logical .true. if the bit at POS in I is set.
+<B>BTEST</B>(3) returns logical .true. if the bit at POS in I is set to 1.
+Position zero is the right-most bit. Bit position increases from right to
+left up to <B>BITSIZE</B>(I)<B>-1</B>.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -112,15 +129,13 @@ where KIND is any integer kind supported by the programming environment.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-I : The type shall be integer.
+I : The integer containing the bit to be tested
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-POS : The bit position to query. it must be a valid position for the
-value I; ie. 0 &lt;= POS &lt;= <B>BIT_SIZE</B>(I) .
-<P>
-A value of zero refers to the least significant bit.
+POS : The position of the bit to query. it must be a valid position for
+the value I; ie. 0 &lt;= POS &lt;= <B>BIT_SIZE</B>(I).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -131,6 +146,9 @@ A value of zero refers to the least significant bit.
 <BLOCKQUOTE>
 The result is a logical that has the value .true. if bit position POS of I
 has the value 1 and the value .false. if bit POS of I has the value 0.
+<P>
+Positions of bits in the sequence are numbered from right to left, with the
+position of the rightmost bit being zero.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -148,98 +166,75 @@ Sample program:
       character(len=*),parameter :: g=&#146;(*(g0))&#146;
 <P>
            i = 32768 + 1024 + 64
-          write(*,&#146;(a,i0,"=&gt;",b32.32,/)&#146;)&#146;Looking at the integer: &#146;,i
-<P>
-          ! looking one bit at a time from LOW BIT TO HIGH BIT
-          write(*,g)&#146;from bit 0 to bit &#146;,bit_size(i),&#146;==&gt;&#146;
-          do pos=0,bit_size(i)-1
-              bool = btest(i, pos)
-              write(*,&#146;(l1)&#146;,advance=&#146;no&#146;)bool
-          enddo
-          write(*,*)
-<P>
-          ! a binary format the hard way.
-          ! Note going from bit_size(i) to zero.
-          write(*,*)
-          write(*,g)&#146;so for &#146;,i,&#146; with a bit size of &#146;,bit_size(i)
-          write(*,&#146;(b32.32)&#146;)i
-          write(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(btest(i,j),j=bit_size(i)-1,0,-1)])
-          write(*,*)
-          write(*,g)&#146;and for &#146;,-i,&#146; with a bit size of &#146;,bit_size(i)
-          write(*,&#146;(b32.32)&#146;)-i
-          write(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(btest(-i,j),j=bit_size(i)-1,0,-1)])
-<P>
-          ! elemental:
-          !
-          a(1,:)=[ 1, 2 ]
-          a(2,:)=[ 3, 4 ]
-          write(*,*)
-          write(*,&#146;(a,/,*(i2,1x,i2,/))&#146;)&#146;given the array a &#46;&#46;&#46;&#146;,a
-          ! the second bit of all the values in a
-          write(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (a, 2)&#146;,btest(a,2)
-          ! bits 1,2,3,4 of the value 2
-          write(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (2, a)&#146;,btest(2,a)
-      end program demo_btest
-<P>
 </PRE>
+<B>write</B>(*,&#146;(a,i0,"=&gt;",b32.32,/)&#146;)&#146;Looking at the integer: &#146;,i
+<BLOCKQUOTE>
+<P>
+! looking one bit at a time from LOW BIT TO HIGH BIT
+<B>write</B>(*,g)&#146;from bit 0 to bit &#146;,bit_size(i),&#146;==&gt;&#146;
+do <B>pos=0,bit_size</B>(i)<B>-1</B>
+bool = <B>btest</B>(i, pos)
+<B>write</B>(*,&#146;(l1)&#146;,advance=&#146;no&#146;)bool
+enddo
+<B>write</B>(*,*)
+<P>
+! a binary format the hard way.
+! Note going from <B>bit_size</B>(i) to zero.
+<B>write</B>(*,*)
+<B>write</B>(*,g)&#146;so for &#146;,i,&#146; with a bit size of &#146;,<B>bit_size</B>(i)
+<B>write</B>(*,&#146;(b32.32)&#146;)i
+<B>write</B>(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(<B>btest</B>(i,j),j=<B>bit_size</B>(i)<B>-1</B>,0,<B>-1</B>)])
+<B>write</B>(*,*)
+<B>write</B>(*,g)&#146;and for &#146;,<B>-i</B>,&#146; with a bit size of &#146;,<B>bit_size</B>(i)
+<B>write</B>(*,&#146;(b32.32)&#146;)<B>-i</B>
+<B>write</B>(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(<B>btest</B>(<B>-i</B>,j),j=<B>bit_size</B>(i)<B>-1</B>,0,<B>-1</B>)])
+<P>
+! elemental:
+!
+<B>a</B>(1,:)=[ 1, 2 ]
+<B>a</B>(2,:)=[ 3, 4 ]
+<B>write</B>(*,*)
+<B>write</B>(*,&#146;(a,/,*(i2,1x,i2,/))&#146;)&#146;given the array a &#46;&#46;&#46;&#146;,a
+! the second bit of all the values in a
+<B>write</B>(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (a, 2)&#146;,<B>btest</B>(a,2)
+! bits 1,2,3,4 of the value 2
+<B>write</B>(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (2, <B>a)&#146;,btest</B>(2,a)
+end program demo_btest
+</BLOCKQUOTE>
+<P>
 Results:
 <P>
 <PRE>
-      Looking at the integer: 33856=&gt;11111111111111110111101111000000
-<P>
-      00000000000000001000010001000000
-      11111111111111110111101111000000
-      1000010001000000
-      11111111111111110111101111000000
-      from bit 0 to bit 32==&gt;
+        &gt; Looking at the integer: 33856=&gt;11111111111111110111101111000000
+        &gt;
+        &gt; 00000000000000001000010001000000
+        &gt; 11111111111111110111101111000000
+        &gt; 1000010001000000
+        &gt; 11111111111111110111101111000000
+        &gt; from bit 0 to bit 32==&gt;
+        &gt; FFFFFFTFFFTFFFFTFFFFFFFFFFFFFFFF
+        &gt;
+        &gt; so for 33856 with a bit size of 32
+        &gt; 00000000000000001000010001000000
+        &gt; ________________^____^___^______
+        &gt;
+        &gt; and for -33856 with a bit size of 32
+        &gt; 11111111111111110111101111000000
+        &gt; ^^^^^^^^^^^^^^^^_^^^^_^^^^______
+        &gt;
+        &gt; given the array a &#46;&#46;&#46;
+        &gt;  1  3
+        &gt;  2  4
+        &gt;
+        &gt; the value of btest (a, 2)
+        &gt;  F  F
+        &gt;  F  T
+        &gt;
+        &gt; the value of btest (2, a)
+        &gt;  T  F
+        &gt;  F  F
 <P>
 </PRE>
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; FFFFFFTFFFTFFFFTFFFFFFFFFFFFFFFF</H4>
-</A>
-<BLOCKQUOTE>
-so for 33856 with a bit size of 32 00000000000000001000010001000000
-________________^____^___^______
-<P>
-and for <B>-33856</B> with a bit size of 32 11111111111111110111101111000000
-^^^^^^^^^^^^^^^^_^^^^_^^^^______
-<P>
-given the array a &#46;&#46;&#46;
-<BLOCKQUOTE>
-<P>
-1
-<P>
-2
-</BLOCKQUOTE>
-<P>
-the value of btest (a, 2)
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; F F</H4>
-</A>
-<BLOCKQUOTE>
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; F T</H4>
-</A>
-<BLOCKQUOTE>
-the value of btest (2, a)
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; T F</H4>
-</A>
-<BLOCKQUOTE>
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; F F</H4>
-</A>
-<BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -261,11 +256,11 @@ Fortran 95
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022                btest(3fortran)
+                               November 07, 2022               btest(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>btest (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 965f49c0-efce-45eb-aa03-3c60a41906bf using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>btest (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5f959688-21f2-4725-8d94-7ccd9f7e9396 using man macros.</FONT>
 <br><br><center><img src="images/btest.3fortran.gif"></center>
 </div>
 </div>

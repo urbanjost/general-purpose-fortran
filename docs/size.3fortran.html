@@ -65,9 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SIZE</B>(3) - [ARRAY:INQUIRY] Determine the size of an array
-<P>
-</BLOCKQUOTE>
+<B>SIZE(3) </B>- [ARRAY:INQUIRY] Determine the size of an array or extent of one
+<B>dimension
+</B><B>
+</B></BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +77,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<PRE>
 result = <B>size</B>(array [,<I>dim</I>] [,<I>kind</I>])
 <P>
-<PRE>
            integer(kind=KIND) function size(array,dim,kind)
 <P>
             type(TYPE(kind=KIND),intent(in) :: array(..)
@@ -97,20 +98,37 @@ result = <B>size</B>(array [,<I>dim</I>] [,<I>kind</I>])
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a <I>kind</I> designated as ** may be any supported <I>kind</I> value for the type
+ARRAY is an assumed-rank array or array of any type and associated <I>kind</I>.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+     If ARRAY is a pointer it must be associated and allocatable arrays must
+     be allocated.
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM is an integer scalar
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY may be of any type and associated <I>kind</I>.
+KIND is a scalar integer constant expression.
 </TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-      If ARRAY is a pointer it must be associated and allocatable arrays
-      must be allocated.
-<P>
-</PRE>
-</BLOCKQUOTE>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is an integer scalar of <I>kind</I> KIND. If KIND is absent a integer
+of default <I>kind</I> is returned.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
@@ -133,7 +151,9 @@ the total number of elements in ARRAY if DIM is absent.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY : the array to measure the number of elements of.
+ARRAY : the array to measure the number of elements of. If *array is an
+assumed-size array, DIM shall be present with a value less than the rank
+of ARRAY.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -143,16 +163,15 @@ of ARRAY.
 <P>
 If not present the total number of elements of the entire array are
 returned.
-<P>
-If KIND is present, the KIND type parameter is that specified by the
-value of KIND; otherwise, the KIND type parameter is that of default
-integer type.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 KIND : An integer initialization expression indicating the <I>kind</I> parameter
 of the result.
+<P>
+If absent the <I>kind</I> type parameter of the returned value is that of
+default integer type.
 <P>
 The KIND must allow for the magnitude returned by SIZE or results are
 undefined.
@@ -166,10 +185,21 @@ If KIND is absent, the return value is of default integer <I>kind</I>.
 
 </A>
 <BLOCKQUOTE>
-If DIM is not present the total number of elements in the array are
-returned.
+If DIM is not present ARRAY is assumed-rank, the result has a value equal to
+<B>PRODUCT</B>(SHAPE(ARRAY,KIND)). Otherwise, the result has a value equal to the
+total number of elements of ARRAY.
 <P>
-If DIM is present the number of elements along that dimension are returned.
+If DIM is present the number of elements along that dimension are returned,
+except that if ARRAY is assumed-rank and associated with an assumed-size
+array and DIM is present with a value equal to the rank of ARRAY, the value
+is <B>-1</B>.
+<P>
+NOTE1
+<P>
+If ARRAY is assumed-rank and has rank zero, DIM cannot be present since it
+cannot satisfy the requirement
+<P>
+1 &lt;= DIM &lt;= 0.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -186,7 +216,7 @@ Sample program:
          write(*,*)&#146;SIZE of simple two-dimensional array&#146;
          write(*,*)&#146;SIZE(arr)       :total count of elements:&#146;,size(arr)
          write(*,*)&#146;SIZE(arr,DIM=1) :number of rows         :&#146;,size(arr,dim=1)
-         write(*,*)&#146;SIZE(arr,DIM=2) :number of columnts     :&#146;,size(arr,dim=2)
+         write(*,*)&#146;SIZE(arr,DIM=2) :number of columns      :&#146;,size(arr,dim=2)
 <P>
          ! pass the same array to a procedure that passes the value two
          ! different ways
@@ -221,7 +251,7 @@ Results:
           SIZE of simple two-dimensional array
           SIZE(arr)       :total count of elements:          33
           SIZE(arr,DIM=1) :number of rows         :           3
-          SIZE(arr,DIM=2) :number of columnts     :          11
+          SIZE(arr,DIM=2) :number of columns      :          11
           interfaced assumed-shape array
           SIZE(arr1)        :          33
           SIZE(arr1,DIM=1)  :           3
@@ -318,11 +348,11 @@ o
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
 <PRE>
-                               October 11, 2022                 size(3fortran)
+                               November 07, 2022                size(3fortran)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>size (3)</TD> <TD align=right width=33%><I>November 11, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0cba791b-3746-470f-94b5-ce8387c65bb0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>size (3)</TD> <TD align=right width=33%><I>December 18, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 142b8560-cb7c-49fc-aa0b-f5d301493002 using man macros.</FONT>
 <br><br><center><img src="images/size.3fortran.gif"></center>
 </div>
 </div>
