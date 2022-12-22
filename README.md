@@ -2,7 +2,7 @@
 
 ## Shortcut
 
-The majority of the documentation is in HTML at the 
+The majority of the documentation is in HTML at the
 [Documentation](https://urbanjost.github.io/general-purpose-fortran/docs/index.html)
 page.
 
@@ -42,8 +42,8 @@ development (and a lot more functionality) is concentrated!
     cd general_purpose-fortran/src
     # you might have to change "-lncurses" to "-lncurses -ltinit"
     # depending on how ncurses(3c) was built on your machine, and
-    # have ncurses(3c), readline(3c), sqlite3(3c), X11(3c) and lua(3c) 
-    # installed for all the interfaces to build, but the most 
+    # have ncurses(3c), readline(3c), sqlite3(3c), X11(3c) and lua(3c)
+    # installed for all the interfaces to build, but the most
     # commonly used interfaces should build without problems.
 
     make -k
@@ -55,14 +55,14 @@ packages. Starting from a base MINT 20.1 platform (2021-03-07), for example:
    sudo apt-get install gfortran
    sudo apt-get install libx11-dev
    sudo apt-get install sqlite3 libsqlite3-dev
-   sudo apt-get install libcurl4-gnutls-dev 
+   sudo apt-get install libcurl4-gnutls-dev
    sudo apt-get install libreadline libreadline-dev
 ```
 
 ### If interested in the graphics routines ...
 
 you might want to edit hershey.sh to select where hershey
-font files will be installed (default is /usr/share/hershey), 
+font files will be installed (default is /usr/share/hershey),
 and then enter ...
 
     bash hershey.sh
@@ -77,7 +77,7 @@ By default, the graphics routines require X11, the ncurses interface
 assumes libncurses is installed, the SQLite3 interface needs the
 libsqlite3 library, and the readline interface needs libreadline.
 These libraries are commonly available on many platforms but you may
-have to remove some of the files from Makefile 
+have to remove some of the files from Makefile
 if you do not want to build those interfaces.
 
 ## Overview
@@ -89,7 +89,7 @@ providing
 *  __command line parsing__
 *  __string operations__
 *  a __date and time__ module
-*  a module that supports basic integrated __unit testing__ 
+*  a module that supports basic integrated __unit testing__
 *  simple __numeric expression parsing__
 *  __command line history__ editing
 *  The low-level __M_draw__ graphics library, and the beginnings of a
@@ -135,7 +135,7 @@ interactive input as well, and incorporates additional modules. It requires
 many other components from the GPF collection, and is used to generate
 programs that use shell-like input as well as crack command lines.
 
-[M\_ARGS(3fm)](https://urbanjost.github.io/general-purpose-fortran/docs/M_args.3m_args.html) 
+[M\_ARGS(3fm)](https://urbanjost.github.io/general-purpose-fortran/docs/M_args.3m_args.html)
 
 The M_args(3fm) module supports cracking Unix-like arguments off the
 command line as a string that can be read as a NAMELIST, eliminating
@@ -392,14 +392,15 @@ interactive command history recall and editing, and supports
 if/else/elseif/endif directives can be found in
 [shell.ff](EXE/SHELL/shell.ff).
 
-* * *
-## Experimental
- 
- + GPF is bundled as an `fpm` package
-## SUPPORTS FPM ![fpm](docs/images/fpm_logo.gif)
+---
+![fpm](docs/images/fpm_logo.gif)
+---
 
-Alternatively, download the github repository and build it with 
-fpm ( as described at [Fortran Package Manager](https://github.com/fortran-lang/fpm) )
+## SUPPORTS FPM
+
+GPF is bundled as an `fpm` package.  Download the github repository and
+build it with fpm
+( as described at [Fortran Package Manager](https://github.com/fortran-lang/fpm) )
 
 ```bash
      git clone https://github.com/urbanjost/general-purpose-fortran.git
