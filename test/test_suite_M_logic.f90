@@ -20,7 +20,7 @@ subroutine test_cond()
 use M_verify, only      : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
 use M_verify, only      : unit_check_level
 use M_strings, only    : lower, delim, v2s  ! convert character case and split a string
-use M_calculator, only : inum0, rnum0
+use M_calculator, only : inum0 
 use M_io, only         : gulp
 ! WRITE         flag whether current data lines should be written
 ! NEST_level    nesting level for if/elseif/else/endif
@@ -108,7 +108,7 @@ expected=[ CHARACTER(LEN=128) :: &
                write(ioout,'(a)')'COMMENT '//trim(line)
             else
                icount=icount+1
-               value=rnum0(trim(line))
+               value=inum0(trim(line))
                write(ioout,'(i0.5,1x,a)')icount, trim(line)//'===>'//v2s(value)           ! write data line
             endif
          else

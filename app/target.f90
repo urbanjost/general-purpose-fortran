@@ -272,7 +272,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    create printable targets>',&
 '@(#)VERSION:        1.0, 20190108>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-12-18 00:52:58 UTC-300>',&
+'@(#)COMPILED:       2022-12-21 19:30:16 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

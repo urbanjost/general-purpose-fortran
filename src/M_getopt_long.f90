@@ -298,7 +298,8 @@ subroutine getopt_new(self, optstring, long_opts, flags, status)
   do i=0,self%argc
     call get_command_argument(i,length=arglen)
     allocate(character(len=arglen) :: self%argv(i)%string)
-    call get_command_argument(i,self%argv(i)%string(1:arglen))
+    !call get_command_argument(i,self%argv(i)%string(1:arglen)) ! ifx bug
+    call get_command_argument(i,self%argv(i)%string)
   end do
   if (present(status))then
      status=.true.

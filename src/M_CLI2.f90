@@ -1862,7 +1862,7 @@ integer                      :: ios
    if(debug_m_cli2)write(*,gen)'<DEBUG>FIND_AND_READ_RESPONSE_FILE:FILENAME=',filename
 
    ! look for name.rsp in directories from environment variable assumed to be a colon-separated list of directories
-   call split(get_env('CLI_RESPONSE_PATH'),paths)
+   call split(get_env('CLI_RESPONSE_PATH','~/.local/share/rsp'),paths)
    paths=[character(len=len(paths)) :: ' ',paths]
    if(debug_m_cli2)write(*,gen)'<DEBUG>FIND_AND_READ_RESPONSE_FILE:PATHS=',paths
 

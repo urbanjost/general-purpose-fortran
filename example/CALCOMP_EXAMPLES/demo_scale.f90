@@ -1,9 +1,9 @@
      program demo_scale
      use M_calcomp
 
-     character*28 ichr1
-     character*26 ichr2
-     character*10 lbcd1,lbcd2
+     character * 28 ichr1
+     character * 26 ichr2
+     character * 10 lbcd1,lbcd2
      dimension xarray(62),yarray(62)
      ICHR1='PLOTTED ON A CALCOMP PLOTTER'
      ICHR2='USING  Y = X -0.7*X +0.1*X'

@@ -31,7 +31,7 @@ PROGFILES = ../app/rmdir-.f90 ../app/table2html.f90 ../app/logname-.f90 ../app/h
         ../app/draw.f90 ../app/redo.f90 ../app/rev-.f90 ../app/phone.f90 ../app/month.f90 \
         ../app/gcd.f90 ../app/tat.f90 ../app/area_of_simple_polygon.f90 ../app/cmp-.f90
 
-CPROGFILES = ../app/h2v.c
+CPROGFILES = ../appc/h2v.c
 
 PROG = ${PROGFILES:.f90=}
 

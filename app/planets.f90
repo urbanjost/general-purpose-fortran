@@ -482,7 +482,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    ephemeris position of planets for adjusting an equitorial telescope>',&
 '@(#)VERSION:        1.0, 20170910>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-12-18 00:49:54 UTC-300>',&
+'@(#)COMPILED:       2022-12-21 19:28:15 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

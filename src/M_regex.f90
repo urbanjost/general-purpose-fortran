@@ -383,7 +383,6 @@ module M_regex
 use ISO_C_Binding, only: C_ptr, C_int, C_size_t, C_char, C_NULL_char, C_NULL_ptr
 use iso_c_binding, only: c_associated , c_f_pointer
 use, intrinsic :: ISO_Fortran_Env, only: ERROR_UNIT
-use M_strings, only : s2c
 implicit none
 private
 
@@ -401,9 +400,9 @@ public regfree  ! subroutine regfree(this)                                      
 public regmatch !  function regmatch(match,string,matches)                         ! Match a regular expression against a string
 public regsub   !  subroutine regsub(matchline, matches, source, dest)             ! Perform substitutions based on pattern matching
 
-public test_suite_M_regex
-
 public regex_type
+
+private s2c
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -982,7 +981,6 @@ end subroutine regfree
 !!
 !!    program demo_regsub
 !!    use M_regex, only: regex_type, regcomp, regexec, regerror, regmatch, regfree, regsub
-!!    use M_strings, only : replace
 !!    implicit none
 !!    type(regex_type)             :: regex
 !!    integer,parameter            :: maxmatch=10
@@ -1030,12 +1028,13 @@ end subroutine regfree
 !!       "doeqj:xxxxx",                                                         &
 !!       "doeqj:",                                                              &
 !!       "doeqj",                                                               &
-!!       ":::::::::::::::",                                                     &
-!!       ":::",                                                                 &
+!!       ! the RE shown needs the field to have at least one character
+!!       ! which should be replaced first, but not shown in this example
+!!       ": : : : : : : : : : : : : : :",                                       &
+!!       ": ::",                                                                &
 !!       "" ]
 !!
 !!       do i=1,size(input_line)
-!!          input_line=replace(input_line(i),'::',': :')          ! the RE shown needs the field to have at least one character
 !!          match=regexec(regex,input_line(i),matches)            ! generate the matches array using the compiled RE
 !!
 !!          write(*,'(a)')repeat('-',80)                          ! put out a number line
@@ -1161,160 +1160,139 @@ end subroutine regsub
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine test_suite_m_regex()
-use M_verify, only: unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start, unit_check_level
-implicit none
-call test_regex()
-!===================================================================================================================================
-contains
-!===================================================================================================================================
-subroutine test_regex()
-call unit_check_start('M_regex')
-!              "Regexp,      String,          expected result"
-call mymatch("Foo",        "FooBar",        .true.   )
-call mymatch("Poo",        "FooBar",        .false.  )
-call mymatch("Bar",        "FooBar",        .true.   )
-call mymatch("Par",        "FooBar",        .false.  )
-call mymatch("Foo",        "Foo",           .true.   )
-call mymatch("Fo",         "Foo",           .true.   )
-call mymatch("Foo",        "Fo",            .false.  )
-call mymatch("ooB",        "FooBar",        .true.   )
-call mymatch("ooP",        "FooBar",        .false.  )
-call mymatch(".",          "FooBar",        .true.   )
-call mymatch("P.",         "FooBar",        .false.  )
-call mymatch("^Foo",       "FooBar",        .true.   )
-call mymatch("^Bar",       "FooBar",        .false.  )
-call mymatch("Foo$",       "FooBar",        .false.  )
-call mymatch("Bar$",       "FooBar",        .true.   )
-call mymatch(".*o",        "FooBar",        .true.   )
-call mymatch("o*o",        "FooBar",        .true.   )
-call mymatch("P*o",        "FooBar",        .true.   )
-call mymatch("Fo*o",       "FooBar",        .true.   )
-call mymatch("Po*o",       "FooBar",        .false.  )
-call mymatch(".+o",        "FooBar",        .true.   )
-call mymatch("o+o",        "FooBar",        .true.   )
-call mymatch("P+o",        "FooBar",        .false.  )
-call mymatch("Fo+o",       "FooBar",        .true.   )
-call mymatch("Po+o",       "FooBar",        .false.  )
-call mymatch(".?o",        "FooBar",        .true.   )
-call mymatch("o?o",        "FooBar",        .true.   )
-call mymatch("P?o",        "FooBar",        .true.   )
-call mymatch("Fo?o",       "FooBar",        .true.   )
-call mymatch("Po?o",       "FooBar",        .false.  )
-call mymatch("F[po]o",     "FooBar",        .true.   )
-call mymatch("F[op]o",     "FooBar",        .true.   )
-call mymatch("F[qp]o",     "FooBar",        .false.  )
-call mymatch("F[^po]o",    "FooBar",        .false.  )
-call mymatch("F[^op]o",    "FooBar",        .false.  )
-call mymatch("F[^qp]o",    "FooBar",        .true.   )
-call mymatch("F[po]*o",    "FooBar",        .true.   )
-call mymatch("F[56]*o",    "F5oBar",        .true.   )
-call mymatch("F[46]*o",    "F5oBar",        .false.  )
-call mymatch("F[46]*5",    "F5oBar",        .true.   )
-call mymatch("F[46]*5o",   "F5oBar",        .true.   )
-call mymatch("F[op]*o",    "FooBar",        .true.   )
-call mymatch("F[qp]*o",    "FooBar",        .true.   )
-call mymatch("P[qp]*o",    "FooBar",        .false.  )
-call mymatch("F[^po]*o",   "FooBar",        .true.   )
-call mymatch("F[^op]*o",   "FooBar",        .true.   )
-call mymatch("F[^qp]*o",   "FooBar",        .true.   )
-call mymatch("P[^qp]*o",   "FooBar",        .false.  )
-call mymatch("F[po]?o",    "FooBar",        .true.   )
-call mymatch("F[56]?o",    "F5oBar",        .true.   )
-call mymatch("F[46]?o",    "F5oBar",        .false.  )
-call mymatch("F[46]?5",    "F5oBar",        .true.   )
-call mymatch("F[46]?5o",   "F5oBar",        .true.   )
-call mymatch("F[op]?o",    "FooBar",        .true.   )
-call mymatch("F[qp]?o",    "FooBar",        .true.   )
-call mymatch("P[qp]?o",    "FooBar",        .false.  )
-call mymatch("F[^po]?o",   "FooBar",        .true.   )
-call mymatch("F[^op]?o",   "FooBar",        .true.   )
-call mymatch("F[^qp]?o",   "FooBar",        .true.   )
-call mymatch("P[^qp]?o",   "FooBar",        .false.  )
-call mymatch("F[po]+o",    "FooBar",        .true.   )
-call mymatch("F[56]+o",    "F5oBar",        .true.   )
-call mymatch("F[46]+o",    "F5oBar",        .false.  )
-call mymatch("F[46]+5",    "F5oBar",        .false.  )
-call mymatch("F[46]+5o",   "F5oBar",        .false.  )
-call mymatch("F[op]+o",    "FooBar",        .true.   )
-call mymatch("F[qp]+o",    "FooBar",        .false.  )
-call mymatch("P[qp]+o",    "FooBar",        .false.  )
-call mymatch("F[^po]+o",   "FooBar",        .false.  )
-call mymatch("F[^op]+o",   "FooBar",        .false.  )
-call mymatch("F[^qp]+o",   "FooBar",        .true.   )
-call mymatch("P[^qp]+o",   "FooBar",        .false.  )
-call mymatch("[0-9]+\.[0-9]*",   "1.9",           .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "1.99",          .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "1.999",         .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "1.9999",        .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "1.99999",       .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "11.99999",      .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "111.99999",     .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "1111.99999",    .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "11111.99999",   .true.   )
-call mymatch("[0-9]+\.[0-9]*",   "111111.99999",  .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "1.9",           .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "1.99",          .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "1.999",         .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "1.9999",        .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "1.99999",       .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "11.99999",      .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "111.99999",     .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "1111.99999",    .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "11111.99999",   .true.   )
-call mymatch("^[0-9]+\.[0-9]*",  "111111.99999",  .true.   )
-call mymatch("a[0-9]+\.[0-9]*",  "a1.9",          .true.   )
-call mymatch("a[0-9]+\.",     "a1.9",          .true.   )
-call mymatch("a[0-9]+",       "a1.9",          .true.   )
-call mymatch("a",          "a1.9",          .true.   )
-call mymatch("\\",         "\",             .true.   )
-call mymatch("\.",         "\",             .false.  )
-call mymatch(".",          "\",             .true.   )
-call mymatch("F[qpo", "FooBar", .false.) ! intentional bad REGEX
+!>
+!!##NAME
+!!      s2c(3f) - [M_strings:ARRAY] convert character variable to array of
+!!      characters with last element set to null
+!!      (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function s2c(string)
+!!
+!!     character(len=*),intent=(in)  :: string
+!!     character(len=1),allocatable  :: s2c(:)
+!!
+!!##DESCRIPTION
+!!    Given a character variable convert it to an array of single-character
+!!    character variables with the last element set to a null character.
+!!    This is generally used to pass character variables to C procedures.
+!!
+!!##EXAMPLES
+!!
+!!    Sample Program:
+!!
+!!     program demo_s2c
+!!     use M_strings, only : s2c
+!!     implicit none
+!!     character(len=*),parameter   :: string="single string"
+!!     character(len=3),allocatable :: array(:)
+!!        write(*,*)'INPUT STRING ',trim(string)
+!!        ! put one character into each 3-character element of array
+!!        array=s2c(string)
+!!        ! write array with ASCII Decimal Equivalent below it except show
+!!        ! unprintable characters like NULL as "XXX"
+!!        write(*,'(1x,*("[",a3,"]":))')&
+!!             & merge('XXX',array,iachar(array(:)(1:1)) < 32)
+!!        write(*,'(1x,*("[",i3,"]":))')&
+!!             & iachar(array(:)(1:1))
+!!     end program demo_s2c
+!!
+!!   Expected output:
+!!
+!!    INPUT STRING single string
+!!    [s  ][i  ][n  ][g  ][l  ][e  ][   ][s  ][t  ][r  ][i  ][n  ][g  ][XXX]
+!!    [115][105][110][103][108][101][ 32][115][116][114][105][110][103][  0]
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+pure function s2c(string)  RESULT (array)
+use,intrinsic :: ISO_C_BINDING, only : C_CHAR
 
-call unit_check_done('M_regex')
-end subroutine test_regex
+! ident_27="@(#) M_strings s2c(3f) copy string(1 Clen(string)) to char array with null terminator"
+
+character(len=*),intent(in)     :: string
+
+! This is changing, but currently the most portable way to pass a CHARACTER variable to C is to convert it to an array of
+! character variables with length one and add a null character to the end of the array. The s2c(3f) function helps do this.
+character(kind=C_CHAR,len=1)    :: array(len_trim(string)+1)
+integer                         :: i
+   do i = 1,size(array)-1
+      array(i) = string(i:i)
+   enddo
+   array(size(array):)=achar(0)
+end function s2c
 !===================================================================================================================================
-subroutine mymatch(expression,string,expected)
-use, intrinsic :: iso_fortran_env, only : ERROR_UNIT
-use M_verify, only: unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start, unit_check_level
-character(len=*),intent(in) :: expression
-character(len=*),intent(in) :: string
-logical,intent(in)          :: expected
-   type(regex_type)             :: regex
-   integer,parameter            :: maxmatch=10
-   integer                      :: matches(2,maxmatch)
-   logical                      :: match
-   integer                      :: istat
-   integer                      :: i
-   call regcomp(regex,expression,'x',status=istat)
-   match=.false.
-   if(istat/=0) then
-      if(unit_check_level.gt.0)then
-         write(ERROR_UNIT,'("runtime error in regcomp(3f):",a,", expression=",a)') regerror(regex,istat),expression
-      endif
-   else
-      match=regexec(regex,string,matches,status=istat)
-      if(istat/=0) then
-         if(unit_check_level.gt.0)then
-            write(ERROR_UNIT,'("runtime error in regexec:(3f)",a)') regerror(regex,istat)
-         endif
-      else if(match)then
-         do i=1,maxmatch
-            if(matches(1,i).le.0)exit
-            if(unit_check_level.gt.0)then
-               write(*,*) 'match="',regmatch(i,string,matches),'"'
-            endif
-         enddo
-      endif
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!      c2s(3f) - [M_strings:ARRAY] convert C string pointer to Fortran
+!!      character string
+!!      (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function c2s(c_string_pointer) result(f_string)
+!!
+!!     type(c_ptr), intent(in)       :: c_string_pointer
+!!     character(len=:), allocatable :: f_string
+!!
+!!##DESCRIPTION
+!!    Given a C pointer to a character string return a Fortran character
+!!    string.
+!!
+!!##OPTIONS
+!!    c_string_pointer  C pointer to convert
+!!
+!!##RETURNS
+!!    f_string          Fortran character variable to return
+!!
+!!##EXAMPLE
+!!
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+function c2s(c_string_pointer) result(f_string)
+! gets a C string (pointer), and returns the corresponding Fortran string;
+! If the C string is null, it returns "NULL", similar to C's "(null)" printed in similar cases:
+use, intrinsic :: iso_c_binding, only: c_ptr,c_f_pointer,c_char,c_null_char
+
+! ident_28="@(#) M_strings c2s(3f) copy pointer to C char array till a null is encountered to a Fortran string up to 4096 characters"
+
+integer,parameter                             :: max_length=4096
+type(c_ptr), intent(in)                       :: c_string_pointer
+character(len=:), allocatable                 :: f_string
+character(kind=c_char), dimension(:), pointer :: char_array_pointer => null()
+character(len=max_length)                            :: aux_string
+integer                                       :: i,length=0
+
+   call c_f_pointer(c_string_pointer,char_array_pointer,[max_length])
+   if (.not.associated(char_array_pointer)) then
+     allocate(character(len=4)::f_string)
+     f_string="NULL"
+     return
    endif
-   call regfree(regex)
-   call unit_check('M_regex',match .eqv. expected,msg='for REGEX '//trim(expression)//' and string '//trim(string))
-end subroutine mymatch
+   aux_string=" "
+   do i=1,max_length
+     if (char_array_pointer(i)==c_null_char) then
+       length=i-1
+       exit
+     endif
+     aux_string(i:i)=char_array_pointer(i)
+   enddo
+   allocate(character(len=length)::f_string)
+   f_string=aux_string(1:length)
+
+end function c2s
 !===================================================================================================================================
-end subroutine test_suite_m_regex
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 end module M_regex
 !===================================================================================================================================

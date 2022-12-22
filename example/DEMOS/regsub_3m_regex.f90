@@ -1,6 +1,5 @@
      program demo_regsub
      use M_regex, only: regex_type, regcomp, regexec, regerror, regmatch, regfree, regsub
-     use M_strings, only : replace
      implicit none
      type(regex_type)             :: regex
      integer,parameter            :: maxmatch=10
@@ -48,12 +47,13 @@
         "doeqj:xxxxx",                                                         &
         "doeqj:",                                                              &
         "doeqj",                                                               &
-        ":::::::::::::::",                                                     &
-        ":::",                                                                 &
+        ! the RE shown needs the field to have at least one character
+        ! which should be replaced first, but not shown in this example
+        ": : : : : : : : : : : : : : :",                                       &
+        ": ::",                                                                &
         "" ]
 
         do i=1,size(input_line)
-           input_line=replace(input_line(i),'::',': :')          ! the RE shown needs the field to have at least one character
            match=regexec(regex,input_line(i),matches)            ! generate the matches array using the compiled RE
 
            write(*,'(a)')repeat('-',80)                          ! put out a number line
