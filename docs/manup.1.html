@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>manup(1f) </B>- [DEVELOPER] Simple markup of text to a <B>man</B>(1) page
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+manup(1f) - [DEVELOPER] Simple markup of text to a man(1) page
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,9 +75,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>manup</B> <I>FILE</I> <B>-cmd</B> <I>title</I> <B>-section</B> <I>N</I> <B>--product</B> "product name" <B>-help</B> .F. <B>--version</B> .F.
-</PRE>
+manup FILE <B>-cmd</B> title <B>-section</B> N <B>--product</B> "product name" <B>-help</B> .F. <B>--version</B> .F.
 </BLOCKQUOTE>
 <A name=2>
 
@@ -93,7 +91,7 @@ This program is being extended. It currently essentially
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-converts uppercase lines <I>title</I> sections
+converts uppercase lines title sections
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -126,54 +124,54 @@ The input filename
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-section</B> <I>N</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<I>N</I> is the <B>man</B>(1) section number. Typically the following
+<B></B><B>-section</B> N </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+N is the man(1) section number. Typically the following
 categories are used:
-<TABLE width=100% cellpadding=3><!-- tsb: <I>N</I> is the <B>man</B>(1) section number. Typically the following
+<TABLE width=100% cellpadding=3><!-- tsb: N is the man(1) section number. Typically the following
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>User </B><B>Commands</B>(1) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>User Commands(1)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Executable programs or shell commands
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>System </B><B>Calls</B>(2) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>System Calls(2)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 System calls (functions provided by the kernel)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>Library </B><B>Calls</B>(3) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>Library Calls(3)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Library calls (functions within program libraries)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>Special </B><B>Files</B>(4) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>Special Files(4)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Special files (usually found in /dev)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>File </B><B>Formats</B>(5) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>File Formats(5)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 File formats and conventions (eg. /etc/passwd)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>Games</B>(6) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>Games(6)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Games
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>Miscellaneous</B>(7) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Miscellaneous (including macro packages and conventions), e.g. <B>man</B>(7), <B>groff</B>(7)
+<B>Miscellaneous(7)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Miscellaneous (including macro packages and conventions), e.g. man(7), groff(7)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>System </B><B>Admin.</B>(8) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>System Admin.(8)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 System administration commands (usually only for root)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>Kernel </B><B>Extensions</B>(9) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>Kernel Extensions(9)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Kernel routines [Non standard]
 </TD></TR>
-<TR></TR></TABLE>See the <B>man</B>(1) page for <B>man</B>(1) for further details.
+<TR></TR></TABLE>See the man(1) page for man(1) for further details.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>-</B><I>title</I> </TD><TD valign=bottom>
-<I>title</I> for manpage header
-<TABLE width=100% cellpadding=3><!-- tsb: <I>title</I> for manpage header
+<B></B><B>-title</B> </TD><TD valign=bottom>
+title for manpage header
+<TABLE width=100% cellpadding=3><!-- tsb: title for manpage header
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
@@ -236,7 +234,7 @@ Given an input file such as
    &gt;       yes(1), repeat(1), xargs(1)
 <P>
 </PRE>
-run it through <B>manup</B>(1):
+run it through manup(1):
 <P>
 <PRE>
     A short example of usage
@@ -278,7 +276,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>manup (1)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 77978618-1e3e-4d8b-b8a3-e01989b2c80a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>manup (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0f84c96b-a36b-47e0-a9d6-41308e176bdc using man macros.</FONT>
 <br><br><center><img src="images/manup.1.gif"></center>
 </div>
 </div>

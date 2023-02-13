@@ -30,4 +30,4 @@
              & i,istat,argument_length,arg
           enddo
 
-    end program demo_get_command_argument
+        end program demo_get_command_argument

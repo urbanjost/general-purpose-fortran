@@ -1,40 +1,77 @@
      program demo_specified
-     use M_CLI2,  only : set_args, get_args, specified
+     use, intrinsic :: iso_fortran_env, only : &
+     & stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT
+     use M_CLI2,  only : set_args, igets, rgets, specified, sget, lget
      implicit none
-     ! DEFINE ARGS
-     integer                 :: flag
-     integer,allocatable     :: ints(:)
-     real,allocatable        :: twonames(:)
 
-     ! IT IS A BAD IDEA TO NOT HAVE THE SAME DEFAULT VALUE FOR ALIASED
-     ! NAMES BUT CURRENTLY YOU STILL SPECIFY THEM
-      call set_args('-flag 1 -f 1 -ints 1,2,3 -i 1,2,3 -twonames 11.3 -T 11.3')
+     ! Define args
+     integer,allocatable  :: ints(:)
+     real,allocatable     :: floats(:)
+     logical              :: flag
+     character(len=:),allocatable :: color
+     character(len=:),allocatable :: list(:)
+     integer :: i
 
-     ! ASSIGN VALUES TO ELEMENTS CONDITIONALLY CALLING WITH SHORT NAME
-      call get_args('flag',flag)
-      if(specified('f'))call get_args('f',flag)
-      call get_args('ints',ints)
-      if(specified('i'))call get_args('i',ints)
-      call get_args('twonames',twonames)
-      if(specified('T'))call get_args('T',twonames)
+      call set_args('&
+         & --color:c "red"       &
+         & --flag:f F            &
+         & --ints:i 1,10,11      &
+         & --floats:T 12.3, 4.56 &
+         & ')
+      ints=igets('ints')
+      floats=rgets('floats')
+      flag=lget('flag')
+      color=sget('color')
 
-      ! IF YOU WANT TO KNOW IF GROUPS OF PARAMETERS WERE SPECIFIED USE
+      write(*,*)'color=',color
+      write(*,*)'flag=',flag
+      write(*,*)'ints=',ints
+      write(*,*)'floats=',floats
+
+      write(*,*)'was -flag specified?',specified('flag')
+
+      ! elemental
+      write(*,*)specified(['floats','ints  '])
+
+      ! If you want to know if groups of parameters were specified use
       ! ANY(3f) and ALL(3f)
-      write(*,*)specified(['twonames','T       '])
-      write(*,*)'ANY:',any(specified(['twonames','T       ']))
-      write(*,*)'ALL:',all(specified(['twonames','T       ']))
+      write(*,*)'ANY:',any(specified(['floats','ints  ']))
+      write(*,*)'ALL:',all(specified(['floats','ints  ']))
 
-      ! FOR MUTUALLY EXCLUSIVE
-      if (all(specified(['twonames','T       '])))then
-          write(*,*)'You specified both names -T and -twonames'
+      ! For mutually exclusive
+      if (all(specified(['floats','ints  '])))then
+          write(*,*)'You specified both names --ints and --floats'
       endif
 
-      ! FOR REQUIRED PARAMETER
-      if (.not.any(specified(['twonames','T       '])))then
-          write(*,*)'You must specify -T or -twonames'
+      ! For required parameter
+      if (.not.any(specified(['floats','ints  '])))then
+          write(*,*)'You must specify --ints or --floats'
       endif
-      ! USE VALUES
-        write(*,*)'flag=',flag
-        write(*,*)'ints=',ints
-        write(*,*)'twonames=',twonames
-      end program demo_specified
+
+     ! check if all values are in range from 10 to 30 and even
+     write(*,*)'are all numbers good?',all([ints>=10,ints<= 30,(ints/2)*2==ints])
+
+     ! perhaps you want to check one value at a time
+     do i=1,size(ints)
+        write(*,*)ints(i),[ints(i) >= 10,ints(i) <= 30,(ints(i)/2)*2 == ints(i)]
+        if(all([ints(i) >= 10,ints(i) <= 30,(ints(i)/2)*2 == ints(i)]) )then
+           write(*,*)ints(i),'is an even number from 10 to 30 inclusive'
+        else
+           write(*,*)ints(i),'is not an even number from 10 to 30 inclusive'
+        endif
+     enddo
+
+     list = [character(len=10) :: 'red','white','blue']
+     if( any(color == list) )then
+        write(*,*)color,'matches a value in the list'
+     else
+        write(*,*)color,'not in the list'
+     endif
+
+     if(size(ints).eq.3)then
+        write(*,*)'ints(:) has expected number of values'
+     else
+        write(*,*)'ints(:) does not have expected number of values'
+     endif
+
+     end program demo_specified

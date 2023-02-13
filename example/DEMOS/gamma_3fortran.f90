@@ -43,4 +43,4 @@
               endif
               f=gamma(real(i+1))
            end function factorial
-  end program demo_gamma
+        end program demo_gamma

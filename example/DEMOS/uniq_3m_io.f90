@@ -4,10 +4,10 @@
         character(len=4096) :: myname
         integer             :: i
            myname=uniq('does_not_exist')
+           write(*,*)'name stays the same   :',trim(myname)
            open(unit=10,file='does_exist')
-           write(*,*)'name stays the same ',trim(myname)
            myname=uniq('does_exist')
-           write(*,*)'name has suffix added ',trim(myname)
+           write(*,*)'name has suffix added :',trim(myname)
            do i=1,10
               myname=uniq('does_exist')
               write(*,*) 'FILENAME:',trim(myname)

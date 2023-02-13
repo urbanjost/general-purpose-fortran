@@ -56,11 +56,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>sort_shell(3f) </B>- [M_sort] Generic subroutine sorts the array X using
-<B>Shell&#146;s Method
-</B><B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+sort_shell(3f) - [M_sort] Generic subroutine sorts the array X using
+Shell&#146;s Method
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -76,29 +76,29 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-subroutine <B>sort_shell</B>(lines,order[,startcol,endcol])
+subroutine sort_shell(lines,order[,startcol,endcol])
 <P>
+<PRE>
     character(len=*),intent(inout) :: lines(:)
     character(len=*),intent(in)    :: order
     integer,optional,intent(in)    :: startcol, endcol
 <P>
 </PRE>
-subroutine <B>sort_shell</B>(ints,order)
+subroutine sort_shell(ints,order)
 <P>
 <PRE>
     integer,intent(inout)          :: ints(:)
     character(len=*),intent(in)    :: order
 <P>
 </PRE>
-subroutine <B>sort_shell</B>(reals,order)
+subroutine sort_shell(reals,order)
 <P>
 <PRE>
     real,intent(inout)             :: reals(:)
     character(len=*),intent(in)    :: order
 <P>
 </PRE>
-subroutine <B>sort_shell</B>(complexs,order,type)
+subroutine sort_shell(complexs,order,type)
 <P>
 <PRE>
     character(len=*),intent(inout) :: lines(:)
@@ -114,7 +114,7 @@ subroutine <B>sort_shell</B>(complexs,order,type)
 </A>
 <BLOCKQUOTE>
 <P>
-subroutine <B>sort_shell</B>(3f) sorts an array over a specified field
+subroutine sort_shell(3f) sorts an array over a specified field
 in numeric or alphanumeric order.
 <P>
 From Wikipedia, the free encyclopedia:
@@ -196,7 +196,7 @@ FOR CHARACTER DATA:
                Optional.
 <P>
 </PRE>
-FOR COMPLEX AND <B>COMPLEX</B>(KIND=KIND(0.0D0)) DATA:
+FOR COMPLEX AND COMPLEX(KIND=KIND(0.0D0)) DATA:
 <P>
 <PRE>
     type       Sort by
@@ -216,39 +216,39 @@ FOR COMPLEX AND <B>COMPLEX</B>(KIND=KIND(0.0D0)) DATA:
 Sample program
 <P>
 <PRE>
-   program demo_sort_shell
-   use M_sort, only : sort_shell
-   character(len=:),allocatable :: array(:)
+     program demo_sort_shell
+     use M_sort, only : sort_shell
+     character(len=:),allocatable :: array(:)
 <P>
-   array= [ character(len=20) ::                               &
-   & &#146;red&#146;,    &#146;green&#146;, &#146;blue&#146;, &#146;yellow&#146;, &#146;orange&#146;,   &#146;black&#146;, &
-   & &#146;white&#146;,  &#146;brown&#146;, &#146;gray&#146;, &#146;cyan&#146;,   &#146;magenta&#146;,           &
-   & &#146;purple&#146;]
+     array = [                                                     &
+     & &#146;red    &#146;,&#146;green  &#146;,&#146;blue   &#146;,&#146;yellow &#146;,&#146;orange &#146;,&#146;black  &#146;,&
+     & &#146;white  &#146;,&#146;brown  &#146;,&#146;gray   &#146;,&#146;cyan   &#146;,&#146;magenta&#146;,          &
+     & &#146;purple &#146;]
 <P>
-   write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
-   call sort_shell(array,order=&#146;a&#146;)
-   write(*,&#146;(a,*(a:,","))&#146;)&#146;A-Z    &#146;,(trim(array(i)),i=1,size(array))
-   do i=1,size(array)-1
-      if(array(i).gt.array(i+1))then
-         write(*,*)&#146;Error in sorting strings a-z&#146;
-      endif
-   enddo
+     write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
+     call sort_shell(array,order=&#146;a&#146;)
+     write(*,&#146;(a,*(a:,","))&#146;)&#146;A-Z    &#146;,(trim(array(i)),i=1,size(array))
+     do i=1,size(array)-1
+        if(array(i).gt.array(i+1))then
+           write(*,*)&#146;Error in sorting strings a-z&#146;
+        endif
+     enddo
 <P>
-   array= [ character(len=20) ::                               &
-   & &#146;RED&#146;,    &#146;GREEN&#146;, &#146;BLUE&#146;, &#146;YELLOW&#146;, &#146;ORANGE&#146;,   &#146;BLACK&#146;, &
-   & &#146;WHITE&#146;,  &#146;BROWN&#146;, &#146;GRAY&#146;, &#146;CYAN&#146;,   &#146;MAGENTA&#146;,           &
-   & &#146;PURPLE&#146;]
+     array= [                                                      &
+     & &#146;RED    &#146;,&#146;GREEN  &#146;,&#146;BLUE   &#146;,&#146;YELLOW &#146;,&#146;ORANGE &#146;,&#146;BLACK  &#146;,&
+     & &#146;WHITE  &#146;,&#146;BROWN  &#146;,&#146;GRAY   &#146;,&#146;CYAN   &#146;,&#146;MAGENTA&#146;,          &
+     & &#146;PURPLE &#146;]
 <P>
-   write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
-   call sort_shell(array,order=&#146;d&#146;)
-   write(*,&#146;(a,*(a:,","))&#146;)&#146;Z-A    &#146;,(trim(array(i)),i=1,size(array))
-   do i=1,size(array)-1
-      if(array(i).lt.array(i+1))then
-         write(*,*)&#146;Error in sorting strings z-a&#146;
-      endif
-   enddo
+     write(*,&#146;(a,*(a:,","))&#146;)&#146;BEFORE &#146;,(trim(array(i)),i=1,size(array))
+     call sort_shell(array,order=&#146;d&#146;)
+     write(*,&#146;(a,*(a:,","))&#146;)&#146;Z-A    &#146;,(trim(array(i)),i=1,size(array))
+     do i=1,size(array)-1
+        if(array(i).lt.array(i+1))then
+           write(*,*)&#146;Error in sorting strings z-a&#146;
+        endif
+     enddo
 <P>
-   end program demo_sort_shell
+     end program demo_sort_shell
 <P>
 </PRE>
 Expected output
@@ -281,12 +281,12 @@ YELLOW,WHITE,RED,PURPLE,ORANGE,MAGENTA,GREEN,GRAY,CYAN,BROWN,BLUE,BLACK
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-ALGORITHM 201, SHELLSORT, J. BOOTHROYD, CACM VOL. 6, NO. 8, P 445, (1963)
+Algorithm 201, SHELLSORT, J. Boothroyd, CACM Vol. 6, No. 8, P 445, (1963)
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
+D. L. Shell, CACM, Vol. 2, P. 30, (1959)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -298,7 +298,7 @@ D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
 John S. Urban, 19970201
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sort_shell (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 53aafd7a-2ed0-4c3d-82aa-320a375d8551 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sort_shell (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 50a708e3-e6da-4298-b05f-96c549d387ea using man macros.</FONT>
 <br><br><center><img src="images/sort_shell.3m_sort.gif"></center>
 </div>
 </div>

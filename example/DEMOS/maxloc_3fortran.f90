@@ -21,4 +21,4 @@
             write(*,'(g0,1x,g0)') (ii,i(ii),ii=lbound(i,dim=1),ubound(i,dim=1))
             write(*,*)maxloc(i)
 
-    end program demo_maxloc
+        end program demo_maxloc

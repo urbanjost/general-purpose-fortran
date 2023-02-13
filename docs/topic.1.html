@@ -56,7 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>topic(1) </B>- [HELP] Display specially formatted help text files.
+topic(1) - [HELP] Display specially formatted help text files.
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -74,10 +74,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>topic</B> [TOPIC | <B>-t</B>| <B>-e</B> <I>SEARCH_STRING</I>] [ <B>-f</B> <I>INPUT_FILE</I>]]|[ <B>-all</B>| <B>-topics</B>| <B>-summaries</B>]
-(<B>(LICENSE:PD)</B>)
-</PRE>
+topic [TOPIC | <B>-t</B>| <B>-e</B> SEARCH_STRING] [ <B>-f</B> INPUT_FILE]]|[ <B>-all</B>| <B>-topics</B>| <B>-summaries</B>]
+(LICENSE:PD)
 </BLOCKQUOTE>
 <A name=2>
 
@@ -89,7 +87,7 @@ This utility program is used to read topics from a specially formatted
 help text file. It is often called from a program as a subprocess.
 <P>
 start at the beginning of the description file and read until the
-desired <B>topic</B> is reached; then display help until another <B>topic</B> begins
+desired topic is reached; then display help until another topic begins
 <P>
 format of file is
 <P>
@@ -120,17 +118,13 @@ EXAMPLE FILE:
 <P>
          This command sets the background color
 <P>
-</PRE>
-<BLOCKQUOTE>
-<I>TOPIC</I>: foreground
-foreground <B>-name</B> color
+      TOPIC: foreground
+      foreground -name color
 <P>
-<PRE>
          This command sets the foreground color
 <P>
 <P>
 </PRE>
-</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=3>
 
@@ -140,15 +134,15 @@ foreground <B>-name</B> color
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>TOPIC</I> </TD><TD valign=bottom>
-The name of the <B>topic</B> to get help for
-<TABLE width=100% cellpadding=3><!-- tsb: The name of the <B>topic</B> to get help for
+<B>TOPIC</B> </TD><TD valign=bottom>
+The name of the topic to get help for
+<TABLE width=100% cellpadding=3><!-- tsb: The name of the topic to get help for
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-if <B>topic</B> is ? show all <B>topic</B> lines
+if topic is ? show all topic lines
 topics all in caps go on new line
 display other topics three to a line in a table, like:
 </TD></TR>
@@ -180,12 +174,12 @@ display other topics three to a line in a table, like:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-if <B>topic</B> is ?? show all <B>topic</B> lines and syntax lines
+if topic is ?? show all topic lines and syntax lines
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-if <B>topic</B> is ??? show all lines
+if topic is ??? show all lines
 </TD></TR>
 <TR></TR></TABLE><!-- .TP -->
 </TD></TR>
@@ -199,10 +193,10 @@ list topics found in help file
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-summaries</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-list summaries for each <B>topic</B>
+list summaries for each topic
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-t</B> <I>SEARCH_STRING</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B></B><B>-t</B> SEARCH_STRING </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 find topics that contain the specified string.
 </TD></TR>
 <TR valign=top><TD colspan=2>
@@ -211,7 +205,7 @@ find topics that contain the specified
 regular expression
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-f</B> <I>INPUT_FILE</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B></B><B>-f</B> INPUT_FILE </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 Set the filename to read descriptions from. The
 default input file is the value of the environment
 variable $USHHELP if it is set. The built-in
@@ -226,15 +220,15 @@ default is /usr/share/ush/help.txt
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>topic</B> <B>-topics</B> | more </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-# show all <B>topic</B> names
+<B>topic </B><B>-topics</B> | more </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+# show all topic names
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>topic</B> <B>-summaries</B> | more </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>topic </B><B>-summaries</B> | more </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 # Show all topics and short abstracts
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>topic</B> <B>-all</B> | more </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>topic </B><B>-all</B> | more </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 # display entire help file
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -248,17 +242,17 @@ default is /usr/share/ush/help.txt
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>M_strings</B>(3f)
+M_strings(3f)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>M_regexp</B>(3f)
+M_regexp(3f)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>M_kracken</B>(3f)
+M_kracken(3f)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -278,7 +272,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>topic (1)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 056c082d-9e84-412c-97ad-110ae9e99e23 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>topic (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d3a7881d-2cae-49c0-998c-ac88cdcf9eeb using man macros.</FONT>
 <br><br><center><img src="images/topic.1.gif"></center>
 </div>
 </div>

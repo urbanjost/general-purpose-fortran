@@ -19,4 +19,4 @@
           ! for two's-complements programming environments a negative non-zero
           ! integer value will always start with a 1 and a positive value with 0
           ! as the first bit is the sign bit. Such platforms are very common.
-  end program demo_leadz
+        end program demo_leadz

@@ -4,7 +4,7 @@
      integer :: ios
      integer :: lun
         lun=fileopen('test.txt','r',ios)
-        if(ios.eq.0)then
+        if(ios == 0)then
            write(*,*) number_of_lines(lun)
         else
            write(*,*)'ERROR: IOS=',ios

@@ -56,7 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_random(3f) </B>- [M_random::INTRO] Routines for generating random numbers and strings
+M_random(3f) - [M_random::INTRO] Routines for generating random numbers and strings
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -70,9 +70,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>See</B> <I>the</I> routines:
+See the routines:
 <P>
+<PRE>
    use M_random, only : init_random_seed_by_system_clock, &
    & init_random_seed_by_dat, init_random_seed
    use M_random, only : random_string, random_hex, random_int
@@ -104,9 +104,9 @@ The generation of random numbers is too important to be left to chance
 </A>
 <BLOCKQUOTE>
 <P>
-The <B>M_random</B>(3fm) module contains routines to support random number
-generation. This includes supplements for <I>the</I> Fortran intrinsic
-<B>random_seed</B>(3f).
+The M_random(3fm) module contains routines to support random number
+generation. This includes supplements for the Fortran intrinsic
+random_seed(3f).
 </BLOCKQUOTE>
 <A name=>
 
@@ -117,32 +117,32 @@ generation. This includes supplements for <I>the</I> Fortran intrinsic
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>init_random_seed_by_system_clock</B>(3f): initialize <B>random_number</B>(3f) to return a single value with system clock
+init_random_seed_by_system_clock(3f): initialize random_number(3f) to return a single value with system clock
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>init_random_seed_by_dat</B>(3f): initialize <B>random_number</B>(3f) to return a single value using <B>date_and_time</B>(3f)
+init_random_seed_by_dat(3f): initialize random_number(3f) to return a single value using date_and_time(3f)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>init_random_seed</B>(3f): initialize <B>random_number</B>(3f) to return a single value with single integer seed like <B>srand</B>(3c)
+init_random_seed(3f): initialize random_number(3f) to return a single value with single integer seed like srand(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>random_string</B>(3f): create random string composed of provided characters of specified length
+random_string(3f): create random string composed of provided characters of specified length
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>random_hex</B>(3f): create random hexadecimal string of specified length
+random_hex(3f): create random hexadecimal string of specified length
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>random_int</B>(3f): return integer uniformly distributed in specified range
+random_int(3f): return integer uniformly distributed in specified range
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -154,12 +154,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>random_kiss64</B>(3f): A 64-bit KISS random number generator by George Margaglia.
+random_kiss64(3f): A 64-bit KISS random number generator by George Margaglia.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>scramble</B>(3f): generate an integer array of specified size populated with a random permutation of 1 to <B>size</B>(array)
+scramble(3f): generate an integer array of specified size populated with a random permutation of 1 to size(array)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -171,46 +171,46 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_int</B>(3f): Initializes <I>the</I> Mersenne Twister random number generator with
+mtprng_int(3f): Initializes the Mersenne Twister random number generator with
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_int_by_array</B>(3f): Initialize with an array of seeds
+mtprng_int_by_array(3f): Initialize with an array of seeds
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_rand64</B>(3f): Obtain <I>the</I> next 64-bit integer in <I>the</I> pseudo-random sequence in <I>the</I> range 0 to 2^32-1
+mtprng_rand64(3f): Obtain the next 64-bit integer in the pseudo-random sequence in the range 0 to 2^32-1
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_rand</B>(3f): Obtain <I>the</I> next 32-bit integer in <I>the</I> pseudo-random sequence in <I>the</I> range 0 to 2^31-1
+mtprng_rand(3f): Obtain the next 32-bit integer in the pseudo-random sequence in the range 0 to 2^31-1
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_rand_range</B>(3f): Obtain a pseudo-random integer in <I>the</I> range [lo,hi]
+mtprng_rand_range(3f): Obtain a pseudo-random integer in the range [lo,hi]
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_rand_real3</B>(3f): Obtain a pseudo-random real number .gt. 0 and .lt. 1.
+mtprng_rand_real3(3f): Obtain a pseudo-random real number .gt. 0 and .lt. 1.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_rand_real2</B>(3f): Obtain a pseudo-random real number .ge. 0.0 and .lt. 1.0
+mtprng_rand_real2(3f): Obtain a pseudo-random real number .ge. 0.0 and .lt. 1.0
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>mtprng_rand_real1</B>(3f): Obtain a pseudo-random real number .ge. 0 and .le.= 1.
+mtprng_rand_real1(3f): Obtain a pseudo-random real number .ge. 0 and .le.= 1.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_random (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4e882ff2-580d-47e9-b96c-c6077696cedf using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_random (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f3edb027-f811-48d5-9da8-7343c8ee5ba3 using man macros.</FONT>
 <br><br><center><img src="images/M_random.3m_random.gif"></center>
 </div>
 </div>

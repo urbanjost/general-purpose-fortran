@@ -52,7 +52,7 @@ integer                      :: io
    enddo
    close(unit=io,iostat=ios,status='delete')
    if(unit_check_level.ne.0) write(*,*)'LAST: ',trim(inl)
-   call unit_check('redo',inl.eq.'echo The Alphabet is: ABCDEFGHIJKLMNOPQRSTUVWXYZ > tmp/_outtest','checking',trim(inl))
+   call unit_check('redo',inl.eq.'echo The Alphabet is: ABCDEFGHIJKLMNOPQRSTUVWXYZ > tmp/_outtest','checking',inl)
    call unit_check_done('redo',msg='')
 end subroutine test_redo
 end program test_suite_M_history

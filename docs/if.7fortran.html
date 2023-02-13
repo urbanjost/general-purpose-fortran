@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>if(7f) </B>- [FORTRAN:EXECUTION CONTROL] selects a block based on a sequence of logical expressions.
-<B>
-</B></BLOCKQUOTE>
+if(7f) - [FORTRAN:EXECUTION CONTROL] selects a block based on a sequence of logical expressions.
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
@@ -67,20 +67,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<P>
+[if_construct_name:] IF (scalar-logical-expr) THEN
+block
+ELSEIF (scalar-logical-expr) THEN [if_construct_name]
+block
+ELSE [if_construct_name]
+block
+ENDIF [if_construct_name]
+<P>
 <PRE>
-<P>
-[if_construct_name:] <I>IF</I> (<I>(scalar-logical-expr)</I>) <I>THEN</I>
-<B>block</B>
-<B>ELSEIF</B> (<I>(scalar-logical-expr)</I>) <I>THEN</I> [if_construct_name]
-<B>block</B>
-<B>ELSE</B> [if_construct_name]
-<B>block</B>
-<B>ENDIF</B> [if_construct_name]
-<P>
         or
 <P>
 </PRE>
-<B>IF</B> (<I>(scalar-logical-expression)</I>) <I>action-statement</I>
+IF (scalar-logical-expression) action-statement
 </BLOCKQUOTE>
 <A name=2>
 
@@ -89,12 +89,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-The <B>IF</B> construct selects for execution at most one of its constituent
+The IF construct selects for execution at most one of its constituent
 blocks. The selection is based on a sequence of logical expressions.
 <P>
-If an if-construct-name is specified, both the <B>IF</B> and <B>ENDIF</B> must use
-that same name. If an <B>ELSE</B> or <B>ELSEIF</B> uses an if-construct-name it must
-be the same as the one specified on the corresponding <B>IF</B>/<B>ENDIF</B>.
+If an if-construct-name is specified, both the IF and ENDIF must use
+that same name. If an ELSE or ELSEIF uses an if-construct-name it must
+be the same as the one specified on the corresponding IF/ENDIF.
 </BLOCKQUOTE>
 <A name=>
 
@@ -102,27 +102,27 @@ be the same as the one specified on the corresponding <B>IF</B>/<B>ENDIF</B>.
 </A>
 <BLOCKQUOTE>
 <P>
-If there is an <B>ELSE</B> statement in the construct it acts as a default
-if all the preceding conditionals on the <B>IF</B> or <B>ELSEIF</B> where false,
+If there is an ELSE statement in the construct it acts as a default
+if all the preceding conditionals on the IF or ELSEIF where false,
 ensuring exactly one of the blocks in the construct is executed. The
 scalar logical expressions are evaluated in the order of their
-appearance in the construct until a true value is found or an <B>ELSE</B>
-statement or <B>ENDIF</B> statement is encountered. <B>IF</B> an <B>ELSE</B> statement is
-found, the <B>block</B> immediately following is executed and this completes
-the execution of the construct. That is, an <B>ELSE</B> should follow any
-<TABLE cellpadding=3><!-- tsb: If there is an <B>ELSE</B> statement in the construct it acts as a default
+appearance in the construct until a true value is found or an ELSE
+statement or ENDIF statement is encountered. IF an ELSE statement is
+found, the block immediately following is executed and this completes
+the execution of the construct. That is, an ELSE should follow any
+<TABLE cellpadding=3><!-- tsb: If there is an ELSE statement in the construct it acts as a default
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>ELSEIF</B> statements. </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ELSEIF statements.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 The scalar logical expressions in any remaining
-<B>ELSEIF</B> statements of the <B>IF</B> construct are not evaluated. If none of
-the evaluated expressions is true and there is no <B>ELSE</B> statement,
+ELSEIF statements of the IF construct are not evaluated. If none of
+the evaluated expressions is true and there is no ELSE statement,
 the execution of the construct is completed without the execution of
-any <B>block</B> within the construct.
+any block within the construct.
 </TD></TR>
-<TR></TR></TABLE>It is permissible to branch to an <B>ENDIF</B> statement only from within
-its <B>IF</B> construct. Execution of an <B>ENDIF</B> statement has no effect.
+<TR></TR></TABLE>It is permissible to branch to an ENDIF statement only from within
+its IF construct. Execution of an ENDIF statement has no effect.
 </BLOCKQUOTE>
 <A name=>
 
@@ -130,14 +130,14 @@ its <B>IF</B> construct. Execution of an <B>ENDIF</B> statement has no effect.
 </A>
 <BLOCKQUOTE>
 <P>
-The <B>IF</B> statement controls the execution of a single action statement
+The IF statement controls the execution of a single action statement
 based on a single logical expression.
 <P>
 The action-stmt in the if-stmt shall not be an end-function-stmt,
 end-mp-subprogram-stmt, end-program-stmt, end-subroutine-stmt,
 or if-stmt.
 <P>
-Execution of an <B>IF</B> statement causes evaluation of the scalar logical
+Execution of an IF statement causes evaluation of the scalar logical
 expression. If the value of the expression is true, the action
 statement is executed. If the value is false, the action statement
 is not executed and execution continues.
@@ -145,7 +145,7 @@ is not executed and execution continues.
 The execution of a function reference in the scalar logical expression
 may affect entities in the action statement. That is, if values are
 changed by the functions used in the logical expressions the selected
-<B>block</B> will use those values. It is generally a bad idea to use functions
+block will use those values. It is generally a bad idea to use functions
 changing the values, but what would you expect this to produce?
 <P>
 <PRE>
@@ -167,7 +167,7 @@ changing the values, but what would you expect this to produce?
 <P>
 <P>
 </PRE>
-An example of an <B>IF</B> statement is:
+An example of an IF statement is:
 <P>
 <PRE>
        IF (A &gt; 0.0) A = LOG (A)
@@ -181,7 +181,7 @@ An example of an <B>IF</B> statement is:
 </A>
 <BLOCKQUOTE>
 <P>
-Sample <B>IF</B> constructs:
+Sample IF constructs:
 <P>
 <PRE>
     program demo_if
@@ -228,7 +228,7 @@ Sample <B>IF</B> constructs:
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>if (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7b7c095a-70e6-427a-902b-42b780e3e73c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>if (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 29f29483-edab-4855-b8c0-aebc12b10c7f using man macros.</FONT>
 <br><br><center><img src="images/if.7fortran.gif"></center>
 </div>
 </div>

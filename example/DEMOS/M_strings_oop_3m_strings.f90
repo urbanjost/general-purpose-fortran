@@ -24,7 +24,7 @@
         write(*,101)'str2%str is ................ ',str2%str
         ! same as intrinsic LEN()
         write(*,202)'len ........................ ',str2%len()
-        ! same as intrinsic INDEX()
+        ! same as intrinsic LEN_TRIM()
         write(*,202)'len_trim ................... ',str2%len_trim()
         ! same as intrinsic INDEX()
         write(*,202)'index("is")................. ',str2%index("is")
@@ -95,11 +95,11 @@
         str3=string('   12.345678901234567e1        ')
         str3=string('Four score and seven years ago')
         write(*,101)'str3%str ................... ',str3%str
-        ! calls M_strings procedure MATCHW
+        ! calls M_strings procedure GLOB
         write(*,*)'match("Fo*") ............... ', str3%match("Fo*")
-        ! calls M_strings procedure MATCHW
+        ! calls M_strings procedure GLOB
         write(*,*)'match("and") ............... ', str3%match("and")
-        ! calls M_strings procedure MATCHW
+        ! calls M_strings procedure GLOB
         write(*,*)'match("*and*") ............. ', str3%match("*and*")
 
         101 format(1x,a,"[",a,"]")
@@ -110,7 +110,7 @@
         write(*,*)repeat('=',68)
         write(*,*)'OVERLOADED OPERATORS (add and subtract,return TYPE(STRING))'
         str1%str='123.456'
-        str2%str='AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj'
+        str2%str='AaBbCcDdEeFfGgHhIi AaBbCcDdEeFfGgHhIi'
         write(*,101)'str1%str ................... ',str1%str
         write(*,101)'str2%str ................... ',str2%str
         write(*,*)'str1 + str2 ................ ',p(str1 + str2)
@@ -121,7 +121,7 @@
 
         write(*,*)repeat('=',68)
         write(*,*)'OVERLOADED OPERATORS (multiply,return TYPE(STRING))'
-        str1%str='AaBbCcDdEeFfGgHhIiJj'
+        str1%str='AaBbCcDdEeFfGgHhIi'
         write(*,101)'str1%str ................... ',str1%str
         write(*,*)'str1 * 2 ................... ',p(str1 * 2)
 

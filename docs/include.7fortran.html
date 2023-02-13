@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>include(7f) </B>- [FORTRAN] including source text
-<B>
-</B></BLOCKQUOTE>
+include(7f) - [FORTRAN] including source text
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
@@ -67,9 +67,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>INCLUDE</B> <I>char-literal-constant</I>
-</PRE>
+INCLUDE char-literal-constant
 </BLOCKQUOTE>
 <A name=2>
 
@@ -78,26 +76,26 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 Additional text may be incorporated into the source text of a program
-unit during processing. This is accomplished with the <B>INCLUDE</B> line,
+unit during processing. This is accomplished with the INCLUDE line,
 which typically has the form
 <P>
 <PRE>
      INCLUDE "filename"
 <P>
 </PRE>
-An <B>INCLUDE</B> line is not a Fortran statement. It is processed at
-compilation. The effect of the <B>INCLUDE</B> line is as if the referenced
-source text physically replaced the <B>INCLUDE</B> line prior to program
+An INCLUDE line is not a Fortran statement. It is processed at
+compilation. The effect of the INCLUDE line is as if the referenced
+source text physically replaced the INCLUDE line prior to program
 processing. Included text may contain any source text, including
-additional <B>INCLUDE</B> lines; such nested <B>INCLUDE</B> lines are similarly
+additional INCLUDE lines; such nested INCLUDE lines are similarly
 replaced with the specified source text. The maximum depth of nesting
-of any nested <B>INCLUDE</B> lines is processor dependent. Inclusion of the
-source text referenced by an <B>INCLUDE</B> line shall not, at any level of
+of any nested INCLUDE lines is processor dependent. Inclusion of the
+source text referenced by an INCLUDE line shall not, at any level of
 nesting, result in inclusion of the same source text (ie. it cannot
 be recursive).
 <P>
-The interpretation of <I>char-literal-constant</I> is processor dependent.
-<TABLE cellpadding=3><!-- tsb: The interpretation of <I>char-literal-constant</I> is processor dependent.
+The interpretation of char-literal-constant is processor dependent.
+<TABLE cellpadding=3><!-- tsb: The interpretation of char-literal-constant is processor dependent.
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
@@ -111,11 +109,11 @@ least treat it as a simple filename.
 <TR></TR></TABLE>Where the compiler searches for the filename is
 implementation-dependent. All current implementations appear to at
 least search for the file in the same directory as the file containing
-the <B>INCLUDE</B> statement if it is not a complete filepath specification. It
+the INCLUDE statement if it is not a complete filepath specification. It
 is common but not required that other directories are searched as
 specified with the common <B>-I</B> switch found on most compiler commands.
 <P>
-The <I>char-literal-constant</I> shall not have a kind type parameter value
+The char-literal-constant shall not have a kind type parameter value
 that is a named-constant. That is, it must be a quoted string. It cannot
 be something like
 <P>
@@ -124,7 +122,7 @@ be something like
       include filename
 <P>
 </PRE>
-An <B>INCLUDE</B> line shall appear on a single source line where a statement
+An INCLUDE line shall appear on a single source line where a statement
 may appear (many compilers support an extension allowing continuation
 lines to be supported); it must be the only nonblank text on the line
 other than an optional trailing comment (no statement label is allowed).
@@ -140,7 +138,7 @@ So here are some bad ideas
       &name&#146;
 <P>
 </PRE>
-When an <B>INCLUDE</B> line is resolved, the first included statement line
+When an INCLUDE line is resolved, the first included statement line
 cannot be a continuation line and the last included statement line
 cannot be continued.
 </BLOCKQUOTE>
@@ -150,11 +148,11 @@ cannot be continued.
 </A>
 <BLOCKQUOTE>
 <P>
-Note that an <B>INCLUDE</B> line is generally processed after any preprocessor
-so the <B>INCLUDE</B> file should not include preprocessor directives such as
-<B>cpp</B>(1) or <B>fpp</B>(1) directives. If that is required you probably need to
-use an equivalent preprocessor directive such as a <B>cpp</B>(1) "#include"
-directive instead of a Fortran <B>INCLUDE</B>.
+Note that an INCLUDE line is generally processed after any preprocessor
+so the INCLUDE file should not include preprocessor directives such as
+cpp(1) or fpp(1) directives. If that is required you probably need to
+use an equivalent preprocessor directive such as a cpp(1) "#include"
+directive instead of a Fortran INCLUDE.
 </BLOCKQUOTE>
 <A name=>
 
@@ -162,13 +160,13 @@ directive instead of a Fortran <B>INCLUDE</B>.
 </A>
 <BLOCKQUOTE>
 <P>
-So it is a de-facto standard that an <B>INCLUDE</B> at least supports a simple
+So it is a de-facto standard that an INCLUDE at least supports a simple
 filename pointing to a file in the directory where the file containing
-the <B>INCLUDE</B> file resides or a full path name in single or double quotes.
+the INCLUDE file resides or a full path name in single or double quotes.
 <P>
-An <B>INCLUDE</B> statement was a common way to ensure a COMMONBLOCK was
+An INCLUDE statement was a common way to ensure a COMMONBLOCK was
 declared the same in multiple files (at least if every file with the
-<B>INCLUDE</B> was recompiled). It should generally be avoided and a MODULE
+INCLUDE was recompiled). It should generally be avoided and a MODULE
 should be used instead of a COMMONBLOCK in the vast majority of cases
 in new code.
 </BLOCKQUOTE>
@@ -235,7 +233,7 @@ Sample program:
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>include (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f7ece073-172c-4f66-8289-2a34d4f2729f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>include (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3cc005f8-6b82-4d76-812d-92dfefc4e2c9 using man macros.</FONT>
 <br><br><center><img src="images/include.7fortran.gif"></center>
 </div>
 </div>

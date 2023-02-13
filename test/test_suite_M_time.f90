@@ -153,23 +153,30 @@ subroutine test_date_to_julian()
 implicit none
 real(kind=realtime) :: julian
 integer             :: ierr
+integer             :: dat(8)
 
-   call date_to_julian( [1970, 1, 1,0, 0,0,0,0] ,julian,ierr)
+   dat = [1970, 1, 1,0, 0,0,0,0]
+   call date_to_julian( dat,julian,ierr)
    call unit_check('date_to_julian',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
 
-   call date_to_julian( [1995, 1, 1,0,12,0,0,0] ,julian,ierr)
+   dat = [1995, 1, 1,0,12,0,0,0]
+   call date_to_julian( dat,julian,ierr)
    call unit_check('date_to_julian',int(julian) == 2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
 
-   call date_to_julian( [1995,10,19,0,12,0,0,0] ,julian,ierr)
+   dat = [1995,10,19,0,12,0,0,0]
+   call date_to_julian( dat,julian,ierr)
    call unit_check('date_to_julian',int(julian) == 2450010, msg="Oct 19th, 1995 12:00(2450010)")
 
-   call date_to_julian( [1995,12,31,0,12,0,0,0] ,julian,ierr)
+   dat = [1995,12,31,0,12,0,0,0]
+   call date_to_julian( dat,julian,ierr)
    call unit_check('date_to_julian',int(julian) == 2450083, msg="Dec 31st, 1995 12:00(2450083)")
 
-   call date_to_julian( [1996, 1, 1,0,12,0,0,0] ,julian,ierr)
+   dat = [1996, 1, 1,0,12,0,0,0]
+   call date_to_julian( dat,julian,ierr)
    call unit_check('date_to_julian',int(julian) == 2450084, msg="Jan  1st, 1996 12:00(2450084)")
 
-   call date_to_julian( [1996,12,31,0,12,0,0,0] ,julian,ierr)
+   dat = [1996,12,31,0,12,0,0,0]
+   call date_to_julian( dat,julian,ierr)
    call unit_check('date_to_julian',int(julian) == 2450449, msg="Dec 31th, 1996 12:00(2450449)")
 
    call unit_check_done('date_to_julian')
@@ -564,23 +571,30 @@ end subroutine test_box_month
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_d2j
 real(kind=realtime)         :: julian
+integer :: dat(8)
 
-   julian=d2j( [1970, 1, 1,0, 0,0,0,0])
+   dat=[1970, 1, 1,0, 0,0,0,0]
+   julian=d2j( dat )
    call unit_check('d2j',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
 
-   julian=d2j( [1995, 1, 1,0,12,0,0,0])
+   dat=[1995, 1, 1,0,12,0,0,0]
+   julian=d2j( dat )
    call unit_check('d2j',int(julian) == 2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
 
-   julian=d2j( [1995,10,19,0,12,0,0,0])
+   dat=[1995,10,19,0,12,0,0,0]
+   julian=d2j( dat )
    call unit_check('d2j',int(julian) == 2450010, msg="Oct 19th, 1995 12:00(2450010)")
 
-   julian=d2j( [1995,12,31,0,12,0,0,0])
+   dat=[1995,12,31,0,12,0,0,0]
+   julian=d2j( dat )
    call unit_check('d2j',int(julian) == 2450083, msg="Dec 31st, 1995 12:00(2450083)")
 
-   julian=d2j( [1996, 1, 1,0,12,0,0,0])
+   dat=[1996, 1, 1,0,12,0,0,0]
+   julian=d2j( dat )
    call unit_check('d2j',int(julian) == 2450084, msg="Jan  1st, 1996 12:00(2450084)")
 
-   julian=d2j( [1996,12,31,0,12,0,0,0])
+   dat=[1996,12,31,0,12,0,0,0]
+   julian=d2j( dat )
    call unit_check('d2j',int(julian) == 2450449, msg="Dec 31th, 1996 12:00(2450449)")
 
 call unit_check_done('d2j')
@@ -659,30 +673,30 @@ end subroutine test_sec2days
 subroutine test_days2sec()
 !!use M_time, only  : days2sec, realtime
 implicit none
-
-   call unit_check('days2sec',nint(days2sec('1')) ==              1, 'expected',1,'got',nint(days2sec('1')))
-   call unit_check('days2sec',nint(days2sec('1:00')) ==          60,'expected',60,'got',nint(days2sec('1:00')))
-   call unit_check('days2sec',nint(days2sec('1:00:00')) ==     3600, 'expected',3600,'got',nint(days2sec('1:00:00')))
-   call unit_check('days2sec',nint(days2sec('1-00:00:00')) == 86400, 'expected',86400,'got',nint(days2sec('1-00:00:00')))
+   ! add 0 to nint function because of gfortran-11 bug passing some arguments with functions to class(*) 
+   call unit_check('days2sec',0+nint(days2sec('1')) ==              1, 'expected',1,'got',0+nint(days2sec('1')))
+   call unit_check('days2sec',0+nint(days2sec('1:00')) ==          60,'expected',60,'got',0+nint(days2sec('1:00')))
+   call unit_check('days2sec',0+nint(days2sec('1:00:00')) ==     3600, 'expected',3600,'got',0+nint(days2sec('1:00:00')))
+   call unit_check('days2sec',0+nint(days2sec('1-00:00:00')) == 86400, 'expected',86400,'got',0+nint(days2sec('1-00:00:00')))
    call unit_check('days2sec',&
-   &nint(days2sec('1d2h 3.0 minutes 4sec')) == 93784,'expected',1,'got',nint(days2sec('1d2h 3.0 minutes 4sec')))
+   &nint(days2sec('1d2h 3.0 minutes 4sec')) == 93784,'expected',1,'got',0+nint(days2sec('1d2h 3.0 minutes 4sec')))
 
-   call unit_check('days2sec',nint(days2sec(' 1-12:04:20              '))  ==  129860, &
-   & 'expected',129860,'got',nint(days2sec('1.12:03:20')))
-   call unit_check('days2sec',nint(days2sec(' 1.5 days                '))  ==  129600, &
-   & 'expected',129600,'got',nint(days2sec('1.5 days')))
-   call unit_check('days2sec',nint(days2sec(' 1.5 days 4hrs 30minutes '))  ==  145800, &
-   & 'expected',145800,'got',nint(days2sec('1.5 days 4hrs 30minutes')))
-   call unit_check('days2sec',nint(days2sec(' 1.5d                    '))  ==  129600, &
-   & 'expected',129600,'got',nint(days2sec('1.5d')))
-   call unit_check('days2sec',nint(days2sec(' 1d2h3m4s                '))  ==  93784, &
-   & 'expected',93784,'got',nint(days2sec('1d2h3m4s')))
-   call unit_check('days2sec',nint(days2sec(' 1d1d1d                  '))  ==  259200, &
-   & 'expected',259200,'got',nint(days2sec('1d1d1d')))
-   call unit_check('days2sec',nint(days2sec(' 4d-12h                  '))  ==  302400, &
-   & 'expected',302400,'got',nint(days2sec('4d-12h')))
-   call unit_check('days2sec',nint(days2sec(' 3  d  1 2   h           '))  ==  302400, &
-   & 'expected',302400,'got',nint(days2sec('3 d 1 s  h')))
+   call unit_check('days2sec',0+nint(days2sec(' 1-12:04:20              '))  ==  129860, &
+   & 'expected',129860,'got',0+nint(days2sec('1.12:03:20')))
+   call unit_check('days2sec',0+nint(days2sec(' 1.5 days                '))  ==  129600, &
+   & 'expected',129600,'got',0+nint(days2sec('1.5 days')))
+   call unit_check('days2sec',0+nint(days2sec(' 1.5 days 4hrs 30minutes '))  ==  145800, &
+   & 'expected',145800,'got',0+nint(days2sec('1.5 days 4hrs 30minutes')))
+   call unit_check('days2sec',0+nint(days2sec(' 1.5d                    '))  ==  129600, &
+   & 'expected',129600,'got',0+nint(days2sec('1.5d')))
+   call unit_check('days2sec',0+nint(days2sec(' 1d2h3m4s                '))  ==  93784, &
+   & 'expected',93784,'got',0+nint(days2sec('1d2h3m4s')))
+   call unit_check('days2sec',0+nint(days2sec(' 1d1d1d                  '))  ==  259200, &
+   & 'expected',259200,'got',0+nint(days2sec('1d1d1d')))
+   call unit_check('days2sec',0+nint(days2sec(' 4d-12h                  '))  ==  302400, &
+   & 'expected',302400,'got',0+nint(days2sec('4d-12h')))
+   call unit_check('days2sec',0+nint(days2sec(' 3  d  1 2   h           '))  ==  302400, &
+   & 'expected',302400,'got',0+nint(days2sec('3 d 1 s  h')))
 
    call unit_check_done('days2sec')
 

@@ -1,4 +1,5 @@
 program fcmd
+use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT
 use M_CLI2, only : set_args, sgets, sget, lget, leafs=>unnamed, specified
 use M_strings, only : split, lower
 use M_system, only  : system_access, R_OK, W_OK, X_OK, F_OK, system_getenv, system_dir, system_isdir
@@ -13,11 +14,13 @@ character(len=:),allocatable    :: cmds(:)
 character(len=:),allocatable    :: name
 integer                         :: path_line_length
 integer                         :: i, j, k, m
+integer                         :: icount
 logical                         :: all
 logical                         :: verbose
 logical                         :: wild
 logical                         :: long
 logical                         :: interactive
+logical                         :: tstfor
 logical                         :: ignorecase
 character(len=:),allocatable    :: help(:),version(:)
 character(len=:),allocatable    :: command
@@ -26,27 +29,21 @@ integer                         :: cmdstat
 character(len=256)              :: cmdmsg
    ! process command-line options
    call setup()
-   call set_args('fcmd --first:f F --cmd:c " " --ignorecase:i F --wild:w F --ok F --long:l',help,version)
+   call set_args('fcmd --vi F --first:f F --cmd:c " " --ignorecase:i F --wild:w F --ok F --test:t F --long:l',help,version)
    all=.not.lget('first')
    wild=lget('wild')
    interactive=lget('ok')
+   tstfor=lget('test')
    ignorecase=lget('ignorecase')
    verbose=lget('verbose')
+
+   cmd=''
+   if(specified('vi')) cmd=system_getenv('FCEDIT',system_getenv('EDITOR',system_getenv('VISUAL','vi')))
    if(specified('cmd'))then
-      cmd=sget('cmd')
-      if(cmd.eq.'')then
-         cmd=system_getenv('FCEDIT',system_getenv('EDITOR',system_getenv('VISUAL','vi')))
-      endif
-   else
-      cmd=''
+      cmd=cmd//':'//sget('cmd')
+      if(sget('cmd')==':') cmd=system_getenv('FCEDIT',system_getenv('EDITOR',system_getenv('VISUAL','vi')))
    endif
-   if(lget('long'))then
-       if(cmd=='')then
-           cmd='ls -l'
-       else
-           cmd=cmd//':ls -l'
-       endif
-   endif
+   if(lget('long')) cmd=cmd//':ls -l'
 
    call get_environment_variable(name="PATH", length=path_line_length)  ! get length of $PATH
    allocate(character(len=path_line_length) :: searchpath)              ! make a string variable long enough to hold $PATH
@@ -65,10 +62,11 @@ character(len=256)              :: cmdmsg
    call split(cmd,cmds,';:')
    if(size(cmds).eq.0)cmds=['']
    if(verbose)then
-      write(*,'("cmds>>",g0)')cmds
-      write(*,'("leafs>>",g0)')leafs
-      write(*,'("all>>",g0)')all
+      write(stderr,'("cmds>>",g0)')cmds
+      write(stderr,'("leafs>>",g0)')leafs
+      write(stderr,'("all>>",g0)')all
    endif
+   icount=0
    NAMESLOOP: do j=1,size(leafs)                                        ! try name appended to each directory name
       if(wild)then
          name='*'//trim(leafs(j))//'*'
@@ -80,13 +78,19 @@ character(len=256)              :: cmdmsg
          pathnames=system_dir(trim(directories(i)),name,ignorecase=ignorecase)
          do m=1,size(pathnames)
             pathname=trim(joinpath(directories(i),pathnames(m)))
+            if(system_isdir(pathname))cycle
             select case(basename(pathname))
             case('.','..','')
             case default
                if(system_access(pathname,X_OK))then
                   do k=1,size(cmds)
                      if(cmds(k).eq.'')then
-                        write(*,'(a)')pathname
+                        if(tstfor)then
+                           write(*,'(a)')basename(pathname)
+                           stop
+                        else
+                           write(*,'(a)')pathname
+                        endif
                      else
                         command=cmds(k) // ' ' // pathname
                         if(interactive)then
@@ -110,6 +114,7 @@ character(len=256)              :: cmdmsg
          enddo
       enddo DIRLOOP
    enddo NAMESLOOP
+   if(tstfor)stop 1
 contains
 subroutine setup()
 help=[ CHARACTER(LEN=128) :: &
@@ -119,8 +124,8 @@ help=[ CHARACTER(LEN=128) :: &
 '   (LICENSE:MIT)',&
 '',&
 'SYNOPSIS',&
-'    fcmd [commands(s) [[--wild] [ --first][--ignorecase]',&
-'    [ --cmd COMMAND;COMMAND,COMMAND;... ]|[--long]|',&
+'    fcmd [commands(s) [--wild] [ --first][--ignorecase][--test]',&
+'    [ --cmd COMMAND;COMMAND,COMMAND;... ]|[--long]|[--vi]',&
 '    [ --help|--version]',&
 '',&
 'DESCRIPTION',&
@@ -137,9 +142,9 @@ help=[ CHARACTER(LEN=128) :: &
 '   per line.',&
 '',&
 '    command(s)      names of commands to locate. simple globbing with *',&
-'                    and ? is allowed if the name is quoted.',&
+'                    and ? is allowed if the names are quoted.',&
 '    --ignorecase,i  ignore case of input command(s)',&
-'    --first,-f  locate only first matching executable in PATH, not all.',&
+'    --first,-f  locate first match of each executable name expression, not all.',&
 '    --cmd,-c    invoke the command on the files found. If present with',&
 '                no parameter the desired command is assumed to be',&
 '                the default editor (useful for finding and looking',&
@@ -153,9 +158,11 @@ help=[ CHARACTER(LEN=128) :: &
 '                Abbreviations for common --cmd options:',&
 '',&
 '                --long,l   abbreviation for "--cmd ''ls -l''"',&
+'                --vi       abbreviation for "--cmd ''vim''"',&
 '',&
-'    --ok        If present, prompt for a y/n answer before executing the',&
-'                list of commands on each file found.',&
+'    --ok        Prompt for a y/n answer before executing the list of',&
+'                commands on each file found.',&
+'    --test,-t   print first command found and stop',&
 '    --wild,-w   add asterisk as a suffix and prefix to all command names',&
 '                being searched for.',&
 '    --version,-v  Print version information on standard output then',&
@@ -170,6 +177,7 @@ help=[ CHARACTER(LEN=128) :: &
 '    fcmd sum -w       # also find all commands containing "sum"',&
 '    fcmd ''*''          # list all commands in search path',&
 '    fcmd gunzip -c    # edit the script gunzip(1)',&
+'    fcmd ls dir       # find both commands',&
 '',&
 '    # find all commands in path and a man-page if they have one',&
 '    fcmd ''*'' -c whereis',&
@@ -178,8 +186,19 @@ help=[ CHARACTER(LEN=128) :: &
 '    # pathnames found.',&
 '    fcmd pwd -c ''file;stat''',&
 '',&
-'   Common commands to use are "cat -vet", "ls -l", "strings", "what",',&
-'   "sum", "whereis", "stat", "wc", "ldd", and "file".',&
+'    Common commands to use are "cat -vet", "ls -l", "strings", "what",',&
+'    "sum", "whereis", "stat", "wc", "ldd", and "file".',&
+'',&
+'    #!/bin/bash',&
+'    #@(#)  find which command is available and view file',&
+'    FILE="$1"',&
+'    case "$(fcmd -t w3m lynx links)" in',&
+'    w3m) w3m $FILE;;',&
+'    lynx) lynx $FILE;;',&
+'    links) links $FILE;;',&
+'    *) echo ''no browser found'';exit;;',&
+'    esac',&
+'',&
 'SEE ALSO',&
 '    which(1), xargs(1)',&
 '']
@@ -187,7 +206,7 @@ version=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
 'PROGRAM:        fcmd(1f)',&
 'DESCRIPTION:    list pathnames of command names that are executable in $PATH',&
-'VERSION:        1.0, 2017-10-15',&
+'VERSION:        1.1, 2023-01-21',&
 'AUTHOR:         John S. Urban',&
 'LICENSE:        MIT',&
 '']

@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>shiftl</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>shiftl</B>(3fortran)
+<B>shiftl(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+shiftl(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SHIFTL(3) </B>- [BIT:SHIFT] Shift bits left
-<B>
-</B></BLOCKQUOTE>
+SHIFTL(3) - [BIT:SHIFT] Shift bits left
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>shiftl</B>( <I>i</I>, shift )
+result = shiftl( i, shift )
 <P>
+<PRE>
            elemental integer(kind=KIND) function shiftl(i, shift)
 <P>
             integer(kind=KIND),intent(in) :: i
@@ -120,13 +120,13 @@ the result will automatically be of the same type, kind and rank as I.
 
 </A>
 <BLOCKQUOTE>
-<B>SHIFTL</B>(3) returns a value corresponding to I with all of the bits shifted
+SHIFTL(3) returns a value corresponding to I with all of the bits shifted
 left by SHIFT places.
 <P>
 Bits shifted out from the left end are lost, and bits shifted in from the
 right end are set to 0.
 <P>
-If the absolute value of SHIFT is greater than <B>BIT_SIZE</B>(I), the value is
+If the absolute value of SHIFT is greater than BIT_SIZE(I), the value is
 undefined.
 <P>
 For example, for a 16-bit integer left-shifted five &#46;&#46;&#46;
@@ -155,7 +155,7 @@ I : The initial value to shift and fill in with zeros
 o
 </TD><TD>
 SHIFT : how many bits to shift left. It shall be nonnegative and less
-than or equal to <B>BIT_SIZE</B>(I).
+than or equal to BIT_SIZE(I).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -188,64 +188,37 @@ Sample program:
         ival=100
         write(*,*)ival, shiftl(ival,3)
 <P>
+       ! elemental (input values may be conformant arrays)
+        print *, &#146; elemental&#146;
+<P>
+       ! loop through some ivalues
+         shift=9
+         ivals=[ &
+         & int(b"01010101010101010101010101010101"), &
+         & int(b"10101010101010101010101010101010"), &
+         & int(b"11111111111111111111111111111111") ]
+<P>
+         write(*,&#146;(/,"SHIFT =  ",i0)&#146;) shift
+         do i=1,size(ivals)
+            ! print initial value as binary and decimal
+            write(*,&#146;(  "I =      ",b32.32," == ",i0)&#146;) ivals(i),ivals(i)
+            ! print shifted value as binary and decimal
+            oval=shiftl(ivals(i),shift)
+            write(*,&#146;(  "RESULT = ",b32.32," == ",i0)&#146;) oval,oval
+         enddo
+<P>
+        ! more about elemental
+         ELEM : block
+         integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])
+         write(*,*)"characteristics of the result are the same as input"
+         write(*,&#146;(*(g0,1x))&#146;) &
+           & "kind=",kind(shiftl(arr,3)), "shape=",shape(shiftl(arr,3)), &
+           & "size=",size(shiftl(arr,3)) !, "rank=",rank(shiftl(arr,3))
+         endblock ELEM
+<P>
+      end program demo_shiftl
+<P>
 </PRE>
-<BLOCKQUOTE>
-! elemental (input values may be conformant arrays)
-print *, &#146; elemental&#146;
-<P>
-! loop through some ivalues
-shift=9
-ivals=[ &
-& <B>int</B>(b"01010101010101010101010101010101"), &
-& <B>int</B>(b"10101010101010101010101010101010"), &
-& <B>int</B>(b"11111111111111111111111111111111") ]
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ! loop through some ivalues
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,&#146;(/,SHIFT = </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-",i0)&#146;) shift
-do <B>i=1,size</B>(ivals)
-! print initial value as binary and decimal
-<TABLE width=100% cellpadding=3><!-- tsb: ",i0)&#146;) shift
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,&#146;( </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-"I =      ",b32.32," == ",i0)&#146;) <B>ivals</B>(<I>i</I>),<B>ivals</B>(<I>i</I>)
-! print shifted value as binary and decimal
-<B>oval=shiftl</B>(<B>ivals</B>(<I>i</I>),shift)
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,&#146;( </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-"RESULT = ",b32.32," == ",i0)&#146;) oval,oval
-enddo
-</TD></TR>
-<TR></TR></TABLE><!-- .RE -->
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-! more about elemental
-ELEM : block
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ! more about elemental
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>integer</B>(kind=int8) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: <B>arr</B>(2,2)=reshape([2,4,8,16],[2,2])
-<B>write</B>(*,*)"characteristics of the result are the same as input"
-<B>write</B>(*,&#146;(*(g0,1x))&#146;) &
-& "kind=",kind(<B>shiftl</B>(arr,3)), "shape=",shape(<B>shiftl</B>(arr,3)), &
-& "size=",size(<B>shiftl</B>(arr,3)) !, "rank=",rank(<B>shiftl</B>(arr,3))
-endblock ELEM
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
-<P>
-end program demo_shiftl
-<P>
 Results:
 <P>
 <PRE>
@@ -279,7 +252,7 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
-<B>SHIFTA</B>(3), <B>SHIFTR</B>(3), <B>ISHFT</B>(3), <B>ISHFTC</B>(3)
+SHIFTA(3), SHIFTR(3), ISHFT(3), ISHFTC(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -288,7 +261,7 @@ fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftl (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 40c28ac6-a001-42b9-89ab-2c34c3b1228b using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftl (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8eeace03-9afb-4e20-b8ee-720585f4caac using man macros.</FONT>
 <br><br><center><img src="images/shiftl.3fortran.gif"></center>
 </div>
 </div>

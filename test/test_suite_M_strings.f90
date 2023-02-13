@@ -2,6 +2,7 @@ module M_testsuite_M_strings
 use,intrinsic :: iso_fortran_env,only : std_in=>input_unit,std_out=>output_unit,std_err=>error_unit
 use M_verify
 use M_strings
+implicit none
 character(len=*),parameter :: options=' -section 3 -library libGPF -filename `pwd`/M_strings.FF &
 & -documentation y -ufpp   y -ccall  n -archive  GPF.a '
 character(len=*),parameter :: g='(*(g0,1x))'
@@ -9,7 +10,11 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_suite_m_strings()
    call test_adjustc()
-   call test_atleast()
+   call test_pad()
+   call test_lpad()
+   call test_cpad()
+   call test_rpad()
+   call test_zpad()
    call test_base()
    call test_base2()
    call test_c2s()
@@ -24,7 +29,7 @@ subroutine test_suite_m_strings()
    call test_describe()
    call test_edit_distance()
    call test_squeeze()
-   call test_cc()
+   call test_bundle()
    call test_expand()
    call test_getvals()
    call test_indent()
@@ -47,7 +52,7 @@ subroutine test_suite_m_strings()
    call test_lenset()
    call test_listout()
    call test_lower()
-   call test_matchw()
+   call test_glob()
    call test_merge_str()
    call test_modif()
    call test_noesc()
@@ -70,20 +75,20 @@ subroutine test_suite_m_strings()
    call test_unquote()
    call test_upper()
    call test_v2s()
-   !call test_v2s_bug()
    call test_value_to_string()
    call test_visible()
    call test_m_strings()
    call test_dble()
    call test_int()
    call test_real()
+   call test_nint()
    call test_stretch()
    call test_trimzeros_()
    call test_setbits()
    call test_match_delimiter()
 end subroutine test_suite_m_strings
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_matchw()
+subroutine test_glob()
 ! This main() routine passes a bunch of test strings into the above code.
 ! In performance comparison mode, it does that over and over.  Otherwise,
 ! it does it just once.  Either way, it outputs a passed/failed result.
@@ -91,7 +96,7 @@ subroutine test_matchw()
 integer :: nReps
 logical :: allpassed
 integer :: i
-   call unit_check_start('matchw',' -description ''match string with a pattern containing * and ? wildcard characters'' '//OPTIONS)
+   call unit_check_start('glob',' -description ''match string with a pattern containing * and ? wildcard characters'' '//OPTIONS)
   allpassed = .true.
 
   nReps = 1000000
@@ -242,7 +247,7 @@ integer :: i
      ! allpassed=test("mississippi", "*issip*PI", .true.) .and. allpassed
   enddo
 
-   call unit_check_done('matchw')
+   call unit_check_done('glob')
 !===================================================================================================================================
    contains
 !===================================================================================================================================
@@ -251,7 +256,7 @@ integer :: i
    ! of two (or more) different wildcard matching routines.
    !
    function test(tame, wild, bExpectedResult) result(bpassed)
-   !x!use M_strings, only : matchw
+   !x!use M_strings, only : glob
       character(len=*) :: tame
       character(len=*) :: wild
       logical          :: bExpectedResult
@@ -259,7 +264,7 @@ integer :: i
       logical          :: bPassed
       bResult = .true.    ! We'll do "&=" cumulative checking.
       bPassed = .false.   ! Assume the worst.
-      bResult = matchw(tame, wild) ! Call a wildcard matching routine.
+      bResult = glob(tame, wild) ! Call a wildcard matching routine.
 
       ! To assist correctness checking, output the two strings in any failing scenarios.
       if (bExpectedResult .eqv. bResult) then
@@ -268,9 +273,9 @@ integer :: i
       else
          !if(nReps == 1) write(std_err,g)"Failed match on ",tame," vs. ", wild
       endif
-      if(i==1)call unit_check('matchw',bExpectedResult.eqv.bResult,'string',tame,'pattern',wild,'expected',bExpectedResult)
+      if(i==1)call unit_check('glob',bExpectedResult.eqv.bResult,'string',tame,'pattern',wild,'expected',bExpectedResult)
    end function test
-end subroutine test_matchw
+end subroutine test_glob
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_replace()
 character(len=:),allocatable :: targetline
@@ -646,7 +651,7 @@ character(len=10)               :: nulls(3)=['ignore    ', 'return    ', 'ignore
    integer :: i
    if(unit_check_level > 0)then
       write(std_err,'(80("="))')
-      write(std_err,'(A)')'parsing ['//TRIM(line)//']'//'with delimiters set to ['//dlm//'] and order '//trim(order)//''
+      write(std_err,'(A)')'parsing ['//TRIM(line)//']'//'with delimiters set to ['//dlm//'] and order '//trim(order)
    endif
    CALL split(line,array,dlm,order)
    if(unit_check_level > 0)then
@@ -661,7 +666,6 @@ subroutine test_m_strings
 !-!use M_strings, only: lower
 !-!use M_strings, only: switch
 !-!use M_strings, only: isgraph,isprint
-implicit none
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 character(len=1)            :: chars(36)
@@ -729,7 +733,6 @@ end subroutine test_chomp
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine test_substitute
 !-!use M_strings, only : substitute
-implicit none
 character(len=:),allocatable    :: targetline   ! input line to be changed
 character(len=:),allocatable    :: old          ! old substring to replace
 character(len=:),allocatable    :: new          ! new substring
@@ -931,7 +934,6 @@ end subroutine test_crop
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_transliterate
 !-!use M_strings, only: transliterate
-implicit none
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
    call unit_check_start('transliterate',' &
@@ -947,13 +949,13 @@ character(len=:),allocatable  :: e
    call unit_check_start('rotate13',' -description ''apply trivial encryption algorithm ROT13 to a string'' '//OPTIONS )
    s='United we stand, divided we fall.'
    e='Havgrq jr fgnaq, qvivqrq jr snyy.'
-   call unit_check('rotate13',rotate13(s) == e,  s,'==>',rotate13(s))
+   ! add //'' to change function call to expression to avoid gfortran bug
+   call unit_check('rotate13',rotate13(s) == e,  s,'==>',rotate13(s)//'') 
    call unit_check_done('rotate13',msg='')
 end subroutine test_rotate13
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_reverse
 !-!use M_strings, only: reverse
-implicit none
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 !-----------------------------------------------------------------------------------------------------------------------------------
    call unit_check_start('reverse',' -description ''elemental function reverses character order in a string'' '//OPTIONS )
@@ -972,7 +974,6 @@ end subroutine test_reverse
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_upper
 !-!use M_strings, only: upper
-implicit none
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -984,7 +985,6 @@ end subroutine test_upper
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lower
 !-!use M_strings, only: lower
-implicit none
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -997,7 +997,6 @@ end subroutine test_lower
 subroutine test_switch
 !-!use M_switch, only: reverse
 !-!use M_switch, only: switch
-implicit none
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 character(len=1)            :: chars(36)
@@ -1062,13 +1061,13 @@ character(len=1024) :: in
    call unit_check_start('indent',' -description ''count number of leading spaces'' ' //OPTIONS )
 
    in='    should be four'
-   call unit_check('indent',indent(in) == 4,msg=trim(in))
+   call unit_check('indent',indent(in) == 4,msg=in)
 
    in='should be zero'
-   call unit_check('indent',indent(in) == 0,msg=trim(in))
+   call unit_check('indent',indent(in) == 0,msg=in)
 
    in='   should be three'
-   call unit_check('indent',indent(trim(in)) == 3,msg=trim(in))
+   call unit_check('indent',indent(in) == 3,msg=in)
 
    call unit_check_done('indent')
 end subroutine test_indent
@@ -1094,7 +1093,8 @@ character(len=2) :: controls(0:31)
       enddo
    endif
    do i=32,126
-      call unit_check('visible',char(i) == visible(char(i)),i,visible(char(i)),char(i))
+      ! add //'' to change function call to expression to avoid gfortran-11 bug
+      call unit_check('visible',char(i) == visible(char(i)),i,visible(char(i))//'',char(i)//'')
    enddo
    call unit_check_done('visible')
 end subroutine test_visible
@@ -1203,7 +1203,6 @@ end subroutine test_adjustc
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_nospace
 !-!use M_strings, only: nospace
-implicit none
    character(len=:),allocatable :: string
    string='  This     is      a     test  '
    string=nospace(string)
@@ -1225,15 +1224,50 @@ subroutine test_stretch()
    call unit_check_done('stretch',msg='tests completed')
 end subroutine test_stretch
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_atleast()
-   call unit_check_start('atleast',' -description ''return a string of at least specified length'' '//OPTIONS )
-   call unit_check('atleast',atleast('Hello World',20)//'!' == 'Hello World         !',msg='check if padded')
-   call unit_check('atleast',len(atleast('Hello World',20)) == 20,msg='check padded length')
-   call unit_check('atleast',len(atleast('Hello World',2)) == 11 &
-           .and.atleast('Hello World',2) == 'Hello World', &
+subroutine test_pad()
+   call unit_check_start('pad',' -description ''return a string of at least specified length'' '//OPTIONS )
+   call unit_check('pad',pad('Hello World',20)//'!' == 'Hello World         !',msg='check if padded')
+   call unit_check('pad',len(pad('Hello World',20)) == 20,msg='check padded length')
+   call unit_check('pad',len(pad('Hello World',2)) == 11 &
+           .and.pad('Hello World',2) == 'Hello World', &
            msg='check not truncated')
-   call unit_check_done('atleast',msg='tests completed')
-end subroutine test_atleast
+   call unit_check_done('pad',msg='tests completed')
+end subroutine test_pad
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_zpad()
+   call unit_check_start('zpad',' -description ''return a string left-padded with zeros'' '//OPTIONS )
+   call unit_check('zpad',zpad(4,4) == '0004',zpad(4,4),'vs','0004')
+   call unit_check('zpad',zpad(4,4) == '0004',zpad(4,4),'vs','0004')
+   call unit_check('zpad',zpad(' 123 ',4) == '0123',zpad(' 123 ',4),'vs','0123')
+   call unit_check('zpad',all(zpad([1,12,123,1234]) == ['0001','0012','0123','1234']),'["0001","0012","0123","1234"]')
+   call unit_check_done('zpad',msg='tests completed')
+end subroutine test_zpad
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_lpad()
+   call unit_check_start('lpad',' -description ''return a left-padded string'' '//OPTIONS )
+   call unit_check('lpad',lpad(4,4) == '   4',lpad(4,4),'vs','   4')
+   call unit_check('lpad',lpad(4,4) == '   4',lpad(4,4),'vs','   4')
+   call unit_check('lpad',lpad(' 123 ',4) == ' 123 ',lpad(' 123 ',4),'vs',' 123')
+   call unit_check('lpad',all(lpad([1,12,123,1234]) == ['   1','  12',' 123','1234']),'["   1","  12"," 123","1234"]')
+   call unit_check_done('lpad',msg='tests completed')
+end subroutine test_lpad
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_cpad()
+   call unit_check_start('cpad',' -description ''return a left-padded string'' '//OPTIONS )
+   call unit_check('cpad',cpad(4,3) == ' 4 ',cpad(4,3),'vs',' 4 ')
+   call unit_check('cpad',cpad('123',8) == '  123   ',cpad('123',8),'vs','  123   ')
+   call unit_check('cpad',all(cpad([1,12,123,1234]) == [' 1  ',' 12 ','123 ','1234']),'[" 1  "," 12 ","123 ","1234"]')
+   call unit_check_done('cpad',msg='tests completed')
+end subroutine test_cpad
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_rpad()
+   call unit_check_start('rpad',' -description ''return a right-padded string'' '//OPTIONS )
+   call unit_check('rpad',rpad(4,4) == '4   ',rpad(4,2),'vs','4   ')
+   call unit_check('rpad',rpad(-4,4) == '-4   ',rpad(-4,2),'vs','-4  ')
+   call unit_check('rpad','['//rpad(' 123 ',4)//']' == '['//'123 '//']','['//rpad(' 123 ',4)//']','vs [','123 '//']')
+   call unit_check('rpad',all(rpad([1,12,123,1234]) == ['1   ','12  ','123 ','1234']),'["1   ","12  ","123 ","1234"]')
+   call unit_check_done('rpad',msg='tests completed')
+end subroutine test_rpad
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lenset()
 character(len=10)            :: string='abcdefghij'
@@ -1267,7 +1301,6 @@ end subroutine test_merge_str
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_compact
 !-!use M_strings, only: compact
-implicit none
    call unit_check_start('compact',' &
       & -description ''left justify string and replace duplicate whitespace with single characters or nothing'' '//OPTIONS )
    if (compact('  This  is     a    test  ')  /=  'This is a test')then
@@ -1428,7 +1461,6 @@ end subroutine test_s2v
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_value_to_string
 !-!use M_strings, only: value_to_string
-implicit none
 CHARACTER(LEN=80) :: STRING
 doubleprecision   :: DVALUE
 real              :: RVALUE
@@ -1491,24 +1523,6 @@ integer           :: IERRSUM=0
 !===================================================================================================================================
 end subroutine test_value_to_string
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_v2s_bug()
-doubleprecision SUM, SUM2, DELTA
-   SUM2=5.555555555555555555555555555555555d0+5.555555555555555555555555555555555e0+INT(5.555555555555555555555555555555555)
-   DELTA=spacing(0.0d0)+spacing(0.0)
-   call unit_check_start('v2s_bug',' &
-      & -description ''generic function returns string given numeric REAL|DOUBLEPRECISION|INTEGER value'' '//OPTIONS )
-   SUM=s2v(v2s_bug(5.55555555555555555555555555d0))
-   SUM=SUM+REAL(s2v(v2s_bug(5.55555555555555555555555555e0)))
-   SUM=SUM+INT(s2v(v2s_bug(5.55555555555555555555555555e0)))
-   if(unit_check_level > 0)then
-      write(std_err,g) 'v2s_bug: SUM2=', SUM2
-      write(std_err,g) 'v2s_bug: SUM=', SUM
-      write(std_err,g) 'v2s_bug: DELTA=', DELTA
-   endif
-   call unit_check('v2s_bug',sum+delta >= sum2.and.sum-delta <= sum2)
-   call unit_check_done('v2s_bug')
-end subroutine test_v2s_bug
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_v2s()
 !use M_math, only : almost
 real            :: SUM
@@ -1528,7 +1542,6 @@ end subroutine test_v2s
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isnumber
 !-!use M_strings, only: isnumber
-implicit none
    call unit_check_start('isnumber',' '//OPTIONS )
    call unit_check('isnumber',isnumber(' 123 ')                                            ==  1,  'integer string')
    call unit_check('isnumber',isnumber(' -123. ')                                          ==  2,  'whole number string')
@@ -1581,7 +1594,7 @@ character(len=:),allocatable :: test_out(:)
          write(std_err,'(a)')'ORIGINAL ['//test_in(i)//']'
          write(std_err,'(a)')'QUOTED   ['//quote(test_in(i))//']'
       endif
-      call unit_check('quote',quote(test_in(i)) == test_out(i),quote(test_in(i)),'==>',trim(test_out(i)))
+      call unit_check('quote',quote(test_in(i)) == test_out(i),quote(test_in(i)),'==>',test_out(i))
    enddo
    call unit_check_done('quote')
 end subroutine test_quote
@@ -1622,7 +1635,6 @@ end subroutine test_unquote
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_describe
 !-!use M_strings, only: describe
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
@@ -1721,16 +1733,15 @@ integer,allocatable         :: ivalues(:)
    call unit_check_done('edit_distance')
 end subroutine test_edit_distance
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_cc()
-integer,allocatable         :: ivalues(:)
-   call unit_check_start('cc',' -description ''return array from list of strings'''//OPTIONS)
-   call unit_check('cc',all(cc('kittens','sit','three') == ["kittens","sit    ","three  "]), "'kittens','sit    ','three  '")
-   call unit_check_done('cc')
-end subroutine test_cc
+subroutine test_bundle()
+   call unit_check_start('bundle',' -description ''return array from list of strings'''//OPTIONS)
+   call unit_check('bundle',all(bundle('kittens','sit','three') == ["kittens","sit    ","three  "]), &
+                                                                  &"'kittens','sit    ','three  '")
+   call unit_check_done('bundle')
+end subroutine test_bundle
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isprint
 !-!use M_strings, only: isprint
-implicit none
 integer :: i
    call unit_check_start('isprint',' &
       & -description ''elemental function determines if CHR is an ASCII printable character'' '//OPTIONS )
@@ -1755,7 +1766,6 @@ end subroutine test_isprint
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isgraph
 !-!use M_strings, only: isgraph
-implicit none
 integer :: i
    call unit_check_start('isgraph',' &
       & -description ''elemental function true if CHR is an ASCII printable character except considers a space non-printable'' '&
@@ -1781,7 +1791,6 @@ end subroutine test_isgraph
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isalpha
 !-!use M_strings, only: isalpha
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: ch
 integer                       :: i
@@ -1809,7 +1818,6 @@ end subroutine test_isalpha
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isxdigit
 !-!use M_strings, only: isxdigit
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: ch
 integer                       :: i
@@ -1838,7 +1846,6 @@ end subroutine test_isxdigit
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isdigit
 !-!use M_strings, only: isdigit
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
@@ -1865,7 +1872,6 @@ end subroutine test_isdigit
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isblank
 !-!use M_strings, only: isblank
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
@@ -1892,7 +1898,6 @@ end subroutine test_isblank
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isascii
 !-!use M_strings, only: isascii
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
@@ -1920,7 +1925,6 @@ end subroutine test_isascii
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isspace
 !-!use M_strings, only: isspace
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
@@ -1949,7 +1953,6 @@ end subroutine test_isspace
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_iscntrl
 !-!use M_strings, only: iscntrl
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
@@ -1977,7 +1980,6 @@ end subroutine test_iscntrl
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ispunct
 !-!use M_strings, only: ispunct
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
@@ -2005,7 +2007,6 @@ end subroutine test_ispunct
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isupper
 !-!use M_strings, only: isupper
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: ch
 integer                       :: i
@@ -2034,7 +2035,6 @@ end subroutine test_isupper
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_islower
 !-!use M_strings, only: islower
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: ch
 integer                       :: i
@@ -2063,7 +2063,6 @@ end subroutine test_islower
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_isalnum
 !-!use M_strings, only: isalnum
-implicit none
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: ch
 integer                       :: i
@@ -2089,6 +2088,14 @@ integer                       :: i
    enddo
    call unit_check_good('isalnum')
 end subroutine test_isalnum
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_nint()
+   call unit_check_start('nint',' ' //OPTIONS )
+   call unit_check('nint',nint('1234.4') == 1234,msg='test string to integer for overloaded NINT("1234.4")')
+   call unit_check('nint',nint('1234.5') == 1235,msg='test string to integer for overloaded NINT("1234.5")')
+   call unit_check('nint',nint('1234.6') == 1235,msg='test string to integer for overloaded NINT("1234.6")')
+   call unit_check_done('nint',msg=' overload of NINT()')
+end subroutine test_nint
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_int()
    call unit_check_start('int',' ' //OPTIONS )
@@ -2142,6 +2149,7 @@ program runtest
 use M_msg
 use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
 use M_testsuite_M_strings
+implicit none
    unit_check_command=''
    unit_check_keep_going=.true.
 !  unit_check_level=1

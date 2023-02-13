@@ -56,11 +56,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>specified(3f) </B>- [ARGUMENTS:M_CLI2] return true if keyword was present
-<B>on command line
-</B><B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+specified(3f) - [ARGUMENTS:M_CLI2] return true if keyword was present
+on command line
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -77,9 +77,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-elemental impure function <B>specified</B>(<I>name</I>)
+elemental impure function specified(name)
 <P>
+<PRE>
     character(len=*),intent(in) :: name
     logical :: specified
 <P>
@@ -92,8 +92,18 @@ elemental impure function <B>specified</B>(<I>name</I>)
 </A>
 <BLOCKQUOTE>
 <P>
-<B>specified</B>(3f) returns .true. if the specified keyword was present on
+specified(3f) returns .true. if the specified keyword was present on
 the command line.
+<P>
+M_CLI2 intentionally does not have validators except for SPECIFIED(3f)
+and of course a check whether the input conforms to the type when
+requesting a value (with get_args(3f) or the convenience functions
+like inum(3f)).
+<P>
+Fortran already has powerful validation capabilities. Logical
+expressions ANY(3f) and ALL(3f) are standard Fortran features which
+easily allow performing the common validations for command line
+arguments without having to learn any additional syntax or methods.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -105,7 +115,8 @@ the command line.
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>NAME</B> </TD><TD valign=bottom>
-<I>name</I> of commandline argument to query the presence of
+name of commandline argument to query the presence of. Long
+names should always be used.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -131,45 +142,104 @@ Sample program:
 <P>
 <PRE>
    program demo_specified
-   use M_CLI2,  only : set_args, get_args, specified
+   use, intrinsic :: iso_fortran_env, only : &
+   & stderr=&gt;ERROR_UNIT, stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
+   use M_CLI2,  only : set_args, igets, rgets, specified, sget, lget
    implicit none
-   ! DEFINE ARGS
-   integer                 :: flag
-   integer,allocatable     :: ints(:)
-   real,allocatable        :: twonames(:)
 <P>
-   ! IT IS A BAD IDEA TO NOT HAVE THE SAME DEFAULT VALUE FOR ALIASED
-   ! NAMES BUT CURRENTLY YOU STILL SPECIFY THEM
-    call set_args(&#146;-flag 1 -f 1 -ints 1,2,3 -i 1,2,3 -twonames 11.3 -T 11.3&#146;)
+   ! Define args
+   integer,allocatable  :: ints(:)
+   real,allocatable     :: floats(:)
+   logical              :: flag
+   character(len=:),allocatable :: color
+   character(len=:),allocatable :: list(:)
+   integer :: i
 <P>
-   ! ASSIGN VALUES TO ELEMENTS CONDITIONALLY CALLING WITH SHORT NAME
-    call get_args(&#146;flag&#146;,flag)
-    if(specified(&#146;f&#146;))call get_args(&#146;f&#146;,flag)
-    call get_args(&#146;ints&#146;,ints)
-    if(specified(&#146;i&#146;))call get_args(&#146;i&#146;,ints)
-    call get_args(&#146;twonames&#146;,twonames)
-    if(specified(&#146;T&#146;))call get_args(&#146;T&#146;,twonames)
+    call set_args(&#146;&
+       & --color:c "red"       &
+       & --flag:f F            &
+       & --ints:i 1,10,11      &
+       & --floats:T 12.3, 4.56 &
+       & &#146;)
+    ints=igets(&#146;ints&#146;)
+    floats=rgets(&#146;floats&#146;)
+    flag=lget(&#146;flag&#146;)
+    color=sget(&#146;color&#146;)
 <P>
-    ! IF YOU WANT TO KNOW IF GROUPS OF PARAMETERS WERE SPECIFIED USE
+    write(*,*)&#146;color=&#146;,color
+    write(*,*)&#146;flag=&#146;,flag
+    write(*,*)&#146;ints=&#146;,ints
+    write(*,*)&#146;floats=&#146;,floats
+<P>
+    write(*,*)&#146;was -flag specified?&#146;,specified(&#146;flag&#146;)
+<P>
+    ! elemental
+    write(*,*)specified([&#146;floats&#146;,&#146;ints  &#146;])
+<P>
+    ! If you want to know if groups of parameters were specified use
     ! ANY(3f) and ALL(3f)
-    write(*,*)specified([&#146;twonames&#146;,&#146;T       &#146;])
-    write(*,*)&#146;ANY:&#146;,any(specified([&#146;twonames&#146;,&#146;T       &#146;]))
-    write(*,*)&#146;ALL:&#146;,all(specified([&#146;twonames&#146;,&#146;T       &#146;]))
+    write(*,*)&#146;ANY:&#146;,any(specified([&#146;floats&#146;,&#146;ints  &#146;]))
+    write(*,*)&#146;ALL:&#146;,all(specified([&#146;floats&#146;,&#146;ints  &#146;]))
 <P>
-    ! FOR MUTUALLY EXCLUSIVE
-    if (all(specified([&#146;twonames&#146;,&#146;T       &#146;])))then
-        write(*,*)&#146;You specified both names -T and -twonames&#146;
+    ! For mutually exclusive
+    if (all(specified([&#146;floats&#146;,&#146;ints  &#146;])))then
+        write(*,*)&#146;You specified both names --ints and --floats&#146;
     endif
 <P>
-    ! FOR REQUIRED PARAMETER
-    if (.not.any(specified([&#146;twonames&#146;,&#146;T       &#146;])))then
-        write(*,*)&#146;You must specify -T or -twonames&#146;
+    ! For required parameter
+    if (.not.any(specified([&#146;floats&#146;,&#146;ints  &#146;])))then
+        write(*,*)&#146;You must specify --ints or --floats&#146;
     endif
-    ! USE VALUES
-      write(*,*)&#146;flag=&#146;,flag
-      write(*,*)&#146;ints=&#146;,ints
-      write(*,*)&#146;twonames=&#146;,twonames
-    end program demo_specified
+<P>
+   ! check if all values are in range from 10 to 30 and even
+   write(*,*)&#146;are all numbers good?&#146;,all([ints&gt;=10,ints&lt;= 30,(ints/2)*2==ints])
+<P>
+   ! perhaps you want to check one value at a time
+   do i=1,size(ints)
+      write(*,*)ints(i),[ints(i) &gt;= 10,ints(i) &lt;= 30,(ints(i)/2)*2 == ints(i)]
+      if(all([ints(i) &gt;= 10,ints(i) &lt;= 30,(ints(i)/2)*2 == ints(i)]) )then
+         write(*,*)ints(i),&#146;is an even number from 10 to 30 inclusive&#146;
+      else
+         write(*,*)ints(i),&#146;is not an even number from 10 to 30 inclusive&#146;
+      endif
+   enddo
+<P>
+   list = [character(len=10) :: &#146;red&#146;,&#146;white&#146;,&#146;blue&#146;]
+   if( any(color == list) )then
+      write(*,*)color,&#146;matches a value in the list&#146;
+   else
+      write(*,*)color,&#146;not in the list&#146;
+   endif
+<P>
+   if(size(ints).eq.3)then
+      write(*,*)&#146;ints(:) has expected number of values&#146;
+   else
+      write(*,*)&#146;ints(:) does not have expected number of values&#146;
+   endif
+<P>
+   end program demo_specified
+<P>
+</PRE>
+Default output
+<P>
+<PRE>
+ &gt; color=red
+ &gt; flag= F
+ &gt; ints=           1          10          11
+ &gt; floats=   12.3000002       4.55999994
+ &gt; was -flag specified? F
+ &gt; F F
+ &gt; ANY: F
+ &gt; ALL: F
+ &gt; You must specify --ints or --floats
+ &gt;           1 F T F
+ &gt;           1  is not an even number from 10 to 30 inclusive
+ &gt;          10 T T T
+ &gt;          10  is an even number from 10 to 30 inclusive
+ &gt;          11 T T F
+ &gt;          11  is not an even number from 10 to 30 inclusive
+ &gt; red matches a value in the list
+ &gt; ints(:) has expected number of values
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -190,7 +260,7 @@ John S. Urban, 2019
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>specified (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dd10c7fb-398a-4519-8ad7-098b566b5af8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>specified (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 262dca56-1924-423b-8f32-3ebc6e1e3ba4 using man macros.</FONT>
 <br><br><center><img src="images/specified.3m_cli2.gif"></center>
 </div>
 </div>

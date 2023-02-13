@@ -172,47 +172,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!        printenv-(1f) - [FUNIX:ENVIRONMENT] print all or part of environment in formats readable by various shells
-!!        (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!        printenv- [variable...] [ -C|-B]
-!!        printenv- [ --help|--version]
-!!##DESCRIPTION
-!!        If no arguments are given, printenv-(1f) prints the entire environment.
-!!        If one or more variable names are given, it prints the value of
-!!        each one that is set.
-!!
-!!##OPTIONS
-!!        variable(s)  if variable names are given, print the value for
-!!                     each one that is set.
-!!        -C           print output in a form that can be sourced into a
-!!                     C shell (eg. as a setenv(1) command).
-!!        -B           print output in a form that can be sourced into a
-!!                     Bourne shell.
-!!        --help       display this help and exit
-!!        --version    output version information and exit
-!!
-!!##USAGE
-!!      Example commands:
-!!
-!!       printenv-                       # print entire environment
-!!       printenv- HOME TMP LOGNAME USER # print selected variables
-!!       printenv- USER -C               # print as a C-shell setenv(1) command
-!!
-!!##EXIT STATUS
-!!        The exit status is:
-!!
-!!         0  if all variables specified were found
-!!         1  otherwise
-!!##SEE ALSO
-!!        env(1), printenv(1)
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -229,7 +188,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0 2016-11-27>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2022-12-21 19:28:47 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 12:23:16 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

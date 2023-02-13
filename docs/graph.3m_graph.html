@@ -56,7 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>graph(3) </B>- [M_graph] Draw an XY graph
+graph(3) - [M_graph] Draw an XY graph
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -72,9 +72,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-subroutine <B>graph</B>(x,y,ndp,ndl,f,c,nc)
-</PRE>
+subroutine graph(x,y,ndp,ndl,f,c,nc)
 </BLOCKQUOTE>
 <A name=2>
 
@@ -85,16 +83,16 @@ subroutine <B>graph</B>(x,y,ndp,ndl,f,c,nc)
 <P>
 This is an XY graph routine that is intended to be very self-contained and
 easily ported to various graphics libraries. This version is callable from
-the <B>M_draw</B>(3f) module.
+the M_draw(3f) module.
 <P>
 It is being ported from the LONGLIB public domain library and will be
-changing. It is recommended that you rename the <B>M_graph</B>(3f) module source
+changing. It is recommended that you rename the M_graph(3f) module source
 to freeze a copy at this point, as new versions will not necessarily be
-upward compatible. The underlying calls to <B>M_graph</B>(3f) should not require
+upward compatible. The underlying calls to M_graph(3f) should not require
 any changes.
 <P>
-<B>graph</B>(3f) is a general routine for plotting lines or scatterplots. Optionally,
-error bars and symbols can be added. <B>graph</B>(3f) differs in philosophy from other
+graph(3f) is a general routine for plotting lines or scatterplots. Optionally,
+error bars and symbols can be added. graph(3f) differs in philosophy from other
 libDL MASTER routines in that plotting options are passed via an option array.
 The routine is designed to produce a reasonable plot with the option array set
 to all zeros. The output format is changed by initializing selected array
@@ -111,11 +109,11 @@ specification of the plot format.
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>x</B> </TD><TD valign=bottom>
-(R): x input array dimensioned <B>x</B>(ndp,ndl).
+(R): x input array dimensioned x(ndp,ndl).
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>y</B> </TD><TD valign=bottom>
-(R): y input array dimensioned <B>y</B>(ndp,ndl).
+(R): y input array dimensioned y(ndp,ndl).
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>ndp</B> </TD><TD valign=bottom>
@@ -127,7 +125,7 @@ specification of the plot format.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>f</B> </TD><TD valign=bottom>
-(R): option array dimensioned at least <B>f</B>(53)
+(R): option array dimensioned at least f(53)
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -136,7 +134,7 @@ specification of the plot format.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>c</B> </TD><TD valign=bottom>
-(C): array of strings dimensioned <B>C</B>(3+ndl)
+(C): array of strings dimensioned C(3+ndl)
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -150,7 +148,7 @@ specification of the plot format.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>nc</B> </TD><TD valign=bottom>
-(i): array of string lengths dimensioned <B>nc</B>(3+ndl)
+(i): array of string lengths dimensioned nc(3+ndl)
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -165,7 +163,7 @@ brackets). These are used when the input value is zero. A simple plot may be
 produced by setting all the elements of f to zero. Note that user specified
 input scaling factors should be powers of ten when the log axis specification
 is selected. An optional legend may be plotted. The legend consists of a column
-of lines and the labels from <B>n</B>(4:)
+of lines and the labels from n(4:)
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -190,11 +188,11 @@ of lines and the labels from <B>n</B>(4:)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>4</B> </TD><TD valign=bottom>
-xmin    user supplied scale value (used if <B>f</B>(3)&lt;0)
+xmin    user supplied scale value (used if f(3)&lt;0)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>5</B> </TD><TD valign=bottom>
-xmax    user supplied scale value (used if <B>f</B>(3)&lt;0)
+xmax    user supplied scale value (used if f(3)&lt;0)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>6</B> </TD><TD valign=bottom>
@@ -202,11 +200,11 @@ xmax    user supplied scale value (used if <B>f</B>(3)&lt;0)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>7</B> </TD><TD valign=bottom>
-ymin    user supplied scale value (used if <B>f</B>(6)&lt;0)
+ymin    user supplied scale value (used if f(6)&lt;0)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>8</B> </TD><TD valign=bottom>
-ymax    user supplied scale value (used if <B>f</B>(6)&lt;0)
+ymax    user supplied scale value (used if f(6)&lt;0)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>9</B> </TD><TD valign=bottom>
@@ -313,11 +311,11 @@ rval    reference value
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>35</B> </TD><TD valign=bottom>
-0/1     use <B>x=log10</B>(abs(x values)+1.e-34): 0=no; 1=yes
+0/1     use x=log10(abs(x values)+1.e-34): 0=no; 1=yes
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>36</B> </TD><TD valign=bottom>
-0/1     use <B>y=log10</B>(abs(y values)+1.e-34): 0=no; 1=yes
+0/1     use y=log10(abs(y values)+1.e-34): 0=no; 1=yes
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>37</B> </TD><TD valign=bottom>
@@ -406,6 +404,7 @@ yval    user specified lower-left corner of legend
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&#46;&#46;&#46;</B> </TD><TD valign=bottom>
+[char46]..      ... etc ...
 </TD></TR>
 <TR></TR></TABLE><!-- .PP -->
 </TD></TR>
@@ -578,7 +577,7 @@ Version 2.0 20-JAN-1994 17:13:12.80
 Version 3.0 Wed Jun 12 10:34:11 MDT 1996
 </TD></TR>
 <TR></TR></TABLE><P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>graph (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1f293171-58dd-4320-8ded-fff1cd53bbba using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>graph (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7df0ee22-bfcb-45cb-ba84-7a2a70418250 using man macros.</FONT>
 <br><br><center><img src="images/graph.3m_graph.gif"></center>
 </div>
 </div>

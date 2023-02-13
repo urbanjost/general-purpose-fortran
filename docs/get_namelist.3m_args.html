@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>get_namelist(3f) </B>- [ARGUMENTS:M_args] NAMELIST-based command line argument parsing
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+get_namelist(3f) - [ARGUMENTS:M_args] NAMELIST-based command line argument parsing
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,9 +75,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-function <B>get_namelist</B>(definition,all) <B>result</B>(<I>string</I>)
+function get_namelist(definition,all) result(string)
 <P>
+<PRE>
    character(len=*),intent(in),optional  :: definition
    logical,intent(in),optional  :: all
    character(len=:),allocatable :: string
@@ -106,7 +106,7 @@ The routine provides three modes
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>keyword=value</B>(s) pairs on the command line.
+keyword=value(s) pairs on the command line.
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
@@ -114,22 +114,19 @@ o
 <P>
       cmd x=1 point=-1,-2,-3 help=T
 <P>
+     This requires nothing but a call to the get_namelist(3f) procedure
+     with no arguments and is very suitable if you just need to pass in
+     a few numeric values. the syntax used on the command line is the
+     syntax required for a NAMELIST input string which is very good for
+     numeric values but does not follow the common syntax rules found
+     in routines like getopts(3c) or IEEE Std 1003.1-2001, for example.
+<P>
 </PRE>
-<BLOCKQUOTE>
-This requires nothing but a call to the <B>get_namelist</B>(3f) procedure
-with no arguments and is very suitable if you just need to pass in
-a few numeric values. the syntax used on the command line is the
-syntax required for a NAMELIST input <I>string</I> which is very good for
-numeric values but does not follow the common syntax rules found
-in routines like <B>getopts</B>(3c) or IEEE Std 1003.1-2001, for example.
-</BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: This requires nothing but a call to the <B>get_namelist</B>(3f) procedure
- -->
-<TR></TR><TR></TR>
+<TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Unix-like command usage when provided a NAMELIST group <I>string</I>.
+Unix-like command usage when provided a NAMELIST group string.
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
@@ -137,16 +134,13 @@ Unix-like command usage when provided a NAMELIST group <I>string</I>.
 <P>
       cmd -x 1 --point -1,-2,-3 --title &#146;my string&#146; --help file1 file2
 <P>
+     You can use an internal write to generate the input string (which
+     means to add a new parameter you need to do nothing but initialize
+     the variable and add the name to the ARGS NAMELIST group and it
+     automatically becomes a new command line argument).
+<P>
 </PRE>
-<BLOCKQUOTE>
-You can use an internal write to generate the input <I>string</I> (which
-means to add a new parameter you need to do nothing but initialize
-the variable and add the name to the ARGS NAMELIST group and it
-automatically becomes a new command line argument).
-</BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: You can use an internal write to generate the input <I>string</I> (which
- -->
-<TR></TR><TR></TR>
+<TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -158,14 +152,12 @@ Unix-like command usage when provided a Unix-like prototype.
 <P>
       cmd -x 1 --point -1,-2,-3 --title &#146;my string&#146; --help file1 file2
 <P>
-</PRE>
-<BLOCKQUOTE>
-If you are not familiar with NAMELIST input and output you can
-declare all the members of the namelist and their default values
-much like you were calling the program with a command prototype
-<I>string</I>.
-</BLOCKQUOTE>
+     If you are not familiar with NAMELIST input and output you can
+     declare all the members of the namelist and their default values
+     much like you were calling the program with a command prototype
+     string.
 <P>
+</PRE>
 For all three modes there is no need to convert from strings to numeric
 values in the source code. Even arrays and user-defined types can be
 used, complex values can be input &#46;&#46;&#46; just define the variable and
@@ -185,7 +177,7 @@ and requires at least Fortran 2003.
 </A>
 <BLOCKQUOTE>
 <P>
-If the routine is called with no definition <I>string</I> arguments are passed
+If the routine is called with no definition string arguments are passed
 in on the command line using NAMELIST syntax (ie. KEYWORD=VALUE). This
 is particularly suited for passing a few numeric values.
 <P>
@@ -223,9 +215,9 @@ For example:
 <P>
        ! use the values in your program.
        write(*,nml=args)
-</PRE>
-end program nooptions
+    end program nooptions
 <P>
+</PRE>
 You can call the example program with syntax like:
 <P>
 <PRE>
@@ -257,8 +249,8 @@ shell and OS you are running in. Typically the following will work &#46;&#46;&#4
 <BLOCKQUOTE>
 <P>
 If you want to pass in options using syntax similar to that provided
-by the C <B>getopts</B>(3c) procedure pass in a NAMELIST <I>string</I>. Typically,
-you would generate the input <I>string</I> by writing the NAMELIST group to
+by the C getopts(3c) procedure pass in a NAMELIST string. Typically,
+you would generate the input string by writing the NAMELIST group to
 an internal file.
 <P>
 The following program can be called using commands like
@@ -330,16 +322,15 @@ Typical program skeleton:
     end program demo_get_namelist
 <P>
 </PRE>
-Instead of writing the NAMELIST group into a <I>string</I> you can compose
-the <I>string</I> yourself. only defined names will be able to be specified
+Instead of writing the NAMELIST group into a string you can compose
+the string yourself. only defined names will be able to be specified
 on the command line. For example:
 <P>
 <PRE>
     call get_namelist(&#146;&ARGS A_="A value",B_=" ",C_=11 22 33, help=F/&#146;)
 <P>
 </PRE>
-</BLOCKQUOTE>
-Sample with manual definition of NAMELIST <I>string</I>
+Sample with manual definition of NAMELIST string
 <P>
 <PRE>
     program show_get_namelist_manual
@@ -377,14 +368,15 @@ Sample with manual definition of NAMELIST <I>string</I>
     end program show_get_namelist_manual
 <P>
 </PRE>
+</BLOCKQUOTE>
 <A name=>
 
     <H4>&nbsp; &nbsp; UNIX PROTOTYPE</H4>
 </A>
 <BLOCKQUOTE>
 <P>
-Instead of passing in a NAMELIST <I>string</I> a Unix-like command prototype
-<I>string</I> can be used. Something like:
+Instead of passing in a NAMELIST string a Unix-like command prototype
+string can be used. Something like:
 <P>
 <PRE>
       call get_namelist(&#146;-A " " -l -x -30.34e2 --help -version &#146;)
@@ -451,8 +443,8 @@ typical usage:
 <TR valign=top><TD colspan=2>
 <B><A HREF=#2>DESCRIPTION</A></B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 null or composed of all command arguments concatenated
-into a <I>string</I> prepared for reading as a NAMELIST group
-or a Unix-line command prototype <I>string</I>.
+into a string prepared for reading as a NAMELIST group
+or a Unix-line command prototype string.
 <P>
 When creating a Unix-like prototype
 <TABLE width=100% cellpadding=3><!-- tsb: When creating a Unix-like prototype
@@ -498,11 +490,11 @@ the values follow the rules for NAMELIST values, so
 </TD></TR>
 <TR valign=top><TD width=3% nowrap>
 <B>ALL</B> </TD><TD valign=bottom>
-By default the output NAMELIST <I>string</I> only contains
+By default the output NAMELIST string only contains
 keywords and values for names that were specified on
 the command line. If ALL is .TRUE. a full NAMELIST
-<I>string</I> is returned containing all the variables from
-the input <I>string</I>.
+string is returned containing all the variables from
+the input string.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -514,7 +506,7 @@ the input <I>string</I>.
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>STRING</B> </TD><TD valign=bottom>
-The output is a NAMELIST <I>string</I> than can be read to update
+The output is a NAMELIST string than can be read to update
 the NAMELIST "ARGS" with the keywords that were supplied on
 the command line.
 </TD></TR>
@@ -565,7 +557,7 @@ keywords.
 o
 </TD><TD>
 if a parameter value of just "-" is supplied it is
-converted to the <I>string</I> "stdin".
+converted to the string "stdin".
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -611,7 +603,7 @@ John S. Urban, 2019
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_namelist (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8afb5020-061d-4433-bcd7-eff9eddac9bc using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_namelist (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8bc70fe1-4f1d-41c5-9c99-62b69f9316e1 using man macros.</FONT>
 <br><br><center><img src="images/get_namelist.3m_args.gif"></center>
 </div>
 </div>

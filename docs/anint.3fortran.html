@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>anint</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>anint</B>(3fortran)
+<B>anint(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+anint(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,20 +65,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>ANINT(3) </B>- [NUMERIC] Real nearest whole number
-<B>
-</B></BLOCKQUOTE>
+ANINT(3) - [NUMERIC] Real nearest whole number
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=9>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>anint</B>(a [,<I>kind</I>])
+result = anint(a [,kind])
 <P>
+<PRE>
            elemental real(kind=KIND) function anint(x,KIND)
 <P>
             real(kind=**),intent(in)   :: x
@@ -96,7 +96,7 @@ result = <B>anint</B>(a [,<I>kind</I>])
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A is type real of any <I>kind</I>
+A is type real of any kind
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -106,7 +106,7 @@ KIND is a scalar integer constant expression.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is type real. The <I>kind</I> of the result is the same as X unless
+the result is type real. The kind of the result is the same as X unless
 specified by KIND.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -116,9 +116,9 @@ specified by KIND.
 
 </A>
 <BLOCKQUOTE>
-<B>ANINT</B>(3) rounds its argument to the nearest whole number.
+ANINT(3) rounds its argument to the nearest whole number.
 <P>
-Unlike <B>NINT</B>(3) which returns an integer the full range or real values can be
+Unlike NINT(3) which returns an integer the full range or real values can be
 returned (integer types typically have a smaller range of values than real
 types).
 </BLOCKQUOTE>
@@ -137,7 +137,7 @@ A : the value to round
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : specifies the <I>kind</I> of the result. The default is the <I>kind</I> of A.
+KIND : specifies the kind of the result. The default is the kind of A.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -147,9 +147,94 @@ KIND : specifies the <I>kind</I> of the result. The default is the <I>kind</I> o
 </A>
 <BLOCKQUOTE>
 The return value is the whole number nearest A.
+<P>
+If A is greater than zero, ANINT(A)(3) returns AINT(A + 0.5).
+<P>
+If A is less than or equal to zero then it returns AINT(A - 0.5).
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_anint
+      use, intrinsic :: iso_fortran_env, only : real32, real64, real128
+      implicit none
+      real,allocatable :: arr(:)
+<P>
+        ! basics
+         print *, &#146;ANINT (2.783) has the value 3.0 =&gt;&#146;, anint(2.783)
+         print *, &#146;ANINT (-2.783) has the value -3.0 =&gt;&#146;, anint(-2.783)
+<P>
+         print *, &#146;by default the kind of the output is the kind of the input&#146;
+         print *, anint(1234567890.1234567890e0)
+         print *, anint(1234567890.1234567890d0)
+<P>
+         print *, &#146;sometimes specifying the result kind is useful when passing&#146;
+         print *, &#146;results as an argument, for example.&#146;
+         print *, &#146;do you know why the results are different?&#146;
+         print *, anint(1234567890.1234567890,kind=real64)
+         print *, anint(1234567890.1234567890d0,kind=real64)
+<P>
+        ! elemental
+         print *, &#146;numbers on a cusp are always the most troublesome&#146;
+         print *, anint([ -2.7, -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, 0.0 ])
+<P>
+         arr=[ 0.0, 0.5, 1.0, 1.5, 2.0, 2.2, 2.5, 2.7 ]
+         print *, anint(arr)
+<P>
+      end program demo_anint
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+          ANINT (2.783) has the value 3.0 =&gt;   3.000000
+          ANINT (-2.783) has the value -3.0 =&gt;  -3.000000
+          by default the kind of the output is the kind of the input
+           1.2345679E+09
+            1234567890.00000
+          sometimes specifying the result kind is useful when passing
+          results as an argument, for example.
+          do you know why the results are different?
+            1234567936.00000
+            1234567890.00000
+          numbers on a cusp are always the most troublesome
+           -3.000000      -3.000000    -2.000000      -2.000000    -2.000000
+           -1.000000      -1.000000    0.0000000E+00
+           0.0000000E+00   1.000000     1.000000       2.000000     2.000000
+            2.000000       3.000000     3.000000
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+FORTRAN 77
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+AINT(3), INT(3), NINT(3), SELECTED_INT_KIND(3), CEILING(3), FLOOR(3)
+<P>
+fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<P>
+<PRE>
+                               November 07, 2022               anint(3fortran)
+</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>anint (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cf3691ca-82d9-4693-8891-dfea995f74c9 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>anint (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 53b9f94f-e5a1-46dd-855f-8da2c6e5f5f7 using man macros.</FONT>
 <br><br><center><img src="images/anint.3fortran.gif"></center>
 </div>
 </div>

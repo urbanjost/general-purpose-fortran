@@ -12,4 +12,4 @@
            write(*,g) ishft(huge(0),shift), shift
            shift=-4
            write(*,g) ishft(huge(0),shift), shift
-  end program demo_ishft
+        end program demo_ishft

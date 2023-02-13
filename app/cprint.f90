@@ -8,84 +8,46 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   cprint(1f) - [FILE FILTER] filter prints specified columns                                                                   ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'SYNOPSIS                                                                                                                        ',&
-'   cprint [ columns ][ -delimiters delim] |-help|-version                                                                       ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   cprint is a filter that prints the specified columns.                                                                        ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'    columns      numbers indicating which columns to print.                                                                     ',&
-'                 A negative value denotes the end of a range.                                                                   ',&
-'                 A value must be from 1 to 1000.                                                                                ',&
-'    -delimiters  input column delimiter character(s) (default: whitespace)                                                      ',&
-'                 Delimiters are changed to spaces on outout.                                                                    ',&
-'    -help        display command help and exit                                                                                  ',&
-'    -version     display command metadata and exit                                                                              ',&
-'EXAMPLES                                                                                                                        ',&
-'  Sample usage:                                                                                                                 ',&
-'                                                                                                                                ',&
-'      $echo a b c d|cprint 1000 -1 # reverse column order of a table                                                            ',&
-'      d c b a                                                                                                                   ',&
-'                                                                                                                                ',&
-'      $: switch first and second column and skip third column                                                                   ',&
-'      $: and print up to column 1000                                                                                            ',&
-'      $ls -l |cprint 2 1 4 -1000                                                                                                ',&
-'                                                                                                                                ',&
-'      $: column numbers may be reused                                                                                           ',&
-'      $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1                                                                            ',&
-'      h e l l o w o r l d                                                                                                       ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                              ',&
+'   cprint(1f) - [FILE FILTER] filter prints specified columns                     ',&
+'   (LICENSE:PD)                                                                   ',&
+'SYNOPSIS                                                                          ',&
+'   cprint [ columns ][ -delimiters delim] |-help|-version                         ',&
+'                                                                                  ',&
+'DESCRIPTION                                                                       ',&
+'   cprint is a filter that prints the specified columns.                          ',&
+'                                                                                  ',&
+'OPTIONS                                                                           ',&
+'    columns      numbers indicating which columns to print.                       ',&
+'                 A negative value denotes the end of a range.                     ',&
+'                 A value must be from 1 to 1000.                                  ',&
+'    -delimiters  input column delimiter character(s) (default: whitespace)        ',&
+'                 Delimiters are changed to spaces on outout.                      ',&
+'    -help        display command help and exit                                    ',&
+'    -version     display command metadata and exit                                ',&
+'EXAMPLES                                                                          ',&
+'  Sample usage:                                                                   ',&
+'                                                                                  ',&
+'      $echo a b c d|cprint 1000 -1 # reverse column order of a table              ',&
+'      d c b a                                                                     ',&
+'                                                                                  ',&
+'      $: switch first and second column and skip third column                     ',&
+'      $: and print up to column 1000                                              ',&
+'      $ls -l |cprint 2 1 4 -1000                                                  ',&
+'                                                                                  ',&
+'      $: column numbers may be reused                                             ',&
+'      $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1                              ',&
+'      h e l l o w o r l d                                                         ',&
+'                                                                                  ',&
+'AUTHOR                                                                            ',&
+'   John S. Urban                                                                  ',&
+'LICENSE                                                                           ',&
+'   Public Domain                                                                  ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    cprint(1f) - [FILE FILTER] filter prints specified columns
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    cprint [ columns ][ -delimiters delim] |-help|-version
-!!
-!!##DESCRIPTION
-!!    cprint is a filter that prints the specified columns.
-!!
-!!##OPTIONS
-!!     columns      numbers indicating which columns to print.
-!!                  A negative value denotes the end of a range.
-!!                  A value must be from 1 to 1000.
-!!     -delimiters  input column delimiter character(s) (default: whitespace)
-!!                  Delimiters are changed to spaces on outout.
-!!     -help        display command help and exit
-!!     -version     display command metadata and exit
-!!##EXAMPLES
-!!
-!!   Sample usage:
-!!
-!!       $echo a b c d|cprint 1000 -1 # reverse column order of a table
-!!       d c b a
-!!
-!!       $: switch first and second column and skip third column
-!!       $: and print up to column 1000
-!!       $ls -l |cprint 2 1 4 -1000
-!!
-!!       $: column numbers may be reused
-!!       $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1
-!!       h e l l o w o r l d
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -103,7 +65,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        2.0, 20200526>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2022-12-21 19:29:19 UTC-300>',&
+'@(#)COMPILED:       2021-12-23 18:10:08 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -115,7 +77,7 @@ use M_strings, only : split, listout
 use M_io, only : read_line
 implicit none
 
-! ident_1="@(#) cprint(1f) filter to print specified columns"
+! ident_1="@(#)cprint(1f): filter to print specified columns"
 
 character(len=:),allocatable       :: line
 character(len=:),allocatable       :: delimiters               ! characters used to delimit columns

@@ -1,5 +1,5 @@
-      program demo_slurp
-      use M_io, only      : slurp
+      program demo_filebyte
+      use M_io, only      : filebyte
       implicit none
       character(len=1),allocatable :: text(:) ! array to hold file in memory
       character(len=*),parameter :: FILENAME='inputfile' ! file to read
@@ -11,7 +11,7 @@
       write(10,'(a)') 'elif elpmas a si sihT'
       close(unit=10)
 
-      call slurp(FILENAME,text) ! allocate character array and copy file into it
+      call filebyte(FILENAME,text) ! allocate character array and copy file into it
 
       if(.not.allocated(text))then
          write(*,*)'*rever* failed to load file '//FILENAME
@@ -21,4 +21,4 @@
          deallocate(text)  ! release memory
       endif
 
-      end program demo_slurp
+      end program demo_filebyte

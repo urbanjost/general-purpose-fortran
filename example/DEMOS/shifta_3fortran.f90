@@ -35,4 +35,4 @@
              & "kind=",kind(shifta(arr,3)), "shape=",shape(shifta(arr,3)), &
              & "size=",size(shifta(arr,3)) !, "rank=",rank(shifta(arr,3))
 
-    end program demo_shifta
+        end program demo_shifta

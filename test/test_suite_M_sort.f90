@@ -28,9 +28,9 @@ end subroutine test_suite_m_sort
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tree_insert()
 
-   call unit_check_start('insert',msg='')
-   !!call unit_check('insert', 0.eq.0, 'checking',100)
-   call unit_check_done('insert',msg='')
+   call unit_check_start('tree_insert',msg='')
+   !!call unit_check('tree_insert', 0.eq.0, 'checking',100)
+   call unit_check_done('tree_insert',msg='')
 end subroutine test_tree_insert
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tree_print()
@@ -52,14 +52,12 @@ integer                      :: csz
 !-----------------------------------------------------------------------------------------------------------------------------------
 call unit_check_start('sort_shell','-library libGPF') ! start tests
 !-----------------------------------------------------------------------------------------------------------------------------------
-array= [ character(len=20) :: &
-   'red',   'green', 'blue', 'yellow', 'orange',   'black', 'white', 'brown', 'gray', 'cyan',   'magenta',  'purple']
+array= [ 'red    ','green  ','blue   ','yellow ','orange ','black  ','white  ','brown  ','gray   ','cyan   ','magenta','purple ']
 csz=size(array)
 call sort_shell(array,order='a')
 call unit_check('sort_shell',all(array(1:csz-1) .le. array(2:csz)),msg='sort string array, ascending')  ! verify in ascending order
 !-----------------------------------------------------------------------------------------------------------------------------------
-array= [ character(len=20) :: &
-   'RED',   'GREEN', 'BLUE', 'YELLOW', 'ORANGE',   'BLACK', 'WHITE', 'BROWN', 'GRAY', 'CYAN',   'MAGENTA',  'PURPLE']
+array= [ 'RED    ','GREEN  ','BLUE   ','YELLOW ','ORANGE ','BLACK  ','WHITE  ','BROWN  ','GRAY   ','CYAN   ','MAGENTA','PURPLE ']
 csz=size(array)
 call sort_shell(array,order='d')
 call unit_check('sort_shell',all(array(1:csz-1) .ge. array(2:csz)),msg='sort string array, descending') ! verify in descending order
@@ -281,11 +279,13 @@ end subroutine test_sort_quick_rx_r
 subroutine test_unique
 integer,allocatable :: ints(:)
 integer             :: ic
+character(len=:),allocatable :: string
 call unit_check_start('unique', '-library libGPF') ! start tests
 
 ints=[1,1,2,3,4,4,10,20,20,30]
 call unique(ints,ic)
-call unit_check('unique',ic.eq.7.and.all(ints(:ic).eq.[1,2,3,4,10,20,30]),'expect 7 ic=',ic, 'ints=',str(ints(:ic)))
+string=str(ints(:ic))
+call unit_check('unique',ic.eq.7.and.all(ints(:ic).eq.[1,2,3,4,10,20,30]),'expect 7 ic=',ic, 'ints=',string)
 
 ints=[integer ::]
 call unique(ints,ic)

@@ -227,7 +227,8 @@ integer                       :: isize
    call locate(arr,'ab',place1) ! find where string is or should be
    call unit_check('replace',place1.gt.0,'location=',place1)
    call replace(arr,'new value for ab',place1)
-   call unit_check('replace',size(arr).eq.isize,'no change in size',size(arr))
+   ! add 0+ to avoid gfortran-11 bug
+   call unit_check('replace',size(arr).eq.isize,'no change in size',0+size(arr))
    if(place1.gt.0.and.place1.le.isize)then
       call unit_check('replace',arr(place1).eq.'new value for ab',arr(place1))
    else

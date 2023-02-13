@@ -1650,11 +1650,12 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                    specific end string is found, left-justified on lines by    ',&
 '                    themselves.                                                 ',&
 '                                                                                ',&
-'                        FileType  Start_String            Stop_String           ',&
-'                        --------  ------------            -----------           ',&
-'                        md        ```fortran              ```                   ',&
-'                        html      <xmp>                   </xmp>                ',&
-'                        tex       \begin{minted}{Fortran} \end{minted}          ',&
+'                        FileType     Start_String                Stop_String    ',&
+'                        --------     ------------                -----------    ',&
+'                        md           ```fortran                  ```            ',&
+'                        markdownMML  ~~~~~~~~~~ {: lang=fortran} ~~~~~~~~~~     ',&
+'                        html         <xmp>                       </xmp>         ',&
+'                        tex          \begin{minted}{Fortran} \end{minted}       ',&
 '                        auto                                                    ',&
 '                        none                                                    ',&
 '                                                                                ',&
@@ -1667,7 +1668,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                    and for tests in documents to be able to be extracted and   ',&
 '                    tested. "auto" switches processing mode depending on input  ',&
 '                    file suffix, treating supported file suffixes               ',&
-'                    ("md","html","tex") appropriately.                          ',&
+'                    ("md","markdownMML","html","tex") appropriately.            ',&
 '                                                                                ',&
 '   --start STRING   Same as --type except along with --stop allows for custom   ',&
 '                    strings to be specified.                                    ',&
@@ -2045,8 +2046,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   If the "--file NAME" option is present the text is written to the            ',&
 '   specified file unfiltered except for string expansion. This allows           ',&
 '   documentation to easily be maintained in the source file. It can be          ',&
-'   tex, html, markdown or any plain text. The filename will be prefixed         ',&
-'   with $PREP_DOCUMENT_DIR/doc/ . If the environment variable                   ',&
+'   markdownMML, tex, html, markdown or any plain text. The filename will be     ',&
+'   prefixed with $PREP_DOCUMENT_DIR/doc/ . If the environment variable          ',&
 '   $PREP_DOCUMENT_DIR is not set the option is ignored.                         ',&
 '                                                                                ',&
 '   The --file output can subsequently easily be processed by other utilities    ',&
@@ -2869,6 +2870,9 @@ logical                      :: isscratch
    case('md','.md')
       G_extract_start='```fortran'
       G_extract_stop='```'
+   case('markdownMML','.markdownMML')
+      G_extract_start='~~~~~~~~~~ {: lang=fortran}'
+      G_extract_stop='~~~~~~~~~~' 
    case('html','.html','htm','.htm')
       ! flaw is HTML is not case sensitive
       G_extract_start='<xmp>'
@@ -2988,6 +2992,9 @@ subroutine auto()
       case('md','.md')
          G_extract_start='```fortran'
          G_extract_stop='```'
+      case('markdownMML','.markdownMML')
+         G_extract_start='~~~~~~~~~~ {: lang=fortran}'
+         G_extract_stop='~~~~~~~~~~' 
       case('tex')
          G_extract_start='\begin{minted}{Fortran}'
          G_extract_stop='\end{minted}'

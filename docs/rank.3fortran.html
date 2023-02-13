@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rank</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>rank</B>(3fortran)
+<B>rank(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+rank(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>RANK(3) </B>- [ARRAY:INQUIRY] Rank of a data object
-<B>
-</B></BLOCKQUOTE>
+RANK(3) - [ARRAY:INQUIRY] Rank of a data object
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>rank</B>(<I>a</I>)
+result = rank(a)
 <P>
+<PRE>
            integer function rank(a)
 <P>
             type(TYPE(kind=**)),intent(in) :: a(..)
@@ -100,7 +100,7 @@ A can be of any type TYPE and rank.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<I>a</I> kind designated as ** may be any supported kind for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -109,9 +109,9 @@ o
 
 </A>
 <BLOCKQUOTE>
-<B>RANK</B>(3) returns the rank of <I>a</I> scalar or array data object.
+RANK(3) returns the rank of a scalar or array data object.
 <P>
-The rank of an array is the number of dimensions it has (zero for <I>a</I> scalar).
+The rank of an array is the number of dimensions it has (zero for a scalar).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -184,19 +184,16 @@ Sample program:
          call query_anything([.true.,.false.])
          call query_anything( reshape([40.0,50.0,60.0,70.0],[2,2]) )
 <P>
-</PRE>
-<BLOCKQUOTE>
-contains
+      contains
 <P>
-subroutine <B>query_int</B>(data_object)
-! It is hard to do much with something dimensioned
-! <B>name</B>(..) if not calling C except inside of <I>a</I>
-! SELECT_RANK construct but one thing you can
-! do is call the inquiry functions &#46;&#46;&#46;
-<B>integer,intent</B>(in) :: <B>data_object</B>(..)
-<B>character</B>(len=*),parameter :: <B>all=&#146;</B>(*(g0,1x))&#146;
+      subroutine query_int(data_object)
+      ! It is hard to do much with something dimensioned
+      ! name(..) if not calling C except inside of a
+      ! SELECT_RANK construct but one thing you can
+      ! do is call the inquiry functions &#46;&#46;&#46;
+      integer,intent(in) :: data_object(..)
+      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
 <P>
-<PRE>
          if(rank(data_object).eq.0)then
             print all,&
             & &#146;passed a scalar to an assumed rank,  &
@@ -207,26 +204,25 @@ subroutine <B>query_int</B>(data_object)
             & rank=&#146;,rank(data_object)
          endif
 <P>
+      end subroutine query_int
+<P>
+      subroutine query_anything(data_object)
+      class(*),intent(in) ::data_object(..)
+      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+        if(rank(data_object).eq.0)then
+          print all,&
+          &&#146;passed a scalar to an unlimited polymorphic rank=&#146;, &
+          & rank(data_object)
+        else
+          print all,&
+          & &#146;passed an array to an unlimited polymorphic, rank=&#146;, &
+          & rank(data_object)
+        endif
+      end subroutine query_anything
+<P>
+      end program demo_rank
+<P>
 </PRE>
-end subroutine query_int
-<P>
-subroutine <B>query_anything</B>(data_object)
-<B>class</B>(*),intent(in) ::<B>data_object</B>(..)
-<B>character</B>(len=*),parameter :: <B>all=&#146;</B>(*(g0,1x))&#146;
-<B>if</B>(<B>rank</B>(data_object).eq.0)then
-print all,&
-&&#146;passed <I>a</I> scalar to an unlimited polymorphic rank=&#146;, &
-& <B>rank</B>(data_object)
-else
-print all,&
-& &#146;passed an array to an unlimited polymorphic, rank=&#146;, &
-& <B>rank</B>(data_object)
-endif
-end subroutine query_anything
-<P>
-end program demo_rank
-</BLOCKQUOTE>
-<P>
 Results:
 <P>
 <PRE>
@@ -237,15 +233,15 @@ Results:
           rank of any arbitrary type=           5
 <P>
 </PRE>
-<BLOCKQUOTE>
-passed <I>a</I> scalar to an assumed rank,
+passed a scalar to an assumed rank,
 rank= 0
+<BLOCKQUOTE>
 <P>
 passed an array to an assumed rank,
 rank= 1
 <P>
 passed an array to an assumed rank,
-rank= 2 passed <I>a</I> scalar to an unlimited polymorphic rank= 0 passed an
+rank= 2 passed a scalar to an unlimited polymorphic rank= 0 passed an
 array to an unlimited polymorphic, rank= 1 passed an array to an
 unlimited polymorphic, rank= 2
 </BLOCKQUOTE>
@@ -270,27 +266,27 @@ Array inquiry:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>SIZE</B>(3) - Determine the size of an array
+SIZE(3) - Determine the size of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>RANK</B>(3) - Rank of <I>a</I> data object
+RANK(3) - Rank of a data object
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>SHAPE</B>(3) - Determine the shape of an array
+SHAPE(3) - Determine the shape of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>UBOUND</B>(3) - Upper dimension bounds of an array
+UBOUND(3) - Upper dimension bounds of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>LBOUND</B>(3) - Lower dimension bounds of an array
+LBOUND(3) - Lower dimension bounds of an array
 </TD></TR>
 <TR></TR></TABLE>State Inquiry:
 <TABLE cellpadding=3><!-- tsb: State Inquiry:
@@ -299,12 +295,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>ALLOCATED</B>(3) - Status of an allocatable entity
+ALLOCATED(3) - Status of an allocatable entity
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>IS_CONTIGUOUS</B>(3) - Test if object is contiguous
+IS_CONTIGUOUS(3) - Test if object is contiguous
 </TD></TR>
 <TR></TR></TABLE>Kind Inquiry:
 <TABLE cellpadding=3><!-- tsb: Kind Inquiry:
@@ -313,7 +309,7 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>KIND</B>(3) - Kind of an entity
+KIND(3) - Kind of an entity
 </TD></TR>
 <TR></TR></TABLE>Bit Inquiry:
 <TABLE cellpadding=3><!-- tsb: Bit Inquiry:
@@ -322,17 +318,17 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>STORAGE_SIZE</B>(3) - Storage size in bits
+STORAGE_SIZE(3) - Storage size in bits
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>BIT_SIZE</B>(3) - Bit size inquiry function
+BIT_SIZE(3) - Bit size inquiry function
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>BTEST</B>(3) - Tests <I>a</I> bit of an integer value.
+BTEST(3) - Tests a bit of an integer value.
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -341,7 +337,7 @@ o
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rank (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4c84edcb-50ee-4983-94d9-98ef9da5d93d using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rank (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2939a28f-a5ff-42da-89b1-0a084339d728 using man macros.</FONT>
 <br><br><center><img src="images/rank.3fortran.gif"></center>
 </div>
 </div>

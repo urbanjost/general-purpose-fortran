@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>OPEN(7f) </B>- [FORTRAN:IO] Initiates or modifies a connection between an external file and a specified unit.
-<B>
-</B></BLOCKQUOTE>
+OPEN(7f) - [FORTRAN:IO] Initiates or modifies a connection between an external file and a specified unit.
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=5>
@@ -67,96 +67,94 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
 <P>
-<B>OPEN</B> (<I>(connect-spec-list)</I>)
-</PRE>
-<TABLE cellpadding=3><!-- tsb: <B>OPEN</B> (<I>(connect-spec-list)</I>)
+OPEN (connect-spec-list)
+<TABLE cellpadding=3><!-- tsb: OPEN (connect-spec-list)
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>connect-spec</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<I>is</I>   [ <I>UNIT</I> = ] <I>file-unit-number</I>
-<TABLE width=100% cellpadding=3><!-- tsb: <I>is</I>   [ <I>UNIT</I> = ] <I>file-unit-number</I>
+<B>connect-spec</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is   [ UNIT = ] file-unit-number
+<TABLE width=100% cellpadding=3><!-- tsb: is   [ UNIT = ] file-unit-number
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>ACCESS</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+ACCESS = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>ACTION</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+ACTION = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>ASYNCHRONOUS</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+ASYNCHRONOUS = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>BLANK</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+BLANK = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>DECIMAL</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+DECIMAL = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>DELIM</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+DELIM = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>ENCODING</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+ENCODING = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>ERR</I> = <I>label</I>
+<B>or</B> </TD><TD valign=bottom>
+ERR = label
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>FILE</I> = <I>file-name-expr</I>
-<B>file-name-expr</B> <I>is</I> <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+FILE = file-name-expr
+file-name-expr is scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>FORM</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+FORM = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>IOMSG</I> = <I>iomsg-variable</I>
-<B>iomsg-variable</B> <I>is</I> <I>scalar-default-char-variable</I>
+<B>or</B> </TD><TD valign=bottom>
+IOMSG = iomsg-variable
+iomsg-variable is scalar-default-char-variable
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>IOSTAT</I> = <I>scalar-int-variable</I>
+<B>or</B> </TD><TD valign=bottom>
+IOSTAT = scalar-int-variable
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>NEWUNIT</I> = <I>scalar-int-variable</I>
+<B>or</B> </TD><TD valign=bottom>
+NEWUNIT = scalar-int-variable
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>PAD</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+PAD = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>POSITION</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+POSITION = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>RECL</I> = <I>scalar-int-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+RECL = scalar-int-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>ROUND</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+ROUND = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>SIGN</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+SIGN = scalar-default-char-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>STATUS</I> = <I>scalar-default-char-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+STATUS = scalar-default-char-expr
 </TD></TR>
 <TR></TR></TABLE></TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -167,39 +165,39 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-An <B>OPEN</B> statement initiates <B>or</B> modifies the connection between an external file and a specified unit. The
-<B>OPEN</B> statement may be used to connect an existing file to a unit, create a file that <I>is</I> preconnected, create a file
-and connect it to a unit, <B>or</B> change certain modes of a connection between a file and a unit.
+An OPEN statement initiates or modifies the connection between an external file and a specified unit. The
+OPEN statement may be used to connect an existing file to a unit, create a file that is preconnected, create a file
+and connect it to a unit, or change certain modes of a connection between a file and a unit.
 <P>
-An external unit may be connected by an <B>OPEN</B> statement in the main program <B>or</B> any subprogram and, once
+An external unit may be connected by an OPEN statement in the main program or any subprogram and, once
 connected, a reference to it may appear in any program unit of the program.
 <P>
-If the file to be connected to the unit does not exist but <I>is</I> the same as the file to which the unit <I>is</I> preconnected,
-the modes specified by an <B>OPEN</B> statement become a part of the connection.
+If the file to be connected to the unit does not exist but is the same as the file to which the unit is preconnected,
+the modes specified by an OPEN statement become a part of the connection.
 <P>
-If the file to be connected to the unit <I>is</I> not the same as the file to which the unit <I>is</I> connected, the effect <I>is</I> as
-if a CLOSE statement without a <I>STATUS</I>= specifier had been executed for the unit immediately prior to the
-execution of an <B>OPEN</B> statement.
+If the file to be connected to the unit is not the same as the file to which the unit is connected, the effect is as
+if a CLOSE statement without a STATUS= specifier had been executed for the unit immediately prior to the
+execution of an OPEN statement.
 <P>
-If a unit <I>is</I> connected to a file that exists, execution of an <B>OPEN</B> statement for that unit <I>is</I> permitted. If the
-<I>FILE</I>= specifier <I>is</I> not included in such an <B>OPEN</B> statement, the file to be connected to the unit <I>is</I> the same as
-the file to which the unit <I>is</I> already connected.
+If a unit is connected to a file that exists, execution of an OPEN statement for that unit is permitted. If the
+FILE= specifier is not included in such an OPEN statement, the file to be connected to the unit is the same as
+the file to which the unit is already connected.
 <P>
-If the file to be connected to the unit <I>is</I> the same as the file to which the unit <I>is</I> connected, only the specifiers for
-changeable modes (9.5.2) may have values different from those currently in effect. If the <I>POSITION</I>= specifier
-appears in such an <B>OPEN</B> statement, the value specified shall not disagree with the current position of the file.
-If the <I>STATUS</I>= specifier <I>is</I> included in such an <B>OPEN</B> statement, it shall be specified with the value OLD.
-Execution of such an <B>OPEN</B> statement causes any new values of the specifiers for changeable modes to be in
-effect, but does not cause any change in any of the unspecified specifiers and the position of the file <I>is</I> unaffected.
-The <I>ERR</I>=, <I>IOSTAT</I>=, and <I>IOMSG</I>= specifiers from any previously executed <B>OPEN</B> statement have no effect
-on any currently executed <B>OPEN</B> statement.
+If the file to be connected to the unit is the same as the file to which the unit is connected, only the specifiers for
+changeable modes (9.5.2) may have values different from those currently in effect. If the POSITION= specifier
+appears in such an OPEN statement, the value specified shall not disagree with the current position of the file.
+If the STATUS= specifier is included in such an OPEN statement, it shall be specified with the value OLD.
+Execution of such an OPEN statement causes any new values of the specifiers for changeable modes to be in
+effect, but does not cause any change in any of the unspecified specifiers and the position of the file is unaffected.
+The ERR=, IOSTAT=, and IOMSG= specifiers from any previously executed OPEN statement have no effect
+on any currently executed OPEN statement.
 <P>
-A <I>STATUS</I>= specifier with a value of OLD <I>is</I> always allowed when the file to be connected to the unit <I>is</I> the same
-as the file to which the unit <I>is</I> connected. In this case, if the status of the file was SCRATCH before execution of
-the <B>OPEN</B> statement, the file will still be deleted when the unit <I>is</I> closed, and the file <I>is</I> still considered to have
+A STATUS= specifier with a value of OLD is always allowed when the file to be connected to the unit is the same
+as the file to which the unit is connected. In this case, if the status of the file was SCRATCH before execution of
+the OPEN statement, the file will still be deleted when the unit is closed, and the file is still considered to have
 a status of SCRATCH.
 <P>
-If a file <I>is</I> already connected to a unit, an <B>OPEN</B> statement on that file with a different unit shall not be executed.
+If a file is already connected to a unit, an OPEN statement on that file with a different unit shall not be executed.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -208,27 +206,27 @@ If a file <I>is</I> already connected to a unit, an <B>OPEN</B> statement on tha
 </A>
 <BLOCKQUOTE>
 <P>
-A specifier that requires a <I>scalar-default-char-expr</I> may have a
+A specifier that requires a scalar-default-char-expr may have a
 limited list of character values. These values are listed for each
 such specifier. Any trailing blanks are ignored. The value specified
-<I>is</I> without regard to case. Some specifiers have a default value if the
-specifier <I>is</I> omitted. No specifier shall appear more than once in a
-given <B>connect-spec</B>-list.
+is without regard to case. Some specifiers have a default value if the
+specifier is omitted. No specifier shall appear more than once in a
+given connect-spec-list.
 <P>
-If the <I>NEWUNIT</I>= specifier does not appear, a <I>file-unit-number</I> shall
-be specified; if the optional characters <I>UNIT</I>= are omitted, the
-<I>file-unit-number</I> shall be the first item in the <B>connect-spec</B>-list.
+If the NEWUNIT= specifier does not appear, a file-unit-number shall
+be specified; if the optional characters UNIT= are omitted, the
+file-unit-number shall be the first item in the connect-spec-list.
 <P>
-The <I>label</I> used in the <I>ERR</I>= specifier shall be the statement <I>label</I> of
+The label used in the ERR= specifier shall be the statement label of
 a branch target statement that appears in the same scoping unit as the
-<B>OPEN</B> statement.
+OPEN statement.
 <P>
-If a <I>NEWUNIT</I>= specifier appears, a <I>file-unit-number</I> shall not appear.
-<TABLE cellpadding=3><!-- tsb: If a <I>NEWUNIT</I>= specifier appears, a <I>file-unit-number</I> shall not appear.
+If a NEWUNIT= specifier appears, a file-unit-number shall not appear.
+<TABLE cellpadding=3><!-- tsb: If a NEWUNIT= specifier appears, a file-unit-number shall not appear.
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>IOSTAT</I>=, <I>ERR</I>=, and <I>IOMSG</I>= </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>IOSTAT=, ERR=, and IOMSG=</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 specifiers are described in 9.11.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -237,90 +235,90 @@ specifiers are described in 9.11.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>ACCESS</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to SEQUENTIAL, DIRECT, <B>or</B> STREAM. The <I>ACCESS</I>= specifier
-specifies the access method for the connection of the file as being sequential, direct, <B>or</B> stream. If this specifier <I>is</I>
-omitted, the default value <I>is</I> SEQUENTIAL. For an existing file, the specified access method shall be included in
+<B>ACCESS</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to SEQUENTIAL, DIRECT, or STREAM. The ACCESS= specifier
+specifies the access method for the connection of the file as being sequential, direct, or stream. If this specifier is
+omitted, the default value is SEQUENTIAL. For an existing file, the specified access method shall be included in
 the set of allowed access methods for the file. For a new file, the processor creates the file with a set of allowed
 access methods that includes the specified method.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>ACTION</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to READ, WRITE, <B>or</B> READWRITE. READ specifies that the
+<B>ACTION</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to READ, WRITE, or READWRITE. READ specifies that the
 WRITE, PRINT, and ENDFILE statements shall not refer to this connection. WRITE specifies that READ
 statements shall not refer to this connection. READWRITE permits any input/output statements to refer to this
-connection. If this specifier <I>is</I> omitted, the default value <I>is</I> processor dependent. If READWRITE <I>is</I> included in
+connection. If this specifier is omitted, the default value is processor dependent. If READWRITE is included in
 the set of allowable actions for a file, both READ and WRITE also shall be included in the set of allowed actions
 for that file. For an existing file, the specified action shall be included in the set of allowed actions for the file.
 For a new file, the processor creates the file with a set of allowed actions that includes the specified action.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>ASYNCHRONOUS</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The <I>scalar-default-char-expr</I> shall evaluate to YES <B>or</B> NO. If YES <I>is</I> specified, asynchronous input/output on
-the unit <I>is</I> allowed. If NO <I>is</I> specified, asynchronous input/output on the unit <I>is</I> not allowed. If this specifier <I>is</I>
-omitted, the default value <I>is</I> NO.
+<B>ASYNCHRONOUS</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The scalar-default-char-expr shall evaluate to YES or NO. If YES is specified, asynchronous input/output on
+the unit is allowed. If NO is specified, asynchronous input/output on the unit is not allowed. If this specifier is
+omitted, the default value is NO.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>BLANK</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to NULL <B>or</B> ZERO. The <I>BLANK</I>= specifier <I>is</I> permitted only for a
+<B>BLANK</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to NULL or ZERO. The BLANK= specifier is permitted only for a
 connection for formatted input/output. It specifies the current value of the blank interpretation mode
-(10.8.6, 9.6.2.6) for input for this connection. This mode has no effect on output. It <I>is</I> a changeable mode (9.5.2).
-If this specifier <I>is</I> omitted in an <B>OPEN</B> statement that initiates a connection, the default value <I>is</I> NULL.
+(10.8.6, 9.6.2.6) for input for this connection. This mode has no effect on output. It is a changeable mode (9.5.2).
+If this specifier is omitted in an OPEN statement that initiates a connection, the default value is NULL.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>DECIMAL</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The <I>scalar-default-char-expr</I> shall evaluate to COMMA <B>or</B> POINT. The <I>DECIMAL</I>= specifier <I>is</I> permitted only
+<B>DECIMAL</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The scalar-default-char-expr shall evaluate to COMMA or POINT. The DECIMAL= specifier is permitted only
 for a connection for formatted input/output. It specifies the current value of the decimal edit mode
 (10.6, 10.8.8, 9.6.2.7)
-for this connection. This <I>is</I> a changeable mode (9.5.2). If this specifier <I>is</I> omitted in an <B>OPEN</B> statement
-that initiates a connection, the default value <I>is</I> POINT.
+for this connection. This is a changeable mode (9.5.2). If this specifier is omitted in an OPEN statement
+that initiates a connection, the default value is POINT.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>DELIM</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to APOSTROPHE, QUOTE, <B>or</B> NONE. The <I>DELIM</I>= specifier <I>is</I>
+<B>DELIM</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to APOSTROPHE, QUOTE, or NONE. The DELIM= specifier is
 permitted only for a connection for formatted input/output. It specifies the current value of the delimiter mode
 (9.6.2.8) for list-directed (10.10.4) and namelist (10.11.4.2) output for the connection. This mode has no effect
-on input. It <I>is</I> a changeable mode (9.5.2). If this specifier <I>is</I> omitted in an <B>OPEN</B> statement that initiates a
-connection, the default value <I>is</I> NONE.
+on input. It is a changeable mode (9.5.2). If this specifier is omitted in an OPEN statement that initiates a
+connection, the default value is NONE.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>ENCODING</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The <I>scalar-default-char-expr</I> shall evaluate to UTF-8 <B>or</B> DEFAULT. The <I>ENCODING</I>= specifier <I>is</I> permitted
-only for a connection for formatted input/output. The value UTF-8 specifies that the encoding form of the file <I>is</I>
-UTF-8 as specified by ISO/IEC 10646-1:2000. Such a file <I>is</I> called a Unicode file, and all characters therein are
+<B>ENCODING</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The scalar-default-char-expr shall evaluate to UTF-8 or DEFAULT. The ENCODING= specifier is permitted
+only for a connection for formatted input/output. The value UTF-8 specifies that the encoding form of the file is
+UTF-8 as specified by ISO/IEC 10646-1:2000. Such a file is called a Unicode file, and all characters therein are
 of ISO 10646 character type. The value UTF-8 shall not be specified if the processor does not support the ISO
-10646 character type. The value DEFAULT specifies that the encoding form of the file <I>is</I> processor-dependent.
-If this specifier <I>is</I> omitted in an <B>OPEN</B> statement that initiates a connection, the default value <I>is</I> DEFAULT.
+10646 character type. The value DEFAULT specifies that the encoding form of the file is processor-dependent.
+If this specifier is omitted in an OPEN statement that initiates a connection, the default value is DEFAULT.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>FILE</I> </TD><TD valign=bottom>
-The value of the <I>FILE</I>= specifier <I>is</I> the name of the file to be connected to the specified unit. Any trailing blanks
-are ignored. The <B>file-name-expr</B> shall be a name that <I>is</I> allowed by the processor. If this specifier <I>is</I> omitted and
-the unit <I>is</I> not connected to a file, the <I>STATUS</I>= specifier shall be specified with a value of SCRATCH; in this
-case, the connection <I>is</I> made to a processor-dependent file. The interpretation of case <I>is</I> processor dependent.
+<B>FILE</B> </TD><TD valign=bottom>
+The value of the FILE= specifier is the name of the file to be connected to the specified unit. Any trailing blanks
+are ignored. The file-name-expr shall be a name that is allowed by the processor. If this specifier is omitted and
+the unit is not connected to a file, the STATUS= specifier shall be specified with a value of SCRATCH; in this
+case, the connection is made to a processor-dependent file. The interpretation of case is processor dependent.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>FORM</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to FORMATTED <B>or</B> UNFORMATTED. The <I>FORM</I>= specifier determines
-whether the file <I>is</I> being connected for formatted <B>or</B> unformatted input/output. If this specifier <I>is</I> omitted,
-the default value <I>is</I> UNFORMATTED if the file <I>is</I> being connected for direct access <B>or</B> stream access, and the
-default value <I>is</I> FORMATTED if the file <I>is</I> being connected for sequential access. For an existing file, the specified
+<B>FORM</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to FORMATTED or UNFORMATTED. The FORM= specifier determines
+whether the file is being connected for formatted or unformatted input/output. If this specifier is omitted,
+the default value is UNFORMATTED if the file is being connected for direct access or stream access, and the
+default value is FORMATTED if the file is being connected for sequential access. For an existing file, the specified
 form shall be included in the set of allowed forms for the file. For a new file, the processor creates the file with a
 set of allowed forms that includes the specified form.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>NEWUNIT</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-If the <I>NEWUNIT</I>= specifier appears in an <B>OPEN</B> statement, either the <I>FILE</I>= specifier shall appear, <B>or</B> the
-<I>STATUS</I>= specifier shall appear with a value of SCRATCH. The unit identified by a <I>NEWUNIT</I> value shall not
+<B>NEWUNIT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+If the NEWUNIT= specifier appears in an OPEN statement, either the FILE= specifier shall appear, or the
+STATUS= specifier shall appear with a value of SCRATCH. The unit identified by a NEWUNIT value shall not
 be preconnected.
 <P>
-The variable <I>is</I> defined with a processor determined <I>NEWUNIT</I> value if no error occurs during the execution of
-the <B>OPEN</B> statement. If an error occurs, the processor shall not change the value of the variable.
+The variable is defined with a processor determined NEWUNIT value if no error occurs during the execution of
+the OPEN statement. If an error occurs, the processor shall not change the value of the variable.
 <P>
-A <I>NEWUNIT</I> value <I>is</I> a negative number, and shall not be equal to <B>-1</B>, any of the named constants ERROR_UNIT,
-INPUT_UNIT, <B>or</B> OUTPUT_UNIT from the intrinsic module ISO_FORTRAN_ENV (13.8.2), any value
-used by the processor for the unit argument to a defined input/output procedure, nor any previous <I>NEWUNIT</I>
-value that identifies a file that <I>is</I> currently connected.
+A NEWUNIT value is a negative number, and shall not be equal to <B>-1</B>, any of the named constants ERROR_UNIT,
+INPUT_UNIT, or OUTPUT_UNIT from the intrinsic module ISO_FORTRAN_ENV (13.8.2), any value
+used by the processor for the unit argument to a defined input/output procedure, nor any previous NEWUNIT
+value that identifies a file that is currently connected.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
@@ -328,71 +326,71 @@ value that identifies a file that <I>is</I> currently connected.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>PAD</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to YES <B>or</B> NO. The <I>PAD</I>= specifier <I>is</I> permitted only for a connection
+<B>PAD</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to YES or NO. The PAD= specifier is permitted only for a connection
 for formatted input/output. It specifies the current value of the pad mode (9.6.4.4.3, 9.6.2.10) for input for this
-connection. This mode has no effect on output. It <I>is</I> a changeable mode (9.5.2). If this specifier <I>is</I> omitted in an
-<B>OPEN</B> statement that initiates a connection, the default value <I>is</I> YES.
+connection. This mode has no effect on output. It is a changeable mode (9.5.2). If this specifier is omitted in an
+OPEN statement that initiates a connection, the default value is YES.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>POSITION</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The <I>scalar-default-char-expr</I> shall evaluate to ASIS, REWIND, <B>or</B> APPEND. The connection shall be for sequential
-<B>or</B> stream access. A new file <I>is</I> positioned at its initial point. REWIND positions an existing file at its initial
-point. APPEND positions an existing file such that the endfile record <I>is</I> the next record, if it has one. If an
+<B>POSITION</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The scalar-default-char-expr shall evaluate to ASIS, REWIND, or APPEND. The connection shall be for sequential
+or stream access. A new file is positioned at its initial point. REWIND positions an existing file at its initial
+point. APPEND positions an existing file such that the endfile record is the next record, if it has one. If an
 existing file does not have an endfile record, APPEND positions the file at its terminal point. ASIS leaves the
-position unchanged if the file exists and already <I>is</I> connected. ASIS leaves the position unspecified if the file exists
-but <I>is</I> not connected. If this specifier <I>is</I> omitted, the default value <I>is</I> ASIS.
+position unchanged if the file exists and already is connected. ASIS leaves the position unspecified if the file exists
+but is not connected. If this specifier is omitted, the default value is ASIS.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>RECL</I> </TD><TD valign=bottom>
-The value of the <I>RECL</I>= specifier shall be positive. It specifies the length of each record in a file being connected
-for direct access, <B>or</B> specifies the maximum length of a record in a file being connected for sequential access. This
-specifier shall not appear when a file <I>is</I> being connected for stream access. This specifier shall appear when a
-file <I>is</I> being connected for direct access. If this specifier <I>is</I> omitted when a file <I>is</I> being connected for sequential
-access, the default value <I>is</I> processor dependent. If the file <I>is</I> being connected for formatted input/output, the
-length <I>is</I> the number of characters for all records that contain only characters of default kind. When a record
-contains any nondefault characters, the effect of the <I>RECL</I>= specifier <I>is</I> processor dependent. If the file <I>is</I> being
-connected for unformatted input/output, the length <I>is</I> measured in file storage units. For an existing file, the
-value of the <I>RECL</I>= specifier shall be included in the set of allowed record lengths for the file. For a new file, the
+<B>RECL</B> </TD><TD valign=bottom>
+The value of the RECL= specifier shall be positive. It specifies the length of each record in a file being connected
+for direct access, or specifies the maximum length of a record in a file being connected for sequential access. This
+specifier shall not appear when a file is being connected for stream access. This specifier shall appear when a
+file is being connected for direct access. If this specifier is omitted when a file is being connected for sequential
+access, the default value is processor dependent. If the file is being connected for formatted input/output, the
+length is the number of characters for all records that contain only characters of default kind. When a record
+contains any nondefault characters, the effect of the RECL= specifier is processor dependent. If the file is being
+connected for unformatted input/output, the length is measured in file storage units. For an existing file, the
+value of the RECL= specifier shall be included in the set of allowed record lengths for the file. For a new file, the
 processor creates the file with a set of allowed record lengths that includes the specified value.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>ROUND</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to one of UP, DOWN, ZERO, NEAREST, COMPATIBLE, <B>or</B> PROCESSOR DEFINED.
-The <I>ROUND</I>= specifier <I>is</I> permitted only for a connection for formatted input/output. It
-specifies the current value of the I/O rounding mode (10.7.2.3.7, 9.6.2.13) for this connection. This <I>is</I> a changeable
-mode (9.5.2). If this specifier <I>is</I> omitted in an <B>OPEN</B> statement that initiates a connection, the I/O rounding
-mode <I>is</I> processor dependent; it shall be one of the above modes.
+<B>ROUND</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to one of UP, DOWN, ZERO, NEAREST, COMPATIBLE, or PROCESSOR DEFINED.
+The ROUND= specifier is permitted only for a connection for formatted input/output. It
+specifies the current value of the I/O rounding mode (10.7.2.3.7, 9.6.2.13) for this connection. This is a changeable
+mode (9.5.2). If this specifier is omitted in an OPEN statement that initiates a connection, the I/O rounding
+mode is processor dependent; it shall be one of the above modes.
 <P>
-A processor <I>is</I> free to select any I/O rounding mode for the default mode. The mode might correspond
-to UP, DOWN, ZERO, NEAREST, <B>or</B> COMPATIBLE; <B>or</B> it might be a completely different I/O rounding mode.
+A processor is free to select any I/O rounding mode for the default mode. The mode might correspond
+to UP, DOWN, ZERO, NEAREST, or COMPATIBLE; or it might be a completely different I/O rounding mode.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>SIGN</I> </TD><TD valign=bottom>
-The <I>scalar-default-char-expr</I> shall evaluate to one of PLUS, SUPPRESS, <B>or</B> PROCESSOR DEFINED. The
-<I>SIGN</I>= specifier <I>is</I> permitted only for a connection for formatted input/output. It specifies the current value of
-the sign mode (10.8.4, 9.6.2.14) for this connection. This <I>is</I> a changeable mode (9.5.2). If this specifier <I>is</I> omitted
-in an <B>OPEN</B> statement that initiates a connection, the default value <I>is</I> PROCESSOR DEFINED.
+<B>SIGN</B> </TD><TD valign=bottom>
+The scalar-default-char-expr shall evaluate to one of PLUS, SUPPRESS, or PROCESSOR DEFINED. The
+SIGN= specifier is permitted only for a connection for formatted input/output. It specifies the current value of
+the sign mode (10.8.4, 9.6.2.14) for this connection. This is a changeable mode (9.5.2). If this specifier is omitted
+in an OPEN statement that initiates a connection, the default value is PROCESSOR DEFINED.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>STATUS</I> </TD><TD valign=bottom>
-If the <I>STATUS</I>= specifier has the value NEW <B>or</B> REPLACE, the <I>FILE</I>= specifier shall appear. If the <I>STATUS</I>=
-specifier has the value SCRATCH, the <I>FILE</I>= specifier shall not appear. If the <I>STATUS</I>= specifier has the value
-OLD, the <I>FILE</I>= specifier shall appear unless the unit <I>is</I> connected and the file connected to the unit exists.
+<B>STATUS</B> </TD><TD valign=bottom>
+If the STATUS= specifier has the value NEW or REPLACE, the FILE= specifier shall appear. If the STATUS=
+specifier has the value SCRATCH, the FILE= specifier shall not appear. If the STATUS= specifier has the value
+OLD, the FILE= specifier shall appear unless the unit is connected and the file connected to the unit exists.
 <P>
-The <I>scalar-default-char-expr</I> shall evaluate to OLD, NEW, SCRATCH, REPLACE, <B>or</B> UNKNOWN. If OLD <I>is</I>
-specified, the file shall exist. If NEW <I>is</I> specified, the file shall not exist.
+The scalar-default-char-expr shall evaluate to OLD, NEW, SCRATCH, REPLACE, or UNKNOWN. If OLD is
+specified, the file shall exist. If NEW is specified, the file shall not exist.
 <P>
-Successful execution of an <B>OPEN</B> statement with NEW specified creates the file and changes the status to OLD.
-If REPLACE <I>is</I> specified and the file does not already exist, the file <I>is</I> created and the status <I>is</I> changed to OLD.
-If REPLACE <I>is</I> specified and the file does exist, the file <I>is</I> deleted, a new file <I>is</I> created with the same name, and
-the status <I>is</I> changed to OLD. If SCRATCH <I>is</I> specified, the file <I>is</I> created and connected to the specified unit
-for use by the program but <I>is</I> deleted at the execution of a CLOSE statement referring to the same unit <B>or</B> at
+Successful execution of an OPEN statement with NEW specified creates the file and changes the status to OLD.
+If REPLACE is specified and the file does not already exist, the file is created and the status is changed to OLD.
+If REPLACE is specified and the file does exist, the file is deleted, a new file is created with the same name, and
+the status is changed to OLD. If SCRATCH is specified, the file is created and connected to the specified unit
+for use by the program but is deleted at the execution of a CLOSE statement referring to the same unit or at
 the normal termination of the program.
 <P>
 SCRATCH shall not be specified with a named file.
 <P>
-If UNKNOWN <I>is</I> specified, the status <I>is</I> processor dependent. If this specifier <I>is</I> omitted, the default value <I>is</I>
+If UNKNOWN is specified, the status is processor dependent. If this specifier is omitted, the default value is
 UNKNOWN.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -403,7 +401,7 @@ UNKNOWN.
 </A>
 <BLOCKQUOTE>
 <P>
-An example of an <B>OPEN</B> statement <I>is</I>:
+An example of an OPEN statement is:
 <P>
 <PRE>
    program demo_open
@@ -436,7 +434,7 @@ An example of an <B>OPEN</B> statement <I>is</I>:
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>open (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7d2dbf35-073a-4f3e-9971-c10f53633839 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>open (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fee8b07d-f66b-4671-8c72-8ef6caf11b41 using man macros.</FONT>
 <br><br><center><img src="images/open.7fortran.gif"></center>
 </div>
 </div>

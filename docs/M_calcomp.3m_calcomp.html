@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_calcomp(3fm) </B>- [M_calcomp::INTRO] emulate old Calcomp graphics library
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+M_calcomp(3fm) - [M_calcomp::INTRO] emulate old Calcomp graphics library
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -91,9 +91,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
 <P>
-</PRE>
 </BLOCKQUOTE>
 <A name=>
 
@@ -304,7 +302,7 @@ to be plotted on a graph
 <P>
 This user guide describes the calling sequences and arguments for the
 FORTRAN-callable CALCOMP software subroutines. The routines do not
-produce a device dependent CALCOMP file but rather call the <B>M_draw</B>(3f)
+produce a device dependent CALCOMP file but rather call the M_draw(3f)
 graphics module.
 <P>
 CALCOMP divides their routines into three categories:
@@ -336,26 +334,26 @@ CALCOMP divides their routines into three categories:
        taken in the generation and post-processing of the plot file.
 <P>
 </PRE>
-</BLOCKQUOTE>
 Other changes may be needed in existing CALCOMP code from vendors as
 CALCOMP has produced several versions of CALCOMP routines that vary in
 such ways as use of CHARACTER variables versus Hollerith, the number
 of parameters on SYMBOL calls, and the current pen position after a
 call to SYMBOL.
-<BLOCKQUOTE>
+</BLOCKQUOTE>
 <P>
 The CALCOMP subroutines were written for use with CALCOMP pen plotters
 and originally worked in units of inches for the mapping of the
 plot directly to the output device. There are two classes of CALCOMP
 subroutines-<B>-those</B> that accept user units and scale them to inches and
 those that require data to be directly in units of inches.
+<BLOCKQUOTE>
 <P>
 Table 1 lists the CALCOMP subroutines that fall into each class.
 <P>
 The main difference CALCOMP users will notice when using this CALCOMP
 library is that when the CALCOMP subroutines were incorporated into
-<B>M_DRAW</B>(3fm) the meaning of CALCOMP inches was altered to no longer mean
-a physical inch but just a unit-less measure (since <B>M_DRAW</B>(3fm) uses
+M_DRAW(3fm) the meaning of CALCOMP inches was altered to no longer mean
+a physical inch but just a unit-less measure (since M_DRAW(3fm) uses
 device-independent space and the graphics post processing procedures
 produce output for a number of graphics devices, some of which have a
 limited device space unlike pen plotters). THIS DIFFERENCE IS USUALLY
@@ -593,7 +591,7 @@ You can list all the manpages sorted by section using
 </A>
 <BLOCKQUOTE>
 <P>
-Since this version of a CALCOMP-compatible library uses the <B>M_draw</B>(3f)
+Since this version of a CALCOMP-compatible library uses the M_draw(3f)
 graphic primitives, the same environment variables can be used to
 select the type and size of output. For example:
 <P>
@@ -654,9 +652,9 @@ have been included in this version; although plots generated will
 not always look exactly the same as those produced on the 7600s.
 <P>
 The CALCOMP library is interfaced to locally developed routines (called
-primitives) which produce plots using the <B>M_DRAW</B>(3fm) module. This
+primitives) which produce plots using the M_DRAW(3fm) module. This
 allows CALCOMP-based code to generate output which can be sent to any
-supported <B>M_DRAW</B>(3fm) output device.
+supported M_DRAW(3fm) output device.
 <P>
 CALCOMP is not the recommended graphics package for major new program
 development.
@@ -697,7 +695,7 @@ plotters. In general, the calls produced plots directly in inches
 (A call to draw a line one unit long produced a one-inch line on
 the plotter).
 <P>
-With the interfacing of CALCOMP to the <B>M_DRAW</B>(3f) module graphics
+With the interfacing of CALCOMP to the M_DRAW(3f) module graphics
 system (which provides the ability to obtain output on a wide range of
 devices), the meaning of units in the CALCOMP library has undergone
 a change. CALCOMP Inches, therefore, may not translate directly
@@ -729,20 +727,17 @@ how to nullify the affects of these differences.
 <P>
            CALL SYMBOL(XPAGE,YPAGE,HEIGHT,IBCD,INTEQ,ANGLE,NCHAR)
 <P>
-</PRE>
-<BLOCKQUOTE>
-Where XPAGE, YPAGE, HEIGHT, and ANGLE are defined as on the 7600s, and the
-user guide can be consulted for details of their use.
+     Where XPAGE, YPAGE, HEIGHT, and ANGLE are defined as on the 7600s, and the
+     user guide can be consulted for details of their use.
 <P>
-The last parameter NCHAR is used as a flag to specify whether a text string
-or a single symbol is being plotted. If NCHAR is less that zero, a single
-symbol is plotted regardless of the contents of IBCD. If NCHAR is equal to
-or greater than zero the string in IBCD is used (FAILURE TO SPECIFY THE
-PROPER VALUE FOR NCHAR, INTEQ OR IBCD WILL CAUSE ERRONEOUS RESULTS).
+     The last parameter NCHAR is used as a flag to specify whether a text string
+     or a single symbol is being plotted. If NCHAR is less that zero, a single
+     symbol is plotted regardless of the contents of IBCD. If NCHAR is equal to
+     or greater than zero the string in IBCD is used (FAILURE TO SPECIFY THE
+     PROPER VALUE FOR NCHAR, INTEQ OR IBCD WILL CAUSE ERRONEOUS RESULTS).
 <P>
-To use SYMBOL to plot text for titles, captions, or legends--
+     To use SYMBOL to plot text for titles, captions, or legends--
 <P>
-<PRE>
         IBCD--Contains the text string as CHARACTER data.
 <P>
         INTEQ--Should be set to 999 .
@@ -750,18 +745,15 @@ To use SYMBOL to plot text for titles, captions, or legends--
 <P>
         NCHAR--Is the number of characters in IBCD.
 <P>
-</PRE>
-For example, the following call to SYMBOL will result in the characters
+     For example, the following call to SYMBOL will result in the characters
+     &#146;TITLE 10&#146; being output beginning at X and Y coordinates of 1.0 .
 <P>
-<PRE>
          CHARACTER GRLBL*8
          GRLBL = &#146;TITLE 10&#146;
          CALL SYMBOL(1.0,1.0,0.14,GRLBL,999,0.0,8)
 <P>
-</PRE>
-To use SYMBOL to plot a single symbol or character--
+     To use SYMBOL to plot a single symbol or character--
 <P>
-<PRE>
         IBCD--  A dummy CHARACTER variable or string should be used
                 THE ACTUAL VALUE IS NOT USED FOR ANYTHING.)
 <P>
@@ -780,50 +772,39 @@ To use SYMBOL to plot a single symbol or character--
                 -1, the pen is UP during the move.
                 -2 or less, the pen is DOWN during the move.
 <P>
-</PRE>
-For example, the following call to SYMBOL will result in special symbol
-number 5 being output with its center at XY coordinates of (1.0,1.0).
+     For example, the following call to SYMBOL will result in special symbol
+     number 5 being output with its center at XY coordinates of (1.0,1.0).
 <P>
-<PRE>
         CALL SYMBOL(1.0,1.0,0.14,DUMMY,5,0.0,-1)
 <P>
-</PRE>
-</BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=4%>
-3.
-</TD><TD>
-Because of interfacing the CALCOMP routines to the device
-dependent <B>M_DRAW</B>(3fm)<B>-based</B> post-processing procedures, some limit for
-the maximum plot size had to be established. For the CALCOMP
-library, a plot frame is limited to a maximum size in either the
-X or Y direction of 100 "CALCOMP inches". (The actual frame size
-on a particular output medium is dependent on the method of post-
-processing and the device selected.)
+  3. Because of interfacing the CALCOMP routines to the device
+     dependent M_DRAW(3fm)-based post-processing procedures, some limit for
+     the maximum plot size had to be established. For the CALCOMP
+     library, a plot frame is limited to a maximum size in either the
+     X or Y direction of 100 "CALCOMP inches". (The actual frame size
+     on a particular output medium is dependent on the method of post-
+     processing and the device selected.)
 <P>
-Each plot frame is usually initialized by a call to subroutine PLOT with
-the third argument (IPEN) equal to <B>-2</B> or <B>-3</B>. For example,
+     Each plot frame is usually initialized by a call to subroutine PLOT with
+     the third argument (IPEN) equal to -2 or -3. For example,
 <P>
-<PRE>
           CALL PLOT(0.5,1.0,-3)
 <P>
-</PRE>
-Says to move 0.5 inches in the X-direction and 1.0 inch in the Y-direction
-before establishing a new origin. When establishing a new origin, all
-offsets are included inside the frame boundary, and therefore, they are part
-of the plot frame size. If any X or Y coordinate value (Plus the appropriate
-offset) exceeds the 100 inch limit, results are unpredictable. In programs
-where X and Y coordinate values exceed the scaling limit, a call to the
-CALCOMP routine FACTOR may be used to scale down the plot size appropriately.
-Each plot frame is terminated by a call to subroutine NFRAME; no additional
-offset is added here.
+     Says to move 0.5 inches in the X-direction and 1.0 inch in the Y-direction
+     before establishing a new origin. When establishing a new origin, all
+     offsets are included inside the frame boundary, and therefore, they are part
+     of the plot frame size. If any X or Y coordinate value (Plus the appropriate
+     offset) exceeds the 100 inch limit, results are unpredictable. In programs
+     where X and Y coordinate values exceed the scaling limit, a call to the
+     CALCOMP routine FACTOR may be used to scale down the plot size appropriately.
+     Each plot frame is terminated by a call to subroutine NFRAME; no additional
+     offset is added here.
 <P>
-Knowledge of the plot frame size in the X and Y directions will be needed to
-scale pen plots to actual inches when the device dependent post processing
-procedures are available. The following example is provided to assist in
-understanding how the frame size is determined.
+     Knowledge of the plot frame size in the X and Y directions will be needed to
+     scale pen plots to actual inches when the device dependent post processing
+     procedures are available. The following example is provided to assist in
+     understanding how the frame size is determined.
 <P>
-<PRE>
       &gt;   PROGRAM CALTEST
       &gt;   USE M_calcomp
       &gt;   CALL PLOTS()           ! perform initialization
@@ -854,43 +835,30 @@ understanding how the frame size is determined.
       &gt;   CALL PLOT(0.0,    0.0,    2)
       &gt;   END SUBROUTINE BORDER
 <P>
+  4. All coordinate values (XPAGE, YPAGE for example) should be greater
+     than or equal to zero relative to the original frame origin.
+     Negative values will be clipped or might cause post-processor errors.
+     (Although this was not a requirement on the 7600s, it is necessary
+     because metafiles must contain only positive values and it would
+     be very inefficient to store each frame&#146;s data and then translate
+     all the values to positive numbers once the frame was finished and
+     the largest negative numbers in the frame could be identified.
+<P>
+  6. Subroutine PLOTS must still be the first CALCOMP subroutine called.
+     It performs various initialization functions and should be called
+     only one time per program execution. Although some of the values
+     are not used, they are maintained for compatibility purposes.
+<P>
+  7. Subroutine CNTOUR (Which was developed at the Westinghouse Research
+     Laboratories) is available in the CALCOMP library. The plot
+     produced by CNTOUR will look different from that produced on the
+     7600s since the legend is placed at the top of the plot. If more
+     that 20 contours are used, the legend could overwrite the plot.
+     A limit of 6.5 inches must be observed for the height parameter
+     (HGT).
+<P>
 </PRE>
-</TD></TR>
-<TR valign=top><TD width=4%>
-4.
-</TD><TD>
-All coordinate values (XPAGE, YPAGE for example) should be greater
-than or equal to zero relative to the original frame origin.
-Negative values will be clipped or might cause post-processor errors.
-(Although this was not a requirement on the 7600s, it is necessary
-because metafiles must contain only positive values and it would
-be very inefficient to store each frame&#146;s data and then translate
-all the values to positive numbers once the frame was finished and
-the largest negative numbers in the frame could be identified.
-<TABLE width=100% cellpadding=3><!-- tsb: All coordinate values (XPAGE, YPAGE for example) should be greater
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-6.
-</TD><TD>
-Subroutine PLOTS must still be the first CALCOMP subroutine called.
-It performs various initialization functions and should be called
-only one time per program execution. Although some of the values
-are not used, they are maintained for compatibility purposes.
-</TD></TR>
-<TR valign=top><TD width=4%>
-7.
-</TD><TD>
-Subroutine CNTOUR (Which was developed at the Westinghouse Research
-Laboratories) is available in the CALCOMP library. The plot
-produced by CNTOUR will look different from that produced on the
-7600s since the legend is placed at the top of the plot. If more
-that 20 contours are used, the legend could overwrite the plot.
-A limit of 6.5 inches must be observed for the height parameter
-(HGT).
-</TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
 <A name=20>
 
      <H3>RECORD OF REVISIONS</H3>
@@ -900,11 +868,11 @@ A limit of 6.5 inches must be observed for the height parameter
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>06/24/85</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+<B>06/24/85</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Preliminary release was made for COS.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>07/11/89</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
+<B>07/11/89</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 The routine NEWPEN may be used to select color.
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
@@ -1144,7 +1112,7 @@ Sample program:
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_calcomp (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ab10b936-47a5-4229-b657-df5f60815411 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_calcomp (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d8a25211-01ec-4fda-a061-81cac640e9f8 using man macros.</FONT>
 <br><br><center><img src="images/M_calcomp.3m_calcomp.gif"></center>
 </div>
 </div>

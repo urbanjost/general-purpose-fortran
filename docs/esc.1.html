@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>esc(1) </B>- [NCURSES] set <B>xterm</B>(1) attributes using a screen or line mode
-<B>(LICENSE:PD)
-</B></BLOCKQUOTE>
+esc(1) - [NCURSES] set xterm(1) attributes using a screen or line mode
+(LICENSE:PD)
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,26 +75,24 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-</PRE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>esc</B> </TD><TD valign=bottom>
+<B>esc</B> </TD><TD valign=bottom>
 [keywords]
-<B>-rows</B> <I>NN</I>
-<B>-cols</B> <I>NN</I>
-<B>-right</B> <I>NN</I>
-<B>-down</B> <I>NN</I>
-<B>-fn</B> <I>fontname</I>
-<B>-fsize</B> <I>fontsize</I>
-<B>-bg</B> <I>background_color</I>
-<B>-fg</B> <I>foreground_color</I>
-<B>-cr</B> <I>cursor_color</I>
-<B>-cn</B> [0 <I>COLOR_VALUE</I> <I>1</I> <I>COLOR_VALUE</I> <I>2</I> <I>COLOR_VALUE</I> &#46;&#46;&#46;|]
-<B>-o</B> <I>windowname</I>
--<I>title</I> <I>TITLE</I> <I>window</I> <I>title</I>
--<I>name</I> <I>TITLE</I> <I>icon</I> <I>name</I>
-<B>-nt</B> <I>TITLE</I> <I>icon</I> <I>name</I> <I>and</I> <I>title</I>
+<B>-rows</B> NN
+<B>-cols</B> NN
+<B>-right</B> NN
+<B>-down</B> NN
+<B>-fn</B> fontname
+<B>-fsize</B> fontsize
+<B>-bg</B> background_color
+<B>-fg</B> foreground_color
+<B>-cr</B> cursor_color
+<B>-cn</B> [0 COLOR_VALUE 1 COLOR_VALUE 2 COLOR_VALUE &#46;&#46;&#46;|]
+<B>-o</B> windowname
+<B>-title</B> TITLE window title
+<B>-name</B> TITLE icon name
+<B>-nt</B> TITLE icon name and title
 <B>-xrdb</B> [NAME]
 <B>-iconstate</B>
 <B>-alias</B>
@@ -110,21 +108,21 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <BLOCKQUOTE>
 If no values are specified on the command line a screen interface is
 displayed that allows setting the background, foreground, cursor color,
-font size, <I>and</I> <I>window</I> size of an <B>xterm</B>(<I>1</I>) terminal emulator <I>window</I>
-using <B>ncurses</B>(3f)/fixedform(3f).
+font size, and window size of an xterm(1) terminal emulator window
+using ncurses(3f)/fixedform(3f).
 <P>
-If options are specified on the command line the values are set <I>and</I> the
+If options are specified on the command line the values are set and the
 screen mode is not launched.
 <P>
-If the positioning <I>and</I> resize options do not work, run the following
+If the positioning and resize options do not work, run the following
 before starting a new xterm:
 <P>
 <PRE>
       esc -xrdb |xrdb -merge
 <P>
 </PRE>
-If you use something that filters stdout such as <B>tmux</B>(<I>1</I>), <B>screen</B>(<I>1</I>) assign
-<B>esc</B>(<I>1</I>) output to the initial stdout before starting the program, such as
+If you use something that filters stdout such as tmux(1), screen(1) assign
+esc(1) output to the initial stdout before starting the program, such as
 <P>
 <PRE>
       export OTHERTTY=&#145;tty&#145;
@@ -141,8 +139,8 @@ If you use something that filters stdout such as <B>tmux</B>(<I>1</I>), <B>scree
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>VALUES</B> </TD><TD valign=bottom>
-The allowed <I>keywords</I> are:
-<TABLE width=100% cellpadding=3><!-- tsb: The allowed <I>keywords</I> are:
+The allowed keywords are:
+<TABLE width=100% cellpadding=3><!-- tsb: The allowed keywords are:
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -158,37 +156,37 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-raise&#46;&#46;&#46;.. raise to top of <I>window</I> stack
+raise&#46;&#46;&#46;.. raise to top of window stack
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-lower&#46;&#46;&#46;.. lower to back of <I>window</I> stack
+lower&#46;&#46;&#46;.. lower to back of window stack
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-iconify&#46;&#46;&#46; iconify <I>window</I>
+iconify&#46;&#46;&#46; iconify window
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-uniconify. uniconify <I>window</I>
+uniconify. uniconify window
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-toggle&#46;&#46;&#46;. toggle <I>icon</I> state
+toggle&#46;&#46;&#46;. toggle icon state
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-maximize.. make <B>xterm</B>(<I>1</I>) <I>window</I> size of display
+maximize.. make xterm(1) window size of display
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-restore&#46;&#46;&#46; restore <I>window</I> size to before the last "maximize"
+restore&#46;&#46;&#46; restore window size to before the last "maximize"
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -203,26 +201,26 @@ tek&#46;&#46;&#46;.... switch to Tektronix 4010 terminal emulator mode
 <TR></TR></TABLE><!-- .TP -->
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-rows</B> <I>NN</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-change number of rows of <I>window</I> to specified value
+<B></B><B>-rows</B> NN </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+change number of rows of window to specified value
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-cols</B> <I>NN</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-change number of columns of <I>window</I> to specified value
+<B></B><B>-cols</B> NN </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+change number of columns of window to specified value
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-right</B> <I>NN</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B></B><B>-right</B> NN </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 distance in rasters from left display edge to place
 upper left corner
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-down</B> <I>NN</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B></B><B>-down</B> NN </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 distance in rasters from upper display edge to place
 upper left corner
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-fn</B> FONTNAME </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-change to specified font <I>name</I>. You can list several
+change to specified font name. You can list several
 available fixed-space font names by using:
 </TD></TR>
 <TR><TD colspan=2>
@@ -230,51 +228,50 @@ available fixed-space font names by using:
                       (xlsfonts -fn &#146;*-c-*&#146; ; xlsfonts -fn &#146;*-m-*&#146;)
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=3%>&nbsp;</TD><TD>
 Example names: (font names may vary from server to server):
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 <PRE>
                           fixed     8x13       9x15        &#146;*24*-c-*&#146;
 <P>
 </PRE>
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-fsize</B> <I>NN</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B></B><B>-fsize</B> NN </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 guess at a fixed font of specified size
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-bg</B> CNAME </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-specify background color by <I>name</I> or hex value "#RRGGBB"
+specify background color by name or hex value "#RRGGBB"
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-fg</B> CNAME </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-specify foreground color by <I>name</I> or hex value "#RRGGBB"
+specify foreground color by name or hex value "#RRGGBB"
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-cr</B> CNAME </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-specify cursor color by <I>name</I> or hex value "#RRGGBB"
+specify cursor color by name or hex value "#RRGGBB"
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-cn</B> <I>NN</I> CNAME&#46;&#46;&#46; </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-define terminal pen colors by number "<I>NN</I> $RRGGBB" or
-<I>name</I>. Typically, at least <I>0</I> thru 15 are supported.
+<B></B><B>-cn</B> NN CNAME&#46;&#46;&#46; </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+define terminal pen colors by number "NN $RRGGBB" or
+name. Typically, at least 0 thru 15 are supported.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>-</B><I>title</I> <I>TITLE</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-<I>window</I> <I>title</I>
+<B></B><B>-title</B> TITLE </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+window title
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>-</B><I>name</I> <I>TITLE</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-<I>icon</I> <I>name</I>
+<B></B><B>-name</B> TITLE </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+icon name
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-nt</B> <I>TITLE</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-<I>icon</I> <I>name</I> <I>and</I> <I>title</I>
+<B></B><B>-nt</B> TITLE </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+icon name and title
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>--alias</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-list some common bash shell aliases that use <B>esc</B>(<I>1</I>).
+list some common bash shell aliases that use esc(1).
 These are typically added to the ~/.bashrc file
 or sourced:
 </TD></TR>
@@ -286,17 +283,17 @@ or sourced:
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-o</B> WINDOWNAME </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-If your <I>window</I> manager supports multiple virtual
+If your window manager supports multiple virtual
 displays by defining the property WM_OCCUPANCY
 (use xprop <B>-id</B> $WINDOWID to see) then you can
 move your windows to specific virtual displays;
-usually by number or by <I>name</I>. The <I>name</I> "all" is
-typically special <I>and</I> makes the <I>window</I> visible
+usually by number or by name. The name "all" is
+typically special and makes the window visible
 in all the virtual displays.
 <P>
-This works for the <B>ctwm</B>(<I>1</I>) <I>window</I> manager.
+This works for the ctwm(1) window manager.
 <P>
-If your <I>window</I> manager has assigned the property
+If your window manager has assigned the property
 WS_OCCUPATION as seen by entering
 <P>
 <PRE>
@@ -313,13 +310,13 @@ you can specify which virtual display to display on.
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B></B><B>--iconstate</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-return current <I>icon</I> state of X11 xterm <I>window</I> (opened or
+return current icon state of X11 xterm window (opened or
 closed).
-<TABLE width=100% cellpadding=3><!-- tsb: return current <I>icon</I> state of X11 xterm <I>window</I> (opened or
+<TABLE width=100% cellpadding=3><!-- tsb: return current icon state of X11 xterm window (opened or
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>--xrdb</B> <I>NAME</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B></B><B>--xrdb</B> NAME </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 print out current terminal settings as a set of
 X11 resources that can be added to your ~/.Xresources
 file so that you can launch terminals with those
@@ -330,25 +327,24 @@ attributes with
                        "xterm -name NAME"
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 For example:
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 <PRE>
                        esc -xrdb EDIT|xrdb -merge
                        xterm -name EDIT
 <P>
 </PRE>
 All other options will be ignored. This must be run
-in an <B>xterm</B>(<I>1</I>) <I>window</I>.
+in an xterm(1) window.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>--help</B> </TD><TD valign=bottom>
-display help <I>and</I> exit
+display help and exit
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-display version information <I>and</I> exit
+display version information and exit
 </TD></TR>
 <TR></TR></TABLE>The following options will return the current value if given a null
 value:
@@ -358,7 +354,7 @@ value:
 <B>-rows</B> <B>-cols</B>
 <B>-down</B> <B>-right</B>
 <B>-iconstate</B>
-<B>-cn</B> &#146;&#146;|<I>0</I> <I>1</I> <I>2</I> &#46;&#46;&#46;
+<B>-cn</B> &#146;&#146;|0 1 2 &#46;&#46;&#46;
 <P>
 By itself, <B>-cn</B> will list the first 16 pen colors. Given a list of
 numbers, it will query those specific pen numbers.
@@ -369,10 +365,10 @@ numbers, it will query those specific pen numbers.
 
 </A>
 <BLOCKQUOTE>
-By default <B>esc</B>(<I>1</I>) writes output to the current stdout file. The
+By default esc(1) writes output to the current stdout file. The
 environment variable OTHERTTY can be used to change the default
 file. This is commonly required before starting programs that
-filter stdout, such as <B>tmux</B>(<I>1</I>) <I>and</I> <B>screen</B>(<I>1</I>).
+filter stdout, such as tmux(1) and screen(1).
 <P>
 <PRE>
       export OTHERTTY=/dev/pts/1
@@ -429,7 +425,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>esc (1)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6cedd8a7-9e68-4cc3-90fb-ead54583c181 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>esc (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3ad4b9ef-ba8f-4d55-a033-584690191226 using man macros.</FONT>
 <br><br><center><img src="images/esc.1.gif"></center>
 </div>
 </div>

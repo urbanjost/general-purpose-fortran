@@ -10,4 +10,4 @@
             ! the following inequalities are always true
             print *, huge(i5) >= 10_k5**5-1
             print *, huge(i15) >= 10_k15**15-1
-  end program demo_selected_int_kind
+        end program demo_selected_int_kind

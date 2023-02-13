@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>findloc</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>findloc</B>(3fortran)
+<B>findloc(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+findloc(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,10 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>FINDLOC(3) </B>- [ARRAY:LOCATION] Location of first element of ARRAY identified
-<B>by MASK along dimension DIM matching a target value
-</B><B>
-</B></BLOCKQUOTE>
+FINDLOC(3) - [ARRAY:LOCATION] Location of first element of ARRAY identified
+by MASK along dimension DIM matching a target value
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=10>
@@ -77,10 +77,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = findloc (<I>array</I>, <I>value</I>, dim [,<I>mask</I>] [,<I>kind</I>] [,<I>back</I>]) | findloc
-(<I>array</I>, <I>value</I> [,<I>mask</I>] [,<I>kind</I>] [,<I>back</I>])
+result = findloc (array, value, dim [,mask] [,kind] [,back]) | findloc
+(array, value [,mask] [,kind] [,back])
 <P>
+<PRE>
     function findloc (array, value, dim, mask, kind, back)
 <P>
               type TYPE(kind=KIND),intent(in)      :: array(..)
@@ -102,7 +102,7 @@ result = findloc (<I>array</I>, <I>value</I>, dim [,<I>mask</I>] [,<I>kind</I>] 
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY is an <I>array</I> of any intrinsic type.
+ARRAY is an array of any intrinsic type.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -134,12 +134,12 @@ BACK a logical scalar.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is integer of default <I>kind</I> or <I>kind</I> KIND if the KIND argument
-is present. If DIM does not appear, the result is an <I>array</I> of rank one
-and of size equal to the rank of ARRAY; otherwise, the result is an <I>array</I>
+the result is integer of default kind or kind KIND if the KIND argument
+is present. If DIM does not appear, the result is an array of rank one
+and of size equal to the rank of ARRAY; otherwise, the result is an array
 of the same rank and shape as ARRAY reduced by the dimension DIM.
 </TD></TR>
-<TR></TR></TABLE>NOTE: a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
+<TR></TR></TABLE>NOTE: a kind designated as ** may be any supported kind for the type
 </BLOCKQUOTE>
 <A name=3>
 
@@ -147,20 +147,20 @@ of the same rank and shape as ARRAY reduced by the dimension DIM.
 
 </A>
 <BLOCKQUOTE>
-<B>FINDLOC</B>(3) returns the location of the first element of ARRAY identified by
-MASK along dimension DIM having a <I>value</I> equal to VALUE.
+FINDLOC(3) returns the location of the first element of ARRAY identified by
+MASK along dimension DIM having a value equal to VALUE.
 <P>
 If both ARRAY and VALUE are of type logical, the comparison is performed
 with the .EQV. operator; otherwise, the comparison is performed with the ==
-operator. If the <I>value</I> of the comparison is .true., that element of ARRAY
+operator. If the value of the comparison is .true., that element of ARRAY
 matches VALUE.
 <P>
 If only one element matches VALUE, that element&#146;s subscripts are returned.
 Otherwise, if more than one element matches VALUE and BACK is absent or
-present with the <I>value</I> .false., the element whose subscripts are returned is
-the first such element, taken in <I>array</I> element order. If BACK is present
-with the <I>value</I> .true., the element whose subscripts are returned is the last
-such element, taken in <I>array</I> element order.
+present with the value .false., the element whose subscripts are returned is
+the first such element, taken in array element order. If BACK is present
+with the value .true., the element whose subscripts are returned is the last
+such element, taken in array element order.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -172,7 +172,7 @@ such element, taken in <I>array</I> element order.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY : shall be an <I>array</I> of intrinsic type.
+ARRAY : shall be an array of intrinsic type.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -182,7 +182,7 @@ VALUE : shall be scalar and in type conformance with ARRAY.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : shall be an integer scalar with a <I>value</I> in the range 1 &lt;= DIM &lt;= n,
+DIM : shall be an integer scalar with a value in the range 1 &lt;= DIM &lt;= n,
 where n is the rank of ARRAY. The corresponding actual argument shall not
 be an optional dummy argument.
 </TD></TR>
@@ -209,9 +209,9 @@ BACK : (optional) shall be a logical scalar.
 
 </A>
 <BLOCKQUOTE>
-KIND is present, the <I>kind</I> type parameter is that specified by the <I>value</I> of
-KIND; otherwise the <I>kind</I> type parameter is that of default integer type. If
-DIM does not appear, the result is an <I>array</I> of rank one and of size equal to
+KIND is present, the kind type parameter is that specified by the value of
+KIND; otherwise the kind type parameter is that of default integer type. If
+DIM does not appear, the result is an array of rank one and of size equal to
 the rank of ARRAY; otherwise, the result is of rank n - 1 and shape
 <P>
 <PRE>
@@ -236,9 +236,9 @@ is the shape of ARRAY.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-CASE (I): The result of FINDLOC (ARRAY, VALUE) is a rank-one <I>array</I> whose
+CASE (I): The result of FINDLOC (ARRAY, VALUE) is a rank-one array whose
 element values are the values of the subscripts of an element of ARRAY
-whose <I>value</I> matches VALUE. If there is such a <I>value</I>, the ith subscript
+whose value matches VALUE. If there is such a value, the ith subscript
 returned lies in the range 1 to ei, where ei is the extent of the ith
 dimension of ARRAY. If no elements match VALUE or ARRAY has size zero,
 all elements of the result are zero.
@@ -247,12 +247,12 @@ all elements of the result are zero.
 o
 </TD><TD>
 CASE (II): the result of FINDLOC (ARRAY, VALUE, MASK = MASK) is a rank-
-one <I>array</I> whose element values are the values of the subscripts of an
-element of ARRAY, corresponding to a true element of MASK, whose <I>value</I>
-matches VALUE. If there is such a <I>value</I>, the ith subscript returned lies
+one array whose element values are the values of the subscripts of an
+element of ARRAY, corresponding to a true element of MASK, whose value
+matches VALUE. If there is such a value, the ith subscript returned lies
 in the range 1 to ei, where ei is the extent of the ith dimension of
 ARRAY. If no elements match VALUE, ARRAY has size zero, or every element
-of MASK has the <I>value</I> false, all elements of the result are zero.
+of MASK has the value false, all elements of the result are zero.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=7>
@@ -445,12 +445,12 @@ Fortran 95
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>MAXLOC</B>(3) - Location of the maximum <I>value</I> within an <I>array</I>
+MAXLOC(3) - Location of the maximum value within an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>MINLOC</B>(3) - Location of the minimum <I>value</I> within an <I>array</I>
+MINLOC(3) - Location of the minimum value within an array
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -459,7 +459,7 @@ o
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>findloc (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 16203a99-584d-489a-aca5-2914ca8db0d1 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>findloc (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f59818d7-8ec3-48c0-aff3-97abf19ba615 using man macros.</FONT>
 <br><br><center><img src="images/findloc.3fortran.gif"></center>
 </div>
 </div>

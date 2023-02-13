@@ -5,52 +5,63 @@
       implicit none
       integer                      :: i
       integer,parameter            :: dp=kind(0.0d0)
-      !
-      ! DEFINE ARGS
+       !
+       ! Define ARGS
       real                         :: x, y, z
-      real(kind=dp),allocatable    :: point(:)
       logical                      :: l, lbig
+      character(len=40)            :: label    ! FIXED LENGTH
+      real(kind=dp),allocatable    :: point(:)
       logical,allocatable          :: logicals(:)
       character(len=:),allocatable :: title    ! VARIABLE LENGTH
-      character(len=40)            :: label    ! FIXED LENGTH
       real                         :: p(3)     ! FIXED SIZE
       logical                      :: logi(3)  ! FIXED SIZE
-      !
-      ! DEFINE AND PARSE (TO SET INITIAL VALUES) COMMAND LINE
-      !   o set a value for all keywords.
-      !   o double-quote strings
-      !   o set all logical values to F or T.
-      !   o value delimiter is comma, colon, or space
+       !
+       ! DEFINE AND PARSE (TO SET INITIAL VALUES) COMMAND LINE
+       !   o set a value for all keywords.
+       !   o double-quote strings, strings must be at least one space
+       !     because adjacent double-quotes designate a double-quote
+       !     in the value.
+       !   o set all logical values to F
+       !   o numeric values support an "e" or "E" exponent
+       !   o for lists delimit with a comma, colon, or space
       call set_args('                         &
               & -x 1 -y 2 -z 3                &
               & -p -1 -2 -3                   &
               & --point 11.11, 22.22, 33.33e0 &
               & --title "my title" -l F -L F  &
               & --logicals  F F F F F         &
-              & -logi F T F                   &
+              & --logi F T F                  &
               & --label " " &
               ! note space between quotes is required
               & ')
-      ! ASSIGN VALUES TO ELEMENTS
-      call get_args('x',x)         ! SCALARS
-      call get_args('y',y)
-      call get_args('z',z)
-      call get_args('l',l)
-      call get_args('L',lbig)
-      call get_args('title',title) ! ALLOCATABLE STRING
-      call get_args('point',point) ! ALLOCATABLE ARRAYS
+       ! Assign values to elements using G_ARGS(3f).
+       ! non-allocatable scalars can be done up to twenty per call
+      call get_args('x',x, 'y',y, 'z',z, 'l',l, 'L',lbig)
+       ! As a convenience multiple pairs of keywords and variables may be
+       ! specified if and only if all the values are scalars and the CHARACTER
+       ! variables are fixed-length or pre-allocated.
+       !
+       ! After SET_ARGS(3f) has parsed the command line
+       ! GET_ARGS(3f) retrieves the value of keywords accept for
+       ! two special cases. For fixed-length CHARACTER variables
+       ! see GET_ARGS_FIXED_LENGTH(3f). For fixed-size arrays see
+       ! GET_ARGS_FIXED_SIZE(3f).
+       !
+       ! allocatables should be done one at a time
+      call get_args('title',title) ! allocatable string
+      call get_args('point',point) ! allocatable arrays
       call get_args('logicals',logicals)
-      !
-      ! for NON-ALLOCATABLE VARIABLES
+       !
+       ! less commonly ...
 
-      ! for non-allocatable string
+       ! for fixed-length strings
       call get_args_fixed_length('label',label)
 
-      ! for non-allocatable arrays
+       ! for non-allocatable arrays
       call get_args_fixed_size('p',p)
       call get_args_fixed_size('logi',logi)
-      !
-      ! USE VALUES
+       !
+       ! all done parsing, use values
       write(*,*)'x=',x, 'y=',y, 'z=',z, x+y+z
       write(*,*)'p=',p
       write(*,*)'point=',point
@@ -60,11 +71,11 @@
       write(*,*)'L=',lbig
       write(*,*)'logicals=',logicals
       write(*,*)'logi=',logi
-      !
-      ! unnamed strings
-      !
+       !
+       ! unnamed strings
+       !
       if(size(filenames) > 0)then
          write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
       endif
-      !
+       !
       end program demo_M_CLI2

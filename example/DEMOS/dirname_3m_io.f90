@@ -11,6 +11,5 @@
         allocate(character(len=filename_length) :: filename)
         call get_command_argument (i , value=filename)
         write(*,'(a)')dirname(filename)
-        deallocate(filename)
      enddo
      end program demo_dirname

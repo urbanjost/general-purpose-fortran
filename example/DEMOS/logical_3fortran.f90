@@ -12,4 +12,4 @@
               & logical_kinds(i),'=', logical_kinds(i)
            enddo
 
-    end program demo_logical
+        end program demo_logical

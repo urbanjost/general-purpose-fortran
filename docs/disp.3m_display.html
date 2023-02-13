@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>disp(3f) </B>- [M_display] pretty-print a matrix
-<B>
-</B></BLOCKQUOTE>
+disp(3f) - [M_display] pretty-print a matrix
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Description</A><BR>
@@ -113,10 +113,8 @@ following kinds of data are supported:
           default character
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 With the add-on modules described in section 2.3 other kinds may be displayed. Matrices are
-displayed in traditional mathematical order, so the rows displayed are <B>X</B>(1,:), <B>X</B>(2,:) etc.
+displayed in traditional mathematical order, so the rows displayed are X(1,:), X(2,:) etc.
 Vectors are by default displayed as column vectors (but a row orientation may be specified
 with the ORIENT argument). An SS edit descriptor is applied automatically so positive
 elements are not prefixed with a + sign (the Fortran standard makes outputting a + sign
@@ -142,16 +140,16 @@ below). The possible edit descriptors are:
           Gw.d, Gw.dEe: any data
 <P>
 </PRE>
+Example calls for numeric X are CALL DISP(X,&#146;ES11.4&#146;) and CALL DISP(&#146;X=&#146;,X,&#146;F8.4&#146;). If X is
+a scalar string (i.e. of rank 0) and TITLE is absent FMT must be specified with a keyword
+(otherwise the call is taken to have TITLE and X): CALL DISP(&#146;str&#146;,FMT=&#146;A4&#146;) displays
+"str" but CALL DISP(&#146;str&#146;,&#146;A4&#146;) displays "strA4").
 </TD></TR>
 <TR><TD width=6%>&nbsp;</TD><TD>
-Example calls for numeric X are CALL <B>DISP</B>(X,&#146;ES11.4&#146;) and CALL <B>DISP</B>(&#146;X=&#146;,X,&#146;F8.4&#146;). If X is
-a scalar string (i.e. of rank 0) and TITLE is absent FMT must be specified with a keyword
-(otherwise the call is taken to have TITLE and X): CALL <B>DISP</B>(&#146;str&#146;,FMT=&#146;A4&#146;) displays
-"str" but CALL <B>DISP</B>(&#146;str&#146;,&#146;A4&#146;) displays "strA4").
 <P>
 If FMT is absent, each element of X is formatted with a default edit descriptor. When X is
 of type logical the default is L1 and when it is of type character the default is A (which
-is equivalent to Aw where w = <B>LEN</B>(X)). For integer data the default is Iw where w is
+is equivalent to Aw where w = LEN(X)). For integer data the default is Iw where w is
 exactly big enough to accommodate both the largest positive and the largest negative values
 in X. For real and complex data the default also depends on the largest absolute values in
 X, as detailed in the DIGMAX-paragraph in section 3.2. The format used for complex numbers
@@ -167,14 +165,14 @@ is demonstrated in the introduction above.
 </A>
 <BLOCKQUOTE>
 <P>
-CALL <B>DISP</B>(TITLE, X, FMT, FMT_IMAG, ADVANCE, DIGMAX, LBOUND, ORIENT,
+CALL DISP(TITLE, X, FMT, FMT_IMAG, ADVANCE, DIGMAX, LBOUND, ORIENT,
 SEP, STYLE, TRIM, UNIT, ZEROAS)
 </BLOCKQUOTE>
 <P>
 All dummy arguments are optional and some of them are incompatible with some data types of X.
 The arguments control how X is displayed, as described in section 3.1 and below. For the character
 arguments ADVANCE and ORIENT the case of letters is ignored (so e.g. ADVANCE = &#146;yes&#146; and ADVANCE =
-realized with argument keywords, e.g. CALL <B>DISP</B>(&#146;X=&#146;, X, DIGMAX=3, ORIENT=&#146;ROW&#146;). When X is a
+realized with argument keywords, e.g. CALL DISP(&#146;X=&#146;, X, DIGMAX=3, ORIENT=&#146;ROW&#146;). When X is a
 scalar string FMT must also be associated with keyword, as mentioned in section 3.1. The most
 useful application of calling DISP with X absent is to advance to the next line or display an
 empty line. For this purpose, the only relevant arguments are UNIT, and ADVANCE with the value
@@ -185,7 +183,7 @@ empty line. For this purpose, the only relevant arguments are UNIT, and ADVANCE 
 <TR valign=top><TD colspan=2>
 <B>FMT_IMAG = edit-descriptor-imag</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 An edit descriptor for imaginary parts of complex X. The
-statement CALL <B>DISP</B>((1.31,2.47),&#146;F0.1&#146;,&#146;F0.2&#146;) will display "1.3 + 2.47i". If FMT_IMAG
+statement CALL DISP((1.31,2.47),&#146;F0.1&#146;,&#146;F0.2&#146;) will display "1.3 + 2.47i". If FMT_IMAG
 is absent and FMT is present then both real and imaginary parts are edited with FMT. If
 both are absent, separate defaults are used, as explained in the DIGMAX-paragraph below.
 FMT_IMAG must be absent if X is not complex.
@@ -217,9 +215,9 @@ This argument is a default integer vector with the numbers of the first row
 / column to show when displaying with numbered style. When calling subroutines in Fortran,
 only the shape of matrix arguments is passed with the arguments, but matrix lower bounds are
 assumed to be 1 unless declared explicitly in the routine. To compensate for this deficiency
-LBOUND may be set to the declared lower <B>bound</B>(s) of X. To take an example, let
-aij = <B>exp</B>(i + j - 1) as in section 1, but let A be declared with <B>REAL::A</B>(0:3,0:3). Then
-CALL <B>DISP</B>(A, STYLE = &#146;NUMBER&#146;, LBOUND = <B>LBOUND</B>(A)) will display:
+LBOUND may be set to the declared lower bound(s) of X. To take an example, let
+aij = exp(i + j - 1) as in section 1, but let A be declared with REAL::A(0:3,0:3). Then
+CALL DISP(A, STYLE = &#146;NUMBER&#146;, LBOUND = LBOUND(A)) will display:
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -230,9 +228,7 @@ CALL <B>DISP</B>(A, STYLE = &#146;NUMBER&#146;, LBOUND = <B>LBOUND</B>(A)) will 
         &gt;  3  20.086  54.598  148.413  403.429.
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
-In fact the call may be shortened to CALL <B>DISP</B>(A, LBOUND = <B>LBOUND</B>(A)) because numbering is
+In fact the call may be shortened to CALL DISP(A, LBOUND = LBOUND(A)) because numbering is
 default when LBOUND is present.
 </TD></TR>
 <TR valign=top><TD colspan=2>
@@ -273,15 +269,14 @@ There are five possible styles:
           &#146;number&#146;     Each matrix or vector row and / or column is numbered.
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 Any of the four title position styles can also be combined with the number style by
 specifying for example STYLE = &#146;pad & number&#146;. Any character except space may be used
 instead of hyphen by prefixing it to the style. STYLE = &#146;*underline&#146; will thus underline the
 title with asterisks. Both row and column numbers appear for numbered matrices, but for
 vectors only row numbers appear (or column numbers when ORIENT is &#146;col&#146;). The five styles
 are illustrated below, accompanied by an example of combined padded title and numbering.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 <PRE>
         &gt; Matr = 1.2   4.2       Matr      ---Matr--       Matr          1     2     ____Matr____
         &gt;        5.6  18.3    1.2   4.2    1.2   4.2    ---------    1  1.2   4.2        1     2
@@ -306,19 +301,16 @@ In the following example, X and U are displayed with TRIM = &#146;yes&#146;, but
         &gt; 3 32 1234      3   32 1234
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 One application of trimming is to display matrices with a fixed number of fractional digits
 but variable effective field width. Then Fw.d editing with w big enough is accompanied by
-TRIM = &#146;yes&#146;. An example is the following display of a matrix with (i, k) element <B>exp</B>(k**i)
+TRIM = &#146;yes&#146;. An example is the following display of a matrix with (i, k) element exp(k**i)
 using F20.2 and &#146;yes&#146;:
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 <PRE>
            power exponentials
 </PRE>
-<TABLE width=100% cellpadding=3><!-- tsb:            power exponentials
- -->
-<TR></TR><TR></TR>
+</TD></TR>
 <TR><TD width=6%>&nbsp;</TD><TD>
 <TABLE width=100% cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
@@ -329,13 +321,14 @@ using F20.2 and &#146;yes&#146;:
 <B>2.72</B> </TD><TD valign=bottom>
 54.60  8103.08
 </TD></TR>
-<TR></TR></TABLE></TD></TR>
 <TR></TR></TABLE><!-- .PP -->
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Similar output may be obtained using I and F edit descriptors with w = 0 as discussed in
 section 3.5. Apart from I and F edited displays, it is possible to trim A-edited displays as
 well as E-edited displays with some negative elements, but the first column all positive:
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 <PRE>
           With TRIM=&#146;yes&#146;:X=1.2e+5 -4.1e-2   With TRIM=&#146;no&#146;:X= 1.2e+5 -4.1e-2
                             2.3e-3  8.6e+1                     2.3e-3  8.6e+1
@@ -355,8 +348,6 @@ which may be referred to either with constants or parameters (named constants) a
             -1      NULL_UNIT      Null device (all output to this is discarded)
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 These units are further described in sections 3.3 and 3.4. Other unit numbers correspond to
 external files that should have been connected with open-statements. The default unit depends
 on the named constant DEFAULT_UNIT, defined in PUTSTRMODULE. The default PUTSTRMODULE sets
@@ -366,10 +357,10 @@ it to <B>-3</B> (see sections 2 and 3.4).
 <B>ZEROAS = zerostring</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Supported for integer and real X (not complex) Any element that compares equal
 to 0 will be displayed as zerostring. If, for example, A is a 4 by 4 upper triangular matrix
-with aij = <B>1/max</B>(0,j - i + 1) then CALL <B>DISP</B>(&#146;A = &#146;, A, &#146;F0.3&#146;, ZEROAS = &#146;0&#146;, ADVANCE = &#146;NO&#146;)
-and CALL <B>DISP</B>(&#146;B = &#146;, A, &#146;F0.3&#146;, ZEROAS = &#146;.&#146;) will display:
+with aij = 1/max(0,j - i + 1) then CALL DISP(&#146;A = &#146;, A, &#146;F0.3&#146;, ZEROAS = &#146;0&#146;, ADVANCE = &#146;NO&#146;)
+and CALL DISP(&#146;B = &#146;, A, &#146;F0.3&#146;, ZEROAS = &#146;.&#146;) will display:
 </TD></TR>
-<TR><TD colspan=2>
+<TR></TR></TABLE><!-- .nf -->
 <PRE>
           A = 1.000  0.500  0.333  0.250   B = 1.000  0.500  0.333  0.250
                   0  1.000  0.500  0.333        .     1.000  0.500  0.333
@@ -377,13 +368,10 @@ and CALL <B>DISP</B>(&#146;B = &#146;, A, &#146;F0.3&#146;, ZEROAS = &#146;.&#14
                   0      0      0  1.000        .      .      .     1.000
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 Notice that when zerostring contains a decimal point it is lined up with other decimal
 points in the column. If zerostring has length 0, the default behavior of not treating zeros
 specially is re-established, in case an earlier DISP_SET call has been used to set ZEROAS.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
 <P>
 <P>
 <A name=3>
@@ -396,7 +384,7 @@ specially is re-established, in case an earlier DISP_SET call has been used to s
 As already mentioned in section 3.2 there are three special units, ASTERISK_UNIT = <B>-3</B>, PUTSTR_UNIT
 = <B>-2</B> and NULL_UNIT = <B>-1</B>. These public named constants (parameters) are defined by M_display.
 <P>
-Selecting ASTERISK_UNIT channels all output to the unit that <B>WRITE</B>(*,&#46;&#46;&#46;) statements use. The
+Selecting ASTERISK_UNIT channels all output to the unit that WRITE(*,&#46;&#46;&#46;) statements use. The
 ISO_FORTRAN_ENV intrinsic module of Fortran 2003 defines the named constant OUTPUT_UNIT and this
 may be used instead, unless its value is set to <B>-2</B> by the compiler (which would clash with
 PUTSTR_UNIT).
@@ -471,8 +459,8 @@ NOT-A-NUMBER AND INFINITE VALUES
 <P>
 If the compiler supports not-a-number and infinite values as defined by the IEEE exceptional values
 of Fortran 2003, these are displayed as NaN, +Inf or Inf. A not-a-number value X is identified as
-being not equal to itself, and an infinite value is either greater than <B>HUGE</B>(X) or smaller than
--<B>HUGE</B>(X). On all the compilers tried the sequence BIG=1E20; CALL <B>DISP</B>(EXP(BIG)) displays +Inf, and
+being not equal to itself, and an infinite value is either greater than HUGE(X) or smaller than
+<B>-HUGE</B>(X). On all the compilers tried the sequence BIG=1E20; CALL DISP(EXP(BIG)) displays +Inf, and
 the program segment:
 <P>
 <PRE>
@@ -509,12 +497,12 @@ NaN
 
 </A>
 <BLOCKQUOTE>
-Based on <B>dispmodule</B>(3f), "A Fortran 95 module for pretty-printing matrices".
+Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
 Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
 Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>disp (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9fff9500-eb49-4e8e-8a3e-e91d3c64e7fd using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>disp (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 379508d0-95d5-4267-8694-54686bc92f66 using man macros.</FONT>
 <br><br><center><img src="images/disp.3m_display.gif"></center>
 </div>
 </div>

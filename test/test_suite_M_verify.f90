@@ -57,7 +57,7 @@ subroutine test_accdig()
 end subroutine test_accdig
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_almost()
-real    :: x, y
+real    :: x, y, r
 integer :: i
 logical,parameter :: expected(*)=[.true., .true., .false., .false., .false., .false., .false., .false.]
 
@@ -65,7 +65,8 @@ logical,parameter :: expected(*)=[.true., .true., .false., .false., .false., .fa
    x=1.2345678
    y=1.2300000
    do i=1,8
-      call unit_check('almost',almost(x,y,real(i),verbose=.false.).eqv.expected(i))
+       r=real(i)
+       call unit_check('almost',almost(x,y,r,verbose=.false.).eqv.expected(i))
    enddo
    call unit_check_done('almost',msg='')
 end subroutine test_almost

@@ -87,6 +87,7 @@ call unit_check_done('anyscalar_to_real',msg='')
 end subroutine test_anyscalar_to_real
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_anything_to_bytes()
+integer :: i, j
 call unit_check_start('anything_to_bytes',msg='')
 call unit_check('anything_to_bytes',any(anything_to_bytes(huge(0_int8))      .eq. transfer(huge(0_int8),'A')) )
 call unit_check('anything_to_bytes',any(anything_to_bytes(huge(0_int16))     .eq. transfer(huge(0_int16),'A')) )
@@ -95,6 +96,17 @@ call unit_check('anything_to_bytes',any(anything_to_bytes(huge(0_int64))     .eq
 call unit_check('anything_to_bytes',any(anything_to_bytes(huge(0.0_real32))  .eq. transfer(huge(0.0_real32),'A')) )
 call unit_check('anything_to_bytes',any(anything_to_bytes(huge(0.0_real64))  .eq. transfer(huge(0.0_real64),'A')) )
 call unit_check('anything_to_bytes',any(anything_to_bytes(huge(0.0_real128)) .eq. transfer(huge(0.0_real128),'A')) )
+call unit_check('anything_to_bytes',any(anything_to_bytes('this is a string') .eq. transfer('this is a string','A')) )
+
+call unit_check('anything_to_bytes',any(&
+        & anything_to_bytes(['aaaaaaaaaa','bbbbbbbbbb']) .eq. transfer(['aaaaaaaaaa','bbbbbbbbbb'],'A')),'check against transfer')
+
+call unit_check('anything_to_bytes',size(anything_to_bytes('this is a string')) .eq. len('this is a string'),'check byte count')
+
+i=size( anything_to_bytes(['aaaaaaaaaa','bbbbbbbbbb']))
+j=len('aaaaaaaaaabbbbbbbbbb')
+call unit_check('anything_to_bytes',i.eq.j,'expected',i,'got',j,'check array byte count')
+
 call unit_check_done('anything_to_bytes',msg='')
 end subroutine test_anything_to_bytes
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

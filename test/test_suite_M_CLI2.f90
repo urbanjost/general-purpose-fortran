@@ -34,7 +34,7 @@ character(len=*),parameter   :: gen='(*(g0,1x))'
    e=len_trim(cmd)+1
    
    command=' &
-   & --ints 11,22,33 &
+   & --ints 11,22,33,b111,o111,z111 &
    & -x 10 -y 20 -z 10#30 &
    & --ithree -1,-2,-3 &
    ! character
@@ -59,7 +59,7 @@ character(len=*),parameter   :: gen='(*(g0,1x))'
       write(6,*)'check defaults'
 
       write(6,*)'default integers'
-      call printit(all([x,y,z,ints,ithree] == [10,20,30,11,22,33,-1,-2,-3]))
+      call printit(all([x,y,z,ints,ithree] == [10,20,30,11,22,33,7,73,273,-1,-2,-3]))
 
       write(6,*)'default reals scalar'
       call printit(all([r_x,r_y,r_z] == [-8.0,-88.0,-888.0]))

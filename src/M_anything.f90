@@ -13,6 +13,7 @@
 ! This module and the example function squarei() that uses it shows how you
 ! can use polymorphism to allow arguments of different types generically by casting
 !===================================================================================================================================
+!===================================================================================================================================
 !>
 !!##NAME
 !!    M_anything(3fm) - [M_anything::INTRO] procedures that use polymorphism to allow arguments of different types generically
@@ -97,6 +98,8 @@
 module M_anything
 use, intrinsic :: ISO_FORTRAN_ENV, only : INT8, INT16, INT32, INT64       !  1           2           4           8
 use, intrinsic :: ISO_FORTRAN_ENV, only : REAL32, REAL64, REAL128         !  4           8          10
+use, intrinsic :: ISO_FORTRAN_ENV, only : CSZ => CHARACTER_STORAGE_SIZE
+use, intrinsic :: iso_fortran_env, only : stderr => error_unit !! ,input_unit,output_unit
 implicit none
 private
 integer,parameter        :: dp=kind(0.0d0)
@@ -277,10 +280,22 @@ contains
 !!         chars=anything_to_bytes([(i*i,i=1,size(ints))])
 !!         write(*,'(/,4(1x,z2.2))')chars
 !!         call bytes_to_anything(chars,ints)
-!!         write(*,*)ints
+!!         write(*,'(*(g0,1x))')ints
 !!      end program demo_bytes_to_anything
 !!
-!!   Expected output
+!! Results:
+!!  >
+!!  >  01 00 00 00
+!!  >  04 00 00 00
+!!  >  09 00 00 00
+!!  >  10 00 00 00
+!!  >  19 00 00 00
+!!  >  24 00 00 00
+!!  >  31 00 00 00
+!!  >  40 00 00 00
+!!  >  51 00 00 00
+!!  >  64 00 00 00
+!!  >  1     4     9    16    25    36    49    64    81   100
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -349,8 +364,6 @@ end subroutine bytes_to_anything
 !!
 !!    program demo_anything_to_bytes
 !!    use M_anything,      only : anything_to_bytes
-!!    !!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-!!    !!use, intrinsic :: iso_fortran_env, only : real32, real64, real128
 !!    implicit none
 !!    integer :: i
 !!       write(*,'(/,4(1x,z2.2))')anything_to_bytes([(i*i,i=1,10)])
@@ -385,16 +398,16 @@ end subroutine bytes_to_anything
 !!##LICENSE
 !!    MIT
 function anything_to_bytes_arr(anything) result(chars)
-implicit none
 
 ! ident_1="@(#) M_anything anything_to_bytes_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything(:)
 character(len=1),allocatable :: chars(:)
-   if(allocated(chars))deallocate(chars)
-   allocate(chars( storage_size(anything)/8) )
-   select type(anything)
 
+   if(allocated(chars))deallocate(chars)
+   allocate(chars( storage_size(anything)/CSZ * size(anything) ) )
+
+   select type(anything)
     type is (character(len=*));     chars=transfer(anything,chars)
     type is (complex);              chars=transfer(anything,chars)
     type is (complex(kind=dp));     chars=transfer(anything,chars)
@@ -407,22 +420,22 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
-
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
    end select
+
 end function anything_to_bytes_arr
 !-----------------------------------------------------------------------------------------------------------------------------------
 function  anything_to_bytes_scalar(anything) result(chars)
-implicit none
 
 ! ident_2="@(#) M_anything anything_to_bytes_scalar(3fp) anything to bytes (an array of CHARACTER(LEN=1) variables)"
 
 class(*),intent(in)          :: anything
 character(len=1),allocatable :: chars(:)
    if(allocated(chars))deallocate(chars)
-   allocate(chars( storage_size(anything)/8) )
-   select type(anything)
+   allocate(chars( storage_size(anything)/CSZ) )
 
+   select type(anything)
     type is (character(len=*));     chars=transfer(anything,chars)
     type is (complex);              chars=transfer(anything,chars)
     type is (complex(kind=dp));     chars=transfer(anything,chars)
@@ -435,15 +448,15 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      stop 'crud. anything_to_bytes_scalar(1) does not know about this type'
-
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      !stop 'crud. anything_to_bytes_scalar(1) does not know about this type'
    end select
+
 end function  anything_to_bytes_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !!subroutine setany(anything,default,answer)
-!!implicit none
 !!
 !!$@(#) M_anything::setany(3fp): set absent parameter to default value
 !!
@@ -524,8 +537,6 @@ end function  anything_to_bytes_scalar
 !!##LICENSE
 !!    MIT
 pure elemental function anyscalar_to_real128(valuein) result(d_out)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-implicit none
 
 ! ident_3="@(#) M_anything anyscalar_to_real128(3f) convert integer or real parameter of any kind to real128"
 
@@ -543,7 +554,6 @@ character(len=3)             :: readable
    type is (logical);              d_out=merge(0.0_real128,1.0_real128,valuein)
    type is (character(len=*));     read(valuein,*) d_out
    class default
-    !!d_out=huge(0.0_real128)
     readable='NaN'
     read(readable,*)d_out
     !!stop '*M_anything::anyscalar_to_real128: unknown type'
@@ -617,8 +627,6 @@ end function anyscalar_to_real128
 !!##LICENSE
 !!    MIT
 pure elemental function anyscalar_to_double(valuein) result(d_out)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-implicit none
 
 ! ident_4="@(#) M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision"
 
@@ -634,7 +642,7 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (real(kind=real64));    d_out=dble(valuein)
    Type is (real(kind=real128))
       !IMPURE! if(valuein > big)then
-      !IMPURE!    write(error_unit,'(*(g0,1x))')'*anyscalar_to_double* value too large ',valuein
+      !IMPURE!    write(stderr,'(*(g0,1x))')'*anyscalar_to_double* value too large ',valuein
       !IMPURE! endif
       d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
@@ -710,8 +718,6 @@ end function anyscalar_to_double
 !!##LICENSE
 !!    MIT
 pure elemental function anyscalar_to_real(valuein) result(r_out)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-implicit none
 
 ! ident_5="@(#) M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real"
 
@@ -726,17 +732,16 @@ real,parameter      :: big=huge(0.0)
    type is (real(kind=real32));    r_out=real(valuein)
    type is (real(kind=real64))
       !!if(valuein > big)then
-      !!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
+      !!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !!endif
       r_out=real(valuein)
    type is (real(kind=real128))
       !!if(valuein > big)then
-      !!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
+      !!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !!endif
       r_out=real(valuein)
    type is (logical);              r_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));     read(valuein,*) r_out
-   !type is (real(kind=real128));  r_out=real(valuein)
    end select
 end function anyscalar_to_real
 !===================================================================================================================================
@@ -745,28 +750,31 @@ end function anyscalar_to_real
 !>
 !!##NAME
 !!
-!!    anyscalar_to_int64(3f) - [M_anything] convert integer any kind to integer(kind=int64)
+!!    anyscalar_to_int64(3f) - [M_anything] convert intrinsic scalar types
+!!    to integer(kind=int64)
 !!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
 !!
-!!    impure elemental function anyscalar_to_int64(intin) result(value)
+!!    impure elemental function anyscalar_to_int64(valin) result(value)
 !!
-!!     class(*),intent(in) :: intin
+!!     class(*),intent(in) :: valin
 !!     integer(kind=int64) :: value
 !!
 !!##DESCRIPTION
 !!
-!!    This function uses polymorphism to allow arguments of different INTEGER types
+!!    This function uses polymorphism to allow arguments of different types
 !!    as input. It is typically used to create other procedures that can take
 !!    many scalar arguments as input options, equivalent to passing the
-!!    parameter VALUE as int(VALUE,0_int64).
+!!    parameter VALUE as int(VALUE,0_int64) for integer; nint(VALUE,0_int64)
+!!    for real values, returning 0_int64 for .true. and 1_int64 for logical,
+!!    and the same as int(VALUE,0_int64) for character variables if the
+!!    character variables represent an integer value.
 !!
 !!##OPTIONS
 !!
 !!    VALUEIN  input argument of a procedure to convert to type INTEGER(KIND=int64).
-!!             May be of KIND kind=int8, kind=int16, kind=int32, kind=int64.
 !!
 !!##RESULTS
 !!             The value of VALUIN converted to INTEGER(KIND=INT64).
@@ -813,8 +821,6 @@ end function anyscalar_to_real
 !!##LICENSE
 !!    MIT
 impure elemental function anyscalar_to_int64(valuein) result(ii38)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-implicit none
 
 ! ident_6="@(#) M_anything anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer"
 
@@ -827,18 +833,18 @@ class(*),intent(in)    :: valuein
    type is (integer(kind=int16));  ii38=int(valuein,kind=int64)
    type is (integer(kind=int32));  ii38=valuein
    type is (integer(kind=int64));  ii38=valuein
-   type is (real(kind=real32));    ii38=int(valuein,kind=int64)
-   type is (real(kind=real64));    ii38=int(valuein,kind=int64)
-   Type is (real(kind=real128));   ii38=int(valuein,kind=int64)
+   type is (real(kind=real32));    ii38=nint(valuein,kind=int64)
+   type is (real(kind=real64));    ii38=nint(valuein,kind=int64)
+   Type is (real(kind=real128));   ii38=nint(valuein,kind=int64)
    type is (logical);              ii38=merge(0_int64,1_int64,valuein)
    type is (character(len=*))   ;
       read(valuein,*,iostat=ios,iomsg=message)ii38
       if(ios /= 0)then
-         write(error_unit,*)'*anyscalar_to_int64* ERROR: '//trim(message)
+         write(stderr,*)'*anyscalar_to_int64* ERROR: '//trim(message)
          stop 2
       endif
    class default
-      write(error_unit,*)'*anyscalar_to_int64* ERROR: unknown integer type'
+      write(stderr,*)'*anyscalar_to_int64* ERROR: unknown integer type'
       stop 3
    end select
 end function anyscalar_to_int64
@@ -932,7 +938,6 @@ end function anyscalar_to_int64
 pure function anyscalar_to_string(gen0, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9, &
                                 & gena, genb, genc, gend, gene, genf, geng, genh, geni, genj, &
                                 & sep)
-implicit none
 
 ! ident_7="@(#) M_anything anyscalar_to_string(3fp) writes a message to a string composed of any standard scalar types"
 
@@ -980,8 +985,6 @@ character(len=:),allocatable  :: sep_local
 contains
 !===================================================================================================================================
 pure subroutine print_generic(generic,line,istart,increment,sep)
-!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
-use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in) :: generic
 character(len=4096),intent(inout) :: line
 integer,intent(inout) :: istart
@@ -1063,7 +1066,6 @@ end function anyscalar_to_string
 !!##LICENSE
 !!    MIT
 impure function anyinteger_to_string(int) result(out)
-use,intrinsic :: iso_fortran_env, only : int64
 
 ! ident_8="@(#) M_anything anyinteger_to_string(3f) function that converts an integer value to a character string"
 
@@ -1156,7 +1158,6 @@ end function anyinteger_to_string
 !!##LICENSE
 !!    MIT
 function get_type_arr(anything) result(chars)
-implicit none
 
 ! ident_9="@(#) M_anything get_type_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
@@ -1182,7 +1183,6 @@ character(len=20)   :: chars
 end function get_type_arr
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental impure function get_type_scalar(anything) result(chars)
-implicit none
 
 ! ident_10="@(#) M_anything get_type_scalar(3fp) anything to bytes (an array of CHARACTER(LEN=1) variables)"
 

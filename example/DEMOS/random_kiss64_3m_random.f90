@@ -16,4 +16,4 @@
          else
             print *, "Fail"
          endif
-  end program demo_random_kiss64
+      end program demo_random_kiss64

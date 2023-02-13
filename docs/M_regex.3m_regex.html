@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_regex(3fm) </B>- [M_regex] Fortran interface to POSIX 1003.2 regular
-<B>expression library using ISO_C_BINDING.
-</B></BLOCKQUOTE>
+M_regex(3fm) - [M_regex] Fortran interface to POSIX 1003.2 regular
+expression library using ISO_C_BINDING.
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -77,10 +77,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-use <I>M_regex</I>, only : <B>regcomp</B>(<I>3f</I>), <B>regexec</B>(<I>3f</I>), <B>regerror</B>(<I>3f</I>), <B>regfree</B>(<I>3f</I>)
-use <I>M_regex</I>, only : <B>regmatch</B>(<I>3f</I>), <B>regsub</B>(<I>3f</I>)
-</PRE>
+use M_regex, only : regcomp(3f), regexec(3f), regerror(3f), regfree(3f)
+use M_regex, only : regmatch(3f), regsub(3f)
 </BLOCKQUOTE>
 <A name=3>
 
@@ -97,28 +95,28 @@ These routines interface with the C implementation of IEEE Std 1003.2
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The <B>regcomp</B>(3c) function compiles a RE string into an internal form
+The regcomp(3c) function compiles a RE string into an internal form
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>regexec</B>(3c) matches that internal form against a string and reports
+regexec(3c) matches that internal form against a string and reports
 results
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>regerror</B>(3c) transforms error codes from either into human-readable
+regerror(3c) transforms error codes from either into human-readable
 messages
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-and <B>regfree</B>(3c) frees any dynamically-allocated storage used by
+and regfree(3c) frees any dynamically-allocated storage used by
 the internal form of an RE.
 </TD></TR>
 <TR></TR></TABLE>The Fortran interface is composed of wrapper routines that call the C
-library, plus some extensions (ie. <B>regmatch</B>(<I>3f</I>), <B>regsub</B>(<I>3f</I>)). See the
+library, plus some extensions (ie. regmatch(3f), regsub(3f)). See the
 C documentation for further details about implementation, performance,
 and limitations.
 <P>
@@ -158,8 +156,8 @@ Expression):
 <P>
 Regular expressions ( REs ), as defined in IEEE Std 1003.2
 ( POSIX.2 ), come in two forms: modern REs (roughly those of
-<B>egrep</B>(1); 1003.2 calls these extended REs or ERE) and obsolete REs
-(roughly those of <B>ed</B>(1); 1003.2 basic REs or BRE). BRE mostly
+egrep(1); 1003.2 calls these extended REs or ERE) and obsolete REs
+(roughly those of ed(1); 1003.2 basic REs or BRE). BRE mostly
 exist for backward compatibility in some old programs; they will be
 discussed at the end. IEEE Std 1003.2 ( POSIX.2 ) leaves some
 aspects of RE syntax and semantics open; decisions on
@@ -204,7 +202,8 @@ not the beginning of a bound . It is illegal to end an RE with
 \ .
 <P>
 A bracket expression is a list of characters enclosed in []
-<LI>below). If the list begins with ^ , it matches any single
+[char46] It normally matches any single character from the list (but see
+below). If the list begins with ^ , it matches any single
 character (but see below) not from the rest of the list. If two
 characters in the list are separated by - , this is shorthand
 for the full range of characters between those two (inclusive) in the
@@ -237,6 +236,7 @@ and =] is an equivalence class, standing for the sequences of
 characters of all collating elements equivalent to that one, including
 itself. (If there are no other equivalent collating elements, the
 treatment is as if the enclosing delimiters were [. and .]
+[char46]) For example, if x and y are the members of an equivalence
 class, then [[=x=]] , [[=y=]] , and [xy] are all
 synonymous. An equivalence class may not be an endpoint of a range.
 <P>
@@ -251,7 +251,7 @@ to that class. Standard character class names are:
          cntrl    print    xdigit
 <P>
 </PRE>
-These stand for the character classes defined in <B>ctype</B>(3). A locale
+These stand for the character classes defined in ctype(3). A locale
 may provide others. A character class may not be used as an endpoint
 of a range.
 <P>
@@ -264,7 +264,7 @@ There are two special cases of bracket expressions: the bracket
 expressions [[:&lt;:]] and [[:&gt;:]] match the null string at the beginning
 and end of a word respectively. A word is defined as a sequence of word
 characters which is neither preceded nor followed by word characters. A
-word character is an alnum character (as defined by <B>ctype</B>(3)) or an
+word character is an alnum character (as defined by ctype(3)) or an
 underscore. This is an extension, compatible with but not specified
 by IEEE Std 1003.2 ( POSIX.2 ), and should be used with caution in
 software intended to be portable to other systems.
@@ -280,7 +280,7 @@ priority over their lower-level component subexpressions.
 <P>
 Match lengths are measured in characters, not collating elements. A
 null string is considered longer than no match at all. For example, bb*
-matches the three middle characters of abbbc , (wee|<I>ee|week</I>)(knights|nights)
+matches the three middle characters of abbbc , (wee|week)(knights|nights)
 matches all ten characters of weeknights, when (.*).* is matched against
 abc the parenthesized subexpression matches all three characters, and
 when (a*)* is matched against bc both the whole RE and the parenthesized
@@ -398,7 +398,7 @@ the string, not how it is matched.
 <TR></TR></TABLE><!-- .PP -->
 </TD></TR>
 <TR></TR></TABLE>If REG_NOSUB was specified in the compilation of the RE, or if nmatch
-is 0, <B>regexec</B>() ignores the pmatch argument (but see below for the
+is 0, regexec() ignores the pmatch argument (but see below for the
 case where REG_STARTEND is specified). Otherwise, pmatch points to
 an array of nmatch structures of type regmatch_t. Such a structure
 has at least the members rm_so and rm_eo, both of type regoff_t (a
@@ -406,7 +406,7 @@ signed arithmetic type at least as large as an off_t and a ssize_t),
 containing respectively the offset of the first character of a
 substring and the offset of the first character after the end of
 the substring. Offsets are measured from the beginning of the string
-argument given to <B>regexec</B>(). An empty substring is denoted by equal
+argument given to regexec(). An empty substring is denoted by equal
 offsets, both indicating the character following the empty substring.
 <P>
 The 0th member of the pmatch array is filled in to indicate what
@@ -429,16 +429,16 @@ If REG_STARTEND is specified, pmatch must point to at least one
 regmatch_t (even if nmatch is 0 or REG_NOSUB was specified), to hold
 the input offsets for REG_STARTEND. Use for output is still entirely
 controlled by nmatch; if nmatch is 0 or REG_NOSUB was specified,
-the value of pmatch[0] will not be changed by a successful <B>regexec</B>().
+the value of pmatch[0] will not be changed by a successful regexec().
 <P>
-The <B>regerror</B>() function maps a non-zero errcode from either
-<B>regcomp</B>() or <B>regexec</B>() to a human-readable, printable message.
+The regerror() function maps a non-zero errcode from either
+regcomp() or regexec() to a human-readable, printable message.
 If preg is non-NULL, the error code should have arisen from use of
 the regex_t pointed to by preg, and if the error code came from
-<B>regcomp</B>(), it should have been the result from the most recent
-<B>regcomp</B>() using that regex_t. The (<B>regerror</B>() may be able to
+regcomp(), it should have been the result from the most recent
+regcomp() using that regex_t. The (regerror() may be able to
 supply a more detailed message using information from the regex_t.)
-The <B>regerror</B>() function places the NUL-terminated message into the
+The regerror() function places the NUL-terminated message into the
 buffer pointed to by errbuf, limiting the length (including the NUL)
 to at most errbuf_size bytes. If the whole message will not fit,
 as much of it as will fit before the terminating NUL is supplied.
@@ -446,10 +446,10 @@ In any case, the returned value is the size of buffer needed to hold
 the whole message (including terminating NUL). If errbuf_size is 0,
 errbuf is ignored but the return value is still correct.
 <P>
-The <B>regfree</B>() function frees any dynamically-allocated storage
+The regfree() function frees any dynamically-allocated storage
 associated with the compiled RE pointed to by preg. The remaining
 regex_t is no longer a valid compiled RE and the effect of supplying
-it to <B>regexec</B>() or <B>regerror</B>() is undefined.
+it to regexec() or regerror() is undefined.
 <P>
 None of these functions references global variables except for
 tables of constants; all are safe for use from multiple threads if
@@ -488,16 +488,10 @@ a bounded repetition, which must then follow the syntax for bounds. A
 </A>
 <BLOCKQUOTE>
 <P>
-When porting to a new programming environment use the
-built-in unit test &#46;&#46;&#46;
-<P>
-<PRE>
-     program test_M_regex
-     use M_regex, only : test_suite_M_regex
-        call test_suite_M_regex()
-     end program test_M_regex
-<P>
-</PRE>
+The test program test_suite_M_regex may be run via "fpm test"
+or when M_regex(3f) is built as part of the GPF (General Purpose
+Fortran library) but requires the test framework in GPF so it
+cannot be run stand-alone.
 </BLOCKQUOTE>
 <A name=9>
 
@@ -508,9 +502,9 @@ built-in unit test &#46;&#46;&#46;
 <P>
 Regular Expression Notation, IEEE Std, 1003.2, section 2.8.
 <P>
-<B>grep</B>(1), <B>re_format</B>(7), <B>regex</B>(3)
+grep(1), re_format(7), regex(3)
 <P>
-These routines implement IEEE Std 1003.2 ("POSIX.2") regular expressions ("RE"s); see <B>re_format</B>(7).
+These routines implement IEEE Std 1003.2 ("POSIX.2") regular expressions ("RE"s); see re_format(7).
 <P>
 IEEE Std 1003.2 (POSIX.2), sections 2.8 (Regular Expression Notation) and B.5 (C Binding for Regular Expression Matching).
 <P>
@@ -525,7 +519,7 @@ IEEE Std 1003.2 (POSIX.2), sections 2.8 (Regular Expression Notation) and B.5 (C
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_regex (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 14ad576a-ae45-4d25-bdd5-cc1c57cdd8fd using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_regex (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0dd11263-9ed9-42af-868a-110f2c7090a9 using man macros.</FONT>
 <br><br><center><img src="images/M_regex.3m_regex.gif"></center>
 </div>
 </div>

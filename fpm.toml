@@ -1,5 +1,5 @@
 name = "GPF"
-version = "2022.12.21"
+version = "2023.12.12"
 license = "Primarily MIT and PD"
 author = "John S. Urban and GPF maintainers"
 maintainer = "urbanjost@comcast.net"
@@ -10,8 +10,5 @@ keywords = ["fortran", "POSIX", "graphics", "strings", "unit tests"]
 homepage = "https://github.com/urbanjost/GPF"
 [build]
 link = ["curl", "ncurses", "sqlite3", "readline", "X11"]
-auto-executables = true
-auto-tests = true
-auto-examples = true
 [install]
 library = true

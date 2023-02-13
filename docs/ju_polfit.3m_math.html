@@ -56,7 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>ju_polfit(3f) </B>- [M_math] Fit discrete data in a least squares sense by polynomials in one variable.
+ju_polfit(3f) - [M_math] Fit discrete data in a least squares sense by polynomials in one variable.
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -74,9 +74,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-SUBROUTINE JU_POLFIT (<I>N</I>, <I>X</I>, <I>Y</I>, <I>W</I>, <I>MAXDEG</I>, <I>NDEG</I>, <I>EPS</I>, <I>R</I>, <I>IERR</I>, <I>A</I>)
-</PRE>
+SUBROUTINE JU_POLFIT (N, X, Y, W, MAXDEG, NDEG, EPS, R, IERR, A)
 </BLOCKQUOTE>
 <A name=2>
 
@@ -85,15 +83,15 @@ SUBROUTINE JU_POLFIT (<I>N</I>, <I>X</I>, <I>Y</I>, <I>W</I>, <I>MAXDEG</I>, <I>
 </A>
 <BLOCKQUOTE>
 <P>
-Given a collection of points <I>X</I>(I) and a set of values <I>Y</I>(I) which
-correspond to some function or measurement at each of the <I>X</I>(I),
+Given a collection of points X(I) and a set of values Y(I) which
+correspond to some function or measurement at each of the X(I),
 subroutine JU_POLFIT computes the weighted least-squares polynomial
 fits of all degrees up to some degree either specified by the user or
 determined by the routine. The fits thus obtained are in orthogonal
 polynomial form. Subroutine JU_PVALUE may then be called to evaluate
 the fitted polynomials and any of their derivatives at any point. The
 subroutine PCOEF may be used to express the polynomial fits as powers
-of (<I>X</I>-C) for any specified point C.
+of (X-C) for any specified point C.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -151,23 +149,23 @@ The parameters for JU_POLFIT are
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>NDEG</I> </TD><TD valign=bottom>
+<B>NDEG</B> </TD><TD valign=bottom>
 degree of the highest degree fit computed.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>EPS</I> </TD><TD valign=bottom>
-RMS error of the polynomial of degree <I>NDEG</I> .
+<B>EPS</B> </TD><TD valign=bottom>
+RMS error of the polynomial of degree NDEG .
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>R</I> </TD><TD valign=bottom>
-vector of dimension at least <I>NDEG</I> containing values
-of the fit of degree <I>NDEG</I> at each of the <I>X</I>(I) .
+<B>R</B> </TD><TD valign=bottom>
+vector of dimension at least NDEG containing values
+of the fit of degree NDEG at each of the X(I) .
 Except when the statistical test is used, these
 values are more accurate than results from subroutine
 JU_PVALUE normally are.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>IERR</I> </TD><TD valign=bottom>
+<B>IERR</B> </TD><TD valign=bottom>
 error flag with the following possible values.
 <P>
 1 -- indicates normal execution, i.e., either
@@ -178,43 +176,43 @@ error flag with the following possible values.
 <TABLE width=100% cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>(1)</B> </TD><TD valign=bottom>
-the input value of <I>EPS</I> was negative, and the
-computed polynomial fit of degree <I>NDEG</I>
+the input value of EPS was negative, and the
+computed polynomial fit of degree NDEG
 satisfies the specified F test, or
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>(2)</B> </TD><TD valign=bottom>
-the input value of <I>EPS</I> was 0., and the fits of
-all degrees up to <I>MAXDEG</I> are complete, or
+the input value of EPS was 0., and the fits of
+all degrees up to MAXDEG are complete, or
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>(3)</B> </TD><TD valign=bottom>
-the input value of <I>EPS</I> was positive, and the
-polynomial of degree <I>NDEG</I> satisfies the RMS
+the input value of EPS was positive, and the
+polynomial of degree NDEG satisfies the RMS
 error requirement.
 2 -- invalid input parameter. At least one of the input
 parameters has an illegal value and must be corrected
 before JU_POLFIT can proceed. Valid input results
 when the following restrictions are observed
-<I>N</I> .GE. 1
-0 .LE. <I>MAXDEG</I> .LE. <I>N</I>-1 for <I>EPS</I> .GE. 0.
-0 .LE. <I>MAXDEG</I> .LE. <I>N</I>-2 for <I>EPS</I> .LT. 0.
-<B>W</B>(1)=<B>-1.0</B> or <B>W</B>(I) .GT. 0., I=1,&#46;&#46;&#46;,<I>N</I> .
+N .GE. 1
+0 .LE. MAXDEG .LE. N-1 for EPS .GE. 0.
+0 .LE. MAXDEG .LE. N-2 for EPS .LT. 0.
+W(1)=<B>-1.0</B> or W(I) .GT. 0., I=1,&#46;&#46;&#46;,N .
 3 -- cannot satisfy the RMS error requirement with a
-polynomial of degree no greater than <I>MAXDEG</I>. Best
-fit found is of degree <I>MAXDEG</I> .
+polynomial of degree no greater than MAXDEG. Best
+fit found is of degree MAXDEG .
 4 -- cannot satisfy the test for significance using
-current value of <I>MAXDEG</I> . Statistically, the
+current value of MAXDEG . Statistically, the
 best fit found is of order NORD . (In this case,
-<I>NDEG</I> will have one of the values: <I>MAXDEG</I>-2,
-<I>MAXDEG</I>-1, or <I>MAXDEG</I>). Using a higher value of
-<I>MAXDEG</I> may result in passing the test.
+NDEG will have one of the values: MAXDEG-2,
+MAXDEG-1, or MAXDEG). Using a higher value of
+MAXDEG may result in passing the test.
 </TD></TR>
 <TR></TR></TABLE></TD></TR>
 <TR></TR></TABLE><!-- .RE -->
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><I>A</I> </TD><TD valign=bottom>
+<B>A</B> </TD><TD valign=bottom>
 work and output array having at least 3N+3MAXDEG+3
 locations
 </TD></TR>
@@ -224,8 +222,8 @@ locations
     <H4>&nbsp; &nbsp; NOTE</H4>
 </A>
 <BLOCKQUOTE>
-JU_POLFIT calculates all fits of degrees up to and including <I>NDEG</I>. Any
-or all of these fits can be evaluated or expressed as powers of (<I>X</I>-C)
+JU_POLFIT calculates all fits of degrees up to and including NDEG. Any
+or all of these fits can be evaluated or expressed as powers of (X-C)
 using JU_PVALUE and PCOEF after just one call to JU_POLFIT.
 </BLOCKQUOTE>
 <A name=5>
@@ -265,7 +263,7 @@ o
 </TD><TD>
 AUTHOR Shampine, L. F., (SNLA)
 Davenport, S. M., (SNLA)
-Huddleston, <I>R</I>. E., (SNLL)
+Huddleston, R. E., (SNLL)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
@@ -288,7 +286,7 @@ Huddleston, <I>R</I>. E., (SNLL)
 
 </A>
 <BLOCKQUOTE>
-<B>ju_pvalue</B>(3f), <B>ju_xermsg</B>(3f)
+ju_pvalue(3f), ju_xermsg(3f)
 </BLOCKQUOTE>
 <A name=7>
 
@@ -296,12 +294,12 @@ Huddleston, <I>R</I>. E., (SNLL)
 
 </A>
 <BLOCKQUOTE>
-L. F. Shampine, S. M. Davenport and <I>R</I>. E. Huddleston,
+L. F. Shampine, S. M. Davenport and R. E. Huddleston,
 Curve fitting by polynomials in one variable, Report
 SLA-74-0270, Sandia Laboratories, June 1974.
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ju_polfit (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9eac5dbe-0acb-4075-a1bb-6360fcd00091 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ju_polfit (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7b532817-cf7b-446d-bbfb-f9ae4c3d88db using man macros.</FONT>
 <br><br><center><img src="images/ju_polfit.3m_math.gif"></center>
 </div>
 </div>

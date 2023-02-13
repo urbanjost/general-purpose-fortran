@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>plot10(3f) </B>- [M_datapac:GENERIC_LINE_PLOT] generate a line printer
-<B>plot with special plot characters
-</B><B>
-</B></BLOCKQUOTE>
+plot10(3f) - [M_datapac:GENERIC_LINE_PLOT] generate a line printer
+plot with special plot characters
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -78,10 +78,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-SUBROUTINE <B>PLOT10</B>( &
+SUBROUTINE PLOT10( &
 & Y,X,Char,N,Ymin,Ymax,Xmin,Xmax,D,Dmin,Dmax,Yaxid,Xaxid,Plchid)
 <P>
+<PRE>
        REAL(kind=wp) :: Y(:)
        REAL(kind=wp) :: X(:)
        REAL(kind=wp) :: Char(:)
@@ -101,9 +101,9 @@ SUBROUTINE <B>PLOT10</B>( &
 
 </A>
 <BLOCKQUOTE>
-<B>PLOT10</B>(3f) yields a one-page printer plot of <B>y</B>(i) versus <B>x</B>(i):
+PLOT10(3f) yields a one-page printer plot of y(i) versus x(i):
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <B>PLOT10</B>(3f) yields a one-page printer plot of <B>y</B>(i) versus <B>x</B>(i):
+<TABLE cellpadding=3><!-- tsb: PLOT10(3f) yields a one-page printer plot of y(i) versus x(i):
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
@@ -121,8 +121,8 @@ values specified by the data analyst;
 <TR valign=top><TD width=4%>
 3.
 </TD><TD>
-with only those points (<B>x</B>(i),<B>y</B>(i)) plotted
-for which the corresponding value of <B>d</B>(i)
+with only those points (x(i),y(i)) plotted
+for which the corresponding value of d(i)
 is between the specified values of dmin and dmax; and
 </TD></TR>
 <TR valign=top><TD width=4%>
@@ -141,36 +141,42 @@ to incorporate information from a third variable (aside from y and x)
 into the plot.
 <P>
 The plot character used at the i-th plotting position (that is,
-at the coordinate (<B>x</B>(i),<B>y</B>(i))) will be
+at the coordinate (x(i),y(i))) will be
 <BLOCKQUOTE>
 <TABLE cellpadding=3><!-- tsb: The plot character used at the i-th plotting position (that is,
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>1 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>1 if char(i) is between</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 0.5 and  1.5
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>2 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>2 if char(i) is between</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 1.5 and  2.5
+[char46]
+[char46]
+[char46]
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>9 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>9 if char(i) is between</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 8.5 and  9.5
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>0 if </B><B>char</B>(i) is between </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>0 if char(i) is between</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 9.5 and 10.5
-a if <B>char</B>(i) is between 10.5 and 11.5
-b if <B>char</B>(i) is between 11.5 and 12.5
-c if <B>char</B>(i) is between 12.5 and 13.5
-w if <B>char</B>(i) is between 32.5 and 33.5
-x if <B>char</B>(i) is between 33.5 and 34.5
-y if <B>char</B>(i) is between 34.5 and 35.5
-z if <B>char</B>(i) is between 35.5 and 36.5
+a if char(i) is between 10.5 and 11.5
+b if char(i) is between 11.5 and 12.5
+c if char(i) is between 12.5 and 13.5
+[char46]
+[char46]
+[char46]
+w if char(i) is between 32.5 and 33.5
+x if char(i) is between 33.5 and 34.5
+y if char(i) is between 34.5 and 35.5
+z if char(i) is between 35.5 and 36.5
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>x if </B><B>char</B>(i) is any value outside the range 0.5 to </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>x if char(i) is any value outside the range 0.5 to</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 36.5.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -191,7 +197,7 @@ Values in the vertical axis vector (Y) which are smaller than YMIN
 or larger than YMAX, or values in the horizontal axis vector (X)
 which are smaller than XMIN or larger than XMAX will not be plotted.
 <P>
-For a given dummy index I, if <B>D</B>(I) is smaller than DMIN or larger than
+For a given dummy index I, if D(I) is smaller than DMIN or larger than
 DMAX, then the corresponding point (X(I),Y(I)) will not be plotted.
 <P>
 Values in the vertical axis vector (Y), the horizontal axis vector
@@ -206,8 +212,8 @@ elements in Y (or X, or CHAR) to be plotted).
 <P>
 to cause specific elements in Y (or X, or CHAR) to be ignored,
 we replace the elements beforehand (by, for example, use of the
-<B>REPLAC</B>(3f) subroutine) by some large value (like, say, 10.0**10)
-and they will subsequently be ignored in the <B>PLOTC</B>(3f) subroutine.
+REPLAC(3f) subroutine) by some large value (like, say, 10.0**10)
+and they will subsequently be ignored in the PLOTC(3f) subroutine.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -291,7 +297,7 @@ label for the plotting character variable.
 </A>
 <BLOCKQUOTE>
 <P>
-A one-page printer plot of <B>Y</B>(I) versus <B>X</B>(I), with special plot
+A one-page printer plot of Y(I) versus X(I), with special plot
 characters, with specified axis limits, for only of a specified subset
 of the data, and with specified labels.
 </BLOCKQUOTE>
@@ -356,7 +362,7 @@ American Statistical Association, New York City, December 27-30, 1973.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>plot10 (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 22ec5624-2316-4536-96af-daf68ebb0494 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>plot10 (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f97b86b1-e6ea-4576-95f7-65765c28702b using man macros.</FONT>
 <br><br><center><img src="images/plot10.3m_datapac.gif"></center>
 </div>
 </div>

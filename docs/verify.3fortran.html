@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>verify</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>verify</B>(3fortran)
+<B>verify(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+verify(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,10 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>VERIFY(3) </B>- [CHARACTER:SEARCH] Position of a character in a string of
-<B>characters that does not appear in a given set of characters.
-</B><B>
-</B></BLOCKQUOTE>
+VERIFY(3) - [CHARACTER:SEARCH] Position of a character in a string of
+characters that does not appear in a given set of characters.
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -77,9 +77,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>verify</B>(<I>string</I>, set [,<I>back</I>] [,<I>kind</I>] )
+result = verify(string, set [,back] [,kind] )
 <P>
+<PRE>
            elemental integer(kind=KIND) function verify(string,set,back,KIND)
 <P>
             character(len=*,kind=**),intent(in) :: string
@@ -99,14 +99,14 @@ result = <B>verify</B>(<I>string</I>, set [,<I>back</I>] [,<I>kind</I>] )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-STRING and SET must be of type character and have the same <I>kind</I> for any
-individual call, but that can be any supported character <I>kind</I>.
+STRING and SET must be of type character and have the same kind for any
+individual call, but that can be any supported character kind.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 KIND must be a constant integer initialization expression and a valid
-<I>kind</I> for the integer type.
+kind for the integer type.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -116,8 +116,8 @@ BACK shall be of type logical.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the <I>kind</I> of the returned value is the same as KIND if present. Otherwise
-a default integer <I>kind</I> is returned.
+the kind of the returned value is the same as KIND if present. Otherwise
+a default integer kind is returned.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -126,16 +126,16 @@ a default integer <I>kind</I> is returned.
 
 </A>
 <BLOCKQUOTE>
-<B>VERIFY</B>(3) verifies that all the characters in STRING belong to the set of
+VERIFY(3) verifies that all the characters in STRING belong to the set of
 characters in SET by identifying the position of the first character in the
-<I>string</I> that is not in the set.
+string that is not in the set.
 <P>
 This makes it easy to verify strings are all uppercase or lowercase, follow
 a basic syntax, only contain printable characters, and many of the
-conditions tested for with the C routines <B>ISALNUM</B>(3c), <B>ISALPHA</B>(3c),
-<B>ISASCII</B>(3c), <B>ISBLANK</B>(3c), <B>ISCNTRL</B>(3c), <B>ISDIGIT</B>(3c), <B>ISGRAPH</B>(3c),
-<B>ISLOWER</B>(3c), <B>ISPRINT</B>(3c), <B>ISPUNCT</B>(3c), <B>ISSPACE</B>(3c), <B>ISUPPER</B>(3c), and
-<B>ISXDIGIT</B>(3c); but for a <I>string</I> as well an an array of strings.
+conditions tested for with the C routines ISALNUM(3c), ISALPHA(3c),
+ISASCII(3c), ISBLANK(3c), ISCNTRL(3c), ISDIGIT(3c), ISGRAPH(3c),
+ISLOWER(3c), ISPRINT(3c), ISPUNCT(3c), ISSPACE(3c), ISUPPER(3c), and
+ISXDIGIT(3c); but for a string as well an an array of strings.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -147,7 +147,7 @@ conditions tested for with the C routines <B>ISALNUM</B>(3c), <B>ISALPHA</B>(3c)
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-STRING : The <I>string</I> to search in for an unmatched character.
+STRING : The string to search in for an unmatched character.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -159,12 +159,13 @@ o
 </TD><TD>
 BACK : The direction to look for an unmatched character. The left-most
 unmatched character position is returned unless BACK is present and
+[char46]false., which causes the position of the right-most unmatched character
 to be returned instead of the left-most unmatched character.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : An integer initialization expression indicating the <I>kind</I> parameter
+KIND : An integer initialization expression indicating the kind parameter
 of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -180,7 +181,7 @@ If STRING is of zero length a zero (0) is always returned.
 <P>
 Otherwise, if an unmatched character is found The position of the first or
 last (if BACK is .false.) unmatched character in STRING is returned,
-starting with position one on the left end of the <I>string</I>.
+starting with position one on the left end of the string.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -376,70 +377,37 @@ Determine if strings represent valid Fortran symbol names
          write(*,&#146;("|",*(g0,"|"))&#146;) symbols
          write(*,&#146;("|",*(1x,l1,8x,"|"))&#146;) fortran_name(symbols)
 <P>
+      contains
+<P>
+      elemental function fortran_name(line) result (lout)
+      !
+      ! determine if a string is a valid Fortran name
+      ! ignoring trailing spaces (but not leading spaces)
+      !
+      character(len=*),parameter   :: int=&#146;0123456789&#146;
+      character(len=*),parameter   :: lower=&#146;abcdefghijklmnopqrstuvwxyz&#146;
+      character(len=*),parameter   :: upper=&#146;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#146;
+      character(len=*),parameter   :: allowed=upper//lower//int//&#146;_&#146;
+<P>
+      character(len=*),intent(in)  :: line
+      character(len=:),allocatable :: name
+      logical                      :: lout
+         name=trim(line)
+         if(len(name).ne.0)then
+            ! first character is alphameric
+            lout = verify(name(1:1), lower//upper) == 0  &
+             ! other characters are allowed in a symbol name
+             & .and. verify(name,allowed) == 0           &
+             ! allowable length
+             & .and. len(name) &lt;= 63
+         else
+            lout = .false.
+         endif
+      end function fortran_name
+<P>
+      end program fortran_symbol_name
+<P>
 </PRE>
-<BLOCKQUOTE>
-contains
-<P>
-elemental function <B>fortran_name</B>(line) result (lout)
-!
-! determine if a <I>string</I> is a valid Fortran name
-! ignoring trailing spaces (but not leading spaces)
-!
-<TABLE cellpadding=3><!-- tsb: elemental function <B>fortran_name</B>(line) result (lout)
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>character</B>(len=*),parameter </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: int=&#146;0123456789&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>character</B>(len=*),parameter </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: lower=&#146;abcdefghijklmnopqrstuvwxyz&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>character</B>(len=*),parameter </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: upper=&#146;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>character</B>(len=*),parameter </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: allowed=upper//lower//int//&#146;_&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>character</B>(len=*),intent(in) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: line
-<B>character</B>(len=:),allocatable :: name
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>logical</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: lout
-<B>name=trim</B>(line)
-<B>if</B>(len(name).ne.0)then
-! first character is alphameric
-<TABLE width=100% cellpadding=3><!-- tsb: :: lout
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>lout = </B><B>verify</B>(name(1:1), lower//upper) == 0 </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! other characters are allowed in a symbol name
-<TABLE width=100% cellpadding=3><!-- tsb: ! other characters are allowed in a symbol name
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>& .and. </B><B>verify</B>(name,allowed) == 0 </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! allowable length
-& .and. <B>len</B>(name) &lt;= 63
-else
-lout = .false.
-endif
-end function fortran_name
-</TD></TR>
-<TR></TR></TABLE><!-- .RE -->
-</TD></TR>
-<TR></TR></TABLE><!-- .PP -->
-</TD></TR>
-<TR></TR></TABLE>end program fortran_symbol_name
-</BLOCKQUOTE>
-<P>
 Results:
 <P>
 <PRE>
@@ -449,7 +417,7 @@ Results:
 </PRE>
 Sample program IV:
 <P>
-check if <I>string</I> is of form NN-HHHHH
+check if string is of form NN-HHHHH
 <P>
 <PRE>
       program checkform
@@ -477,9 +445,9 @@ check if <I>string</I> is of form NN-HHHHH
          else
             write(*,*)trim(chars),&#146; failed&#146;
          endif
-</PRE>
-end program checkform
+      end program checkform
 <P>
+</PRE>
 Results:
 <P>
 <PRE>
@@ -522,11 +490,9 @@ exploring uses of elemental functionality and dusty corners
          ! and first letter in "home! " not in "me"
          write(*,*) verify(strings,sets)
 <P>
-</PRE>
-<BLOCKQUOTE>
-end program more_verify
-</BLOCKQUOTE>
+      end program more_verify
 <P>
+</PRE>
 Results:
 <P>
 <PRE>
@@ -560,12 +526,12 @@ arguments, and search for certain arguments:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3), <B>SCAN</B>(3), <B>VERIFY</B>(3)
+ELEMENTAL: ADJUSTL(3), ADJUSTR(3), INDEX(3), SCAN(3), VERIFY(3)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
+NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -574,7 +540,7 @@ NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>verify (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 938814cc-5721-428c-9a0f-c0f3fb620642 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>verify (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 52a453ba-348b-46bf-9d32-2281189c55d9 using man macros.</FONT>
 <br><br><center><img src="images/verify.3fortran.gif"></center>
 </div>
 </div>

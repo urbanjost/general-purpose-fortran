@@ -7,13 +7,16 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    use M_args, only : get_namelist, print_dictionary, unnamed
-!!    use M_args, only : get_command_arguments_as_raw_namelist
-!!    use M_args, only : get_command_arguments_stack
-!!    use M_args, only : get_command_arguments_string
-!!    use M_args, only : longest_command_argument
-!!    use M_args, only : debug
-!!    use M_args, only : oneline
+!!
+!!  Usage:
+!!
+!!      use M_args, only : get_namelist, print_dictionary, unnamed
+!!      use M_args, only : get_command_arguments_as_raw_namelist
+!!      use M_args, only : get_command_arguments_stack
+!!      use M_args, only : get_command_arguments_string
+!!      use M_args, only : longest_command_argument
+!!      use M_args, only : debug
+!!      use M_args, only : oneline
 !!
 !!##DESCRIPTION
 !!    Use the M_arguments(3fp) module template in the following example
@@ -886,8 +889,10 @@ integer :: command_line_length
 !!##EXAMPLE
 !!
 !!   sample program:
-!!      ! look at some of the values as strings or numbers
-!!    end program demo_parse
+!!
+!!    program demo_prototype_to_dictionary
+!!       ! look at some of the values as strings or numbers
+!!    end program demo_prototype_to_dictionary
 !!
 !!   Results:
 !!
@@ -1182,7 +1187,7 @@ end function get
 !!##EXAMPLE
 !!
 !!   Sample program
-!!    program demo_M_list
+!!    program demo_prototype_and_cmd_args_to_nlist
 !!    use M_args,  only : prototype_and_cmd_args_to_nlist, unnamed, debug
 !!    implicit none
 !!    character(len=:),allocatable :: readme
@@ -1226,7 +1231,7 @@ end function get
 !!             write(*,'(i6.6,3a)')(i,'[',unnamed(i),']',i=1,size(unnamed))
 !!          endif
 !!       endif
-!!    end program demo_M_list
+!!    end program demo_prototype_and_cmd_args_to_nlist
 !!##AUTHOR
 !!    John S. Urban, 2019
 !!##LICENSE
@@ -1455,7 +1460,7 @@ end subroutine dictionary_to_namelist
 !!
 !!    Typical usage:
 !!
-!!     program demo_get_namelist
+!!     program demo_print_dictionary
 !!     use M_args,  only : unnamed, get_namelist, print_dictionary
 !!     implicit none
 !!     integer                      :: i
@@ -1489,7 +1494,7 @@ end subroutine dictionary_to_namelist
 !!        write(*,'(a)')'files:'
 !!        write(*,'(i6.6,3a)')(i,'[',unnamed(i),']',i=1,size(unnamed))
 !!     endif
-!!     end program demo_get_namelist
+!!     end program demo_print_dictionary
 !!
 !!    Sample output
 !!

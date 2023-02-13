@@ -56,11 +56,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>asa2pdf(1f) </B>- [FILE FILTER] Convert text files with/without
-<B>ASA carriage control to an Adobe PDF file.
-</B><B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+asa2pdf(1f) - [FILE FILTER] Convert text files with/without
+ASA carriage control to an Adobe PDF file.
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -79,17 +79,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>asa2pdf</B> <B>-o</B> <I>output_filename</I> <B>-i</B> <I>input_filename</I>
-<B>-g</B> <I>gray_scale_shade</I> <B>-b</B> <I>lines_alternately_shaded</I> <B>-d</B> <I>dashcode</I>
-<B>-s</B> <I>top_middle_page_label</I> <B>-t</B> <I>top_left_page_label</I>
-<B>-P</B> # <I>add</I> <I>page</I> <I>numbers</I>
-<B>-l</B> <I>lines_per_page</I> <B>-f</B> <I>font_name</I> <B>-S</B> <I>columns_to_shift_data</I>
-<B>-N</B> # <I>add</I> <I>line</I> <I>numbers</I>
-<B>-H</B> <I>page_height</I> <B>-W</B> <I>page_width</I> <B>-u</B> <I>points_per_unit</I>
-<B>-L</B> <I>left_margin</I> <B>-R</B> <I>right_margin</I> <B>-B</B> <I>bottom_margin</I> <B>-T</B> <I>top_margin</I>
+asa2pdf <B>-o</B> output_filename <B>-i</B> input_filename
+<B>-g</B> gray_scale_shade <B>-b</B> lines_alternately_shaded <B>-d</B> dashcode
+<B>-s</B> top_middle_page_label <B>-t</B> top_left_page_label
+<B>-P</B> # add page numbers
+<B>-l</B> lines_per_page <B>-f</B> font_name <B>-S</B> columns_to_shift_data
+<B>-N</B> # add line numbers
+<B>-H</B> page_height <B>-W</B> page_width <B>-u</B> points_per_unit
+<B>-L</B> left_margin <B>-R</B> right_margin <B>-B</B> bottom_margin <B>-T</B> top_margin
 <B>-help</B> <B>-version</B> <B>-show</B>
-</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -98,20 +96,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-Basically, <B>asa2pdf</B>(1) emulates a <I>line</I> printer that recognizes ASA
+Basically, asa2pdf(1) emulates a line printer that recognizes ASA
 carriage control. That is, it lets you convert ASCII text files using
 ASA carriage control into Adobe "clear text" PDF files instead of a
-printed <I>page</I>.
+printed page.
 <P>
 The PDF is clear-text ASCII so that it is easy to still use other
-Unix/Linux utilities such as <B>spell</B>(1), <B>diff</B>(1), <B>grep</B>(1), &#46;&#46;&#46;. on the
+Unix/Linux utilities such as spell(1), diff(1), grep(1), &#46;&#46;&#46;. on the
 output files.
 <P>
 To properly view the output requires a PDF processor (such
-as <B>xpdf</B>(1),acroread(1)/AcroRd32, <B>gv</B>(1) or <B>ghostview</B>(1), &#46;&#46;&#46;).
+as xpdf(1),acroread(1)/AcroRd32, gv(1) or ghostview(1), &#46;&#46;&#46;).
 Most modern systems can view, mail and print PDF files.
 <P>
-The default layout generates a landscape 132-column 60-<I>line</I> format with
+The default layout generates a landscape 132-column 60-line format with
 every other two lines shaded. A variety of switches are available to
 let you easily print files with no vertical carriage control, and in
 portrait mode too. There are options to use dashed lines instead of
@@ -146,12 +144,12 @@ characters (ctrl-H, ctrl-L, &#46;&#46;&#46;) have come close they have their
 own issues).
 <P>
 So many programs using ASA-based formatting have not been changed,
-and use commands like <B>asa</B>(1)/nasa(1), and <B>fpr</B>(1) to allow the files to
-be printed as desired but NOT to generally be viewed properly on-<I>line</I>,
+and use commands like asa(1)/nasa(1), and fpr(1) to allow the files to
+be printed as desired but NOT to generally be viewed properly on-line,
 and printing itself is becoming less common.
 <P>
 So the problem isn&#146;t so much with ASA files, but that today&#146;s
-infrastructure does not support the format well. The <B>asa2pdf</B>(1)
+infrastructure does not support the format well. The asa2pdf(1)
 program bridges the gap by allowing you to still make and manipulate
 ASA files until you want to print or email them, at which time you
 can quickly convert them to an Adobe PDF file.
@@ -163,13 +161,13 @@ can quickly convert them to an Adobe PDF file.
 </A>
 <BLOCKQUOTE>
 <P>
-<B>asa2pdf</B>(1) reads input from standard input. By default the first
-character of each <I>line</I> is interpreted as a control character. Lines
+asa2pdf(1) reads input from standard input. By default the first
+character of each line is interpreted as a control character. Lines
 beginning with any character other than those listed in the ASA
 carriage-control characters table or in the list of extensions below
 are interpreted as if they began with a blank, and an appropriate
 diagnostic appears on standard error. The first character of each
-<I>line</I> is not printed.
+line is not printed.
 <P>
 ASA Carriage Control Characters
 <P>
@@ -223,7 +221,7 @@ Name of text file to read. Defaults to stdin.
 </A>
 <BLOCKQUOTE>
 <P>
-The <I>page</I> size may be specified using <B>-H</B> for height, <B>-W</B> for width, and <B>-u</B>
+The page size may be specified using <B>-H</B> for height, <B>-W</B> for width, and <B>-u</B>
 to indicate the points per unit (72 makes H and W in inches,
 1 is used when units are in font points). For example:
 <P>
@@ -266,7 +264,7 @@ repeat shade pattern every N lines
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-d</B> &#146; &#146; </TD><TD valign=bottom>
-<I>dashcode</I> pattern
+dashcode pattern
 The pattern is a series of integers defining an
 on-off sequence in user units used to create a
 dash pattern. A single digit "N" implies a pattern
@@ -281,15 +279,15 @@ of "N N". (seems buggy)
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-s</B> &#146;&#146; </TD><TD valign=bottom>
-top middle <I>page</I> label.
+top middle page label.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-t</B> &#146;&#146; </TD><TD valign=bottom>
-top left <I>page</I> label.
+top left page label.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-P</B> </TD><TD valign=bottom>
-<I>add</I> <I>page</I> <I>numbers</I> to right corners
+add page numbers to right corners
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -300,7 +298,7 @@ top left <I>page</I> label.
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-l</B> 60 </TD><TD valign=bottom>
-lines per <I>page</I>
+lines per page
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-f</B> Courier </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
@@ -316,7 +314,7 @@ right shift 1 for non-ASA files
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-N</B> </TD><TD valign=bottom>
-<I>add</I> <I>line</I> <I>numbers</I>
+add line numbers
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -344,7 +342,7 @@ display this help
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-$IMPACT_TOP Will be printed in large red letters across the <I>page</I> top.
+$IMPACT_TOP Will be printed in large red letters across the page top.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -421,18 +419,18 @@ Sample commands:
 ALTERNATIVES TO ASA2PDF
 <P>
 About the only standard ASA support on Unix variants is that some
-contain the <B>asa</B>(1)/<B>fpr</B>(1) and <B>nasa</B>(1) commands for converting ASA text
+contain the asa(1)/fpr(1) and nasa(1) commands for converting ASA text
 files into and from text files with machine control (MC) characters
 such as form-feed, backspace, carriage-return, &#46;&#46;&#46;. Most personal
 printers will no longer properly print ASA files directly, but they
 will often correctly print files with simple MC characters
-(Note that the <B>asa</B>(1) command is referenced in the POSIX.2 standard).
+(Note that the asa(1) command is referenced in the POSIX.2 standard).
 <P>
 Furthermore, if a printer does not directly support MC characters,
-text conversion utilities such as <B>enscript</B>(1) and <B>a2ps</B>(1) can
+text conversion utilities such as enscript(1) and a2ps(1) can
 often be used to print the files (usually by converting the files
 to PostScript or PCL). Such utilities support features such as
-titling, <I>page</I> numbering, and other useful options.
+titling, page numbering, and other useful options.
 <P>
 Programs like "Adobe Distiller" can convert text to a PDF; as well as
 editors such as OpenOffice. In fact, most modern document-formatting
@@ -443,7 +441,7 @@ HTML and PostScript/PDF and PCL files are the alternatives often
 incorporated to satisfy simple formatting criteria --
 yet HTML is not printer-oriented;
 and PDF files are complex to write from a simple program, and PCL is
-vendor-specific and has few on-<I>line</I> viewers available for it.
+vendor-specific and has few on-line viewers available for it.
 </BLOCKQUOTE>
 <P>
 <P>
@@ -486,8 +484,8 @@ MC character files are
       paste(1)        can be used to put files side-by-side.
 <P>
 </PRE>
+asa(1)/nasa(1), fpr(1), enscript(1), a2ps(1), and ps2pdf(1).
 </BLOCKQUOTE>
-<B>asa</B>(1)/<B>nasa</B>(1), <B>fpr</B>(1), <B>enscript</B>(1), <B>a2ps</B>(1), and <B>ps2pdf</B>(1).
 <A name=8>
 
      <H3>AUTHOR</H3>
@@ -505,7 +503,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>asa2pdf (1)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a23dae32-2392-4642-90dc-e52b445a0551 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>asa2pdf (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f702a69b-1045-4c00-ba03-eb7df8eb21ee using man macros.</FONT>
 <br><br><center><img src="images/asa2pdf.1.gif"></center>
 </div>
 </div>

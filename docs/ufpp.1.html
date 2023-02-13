@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>ufpp(1) </B>- [DEVELOPER] pre-process FORTRAN source files
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+ufpp(1) - [DEVELOPER] pre-process FORTRAN source files
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -76,26 +76,24 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-</PRE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>ufpp</B> </TD><TD valign=bottom>
-[[-D] <I>define_list</I>]
-[-I <I>include_directories</I>]
-[-i <B>input_file</B>(s)]
-[-o <I>output_file</I>]
+<B>ufpp</B> </TD><TD valign=bottom>
+[[-D] define_list]
+[-I include_directories]
+[-i input_file(s)]
+[-o output_file]
 [-html]
 [-system]
 [-q]
 [-verbose]
-[-header <I>text_for_first_line</I>]
+[-header text_for_first_line]
 [-ident]
-[-prefix <I>character_ADE</I>]
+[-prefix character_ADE]
 [-keeptabs]
-[-header <I>text_for_first_line</I>]
+[-header text_for_first_line]
 [-noenv]
-[-width <I>n</I>]
+[-width n]
 [-debug]
 [-d ignore|remove|blank]
 [-cstyle default|doxygen]
@@ -112,22 +110,22 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><I>define_list</I>, <B>-D</B> <I>define_list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>define_list, </B><B>-D</B> define_list </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 An optional space-delimited list of expressions
 used to define variables before file processing
 commences.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-i</B> <I>input_file(s)</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B></B><B>-i</B> input_files </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 The default input file is stdin. Filenames are
 space-delimited. In a list, @ represents stdin.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-o</B> <I>output_file</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B></B><B>-o</B> output_file </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 The default output file is stdout.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-I</B> <I>include_directories</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B></B><B>-I</B> include_directories </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 The directories to search for files specified on
 $INCLUDE directives.
 </TD></TR>
@@ -173,13 +171,13 @@ file.
 All commands on a $SYSTEM directive are echoed
 to stderr with a + prefix. Text following the
 string "@(#)" is printed to stderr similar to
-the Unix command <B>what</B>(1) but is otherwise
+the Unix command what(1) but is otherwise
 treated as other text input.
 </TD></TR>
 <TR valign=top><TD width=4% nowrap>
 <B></B><B>-noenv</B> </TD><TD valign=bottom>
 The $IFDEF and $IFNDEF directives test for an
-internal <B>ufpp</B>(1) variable and then an
+internal ufpp(1) variable and then an
 environment variable by default. This option
 turns off testing for environment variables.
 </TD></TR>
@@ -194,10 +192,8 @@ of the form
                  character(len=*),parameter :: ident_NNN="@(#) string"
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=4%>&nbsp;</TD><TD>
 so executables and object code contain the metadata
-for use with the <B>what</B>(1) command. This generates an
+for use with the what(1) command. This generates an
 unused variable with some compilers might optimized
 away depending on what options are used.
 </TD></TR>
@@ -221,7 +217,7 @@ occurring.
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-header</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-<I>text_for_first_line</I>
+text_for_first_line
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B></B><B>-allow_links</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
@@ -306,7 +302,7 @@ input file starts with "$DEBUG never".
 Display version and exit
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-width</B> <I>n</I> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B></B><B>-width</B> n </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 Maximum line length of the output file. Default
 is 1024. Typically used to trim fixed-format
 FORTRAN code that contains comments or "ident"
@@ -321,7 +317,7 @@ fixed-format Fortran code.
 </A>
 <BLOCKQUOTE>
 <P>
-By default the stand-alone pre-processor <B>ufpp</B>(1) will interpret lines with
+By default the stand-alone pre-processor ufpp(1) will interpret lines with
 "$" in column one, and will output no such lines. Other input is
 conditionally written to the output file based on the directives encountered
 in the input.
@@ -408,21 +404,21 @@ and if "I" were 2000, would produce the output
       STOP 1
 <P>
 </PRE>
-The manpage for <B>ASSERT</B>(3f) describes the meaning of the parameters in
+The manpage for ASSERT(3f) describes the meaning of the parameters in
 greater detail, but the filename will be the name of the file that
-was processed by <B>ufpp</B>(1), the line number will be the linenumber
-of the file processed by <B>ufpp</B>, and everything else on the $ASSERT
-directive is passed directly to <B>ASSERT</B>(3f). Note that the first
+was processed by ufpp(1), the line number will be the linenumber
+of the file processed by ufpp, and everything else on the $ASSERT
+directive is passed directly to ASSERT(3f). Note that the first
 parameter passed on $ASSERT must be a logical expression.
 <P>
-The <B>ASSERT</B>(3f) procedure must be in the load path and the "call assert"
-must be written to the <B>ufpp</B>(1) output file in a scope where
+The ASSERT(3f) procedure must be in the load path and the "call assert"
+must be written to the ufpp(1) output file in a scope where
 <P>
 <PRE>
       use, M_verify, only : assert
 <P>
 </PRE>
-has made the <B>assert</B>(3f) procedure available.
+has made the assert(3f) procedure available.
 </BLOCKQUOTE>
 <A name=>
 
@@ -432,7 +428,7 @@ has made the <B>assert</B>(3f) procedure available.
 <P>
 The $ASSERT directive will not be written to the output file unless
 the environment variable DEBUGVERSION=T and the <B>-debug</B> switch is
-present on the <B>ufpp</B>.
+present on the ufpp.
 <P>
 <PRE>
       program demo_assert_directive
@@ -548,7 +544,7 @@ else
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
-This string is generally included for use with the <B>what</B>(1) command.
+This string is generally included for use with the what(1) command.
 <BLOCKQUOTE>
 <P>
 The default language is fortran. Depending on your compiler, the
@@ -659,8 +655,8 @@ It is assumed the output will not generate lines over 132 columns. FORTRAN is
 currently the only language supported. A blank value resumes normal
 output processing. The Fortran generated is free-format Fortran 2003.
 <P>
-So the text can easily be processed by other utilities such as <B>markdown</B>(1)
-or <B>txt2man</B>(1) to produce <B>man</B>(1) pages and HTML documents the file can be
+So the text can easily be processed by other utilities such as markdown(1)
+or txt2man(1) to produce man(1) pages and HTML documents the file can be
 written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the <B>-file</B> parameter. If the
 environment variable $UFPP_DOCUMENT_DIR is not set the option is ignored.
 </BLOCKQUOTE>
@@ -669,7 +665,7 @@ environment variable $UFPP_DOCUMENT_DIR is not set the option is ignored.
 <BLOCKQUOTE>
 $SHOW
 <P>
-Shows current state of <B>ufpp</B>(1); including variable names and values; and
+Shows current state of ufpp(1); including variable names and values; and
 the name of the current input files. All output is preceded by an
 exclamation character.
 <P>
@@ -735,9 +731,9 @@ $UNDEFINE variable_name
 A symbol defined with $DEFINE can be removed with the $UNDEFINE
 directive.
 <P>
-<B>DEFINED</B>(variable_name)
+DEFINED(variable_name)
 <P>
-A special function called <B>DEFINED</B>() may appear only in a $IF or $ELSEIF.
+A special function called DEFINED() may appear only in a $IF or $ELSEIF.
 If "variable_name" has been defined at that point in the source code,
 then the function value is ".TRUE.", otherwise it is ".FALSE.". A name is
 defined only if it has appeared in the source previously in a $DEFINE
@@ -745,7 +741,7 @@ directive or been declared on the command line.
 The names used in compiler directives are district from names in the
 FORTRAN source, which means that "a" in a $DEFINE and "a" in a FORTRAN
 source statement are totally unrelated.
-The <B>DEFINED</B>() parameter is NOT valid in a $DEFINE directive.
+The DEFINED() parameter is NOT valid in a $DEFINE directive.
 <P>
 Example:
 <P>
@@ -872,7 +868,7 @@ o
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
-Major <B>cpp</B>(1) features not present in <B>ufpp</B>(1):
+Major cpp(1) features not present in ufpp(1):
 <P>
 <PRE>
    There are no predefined preprocessor symbols. Use a directive input file
@@ -898,7 +894,7 @@ Major <B>cpp</B>(1) features not present in <B>ufpp</B>(1):
 <P>
 Define variables on command line:
 <P>
-Typically, variables are defined on the command line when <B>ufpp</B>(1) is invoked
+Typically, variables are defined on the command line when ufpp(1) is invoked
 or are grouped together into small files that are included with a $INCLUDE
 or as input files.
 <P>
@@ -971,7 +967,6 @@ Basic conditionals:
    &gt;$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 <P>
 </PRE>
-<BLOCKQUOTE>
 An example using the magic string "DEBUGVERSION" assuming the environment
 variable DEBUGVERSION has been set to T or F. Given the source file:
 <P>
@@ -1006,7 +1001,6 @@ variable DEBUGVERSION has been set to T or F. Given the source file:
    !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 <P>
 </PRE>
-<BLOCKQUOTE>
 Expected output if debug mode is on
 <P>
 <PRE>
@@ -1061,8 +1055,6 @@ Expected output if debug mode is off:
    !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 <P>
 </PRE>
-</BLOCKQUOTE>
-</BLOCKQUOTE>
 <A name=6>
 
      <H3>AUTHOR</H3>
@@ -1080,7 +1072,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ufpp (1)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3f335777-4aa5-4fac-b9b0-47c380af8668 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ufpp (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 442cf29b-6fdd-4e5c-aa84-779238fccf82 using man macros.</FONT>
 <br><br><center><img src="images/ufpp.1.gif"></center>
 </div>
 </div>

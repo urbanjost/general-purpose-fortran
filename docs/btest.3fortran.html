@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>btest</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>btest</B>(3fortran)
+<B>btest(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+btest(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>BTEST(3) </B>- [BIT:INQUIRY] Tests a bit of an integer value.
-<B>
-</B></BLOCKQUOTE>
+BTEST(3) - [BIT:INQUIRY] Tests a bit of an integer value.
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>btest</B>(i,pos)
+result = btest(i,pos)
 <P>
+<PRE>
            elemental logical function btest(i,pos)
 <P>
             integer(kind=**),intent(in)  :: i
@@ -115,9 +115,9 @@ the result is a default logical
 
 </A>
 <BLOCKQUOTE>
-<B>BTEST</B>(3) returns logical .true. if the bit at POS in I is set to 1.
+BTEST(3) returns logical .true. if the bit at POS in I is set to 1.
 Position zero is the right-most bit. Bit position increases from right to
-left up to <B>BITSIZE</B>(I)<B>-1</B>.
+left up to BITSIZE(I)<B>-1</B>.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -135,7 +135,7 @@ I : The integer containing the bit to be tested
 o
 </TD><TD>
 POS : The position of the bit to query. it must be a valid position for
-the value I; ie. 0 &lt;= POS &lt;= <B>BIT_SIZE</B>(I).
+the value I; ie. 0 &lt;= POS &lt;= BIT_SIZE(I).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -166,42 +166,40 @@ Sample program:
       character(len=*),parameter :: g=&#146;(*(g0))&#146;
 <P>
            i = 32768 + 1024 + 64
+          write(*,&#146;(a,i0,"=&gt;",b32.32,/)&#146;)&#146;Looking at the integer: &#146;,i
+<P>
+          ! looking one bit at a time from LOW BIT TO HIGH BIT
+          write(*,g)&#146;from bit 0 to bit &#146;,bit_size(i),&#146;==&gt;&#146;
+          do pos=0,bit_size(i)-1
+              bool = btest(i, pos)
+              write(*,&#146;(l1)&#146;,advance=&#146;no&#146;)bool
+          enddo
+          write(*,*)
+<P>
+          ! a binary format the hard way.
+          ! Note going from bit_size(i) to zero.
+          write(*,*)
+          write(*,g)&#146;so for &#146;,i,&#146; with a bit size of &#146;,bit_size(i)
+          write(*,&#146;(b32.32)&#146;)i
+          write(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(btest(i,j),j=bit_size(i)-1,0,-1)])
+          write(*,*)
+          write(*,g)&#146;and for &#146;,-i,&#146; with a bit size of &#146;,bit_size(i)
+          write(*,&#146;(b32.32)&#146;)-i
+          write(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(btest(-i,j),j=bit_size(i)-1,0,-1)])
+<P>
+          ! elemental:
+          !
+          a(1,:)=[ 1, 2 ]
+          a(2,:)=[ 3, 4 ]
+          write(*,*)
+          write(*,&#146;(a,/,*(i2,1x,i2,/))&#146;)&#146;given the array a &#46;&#46;&#46;&#146;,a
+          ! the second bit of all the values in a
+          write(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (a, 2)&#146;,btest(a,2)
+          ! bits 1,2,3,4 of the value 2
+          write(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (2, a)&#146;,btest(2,a)
+      end program demo_btest
+<P>
 </PRE>
-<B>write</B>(*,&#146;(a,i0,"=&gt;",b32.32,/)&#146;)&#146;Looking at the integer: &#146;,i
-<BLOCKQUOTE>
-<P>
-! looking one bit at a time from LOW BIT TO HIGH BIT
-<B>write</B>(*,g)&#146;from bit 0 to bit &#146;,bit_size(i),&#146;==&gt;&#146;
-do <B>pos=0,bit_size</B>(i)<B>-1</B>
-bool = <B>btest</B>(i, pos)
-<B>write</B>(*,&#146;(l1)&#146;,advance=&#146;no&#146;)bool
-enddo
-<B>write</B>(*,*)
-<P>
-! a binary format the hard way.
-! Note going from <B>bit_size</B>(i) to zero.
-<B>write</B>(*,*)
-<B>write</B>(*,g)&#146;so for &#146;,i,&#146; with a bit size of &#146;,<B>bit_size</B>(i)
-<B>write</B>(*,&#146;(b32.32)&#146;)i
-<B>write</B>(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(<B>btest</B>(i,j),j=<B>bit_size</B>(i)<B>-1</B>,0,<B>-1</B>)])
-<B>write</B>(*,*)
-<B>write</B>(*,g)&#146;and for &#146;,<B>-i</B>,&#146; with a bit size of &#146;,<B>bit_size</B>(i)
-<B>write</B>(*,&#146;(b32.32)&#146;)<B>-i</B>
-<B>write</B>(*,g)merge(&#146;^&#146;,&#146;_&#146;,[(<B>btest</B>(<B>-i</B>,j),j=<B>bit_size</B>(i)<B>-1</B>,0,<B>-1</B>)])
-<P>
-! elemental:
-!
-<B>a</B>(1,:)=[ 1, 2 ]
-<B>a</B>(2,:)=[ 3, 4 ]
-<B>write</B>(*,*)
-<B>write</B>(*,&#146;(a,/,*(i2,1x,i2,/))&#146;)&#146;given the array a &#46;&#46;&#46;&#146;,a
-! the second bit of all the values in a
-<B>write</B>(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (a, 2)&#146;,<B>btest</B>(a,2)
-! bits 1,2,3,4 of the value 2
-<B>write</B>(*,&#146;(a,/,*(l2,1x,l2,/))&#146;)&#146;the value of btest (2, <B>a)&#146;,btest</B>(2,a)
-end program demo_btest
-</BLOCKQUOTE>
-<P>
 Results:
 <P>
 <PRE>
@@ -250,8 +248,8 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-<B>IEOR</B>(3), <B>IBCLR</B>(3), <B>NOT</B>(3), <B>IBCLR</B>(3), <B>IBITS</B>(3), <B>IBSET</B>(3), <B>IAND</B>(3), <B>IOR</B>(3),
-<B>IEOR</B>(3), <B>MVBITS</B>(3)
+IEOR(3), IBCLR(3), NOT(3), IBCLR(3), IBITS(3), IBSET(3), IAND(3), IOR(3),
+IEOR(3), MVBITS(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -260,7 +258,7 @@ fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>btest (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8db5d65b-e052-420d-920e-fae030a541cd using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>btest (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 62998986-605d-4042-84f2-d35731093fde using man macros.</FONT>
 <br><br><center><img src="images/btest.3fortran.gif"></center>
 </div>
 </div>

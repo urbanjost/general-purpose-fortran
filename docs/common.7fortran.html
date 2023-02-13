@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>common(7f) </B>- [FORTRAN:INTRINSICS] specifies blocks of variables that can be accessed by any scoping unit in the program
-<B>
-</B></BLOCKQUOTE>
+common(7f) - [FORTRAN:INTRINSICS] specifies blocks of variables that can be accessed by any scoping unit in the program
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=3>
@@ -67,9 +67,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>common</B> /<B>common</B>-block-name/ variables, /<B>common</B>-block-name/ variables, &#46;&#46;&#46;
-</PRE>
+common /common-block-name/ variables, /common-block-name/ variables, &#46;&#46;&#46;
 </BLOCKQUOTE>
 <A name=2>
 
@@ -77,44 +75,44 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-The COMMON statement specifies blocks of physical storage, called <B>common</B> blocks, that can be accessed by
+The COMMON statement specifies blocks of physical storage, called common blocks, that can be accessed by
 any of the scoping units in a program. Thus, the COMMON statement provides a global data facility based on
 storage association (16.5.3).
 <P>
-A <B>common</B> block that does not have a name is called blank <B>common</B>.
-<TABLE cellpadding=3><!-- tsb: A <B>common</B> block that does not have a name is called blank <B>common</B>.
+A common block that does not have a name is called blank common.
+<TABLE cellpadding=3><!-- tsb: A common block that does not have a name is called blank common.
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>R568</B> </TD><TD valign=bottom>
-<B>common</B>-stmt                  is   COMMON
-[ / [ <B>common</B>-block-name ] / ] <B>common</B>-block-object-list
-[ [ , ] / [ <B>common</B>-block-name ] /
-<B>common</B>-block-object-list ] &#46;&#46;&#46;
+common-stmt                  is   COMMON
+[ / [ common-block-name ] / ] common-block-object-list
+[ [ , ] / [ common-block-name ] /
+common-block-object-list ] &#46;&#46;&#46;
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>R569</B> </TD><TD valign=bottom>
-<B>common</B>-block-object          is variable-name [ ( array-spec ) ]
+common-block-object          is variable-name [ ( array-spec ) ]
 or proc-pointer-name
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>C595</B> </TD><TD valign=bottom>
-(R569) An array-spec in a <B>common</B>-block-object shall be an explicit-shape-spec-list.
+(R569) An array-spec in a common-block-object shall be an explicit-shape-spec-list.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>C596</B> </TD><TD valign=bottom>
 (R569) Only one appearance of a given variable-name or proc-pointer-name is permitted in all
-<B>common</B>-block-object-lists within a scoping unit.
+common-block-object-lists within a scoping unit.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>C597</B> </TD><TD valign=bottom>
-(R569) A <B>common</B>-block-object shall not be a dummy argument, an allocatable variable, a derived-type
+(R569) A common-block-object shall not be a dummy argument, an allocatable variable, a derived-type
 object with an ultimate component that is allocatable, an automatic object, a function name, an entry
 name, a variable with the BIND attribute, a coarray, or a result name.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>C598</B> </TD><TD valign=bottom>
-(R569) If a <B>common</B>-block-object is of a derived type, the type shall have the BIND attribute or the
+(R569) If a common-block-object is of a derived type, the type shall have the BIND attribute or the
 SEQUENCE attribute and it shall have no default initialization.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
@@ -122,25 +120,25 @@ SEQUENCE attribute and it shall have no default initialization.
 (R569) A variable-name or proc-pointer-name shall not be a name made accessible by use association.
 </TD></TR>
 <TR><TD colspan=2>
-In each COMMON statement, the data objects whose names appear in a <B>common</B> block object list following a
-<B>common</B> block name are declared to be in that <B>common</B> block. If the first <B>common</B> block name is omitted, all
-data objects whose names appear in the first <B>common</B> block object list are specified to be in blank <B>common</B>.
-Alternatively, the appearance of two slashes with no <B>common</B> block name between them declares the data objects
-whose names appear in the <B>common</B> block object list that follows to be in blank <B>common</B>.
+In each COMMON statement, the data objects whose names appear in a common block object list following a
+common block name are declared to be in that common block. If the first common block name is omitted, all
+data objects whose names appear in the first common block object list are specified to be in blank common.
+Alternatively, the appearance of two slashes with no common block name between them declares the data objects
+whose names appear in the common block object list that follows to be in blank common.
 </TD></TR>
 <TR><TD colspan=2>
-Any <B>common</B> block name or an omitted <B>common</B> block name for blank <B>common</B> may occur more than once in one
-or more COMMON statements in a scoping unit. The <B>common</B> block list following each successive appearance
-of the same <B>common</B> block name in a scoping unit is treated as a continuation of the list for that <B>common</B> block
-name. Similarly, each blank <B>common</B> block object list in a scoping unit is treated as a continuation of blank
-<B>common</B>.
+Any common block name or an omitted common block name for blank common may occur more than once in one
+or more COMMON statements in a scoping unit. The common block list following each successive appearance
+of the same common block name in a scoping unit is treated as a continuation of the list for that common block
+name. Similarly, each blank common block object list in a scoping unit is treated as a continuation of blank
+common.
 </TD></TR>
 <TR><TD colspan=2>
 The form variable-name (array-spec) specifies the DIMENSION attribute for that variable.
 </TD></TR>
 <TR><TD colspan=2>
-If derived-type objects of numeric sequence type (4.5.2) or character sequence type (4.5.2) appear in <B>common</B>, it
-is as if the individual components were enumerated directly in the <B>common</B> list.
+If derived-type objects of numeric sequence type (4.5.2) or character sequence type (4.5.2) appear in common, it
+is as if the individual components were enumerated directly in the common list.
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -157,7 +155,7 @@ is as if the individual components were enumerated directly in the <B>common</B>
 Common block storage sequence
 </TD></TR>
 <TR><TD colspan=2>
-For each <B>common</B> block in a scoping unit, a <B>common</B> block storage sequence is formed as follows:
+For each common block in a scoping unit, a common block storage sequence is formed as follows:
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -171,15 +169,15 @@ For each <B>common</B> block in a scoping unit, a <B>common</B> block storage se
                  considered to be in that common block.
 <P>
 </PRE>
-Only COMMON statements and EQUIVALENCE statements appearing in the scoping unit contribute to <B>common</B>
+Only COMMON statements and EQUIVALENCE statements appearing in the scoping unit contribute to common
 block storage sequences formed in that scoping unit.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>5.7.2.3</B> </TD><TD valign=bottom>
-Size of a <B>common</B> block
+Size of a common block
 </TD></TR>
 <TR><TD colspan=2>
-The size of a <B>common</B> block is the size of its <B>common</B> block storage sequence, including any extensions of the
+The size of a common block is the size of its common block storage sequence, including any extensions of the
 sequence resulting from equivalence association.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
@@ -187,12 +185,12 @@ sequence resulting from equivalence association.
 Common association
 </TD></TR>
 <TR><TD colspan=2>
-Within a program, the <B>common</B> block storage sequences of all nonzero-sized <B>common</B> blocks with the same name
-have the same first storage unit, and the <B>common</B> block storage sequences of all zero-sized <B>common</B> blocks with the
-same name are storage associated with one another. Within a program, the <B>common</B> block storage sequences of
-all nonzero-sized blank <B>common</B> blocks have the same first storage unit and the storage sequences of all zero-sized
-blank <B>common</B> blocks are associated with one another and with the first storage unit of any nonzero-sized blank
-<B>common</B> blocks. This results in the association of objects in different scoping units. Use or host association may
+Within a program, the common block storage sequences of all nonzero-sized common blocks with the same name
+have the same first storage unit, and the common block storage sequences of all zero-sized common blocks with the
+same name are storage associated with one another. Within a program, the common block storage sequences of
+all nonzero-sized blank common blocks have the same first storage unit and the storage sequences of all zero-sized
+blank common blocks are associated with one another and with the first storage unit of any nonzero-sized blank
+common blocks. This results in the association of objects in different scoping units. Use or host association may
 cause these associated objects to be accessible in the same scoping unit.
 </TD></TR>
 <TR><TD colspan=2>
@@ -238,10 +236,10 @@ attribute and the same type and type parameters.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>5.7.2.5</B> </TD><TD valign=bottom>
-Differences between named <B>common</B> and blank <B>common</B>
+Differences between named common and blank common
 </TD></TR>
 <TR><TD colspan=2>
-A blank <B>common</B> block has the same properties as a named <B>common</B> block, except for the following.
+A blank common block has the same properties as a named common block, except for the following.
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -255,16 +253,16 @@ A blank <B>common</B> block has the same properties as a named <B>common</B> blo
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>5.7.3</B> </TD><TD valign=bottom>
-Restrictions on <B>common</B> and equivalence
+Restrictions on common and equivalence
 </TD></TR>
-<TR></TR></TABLE>An EQUIVALENCE statement shall not cause the storage sequences of two different <B>common</B> blocks to be
+<TR></TR></TABLE>An EQUIVALENCE statement shall not cause the storage sequences of two different common blocks to be
 associated.
 <P>
 Equivalence association shall not cause a derived-type object with default initialization to be associated with an
-object in a <B>common</B> block.
+object in a common block.
 <P>
-Equivalence association shall not cause a <B>common</B> block storage sequence to be extended by adding storage units
-preceding the first storage unit of the first object specified in a COMMON statement for the <B>common</B> block.
+Equivalence association shall not cause a common block storage sequence to be extended by adding storage units
+preceding the first storage unit of the first object specified in a COMMON statement for the common block.
 <P>
 <PRE>
         NOTE 5.46
@@ -276,7 +274,7 @@ preceding the first storage unit of the first object specified in a COMMON state
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>common (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 25872ed1-868a-4ea8-9956-20b283f5d415 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>common (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 92d7e68a-8e9f-408f-b2e9-1f13822aeee6 using man macros.</FONT>
 <br><br><center><img src="images/common.7fortran.gif"></center>
 </div>
 </div>

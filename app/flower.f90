@@ -272,11 +272,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '',&
 '',&
 '',&
-'1. flower(1) is primarily intended  to allow for a preference of lowercase',&
-'   characters when working with older uppercase-only FORTRAN this program',&
-'   will convert the code to lowercase once the code has been converted',&
-'   to free-format Fortran source file format.',&
-'',&
+'1. flower(1) will convert free-format Fortran code to lowercase.',&
 '   It can also convert the code to uppercase. In each case comments and',&
 '   quoted text are left as-is.',&
 '',&
@@ -292,7 +288,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '2. It may also be used to generate simple statistics about what percentage',&
 '   of the code is comments.',&
 '',&
-'3. flower(1) can also be used to strip the comments from the code.',&
+'3. flower(1) can also be used to strip comments from the code.',&
 '',&
 '4. Lastly, the code can be removed so the comments can be used for documentation',&
 '   or run through utilities like spell checkers.',&

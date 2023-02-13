@@ -1232,8 +1232,9 @@ contains
       !& 'sha256 11 GOT',sha256(str),'expected 6BC568C54C0BB123FBCA27DAD40067345DD9FBE61E1376FE3C27902943FCF6A5')
 
 
+      ! add //'' to avoid gfortran-11 bug
       call unit_check('test_sha256_11',sha256(str)=="711CC2AB7E0A98D1EDBDA435A7B219E8AAA12661F347339A14041208751373C6", &
-      & 'sha256 11 GOT',sha256(str),'expected 711CC2AB7E0A98D1EDBDA435A7B219E8AAA12661F347339A14041208751373C6')
+      & 'sha256 11 GOT',sha256(str)//'','expected 711CC2AB7E0A98D1EDBDA435A7B219E8AAA12661F347339A14041208751373C6')
 
 
 
@@ -1462,7 +1463,7 @@ use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good
 use M_verify, only : unit_check_level
 use M_msg,   only : str
 implicit none
-   character(len=:),allocatable :: ccards(:), string
+   character(len=:),allocatable :: ccards(:), string, buff
    call unit_check_start('luhn_checksum',msg='')
    ! good values
    ccards=[ character(len=20) :: '79927398713', '49927398716', '123456-781234567-0', '4578 4230 1376 9219' ]
@@ -1482,9 +1483,10 @@ implicit none
       do i=1,size(ccards)
          j=len(trim(ccards(i)))
          string=luhn_checksum(ccards(i)(:j-1))
+         buff=str(ccards(i)(:j-1))
          call unit_check('luhn_checksum', &
-           (transliterate(ccards(i),' -','').eq.string).eqv.goodbad, &
-           msg=str('input',ccards(i)(:j-1),'output',string))
+           & (transliterate(ccards(i),' -','').eq.string).eqv.goodbad, &
+           & 'input',buff,'output',string)
       enddo
    end subroutine checkem
 end subroutine test_luhn_checksum

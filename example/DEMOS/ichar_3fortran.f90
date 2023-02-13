@@ -3,4 +3,4 @@
 
            write(*,*)ichar(['a','z','A','Z'])
 
-    end program demo_ichar
+        end program demo_ichar

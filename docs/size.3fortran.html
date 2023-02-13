@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>size</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>size</B>(3fortran)
+<B>size(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+size(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,10 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SIZE(3) </B>- [ARRAY:INQUIRY] Determine the size of an array or extent of one
-<B>dimension
-</B><B>
-</B></BLOCKQUOTE>
+SIZE(3) - [ARRAY:INQUIRY] Determine the size of an array or extent of one
+dimension
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -77,9 +77,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>size</B>(array [,<I>dim</I>] [,<I>kind</I>])
+result = size(array [,dim] [,kind])
 <P>
+<PRE>
            integer(kind=KIND) function size(array,dim,kind)
 <P>
             type(TYPE(kind=KIND),intent(in) :: array(..)
@@ -98,7 +98,7 @@ result = <B>size</B>(array [,<I>dim</I>] [,<I>kind</I>])
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY is an assumed-rank array or array of any type and associated <I>kind</I>.
+ARRAY is an assumed-rank array or array of any type and associated kind.
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
@@ -120,13 +120,13 @@ KIND is a scalar integer constant expression.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is an integer scalar of <I>kind</I> KIND. If KIND is absent a integer
-of default <I>kind</I> is returned.
+the result is an integer scalar of kind KIND. If KIND is absent a integer
+of default kind is returned.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -135,10 +135,10 @@ a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
 
 </A>
 <BLOCKQUOTE>
-<B>SIZE</B>(3) returns the total number of elements in an array, or if DIM is
+SIZE(3) returns the total number of elements in an array, or if DIM is
 specified returns the number of elements along that dimension.
 <P>
-<B>SIZE</B>(3) determines the extent of ARRAY along a specified dimension DIM, or
+SIZE(3) determines the extent of ARRAY along a specified dimension DIM, or
 the total number of elements in ARRAY if DIM is absent.
 </BLOCKQUOTE>
 <A name=4>
@@ -167,16 +167,16 @@ returned.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : An integer initialization expression indicating the <I>kind</I> parameter
+KIND : An integer initialization expression indicating the kind parameter
 of the result.
 <P>
-If absent the <I>kind</I> type parameter of the returned value is that of
+If absent the kind type parameter of the returned value is that of
 default integer type.
 <P>
 The KIND must allow for the magnitude returned by SIZE or results are
 undefined.
 <P>
-If KIND is absent, the return value is of default integer <I>kind</I>.
+If KIND is absent, the return value is of default integer kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -186,7 +186,7 @@ If KIND is absent, the return value is of default integer <I>kind</I>.
 </A>
 <BLOCKQUOTE>
 If DIM is not present ARRAY is assumed-rank, the result has a value equal to
-<B>PRODUCT</B>(SHAPE(ARRAY,KIND)). Otherwise, the result has a value equal to the
+PRODUCT(SHAPE(ARRAY,KIND)). Otherwise, the result has a value equal to the
 total number of elements of ARRAY.
 <P>
 If DIM is present the number of elements along that dimension are returned,
@@ -281,27 +281,27 @@ Array inquiry:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>SIZE</B>(3) - Determine the size of an array
+SIZE(3) - Determine the size of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>RANK</B>(3) - Rank of a data object
+RANK(3) - Rank of a data object
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>SHAPE</B>(3) - Determine the shape of an array
+SHAPE(3) - Determine the shape of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>UBOUND</B>(3) - Upper dimension bounds of an array
+UBOUND(3) - Upper dimension bounds of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>LBOUND</B>(3) - Lower dimension bounds of an array
+LBOUND(3) - Lower dimension bounds of an array
 </TD></TR>
 <TR></TR></TABLE>State Inquiry:
 <TABLE cellpadding=3><!-- tsb: State Inquiry:
@@ -310,12 +310,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>ALLOCATED</B>(3) - Status of an allocatable entity
+ALLOCATED(3) - Status of an allocatable entity
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>IS_CONTIGUOUS</B>(3) - Test if object is contiguous
+IS_CONTIGUOUS(3) - Test if object is contiguous
 </TD></TR>
 <TR></TR></TABLE>Kind Inquiry:
 <TABLE cellpadding=3><!-- tsb: Kind Inquiry:
@@ -324,7 +324,7 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>KIND</B>(3) - Kind of an entity
+KIND(3) - Kind of an entity
 </TD></TR>
 <TR></TR></TABLE>Bit Inquiry:
 <TABLE cellpadding=3><!-- tsb: Bit Inquiry:
@@ -333,17 +333,17 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>STORAGE_SIZE</B>(3) - Storage size in bits
+STORAGE_SIZE(3) - Storage size in bits
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>BIT_SIZE</B>(3) - Bit size inquiry function
+BIT_SIZE(3) - Bit size inquiry function
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>BTEST</B>(3) - Tests a bit of an integer value.
+BTEST(3) - Tests a bit of an integer value.
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -352,7 +352,7 @@ o
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>size (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0c641c60-6a42-4189-89c3-02830f9538f8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>size (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 83ea0095-9075-42ba-aeb4-a8b8a7026362 using man macros.</FONT>
 <br><br><center><img src="images/size.3fortran.gif"></center>
 </div>
 </div>

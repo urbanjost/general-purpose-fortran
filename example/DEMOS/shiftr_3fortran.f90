@@ -37,4 +37,4 @@
              & "size=",size(shiftr(arr,3)) !, "rank=",rank(shiftr(arr,3))
            endblock ELEM
 
-    end program demo_shiftr
+        end program demo_shiftr

@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>use(7f) </B>- [FORTRAN] gives a program unit access to public entities in a module.
-<B>
-</B></BLOCKQUOTE>
+use(7f) - [FORTRAN] gives a program unit access to public entities in a module.
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=5>
@@ -67,10 +67,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>USE</B> [, <I>mode-nature</I> ::] <I>namespace</I> [, <I>rename-list</I>]
-<B>USE</B> [, <I>mode-nature</I> ::] <I>namespace</I> [,ONLY: <I>only-list</I>]
-</PRE>
+USE [, mode-nature ::] namespace [, rename-list]
+USE [, mode-nature ::] namespace [,ONLY: only-list]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -78,44 +76,44 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-The <B>USE</B> statement makes the specified <I>namespace</I> accessible to the
+The USE statement makes the specified namespace accessible to the
 current scoping unit. It also provides a means of renaming or limiting
-the accessibility of entities in the <I>namespace</I>.
+the accessibility of entities in the namespace.
 <P>
-If more than one <B>USE</B> statement appears in a scoping unit, the rename-lists
-and only-lists are treated as one concatenated <I>rename-list</I>.
+If more than one USE statement appears in a scoping unit, the rename-lists
+and only-lists are treated as one concatenated rename-list.
 <P>
 WHERE:
 <TABLE cellpadding=3><!-- tsb: WHERE:
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>mode-nature</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Is INTRINSIC or NON_INTRINSIC. If INTRINSIC is used, <I>namespace</I>
+<B>mode-nature</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Is INTRINSIC or NON_INTRINSIC. If INTRINSIC is used, namespace
 must be the name of an intrinsic module. If NON_INTRINSIC is used,
-<I>namespace</I> must be the name of an nonintrinsic module. If mod-nature is
-not specified, <I>namespace</I> must be the name of an intrinsic or nonintrinsic
+namespace must be the name of an nonintrinsic module. If mod-nature is
+not specified, namespace must be the name of an intrinsic or nonintrinsic
 module. If both are provided, the nonintrinsic module is used. It is an
 error to specify a user module and an intrinsic module of the same name
 in the same program unit.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>namespace</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is a publicly accessible <I>namespace</I>; ie. it is the name of a module.
+<B>namespace</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is a publicly accessible namespace; ie. it is the name of a module.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>rename-list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rename-list</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 is a comma-separated list of local-name =&gt; use-name
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><I>only-list</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>only-list</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 is a comma-separated list of access-id or [local-name =&gt; use-name]
 </TD></TR>
-<TR></TR></TABLE>A <B>USE</B> statement with ONLY provides access only to those entities that
-appear in the <I>only-list</I>.
+<TR></TR></TABLE>A USE statement with ONLY provides access only to those entities that
+appear in the only-list.
 <P>
-A <B>USE</B> statement without ONLY provides access to all PUBLIC entities in
-the specified <I>namespace</I>.
+A USE statement without ONLY provides access to all PUBLIC entities in
+the specified namespace.
 <P>
 where
 <P>
@@ -146,7 +144,7 @@ where
 </A>
 <BLOCKQUOTE>
 <P>
-<I>rename-list</I> and ONLY: <I>only-list</I> may only appear if the <I>namespace</I> being
+rename-list and ONLY: only-list may only appear if the namespace being
 used was implemented with Fortran for .NET
 </BLOCKQUOTE>
 <P>
@@ -165,7 +163,7 @@ If local-name is absent, the use-name is available by use association.
 An entity can be accessed by more than one local-name.
 <P>
 A local-name must not be declared with different attributes in the
-scoping unit that contains the <B>USE</B> statement, except that it can appear
+scoping unit that contains the USE statement, except that it can appear
 in a PUBLIC or PRIVATE statement in the scoping unit of a module.
 <P>
 Forward references to modules are not allowed. That is, if a module is
@@ -193,11 +191,8 @@ Samples:
          procedure, nopass :: static_method2
       end type type2
 <P>
-</PRE>
-<BLOCKQUOTE>
-contains
+   contains
 <P>
-<PRE>
       subroutine static_method1(arg)
          integer :: arg
          ! code to implement method goes here
@@ -208,18 +203,18 @@ contains
          ! code to implement method goes here
       end subroutine static_method2
 <P>
+   end module example
+   !==============================================================
+   use example ! all public objects in namespace example available
+   !==============================================================
+   use example, only: type1 ! class prototype type1 available,
+                            ! class prototype type2 not available
+   !==============================================================
+   ! within this scoping unit, type1 is referred to as "mytype"
+   use example, mytype =&gt; type1
+   !==============================================================
+<P>
 </PRE>
-end module example
-!==============================================================
-use example ! all public objects in <I>namespace</I> example available
-!==============================================================
-use example, only: type1 ! class prototype type1 available,
-! class prototype type2 not available
-!==============================================================
-! within this scoping unit, type1 is referred to as "mytype"
-use example, mytype =&gt; type1
-!==============================================================
-</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
 
@@ -230,7 +225,7 @@ use example, mytype =&gt; type1
 <P>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 211f1dac-39cc-4e9c-b1b7-64500ca21ba4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 639aa635-be11-4c3a-b462-495bfe287de3 using man macros.</FONT>
 <br><br><center><img src="images/use.7fortran.gif"></center>
 </div>
 </div>

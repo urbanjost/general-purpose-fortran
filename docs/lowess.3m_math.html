@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>lowess(3f) </B>- [M_math:fit] procedures for locally weighted regression
-<B>
-</B></BLOCKQUOTE>
+lowess(3f) - [M_math:fit] procedures for locally weighted regression
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -79,9 +79,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>Calling</B> Sequence:
+Calling Sequence:
 <P>
+<PRE>
     subroutine lowess(x, y, n, f, nsteps, delta, ys, rw, res)
     real,intent(in)    :: x(n)
     real,intent(in)    :: y(n)
@@ -192,6 +192,7 @@ Input; specifies the amount of smoothing; F is
 the fraction of points used to compute each
 fitted value; as F increases the smoothed values
 become smoother; choosing F in the range .2 to
+[char46]8 usually results in a good fit; if you have no
 idea which value to use, try F = .5.
 </TD></TR>
 <TR valign=top><TD colspan=2>
@@ -211,19 +212,19 @@ additional instructions section.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>YS =</B> </TD><TD valign=bottom>
-Output; fitted values; <B>YS</B>(I) is the fitted value
-at <B>X</B>(I); to summarize the scatterplot, <B>YS</B>(I)
-should be plotted against <B>X</B>(I).
+Output; fitted values; YS(I) is the fitted value
+at X(I); to summarize the scatterplot, YS(I)
+should be plotted against X(I).
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>RW =</B> </TD><TD valign=bottom>
-Output; robustness weights; <B>RW</B>(I) is the weight
-given to the point (<B>X</B>(I),Y(I)); if NSTEPS = 0,
+Output; robustness weights; RW(I) is the weight
+given to the point (X(I),Y(I)); if NSTEPS = 0,
 RW is not used.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>RES =</B> </TD><TD valign=bottom>
-Output; residuals; <B>RES</B>(I) = <B>Y</B>(I)-<B>YS</B>(I).
+Output; residuals; RES(I) = Y(I)<B>-YS</B>(I).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
@@ -239,13 +240,13 @@ Very roughly the algorithm is this:
 on the initial fit and on each of the NSTEPS iterations locally weighted regression fitted values are computed
 at points in X which are spaced, roughly, DELTA apart;
 then the fitted values at the remaining points are computed using linear interpolation.
-The first locally weighted regression (LWR) computation is carried out at <B>X</B>(1) and the last is carried out at <B>X</B>(N).
-Suppose the LWR computation is carried out at <B>X</B>(I).
-If <B>X</B>(I+1) is greater than or equal to <B>X</B>(I)+DELTA, the next LWR computation is carried out at <B>X</B>(I+1).
-If <B>X</B>(I+1) is less than <B>X</B>(I)+DELTA, the next LWR computation is carried out at the largest <B>X</B>(J) which is greater than
-or equal to <B>X</B>(I) but is not greater than <B>X</B>(I)+DELTA.
-Then the fitted values for <B>X</B>(K) between <B>X</B>(I) and <B>X</B>(J), if there are any, are computed by linear interpolation
-of the fitted values at <B>X</B>(I) and <B>X</B>(J).
+The first locally weighted regression (LWR) computation is carried out at X(1) and the last is carried out at X(N).
+Suppose the LWR computation is carried out at X(I).
+If X(I+1) is greater than or equal to X(I)+DELTA, the next LWR computation is carried out at X(I+1).
+If X(I+1) is less than X(I)+DELTA, the next LWR computation is carried out at the largest X(J) which is greater than
+or equal to X(I) but is not greater than X(I)+DELTA.
+Then the fitted values for X(K) between X(I) and X(J), if there are any, are computed by linear interpolation
+of the fitted values at X(I) and X(J).
 If N is less than 100 then DELTA can be set to 0.0 since the computation time will not be too great.
 For larger N it is typically not necessary to carry out the LWR computation for all points,
 so that much computation time can be saved by taking DELTA to be greater than 0.0.
@@ -265,19 +266,19 @@ routine and robust locally weighted regression of degree 1
 with the tricube weight function. A few additional features
 have been added. Suppose r is FN truncated to an integer.
 Let h be the distance to the r-th nearest neighbor
-from <B>X</B>(I). All points within h of <B>X</B>(I) are used. Thus if
+from X(I). All points within h of X(I) are used. Thus if
 the r-th nearest neighbor is exactly the same distance as
 other points, more than r points can possibly be used for
-the smooth at <B>X</B>(I). There are two cases where robust
+the smooth at X(I). There are two cases where robust
 locally weighted regression of degree 0 is actually used at
-<B>X</B>(I). One case occurs when h is 0.0. The second case
-occurs when the weighted standard error of the <B>X</B>(I) with
-respect to the weights <B>w</B>(j) is less than .001 times the
-range of the <B>X</B>(I), where <B>w</B>(j) is the weight assigned to the
+X(I). One case occurs when h is 0.0. The second case
+occurs when the weighted standard error of the X(I) with
+respect to the weights w(j) is less than .001 times the
+range of the X(I), where w(j) is the weight assigned to the
 j-th point of X (the tricube weight times the robustness
 weight) divided by the sum of all of the weights. Finally,
-if the <B>w</B>(j) are all zero for the smooth at <B>X</B>(I), the fitted
-value is taken to be <B>Y</B>(I).
+if the w(j) are all zero for the smooth at X(I), the fitted
+value is taken to be Y(I).
 </BLOCKQUOTE>
 <A name=6>
 
@@ -304,7 +305,7 @@ SORT
 </A>
 <BLOCKQUOTE>
 <P>
-<B>Calling</B> sequence
+Calling sequence
 <P>
 <PRE>
         CALL LOWEST(X,Y,N,XS,YS,NLEFT,NRIGHT,W,USERW,RW,OK)
@@ -368,7 +369,7 @@ Argument description
 <P>
 The smooth at XS is computed using (robust) locally weighted
 regression of degree 1. The tricube weight function is used
-with h equal to the maximum of <B>XS-X</B>(NLEFT) and <B>X</B>(NRIGHT)<B>-XS</B>.
+with h equal to the maximum of XS-X(NLEFT) and X(NRIGHT)<B>-XS</B>.
 Two cases where the program reverts to locally weighted
 regression of degree 0 are described in the documentation
 for LOWESS.
@@ -491,7 +492,7 @@ Bill Cleveland
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lowess (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 05e71ff3-7c15-44c3-95d2-98bc89ac89ea using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lowess (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 44e9abf7-5600-4f28-8947-125a8ee45a34 using man macros.</FONT>
 <br><br><center><img src="images/lowess.3m_math.gif"></center>
 </div>
 </div>

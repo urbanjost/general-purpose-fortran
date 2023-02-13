@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>STOP(7f),ALLSTOP(7f) </B>- [FORTRAN:STATEMENT] initiates termination of
-<B>execution
-</B><B>
-</B></BLOCKQUOTE>
+STOP(7f),ALLSTOP(7f) - [FORTRAN:STATEMENT] initiates termination of
+execution
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=5>
@@ -68,28 +68,26 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>STOP</B> [ <I>stop-code</I> ]
-<B>ERROR</B> <I>STOP</I> [ <I>stop-code</I> ]
-</PRE>
-<TABLE cellpadding=3><!-- tsb: <B>STOP</B> [ <I>stop-code</I> ]
+STOP [ stop-code ]
+ERROR STOP [ stop-code ]
+<TABLE cellpadding=3><!-- tsb: STOP [ stop-code ]
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>stop-code</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<I>is</I>  <I>scalar-char-initialization-expr</I>
-<TABLE width=100% cellpadding=3><!-- tsb: <I>is</I>  <I>scalar-char-initialization-expr</I>
+<B>stop-code</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is  scalar-char-initialization-expr
+<TABLE width=100% cellpadding=3><!-- tsb: is  scalar-char-initialization-expr
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-<I>scalar-int-initialization-expr</I>
+<B>or</B> </TD><TD valign=bottom>
+scalar-int-initialization-expr
 </TD></TR>
 <TR></TR></TABLE><!-- .PP -->
 </TD></TR>
-<TR></TR></TABLE><B>The</B> <I>scalar-char-initialization-expr</I> <I>shall</I> <I>be</I> <I>of</I> <I>default</I> kind.
+<TR></TR></TABLE>The scalar-char-initialization-expr shall be of default kind.
 <P>
-<B>The</B> <I>scalar-int-initialization-expr</I> <I>shall</I> <I>be</I> <I>of</I> <I>default</I> kind.
+The scalar-int-initialization-expr shall be of default kind.
 </BLOCKQUOTE>
 <A name=2>
 
@@ -97,41 +95,41 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-A <I>STOP</I> statement will cause the program to terminate normally. It may
-provide additional information in the form <I>of</I> output <B>or</B> a system status
+A STOP statement will cause the program to terminate normally. It may
+provide additional information in the form of output or a system status
 code, depending on the system.
 <P>
 Any messages generated appear on the ERROR_UNIT file, as identified in
-the intrinsic module ISO_FORTRAN_ENV. This unit <I>is</I> often referred to as
-"stderr". It <I>is</I> recommended that systems write the value <I>of</I> the stop
-code whether numeric <B>or</B> a string.
+the intrinsic module ISO_FORTRAN_ENV. This unit is often referred to as
+"stderr". It is recommended that systems write the value of the stop
+code whether numeric or a string.
 <P>
-Note that although <I>STOP</I> <I>is</I> a "normal" termination system status codes
-<B>or</B> "exit codes" are often used for error processing in many scripting
-languages. This code may <I>be</I> detectable by <B>EXECUTE_SYSTEM_COMMAND</B>(3f).
+Note that although STOP is a "normal" termination system status codes
+or "exit codes" are often used for error processing in many scripting
+languages. This code may be detectable by EXECUTE_SYSTEM_COMMAND(3f).
 <P>
-Execution <I>of</I> an <B>ERROR</B> <I>STOP</I> statement initiates error termination <I>of</I>
+Execution of an ERROR STOP statement initiates error termination of
 an execution, which on several systems includes the output from
 a traceback.
 <P>
-So when an image <I>is</I> terminated by a <I>STOP</I> <B>or</B> <B>ERROR</B> <I>STOP</I> statement, its
-stop code, if any, <I>is</I> made available in a processor-dependent manner.
+So when an image is terminated by a STOP or ERROR STOP statement, its
+stop code, if any, is made available in a processor-dependent manner.
 <P>
-If any exception <I>is</I> signaling on a stopped image, the processor issues a
+If any exception is signaling on a stopped image, the processor issues a
 warning indicating which exceptions are signaling;
 <P>
-When normal termination occurs on more than one image, it <I>is</I> expected
-that a processor-dependent summary <I>of</I> any stop codes and signaling
-exceptions will <I>be</I> made available.
+When normal termination occurs on more than one image, it is expected
+that a processor-dependent summary of any stop codes and signaling
+exceptions will be made available.
 <P>
-If an integer <B>stop-code</B> <I>is</I> used as the process exit status,
-the processor might <I>be</I> able to interpret only values within a limited
-range, <B>or</B> only a limited portion <I>of</I> the integer value (for example,
+If an integer stop-code is used as the process exit status,
+the processor might be able to interpret only values within a limited
+range, or only a limited portion of the integer value (for example,
 only the least-significant 8 bits).
 <P>
-If the <B>stop-code</B> <I>is</I> <I>of</I> type character <B>or</B> does not appear, <B>or</B> if an
-END PROGRAM statement <I>is</I> executed, it <I>is</I> recommended that the value
-zero <I>be</I> supplied as the process exit status, if the processor supports
+If the stop-code is of type character or does not appear, or if an
+END PROGRAM statement is executed, it is recommended that the value
+zero be supplied as the process exit status, if the processor supports
 that concept.
 </BLOCKQUOTE>
 <A name=3>
@@ -174,7 +172,7 @@ Sample:
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>stop (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5dcc5598-b552-4725-bdba-5adcb628f7d2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>stop (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 89b3d25f-2b82-4637-af46-49c13ccf0b21 using man macros.</FONT>
 <br><br><center><img src="images/stop.7fortran.gif"></center>
 </div>
 </div>

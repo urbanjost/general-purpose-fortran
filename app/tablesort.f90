@@ -17,7 +17,7 @@ integer                            :: i, j, ierr, icol
    do i=1,size(files)                                ! for each file read and sort lines
       call read_table(files(i),table,ierr)           ! read file into numeric array
       if(.not.allocated(table).or.ierr.ne.0)then
-         write(stdout,g)'*demo_swallow* failed to load file '//files(i)
+         write(stdout,g)'*tablesort* failed to load file '//files(i)
       else
          icol=iget('col')
          if(icol.le.0.or.icol.gt.size(table,dim=2))then
@@ -76,6 +76,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '',&
 'LICENSE',&
 '   Public Domain',&
+'SEE ALSO',&
+'   Related commands',&
+'',&
+'      sort -k 3n # sort by column 3 numerically',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&

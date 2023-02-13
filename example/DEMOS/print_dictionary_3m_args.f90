@@ -1,4 +1,4 @@
-      program demo_get_namelist
+      program demo_print_dictionary
       use M_args,  only : unnamed, get_namelist, print_dictionary
       implicit none
       integer                      :: i
@@ -32,4 +32,4 @@
          write(*,'(a)')'files:'
          write(*,'(i6.6,3a)')(i,'[',unnamed(i),']',i=1,size(unnamed))
       endif
-      end program demo_get_namelist
+      end program demo_print_dictionary

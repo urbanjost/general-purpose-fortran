@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_escape(3f) </B>- [M_escape::INTRO] substitute escape sequences for HTML-like
-<B>syntax in strings
-</B><B>
-</B></BLOCKQUOTE>
+M_escape(3f) - [M_escape::INTRO] substitute escape sequences for HTML-like
+syntax in strings
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -77,11 +77,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>use</B> M_escape, <I>only</I> : esc, esc_mode, <I>update</I>
-<B>use</B> M_escape, <I>only</I> : <I>attr</I>
-<B>use</B> M_escape, <I>only</I> : color, <I>color_mode</I>
-</PRE>
+use M_escape, only : esc, esc_mode, update
+use M_escape, only : attr
+use M_escape, only : color, color_mode
 </BLOCKQUOTE>
 <A name=2>
 
@@ -98,7 +96,7 @@ device. This routine provides the basic structure to support such
 behaviors, or to perhaps in the future generate a CSS style sheet
 and HTML instead of text to the terminal, &#46;&#46;&#46;
 <P>
-Alternatively, direct <B>use</B> of the escape sequences is supported,
+Alternatively, direct use of the escape sequences is supported,
 as well as a functional interface, and an object-oriented approach.
 <P>
 The original concept was to allow formatting by using an existing
@@ -108,8 +106,8 @@ opposite approach in that it is directly formatting the text by using
 a similar syntax to directly generate text attributes; but it is a
 much simpler approach programmatically.
 <P>
-Typically, you should <B>use</B> <B>M_system::system_istty</B>(3f) or the common
-Fortran extension <B>ISATTY</B>() to set the default
+Typically, you should use M_system::system_istty(3f) or the common
+Fortran extension ISATTY() to set the default
 to "plain" instead of "color" when the output file is not a terminal.
 </BLOCKQUOTE>
 <A name=3>
@@ -123,17 +121,17 @@ to "plain" instead of "color" when the output file is not a terminal.
 o
 </TD><TD>
 Add ANSI terminal escape sequences with an HTML-like syntax with
-<B>ESC</B>(3f).
+ESC(3f).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-suppress the escape sequence output with <B>ESC_MODE</B>(3f).
+suppress the escape sequence output with ESC_MODE(3f).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-add, delete, and replace what strings are produced using <B>UPDATE</B>(3f).
+add, delete, and replace what strings are produced using UPDATE(3f).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -152,8 +150,8 @@ colors are not nestable, keywords are case-sensitive,
 o
 </TD><TD>
 not all terminals obey the sequences. On Windows, it is best if
-you <B>use</B> Windows 10+ and/or the Linux mode; although it has worked
-with all CygWin and MinGW and Putty windows and <B>mintty</B>(1).
+you use Windows 10+ and/or the Linux mode; although it has worked
+with all CygWin and MinGW and Putty windows and mintty(1).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -173,14 +171,14 @@ syntax. For example
             &lt;i&gt;&lt;/i&gt;     __ and __
 <P>
 </PRE>
-</BLOCKQUOTE>
 Apparently have to make a stack of colors to allow nesting colors
-<BLOCKQUOTE>
+</BLOCKQUOTE>
 <P>
 How common are extensions like xterm-256 has to set RGB values for
 colors and so on?
+<BLOCKQUOTE>
 <P>
-Should a call to <B>system_istty</B>(3f) be built in to turn off escape sequences
+Should a call to system_istty(3f) be built in to turn off escape sequences
 when a terminal is not present?
 <P>
 For color or pre-defined words a case statement could be used to call
@@ -189,15 +187,15 @@ require a function call to assign text attributes instead of in-band ANSI
 escape control sequences. See the "Rosetta Code" web site for examples
 of generating color in Microsoft consoles.
 <P>
-Attributes are currently ended at the end of each call to <B>esc</B>(3f). Perhaps
+Attributes are currently ended at the end of each call to esc(3f). Perhaps
 allow multi-line formatting?
 <P>
 Ultimately, an object-oriented package with capabilities like ncurses to
 define a "pad" and move and resize and format it would be ideal and very
-useful. Also see <B>fixedform</B>(3f) in the GPF (General Fortran Package).
+useful. Also see fixedform(3f) in the GPF (General Fortran Package).
 <P>
-It is a shame <B>xterm</B>(1) does not support pixel-oriented abilities to define
-a "graphics" area or support <B>canvas</B>(3c)<B>-like</B> in-band graphics, somewhat
+It is a shame xterm(1) does not support pixel-oriented abilities to define
+a "graphics" area or support canvas(3c)<B>-like</B> in-band graphics, somewhat
 like Tektronix terminals, although it does have a Tektronix 4010 mode.
 <P>
 Perhaps overload + to replace //
@@ -248,7 +246,7 @@ Sample program
 </A>
 <BLOCKQUOTE>
 <P>
-Alternatively, you may <B>use</B> the escape sequences directly
+Alternatively, you may use the escape sequences directly
 <P>
 <PRE>
    program direct
@@ -280,8 +278,8 @@ Alternatively, you may <B>use</B> the escape sequences directly
 </A>
 <BLOCKQUOTE>
 <P>
-If you prefer a functional interface, <B>use</B> the <I>attr</I>(3f) function with
-the same keywords as with the <B>esc</B>(3f) function. Note that <B>esc_mode</B>(3f)
+If you prefer a functional interface, use the attr(3f) function with
+the same keywords as with the esc(3f) function. Note that esc_mode(3f)
 will work with this function.
 <P>
 <PRE>
@@ -308,7 +306,7 @@ will work with this function.
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_escape (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5cfcade2-126f-4637-b58b-75e80b840c85 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_escape (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 157afcdc-a35f-482c-8e85-ed2979dd19a6 using man macros.</FONT>
 <br><br><center><img src="images/M_escape.3m_escape.gif"></center>
 </div>
 </div>

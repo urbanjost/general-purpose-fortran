@@ -413,7 +413,7 @@ integer             :: ierr
 
    call system_chdir('/tmp',ierr)
    call system_getcwd(dirname,ierr)
-   call unit_check('system_chdir', dirname.eq.'/tmp', 'checking /tmp to',trim(dirname))
+   call unit_check('system_chdir', dirname.eq.'/tmp', 'checking /tmp to',dirname)
 
    call system_chdir('/',ierr)
    call system_getcwd(dirname,ierr)
@@ -810,10 +810,12 @@ end subroutine test_system_link
 subroutine test_system_mkdir()
 
 integer :: ierr
+logical :: query
    call unit_check_start('system_mkdir',msg='make and remove _scratch/')
    ierr=system_mkdir('_scratch',IANY([R_USR,W_USR,X_USR]))
    call unit_check('system_mkdir', ierr.eq.0, 'make _scratch/, ierr=',ierr)
-   call unit_check_msg('system_mkdir',system_isdir('_scratch'),'looks like the directory was made')
+   query=system_isdir('_scratch')
+   call unit_check_msg('system_mkdir',query,'looks like the directory was made')
    call system_chdir('_scratch',ierr)
    call system_chdir('..',ierr)
    call unit_check_msg('system_mkdir',ierr.eq.0,'looks like it can be entered')
@@ -1163,13 +1165,13 @@ equivalence                                    &
       write (*, FMT="('Owner''s gid/group:',          T30, I0,1x, A)") buff(6), system_getgrgid(buff(6))
       write (*, FMT="('Device where located:',        T30, I0)") buff(7)
       write (*, FMT="('File size(bytes):',            T30, I0)") buff(8)
-      dat=u2d(int(buff(9)))
+      dat=u2d(0+int(buff(9))) ! add 0 to avoid gfortran-11 bug
       temp=fmtdate(dat,fmt_date) ! kludge for ifort (IFORT) 2021.3.0 20210609
       write (*, FMT="('Last access time:',            T30, I0,1x, A)") buff(9), temp
-      dat=u2d(int(buff(10)))
+      dat=u2d(0+int(buff(10)))
       temp=fmtdate(dat,fmt_date) ! kludge for ifort (IFORT) 2021.3.0 20210609
       write (*, FMT="('Last modification time:',      T30, I0,1x, A)") buff(10),temp
-      dat=u2d(int(buff(11)))
+      dat=u2d(0+int(buff(11)))
       temp=fmtdate(dat,fmt_date) ! kludge for ifort (IFORT) 2021.3.0 20210609
       write (*, FMT="('Last status change time:',     T30, I0,1x, A)") buff(11),temp
       write (*, FMT="('Preferred block size(bytes):', T30, I0)") buff(12)

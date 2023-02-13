@@ -56,7 +56,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>txt2man </B>- [DEVELOPER] convert flat ASCII text to man page format
+txt2man - [DEVELOPER] convert flat ASCII text to manpage format
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
@@ -76,10 +76,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>txt2man</B> [-hpTxX] [-t <I>mytitle</I>] [-P <I>pname</I>] [-r <I>rel</I>] [-s <I>sect</I>]
-[-v <I>vol</I>] [-I <I>txt</I>] [-B <I>txt</I>] [ifile]
-</PRE>
+txt2man [-hpTxX] [-t mytitle] [-P pname] [-r rel] [-s sect]
+[-v vol] [-I txt] [-B txt] [ifile]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -87,17 +85,17 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>txt2man</B> converts the input text into nroff/troff standard <B>man</B>(7)
+txt2man converts the input text into nroff/troff standard man(7)
 macros used to format Unix manual pages. Nice pages can be generated;
 particularly for commands (section 1 or 8) or for C functions (sections
 2, 3), with the ability to recognize and format command and function
 names, flags, types and arguments.
 <P>
-<B>txt2man</B> is also able to recognize and format sections, paragraphs,
+txt2man is also able to recognize and format sections, paragraphs,
 lists (standard, numbered, description, nested), cross references and
 literal display blocks.
 <P>
-If an input file <I>ifile</I> is omitted, standard input is used. The result
+If an input file ifile is omitted, standard input is used. The result
 is displayed on standard output.
 <P>
 Here is how text patterns are recognized and processed:
@@ -163,7 +161,7 @@ Line to set the default paragraph indent
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B>Cross references</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-A cross reference (another man page) is defined by a word
+A cross reference (another manpage) is defined by a word
 followed by a number in parenthesis.
 <P>
 Special sections:
@@ -180,13 +178,13 @@ this section.
 This section receives a special treatment to identify command
 name, flags and arguments, and propagate corresponding
 attributes later in the text. If a C-like function is recognized
-(word immediately followed by an open parenthesis), <B>txt2man</B> will
+(word immediately followed by an open parenthesis), txt2man will
 print function name in bold font, types in normal font, and
 variables in italic font. The whole section will be printed using
 a fixed font family (courier) whenever possible (troff).
 </TD></TR>
 <TR></TR></TABLE>It is a good practice to embed documentation into source code, by using
-comments or constant text variables. <B>txt2man</B> allows one to do that, keeping
+comments or constant text variables. txt2man allows one to do that, keeping
 the document source readable, usable even without further formatting
 (i.e. for online help) and easy to write. The result is high quality
 and standard-complying documentation.
@@ -203,44 +201,44 @@ and standard-complying documentation.
 The option <B>-h</B> displays help.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-P</B> <I>pname</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Set <I>pname</I> as project name in header. Default to uname <B>-s</B>.
+<B></B><B>-P</B> pname </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set pname as project name in header. Default to uname <B>-s</B>.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-p</B> </TD><TD valign=bottom>
 Probe title, section name and volume.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-t</B> <I>mytitle</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Set <I>mytitle</I> as title of generated man page.
+<B></B><B>-t</B> mytitle </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set mytitle as title of generated manpage.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>-r</B> <I>rel</I> </TD><TD valign=bottom>
-Set <I>rel</I> as project name and release.
+<B></B><B>-r</B> rel </TD><TD valign=bottom>
+Set rel as project name and release.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>-s</B> <I>sect</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Set <I>sect</I> as section in heading, usually a value from 1 to 8.
+<B></B><B>-s</B> sect </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Set sect as section in heading, usually a value from 1 to 8.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>-v</B> <I>vol</I> </TD><TD valign=bottom>
-Set <I>vol</I> as volume name, i.e. "Unix user &#146;s manual".
+<B></B><B>-v</B> vol </TD><TD valign=bottom>
+Set vol as volume name, i.e. "Unix user &#146;s manual".
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>-I</B> <I>txt</I> </TD><TD valign=bottom>
+<B></B><B>-I</B> txt </TD><TD valign=bottom>
 Italicize text in output. Can be specified more than once.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>-B</B> <I>txt</I> </TD><TD valign=bottom>
+<B></B><B>-B</B> txt </TD><TD valign=bottom>
 Emphasize (bold) text in output. Can be specified more than once.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-T</B> </TD><TD valign=bottom>
-Text result previewing using PAGER, usually <B>more</B>(1).
+Text result previewing using PAGER, usually more(1).
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-X</B> </TD><TD valign=bottom>
-X11 result previewing using <B>gxditview</B>(1).
+X11 result previewing using gxditview(1).
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B></B><B>-x</B> </TD><TD valign=bottom>
@@ -256,8 +254,8 @@ Basic example input file
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>PAGER</B> </TD><TD valign=bottom>
-name of paging command, usually <B>more</B>(1), or <B>less</B>(1). If not set
-falls back to <B>more</B>(1).
+name of paging command, usually more(1), or less(1). If not set
+falls back to more(1).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -291,7 +289,7 @@ time they are encountered in the document.
 
 </A>
 <BLOCKQUOTE>
-<B>man</B>(1), <B>mandoc</B>(7), <B>rman</B>(1), <B>groff</B>(1), <B>more</B>(1), <B>gxditview</B>(1), <B>troff</B>(1).
+man(1), mandoc(7), rman(1), groff(1), more(1), gxditview(1), troff(1).
 </BLOCKQUOTE>
 <A name=8>
 
@@ -342,7 +340,7 @@ Remove spaces and it is OK.
 Marc Vertes &lt;<A HREF="mailto:mvertes@free.fr">mvertes@free.fr</A>&gt;
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>txt2man (1)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5bbefc23-06fc-4dba-9e42-f6b9ffa2d4ee using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>txt2man (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from afe6ef07-fd86-4c23-8275-532167c56485 using man macros.</FONT>
 <br><br><center><img src="images/txt2man.1.gif"></center>
 </div>
 </div>

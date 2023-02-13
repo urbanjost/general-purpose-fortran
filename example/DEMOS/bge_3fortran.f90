@@ -45,4 +45,4 @@
            write(*,'("plus zero=",b0)')  +0
            write(*,'("minus zero=",b0)') -0
 
-    end program demo_bge
+        end program demo_bge

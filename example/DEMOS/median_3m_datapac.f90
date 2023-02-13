@@ -17,4 +17,4 @@
         call median(x, n, 1, xmed)
         write(*,g)' median of',x,'is',xmed
 
-    end program demo_median
+     end program demo_median

@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>merge_bits</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>merge_bits</B>(3fortran)
+<B>merge_bits(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+merge_bits(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>MERGE_BITS(3) </B>- [BIT:COPY] Merge bits using a mask
-<B>
-</B></BLOCKQUOTE>
+MERGE_BITS(3) - [BIT:COPY] Merge bits using a mask
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>merge_bits</B>(<I>i</I>, <I>j</I>, <I>mask</I>)
+result = merge_bits(i, j, mask)
 <P>
+<PRE>
            elemental integer(kind=KIND) function merge_bits(i,j,mask)
 <P>
             integer(kind=KIND), intent(in) :: i, j, mask
@@ -96,7 +96,7 @@ result = <B>merge_bits</B>(<I>i</I>, <I>j</I>, <I>mask</I>)
 o
 </TD><TD>
 the result and all input values have the same integer type and KIND with
-the exception that the <I>mask</I> and either I or J may be a BOZ constant.
+the exception that the mask and either I or J may be a BOZ constant.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -107,7 +107,7 @@ the exception that the <I>mask</I> and either I or J may be a BOZ constant.
 <BLOCKQUOTE>
 A common graphics operation in Ternary Raster Operations is to combine bits
 from two different sources, generally referred to as bit-blending.
-<B>MERGE_BITS</B>(3) performs a masked bit-blend of I and J using the bits of the
+MERGE_BITS(3) performs a masked bit-blend of I and J using the bits of the
 MASK value to determine which of the input values to copy bits from.
 <P>
 Specifically, The k-th bit of the result is equal to the k-th bit of I if
@@ -121,10 +121,10 @@ The resulting value is the same as would result from
 <P>
 </PRE>
 An exception to all values being of the same integer type is that I or J
-and/or the <I>mask</I> may be a BOZ constant (A BOZ constant means it is either a
+and/or the mask may be a BOZ constant (A BOZ constant means it is either a
 Binary, Octal, or Hexadecimal literal constant). The BOZ values are
-converted to the integer type of the non-BOZ <B>value</B>(s) as if called by the
-intrinsic function <B>INT</B>() with the kind of the non-BOZ <B>value</B>(s), so the BOZ
+converted to the integer type of the non-BOZ value(s) as if called by the
+intrinsic function INT() with the kind of the non-BOZ value(s), so the BOZ
 values must be in the range of the type of the result.
 </BLOCKQUOTE>
 <A name=4>
@@ -137,8 +137,8 @@ values must be in the range of the type of the result.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-I : value to select bits from when the associated bit in the <I>mask</I> is
-<TABLE width=100% cellpadding=3><!-- tsb: I : value to select bits from when the associated bit in the <I>mask</I> is
+I : value to select bits from when the associated bit in the mask is
+<TABLE width=100% cellpadding=3><!-- tsb: I : value to select bits from when the associated bit in the mask is
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
@@ -151,8 +151,8 @@ I : value to select bits from when the associated bit in the <I>mask</I> is
 <TR valign=top><TD width=4%>
 o
 </TD><TD>
-J : value to select bits from when the associated bit in the <I>mask</I> is
-<TABLE width=100% cellpadding=3><!-- tsb: J : value to select bits from when the associated bit in the <I>mask</I> is
+J : value to select bits from when the associated bit in the mask is
+<TABLE width=100% cellpadding=3><!-- tsb: J : value to select bits from when the associated bit in the mask is
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
@@ -165,7 +165,7 @@ J : value to select bits from when the associated bit in the <I>mask</I> is
 <TR valign=top><TD width=4%>
 o
 </TD><TD>
-MASK : a value whose bits are used as a <I>mask</I> to select bits from I and J
+MASK : a value whose bits are used as a mask to select bits from I and J
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -174,7 +174,7 @@ MASK : a value whose bits are used as a <I>mask</I> to select bits from I and J
 
 </A>
 <BLOCKQUOTE>
-The bits blended from I and J using the <I>mask</I> MASK.
+The bits blended from I and J using the mask MASK.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -224,11 +224,9 @@ Sample program:
          & ior(iand(32767_int16, z&#146;1234&#146;),                       &
          &   iand(o&#146;12345&#146;, not(int( z&#146;1234&#146;, kind=int16))))
 <P>
-</PRE>
-<BLOCKQUOTE>
-end program demo_merge_bits
-</BLOCKQUOTE>
+      end program demo_merge_bits
 <P>
+</PRE>
 Results:
 <P>
 <PRE>
@@ -261,7 +259,7 @@ fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>merge_bits (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1395701b-d304-47fd-ad3a-d4bbad9c630d using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>merge_bits (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 730050a6-8533-4116-9033-a6d8d7a49609 using man macros.</FONT>
 <br><br><center><img src="images/merge_bits.3fortran.gif"></center>
 </div>
 </div>

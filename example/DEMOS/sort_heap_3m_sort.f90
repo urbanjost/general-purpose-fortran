@@ -34,7 +34,7 @@
      ii=ii(indx)
      do i=1,isz-1
         if(ii(i).gt.ii(i+1))then
-           write(*,*)'Error in sorting integer small to large ',i,ii(i),ii(i+1)
+           write(*,*)'Error sorting integers small to large ',i,ii(i),ii(i+1)
         endif
      enddo
      write(*,*)'test of integer sort_heap(3f) complete'
@@ -45,7 +45,7 @@
      cc=cc(indx)
      do i=1,isz-1
         if(cc(i).gt.cc(i+1))then
-           write(*,*)'Error in sorting character small to large ',i,cc(i),cc(i+1)
+           write(*,*)'Error sorting characters small to large ',i,cc(i),cc(i+1)
         endif
      enddo
      write(*,*)'test of character sort_heap(3f) complete'
@@ -54,7 +54,7 @@
 
      function random_string(chars,length) result(out)
 
-     !$@(#) M_random::random_string(3f): create random string from provided chars
+     ! create random string from provided chars
 
      character(len=*),intent(in)     :: chars
      integer,intent(in)              :: length

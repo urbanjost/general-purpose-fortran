@@ -18,4 +18,4 @@
            c = [ character(len=10) :: 'ape', 'bat', 'cat', 'dog']
            write(*, fmt="(*(g0, ' '))") pack(c, c(:)(2:2) == 'a' )
 
-    end program demo_pack
+        end program demo_pack

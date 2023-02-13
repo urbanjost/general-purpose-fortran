@@ -40,35 +40,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    hasher(1f) - [M_hashkeys] exercise the string hash methods in the M_hashkey(3fm) module
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    hasher [ input_files [ -hash hashname] ]|[ -string string_value]|--help|--version
-!!
-!!##DESCRIPTION
-!!    hasher(1f) does a byte by byte hash of a file or a hash of a string
-!!    using the procedures available in the M_hashkey(3fm) module. It is up
-!!    to the user to determine if the method is suitable for a specific use.
-!!
-!!##OPTIONS
-!!    input_files  files to generate a hash for
-!!    hash         name of hash algorithm. Currently allowed
-!!                 values are:
-!!
-!!                   djb2 (default)   calls djb2_hash(3f)
-!!                   sdbm             calls sdbm_hash(3f)
-!!                   crc32            calls cfc32_hash(3f)
-!!
-!!    --help       display this help and exit
-!!    --version    output version information and exit
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -88,7 +59,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)                change and redistribute it.  There is NO WARRANTY;>',&
 '@(#)                without even the implied warranty of MERCHANTABILITY or>',&
 '@(#)                FITNESS FOR A PARTICULAR PURPOSE.>',&
-'@(#)COMPILED:       2022-07-16 12:57:25 UTC-240>',&
+'@(#)COMPILED:       2023-02-12 12:24:01 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -9,20 +9,20 @@
         do
            write(*,'(a)',advance='no')'enter filename>'
            read(*,'(a)',iostat=ios)filename
-           if(ios.ne.0)exit
+           if(ios /= 0)exit
            write(*,'(a)',advance='no')'enter mode ([rwa][bt][+]>'
            read(*,'(a)',iostat=ios)mode
-           if(ios.ne.0)exit
+           if(ios /= 0)exit
            lun=fileopen(filename,mode,ios)
-           if(ios.eq.0)then
+           if(ios == 0)then
               write(*,*)'OPENED'
            else
               write(*,*)'ERROR: IOS=',ios
            endif
-           if(lun.ne.-1)then
+           if(lun /= -1)then
               call print_inquire(lun,'')
               close(lun,iostat=ios,iomsg=message)
-              if(ios.ne.0)then
+              if(ios /= 0)then
                  write(*,'(a)')trim(message)
               endif
            endif

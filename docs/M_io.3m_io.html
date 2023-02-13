@@ -52,11 +52,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    </dd>
    <dt> SYNOPSIS </dt><dd>
       <pre>
-      use M_io, only : slurp, gulp, notopen, print_inquire, read_table
+      use M_io, only : notopen, print_inquire, read_table, filename_generator
       use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, basename
       use M_io, only : separator, getname, which, lookfor
       use M_io, only : read_line, getline, rd, get_next_char
-      use M_io, only : fileopen, fileclose, filedelete, filewrite
+      use M_io, only : fileopen, fileclose, filedelete, filewrite, fileread, filebyte
       use M_io, only : number_of_lines
       use M_io, only : get_env
       </pre>
@@ -65,14 +65,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
       The M_io module is a collection of routines related to basic I/O
       (input/output) operations.
       <ul>
-         <li> READING DATA
+         <li> READING DATA SEQUENTIALLY
          <ul>
             <li><a href="read_line.3m_io.html">       READ_LINE </a> - read line as long as programming environment line length limit cleaning up input line</li>
             <li><a href="getline.3m_io.html">         GETLINE </a> - read line as long as programming environment line length limit</li>
             <li><a href="rd.3m_io.html">              RD </a> - ask for string from standard input with user-definable prompt </li>
             <li><a href="read_table.3m_io.html">      READ_TABLE </a> - read a file into a numeric array </li>
-            <li><a href="slurp.3m_io.html">           SLURP </a> - read a file into a single-character array </li>
-            <li><a href="gulp.3m_io.html">            GULP </a> - read a file into a character array of text lines</li>
             <li><a href="number_of_lines.3m_io.html"> NUMBER_OF_LINES </a> - number of lines in open sequential file</li>
             <li><a href="get_next_char.3m_io.html">   GET_NEXT_CHAR </a> - read character byte by byte</li>
          </ul>
@@ -81,9 +79,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
          <li> SEQUENTIAL FILES
          <ul>
             <li><a href="fileopen.3m_io.html">       FILEOPEN </a> - open a file</li>
+            <li><a href="fileread.3m_io.html">       FILEREAD </a> - read a file into a string array </li>
+            <li><a href="filebyte.3m_io.html">       FILEBYTE </a> - read a file into a single-character array </li>
+            <li><a href="filewrite.3m_io.html">      FILEWRITE </a> - write string array to a file</li>
             <li><a href="fileclose.3m_io.html">      FILECLOSE </a> - close a file</li>
             <li><a href="filedelete.3m_io.html">     FILEDELETE </a> - remove a file</li>
-            <li><a href="filewrite.3m_io.html">     FILEWRITE </a> - write CHARACTER array to a file</li>
          </ul>
          </li>
 
@@ -113,7 +113,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
          <li> MISCELLANEOUS
          <ul>
-            <li><a href="notopen.3m_io.html">       NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
+            <li><a href="notopen.3m_io.html"> NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
+            <li><a href="filename_generator.3m_io.html"> FILENAME_GENERATOR </a> - create filename containing a whole number</li>
             <li><a href="print_inquire.3m_io.html"> PRINT_INQUIRE </a> - run INQUIRE(3f) on a file by name or number and print results</li>
          </ul>
          </li>

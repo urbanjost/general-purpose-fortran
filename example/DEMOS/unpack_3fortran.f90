@@ -21,29 +21,29 @@
            & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &
            & field=0) )
 
-    contains
+        contains
 
-             subroutine print_matrix_int(title,arr)
-             ! convenience routine:
-             ! just prints small integer arrays in row-column format
-             implicit none
-             character(len=*),intent(in)  :: title
-             integer,intent(in)           :: arr(:,:)
-             integer                      :: i
-             character(len=:),allocatable :: biggest
+           subroutine print_matrix_int(title,arr)
+           ! convenience routine:
+           ! just prints small integer arrays in row-column format
+           implicit none
+           character(len=*),intent(in)  :: title
+           integer,intent(in)           :: arr(:,:)
+           integer                      :: i
+           character(len=:),allocatable :: biggest
 
-                write(*,*)trim(title)
-                ! make buffer to write integer into
-                biggest='           '
-                ! find how many characters to use for integers
-                write(biggest,'(i0)')ceiling(log10(real(maxval(abs(arr)))))+2
-                ! use this format to write a row
-                biggest='("  [",*(i'//trim(biggest)//':,","))'
-                ! print one row of array at a time
-                do i=1,size(arr,dim=1)
-                   write(*,fmt=biggest,advance='no')arr(i,:)
-                   write(*,'(" ]")')
-                enddo
-    end subroutine print_matrix_int
+              write(*,*)trim(title)
+              ! make buffer to write integer into
+              biggest='           '
+              ! find how many characters to use for integers
+              write(biggest,'(i0)')ceiling(log10(real(maxval(abs(arr)))))+2
+              ! use this format to write a row
+              biggest='("  [",*(i'//trim(biggest)//':,","))'
+              ! print one row of array at a time
+              do i=1,size(arr,dim=1)
+                 write(*,fmt=biggest,advance='no')arr(i,:)
+                 write(*,'(" ]")')
+              enddo
+           end subroutine print_matrix_int
 
-    end program demo_unpack
+        end program demo_unpack

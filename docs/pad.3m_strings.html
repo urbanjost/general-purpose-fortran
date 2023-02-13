@@ -1,0 +1,275 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>pad (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+pad(3f) - [M_strings:LENGTH] return string padded to at least
+specified length
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>See Also</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>License</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+function pad(str,length,pattern,right,clip) result(strout)
+<P>
+<PRE>
+   character(len=*)                           :: str
+   integer,intent(in)                         :: length
+   character(len=max(length,len(trim(line)))) :: strout
+   character(len=*),intent(in),optional       :: pattern
+   logical,intent(in),optional                :: right
+   logical,intent(in),optional                :: clip
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+pad(3f) pads a string with a pattern to at least the specified
+length. If the trimmed input string is longer than the requested
+length the trimmed string is returned.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>str</B> </TD><TD valign=bottom>
+the input string to return trimmed, but then padded to
+the specified length if shorter than length
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>length</B> </TD><TD valign=bottom>
+The minimum string length to return
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>pattern</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+optional string to use as padding. Defaults to a space.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>right</B> </TD><TD valign=bottom>
+if true pads string on the right, else on the left
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>clip</B> </TD><TD valign=bottom>
+trim spaces from input string but otherwise retain length.
+Except for simple cases you typically would trim the input
+yourself.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>strout</B> </TD><TD valign=bottom>
+The input string padded to the requested length or
+the trimmed input string if the input string is
+longer than the requested length.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+   program demo_pad
+    use M_strings, only : pad
+    implicit none
+    character(len=10)            :: string=&#146;abcdefghij&#146;
+    character(len=:),allocatable :: answer
+    integer                      :: i
+    character(len=*),parameter   :: g=&#146;(*(g0))&#146;
+       answer=pad(string,5)
+       write(*,&#146;("[",a,"]")&#146;) answer
+       answer=pad(string,20)
+       write(*,&#146;("[",a,"]")&#146;) answer
+       i=30
+       write(*,g)
+       write(*,&#146;(1x,a,1x,i0)&#146;) &
+        & pad(&#146;CHAPTER 1 : The beginning &#146;,i,&#146;.&#146;), 1   , &
+        & pad(&#146;CHAPTER 2 : The end &#146;,i,&#146;.&#146;),       1234, &
+        & pad(&#146;APPENDIX &#146;,i,&#146;.&#146;),                  1235
+       write(*,*)
+       write(*,&#146;(1x,a,i7)&#146;) &
+        & pad(&#146;CHAPTER 1 : The beginning &#146;,i,&#146;.&#146;), 1   , &
+        & pad(&#146;CHAPTER 2 : The end &#146;,i,&#146;.&#146;),       1234, &
+        & pad(&#146;APPENDIX &#146;,i,&#146;.&#146;),                  1235
+<P>
+        write(*,g)pad(&#146;12&#146;,5,&#146;0&#146;,right=.false.)
+<P>
+        write(*,g)pad(&#146;12345 &#146;,30,&#146;_&#146;,right=.false.)
+        write(*,g)pad(&#146;12345 &#146;,30,&#146;_&#146;,right=.false.,clip=.true.)
+        write(*,g)pad(&#146;12345 &#146;,7,&#146;_&#146;,right=.false.)
+        write(*,g)pad(&#146;12345 &#146;,7,&#146;_&#146;,right=.false.,clip=.true.)
+        write(*,g)pad(&#146;12345 &#146;,6,&#146;_&#146;,right=.false.)
+        write(*,g)pad(&#146;12345 &#146;,6,&#146;_&#146;,right=.false.,clip=.true.)
+        write(*,g)pad(&#146;12345 &#146;,5,&#146;_&#146;,right=.false.)
+        write(*,g)pad(&#146;12345 &#146;,5,&#146;_&#146;,right=.false.,clip=.true.)
+        write(*,g)pad(&#146;12345 &#146;,4,&#146;_&#146;,right=.false.)
+        write(*,g)pad(&#146;12345 &#146;,4,&#146;_&#146;,right=.false.,clip=.true.)
+   end program demo_pad
+<P>
+</PRE>
+Results:
+<P>
+&gt; [abcdefghij]
+<TABLE cellpadding=3><!-- tsb: &gt; [abcdefghij]
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>&gt; [abcdefghij</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+&gt;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+CHAPTER 1 : The beginning &#46;&#46;&#46;. 1
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+CHAPTER 2 : The end &#46;&#46;&#46;....... 1234
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+APPENDIX &#46;&#46;&#46;.................. 1235
+&gt;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+CHAPTER 1 : The beginning &#46;&#46;&#46;.      1
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+CHAPTER 2 : The end &#46;&#46;&#46;.......   1234
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+APPENDIX &#46;&#46;&#46;..................   1235
+&gt; 00012
+&gt; ________________________12345
+&gt; _________________________12345
+&gt; _12345
+&gt; __12345
+&gt; 12345
+&gt; _12345
+&gt; 12345
+&gt; 12345
+&gt; 12345
+&gt; 12345
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+adjustl(3f), adjustr(3f), repeat(3f), trim(3f), len_trim(3f), len(3f)
+<P>
+adjustc(3f), stretch(3f), lpad(3f), rpad(3f), cpad(3f), zpad(3f), lenset(3f)
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>pad (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 153ecaad-cd7c-45f7-9307-01fa7114ec84 using man macros.</FONT>
+<br><br><center><img src="images/pad.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

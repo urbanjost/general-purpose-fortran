@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_xterm(3fm) </B>- [M_xterm] send escape sequences to an <B>xterm</B>(1) window that control VT102 emulator attributes
-<B>(LICENSE:MIT)
-</B></BLOCKQUOTE>
+M_xterm(3fm) - [M_xterm] send escape sequences to an xterm(1) window that control VT102 emulator attributes
+(LICENSE:MIT)
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -74,16 +74,14 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>use</B> M_xterm, <I>only</I> : <I>xterm_font</I>
-<B>use</B> M_xterm, <I>only</I> : xterm_colors, <I>xterm_pencolor</I>
-<B>use</B> M_xterm, <I>only</I> : xterm_geometry, xterm_width, <I>xterm_position</I>
-<B>use</B> M_xterm, <I>only</I> : xterm_clear, xterm_keywords, <I>xterm_labels</I>
+use M_xterm, only : xterm_font
+use M_xterm, only : xterm_colors, xterm_pencolor
+use M_xterm, only : xterm_geometry, xterm_width, xterm_position
+use M_xterm, only : xterm_clear, xterm_keywords, xterm_labels
 <P>
-<B>use</B> M_xterm, <I>only</I> : xterm_get_geometry, xterm_get_font, <I>xterm_get_position</I>
-<B>use</B> M_xterm, <I>only</I> : xterm_get_iconstate, xterm_get_colors, <I>xterm_get_pencolor</I>
-<B>use</B> M_xterm, <I>only</I> : xterm_xrdb, <I>xterm_occupancy</I>
-</PRE>
+use M_xterm, only : xterm_get_geometry, xterm_get_font, xterm_get_position
+use M_xterm, only : xterm_get_iconstate, xterm_get_colors, xterm_get_pencolor
+use M_xterm, only : xterm_xrdb, xterm_occupancy
 </BLOCKQUOTE>
 <A name=2>
 
@@ -91,15 +89,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-The <B>xterm</B>(1) terminal emulator emulates an extended VT102 terminal on
+The xterm(1) terminal emulator emulates an extended VT102 terminal on
 X11 Windows platforms. This means a number of strings beginning with
 an escape character can be used to clear the screen, toggle between
 80 and 132 column mode, position the cursor, and perform other command
 sequences that allow screen-based utilities to operate.
 <P>
-Since basic terminal control libraries such as <B>ncurses</B>(3c) already
-exist for basic terminal screen formatting, The <B>M_xterm</B>(3fm) module
-specifically supports the <B>xterm</B>(1) extensions that control the X11
+Since basic terminal control libraries such as ncurses(3c) already
+exist for basic terminal screen formatting, The M_xterm(3fm) module
+specifically supports the xterm(1) extensions that control the X11
 window attributes such as window size, font, and colors:
 <P>
 <PRE>
@@ -115,7 +113,7 @@ window attributes such as window size, font, and colors:
 <P>
 </PRE>
 An additional set of routines sends escape sequences to stdout that
-query the current state of the <B>xterm</B>(1). Then, with the terminal set
+query the current state of the xterm(1). Then, with the terminal set
 to raw mode, they read back the response. In this implementation that
 means the command may not work in a basic pipe or have I/O redirected
 on some systems.
@@ -139,7 +137,7 @@ on some systems.
 </PRE>
 For all these routines to work with some xterm versions, you may have to
 set the following X11 resources in your ~.Xresources file **before**
-starting the <B>xterm</B>(1) window. You may also <B>use</B> the <B>xrdb</B>(1) command.
+starting the xterm(1) window. You may also use the xrdb(1) command.
 For example
 <P>
 <PRE>
@@ -150,15 +148,13 @@ For example
       end_of_file
 <P>
 </PRE>
-</BLOCKQUOTE>
-For a running <B>xterm</B>(1), you may <B>use</B> the "VT Fonts" menu to enable "Window Ops","Title Ops","Font Ops",
+For a running xterm(1), you may use the "VT Fonts" menu to enable "Window Ops","Title Ops","Font Ops",
 and "Color Ops" if they are no enabled. If the "VT Fonts" menu is not visible in the upper left corner
-of the <B>xterm</B>(1) display, ctrl-Mouse3 in the main terminal display will make the menu visible.
-<BLOCKQUOTE>
-<P>
-An example program that can easily be called from scripts and shell aliases called <B>setxt</B>(1) is included
-in the GPF (General Purpose Fortran) distribution that this module is a part of.
+of the xterm(1) display, ctrl-Mouse3 in the main terminal display will make the menu visible.
 </BLOCKQUOTE>
+<P>
+An example program that can easily be called from scripts and shell aliases called setxt(1) is included
+in the GPF (General Purpose Fortran) distribution that this module is a part of.
 <A name=3>
 
      <H3>EXAMPLE</H3>
@@ -191,9 +187,9 @@ Sample usage:
 
 </A>
 <BLOCKQUOTE>
-<B>xlsfonts</B>(1x),
-<B>clear</B>(1), <B>ncurses</B>(3c), stty (1), tabs (1),
-<B>terminfo</B>(5), tput (1), tset (1), tty (1)
+xlsfonts(1x),
+clear(1), ncurses(3c), stty (1), tabs (1),
+terminfo(5), tput (1), tset (1), tty (1)
 </BLOCKQUOTE>
 <A name=5>
 
@@ -217,7 +213,7 @@ John S. Urban
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_xterm (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b9be2439-eb1f-48e3-b84e-c9a688fb1b3e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_xterm (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0d454212-f609-4450-8781-1b5f9c03bfaa using man macros.</FONT>
 <br><br><center><img src="images/M_xterm.3m_xterm.gif"></center>
 </div>
 </div>

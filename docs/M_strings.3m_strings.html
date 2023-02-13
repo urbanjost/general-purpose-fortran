@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_strings(3f) </B>- [M_strings::INTRO] Fortran string module
-<B>
-</B></BLOCKQUOTE>
+M_strings(3f) - [M_strings::INTRO] Fortran string module
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Description</A><BR>
@@ -74,13 +74,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-The <B>M_strings</B>(3fm) module is a collection of Fortran procedures
+The M_strings(3fm) module is a collection of Fortran procedures
 that supplement the built-in intrinsic string routines. Routines
 for parsing, tokenizing, changing case, substituting new strings for
 substrings, locating strings with simple wildcard expressions, removing
 tabs and line terminators and other string manipulations are included.
 <P>
-<B>M_strings_oop</B>(3fm) is a companion module that provides an OOP interface
+M_strings_oop(3fm) is a companion module that provides an OOP interface
 to the M_strings module.
 </BLOCKQUOTE>
 <A name=2>
@@ -89,36 +89,39 @@ to the M_strings module.
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>public</B> entities:
+public entities:
 <P>
-     use M_strings, only : split,sep,delim,chomp,strtok
-     use M_strings, only : split2020, find_field
-     use M_strings, only : substitute,change,modif,transliterate,reverse
-     use M_strings, only : replace,join
-     use M_strings, only : upper,lower,upper_quoted
-     use M_strings, only : rotate13
-     use M_strings, only : adjustc,compact,nospace,indent
-     use M_strings, only : crop,clip,unquote,quote,matching_delimiter
-     use M_strings, only : len_white,atleast,stretch,lenset,merge_str
-     use M_strings, only : switch,s2c,c2s
-     use M_strings, only : noesc,notabs,dilate,expand,visible
-     use M_strings, only : longest_common_substring
-     !x!use M_strings, only : uc
-     use M_strings, only : string_to_value,string_to_values,s2v,s2vs
-     use M_strings, only : value_to_string,v2s,msg
-     use M_strings, only : listout,getvals
-     use M_strings, only : glob, ends_with
-     use M_strings, only : paragraph
-     use M_strings, only : base, decodebase, codebase, base2
-     use M_strings, only : isalnum, isalpha, iscntrl, isdigit
-     use M_strings, only : isgraph, islower, isprint, ispunct
-     use M_strings, only : isspace, isupper, isascii, isblank, isxdigit
-     use M_strings, only : isnumber
-     use M_strings, only : fortran_name
-     use M_strings, only : describe
-     use M_strings, only : edit_distance
-     use M_strings, only : cc
+<PRE>
+     use M_strings,only : split, sep, delim, chomp, strtok
+     use M_strings,only : split2020, find_field
+     use M_strings,only : substitute, change, modif, transliterate, &
+             & reverse, squeeze
+     use M_strings,only : replace, join
+     use M_strings,only : upper, lower, upper_quoted
+     use M_strings,only : rotate13
+     use M_strings,only : adjustc, compact, nospace, indent
+     use M_strings,only : crop, clip, unquote, quote, matching_delimiter
+     use M_strings,only : len_white, pad, lpad, cpad, rpad, zpad, &
+             & stretch, lenset, merge_str
+     use M_strings,only : switch, s2c, c2s
+     use M_strings,only : noesc, notabs, dilate, expand, visible
+     use M_strings,only : longest_common_substring
+     use M_strings,only : string_to_value, string_to_values, s2v, s2vs
+     use M_strings,only : int, real, dble, nint
+     use M_strings,only : atoi, atol, aton
+     use M_strings,only : value_to_string, v2s, msg
+     use M_strings,only : listout, getvals
+     use M_strings,only : glob, ends_with
+     use M_strings,only : paragraph
+     use M_strings,only : base, decodebase, codebase, base2
+     use M_strings,only : isalnum, isalpha, iscntrl, isdigit
+     use M_strings,only : isgraph, islower, isprint, ispunct
+     use M_strings,only : isspace, isupper, isascii, isblank, isxdigit
+     use M_strings,only : isnumber
+     use M_strings,only : fortran_name
+     use M_strings,only : describe
+     use M_strings,only : edit_distance
+     use M_strings,only : bundle
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -136,7 +139,7 @@ and stores tokens into an array
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>sep</B> </TD><TD valign=bottom>
-function interface to <B>split</B>(3f)
+function interface to split(3f)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>delim</B> </TD><TD valign=bottom>
@@ -151,7 +154,7 @@ string using specified delimiters
 <TR valign=top><TD colspan=2>
 <B>paragraph</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 convert a string into a paragraph
-strtok tokenize a string like C <B>strtok</B>(3c) routine
+strtok tokenize a string like C strtok(3c) routine
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -187,7 +190,7 @@ substring with new substring
 <B>replace</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 function non-recursively globally replaces old
 substring with new substring using allocatable string
-(version of <B>substitute</B>(3f) without limitation on
+(version of substitute(3f) without limitation on
 length of output string)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
@@ -247,6 +250,55 @@ quoted per Fortran rules
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
 
+    <H4>&nbsp; &nbsp; STRING LENGTH AND PADDING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>len_white</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+find location of last non-whitespace character
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lenset</B> </TD><TD valign=bottom>
+return a string of specified length
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>pad</B> </TD><TD valign=bottom>
+return a string of at least specified length
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>zpad</B> </TD><TD valign=bottom>
+pad integer or string to length with zero characters
+on left
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lpad</B> </TD><TD valign=bottom>
+convert scalar intrinsic to a string padded on left to
+specified length
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>cpad</B> </TD><TD valign=bottom>
+convert scalar intrinsic to a centered string of the
+specified length
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>rpad</B> </TD><TD valign=bottom>
+convert scalar intrinsic to a string padded on right to
+specified length
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>stretch</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+return a string of at least specified length with suffix
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>merge_str</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+make strings of equal length and then call MERGE(3f)
+intrinsic
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
     <H4>&nbsp; &nbsp; WHITE SPACE</H4>
 </A>
 <BLOCKQUOTE>
@@ -286,6 +338,7 @@ function trims leading and trailing spaces
     <H4>&nbsp; &nbsp; QUOTES</H4>
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B>matching_delimiter</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
@@ -300,35 +353,8 @@ remove quotes from string as if read with list-directed input
 add quotes to string as if written with list-directed input
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; STRING LENGTH</H4>
-</A>
-<BLOCKQUOTE>
 <P>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>len_white</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-find location of last non-whitespace character
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>lenset</B> </TD><TD valign=bottom>
-return a string of specified length
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>atleast</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-return a string of at least specified length
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>stretch</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-return a string of at least specified length with suffix
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>merge_str</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-make strings of equal length and then call <B>MERGE</B>(3f)
-intrinsic
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
 <A name=>
 
     <H4>&nbsp; &nbsp; CHARACTER ARRAY VERSUS STRING</H4>
@@ -414,6 +440,23 @@ function returns a DOUBLEPRECISION array of numbers
 from a string
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
+<B>s2vs</B> </TD><TD valign=bottom>
+function returns a DOUBLEPRECISION array of numbers
+from a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>atoi</B> </TD><TD valign=bottom>
+function returns INTEGER(kind=int32)  from a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>atol</B> </TD><TD valign=bottom>
+function returns INTEGER(kind=int64)  from a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>aton</B> </TD><TD valign=bottom>
+changes string to numeric value
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
 <B>msg</B> </TD><TD valign=bottom>
 append the values of up to nine values into a string
 </TD></TR>
@@ -451,7 +494,7 @@ contain wildcard characters
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>ends_with</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-test whether strings ends with one of the specified suffixs
+test whether strings ends with one of the specified suffixes
 </TD></TR>
 <TR></TR></TABLE><TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
@@ -463,6 +506,7 @@ isalnum returns .true. if character is a letter or digit
 o
 </TD><TD>
 isalpha returns .true. if character is a letter and
+[char46]false. otherwise
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -513,8 +557,8 @@ isupper returns .true. if character is an uppercase letter (A-Z)
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-isascii returns .true. if the character is in the range <B>char</B>(0)
-to <B>char</B>(127)
+isascii returns .true. if the character is in the range char(0)
+to char(127)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -563,8 +607,8 @@ decodebase convert whole number in base 10 to string in base [2-36]
 <BLOCKQUOTE>
 <P>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=3% nowrap>
-<B>cc</B> </TD><TD valign=bottom>
+<TR valign=top><TD colspan=2>
+<B>bundle</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 return up to twenty strings of arbitrary length as an array
 </TD></TR>
 <TR valign=top><TD colspan=2>
@@ -588,7 +632,7 @@ substring of two strings.
 </A>
 <BLOCKQUOTE>
 <P>
-The <B>M_strings</B>(3fm) module supplements and works in combination with
+The M_strings(3fm) module supplements and works in combination with
 the Fortran built-in intrinsics. Stand-alone Fortran lets you access
 the characters in a string using ranges much like they are character
 arrays, assignment, comparisons with standard operators, supports
@@ -625,9 +669,9 @@ operator, as well as a number of intrinsic string routines:
 </A>
 <BLOCKQUOTE>
 <P>
-The <B>M_strings_oop</B>(3fm) module (included with the <B>M_strings</B>(3fm)
+The M_strings_oop(3fm) module (included with the M_strings(3fm)
 module) provides an OOP (Object-Oriented Programming) interface to
-the <B>M_strings</B>(3fm) module.
+the M_strings(3fm) module.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -647,41 +691,47 @@ expression library (M_regex).
 </A>
 <BLOCKQUOTE>
 Each of the procedural functions includes an example program in the
-corresponding <B>man</B>(1) page for the function. The object-oriented
-interface does not have individual <B>man</B>(1) pages, but is instead
+corresponding man(1) page for the function. The object-oriented
+interface does not have individual man(1) pages, but is instead
 demonstrated using the following example program:
 <P>
 <PRE>
     program demo_M_strings
-    use M_strings, only : split, delim, chomp, sep
-    use M_strings, only : split2020, find_field
-    use M_strings, only : substitute, change, modif
-    use M_strings, only : transliterate, reverse
-    use M_strings, only : replace, join
-    use M_strings, only : upper, lower, upper_quoted
-    use M_strings, only : rotate13
-    use M_strings, only : adjustc, compact, nospace, indent, crop, clip, squeeze
-    use M_strings, only : unquote, quote, matching_delimiter
-    use M_strings, only : len_white, atleast, stretch, lenset, merge_str
-    use M_strings, only : switch, s2c, c2s
-    use M_strings, only : noesc, notabs, dilate, expand, visible
-    use M_strings, only : longest_common_substring
-    !x!use M_strings, only : uc
-    use M_strings, only : string_to_value, string_to_values, s2v, s2vs
-    use M_strings, only : value_to_string, v2s, msg
-    use M_strings, only : listout, getvals
-    use M_strings, only : glob, ends_with
-    use M_strings, only : paragraph
-    use M_strings, only : base, decodebase, codebase, base2
-    use M_strings, only : isalnum, isalpha, iscntrl, isdigit, isgraph
-    use M_strings, only : islower, isprint, ispunct, isspace, isupper
-    use M_strings, only : isascii, isblank, isxdigit
-    use M_strings, only : fortran_name
+    use M_strings,only : split, sep, delim, chomp, strtok
+    use M_strings,only : split2020, find_field
+    use M_strings,only : substitute, change, modif, transliterate, &
+            & reverse, squeeze
+    use M_strings,only : replace, join
+    use M_strings,only : upper, lower, upper_quoted
+    use M_strings,only : rotate13
+    use M_strings,only : adjustc, compact, nospace, indent
+    use M_strings,only : crop, clip, unquote, quote, matching_delimiter
+    use M_strings,only : len_white, pad, lpad, cpad, rpad, zpad, &
+            & stretch, lenset, merge_str
+    use M_strings,only : switch, s2c, c2s
+    use M_strings,only : noesc, notabs, dilate, expand, visible
+    use M_strings,only : longest_common_substring
+    use M_strings,only : string_to_value, string_to_values, s2v, s2vs
+    use M_strings,only : int, real, dble, nint
+    use M_strings,only : atoi, atol, aton
+    use M_strings,only : value_to_string, v2s, msg
+    use M_strings,only : listout, getvals
+    use M_strings,only : glob, ends_with
+    use M_strings,only : paragraph
+    use M_strings,only : base, decodebase, codebase, base2
+    use M_strings,only : isalnum, isalpha, iscntrl, isdigit
+    use M_strings,only : isgraph, islower, isprint, ispunct
+    use M_strings,only : isspace, isupper, isascii, isblank, isxdigit
+    use M_strings,only : isnumber
+    use M_strings,only : fortran_name
+    use M_strings,only : describe
+    use M_strings,only : edit_distance
+    use M_strings,only : bundle
     end program demo_M_strings
 <P>
 </PRE>
-</BLOCKQUOTE>
 Expected output
+</BLOCKQUOTE>
 <A name=5>
 
      <H3>AUTHOR</H3>
@@ -699,7 +749,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_strings (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2ac1b0af-5e4b-47b2-8220-22efe92a5b7d using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_strings (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 584b9cd9-acd3-47eb-ba61-794edda15ff8 using man macros.</FONT>
 <br><br><center><img src="images/M_strings.3m_strings.gif"></center>
 </div>
 </div>

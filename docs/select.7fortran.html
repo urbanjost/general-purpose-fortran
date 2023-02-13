@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>select(7f) </B>- [FORTRAN:EXECUTION CONTROL] select a block based on the value of an expression (a case)
-<B>
-</B></BLOCKQUOTE>
+select(7f) - [FORTRAN:EXECUTION CONTROL] select a block based on the value of an expression (a case)
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=3>
@@ -67,102 +67,100 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>1</B> <I>The</I> <I>CASE</I> <I>construct</I> <I>selects</I> <I>for</I> <I>execution</I> <I>at</I> <I>most</I> <I>one</I> <I>of</I> <I>its</I> <I>constituent</I> blocks. <I>The</I> <I>selection</I> <I>is</I> <I>based</I> <I>on</I> <I>the</I>
-<B>value</B> <I>of</I> <I>an</I> expression.
+1 The CASE construct selects for execution at most one of its constituent blocks. The selection is based on the
+value of an expression.
 <BLOCKQUOTE>
-</PRE>
-<TABLE cellpadding=3><!-- tsb: <B>1</B> <I>The</I> <I>CASE</I> <I>construct</I> <I>selects</I> <I>for</I> <I>execution</I> <I>at</I> <I>most</I> <I>one</I> <I>of</I> <I>its</I> <I>constituent</I> blocks. <I>The</I> <I>selection</I> <I>is</I> <I>based</I> <I>on</I> <I>the</I>
+<TABLE cellpadding=3><!-- tsb: 1 The CASE construct selects for execution at most one of its constituent blocks. The selection is based on the
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R810</B> </TD><TD valign=bottom>
-case-<I>construct</I>               <I>is</I>   <I>select-case-stmt</I>
-[ <I>case-stmt</I>
-<B>block</B> ] &#46;&#46;&#46;
-<B>end-select-stmt</B>
+<B>R810</B> </TD><TD valign=bottom>
+case-construct               is   select-case-stmt
+[ case-stmt
+block ] &#46;&#46;&#46;
+end-select-stmt
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R811</B> </TD><TD valign=bottom>
-select-<I>case-stmt</I>             <I>is</I>   [ <I>case-</I><I>construct</I>-name : ] <I>SELECT</I> <I>CASE</I>  case-expr)
+<B>R811</B> </TD><TD valign=bottom>
+select-case-stmt             is   [ case-construct-name : ] SELECT CASE  case-expr)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R812</B> </TD><TD valign=bottom>
-<I>case-stmt</I>                    <I>is</I>   <I>CASE</I> <I>case-selector</I> [case-<I>construct</I>-name]
+<B>R812</B> </TD><TD valign=bottom>
+case-stmt                    is   CASE case-selector [case-construct-name]
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R813</B> </TD><TD valign=bottom>
-<I>end-select-stmt</I>              <I>is</I>   <I>END</I> <I>SELECT</I> [ case-<I>construct</I>-name ]
+<B>R813</B> </TD><TD valign=bottom>
+end-select-stmt              is   END SELECT [ case-construct-name ]
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>C809</B> </TD><TD valign=bottom>
-(<I>(</I><B>R810</B>)) <I>If</I> <I>the</I> select-<I>case-stmt</I> <I>of</I> <I>a</I> case-<I>construct</I> <I>specifies</I>
-<B>a</B> case-<I>construct</I>-name, <I>the</I> <I>corresponding</I> <I>end-select-stmt</I>
-<B>shall</B> <I>specify</I> <I>the</I> <I>same</I> case-<I>construct</I>-name. <I>If</I>
-<B>the</B> select-<I>case-stmt</I> <I>of</I> <I>a</I> case-<I>construct</I> <I>does</I> <I>not</I> <I>specify</I> <I>a</I>
-case-<I>construct</I>-name, <I>the</I> <I>corresponding</I> <I>end-select-stmt</I> <I>shall</I>
-<B>not</B> <I>specify</I> <I>a</I> case-<I>construct</I>-name. <I>If</I> <I>a</I> <I>case-stmt</I> <I>specifies</I>
-<B>a</B> case-<I>construct</I>-name, <I>the</I> <I>corresponding</I> select-<I>case-stmt</I>
-<B>shall</B> <I>specify</I> <I>the</I> <I>same</I> case-<I>construct</I>-name.
+<B>C809</B> </TD><TD valign=bottom>
+(R810) If the select-case-stmt of a case-construct specifies
+a case-construct-name, the corresponding end-select-stmt
+shall specify the same case-construct-name. If
+the select-case-stmt of a case-construct does not specify a
+case-construct-name, the corresponding end-select-stmt shall
+not specify a case-construct-name. If a case-stmt specifies
+a case-construct-name, the corresponding select-case-stmt
+shall specify the same case-construct-name.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R814</B> </TD><TD valign=bottom>
-<I>case-expr</I>                    <I>is</I> <I>scalar-int-expr</I>
-<B>or</B> <I>scalar-char-expr</I>
-<B>or</B> <I>scalar-logical-expr</I>
+<B>R814</B> </TD><TD valign=bottom>
+case-expr                    is scalar-int-expr
+or scalar-char-expr
+or scalar-logical-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R815</B> </TD><TD valign=bottom>
-<I>case-selector</I>                <I>is</I> (<I>(case-</I><B>value</B>-range-list))
-<B>or</B> <I>DEFAULT</I>
+<B>R815</B> </TD><TD valign=bottom>
+case-selector                is (case-value-range-list)
+or DEFAULT
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>C810</B> </TD><TD valign=bottom>
-(<I>(</I><B>R810</B>)) <I>No</I> <I>more</I> <I>than</I> <I>one</I> <I>of</I> <I>the</I> <I>selectors</I> <I>of</I> <I>one</I> <I>of</I> <I>the</I> <I>CASE</I> <I>statements</I> <I>shall</I> <I>be</I> <I>DEFAULT</I>.
+<B>C810</B> </TD><TD valign=bottom>
+(R810) No more than one of the selectors of one of the CASE statements shall be DEFAULT.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R816</B> </TD><TD valign=bottom>
-case-<B>value</B>-range             <I>is</I>   case-<B>value</B>
-<TABLE width=100% cellpadding=3><!-- tsb: case-<B>value</B>-range             <I>is</I>   case-<B>value</B>
+<B>R816</B> </TD><TD valign=bottom>
+case-value-range             is   case-value
+<TABLE width=100% cellpadding=3><!-- tsb: case-value-range             is   case-value
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-case-<B>value</B> :
+<B>or</B> </TD><TD valign=bottom>
+case-value :
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-: case-<B>value</B>
+<B>or</B> </TD><TD valign=bottom>
+: case-value
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>or</B> </TD><TD valign=bottom>
-case-<B>value</B> : case-<B>value</B>
+<B>or</B> </TD><TD valign=bottom>
+case-value : case-value
 </TD></TR>
 <TR></TR></TABLE><!-- .TP -->
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>R817</B> </TD><TD valign=bottom>
-case-<B>value</B>                   <I>is</I> <I>scalar-int-initialization-expr</I>
-<B>or</B> <I>scalar-char-initialization-expr</I>
-<B>or</B> <I>scalar-logical-initialization-expr</I>
+<B>R817</B> </TD><TD valign=bottom>
+case-value                   is scalar-int-initialization-expr
+or scalar-char-initialization-expr
+or scalar-logical-initialization-expr
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>C811</B> </TD><TD valign=bottom>
-(<I>(</I><B>R810</B>)) <I>For</I> <I>a</I> <I>given</I> case-<I>construct</I>, <I>each</I> case-<B>value</B> <I>shall</I> <I>be</I>
-<B>of</B> <I>the</I> <I>same</I> <I>type</I> <I>as</I> <I>case-expr</I> . <I>For</I> <I>character</I>
-<I>type</I>, <I>the</I> <I>kind</I> <I>type</I> <I>parameters</I> <I>shall</I> <I>be</I> <I>the</I> <I>same</I>; <I>character</I>
-<B>length</B> <I>differences</I> <I>are</I> allowed.
+<B>C811</B> </TD><TD valign=bottom>
+(R810) For a given case-construct, each case-value shall be
+of the same type as case-expr . For character
+type, the kind type parameters shall be the same; character
+length differences are allowed.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>C812</B> </TD><TD valign=bottom>
-(<I>(</I><B>R810</B>)) <I>.</I> case-<B>value</B>-range <I>using</I> <I>.</I> <I>colon</I> <I>shall</I> <I>not</I> <I>be</I> <I>used</I>
-<B>if</B> <I>case-expr</I> <I>is</I> <I>of</I> <I>type</I> logical.
+<B>C812</B> </TD><TD valign=bottom>
+(R810) A case-value-range using a colon shall not be used
+if case-expr is of type logical.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>C813</B> </TD><TD valign=bottom>
-(<I>(</I><B>R810</B>)) <I>For</I> <I>.</I> <I>given</I> case-<I>construct</I>, <I>there</I> <I>shall</I> <I>be</I> <I>no</I> <I>possible</I>
-<B>value</B> <I>of</I> <I>the</I> <I>case-expr</I> <I>that</I> <I>matches</I> <I>more</I>
-<B>than</B> <I>one</I> case-<B>value</B>-range.
+<B>C813</B> </TD><TD valign=bottom>
+(R810) For a given case-construct, there shall be no possible
+value of the case-expr that matches more
+than one case-value-range.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
@@ -175,11 +173,11 @@ case-<B>value</B>                   <I>is</I> <I>scalar-int-initialization-expr<
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>8.1.5</B> </TD><TD valign=bottom>
-<I>CASE</I> <I>construct</I>
+CASE construct
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>8.1.5.1</B> </TD><TD valign=bottom>
-Purpose and form <I>of</I> <I>the</I> <I>CASE</I> <I>construct</I>
+Purpose and form of the CASE construct
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
@@ -188,7 +186,7 @@ Purpose and form <I>of</I> <I>the</I> <I>CASE</I> <I>construct</I>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>8.1.5.2</B> </TD><TD valign=bottom>
-Execution <I>of</I> <I>.</I> <I>CASE</I> <I>construct</I>
+Execution of a CASE construct
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -219,7 +217,7 @@ Execution <I>of</I> <I>.</I> <I>CASE</I> <I>construct</I>
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>8.1.5.3</B> </TD><TD valign=bottom>
-Examples <I>of</I> <I>CASE</I> constructs
+Examples of CASE constructs
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
@@ -290,7 +288,7 @@ Examples <I>of</I> <I>CASE</I> constructs
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>select (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from beea5fdc-1593-49da-b364-4217f599a079 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>select (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0a159237-974a-4f45-abbf-f35e2da18188 using man macros.</FONT>
 <br><br><center><img src="images/select.7fortran.gif"></center>
 </div>
 </div>

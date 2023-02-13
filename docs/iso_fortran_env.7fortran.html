@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>iso_fortran_env(7f) </B>- [FORTRAN] standard intrinsic module provides public entities related to the Fortran environment
-<B>
-</B></BLOCKQUOTE>
+iso_fortran_env(7f) - [FORTRAN] standard intrinsic module provides public entities related to the Fortran environment
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
@@ -67,20 +67,18 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : integer_kinds, int8, int16, int32, <I>int64</I>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : real_kinds, real32, real64, <I>real128</I>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : <I>logical_kinds</I>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : character_kinds, <I>character_storage_size</I>
+use, intrinsic :: iso_fortran_env, only : integer_kinds, int8, int16, int32, int64
+use, intrinsic :: iso_fortran_env, only : real_kinds, real32, real64, real128
+use, intrinsic :: iso_fortran_env, only : logical_kinds
+use, intrinsic :: iso_fortran_env, only : character_kinds, character_storage_size
 <P>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : compiler_options, <I>compiler_version</I>
+use, intrinsic :: iso_fortran_env, only : compiler_options, compiler_version
 <P>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : error_unit, input_unit, <I>output_unit</I>
+use, intrinsic :: iso_fortran_env, only : error_unit, input_unit, output_unit
 <P>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : file_storage_size, <I>numeric_storage_size</I>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : iostat_end, iostat_eor, <I>iostat_inquire_internal_unit</I>
-use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : <I>stat_stopped_image</I>
-</PRE>
+use, intrinsic :: iso_fortran_env, only : file_storage_size, numeric_storage_size
+use, intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor, iostat_inquire_internal_unit
+use, intrinsic :: iso_fortran_env, only : stat_stopped_image
 </BLOCKQUOTE>
 <A name=2>
 
@@ -89,7 +87,7 @@ use, <I>intrinsic</I> :: iso_fortran_env, <I>only</I> : <I>stat_stopped_image</I
 </A>
 <BLOCKQUOTE>
 <P>
-The <I>intrinsic</I> module ISO_FORTRAN_ENV provides at least the following
+The intrinsic module ISO_FORTRAN_ENV provides at least the following
 public entities relating to the Fortran environment.
 </BLOCKQUOTE>
 <A name=>
@@ -98,24 +96,24 @@ public entities relating to the Fortran environment.
 </A>
 <BLOCKQUOTE>
 <P>
-This part of ISO/IEC 1539 defines five standard <I>intrinsic</I> modules: a
+This part of ISO/IEC 1539 defines five standard intrinsic modules: a
 Fortran environment module, a set of three modules to support exception
 handling and IEEE arithmetic, and a module to support interoperability
 with the C programming language.
 <P>
-The IEEE_EXCEPTIONS, IEEE_ARITHMETIC, and IEEE_FEATURES <I>intrinsic</I>
-modules are described in Clause 14. The <I>intrinsic</I> module ISO_C_BINDING
+The IEEE_EXCEPTIONS, IEEE_ARITHMETIC, and IEEE_FEATURES intrinsic
+modules are described in Clause 14. The intrinsic module ISO_C_BINDING
 is described in Clause 15.
 <P>
-The types and procedures defined in standard <I>intrinsic</I> modules are
-not themselves <I>intrinsic</I>.
+The types and procedures defined in standard intrinsic modules are
+not themselves intrinsic.
 <P>
-A processor may extend the standard <I>intrinsic</I> modules to provide public
+A processor may extend the standard intrinsic modules to provide public
 entities in them in addition to those specified in ISO/IEC 1539.
 <P>
 To avoid potential name conflicts with program entities, it is
 recommended that a program use the ONLY option in any USE statement
-that references a standard <I>intrinsic</I> module.
+that references a standard intrinsic module.
 </BLOCKQUOTE>
 <A name=>
 
@@ -176,7 +174,7 @@ phase of program execution.
 </A>
 <BLOCKQUOTE>
 <P>
-<B>COMPILER_OPTIONS</B>() might have the value &#146;/OPTIMIZE /FLOAT=IEEE&#146;.
+COMPILER_OPTIONS() might have the value &#146;/OPTIMIZE /FLOAT=IEEE&#146;.
 </BLOCKQUOTE>
 <A name=>
 
@@ -216,7 +214,7 @@ phase of the processor.
 </A>
 <BLOCKQUOTE>
 <P>
-<B>COMPILER_VERSION</B>() might have the value &#146;Fast KL-10 Compiler Version 7&#146;.
+COMPILER_VERSION() might have the value &#146;Fast KL-10 Compiler Version 7&#146;.
 <P>
 For both COMPILER_OPTIONS and COMPILER VERSION the processor should
 include relevant information that could be useful in solving problems
@@ -317,7 +315,7 @@ IOSTAT_INQUIRE_INTERNAL_UNIT is assigned to the variable specified in an
 IOSTAT= specifier in an INQUIRE statement (9.10) if a file-unit-number
 identifies an internal unit in that statement.
 <P>
-This can <I>only</I> occur when a user defined derived type input/output
+This can only occur when a user defined derived type input/output
 procedure is called by the processor as the result of executing a
 parent data transfer statement for an internal unit.
 </BLOCKQUOTE>
@@ -388,7 +386,7 @@ execution. This value shall be positive and different from the value
 of IOSTAT INQUIRE INTERNAL UNIT.
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iso_fortran_env (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ccacaaf8-d385-4cda-b448-d30adae31727 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iso_fortran_env (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8a2689e5-7a8e-418d-9f53-95aff1450f6b using man macros.</FONT>
 <br><br><center><img src="images/iso_fortran_env.7fortran.gif"></center>
 </div>
 </div>

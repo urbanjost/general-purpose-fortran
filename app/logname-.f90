@@ -40,23 +40,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!       logname-(1f) - [FUNIX] display login name
-!!       (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!       logname- [ -help|-version]
-!!##DESCRIPTION
-!!       Demonstrate call to system_getlogin(3f) (which calls getlogin(3c)
-!!##OPTIONS
-!!        --help      display command help and exit
-!!        --version   output version information and exit
-!!##EXAMPLE
-!!
-!!       Command usage:
-!!
-!!         logname-
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -76,7 +59,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-12-21 19:28:43 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 12:23:54 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

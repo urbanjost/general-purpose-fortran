@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>data(7f) </B>- [FORTRAN] DATA statement
-<B>
+data(7f) - [FORTRAN] DATA statement
+<P>
 </BLOCKQUOTE>
-</B><B>
+<P>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
@@ -68,12 +68,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-</PRE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>data-stmt</B> <I>is</I> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<I>DATA</I> <I>data-stmt-set</I> [ [ , ] <I>data-stmt-set</I> ] &#46;&#46;&#46;
+<B>data-stmt is</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+DATA data-stmt-set [ [ , ] data-stmt-set ] &#46;&#46;&#46;
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=2>
@@ -83,17 +81,17 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-The <I>DATA</I> statement specifies explicit initialization.
+The DATA statement specifies explicit initialization.
 <P>
-If a nonpointer object has default initialization, it shall not appear in a <B>data-stmt</B>-object-list.
+If a nonpointer object has default initialization, it shall not appear in a data-stmt-object-list.
 <P>
-A variable that appears in a <I>DATA</I> statement and has not been typed previously may appear in a subsequent type
+A variable that appears in a DATA statement and has not been typed previously may appear in a subsequent type
 declaration only if that declaration confirms the implicit typing. An array name, array section, or array element
-that appears in a <I>DATA</I> statement shall have had its array properties established by a previous specification
+that appears in a DATA statement shall have had its array properties established by a previous specification
 statement.
 <P>
-Except for variables in named common blocks, a named variable has the SAVE attribute if any part of it <I>is</I>
-initialized in a <I>DATA</I> statement, and this may be confirmed by explicit specification.
+Except for variables in named common blocks, a named variable has the SAVE attribute if any part of it is
+initialized in a DATA statement, and this may be confirmed by explicit specification.
 <P>
 <PRE>
       R535    data-stmt-set                 is   data-stmt-object-list / data-stmt-value-list /
@@ -168,39 +166,39 @@ initialized in a <I>DATA</I> statement, and this may be confirmed by explicit sp
       C576     (R544) Any subscript, substring starting point, or substring ending point shall be an initialization expression.
 <P>
 </PRE>
-The <B>data-stmt</B>-object-list <I>is</I> expanded to form a sequence of pointers and scalar variables, referred to as "sequence
-of variables" in subsequent text. A nonpointer array whose unqualified name appears as a <B>data-stmt</B>-object or
-data-i-do-object <I>is</I> equivalent to a complete sequence of its array elements in array element order (6.5.3.2). An
-array section <I>is</I> equivalent to the sequence of its array elements in array element order. A data-implied-do <I>is</I>
+The data-stmt-object-list is expanded to form a sequence of pointers and scalar variables, referred to as "sequence
+of variables" in subsequent text. A nonpointer array whose unqualified name appears as a data-stmt-object or
+data-i-do-object is equivalent to a complete sequence of its array elements in array element order (6.5.3.2). An
+array section is equivalent to the sequence of its array elements in array element order. A data-implied-do is
 expanded to form a sequence of array elements and structure components, under the control of the data-i-do-variable,
 as in the DO construct (8.1.7.6).
 <P>
-The <B>data-stmt</B>-value-list <I>is</I> expanded to form a sequence of <B>data-stmt</B>-constants. A <B>data-stmt</B>-repeat indicates the
-number of times the following <B>data-stmt</B>-constant <I>is</I> to be included in the sequence; omission of a <B>data-stmt</B>-repeat
+The data-stmt-value-list is expanded to form a sequence of data-stmt-constants. A data-stmt-repeat indicates the
+number of times the following data-stmt-constant is to be included in the sequence; omission of a data-stmt-repeat
 has the effect of a repeat factor of 1.
 <P>
 A zero-sized array or a data-implied-do with an iteration count of zero contributes no variables to the expanded
 sequence of variables, but a zero-length scalar character variable does contribute a variable to the expanded
-sequence. A <B>data-stmt</B>-constant with a repeat factor of zero contributes no <B>data-stmt</B>-constants to the expanded
-sequence of scalar <B>data-stmt</B>-constants.
+sequence. A data-stmt-constant with a repeat factor of zero contributes no data-stmt-constants to the expanded
+sequence of scalar data-stmt-constants.
 <P>
-The expanded sequences of variables and <B>data-stmt</B>-constants are in one-to-one correspondence. Each <B>data-stmt</B>-constant
+The expanded sequences of variables and data-stmt-constants are in one-to-one correspondence. Each data-stmt-constant
 specifies the initial value, initial data target, or null-init for the corresponding variable. The lengths of
 the two expanded sequences shall be the same.
 <P>
-A <B>data-stmt</B>-constant shall be null-init or initial-data-target if and only if the corresponding <B>data-stmt</B>-object has
-the POINTER attribute. If <B>data-stmt</B>-constant <I>is</I> null-init, the initial association status of the corresponding data
-statement object <I>is</I> disassociated. If <B>data-stmt</B>-constant <I>is</I> initial-data-target the corresponding data statement
-object shall be data-pointer-initialization compatible with the initial data target; the data statement object <I>is</I>
+A data-stmt-constant shall be null-init or initial-data-target if and only if the corresponding data-stmt-object has
+the POINTER attribute. If data-stmt-constant is null-init, the initial association status of the corresponding data
+statement object is disassociated. If data-stmt-constant is initial-data-target the corresponding data statement
+object shall be data-pointer-initialization compatible with the initial data target; the data statement object is
 initially associated with the target.
 <P>
-A <B>data-stmt</B>-constant other than boz-literal-constant, null-init, or initial-data-target shall be compatible with its
-corresponding variable according to the rules of intrinsic assignment (7.2.1.2). The variable <I>is</I> initially defined
-with the value specified by the <B>data-stmt</B>-constant; if necessary, the value <I>is</I> converted according to the rules of
+A data-stmt-constant other than boz-literal-constant, null-init, or initial-data-target shall be compatible with its
+corresponding variable according to the rules of intrinsic assignment (7.2.1.2). The variable is initially defined
+with the value specified by the data-stmt-constant; if necessary, the value is converted according to the rules of
 intrinsic assignment (7.2.1.3) to a value that agrees in type, type parameters, and shape with the variable.
 <P>
-If a <B>data-stmt</B>-constant <I>is</I> a boz-literal-constant, the corresponding variable shall be of type integer.
-The boz-literal-constant <I>is</I> treated as if it were converted by the intrinsic function INT (13.7.81) to type integer with the
+If a data-stmt-constant is a boz-literal-constant, the corresponding variable shall be of type integer.
+The boz-literal-constant is treated as if it were converted by the intrinsic function INT (13.7.81) to type integer with the
 kind type parameter of the variable.
 </BLOCKQUOTE>
 <A name=3>
@@ -209,7 +207,7 @@ kind type parameter of the variable.
 
 </A>
 <BLOCKQUOTE>
-Examples of <I>DATA</I> statements are:
+Examples of DATA statements are:
 <P>
 <PRE>
           CHARACTER (LEN = 10) NAME
@@ -225,16 +223,16 @@ Examples of <I>DATA</I> statements are:
           DATA YOURNAME % AGE, YOURNAME % NAME / 35, &#146;FRED BROWN&#146; /
 <P>
 </PRE>
-The character variable NAME <I>is</I> initialized with the value JOHN DOE with padding on the right because
-the length of the constant <I>is</I> less than the length of the variable. All ten elements of the integer array
-MILES are initialized to zero. The two-dimensional array SKEW <I>is</I> initialized so that the lower triangle
-of SKEW <I>is</I> zero and the strict upper triangle <I>is</I> one. The structures MYNAME and YOURNAME are
-declared using the derived type PERSON from Note 4.17. The pointer HEAD OF LIST <I>is</I> declared using
-the derived type NODE from Note 4.37; it <I>is</I> initially disassociated. MYNAME <I>is</I> initialized by a structure
-constructor. YOURNAME <I>is</I> initialized by supplying a separate value for each component.
+The character variable NAME is initialized with the value JOHN DOE with padding on the right because
+the length of the constant is less than the length of the variable. All ten elements of the integer array
+MILES are initialized to zero. The two-dimensional array SKEW is initialized so that the lower triangle
+of SKEW is zero and the strict upper triangle is one. The structures MYNAME and YOURNAME are
+declared using the derived type PERSON from Note 4.17. The pointer HEAD OF LIST is declared using
+the derived type NODE from Note 4.37; it is initially disassociated. MYNAME is initialized by a structure
+constructor. YOURNAME is initialized by supplying a separate value for each component.
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>data (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ad701722-5635-4edb-af45-6562c0f8c3f9 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>data (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 07b4a10f-d00c-4e7f-97ef-b18d6ab16602 using man macros.</FONT>
 <br><br><center><img src="images/data.7fortran.gif"></center>
 </div>
 </div>

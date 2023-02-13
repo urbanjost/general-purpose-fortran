@@ -24,4 +24,4 @@
            endif
            print *, allocated(grid), allocated(tempgrid)
            print '(99f8.3)', grid
-  end program demo_move_alloc
+        end program demo_move_alloc

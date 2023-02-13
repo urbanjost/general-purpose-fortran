@@ -70,4 +70,4 @@
          call process_close(fp,ierr)
          write(*,'(a)')'CLOSED THE PROCESS. RETURNING TO PROGRAM'
 
-    end program demo_M_process
+      end program demo_M_process

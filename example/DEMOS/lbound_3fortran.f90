@@ -44,4 +44,4 @@
             & 'SIZE=',size(arr)
          end subroutine esub
 
-    !end program demo_lbound
+        !end program demo_lbound

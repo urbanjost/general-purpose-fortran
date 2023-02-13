@@ -53,4 +53,4 @@
               write(*,*)'(P,R)',same_type_as(p,r)
            end subroutine pointers
 
-    end program demo_same_type_as
+          end program demo_same_type_as

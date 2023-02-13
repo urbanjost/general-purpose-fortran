@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>product</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>product</B>(3fortran)
+<B>product(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+product(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>PRODUCT(3) </B>- [ARRAY:REDUCTION] Product of array elements
-<B>
-</B></BLOCKQUOTE>
+PRODUCT(3) - [ARRAY:REDUCTION] Product of array elements
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>product</B>(array [,<I>dim</I>] [,<I>mask</I>])
+result = product(array [,dim] [,mask])
 <P>
+<PRE>
            NUMERIC function product(array, dim, mask)
 <P>
             NUMERIC,intent(in) :: array(..)
@@ -111,7 +111,7 @@ NUMERIC is any numeric type and kind.
 
 </A>
 <BLOCKQUOTE>
-<B>PRODUCT</B>(3) multiplies together all the selected elements of ARRAY, or along
+PRODUCT(3) multiplies together all the selected elements of ARRAY, or along
 dimension DIM if the corresponding element in MASK is .true..
 <P>
 If DIM is absent, a scalar with the product of all elements in ARRAY is
@@ -242,13 +242,10 @@ Sample program:
 <P>
          call print_matrix_int(&#146;dim=3&#146;,product(box,dim=3))
 <P>
-</PRE>
-<BLOCKQUOTE>
-endblock WITH_DIM
+      endblock WITH_DIM
 <P>
-contains
+      contains
 <P>
-<PRE>
          subroutine print_matrix_int(title,arr)
          implicit none
 <P>
@@ -272,14 +269,11 @@ contains
                write(*,&#146;(" ]")&#146;)
             enddo
 <P>
+         end subroutine print_matrix_int
+<P>
+      end program demo_product
+<P>
 </PRE>
-<BLOCKQUOTE>
-end subroutine print_matrix_int
-</BLOCKQUOTE>
-<P>
-end program demo_product
-</BLOCKQUOTE>
-<P>
 Results:
 <P>
 <PRE>
@@ -298,146 +292,51 @@ Results:
        odd * even =
        4875 * 72000 = 351000000
 <P>
+      zero-sized array=&gt; 1
+      all elements have a false mask=&gt; 1
+<P>
+      rect :( 2 3 )
+       &gt; [  1,  2,  3 ]
+       &gt; [  4,  5,  6 ]
+      product of columns= 4 10 18
+      product of rows= 6 120
+<P>
+      box 1 :( 2 3 )
+       &gt; [  1,  2,  3 ]
+       &gt; [  4,  5,  6 ]
+<P>
+      box 2 :( 2 3 )
+       &gt; [  10,  20,  30 ]
+       &gt; [  40,  50,  60 ]
+<P>
+      box 3 :( 2 3 )
+       &gt; [ -10, -20, -30 ]
+       &gt; [ -40, -50, -60 ]
+<P>
+      box 4 :( 2 3 )
+       &gt; [   2,   4,   6 ]
+       &gt; [   8,  10,  12 ]
+      no dim gives a scalar .1719927E+26
+<P>
+      negative values :( 3 4 )
+       &gt; [     1,     1,   400,     1 ]
+       &gt; [     1,     1,  1000,     1 ]
+       &gt; [     1,     1,  1800,     1 ]
+<P>
+      dim=1 :( 3 4 )
+       &gt; [     4,   400,   400,    16 ]
+       &gt; [    10,  1000,  1000,    40 ]
+       &gt; [    18,  1800,  1800,    72 ]
+<P>
+      dim=2 :( 2 4 )
+       &gt; [       6,    6000,   -6000,      48 ]
+       &gt; [     120,  120000, -120000,     960 ]
+<P>
+      dim=3 :( 2 3 )
+       &gt; [    -200,   -3200,  -16200 ]
+       &gt; [  -51200, -125000, -259200 ]
+<P>
 </PRE>
-<BLOCKQUOTE>
-zero-sized array=&gt; 1
-all elements have a false <I>mask</I>=&gt; 1
-<P>
-rect :( 2 3 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: rect :( 2 3 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-1,  2,  3 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-4,  5,  6 ]
-product of columns= 4 10 18
-product of rows= 6 120
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-box 1 :( 2 3 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: box 1 :( 2 3 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-1,  2,  3 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-4,  5,  6 ]
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-box 2 :( 2 3 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: box 2 :( 2 3 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-10,  20,  30 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-40,  50,  60 ]
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-box 3 :( 2 3 )
-&gt; [ <B>-10</B>, <B>-20</B>, <B>-30</B> ]
-&gt; [ <B>-40</B>, <B>-50</B>, <B>-60</B> ]
-<P>
-box 4 :( 2 3 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: box 4 :( 2 3 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-2,   4,   6 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-8,  10,  12 ]
-no <I>dim</I> gives a scalar .1719927E+26
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-negative values :( 3 4 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: negative values :( 3 4 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-1,     1,   400,     1 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-1,     1,  1000,     1 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-1,     1,  1800,     1 ]
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-<I>dim</I>=1 :( 3 4 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <I>dim</I>=1 :( 3 4 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-4,   400,   400,    16 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-10,  1000,  1000,    40 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-18,  1800,  1800,    72 ]
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-<I>dim</I>=2 :( 2 4 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <I>dim</I>=2 :( 2 4 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-6,    6000,   <B>-6000</B>,      48 ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-120,  120000, <B>-120000</B>,     960 ]
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-<I>dim</I>=3 :( 2 3 )
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <I>dim</I>=3 :( 2 3 )
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-<B>-200</B>,   <B>-3200</B>,  <B>-16200</B> ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt; [</B> </TD><TD valign=bottom>
-<B>-51200</B>, <B>-125000</B>, <B>-259200</B> ]
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -453,7 +352,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-<B>SUM</B>(3), note that an element by element multiplication is done directly
+SUM(3), note that an element by element multiplication is done directly
 using the star character.
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
@@ -463,7 +362,7 @@ fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>product (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 42278d01-a0d2-4eef-a720-49f2dddb6da2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>product (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9f555a0e-1c0f-4cd5-bb44-2ea8b0b14385 using man macros.</FONT>
 <br><br><center><img src="images/product.3fortran.gif"></center>
 </div>
 </div>

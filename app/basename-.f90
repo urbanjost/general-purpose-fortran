@@ -7,11 +7,11 @@ use M_io,      only : basename, getline
 implicit none
 character(len=:),allocatable     :: help_text(:), version_text(:)
 character(len=:),allocatable     :: line, suffix
-logical                          :: zero=.false.
+character(len=1)                 :: endit
    call setup()
 !  define command arguments, default values and crack command line
    call set_args(' -zero:z F --suffix:s " " ',help_text,version_text)
-   zero=lget('zero')
+   endit=merge(achar(0),new_line('a'),lget('zero'))
    suffix=sget('suffix')
    if(size(array).gt.0)then ! filenames on command line
          call printit()
@@ -27,18 +27,10 @@ contains
 subroutine printit()
 integer                          :: i
   do i=1,size(array)                           ! loop thru file-or-directory names
-     if(zero)then
-        if(specified('suffix'))then
-           write(*,'(a)',advance='no')basename(array(i),suffix)//achar(0)
-        else
-           write(*,'(a)',advance='no')basename(array(i))//achar(0)
-        endif
+     if(specified('suffix'))then
+        write(*,'(a)',advance='no')basename(array(i),suffix)//endit
      else
-        if(specified('suffix'))then
-           write(*,'(a)')basename(array(i),suffix)
-        else
-           write(*,'(a)')basename(array(i))
-        endif
+        write(*,'(a)',advance='no')basename(array(i))//endit
      endif
   enddo
 end subroutine printit

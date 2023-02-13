@@ -42,7 +42,7 @@
           ! distance from the origin <0,0>
             write(*, g) ' distance of (', z, ') from zero is', abs( z )
             write(*, g) ' so beware of overflow with complex values'
-            write(*, g) abs(cmplx( huge(0.0)/2, huge(0.0)/2 ))
+            write(*, g) abs(cmplx( huge(0.0), huge(0.0) ))
             write(*, g) ' because the biggest default real is',huge(0.0)
 
         end program demo_abs

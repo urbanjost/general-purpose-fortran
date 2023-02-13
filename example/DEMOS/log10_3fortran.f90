@@ -11,4 +11,4 @@
            write(*, *)log10([1.0, 10.0, 100.0, 1000.0, 10000.0, &
                              & 100000.0, 1000000.0, 10000000.0])
 
-    end program demo_log10
+        end program demo_log10

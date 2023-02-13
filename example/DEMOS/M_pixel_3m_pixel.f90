@@ -73,20 +73,20 @@
         ! write standard gif file
         call writegif('M_pixel.3m_pixel.gif',P_pixel,P_ColorMap)
 
-    contains
+     contains
 
-          subroutine target(xc,yc,rc)
-          use M_pixel,    only : cosd, sind
-          real     :: xc,yc,rc
-          integer  :: i
-          real     :: x,y
-             do i=0,360,10
-                x=rc*cosd(i)
-                y=rc*sind(i)
-                call line(xc,yc,xc+x,yc+y)
-             enddo
-             do i=1,int(rc),10
-                call circle(xc,yc,real(i))
-             enddo
-          end subroutine target
-    end program demo_M_pixel
+        subroutine target(xc,yc,rc)
+        use M_pixel,    only : cosd, sind
+        real     :: xc,yc,rc
+        integer  :: i
+        real     :: x,y
+           do i=0,360,10
+              x=rc*cosd(i)
+              y=rc*sind(i)
+              call line(xc,yc,xc+x,yc+y)
+           enddo
+           do i=1,int(rc),10
+              call circle(xc,yc,real(i))
+           enddo
+        end subroutine target
+     end program demo_M_pixel

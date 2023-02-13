@@ -23,4 +23,4 @@
            print *, dprod( [2.3,3.4,4.5], 10.0 )
            print *, dprod( [2.3,3.4,4.5], [9.8,7.6,5.4] )
 
-    end program demo_dprod
+        end program demo_dprod

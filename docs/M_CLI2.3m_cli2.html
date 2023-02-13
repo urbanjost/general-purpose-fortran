@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_CLI2(3fm) </B>- [ARGUMENTS::M_CLI2::INTRO] command line argument
-<B>parsing using a prototype command
-</B><B>(LICENSE:PD)
-</B></BLOCKQUOTE>
+M_CLI2(3fm) - [ARGUMENTS::M_CLI2::INTRO] command line argument
+parsing using a prototype command
+(LICENSE:PD)
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -67,22 +67,28 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <A HREF=#3>Example</A><BR>
 <A HREF=#4>Author</A><BR>
 <A HREF=#5>License</A><BR>
+<A HREF=#6>See Also</A><BR>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>Available</B> <I>procedures</I> <I>and</I> variables:
+Available procedures and variables:
 <P>
-     use M_CLI2, only : set_args, get_args, unnamed, remaining, args
-     use M_CLI2, only : get_args_fixed_length, get_args_fixed_size
-     use M_CLI2, only : specified
+<PRE>
+     ! basic procedures
+     use M_CLI2, only : set_args, get_args, specified, set_mode
      ! convenience functions
      use M_CLI2, only : dget, iget, lget, rget, sget, cget
      use M_CLI2, only : dgets, igets, lgets, rgets, sgets, cgets
+     ! variables
+     use M_CLI2, only : unnamed, remaining, args
+     ! working with non-allocatable strings and arrays
+     use M_CLI2, only : get_args_fixed_length, get_args_fixed_size
+     ! special function for creating subcommands
+     use M_CLI2, only : get_subcommand(3f)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,16 +98,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-Allow for command line parsing much like standard Unix command line
-parsing using a simple prototype.
+The M_CLI2 module cracks a Unix-style command line.
 <P>
-Typically one call to <B>SET_ARGS</B>(3f) is made to define the command
-arguments, set default values <I>and</I> parse the command line. Then a call
-is made to the convenience commands based on <B>GET_ARGS</B>(3f) for each
+Typically one call to SET_ARGS(3f) is made to define the command
+arguments, set default values and parse the command line. Then a call
+is made to the convenience procedures or GET_ARGS(3f) proper for each
 command keyword to obtain the argument values.
 <P>
-The documentation for <B>SET_ARGS</B>(3f) <I>and</I> <B>GET_ARGS</B>(3f) provides further
-details.
+Detailed descriptions of each procedure and example programs are
+included.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -110,24 +115,37 @@ details.
 </A>
 <BLOCKQUOTE>
 <P>
-Sample typical minimal usage
+Sample minimal program which may be called in various ways:
+<P>
+<PRE>
+    mimimal -x 100.3 -y 3.0e4
+    mimimal --xvalue=300 --debug
+    mimimal --yvalue 400
+    mimimal -x 10 file1 file2 file3
+<P>
+</PRE>
+Program example:
 <P>
 <PRE>
     program minimal
-    use M_CLI2,  only : set_args, lget, rget, filenames=&gt;unnamed
+    use M_CLI2,  only : set_args, lget, rget, sgets
     implicit none
     real    :: x, y
     integer :: i
-       call set_args(&#146; -y 0.0 -x 0.0 -v F&#146;)
-       x=rget(&#146;x&#146;)
-       y=rget(&#146;y&#146;)
-       if(lget(&#146;v&#146;))then
+    character(len=:),allocatable :: filenames(:)
+       ! define and crack command line
+       call set_args(&#146; --yvalue:y 0.0 --xvalue:x 0.0 --debug F&#146;)
+       ! get values
+       x=rget(&#146;xvalue&#146;)
+       y=rget(&#146;yvalue&#146;)
+       if(lget(&#146;debug&#146;))then
           write(*,*)&#146;X=&#146;,x
           write(*,*)&#146;Y=&#146;,y
           write(*,*)&#146;ATAN2(Y,X)=&#146;,atan2(x=x,y=y)
        else
           write(*,*)atan2(x=x,y=y)
        endif
+       filenames=sgets() ! sget with no name gets "unnamed" values
        if(size(filenames) &gt; 0)then
           write(*,&#146;(g0)&#146;)&#146;filenames:&#146;
           write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,filenames(i),&#146;]&#146;,i=1,size(filenames))
@@ -135,7 +153,7 @@ Sample typical minimal usage
     end program minimal
 <P>
 </PRE>
-Sample program using type <B>get_args</B>() <I>and</I> variants
+Sample program using get_args() and variants
 <P>
 <PRE>
     program demo_M_CLI2
@@ -145,52 +163,63 @@ Sample program using type <B>get_args</B>() <I>and</I> variants
     implicit none
     integer                      :: i
     integer,parameter            :: dp=kind(0.0d0)
-    !
-    ! DEFINE ARGS
+     !
+     ! Define ARGS
     real                         :: x, y, z
-    real(kind=dp),allocatable    :: point(:)
     logical                      :: l, lbig
+    character(len=40)            :: label    ! FIXED LENGTH
+    real(kind=dp),allocatable    :: point(:)
     logical,allocatable          :: logicals(:)
     character(len=:),allocatable :: title    ! VARIABLE LENGTH
-    character(len=40)            :: label    ! FIXED LENGTH
     real                         :: p(3)     ! FIXED SIZE
     logical                      :: logi(3)  ! FIXED SIZE
-    !
-    ! DEFINE AND PARSE (TO SET INITIAL VALUES) COMMAND LINE
-    !   o set a value for all keywords.
-    !   o double-quote strings
-    !   o set all logical values to F or T.
-    !   o value delimiter is comma, colon, or space
+     !
+     ! DEFINE AND PARSE (TO SET INITIAL VALUES) COMMAND LINE
+     !   o set a value for all keywords.
+     !   o double-quote strings, strings must be at least one space
+     !     because adjacent double-quotes designate a double-quote
+     !     in the value.
+     !   o set all logical values to F
+     !   o numeric values support an "e" or "E" exponent
+     !   o for lists delimit with a comma, colon, or space
     call set_args(&#146;                         &
             & -x 1 -y 2 -z 3                &
             & -p -1 -2 -3                   &
             & --point 11.11, 22.22, 33.33e0 &
             & --title "my title" -l F -L F  &
             & --logicals  F F F F F         &
-            & -logi F T F                   &
+            & --logi F T F                  &
             & --label " " &
             ! note space between quotes is required
             & &#146;)
-    ! ASSIGN VALUES TO ELEMENTS
-    call get_args(&#146;x&#146;,x)         ! SCALARS
-    call get_args(&#146;y&#146;,y)
-    call get_args(&#146;z&#146;,z)
-    call get_args(&#146;l&#146;,l)
-    call get_args(&#146;L&#146;,lbig)
-    call get_args(&#146;title&#146;,title) ! ALLOCATABLE STRING
-    call get_args(&#146;point&#146;,point) ! ALLOCATABLE ARRAYS
+     ! Assign values to elements using G_ARGS(3f).
+     ! non-allocatable scalars can be done up to twenty per call
+    call get_args(&#146;x&#146;,x, &#146;y&#146;,y, &#146;z&#146;,z, &#146;l&#146;,l, &#146;L&#146;,lbig)
+     ! As a convenience multiple pairs of keywords and variables may be
+     ! specified if and only if all the values are scalars and the CHARACTER
+     ! variables are fixed-length or pre-allocated.
+     !
+     ! After SET_ARGS(3f) has parsed the command line
+     ! GET_ARGS(3f) retrieves the value of keywords accept for
+     ! two special cases. For fixed-length CHARACTER variables
+     ! see GET_ARGS_FIXED_LENGTH(3f). For fixed-size arrays see
+     ! GET_ARGS_FIXED_SIZE(3f).
+     !
+     ! allocatables should be done one at a time
+    call get_args(&#146;title&#146;,title) ! allocatable string
+    call get_args(&#146;point&#146;,point) ! allocatable arrays
     call get_args(&#146;logicals&#146;,logicals)
-    !
-    ! for NON-ALLOCATABLE VARIABLES
+     !
+     ! less commonly &#46;&#46;&#46;
 <P>
-    ! for non-allocatable string
+     ! for fixed-length strings
     call get_args_fixed_length(&#146;label&#146;,label)
 <P>
-    ! for non-allocatable arrays
+     ! for non-allocatable arrays
     call get_args_fixed_size(&#146;p&#146;,p)
     call get_args_fixed_size(&#146;logi&#146;,logi)
-    !
-    ! USE VALUES
+     !
+     ! all done parsing, use values
     write(*,*)&#146;x=&#146;,x, &#146;y=&#146;,y, &#146;z=&#146;,z, x+y+z
     write(*,*)&#146;p=&#146;,p
     write(*,*)&#146;point=&#146;,point
@@ -200,13 +229,13 @@ Sample program using type <B>get_args</B>() <I>and</I> variants
     write(*,*)&#146;L=&#146;,lbig
     write(*,*)&#146;logicals=&#146;,logicals
     write(*,*)&#146;logi=&#146;,logi
-    !
-    ! unnamed strings
-    !
+     !
+     ! unnamed strings
+     !
     if(size(filenames) &gt; 0)then
        write(*,&#146;(i6.6,3a)&#146;)(i,&#146;[&#146;,filenames(i),&#146;]&#146;,i=1,size(filenames))
     endif
-    !
+     !
     end program demo_M_CLI2
 <P>
 </PRE>
@@ -227,8 +256,50 @@ John S. Urban, 2019
 <BLOCKQUOTE>
 Public Domain
 </BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+get_args(3f)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+get_args_fixed_size(3f)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+get_args_fixed_length(3f)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+get_subcommand(3f)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+set_mode(3f)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+specified(3f)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Note that the convenience routines are described under get_args(3f):
+dget(3f), iget(3f), lget(3f), rget(3f), sget(3f), cget(3f) dgets(3f),
+igets(3f), lgets(3f), rgets(3f), sgets(3f), cgets(3f)
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_CLI2 (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4051ad81-de9d-462d-b587-97f566830d1d using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_CLI2 (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7705f219-a565-4382-90bb-f397efbf01d7 using man macros.</FONT>
 <br><br><center><img src="images/M_CLI2.3m_cli2.gif"></center>
 </div>
 </div>

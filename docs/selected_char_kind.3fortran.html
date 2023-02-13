@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>selected_char_kind</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>selected_char_kind</B>(3fortran)
+<B>selected_char_kind(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+selected_char_kind(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SELECTED_CHAR_KIND(3) </B>- [KIND] Select character kind such as "Unicode"
-<B>
-</B></BLOCKQUOTE>
+SELECTED_CHAR_KIND(3) - [KIND] Select character kind such as "Unicode"
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>selected_char_kind</B>(<I>name</I>)
+result = selected_char_kind(name)
 <P>
+<PRE>
            integer function selected_char_kind(name)
 <P>
             character(len=*),intent(in) :: name
@@ -109,10 +109,10 @@ the result is a default integer scalar
 
 </A>
 <BLOCKQUOTE>
-<B>SELECTED_CHAR_KIND</B>(3) returns a kind parameter value for the character set
+SELECTED_CHAR_KIND(3) returns a kind parameter value for the character set
 named NAME.
 <P>
-If a <I>name</I> is not supported, <B>-1</B> is returned. Otherwise the result is a value
+If a name is not supported, <B>-1</B> is returned. Otherwise the result is a value
 equal to that kind type parameter value.
 <P>
 The list of supported names is processor-dependent except for "DEFAULT".
@@ -123,7 +123,7 @@ The list of supported names is processor-dependent except for "DEFAULT".
 o
 </TD><TD>
 If NAME has the value "DEFAULT", then the result has a value equal to
-that of the kind type parameter of default character. This <I>name</I> is always
+that of the kind type parameter of default character. This name is always
 supported.
 </TD></TR>
 <TR valign=top><TD width=3%>
@@ -142,7 +142,7 @@ that of the kind type parameter of the ISO 10646 character kind
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If NAME is a processor-defined <I>name</I> of some other character kind
+If NAME is a processor-defined name of some other character kind
 supported by the processor, then the result has a value equal to that
 kind type parameter value. Pre-defined names include "ASCII" and
 "ISO_10646".
@@ -159,7 +159,7 @@ kind type parameter value. Pre-defined names include "ASCII" and
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-NAME : A <I>name</I> to query the processor-dependent kind value of, and/or to
+NAME : A name to query the processor-dependent kind value of, and/or to
 determine if supported. NAME, interpreted without respect to case or
 trailing blanks.
 <P>
@@ -216,72 +216,46 @@ Sample program:
              write(*,*)&#146;ASCII is the default on this processor&#146;
          endif
 <P>
+        ! for constants the the kind precedes the value, somewhat like a
+        ! BOZ constant
+         alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"
+         write (*,*) alphabet
+<P>
+         hello_world = ucs4_&#146;Hello World and Ni Hao -- &#146; &
+                       // char (int (z&#146;4F60&#146;), ucs4)     &
+                       // char (int (z&#146;597D&#146;), ucs4)
+<P>
+        ! an encoding option is required on OPEN for non-default I/O
+         if(ucs4 /= -1 )then
+            open (output_unit, encoding=&#146;UTF-8&#146;)
+            write (*,*) trim (hello_world)
+         else
+            write (*,*) &#146;cannot use utf-8&#146;
+         endif
+<P>
+         call create_date_string(string)
+         write (*,*) trim (string)
+<P>
+      contains
+<P>
+      ! The following produces a Japanese date stamp.
+      subroutine create_date_string(string)
+      intrinsic date_and_time,selected_char_kind
+      integer,parameter :: ucs4 = selected_char_kind("ISO_10646")
+      character(len=1,kind=ucs4),parameter :: &
+             nen =   char(int( z&#146;5e74&#146; ),ucs4), & ! year
+             gatsu = char(int( z&#146;6708&#146; ),ucs4), & ! month
+             nichi = char(int( z&#146;65e5&#146; ),ucs4)    ! day
+      character(len= *, kind= ucs4) string
+      integer values(8)
+         call date_and_time(values=values)
+         write(string,101) values(1),nen,values(2),gatsu,values(3),nichi
+       101 format(*(i0,a))
+      end subroutine create_date_string
+<P>
+      end program demo_selected_char_kind
+<P>
 </PRE>
-<BLOCKQUOTE>
-! for constants the the kind precedes the value, somewhat like a
-! BOZ constant
-alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"
-write (*,*) alphabet
-<BLOCKQUOTE>
-<P>
-hello_world = ucs4_&#146;Hello World and Ni Hao -- &#146; &
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: hello_world = ucs4_&#146;Hello World and Ni Hao -- &#146; &
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>// char (int (z&#146;4F60&#146;), ucs4)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-// char (int (z&#146;597D&#146;), ucs4)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
-<P>
-! an encoding option is required on OPEN for non-default I/O
-<B>if</B>(ucs4 /= <B>-1</B> )then
-open (output_unit, encoding=&#146;UTF-8&#146;)
-write (*,*) trim (hello_world)
-else
-write (*,*) &#146;cannot use utf-8&#146;
-endif
-<BLOCKQUOTE>
-<P>
-call <B>create_date_string</B>(string)
-write (*,*) trim (string)
-</BLOCKQUOTE>
-</BLOCKQUOTE>
-<P>
-contains
-<BLOCKQUOTE>
-<P>
-! The following produces a Japanese date stamp.
-subroutine <B>create_date_string</B>(string)
-intrinsic date_and_time,selected_char_kind
-integer,parameter :: ucs4 = <B>selected_char_kind</B>("ISO_10646")
-<B>character</B>(len=1,kind=ucs4),parameter :: &
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ! The following produces a Japanese date stamp.
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>nen =</B> </TD><TD valign=bottom>
-<B>char</B>(int( z&#146;5e74&#146; ),ucs4), & ! year
-gatsu = <B>char</B>(int( z&#146;6708&#146; ),ucs4), & ! month
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>nichi = </B><B>char</B>(int( z&#146;65e5&#146; ),ucs4) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! day
-<B>character</B>(len= *, kind= ucs4) string
-integer <B>values</B>(8)
-call <B>date_and_time</B>(values=values)
-<B>write</B>(string,101) <B>values</B>(1),nen,<B>values</B>(2),gatsu,<B>values</B>(3),nichi
-101 <B>format</B>(*(i0,a))
-end subroutine create_date_string
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-end program demo_selected_char_kind
-</BLOCKQUOTE>
-<P>
 Results:
 <P>
 The results are very processor-dependent
@@ -311,9 +285,9 @@ Fortran 2003
 
 </A>
 <BLOCKQUOTE>
-<B>SELECTED_INT_KIND</B>(3), <B>SELECTED_REAL_KIND</B>(3)
+SELECTED_INT_KIND(3), SELECTED_REAL_KIND(3)
 <P>
-<B>ACHAR</B>(3), <B>CHAR</B>(3), <B>ICHAR</B>(3), <B>IACHAR</B>(3)
+ACHAR(3), CHAR(3), ICHAR(3), IACHAR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -322,7 +296,7 @@ fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_char_kind (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f65420d7-7d74-46db-8a00-1a11d44208fa using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_char_kind (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from eb7f0f2e-df65-4917-824b-a81fc34289ee using man macros.</FONT>
 <br><br><center><img src="images/selected_char_kind.3fortran.gif"></center>
 </div>
 </div>

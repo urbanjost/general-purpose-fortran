@@ -7,4 +7,4 @@
            write(*,*) nearest(1.0_sgl,+1.0),nearest(1.0_sgl,+1.0)-1.0
 
            write(*,*) spacing(1.0_dbl)
-  end program demo_spacing
+        end program demo_spacing

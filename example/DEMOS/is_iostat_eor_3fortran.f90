@@ -27,4 +27,4 @@
 
            close(lun,iostat=ios,status='delete')
 
-    end program demo_is_iostat_eor
+        end program demo_is_iostat_eor

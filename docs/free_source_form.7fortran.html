@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>free_source_form(7f) </B>- [FORTRAN] syntax of free source form statements, comments, and continuation lines
-<B>
-</B></BLOCKQUOTE>
+free_source_form(7f) - [FORTRAN] syntax of free source form statements, comments, and continuation lines
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=4>
@@ -67,9 +67,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-[label] <I>statement</I> [! <I>comment</I>]
-</PRE>
+[label] statement [! comment]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -100,8 +98,8 @@ suffix usually additionally indicates the file should be run through
 a pre-processor (which one -- cpp, fpp, m4, &#46;&#46;&#46; varies with different
 programming environments).
 </TD></TR>
-<TR></TR></TABLE>In free source form there are no restrictions on where a <I>statement</I>
-(or portion of a <I>statement</I>) may appear within a line. A line may
+<TR></TR></TABLE>In free source form there are no restrictions on where a statement
+(or portion of a statement) may appear within a line. A line may
 contain zero characters. If a line consists entirely of characters of
 default kind, it may contain at most 132 characters. If a line contains
 any character that is not of default kind (like a tab character or
@@ -160,13 +158,13 @@ Adjacent keywords where separating blanks are optional
 </A>
 <BLOCKQUOTE>
 <P>
-The character "!" initiates a <I>comment</I> except where it appears within
-a character context. The <I>comment</I>
+The character "!" initiates a comment except where it appears within
+a character context. The comment
 extends to the end of the line. If the first nonblank character on
-a line is an "!", the line is a <I>comment</I> line. Lines containing only
-blanks or containing no characters are also <I>comment</I> lines. Comments may
-appear anywhere in a program unit and may precede the first <I>statement</I>
-of a program unit or may follow the last <I>statement</I> of a program
+a line is an "!", the line is a comment line. Lines containing only
+blanks or containing no characters are also comment lines. Comments may
+appear anywhere in a program unit and may precede the first statement
+of a program unit or may follow the last statement of a program
 unit. Comments have no effect on the interpretation of the program unit.
 <P>
 <PRE>
@@ -182,19 +180,19 @@ unit. Comments have no effect on the interpretation of the program unit.
 </A>
 <BLOCKQUOTE>
 <P>
-The character "&" is used to indicate that the current <I>statement</I> is
+The character "&" is used to indicate that the current statement is
 continued on the next line that is not a
-<I>comment</I> line. Comment lines cannot be continued; an "&" in a <I>comment</I>
-has no effect. Comments may occur within a continued <I>statement</I>. When
-used for continuation, the "&" is not part of the <I>statement</I>. No line
+comment line. Comment lines cannot be continued; an "&" in a comment
+has no effect. Comments may occur within a continued statement. When
+used for continuation, the "&" is not part of the statement. No line
 shall contain a single "&" as the only nonblank character or as the
-only nonblank character before an "!" that initiates a <I>comment</I>.
+only nonblank character before an "!" that initiates a comment.
 <P>
 If a noncharacter context is to be continued, an "&" shall be the last
 nonblank character on the line, or the last
 nonblank character before an "!". There shall be a later line that is
-not a <I>comment</I>; the <I>statement</I> is continued on the next such line. If
-the first nonblank character on that line is an "&", the <I>statement</I>
+not a comment; the statement is continued on the next such line. If
+the first nonblank character on that line is an "&", the statement
 continues at the next character position following that "&"; otherwise,
 it continues with the first character position of that line.
 <P>
@@ -206,8 +204,8 @@ of the split token.
 If a character context is to be continued, an "&" shall be the last
 nonblank character on the line and shall not be
 followed by commentary. There shall be a later line that is not a
-<I>comment</I>; an "&" shall be the first nonblank character on the next such
-line and the <I>statement</I> continues with the next character following that
+comment; an "&" shall be the first nonblank character on the next such
+line and the statement continues with the next character following that
 "&".
 </BLOCKQUOTE>
 <A name=>
@@ -216,13 +214,13 @@ line and the <I>statement</I> continues with the next character following that
 </A>
 <BLOCKQUOTE>
 <P>
-If a <I>statement</I> is not continued, a <I>comment</I> or the end of the line
-terminates the <I>statement</I>.
+If a statement is not continued, a comment or the end of the line
+terminates the statement.
 <P>
-A <I>statement</I> may alternatively be terminated by a ";" character that
+A statement may alternatively be terminated by a ";" character that
 appears other than in a character context
-or in a <I>comment</I>. The ";" is not part of the <I>statement</I>. After a ";"
-terminator, another <I>statement</I> may appear on the same line, or begin
+or in a comment. The ";" is not part of the statement. After a ";"
+terminator, another statement may appear on the same line, or begin
 on that line and be continued. A sequence consisting only of zero
 or more blanks and one or more ";" terminators, in any order, is
 equivalent to a single ";" terminator.
@@ -233,13 +231,13 @@ equivalent to a single ";" terminator.
 </A>
 <BLOCKQUOTE>
 <P>
-A label may precede any <I>statement</I> not forming part of another <I>statement</I>
-(Note that no Fortran <I>statement</I> begins with a digit).
+A label may precede any statement not forming part of another statement
+(Note that no Fortran statement begins with a digit).
 <P>
 It is strongly suggested that numeric labels only be used on CONTINUE
 statements and for labeling FORMAT statements.
 <P>
-A <I>statement</I> shall not have more than 255 continuation lines.
+A statement shall not have more than 255 continuation lines.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -328,7 +326,7 @@ Sample program:
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>free_source_form (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cd8a9158-e943-48eb-9c4c-32d94e30193e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>free_source_form (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 11c6eac4-01f8-4b0d-911e-af31fa180653 using man macros.</FONT>
 <br><br><center><img src="images/free_source_form.7fortran.gif"></center>
 </div>
 </div>

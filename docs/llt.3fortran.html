@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>llt</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>llt</B>(3fortran)
+<B>llt(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+llt(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>LLT(3) </B>- [CHARACTER:COMPARE] ASCII Lexical less than
-<B>
-</B></BLOCKQUOTE>
+LLT(3) - [CHARACTER:COMPARE] ASCII Lexical less than
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>llt</B>(<I>string_a</I>, <I>stringb</I>)
+result = llt(string_a, stringb)
 <P>
+<PRE>
             elemental logical function llt(string_a, string_b)
 <P>
              character(len=*),intent(in) :: string_a
@@ -96,12 +96,12 @@ result = <B>llt</B>(<I>string_a</I>, <I>stringb</I>)
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-**<I>string_a</I>** is default _character_ or an ASCII character.
+**string_a** is default _character_ or an ASCII character.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-**string_b** is the same type and kind as **<I>string_a</I>**
+**string_b** is the same type and kind as **string_a**
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -115,7 +115,7 @@ the result is a default logical
 
 </A>
 <BLOCKQUOTE>
-<B>LLT</B>(3) determines whether one string is lexically less than another string,
+LLT(3) determines whether one string is lexically less than another string,
 where the two strings are interpreted as containing ASCII character codes.
 If the STRING_A and STRING_B are not the same length, the shorter is
 compared as if spaces were appended to it to form a value that has the same
@@ -150,7 +150,7 @@ STRING_B : string to compare to STRING_A
 
 </A>
 <BLOCKQUOTE>
-Returns .true. if <I>string_a</I> &lt;= string_b, and .false. otherwise, based on the
+Returns .true. if string_a &lt;= string_b, and .false. otherwise, based on the
 ASCII collating sequence.
 <P>
 If both input arguments are null strings, .false. is always returned.
@@ -174,51 +174,21 @@ Sample program:
          print *,&#146;the ASCII collating sequence for printable characters&#146;
          write(*,&#146;(1x,19a)&#146;)(char(i),i=32,126) ! ASCII order
 <P>
-</PRE>
-<BLOCKQUOTE>
-! basics
-print *,&#146;case matters&#146;
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ! basics
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>(&#146;abc&#146;,&#146;ABC&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! [F] lowercase is &gt; uppercase
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>(&#146;abc&#146;,&#146;abc </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! If both strings are of zero length the result is false.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>(&#146;&#146;,&#146;&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! [F]
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>(&#146;&#146;,&#146;a&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! [T] the null string is padded
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>(&#146;a&#146;,&#146;&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! [F]
-print *,&#146;elemental&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;]) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! [F F]  scalar and array
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-! [F T]
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>write</B>(*,*) <B>llt</B>([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T F] </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-both arrays
-end program demo_llt
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
+        ! basics
+         print *,&#146;case matters&#146;
+         write(*,*) llt(&#146;abc&#146;,&#146;ABC&#146;)           ! [F] lowercase is &gt; uppercase
+         write(*,*) llt(&#146;abc&#146;,&#146;abc  &#146;)         ! [F] trailing spaces
+         ! If both strings are of zero length the result is false.
+         write(*,*) llt(&#146;&#146;,&#146;&#146;)                 ! [F]
+         write(*,*) llt(&#146;&#146;,&#146;a&#146;)                ! [T] the null string is padded
+         write(*,*) llt(&#146;a&#146;,&#146;&#146;)                ! [F]
+         print *,&#146;elemental&#146;
+         write(*,*) llt(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;])   ! [F F]  scalar and array
+         write(*,*) llt([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;)  ! [F T]
+         write(*,*) llt([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T F]  both arrays
+      end program demo_llt
 <P>
+</PRE>
 Results:
 <P>
 <PRE>
@@ -255,7 +225,7 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
-<B>LGE</B>(3), <B>LGT</B>(3), <B>LLE</B>(3))
+LGE(3), LGT(3), LLE(3))
 <P>
 Functions that perform operations on character strings, return lengths of
 arguments, and search for certain arguments:
@@ -265,12 +235,12 @@ arguments, and search for certain arguments:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3), <B>SCAN</B>(3), <B>VERIFY</B>(3)
+ELEMENTAL: ADJUSTL(3), ADJUSTR(3), INDEX(3), SCAN(3), VERIFY(3)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
+NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -279,7 +249,7 @@ NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>llt (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0fa0a3ed-21c1-4933-a98a-628e2157f625 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>llt (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3a96050e-8df9-42eb-b432-01bde0c6dfb3 using man macros.</FONT>
 <br><br><center><img src="images/llt.3fortran.gif"></center>
 </div>
 </div>

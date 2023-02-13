@@ -10,7 +10,7 @@
         filename='test.in'
         open(unit=fd,file=trim(filename),access='stream',status='old',&
         & iostat=ios,action='read',form='unformatted',iomsg=message)
-        if(ios.ne.0)then
+        if(ios /= 0)then
            write(*,*)&
            '*demo_get_next_char* ERROR: could not open '//&
            trim(filename)
@@ -22,10 +22,10 @@
         ONE_CHAR_AT_A_TIME: do
            ! get next character from buffered read from file
            call get_next_char(fd,c1,ios1)
-           if(ios1.eq.iostat_end)then
+           if(ios1 == iostat_end)then
               ! reached end of file so stop
               stop
-           elseif(ios1.ne.0 )then
+           elseif(ios1 /= 0 )then
               ! error on file read
               write(*,*)&
            '*demo_get_next_char* ERROR: before end of '//&

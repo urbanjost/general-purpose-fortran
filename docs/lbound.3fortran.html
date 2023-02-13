@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>lbound</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>lbound</B>(3fortran)
+<B>lbound(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+lbound(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>LBOUND(3) </B>- [ARRAY:INQUIRY] Lower dimension bounds of an array
-<B>
-</B></BLOCKQUOTE>
+LBOUND(3) - [ARRAY:INQUIRY] Lower dimension bounds of an array
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>lbound</B>(array [,<I>dim</I>] [,<I>kind</I>] )
+result = lbound(array [,dim] [,kind] )
 <P>
+<PRE>
            elemental TYPE(kind=KIND) function lbound(array,dim,kind)
 <P>
             TYPE(kind=KIND),intent(in)           :: array(..)
@@ -110,21 +110,21 @@ unallocated allocatable.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND an integer initialization expression indicating the <I>kind</I> parameter
+KIND an integer initialization expression indicating the kind parameter
 of the result.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is of type integer and of <I>kind</I> KIND. If KIND is absent,
-the return value is of default integer <I>kind</I>. The result is scalar if DIM
+The return value is of type integer and of kind KIND. If KIND is absent,
+the return value is of default integer kind. The result is scalar if DIM
 is present; otherwise, the result is an array of rank one and size n,
 where n is the rank of ARRAY.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -133,6 +133,7 @@ a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
 
 </A>
 <BLOCKQUOTE>
+RESULT(3) returns the lower bounds of an array, or a single lower bound
 along the DIM dimension.
 </BLOCKQUOTE>
 <A name=4>
@@ -156,7 +157,7 @@ of the upper bounds of ARRAY.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : An integer initialization expression indicating the <I>kind</I> parameter
+KIND : An integer initialization expression indicating the kind parameter
 of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -248,11 +249,9 @@ Sample program
           & &#146;SIZE=&#146;,size(arr)
        end subroutine esub
 <P>
-</PRE>
-<BLOCKQUOTE>
-!end program demo_lbound
-</BLOCKQUOTE>
+      !end program demo_lbound
 <P>
+</PRE>
 Results:
 <P>
 <PRE>
@@ -284,24 +283,24 @@ Array inquiry:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>SIZE</B>(3) - Determine the size of an array
+SIZE(3) - Determine the size of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>RANK</B>(3) - Rank of a data object
+RANK(3) - Rank of a data object
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>SHAPE</B>(3) - Determine the shape of an array
+SHAPE(3) - Determine the shape of an array
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>UBOUND</B>(3) - Upper dimension bounds of an array
+UBOUND(3) - Upper dimension bounds of an array
 </TD></TR>
-<TR></TR></TABLE><B>CO_UBOUND</B>(3), <B>_LBOUND</B>(3)
+<TR></TR></TABLE>CO_UBOUND(3), _LBOUND(3)
 <P>
 State Inquiry:
 <TABLE cellpadding=3><!-- tsb: State Inquiry:
@@ -310,12 +309,12 @@ State Inquiry:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>ALLOCATED</B>(3) - Status of an allocatable entity
+ALLOCATED(3) - Status of an allocatable entity
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>IS_CONTIGUOUS</B>(3) - Test if object is contiguous
+IS_CONTIGUOUS(3) - Test if object is contiguous
 </TD></TR>
 <TR></TR></TABLE>Kind Inquiry:
 <TABLE cellpadding=3><!-- tsb: Kind Inquiry:
@@ -324,7 +323,7 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>KIND</B>(3) - Kind of an entity
+KIND(3) - Kind of an entity
 </TD></TR>
 <TR></TR></TABLE>Bit Inquiry:
 <TABLE cellpadding=3><!-- tsb: Bit Inquiry:
@@ -333,17 +332,17 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>STORAGE_SIZE</B>(3) - Storage size in bits
+STORAGE_SIZE(3) - Storage size in bits
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>BIT_SIZE</B>(3) - Bit size inquiry function
+BIT_SIZE(3) - Bit size inquiry function
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>BTEST</B>(3) - Tests a bit of an integer value.
+BTEST(3) - Tests a bit of an integer value.
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -352,7 +351,7 @@ o
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lbound (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a6299b5-265e-4610-9c83-eb5dd73acd59 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lbound (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 91198a83-6f09-4ed1-b5a7-41f5a42bac6a using man macros.</FONT>
 <br><br><center><img src="images/lbound.3fortran.gif"></center>
 </div>
 </div>

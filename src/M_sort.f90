@@ -54,7 +54,8 @@ end interface
 
 interface sort_heap
    module procedure sort_heap_integer_int8, sort_heap_integer_int16, sort_heap_integer_int32, sort_heap_integer_int64
-   module procedure sort_heap_real_real32, sort_heap_real_real64, sort_heap_real_real128
+   module procedure sort_heap_real_real32, sort_heap_real_real64
+   module procedure sort_heap_real_real128
    module procedure sort_heap_character_ascii
 end interface
 !===================================================================================================================================
@@ -63,9 +64,10 @@ end interface
 
 interface unique
 module procedure  unique_integer_int8,            unique_integer_int16,   unique_integer_int32,   unique_integer_int64
-module procedure  unique_real_real32,             unique_real_real64,     unique_real_real128
-module procedure  unique_complex_real32,          unique_complex_real64,  unique_complex_real128
-module procedure  unique_strings_allocatable_len  !!,unique_strings
+module procedure  unique_real_real32,             unique_real_real64
+module procedure  unique_complex_real32,          unique_complex_real64
+module procedure  unique_real_real128,            unique_complex_real128
+module procedure  unique_strings_allocatable_len  !x!,unique_strings
 end interface
 !===================================================================================================================================
 
@@ -325,39 +327,39 @@ contains
 !!
 !!   Sample program
 !!
-!!    program demo_sort_shell
-!!    use M_sort, only : sort_shell
-!!    character(len=:),allocatable :: array(:)
+!!      program demo_sort_shell
+!!      use M_sort, only : sort_shell
+!!      character(len=:),allocatable :: array(:)
 !!
-!!    array= [ character(len=20) ::                               &
-!!    & 'red',    'green', 'blue', 'yellow', 'orange',   'black', &
-!!    & 'white',  'brown', 'gray', 'cyan',   'magenta',           &
-!!    & 'purple']
+!!      array = [                                                     &
+!!      & 'red    ','green  ','blue   ','yellow ','orange ','black  ',&
+!!      & 'white  ','brown  ','gray   ','cyan   ','magenta',          &
+!!      & 'purple ']
 !!
-!!    write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
-!!    call sort_shell(array,order='a')
-!!    write(*,'(a,*(a:,","))')'A-Z    ',(trim(array(i)),i=1,size(array))
-!!    do i=1,size(array)-1
-!!       if(array(i).gt.array(i+1))then
-!!          write(*,*)'Error in sorting strings a-z'
-!!       endif
-!!    enddo
+!!      write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
+!!      call sort_shell(array,order='a')
+!!      write(*,'(a,*(a:,","))')'A-Z    ',(trim(array(i)),i=1,size(array))
+!!      do i=1,size(array)-1
+!!         if(array(i).gt.array(i+1))then
+!!            write(*,*)'Error in sorting strings a-z'
+!!         endif
+!!      enddo
 !!
-!!    array= [ character(len=20) ::                               &
-!!    & 'RED',    'GREEN', 'BLUE', 'YELLOW', 'ORANGE',   'BLACK', &
-!!    & 'WHITE',  'BROWN', 'GRAY', 'CYAN',   'MAGENTA',           &
-!!    & 'PURPLE']
+!!      array= [                                                      &
+!!      & 'RED    ','GREEN  ','BLUE   ','YELLOW ','ORANGE ','BLACK  ',&
+!!      & 'WHITE  ','BROWN  ','GRAY   ','CYAN   ','MAGENTA',          &
+!!      & 'PURPLE ']
 !!
-!!    write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
-!!    call sort_shell(array,order='d')
-!!    write(*,'(a,*(a:,","))')'Z-A    ',(trim(array(i)),i=1,size(array))
-!!    do i=1,size(array)-1
-!!       if(array(i).lt.array(i+1))then
-!!          write(*,*)'Error in sorting strings z-a'
-!!       endif
-!!    enddo
+!!      write(*,'(a,*(a:,","))')'BEFORE ',(trim(array(i)),i=1,size(array))
+!!      call sort_shell(array,order='d')
+!!      write(*,'(a,*(a:,","))')'Z-A    ',(trim(array(i)),i=1,size(array))
+!!      do i=1,size(array)-1
+!!         if(array(i).lt.array(i+1))then
+!!            write(*,*)'Error in sorting strings z-a'
+!!         endif
+!!      enddo
 !!
-!!    end program demo_sort_shell
+!!      end program demo_sort_shell
 !!
 !!   Expected output
 !!
@@ -371,8 +373,8 @@ contains
 !!       YELLOW,WHITE,RED,PURPLE,ORANGE,MAGENTA,GREEN,GRAY,CYAN,BROWN,BLUE,BLACK
 !!
 !!##REFERENCE
-!!    1. ALGORITHM 201, SHELLSORT, J. BOOTHROYD, CACM VOL. 6, NO. 8, P 445, (1963)
-!!    2. D. L. SHELL, CACM, VOL. 2, P. 30, (1959)
+!!    1. Algorithm 201, SHELLSORT, J. Boothroyd, CACM Vol. 6, No. 8, P 445, (1963)
+!!    2. D. L. Shell, CACM, Vol. 2, P. 30, (1959)
 !!
 !!##AUTHOR
 !!      John S. Urban, 19970201
@@ -4222,7 +4224,6 @@ integer                              :: i,isize
 ! unique >>>>>>>>>>>
 end subroutine unique_complex_real128
 ! unique_template >>>>>>>>>>>
-
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4330,27 +4331,27 @@ end subroutine unique_allocatable_strings
 !!    integer             :: one2(3,3)=1
 !!    integer             :: two2(3,3)=2
 !!
-!!       print *, "integers before swap ", iarray
+!!       print *, "integers before swap", iarray
 !!       call swap (iarray(1), iarray(2))
-!!       print *, "integers after swap  ", iarray
+!!       print *, "integers after swap ", iarray
 !!
-!!       print *, "reals before swap ", rarray
+!!       print *, "reals before swap", rarray
 !!       call swap (rarray(1), rarray(2))
-!!       print *, "reals after swap  ", rarray
+!!       print *, "reals after swap ", rarray
 !!
-!!       print *, "doubles before swap ", darray
+!!       print *, "doubles before swap", darray
 !!       call swap (darray(1), darray(2))
-!!       print *, "doubles after swap  ", darray
+!!       print *, "doubles after swap ", darray
 !!
-!!       print *, "complexes before swap ", carray
+!!       print *, "complexes before swap", carray
 !!       call swap (carray(1), carray(2))
-!!       print *, "complexes after swap  ", carray
+!!       print *, "complexes after swap ", carray
 !!
-!!       print *, "logicals before swap ", larray
+!!       print *, "logicals before swap", larray
 !!       call swap (larray(1), larray(2))
-!!       print *, "logicals after swap  ", larray
+!!       print *, "logicals after swap ", larray
 !!
-!!       print *, "strings before swap ", string
+!!       print *, "strings before swap", string
 !!       call swap (string(1), string(2))
 !!       print *, "strings after swap ", string
 !!
@@ -4400,18 +4401,18 @@ end subroutine unique_allocatable_strings
 !!
 !!   Expected Results:
 !!
-!!    > integers before swap           10          20
-!!    > integers after swap            20          10
-!!    > reals before swap    11.1099997       22.2199993
-!!    > reals after swap     22.2199993       11.1099997
-!!    > doubles before swap    1234.5678900000000        9876.5432099999998
-!!    > doubles after swap     9876.5432099999998        1234.5678900000000
-!!    > complexes before swap  (1234.00000,56789.0000) (9876.00000,54321.0000)
-!!    > complexes after swap   (9876.00000,54321.0000) (1234.00000,56789.0000)
-!!    > logicals before swap  T F
-!!    > logicals after swap   F T
+!!    > integers before swap          10          20
+!!    > integers after swap           20          10
+!!    > reals before swap   11.1099997       22.2199993
+!!    > reals after swap    22.2199993       11.1099997
+!!    > doubles before swap   1234.5678900000000        9876.5432099999998
+!!    > doubles after swap    9876.5432099999998        1234.5678900000000
+!!    > complexes before swap (1234.00000,56789.0000) (9876.00000,54321.0000)
+!!    > complexes after swap  (9876.00000,54321.0000) (1234.00000,56789.0000)
+!!    > logicals before swap T F
+!!    > logicals after swap  F T
 !!    > strings before swap First string    The other string
-!!    > strings after swap The other stringFirst string
+!!    > strings after swap  The other stringFirst string
 !!    > swap two vectors
 !!    >one before: 1,1,1,1,1,1,1,1,1,1,1,1,1
 !!    >two before: 2,2,2,2,2,2,2,2,2,2,2,2,2
@@ -4837,10 +4838,10 @@ end subroutine swap_string
 !!    > integers after swap_any            20          10
 !!    > reals before swap_any    11.1099997       22.2199993
 !!    > reals after swap_any     22.2199993       11.1099997
-!!    > doubles before swap_any    1234.5678900000000        9876.5432099999998
-!!    > doubles after swap_any     9876.5432099999998        1234.5678900000000
-!!    > complexes before swap_any  (1234.00000,56789.0000) (9876.00000,54321.0000)
-!!    > complexes after swap_any   (9876.00000,54321.0000) (1234.00000,56789.0000)
+!!    > doubles before swap_any   1234.5678900000000        9876.5432099999998
+!!    > doubles after swap_any    9876.5432099999998        1234.5678900000000
+!!    > complexes before swap_any (1234.00000,56789.0000) (9876.00000,54321.0000)
+!!    > complexes after swap_any  (9876.00000,54321.0000) (1234.00000,56789.0000)
 !!    > logicals before swap_any  T F
 !!    > logicals after swap_any   F T
 !!    > strings before swap_any First string    The other string
@@ -5074,9 +5075,7 @@ end subroutine tree_print
 !!   Sample program
 !!
 !!    program demo_anything_to_bytes
-!!    use M_sort,      only : anything_to_bytes
-!!    !!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-!!    !!use, intrinsic :: iso_fortran_env, only : real32, real64, real128
+!!    use M_sort, only : anything_to_bytes
 !!    implicit none
 !!    integer :: i
 !!       write(*,'(/,4(1x,z2.2))')anything_to_bytes([(i*i,i=1,10)])
@@ -5117,8 +5116,11 @@ implicit none
 
 class(*),intent(in)          :: anything(:)
 character(len=1),allocatable :: chars(:)
-   select type(anything)
 
+   if(allocated(chars))deallocate(chars)
+   allocate(chars( storage_size(anything)/8 * size(anything) ) )
+
+   select type(anything)
     type is (character(len=*));     chars=transfer(anything,chars)
     type is (complex);              chars=transfer(anything,chars)
     type is (complex(kind=dp));     chars=transfer(anything,chars)
@@ -5131,9 +5133,10 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
-
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
    end select
+
 end function anything_to_bytes_arr
 !-----------------------------------------------------------------------------------------------------------------------------------
 function  anything_to_bytes_scalar(anything) result(chars)
@@ -5143,8 +5146,10 @@ implicit none
 
 class(*),intent(in)          :: anything
 character(len=1),allocatable :: chars(:)
-   select type(anything)
+   if(allocated(chars))deallocate(chars)
+   allocate(chars( storage_size(anything)/8) )
 
+   select type(anything)
     type is (character(len=*));     chars=transfer(anything,chars)
     type is (complex);              chars=transfer(anything,chars)
     type is (complex(kind=dp));     chars=transfer(anything,chars)
@@ -5157,9 +5162,10 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      stop 'crud. anything_to_bytes_scalar(1) does not know about this type'
-
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      !stop 'crud. anything_to_bytes_scalar(1) does not know about this type'
    end select
+
 end function  anything_to_bytes_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -5199,7 +5205,33 @@ end function  anything_to_bytes_scalar
 !!
 !!   Sample program
 !!
-!!   Expected output
+!!      program demo_bytes_to_anything
+!!      use M_sort, only : bytes_to_anything
+!!      use M_sort, only : anything_to_bytes
+!!      implicit none
+!!      character(len=1),allocatable :: chars(:)
+!!      integer :: ints(10)
+!!      integer :: i
+!!         chars=anything_to_bytes([(i*i,i=1,size(ints))])
+!!         write(*,'(/,4(1x,z2.2))')chars
+!!         call bytes_to_anything(chars,ints)
+!!         write(*,'(*(g0,1x))')ints
+!!      end program demo_bytes_to_anything
+!!
+!! Results:
+!!
+!!     >
+!!     >  01 00 00 00
+!!     >  04 00 00 00
+!!     >  09 00 00 00
+!!     >  10 00 00 00
+!!     >  19 00 00 00
+!!     >  24 00 00 00
+!!     >  31 00 00 00
+!!     >  40 00 00 00
+!!     >  51 00 00 00
+!!     >  64 00 00 00
+!!     >  1     4     9    16    25    36    49    64    81   100
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -5316,6 +5348,11 @@ real(kind=real64),intent(in) :: input(:)
 integer :: counts(size(input)), i
    counts=[(count(input(i) > input)+count(input(i) == input(:i)), i=1,size(input) )]
 end function sort_real64
+function sort_real128(input) result(counts)
+real(kind=real128),intent(in) :: input(:)
+integer :: counts(size(input)), i
+   counts=[(count(input(i) > input)+count(input(i) == input(:i)), i=1,size(input) )]
+end function sort_real128
 function sort_character(input) result(counts)
 character(len=*),intent(in) :: input(:)
 integer :: counts(size(input)), i
@@ -5394,7 +5431,7 @@ end function sort_character
 !!    ii=ii(indx)
 !!    do i=1,isz-1
 !!       if(ii(i).gt.ii(i+1))then
-!!          write(*,*)'Error in sorting integer small to large ',i,ii(i),ii(i+1)
+!!          write(*,*)'Error sorting integers small to large ',i,ii(i),ii(i+1)
 !!       endif
 !!    enddo
 !!    write(*,*)'test of integer sort_heap(3f) complete'
@@ -5405,7 +5442,7 @@ end function sort_character
 !!    cc=cc(indx)
 !!    do i=1,isz-1
 !!       if(cc(i).gt.cc(i+1))then
-!!          write(*,*)'Error in sorting character small to large ',i,cc(i),cc(i+1)
+!!          write(*,*)'Error sorting characters small to large ',i,cc(i),cc(i+1)
 !!       endif
 !!    enddo
 !!    write(*,*)'test of character sort_heap(3f) complete'
@@ -5414,7 +5451,7 @@ end function sort_character
 !!
 !!    function random_string(chars,length) result(out)
 !!
-!!    !$@(#) M_random::random_string(3f): create random string from provided chars
+!!    ! create random string from provided chars
 !!
 !!    character(len=*),intent(in)     :: chars
 !!    integer,intent(in)              :: length

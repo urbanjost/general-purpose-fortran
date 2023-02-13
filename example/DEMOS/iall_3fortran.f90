@@ -9,4 +9,4 @@
 
            print '(b8.8)', iall(a)
 
-    end program demo_iall
+        end program demo_iall

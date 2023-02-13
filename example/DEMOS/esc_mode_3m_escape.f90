@@ -24,4 +24,4 @@
        call esc_mode(manner='ansi')  ! return to default mode
        write(*,'(a)')esc(trim(line))
 
-    end program demo_esc_mode
+     end program demo_esc_mode

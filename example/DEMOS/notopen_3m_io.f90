@@ -7,7 +7,7 @@
       write(*,*)'(5 and 6 always return -1)'
 
       do ii=0,1000
-         if(notopen(ii,ii,ierr) .ne. ii)then
+         if(notopen(ii,ii,ierr)  /=  ii)then
             write(*,*)'INUSE:',ii, notopen(ii,ii,ierr)
          endif
       enddo

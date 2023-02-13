@@ -10,4 +10,4 @@
            print *, precision(x), range(x)
            print *, precision(y), range(y)
            print *, precision(z), range(z)
-  end program demo_selected_real_kind
+        end program demo_selected_real_kind

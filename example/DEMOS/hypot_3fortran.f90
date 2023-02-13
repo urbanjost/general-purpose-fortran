@@ -23,4 +23,4 @@
            write(*,f)"have distances from the origin of ",hypot(xs,ys)
            write(*,f)"the closest is",minval(hypot(xs,ys))
 
-    end program demo_hypot
+        end program demo_hypot

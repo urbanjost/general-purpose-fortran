@@ -50,34 +50,36 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>User Commands  &nbsp;-&nbsp;</I><NOBR>flower (1)</NOBR><HR></H1>
 </CENTER>
+<BLOCKQUOTE>
+help_text=[ CHARACTER(LEN=128) :: &
+</BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>flower(1f) </B>- [DEVELOPER] change case of free-format Fortran file
-<B>or remove code or remove comments
-</B><B>(LICENSE:PD)
-</B></BLOCKQUOTE>
+fman(1f) - [DEVELOPER] output descriptions of Fortran intrinsics
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
 <A HREF=#4>Examples</A><BR>
-<A HREF=#5>Exit Status</A><BR>
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>flower</B> [ <B>--stat</B>|[ [-<B>-nocomment</B>|<B>--nocode</B>] [-<B>-toupper</B>]|[-<B>-verbose</B>] ]
-<B>FILENAMES</B>(s) ]|[-<B>-help</B>|<B>--version</B>|<B>--usage</B>]
-</PRE>
+fman NAME(s) [[-ignorecase][-<B>-regex</B> Regular_Expression]]|[-topic_only]
+[-<B>-color</B>][-<B>-demo</B>]
+<P>
+fman [ <B>--help</B>| <B>--version</B>]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -85,48 +87,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+fman(1) prints descriptions of Fortran intrinsics as simple flat text.
 <P>
-<P>
-<P>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-<B>flower</B>(1) is primarily intended to allow for a preference of lowercase
-characters when working with older uppercase-only FORTRAN this program
-will convert the code to lowercase once the code has been converted
-to free-format Fortran source file format.
-<P>
-It can also convert the code to uppercase. In each case comments and
-quoted text are left as-is.
-<P>
-This is a basic program that writes its results to stdout and does
-not recognize Hollerith strings and preprocessor directives as
-special cases.
-<P>
-Tabs should be expanded before processing the file.
-<P>
-<B>flower</B>(1) depends on the input being plain standard free-format
-Fortran so the output should be carefully checked.
-</TD></TR>
-<TR valign=top><TD width=4%>
-2.
-</TD><TD>
-It may also be used to generate simple statistics about what percentage
-of the code is comments.
-</TD></TR>
-<TR valign=top><TD width=4%>
-3.
-</TD><TD>
-<B>flower</B>(1) can also be used to strip the comments from the code.
-</TD></TR>
-<TR valign=top><TD width=4%>
-4.
-</TD><TD>
-Lastly, the code can be removed so the comments can be used for documentation
-or run through utilities like spell checkers.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+The text is formatted in the txt2man(1) markdown language so one can easily
+generate man-pages on ULS (Unix-Like Systems).
+</BLOCKQUOTE>
 <A name=3>
 
      <H3>OPTIONS</H3>
@@ -135,41 +100,44 @@ or run through utilities like spell checkers.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>FILENAME</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Fortran source file which is to be converted to lowercase
+<B>TOPIC(s)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A list of Fortran intrinsic names or the special names
+"toc" and "manual" (which generate a table of contents
+and the entire set of documents respecively).
+The default is "toc" and to ignore case.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>--nocomment</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-remove comment characters
+<B></B><B>--regex</B>,<B>-e</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Search all output per the provided Regular Expression.
+Output is prefixed with the topic it was found in.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>--nocode</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-remove code characters
+<B></B><B>--topic_only</B>,<B>-t</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Only show topic names. Other switches are ignored.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>--toupper</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-convert code characters to uppercase instead of lowercase
+<B></B><B>--ignorecase</B>,<B>-i</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Ignore case when searching for a Regular Expression.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>--verbose</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-turn on verbose mode including file statistics. Note
-that if <B>--nocomment</B> and <B>--nocode</B> are selected <B>--verbose</B>
-is implied.
+<B></B><B>--demo</B>,<B>-d</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+extract first demo program found for a topic (starting with
+"program demo_*" and ending with "end program demo_*").
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>--stat</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-is the same as <B>--nocomment</B> <B>--nocode</B> <B>--verbose</B>, meaning
-no other output than file statistics will be produced.
-If present, <B>--nocomment</B>, <B>--nocode</B>, and <B>--verbose</B> are
-ignored.
+<B></B><B>--color</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Use ANSI in-line escape sequences to display the text in
+set colors. Does not work with all terminal emulators or
+terminals. Must use the <B>-r</B> switch with less(1) for less(1)
+to display colors.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--help</B> </TD><TD valign=bottom>
+Display this help and exit
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>--help</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-display help text and exit
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-display version text and exit
+<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Output version information and exit
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -178,46 +146,26 @@ display version text and exit
 
 </A>
 <BLOCKQUOTE>
-Typical usage
+Sample commands
 <P>
 <PRE>
-     # convert all code to lowercase
-     flower sample.f90 &gt; sample_new.f90
+   fman                 # list table of contents
+   fman -e character    # check TOC for string. try "trigo","size","complex"
+   fman tan|less        # display a description of tan(3f)
 <P>
-     # show stats for files measuring percent of comments
-     flower --stat *.f90 *.F90
+   fman --regex &#146;&#146;character&#146;&#146; # look for string in the TOC ignoring case
 <P>
-     # check spelling on comments
-     flower --nocode *.f90 *.F90|spell
+   fman manual&gt;fortran.txt    # create a copy of all descriptions
 <P>
-     # grep code ignoring comments
-     flower --nocomment *.f90 *.F90|grep -iw contains
+   # list the topic "scan" if found and lines containing "scan" from the entire
+   # manual, prefixing the lines with the section name, while ignoring case.
+   fman -e scan -i manual
 <P>
+   fman -d verify &gt;demo_verify.f90 # get sample program to try VERIFY(3f).
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
-
-     <H3>EXIT STATUS</H3>
-
-</A>
-<BLOCKQUOTE>
-The following exit values are returned:
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: The following exit values are returned:
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>0</B> </TD><TD valign=bottom>
-no differences were found
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>1</B> </TD><TD valign=bottom>
-differences were found
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>flower (1)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a21ea3d9-8722-4888-8587-6b20b526bbba using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>flower (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b1711314-30c2-417a-a979-68180f76ef61 using man macros.</FONT>
 <br><br><center><img src="images/flower.1.gif"></center>
 </div>
 </div>

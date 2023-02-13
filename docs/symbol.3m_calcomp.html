@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>symbol(3f) </B>- [M_calcomp:basic] draw text string or marker
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+symbol(3f) - [M_calcomp:basic] draw text string or marker
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,9 +75,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>The</B> "standard" <I>call</I> <I>which</I> <I>produces</I> <I>a</I> <I>line</I> <I>of</I> <I>text</I> is:
+The "standard" call which produces a line of text is:
 <P>
+<PRE>
        subroutine symbol(xpage,ypage,height,ibcd,inteq,angle,+nchar)
 <P>
 </PRE>
@@ -89,8 +89,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-<B>The</B> SYMBOL subroutine <I>produces</I> plot annotation at any angle
-and in practically any size. There are two SYMBOL <I>call</I> formats:
+The SYMBOL subroutine produces plot annotation at any angle
+and in practically any size. There are two SYMBOL call formats:
 <P>
 <PRE>
      1) the "standard" call, which can be used to draw text such
@@ -101,24 +101,24 @@ and in practically any size. There are two SYMBOL <I>call</I> formats:
         denoting data points.
 <P>
 </PRE>
-Both forms <I>of</I> the SYMBOL calling sequence have seven arguments.
-Which form is being used is determined by the value <I>of</I> the NCHAR
+Both forms of the SYMBOL calling sequence have seven arguments.
+Which form is being used is determined by the value of the NCHAR
 parameter.
 <P>
-<B>The</B> standard characters that are drawn by SYMBOL include the
+The standard characters that are drawn by SYMBOL include the
 letters A-Z, digits 0-9, and certain special characters. See Table 2
-for <I>a</I> description <I>of</I> CALCOMP&#146;s symbol table.
+for a description of CALCOMP&#146;s symbol table.
 <P>
-<B>The</B> parameter NCHAR is used to specify whether <I>a</I> <I>text</I> string
-or <I>a</I> single symbol is being plotted. If NCHAR is &gt;= 0, the <I>text</I>
-string in IBCD is used. If NCHAR= <B>-1</B> or <B>-2</B>, <I>a</I> single symbol is
-produced using the value <I>of</I> INTEQ (Which MUST then be between 0 and
+The parameter NCHAR is used to specify whether a text string
+or a single symbol is being plotted. If NCHAR is &gt;= 0, the text
+string in IBCD is used. If NCHAR= <B>-1</B> or <B>-2</B>, a single symbol is
+produced using the value of INTEQ (Which MUST then be between 0 and
 90, inclusive).
 <P>
 It is recommended that 999 be used for INTEQ when NCHAR is greater
-than or equal to zero, and either <I>a</I> dummy character variable (e.g.
-<B>CHARACTER</B>(len=1) :: DUMMY) or <I>a</I> literal character string (e.g. &#146; &#146;) be used
-for IBCD when NCHAR is less than zero (not just <I>a</I> plain word as <I>a</I>
+than or equal to zero, and either a dummy character variable (e.g.
+CHARACTER(len=1) :: DUMMY) or a literal character string (e.g. &#146; &#146;) be used
+for IBCD when NCHAR is less than zero (not just a plain word as a
 dummy variable)!
 </BLOCKQUOTE>
 <A name=3>
@@ -131,32 +131,32 @@ dummy variable)!
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B>XPAGE, YPAGE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-are the coordinates, in inches, <I>of</I> the lower left-hand
-corner (before character rotation) <I>of</I> the first character
-to be produced. <B>The</B> pen is up while moving to this point.
+are the coordinates, in inches, of the lower left-hand
+corner (before character rotation) of the first character
+to be produced. The pen is up while moving to this point.
 <P>
 Annotation may be continued from the position following
-that at <I>which</I> the last annotation ended. Continuation
+that at which the last annotation ended. Continuation
 occurs when XPAGE and/or YPAGE equals 999.0, and may be
 applied to X or Y independently. (Calling WHERE to
 obtain the current pen position and using RXPAGE, RYPAGE
-in another <I>call</I> to SYMBOL would not give the same results
+in another call to SYMBOL would not give the same results
 as using 999.)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>HEIGHT</B> </TD><TD valign=bottom>
-is the height, in inches, <I>of</I> the <B>character</B>(s) to be
-plotted. For best results, it should be <I>a</I> multiple <I>of</I>
-seven times the standard CALCOMP increment size <I>of</I> 0.01
+is the height, in inches, of the character(s) to be
+plotted. For best results, it should be a multiple of
+seven times the standard CALCOMP increment size of 0.01
 (e.g., 0.07, 0.14, 0.21), but other values are
-acceptable. <B>The</B> width <I>of</I> <I>a</I> character, including spacing,
-is normally the same as the height (e.g., <I>a</I> string <I>of</I> 10
+acceptable. The width of a character, including spacing,
+is normally the same as the height (e.g., a string of 10
 characters 0.14 inch high is 1.4 inches wide).
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>IBCD</B> </TD><TD valign=bottom>
-is the <I>text</I> to be used as annotation. <B>The</B> <B>character</B>(s)
-must be in <I>a</I> character array or single variable. (<B>The</B>
+is the text to be used as annotation. The character(s)
+must be in a character array or single variable. (The
 data should be stored as TYPE CHARACTER.)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
@@ -165,22 +165,22 @@ Ignored (Assuming NCHAR is positive!)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>ANGLE</B> </TD><TD valign=bottom>
-is the angle, in degrees from the X axis, at <I>which</I> the
+is the angle, in degrees from the X axis, at which the
 annotation is to be plotted. If ANGLE=0.0, the
-<B>character</B>(s) will be plotted right side up and parallel
-to the X axis. <B>The</B> absolute magnitude <I>of</I> ANGLE can not
+character(s) will be plotted right side up and parallel
+to the X axis. The absolute magnitude of ANGLE can not
 exceed 1800 degrees.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>+NCHAR</B> </TD><TD valign=bottom>
-is the number <I>of</I> characters to be plotted from IBCD.
+is the number of characters to be plotted from IBCD.
 If NCHAR=0, one alphanumeric character is produced, using
-<I>a</I> single character <I>which</I> is the first element <I>of</I> IBCD.
+a single character which is the first element of IBCD.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
-For example, the following <I>call</I> to SYMBOL will result in the characters TITLE
-10 being output beginning at the X and Y coordinates <I>of</I> 1.0 .
+For example, the following call to SYMBOL will result in the characters TITLE
+10 being output beginning at the X and Y coordinates of 1.0 .
 <P>
 <PRE>
     character grlbl*8
@@ -195,10 +195,10 @@ For example, the following <I>call</I> to SYMBOL will result in the characters T
 </A>
 <BLOCKQUOTE>
 <P>
-A second form is the "special" <I>call</I>, <I>which</I> <I>produces</I> only <I>a</I> single symbol
-based on the value <I>of</I> INTEQ - not on the ASCII representation <I>of</I> <I>a</I> character.
+A second form is the "special" call, which produces only a single symbol
+based on the value of INTEQ - not on the ASCII representation of a character.
 <P>
-<B>The</B> "special" <I>call</I> is:
+The "special" call is:
 <P>
 <PRE>
        call symbol(xpage,ypage,height,ibcd,inteq,angle,-nchar)
@@ -208,19 +208,19 @@ based on the value <I>of</I> INTEQ - not on the ASCII representation <I>of</I> <
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B>XPAGE, YPAGE,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-are the same as described for the "standard" <I>call</I>. If
+are the same as described for the "standard" call. If
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>and ANGLE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-the symbol to be produced is one <I>of</I> the centered symbols
+the symbol to be produced is one of the centered symbols
 (e.g., if INTEQ is less than 14), XPAGE, YPAGE represent
-the geometric center <I>of</I> the character produced.
+the geometric center of the character produced.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>HEIGHT</B> </TD><TD valign=bottom>
-is the height (and width), in inches, <I>of</I> the centered
-symbol to be drawn. Preferably, it should be <I>a</I> multiple
-<I>of</I> four times the CALCOMP 0.01 increment size.
+is the height (and width), in inches, of the centered
+symbol to be drawn. Preferably, it should be a multiple
+of four times the CALCOMP 0.01 increment size.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>IBCD</B> </TD><TD valign=bottom>
@@ -228,9 +228,9 @@ Ignored (assuming NCHAR is negative!)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>INTEQ</B> </TD><TD valign=bottom>
-is the integer equivalent <I>of</I> the desired symbol. Valid
+is the integer equivalent of the desired symbol. Valid
 integers and their symbols are listed in the Symbol Table
-(Table 2). If INTEQ is 0 through 14, <I>a</I> centered symbol
+(Table 2). If INTEQ is 0 through 14, a centered symbol
 is produced. INTEQ <B>-MUST</B>- be greater than or equal to zero
 and less than or equal to 90 .
 </TD></TR>
@@ -241,23 +241,23 @@ during the move to XPAGE, YPAGE.
 <P>
 When NCHAR is:
 <P>
-<B>-1</B>, the pen is up during the move, after <I>which</I> <I>a</I> single
+<B>-1</B>, the pen is up during the move, after which a single
 symbol is produced.
 <P>
-<B>-2</B>, or less, the pen is down during the move, after <I>which</I>
-<I>a</I> single symbol is produced.
+<B>-2</B>, or less, the pen is down during the move, after which
+a single symbol is produced.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
-For example, the following <I>call</I> to SYMBOL will result in special symbol
-number 5 being output with its center at X and Y coordinates <I>of</I> 1.0 .
+For example, the following call to SYMBOL will result in special symbol
+number 5 being output with its center at X and Y coordinates of 1.0 .
 <P>
 <PRE>
        CALL SYMBOL(1.0,1.0,0.16,&#146; &#146;,5,0.0,-1)
 <P>
 </PRE>
 Table 2 shows the current symbols available and the integer equivalents for
-each symbol <I>which</I> are used in the "special" <I>call</I>. When <I>a</I> "standard" <I>call</I> to
+each symbol which are used in the "special" call. When a "standard" call to
 SYMBOL is made, the host computer&#146;s internal characters are translated to the
 appropriate characters from this table.
 </BLOCKQUOTE>
@@ -334,7 +334,7 @@ Sample program
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>symbol (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 815a9287-4c58-4d32-a3e8-7dda9607703c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>symbol (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2ecb51ec-0607-4af5-88af-140ecb1bd035 using man macros.</FONT>
 <br><br><center><img src="images/symbol.3m_calcomp.gif"></center>
 </div>
 </div>

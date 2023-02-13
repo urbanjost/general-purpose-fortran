@@ -56,11 +56,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_verify(3fm) </B>- [M_verify::INTRO] a collection of Fortran routines for
-<B>supporting code development by providing error
-</B><B>processing, debugging procedures and unit testing.
-</B><B>(LICENSE:PD)
-</B></BLOCKQUOTE>
+M_verify(3fm) - [M_verify::INTRO] a collection of Fortran routines for
+supporting code development by providing error
+processing, debugging procedures and unit testing.
+(LICENSE:PD)
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -76,10 +76,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
+<P>
+Module procedures
+<P>
 <PRE>
-<P>
-<B>Module</B> <I>procedures</I>
-<P>
    use M_verify, only : unit_check, unit_check_start, unit_check_done, unit_check_stop
    use M_verify, only : unit_check_good, unit_check_bad
    use M_verify, only : unit_check_msg
@@ -88,7 +88,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    use M_verify, only : assert
 <P>
 </PRE>
-<B>Module</B> <I>values</I>
+Module values
 <P>
 <PRE>
    use M_verify, only : unit_check_limit, unit_check_keep_going
@@ -111,11 +111,11 @@ to your heart.
 
 </A>
 <BLOCKQUOTE>
-The <B>M_verify</B>(3fm) Fortran module provides <I>procedures</I> and variables
+The M_verify(3fm) Fortran module provides procedures and variables
 useful for providing error processing, debugging capabilities, and
 unit testing.
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: The <B>M_verify</B>(3fm) Fortran module provides <I>procedures</I> and variables
+<TABLE cellpadding=3><!-- tsb: The M_verify(3fm) Fortran module provides procedures and variables
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -128,7 +128,7 @@ mail failure alerts, &#46;&#46;&#46;
 o
 </TD><TD>
 supports easily composing a message from up to nine scalar
-intrinsic <I>values</I> and different message levels
+intrinsic values and different message levels
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -171,7 +171,7 @@ name of command to execute. Defaults to the name
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>unit_check_start</B>(3f) </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B>unit_check_start(3f)</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 start tests of a procedure and optionally call
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
@@ -182,7 +182,7 @@ start tests of a procedure and optionally call
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>unit_check</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 if expression is false optionally call
 </TD></TR>
 <TR><TD colspan=2>
@@ -190,38 +190,35 @@ if expression is false optionally call
                              command NAME bad
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 and stop program (by default)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>unit_check_done</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check_done(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 call
 </TD></TR>
-<TR><TD colspan=2>
+<TR></TR></TABLE><!-- .nf -->
 <PRE>
                              command NAME good
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 if no failures; else call
 <P>
 <PRE>
                              command NAME bad
 </PRE>
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<TABLE cellpadding=3>
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:                              command NAME bad
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>unit_check_stop</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check_stop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 stop program with exit value of 0 if no failures
 else with an exit value of 1
 <TABLE width=100% cellpadding=3><!-- tsb: stop program with exit value of 0 if no failures
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>unit_check_good</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check_good(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 call command
 </TD></TR>
 <TR><TD colspan=2>
@@ -231,7 +228,7 @@ call command
 </PRE>
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>unit_check_bad</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check_bad(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 call command
 </TD></TR>
 <TR><TD colspan=2>
@@ -239,12 +236,10 @@ call command
                              command NAME bad
 <P>
 </PRE>
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
 and stop program by default
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>unit_check_msg</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_check_msg(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 write message
 </TD></TR>
 <TR></TR></TABLE></TD></TR>
@@ -255,12 +250,12 @@ write message
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>fstop</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>fstop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 calls &#146;STOP VALUE&#146; passing in a value (1-32),
 with optional message
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>pdec</B>(3f) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>pdec(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 write ASCII Decimal Equivalent (ADE) numbers
 vertically beneath string
 </TD></TR>
@@ -272,12 +267,12 @@ as a flag to process debug statements.
 <TR></TR></TABLE>For unit testing, the existence of a command called "goodbad" is
 initially assumed. This is generally a script that makes entries
 for each unit in an SQLite data file which is then used to create
-CSV and HTML reports on the status of each unit. A sample <B>goodbad</B>(1)
-command written in the <B>bash</B>(1) shell and using the <B>sqlite3</B>(1) command
+CSV and HTML reports on the status of each unit. A sample goodbad(1)
+command written in the bash(1) shell and using the sqlite3(1) command
 should be included in this distribution as an example.
 <P>
 The flexibility introduced by calling an external script or program
-is that The <B>goodbad</B>(1) command can be changed as desired to write CSV
+is that The goodbad(1) command can be changed as desired to write CSV
 files or simple logs or to notify developers with e-mail as desired.
 </BLOCKQUOTE>
 <A name=>
@@ -286,15 +281,15 @@ files or simple logs or to notify developers with e-mail as desired.
 </A>
 <BLOCKQUOTE>
 <P>
-The routines in <B>M_verify</B>(3f) are often combined with the <B>M_hashkeys</B>(3fm)
+The routines in M_verify(3f) are often combined with the M_hashkeys(3fm)
 routines and various math and statistical routines to quickly create
 unit tests.
 <P>
-Comparisons of real <I>values</I> can be done with a tolerance with
-<B>M_Compare_Float_Numbers</B>(3fm), for example.
+Comparisons of real values can be done with a tolerance with
+M_Compare_Float_Numbers(3fm), for example.
 <P>
-The intrinsics <B>ANY</B>(3f) and <B>ALL</B>(3f) are particularly useful in calls
-to <B>unit_check</B>(3f).
+The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls
+to unit_check(3f).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -426,7 +421,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_verify (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9eedd2f6-e83a-4ea9-ba7a-ef9f7cf0fef0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_verify (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e27a4fe0-c715-4f58-8cf7-69e1f5bc0853 using man macros.</FONT>
 <br><br><center><img src="images/M_verify.3m_verify.gif"></center>
 </div>
 </div>

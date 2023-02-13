@@ -56,17 +56,17 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>set_args(3f) </B>- [ARGUMENTS:M_CLI2] command line argument parsing
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+set_args(3f) - [ARGUMENTS:M_CLI2] command line argument parsing
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
 <A HREF=#4>Defining The Prototype</A><BR>
-<A HREF=#5>Usage</A><BR>
+<A HREF=#5>Usage Notes</A><BR>
 <A HREF=#6>Example</A><BR>
 <A HREF=#7>Response Files</A><BR>
 <A HREF=#8>Specification For Response Files</A><BR>
@@ -79,10 +79,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-subroutine <B>set_args</B>(definition,help_text,version_text,ierr,errmsg)
+subroutine set_args(prototype,help_text,version_text,ierr,errmsg)
 <P>
-     character(len=*),intent(in),optional              :: definition
+<PRE>
+     character(len=*),intent(in),optional              :: prototype
      character(len=*),intent(in),optional              :: help_text(:)
      character(len=*),intent(in),optional              :: version_text(:)
      integer,intent(out),optional                      :: ierr
@@ -96,12 +96,14 @@ subroutine <B>set_args</B>(definition,help_text,version_text,ierr,errmsg)
 </A>
 <BLOCKQUOTE>
 <P>
-<B>SET_ARGS</B>(3f) requires a unix-like command prototype for defining
-arguments and default command-line options. Argument values are then
-read using <B>GET_ARGS</B>(3f).
+SET_ARGS(3f) requires a unix-like command prototype which defines
+the command-line options and their default values. When the program
+is executed this and the command-line options are applied and the
+resulting values are placed in an internal table for retrieval via
+GET_ARGS(3f).
 <P>
-The <B>--help</B> and <B>--version</B> options require the optional
-help_text and version_text values to be provided.
+The built-in <B>--help</B> and <B>--version</B> options require optional help_text
+and version_text values to be provided to be particularly useful.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -112,53 +114,45 @@ help_text and version_text values to be provided.
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>DEFINITION</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>PROTOTYPE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 composed of all command arguments concatenated
 into a Unix-like command prototype string. For
 example:
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
-                call set_args(&#146;-L F -ints 10,20,30 -title "my title" -R 10.3&#146;)
+                call set_args(&#146;-L F --ints 1,2,3 --title "my title" -R 10.3&#146;)
 <P>
 </PRE>
+The following options are predefined for all commands:
 </TD></TR>
 <TR><TD width=6%>&nbsp;</TD><TD>
-DEFINITION is pre-defined to act as if started with
-the reserved options &#146;<B>--verbose</B> F <B>--usage</B> F <B>--help</B>
-F <B>--version</B> F&#146;. The <B>--usage</B> option is processed when
-the <B>set_args</B>(3f) routine is called. The same is true
-for <B>--help</B> and <B>--version</B> if the optional help_text
-and version_text options are provided.
 <P>
 see "DEFINING THE PROTOTYPE" in the next section for
 further details.
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>HELP_TEXT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if present, will be displayed if program is called with
-<B>--help</B> switch, and then the program will terminate. If
-not supplied, the command line initialization string
-will be shown when <B>--help</B> is used on the commandline.
-<TABLE width=100% cellpadding=3><!-- tsb: if present, will be displayed if program is called with
- -->
-<TR></TR><TR></TR>
+if present, will be displayed when the program is called with
+a <B>--help</B> switch, and then the program will terminate. If
+help text is not supplied the command line initialization
+string will be echoed.
+</TD></TR>
 <TR valign=top><TD colspan=2>
 <B>VERSION_TEXT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if present, will be displayed if program is called with
-<B>--version</B> switch, and then the program will terminate.
+if present, any version text defined will be displayed
+when the program is called with a <B>--version</B> switch,
+and then the program will terminate.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>IERR</B> </TD><TD valign=bottom>
 if present a non-zero option is returned when an
-error occurs instead of program execution being
-terminated
+error occurs instead of the program terminating.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>ERRMSG</B> </TD><TD valign=bottom>
-a description of the error if ierr is present
+a description of the error if ierr is present.
 </TD></TR>
-<TR></TR></TABLE></TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
@@ -166,23 +160,34 @@ a description of the error if ierr is present
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
+Keywords start with a single dash for short single-character
+keywords, and with two dashes for longer keywords.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
 all keywords on the prototype MUST get a value.
+<TABLE width=100% cellpadding=3><!-- tsb: all keywords on the prototype MUST get a value.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+logicals must be set to an unquoted F.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-logicals MUST be set to F or T.
+strings must be delimited with double-quotes.
+Since internal double-quotes are represented with two
+double-quotes the string must be at least one space.
 </TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-strings MUST be delimited with double-quotes and
-must be at least one space. Internal double-quotes
-are represented with two double-quotes.
+<TR></TR></TABLE><!-- .IP \(bu 3 -->
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -196,112 +201,147 @@ o
 lists of values should be comma-delimited unless a
 user-specified delimiter is used. The prototype
 must use the same array delimiters as the call to
-the family of get_args*(3f) called.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-long names (<B>--keyword</B>) should be all lowercase
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-The simplest way to have short names is to suffix the long
-name with :LETTER If this syntax is used then logical shorts
-may be combined on the command line and -- and - prefixes are
-strictly enforced.
-<P>
-mapping of short names to long names not using the
-<B>--LONGNAME</B>:SHORTNAME syntax is demonstrated in the manpage
-for <B>SPECIFIED</B>(3f).
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-A very special behavior occurs if the keyword name ends in ::.
-The next parameter is taken as a value even if it starts with -.
-This is not generally recommended but is noted here for
-completeness.
+get the value.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 to define a zero-length allocatable array make the
-value a delimiter (usually a comma).
+value a delimiter (usually a comma) or an empty set
+of braces ("[]").
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LONG AND SHORT NAMES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Long keywords start with two dashes followed by more than one letter.
+Short keywords are a dash followed by a single letter.
+<TABLE cellpadding=3><!-- tsb: Long keywords start with two dashes followed by more than one letter.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+It is recommended long names (<B>--keyword</B>) should be all lowercase
+but are case-sensitive by default, unless "set_mode(&#146;ignorecase&#146;)"
+is in effect.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-all unused values go into the character array UNNAMED
+Long names should always be more than one character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The recommended way to have short names is to suffix the long
+name with :LETTER in the definition.
+<P>
+If this syntax is used then logical shorts may be combined on the
+command line when "set_mode(&#146;strict&#146;)" is in effect.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SPECIAL BEHAVIORS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A special behavior occurs if a keyword name ends in ::.
+When the program is called the next parameter is taken as
+a value even if it starts with -. This is not generally
+recommended but is useful in rare cases where non-numeric
+values starting with a dash are desired.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 If the prototype ends with "--" a special mode is turned
 on where anything after "--" on input goes into the variable
-REMAINING and the array ARGS instead of becoming elements in
-the UNNAMED array. This is not needed for normal processing.
+REMAINING with values double-quoted and also into the array ARGS
+instead of becoming elements in the UNNAMED array. This is not
+needed for normal processing, but was needed for a program that
+needed this behavior for its subcommands.
+<P>
+That is, for a normal call all unnamed values go into UNNAMED
+and ARGS and REMAINING are ignored. So for
+<P>
+<PRE>
+         call set_args(&#146;-x 10 -y 20 &#146;)
+<P>
+</PRE>
+A program invocation such as
+<P>
+<PRE>
+         xx a b c -- A B C " dd "
+<P>
+</PRE>
+results in
+<P>
+<PRE>
+      UNNAMED= [&#146;a&#146;,&#146;b&#146;,&#146;c&#146;,&#146;A&#146;,&#146;B&#146;,&#146;C&#146;,&#146; dd&#146;]
+      REMAINING= &#146;&#146;
+      ARGS= [character(len=0) :: ] ! ie, an empty character array
+<P>
+</PRE>
+Whereas
+<P>
+<PRE>
+      call set_args(&#146;-x 10 -y 20 --&#146;)
+<P>
+</PRE>
+generates the following output from the same program execution:
+<P>
+<PRE>
+      UNNAMED= [&#146;a&#146;,&#146;b&#146;,&#146;c&#146;]
+      REMAINING= &#146;"A" "B" "C" " dd "&#146;
+      ARGS= [&#146;A&#146;,&#146;B&#146;,&#146;C,&#146; dd&#146;]
+<P>
+</PRE>
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
-     <H3>USAGE</H3>
+     <H3>USAGE NOTES</H3>
 
 </A>
 <BLOCKQUOTE>
-When invoking the program line note that (subject to change) the
-following variations from other common command-line parsers:
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: When invoking the program line note that (subject to change) the
+When invoking the program line note the (subject to change)
+following restrictions (which often differ between various
+command-line parsers):
+<TABLE cellpadding=3><!-- tsb: When invoking the program line note the (subject to change)
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Long names should be all lowercase and always more than one
-character.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
 values for duplicate keywords are appended together with a space
-separator when a command line is executed.
+separator when a command line is executed by default.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-numeric keywords are not allowed; but this allows
-negative numbers to be used as values.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-Although not generally recommended you can equivalence
-keywords (usually for multi-lingual support). Be aware that
-specifying both names of an equivalenced keyword on a command
-line will have undefined results (currently, their ASCII
-alphabetical order will define what the Fortran variable
-values become).
-<P>
-The second of the names should only be called with a
-GET_ARGS*(3f) routine if the <B>SPECIFIED</B>(3f) function is .TRUE.
-for that name.
-<P>
-Note that allocatable arrays cannot be EQUIVALENCEd in Fortran.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-short keywords cannot be combined unless they were defined
-using the <B>--LONGNAME</B>:SHORTNAME syntax. Even then <B>-a</B> <B>-b</B> <B>-c</B>
-is required not <B>-abc</B> unless all the keywords are logicals
-(Boolean keys).
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-shuffling is not supported. Values should follow their
+shuffling is not supported. Values immediately follow their
 keywords.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Only short Boolean keywords can be bundled together.
+If allowing bundling is desired call "set_mode(&#146;strict&#146;)".
+This will require prefixing long names with "--" and short
+names with "-". Otherwise M_CLI2 relaxes that requirement
+and mostly does not care what prefix is used for a keyword.
+But this would make it unclear what was meant by "<B>-ox</B>" if
+allowed options were "<B>-o</B> F <B>-x</B> F <B>--ox</B> F " for example, so
+"strict" mode is required to remove the ambiguity.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -312,23 +352,21 @@ converted to the string "stdin".
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-values not matching a keyword go into the character
-array "UNUSED".
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-if the keyword "--" is encountered the rest of the
-command arguments go into the character array "UNUSED".
+values not needed for a keyword value go into the character
+array "UNNAMED".
+<P>
+In addition if the keyword "--" is encountered on the command
+line the rest of the command line goes into the character array
+"UNNAMED".
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
 <A name=6>
 
      <H3>EXAMPLE</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
@@ -353,12 +391,12 @@ Sample program:
        & -p -1,-2,-3 &
        ! always double-quote strings
        & --title "my title" &
-       ! set all logical values to F or T.
+       ! string should be a single character at a minimum
+       & --label " ", &
+       ! set all logical values to F
        & -l F -L F &
        ! set allocatable size to zero if you like by using a delimiter
-       & -ints , &
-       ! string should be a single character at a minimum
-       & --label " " &
+       & --ints , &
        & &#146;)
     ! ASSIGN VALUES TO ELEMENTS
     !     SCALARS
@@ -395,12 +433,12 @@ Sample program:
 <BLOCKQUOTE>
 <P>
 If you have no interest in using external files as abbreviations
-you can ignore this section. Otherwise, before calling <B>set_args</B>(3f)
+you can ignore this section. Otherwise, before calling set_args(3f)
 add:
 <P>
 <PRE>
-    use M_CLI2, only : CLI_response_file
-    CLI_response_file=.true.
+    use M_CLI2, only : set_mode
+    call set_mode(&#146;response_file&#146;)
 <P>
 </PRE>
 M_CLI2 Response files are small files containing CLI (Command Line
@@ -566,13 +604,12 @@ So if a program that does nothing but echos its parameters
 <P>
 <PRE>
    program testit
-   use M_CLI2, only : set_args, rget, sget, lget
-   use M_CLI2, only : CLI_response_file
+   use M_CLI2, only : set_args, rget, sget, lget, set_mode
    implicit none
       real :: x,y                           ; namelist/args/ x,y
       character(len=:),allocatable :: title ; namelist/args/ title
       logical :: big                        ; namelist/args/ big
-      CLI_response_file=.true.
+      call set_mode(&#146;response_file&#146;)
       call set_args(&#146;-x 10.0 -y 20.0 --title "my title" --big F&#146;)
       x=rget(&#146;x&#146;)
       y=rget(&#146;y&#146;)
@@ -730,7 +767,7 @@ John S. Urban, 2019
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>set_args (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 510079e1-af5c-44f7-a30b-4169d76ad748 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>set_args (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a31c829c-66f0-4fe2-8b88-a0cc5cde3bce using man macros.</FONT>
 <br><br><center><img src="images/set_args.3m_cli2.gif"></center>
 </div>
 </div>

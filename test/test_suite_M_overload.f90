@@ -56,16 +56,17 @@ subroutine test_sign()
          &  -ccall        n &
          &  -archive      GPF.a &
          & ')
-   call unit_check('sign',sign(10_int8).eq.1.and.sign(-10_int8).eq.-1,'sign(+-10_int8)',sign(10_int8),sign(-10_int8))
-   call unit_check('sign',sign(10_int16).eq.1.and.sign(-10_int16).eq.-1,'sign(+-10_int16)',sign(10_int16),sign(-10_int16))
-   call unit_check('sign',sign(10_int32).eq.1.and.sign(-10_int32).eq.-1,'sign(+-10_int32)',sign(10_int32),sign(-10_int32))
-   call unit_check('sign',sign(10_int64).eq.1.and.sign(-10_int64).eq.-1,'sign(+-10_int64)',sign(10_int64),sign(-10_int64))
+   ! add 0+ to avoid gfortran-11 bug
+   call unit_check('sign',sign(10_int8).eq.1.and.sign(-10_int8).eq.-1,'sign(+-10_int8)',0+sign(10_int8),0+sign(-10_int8))
+   call unit_check('sign',sign(10_int16).eq.1.and.sign(-10_int16).eq.-1,'sign(+-10_int16)',0+sign(10_int16),0+sign(-10_int16))
+   call unit_check('sign',sign(10_int32).eq.1.and.sign(-10_int32).eq.-1,'sign(+-10_int32)',0+sign(10_int32),0+sign(-10_int32))
+   call unit_check('sign',sign(10_int64).eq.1.and.sign(-10_int64).eq.-1,'sign(+-10_int64)',0+sign(10_int64),0+sign(-10_int64))
    call unit_check('sign',sign(10.0_real32).eq.1.and.sign(-10.0_real32).eq.-1,&
-   & 'sign(+-10_real32)',sign(10.0_real32),sign(-10.0_real32))
-   call unit_check('sign',sign(10.0_real64).eq.1.and.sign(-10.0_real64).eq.-1,&
-   & 'sign(+-10_real64)',sign(10.0_real64),sign(-10.0_real64))
-   call unit_check('sign',sign(10.0_real128).eq.1.and.sign(-10.0_real128).eq.-1,&
-   & 'sign(+-10_real128)',sign(10.0_real128),sign(-10.0_real128))
+   & 'sign(+-10_real32)',0+sign(10.0_real32),0+sign(-10.0_real32))
+   call unit_check('sign',0+sign(10.0_real64).eq.1.and.sign(-10.0_real64).eq.-1,&
+   & 'sign(+-10_real64)',0+sign(10.0_real64),0+sign(-10.0_real64))
+   call unit_check('sign',0+sign(10.0_real128).eq.1.and.0+sign(-10.0_real128).eq.-1,&
+   & 'sign(+-10_real128)',0+sign(10.0_real128),0+sign(-10.0_real128))
    call unit_check_done('sign',msg='')
 end subroutine test_sign
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

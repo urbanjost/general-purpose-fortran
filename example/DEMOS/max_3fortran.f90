@@ -50,4 +50,4 @@
            ! as being a copy of one of the arrays with all values set to
            ! the scalar value.
 
-    end program demo_max
+        end program demo_max

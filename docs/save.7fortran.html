@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>SAVE(7f) </B>- [FORTRAN:STATEMENT:ATTRIBUTE] specifies that a local variable retains its status and value after a RETURN
-<B>
+SAVE(7f) - [FORTRAN:STATEMENT:ATTRIBUTE] specifies that a local variable retains its status and value after a RETURN
+<P>
 </BLOCKQUOTE>
-</B><B>
+<P>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=5>
@@ -68,9 +68,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>SAVE</B> [ [ :: ] <I>saved-entity-list</I> ]
+SAVE [ [ :: ] saved-entity-list ]
 <P>
+<PRE>
       saved-entity                 is object-name
                                    or proc-pointer-name
                                    or / common-block-name /
@@ -78,7 +78,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
       proc-pointer-name            is   name
 <P>
 </PRE>
-<B>or</B> <I>as</I> <I>an</I> <I>attribute</I> <I>of</I> <I>a</I> <I>data</I> <I>entity</I> declaration. <I>For</I> example,
+or as an attribute of a data entity declaration. For example,
 <P>
 <PRE>
       INTEGER,SAVE :: II
@@ -92,38 +92,38 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-1 The <B>SAVE</B> <I>attribute</I> specifies that <I>a</I> local variable <I>of</I> <I>a</I> program unit <B>or</B> subprogram retains its association status,
-allocation status, definition status, and value after execution <I>of</I> <I>a</I> RETURN <B>or</B> END statement unless it is <I>a</I>
-pointer and its target becomes undefined. If it is <I>a</I> local variable <I>of</I> <I>a</I> subprogram it is shared by all
-instances <I>of</I> the subprogram.
+1 The SAVE attribute specifies that a local variable of a program unit or subprogram retains its association status,
+allocation status, definition status, and value after execution of a RETURN or END statement unless it is a
+pointer and its target becomes undefined. If it is a local variable of a subprogram it is shared by all
+instances of the subprogram.
 <BLOCKQUOTE>
 <P>
-An <I>entity</I> with the <B>SAVE</B> <I>attribute</I> shall be <I>a</I> common block, variable, <B>or</B> procedure pointer.
+An entity with the SAVE attribute shall be a common block, variable, or procedure pointer.
 <P>
-The <B>SAVE</B> <I>attribute</I> shall not be specified for <I>a</I> dummy argument, <I>a</I> function result, <I>an</I> automatic <I>data</I>
-object, <B>or</B> <I>an</I> object that is in <I>a</I> common block.
+The SAVE attribute shall not be specified for a dummy argument, a function result, an automatic data
+object, or an object that is in a common block.
 <P>
-If <I>a</I> <B>SAVE</B> statement with <I>an</I> omitted saved <I>entity</I> list appears in <I>a</I> scoping unit, no other
-appearance <I>of</I> the <B>SAVE</B> attr-spec <B>or</B> <B>SAVE</B> statement is permitted in that scoping unit.
+If a SAVE statement with an omitted saved entity list appears in a scoping unit, no other
+appearance of the SAVE attr-spec or SAVE statement is permitted in that scoping unit.
 <P>
-A local variable <I>of</I> <I>a</I> pure subprogram, <B>or</B> <I>of</I> <I>a</I> BLOCK construct within
-<I>a</I> pure subprogram, shall not have the <B>SAVE</B> <I>attribute</I>. Variable
-initialization in <I>a</I> type-declaration-stmt <B>or</B> <I>a</I> <I>data</I>-stmt implies the
-<B>SAVE</B> <I>attribute</I>; therefore, such initialization is also disallowed in
-<I>a</I> pure subprogram.
+A local variable of a pure subprogram, or of a BLOCK construct within
+a pure subprogram, shall not have the SAVE attribute. Variable
+initialization in a type-declaration-stmt or a data-stmt implies the
+SAVE attribute; therefore, such initialization is also disallowed in
+a pure subprogram.
 </BLOCKQUOTE>
 <P>
-2 The <B>SAVE</B> <I>attribute</I> specifies that <I>a</I> local variable <I>of</I> <I>a</I> BLOCK construct retains its association status, allocation
-status, definition status, and value after termination <I>of</I> the construct unless it is <I>a</I> pointer and its target becomes
-undefined (16.5.2.5(6)). If the BLOCK construct is within <I>a</I> subprogram the variable is shared by all instances
-(12.6.2.4) <I>of</I> the subprogram.
+2 The SAVE attribute specifies that a local variable of a BLOCK construct retains its association status, allocation
+status, definition status, and value after termination of the construct unless it is a pointer and its target becomes
+undefined (16.5.2.5(6)). If the BLOCK construct is within a subprogram the variable is shared by all instances
+(12.6.2.4) of the subprogram.
 <P>
-3 Giving <I>a</I> common block the <B>SAVE</B> <I>attribute</I> confers the <I>attribute</I> on all entities in the common block.
+3 Giving a common block the SAVE attribute confers the attribute on all entities in the common block.
 <P>
-4 A variable, common block, <B>or</B> procedure pointer declared in the scoping unit <I>of</I> <I>a</I> main program, module, <B>or</B>
-submodule implicitly has the <B>SAVE</B> <I>attribute</I>, which may be confirmed by explicit specification. If <I>a</I> common
-block has the <B>SAVE</B> <I>attribute</I> in any other kind <I>of</I> scoping unit, it shall have the <B>SAVE</B> <I>attribute</I> in every scoping
-unit that is not <I>a</I> main program, module, <B>or</B> submodule.
+4 A variable, common block, or procedure pointer declared in the scoping unit of a main program, module, or
+submodule implicitly has the SAVE attribute, which may be confirmed by explicit specification. If a common
+block has the SAVE attribute in any other kind of scoping unit, it shall have the SAVE attribute in every scoping
+unit that is not a main program, module, or submodule.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -132,7 +132,7 @@ unit that is not <I>a</I> main program, module, <B>or</B> submodule.
 </A>
 <BLOCKQUOTE>
 <P>
-1 A blank common block has the same properties <I>as</I> <I>a</I> named common block, except for the following.
+1 A blank common block has the same properties as a named common block, except for the following.
 <P>
 <PRE>
       Execution of a RETURN or END statement might cause data objects
@@ -141,21 +141,21 @@ unit that is not <I>a</I> main program, module, <B>or</B> submodule.
       never causes data objects in blank common to become undefined.
 <P>
 </PRE>
+2 When the execution of a procedure is terminated by execution of a RETURN or END statement, an unsaved
+allocatable local variable of the procedure retains its allocation and definition status if it is a function result
+variable or a subobject thereof; otherwise, it is deallocated.
 <BLOCKQUOTE>
-2 When the execution <I>of</I> <I>a</I> procedure is terminated by execution <I>of</I> <I>a</I> RETURN <B>or</B> END statement, <I>an</I> unsaved
-allocatable local variable <I>of</I> the procedure retains its allocation and definition status if it is <I>a</I> function result
-variable <B>or</B> <I>a</I> subobject thereof; otherwise, it is deallocated.
 <P>
-3 When <I>a</I> BLOCK construct terminates, <I>an</I> unsaved allocatable local variable <I>of</I> the construct is deallocated.
+3 When a BLOCK construct terminates, an unsaved allocatable local variable of the construct is deallocated.
 </BLOCKQUOTE>
 <P>
-1 A <B>SAVE</B> statement with <I>a</I> saved <I>entity</I> list specifies the <B>SAVE</B> <I>attribute</I> (5.3.16) for <I>a</I> list <I>of</I> entities. A <B>SAVE</B>
-statement without <I>a</I> saved <I>entity</I> list is treated <I>as</I> though it contained the names <I>of</I> all allowed items in the same
+1 A SAVE statement with a saved entity list specifies the SAVE attribute (5.3.16) for a list of entities. A SAVE
+statement without a saved entity list is treated as though it contained the names of all allowed items in the same
 scoping unit.
 <P>
-3 Explicit initialization <I>of</I> <I>a</I> variable that is not in <I>a</I> common block implies the <B>SAVE</B> <I>attribute</I>, which may be
+3 Explicit initialization of a variable that is not in a common block implies the SAVE attribute, which may be
 confirmed by explicit specification.
-3 The BIND <I>attribute</I> for <I>a</I> variable <B>or</B> common block implies the <B>SAVE</B> <I>attribute</I>, which may be confirmed by
+3 The BIND attribute for a variable or common block implies the SAVE attribute, which may be confirmed by
 explicit specification.
 </BLOCKQUOTE>
 <A name=4>
@@ -164,7 +164,7 @@ explicit specification.
 
 </A>
 <BLOCKQUOTE>
-To assign the <B>SAVE</B> <I>attribute</I> to all local variables in <I>a</I> subprogram
+To assign the SAVE attribute to all local variables in a subprogram
 </BLOCKQUOTE>
 <A name=>
 
@@ -172,13 +172,13 @@ To assign the <B>SAVE</B> <I>attribute</I> to all local variables in <I>a</I> su
 </A>
 <BLOCKQUOTE>
 <P>
-An example <I>of</I> <I>a</I> typical <B>SAVE</B> statement is:
+An example of a typical SAVE statement is:
 <P>
 <PRE>
     SAVE A, B, C, / BLOCKA /, D
 <P>
 </PRE>
-Example with <I>an</I> allocatable variable
+Example with an allocatable variable
 <P>
 <PRE>
     subroutine process
@@ -188,14 +188,14 @@ Example with <I>an</I> allocatable variable
     end subroutine process
 <P>
 </PRE>
-on return from subroutine PROCESS, the allocation status <I>of</I> X is
-preserved because X has the <B>SAVE</B> <I>attribute</I>. TEMP does not have the
-<B>SAVE</B> <I>attribute</I>, so it will be deallocated if it was allocated. On
-the next invocation <I>of</I> PROCESS, TEMP will have <I>an</I> allocation status
-<I>of</I> unallocated.
+on return from subroutine PROCESS, the allocation status of X is
+preserved because X has the SAVE attribute. TEMP does not have the
+SAVE attribute, so it will be deallocated if it was allocated. On
+the next invocation of PROCESS, TEMP will have an allocation status
+of unallocated.
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>save (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7f32c9fa-1348-446c-b128-705aee13ef86 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>save (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 84b510b4-d8db-4a00-89e3-90eafe302287 using man macros.</FONT>
 <br><br><center><img src="images/save.7fortran.gif"></center>
 </div>
 </div>

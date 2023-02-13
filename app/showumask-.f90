@@ -45,28 +45,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!   showumask-(1f) - [FUNIX] show umask in decimal, octal, hex, and binary
-!!   (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!   showumask- [ -help|-version]
-!!
-!!##DESCRIPTION
-!!    example program calling system_getumask(3f) to get umask value.
-!!
-!!##EXAMPLE
-!!
-!!
-!!    showumask-
-!!
-!!     18 O'0022' Z'12' B'000000010010'
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -87,7 +65,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-12-21 19:28:54 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 12:23:34 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -4,7 +4,7 @@ program rever
 ! ??? - how to make stdin and stdout and stderr stream files  ???
 !- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 use iso_fortran_env, only : output_unit                                          ! access computing environment
-use M_io, only      : slurp, notopen
+use M_io, only      : filebyte, notopen
 use M_verify, only   : stderr
 use M_kracken, only : kracken, sgets, lget, IPvalue
 use M_strings, only : split
@@ -37,7 +37,7 @@ implicit none
       & access='stream')
    end select
 !- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-   call slurp(files(1),text)                                                     ! allocate character array and copy file into it
+   call filebyte(files(1),text)                                                  ! allocate character array and copy file into it
 !- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
    if(.not.allocated(text))then
       call stderr('*reverse* failed to load file '//trim(files(1)))
@@ -131,7 +131,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-12-21 19:28:14 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 18:33:51 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

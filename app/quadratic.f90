@@ -131,7 +131,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    Calculate and print the roots of a quadratic formula even if they are complex>',&
 '@(#)VERSION:        2.0, 20180825>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-12-21 19:30:08 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 18:39:24 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

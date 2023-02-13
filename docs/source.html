@@ -552,7 +552,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_CLI2.f90">../src/M_CLI2.f90</a></td>
 <td>
-	 M_CLI2 str(3f) {msg_scalar msg_one}<br/>
 	<br/>
 	'|tr '<br/>
 	 M_CLI2 set_args(3f) parse prototype string<br/>
@@ -564,7 +563,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_CLI2 get_subcommand(3f) parse prototype string to get subcommand allowing for response files<br/>
 	 M_CLI2 prototype_to_dictionary(3f) parse user command and store tokens into dictionary<br/>
 	 M_CLI2 prototype_and_cmd_args_to_nlist create dictionary from prototype if not null and update from command line<br/>
-	 M_CLI2 strtok(3f) Tokenize a string<br/>
 	 M_CLI2 get_anyarray_l(3f) given keyword fetch logical array from string in dictionary(F on err)<br/>
 	 M_CLI2 get_anyarray_d(3f) given keyword fetch dble value array from Language Dictionary (0 on err)<br/>
 	M_CLI2::get_anyarray_c(3f): Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
@@ -572,15 +570,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_CLI2 get_fixedarray_fixed_length_c(3f) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
 	 M_CLI2 get_scalar_anylength_c(3f) Fetch string value for specified KEYWORD from the lang. dictionary<br/>
 	 M_CLI2 get_args_fixed_length_scalar_c(3f) Fetch string value for specified KEYWORD from the lang. dictionary<br/>
-	 M_CLI2 journal(3f) writes a message to a string composed of any standard scalar types<br/>
 	 M_CLI2 upper(3f) Changes a string to uppercase<br/>
 	 M_CLI2 lower(3f) Changes a string to lowercase over specified range<br/>
 	 M_CLI2 split(3f) parse string on delimiter characters and store tokens into an allocatable array<br/>
 	 M_CLI2 replace_str(3f) Globally replace one substring for another in string<br/>
-	 M_CLI2 merge_str(3f) pads first and second arguments to MERGE(3f) to same length<br/>
 	 M_CLI2 decodebase(3f) convert whole number string in base [2-36] to base 10 number<br/>
-	 M_CLI2 lenset(3f) return string trimmed or padded to specified length<br/>
-	 M_CLI2 substitute(3f) Globally substitute one substring for another in string<br/>
 	 M_CLI2 locate_c(3f) find PLACE in sorted character array LIST where VALUE can be found or should be placed<br/>
 	 M_strings atleast(3f) return string padded to at least specified length<br/>
 	 M_CLI2 locate_key(3f) find PLACE in sorted character array where VALUE can be found or should be placed<br/>
@@ -931,11 +925,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_io.f90">../src/M_io.f90</a></td>
 <td>
-	 M_io read_table(3f) read file containing a table of numeric values<br/>
 	 M_io rd(3f) ask for string or number from standard input with user-definable prompt<br/>
+	 M_io read_table(3f) read file containing a table of numeric values<br/>
 	 M_io uniq(3f) append a number to the end of filename to make a unique name if name exists<br/>
 	 M_io print_inquire(3f) Do INQUIRE on file by name/number and print results<br/>
-	 M_io slurp(3f) allocate text array and read file filename into it<br/>
+	 M_io filebyte(3f) allocate text array and read file filename into it<br/>
 	 determine number or lines in file given a LUN to the open file<br/>
 	 M_io notopen(3f) find free FORTRAN unit number to OPEN() a file<br/>
 	 M_io dirname(3f) strip last component from filename<br/>
@@ -1316,7 +1310,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_sort sort_quick_rx_complex_int64(3f) indexed hybrid quicksort of a real array<br/>
 	 M_sort tree_insert(3f) sort a number of integers by building a tree sorted in infix order<br/>
 	 M_sort tree_print(3f)<br/>
-	 M_random::random_string(3f): create random string from provided chars<br/>
 </td>
 <tr><td><a href="../src/M_sqlite.f90">../src/M_sqlite.f90</a></td>
 <td>
@@ -1325,33 +1318,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_steam67.f90">../src/M_steam67.f90</a></td>
 <td>
-	M_steam67::steam67(3f): 1967 ASME Steam Table Library<br/>
-	M_steam67::condv67(3f): compute thermal conductivity of water at pressure P and temperature T<br/>
-	M_steam67::condl67(3f): return thermal conductivity given P,T<br/>
-	M_steam67::do67(3f)L summation of a polynomial<br/>
-	M_steam67::cpl67(3f):  calculates specific isobaric head capacity of water at pressure P and temperature T<br/>
-	M_steam67::cpv67(3f): calculates specific isobaric heat capacity and specific volume of water at pressure P and temperature T<br/>
-	M_steam67::crflo67(3f): critical flow and degrees superheat of wet/superheated steam at PRES,ENTH<br/>
-	M_steam67::function critvs67(press, enth, gamma)<br/>
-	M_steam67::entry critvw67(press, enth, gamma)<br/>
-	M_steam67::critical flow(3f): velocity and isentropic exponent of wet/superheated steam<br/>
-	M_steam67::hcsl67(3f): calculate specific enthalpy/volume and entropy of liquid(P,T)<br/>
-	M_steam67::hcslvl67(3f): calculate V,S,specific enthalpy for liquid given (P,T)<br/>
-	M_steam67::hcslv267(3f): calculate specific enthalpy, specific volume, and entropy of the liquid at P and T<br/>
-	M_steam67::hss67(3f): specific enthalpy = HSS67(P,T,s,v)<br/>
-	M_steam67::hsl67(3f): specific enthalpy = HSS67(P,T,s,v)<br/>
-	M_steam67::psl67(3f): calculate saturation pressure of the saturated liquid at temperature T<br/>
-	M_steam67::psl167(3f): calculate saturation pressure of the saturated liquid at temperature T.<br/>
-	M_steam67::psv67(3f):  calculate saturation pressure of the saturated liquid at entropy SS in psia<br/>
-	M_steam67::psv167(3f): calculate saturation pressure of the saturated liquid at entropy SS in psia<br/>
-	M_steam67::psv267(3f): calculate saturation pressure in psia of the saturated liquid at entropy SS.<br/>
-	M_steam67::pls67(3f):  saturation pressure of the saturated liquid at entropy SS.<br/>
-	M_steam67::sssiss67(3f): specific entropy, temperature, specific volume, steam quality of liquid at pressure P and enthalpy H<br/>
-	M_steam67::hssiss67(3f):  specific enthalpy, temperature, specific volume, steam quality of water at pressure P and entropy S<br/>
-	M_steam67::hcl67(3f): calculate specific enthalpy and entropy of water at pressure P and temp T<br/>
-	M_steam67::p23t67(3f)<br/>
-	M_steam67::zsrh67(3f) calculate remaining variables at extremities of isentropic process in compressed liquid region.<br/>
-	M_steam67::steam67(3f):print pedigree of library and return version value<br/>
 </td>
 <tr><td><a href="../src/M_stopwatch.f90">../src/M_stopwatch.f90</a></td>
 <td>
@@ -1394,13 +1360,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings adjustc(3f) center text<br/>
 	 M_strings nospace(3f) remove all whitespace from input string<br/>
 	 M_strings stretch(3f) return string padded to at least specified length<br/>
-	 M_strings atleast(3f) return string padded to at least specified length<br/>
+	 M_strings rpad_scalar(3f) return value padded to at least specified length<br/>
+	 M_strings rpad_vector(3f) return strings or arguments converted to string right-padded to at least specified length<br/>
+	 M_strings cpad_scalar(3f) convert value to string center-padded to at least specified length<br/>
+	 M_strings cpad_vector(3f) return strings or arguments converted to string center-padded to at least specified length<br/>
+	 M_strings lpad_scalar(3f) convert value to string padded on left to at least specified length<br/>
+	 M_strings lpad_vector(3f) return vector of strings or arguments converted to string left-padded to at least specified length<br/>
+	 M_strings zpad_vector(3f) return string or argument converted to string zero-padded to at least specified length<br/>
+	 M_strings zpad_vector(3f) return vector of strings or arguments converted to string zero-padded to at least specified length<br/>
+	 M_strings::pad(3f): return string padded to at least specified length<br/>
 	 M_strings lenset(3f) return string trimmed or padded to specified length<br/>
 	 M_strings merge_str(3f) pads first and second arguments to MERGE(3f) to same length<br/>
 	 M_strings compact(3f) Converts white-space to single spaces; removes leading spaces<br/>
 	 M_strings noesc(3f) convert non-printable characters to a space<br/>
 	 M_strings s2v(3f) returns doubleprecision number from string;zero if error occurs<br/>
-	 M_strings v2s_bug(3f) function returns string given numeric value<br/>
 	 M_strings isnumber(3f) Determines if a string is a number of not.<br/>
 	 M_strings listout(3f) copy icurve_lists to icurve_expanded expanding negative numbers to ranges (1 -10 means 1 thru 10)<br/>
 	 M_strings describe(3f) return string describing long name of a single character<br/>
@@ -1450,9 +1423,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings oop_compact(3f) adjust string to center<br/>
 	 M_strings oop_substitute(3f) change all occurrences of oldstring to newstring non-recursively<br/>
 	 M_strings oop_transliterate(3f) change all occurrences of oldstring to newstring non-recursively<br/>
-	 M_strings oop_atleast(3f) set string to at least specified length<br/>
+	 M_strings oop_pad(3f) set string to at least specified length<br/>
+	 M_strings oop_zpad(3f) set string to at least specified length<br/>
+	 M_strings oop_cpad(3f) set string to at least specified length<br/>
+	 M_strings oop_lpad(3f) set string to at least specified length<br/>
+	 M_strings oop_rpad(3f) set string to at least specified length<br/>
 	 M_strings oop_lenset(3f) set string to specific length<br/>
-	 M_strings oop_matchw(3f) test if wildcard pattern matches string<br/>
+	 M_strings oop_glob(3f) test if wildcard pattern matches string<br/>
 	 M_strings oop_notabs(3f) expand tab characters assuming tab stops every eight(8) characters<br/>
 	 M_strings oop_noesc(3f) replace non-printable characters with spaces<br/>
 	 M_strings oop_p(3f) return CHARACTER string from TYPE(STRING)<br/>
@@ -1462,14 +1439,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings string_append_value(3f) append value to TYPE(STRING)<br/>
 	 M_strings string_multiply_value(3f) multiply TYPE(STRING) value times<br/>
 	 M_strings eq(3f) compare derived type string objects (eq lt gt le ge ne)<br/>
-</td>
-<tr><td><a href="../src/M_stringtonumber.f90">../src/M_stringtonumber.f90</a></td>
-<td>
-	 use C strtod<br/>
-	 use C strtod<br/>
-	 use C strtod<br/>
-	 use C strtod<br/>
-	 use C strtod<br/>
 </td>
 <tr><td><a href="../src/M_system.f90">../src/M_system.f90</a></td>
 <td>

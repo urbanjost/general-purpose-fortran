@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>char</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>char</B>(3fortran)
+<B>char(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+char(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>CHAR(3) </B>- [CHARACTER] Generate a character from a code value
-<B>
-</B></BLOCKQUOTE>
+CHAR(3) - [CHARACTER] Generate a character from a code value
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>char</B>(i [,<I>kind</I>])
+result = char(i [,kind])
 <P>
+<PRE>
            elemental character(kind=KIND) function char(i,KIND)
 <P>
             integer(kind=**),intent(in) :: i
@@ -96,24 +96,24 @@ result = <B>char</B>(i [,<I>kind</I>])
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a <I>kind</I> designated as ** may be any supported <I>kind</I> for the type
+a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-I is an integer of any <I>kind</I>
+I is an integer of any kind
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND is an integer initialization expression indicating the <I>kind</I>
+KIND is an integer initialization expression indicating the kind
 parameter of the result.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The returned value is a character with the <I>kind</I> specified by KIND or if
-KIND is not present, the default character <I>kind</I>.
+The returned value is a character with the kind specified by KIND or if
+KIND is not present, the default character kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -123,13 +123,13 @@ KIND is not present, the default character <I>kind</I>.
 </A>
 <BLOCKQUOTE>
 Generates a character value given a numeric code representing the position I
-in the collating sequence associated with the specified <I>kind</I> KIND.
+in the collating sequence associated with the specified kind KIND.
 <P>
-Note that <B>ACHAR</B>(3) is a similar function specifically for ASCII characters
+Note that ACHAR(3) is a similar function specifically for ASCII characters
 that is preferred when only ASCII is being processed, which is equivalent to
-<B>CHAR</B>(I,KIND=SELECTED_CHAR_KIND("ASCII") )
+CHAR(I,KIND=SELECTED_CHAR_KIND("ASCII") )
 <P>
-The <B>ICHAR</B>(3) function is the reverse of <B>CHAR</B>(3), converting characters to
+The ICHAR(3) function is the reverse of CHAR(3), converting characters to
 their collating sequence value.
 </BLOCKQUOTE>
 <A name=4>
@@ -143,15 +143,15 @@ their collating sequence value.
 o
 </TD><TD>
 I : a value in the range 0 &lt;= I &lt;= N-1, where N is the number of
-characters in the collating sequence associated with the specified <I>kind</I>
+characters in the collating sequence associated with the specified kind
 type parameter. : For ASCII, N is 127. The default character set may or
 may not allow higher values.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : A constant integer initialization expression indicating the <I>kind</I>
-parameter of the result. If not present, the default <I>kind</I> is assumed.
+KIND : A constant integer initialization expression indicating the kind
+parameter of the result. If not present, the default kind is assumed.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -160,7 +160,7 @@ parameter of the result. If not present, the default <I>kind</I> is assumed.
 
 </A>
 <BLOCKQUOTE>
-The return value is a single character of the specified <I>kind</I>, determined by
+The return value is a single character of the specified kind, determined by
 the position of I in the collating sequence associated with the specified
 KIND.
 </BLOCKQUOTE>
@@ -232,7 +232,7 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
-<B>ACHAR</B>(3), <B>IACHAR</B>(3), <B>ICHAR</B>(3)
+ACHAR(3), IACHAR(3), ICHAR(3)
 <P>
 Functions that perform operations on character strings, return lengths of
 arguments, and search for certain arguments:
@@ -242,12 +242,12 @@ arguments, and search for certain arguments:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ELEMENTAL: <B>ADJUSTL</B>(3), <B>ADJUSTR</B>(3), <B>INDEX</B>(3), <B>SCAN</B>(3), <B>VERIFY</B>(3)
+ELEMENTAL: ADJUSTL(3), ADJUSTR(3), INDEX(3), SCAN(3), VERIFY(3)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3)
+NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -256,7 +256,7 @@ NONELEMENTAL: <B>LEN_TRIM</B>(3), <B>LEN</B>(3), <B>REPEAT</B>(3), <B>TRIM</B>(3
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>char (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f696e2c5-3e7d-4666-9b6c-8b3f5bd91216 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>char (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3c0de390-4b0c-4acf-b03d-dfd4e6b6ea58 using man macros.</FONT>
 <br><br><center><img src="images/char.3fortran.gif"></center>
 </div>
 </div>

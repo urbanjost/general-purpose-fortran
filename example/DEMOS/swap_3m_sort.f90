@@ -13,27 +13,27 @@
      integer             :: one2(3,3)=1
      integer             :: two2(3,3)=2
 
-        print *, "integers before swap ", iarray
+        print *, "integers before swap", iarray
         call swap (iarray(1), iarray(2))
-        print *, "integers after swap  ", iarray
+        print *, "integers after swap ", iarray
 
-        print *, "reals before swap ", rarray
+        print *, "reals before swap", rarray
         call swap (rarray(1), rarray(2))
-        print *, "reals after swap  ", rarray
+        print *, "reals after swap ", rarray
 
-        print *, "doubles before swap ", darray
+        print *, "doubles before swap", darray
         call swap (darray(1), darray(2))
-        print *, "doubles after swap  ", darray
+        print *, "doubles after swap ", darray
 
-        print *, "complexes before swap ", carray
+        print *, "complexes before swap", carray
         call swap (carray(1), carray(2))
-        print *, "complexes after swap  ", carray
+        print *, "complexes after swap ", carray
 
-        print *, "logicals before swap ", larray
+        print *, "logicals before swap", larray
         call swap (larray(1), larray(2))
-        print *, "logicals after swap  ", larray
+        print *, "logicals after swap ", larray
 
-        print *, "strings before swap ", string
+        print *, "strings before swap", string
         call swap (string(1), string(2))
         print *, "strings after swap ", string
 
@@ -79,4 +79,4 @@
         enddo
         end subroutine printarrays
 
-    end program demo_swap
+     end program demo_swap

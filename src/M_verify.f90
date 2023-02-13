@@ -239,6 +239,7 @@ private
 integer,save,public :: io_debug=ERROR_UNIT            ! mutable copy of ERROR_UNIT, but initialized to the unit used for stderr
 integer,save,public :: unit_check_lun=ERROR_UNIT      ! mutable copy of ERROR_UNIT, but initialized to the unit used for stderr
 logical,save,public :: debug=.false.
+character(len=20),save,public :: unit_check_prefix=''
 
 logical,save,public :: unit_check_keep_going=.false.  ! logical variable that can be used to turn off program termination on errors.
 integer,save,public :: unit_check_level=0             ! a level that can be used to select different debug levels
@@ -337,7 +338,7 @@ class(*),intent(in),optional  :: g1 ,g2 ,g3 ,g4 ,g5
 class(*),intent(in),optional  :: g6 ,g7 ,g8 ,g9
 
    ! write message to standard error
-   call stderr('unit_check_msg:   '//atleast(name,20)//' INFO    : '//str(g1,g2,g3,g4,g5,g6,g7,g8,g9))
+   call stderr(trim(unit_check_prefix)//'check_msg:   '//atleast(name,20)//' INFO    : '//str(g1,g2,g3,g4,g5,g6,g7,g8,g9))
 
 end subroutine unit_check_msg
 !===================================================================================================================================
@@ -663,19 +664,19 @@ character(len=:),allocatable         :: msg_local
 msg_local=str(msg,msg1,msg2,msg3,msg4,msg5,msg6,msg7,msg8,msg9)
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(.not.logical_expression)then
-      call stderr('unit_check:       '//atleast(name,20)//' FAILURE : '//trim(msg_local))  ! write message to standard error
+      call stderr(trim(unit_check_prefix)//'check:       '//atleast(name,20)//' FAILURE : '//trim(msg_local))
       if(unit_check_command /= '')then
          call execute_command_line(unit_check_command//' '//trim(name)//' bad')
       endif
       if(.not.unit_check_keep_going) then
-         call stderr('unit_check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))    ! write to standard error
+         call stderr(trim(unit_check_prefix)//'check:         STOPPING PROGRAM ON FAILED TEST OF '//trim(name))
          call fstop(1)
       endif
       IFAILED_G=IFAILED_G+1
       IFAILED_ALL_G=IFAILED_ALL_G+1
    else
       if(.not.no_news_is_good_news)then
-         call stderr('unit_check:       '//atleast(name,20)//' SUCCESS : '//trim(msg_local))  ! write message to standard error
+         call stderr(trim(unit_check_prefix)//'check:       '//atleast(name,20)//' SUCCESS : '//trim(msg_local))
       endif
       IPASSED_G=IPASSED_G+1
       IPASSED_ALL_G=IPASSED_ALL_G+1
@@ -791,7 +792,7 @@ logical,save                         :: called=.false.
    endif
    if(present(msg))then
      if(msg /= '')then
-        call stderr('unit_check_start: '//atleast(name,20)//' START   : '//trim(msg)) ! write message to standard error
+        call stderr(trim(unit_check_prefix)//'check_start: '//atleast(name,20)//' START   : '//trim(msg))
      endif
    endif
    call get_environment_variable('M_verify_STOP',var)
@@ -885,21 +886,21 @@ integer                              :: clicks_now
    if(PF == 'PASSED  :'.and.ipassed_all_G == 0)then
       PF='UNTESTED:'
    endif
-   write(out,'("unit_check_stop:  ", &
-       & "TALLY:              ",          &
-       & 1x,a,                            &
-       & " DURATION:",i14.14,             &
-       & " GOOD:",i0,                     &
-       & 1x," BAD:",i0                    &
-       & )')                              &
-       & PF,                              &
-       & milliseconds,                    &
-       & IPASSED_ALL_G,                   &
-       & IFAILED_ALL_G
+   write(out,'(a,                               &
+       & "check_stop:  TALLY                ",a,&
+       & " GOOD:",i9,                           &
+       & " BAD:",i9,                            &
+       & " DURATION:",i14.14                    &
+       & )')                                    &
+       & trim(unit_check_prefix),               &
+       & PF,                                    &
+       & IPASSED_ALL_G,                         &
+       & IFAILED_ALL_G,                         &
+       & milliseconds
    if(present(msg))then
       call stderr(trim(out)//': '//trim(msg))
    else
-      call stderr(trim(out))
+      call stderr(out)
    endif
    if(IFAILED_ALL_G == 0)then
       stop EXIT_SUCCESS
@@ -1005,24 +1006,26 @@ integer                              :: clicks_now
       call system_clock(clicks_now)
       milliseconds=(julian()-duration)*1000
       milliseconds=clicks_now-clicks
-      write(out,'("unit_check_done:  ",a, &
+      write(out,'(a,"check_done:  ",a,    &
        & 1x,a,                            &
-       & " DURATION:",i14.14,             &
-       & " GOOD:",i0,                     &
-       & 1x," BAD:",i0                    &
+       & " GOOD:",i9,                     &
+       & " BAD:",i9,                      &
+       & " DURATION:",i14.14              &
        & )')                              &
+       & trim(unit_check_prefix),         &
        & atleast(name,20),                &
        & PF,                              &
-       & milliseconds,                    &
        & IPASSED_G,                       &
-       & IFAILED_G
+       & IFAILED_G,                       &
+       & milliseconds
    else
-      write(out,'("unit_check_done:  ",a,1x,a," GOOD:",i0,1x," BAD:",i0)') atleast(name,20),PF,IPASSED_G,IFAILED_G
+      write(out,'(a,"check_done:  ",a,1x,a," GOOD:",i0,1x," BAD:",i0)') &
+       & trim(unit_check_prefix),atleast(name,20),PF,IPASSED_G,IFAILED_G
    endif
    if(present(msg))then
       call stderr(trim(out)//': '//trim(msg))
    else
-      call stderr(trim(out))
+      call stderr(out)
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    IPASSED_G=0

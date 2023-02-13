@@ -30,4 +30,4 @@
             write(*,'(*(g0))')'I=',i,' J=',j,' SHIFT=',shift
             write(*,'(b32.32)') i,j, dshiftr (i, j, shift)
 
-    end program demo_dshiftr
+        end program demo_dshiftr

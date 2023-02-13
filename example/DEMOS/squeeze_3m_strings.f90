@@ -4,12 +4,16 @@
      character(len=:),allocatable :: strings(:)
 
      strings=[ character(len=72) :: &
-     '', &
-     '"If I were two-faced, would I be wearing this one?" --- Abraham Lincoln',  &
-     '..1111111111111111111111111111111111111111111111111111111111111117777888', &
-     'I never give ''em hell, I just tell the truth, and they think it''s hell.',&
-     '                                                    --- Harry S Truman'    &
-     ]
+     &'', &
+     &'"If I were two-faced,&
+     &would I be wearing this one?" --- Abraham Lincoln',  &
+     &'..1111111111111111111&
+     &111111111111111111111111111111111111111111117777888', &
+     &'I never give ''em hell,&
+     &I just tell the truth, and they think it''s hell.',&
+     &'                                                  &
+     & --- Harry S Truman'    &
+     &]
         call printme( trim(strings(1)), ' ' )
         call printme( strings(2:4),     ['-','7','.'] )
         call printme( strings(5),       [' ','-','r'] )

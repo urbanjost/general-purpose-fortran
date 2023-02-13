@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_overload(3fm) </B>- [M_overload::INTRO] overloads of standard operators and intrinsic procedures
-<B>(LICENSE:PD)
-</B></BLOCKQUOTE>
+M_overload(3fm) - [M_overload::INTRO] overloads of standard operators and intrinsic procedures
+(LICENSE:PD)
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,16 +75,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>overloads</B> <I>on</I> <I>LOGICAL</I> <I>values</I>
+overloads on LOGICAL values
 <P>
+<PRE>
    ! use == like .eqv.; ie. logical==logical
    use M_overload, only : operator(==)
    ! use /= like .neqv.; ie. logical/=logical
    use M_overload, only : operator(/=)
 <P>
 </PRE>
-<B>overloads</B> <I>on</I> <I>INTRINSICS</I> <I>to</I> <I>take</I> strings, logicals, <I>and</I> <I>metamorphic</I> <I>numeric</I> <I>intrinsic</I> <I>values</I>
+overloads on INTRINSICS to take strings, logicals, and metamorphic numeric intrinsic values
 <P>
 <PRE>
   use M_overload, only : int, real, dble
@@ -93,7 +93,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
   ! dble(&#146;string&#146;)  dble(logical)  dble(class(*))
 <P>
 </PRE>
-<B>overloads</B> <I>on</I> <I>operators</I>
+overloads on operators
 <P>
 <PRE>
   use M_overload, only : operator(==)
@@ -104,7 +104,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <P>
 <P>
 </PRE>
-<B>Allow</B> <I>strings</I> <I>of</I> <I>different</I> <I>length</I> <I>in</I> <I>MERGE</I>
+Allow strings of different length in MERGE
 <P>
 <PRE>
   use M_overload, only : merge
@@ -122,7 +122,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B>intrinsic_value .fmt. &#146;&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-convert an <I>intrinsic</I> value <I>to</I> a CHARACTER variable
+convert an intrinsic value to a CHARACTER variable
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -132,10 +132,10 @@ convert an <I>intrinsic</I> value <I>to</I> a CHARACTER variable
 </A>
 <BLOCKQUOTE>
 <P>
-Operator <I>and</I> function <B>overloads</B> have a wide range <I>of</I> applications
-from allowing existing Fortran routines <I>to</I> be used with almost no
-source-code changes <I>to</I> produce versions using arbitrary precision
-or cumulative error bounds <I>on</I> floating-point calculations <I>to</I> adding
+Operator and function overloads have a wide range of applications
+from allowing existing Fortran routines to be used with almost no
+source-code changes to produce versions using arbitrary precision
+or cumulative error bounds on floating-point calculations to adding
 intuitive syntax for standard Fortran operations.
 </BLOCKQUOTE>
 <A name=4>
@@ -148,13 +148,13 @@ intuitive syntax for standard Fortran operations.
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>//</B> </TD><TD valign=bottom>
-<B>overloads</B> // <I>to</I> concatenate any two <I>intrinsic</I> types into a string
+overloads // to concatenate any two intrinsic types into a string
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>==,/=</B> </TD><TD valign=bottom>
-<B>Allow</B> the syntax "L1 == L2"  <I>and</I> "L1 /= L2" where L1 <I>and</I> L2 are
-type <I>LOGICAL</I> as an alternative <I>to</I> the standard expressions
-"L1 .EQV. L2" <I>and</I> "L1 .NEQV. L2".
+Allow the syntax "L1 == L2"  and "L1 /= L2" where L1 and L2 are
+type LOGICAL as an alternative to the standard expressions
+"L1 .EQV. L2" and "L1 .NEQV. L2".
 <P>
 It should be pointed out that
 <P>
@@ -162,29 +162,29 @@ It should be pointed out that
               L1 == L2   !! should be L1 .eqv. L2
 <P>
 </PRE>
-<I>and</I>
+and
 <P>
 <PRE>
               L1 /= L2   !! should be L1 .neqv. L2
 <P>
 </PRE>
 should NOT work by default; but often do (probably because
-the compiler silently converts <I>LOGICAL</I> <I>to</I> INTEGER when a
-<I>LOGICAL</I> appears where a <I>numeric</I> value is required). If your
+the compiler silently converts LOGICAL to INTEGER when a
+LOGICAL appears where a numeric value is required). If your
 compiler supports this non-standard (but intuitive-looking)
-syntax you can use this module <I>to</I> allow the syntax <I>in</I> a
+syntax you can use this module to allow the syntax in a
 portable manner with a standard method.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>int</B>(), <B>real</B>(), <B>dble</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-allow <I>strings</I> <I>to</I> be converted <I>to</I> <I>numeric</I> <I>values</I>
-using the standard <I>intrinsic</I> names
-<TABLE width=100% cellpadding=3><!-- tsb: allow <I>strings</I> <I>to</I> be converted <I>to</I> <I>numeric</I> <I>values</I>
+<B>int(), real(), dble()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+allow strings to be converted to numeric values
+using the standard intrinsic names
+<TABLE width=100% cellpadding=3><!-- tsb: allow strings to be converted to numeric values
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>sign</B>(value) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-call <B>sign</B>(1,value)
+<B>sign(value)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+call sign(1,value)
 </TD></TR>
 <TR></TR></TABLE><!-- .RE -->
 </TD></TR>
@@ -194,8 +194,8 @@ call <B>sign</B>(1,value)
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>str=merge</B>(&#146;little&#146;,&#146;big&#146;,a.eq.10) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-allows for <I>strings</I> <I>of</I> <I>different</I> lengths
+<B>str=merge(&#146;little&#146;,&#146;big&#146;,a.eq.10)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+allows for strings of different lengths
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -274,13 +274,11 @@ Sample usage:
      write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
       & sign(10.0_real128).eq.1.0&
       & .and. sign(-10.0_real128).eq.-1.0 )
+   contains
+<P>
+   end program demo_M_overload
+<P>
 </PRE>
-contains
-<BLOCKQUOTE>
-<P>
-end program demo_M_overload
-</BLOCKQUOTE>
-<P>
 Results:
 <BLOCKQUOTE>
 <TABLE cellpadding=3><!-- tsb: Results:
@@ -300,23 +298,23 @@ Results:
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>int</B>("STRING") works
+int("STRING") works
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>real</B>("STRING") works
+real("STRING") works
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>dble</B>("STRING") works
+dble("STRING") works
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-== works like .eqv. for <I>LOGICAL</I> <I>values</I>
+== works like .eqv. for LOGICAL values
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-/= works like .neqv. for <I>LOGICAL</I> <I>values</I>
+/= works like .neqv. for LOGICAL values
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
@@ -364,23 +362,23 @@ sign works
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>int</B>("STRING") works
+int("STRING") works
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>real</B>("STRING") works
+real("STRING") works
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>dble</B>("STRING") works
+dble("STRING") works
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-== works like .eqv. for <I>LOGICAL</I> <I>values</I>
+== works like .eqv. for LOGICAL values
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-/= works like .neqv. for <I>LOGICAL</I> <I>values</I>
+/= works like .neqv. for LOGICAL values
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
@@ -470,7 +468,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_overload (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 63b6acc1-2151-422d-b97f-94aa1ee03af7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_overload (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1a9fe29f-43fe-4c7f-984e-1dcb48d3bc09 using man macros.</FONT>
 <br><br><center><img src="images/M_overload.3m_overload.gif"></center>
 </div>
 </div>

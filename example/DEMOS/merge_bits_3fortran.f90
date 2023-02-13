@@ -37,4 +37,4 @@
            & ior(iand(32767_int16, z'1234'),                       &
            &   iand(o'12345', not(int( z'1234', kind=int16))))
 
-    end program demo_merge_bits
+        end program demo_merge_bits

@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>NULLIFY(7f) </B>- [FORTRAN:STATEMENT] causes pointers to be disassociated from a target
-<B>
-</B></BLOCKQUOTE>
+NULLIFY(7f) - [FORTRAN:STATEMENT] causes pointers to be disassociated from a target
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=6>
@@ -67,9 +67,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
 NULLIFY ( pointer-object-list )
 <P>
+<PRE>
    pointer-object   is variable-name
                     or structure-component
                     or proc-pointer-name
@@ -83,14 +83,14 @@ NULLIFY ( pointer-object-list )
 </A>
 <BLOCKQUOTE>
 <P>
-<B>NULLIFY</B>(3f) breaks a pointers&#146; association with a target. Note
+NULLIFY(3f) breaks a pointers&#146; association with a target. Note
 it is NOT used to deallocate memory -- that is the function of
-<B>DEALLOCATE</B>(3f).
+DEALLOCATE(3f).
 <P>
 In addition, since the initial association status of a pointer is
-undefined <B>NULLIFY</B>(7f) can be used to initialize an undefined pointer,
+undefined NULLIFY(7f) can be used to initialize an undefined pointer,
 giving it disassociated status &#46;&#46;&#46; then the pointer can be tested
-using the intrinsic function <B>ASSOCIATED</B>(3f).
+using the intrinsic function ASSOCIATED(3f).
 </BLOCKQUOTE>
 <A name=>
 
@@ -105,10 +105,10 @@ using the intrinsic function <B>ASSOCIATED</B>(3f).
 </A>
 <BLOCKQUOTE>
 <P>
-Do not use <B>NULLIFY</B>(3f) when you mean <B>DEALLOCATE</B>(3f) or you can cause
+Do not use NULLIFY(3f) when you mean DEALLOCATE(3f) or you can cause
 memory leaks.
 <P>
-The inappropriate use of <B>NULLIFY</B>(3f) can result in large blocks of
+The inappropriate use of NULLIFY(3f) can result in large blocks of
 memory being left inaccessible to the program.
 <P>
 For instance, if you nullify a pointer that pointed to an array
@@ -149,11 +149,11 @@ problematic.
 </A>
 <BLOCKQUOTE>
 <P>
-There are times you absolutely need to use <B>NULLIFY</B>(3f) instead of
-<B>DEALLOCATE</B>(3f).
+There are times you absolutely need to use NULLIFY(3f) instead of
+DEALLOCATE(3f).
 <P>
 In the opposite case from above where the pointer merely points to
-a target instead of having been used in the <B>ALLOCATE</B>(3f) statement
+a target instead of having been used in the ALLOCATE(3f) statement
 The nullify statement is necessary.
 <P>
 For example, in the next few lines of code an allocatable array called
@@ -180,7 +180,7 @@ in an error message, due to the indirect attempt at deallocation.
 <P>
 </PRE>
 To prevent the problems that this can cause, replace the DEALLOCATE
-statement with <B>NULLIFY</B>(3f).
+statement with NULLIFY(3f).
 </BLOCKQUOTE>
 <A name=3>
 
@@ -225,7 +225,7 @@ The following is an example of the NULLIFY statement:
 <P>
 </PRE>
 At this point PTR_A will have disassociated status, but PTR_B will
-continue to be associated with variable <B>VALUES</B>().
+continue to be associated with variable VALUES().
 <P>
 <PRE>
    program demo_nullify
@@ -260,7 +260,6 @@ continue to be associated with variable <B>VALUES</B>().
    end program demo_nullify
 <P>
 </PRE>
-<BLOCKQUOTE>
 Results:
 <P>
 <PRE>
@@ -277,17 +276,16 @@ Results:
 <P>
 </PRE>
 </BLOCKQUOTE>
-</BLOCKQUOTE>
 <A name=5>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-<B>deallocate</B>(7f), <B>allocate</B>(3f), <B>allocated</B>(3f), <B>associated</B>(3f), <B>null</B>(3f)
+deallocate(7f), allocate(3f), allocated(3f), associated(3f), null(3f)
 ################################################################################
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <B>deallocate</B>(7f), <B>allocate</B>(3f), <B>allocated</B>(3f), <B>associated</B>(3f), <B>null</B>(3f)
+<TABLE cellpadding=3><!-- tsb: deallocate(7f), allocate(3f), allocated(3f), associated(3f), null(3f)
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
@@ -295,9 +293,9 @@ Results:
 10/4/06
 Hi, Nice to be here. I am a beginer in Fortran, So I want to know the
 following:
-What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+What is the difference between the deallocate() and nullify() function
 in Fortran 90?
-And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+And what is the difference among the allocate(), =&gt; and = operator for
 the pointer variable?
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -325,7 +323,7 @@ Click here to Reply
 Fortran Learner wrote:
 &gt; Hi, Nice to be here. I am a beginer in Fortran, So I want to know the
 &gt; following:
-&gt; What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+&gt; What is the difference between the deallocate() and nullify() function
 &gt; in Fortran 90?
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -338,7 +336,7 @@ Nullify puts a pointer in a well-defined "cleared" assocation status.
 If the pointer is associated with a block of allocated memory, nullify
 does not (AFAIK) deallocate the memory.
 <P>
-&gt; And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+&gt; And what is the difference among the allocate(), =&gt; and = operator for
 &gt; the pointer variable?
 <P>
 For a pointer variable, allocate will allocate a block of memory and
@@ -351,12 +349,12 @@ with something else (whatever is on the RHS of the statement)
 <P>
 &gt; I meet some quite serious problem in my program. There are even some
 &gt; very stranger problem,
-&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt; Before I want to deallocate a pointer varibale, I use a associated()
 &gt; function to test it. The resutl for this function is true, but when I
 &gt; try to deallocate it an error occured.The error ifnormation such like
 &gt; that: allocatable array or pointer is not allocated.
 &gt;
-&gt; I am amuszing, why the test function <B>associated</B>() is true?
+&gt; I am amuszing, why the test function associated() is true?
 <P>
 If the pointer is associated with a variable, rather than an allocated
 <TABLE cellpadding=3><!-- tsb: If the pointer is associated with a variable, rather than an allocated
@@ -394,12 +392,12 @@ news:45241887$0$40072$<A HREF="mailto:a726171b@news.hal-pc.org">a726171b@news.ha
 <TR><TD colspan=2>
 &gt;&gt; I meet some quite serious problem in my program. There are even some
 &gt;&gt; very stranger problem,
-&gt;&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt;&gt; Before I want to deallocate a pointer varibale, I use a associated()
 &gt;&gt; function to test it. The resutl for this function is true, but when I
 &gt;&gt; try to deallocate it an error occured.The error ifnormation such like
 &gt;&gt; that: allocatable array or pointer is not allocated.
 &gt;&gt;
-&gt;&gt; I am amuszing, why the test function <B>associated</B>() is true?
+&gt;&gt; I am amuszing, why the test function associated() is true?
 &gt;
 &gt; If the pointer is associated with a variable, rather than an allocated
 </TD></TR>
@@ -415,11 +413,11 @@ be tested with associated. In general, pointers should be given a defined
 status as early in the program as possible, where possible by initialization
 as in
 <P>
-integer, pointer :: <B>kkk=&gt;null</B>()
+integer, pointer :: kkk=&gt;null()
 <P>
 or otherwise as in
 <P>
-<B>nullify</B>(kkk)
+nullify(kkk)
 <P>
 Regards,
 <P>
@@ -443,13 +441,13 @@ Michael Metcalf &lt;michael&#46;&#46;&#46;@compuserve.com&gt; wrote:
 &gt; should be given a defined status as early in the program as possible,
 &gt; where possible by initialization as in
 <P>
-&gt; integer, pointer :: <B>kkk=&gt;null</B>()
+&gt; integer, pointer :: kkk=&gt;null()
 <P>
 As we have been discussing for days, does this cause kkk
 to be SAVEd?
 <P>
-This might be one case where I would want it <B>null</B>() each
-<TABLE cellpadding=3><!-- tsb: This might be one case where I would want it <B>null</B>() each
+This might be one case where I would want it null() each
+<TABLE cellpadding=3><!-- tsb: This might be one case where I would want it null() each
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
@@ -478,7 +476,7 @@ language.
 The answers here aren&#146;t going to be enough to make you proficient in
 using pointers.
 <P>
-&gt; What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+&gt; What is the difference between the deallocate() and nullify() function
 &gt; in Fortran 90?
 <P>
 As Craig said, deallocate frees the space. Nullify does nothing to the
@@ -487,7 +485,7 @@ more. I can see that you are missing one of the most fundamental ideas
 of what pointers are about in the first place. In fact, I can see that
 trend inmost of these questions. More on that below.
 <P>
-&gt; And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+&gt; And what is the difference among the allocate(), =&gt; and = operator for
 &gt; the pointer variable?
 <P>
 Allocate allocates a new target and makes the pointer point to it.
@@ -497,7 +495,7 @@ target. Ordinary assignment (the =) assigns data to the target.
 <P>
 <P>
 <BLOCKQUOTE>
-&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt; Before I want to deallocate a pointer varibale, I use a associated()
 &gt; function to test it&#46;&#46;&#46;
 <P>
 Ok. Stop right there. A major and common problem. Pointers can be in one
@@ -590,7 +588,7 @@ news:eg1886$oc6$<A HREF="mailto:1@naig.caltech.edu">1@naig.caltech.edu</A>&#46;&
 &gt;&gt; should be given a defined status as early in the program as possible,
 &gt;&gt; where possible by initialization as in
 &gt;
-&gt;&gt; integer, pointer :: <B>kkk=&gt;null</B>()
+&gt;&gt; integer, pointer :: kkk=&gt;null()
 &gt;
 &gt; As we have been discussing for days, does this cause kkk
 &gt; to be SAVEd?
@@ -643,7 +641,7 @@ compile with g95 <B>-std</B>=f95 but will with g95 <B>-std</B>=f95 <B>-ftr15581<
 !
 MODULE myProject
 TYPE myData
-REAL , ALLOCATABLE :: <B>values</B>(:)
+REAL , ALLOCATABLE :: values(:)
 END TYPE myData
 END MODULE myProject
 ! ----------------------------------------
@@ -656,10 +654,10 @@ END MODULE myProject
 <BLOCKQUOTE>
 <P>
 USE myProject
-<B>TYPE</B>(myData) :: data
-<B>ALLOCATE</B>(data%<B>values</B>(3))
+TYPE(myData) :: data
+ALLOCATE(data%values(3))
 data%values = (/2,4,6/)
-<B>WRITE</B>(*,*) data%values
+WRITE(*,*) data%values
 </BLOCKQUOTE>
 <A name=>
 
@@ -671,7 +669,7 @@ data%values = (/2,4,6/)
 <P>
 -- John Harper, School of Mathematics, Statistics and Computer Science,
 Victoria University, PO Box 600, Wellington 6140, New Zealand
-e-mail john&#46;&#46;&#46;<A HREF="mailto:.@vuw.ac.nz">.@vuw.ac.nz</A> phone (+<I>64</I>)(4)463 5341 fax (+<I>64</I>)(4)463 5045
+e-mail john&#46;&#46;&#46;<A HREF="mailto:.@vuw.ac.nz">.@vuw.ac.nz</A> phone (+64)(4)463 5341 fax (+64)(4)463 5045
 <P>
 <PRE>
         Fortran Learner        
@@ -686,7 +684,7 @@ Actually, I had debug my program last night, and I found most of all
 the memory leak in my program are caused by undefined pointer. As
 mentioned by Craig Powers and Richard E Maine, every pointer has three
 status. Before any using of an pointer, the status of the pointer
-should be undefined. So, if tested by <B>associated</B>(), the result should
+should be undefined. So, if tested by associated(), the result should
 unpredictable and will lead memory leak. This is the main problem in my
 program.
 <P>
@@ -719,7 +717,7 @@ as Reference to the data at the position it points to.
 <TR></TR></TABLE>Fortran Learner wrote:
 &gt; Hi, Nice to be here. I am a beginer in Fortran, So I want to know the
 &gt; following:
-&gt; What is the difference between the <B>deallocate</B>() and <B>nullify</B>() function
+&gt; What is the difference between the deallocate() and nullify() function
 &gt; in Fortran 90?
 <P>
 nullify sets the pointer pointing to a definite non existent memory
@@ -731,7 +729,7 @@ change the pointer. So the pointer will look like pointing to a memory
 position, which is no longer owned by the program. But the memory can be
 used again for other programs/variables.
 <P>
-&gt; And what is the difference among the <B>allocate</B>(), =&gt; and = operator for
+&gt; And what is the difference among the allocate(), =&gt; and = operator for
 &gt; the pointer variable?
 <P>
 =&gt; changes where the pointer points to
@@ -739,7 +737,7 @@ used again for other programs/variables.
 <P>
 &gt; I meet some quite serious problem in my program. There are even some
 &gt; very stranger problem,
-&gt; Before I want to deallocate a pointer varibale, I use a <B>associated</B>()
+&gt; Before I want to deallocate a pointer varibale, I use a associated()
 &gt; function to test it. The resutl for this function is true, but when I
 &gt; try to deallocate it an error occured.The error ifnormation such like
 &gt; that: allocatable array or pointer is not allocated.
@@ -748,7 +746,7 @@ Either the pointer is not initialized or it was freed, but not set to 0.
 So the program has no chance to detect, that the pointer does not point
 to a proper memory position.
 <P>
-&gt; I am amuszing, why the test function <B>associated</B>() is true?
+&gt; I am amuszing, why the test function associated() is true?
 <P>
 Associated only tests if the pointer is 0.
 <P>
@@ -762,23 +760,23 @@ variables. Consider
 <P>
 type list
 integer:: value
-<B>type</B>(list),pointer :: next
+type(list),pointer :: next
 end type
 <P>
-<B>type</B>(list),pointer :: root, element
+type(list),pointer :: root, element
 <P>
 so you can create a list of several elements:
 <P>
-<B>allocate</B>(root)
-root % next = <B>null</B>() ! end of list marker
+allocate(root)
+root % next = null() ! end of list marker
 root % value = 1
 <P>
-<B>allocate</B>(element)
+allocate(element)
 element % next =&gt; root
 element % value = 2
 root % element
 <P>
-<B>allocate</B>(element)
+allocate(element)
 element % next =&gt; root
 element % value = 3
 root % element
@@ -790,7 +788,7 @@ Now root points to a linked list:
 <P>
 root -&gt; {3} -&gt; {2} -&gt; {1} -&gt; 0
 <P>
-(the last 0 is the <B>null</B>() pointer). All three elements are still in memory.
+(the last 0 is the null() pointer). All three elements are still in memory.
 <P>
 &gt; In my program, there are various pointer variable, after an complicated
 &gt; calculation, even for me it&#146;s not easy to free them.
@@ -798,10 +796,10 @@ root -&gt; {3} -&gt; {2} -&gt; {1} -&gt; 0
 That&#146;s a common problem with pointers. For our linked list we must do
 the following:
 <P>
-do while (<B>associated</B>(root))
+do while (associated(root))
 element =&gt; root
 root =&gt; root % next
-<B>deallocate</B>(element)
+deallocate(element)
 end do
 <P>
 That will delete all elements. Remember the last next pointer has been
@@ -886,17 +884,17 @@ Richard E Maine &lt;<A HREF="mailto:nospam@see.signature">nospam@see.signature</
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>deallocate</B>(p)
+deallocate(p)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>&gt;</B> </TD><TD valign=bottom>
-<B>nullify</B>(p)
+nullify(p)
 </TD></TR>
 <TR><TD colspan=2>
 &gt; The nullify there is completely redundant.
 </TD></TR>
 <TR><TD colspan=2>
-In C, with call by value, the <B>free</B>() function only
+In C, with call by value, the free() function only
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>gets a copy of the pointer.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
@@ -904,7 +902,7 @@ In that case, if you
 expect to test for null you need to assign null
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>after the call to </B><B>free</B>(). <!-- .PP -->
+<B>after the call to free().</B> <!-- .PP -->
 </TD></TR>
 <TR><TD colspan=2>
 For Java, which uses garbage collection instead of
@@ -1026,7 +1024,7 @@ Thanks for the clarification.
 ################################################################################
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nullify (7)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 25f44f5d-6ad7-4c23-b38f-d50cb296b6ec using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nullify (7)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2cee8b9f-3360-43a9-b4d2-6474cf727904 using man macros.</FONT>
 <br><br><center><img src="images/nullify.7fortran.gif"></center>
 </div>
 </div>

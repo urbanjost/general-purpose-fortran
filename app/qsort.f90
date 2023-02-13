@@ -1,5 +1,5 @@
 program qsort
-use M_io,      only : swallow
+use M_io,      only : fileread
 use M_CLI2,    only : set_args, lget , files=>unnamed
 use M_strings, only : upper, notabs, transliterate
 use M_sort,    only : sort_quick_rx
@@ -21,9 +21,9 @@ integer                            :: i, j, k, ilen, ios
       end select
    enddo
    do i=1,size(files)                                                            ! for each file read and reverse lines
-      call swallow(files(i),pageout)                                             ! allocate character array and copy file into it
+      call fileread(files(i),pageout)                                            ! allocate character array and copy file into it
       if(.not.allocated(pageout))then
-         write(*,*)'*demo_swallow* failed to load file '//files(i)
+         write(*,*)'*qsort* failed to load file '//files(i)
       else
          allocate(ii(size(pageout)))
          allocate(character(len=(len(pageout))) :: pageleft(size(pageout)))

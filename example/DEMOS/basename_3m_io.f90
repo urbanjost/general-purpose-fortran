@@ -14,6 +14,5 @@
         ! leaf with suffix retained
         ! with suffix unless it is ".f90"
         write(*,'(*(a,1x))') basename(fn), basename(fn,''), basename(fn,'.f90')
-        deallocate(fn)
      enddo
      end program demo_basename

@@ -11,4 +11,4 @@
            write(*,*) maxval(ints,dim=2)
            ! find biggest number less than 30 with mask
            write(*,*) maxval(ints,mask=ints.lt.30)
-  end program demo_maxval
+        end program demo_maxval

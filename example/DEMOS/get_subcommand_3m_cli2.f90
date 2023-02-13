@@ -5,8 +5,8 @@
      !x! You can call this program which has two subcommands (run, test),
      !x! like this:
      !x!    demo_get_subcommand --help
-     !x!    demo_get_subcommand run -x -y -z -title -l -L
-     !x!    demo_get_subcommand test -title -l -L -testname
+     !x!    demo_get_subcommand run -x -y -z --title -l -L
+     !x!    demo_get_subcommand test --title -l -L --testname
      !x!    demo_get_subcommand run --help
         implicit none
      !x! DEFINE VALUES TO USE AS ARGUMENTS WITH INITIAL VALUES
@@ -28,11 +28,10 @@
      subroutine parse(name)
      !x! PUT EVERYTHING TO DO WITH COMMAND PARSING HERE FOR CLARITY
      use M_CLI2, only : set_args, get_args, get_args_fixed_length
-     use M_CLI2, only : get_subcommand
-     use M_CLI2, only : CLI_RESPONSE_FILE
+     use M_CLI2, only : get_subcommand, set_mode
      character(len=*)              :: name    ! the subcommand name
      character(len=:),allocatable  :: help_text(:), version_text(:)
-        CLI_RESPONSE_FILE=.true.
+        call set_mode('response_file')
      ! define version text
         version_text=[character(len=80) :: &
            '@(#)PROGRAM:     demo_get_subcommand            >', &
@@ -44,8 +43,8 @@
          ! general help for "demo_get_subcommand --help"
          help_text=[character(len=80) :: &
           ' allowed subcommands are          ', &
-          '   * run  -l -L -title -x -y -z   ', &
-          '   * test -l -L -title            ', &
+          '   * run  -l -L --title -x -y -z  ', &
+          '   * test -l -L --title           ', &
           '' ]
         ! find the subcommand name by looking for first word on command
         ! not starting with dash

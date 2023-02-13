@@ -58,6 +58,6 @@
               write(*,'(" ]")')
            enddo
 
-    end subroutine printi
+        end subroutine printi
 
-    end program demo_reshape
+        end program demo_reshape

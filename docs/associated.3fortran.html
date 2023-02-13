@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>associated</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>associated</B>(3fortran)
+<B>associated(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+associated(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,10 +65,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>ASSOCIATED(3) </B>- [STATE:INQUIRY] Association status of a pointer or
-<B>pointer/target pair
-</B><B>
-</B></BLOCKQUOTE>
+ASSOCIATED(3) - [STATE:INQUIRY] Association status of a pointer or
+pointer/target pair
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -77,9 +77,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>associated</B>(pointer [,<I>target</I>])
+result = associated(pointer [,target])
 <P>
+<PRE>
            logical function associated(pointer,target)
 <P>
             type(TYPE(kind=KIND),pointer :: pointer
@@ -103,7 +103,7 @@ a procedure pointer
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-TARGET shall be a pointer or a <I>target</I>. It must have the same type, kind
+TARGET shall be a pointer or a target. It must have the same type, kind
 type parameter, and array rank as POINTER.
 </TD></TR>
 <TR valign=top><TD width=3%>
@@ -123,8 +123,8 @@ the result is a default logical value
 
 </A>
 <BLOCKQUOTE>
-<B>ASSOCIATED</B>(3) determines the status of the pointer POINTER or if POINTER is
-associated with the <I>target</I> TARGET.
+ASSOCIATED(3) determines the status of the pointer POINTER or if POINTER is
+associated with the target TARGET.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -142,7 +142,7 @@ status shall not be undefined.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-TARGET : A <I>target</I> that is to be tested for occupying the same storage
+TARGET : A target that is to be tested for occupying the same storage
 units as the pointer POINTER. That is, it is tested as to whether it is
 pointed to by POINTER.
 </TD></TR>
@@ -153,28 +153,30 @@ pointed to by POINTER.
 
 </A>
 <BLOCKQUOTE>
-<B>ASSOCIATED</B>(3f) returns a scalar value of type logical. There are several
+ASSOCIATED(3f) returns a scalar value of type logical. There are several
 cases:
-<TABLE cellpadding=3><!-- tsb: <B>ASSOCIATED</B>(3f) returns a scalar value of type logical. There are several
+<TABLE cellpadding=3><!-- tsb: ASSOCIATED(3f) returns a scalar value of type logical. There are several
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-When the optional TARGET is not present then <B>ASSOCIATED</B>(POINTER) is
+When the optional TARGET is not present then ASSOCIATED(POINTER) is
+[char46]true. if POINTER is associated with a target; otherwise, it returns
+[char46]false..
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-If TARGET is present and a scalar <I>target</I>, the result is .true. if TARGET
-is not a zero-sized storage sequence and the <I>target</I> associated with
+If TARGET is present and a scalar target, the result is .true. if TARGET
+is not a zero-sized storage sequence and the target associated with
 POINTER occupies the same storage units. If POINTER is disassociated,
 the result is .false..
 </TD></TR>
 <TR valign=top><TD width=4%>
 3.
 </TD><TD>
-If TARGET is present and an array <I>target</I>, the result is .true. if TARGET
+If TARGET is present and an array target, the result is .true. if TARGET
 and POINTER have the same shape, are not zero-sized arrays, are arrays
 whose elements are not zero-sized storage sequences, and TARGET and
 POINTER occupy the same storage units in array element order.
@@ -185,7 +187,7 @@ As in case 2, the result is .false., if POINTER is disassociated.
 4.
 </TD><TD>
 If TARGET is present and an scalar pointer, the result is .true. if
-TARGET is associated with POINTER, the <I>target</I> associated with TARGET are
+TARGET is associated with POINTER, the target associated with TARGET are
 not zero-sized storage sequences and occupy the same storage units.
 <P>
 The result is .false., if either TARGET or POINTER is disassociated.
@@ -194,7 +196,7 @@ The result is .false., if either TARGET or POINTER is disassociated.
 5.
 </TD><TD>
 If TARGET is present and an array pointer, the result is .true. if
-<I>target</I> associated with POINTER and the <I>target</I> associated with TARGET
+target associated with POINTER and the target associated with TARGET
 have the same shape, are not zero-sized arrays, are arrays whose
 elements are not zero-sized storage sequences, and TARGET and POINTER
 occupy the same storage units in array element order.
@@ -251,7 +253,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-<B>NULL</B>(3)
+NULL(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 <P>
@@ -260,7 +262,7 @@ fortran-lang intrinsic descriptions (license: MIT) @urbanjost
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>associated (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 56372c14-d7f3-4b53-91bc-7145f33cb82c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>associated (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6c9c11cd-32ab-402e-b7f4-ae355df53224 using man macros.</FONT>
 <br><br><center><img src="images/associated.3fortran.gif"></center>
 </div>
 </div>

@@ -65,25 +65,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!        rev-(1f) - [FUNIX] reverse lines in a file
-!!        (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!        rev- INPUT_FILE(S) [ --help][ --version]
-!!##DESCRIPTION
-!!        reverse lines in a file
-!!##OPTIONS
-!!        INPUT_FILE(s)  input file(s)
-!!        --help         display help text and exit
-!!        --version      display version information and exit
-!!##SEE ALSO
-!!        tac(1), rev(1)
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -100,7 +81,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 2019-08-31>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2022-12-21 19:28:51 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 12:23:55 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -13,4 +13,4 @@
         write(*,g) 'double ',median(&
         [11.0d0,22.0d0,33.0d0,66.0d0,77.0d0,88.0d0])
 
-    end program demo_median
+     end program demo_median

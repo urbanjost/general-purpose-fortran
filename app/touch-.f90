@@ -102,36 +102,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    touch-(1f) - [FUNIX:FILESYSTEM] change file access and modify timestamps to current time, creating file if necessary
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    touch- [FILE... [ -date DATE]]|[ --help|--version|--verbose]
-!!
-!!##DESCRIPTION
-!!
-!!    Make sure specified filenames exist (by creating them as empty
-!!    files) and change file access time to current time or specified
-!!    time.
-!!##OPTIONS
-!!    -date      Change the file timestamps to the specified date instead of
-!!               the current time. Uses guessdate(3f) to read the date.
-!!    --verbose  Display messages showing command progress
-!!    --help     Display help text and exit
-!!    --version  Display version information and exit
-!!##EXAMPLES
-!!
-!!   Sample commands
-!!
-!!    touch- *.f90
-!!    touch- * -date 2000-01-02 10:20:30
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -147,7 +117,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    change file access timestamp to current time, creating file is necessary>',&
 '@(#)VERSION:        1.0, 20180217>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2022-12-21 19:28:58 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 12:23:51 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

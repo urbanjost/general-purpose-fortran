@@ -69,4 +69,4 @@
               write(*,*)'(Q,P)',extends_type_of(q,p)
            end subroutine pointers
 
-    end program demo_extends_type_of
+          end program demo_extends_type_of

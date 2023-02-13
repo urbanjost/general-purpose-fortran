@@ -6,5 +6,6 @@ unit_check_keep_going=.true.
 unit_check_level=0
    write(*,*)'STARTED test_suite_M_sha3'
    call test_suite_M_sha3()
-   write(*,*)'COMPLETEDtest_suite_ M_sha3'
+   write(*,*)'COMPLETED test_suite_ M_sha3'
+   call unit_check_stop()
 end program runtest

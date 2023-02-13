@@ -4,7 +4,7 @@
       integer :: lun
       integer :: ios, ierr
          lun=fileopen('<input.txt',ios=ierr)
-         if(ierr.ne.0)then
+         if(ierr /= 0)then
             write(*,*)'<ERROR> opening file'
          endif
          ios=fileclose(lun)

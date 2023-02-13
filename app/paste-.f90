@@ -100,18 +100,19 @@ help_text=[ CHARACTER(LEN=128) :: &
 'DESCRIPTION',&
 '   paste(1f) writes to standard output lines consisting of sequentially',&
 '   corresponding lines of each given file, separated by a TAB character.',&
-'   Standard input is used for a file name of ''-'' or if no input files are',&
-'   given.',&
+'   Standard input is used for a file name of ''-'' or if no input files',&
+'   are given.',&
 '',&
 '   An exit status of zero indicates success, and a nonzero value',&
 '   indicates failure.',&
 '',&
-'   UNLIKE C VERSION the delimiter list cannot be a null set. A zero-length',&
-'   list will be treated as a blank; and if a blank is a member of the set',&
-'   it cannot be at the end of the delimiters list.',&
+'   Unlike the C version the delimiter list cannot be a null set. A',&
+'   zero-length list will be treated as a blank; and if a blank is a',&
+'   member of the set it cannot be at the end of the delimiters list.',&
 '',&
-'   Fortran does not allow the same file to be opened simultaneously more',&
-'   than once so filenames cannot be repeated',&
+'   Standard Fortran does not currently support the same file being opened',&
+'   multiple times simultaneously so repeating filenames is not supported',&
+'   but may work, depending on the compiler.',&
 '',&
 'OPTIONS',&
 '   -d, --delimiters=LIST  Consecutively use the characters in LIST',&

@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_strings_oop(3f) </B>- [M_strings::INTRO::OOPS] OOP Fortran string module
-<B>
-</B></BLOCKQUOTE>
+M_strings_oop(3f) - [M_strings::INTRO::OOPS] OOP Fortran string module
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -74,9 +74,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>use</B> <I>M_strings_oop</I>
-</PRE>
+use M_strings_oop
 </BLOCKQUOTE>
 <A name=2>
 
@@ -84,13 +82,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-The <B>M_strings</B>(3fm) module is a collection of Fortran procedures
+The M_strings(3fm) module is a collection of Fortran procedures
 that supplement the built-in intrinsic string routines. Routines
 for parsing, tokenizing, changing case, substituting new strings for
 substrings, locating strings with simple wildcard expressions, removing
 tabs and line terminators and other string manipulations are included.
 <P>
-<I>M_strings_oop</I>(3fm) is a companion module that provides an OOP interface
+M_strings_oop(3fm) is a companion module that provides an OOP interface
 to the M_strings module.
 </BLOCKQUOTE>
 <A name=3>
@@ -110,9 +108,9 @@ expression library (M_regex).
 
 </A>
 <BLOCKQUOTE>
-Each of the procedural functions in <B>M_strings</B>(3fm) includes an example
-program in the corresponding <B>man</B>(1) page for the function. The
-object-oriented interface does not have individual <B>man</B>(1) pages,
+Each of the procedural functions in M_strings(3fm) includes an example
+program in the corresponding man(1) page for the function. The
+object-oriented interface does not have individual man(1) pages,
 but is instead demonstrated using the following example program:
 <P>
 <PRE>
@@ -142,7 +140,7 @@ but is instead demonstrated using the following example program:
       write(*,101)&#146;str2%str is &#46;&#46;&#46;............. &#146;,str2%str
       ! same as intrinsic LEN()
       write(*,202)&#146;len &#46;&#46;&#46;..................... &#146;,str2%len()
-      ! same as intrinsic INDEX()
+      ! same as intrinsic LEN_TRIM()
       write(*,202)&#146;len_trim &#46;&#46;&#46;................ &#146;,str2%len_trim()
       ! same as intrinsic INDEX()
       write(*,202)&#146;index("is")&#46;&#46;&#46;.............. &#146;,str2%index("is")
@@ -213,11 +211,11 @@ but is instead demonstrated using the following example program:
       str3=string(&#146;   12.345678901234567e1        &#146;)
       str3=string(&#146;Four score and seven years ago&#146;)
       write(*,101)&#146;str3%str &#46;&#46;&#46;................ &#146;,str3%str
-      ! calls M_strings procedure MATCHW
+      ! calls M_strings procedure GLOB
       write(*,*)&#146;match("Fo*") &#46;&#46;&#46;............ &#146;, str3%match("Fo*")
-      ! calls M_strings procedure MATCHW
+      ! calls M_strings procedure GLOB
       write(*,*)&#146;match("and") &#46;&#46;&#46;............ &#146;, str3%match("and")
-      ! calls M_strings procedure MATCHW
+      ! calls M_strings procedure GLOB
       write(*,*)&#146;match("*and*") &#46;&#46;&#46;.......... &#146;, str3%match("*and*")
 <P>
       101 format(1x,a,"[",a,"]")
@@ -228,7 +226,7 @@ but is instead demonstrated using the following example program:
       write(*,*)repeat(&#146;=&#146;,68)
       write(*,*)&#146;OVERLOADED OPERATORS (add and subtract,return TYPE(STRING))&#146;
       str1%str=&#146;123.456&#146;
-      str2%str=&#146;AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj&#146;
+      str2%str=&#146;AaBbCcDdEeFfGgHhIi AaBbCcDdEeFfGgHhIi&#146;
       write(*,101)&#146;str1%str &#46;&#46;&#46;................ &#146;,str1%str
       write(*,101)&#146;str2%str &#46;&#46;&#46;................ &#146;,str2%str
       write(*,*)&#146;str1 + str2 &#46;&#46;&#46;............. &#146;,p(str1 + str2)
@@ -239,7 +237,7 @@ but is instead demonstrated using the following example program:
 <P>
       write(*,*)repeat(&#146;=&#146;,68)
       write(*,*)&#146;OVERLOADED OPERATORS (multiply,return TYPE(STRING))&#146;
-      str1%str=&#146;AaBbCcDdEeFfGgHhIiJj&#146;
+      str1%str=&#146;AaBbCcDdEeFfGgHhIi&#146;
       write(*,101)&#146;str1%str &#46;&#46;&#46;................ &#146;,str1%str
       write(*,*)&#146;str1 * 2 &#46;&#46;&#46;................ &#146;,p(str1 * 2)
 <P>
@@ -278,7 +276,6 @@ but is instead demonstrated using the following example program:
     end program demo_M_strings_oop
 <P>
 </PRE>
-</BLOCKQUOTE>
 Expected output
 <P>
 <PRE>
@@ -329,23 +326,23 @@ Expected output
   match("*and*") &#46;&#46;&#46;..........  T
   ====================================================================
   OVERLOADED OPERATORS (add and subtract, return TYPE(STRING))
-  str1%str &#46;&#46;&#46;................ [123.456]
-  str2%str &#46;&#46;&#46;................ [AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj]
-  str1 + str2 &#46;&#46;&#46;............. 123.456 AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj
-  str1 + 20000 &#46;&#46;&#46;............ 20123.455999999998
-  str1 - 20.0 &#46;&#46;&#46;............. -103.456
-  str2 - "Aa" (removes ALL) .. BbCcDdEeFfGgHhIiJj BbCcDdEeFfGgHhIiJj
+  str1%str &#46;&#46;&#46;............... [123.456]
+  str2%str &#46;&#46;&#46;............... [AaBbCcDdEeFfGgHhIi AaBbCcDdEeFfGgHhIi]
+  str1 + str2 &#46;&#46;&#46;............ 123.456 AaBbCcDdEeFfGgHhIi AaBbCcDdEeFfGgHhIi
+  str1 + 20000 &#46;&#46;&#46;........... 20123.455999999998
+  str1 - 20.0 &#46;&#46;&#46;............ -103.456
+  str2 - "Aa" (removes ALL) . BbCcDdEeFfGgHhIi BbCcDdEeFfGgHhIi
   ===================================================================
   OVERLOADED OPERATORS (multiply, return TYPE(STRING))
-  str1%str &#46;&#46;&#46;................ [AaBbCcDdEeFfGgHhIiJj]
-  str1 * 2 &#46;&#46;&#46;................ AaBbCcDdEeFfGgHhIiJjAaBbCcDdEeFfGgHhIiJj
+  str1%str &#46;&#46;&#46;................ [AaBbCcDdEeFfGgHhIi]
+  str1 * 2 &#46;&#46;&#46;................ AaBbCcDdEeFfGgHhIiAaBbCcDdEeFfGgHhIi
   ===================================================================
   OVERLOADED OPERATORS (//, return TYPE(STRING))
   str1%str &#46;&#46;&#46;................ [String one:]
   str2%str &#46;&#46;&#46;................ [String two:]
-  str1 // str2 &#46;&#46;&#46;............. String one:String two:
-  str1 // 20000 &#46;&#46;&#46;............ String one:20000
-  str1 // 20.0 &#46;&#46;&#46;............. String one:20.0
+  str1 // str2 &#46;&#46;&#46;............ String one:String two:
+  str1 // 20000 &#46;&#46;&#46;........... String one:20000
+  str1 // 20.0 &#46;&#46;&#46;............ String one:20.0
   ===================================================================
   OVERLOADED OPERATORS (logical comparisons, return logical)
   str1%str &#46;&#46;&#46;................ [abcdefghij]
@@ -360,6 +357,7 @@ Expected output
   ===================================================================
 <P>
 </PRE>
+</BLOCKQUOTE>
 <A name=5>
 
      <H3>AUTHOR</H3>
@@ -377,7 +375,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_strings_oop (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2f0552e6-c13d-4585-bec7-95a7b64bf0b2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_strings_oop (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2cef6a8b-7369-4449-9273-a89a447a0c37 using man macros.</FONT>
 <br><br><center><img src="images/M_strings_oop.3m_strings.gif"></center>
 </div>
 </div>

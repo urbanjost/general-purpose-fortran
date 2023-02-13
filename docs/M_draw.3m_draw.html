@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_draw(3fm) </B>- [M_draw::INTRO] The M_draw graphics library
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+M_draw(3fm) - [M_draw::INTRO] The M_draw graphics library
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Description</A><BR>
@@ -109,7 +109,7 @@ SVG driver.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A PCL5/HPGL2 driver that supports <B>prefsize</B>() calls.
+A PCL5/HPGL2 driver that supports prefsize() calls.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -123,7 +123,7 @@ o
 Color PBM (Poskanzer pixmap P3 and P6 formats). If you have the
 pbmplus package you can use it to make M_draw appear to write
 any format pbmplus writes (assuming your system supports the
-<B>popen</B>(3c) function).
+popen(3c) function).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -180,35 +180,35 @@ The original VOGLE source&#146;s ownership statement
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>vinit</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>vinit(device)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Initialise device
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>vexit</B>() </TD><TD valign=bottom>
+<B>vexit()</B> </TD><TD valign=bottom>
 Reset window/terminal (must be last routine called)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>voutput</B>(path) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>voutput(path)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Redirect output from *next* vinit to file
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>vnewdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>vnewdev(device)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Reinitialize to use new device without changing
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>vgetdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>vgetdev(device)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Get name of current device
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>pushdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>pushdev(device)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 push current device onto a stack
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>popdev</B>(device) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>popdev(device)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 pop device from stack created by pushdev.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getdepth</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getdepth()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Return number of bit planes (color planes)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -219,11 +219,11 @@ Return number of bit planes (color planes)
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>prefposition</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>prefposition(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify preferred position of window
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>prefsize</B>(width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>prefsize(width, height)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify preferred width and height of window
 </TD></TR>
 <TR></TR></TABLE>Some devices are basically window oriented - like sunview and X11. You
@@ -232,7 +232,7 @@ routines. These can make your code very device independent. Both routines
 take arguments which are in device space. (0, 0) is the top left hand
 corner in device space. To have any effect these routines must be called
 before vinit. For the X11 device, an entry may be made in your .Xdefaults
-file or loaded in with the <B>xrdb</B>(1) command:
+file or loaded in with the xrdb(1) command:
 <P>
 <PRE>
       xrdb &lt;&lt;\end_of_file
@@ -256,7 +256,7 @@ file or loaded in with the <B>xrdb</B>(1) command:
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>clipping</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>clipping(onoff)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Turn clipping on or off
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -267,13 +267,13 @@ Turn clipping on or off
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B></B><B>clear</B>() </TD><TD valign=bottom>
+<B>clear()</B> </TD><TD valign=bottom>
 Clears screen to current color
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>color</B>(col) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>color(col)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set current color
-<B>mapcolor</B>(indx, red, green, blue) Set color map index
+mapcolor(indx, red, green, blue) Set color map index
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -283,23 +283,23 @@ Set current color
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>getkey</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getkey()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Return ASCII ordinal of next key typed
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>checkkey</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>checkkey()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Returns zero if no key is pressed or ASCII ordinal
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getstring</B>(bcol, string) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getstring(bcol, string)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Read in a string, echoing it in current font
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>locator</B>(xaddr, yaddr) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>locator(xaddr, yaddr)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Find out where cursor is
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>slocator</B>(xaddr, yaddr) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>slocator(xaddr, yaddr)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Find out where cursor is in screen coordinates
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -310,11 +310,11 @@ Find out where cursor is in screen coordinates
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>vsetflush</B>(yesno) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>vsetflush(yesno)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set global flushing status
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>vflush</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>vflush()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Call device flush or syncronisation routine
 </TD></TR>
 <TR><TD colspan=2>
@@ -328,7 +328,7 @@ the following cases:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Within a <B>callobj</B>() call.
+Within a callobj() call.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -356,28 +356,28 @@ When double buffering (the flush is only done within swapbuffers).
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>viewport</B>(left, right, bottom, top) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>viewport(left, right, bottom, top)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify which part of screen to draw in
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>pushviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>pushviewport()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Save current viewport
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>popviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>popviewport()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Retrieve last viewport
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getviewport</B>(left, right, bottom,top) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getviewport(left, right, bottom,top)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Returns limits of current viewport in screen coordinates
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>expandviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>expandviewport()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 use the entire device viewport
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>unexpandviewport</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-undo <B>expandviewport</B>(3f)
+<B>unexpandviewport()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+undo expandviewport(3f)
 </TD></TR>
 <TR></TR></TABLE>Viewpoint routines alter the current transformation matrix.
 </BLOCKQUOTE>
@@ -388,16 +388,16 @@ undo <B>expandviewport</B>(3f)
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>getaspect</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getaspect()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Returns the ratio height over width of the display device.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getfactors</B>(wfact, hfact) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Returns width over <B>min</B>(width of device, height of device) and height over <B>min</B>(width of
+<B>getfactors(wfact, hfact)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Returns width over min(width of device, height of device) and height over min(width of
 device, height of device).
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getdisplaysize</B>(w, h) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getdisplaysize(w, h)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Returns width and height of device in device units
 </TD></TR>
 <TR></TR></TABLE>Often the screen is not perfectly square and it would be nice to use
@@ -412,12 +412,12 @@ to viewport, etc as needed.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>pushattributes</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>pushattributes()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Save the current attributes on the attribute stack.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>popattributes</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Restore attributes to what they were at last <B>pushattributes</B>().
+<B>popattributes()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Restore attributes to what they were at last pushattributes().
 </TD></TR>
 <TR></TR></TABLE>The attribute stack contains details such as current color, filling,
 hatching, centered, fixedwidth, text height, text width, and the
@@ -431,19 +431,19 @@ use pushattributes before the call and popattributes after.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>ortho</B>(left, right, bottom, top,near,far) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ortho(left, right, bottom, top,near,far)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Define x,y,z clipping planes.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>ortho2</B>(left, right, bottom, top) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ortho2(left, right, bottom, top)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Define x and y clipping planes.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>perspective</B>(fov, aspect, near, far) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>perspective(fov, aspect, near, far)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify perspective viewing pyramid
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>window</B>(left, right, bot, top, near,far) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>window(left, right, bot, top, near,far)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify a perspective viewing pyramid
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -473,11 +473,11 @@ and window.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>pushmatrix</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>pushmatrix()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Save the current transformation matrix on the matrix stack.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>popmatrix</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>popmatrix()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Reinstall the last matrix pushed
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -488,15 +488,15 @@ Reinstall the last matrix pushed
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>polarview</B>(dist, azim, inc, twist) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>polarview(dist, azim, inc, twist)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify the viewer&#146;s position in polar coordinates
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>up</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>up(x, y, z)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify the world up.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>lookat</B>(vx, vy, vz, px, py, pz,twist) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>lookat(vx, vy, vz, px, py, pz,twist)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Specify the viewer&#146;s position
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -507,27 +507,27 @@ Specify the viewer&#146;s position
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>move</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>move(x, y, z)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Move current graphics position to (x, y, z)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rmove</B>(deltax, deltay, deltaz) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rmove(deltax, deltay, deltaz)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Relative move
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>move2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>move2(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Move graphics position to point (x, y)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rmove2</B>(deltax, deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rmove2(deltax, deltay)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Relative move in world units.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>smove2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>smove2(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Move current graphics position in screen coordinates (<B>-1.0</B> to 1.0).
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rsmove2</B>(deltax, deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rsmove2(deltax, deltay)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Relative move in screen units (<B>-1.0</B> to 1.0).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -538,15 +538,15 @@ Relative move in screen units (<B>-1.0</B> to 1.0).
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>linewidth</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>linewidth()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 set line width in rasters
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>dashcode</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>dashcode()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 set dash pattern length
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>linestyle</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>linestyle()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 set the line dash pattern
 </TD></TR>
 <TR></TR></TABLE>Linestyles are specified by giving a nominal length of a single
@@ -557,7 +557,7 @@ reset, the accumulated information as to where on a curve (or line)
 a dash is to be draw is also reset.
 <P>
 For EXAMPLE, with a nominal view of <B>-1</B> to 1, setting the dash length
-to 0.5, and the linestyle to &#146;11010&#146; would draw a <B>line</B>(or curve) with
+to 0.5, and the linestyle to &#146;11010&#146; would draw a line(or curve) with
 a 1.0 unit solid part, followed by a 0.5 unit blank part followed by
 a 0.5 unit solid part followed by a 0.5 unit blank part. The linestyle
 would then repeat itself.
@@ -573,27 +573,27 @@ the farther away they are.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>draw</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>draw(x, y, z)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw from current graphics position to (x, y, z)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rdraw</B>(deltax, deltay, deltaz) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rdraw(deltax, deltay, deltaz)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Relative draw
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>draw2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>draw2(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw from current graphics position to point (x, y)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rdraw2</B>(deltax,deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rdraw2(deltax,deltay)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Relative draw
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>sdraw2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>sdraw2(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw in screen coordinates (<B>-1.0</B> to 1.0).
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rsdraw2</B>(deltax, deltay) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rsdraw2(deltax, deltay)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Relative draw in screen units (<B>-1.0</B> to 1.0).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -604,27 +604,27 @@ Relative draw in screen units (<B>-1.0</B> to 1.0).
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>circleprecision</B>(nsegs) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>circleprecision(nsegs)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set number of line segments in a circle. Default is 32.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>arc</B>(x, y, radius, startang, endang) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>arc(x, y, radius, startang, endang)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw an arc in world units.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>sector</B>(x, y, radius, startang,endang) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>sector(x, y, radius, startang,endang)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw a sector. Note: sectors are polygons.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>circle</B>(x, y, radius) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>circle(x, y, radius)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw a circle. Note: circles are polygons.
 </TD></TR>
 <TR></TR></TABLE>When creating arcs and sectors note that angles are
-measured in degrees; where <B>zero</B>(0) is the positive X axis in a
+measured in degrees; where zero(0) is the positive X axis in a
 right-handed Cartesian coordinate system and positive angles sweep
 counterclockwise. If filling sectors or circles (As described in the
 section on polygons) hatch pitch is measured in world coordinates
-and is initially set to 0.1. The initial hatch angle is <B>zero</B>(0).
+and is initially set to 0.1. The initial hatch angle is zero(0).
 </BLOCKQUOTE>
 <A name=>
 
@@ -633,23 +633,23 @@ and is initially set to 0.1. The initial hatch angle is <B>zero</B>(0).
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>curvebasis</B>(basis) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>curvebasis(basis)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Define a basis matrix for a curve.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>curveprecision</B>(nsegs) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>curveprecision(nsegs)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Define number of line segments used to draw a curve.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rcurve</B>(geom) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rcurve(geom)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw a rational curve.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>curve</B>(geom) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>curve(geom)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw a curve.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>curven</B>(n, geom) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>curven(n, geom)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw n - 3 overlapping curve segments. Note: n must be at least 4.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -660,47 +660,47 @@ Draw n - 3 overlapping curve segments. Note: n must be at least 4.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>rect</B>(x1, y1, x2, y2) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rect(x1, y1, x2, y2)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw a rectangle.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>polyfill</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>polyfill(onoff)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set the polygon fill flag
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>polyhatch</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>polyhatch(onoff)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set the polygon hatch flag
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>hatchang</B>(angle) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>hatchang(angle)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set the angle of the hatch lines.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>hatchpitch</B>(pitch) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>hatchpitch(pitch)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set the distance between hatch lines.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>poly2</B>(n, points) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>poly2(n, points)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Construct an (x, y) polygon from an array of points
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>poly</B>(n, points) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>poly(n, points)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Construct a polygon from an array of points
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>makepoly</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>makepoly()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 opens polygon constructed by a series of move-draws and closed by closepoly
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>closepoly</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>closepoly()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Terminates a polygon opened by makepoly.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>backface</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>backface(onoff)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Turns on culling of backfacing polygons.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>backfacedir</B>(clockwise) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>backfacedir(clockwise)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Sets backfacing direction to clockwise or anti-clockwise
 </TD></TR>
 <TR><TD colspan=2>
@@ -749,95 +749,95 @@ not self-intersecting in this way is called a simple polygon.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>font</B>(fontname) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>font(fontname)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 set the current font
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>numchars</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>numchars()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 return number of characters in the current SOFTWARE font.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>textsize</B>(width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>textsize(width, height)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 set maximum size of a character in the current SOFTWARE font.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>textang</B>(ang) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>textang(ang)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 set the SOFTWARE text angle.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>fixedwidth</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>fixedwidth(onoff)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 turns fixedwidth mode on or off for SOFTWARE fonts.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getcharsize</B>(c, width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getcharsize(c, width, height)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 get the width and height of a character.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getfontdec</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getfontdec()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 return size of maximum font descender
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getfontsize</B>(width, height) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getfontsize(width, height)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 get maximum width and height of a character in a font.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>drawchar</B>(c) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>drawchar(c)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 draw the character c and update current position.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>drawstr</B>(str) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>drawstr(str)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 draw the text in string at the current position.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>strlength</B>(str) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>strlength(str)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 return the length of the string s
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>boxtext</B>(x, y, l, h, s) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>boxtext(x, y, l, h, s)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 stretch and draw the SOFTWARE string s so that it fits in the imaginary box
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>boxfit</B>(x, y, l, h, s) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>boxfit(x, y, l, h, s)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 resize the SOFTWARE text size so it fits in a box
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>textjustify</B>(val) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>textjustify(val)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 general text justification
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>leftjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>leftjustify()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 left justify text
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rightjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rightjustify()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 right justify text
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>topjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>topjustify()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 top justify text
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>bottomjustify</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>bottomjustify()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 bottom justify text
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>centertext</B>(onoff) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>centertext(onoff)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 turns centertext mode on or off for SOFTWARE fonts.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>xcentertext</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>xcentertext()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 center text in the X direction
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>ycentertext</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>ycentertext()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 center text in the Y direction
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>textslant</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>textslant()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 defines the obliqueness of the fonts.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>textweight</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>textweight()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 defines the weight of the fonts.
 </TD></TR>
 <TR></TR></TABLE>M_draw supports hardware and software fonts. The software fonts are based
@@ -882,25 +882,25 @@ the default font is futura.l
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>translate</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>translate(x, y, z)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set up a translation.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>scale</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>scale(x, y, z)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set up scaling factors in x, y, and z axis.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rotate</B>(angle, axis) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rotate(angle, axis)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set up a rotation in axis axis where axis is one of &#146;x&#146;,&#146;y&#146;, or &#146;z&#146;.
 </TD></TR>
 <TR></TR></TABLE>All transformations are cumulative, so if you rotate something and
 then do a translate you are translating relative to the rotated
 axes. If you need to preserve the current transformation matrix use
-<B>pushmatrix</B>(), do the drawing, and then call <B>popmatrix</B>() to get back
+pushmatrix(), do the drawing, and then call popmatrix() to get back
 where you were before.
 <P>
 When doing transformations, ensure your objects remain in the viewing
-volume or they will be clipped. See routines such as <B>ortho</B>(3) for
+volume or they will be clipped. See routines such as ortho(3) for
 more information.
 </BLOCKQUOTE>
 <A name=>
@@ -910,23 +910,23 @@ more information.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>patchbasis</B>(tbasis, ubasis) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>patchbasis(tbasis, ubasis)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Define the t and u basis matrices of a patch.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>patchprecision</B>(tseg, useg) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>patchprecision(tseg, useg)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set minimum number of line segments making up curves in a patch.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>patchcurves</B>(nt, nu) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>patchcurves(nt, nu)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Set the number of curves making up a patch.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>rpatch</B>(gx, gy, gz, gw) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>rpatch(gx, gy, gz, gw)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draws a rational patch in the current basis, according to the geometry matrices gx, gy, gz, and gw.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>patch</B>(gx, gy, gz) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>patch(gx, gy, gz)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draws a patch in the current basis, according to the geometry matrices gx, gy, and gz.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -937,11 +937,11 @@ Draws a patch in the current basis, according to the geometry matrices gx, gy, a
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>point</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>point(x, y, z)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw a point at x, y, z
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>point2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>point2(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw a point at x, y.
 </TD></TR>
 <TR></TR></TABLE>points are drawn with the current color and linewidth. Points are
@@ -956,43 +956,43 @@ hardware line style.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>makeobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>makeobj(n)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Commence the object number n.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>closeobj</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>closeobj()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Close the current object.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>genobj</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>genobj()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Returns a unique object identifier.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getopenobj</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getopenobj()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Return the number of the current object.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>callobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>callobj(n)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw object number n.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>isobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>isobj(n)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Returns non-zero if there is an object of number n.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>delobj</B>(n) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>delobj(n)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Delete the object number n.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>loadobj</B>(n, filename) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>loadobj(n, filename)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Load the object in the file filename as object number n.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>saveobj</B>(n, filename) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>saveobj(n, filename)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Save object number n into file filename. Does NOT save objects called inside object n.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>invokeobj</B>(xt,yt,zt,xs,ys,zs,xr,yr,zr,iobject) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>invokeobj(xt,yt,zt,xs,ys,zs,xr,yr,zr,iobject)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 push environment and do a transformation and then pop environment
 </TD></TR>
 <TR></TR></TABLE>Objects are graphical entities created by the drawing routines called
@@ -1014,15 +1014,15 @@ in objects.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>backbuffer</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>backbuffer()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw in the backbuffer. Returns <B>-1</B> if the device is not up to it.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>frontbuffer</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>frontbuffer()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Draw in the front buffer. This will always work.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>swapbuffers</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>swapbuffers()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Swap the front and back buffers.
 </TD></TR>
 <TR></TR></TABLE>Where possible M_draw allows for front and back buffers to enable
@@ -1036,19 +1036,19 @@ backbuffer is used to initialise double buffering.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B></B><B>getgp</B>(x, y, z) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getgp(x, y, z)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Gets the current graphics position
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getgpt</B>(x, y, z, w) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getgpt(x, y, z, w)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Gets the current transformed graphics position in world coords.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>getgp2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>getgp2(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Gets the current graphics position
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>sgetgp2</B>(x, y) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>sgetgp2(x, y)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 Gets the current screen graphics position in screen coords (<B>-1</B> to 1)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -1059,11 +1059,11 @@ Gets the current screen graphics position in screen coords (<B>-1</B> to 1)
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>subroutine </B><B>pop</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>subroutine pop()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 pop
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>subroutine </B><B>push</B>() </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>subroutine push()</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 push
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -1212,8 +1212,9 @@ Sample program:
       call textsize(height,height)
       call drawstr(itext)
       end subroutine hershey
+   end program demo_M_draw
+<P>
 </PRE>
-end program demo_M_draw
 </BLOCKQUOTE>
 <A name=4>
 
@@ -1235,18 +1236,18 @@ When creating an object, current position and text size are not
 actually changed so almost any query routine to get position or font
 size or whatever will not work properly.
 <P>
-If call <B>vexit</B>(3f) and then call <B>vinit</B>(3f) everything should probably
+If call vexit(3f) and then call vinit(3f) everything should probably
 be reset to initial values at program startup, such as linewidth,
 current font, and color. It is currently left up to the output device
 initialization routine. It should not be. To minimize the issue,
-call all the push* routines after a <B>vinit</B>(3f) and call all the pop*
-routines before <B>vexit</B>(3f).
+call all the push* routines after a vinit(3f) and call all the pop*
+routines before vexit(3f).
 <P>
 Exactly what attributes should and should not be reset with a
-<B>vnewdev</B>(3f) is questionable.
+vnewdev(3f) is questionable.
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_draw (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cc4156c5-88ef-4644-a09f-a34bbb9c3cf2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_draw (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c3d2f055-4c2b-4099-9743-cfceb85acd15 using man macros.</FONT>
 <br><br><center><img src="images/M_draw.3m_draw.gif"></center>
 </div>
 </div>

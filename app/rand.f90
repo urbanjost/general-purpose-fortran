@@ -133,14 +133,14 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2022-12-21 19:29:28 UTC-300>',&
+'@(#)COMPILED:       2023-02-12 18:35:43 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
 program rand
-use M_io,      only : swallow
+use M_io,      only : fileread
 use M_strings, only : notabs
 use M_random,  only : scramble, init_random_seed_by_system_clock
 use M_verify,   only : stderr
@@ -151,6 +151,7 @@ character(len=:),allocatable     :: pageout(:) ! array to hold file in memory
 integer,allocatable              :: indx(:)
 integer                          :: i,j,k,n
 integer,allocatable              :: vals(:)
+integer                          :: icount
 !-----------------------------------------------------------------------------------------------------------------------------------
    call kracken('rand','-help .F. -version .f. -e .F. -n -1 -i')    ! define command arguments,default values and crack command line
    call help_usage(lget('rand_help'))                               ! if -help option is present, display help text and exit
@@ -177,12 +178,14 @@ DONE : block
       exit DONE
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   do j=1,size(FILENAMES)
+   icount=size(FILENAMES)
+   if(icount==0)FILENAMES=['-']
+   do j=1,max(icount,1)
       ! allocate character array and copy file into it
       if(FILENAMES(j).eq.'-')then
-         call swallow(5,pageout)
+         call fileread(5,pageout)
       else
-         call swallow(FILENAMES(j),pageout)
+         call fileread(FILENAMES(j),pageout)
       endif
       if(.not.allocated(pageout))then
          call stderr('*rand* failed to load file ',FILENAMES(j))

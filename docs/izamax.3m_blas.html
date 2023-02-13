@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>izamax(3f) </B>- [BLAS:AUX_BLAS]
-<B>
-</B></BLOCKQUOTE>
+izamax(3f) - [BLAS:AUX_BLAS]
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,9 +75,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-integer function <B>izamax</B>(n,zx,incx)
+integer function izamax(n,zx,incx)
 <P>
+<PRE>
       .. Scalar Arguments ..
       integer,intent(in)              :: incx,n
       ..
@@ -94,14 +94,14 @@ integer function <B>izamax</B>(n,zx,incx)
 </A>
 <BLOCKQUOTE>
 <P>
-<B>|Re</B>(IZAMAX <B>|Re</B>(finds <B>|Re</B>(the <B>|Re</B>(index <B>|Re</B>(of <B>|Re</B>(the <B>|Re</B>(first <B>|Re</B>(element <B>|Re</B>(having <B>|Re</B>(maximum |<B>|Re</B>(.)|
-<TABLE cellpadding=3><!-- tsb: <B>|Re</B>(IZAMAX <B>|Re</B>(finds <B>|Re</B>(the <B>|Re</B>(index <B>|Re</B>(of <B>|Re</B>(the <B>|Re</B>(first <B>|Re</B>(element <B>|Re</B>(having <B>|Re</B>(maximum |<B>|Re</B>(.)|
+IZAMAX finds the index of the first element having maximum |Re(.)|
+<TABLE cellpadding=3><!-- tsb: IZAMAX finds the index of the first element having maximum |Re(.)|
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-|\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(.)|
+|Im(.)|
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -112,17 +112,17 @@ o
 <BLOCKQUOTE>
 <P>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>\fB|Im</B>(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(N </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(number \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(of \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(elements \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(in \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(input \<B>|Im</B>(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(fBvector\<B>|Im</B>(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(fP(\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(s)
+<TR valign=top><TD width=3% nowrap>
+<B>N</B> </TD><TD valign=bottom>
+number of elements in input vector(s)
+</TD></TR>
+<TR valign=top><TD width=3% nowrap>
+<B>ZX</B> </TD><TD valign=bottom>
+array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>\fB|Im</B>(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(ZX </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(array, \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(dimension ( \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(1 + ( \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(N - \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(1 )*\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(<B>)*abs</B>( \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(INCX ) )
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>\fB|Im</B>(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(INCX </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(storage \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(spacing \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(between \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(elements \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(of \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(ZX
+<B>INCX</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+storage spacing between elements of ZX
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -133,8 +133,8 @@ o
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>\fB|Im</B>(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(IZAMAX </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(index \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(of \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(the \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(first \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(element \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(having \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(maximum
+<B>IZAMAX</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+index of the first element having maximum
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -148,22 +148,22 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Univ. \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(of \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Tennessee
+Univ. of Tennessee
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Univ. \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(of \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(California \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Berkeley
+Univ. of California Berkeley
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Univ. \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(of \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Colorado \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Denver
+Univ. of Colorado Denver
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(NAG \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Ltd.
+NAG Ltd.
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
@@ -177,9 +177,9 @@ o
 </A>
 <BLOCKQUOTE>
 <P>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(jack \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(dongarra, \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(1/\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(15/\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(85.
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(modified \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(3/\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(93 \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(to \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(return \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(if \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(incx .\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(le. \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(0.
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(modified \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(12/\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(3/\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(93, \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(<B>array</B>(\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(1) \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(declarations \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(changed \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(to \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(<B>array</B>(*)
+jack dongarra, 1/15/85.
+modified 3/93 to return if incx .le. 0.
+modified 12/3/93, array(1) declarations changed to array(*)
 </BLOCKQUOTE>
 <A name=7>
 
@@ -187,11 +187,11 @@ o
 
 </A>
 <BLOCKQUOTE>
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(Online \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(html \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(documentation \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(available \fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(at
-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(http://\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(www.netlib.org/\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(lapack/\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(explore-\fB|Im(fB|<B>|Im</B>(Re\fB|Im(fP(<B>|Im</B>(html/
+Online html documentation available at
+<A HREF="http://www.netlib.org/lapack/explore-html">http://www.netlib.org/lapack/explore-html</A>/
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>izamax (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9c026ba2-df94-4942-8da7-1a2d8878e64c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>izamax (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4ff607f8-0a54-4516-8d18-f65e1568aca5 using man macros.</FONT>
 <br><br><center><img src="images/izamax.3m_blas.gif"></center>
 </div>
 </div>

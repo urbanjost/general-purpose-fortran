@@ -56,10 +56,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>read_table(3f) </B>- [M_io] read file containing a table of numeric values
-<B>(LICENSE:PD)
-</B><B>
-</B></BLOCKQUOTE>
+read_table(3f) - [M_io:READ] read file containing a table of numeric values
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -75,16 +75,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-subroutine <B>read_table</B>(filename,array,ierr)
+subroutine read_table(filename,array,ierr,comment)
 <P>
+<PRE>
    character(len=*),intent(in)          :: filename
    TYPE,allocatable,intent(out)         :: array(:,:)
-   character(len=1,intent(in),optional  :: comment
    integer,intent(out)                  :: ierr
+   character(len=1,intent(in),optional  :: comment
 <P>
 </PRE>
-where TYPE may be <I>REAL</I>, <I>INTEGER</I>, or DOUBLEPRECISION
+where TYPE may be REAL, INTEGER, or DOUBLEPRECISION
 </BLOCKQUOTE>
 <A name=2>
 
@@ -112,16 +112,16 @@ filename to read
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>array</B> </TD><TD valign=bottom>
-array to create. May be <I>INTEGER</I>, <I>REAL</I>, or DOUBLEPRECISION
+array to create. May be INTEGER, REAL, or DOUBLEPRECISION
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ierr</B> </TD><TD valign=bottom>
+zero if no error occurred.
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>comment</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 ignore lines which contain this as the first non-blank
 character. Ignore it and subsequent characters on any line.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>ierr</B> </TD><TD valign=bottom>
-zero if no error occurred.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -142,7 +142,18 @@ Sample program, assuming the input file "inputfile" exists:
     ! create test file
     open(file=&#146;inputfile&#146;,unit=10,action=&#146;write&#146;)
     write(10,&#146;(a)&#146;) [character(len=80):: &
-     &#146;#---#---#---#                          &#146;, &
+     &#146; ___.___.___                           &#146;, &
+     &#146;| 1 | 5 | 3 |                          &#146;, &
+     &#146;|---+---+---|                          &#146;, &
+     &#146;| 4 | 2 | 6 |                          &#146;, &
+     &#146; -----------                           &#146;, &
+     &#146;    #-----#-----#------#               &#146;, &
+     &#146;|   | 1   | 3e2 | 4    |               &#146;, &
+     &#146;|   #-----#-----#------#               &#146;, &
+     &#146;|   | 2.0 | -5  | +2.2 |               &#146;, &
+     &#146;    #-----#-----#------#               &#146;, &
+     &#146;                                       &#146;, &
+     &#146;#___#___#___#                          &#146;, &
      &#146;| 1 | 5 | 3 |                          &#146;, &
      &#146;#---#---#---#                          &#146;, &
      &#146;| 4 | 2 | 6 |                          &#146;, &
@@ -179,26 +190,30 @@ Sample program, assuming the input file "inputfile" exists:
     end program demo_read_table
 <P>
 </PRE>
-</BLOCKQUOTE>
 Results:
 <P>
 <PRE>
-    size=                 33
-    size(dim=1)=          11
+    size=                 45
+    size(dim=1)=          15
     size=(dim=2)           3
-      1.00000000000000        5.00000000000000        3.00000000000000
-      4.00000000000000        2.00000000000000        6.00000000000000
-      1.00000000000000        10.0000000000000        45.0000000000000
-      10.0000000000000        20.0000000000000        45.0000000000000
-      2.00000000000000        20.0000000000000        15.0000000000000
-      20.3450000000000        20.0000000000000        15.0000000000000
-      30.0000000000000        30000.0000000000       0.000000000000000E+000
-      4.00000000000000        30.0444000000000       -10.0000000000000
-      40.0000000000000        30.5555000000000       -10.0000000000000
-      4.00000000000000        30.0444000000000       -10.0000000000000
-      40.0000000000000        30.5555000000000       -10.0000000000000
+      1.000000000000000      5.000000000000000      3.000000000000000
+      4.000000000000000      2.000000000000000      6.000000000000000
+      1.000000000000000      300.0000000000000      4.000000000000000
+      2.000000000000000     -5.000000000000000      2.200000000000000
+      1.000000000000000      5.000000000000000      3.000000000000000
+      4.000000000000000      2.000000000000000      6.000000000000000
+      1.000000000000000      10.00000000000000      45.00000000000000
+      10.00000000000000      20.00000000000000      45.00000000000000
+      2.000000000000000      20.00000000000000      15.00000000000000
+      20.34499999999999      20.00000000000000      15.00000000000000
+      30.00000000000000      30000.00000000000      0.000000000000000
+      4.000000000000000      30.04440000000000     -10.00000000000000
+      40.00000000000000      30.55549999999999     -10.00000000000000
+      4.000000000000000      30.04440000000000     -10.00000000000000
+      40.00000000000000      30.55549999999999     -10.00000000000000
 <P>
 </PRE>
+</BLOCKQUOTE>
 <A name=5>
 
      <H3>AUTHOR</H3>
@@ -216,7 +231,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>read_table (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f43514f1-80cf-47ac-a498-23d04c1723e3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>read_table (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fd032d2f-db6a-4bed-8370-e67f32b15f78 using man macros.</FONT>
 <br><br><center><img src="images/read_table.3m_io.gif"></center>
 </div>
 </div>

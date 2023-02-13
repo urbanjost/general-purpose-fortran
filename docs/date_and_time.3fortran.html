@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>date_and_time</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>date_and_time</B>(3fortran)
+<B>date_and_time(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+date_and_time(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>DATE_AND_TIME(3) </B>- [SYSTEM:TIME] Gets current date time
-<B>
-</B></BLOCKQUOTE>
+DATE_AND_TIME(3) - [SYSTEM:TIME] Gets current date time
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-call <B>date_and_time</B>( [date] [,<I>time</I>] [,<I>zone</I>] [,<I>values</I>] )
+call date_and_time( [date] [,time] [,zone] [,values] )
 <P>
+<PRE>
            subroutine date_and_time(date, time, zone, values)
 <P>
             character(len=8),intent(out),optional :: date
@@ -103,12 +103,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-*<I>time</I> is a default character scalar
+*time is a default character scalar
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-*<I>zone</I> is a default character scalar
+*zone is a default character scalar
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -123,10 +123,10 @@ of at least four.
 
 </A>
 <BLOCKQUOTE>
-<B>DATE_AND_TIME</B>(3) gets the corresponding date and <I>time</I> information from the
-real-<I>time</I> system clock.
+DATE_AND_TIME(3) gets the corresponding date and time information from the
+real-time system clock.
 <P>
-Unavailable <I>time</I> and date character parameters return blanks.
+Unavailable time and date character parameters return blanks.
 <P>
 Unavailable numeric parameters return <B>-HUGE</B>(VALUE).
 <P>
@@ -201,7 +201,7 @@ the difference with respect to Coordinated Universal Time (UTC), where
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-hh and mm are the <I>time</I> difference with respect to Coordinated
+hh and mm are the time difference with respect to Coordinated
 Universal Time (UTC) in hours and minutes, respectively.
 </TD></TR>
 <TR></TR></TABLE>The characters of this value following the sign character are all decimal
@@ -220,48 +220,48 @@ available for a value it is set to <B>-HUGE</B>(VALUES). Otherwise, it contains:
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(1) : The year, including the century.
+VALUES(1) : The year, including the century.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(2) : The month of the year
+VALUES(2) : The month of the year
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(3) : The day of the month
+VALUES(3) : The day of the month
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(4) : Time difference in minutes between the reported <I>time</I> and
-UTC <I>time</I>.
+VALUES(4) : Time difference in minutes between the reported time and
+UTC time.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(5) : The hour of the day, in the range 0 to 23.
+VALUES(5) : The hour of the day, in the range 0 to 23.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(6) : The minutes of the hour, in the range 0 to 59
+VALUES(6) : The minutes of the hour, in the range 0 to 59
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(7) : The seconds of the minute, in the range 0 to 60
+VALUES(7) : The seconds of the minute, in the range 0 to 60
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>VALUES</B>(8) : The milliseconds of the second, in the range 0 to 999.
+VALUES(8) : The milliseconds of the second, in the range 0 to 999.
 </TD></TR>
 <TR></TR></TABLE><!-- .PP -->
 </TD></TR>
-<TR></TR></TABLE>The date, clock, and <I>time</I> <I>zone</I> information might be available on some images
-and not others. If the date, clock, or <I>time</I> <I>zone</I> information is available on
+<TR></TR></TABLE>The date, clock, and time zone information might be available on some images
+and not others. If the date, clock, or time zone information is available on
 more than one image, it is processor dependent whether or not those images
 share the same information.
 </BLOCKQUOTE>
@@ -297,9 +297,9 @@ Sample program:
            & values(6),&#146; - The minutes of the hour&#146;, &
            & values(7),&#146; - The seconds of the minute&#146;, &
            & values(8),&#146; - The milliseconds of the second&#146;
-</PRE>
-end program demo_date_and_time
+      end program demo_date_and_time
 <P>
+</PRE>
 Results:
 <P>
 <PRE>
@@ -329,7 +329,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-<B>CPU_TIME</B>(3), <B>SYSTEM_CLOCK</B>(3)
+CPU_TIME(3), SYSTEM_CLOCK(3)
 </BLOCKQUOTE>
 <A name=8>
 
@@ -337,8 +337,8 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-date and <I>time</I> conversion, formatting and computation
-<TABLE cellpadding=3><!-- tsb: date and <I>time</I> conversion, formatting and computation
+date and time conversion, formatting and computation
+<TABLE cellpadding=3><!-- tsb: date and time conversion, formatting and computation
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -363,7 +363,7 @@ datetime-fortran - https://github.com/wavebitscientific/datetime-fortran
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7812d182-2c3a-4bcd-bbd6-803624f61a72 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a6ca6e3-3301-4f09-92b8-bd6a3699ea69 using man macros.</FONT>
 <br><br><center><img src="images/date_and_time.3fortran.gif"></center>
 </div>
 </div>

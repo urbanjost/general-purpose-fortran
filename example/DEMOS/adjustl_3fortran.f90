@@ -25,4 +25,4 @@
             astr = trim(astr)
             write(*,'(a,"[",a,"]")') 'trimmed: ',astr
 
-    end program demo_adjustl
+        end program demo_adjustl

@@ -52,4 +52,4 @@
            write(*,g) 'shape of answer is ', &
            & shape(minval(box, dim=2, mask = .true. ))
 
-    end program demo_minval
+        end program demo_minval

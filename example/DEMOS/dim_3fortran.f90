@@ -15,4 +15,4 @@
             print *, dim([1,2,3],[3,2,1])
             print *, dim(-10,[0,-10,-20])
 
-    end program demo_dim
+        end program demo_dim

@@ -41,4 +41,4 @@
            print *, transfer(x, 1.0)    ! prints "nan" on i686
         endblock ALT1
 
-    end program demo_nan
+     end program demo_nan

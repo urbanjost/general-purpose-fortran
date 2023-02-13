@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_orderpack(3f) </B>- [orderpack::INTRO]General and Specialized Ranking
-<B>and Sorting Routines
-</B></BLOCKQUOTE>
+M_orderpack(3f) - [orderpack::INTRO]General and Specialized Ranking
+and Sorting Routines
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -85,9 +85,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>Procedure</B> <I>names</I> <I>and</I> syntax:
+Procedure names and syntax:
 <P>
+<PRE>
     use M_orderpack, only : &
      Sort,             & ! Subroutine Sort             (INOUTVALS)
      Sort_Special,     & ! Subroutine Sort_Special     (INOUTVALS)
@@ -117,8 +117,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
      Perturb             ! Subroutine Perturb          (INOUTVALS, CLOSENESS)
 <P>
 </PRE>
-<B>The</B> <I>procedures</I> <I>may</I> <I>be</I> <I>accessed</I> <I>via</I> <I>their</I> <I>original</I> <I>names</I> <I>in</I> ORDERPACK2.0
-<B>as</B> well, <I>one</I> <I>per</I> module:
+The procedures may be accessed via their original names in ORDERPACK2.0
+as well, one per module:
 <P>
 <PRE>
     ! previous ORDERPACK2.0 name ! ORDERPACK 2.1 name
@@ -152,28 +152,28 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-ORDERPACK 2.1 - Unconditional, Unique <I>and</I> Partial Ranking, Sorting,
-<I>and</I> Permutation
+ORDERPACK 2.1 - Unconditional, Unique and Partial Ranking, Sorting,
+and Permutation
 <P>
-ORDERPACK 2.1 performs both conventional sorting <I>and</I> ranking <B>as</B> well <B>as</B>
-the rarer specialized ordering tasks such <B>as</B> partial sorting, partial
-ranking, unique sorting, unique ranking, inverse unique ranking, <I>and</I>
-more. These partial sort <I>and</I> ranking routines can greatly accelerate
+ORDERPACK 2.1 performs both conventional sorting and ranking as well as
+the rarer specialized ordering tasks such as partial sorting, partial
+ranking, unique sorting, unique ranking, inverse unique ranking, and
+more. These partial sort and ranking routines can greatly accelerate
 many computations when users need only the M largest or smallest
 elements out of a N-element vector.
 <P>
-All the specialized <I>procedures</I> have a range over which they far
-outperform a basic sort, <I>and</I> most have a range where they dramatically
+All the specialized procedures have a range over which they far
+outperform a basic sort, and most have a range where they dramatically
 underperform. If you are not limited by memory requirements or have no
-issues with runtimes the simplest solution <I>may</I> <I>be</I> just to use <B>SORT</B>(3f)
-<I>and</I> <B>RANK</B>(3f).
+issues with runtimes the simplest solution may be just to use SORT(3f)
+and RANK(3f).
 <P>
-Otherwise, your solution method <I>may</I> very well depend on the size of
+Otherwise, your solution method may very well depend on the size of
 the input arrays, whether the data is already close to the required
 order, or how costly it is to create work arrays or an index array.
 <P>
-So, if you want the smallest value <I>in</I> an array call the intrinsic
-<B>MINVAL</B>(3f), not <B>ORDERVAL</B>(3f).
+So, if you want the smallest value in an array call the intrinsic
+MINVAL(3f), not ORDERVAL(3f).
 </BLOCKQUOTE>
 <A name=3>
 
@@ -267,7 +267,7 @@ partially ranks array
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>Prank_Decreasing</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-partially ranks array <I>in</I> DECREASING order
+partially ranks array in DECREASING order
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>Prank_Special</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
@@ -313,7 +313,7 @@ partially rank an array removing duplicates
 <TR valign=top><TD width=6% nowrap>
 <B><A HREF=#5>Unique</A></B> </TD><TD valign=bottom>
 Removes duplicates from an array
-otherwise retaining <I>original</I> order
+otherwise retaining original order
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -348,9 +348,9 @@ elements close to initial locations
 </A>
 <BLOCKQUOTE>
 <P>
-While Fortran 90 <I>and</I> later variants have made life much easier for
+While Fortran 90 and later variants have made life much easier for
 scientific programmers than Fortran 77, the language still lacks
-depth <I>in</I> public domain utilities. <B>The</B> following package, ORDERPACK
+depth in public domain utilities. The following package, ORDERPACK
 2.1, provides important but uncommon routines needed to complete the
 Fortran programming environment.
 </BLOCKQUOTE>
@@ -361,14 +361,14 @@ Fortran programming environment.
 </A>
 <BLOCKQUOTE>
 <P>
-<B>The</B> existing fortran code base provides many conventional ranking
+The existing fortran code base provides many conventional ranking
 or sorting routines, but very few specialized ranking or sorting
 routines. Specifically, we know of no other Fortran code which sorts
 or ranks only a small proportion of an array (partial ordering). Such
-partial ranking routines have applications <I>in</I> statistics for rapidly
-computing extreme order statistics, finding nearest neighbors, <I>and</I>
+partial ranking routines have applications in statistics for rapidly
+computing extreme order statistics, finding nearest neighbors, and
 other clustering operations. In addition, many applications need to
-work with only the unique values <I>in</I> an array (unique ordering). Such
+work with only the unique values in an array (unique ordering). Such
 unique ranking routines allow users to isolate individual cases out
 of a mass of discrete data. Many times the frequency of the unique
 values proves interesting (e.g., empirical distributions).
@@ -376,22 +376,22 @@ values proves interesting (e.g., empirical distributions).
 ORDERPACK handles all of these ordering needs.
 <P>
 Also, ORDERPACK contains a partial unique ranking routine. Such a
-routine would prove useful <I>in</I> finding a limited number of unique
-values <I>in</I> an array.
+routine would prove useful in finding a limited number of unique
+values in an array.
 <P>
 Inversion of orderings becomes difficult when duplicates exist (not
-a <I>one</I>-to-<I>one</I> relation). <B>The</B> ORDERPACK inverse ranking routine handles
+a one-to-one relation). The ORDERPACK inverse ranking routine handles
 this difficult case.
 <P>
 As an added bonus ORDERPACK provides an unusual routine which allows
 user controllable partial random permutation of arrays.
 <P>
 ORDERPACK of course contains conventional or unconditional sorting
-routines <B>as</B> well.
+routines as well.
 <P>
 Finally, many Fortran sorting or ranking routines do not take advantage
-of available memory <I>and</I> cache to maximize performance. <B>The</B> routines
-<I>in</I> ORDERPACK have been designed to take advantage of modern machines.
+of available memory and cache to maximize performance. The routines
+in ORDERPACK have been designed to take advantage of modern machines.
 </BLOCKQUOTE>
 <A name=10>
 
@@ -400,14 +400,14 @@ of available memory <I>and</I> cache to maximize performance. <B>The</B> routine
 </A>
 <BLOCKQUOTE>
 <P>
-Ranking consists <I>in</I> finding, for each element of a set, its order
-(rank) <I>in</I> the sorted set, without effectively changing the initial
+Ranking consists in finding, for each element of a set, its order
+(rank) in the sorted set, without effectively changing the initial
 order (or disorder! ) of the set. In many instances, it better suits
-the actual need of the user than sorting, <B>as</B> the ranks can then <I>be</I>
+the actual need of the user than sorting, as the ranks can then be
 used to order other related sets or components of a user type.
 <P>
 Ranking is especially needed when the sizes of the elements are large,
-<I>and</I> therefore moving them around is resource-consuming.
+and therefore moving them around is resource-consuming.
 </BLOCKQUOTE>
 <A name=11>
 
@@ -416,14 +416,14 @@ Ranking is especially needed when the sizes of the elements are large,
 </A>
 <BLOCKQUOTE>
 <P>
-In some instances, <I>one</I> is not actually interested <I>in</I> modifying the
-order of the elements <I>in</I> a set, but only <I>in</I> knowing how to access them
-<I>in</I> increasing -- or decreasing -- order. Ranking, <B>as</B> it is called,
-provides the index array <B>I</B>(:) such <B>as</B> the set <B>S</B>(<B>I</B>(:)) is ordered. One
+In some instances, one is not actually interested in modifying the
+order of the elements in a set, but only in knowing how to access them
+in increasing -- or decreasing -- order. Ranking, as it is called,
+provides the index array I(:) such as the set S(I(:)) is ordered. One
 of the advantages of carrying out ranking rather than sorting is that
-the index array can <I>be</I> computed without the performance penalty of
+the index array can be computed without the performance penalty of
 moving the elements around when they are of large sizes. A similar
-point is that the index array can <I>be</I> used to index other data.
+point is that the index array can be used to index other data.
 </BLOCKQUOTE>
 <A name=12>
 
@@ -432,30 +432,30 @@ point is that the index array can <I>be</I> used to index other data.
 </A>
 <BLOCKQUOTE>
 <P>
-We tried to take into account the recent trends <I>in</I> computing to make
-our compromise choices. Of course, no two problems are the same, <I>and</I>
-for some of them the following decisions <I>may</I> happen to <I>be</I> wrong. We
-just hope that for most cases, they will <I>be</I> right.
+We tried to take into account the recent trends in computing to make
+our compromise choices. Of course, no two problems are the same, and
+for some of them the following decisions may happen to be wrong. We
+just hope that for most cases, they will be right.
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: We tried to take into account the recent trends <I>in</I> computing to make
+<TABLE cellpadding=3><!-- tsb: We tried to take into account the recent trends in computing to make
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Make extensive use of work arrays: Memory can <I>be</I> extended,
+Make extensive use of work arrays: Memory can be extended,
 time cannot.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Try to reduce the number of operations <I>in</I> the inner loops, even
+Try to reduce the number of operations in the inner loops, even
 if it increases code size.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Assume that cache size is relatively small, <I>and</I> try to maximize
+Assume that cache size is relatively small, and try to maximize
 cache hits.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -467,37 +467,37 @@ cache hits.
 </A>
 <BLOCKQUOTE>
 <P>
-Robust routines make <I>their</I> interface known to the calling
-program. There are three main ways to implement this <I>in</I> Fortran:
+Robust routines make their interface known to the calling
+program. There are three main ways to implement this in Fortran:
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: Robust routines make <I>their</I> interface known to the calling
+<TABLE cellpadding=3><!-- tsb: Robust routines make their interface known to the calling
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Explicit interfaces, either included <I>in</I> the body of the calling
-routine, or gathered <I>in</I> an &#146;interface module&#146;. An example of
-including an interface block <I>in</I> the calling program can <I>be</I> found
-<I>in</I> the sample program sort7.f90.
+Explicit interfaces, either included in the body of the calling
+routine, or gathered in an &#146;interface module&#146;. An example of
+including an interface block in the calling program can be found
+in the sample program sort7.f90.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Embedding the routine of interest <B>as</B> a "contained routine" into
-the calling procedure. An example of such way can <I>be</I> found <I>in</I>
+Embedding the routine of interest as a "contained routine" into
+the calling procedure. An example of such way can be found in
 the follow.f90 program, that rebuilds a curve from a set of X,
 Y coordinates.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Embedding the routine of interest into a MODULE, <I>and</I> USEing that
-module <I>in</I> the procedure that calls the routine. This creates
-order dependencies when compiling code, generally resulting <I>in</I>
-requiring such tools <B>as</B> Makefiles but has many other benefits,
-such <B>as</B> most easily allowing for generic versions of the routines,
-This is the way we used here. An example of use is provided <B>as</B>
+Embedding the routine of interest into a MODULE, and USEing that
+module in the procedure that calls the routine. This creates
+order dependencies when compiling code, generally resulting in
+requiring such tools as Makefiles but has many other benefits,
+such as most easily allowing for generic versions of the routines,
+This is the way we used here. An example of use is provided as
 the test program tstvalnth.f90.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -509,23 +509,23 @@ the test program tstvalnth.f90.
 </A>
 <BLOCKQUOTE>
 <P>
-When <I>one</I> looks at the description of a sorting algorithm, the
-process seems pretty simple, <I>and</I> can usually <I>be</I> held <I>in</I> 10 to 20
-lines of pseudo-code. But if <I>one</I> wants an optimized program, <I>one</I>
-takes this simple implementation, <I>and</I> looks for redundant operations,
-investigates runs with sample data sets with a profiling tool, <I>and</I>
+When one looks at the description of a sorting algorithm, the
+process seems pretty simple, and can usually be held in 10 to 20
+lines of pseudo-code. But if one wants an optimized program, one
+takes this simple implementation, and looks for redundant operations,
+investigates runs with sample data sets with a profiling tool, and
 is led to duplicate code with slight modifications rather than use
-tests <I>in</I> inner loops, to process differently the first <I>and</I> the last
+tests in inner loops, to process differently the first and the last
 iterations, or to take into account some special cases that are only
-special <I>in</I> that they can <I>be</I> done faster.
+special in that they can be done faster.
 <P>
-In the end, the number of lines of source code <I>may</I> <I>be</I>
-multiplied tenfold, <I>and</I> the readability decreased <I>in</I> a similar
+In the end, the number of lines of source code may be
+multiplied tenfold, and the readability decreased in a similar
 proportion. Unfortunately, this is the price to pay for speed of
 execution. It was that way when I started programming more than 20
-years ago, <I>and</I> I have forsaken any hope that it might become otherwise
+years ago, and I have forsaken any hope that it might become otherwise
 before I return to dust. So please accept my apologies that this code
-is often complex <I>and</I> difficult to read.
+is often complex and difficult to read.
 </BLOCKQUOTE>
 <A name=15>
 
@@ -554,7 +554,7 @@ John S. Urban, 2022-04-16
 CC0-1.0
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_orderpack (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ec72956c-1309-4cff-8569-b05aaa4443b8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_orderpack (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5810b89d-a1e7-43d7-8d2f-fdc1b0bc4dda using man macros.</FONT>
 <br><br><center><img src="images/M_orderpack.3orderpack.gif"></center>
 </div>
 </div>

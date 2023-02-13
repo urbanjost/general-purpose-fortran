@@ -66,7 +66,7 @@
 !!       write(*,101)'str2%str is ................ ',str2%str
 !!       ! same as intrinsic LEN()
 !!       write(*,202)'len ........................ ',str2%len()
-!!       ! same as intrinsic INDEX()
+!!       ! same as intrinsic LEN_TRIM()
 !!       write(*,202)'len_trim ................... ',str2%len_trim()
 !!       ! same as intrinsic INDEX()
 !!       write(*,202)'index("is")................. ',str2%index("is")
@@ -137,11 +137,11 @@
 !!       str3=string('   12.345678901234567e1        ')
 !!       str3=string('Four score and seven years ago')
 !!       write(*,101)'str3%str ................... ',str3%str
-!!       ! calls M_strings procedure MATCHW
+!!       ! calls M_strings procedure GLOB
 !!       write(*,*)'match("Fo*") ............... ', str3%match("Fo*")
-!!       ! calls M_strings procedure MATCHW
+!!       ! calls M_strings procedure GLOB
 !!       write(*,*)'match("and") ............... ', str3%match("and")
-!!       ! calls M_strings procedure MATCHW
+!!       ! calls M_strings procedure GLOB
 !!       write(*,*)'match("*and*") ............. ', str3%match("*and*")
 !!
 !!       101 format(1x,a,"[",a,"]")
@@ -152,7 +152,7 @@
 !!       write(*,*)repeat('=',68)
 !!       write(*,*)'OVERLOADED OPERATORS (add and subtract,return TYPE(STRING))'
 !!       str1%str='123.456'
-!!       str2%str='AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj'
+!!       str2%str='AaBbCcDdEeFfGgHhIi AaBbCcDdEeFfGgHhIi'
 !!       write(*,101)'str1%str ................... ',str1%str
 !!       write(*,101)'str2%str ................... ',str2%str
 !!       write(*,*)'str1 + str2 ................ ',p(str1 + str2)
@@ -163,7 +163,7 @@
 !!
 !!       write(*,*)repeat('=',68)
 !!       write(*,*)'OVERLOADED OPERATORS (multiply,return TYPE(STRING))'
-!!       str1%str='AaBbCcDdEeFfGgHhIiJj'
+!!       str1%str='AaBbCcDdEeFfGgHhIi'
 !!       write(*,101)'str1%str ................... ',str1%str
 !!       write(*,*)'str1 * 2 ................... ',p(str1 * 2)
 !!
@@ -250,23 +250,23 @@
 !!   match("*and*") .............  T
 !!   ====================================================================
 !!   OVERLOADED OPERATORS (add and subtract, return TYPE(STRING))
-!!   str1%str ................... [123.456]
-!!   str2%str ................... [AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj]
-!!   str1 + str2 ................ 123.456 AaBbCcDdEeFfGgHhIiJj AaBbCcDdEeFfGgHhIiJj
-!!   str1 + 20000 ............... 20123.455999999998
-!!   str1 - 20.0 ................ -103.456
-!!   str2 - "Aa" (removes ALL) .. BbCcDdEeFfGgHhIiJj BbCcDdEeFfGgHhIiJj
+!!   str1%str .................. [123.456]
+!!   str2%str .................. [AaBbCcDdEeFfGgHhIi AaBbCcDdEeFfGgHhIi]
+!!   str1 + str2 ............... 123.456 AaBbCcDdEeFfGgHhIi AaBbCcDdEeFfGgHhIi
+!!   str1 + 20000 .............. 20123.455999999998
+!!   str1 - 20.0 ............... -103.456
+!!   str2 - "Aa" (removes ALL) . BbCcDdEeFfGgHhIi BbCcDdEeFfGgHhIi
 !!   ===================================================================
 !!   OVERLOADED OPERATORS (multiply, return TYPE(STRING))
-!!   str1%str ................... [AaBbCcDdEeFfGgHhIiJj]
-!!   str1 * 2 ................... AaBbCcDdEeFfGgHhIiJjAaBbCcDdEeFfGgHhIiJj
+!!   str1%str ................... [AaBbCcDdEeFfGgHhIi]
+!!   str1 * 2 ................... AaBbCcDdEeFfGgHhIiAaBbCcDdEeFfGgHhIi
 !!   ===================================================================
 !!   OVERLOADED OPERATORS (//, return TYPE(STRING))
 !!   str1%str ................... [String one:]
 !!   str2%str ................... [String two:]
-!!   str1 // str2 ................ String one:String two:
-!!   str1 // 20000 ............... String one:20000
-!!   str1 // 20.0 ................ String one:20.0
+!!   str1 // str2 ............... String one:String two:
+!!   str1 // 20000 .............. String one:20000
+!!   str1 // 20.0 ............... String one:20.0
 !!   ===================================================================
 !!   OVERLOADED OPERATORS (logical comparisons, return logical)
 !!   str1%str ................... [abcdefghij]
@@ -297,12 +297,12 @@ module M_strings_oop
 ! methods it supports and overloading of operators to support the new data type.
 !
 use M_strings, only : upper, lower                       ! case
-use M_strings, only : lenset, atleast, adjustc, compact, crop     ! whitespace
+use M_strings, only : lenset, pad, lpad, cpad, rpad, zpad, adjustc, compact, crop     ! whitespace
 use M_strings, only : reverse
 use M_strings, only : notabs, noesc, expand
 use M_strings, only : substitute, transliterate
 use M_strings, only : string_to_value, switch, v2s, s2v
-use M_strings, only : switch, split, matchw
+use M_strings, only : switch, split, glob
 implicit none
 private
 integer,parameter,private :: dp=kind(0.0d0)
@@ -330,8 +330,12 @@ contains
    procedure  ::  len            =>  oop_len
    procedure  ::  len_trim       =>  oop_len_trim
    procedure  ::  lenset         =>  oop_lenset
-   procedure  ::  atleast        =>  oop_atleast
-   procedure  ::  match          =>  oop_matchw
+   procedure  ::  pad            =>  oop_pad
+   procedure  ::  lpad           =>  oop_lpad
+   procedure  ::  cpad           =>  oop_cpad
+   procedure  ::  rpad           =>  oop_rpad
+   procedure  ::  zpad           =>  oop_zpad
+   procedure  ::  match          =>  oop_glob
    procedure  ::  lower          =>  oop_lower
    procedure  ::  noesc          =>  oop_noesc
    procedure  ::  notabs         =>  oop_notabs
@@ -647,21 +651,69 @@ end function oop_transliterate
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function oop_atleast(self,length) result (string_out)
+function oop_pad(self,length) result (string_out)
 
-! ident_21="@(#) M_strings oop_atleast(3f) set string to at least specified length"
+! ident_21="@(#) M_strings oop_pad(3f) set string to at least specified length"
 
 class(string),intent(in)     :: self
 type(string)                 :: string_out
 integer,intent(in)           :: length
-   string_out%str=atleast(self%str,length)
-end function oop_atleast
+   string_out%str=pad(self%str,length)
+end function oop_pad
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function oop_zpad(self,length) result (string_out)
+
+! ident_22="@(#) M_strings oop_zpad(3f) set string to at least specified length"
+
+class(string),intent(in)     :: self
+type(string)                 :: string_out
+integer,intent(in)           :: length
+   string_out%str=zpad(self%str,length)
+end function oop_zpad
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function oop_cpad(self,length) result (string_out)
+
+! ident_23="@(#) M_strings oop_cpad(3f) set string to at least specified length"
+
+class(string),intent(in)     :: self
+type(string)                 :: string_out
+integer,intent(in)           :: length
+   string_out%str=cpad(self%str,length)
+end function oop_cpad
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function oop_lpad(self,length) result (string_out)
+
+! ident_24="@(#) M_strings oop_lpad(3f) set string to at least specified length"
+
+class(string),intent(in)     :: self
+type(string)                 :: string_out
+integer,intent(in)           :: length
+   string_out%str=lpad(self%str,length)
+end function oop_lpad
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function oop_rpad(self,length) result (string_out)
+
+! ident_25="@(#) M_strings oop_rpad(3f) set string to at least specified length"
+
+class(string),intent(in)     :: self
+type(string)                 :: string_out
+integer,intent(in)           :: length
+   string_out%str=rpad(self%str,length)
+end function oop_rpad
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function oop_lenset(self,length) result (string_out)
 
-! ident_22="@(#) M_strings oop_lenset(3f) set string to specific length"
+! ident_26="@(#) M_strings oop_lenset(3f) set string to specific length"
 
 class(string),intent(in)     :: self
 type(string)                 :: string_out
@@ -671,21 +723,21 @@ end function oop_lenset
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function oop_matchw(self,pattern) result (answer)
+function oop_glob(self,pattern) result (answer)
 
-! ident_23="@(#) M_strings oop_matchw(3f) test if wildcard pattern matches string"
+! ident_27="@(#) M_strings oop_glob(3f) test if wildcard pattern matches string"
 
 class(string),intent(in)     :: self
 character(len=*),intent(in)  :: pattern
 logical                      :: answer
-   answer=matchw(self%str,pattern)
-end function oop_matchw
+   answer=glob(self%str,pattern)
+end function oop_glob
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function oop_notabs(self) result (string_out)
 
-! ident_24="@(#) M_strings oop_notabs(3f) expand tab characters assuming tab stops every eight(8) characters"
+! ident_28="@(#) M_strings oop_notabs(3f) expand tab characters assuming tab stops every eight(8) characters"
 
 class(string),intent(in)     :: self
 type(string)                 :: string_out
@@ -699,7 +751,7 @@ end function oop_notabs
 !===================================================================================================================================
 function oop_noesc(self) result (string_out)
 
-! ident_25="@(#) M_strings oop_noesc(3f) replace non-printable characters with spaces"
+! ident_29="@(#) M_strings oop_noesc(3f) replace non-printable characters with spaces"
 
 class(string),intent(in)     :: self
 type(string)                 :: string_out
@@ -710,7 +762,7 @@ end function oop_noesc
 !===================================================================================================================================
 function p(self) result (string_out)
 
-! ident_26="@(#) M_strings oop_p(3f) return CHARACTER string from TYPE(STRING)"
+! ident_30="@(#) M_strings oop_p(3f) return CHARACTER string from TYPE(STRING)"
 
 class(string),intent(in)     :: self
 character(len=len(self%str)) :: string_out
@@ -724,7 +776,7 @@ subroutine init_string(self)
 ! allow for TYPE(STRING) object to be initialized.
 !
 
-! ident_27="@(#) M_strings init_dt(3f) initialize TYPE(STRING)"
+! ident_31="@(#) M_strings init_dt(3f) initialize TYPE(STRING)"
 
 class(string)                        :: self
    self%str=''
@@ -736,7 +788,7 @@ end subroutine init_string
 !===================================================================================================================================
 function string_plus_value(self,value) result (other)
 
-! ident_28="@(#) M_strings string_plus_value(3f) add value to TYPE(STRING)"
+! ident_32="@(#) M_strings string_plus_value(3f) add value to TYPE(STRING)"
 
 class(string),intent(in)      :: self
 type(string)                  :: other
@@ -754,7 +806,7 @@ end function string_plus_value
 !===================================================================================================================================
 function string_minus_value(self,value) result (other)
 
-! ident_29="@(#) M_strings string_minus_value(3f) subtract value from TYPE(STRING)"
+! ident_33="@(#) M_strings string_minus_value(3f) subtract value from TYPE(STRING)"
 
 class(string),intent(in)      :: self
 type(string)                  :: other
@@ -776,7 +828,7 @@ end function string_minus_value
 !===================================================================================================================================
 function string_append_value(self,value) result (other)
 
-! ident_30="@(#) M_strings string_append_value(3f) append value to TYPE(STRING)"
+! ident_34="@(#) M_strings string_append_value(3f) append value to TYPE(STRING)"
 
 class(string),intent(in)      :: self
 type(string)                  :: other
@@ -794,7 +846,7 @@ end function string_append_value
 !===================================================================================================================================
 function string_multiply_value(self,value) result (other)
 
-! ident_31="@(#) M_strings string_multiply_value(3f) multiply TYPE(STRING) value times"
+! ident_35="@(#) M_strings string_multiply_value(3f) multiply TYPE(STRING) value times"
 
 class(string),intent(in)      :: self
 type(string)                  :: other
@@ -810,7 +862,7 @@ end function string_multiply_value
 !===================================================================================================================================
 logical function eq(self,other)
 
-! ident_32="@(#) M_strings eq(3f) compare derived type string objects (eq lt gt le ge ne)"
+! ident_36="@(#) M_strings eq(3f) compare derived type string objects (eq lt gt le ge ne)"
 
    class(string),intent(in) :: self
    type(string),intent(in)  :: other

@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>co_reduce</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>co_reduce</B>(3fortran)
+<B>co_reduce(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+co_reduce(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>CO_REDUCE(3) </B>- [COLLECTIVE] Reduction of values on the current set of images
-<B>
-</B></BLOCKQUOTE>
+CO_REDUCE(3) - [COLLECTIVE] Reduction of values on the current set of images
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=9>
@@ -76,9 +76,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-call <B>co_reduce</B>(<I>a</I>, <I>operation</I>, result_image [,<I>stat</I>] [,<I>errmsg</I>] )
-</PRE>
+call co_reduce(a, operation, result_image [,stat] [,errmsg] )
 </BLOCKQUOTE>
 <A name=2>
 
@@ -93,17 +91,17 @@ call <B>co_reduce</B>(<I>a</I>, <I>operation</I>, result_image [,<I>stat</I>] [,
 
 </A>
 <BLOCKQUOTE>
-<B>CO_REDUCE</B>(3) determines element-wise the reduction of the value of A on all
+CO_REDUCE(3) determines element-wise the reduction of the value of A on all
 images of the current team. The pure function passed as OPERATION is used to
 pairwise reduce the values of A by passing either the value of A of
-different images or the result values of such <I>a</I> reduction as argument. If A
+different images or the result values of such a reduction as argument. If A
 is an array, the reduction is done element wise. If result_image is present,
 the result values are returned in A on the specified image only and the
 value of A on the other images become undefined. If result_image is not
 present, the value is returned on all images. If the execution was
 successful and STAT is present, it is assigned the value zero. If the
-execution failed, STAT gets assigned <I>a</I> nonzero value and, if present, ERRMSG
-gets assigned <I>a</I> value describing the occurred error.
+execution failed, STAT gets assigned a nonzero value and, if present, ERRMSG
+gets assigned a value describing the occurred error.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -115,8 +113,8 @@ gets assigned <I>a</I> value describing the occurred error.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A : is an <B>INTENT</B>(INOUT) argument and shall be nonpolymorphic. If it is
-allocatable, it shall be allocated; if it is <I>a</I> pointer, it shall be
+A : is an INTENT(INOUT) argument and shall be nonpolymorphic. If it is
+allocatable, it shall be allocated; if it is a pointer, it shall be
 associated. A shall have the same type and type parameters on all images
 of the team; if it is an array, it shall have the same shape on all
 images.
@@ -126,7 +124,7 @@ o
 </TD><TD>
 OPERATION : pure function with two scalar nonallocatable arguments, which
 shall be nonpolymorphic and have the same type and type parameters as A.
-The function shall return <I>a</I> nonallocatable scalar of the same type and
+The function shall return a nonallocatable scalar of the same type and
 type parameters as A. The function shall be the same on all images and
 with regards to the arguments mathematically commutative and associative.
 Note that OPERATION may not be an elemental unless it is an intrinsic
@@ -148,12 +146,12 @@ RESULT_IMAGE
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-STAT : (optional) <I>a</I> scalar integer variable
+STAT : (optional) a scalar integer variable
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ERRMSG : (optional) <I>a</I> scalar character variable
+ERRMSG : (optional) a scalar character variable
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -175,18 +173,17 @@ Sample program:
             write(*,*) "Product value", val  ! prints num_images() factorial
          endif
 <P>
+      contains
+<P>
+      pure function myprod(a, b)
+         integer, value :: a, b
+         integer :: myprod
+         myprod = a * b
+      end function myprod
+<P>
+      end program demo_co_reduce
+<P>
 </PRE>
-<BLOCKQUOTE>
-contains
-<P>
-pure function <B>myprod</B>(<I>a</I>, b)
-integer, value :: <I>a</I>, b
-integer :: myprod
-myprod = <I>a</I> * b
-end function myprod
-<P>
-end program demo_co_reduce
-</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=6>
 
@@ -195,9 +192,9 @@ end program demo_co_reduce
 </A>
 <BLOCKQUOTE>
 While the rules permit in principle an intrinsic function, none of the
-intrinsics in the standard fulfill the criteria of having <I>a</I> specific
+intrinsics in the standard fulfill the criteria of having a specific
 function, which takes two arguments of the same type and returning that type
-as <I>a</I> result.
+as a result.
 </BLOCKQUOTE>
 <A name=7>
 
@@ -213,7 +210,7 @@ TS 18508
 
 </A>
 <BLOCKQUOTE>
-<B>CO_MIN</B>(3), <B>CO_MAX</B>(3), <B>CO_SUM</B>(3), <B>CO_BROADCAST</B>(3)
+CO_MIN(3), CO_MAX(3), CO_SUM(3), CO_BROADCAST(3)
 <P>
 fortran-lang intrinsic descriptions
 <P>
@@ -222,7 +219,7 @@ fortran-lang intrinsic descriptions
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>co_reduce (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f310225d-005f-4f9a-b058-91338c2e62df using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>co_reduce (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 13172aa7-dfee-4f89-a7e3-b658d46d5ec7 using man macros.</FONT>
 <br><br><center><img src="images/co_reduce.3fortran.gif"></center>
 </div>
 </div>

@@ -56,9 +56,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_system(3fm) </B>- [M_system::INTRO] Fortran interface to C system interface
-<B>(LICENSE:PD)
-</B></BLOCKQUOTE>
+M_system(3fm) - [M_system::INTRO] Fortran interface to C system interface
+(LICENSE:PD)
+</BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
@@ -79,9 +79,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-<B>Public</B> objects:
+Public objects:
 <P>
+<PRE>
    ! ENVIRONMENT
    use M_system, only : set_environment_variable, system_unsetenv, &
    system_putenv, system_getenv
@@ -125,7 +125,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>M_system</B>(3fm) is a collection of Fortran procedures that call C or a
+M_system(3fm) is a collection of Fortran procedures that call C or a
 C wrapper using the ISO_C_BINDING interface to access system calls.
 System calls are a special set of functions used by programs to
 communicate directly with an operating system.
@@ -150,39 +150,39 @@ call -- Always check the return value.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_putenv</B>(3f): call <B>putenv</B>(3c)
+system_putenv(3f): call putenv(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getenv</B>(3f): function call to <B>get_environment_variable</B>(3f)
+system_getenv(3f): function call to get_environment_variable(3f)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_unsetenv</B>(3f): call <B>unsetenv</B>(3c) to remove variable
+system_unsetenv(3f): call unsetenv(3c) to remove variable
 from environment
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>set_environment_variable</B>(3f): set environment variable by
-calling <B>setenv</B>(3c)
+set_environment_variable(3f): set environment variable by
+calling setenv(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_initenv</B>(3f): initialize environment table for reading
+system_initenv(3f): initialize environment table for reading
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_readenv</B>(3f): read next entry from environment table
+system_readenv(3f): read next entry from environment table
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_clearenv</B>(3f): emulate <B>clearenv</B>(3c) to clear environment
+system_clearenv(3f): emulate clearenv(3c) to clear environment
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -195,148 +195,148 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_chdir</B>(3f): call <B>chdir</B>(3c) to change current
+system_chdir(3f): call chdir(3c) to change current
 directory of a process
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getcwd</B>(3f): call <B>getcwd</B>(3c) to get pathname of
+system_getcwd(3f): call getcwd(3c) to get pathname of
 current working directory
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_stat</B>(3f): determine system information of file
+system_stat(3f): determine system information of file
 by name
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_stat_print</B>(3f): print system information of filename
+system_stat_print(3f): print system information of filename
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_perm</B>(3f): create string representing file
+system_perm(3f): create string representing file
 permission and type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_access</B>(3f): determine filename access or existence
+system_access(3f): determine filename access or existence
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_isdir</B>(3f): determine if filename is a directory
+system_isdir(3f): determine if filename is a directory
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_islnk</B>(3f): determine if filename is a link
+system_islnk(3f): determine if filename is a link
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_isreg</B>(3f): determine if filename is a regular file
+system_isreg(3f): determine if filename is a regular file
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_isblk</B>(3f): determine if filename is a block device
+system_isblk(3f): determine if filename is a block device
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_ischr</B>(3f): determine if filename is a character device
+system_ischr(3f): determine if filename is a character device
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_isfifo</B>(3f): determine if filename is a fifo - named pipe
+system_isfifo(3f): determine if filename is a fifo - named pipe
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_issock</B>(3f): determine if filename is a socket
+system_issock(3f): determine if filename is a socket
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_realpath</B>(3f): resolve a pathname
+system_realpath(3f): resolve a pathname
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_chmod</B>(3f): call <B>chmod</B>(3c) to set file permission mode
+system_chmod(3f): call chmod(3c) to set file permission mode
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_chown</B>(3f): call <B>chown</B>(3c) to set file owner
+system_chown(3f): call chown(3c) to set file owner
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getumask</B>(3f): call <B>umask</B>(3c) to get process permission mask
+system_getumask(3f): call umask(3c) to get process permission mask
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_setumask</B>(3f): call <B>umask</B>(3c) to set process permission mask
+system_setumask(3f): call umask(3c) to set process permission mask
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_mkdir</B>(3f): call <B>mkdir</B>(3c) to create empty directory
+system_mkdir(3f): call mkdir(3c) to create empty directory
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_mkfifo</B>(3f): call <B>mkfifo</B>(3c) to create a special FIFO file
+system_mkfifo(3f): call mkfifo(3c) to create a special FIFO file
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_link</B>(3f): call <B>link</B>(3c) to create a filename link
+system_link(3f): call link(3c) to create a filename link
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_rename</B>(3f): call <B>rename</B>(3c) to change filename
+system_rename(3f): call rename(3c) to change filename
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_remove</B>(3f): call <B>remove</B>(3c) to remove file
+system_remove(3f): call remove(3c) to remove file
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_rmdir</B>(3f): call <B>rmdir</B>(3c) to remove empty directory
+system_rmdir(3f): call rmdir(3c) to remove empty directory
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_unlink</B>(3f): call <B>unlink</B>(3c) to remove a link to a file
+system_unlink(3f): call unlink(3c) to remove a link to a file
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_utime</B>(3f): call <B>utime</B>(3c) to set file access and
+system_utime(3f): call utime(3c) to set file access and
 modification times
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_dir</B>(3f): read name of files in specified directory
+system_dir(3f): read name of files in specified directory
 matching a wildcard string
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>fileglob</B>(3f): Returns list of files using a file globbing pattern
+fileglob(3f): Returns list of files using a file globbing pattern
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -349,12 +349,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getc</B>(3f): get a character from stdin
+system_getc(3f): get a character from stdin
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_putc</B>(3f): put a character on stdout
+system_putc(3f): put a character on stdout
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -367,12 +367,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_srand</B>(3f): call <B>srand</B>(3c)
+system_srand(3f): call srand(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_rand</B>(3f): call <B>rand</B>(3c)
+system_rand(3f): call rand(3c)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=7>
@@ -385,12 +385,12 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_errno</B>(3f): return <B>errno</B>(3c)
+system_errno(3f): return errno(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_perror</B>(3f): call <B>perror</B>(3c) to display last C error message
+system_perror(3f): call perror(3c) to display last C error message
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=8>
@@ -403,62 +403,62 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_geteuid</B>(3f): call <B>geteuid</B>(3c)
+system_geteuid(3f): call geteuid(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getuid</B>(3f): call <B>getuid</B>(3c)
+system_getuid(3f): call getuid(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getegid</B>(3f): call <B>getegid</B>(3c)
+system_getegid(3f): call getegid(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getgid</B>(3f): call <B>getgid</B>(3c)
+system_getgid(3f): call getgid(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getpid</B>(3f): call <B>getpid</B>(3c)
+system_getpid(3f): call getpid(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getppid</B>(3f): call <B>getppid</B>(3c)
+system_getppid(3f): call getppid(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_gethostname</B>(3f): get name of current host
+system_gethostname(3f): get name of current host
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_uname</B>(3f): call <B>my_uname</B>(3c) which calls <B>uname</B>(3c)
+system_uname(3f): call my_uname(3c) which calls uname(3c)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getlogin</B>(3f): get login name
+system_getlogin(3f): get login name
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getpwuid</B>(3f): get login name associated with given UID
+system_getpwuid(3f): get login name associated with given UID
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_getgrgid</B>(3f): get group name associated with given GID
+system_getgrgid(3f): get group name associated with given GID
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_cpu_time</B>(3f) : get processor time in seconds using <B>times</B>(3c)
+system_cpu_time(3f) : get processor time in seconds using times(3c)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=9>
@@ -471,7 +471,7 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>system_system</B>(3f): call <B>execute_command_line</B>(3c) outputting messages
+system_system(3f): call execute_command_line(3c) outputting messages
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=10>
@@ -537,7 +537,7 @@ fortranposix.
 <TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_system (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 228bd79a-2a64-473a-9750-27e017066acf using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_system (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 08cd8b9f-f817-4437-9be6-2afa0a023201 using man macros.</FONT>
 <br><br><center><img src="images/M_system.3m_system.gif"></center>
 </div>
 </div>

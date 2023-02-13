@@ -764,7 +764,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </pre>
 <pre>
 <!--FORTRAN90--><xmp>
-
       program demo_M_calculator
          !     line mode calculator that calls calculator
          !
@@ -804,7 +803,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
               write(6,'(a)')'warning===> unexpected ierr value from calculator'
             end select
          enddo INFINITE
-
+         !
          string='A=sind(30)'
          rvalue=rnum0(string,ierr)
          if(ierr.eq.0)then
@@ -814,7 +813,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
          endif
          rvalue=rnum0('A',ierr)
          write(*,*) rvalue
-
+         !
          ! OPTIONAL: contains example routines for adding user-defined
          !           functions.
          !
@@ -853,7 +852,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
          real(kind=k_dbl)             :: fval
          character(len=*)             :: ctmp
          integer                      :: ier
-
+         !
          integer                      :: iwhich
          integer                      :: i10
          integer                      :: ilen

@@ -26,4 +26,4 @@
            write(*,*) lle(['cba', '123'],'abc') ! [F,T]
            ! per the rules for elemental procedures arrays must be the same size
            write(*,*) lle(['abc','123'],['cba','123']) ! [T,T] both arrays
-  end program demo_lle
+        end program demo_lle

@@ -15,4 +15,4 @@
 
             write(*,'(a,*(i0:,", "))') "The available kinds are ",integer_kinds
 
-    end program demo_bit_size
+        end program demo_bit_size

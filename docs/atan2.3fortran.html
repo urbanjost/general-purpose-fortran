@@ -55,8 +55,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B></B><B>atan2</B>(3fortran) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>atan2</B>(3fortran)
+<B>atan2(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+atan2(3fortran)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
@@ -65,9 +65,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<B>ATAN2(3) </B>- [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function
-<B>
-</B></BLOCKQUOTE>
+ATAN2(3) - [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function
+<P>
+</BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=10>
@@ -76,9 +76,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-result = <B>atan2</B>(<I>y</I>, <I>x</I>)
+result = atan2(y, x)
 <P>
+<PRE>
            elemental real(kind=KIND) function atan2(y, x)
 <P>
             real,kind=KIND) :: atan2
@@ -110,14 +110,14 @@ The return value has the same type and kind as Y and X.
 
 </A>
 <BLOCKQUOTE>
-<B>ATAN2</B>(3) computes in radians a processor-dependent approximation of the
+ATAN2(3) computes in radians a processor-dependent approximation of the
 arctangent of the complex number ( X, Y ) or equivalently the principal
 value of the arctangent of the value Y/X (which determines a unique angle).
 <P>
 If Y has the value zero, X shall not have the value zero.
 <P>
 The resulting phase lies in the range <B>-PI</B> &lt;= ATAN2 (Y,X) &lt;= PI and is equal
-to a processor-dependent approximation to a value of <B>arctan</B>(Y/X).
+to a processor-dependent approximation to a value of arctan(Y/X).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -146,7 +146,7 @@ the point &lt;X,Y&gt;.
 </A>
 <BLOCKQUOTE>
 The value returned is by definition the principal value of the complex
-number (X, Y), or in other terms, the phase of the phasor <I>x</I>+i*<I>y</I>.
+number (X, Y), or in other terms, the phase of the phasor x+i*y.
 <P>
 The principal value is simply what we get when we adjust a radian value to
 lie between <B>-PI</B> and PI inclusive,
@@ -157,7 +157,7 @@ Cartesian coordinates of the line from the origin point &lt;0,0&gt; to the point
 <P>
 Pictured as a vector it is easy to see that if X and Y are both zero the
 angle is indeterminate because it sits directly over the origin, so
-<B>ATAN</B>(0.0,0.0) will produce an error.
+ATAN(0.0,0.0) will produce an error.
 <P>
 Range of returned values by quadrant:
 <P>
@@ -236,43 +236,32 @@ Sample program:
         & T54,&#146;DISTANCE=&#146;,g0)
        endblock COMPLEX_VALS
 <P>
+      contains
+<P>
+      elemental real function r2d(radians)
+      ! input radians to convert to degrees
+      doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
+      real,intent(in)           :: radians
+         r2d=radians / DEGREE ! do the conversion
+      end function r2d
+<P>
+      subroutine cartesian_to_polar(x,y,radius,inclination)
+      ! return angle in radians in range 0 to 2*PI
+      implicit none
+      real,intent(in)  :: x,y
+      real,intent(out) :: radius,inclination
+         radius=sqrt(x**2+y**2)
+         if(radius.eq.0)then
+            inclination=0.0
+         else
+            inclination=atan2(y,x)
+            if(inclination &lt; 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)
+         endif
+      end subroutine cartesian_to_polar
+<P>
+      end program demo_atan2
+<P>
 </PRE>
-<BLOCKQUOTE>
-contains
-<P>
-elemental real function <B>r2d</B>(radians)
-! input radians to convert to degrees
-doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians
-<TABLE cellpadding=3><!-- tsb: elemental real function <B>r2d</B>(radians)
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>real,intent</B>(in) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: radians
-r2d=radians / DEGREE ! do the conversion
-end function r2d
-</TD></TR>
-<TR><TD colspan=2>
-subroutine <B>cartesian_to_polar</B>(<I>x</I>,<I>y</I>,radius,inclination)
-! return angle in radians in range 0 to 2*PI
-implicit none
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>real,intent</B>(in) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: <I>x</I>,<I>y</I>
-<B>real,intent</B>(out) :: radius,inclination
-<B>radius=sqrt</B>(<I>x</I>**2+<I>y</I>**2)
-<B>if</B>(radius.eq.0)then
-inclination=0.0
-else
-<B>inclination=atan2</B>(<I>y</I>,<I>x</I>)
-<B>if</B>(inclination &lt; 0.0)inclination=inclination+2*<B>atan2</B>(0.0d0,<B>-1.0d0</B>)
-endif
-end subroutine cartesian_to_polar
-</TD></TR>
-<TR></TR></TABLE>end program demo_atan2
-</BLOCKQUOTE>
-<P>
 Results:
 <P>
 <PRE>
@@ -308,7 +297,7 @@ FORTRAN 77
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>ATAN</B>(3)
+ATAN(3)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=9>
@@ -330,7 +319,7 @@ arctan:wikipedia fortran-lang intrinsic descriptions (license: MIT)
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>December 21, 2022</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f53cd028-0178-430d-9bb5-68071caea927 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 53a26c54-4e99-48f5-bb5f-dd91a905d0d0 using man macros.</FONT>
 <br><br><center><img src="images/atan2.3fortran.gif"></center>
 </div>
 </div>

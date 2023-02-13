@@ -7,13 +7,14 @@ logical,allocatable :: tests(:)
 
   tests=[logical :: ]
 
-  call add('INTEGER',str(10),'10')
-  call add('LOGICAL',str(.false.),'F')
-  call add('LOGICAL',str(.true.),'T')
-  call add('REAL',str(100.0),'100.000000')
-  call add('COMPLEX',str((11.0,22.0)),'(11.0000000,22.0000000)')
-  call add('COMPOUND',str(10,100.0,"string",(11.0,22.0),.false.),'10 100.000000 string (11.0000000,22.0000000) F')
-
+  call add('INTEGER',str(10),'10','10')
+  call add('LOGICAL',str(.false.),'F','F')
+  call add('LOGICAL',str(.true.),'T','T')
+  call add('REAL',str(100.0),'100.000000','100.0000')
+  call add('COMPLEX',str((11.0,22.0)),'(11.0000000,22.0000000)','(11.00000,22.00000)')
+  call add('COMPOUND',str(10,100.0,"string",(11.0,22.0),.false.), &
+       & '10 100.000000 string (11.0000000,22.0000000) F',&
+       & '10 100.0000 string (11.00000,22.00000) F')
   write(*,'(*(g0,1x))')tests
   if (allpassed)then
      write(*,'(*(g0,1x))')"*M_msg::str* Passed",size(tests),"tests"
@@ -24,12 +25,17 @@ logical,allocatable :: tests(:)
   endif
 
 contains
-subroutine add(message,question,answer)
+subroutine add(message,question,answer,answer2)
 character(len=*),intent(in)   :: message
 character(len=*),intent(in)   :: question
 character(len=*),intent(in)   :: answer
+character(len=*),intent(in)   :: answer2
 logical                       :: passed
+integer                       :: ipad
   passed=question .eq. answer
+  if(.not.passed)then
+     passed=question .eq. answer2
+  endif
   write(*,'(*(g0,1x))')passed,'expected ', answer, 'got',question
   tests=[tests,passed]
   allpassed=allpassed.and.passed

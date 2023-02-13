@@ -1,0 +1,241 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>zpad (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+zpad(3f) - [M_strings:LENGTH] pad a string on the left with zeros to
+specified length
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function zpad(valuein,length) result(strout)
+<P>
+<PRE>
+    class*,intent(in)           :: valuein(..)
+    integer,intent(in),optional :: length
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+zpad(3f) crops the input string or integer (which will be converted
+to a string) and then pads it on the left with zeros to at least
+the specified length. If the trimmed input string is longer than the
+requested length the original string is returned trimmed of leading
+and trailing spaces.
+<P>
+For strings representing unsigned numbers this is basically an alias for
+<P>
+<PRE>
+       strout=pad(str,length,&#146;0&#146;,clip=.true.,right=.false.)
+<P>
+</PRE>
+For integers the same is often done with internal WRITE(3f) statements
+such as
+<P>
+<PRE>
+       write(strout,&#146;(i5.5)&#146;)ivalue
+<P>
+</PRE>
+but unlike internal I/O the function call can be used in expressions
+or passed as a procedure argument. If the requested length is exceeded
+the returned string is untruncated but cropped of leading and trailing
+spaces.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>str</B> </TD><TD valign=bottom>
+May be a scalor or vector string or integer. The input string
+to return trimmed, but then padded to the specified length
+if shorter than length. If an integer is input it is first
+converted to a string. If the leftmost non-blank character
+is a sign character it is moved to the left-most position
+of the output.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>length</B> </TD><TD valign=bottom>
+The minimum string length to return. If not present, the
+length of the input parameter STR is used. If the input value
+STR is not a string no zero padding occurs if LENGTH is not
+supplied.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>strout</B> </TD><TD valign=bottom>
+The input string padded to the requested length or the trimmed
+input string if the input string is longer than the requested
+length.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+     program demo_zpad
+      use M_strings, only : zpad
+      implicit none
+      integer :: lun, i
+         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;111&#146;, 5)
+         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;123456789&#146;, 5)
+         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;  34567  &#146;, 7)
+         write(*,&#146;("[",a,"]")&#146;) zpad( valuein=42 , length=7)
+         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;  +34567  &#146;, 7)
+         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;  -34567  &#146;, 7)
+         write(*,&#146;("[",a,"]")&#146;) zpad(1234)
+         write(*,&#146;("[",a,"]")&#146;) zpad(-1234)
+         write(*,&#146;("[",a,"]")&#146;) zpad(1234,8)
+         write(*,&#146;("[",a,"]")&#146;) zpad(-1234,8)
+         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;&#146;)
+         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;0&#146;)
+         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;0    &#146;)
+         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;     &#146;)
+         write(*,&#146;("[",a,"]")&#146;) zpad([1,10,100,1000,10000,100000],8)
+<P>
+         ! open output_00085.dat
+         i=85
+         open(newunit=lun,file=&#146;output_&#146;//zpad(i,5)//&#146;.dat&#146;)
+         close(unit=lun,status=&#146;delete&#146;)
+<P>
+     end program demo_zpad
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+      [00111]
+      [123456789]
+      [0034567]
+      [0000042]
+      [+0034567]
+      [-0034567]
+      [1234]
+      [-1234]
+      [00001234]
+      [-00001234]
+      []
+      [0]
+      [00000]
+      [00000]
+      [00000001]
+      [00000010]
+      [00000100]
+      [00001000]
+      [00010000]
+      [00100000]
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>zpad (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 781ee341-4994-48a3-afb4-e2f3554344ef using man macros.</FONT>
+<br><br><center><img src="images/zpad.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
