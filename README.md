@@ -1,10 +1,5 @@
-# General-Purpose Fortran Repository![GPF](docs/images/GPF.gif)
-
-## Shortcut
-
-The majority of the documentation is in HTML at the 
-[Documentation](https://urbanjost.github.io/general-purpose-fortran/docs/index.html)
-page.
+[![GPF](docs/images/GPF.gif)](https://urbanjost.github.io/general-purpose-fortran/docs/index.html)
+# [General-Purpose Fortran Repository](https://urbanjost.github.io/general-purpose-fortran/docs/man3.html)
 
 ## Intro
 This repository concentrates on those "other" Fortran procedures that
